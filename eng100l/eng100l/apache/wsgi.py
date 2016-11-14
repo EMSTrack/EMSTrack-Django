@@ -9,7 +9,7 @@ sys.path.append(workspace)
 sys.path.append(project)
 
 # Add the path to 3rd party django application and to django itself.
-sys.path.append('/var/www/http/eng100l')
+sys.path.append('/var/www/html/eng100l')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'eng100l.apache.override'
 
