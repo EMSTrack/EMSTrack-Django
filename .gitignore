@@ -93,7 +93,7 @@ ENV/
 .DS_Store
 
 # Local settings
-aed/settings.py
+settings.py
 
 # Emacs backup
 *~

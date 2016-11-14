@@ -22,7 +22,7 @@ class Ambulances(models.Model):
     license_plate = models.CharField(max_length=254, primary_key=True)
     status        = models.CharField(max_length=254)
     location      = models.PointField(srid=4326, default=Tijuana)
-    reporter      = models.OneToOneField(Reporter, null=True)
+    reporter      = models.OneToOneField(Reporter, blank=True, null=True)
 
     def __str__(self):
         return "{}: ({}) {}".format(self.license_plate,
