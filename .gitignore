@@ -97,3 +97,6 @@ settings.py
 
 # Emacs backup
 *~
+
+# Static files
+eng100l/static/
