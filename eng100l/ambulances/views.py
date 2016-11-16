@@ -40,4 +40,22 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
         record = self.update_ambulance(pk)
         json = { 'status': record.status, 'location': record.location }
         return self.render_json_response(json)
+     
+class AmbulanceInfoView(views.JSONResponseMixin, View):
+    def get_ajax(self, request, pk):
+        s = Ambulances.objects.get(pk=pk)
         
+        json = {
+            "status" : s.status,
+            "reporter" : s.reporter if s.reporter is not None else "No reporter"
+        }
+        return self.render_json_response(json)
+
+    def get(self, request, pk):
+        s = Ambulances.objects.get(pk=pk)
+
+        json = {
+            "status" : s.status,
+            "reporter" : s.reporter if s.reporter is not None else "No reporter"
+        }
+        return self.render_json_response(json)
