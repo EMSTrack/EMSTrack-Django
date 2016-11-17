@@ -92,11 +92,10 @@ ENV/
 # OSC .DS_Store
 .DS_Store
 
-# Local settings
-eng100l/settings.py
-
-# Migrations
-eng100l/ambulances/migrations
-
 # Emacs backup
 *~
+
+# Migrations and static
+eng100l/eng100l/settings.py
+eng100l/ambulances/migrations
+eng100l/static
