@@ -93,7 +93,10 @@ ENV/
 .DS_Store
 
 # Local settings
-aed/settings.py
+eng100l/settings.py
+
+# Migrations
+eng100l/ambulances/migrations
 
 # Emacs backup
 *~
