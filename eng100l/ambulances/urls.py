@@ -7,7 +7,7 @@ urlpatterns = [
         views.AmbulanceUpdateView.as_view(),
         name="ambulance_update"),
 
-    url(r'^ambulance_info/(?P<pk>[0-9]+)$',
+    url(r'^info/(?P<pk>[0-9]+)$',
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
 ]
