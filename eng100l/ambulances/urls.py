@@ -11,7 +11,7 @@ urlpatterns = [
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
 
-    url(r'^ambulance_create$',
+    url(r'^create$',
     	views.AmbulanceCreateView.as_view(),
     	name="ambulance_create"),
 ]
