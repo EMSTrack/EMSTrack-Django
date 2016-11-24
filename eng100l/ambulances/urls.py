@@ -10,4 +10,8 @@ urlpatterns = [
     url(r'^ambulance_info/(?P<pk>[0-9]+)$',
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
+
+    url(r'^ambulance_create$',
+    	views.AmbulanceCreateView.as_view(),
+    	name="ambulance_create"),
 ]

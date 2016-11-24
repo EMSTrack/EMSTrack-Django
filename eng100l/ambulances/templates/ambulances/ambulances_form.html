@@ -1,0 +1,29 @@
+{% extends "ambulances/base.html" %}
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" 
+      href="{% static 'craed/form.css' %}" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet"
+      href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+{{ form.media }}
+{% endblock %}
+
+{% block content %}
+
+<form id="ambulances_form" action="" method="post">{% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <div id="buttons">
+    {% if object %}
+    <input class="button save" type="submit" value="Save" />
+    <a class="button cancel" href="{{request.META.HTTP_REFERER}}">Cancel</a>
+    {% else %}
+    <input class="button save" type="submit" value="Create Ambulance" />
+    {% endif %}
+  </div>
+</form>
+
+{% endblock %}

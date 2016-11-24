@@ -9,8 +9,7 @@ Tijuana = Point(-117.0382, 32.5149, srid=4326)
 # Create your models here.
 
 class Reporter(models.Model):
-    user         = models.ForeignKey(User,
-                                     on_delete=models.CASCADE)
+    user         = models.ForeignKey(User, on_delete=models.CASCADE)
     badge_number = models.CharField(max_length=254)
 
     def __str__(self):
