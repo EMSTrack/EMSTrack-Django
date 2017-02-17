@@ -25,4 +25,8 @@ urlpatterns = [
     url(r'^ambulance_view$',
         views.AmbulanceView.as_view(),
         name="ambulance_view"),
+
+    url(r'^all_ambulances',
+        views.AllAmbulancesView.as_view(),
+        name="all_ambulance")
 ]

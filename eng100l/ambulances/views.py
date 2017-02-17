@@ -114,4 +114,26 @@ class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     def lng(self):
         return float(self.request.GET.get('lng') or -117.0096155300208)
 
+class AllAmbulancesView(views.JSONResponseMixin, View):
+    def build_json(self):
+
+        ambulances = Ambulances.objects.all()
+        json = []
+
+        for ambulance in ambulances:
+            json.append({
+                "status": ambulance.status,
+                "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
+                "location": "(" + repr(ambulance.location.x) + ","
+                            + repr(ambulance.location.y) + ")"
+            })
+    	return json
+
+    def get_ajax(self, request):
+        json = self.build_json()
+        return self.render_json_response(json)
+
+    def get(self, request):
+        json = self.build_json()
+        return self.render_json_response(json)
 

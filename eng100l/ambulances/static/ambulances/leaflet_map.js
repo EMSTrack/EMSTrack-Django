@@ -13,7 +13,7 @@
 		map_id: 'map',
 		lat: 32.523,
 		lng: -117.096623,
-		zoom: 13,
+		zoom: 13
 	};
 
 	this.map = L.map(this.options.map_id, {
