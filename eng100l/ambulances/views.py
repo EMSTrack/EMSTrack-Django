@@ -1,27 +1,49 @@
-from django.shortcuts import render
-
-from django.http import HttpResponse
-
-from django.core.urlresolvers import reverse, reverse_lazy
-
-from django.views import View
-from django.views.generic import CreateView
-from braces import views
-
 # Create your views here.
 
-from .models import Reporter, Ambulances
-from .forms import AmbulanceCreateForm
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse, reverse_lazy
+
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from braces import views
+from django.views import View
+
+from django.http import HttpResponse
+from django.http import JsonResponse
+from django.template import loader
+
+from django.contrib.gis.geos import Point
+
+from .models import AED, Ambulances, Reporter
+from .forms import AEDUpdateForm, AEDCreateForm, AmbulanceUpdateForm, AmbulanceCreateForm, ReporterCreateForm
 
 class AmbulanceCreateView(CreateView):
-	model = Ambulances
-	form_class = AmbulanceCreateForm
-	#context_object_name = "ambulances_form"
-	success_url = reverse_lazy('ambulance_create')
+    model = Ambulances
+    context_object_name = "ambulance_form"
+    form_class = AmbulanceCreateForm
+    success_url = reverse_lazy('list')
+
+class AmbulanceInfoView(views.JSONResponseMixin, View):
+    def build_json(self, pk):
+    	record = Ambulances.objects.get(pk=pk)
+    	json = {
+    		"status" : record.status,
+    		"reporter" : record.reporter if record.reporter else "No Reporter",
+    		"location" : "(" + repr(record.location.x) + "," 
+    						 + repr(record.location.y) + ")"
+    	}
+    	return json
+
+    def get_ajax(self, request, pk):
+        json = self.build_json(pk)
+        return self.render_json_response(json)
+
+    def get(self, request, pk):
+        json = self.build_json(pk)
+        return self.render_json_response(json)
 
 class AmbulanceUpdateView(views.JSONResponseMixin, View):
     def update_ambulance(self, pk):
-        # retrieve record
         record = Ambulances.objects.get(pk=pk)
 
         # lookup status
@@ -31,41 +53,65 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
             record.status = status
 
         # lookup location
-        location = self.request.GET.get('location')
-        if location:
+        longitude = float(self.request.GET.get('long'))
+        latitude = float(self.request.GET.get('lat'))
+        if longitude and latitude:
             # update record
+            location = Point(longitude, latitude, srid=4326)
             record.location = location
 
         # save updated record
         record.save()
         return record
 
+    def get_ajax(self, request, pk):
+        record = self.update_ambulance(pk)
+        #return HttpResponse('Got it!')
+
+        json = { "status" : record.status,
+                 "long" : record.location.x,
+                 "lat" : record.location.y 
+                }
+        return self.render_json_response(json)
+
+    #Through the browser, can render HTML for human-friendly viewing
     def get(self, request, pk):
         record = self.update_ambulance(pk)
         return HttpResponse('Got it!')
 
-    def get_ajax(self, request, pk):
-        record = self.update_ambulance(pk)
-        json = { 'status': record.status, 'location': record.location }
-        return self.render_json_response(json)
-     
-class AmbulanceInfoView(views.JSONResponseMixin, View):
-    def get_ajax(self, request, pk):
-        s = Ambulances.objects.get(pk=pk)
-        user = s.reporter.user
-        
-        json = {
-            "status" : s.status,
-            "reporter" : user.first_name + ' ' + user.last_name if s.reporter is not None else "No reporter"
-        }
+
+class ReporterCreateView(CreateView):
+    model = Reporter
+    context_object_name = "reporter_form"
+    form_class = ReporterCreateForm
+    success_url = reverse_lazy('list')
+
+class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
+    model = Ambulances
+    context_object_name = 'ambulances_list'
+
+    def get_ajax(self, request, *args, **kwargs):
+        json = []
+        entries = self.get_queryset()
+        for entry in entries:
+            json.append({
+                'type': 'Ambulances',
+                'location': { 'x': entry.location.x,
+                              'y': entry.location.y },
+                'license_plate': entry.license_plate,
+                'status': entry.status,
+            })
         return self.render_json_response(json)
 
-    def get(self, request, pk):
-        s = Ambulances.objects.get(pk=pk)
-        user = s.reporter.user
+    def index(request):
+        ambulances = Ambulances.objects.all()
+        len(ambulances)
+        return render(request, 'craed/ambulances_list.html', {'ambulances_list': ambulances})
 
-        json = {
-            "status" : s.status,
-            "reporter" : user.first_name + ' ' + user.last_name if s.reporter is not None else "No reporter"
-        }
-        return self.render_json_response(json)
+    def lat(self):
+        return float(self.request.GET.get('lat') or 32.52174913333495)
+
+    def lng(self):
+        return float(self.request.GET.get('lng') or -117.0096155300208)
+
+

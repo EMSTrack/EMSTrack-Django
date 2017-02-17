@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+  <title>{% block title %}Cruz Roja de Tijuana - Ambulance Locator{% endblock %}</title>
+  <meta charset="utf-8" />
+  <script type = "text/javascript" 
+          src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  <script src="{% static 'ambulances/leaflet_map.js' %}"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+  <link rel="stylesheet" type="text/css" href="{% static 'ambulances/css/ambulance_base.css' %}" />
+  {% block head %}{% endblock %}
+</head>
+
+
+  <body>
+    <div id="map" tabindex="0"></div>
+    <div class="overlay">
+      <div id="title">
+        <h1>Cruz Roja de Tijuana</h1>
+        <h2>Ambulance Locator</h2>
+        </div>
+
+    <div id="content">
+      {% block content %}{% endblock %}
+      </div>
+    <footer>
+      <nav class="footer">
+        <a href="craed/about">About</a>
+        <a href="craed/contact">Contact</a>
+        <a href="http://www.cruzrojatijuana.org.mx">Cruz Roja de Tijuana</a>
+        </nav>
+      </footer>
+    </div>>
+    
+    <script>
+    var options = {
+        map_id: 'map',
+        //lat: {{ view.lat }},
+        //lng: {{ view.lng }},
+        lat: 32.523, 
+        lng: -117.096623,
+        zoom: 13,
+        //newPointFunction: newPointFunction,
+      };
+
+      // create map
+      var widget = new MyMarkers(options);
+      {% block jscontent %}{% endblock %}
+    </script> 
+    
+  </body>
+</html>

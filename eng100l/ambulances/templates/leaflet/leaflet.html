@@ -1,0 +1,66 @@
+{% load i18n l10n static %}
+<style type="text/css">
+  {% block map_css %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+    // CSS block
+    #{{ id }}_div_map { position: absolute; vertical-align: top; float: {{ LANGUAGE_BIDI|yesno:"right,left" }}; }
+    {% if not display_raw %}#{{ id }} { display: none; }{% endif %}
+  {% endblock %}
+</style>
+
+<div id="{{ id }}_div_coords">
+  <label class="{{ id }}_coords_label">Latitude:</label>
+  <input type="text" id="{{ id }}_lat" name="{{ name }}_lat" disabled>
+  <br/>
+  <label class="{{ id }}_coords_label">Longitude:</label>
+  <input type="text" id="{{ id }}_lng" name="{{ name }}_lng" disabled>
+  {% if display_raw %}<p>{% trans "Debugging window (serialized value)" %}</p>{% endif %}
+  <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10" name="{{ name }}">{{ serialized }}</textarea>
+</div>
+
+<div id="{{ id }}_div_map">
+    <div id="{{ id }}_map"></div>
+</div>
+
+<script type="text/javascript">
+    {% block map_options %}
+      var map_options = {};
+    {% endblock %}
+
+    // has point
+    var point = {
+    {% if point %}
+      x: {{ point.x }},
+      y: {{ point.y }},
+      {% if point.z %}
+      z: {{ point.z }},
+      {% else %}
+      z: 0,
+      {% endif %}
+      srid: {{ point.srid }}
+    {% else %}
+      x: -117.0037100,
+      y: 32.5027000,
+      z: 0,
+      srid: 4326 
+    {% endif %}
+    };
+
+    {% block options %}var options = {
+	geom_name: '{{ geom_type }}',
+	id: '{{ id }}',
+	id_lat: '{{ id }}_lat',
+	id_lng: '{{ id }}_lng',
+	map_id: '{{ id }}_map',
+	map_options: map_options,
+	map_srid: {{ map_srid|unlocalize }},
+	name: '{{ name }}',
+	lat: point.y,
+        lng: point.x,
+        point: [point.y, point.x],
+    };
+    {% endblock %}
+
+    // Create widget
+    var {{ module }} = new LeafletPointWidget(options);
+
+</script>
