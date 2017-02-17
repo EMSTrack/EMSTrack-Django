@@ -14,8 +14,8 @@ from django.template import loader
 
 from django.contrib.gis.geos import Point
 
-from .models import AED, Ambulances, Reporter
-from .forms import AEDUpdateForm, AEDCreateForm, AmbulanceUpdateForm, AmbulanceCreateForm, ReporterCreateForm
+from .models import Ambulances, Reporter
+from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, ReporterCreateForm
 
 class AmbulanceCreateView(CreateView):
     model = Ambulances

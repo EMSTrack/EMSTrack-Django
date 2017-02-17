@@ -5,7 +5,7 @@ from django.contrib.gis import forms as gis_forms
 from django.contrib.gis.forms import widgets as gis_widgets
 from django.core.serializers import serialize
 
-from .models import AED, Ambulances, Reporter
+from .models import Ambulances, Reporter
 
 class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
     template_name = 'leaflet/leaflet.html'
