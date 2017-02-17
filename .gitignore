@@ -99,3 +99,6 @@ ENV/
 eng100l/eng100l/settings.py
 eng100l/ambulances/migrations
 eng100l/static
+
+# IntelliJ
+idea/
