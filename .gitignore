@@ -101,4 +101,4 @@ eng100l/ambulances/migrations
 eng100l/static
 
 # IntelliJ
-idea/
+/eng100l/idea/
