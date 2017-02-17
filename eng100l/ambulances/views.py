@@ -21,7 +21,7 @@ class AmbulanceCreateView(CreateView):
     model = Ambulances
     context_object_name = "ambulance_form"
     form_class = AmbulanceCreateForm
-    success_url = reverse_lazy('list')
+    success_url = reverse_lazy('ambulance_create')
 
 class AmbulanceInfoView(views.JSONResponseMixin, View):
     def build_json(self, pk):

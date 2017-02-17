@@ -39,7 +39,7 @@ ul.menubar {
 li.menuitem {
     float: left;
     border-right: 1px solid #bbb;
-    width: 100px
+    display: inline-block;
 }
 
 li.menuitem a {
