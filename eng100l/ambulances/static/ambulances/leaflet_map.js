@@ -32,7 +32,7 @@
 
 // custom icon settings
 var ambulance_icon = L.icon({
-	iconUrl: '../icons/ambulance_icon.png',
+	iconUrl: '/static/icons/ambulance_icon.png',
 
 	iconSize: [50, 50],
 	iconAnchor: [25, 0],
