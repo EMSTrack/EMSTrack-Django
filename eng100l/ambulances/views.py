@@ -17,22 +17,25 @@ from django.contrib.gis.geos import Point
 from .models import Ambulances, Reporter
 from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, ReporterCreateForm
 
+
 class AmbulanceCreateView(CreateView):
     model = Ambulances
     context_object_name = "ambulance_form"
     form_class = AmbulanceCreateForm
     success_url = reverse_lazy('ambulance_create')
 
+
 class AmbulanceInfoView(views.JSONResponseMixin, View):
+
     def build_json(self, pk):
-    	record = Ambulances.objects.get(pk=pk)
-    	json = {
-    		"status" : record.status,
-    		"reporter" : record.reporter if record.reporter else "No Reporter",
-    		"location" : "(" + repr(record.location.x) + "," 
-    						 + repr(record.location.y) + ")"
-    	}
-    	return json
+        record = Ambulances.objects.get(pk=pk)
+        json = {
+            "status": record.status,
+            "reporter": record.reporter if record.reporter else "No Reporter",
+            "location": "(" + repr(record.location.x) + ","
+            + repr(record.location.y) + ")"
+        }
+        return json
 
     def get_ajax(self, request, pk):
         json = self.build_json(pk)
@@ -42,7 +45,9 @@ class AmbulanceInfoView(views.JSONResponseMixin, View):
         json = self.build_json(pk)
         return self.render_json_response(json)
 
+
 class AmbulanceUpdateView(views.JSONResponseMixin, View):
+
     def update_ambulance(self, pk):
         record = Ambulances.objects.get(pk=pk)
 
@@ -66,15 +71,15 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
 
     def get_ajax(self, request, pk):
         record = self.update_ambulance(pk)
-        #return HttpResponse('Got it!')
+        # return HttpResponse('Got it!')
 
-        json = { "status" : record.status,
-                 "long" : record.location.x,
-                 "lat" : record.location.y 
+        json = {"status": record.status,
+                "long": record.location.x,
+                "lat": record.location.y
                 }
         return self.render_json_response(json)
 
-    #Through the browser, can render HTML for human-friendly viewing
+    # Through the browser, can render HTML for human-friendly viewing
     def get(self, request, pk):
         record = self.update_ambulance(pk)
         return HttpResponse('Got it!')
@@ -86,6 +91,7 @@ class ReporterCreateView(CreateView):
     form_class = ReporterCreateForm
     success_url = reverse_lazy('list')
 
+
 class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     model = Ambulances
     context_object_name = 'ambulances_list'
@@ -96,8 +102,8 @@ class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
         for entry in entries:
             json.append({
                 'type': 'Ambulances',
-                'location': { 'x': entry.location.x,
-                              'y': entry.location.y },
+                'location': {'x': entry.location.x,
+                             'y': entry.location.y},
                 'license_plate': entry.license_plate,
                 'status': entry.status,
             })
@@ -106,7 +112,7 @@ class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     def index(request):
         ambulances = Ambulances.objects.all()
         len(ambulances)
-        return render(request, 'craed/ambulances_list.html', {'ambulances_list': ambulances})
+        return render(request, 'ambulances/ambulances_list.html', {'ambulances_list': ambulances})
 
     def lat(self):
         return float(self.request.GET.get('lat') or 32.52174913333495)
@@ -114,7 +120,9 @@ class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     def lng(self):
         return float(self.request.GET.get('lng') or -117.0096155300208)
 
+
 class AllAmbulancesView(views.JSONResponseMixin, View):
+
     def build_json(self):
 
         ambulances = Ambulances.objects.all()
@@ -122,12 +130,13 @@ class AllAmbulancesView(views.JSONResponseMixin, View):
 
         for ambulance in ambulances:
             json.append({
+                "id": ambulance.license_plate,
                 "status": ambulance.status,
                 "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
                 "location": "(" + repr(ambulance.location.x) + ","
                             + repr(ambulance.location.y) + ")"
             })
-    	return json
+        return json
 
     def get_ajax(self, request):
         json = self.build_json()
@@ -136,4 +145,3 @@ class AllAmbulancesView(views.JSONResponseMixin, View):
     def get(self, request):
         json = self.build_json()
         return self.render_json_response(json)
-
