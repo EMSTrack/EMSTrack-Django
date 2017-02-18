@@ -1,0 +1,68 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red27\green29\blue31;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf2 Setup Instructions for Mac\
+\
+1.\
+\
+Install Homebrew ({\field{\*\fldinst{HYPERLINK "https://brew.sh/"}}{\fldrslt https://brew.sh/}})\
+\
+2. (if any problems during this process do: xcode-select \'97install)\
+\
+INSTALLING PYTHON AND DJANGO\
+\
+brew install python3\
+pip install django\
+pip install django-braces\
+\
+INSTALLING POSTGRESQL AND POSTGIS\
+\
+brew install postgresql\
+brew install postgis\
+brew install pgrouting\
+\
+STARTING POSTGRES\
+\
+\pard\pardeftab720\sl300\partightenfactor0
+\cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec3 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start\
+createdb\
+\
+CREATING DATABASES\
+\
+pql        (to enter psql)\
+\
+	CREATE USER [username] WITH PASSWORD \'91[password]\'92;\
+	CREATE EXTENSION adminpack;\
+	CREATE DATABASE [database name];\
+	GRANT ALL PRIVILEGES ON DATABASE [database name] TO [username];\
+	\\connect [database name];\
+	CREATE EXTENSION postgis;\
+	SELECT postgis_full_version();\
+	CREATE EXTENSION pgrouting;\
+	SELECT * FROM pgr_version();\
+	\\q     (to exit sql)\
+\
+\kerning1\expnd0\expndtw0 \outl0\strokewidth0 INSTALL OTHER DEPENDENCIES\
+\
+pip install psycopg2;\
+\
+SETTINGS FILES\
+\
+1. Copy settings template in this directory to eng100l/eng100l   (inner eng100l folder). \
+2. Rename it to settings.py \
+3. Change the values specified in the settings file to your db name, user, and password.\
+4. Add a secret key by generating a django key online\
+\
+RUNNING THE PROJECT\
+\
+python manage.py createsuperuser  (and input user and pass)\
+python manage.py makemigrations\
+python manage.py migrate\
+python manage.py runserver\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf2 \
+}

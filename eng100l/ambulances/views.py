@@ -106,7 +106,7 @@ class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     def index(request):
         ambulances = Ambulances.objects.all()
         len(ambulances)
-        return render(request, 'craed/ambulances_list.html', {'ambulances_list': ambulances})
+        return render(request, 'ambulances/ambulances_list.html', {'ambulances_list': ambulances})
 
     def lat(self):
         return float(self.request.GET.get('lat') or 32.52174913333495)
