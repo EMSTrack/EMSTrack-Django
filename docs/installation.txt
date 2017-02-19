@@ -1,10 +1,10 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf470
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red27\green29\blue31;}
+{\colortbl;\red255\green255\blue255;\red27\green29\blue31;}
 \margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf2 Setup Instructions for Mac\
+\f0\fs24 \cf0 Setup Instructions for Mac\
 \
 1.\
 \
@@ -27,8 +27,8 @@ brew install pgrouting\
 STARTING POSTGRES\
 \
 \pard\pardeftab720\sl300\partightenfactor0
-\cf2 \expnd0\expndtw0\kerning0
-\outl0\strokewidth0 \strokec3 pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start\
+\cf0 \expnd0\expndtw0\kerning0
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start\
 createdb\
 \
 CREATING DATABASES\
@@ -46,7 +46,7 @@ pql        (to enter psql)\
 	SELECT * FROM pgr_version();\
 	\\q     (to exit sql)\
 \
-\kerning1\expnd0\expndtw0 \outl0\strokewidth0 INSTALL OTHER DEPENDENCIES\
+\kerning1\expnd0\expndtw0 INSTALL OTHER DEPENDENCIES\
 \
 pip install psycopg2;\
 \
@@ -59,10 +59,11 @@ SETTINGS FILES\
 \
 RUNNING THE PROJECT\
 \
+(go to directory with manage.py in it)\
 python manage.py createsuperuser  (and input user and pass)\
 python manage.py makemigrations\
 python manage.py migrate\
 python manage.py runserver\
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
-\cf2 \
+\cf0 \
 }
