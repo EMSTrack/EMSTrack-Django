@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.csrf import csrf_exempt
 
 from . import views
 
@@ -28,5 +29,9 @@ urlpatterns = [
 
     url(r'^all_ambulances',
         views.AllAmbulancesView.as_view(),
-        name="all_ambulance")
+        name="all_ambulance"),
+
+    url(r'^create_route$',
+        csrf_exempt(views.CreateRoute.as_view()),
+        name="create_route")
 ]

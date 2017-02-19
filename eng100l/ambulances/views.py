@@ -3,6 +3,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from braces import views
@@ -11,6 +13,9 @@ from django.views import View
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.template import loader
+from django.views.decorators.csrf import csrf_exempt
+import json
+import ast
 
 from django.contrib.gis.geos import Point
 
@@ -145,3 +150,12 @@ class AllAmbulancesView(views.JSONResponseMixin, View):
     def get(self, request):
         json = self.build_json()
         return self.render_json_response(json)
+
+class CreateRoute(views.JSONResponseMixin, View):
+    def post(self, request):
+        #json_data = json.loads(request.body)
+        points = ast.literal_eval(request.body)
+        text = ""
+        for p in points:
+            text = text + p["alex"] + "\n"
+        return HttpResponse(text)
