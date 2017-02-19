@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-US">
+{% load static %}
+
+<head>
+  <title>Cruz Roja Ambulance Tracker</title>
+  <meta charset="utf-8">
+  <meta name="viewpoint" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+  <!-- link rel="stylesheet" href="styles.css" -->
+</head>
+
+
+<body>
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Cruz Roja</a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Call Ambulance<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Page 1-1</a></li>
+              <li><a href="#">Page 1-2</a></li>
+              <li><a href="#">Page 1-3</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Current Status</a></li>
+          <li><a href="#">Past Records</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3>Track Ambulances</h3>
+
+    <div class="row">
+      <div class="col-md-9">
+        <div id="live-map" style="width: 800px; height: 600px"></div>
+      </div><!--end col-md-8-->
+
+      <div class="col-md-3">
+        <h3>Ambulance List</h3>
+        <div class="panel-group" id="accordion">
+          <!-- Ambulance A -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="ambulance-panel" id="1">Ambulance 1</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-list">Latitude: 32.507443</li>
+                  <li class="list-group-list">Longitude: -116.965987</li>
+                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ambulance B -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="ambulance-panel" id="2">Ambulance 2</a>
+              </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-list">Latitude: 32.507443</li>
+                  <li class="list-group-list">Longitude: -116.965987</li>
+                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ambulance C -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="ambulance-panel" id="3">Ambulance 3</a>
+              </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-list">Latitude: 32.507443</li>
+                  <li class="list-group-list">Longitude: -116.965987</li>
+                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+        </div><!--end panel-group accordion-->
+        <button id="refresh" type="button" class="btn btn-success">Change Location</button>
+        <p style="margin-top: 10px">Click this button to change location of ambulances</p>
+      </div><!--end col-md-3-->
+
+    </div><!--end row -->
+  </div>
+
+  <footer>
+  </footer>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+  <script src="{% static 'ambulances/js/map.js' %}"></script>
+
+</body>
+
+</html>

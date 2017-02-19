@@ -153,9 +153,13 @@ class AllAmbulancesView(views.JSONResponseMixin, View):
 
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):
-        #json_data = json.loads(request.body)
+        # json_data = json.loads(request.body)
         points = ast.literal_eval(request.body)
         text = ""
         for p in points:
             text = text + p["alex"] + "\n"
         return HttpResponse(text)
+
+class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
+    def get(self, request):
+        return render(request, 'ambulances/ambulance_map.html')
