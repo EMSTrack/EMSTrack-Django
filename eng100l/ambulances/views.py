@@ -32,22 +32,35 @@ class AmbulanceCreateView(CreateView):
 
 class AmbulanceInfoView(views.JSONResponseMixin, View):
 
-    def build_json(self, pk):
-        record = Ambulances.objects.get(pk=pk)
-        json = {
-            "status": record.status,
-            "reporter": record.reporter if record.reporter else "No Reporter",
-            "location": "(" + repr(record.location.x) + ","
-            + repr(record.location.y) + ")"
-        }
+    def build_json(self, request):
+
+        idFilter = request.GET.get('id')
+        statusFilter = request.GET.get('status')
+
+        ambulances = Ambulances.objects.all()
+        if (idFilter):
+            ambulances = ambulances.filter(license_plate=idFilter)
+        if (statusFilter):
+            ambulances = ambulances.filter(status=statusFilter)
+
+        json = []
+
+        for ambulance in ambulances:
+            json.append({
+                "id": ambulance.license_plate,
+                "status": ambulance.status,
+                "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
+                "lat": repr(ambulance.location.x),
+                "long": repr(ambulance.location.y)
+            })
         return json
 
-    def get_ajax(self, request, pk):
-        json = self.build_json(pk)
+    def get_ajax(self, request):
+        json = self.build_json(request)
         return self.render_json_response(json)
 
-    def get(self, request, pk):
-        json = self.build_json(pk)
+    def get(self, request):
+        json = self.build_json(request)
         return self.render_json_response(json)
 
 
@@ -124,32 +137,6 @@ class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
     def lng(self):
         return float(self.request.GET.get('lng') or -117.0096155300208)
-
-
-class AllAmbulancesView(views.JSONResponseMixin, View):
-
-    def build_json(self):
-
-        ambulances = Ambulances.objects.all()
-        json = []
-
-        for ambulance in ambulances:
-            json.append({
-                "id": ambulance.license_plate,
-                "status": ambulance.status,
-                "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
-                "location": "(" + repr(ambulance.location.x) + ","
-                            + repr(ambulance.location.y) + ")"
-            })
-        return json
-
-    def get_ajax(self, request):
-        json = self.build_json()
-        return self.render_json_response(json)
-
-    def get(self, request):
-        json = self.build_json()
-        return self.render_json_response(json)
 
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):

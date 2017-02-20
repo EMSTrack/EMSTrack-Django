@@ -19,17 +19,13 @@ urlpatterns = [
         views.ReporterCreateView.as_view(),
         name="reporter_create"),
 
-    url(r'^ambulance_info/(?P<pk>[0-9]+)$',
+    url(r'^ambulance_info',
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
 
     url(r'^ambulance_view$',
         views.AmbulanceView.as_view(),
         name="ambulance_view"),
-
-    url(r'^all_ambulances',
-        views.AllAmbulancesView.as_view(),
-        name="all_ambulance"),
 
     url(r'^create_route$',
         csrf_exempt(views.CreateRoute.as_view()),
