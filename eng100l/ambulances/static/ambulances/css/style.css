@@ -5,7 +5,7 @@ body {
 
 .content {
 
-    padding: 65px 0px 60px 0px;
+    padding: 65px 0px 40px 0px;
 }
 
 .bare {
@@ -63,7 +63,6 @@ li.menuitem a:hover {
 
 .site-footer {
     width: 100%;
-    position: absolute;
     background-color: #333333;
     text-align: center;
     padding-top: 6px;
