@@ -50,8 +50,8 @@ class AmbulanceInfoView(views.JSONResponseMixin, View):
                 "id": ambulance.license_plate,
                 "status": ambulance.status,
                 "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
-                "lat": repr(ambulance.location.x),
-                "long": repr(ambulance.location.y)
+                "lat": repr(ambulance.location.y),
+                "long": repr(ambulance.location.x)
             })
         return json
 

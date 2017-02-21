@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	var mymap = L.map('live-map').setView([32.506674, -116.963434], 16);
+	var mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 	// Initialize marker icons.
 	var ambulanceIcon = L.icon({
 		iconUrl: '/static/icons/ambulance_icon.png',
@@ -21,14 +21,16 @@ $(document).ready(function() {
 	// Add hospital marker.
 	L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
 
-	var ajaxUrl = 'https://yangf96.github.io/Cruz-Roja-Views/ambulances.json';
+	var ajaxUrl = "ambulance_info";
 	$('#refresh').click(function() {
+		/*
 		console.log('change url');
 		console.log('click url is ' + ajaxUrl);
 		if(ajaxUrl === 'https://yangf96.github.io/Cruz-Roja-Views/ambulances.json')
 			ajaxUrl = 'https://yangf96.github.io/JSON-test/moreAmbulances.json';
 		else
 			ajaxUrl = 'https://yangf96.github.io/Cruz-Roja-Views/ambulances.json';
+			*/
 	});
 
 
@@ -39,7 +41,7 @@ $(document).ready(function() {
 		url: ajaxUrl,
 		success: function(arr) {
 			$.each(arr, function(index, item) {
-				ambulanceMarkers[item.id] = L.marker([item.lat, item.lon], {icon: ambulanceIcon})
+				ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIcon})
 				.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
 				// Bind id to icon
 				ambulanceMarkers[item.id]._icon.id = item.id;
@@ -77,12 +79,13 @@ function AjaxReq(ambulanceMarkers, ajaxUrl, ambulanceIcon, mymap) {
 	console.log(ajaxUrl);
 	$.ajax({
 		type: 'GET',
-		url: ajaxUrl,
+		datatype: "json",
+		url: 'ambulance_info',
 		success: function(arr) {
 			$.each(arr, function (index, item) {
 				// Create new ambulance markers if new ambulances are added
 				if(typeof ambulanceMarkers[item.id] == 'undefined'){
-					ambulanceMarkers[item.id] = L.marker([item.lat, item.lon], {icon: ambulanceIcon})
+					ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIcon})
 					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
 					// Bind id to icon
 					ambulanceMarkers[item.id]._icon.id = item.id;
@@ -96,7 +99,7 @@ function AjaxReq(ambulanceMarkers, ajaxUrl, ambulanceIcon, mymap) {
 					});  
 				}
 				// Update ambulance location
-				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.lat, item.lon]).update();
+				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.lat, item.long]).update();
 				ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
 			});
 		}
