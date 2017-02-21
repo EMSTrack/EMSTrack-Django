@@ -4,20 +4,65 @@
 <head>
   <title>{% block title %}Cruz Roja de Tijuana - Ambulance Tracker{% endblock %}</title>
   <meta charset="utf-8" />
-  <script type = "text/javascript" 
-          src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <link rel="stylesheet" type="text/css" 
-	href="{% static 'ambulances/css/style.css' %}" />
-  {% block head %}{% endblock %}
+  <meta name="viewpoint" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static 'ambulances/css/style.css' %}" />
+  <script type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  {% block head %}
+  {% endblock %}
 </head>
+
 <body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <!-- Navbar toggle -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/ambulances/ambulance_view">Cruz Roja</a>
+      </div>
+      <!-- Navbar Menu -->
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/ambulances/ambulance_view">Home</a></li>
+          {% if user.is_authenticated %}
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Call Ambulance<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Page 1-1</a></li>
+              <li><a href="#">Page 1-2</a></li>
+              <li><a href="#">Page 1-3</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Current Status</a></li>
+          <li><a href="#">Past Records</a></li>
+          <li><a href="/ambulances/create_ambulance">Create Ambulance</a></li>
+          <li><a href="/ambulances/create_reporter">Create Reporter</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/accounts/logout/?next={{ request.path }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
+        </ul>
+        {% else %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
+          <li><a href="/accounts/login/?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+<!--
   <h1>Cruz Roja de Tijuana</h1>
   <h2>Ambulance Locator</h2>
   <ul class="menubar">
     <li class="menuitem">
       <a href="/ambulances/ambulance_view">Home</a>
     </li>
-    {% if user.is_authenticated %}
     <li class="menuitem">
       <a href="/ambulances/create_ambulance">Create Ambulance</a>
     </li>
@@ -27,28 +72,33 @@
     <li class="menuitem" style="float:right">
       <a href="/accounts/logout/?next={{ request.path }}">Logout</a>
     </li>
-    {% else %}
     <li class="menuitem" style="float:right">
       <a href="/accounts/login/?next={{ request.path }}">Login</a>
     </li>
-    {% endif %}
   </ul>
+-->
+
   <script>
     // make current page active
     var pname = $(location).attr('pathname').split('/',3).join('/');
     $('.menuitem a[href^="' + pname + '"]').addClass('menuitem active');
   </script>
-  <div id="content">
-    {% block content %}{% endblock %}
-  </div>
-  {% block footer %}
+
+  <div class="content">
+  {% block content %}
   {% endblock %}
-  <footer>
-    <nav class="footer">
-      <a href="craed/about">About</a>
-      <a href="craed/contact">Contact</a>
-      <a href="http://www.cruzrojatijuana.org.mx">Cruz Roja de Tijuana</a>
-    </nav>
+  </div>
+
+  <footer class="site-footer">
+    {% block footer %}
+    {% endblock %}
+    <div class="container">
+      <ul>
+        <li><a href="craed/about">About</a></li>
+        <li><a href="craed/contact">Contact</a></li>
+        <li><a href="http://www.cruzrojatijuana.org.mx">Cruz Roja de Tijuana</a></li>
+      </ul>
+    </div>
   </footer>
 </body>
 </html>
