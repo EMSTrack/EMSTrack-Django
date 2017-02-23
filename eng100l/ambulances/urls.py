@@ -19,7 +19,7 @@ urlpatterns = [
         views.ReporterCreateView.as_view(),
         name="reporter_create"),
 
-    url(r'^ambulance_info',
+    url(r'^ambulance_info$',
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
 

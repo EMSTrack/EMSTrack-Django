@@ -100,5 +100,9 @@ eng100l/eng100l/settings.py
 eng100l/ambulances/migrations
 eng100l/static
 
+# Docker
+eng100l/Dockerfile
+eng100l/docker-compose.yml
+
 # IntelliJ
 /eng100l/.idea/
