@@ -33,5 +33,5 @@ python manage.py makemigrations ambulances
 python manage.py migrate
 
 11.) Now that you've migrated, you should be able to run the project again with docker-compose up. Go back to the terminal
-in which `docker-compose up` has been running, and terminate it with CTRL+C. Run again `docker-compose up`, and you you should
-be able to run the project. 
+in which `docker-compose up` has been running, and terminate it with CTRL+C. Run again `docker-compose build`,
+and after that finishes, `docker-compose up`, and you you should be able to run the project. 
