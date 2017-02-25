@@ -19,8 +19,8 @@ import ast
 
 from django.contrib.gis.geos import Point
 
-from .models import Ambulances, Reporter
-from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, ReporterCreateForm
+from .models import Ambulances, TrackableDevice
+from .forms import AmbulanceUpdateForm, AmbulanceCreateForm
 
 
 class AmbulanceCreateView(CreateView):
@@ -49,7 +49,6 @@ class AmbulanceInfoView(views.JSONResponseMixin, View):
             json.append({
                 "id": ambulance.license_plate,
                 "status": ambulance.status,
-                "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
                 "lat": repr(ambulance.location.y),
                 "long": repr(ambulance.location.x)
             })
@@ -103,11 +102,41 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
         return HttpResponse('Got it!')
 
 
+<<<<<<< HEAD
 class ReporterCreateView(CreateView):
     model = Reporter
     context_object_name = "reporter_form"
     form_class = ReporterCreateForm
     success_url = reverse_lazy('list')
+=======
+class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
+    model = Ambulances
+    context_object_name = 'ambulances_list'
+
+    def get_ajax(self, request, *args, **kwargs):
+        json = []
+        entries = self.get_queryset()
+        for entry in entries:
+            json.append({
+                'type': 'Ambulances',
+                'location': {'x': entry.location.x,
+                             'y': entry.location.y},
+                'license_plate': entry.license_plate,
+                'status': entry.status,
+            })
+        return self.render_json_response(json)
+
+    def index(request):
+        ambulances = Ambulances.objects.all()
+        len(ambulances)
+        return render(request, 'ambulances/ambulances_list.html', {'ambulances_list': ambulances})
+
+    def lat(self):
+        return float(self.request.GET.get('lat') or 32.52174913333495)
+
+    def lng(self):
+        return float(self.request.GET.get('lng') or -117.0096155300208)
+>>>>>>> adding_tables
 
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):
