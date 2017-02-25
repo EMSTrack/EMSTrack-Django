@@ -19,8 +19,8 @@ import ast
 
 from django.contrib.gis.geos import Point
 
-from .models import Ambulances, Reporter
-from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, ReporterCreateForm
+from .models import Ambulances, TrackableDevice
+from .forms import AmbulanceUpdateForm, AmbulanceCreateForm
 
 
 class AmbulanceCreateView(CreateView):
@@ -49,7 +49,6 @@ class AmbulanceInfoView(views.JSONResponseMixin, View):
             json.append({
                 "id": ambulance.license_plate,
                 "status": ambulance.status,
-                "reporter": ambulance.reporter if ambulance.reporter else "No Reporter",
                 "lat": repr(ambulance.location.y),
                 "long": repr(ambulance.location.x)
             })
@@ -103,11 +102,7 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
         return self.render_json_response(response)
 
 
-class ReporterCreateView(CreateView):
-    model = Reporter
-    context_object_name = "reporter_form"
-    form_class = ReporterCreateForm
-    success_url = reverse_lazy('list')
+
 
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):

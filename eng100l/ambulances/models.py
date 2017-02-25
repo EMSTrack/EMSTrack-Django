@@ -10,20 +10,21 @@ Tijuana = Point(-117.0382, 32.5149, srid=4326)
 
 # Create your models here.
 
-class Reporter(models.Model):
-    user         = models.ForeignKey(User, on_delete=models.CASCADE)
-    badge_number = models.CharField(max_length=254)
-    
+class Status(models.Model):
+    status_string = models.CharField(max_length=254, primary_key=True)
+
     def __str__(self):
-        return "{} {}, {}".format(self.user.first_name,
-                                  self.user.last_name,
-                                  self.badge_number)
+        return "{}".format(self.status_string)
+
+class TrackableDevice(models.Model):
+    device_id = models.CharField(max_length=254, primary_key=True)
+    location = models.PointField(srid=4326, default=Tijuana)
 
 class Ambulances(models.Model):
     license_plate = models.CharField(max_length=254, primary_key=True)
     status        = models.CharField(max_length=254, default="Idle")
     location      = models.PointField(srid=4326, default=Tijuana)
-    reporter      = models.OneToOneField(Reporter, blank=True, null=True)
+    device        = models.OneToOneField(TrackableDevice, blank=True, null=True)
         
     def __str__(self):
         return "{}: ({}), {}".format(self.license_plate,

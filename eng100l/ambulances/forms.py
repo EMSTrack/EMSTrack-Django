@@ -5,7 +5,7 @@ from django.contrib.gis import forms as gis_forms
 from django.contrib.gis.forms import widgets as gis_widgets
 from django.core.serializers import serialize
 
-from .models import Ambulances, Reporter
+from .models import Ambulances, TrackableDevice
 
 class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
     template_name = 'leaflet/leaflet.html'
@@ -39,7 +39,7 @@ class AmbulanceUpdateForm(forms.ModelForm):
     model = Ambulances
     fields = [ 'status' ]
 
-class ReporterCreateForm(forms.ModelForm):
+class TrackableDeviceCreateForm(forms.ModelForm):
   class Meta:
-    model = Reporter
-    fields = ['badge_number']
+    model = TrackableDevice
+    fields = ['device_id']
