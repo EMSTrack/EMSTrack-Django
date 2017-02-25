@@ -30,6 +30,11 @@ class AmbulanceCreateView(CreateView):
     form_class = AmbulanceCreateForm
     success_url = reverse_lazy('ambulance_create')
 
+    def get_context_data(self, **kwargs):
+        context = super(AmbulanceCreateView, self).get_context_data(**kwargs)
+        context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
+        return context
+
 
 class AmbulanceInfoView(views.JSONResponseMixin, View):
 

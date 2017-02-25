@@ -24,4 +24,23 @@
     {% endif %}
   </div>
 </form>
+
+    <br/><br/>
+
+    <h1>Ambulance List</h1>
+
+    <br/>
+
+    <ul>
+    {% for ambulance in ambulances %}
+        {% if ambulance.license_plate != "" %}
+            <li>
+                {{ ambulance.license_plate }};
+                {{ ambulance.status }};
+                {{ ambulance.location }};
+                <a href="ambulance_map">Edit (does nothing right now)</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
 {% endblock %}
