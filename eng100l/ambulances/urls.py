@@ -15,10 +15,6 @@ urlpatterns = [
         views.AmbulanceCreateView.as_view(),
         name="ambulance_create"),
 
-    url(r'^create_reporter$', 
-        views.ReporterCreateView.as_view(),
-        name="reporter_create"),
-
     url(r'^ambulance_info$',
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
