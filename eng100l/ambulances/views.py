@@ -109,35 +109,6 @@ class ReporterCreateView(CreateView):
     form_class = ReporterCreateForm
     success_url = reverse_lazy('list')
 
-
-class AmbulanceView(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
-    model = Ambulances
-    context_object_name = 'ambulances_list'
-
-    def get_ajax(self, request, *args, **kwargs):
-        json = []
-        entries = self.get_queryset()
-        for entry in entries:
-            json.append({
-                'type': 'Ambulances',
-                'location': {'x': entry.location.x,
-                             'y': entry.location.y},
-                'license_plate': entry.license_plate,
-                'status': entry.status,
-            })
-        return self.render_json_response(json)
-
-    def index(request):
-        ambulances = Ambulances.objects.all()
-        len(ambulances)
-        return render(request, 'ambulances/ambulances_list.html', {'ambulances_list': ambulances})
-
-    def lat(self):
-        return float(self.request.GET.get('lat') or 32.52174913333495)
-
-    def lng(self):
-        return float(self.request.GET.get('lng') or -117.0096155300208)
-
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):
         # json_data = json.loads(request.body)

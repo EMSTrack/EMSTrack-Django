@@ -23,10 +23,6 @@ urlpatterns = [
         views.AmbulanceInfoView.as_view(),
         name="ambulance_info"),
 
-    url(r'^ambulance_view$',
-        views.AmbulanceView.as_view(),
-        name="ambulance_view"),
-
     url(r'^create_route$',
         csrf_exempt(views.CreateRoute.as_view()),
         name="create_route"),
