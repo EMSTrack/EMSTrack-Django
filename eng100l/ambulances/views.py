@@ -99,8 +99,8 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
 
     # Through the browser, can render HTML for human-friendly viewing
     def get(self, request, pk):
-        record = self.update_ambulance(pk)
-        return HttpResponse('Got it!')
+        response = self.update_ambulance(pk)
+        return self.render_json_response(response)
 
 
 class ReporterCreateView(CreateView):
