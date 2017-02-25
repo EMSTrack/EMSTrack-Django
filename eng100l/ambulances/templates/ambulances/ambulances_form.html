@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block content %}
+    {% if user.is_authenticated %}
 <form id="ambulances_form" action="" method="post">{% csrf_token %}
   <table>
     {{ form.as_table }}
@@ -26,6 +27,7 @@
 </form>
 
     <br/><br/>
+    {% endif %}
 
     <h1>Ambulance List</h1>
 
@@ -38,7 +40,9 @@
                 {{ ambulance.license_plate }};
                 {{ ambulance.status }};
                 {{ ambulance.location }};
-                <a href="ambulance_map">Edit (does nothing right now)</a>
+                {% if user.is_authenticated %}
+                    <a href="ambulance_map">Edit (does nothing right now)</a>
+                {% endif %}
             </li>
         {% endif %}
     {% endfor %}
