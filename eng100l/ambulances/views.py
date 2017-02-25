@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.http import JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
+from django.core.exceptions import ObjectDoesNotExist
 import json
 import ast
 
@@ -66,7 +67,13 @@ class AmbulanceInfoView(views.JSONResponseMixin, View):
 class AmbulanceUpdateView(views.JSONResponseMixin, View):
 
     def update_ambulance(self, pk):
-        record = Ambulances.objects.get(pk=pk)
+        try:
+            record = Ambulances.objects.get(pk=pk)
+        except ObjectDoesNotExist:
+            return {
+                "message": "Found no ambulance with that license plate",
+                "result": "failure"
+            }
 
         # lookup status
         status = self.request.GET.get('status')
@@ -84,11 +91,13 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
 
         # save updated record
         record.save()
-        return record
+        return {
+            "message": "Successful ambulance update",
+            "result": "success"
+        }
 
     def get_ajax(self, request, pk):
         record = self.update_ambulance(pk)
-        # return HttpResponse('Got it!')
 
         json = {"status": record.status,
                 "long": record.location.x,
@@ -100,9 +109,6 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
     def get(self, request, pk):
         response = self.update_ambulance(pk)
         return self.render_json_response(response)
-
-
-
 
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):
