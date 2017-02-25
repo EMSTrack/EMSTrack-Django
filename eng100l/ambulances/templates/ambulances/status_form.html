@@ -24,4 +24,22 @@
     {% endif %}
   </div>
 </form>
+
+
+
+    <br/><br/>
+
+    <h1>Status List</h1>
+
+    <br/>
+
+    <ul>
+    {% for status in statuses %}
+        {% if status.status_string != "" %}
+            <li>
+                {{ status.status_string }}
+            </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
 {% endblock %}
