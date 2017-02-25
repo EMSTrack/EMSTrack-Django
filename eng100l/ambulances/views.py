@@ -20,8 +20,8 @@ import ast
 
 from django.contrib.gis.geos import Point
 
-from .models import Ambulances, TrackableDevice
-from .forms import AmbulanceUpdateForm, AmbulanceCreateForm
+from .models import Ambulances, TrackableDevice, Status
+from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, StatusCreateForm
 
 
 class AmbulanceCreateView(CreateView):
@@ -63,6 +63,12 @@ class AmbulanceInfoView(views.JSONResponseMixin, View):
         json = self.build_json(request)
         return self.render_json_response(json)
 
+
+class StatusCreateView(CreateView):
+    model = Status
+    context_object_name = "status_form"
+    form_class = StatusCreateForm
+    success_url = reverse_lazy("status_create")
 
 class AmbulanceUpdateView(views.JSONResponseMixin, View):
 
