@@ -59,6 +59,12 @@ li.menuitem a:hover {
     background-color: #4CAF50;
 }
 
+/* navbar */
+
+.navbar{
+    border-radius: 0;
+}
+
 /* footer */
 
 .site-footer {
@@ -82,7 +88,10 @@ li.menuitem a:hover {
     color: #dddddd;
 }
 
-.navbar{
-    border-radius: 0;
+/* collapse */
+
+.panel-body {
+    padding-left: 10px
 }
+
 

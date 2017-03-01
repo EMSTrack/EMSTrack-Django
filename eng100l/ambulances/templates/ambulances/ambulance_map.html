@@ -4,6 +4,7 @@
 {% block title %}Cruz Roja Ambulance Tracker{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+
 {% endblock %}
   <!-- link rel="stylesheet" href="styles.css" -->
 
@@ -12,74 +13,118 @@
   <h3>Track Ambulances</h3>
 
   <div class="row">
+    
     <div class="col-md-9">
       <div id="live-map" style="width: 800px; height: 600px"></div>
-    </div><!--end col-md-8-->
+    </div><!--end col-md-9-->
 
     <div class="col-md-3">
-      <h3>Ambulance List</h3>
-      <div class="panel-group">
-        <!-- Ambulance A -->
+      
+      <div class="row"><!--start of filter row-->
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="ambulance-panel" id="1">Ambulance 1</a>
-            </h4>
+            <h3 class="panel-title">
+              <a data-toggle="collapse" href="#filter" class="filter-panel">Display Filter</a>
+            </h3>
           </div>
-          <div id="collapse1" class="panel-collapse collapse">
+          <div id="filter" class="panel-collapse">
             <div class="panel-body">
-              <ul class="list-group">
-                <li class="list-group-list">Latitude: 32.507443</li>
-                <li class="list-group-list">Longitude: -116.965987</li>
-                <li class="list-group-list">Plate Num: 6LIK274</li>
-              </ul>
+              <form>
+                <div class="checkbox">
+                  <label><input type="checkbox" value=""/>Show Idle</label>
+                </div>
+                <div class="checkbox">
+                  <label><input type="checkbox" value=""/>Show Occupied</label>
+                </div>
+              </form>
             </div>
           </div>
         </div>
+      </div><!--end of filter row-->
 
-        <!-- Ambulance B -->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="ambulance-panel" id="2">Ambulance 2</a>
-            </h4>
-          </div>
-          <div id="collapse2" class="panel-collapse collapse">
-            <div class="panel-body">
-              <ul class="list-group">
-                <li class="list-group-list">Latitude: 32.507443</li>
-                <li class="list-group-list">Longitude: -116.965987</li>
-                <li class="list-group-list">Plate Num: 6LIK274</li>
-              </ul>
+      <div class="row"><!--start of ambulance list row-->
+        <h3>Ambulance List</h3>
+        <div class="panel-group" id="accordion">
+          <!-- Ambulance A -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="ambulance-panel" id="1">Ambulance 1</a>
+              </h4>
+            </div>
+            <div id="collapse1" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-list">Latitude: 32.507443</li>
+                  <li class="list-group-list">Longitude: -116.965987</li>
+                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-
-        <!-- Ambulance C -->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="ambulance-panel" id="3">Ambulance 3</a>
-            </h4>
-          </div>
-          <div id="collapse3" class="panel-collapse collapse">
-            <div class="panel-body">
-              <ul class="list-group">
-                <li class="list-group-list">Latitude: 32.507443</li>
-                <li class="list-group-list">Longitude: -116.965987</li>
-                <li class="list-group-list">Plate Num: 6LIK274</li>
-              </ul>
+          <!-- Ambulance B -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="ambulance-panel" id="2">Ambulance 2</a>
+              </h4>
+            </div>
+            <div id="collapse2" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-list">Latitude: 32.507443</li>
+                  <li class="list-group-list">Longitude: -116.965987</li>
+                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+          <!-- Ambulance C -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="ambulance-panel" id="3">Ambulance 3</a>
+              </h4>
+            </div>
+            <div id="collapse3" class="panel-collapse collapse">
+              <div class="panel-body">
+                <ul class="list-group">
+                  <li class="list-group-list">Latitude: 32.507443</li>
+                  <li class="list-group-list">Longitude: -116.965987</li>
+                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                </ul>
+              </div>
+            </div>
+          </div>
 
-      </div><!--end panel-group accordion-->
+          {% for ambulance in object_list %}
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{counter}}" class="ambulance-panel" id="{{counter}}">Ambulance {{counter}}</a>
+                </h4>
+              </div>
+              <div id="collapse{{counter}}" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <ul class="list-group">
+                    <li class="list-group-list">Latitude: 32.507443</li>
+                    <li class="list-group-list">Longitude: -116.965987</li>
+                    <li class="list-group-list">Plate Num: 6LIK274</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+
+        </div><!--end panel-group accordion-->
+      </div><!--end of bottom row -->
+
       <button id="refresh" type="button" class="btn btn-success">Change Location</button>
       <p style="margin-top: 10px">Click this button to change location of ambulances</p>
-    </div><!--end col-md-3-->
 
+    </div><!--end col-md-3-->
   </div><!--end row -->
-</div>
+</div><!--end container-->
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
