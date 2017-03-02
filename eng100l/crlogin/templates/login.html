@@ -1,0 +1,124 @@
+<html>
+<head>
+
+  <!-- Latest compiled and minified CSS -->
+  
+  <link rel="stylesheet" href="https://bootswatch.com/flatly/bootstrap.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <style> 
+  .main {
+		max-width: 320px; 
+		margin: 0 auto; 
+	}
+
+	section.login-box {
+		margin: auto;
+		width: 400px; 
+	}
+	button.btn.btn-primary {
+		width: 100%;
+	}
+</style>
+</head>
+
+<body>
+
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Cruz Roja</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Sign In <span class="sr-only">(current)</span></a></li>
+        <li><a href="/auth/signup/">Signup</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!-- <li><a href="#">Link</a></li> -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+{% if error %}
+<div class="panel panel-danger">
+  <div class="panel-heading">
+      <h3 class="panel-title">Error</h3>
+  </div>
+  <div class="panel-body">
+{{ error }}
+  </div>
+</div>
+{% endif %}
+
+<!-- Maria added this --> 
+{% if form.errors %}
+<p class="login-error">Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if success %}
+<div class="panel panel-success">
+  <div class="panel-heading">
+      <h3 class="panel-title">Success!</h3>
+  </div>
+  <div class="panel-body">
+{{ success }}
+  </div>
+</div>
+{% endif %}
+
+
+
+<!-- Actual login form --> 
+  <div class="container">
+    <div class="row">
+    <section class="login-box">
+
+        <h3>Cruz Roja Login</h3>
+        <!-- Line under please login --> 
+        <div class="line">
+          <hr class="line-hr">
+          <span class="line-span">  </span>
+        </div>
+        
+        <form class="form-signin" method="post" action="/login/">{% csrf_token %}
+        <div class="form-group">
+          <label for="user-auth-phone">Phone Number</label>
+          <input type="text" class="form-control" id="inputUserPhone" name="phone" required>
+        </div>
+
+        <div class="form-group">
+          <a class="pull-right" href="#">Forgot Password?</a>
+          <label for="user-input-password">Password</label>
+          <input type="password" class="form-control" id="inputUserPassword" name="password" required>
+        </div>
+        <button type="submit" class="btn btn btn-primary" value="login">Login</button>
+        </form>
+    </section>
+    </div>
+  </div>
+</body>
+</html>
+    
+<!--
+    <h2 class="form-signin-heading">Cruz Roja Sign In</h2>
+    <label for="inputPhone" class="sr-only">Phone Number</label>
+    <input type=text placeholder="Phone Number" name="phone" class="form-control" required autofocus>
+
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type=password placeholder="Password" name="password" class=form-control required>
+    --> 
+  <!-- <input type="submit" value="login"> 
+    <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Login</button>--> 
+
