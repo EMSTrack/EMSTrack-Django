@@ -24,14 +24,14 @@ from .models import Ambulances, TrackableDevice, Status
 from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, StatusCreateForm
 
 
-class AmbulanceCreateView(CreateView):
+class AmbulanceView(CreateView):
     model = Ambulances
     context_object_name = "ambulance_form"
     form_class = AmbulanceCreateForm
     success_url = reverse_lazy('ambulance_create')
 
     def get_context_data(self, **kwargs):
-        context = super(AmbulanceCreateView, self).get_context_data(**kwargs)
+        context = super(AmbulanceView, self).get_context_data(**kwargs)
         context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
         return context
 
