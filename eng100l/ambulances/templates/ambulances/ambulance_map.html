@@ -42,82 +42,26 @@
         </div>
       </div><!--end of filter row-->
 
-      <div class="row"><!--start of ambulance list row-->
-        <h3>Ambulance List</h3>
-        <div class="panel-group" id="accordion">
-          <!-- Ambulance A -->
+      <div class="panel-group" id="accordion">
+        {% for ambulance in object_list %}
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="ambulance-panel" id="1">Ambulance 1</a>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" class="ambulance-panel" id="{{forloop.counter}}">Ambulance: {{ forloop.counter }}</a>
               </h4>
             </div>
-            <div id="collapse1" class="panel-collapse collapse">
+            <div id="collapse{{forloop.counter}}" class="panel-collapse collapse">
               <div class="panel-body">
-                <ul class="list-group">
-                  <li class="list-group-list">Latitude: 32.507443</li>
-                  <li class="list-group-list">Longitude: -116.965987</li>
-                  <li class="list-group-list">Plate Num: 6LIK274</li>
+                <ul class="list-group" style="list-style: none; padding-left: 10px;">
+                  <li class="list-group-list">Latitude: {{ ambulance.position }}</li>
+                  <li class="list-group-list">Longitude: {{ ambulance.position.y }}</li>
+                  <li class="list-group-list">License Plate: {{ ambulance.license_plate }}</li>
                 </ul>
               </div>
             </div>
           </div>
-          <!-- Ambulance B -->
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="ambulance-panel" id="2">Ambulance 2</a>
-              </h4>
-            </div>
-            <div id="collapse2" class="panel-collapse collapse">
-              <div class="panel-body">
-                <ul class="list-group">
-                  <li class="list-group-list">Latitude: 32.507443</li>
-                  <li class="list-group-list">Longitude: -116.965987</li>
-                  <li class="list-group-list">Plate Num: 6LIK274</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <!-- Ambulance C -->
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="ambulance-panel" id="3">Ambulance 3</a>
-              </h4>
-            </div>
-            <div id="collapse3" class="panel-collapse collapse">
-              <div class="panel-body">
-                <ul class="list-group">
-                  <li class="list-group-list">Latitude: 32.507443</li>
-                  <li class="list-group-list">Longitude: -116.965987</li>
-                  <li class="list-group-list">Plate Num: 6LIK274</li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          {% for ambulance in object_list %}
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{counter}}" class="ambulance-panel" id="{{counter}}">Ambulance {{counter}}</a>
-                </h4>
-              </div>
-              <div id="collapse{{counter}}" class="panel-collapse collapse">
-                <div class="panel-body">
-                  <ul class="list-group">
-                    <li class="list-group-list">Latitude: 32.507443</li>
-                    <li class="list-group-list">Longitude: -116.965987</li>
-                    <li class="list-group-list">Plate Num: 6LIK274</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-
-        </div><!--end panel-group accordion-->
-      </div><!--end of bottom row -->
+        {% endfor %}
+      </div>
 
       <button id="refresh" type="button" class="btn btn-success">Change Location</button>
       <p style="margin-top: 10px">Click this button to change location of ambulances</p>

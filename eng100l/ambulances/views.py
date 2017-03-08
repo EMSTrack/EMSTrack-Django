@@ -136,9 +136,11 @@ class CreateRoute(views.JSONResponseMixin, View):
         return HttpResponse(text)
 
 class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
-    #def get_queryset(self):
-        #return Ambulances.objects.all()
+    template_name = 'ambulances/ambulance_map.html'
 
-    def get(self, request):
-        return render(request, 'ambulances/ambulance_map.html')
+    def get_queryset(self):
+        return Ambulances.objects.all()
+
+    #def get(self, request):
+        #return render(request, 'ambulances/ambulance_map.html')
 
