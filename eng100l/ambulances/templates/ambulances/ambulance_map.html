@@ -42,29 +42,27 @@
         </div>
       </div><!--end of filter row-->
 
-      <div class="panel-group" id="accordion">
-        {% for ambulance in object_list %}
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" class="ambulance-panel" id="{{forloop.counter}}">Ambulance: {{ forloop.counter }}</a>
-              </h4>
-            </div>
-            <div id="collapse{{forloop.counter}}" class="panel-collapse collapse">
-              <div class="panel-body">
-                <ul class="list-group" style="list-style: none; padding-left: 10px;">
-                  <li class="list-group-list">Latitude: {{ ambulance.position }}</li>
-                  <li class="list-group-list">Longitude: {{ ambulance.position.y }}</li>
-                  <li class="list-group-list">License Plate: {{ ambulance.license_plate }}</li>
-                </ul>
+      <div class="row">
+        <div class="panel-group" id="accordion">
+          {% for ambulance in object_list %}
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ambulance.license_plate}}" class="ambulance-panel" id="{{ambulance.license_plate}}">Ambulance: {{ ambulance.license_plate }}</a>
+                </h4>
+              </div>
+              <div id="collapse{{ambulance.license_plate}}" class="panel-collapse collapse">
+                <div class="panel-body">
+                  <ul class="list-group" style="list-style: none; padding-left: 10px;">
+                    <li class="list-group-list">Latitude: {{ ambulance.status }}</li>
+                    <li class="list-group-list">License Plate: {{ ambulance.license_plate }}</li>
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
-
-      <button id="refresh" type="button" class="btn btn-success">Change Location</button>
-      <p style="margin-top: 10px">Click this button to change location of ambulances</p>
 
     </div><!--end col-md-3-->
   </div><!--end row -->
