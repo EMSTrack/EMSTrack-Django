@@ -10,6 +10,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from braces import views
 from django.views import View
 
+from . import response_msg
+
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.template import loader
@@ -87,8 +89,8 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
             record = Ambulances.objects.get(pk=pk)
         except ObjectDoesNotExist:
             return {
-                "message": "Found no ambulance with that license plate",
-                "result": "failure"
+                "message": response_msg.NO_AMBULANCE_MSG["message"],
+                "result": response_msg.NO_AMBULANCE_MSG["result"]
             }
 
         # lookup status
@@ -108,8 +110,8 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
         # save updated record
         record.save()
         return {
-            "message": "Successful ambulance update",
-            "result": "success"
+            "message": response_msg.AMBULANCE_UPDATE_SUCCESS["message"],
+            "result": response_msg.AMBULANCE_UPDATE_SUCCESS["result"]
         }
 
     def get_ajax(self, request, pk):
