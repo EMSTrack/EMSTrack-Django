@@ -47,10 +47,10 @@
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4 class="panel-title">
-                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{forloop.counter}}" class="ambulance-panel" id="{{forloop.counter}}">Ambulance: {{ forloop.counter }}</a>
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ambulance.license_plate}}" class="ambulance-panel" id="{{ambulance.license_plate}}">Ambulance: {{ ambulance.license_plate }}</a>
               </h4>
             </div>
-            <div id="collapse{{forloop.counter}}" class="panel-collapse collapse">
+            <div id="collapse{{ambulance.license_plate}}" class="panel-collapse collapse">
               <div class="panel-body">
                 <ul class="list-group" style="list-style: none; padding-left: 10px;">
                   <li class="list-group-list">Latitude: {{ ambulance.position }}</li>
@@ -62,9 +62,6 @@
           </div>
         {% endfor %}
       </div>
-
-      <button id="refresh" type="button" class="btn btn-success">Change Location</button>
-      <p style="margin-top: 10px">Click this button to change location of ambulances</p>
 
     </div><!--end col-md-3-->
   </div><!--end row -->
