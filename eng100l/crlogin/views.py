@@ -33,7 +33,7 @@ def user_login(request):
             #User is successfully authenticated
             login(request,user)
             success = "Welcome! You have successfully logged in. "
-            return HttpResponseRedirect("/home/")
+            return HttpResponseRedirect("/ambulances")
             #return render(request, 'home.html', {})
             # return HttpResponseRedirect('/')
         else:
@@ -42,7 +42,7 @@ def user_login(request):
     else:
         print("Thinks its GET login method")
         if request.user.is_authenticated(): 
-        	return HttpResponseRedirect("/home/")
+        	return HttpResponseRedirect("/auth/login")
         else: 
         	return render(request, 'login.html')
 
@@ -66,7 +66,7 @@ def user_signup(request):
                                               email=email,
                                               password=pass_1,
                                              )
-              return HttpResponseRedirect("/login/")
+              return HttpResponseRedirect("/auth/login/")
         else:
              error = " Password Mismatch "
              return render(request, 'login/signup.html',{"error":error})
