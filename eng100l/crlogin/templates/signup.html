@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html> 
+<html>
+<head>
+  <title>{% block title %}Cruz Roja Registration{% endblock %}</title>
+  <!-- Latest compiled and minified CSS -->
+  <meta charset="utf-8" />
+  <meta name="viewpoint" content="width=device-width, initial-scale=1">
+  <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}"/>
+  <link rel="stylesheet" type="text/css" href="{% static '/css/auth.css' %}"/>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <!-- Navbar toggle -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/ambulances">Cruz Roja</a>
+      </div>
+      <!-- Navbar Menu -->
+      <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+          <li><a href="/auth/login/">Sign In</a></li>
+          <li class="active"><a href="/auth/signup/">Signup<span class="sr-only">(current)</span></a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"></a></li> 
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Maria added this --> 
+  {% if error %}
+  <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h3 class="panel-title">Error</h3>
+   </div>
+    <div class="panel-body">
+    {{ error }}
+    </div>
+  </div>
+  {% endif %}
+
+
+  <div class="container">
+    <div class="row">
+    <section class="login-box" style="padding-top: 40px;">
+    <div class="box">
+      
+      <div class="upper-box">
+        <h3>Cruz Roja Registration</h3>
+        <div class="line">
+          <hr class="line-hr">
+          <span class="line-span">  </span>
+        </div>
+      </div>
+
+      <div class="lower-box"> 
+        <form class="form-horizontal" method="post" action="/auth/signup/">{% csrf_token %}
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label>
+          <input type="text" class="form-control" name="phone" id="inputUserPhone" required>
+        </div>
+
+        <div class="form-group">
+          <label for="emailAddress">Email Address</label>
+          <input type="text" class="form-control" name="email" id="inputUserEmail" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword">Password</label>
+          <input type="password" class="form-control" name="password1" id="inputUserPassword1" required>
+        </div>
+
+        <div class="form-group">
+          <label for="inputPassword">Re-enter Password</label>
+          <input type="password" class="form-control" name="password2" id="inputUserPassword2" required>
+        </div>
+
+        <button type="submit" class="btn btn btn-primary btn-success" value="signup">Signup</button>
+        </form>
+      </div>
+
+    </div>
+    </section>
+  </div>
+  </div>
+</body>
+</html>
