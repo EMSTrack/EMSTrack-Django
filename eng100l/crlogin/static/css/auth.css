@@ -3,6 +3,14 @@
   margin: 0 auto; 
 }
 
+section.pass-box {
+	margin: auto;
+	width: 400px; 
+}
+button.btn.btn-primary {
+	width: 100%;
+}
+
 section.login-box {
   margin: auto;
   width: 450px !important; 
