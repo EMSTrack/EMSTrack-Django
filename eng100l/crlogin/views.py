@@ -34,6 +34,7 @@ def user_login(request):
         if user:
             #User is successfully authenticated
             login(request,user)
+            print("Logged in user name: ", user.first_name)
             success = "Welcome! You have successfully logged in. "
             return HttpResponseRedirect("/ambulances")
             #return render(request, 'home.html', {})
@@ -56,6 +57,8 @@ def user_signup(request):
         phone = request.POST.get('phone')
         pass_1 = request.POST.get('password1')
         pass_2 = request.POST.get('password2')
+        first_name = name.split(" ",1)[0]
+        last_name = name.split(" ",1)[1]
         print ("email: ", email)
         if pass_1 == pass_2:
             if user_exists(email):
@@ -70,6 +73,8 @@ def user_signup(request):
                                               username=email,
                                               email=email,
                                               password=pass_1,
+                                              first_name=first_name, 
+                                              last_name=last_name
                                              )
               return HttpResponseRedirect("/auth/login/")
         else:
