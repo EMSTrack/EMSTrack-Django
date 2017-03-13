@@ -2,20 +2,21 @@
 <!DOCTYPE html> 
 <html>
 <head>
-  <title>{% block title %}Cruz Roja Login{% endblock %}</title>
+  <title>{% block title %}Cruz Roja Settings{% endblock %}</title>
   <!-- Latest compiled and minified CSS -->
   <meta charset="utf-8" />
   <meta name="viewpoint" content="width=device-width, initial-scale=1">
   <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}"/>
   <link rel="stylesheet" type="text/css" href="{% static '/css/auth.css' %}"/>
-
 </head>
 
+{% if user.is_authenticated %}
 <body>
 <!-- Navigation Bar -->
   <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -35,7 +36,6 @@
             <li><a href="/ambulances/">Ambulances</a></li>
             <li><a href="/ambulances/status">Statuses</a></li>
             <li><a href="/ambulances/ambulance_map">Map</a></li>
-            {% if user.is_authenticated %}
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">Call Ambulance<span class="caret"></span></a>
               <ul class="dropdown-menu">
@@ -44,22 +44,17 @@
                 <li><a href="#">Page 1-3</a></li>
               </ul>
             </li>
-        </ul>
-        <li><a href="#">Past Records</a></li>
-        </ul>
+            <li><a href="#">Past Records</a></li>
+        </ul> 
+        
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/accounts/logout/?next={{ request.path }}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
+          <li class="active"><a href="#"><span class="glyphicon"></span>&nbsp;Settings</a></li>
+          <li><a href="/auth/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout</a></li>
         </ul>
-        {% else %}
-        </ul>
-        <ul class="nav navbar-nav navbar-right" style="float: right !important;">
-          <li><a href="/auth/signup/"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-          <li class="active"><a href="/accounts/login/?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
-        </ul>
-        {% endif %}
       </div>
     </div>
   </nav>
+
 
 
 {% if error %}
@@ -74,10 +69,6 @@
 {% endif %}
 
 
-{% if form.errors %}
-<p class="login-error">Your username and password didn't match. Please try again.</p>
-{% endif %}
-
 {% if success %}
 <div class="panel panel-success">
   <div class="panel-heading">
@@ -90,42 +81,50 @@
 {% endif %}
 
 
-
-<!-- Actual login form --> 
   <div class="container">
     <div class="row">
     <section class="login-box"  style="padding-top: 100px;">
-    <div class="box">
-      
-      <div class="upper-box">
-        <h3>Cruz Roja Login</h3>
-        <!-- Line under please login -->
-        <div class="line">
-          <hr class="line-hr">
-          <span class="line-span">  </span>
-        </div> 
-      </div>
-      
-      <div class="lower-box">
-        <form class="form-signin" method="post" action="/auth/login/">{% csrf_token %}
-        <div class="form-group row">
-          <label for="user-auth-phone">Phone Number</label>
-          <input type="text" class="form-control" id="inputUserPhone" name="phone" required>
-        </div>
+      <div class="box">
 
-        <div class="form-group">
-          <a class="pull-right" href="#">Forgot Password?</a>
-          <label for="user-input-password">Password</label>
-          <input type="password" class="form-control" id="inputUserPassword" name="password" required>
-        </div>
-        <button type="submit" class="btn btn btn-primary btn-success" value="login">Login</button>
-        </form>
-      </div>
+        <div class="upper-box">
 
-    </div>
+          <h3>Change Password</h3>
+          <!-- Line under please login --> 
+          <div class="line">
+            <hr class="line-hr">
+            <span class="line-span">  </span>
+          </div>
+        </div>
+        
+        <div class="lower-box">
+          <form class="form-signin" method="post" action="/auth/settings/">{% csrf_token %}
+            <div class="form-group row">
+              <label for="inputPassword">Current Password</label>
+              <input type="password" class="form-control" name="currpassword" required>
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassword">New Password</label>
+              <input type="password" class="form-control" name="password1" required>
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassword">New Password (again)</label>
+              <input type="password" class="form-control" name="password2" required>
+            </div>
+
+            <button type="submit" class="btn btn btn-primary btn-success" value="submit">Submit</button>
+          </form>
+        </div>
+      </div>
     </section>
     </div>
   </div>
+
+
+{% else %}
+	<meta http-equiv="refresh" content="0; url=/login/" />
+{% endif %}
+
 </body>
 </html>
-

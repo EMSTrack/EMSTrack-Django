@@ -101,7 +101,7 @@ class HomePageView(TemplateView):
 
 
 
-# Maria added this for user in session 
+# added this for user in session 
 def redirect_view(request):
 	if not request.user.is_authenticated(): 
 		return redirect('/login/?next=%s' % request.path)
@@ -113,4 +113,31 @@ def user_exists(username):
     return False
 
 
+# Settings 
+def user_settings(request):
+  if request.method == 'POST':
+    if request.user.is_authenticated():
+      phone = request.user.username
+      pass_c = request.POST.get('currpassword')
+      pass_1 = request.POST.get('password1')
+      pass_2 = request.POST.get('password2')
+      user_check = authenticate(username=phone, password=pass_c)
+      if user_check:
+        if pass_1 == pass_2:
+          user = User.objects.get(username=phone)
+          user.set_password(pass_1)
+          user.save()
+          success = "Successfully changed password."
+          login(request, user)
+          return HttpResponseRedirect("/ambulances")
+        else:
+          error = " Password Mismatch "
+          return render(request, 'settings.html',{"error":error})
+      else:
+        error = "Phone Number and Password didn't match, Please try again."
+        return render(request, 'settings.html',{"error":error})
+    else:
+      return render(request, '/login/')
+  else:
+    return render(request, 'settings.html')
 
