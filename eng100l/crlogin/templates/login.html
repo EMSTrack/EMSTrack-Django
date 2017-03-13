@@ -54,7 +54,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right" style="float: right !important;">
           <li><a href="/auth/signup/"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-          <li class="active"><a href="/accounts/login/?next={{ request.path }}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+          <li class="active"><a href="#"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
         </ul>
         {% endif %}
       </div>
@@ -109,8 +109,8 @@
       <div class="lower-box">
         <form class="form-signin" method="post" action="/auth/login/">{% csrf_token %}
         <div class="form-group row">
-          <label for="user-auth-phone">Phone Number</label>
-          <input type="text" class="form-control" id="inputUserPhone" name="phone" required>
+          <label for="user-auth-email">Email</label>
+          <input type="text" class="form-control" id="inputUserEmail" name="email" required>
         </div>
 
         <div class="form-group">

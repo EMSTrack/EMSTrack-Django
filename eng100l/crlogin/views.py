@@ -26,9 +26,11 @@ def user_login(request):
     print("correct user login")
     if request.method == "POST":
         print ("This is POST login")
-        phone = request.POST.get('phone')
+        email = request.POST.get('email')
         password = request.POST.get('password')
-        user = authenticate(username=phone, password=password)
+        print("email: ", email)
+        print("password: ", password)
+        user = authenticate(username=email, password=password)
         if user:
             #User is successfully authenticated
             login(request,user)
@@ -37,7 +39,7 @@ def user_login(request):
             #return render(request, 'home.html', {})
             # return HttpResponseRedirect('/')
         else:
-            error = " Sorry! Phone Number and Password didn't match, Please try again ! "
+            error = "Email and Password did not match. Please try again."
             return render(request, 'login.html',{'error':error})
     else:
         print("Thinks its GET login method")
@@ -48,36 +50,37 @@ def user_login(request):
 
 def user_signup(request):
     if request.method == 'POST':
+        # TODO: need to save name, phone number etc
+        name = request.POST.get('fullname')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         pass_1 = request.POST.get('password1')
         pass_2 = request.POST.get('password2')
+        print ("email: ", email)
         if pass_1 == pass_2:
-            if user_exists(phone):
+            if user_exists(email):
               print ("USER EXISTS!!!")
               # user already exists 
-              error = "User with this phone number already exists."
+              error = "User with this email already exists."
               return render(request, 'signup.html', {'error':error})
 
             else:  
               print ("USER DOES NOT EXIST")
               user = User.objects.create_user(
-                                              username=phone,
+                                              username=email,
                                               email=email,
                                               password=pass_1,
                                              )
               return HttpResponseRedirect("/auth/login/")
         else:
-             error = " Password Mismatch "
-             return render(request, 'login/signup.html',{"error":error})
+             error = "Passwords Do Not Match"
+             return render(request, 'signup.html',{"error":error})
     else:
          return render(request, 'signup.html')
 
 
-def user_logout(request):
-  #if request.method == "GET": 
+def user_logout(request): 
   try: 
-    #del request.session['phone']  # Not sure if this is needed
     auth.logout(request)
     return HttpResponseRedirect("/auth/login/")
   except: 
