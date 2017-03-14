@@ -13,13 +13,13 @@ from django.contrib import auth  # needed for logout
 # TODO: probably dont even need this 
 # OR move implementation from User app
 class LoginPageView(TemplateView):
-	print("Wrong one")
-	def get(self, request, **kwargs):
-		return render(request, 'login.html', context=None)
+    # print("Wrong one")
+    def get(self, request, **kwargs):
+        return render(request, 'login.html', context=None)
 
-	def post(self, request, **kwargs):
-		print ("wrong one")
-		return render(request, 'login.html', context=None)
+    def post(self, request, **kwargs):
+        print ("wrong one")
+        return render(request, 'login.html', context=None)
 
 
 def user_login(request):
@@ -41,10 +41,10 @@ def user_login(request):
             return render(request, 'login.html',{'error':error})
     else:
         print("Thinks its GET login method")
-        if request.user.is_authenticated(): 
-        	return HttpResponseRedirect("/auth/login")
+        if request.user.is_authenticated():
+            return HttpResponseRedirect("/auth/login")
         else: 
-        	return render(request, 'login.html')
+            return render(request, 'login.html')
 
 def user_signup(request):
     if request.method == 'POST':
@@ -54,90 +54,92 @@ def user_signup(request):
         pass_2 = request.POST.get('password2')
         if pass_1 == pass_2:
             if user_exists(phone):
-              print ("USER EXISTS!!!")
-              # user already exists 
-              error = "User with this phone number already exists."
-              return render(request, 'signup.html', {'error':error})
+                print ("USER EXISTS!!!")
+                # user already exists 
+                error = "User with this phone number already exists."
+                return render(request, 'signup.html', {'error':error})
 
             else:  
-              print ("USER DOES NOT EXIST")
-              user = User.objects.create_user(
-                                              username=phone,
-                                              email=email,
-                                              password=pass_1,
-                                             )
-              return HttpResponseRedirect("/auth/login/")
+                print ("USER DOES NOT EXIST")
+                user = User.objects.create_user(
+                        username=phone,
+                        email=email,
+                        password=pass_1,
+                )
+                return HttpResponseRedirect("/auth/login/")
         else:
-             error = " Password Mismatch "
-             return render(request, 'login/signup.html',{"error":error})
+            error = " Password Mismatch "
+            return render(request, 'login/signup.html',{"error":error})
     else:
-         return render(request, 'signup.html')
+        return render(request, 'signup.html')
 
 
 def user_logout(request):
-  #if request.method == "GET": 
-  try: 
-    #del request.session['phone']  # Not sure if this is needed
-    auth.logout(request)
-    return HttpResponseRedirect("/auth/login/")
-  except: 
-    return HttpResponse("Error occurred when logging out")
-
-
+    #if request.method == "GET": 
+    try: 
+        #del request.session['phone']  # Not sure if this is needed
+        auth.logout(request)
+        return HttpResponseRedirect("/auth/login/")
+    except: 
+        return HttpResponse("Error occurred when logging out")
 
 class AboutPageView(TemplateView):
     template_name = "about.html"
 
 
 class HomePageView(TemplateView):
-	def get(self, request, **kwargs):
-		return render(request, 'home.html', {})
+    def get(self, request, **kwargs):
+        return render(request, 'home.html', {})
 
-	def post(self, request, **kwargs):
-		username = None
-		if request.user.is_authenticated():
-			username = request.user.username
-		return render(request, 'home.html', {})
-
-
+    def post(self, request, **kwargs):
+        username = None
+        if request.user.is_authenticated():
+            username = request.user.username
+            return render(request, 'home.html', {})
 
 # added this for user in session 
 def redirect_view(request):
-	if not request.user.is_authenticated(): 
-		return redirect('/login/?next=%s' % request.path)
+    if not request.user.is_authenticated(): 
+        return redirect('/login/?next=%s' % request.path)
 
 
 def user_exists(username):
     if User.objects.filter(username=username).exists():
         return True
-    return False
 
+    return False
 
 # Settings 
 def user_settings(request):
-  if request.method == 'POST':
-    if request.user.is_authenticated():
-      phone = request.user.username
-      pass_c = request.POST.get('currpassword')
-      pass_1 = request.POST.get('password1')
-      pass_2 = request.POST.get('password2')
-      user_check = authenticate(username=phone, password=pass_c)
-      if user_check:
-        if pass_1 == pass_2:
-          user = User.objects.get(username=phone)
-          user.set_password(pass_1)
-          user.save()
-          success = "Successfully changed password."
-          login(request, user)
-          return HttpResponseRedirect("/ambulances")
-        else:
-          error = " Password Mismatch "
-          return render(request, 'settings.html',{"error":error})
-      else:
-        error = "Phone Number and Password didn't match, Please try again."
-        return render(request, 'settings.html',{"error":error})
-    else:
-      return render(request, '/login/')
-  else:
-    return render(request, 'settings.html')
 
+    if request.method == 'POST':
+
+        if request.user.is_authenticated():
+            phone = request.user.username
+            pass_c = request.POST.get('currpassword')
+            pass_1 = request.POST.get('password1')
+            pass_2 = request.POST.get('password2')
+            user_check = authenticate(username=phone, password=pass_c)
+
+            if user_check:
+                if pass_1 == pass_2:
+                    user = User.objects.get(username=phone)
+                    user.set_password(pass_1)
+                    user.save()
+                    success = "Successfully changed password."
+                    login(request, user)
+                    return HttpResponseRedirect("/ambulances")
+            
+                else:
+                    error = " Password Mismatch "
+                    return render(request, 'settings.html',{"error":error})
+            
+            else:
+                error = "Phone Number and Password didn't match, Please try again."
+                return render(request, 'settings.html',{"error":error})
+        
+        else:
+            return render(request, '/login/')
+    
+    else:
+        return render(request, 'settings.html')
