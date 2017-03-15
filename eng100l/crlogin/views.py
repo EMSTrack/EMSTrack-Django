@@ -13,7 +13,7 @@ from django.contrib import auth  # needed for logout
 # TODO: probably dont even need this 
 # OR move implementation from User app
 class LoginPageView(TemplateView):
-    # print("Wrong one")
+    #print("Wrong one")
     def get(self, request, **kwargs):
         return render(request, 'login.html', context=None)
 
@@ -23,7 +23,16 @@ class LoginPageView(TemplateView):
 
 
 def user_login(request):
-    print("correct user login")
+    
+    if request.method == "GET":  
+        print("YASS")
+        if request.user.is_authenticated():
+            return HttpResponseRedirect("/ambulances") 
+            print("User is logged in ")
+        else: 
+            return render(request, 'login.html')
+
+  
     if request.method == "POST":
         print ("This is POST login")
         email = request.POST.get('email')
@@ -42,14 +51,19 @@ def user_login(request):
         else:
             error = "Email and Password did not match. Please try again."
             return render(request, 'login.html',{'error':error})
-    else:
-        print("Thinks its GET login method")
-        if request.user.is_authenticated():
-            return HttpResponseRedirect("/auth/login")
-        else: 
-            return render(request, 'login.html')
+
 
 def user_signup(request):
+    
+    if request.method == "GET":  
+        print("YASS")
+        if request.user.is_authenticated():
+            return HttpResponseRedirect("/ambulances") 
+            print("User is logged in ")
+        else: 
+            return render(request, 'signup.html')
+
+
     if request.method == 'POST':
         # TODO: need to save name, phone number etc
         name = request.POST.get('fullname')
