@@ -2,31 +2,31 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" 
-      href="{% static 'ambulances/css/form.css' %}" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet"
-      href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-{{ form.media }}
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ambulances/css/form.css' %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+          href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
+    {{ form.media }}
 {% endblock %}
 
 {% block content %}
     {% if user.is_authenticated %}
-<form id="ambulances_form" action="" method="post">{% csrf_token %}
-  <table>
-    {{ form.as_table }}
-  </table>
-  <div id="buttons">
-    {% if object %}
-    <input class="button save" type="submit" value="Save" />
-    <a class="button cancel" href="{{request.META.HTTP_REFERER}}">Cancel</a>
-    {% else %}
-    <input class="button save" type="submit" value="Create Ambulance" />
-    {% endif %}
-  </div>
-</form>
+        <form id="ambulances_form" action="" method="post">{% csrf_token %}
+            <table>
+                {{ form.as_table }}
+            </table>
+            <div id="buttons">
+                {% if object %}
+                    <input class="button save" type="submit" value="Save"/>
+                    <a class="button cancel" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+                {% else %}
+                    <input class="button save" type="submit" value="Create Ambulance"/>
+                {% endif %}
+            </div>
+        </form>
 
-    <br/><br/>
+        <br/><br/>
     {% endif %}
 
     <h1>Ambulance List</h1>
@@ -34,17 +34,17 @@
     <br/>
 
     <ul>
-    {% for ambulance in ambulances %}
-        {% if ambulance.license_plate != "" %}
-            <li>
-                {{ ambulance.license_plate }};
-                {{ ambulance.status }};
-                {{ ambulance.location }};
-                {% if user.is_authenticated %}
-                    <a href="ambulance_map">Edit (does nothing right now)</a>
-                {% endif %}
-            </li>
-        {% endif %}
-    {% endfor %}
+        {% for ambulance in ambulances %}
+            {% if ambulance.license_plate != "" %}
+                <li>
+                    {{ ambulance.license_plate }};
+                    {{ ambulance.status }};
+                    {{ ambulance.location }};
+                    {% if user.is_authenticated %}
+                        <a href="ambulance_map">Edit (does nothing right now)</a>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
     </ul>
 {% endblock %}

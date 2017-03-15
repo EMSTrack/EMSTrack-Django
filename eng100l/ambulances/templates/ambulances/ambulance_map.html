@@ -3,73 +3,76 @@
 
 {% block title %}Cruz Roja Ambulance Tracker{% endblock %}
 {% block head %}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
 
 {% endblock %}
-  <!-- link rel="stylesheet" href="styles.css" -->
+<!-- link rel="stylesheet" href="styles.css" -->
 
 {% block content %}
-<div class="container">
-  <h3>Track Ambulances</h3>
+    <div class="container">
+        <h3>Track Ambulances</h3>
 
-  <div class="row">
-    
-    <div class="col-md-9">
-      <div id="live-map" style="width: 800px; height: 600px"></div>
-    </div><!--end col-md-9-->
+        <div class="row">
 
-    <div class="col-md-3">
-      
-      <div class="row"><!--start of filter row-->
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title">
-              <a data-toggle="collapse" href="#filter" class="filter-panel">Display Filter</a>
-            </h3>
-          </div>
-          <div id="filter" class="panel-collapse">
-            <div class="panel-body">
-              <form>
-                <div class="checkbox">
-                  <label><input type="checkbox" value=""/>Show Idle</label>
+            <div class="col-md-9">
+                <div id="live-map" style="width: 800px; height: 600px"></div>
+            </div><!--end col-md-9-->
+
+            <div class="col-md-3">
+
+                <div class="row"><!--start of filter row-->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <a data-toggle="collapse" href="#filter" class="filter-panel">Display Filter</a>
+                            </h3>
+                        </div>
+                        <div id="filter" class="panel-collapse">
+                            <div class="panel-body">
+                                <form>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value=""/>Show Idle</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value=""/>Show Active</label>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--end of filter row-->
+
+                <div class="row">
+                    <div class="panel-group" id="accordion">
+                        {% for ambulance in object_list %}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion"
+                                           href="#collapse{{ ambulance.license_plate }}" class="ambulance-panel"
+                                           id="{{ ambulance.license_plate }}">Ambulance: {{ ambulance.license_plate }}</a>
+                                    </h4>
+                                </div>
+                                <div id="collapse{{ ambulance.license_plate }}" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul class="list-group" style="list-style: none; padding-left: 10px;">
+                                            <li class="list-group-list">Status: {{ ambulance.status }}</li>
+                                            <li class="list-group-list">License
+                                                Plate: {{ ambulance.license_plate }}</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-                <div class="checkbox">
-                  <label><input type="checkbox" value=""/>Show Active</label>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div><!--end of filter row-->
 
-      <div class="row">
-        <div class="panel-group" id="accordion">
-          {% for ambulance in object_list %}
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ambulance.license_plate}}" class="ambulance-panel" id="{{ambulance.license_plate}}">Ambulance: {{ ambulance.license_plate }}</a>
-                </h4>
-              </div>
-              <div id="collapse{{ambulance.license_plate}}" class="panel-collapse collapse">
-                <div class="panel-body">
-                  <ul class="list-group" style="list-style: none; padding-left: 10px;">
-                    <li class="list-group-list">Status: {{ ambulance.status }}</li>
-                    <li class="list-group-list">License Plate: {{ ambulance.license_plate }}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
+            </div><!--end col-md-3-->
+        </div><!--end row -->
+    </div><!--end container-->
 
-    </div><!--end col-md-3-->
-  </div><!--end row -->
-</div><!--end container-->
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-<script src="{% static 'ambulances/js/map.js' %}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="{% static 'ambulances/js/map.js' %}"></script>
 {% endblock %}
