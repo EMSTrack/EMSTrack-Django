@@ -2,10 +2,20 @@ from django.conf.urls import url
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework_swagger.views import get_swagger_view
+from rest_framework import routers
 
 from . import views
+from .views import StatusViewSet, AmbulancesViewSet
+
+schema_view = get_swagger_view(title='Ambulances API')
+
+router = routers.DefaultRouter()
+router.register(r'status', StatusViewSet)
+router.register(r'ambulance_info', AmbulancesViewSet)
 
 urlpatterns = [
+    url(r'^docs/', schema_view),
 
     url(r'^update_ambulance/(?P<pk>[0-9]+)$',
         views.AmbulanceUpdateView.as_view(),
@@ -31,3 +41,5 @@ urlpatterns = [
         views.AmbulanceMap.as_view(),
         name="ambulance_map")
 ]
+
+urlpatterns += router.urls
