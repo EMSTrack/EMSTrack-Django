@@ -150,6 +150,7 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
         #return render(request, 'ambulances/ambulance_map.html')
 
 
+# create custom viewset to limit types of requests that can be made.
 class AmbulancesViewSet(viewsets.ModelViewSet):
     queryset = Ambulances.objects.all()
     serializer_class = AmbulancesSerializer

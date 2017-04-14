@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^auth/', include('crlogin.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', RedirectView.as_view(url='http://cruzroja.ucsd.edu/wiki')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 urlpatterns += router.urls
