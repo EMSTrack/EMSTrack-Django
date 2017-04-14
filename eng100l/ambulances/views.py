@@ -100,11 +100,11 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
             record.status = status
 
         # lookup location
-        longitude = float(self.request.GET.get('long'))
-        latitude = float(self.request.GET.get('lat'))
+        longitude = self.request.GET.get('long')
+        latitude = self.request.GET.get('lat')
         if longitude and latitude:
             # update record
-            location = Point(longitude, latitude, srid=4326)
+            location = Point(float(longitude), float(latitude), srid=4326)
             record.location = location
 
         # save updated record
@@ -145,4 +145,3 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
     #def get(self, request):
         #return render(request, 'ambulances/ambulance_map.html')
-
