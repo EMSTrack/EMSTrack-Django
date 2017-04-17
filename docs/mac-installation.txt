@@ -42,6 +42,13 @@ INSTALL OTHER DEPENDENCIES
 
 pip install psycopg2;
 
+INSTALL REST FRAMEWORK
+
+pip install djangorestframework
+pip install markdown
+pip install django-filter
+pip install django-rest-swagger
+
 SETTINGS FILES
 
 1. Copy settings template in this directory to eng100l/eng100l   (inner eng100l

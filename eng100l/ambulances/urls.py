@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.generic.base import TemplateView
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.csrf import csrf_exempt
@@ -12,26 +12,27 @@ schema_view = get_swagger_view(title='Ambulances API')
 
 router = routers.DefaultRouter()
 router.register(r'status', StatusViewSet)
-router.register(r'ambulance_info', AmbulancesViewSet)
+router.register(r'ambulances', AmbulancesViewSet)
 
 urlpatterns = [
+
+    # Swagger Documentation
     url(r'^docs/', schema_view),
 
-    url(r'^update_ambulance/(?P<pk>[0-9]+)$',
-        views.AmbulanceUpdateView.as_view(),
-        name="ambulance_update"),
+    # Router API urls
+    url(r'^api/', include(router.urls)),
 
     url(r'^$',
         views.AmbulanceView.as_view(),
         name="ambulance_create"),
 
+    url(r'^update_ambulance/(?P<pk>[0-9]+)$',
+        views.AmbulanceUpdateView.as_view(),
+        name="ambulance_update"),
+
     url(r'^status$',
         views.StatusCreateView.as_view(),
         name="status_create"),
-
-    url(r'^ambulance_info$',
-        views.AmbulanceInfoView.as_view(),
-        name="ambulance_info"),
 
     url(r'^create_route$',
         csrf_exempt(views.CreateRoute.as_view()),
@@ -41,5 +42,3 @@ urlpatterns = [
         views.AmbulanceMap.as_view(),
         name="ambulance_map")
 ]
-
-urlpatterns += router.urls

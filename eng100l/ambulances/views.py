@@ -40,40 +40,6 @@ class AmbulanceView(CreateView):
         context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
         return context
 
-
-class AmbulanceInfoView(views.JSONResponseMixin, View):
-
-    def build_json(self, request):
-
-        idFilter = request.GET.get('id')
-        statusFilter = request.GET.get('status')
-
-        ambulances = Ambulances.objects.all()
-        if (idFilter):
-            ambulances = ambulances.filter(license_plate=idFilter)
-        if (statusFilter):
-            ambulances = ambulances.filter(status=statusFilter)
-
-        json = []
-
-        for ambulance in ambulances:
-            json.append({
-                "id": ambulance.license_plate,
-                "status": ambulance.status,
-                "lat": repr(ambulance.location.y),
-                "long": repr(ambulance.location.x)
-            })
-        return json
-
-    def get_ajax(self, request):
-        json = self.build_json(request)
-        return self.render_json_response(json)
-
-    def get(self, request):
-        json = self.build_json(request)
-        return self.render_json_response(json)
-
-
 class StatusCreateView(CreateView):
     model = Status
     context_object_name = "status_form"
