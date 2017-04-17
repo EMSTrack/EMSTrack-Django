@@ -48,6 +48,7 @@ pip install djangorestframework
 pip install markdown
 pip install django-filter
 pip install django-rest-swagger
+pip install django-extra-fields
 
 SETTINGS FILES
 
