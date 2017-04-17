@@ -23,6 +23,7 @@ import ast
 from django.contrib.gis.geos import Point
 
 from rest_framework import viewsets
+from rest_framework import filters
 
 from .models import Ambulances, TrackableDevice, Status
 from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, StatusCreateForm
@@ -120,6 +121,8 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 class AmbulancesViewSet(viewsets.ModelViewSet):
     queryset = Ambulances.objects.all()
     serializer_class = AmbulancesSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('license_plate', 'status')
 
 class StatusViewSet(viewsets.ModelViewSet):
     queryset = Status.objects.all()
