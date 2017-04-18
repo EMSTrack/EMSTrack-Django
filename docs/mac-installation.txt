@@ -68,3 +68,9 @@ python manage.py makemigrations ambulances
 python manage.py migrate
 python manage.py runserver
 
+IF THERE IS AN ERROR WHEN RUNNING 'python manage.py makemigrations ambulances'
+
+1. Create a folder called migrations in the ambulances directory
+2. Add an empty file named '__init__.py' to it
+3. Retry the command
+
