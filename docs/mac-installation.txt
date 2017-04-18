@@ -64,6 +64,7 @@ RUNNING THE PROJECT
 (go to directory with manage.py in it)
 python manage.py createsuperuser  (and input user and pass)
 python manage.py makemigrations
+python manage.py makemigrations ambulances
 python manage.py migrate
 python manage.py runserver
 
