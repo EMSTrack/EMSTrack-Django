@@ -1,23 +1,13 @@
-# Create your views here.
+from django.core.urlresolvers import reverse_lazy
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse, reverse_lazy
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, CreateView
 from braces import views
 from django.views import View
 
 from . import response_msg
 
 from django.http import HttpResponse
-from django.http import JsonResponse
-from django.template import loader
-from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-import json
 import ast
 
 from django.contrib.gis.geos import Point
@@ -25,9 +15,9 @@ from django.contrib.gis.geos import Point
 from rest_framework import viewsets
 from rest_framework import filters
 
-from .models import Ambulances, TrackableDevice, Status
-from .forms import AmbulanceUpdateForm, AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, TrackableDeviceSerializer
+from .models import Ambulances, Status
+from .forms import AmbulanceCreateForm, StatusCreateForm
+from .serializers import AmbulancesSerializer, StatusSerializer
 
 
 class AmbulanceView(CreateView):
@@ -41,6 +31,7 @@ class AmbulanceView(CreateView):
         context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
         return context
 
+
 class StatusCreateView(CreateView):
     model = Status
     context_object_name = "status_form"
@@ -51,6 +42,7 @@ class StatusCreateView(CreateView):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
         context['statuses'] = Status.objects.all().order_by('status_string')
         return context
+
 
 class AmbulanceUpdateView(views.JSONResponseMixin, View):
 
@@ -98,6 +90,7 @@ class AmbulanceUpdateView(views.JSONResponseMixin, View):
         response = self.update_ambulance(pk)
         return self.render_json_response(response)
 
+
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):
         # json_data = json.loads(request.body)
@@ -107,14 +100,12 @@ class CreateRoute(views.JSONResponseMixin, View):
             text = text + p["alex"] + "\n"
         return HttpResponse(text)
 
+
 class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     template_name = 'ambulances/ambulance_map.html'
 
     def get_queryset(self):
         return Ambulances.objects.all()
-
-    #def get(self, request):
-        #return render(request, 'ambulances/ambulance_map.html')
 
 
 # create custom viewset to limit types of requests that can be made.
@@ -123,6 +114,7 @@ class AmbulancesViewSet(viewsets.ModelViewSet):
     serializer_class = AmbulancesSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('license_plate', 'status')
+
 
 class StatusViewSet(viewsets.ModelViewSet):
     queryset = Status.objects.all()
