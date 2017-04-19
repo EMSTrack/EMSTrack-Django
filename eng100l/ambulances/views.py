@@ -14,6 +14,7 @@ from django.contrib.gis.geos import Point
 
 from rest_framework import viewsets
 from rest_framework import filters
+from rest_framework import mixins
 
 from .models import Ambulances, Status
 from .forms import AmbulanceCreateForm, StatusCreateForm
@@ -108,14 +109,23 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
         return Ambulances.objects.all()
 
 
-# create custom viewset to limit types of requests that can be made.
-class AmbulancesViewSet(viewsets.ModelViewSet):
+# Viewsets
+
+# Custom viewset that only allows listing, retrieving, and updating
+class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
+                                mixins.RetrieveModelMixin,
+                                mixins.UpdateModelMixin,
+                                viewsets.GenericViewSet):
+    pass
+
+
+class AmbulancesViewSet(ListRetrieveUpdateViewSet):
     queryset = Ambulances.objects.all()
     serializer_class = AmbulancesSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('license_plate', 'status')
 
 
-class StatusViewSet(viewsets.ModelViewSet):
+class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer

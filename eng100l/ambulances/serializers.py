@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import Status, TrackableDevice, Ambulances
 from drf_extra_fields.geo_fields import PointField
 
+
 class StatusSerializer(serializers.ModelSerializer):
 
     status = serializers.SerializerMethodField('get_alternate_name')
@@ -13,10 +14,12 @@ class StatusSerializer(serializers.ModelSerializer):
     def get_alternate_name(self, obj):
         return obj.status_string
 
+
 class TrackableDeviceSerializer(serializers.ModelSerializer):
     class Meta:
-        model= TrackableDevice 
+        model = TrackableDevice
         fields = '__all__'
+
 
 class AmbulancesSerializer(serializers.ModelSerializer):
 
@@ -24,7 +27,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
     id = serializers.SerializerMethodField('get_alternate_name')
 
     class Meta:
-        model = Ambulances	
+        model = Ambulances
         fields = ['id', 'location', 'status', 'device']
 
     def get_alternate_name(self, obj):
