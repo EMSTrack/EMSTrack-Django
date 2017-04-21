@@ -20,9 +20,15 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
+<<<<<<< HEAD
 from .models import Ambulances, Status, Call
 from .forms import AmbulanceCreateForm, StatusCreateForm
 from .serializers import AmbulancesSerializer, StatusSerializer, CallSerializer
+=======
+from .models import Ambulances, Status, Region
+from .forms import AmbulanceCreateForm, StatusCreateForm
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer
+>>>>>>> 6e5644ae5302853abdc5fc230c74687b87316336
 
 
 class AmbulanceView(CreateView):
@@ -134,47 +140,9 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
 
-#new Call request
-@csrf_exempt
-def call_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
-    if request.method == 'GET':
-        calls = Call.objects.all()
-        serializer = CallSerializer(calls, many=True)
-        return JsonResponse(serializer.data, safe=False)
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = CallSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
 
-@csrf_exempt
-def call_detail(request, pk):
-    """
-    Retrieve, update or delete an individual call.
-    """
-    try:
-        call = Call.objects.get(pk=pk)
-    except Call.DoesNotExist:
-        return HttpResponse(status=404)
 
-    if request.method == 'GET':
-        serializer = SnippetSerializer(call)
-        return JsonResponse(serializer.data)
-
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = CallSerializer(call, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
-
-    elif request.method == 'DELETE':
-        call.delete()
-        return HttpResponse(status=204)
+class RegionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Region.objects.all()
+    serializer_class = RegionSerializer
