@@ -66,6 +66,10 @@ $(document).ready(function() {
 	// Open popup on panel hover.
 	$('.ambulance-panel').click(function(){
 		var id = $(this).attr('id');
+
+		var position = ambulanceMarkers[id].getLatLng();
+		mymap.setView(position, 12);
+
 		// Open popup for 2.5 seconds.
 		ambulanceMarkers[id].openPopup();
 		setTimeout(function(){
