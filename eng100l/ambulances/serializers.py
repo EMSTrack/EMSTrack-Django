@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Status, TrackableDevice, Ambulances
+from .models import Status, TrackableDevice, Ambulances, Region
 from drf_extra_fields.geo_fields import PointField
 
 
@@ -32,3 +32,9 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     def get_alternate_name(self, obj):
         return obj.license_plate
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'

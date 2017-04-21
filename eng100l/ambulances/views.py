@@ -16,9 +16,9 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
-from .models import Ambulances, Status
+from .models import Ambulances, Status, Region
 from .forms import AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer
 
 
 class AmbulanceView(CreateView):
@@ -129,3 +129,8 @@ class AmbulancesViewSet(ListRetrieveUpdateViewSet):
 class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
+
+
+class RegionViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Region.objects.all()
+    serializer_class = RegionSerializer
