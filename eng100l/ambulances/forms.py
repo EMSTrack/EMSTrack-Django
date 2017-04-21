@@ -32,18 +32,18 @@ class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
 class AmbulanceCreateForm(forms.ModelForm):
   class Meta:
     model = Ambulances
-    fields = ['license_plate']
+    fields = ['license_plate', 'name']
 
 
 class StatusCreateForm(forms.ModelForm):
   class Meta:
     model = Status
-    fields = ['status_string']
+    fields = ['name']
 
 class AmbulanceUpdateForm(forms.ModelForm):
   class Meta:
     model = Ambulances
-    fields = [ 'status' ]
+    fields = [ 'status']
 
 class TrackableDeviceCreateForm(forms.ModelForm):
   class Meta:

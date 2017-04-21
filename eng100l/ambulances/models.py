@@ -11,11 +11,10 @@ Tijuana = Point(-117.0382, 32.5149, srid=4326)
 # Create your models here.
 
 class Status(models.Model):
-    #status_id = models.AutoField(primary_key=True)
-    status_string = models.CharField(max_length=254, unique=True, primary_key=True)
+    name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
-        return "{}".format(self.status_string)
+        return "{}".format(self.name)
 
 class TrackableDevice(models.Model):
     device_id = models.CharField(max_length=254, primary_key=True)
@@ -23,10 +22,11 @@ class TrackableDevice(models.Model):
 
 class Ambulances(models.Model):
     license_plate = models.CharField(max_length=254, primary_key=True)
-    # status        = models.CharField(max_length=254, default="Idle")
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default="Idle")
+    name = models.CharField(max_length=254)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     location      = models.PointField(srid=4326, default=Tijuana)
     device        = models.OneToOneField(TrackableDevice, blank=True, null=True)
+    priority = models.CharField(max_length=254, default="High")
 
     def __str__(self):
         return "{}: ({}), {}".format(self.license_plate,
@@ -41,5 +41,5 @@ class Call(models.Model):
 
 
 class Region(models.Model):
-    name = models.CharField(max_length=254, primary_key=True)
+    name = models.CharField(max_length=254, unique=True)
     center = models.PointField(srid=4326, null=True)

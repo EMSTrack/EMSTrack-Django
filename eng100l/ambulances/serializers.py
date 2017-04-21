@@ -6,14 +6,9 @@ from drf_extra_fields.geo_fields import PointField
 
 class StatusSerializer(serializers.ModelSerializer):
 
-    status = serializers.SerializerMethodField('get_alternate_name')
-
     class Meta:
         model = Status
-        fields = ['status']
-
-    def get_alternate_name(self, obj):
-        return obj.status_string
+        fields = ['__all__']
 
 
 class TrackableDeviceSerializer(serializers.ModelSerializer):
@@ -34,8 +29,8 @@ class AmbulancesSerializer(serializers.ModelSerializer):
     def get_alternate_name(self, obj):
         return obj.license_plate
 
-class CallSerializer(serializers.ModelSerializer):
 
+class CallSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
 

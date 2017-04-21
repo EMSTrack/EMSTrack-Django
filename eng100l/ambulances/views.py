@@ -45,7 +45,7 @@ class StatusCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
-        context['statuses'] = Status.objects.all().order_by('status_string')
+        context['statuses'] = Status.objects.all()
         return context
 
 
@@ -135,11 +135,10 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StatusSerializer
 
 
-
-
 class RegionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
+
 
 class CallViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Call.objects.all()

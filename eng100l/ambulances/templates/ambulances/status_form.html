@@ -37,9 +37,9 @@
 
     <ul>
         {% for status in statuses %}
-            {% if status.status_string != "" %}
+            {% if status.name != "" %}
                 <li>
-                    {{ status.status_string }}
+                    {{ status.name }}
                 </li>
             {% endif %}
         {% endfor %}
