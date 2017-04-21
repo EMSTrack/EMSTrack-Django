@@ -38,5 +38,8 @@ urlpatterns = [
 
     url(r'^ambulance_map$',
         views.AmbulanceMap.as_view(),
-        name="ambulance_map")
+        name="ambulance_map"),
+    url(r'^calls/$', views.call_list),
+    #url(r'^calls/(?P<pk>[0-9]+)/$', views.call_detail),
+
 ]
