@@ -8,7 +8,7 @@ class StatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Status
-        fields = ['__all__']
+        fields = '__all__'
 
 
 class TrackableDeviceSerializer(serializers.ModelSerializer):
