@@ -43,8 +43,6 @@ class CallSerializer(serializers.ModelSerializer):
         model = Call
         fields = ['address', 'location', 'priority']
 
-    def get_alternate_name(self, obj):
-
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
