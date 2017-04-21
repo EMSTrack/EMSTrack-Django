@@ -20,15 +20,9 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
-<<<<<<< HEAD
-from .models import Ambulances, Status, Call
+from .models import Ambulances, Status, Region, Call
 from .forms import AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, CallSerializer
-=======
-from .models import Ambulances, Status, Region
-from .forms import AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer
->>>>>>> 6e5644ae5302853abdc5fc230c74687b87316336
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer
 
 
 class AmbulanceView(CreateView):
