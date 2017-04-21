@@ -36,7 +36,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
 
-    address = serializers.SerializerMethodField('get_alternate_name')
+
     location = PointField(required=False)
 
     class Meta:

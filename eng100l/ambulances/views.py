@@ -140,3 +140,7 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
 class RegionViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Region.objects.all()
     serializer_class = RegionSerializer
+
+class CallViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Call.objects.all()
+    serializer_class = CallSerializer

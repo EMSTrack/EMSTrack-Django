@@ -34,7 +34,7 @@ class Ambulances(models.Model):
                                      self.location)
 
 class Call(models.Model):
-    address_string = models.CharField(max_length=254, primary_key=True)
+    address = models.CharField(max_length=254, primary_key=True)
     location = models.PointField(srid=4326, default=Tijuana)
     priority = models.CharField(max_length=254, default="A")
 
