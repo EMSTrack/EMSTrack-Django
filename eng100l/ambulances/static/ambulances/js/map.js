@@ -22,17 +22,6 @@ $(document).ready(function() {
 	L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
 
 	var ajaxUrl = "ambulance_info";
-	$('#refresh').click(function() {
-		/*
-		console.log('change url');
-		console.log('click url is ' + ajaxUrl);
-		if(ajaxUrl === 'https://yangf96.github.io/Cruz-Roja-Views/ambulances.json')
-			ajaxUrl = 'https://yangf96.github.io/JSON-test/moreAmbulances.json';
-		else
-			ajaxUrl = 'https://yangf96.github.io/Cruz-Roja-Views/ambulances.json';
-			*/
-	});
-
 
 	var ambulanceMarkers = {};	// Store ambulance markers
 
@@ -42,7 +31,7 @@ $(document).ready(function() {
 		success: function(arr) {
 			$.each(arr, function(index, item) {
 				ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIcon})
-				.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+				.bindPopup("<strong>" + item.id + "</strong><br/>" + item.status).addTo(mymap);
 				// Bind id to icon
 				ambulanceMarkers[item.id]._icon.id = item.id;
 				// Collapse panel on icon hover.
@@ -56,6 +45,21 @@ $(document).ready(function() {
 
 			});
 		}
+	});
+
+	$('.collapse').on('show.bs.collapse', function() {
+		let idStr = $(this).attr('id');
+		let jsonUrl = '/ambulances/ambulance_info?id=' + idStr.slice(8);	// get ambulance id
+		console.log(jsonUrl);
+		$.getJSON(jsonUrl, function (data) {
+			let detailsHtml = '<li class"list-group-list">Status: '
+				+ data[0].status + '</li>'
+				+ '<li class"list-group-list">Latitude: '
+				+ data[0].lat + '</li>'
+				+ '<li class"list-group-list">Longitude: '
+				+ data[0].long + '</li>';
+			$('.collapse').find('ul.list-group').html(detailsHtml);
+		});
 	});
 
 	window.setInterval(function() {
@@ -90,7 +94,7 @@ function AjaxReq(ambulanceMarkers, ajaxUrl, ambulanceIcon, mymap) {
 				// Create new ambulance markers if new ambulances are added
 				if(typeof ambulanceMarkers[item.id] == 'undefined'){
 					ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIcon})
-					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+					.bindPopup("<strong>" + item.id + "</strong><br/>" + item.status).addTo(mymap);
 					// Bind id to icon
 					ambulanceMarkers[item.id]._icon.id = item.id;
 					// Collapse panel on icon hover.
@@ -104,7 +108,7 @@ function AjaxReq(ambulanceMarkers, ajaxUrl, ambulanceIcon, mymap) {
 				}
 				// Update ambulance location
 				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.lat, item.long]).update();
-				ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
+				ambulanceMarkers[item.id]._popup.setContent("<strong>" + item.id + "</strong><br/>" + item.status);
 			});
 		}
 	});
