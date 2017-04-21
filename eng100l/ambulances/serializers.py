@@ -1,9 +1,6 @@
 from rest_framework import serializers
-<<<<<<< HEAD
-from .models import Status, TrackableDevice, Ambulances, Call
-=======
-from .models import Status, TrackableDevice, Ambulances, Region
->>>>>>> 6e5644ae5302853abdc5fc230c74687b87316336
+
+from .models import Status, TrackableDevice, Ambulances, Region, Call
 from drf_extra_fields.geo_fields import PointField
 
 
