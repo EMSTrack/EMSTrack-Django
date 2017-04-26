@@ -17,7 +17,7 @@ class TrackableDeviceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
+# To translate between status id and status name in the returned JSON
 class StatusField(serializers.Field):
 
     def to_representation(self, obj):
@@ -35,7 +35,8 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulances
-        fields = ['id', 'location', 'status']
+        fields = ['id', 'location', 'status', 'priority']
+        read_only_fields = ('priority',)
 
     def get_alternate_name(self, obj):
         return obj.license_plate
@@ -58,18 +59,22 @@ class RegionSerializer(serializers.ModelSerializer):
         model = Region
         fields = '__all__'
 
+
 class EquipmentCountSerializer(serializers.ModelSerializer):
+
     name = serializers.SerializerMethodField('get_equipment_name')
+
     class Meta:
         model = EquipmentCount
         fields = ['name', 'quantity']
 
     def get_equipment_name(self, obj):
         return Equipment.objects.filter(id=(obj.equipment).id).first().name
-        
+
 
 class HospitalSerializer(serializers.ModelSerializer):
     equipment = EquipmentCountSerializer(many=True)
+
     class Meta:
         model = Hospital
         fields = ['name', 'equipment']

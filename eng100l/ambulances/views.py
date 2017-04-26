@@ -129,19 +129,16 @@ class AmbulancesViewSet(ListRetrieveUpdateViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('license_plate', 'status')
 
+
 class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
 
 
-class RegionViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Region.objects.all()
-    serializer_class = RegionSerializer
-
-
 class CallViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
+
 
 class HospitalViewSet(ListRetrieveUpdateViewSet):
     queryset = Hospital.objects.all()
