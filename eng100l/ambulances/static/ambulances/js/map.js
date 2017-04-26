@@ -5,6 +5,10 @@ $(document).ready(function() {
 		iconUrl: '/static/icons/ambulance_icon.png',
 		iconSize: [60, 60],
 	});
+	var ambulanceIconBlack = L.icon({
+		iconUrl: '/static/icons/ambulance_icon_black.png',
+		iconSize: [60, 60],
+	});
 	var hospitalIcon = L.icon({
 		iconUrl: '/static/icons/hospital_icon.png',
 		iconSize: [40, 40]
@@ -30,8 +34,18 @@ $(document).ready(function() {
 		url: ajaxUrl,
 		success: function(arr) {
 			$.each(arr, function(index, item) {
-				ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIcon})
-				.bindPopup("<strong>" + item.id + "</strong><br/>" + item.status).addTo(mymap);
+				// Red = active?
+				if(item.status === "Active" ) {
+					ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIcon})
+					.bindPopup("<strong>" + item.id + "</strong><br/>" + item.status).addTo(mymap);
+				}
+				else {
+					ambulanceMarkers[item.id] = L.marker([item.lat, item.long], {icon: ambulanceIconBlack})
+					.bindPopup("<strong>" + item.id + "</strong><br/>" + item.status).addTo(mymap);
+				}
+				
+
+				console.log(item.status);
 				// Bind id to icon
 				ambulanceMarkers[item.id]._icon.id = item.id;
 				// Collapse panel on icon hover.
