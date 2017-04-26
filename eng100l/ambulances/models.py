@@ -25,7 +25,7 @@ class Ambulances(models.Model):
     name = models.CharField(max_length=254)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     location      = models.PointField(srid=4326, default=Tijuana)
-    device        = models.OneToOneField(TrackableDevice, blank=True, null=True)
+    # device        = models.OneToOneField(TrackableDevice, blank=True, null=True)
     priority = models.CharField(max_length=254, default="High")
 
     def __str__(self):

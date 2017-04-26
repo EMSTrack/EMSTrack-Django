@@ -24,7 +24,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulances
-        fields = ['id', 'location', 'status', 'device']
+        fields = ['id', 'location', 'status']
 
     def get_alternate_name(self, obj):
         return obj.license_plate
