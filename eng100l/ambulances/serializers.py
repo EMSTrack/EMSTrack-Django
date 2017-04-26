@@ -17,10 +17,21 @@ class TrackableDeviceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+
+class StatusField(serializers.Field):
+
+    def to_representation(self, obj):
+        return Status.objects.filter(id=obj.id).first().name
+
+    def to_internal_value(self, data):
+        return Status.objects.filter(name=data).first()
+
+
 class AmbulancesSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
     id = serializers.SerializerMethodField('get_alternate_name')
+    status = StatusField()
 
     class Meta:
         model = Ambulances
@@ -28,6 +39,9 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     def get_alternate_name(self, obj):
         return obj.license_plate
+
+    def get_status_name(self, obj):
+        return Status.objects.filter(id=(obj.status).id).first().name
 
 
 class CallSerializer(serializers.ModelSerializer):
