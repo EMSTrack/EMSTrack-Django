@@ -42,6 +42,14 @@ INSTALL OTHER DEPENDENCIES
 
 pip install psycopg2;
 
+INSTALL REST FRAMEWORK
+
+pip install djangorestframework
+pip install markdown
+pip install django-filter
+pip install django-rest-swagger
+pip install django-extra-fields
+
 SETTINGS FILES
 
 1. Copy settings template in this directory to eng100l/eng100l   (inner eng100l
@@ -56,6 +64,13 @@ RUNNING THE PROJECT
 (go to directory with manage.py in it)
 python manage.py createsuperuser  (and input user and pass)
 python manage.py makemigrations
+python manage.py makemigrations ambulances
 python manage.py migrate
 python manage.py runserver
+
+IF THERE IS AN ERROR WHEN RUNNING 'python manage.py makemigrations ambulances'
+
+1. Create a folder called migrations in the ambulances directory
+2. Add an empty file named '__init__.py' to it
+3. Retry the command
 

@@ -32,12 +32,20 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SWAGGER_SETTINGS = {
+    'APIS_SORTER': 'alpha',
+    'DOC_EXPANSION': 'list',
+    'LOGIN_URL': 'rest_framework:login',
+    'LOGOUT_URL': 'rest_framework:logout'
+}
 
 # Application definition
 
 INSTALLED_APPS = [
     'ambulances.apps.AmbulancesConfig',
     'crlogin.apps.CrloginConfig',
+    'rest_framework',
+    'rest_framework_swagger',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
