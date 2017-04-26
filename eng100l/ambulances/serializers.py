@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call
+from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount
 from drf_extra_fields.geo_fields import PointField
 
 
@@ -43,3 +43,19 @@ class RegionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Region
         fields = '__all__'
+
+class EquipmentCountSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField('get_equipment_name')
+    class Meta:
+        model = EquipmentCount
+        fields = ['name', 'quantity']
+
+    def get_equipment_name(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().name
+        
+
+class HospitalSerializer(serializers.ModelSerializer):
+    equipment = EquipmentCountSerializer(many=True)
+    class Meta:
+        model = Hospital
+        fields = ['name', 'equipment']

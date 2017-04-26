@@ -20,9 +20,9 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
-from .models import Ambulances, Status, Region, Call
+from .models import Ambulances, Status, Region, Call, Hospital
 from .forms import AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer
 
 
 class AmbulanceView(CreateView):
@@ -129,7 +129,6 @@ class AmbulancesViewSet(ListRetrieveUpdateViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('license_plate', 'status')
 
-
 class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Status.objects.all()
     serializer_class = StatusSerializer
@@ -143,3 +142,9 @@ class RegionViewSet(viewsets.ReadOnlyModelViewSet):
 class CallViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
+
+class HospitalViewSet(ListRetrieveUpdateViewSet):
+    queryset = Hospital.objects.all()
+    serializer_class = HospitalSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('name', 'address')
