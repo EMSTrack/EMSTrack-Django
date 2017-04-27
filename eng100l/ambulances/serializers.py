@@ -63,14 +63,21 @@ class RegionSerializer(serializers.ModelSerializer):
 class EquipmentCountSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField('get_equipment_name')
+    equipment_type = serializers.SerializerMethodField('get_type')
+    toggleable = serializers.SerializerMethodField('get_toggle')
 
     class Meta:
         model = EquipmentCount
-        fields = ['name', 'quantity']
+        fields = ['name', 'quantity', 'equipment_type', 'toggleable']
 
     def get_equipment_name(self, obj):
         return Equipment.objects.filter(id=(obj.equipment).id).first().name
 
+    def get_type(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().equipment_type
+
+    def get_toggle(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().toggleable
 
 class HospitalSerializer(serializers.ModelSerializer):
     equipment = EquipmentCountSerializer(many=True)

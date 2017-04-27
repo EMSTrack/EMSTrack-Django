@@ -53,6 +53,8 @@ class Hospital(models.Model):
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
+    equipment_type = models.CharField(max_length=254)
+    toggleable = models.BooleanField(default=0)
 
     def __str__(self):
         return "{}".format(self.name)
