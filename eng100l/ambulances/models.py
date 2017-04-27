@@ -22,7 +22,7 @@ class TrackableDevice(models.Model):
 
 class Ambulances(models.Model):
     license_plate = models.CharField(max_length=254, primary_key=True)
-    name = models.CharField(max_length=254)
+    name = models.CharField(max_length=254, default = "1")
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     location      = models.PointField(srid=4326, default=Tijuana)
     # device        = models.OneToOneField(TrackableDevice, blank=True, null=True)
@@ -60,7 +60,7 @@ class Equipment(models.Model):
 
 class EquipmentCount(models.Model):
     id = models.AutoField(primary_key=True)
-    hospital = models.ForeignKey(Hospital, related_name='equipment', 
+    hospital = models.ForeignKey(Hospital, related_name='equipment',
         on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
