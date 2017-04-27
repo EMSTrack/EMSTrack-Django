@@ -78,3 +78,8 @@ class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = ['name', 'equipment']
+
+class BaseSerializer(serializer.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = '__all__'

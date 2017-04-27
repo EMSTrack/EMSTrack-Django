@@ -64,3 +64,7 @@ class EquipmentCount(models.Model):
         on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+
+class Base(models.Model):
+    name = models.CharField(max_length=254, unique=True)
+    location = models.PointField(srid=4326, null=True)

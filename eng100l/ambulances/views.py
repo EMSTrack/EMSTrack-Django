@@ -145,3 +145,7 @@ class HospitalViewSet(ListRetrieveUpdateViewSet):
     serializer_class = HospitalSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('name', 'address')
+
+class BaseViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Base.objects.all()
+    serializer_class = BaseSerializer
