@@ -43,7 +43,6 @@ class Region(models.Model):
     center = models.PointField(srid=4326, null=True)
 
 class Hospital(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254, default="")
     address = models.CharField(max_length=254, default="")
 
@@ -51,7 +50,7 @@ class Hospital(models.Model):
         return "{}".format(self.name)
 
 class Equipment(models.Model):
-    id = models.AutoField(primary_key=True)
+
     name = models.CharField(max_length=254)
 
     def __str__(self):
@@ -59,7 +58,6 @@ class Equipment(models.Model):
 
 
 class EquipmentCount(models.Model):
-    id = models.AutoField(primary_key=True)
     hospital = models.ForeignKey(Hospital, related_name='equipment', 
         on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
