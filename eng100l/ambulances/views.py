@@ -49,53 +49,6 @@ class StatusCreateView(CreateView):
         return context
 
 
-class AmbulanceUpdateView(views.JSONResponseMixin, View):
-
-    def update_ambulance(self, pk):
-        try:
-            record = Ambulances.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return {
-                "message": response_msg.NO_AMBULANCE_MSG["message"],
-                "result": response_msg.NO_AMBULANCE_MSG["result"]
-            }
-
-        # lookup status
-        status = self.request.GET.get('status')
-        if status:
-            # update record
-            record.status = status
-
-        # lookup location
-        longitude = float(self.request.GET.get('long'))
-        latitude = float(self.request.GET.get('lat'))
-        if longitude and latitude:
-            # update record
-            location = Point(longitude, latitude, srid=4326)
-            record.location = location
-
-        # save updated record
-        record.save()
-        return {
-            "message": response_msg.AMBULANCE_UPDATE_SUCCESS["message"],
-            "result": response_msg.AMBULANCE_UPDATE_SUCCESS["result"]
-        }
-
-    def get_ajax(self, request, pk):
-        record = self.update_ambulance(pk)
-
-        json = {"status": record.status,
-                "long": record.location.x,
-                "lat": record.location.y
-                }
-        return self.render_json_response(json)
-
-    # Through the browser, can render HTML for human-friendly viewing
-    def get(self, request, pk):
-        response = self.update_ambulance(pk)
-        return self.render_json_response(response)
-
-
 class CreateRoute(views.JSONResponseMixin, View):
     def post(self, request):
         # json_data = json.loads(request.body)

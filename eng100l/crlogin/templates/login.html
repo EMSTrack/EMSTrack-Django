@@ -54,7 +54,7 @@
         </ul>
         <ul class="nav navbar-nav navbar-right" style="float: right !important;">
           <li><a href="/auth/signup/"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-          <li class="active"><a href="/auth/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+          <li class="active"><a href="#"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
         </ul>
         {% endif %}
       </div>
@@ -92,40 +92,27 @@
 
 
 <!-- Actual login form --> 
-  <div class="container">
+  <div class="container" id="wrap">
     <div class="row">
-    <section class="login-box"  style="padding-top: 100px;">
-    <div class="box">
-      
-      <div class="upper-box">
-        <h3>Cruz Roja Login</h3>
-        <!-- Line under please login -->
-        <div class="line">
-          <hr class="line-hr">
-          <span class="line-span">  </span>
-        </div> 
-      </div>
-      
-      <div class="lower-box">
+      <div class="col-md-6 col-md-offset-3">     
         <form class="form-signin" method="post" action="/auth/login/">{% csrf_token %}
-        <div class="form-group row">
-          <label for="user-auth-email">Email</label>
-          <input type="text" class="form-control" id="inputUserEmail" name="email" required>
-        </div>
 
-        <div class="form-group">
-          <a class="pull-right" href="#">Forgot Password?</a>
-          <label for="user-input-password">Password</label>
-          <input type="password" class="form-control" id="inputUserPassword" name="password" required>
-        </div>
-        <button type="submit" class="btn btn btn-primary btn-success" value="login">Login</button>
+          <div class="upper-box">
+            <h3>Cruz Roja Login</h3>
+          </div>
+      
+          <div class="row input_form">
+            <input type="text" placeholder="Email" class="form-control input-lg" id="inputUserEmail" name="email" style="margin-bottom: 30px;" required>  
+            <input type="password" placeholder="Password" class="form-control input-lg" id="inputUserPassword" name="password" required>
+            <a class="pull-right" href="#">Forgot Password?</a>
+            <button type="submit" class="btn btn btn-primary btn-success" value="login">Login</button>
+          </div>
+
         </form>
       </div>
-
-    </div>
-    </section>
     </div>
   </div>
+
 </body>
 </html>
 
