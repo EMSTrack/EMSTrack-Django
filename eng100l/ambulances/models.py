@@ -11,7 +11,7 @@ Tijuana = Point(-117.0382, 32.5149, srid=4326)
 # Create your models here.
 
 class Status(models.Model):
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(max_length=254, unique=True, default="")
 
     def __str__(self):
         return "{}".format(self.name)
