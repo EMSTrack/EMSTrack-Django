@@ -4,6 +4,7 @@
 {% block title %}Cruz Roja Ambulance Tracker{% endblock %}
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
 
 {% endblock %}
 <!-- link rel="stylesheet" href="styles.css" -->
@@ -58,8 +59,8 @@
                                         <ul class="list-group" style="list-style: none; padding-left: 10px;">
                                             <!--update details by ajax calls-->
                                             <li class="list-group-list">Status: {{ ambulance.status }}</li>
-                                            <li class="list-group-list">Latitude: {{ ambulance.lat }}</li>
-                                            <li class="list-group-list">Longitude: {{ ambulance.long }}</li>
+                                            <li class="list-group-list">Latitude: {{ ambulance.location.y }}</li>
+                                            <li class="list-group-list">Longitude: {{ ambulance.location.x }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -75,5 +76,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
     <script src="{% static 'ambulances/js/map.js' %}"></script>
+    
 {% endblock %}
