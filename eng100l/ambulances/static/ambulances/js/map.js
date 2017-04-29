@@ -69,7 +69,7 @@ $(document).ready(function() {
 	}, 1000);
 
 
-	// Open popup on panel hover.
+	// Open popup on panel click.
 	$('.ambulance-panel').click(function(){
 		var id = $(this).attr('id');
 
@@ -83,6 +83,8 @@ $(document).ready(function() {
 			ambulanceMarkers[id].closePopup();
 		}, 2500);
 	});
+
+
 });
 
 var firstUpdate = true; // Flags if this is the first update to the map (initial update).
@@ -145,7 +147,7 @@ function updateAmbulances(mymap) {
 			if(firstUpdate){
 
 				// Add the checkbox on the top right corner for filtering.
-				var container = L.DomUtil.create('div');
+				var container = L.DomUtil.create('div', 'filter-options');
 
 				//Generate HTML code for checkboxes for each of the statuses.
 				var filterHtml = "";
@@ -158,10 +160,12 @@ function updateAmbulances(mymap) {
 						}
 						filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status.name + '" type="checkbox" value="">' + status.name + "</label></div>";
 					});
+					// Append html code on success callback function
 					container.innerHTML = filterHtml;
+					// Initialize checked to true for all statuses.
 					$('.chk').attr('checked', true);
 				});
-				
+
 				// Add the checkboxes.
 				var customControl = L.Control.extend({
  
@@ -178,9 +182,6 @@ function updateAmbulances(mymap) {
 				 mymap.addControl(new customControl());
 
 				 firstUpdate = false;
-
-				 // Initialize checked to true for all statuses.
-				 $('.chk').attr('checked', true);
 
 				 // Listener to see if a click on a checkbox leads to a check. If so,
 				 // remove the layer from the map.
