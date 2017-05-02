@@ -7,9 +7,6 @@ section.pass-box {
 	margin: auto;
 	width: 400px; 
 }
-button.btn.btn-primary {
-	width: 100%;
-}
 
 section.login-box {
   margin: auto;
@@ -19,25 +16,35 @@ section.login-box {
 button.btn.btn-primary {
   width: 100%;
   height: 50px; 
-  margin-top: 15px;
+  background-color: Transparent;
+  border-color: #cce6ff;
+  margin-top: 40px;
+
 }
+
+button.btn.btn-primary:hover {
+	background-color: #60afff;
+	border-color: white;
+	opacity: 0.9;
+}
+
 div.form-group {
   margin-left: 0px !important; 
   margin-right: 0px !important;  
 }
 div.upper-box {
 	padding-top: 20px; 
-	padding-bottom: 0px; 
+	padding-bottom: 30px; 
 	text-align: center; 
-	background-color: white;
-	color: gray;
+	/*background-color: #cce6ff;*/ 
+	color: white;
 }
 div.lower-box {
 	padding-bottom: 40px;
 	padding-right: 15px;
 	padding-top: 30px; 
 	padding-left: 15px;
-	background-color: white;
+	background-color: #cce6ff;
 }
 div.box {
 	border: 1px solid #696969;
@@ -57,7 +64,6 @@ hr.line-hr {
 
 input.form-control {
 	height: 45px !important;
-	background-color: 
 }
 
 div.panel.panel-danger {
@@ -65,3 +71,50 @@ div.panel.panel-danger {
 	margin-bottom: -90px;
 }
 
+
+body {
+	height: 100%;
+	width: 100%;
+	/* Gradient background */ 
+	/* For browsers that do not support gradients */
+	background: #405A75; 
+	/* Safari 5.1 to 6.0 */
+    background: -webkit-linear-gradient(bottom, #405A75 35%, #3586BD 100%);
+    /* Opera 11.1 to 12.0 */ 
+    background: -o-linear-gradient(top, #405A75 35%, #3586BD 100%); 
+    /* Firefox 3.6 to 15 */
+    background: -moz-linear-gradient(top, #405A75 35%, #3586BD 100%); 
+    /* Standard syntax */
+    background: linear-gradient(to bottom, #405A75 35%, #3586BD 100%); 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.input_form {
+	margin-bottom: 30px; 
+}
+
+label.position {
+	color: white;
+}
+
+div#wrap.container{
+	margin-top: 100px; 
+}
+
+button.btn.dropdown-toggle.btn-default {
+	height: 44px;
+}
+
+a.pull-right {
+	margin-top: 7px;
+	color: white;
+}
+
+a.pull-right:hover {
+	color: #60afff;
+}
+
+span.filter-option.pull-left {
+	font-size: 17px; 
+}

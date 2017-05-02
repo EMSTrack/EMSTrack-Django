@@ -4,6 +4,7 @@
 {% block title %}Cruz Roja Ambulance Tracker{% endblock %}
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
 
 {% endblock %}
 <!-- link rel="stylesheet" href="styles.css" -->
@@ -19,29 +20,28 @@
             </div><!--end col-md-9-->
 
             <div class="col-md-3">
-
-                <div class="row"><!--start of filter row-->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                <a data-toggle="collapse" href="#filter" class="filter-panel">Display Filter</a>
-                            </h3>
-                        </div>
-                        <div id="filter" class="panel-collapse">
-                            <div class="panel-body">
-                                <form>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" value=""/>Show Idle</label>
-                                    </div>
-                                    <div class="checkbox">
-                                        <label><input type="checkbox" value=""/>Show Active</label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                <!-- Start of Ambulance Grid -->
+                <div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >
+                    <h3>Ambulances</h3>
+                    <div class="row" style="margin-top: 5px; margin-bottom: 5px;">
+                        <button type="button" class="btn btn-default">12345678</button>
+                        <button type="button" class="btn btn-default">12345678</button>
+                        <button type="button" class="btn btn-default">12345678</button>
                     </div>
-                </div><!--end of filter row-->
+                    <div class="row" style="margin-top: 5px; margin-bottom: 5px;">
+                        <button type="button" class="btn btn-default">12345678</button>
+                        <button type="button" class="btn btn-default">12345678</button>
+                        <button type="button" class="btn btn-default">12345678</button>
+                    </div>
+                    <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
+                        <button type="button" class="btn btn-default">12345678</button>
+                        <button type="button" class="btn btn-default">12345678</button>
+                        <button type="button" class="btn btn-default">12345678</button>
+                    </div>
 
+                </div>
+                <br>
+                <!-- End of Ambulance Grid Row -->
                 <div class="row">
                     <div class="panel-group" id="accordion">
                         {% for ambulance in object_list %}
@@ -58,15 +58,15 @@
                                         <ul class="list-group" style="list-style: none; padding-left: 10px;">
                                             <!--update details by ajax calls-->
                                             <li class="list-group-list">Status: {{ ambulance.status }}</li>
-                                            <li class="list-group-list">Latitude: {{ ambulance.lat }}</li>
-                                            <li class="list-group-list">Longitude: {{ ambulance.long }}</li>
+                                            <li class="list-group-list">Latitude: {{ ambulance.location.y }}</li>
+                                            <li class="list-group-list">Longitude: {{ ambulance.location.x }}</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
-                </div>
+                </div><!--end row-->
 
             </div><!--end col-md-3-->
         </div><!--end row -->
@@ -75,5 +75,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
     <script src="{% static 'ambulances/js/map.js' %}"></script>
+    
 {% endblock %}

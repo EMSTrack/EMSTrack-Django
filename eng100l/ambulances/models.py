@@ -37,6 +37,14 @@ class Call(models.Model):
     address = models.CharField(max_length=254, primary_key=True)
     location = models.PointField(srid=4326, default=Tijuana)
     priority = models.CharField(max_length=254, default="A")
+    call_time = models.DateTimeField(default=timezone.now )
+    assignment = models.CharField(max_length=254, default = "none")
+    state = models.CharField(max_length=254)
+    st_main = models.CharField(max_length=254)
+    colony = models.CharField(max_length=254, default="A")
+    delegation = models.CharField(max_length=254)
+    ambulance_no = models.PositiveSmallIntegerField(default=0)
+
 
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
