@@ -11,6 +11,10 @@ var ambulanceIconBlack = L.icon({
 	iconUrl: '/static/icons/ambulance_icon_black.png',
 	iconSize: [60, 60],
 });
+var ambulanceIconBlue = L.icon({
+	iconUrl: '/static/icons/ambulance_blue.png',
+	iconSize: [60, 40],
+});
 var hospitalIcon = L.icon({
 		iconUrl: '/static/icons/hospital_icon.png',
 		iconSize: [40, 40]
@@ -120,7 +124,9 @@ function updateAmbulances(mymap) {
 				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
 					// set icon by status
 					let coloredIcon = ambulanceIcon;
-					if(item.status !== 'Active')
+					if(item.status === 'Available')
+						coloredIcon = ambulanceIconBlue;
+					if(item.status === 'Out of service')
 						coloredIcon = ambulanceIconBlack;
 
 					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
