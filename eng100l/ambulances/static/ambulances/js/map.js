@@ -84,6 +84,19 @@ $(document).ready(function() {
 		}, 2500);
 	});
 
+	// Update panel details on collapse
+	$('.collapse').on('shown.bs.collapse', function() {
+		let ambulance_id = this.id.slice(6);	// extract id from panel id
+		let getAmbulanceUrl = 'api/ambulances/' + ambulance_id;
+		$.get(getAmbulanceUrl, function(data) {
+			//console.log(JSON.stringify(data));
+			let liElement = '<li class="list-group-list">';
+			$('#panel_'+ambulance_id).find('.list-group').html(liElement + "Status: " + data.status + '</li>'
+				+ liElement + "Latitude: " + data.location.latitude + '</li>'
+				+ liElement + "Longitude: " + data.location.longitude + '</li>'
+				+ liElement + "Updated!" + '</li>');
+		});
+	});
 
 });
 
@@ -96,7 +109,6 @@ var layergroups = {}; // The layer groups that will be part of the map.
  */
 function updateAmbulances(mymap) {
 	console.log('ajax request sent');
-	console.log(ajaxUrl);
 	$.ajax({
 		type: 'GET',
 		datatype: "json",
@@ -118,12 +130,12 @@ function updateAmbulances(mymap) {
 					ambulanceMarkers[item.id]._icon.id = item.id;
 					// Collapse panel on icon hover.
 					ambulanceMarkers[item.id].on('mouseover', function(e){
-							$('#collapse' + this._icon.id).collapse('show');
-							this.openPopup().on('mouseout', function(e){
-							$('#collapse' + this._icon.id).collapse('hide');
+						$('#panel_' + item.id).collapse('show');
+						this.openPopup().on('mouseout', function(e){
+							$('#panel_' + item.id).collapse('hide');
 							this.closePopup();
 						});
-					}); 
+					});
 			    }
 
 			    // Update ambulance location
@@ -154,7 +166,6 @@ function updateAmbulances(mymap) {
 				$.get('api/status', function(statuses) {
 					statuses.forEach(function(status){
 						if(statusWithMarkers[status.name] !== undefined) {
-							console.log(status.name);
 							layergroups[status.name] = L.layerGroup(statusWithMarkers[status.name]);
 							layergroups[status.name].addTo(mymap);
 						}
@@ -208,7 +219,6 @@ function updateAmbulances(mymap) {
 				// Goes through each layer group and adds or removes accordingly.
 				Object.keys(layergroups).forEach(function(key){
 					layergroups[key].clearLayers();
-					console.log(layergroups);
 					for(var i = 0; i < statusWithMarkers[key].length; i++){
 						// Add the ambulances in the layer if it is checked.
 						if($(".chk[data-status='" + key + "']").is(':checked')){

@@ -49,11 +49,11 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#accordion"
-                                           href="#collapse{{ ambulance.license_plate }}" class="ambulance-panel"
+                                           href="#panel_{{ ambulance.license_plate }}" class="ambulance-panel"
                                            id="{{ ambulance.license_plate }}">Ambulance: {{ ambulance.license_plate }}</a>
                                     </h4>
                                 </div>
-                                <div id="collapse{{ ambulance.license_plate }}" class="panel-collapse collapse">
+                                <div id="panel_{{ ambulance.license_plate }}" class="panel-collapse collapse">
                                     <div class="panel-body">
                                         <ul class="list-group" style="list-style: none; padding-left: 10px;">
                                             <!--update details by ajax calls-->
