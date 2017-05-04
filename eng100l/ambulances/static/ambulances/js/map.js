@@ -123,6 +123,7 @@ function updateAmbulances(mymap) {
 			$.each(arr, function(index, item) {
 				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
 					// set icon by status
+					console.log("Before ambulance icon setup");
 					let coloredIcon = ambulanceIcon;
 					if(item.status === 'Available')
 						coloredIcon = ambulanceIconBlue;
@@ -143,6 +144,19 @@ function updateAmbulances(mymap) {
 						});
 					});
 			    }
+			    else {
+			    	// If ambulance markers exist
+			    	let coloredIcon = ambulanceIcon;
+					if(item.status === 'Available')
+						coloredIcon = ambulanceIconBlue;
+					if(item.status === 'Out of service')
+						coloredIcon = ambulanceIconBlack;
+
+					mymap.removeLayer(ambulanceMarkers[item.id]);
+					
+					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+			    }
 
 			    // Update ambulance location
 				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
@@ -154,16 +168,12 @@ function updateAmbulances(mymap) {
 				}
 				else{
 					statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
-				}
-
-
-			 
-
+				}			 
 			});
 			
 			// This is for the first update of the map.
 			if(firstUpdate){
-
+				console.log("FIRST UPDATE!");
 				// Add the checkbox on the top right corner for filtering.
 				var container = L.DomUtil.create('div', 'filter-options');
 
@@ -220,7 +230,6 @@ function updateAmbulances(mymap) {
 
 
 			}
-
 			else{
 				// Goes through each layer group and adds or removes accordingly.
 				Object.keys(layergroups).forEach(function(key){
@@ -239,8 +248,7 @@ function updateAmbulances(mymap) {
 
 			});
 
-			}
-		
+			}		
 
 		}
 	});
