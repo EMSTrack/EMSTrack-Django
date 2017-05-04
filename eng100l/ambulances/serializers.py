@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount
 from drf_extra_fields.geo_fields import PointField
+from drf_writable_nested import WritableNestedModelSerializer
 
 
 class StatusSerializer(serializers.ModelSerializer):
@@ -9,7 +10,6 @@ class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
         fields = '__all__'
-
 
 class TrackableDeviceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -63,18 +63,25 @@ class RegionSerializer(serializers.ModelSerializer):
 class EquipmentCountSerializer(serializers.ModelSerializer):
 
     name = serializers.SerializerMethodField('get_equipment_name')
+    equipment_type = serializers.SerializerMethodField('get_type')
+    toggleable = serializers.SerializerMethodField('get_toggle')
 
     class Meta:
         model = EquipmentCount
-        fields = ['name', 'quantity']
+        fields = ['id', 'name', 'hospital_id', 'equipment_id', 'quantity', 'equipment_type', 'toggleable']
 
     def get_equipment_name(self, obj):
         return Equipment.objects.filter(id=(obj.equipment).id).first().name
 
+    def get_type(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().equipment_type
+
+    def get_toggle(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().toggleable
 
 class HospitalSerializer(serializers.ModelSerializer):
     equipment = EquipmentCountSerializer(many=True)
 
     class Meta:
         model = Hospital
-        fields = ['name', 'equipment']
+        fields = ['id', 'name', 'equipment']
