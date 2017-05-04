@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount
 from drf_extra_fields.geo_fields import PointField
+from drf_writable_nested import WritableNestedModelSerializer
 
 
 class StatusSerializer(serializers.ModelSerializer):
@@ -9,7 +10,6 @@ class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
         fields = '__all__'
-
 
 class TrackableDeviceSerializer(serializers.ModelSerializer):
     class Meta:
@@ -68,7 +68,7 @@ class EquipmentCountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EquipmentCount
-        fields = ['name', 'quantity', 'equipment_type', 'toggleable']
+        fields = ['id', 'name', 'hospital_id', 'equipment_id', 'quantity', 'equipment_type', 'toggleable']
 
     def get_equipment_name(self, obj):
         return Equipment.objects.filter(id=(obj.equipment).id).first().name
@@ -84,4 +84,4 @@ class HospitalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hospital
-        fields = ['name', 'equipment']
+        fields = ['id', 'name', 'equipment']
