@@ -32,7 +32,7 @@ urlpatterns = [
         name="status_create"),
 
     url(r'^create_route$',
-        csrf_exempt(views.CreateRoute.as_view()),
+        views.CreateRoute.as_view(),
         name="create_route"),
 
     url(r'^ambulance_map$',

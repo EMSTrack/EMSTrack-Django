@@ -10,7 +10,7 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 import ast
 
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import LineString
 
 from rest_framework import viewsets
 from rest_framework import filters
@@ -50,13 +50,9 @@ class StatusCreateView(CreateView):
 
 
 class CreateRoute(views.JSONResponseMixin, View):
-    def post(self, request):
-        # json_data = json.loads(request.body)
-        points = ast.literal_eval(request.body)
-        text = ""
-        for p in points:
-            text = text + p["alex"] + "\n"
-        return HttpResponse(text)
+    def get(self, request):
+        # a = LineString((1, 1), (2, 2))
+        return HttpResponse("Hey")
 
 
 class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
