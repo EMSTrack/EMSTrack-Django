@@ -35,7 +35,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulances
-        fields = ['id', 'location', 'status', 'priority']
+        fields = ['id', 'location', 'status', 'priority', 'orientation']
         read_only_fields = ('priority',)
 
     def get_alternate_name(self, obj):
