@@ -144,19 +144,20 @@ function updateAmbulances(mymap) {
 						});
 					});
 			    }
-			    else {
-			    	// If ambulance markers exist
-			    	let coloredIcon = ambulanceIcon;
-					if(item.status === 'Available')
-						coloredIcon = ambulanceIconBlue;
-					if(item.status === 'Out of service')
-						coloredIcon = ambulanceIconBlack;
+			    // commented temporarily
+			  //   else {
+			  //   	// If ambulance markers exist
+			  //   	let coloredIcon = ambulanceIcon;
+					// if(item.status === 'Available')
+					// 	coloredIcon = ambulanceIconBlue;
+					// if(item.status === 'Out of service')
+					// 	coloredIcon = ambulanceIconBlack;
 
-					mymap.removeLayer(ambulanceMarkers[item.id]);
+					// mymap.removeLayer(ambulanceMarkers[item.id]);
 					
-					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
-					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
-			    }
+					// ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+					// .bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+			  //   }
 
 			    // Update ambulance location
 				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
