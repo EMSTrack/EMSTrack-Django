@@ -121,43 +121,40 @@ function updateAmbulances(mymap) {
 			statusWithMarkers = {}; // clear all statuses from previous ajax call.
 			var i = 0;
 			$.each(arr, function(index, item) {
-				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
-					// set icon by status
-					console.log("Before ambulance icon setup");
-					let coloredIcon = ambulanceIcon;
-					if(item.status === 'Available')
-						coloredIcon = ambulanceIconBlue;
-					if(item.status === 'Out of service')
-						coloredIcon = ambulanceIconBlack;
 
+				// set icon by status
+				let coloredIcon = ambulanceIcon;
+				if(item.status === 'Available')
+					coloredIcon = ambulanceIconBlue;
+				if(item.status === 'Out of service')
+					coloredIcon = ambulanceIconBlack;
+
+				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
+					// If ambulance marker doesn't exist
 					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
 					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
-
-			    	// Bind id to icons
-					ambulanceMarkers[item.id]._icon.id = item.id;
-					// Collapse panel on icon hover.
-					ambulanceMarkers[item.id].on('mouseover', function(e){
-						$('#panel_' + item.id).collapse('show');
-						this.openPopup().on('mouseout', function(e){
-							$('#panel_' + item.id).collapse('hide');
-							this.closePopup();
-						});
-					});
 			    }
-			    // commented temporarily
-			  //   else {
-			  //   	// If ambulance markers exist
-			  //   	let coloredIcon = ambulanceIcon;
-					// if(item.status === 'Available')
-					// 	coloredIcon = ambulanceIconBlue;
-					// if(item.status === 'Out of service')
-					// 	coloredIcon = ambulanceIconBlack;
+			    else {
+			    	// If ambulance markers exist
 
-					// mymap.removeLayer(ambulanceMarkers[item.id]);
+			    	// Remove existing marker
+					mymap.removeLayer(ambulanceMarkers[item.id]);
 					
-					// ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
-					// .bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
-			  //   }
+					// Re-add it but with updated ambulance icon
+					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+			    }
+
+			    // Bind id to icons
+				ambulanceMarkers[item.id]._icon.id = item.id;
+				// Collapse panel on icon hover.
+				ambulanceMarkers[item.id].on('mouseover', function(e){
+					$('#panel_' + item.id).collapse('show');
+					this.openPopup().on('mouseout', function(e){
+						$('#panel_' + item.id).collapse('hide');
+						this.closePopup();
+					});
+				});
 
 			    // Update ambulance location
 				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
