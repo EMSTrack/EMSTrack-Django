@@ -21,7 +21,7 @@ class TrackableDevice(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
 
 class Ambulances(models.Model):
-    license_plate = models.CharField(max_length=254, primary_key=True)
+    license_plate = models.CharField(max_length=254)
     name = models.CharField(max_length=254, default="")
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     location      = models.PointField(srid=4326, default=Tijuana)
