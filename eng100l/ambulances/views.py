@@ -3,8 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.views.generic import ListView, CreateView
 from braces import views
 from django.views import View
-import datetime
-from django.utils import timezone
+
 from . import response_msg
 
 from django.http import HttpResponse
@@ -16,15 +15,16 @@ from django.contrib.gis.geos import Point
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
+
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 from .models import Ambulances, Status, Region, Call, Hospital, Base
-from .forms import AmbulanceCreateForm, StatusCreateForm
+from .forms import AmbulanceCreateForm, StatusCreateForm, CallCreateForm
 from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, BaseSerializer
-
+from rest_framework import generics
 
 class AmbulanceView(CreateView):
     model = Ambulances
@@ -136,7 +136,7 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StatusSerializer
 
 
-class CallViewSet(viewsets.ReadOnlyModelViewSet):
+class CallViewSet(viewsets.ModelViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
 

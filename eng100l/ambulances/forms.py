@@ -50,6 +50,7 @@ class TrackableDeviceCreateForm(forms.ModelForm):
     model = TrackableDevice
     fields = ['device_id']
 
+# front end team to choose which fields to display?
 class CallCreateForm(forms.ModelForm):
   class Meta:
     model = Call
