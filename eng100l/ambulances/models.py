@@ -72,3 +72,9 @@ class Route(models.Model):
     path = models.LineStringField(srid=4326, null=False, default=DefaultRoute)
     # Think about abstraction?
     type = models.CharField(max_length=50, null=False, default="Default Type")
+
+
+class LocationPoint(models.Model):
+    location = models.PointField(srid=4326, default=Tijuana)
+    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
+    timestamp = models.DateTimeField()
