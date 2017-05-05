@@ -21,7 +21,7 @@
 
             <div class="col-md-3">
                 <!-- Start of Ambulance Grid -->
-                <div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >
+               <!--  <div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >
                     <h3>Ambulances</h3>
                     <div class="row" style="margin-top: 5px; margin-bottom: 5px;">
                         <button type="button" class="btn btn-default">12345678</button>
@@ -39,9 +39,10 @@
                         <button type="button" class="btn btn-default">12345678</button>
                     </div>
 
-                </div>
+                </div> -->          <!-- Commented out temporarily for demo -->
                 <br>
                 <!-- End of Ambulance Grid Row -->
+                <!--
                 <div class="row">
                     <div class="panel-group" id="accordion">
                         {% for ambulance in object_list %}
@@ -55,9 +56,9 @@
                                 </div>
                                 <div id="panel_{{ ambulance.license_plate }}" class="panel-collapse collapse">
                                     <div class="panel-body">
-                                        <ul class="list-group" style="list-style: none; padding-left: 10px;">
+                                        <ul class="list-group" style="list-style: none; padding-left: 10px;">   -->
                                             <!--update details by ajax calls-->
-                                            <li class="list-group-list">Status: {{ ambulance.status }}</li>
+                 <!--                           <li class="list-group-list">Status: {{ ambulance.status }}</li>
                                             <li class="list-group-list">Latitude: {{ ambulance.location.y }}</li>
                                             <li class="list-group-list">Longitude: {{ ambulance.location.x }}</li>
                                         </ul>
@@ -65,8 +66,95 @@
                                 </div>
                             </div>
                         {% endfor %}
+                    </div> 
+                </div>      -->
+                <!--end row-->        
+
+                <!--        Ambulance info panel      -->
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <b>Ambulance Info</b>
+                                </h4>
+                        </div>
+                        <div class="panel-body ambulance-detail">
+                            Ambulance: <br/>
+                            Priority: <br/>
+                            Street: <br/>
+                            Address: <br/>
+                        </div>
                     </div>
-                </div><!--end row-->
+                </div><!--        end of Ambulance info panel      -->
+
+                <!--        Dispatch panel      -->
+                <div class="row">
+                <form method="POST" action="#">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <b>Dispatch Ambulance(s)</b>
+                            </h4>
+                        </div>
+                        <!-- Dispatch Panel window -->
+                        <div class="panel-body" style="height:400px; overflow-y:scroll;">
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Location:
+                            <input type="text" name="street" class="form-control" placeholder="Street"/>
+                            <input type="text" name="address" class="form-control" placeholder="Address"/>
+                            <br/>
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Description:
+                            <div class="form-group">
+                                <textarea class="form-control" name="description" rows="5" id="comment"></textarea>
+                            </div>
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Priority:
+                            <div class="btn-group" role="group">
+                              <button type="button" class="btn btn-default">A</button>
+                              <button type="button" class="btn btn-default">B</button>
+                              <button type="button" class="btn btn-default">C</button>
+                              <button type="button" class="btn btn-default">D</button>
+                              <button type="button" class="btn btn-default">E</button>
+                            </div><br/><br/>
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Number of ambulance:
+                            <input type="number" class="form-control" id="usr"><br/>
+
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Dispatch Ambulance(s)<br/>
+
+                            <div class="panel panel-default" >
+                                <div class="panel-body" style="line-height: 1.5px;">
+                                    <span class="button-checkbox">
+                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 1</button>
+                                        <input type="checkbox" class="hidden" checked />
+                                    </span>
+                                    <span class="button-checkbox">
+                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 2</button>
+                                        <input type="checkbox" class="hidden" checked />
+                                    </span>
+                                    <span class="button-checkbox">
+                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 3</button>
+                                        <input type="checkbox" class="hidden" checked />
+                                    </span>
+                                    <span class="button-checkbox">
+                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 4</button>
+                                        <input type="checkbox" class="hidden" checked />
+                                    </span>
+                                    <span class="button-checkbox">
+                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 5</button>
+                                        <input type="checkbox" class="hidden" checked />
+                                    </span>
+                                </div>
+                            </div>
+                            <br/><br/>
+                            <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">Dispatch</button>
+                        </div>
+                    </div>
+                </form>
+
+                </div><!--        end of row Dispatch panel      -->
 
             </div><!--end col-md-3-->
         </div><!--end row -->

@@ -16,8 +16,8 @@ var ambulanceIconBlue = L.icon({
 	iconSize: [60, 40],
 });
 var hospitalIcon = L.icon({
-		iconUrl: '/static/icons/hospital_icon.png',
-		iconSize: [40, 40]
+	iconUrl: '/static/icons/hospital_icon.png',
+	iconSize: [40, 40]
 });
 
 var ajaxUrl = "api/ambulances";
@@ -154,6 +154,9 @@ function updateAmbulances(mymap) {
 						$('#panel_' + item.id).collapse('hide');
 						this.closePopup();
 					});
+
+					// update details panel
+					updateDetailPanel(item.id);
 				});
 
 			    // Update ambulance location
@@ -251,3 +254,17 @@ function updateAmbulances(mymap) {
 		}
 	});
 }
+
+/*
+ * updateDetailPanel updates the detail panel with the ambulance's details.
+ * @param mymap is the map UI.
+ * @return void.
+ */
+ function updateDetailPanel(ambulanceId) {
+ 	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
+ 	console.log(apiAmbulanceUrl);
+ 	$.get(apiAmbulanceUrl, function(data) {
+		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
+			"Status: " + data.status);
+	});
+ }
