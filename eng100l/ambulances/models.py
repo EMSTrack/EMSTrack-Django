@@ -4,9 +4,10 @@ from django.core.urlresolvers import reverse
 
 from django.db import models
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import LineString, Point
 
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
+DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Create your models here.
 
@@ -64,3 +65,10 @@ class EquipmentCount(models.Model):
         on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+
+
+class Route(models.Model):
+    name = models.CharField(max_length=50, null=False, default="Default Route Name")
+    path = models.LineStringField(srid=4326, null=False, default=DefaultRoute)
+    # Think about abstraction?
+    type = models.CharField(max_length=50, null=False, default="Default Type")

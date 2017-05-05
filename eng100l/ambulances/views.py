@@ -10,8 +10,6 @@ from django.http import HttpResponse
 from django.core.exceptions import ObjectDoesNotExist
 import ast
 
-from django.contrib.gis.geos import LineString
-
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
@@ -20,9 +18,9 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
-from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount
+from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Route
 from .forms import AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer
 
 
 class AmbulanceView(CreateView):
@@ -47,12 +45,6 @@ class StatusCreateView(CreateView):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
         context['statuses'] = Status.objects.all()
         return context
-
-
-class CreateRoute(views.JSONResponseMixin, View):
-    def get(self, request):
-        # a = LineString((1, 1), (2, 2))
-        return HttpResponse("Hey")
 
 
 class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
@@ -97,3 +89,7 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = HospitalSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('name', 'address')
+
+class RouteViewSet(ListRetrieveUpdateViewSet):
+    queryset = Route.objects.all()
+    serializer_class = RouteSerializer

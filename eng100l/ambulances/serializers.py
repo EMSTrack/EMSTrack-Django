@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount
+from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Route
 from drf_extra_fields.geo_fields import PointField
 
 class StatusSerializer(serializers.ModelSerializer):
@@ -83,3 +83,10 @@ class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = ['id', 'name', 'equipment']
+
+
+class RouteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Route
+        fields = '__all__'    
