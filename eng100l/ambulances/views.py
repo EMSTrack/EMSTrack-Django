@@ -63,6 +63,12 @@ class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
                                 viewsets.GenericViewSet):
     pass
 
+class ListCreateViewSet(mixins.ListModelMixin,
+                        mixins.RetrieveModelMixin,
+                        mixins.CreateModelMixin,
+                        viewsets.GenericViewSet):
+    pass
+
 
 class AmbulancesViewSet(ListRetrieveUpdateViewSet):
     queryset = Ambulances.objects.all()
@@ -90,6 +96,6 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('name', 'address')
 
-class RouteViewSet(ListRetrieveUpdateViewSet):
+class RouteViewSet(ListCreateViewSet):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
