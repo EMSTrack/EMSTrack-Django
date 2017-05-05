@@ -27,7 +27,7 @@ class AmbulanceView(CreateView):
     model = Ambulances
     context_object_name = "ambulance_form"
     form_class = AmbulanceCreateForm
-    success_url = reverse_lazy('ambulance_create')
+    success_url = reverse_lazy('ambulance')
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
@@ -39,7 +39,7 @@ class StatusCreateView(CreateView):
     model = Status
     context_object_name = "status_form"
     form_class = StatusCreateForm
-    success_url = reverse_lazy("status_create")
+    success_url = reverse_lazy("status")
 
     def get_context_data(self, **kwargs):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
