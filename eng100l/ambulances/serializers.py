@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount
+from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base
 from drf_extra_fields.geo_fields import PointField
 
 
@@ -47,11 +47,9 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
 
-    location = PointField(required=False)
-
     class Meta:
         model = Call
-        fields = ['address', 'location', 'priority']
+        fields = '__all__'
 
 
 class RegionSerializer(serializers.ModelSerializer):
@@ -79,7 +77,7 @@ class HospitalSerializer(serializers.ModelSerializer):
         model = Hospital
         fields = ['name', 'equipment']
 
-class BaseSerializer(serializer.ModelSerializer):
+class BaseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Region
+        model = Base
         fields = '__all__'

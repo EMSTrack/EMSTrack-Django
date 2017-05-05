@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.urlresolvers import reverse
+import datetime
+from django.utils import timezone
 
 from django.db import models
 from django.contrib.gis.db import models
@@ -34,9 +36,33 @@ class Ambulances(models.Model):
                                      self.location)
 
 class Call(models.Model):
-    address = models.CharField(max_length=254, primary_key=True)
+    id = models.AutoField(primary_key=True, default="1")
+    name = models.CharField(max_length=254, default = "")
+    # address-related info
+    residential_unit = models.CharField(max_length=254, default = "None")
+    stmain_number = models.CharField(max_length=254, default = "None")
+    delegation = models.CharField(max_length=254, default = "None")
+    zipcode = models.CharField(max_length=254, default = "22500")
+    city = models.CharField(max_length=254, default="Tijuana")
+    state = models.CharField(max_length=254, default="Baja California")
     location = models.PointField(srid=4326, default=Tijuana)
-    priority = models.CharField(max_length=254, default="A")
+    # assignment = base name and #
+    assignment = models.CharField(max_length=254, default = "None")
+    # short description of the patient's injury
+    description = models.CharField(max_length=500, default = "None")
+    # ambulance assigned to Call
+    ambulance = models.CharField(max_length=254, default = "None")
+    # response time related info
+    call_time = models.DateTimeField(default = timezone.now)
+    departure_time = models.DateTimeField(blank = True, null = True)
+    transfer_time = models.DateTimeField(blank = True, null = True)
+    hospital_time = models.DateTimeField(blank = True, null = True)
+    base_time = models.DateTimeField(blank = True, null = True)
+
+
+
+    PRIORITIES = [('A','A'),('B','B'),('C','C'),('D','D'),('E','E')]
+    priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
 
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
