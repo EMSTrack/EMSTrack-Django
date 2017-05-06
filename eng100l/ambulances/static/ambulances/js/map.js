@@ -257,7 +257,7 @@ function updateAmbulances(mymap) {
 
 /*
  * updateDetailPanel updates the detail panel with the ambulance's details.
- * @param mymap is the map UI.
+ * @param ambulanceId is the unique id used in the ajax call url.
  * @return void.
  */
  function updateDetailPanel(ambulanceId) {
@@ -265,6 +265,7 @@ function updateAmbulances(mymap) {
  	console.log(apiAmbulanceUrl);
  	$.get(apiAmbulanceUrl, function(data) {
 		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
-			"Status: " + data.status);
+			"Status: " + data.status + "<br/>" + 
+			"Priority: " + data.priority);
 	});
  }
