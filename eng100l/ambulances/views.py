@@ -40,7 +40,7 @@ class AmbulanceUpdateView(UpdateView):
     model = Ambulances
     form_class = AmbulanceUpdateForm
     template_name = 'ambulances/ambulance_edit.html'
-    success_url = '/ambulances/'
+    success_url = reverse_lazy('ambulance')
 
     def get_object(self, queryset=None):
         obj = Ambulances.objects.get(license_plate=self.kwargs['pk'])
@@ -51,7 +51,7 @@ class StatusCreateView(CreateView):
     model = Status
     context_object_name = "status_form"
     form_class = StatusCreateForm
-    success_url = reverse_lazy("status")
+    success_url = reverse_lazy('status')
 
     def get_context_data(self, **kwargs):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
