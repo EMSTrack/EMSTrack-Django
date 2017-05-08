@@ -46,6 +46,11 @@ class AmbulanceUpdateView(UpdateView):
         obj = Ambulances.objects.get(license_plate=self.kwargs['pk'])
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super(AmbulanceUpdateView, self).get_context_data(**kwargs)
+        context['id'] = self.kwargs['pk']
+        return context
+
 
 class StatusCreateView(CreateView):
     model = Status
