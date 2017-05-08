@@ -28,6 +28,8 @@ urlpatterns = [
         views.AmbulanceView.as_view(),
         name="ambulance"),
 
+    url(r'^ambulance/(?P<pk>\d+)/edit/$', views.ambulance_edit, name='ambulance_edit'),
+
     url(r'^status$',
         views.StatusCreateView.as_view(),
         name="status"),

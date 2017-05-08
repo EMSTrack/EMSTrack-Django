@@ -14,12 +14,13 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 from django.http import JsonResponse
+from django.shortcuts import redirect, get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Route
-from .forms import AmbulanceCreateForm, StatusCreateForm
+from .forms import AmbulanceCreateForm, StatusCreateForm, AmbulanceEditForm
 from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer
 
 
@@ -33,6 +34,19 @@ class AmbulanceView(CreateView):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
         context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
         return context
+
+
+def ambulance_edit(request, pk):
+    ambulance = get_object_or_404(Ambulances, pk=pk)
+    if request.method == "POST":
+        form = AmbulanceEditForm(request.POST, instance=ambulance)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('ambulance')
+    else:
+        form = AmbulanceEditForm(instance=ambulance)
+    return render(request, 'ambulances/ambulance_edit.html', {'form': form})
 
 
 class StatusCreateView(CreateView):
