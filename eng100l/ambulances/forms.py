@@ -9,7 +9,7 @@ class AmbulanceCreateForm(forms.ModelForm):
         fields = ['license_plate', 'name', 'status']
 
 
-class AmbulanceEditForm(forms.ModelForm):
+class AmbulanceUpdateForm(forms.ModelForm):
     class Meta:
         model = Ambulances
         fields = ['license_plate', 'name', 'status']

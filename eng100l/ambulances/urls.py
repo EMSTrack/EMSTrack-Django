@@ -4,7 +4,7 @@ from rest_framework_swagger.views import get_swagger_view
 from rest_framework import routers
 
 from . import views
-from .views import StatusViewSet, AmbulancesViewSet, CallViewSet, HospitalViewSet, EquipmentCountViewSet, RouteViewSet
+from .views import StatusViewSet, AmbulancesViewSet, CallViewSet, HospitalViewSet, EquipmentCountViewSet, RouteViewSet, AmbulanceUpdateView
 
 schema_view = get_swagger_view(title='Ambulances API')
 
@@ -28,7 +28,7 @@ urlpatterns = [
         views.AmbulanceView.as_view(),
         name="ambulance"),
 
-    url(r'^ambulance/(?P<pk>\d+)/edit/$', views.ambulance_edit, name='ambulance_edit'),
+    url(r'^ambulance/(?P<pk>\d+)/update/$', AmbulanceUpdateView.as_view(), name='ambulance_update'),
 
     url(r'^status$',
         views.StatusCreateView.as_view(),

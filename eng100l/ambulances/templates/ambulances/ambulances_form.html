@@ -39,7 +39,7 @@
                     {{ ambulance.status }};
                     {{ ambulance.location }};
                     {% if user.is_authenticated %}
-                        <a href="{% url 'ambulance_edit' pk=ambulance.license_plate %}">Edit</a>
+                        <a href="{% url 'ambulance_update' pk=ambulance.license_plate %}">Edit</a>
                     {% endif %}
                 </li>
             {% endif %}

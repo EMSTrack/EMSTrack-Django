@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse_lazy
 
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
 from django.views import View
 
@@ -20,7 +20,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Route
-from .forms import AmbulanceCreateForm, StatusCreateForm, AmbulanceEditForm
+from .forms import AmbulanceCreateForm, StatusCreateForm, AmbulanceUpdateForm
 from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer
 
 
@@ -36,17 +36,15 @@ class AmbulanceView(CreateView):
         return context
 
 
-def ambulance_edit(request, pk):
-    ambulance = get_object_or_404(Ambulances, pk=pk)
-    if request.method == "POST":
-        form = AmbulanceEditForm(request.POST, instance=ambulance)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('ambulance')
-    else:
-        form = AmbulanceEditForm(instance=ambulance)
-    return render(request, 'ambulances/ambulance_edit.html', {'form': form})
+class AmbulanceUpdateView(UpdateView):
+    model = Ambulances
+    form_class = AmbulanceUpdateForm
+    template_name = 'ambulances/ambulance_edit.html'
+    success_url = '/ambulances/'
+
+    def get_object(self, queryset=None):
+        obj = Ambulances.objects.get(license_plate=self.kwargs['pk'])
+        return obj
 
 
 class StatusCreateView(CreateView):
