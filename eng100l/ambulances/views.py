@@ -32,7 +32,8 @@ class AmbulanceView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
-        context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
+        context['ambulances'] = Ambulances.objects.all().extra(select={'order': "CAST(license_plate as INTEGER)"}).order_by('order')
+        #context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
         return context
 
 

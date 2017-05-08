@@ -36,6 +36,7 @@
             {% if ambulance.license_plate != "" %}
                 <li>
                     {{ ambulance.license_plate }};
+                    {{ ambulance.name }};
                     {{ ambulance.status }};
                     {{ ambulance.location }};
                     {% if user.is_authenticated %}
