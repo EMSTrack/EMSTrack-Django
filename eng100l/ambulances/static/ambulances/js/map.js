@@ -295,3 +295,22 @@ function createAmbulanceGrid() {
 		}
 	});
 }
+
+/*
+ * postDispatchCall makes an ajax post request to post dispatched ambulance.
+ * @param void.
+ * @return void.
+ */
+ function postDispatchCall() {
+ 	var formData;
+
+ 	$.ajax({
+ 		url: 'api/ambulances/call',
+ 		type: 'POST',
+ 		dataType: 'json',
+ 		data: formData,
+ 		success: function(data) {
+ 			alert(JSON.stringify(data));
+ 		}
+ 	});
+ }

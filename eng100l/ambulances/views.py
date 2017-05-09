@@ -100,7 +100,7 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StatusSerializer
 
 
-class CallViewSet(viewsets.ReadOnlyModelViewSet):
+class CallViewSet(ListCreateViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
 
