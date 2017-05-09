@@ -64,6 +64,9 @@ $(document).ready(function() {
    		mymap.addLayer(layer);
 	});
 
+    // Create ambulance grid (move somewhere else if not appropriate here)
+    createAmbulanceGrid();
+
     // Update the ambulances on the map.
    	updateAmbulances(mymap);
 
@@ -118,10 +121,11 @@ function updateAmbulances(mymap) {
 		datatype: "json",
 		url: ajaxUrl,
 		success: function(arr) {
+			
 			statusWithMarkers = {}; // clear all statuses from previous ajax call.
 			var i = 0;
 			$.each(arr, function(index, item) {
-
+				
 				// set icon by status
 				let coloredIcon = ambulanceIcon;
 				if(item.status === 'Available')
@@ -269,3 +273,25 @@ function updateAmbulances(mymap) {
 			"Priority: " + data.priority);
 	});
  }
+
+
+/*
+ * createAmbulanceGrid creates the ambulance grid using the data from the server (status indicated by color of button, ID of ambulance on buttons)
+ *
+ */
+function createAmbulanceGrid() {
+	$.get('api/ambulances/', function(data) {
+		var i, ambulanceId;
+		//console.log(data);
+		for(i = 0; i < data.length; i++) {
+			ambulanceId = data[i].id;
+			ambulanceStatus = data[i].status;
+			if(ambulanceStatus === 'Available')
+				$('#ambulance-grid').append('<button type="button" class="btn btn-success" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+			if(ambulanceStatus === 'Out of service')
+				$('#ambulance-grid').append('<button type="button" class="btn btn-default" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+			if(ambulanceStatus === 'In Service')
+				$('#ambulance-grid').append('<button type="button" class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+		}
+	});
+}
