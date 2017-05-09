@@ -22,6 +22,12 @@ var hospitalIcon = L.icon({
 
 var ajaxUrl = "api/ambulances";
 
+/**
+ * Ambulance statuses 
+ */
+var STATUS_IN_SERVICE = "In Service";
+var STATUS_AVAILABLE = "Available";
+var STATUS_OUT_OF_SERVICE = "Out of Service";
 
 
 /**
@@ -128,9 +134,9 @@ function updateAmbulances(mymap) {
 				
 				// set icon by status
 				let coloredIcon = ambulanceIcon;
-				if(item.status === 'Available')
+				if(item.status === STATUS_AVAILABLE)
 					coloredIcon = ambulanceIconBlue;
-				if(item.status === 'Out of service')
+				if(item.status === STATUS_OUT_OF_SERVICE)
 					coloredIcon = ambulanceIconBlack;
 
 				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
@@ -286,11 +292,11 @@ function createAmbulanceGrid() {
 		for(i = 0; i < data.length; i++) {
 			ambulanceId = data[i].id;
 			ambulanceStatus = data[i].status;
-			if(ambulanceStatus === 'Available')
+			if(ambulanceStatus === STATUS_AVAILABLE)
 				$('#ambulance-grid').append('<button type="button" class="btn btn-success" style="margin: 5px 5px;">' + ambulanceId + '</button>');
-			if(ambulanceStatus === 'Out of service')
+			if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
 				$('#ambulance-grid').append('<button type="button" class="btn btn-default" style="margin: 5px 5px;">' + ambulanceId + '</button>');
-			if(ambulanceStatus === 'In Service')
+			if(ambulanceStatus === STATUS_IN_SERVICE)
 				$('#ambulance-grid').append('<button type="button" class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceId + '</button>');
 		}
 	});
