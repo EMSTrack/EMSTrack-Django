@@ -29,6 +29,8 @@ var STATUS_IN_SERVICE = "In Service";
 var STATUS_AVAILABLE = "Available";
 var STATUS_OUT_OF_SERVICE = "Out of Service";
 
+// Ajax update frequency (in milliseconds)
+var UPDATE_FREQUENCY = 1000;
 
 /**
  * This is a handler for when the page is loaded.
@@ -79,7 +81,7 @@ $(document).ready(function() {
     // Calling for ambulance updates every second.
 	window.setInterval(function() {
 		updateAmbulances(mymap);
-	}, 1000);
+	}, UPDATE_FREQUENCY);
 
 
 	// Open popup on panel click.
@@ -110,6 +112,12 @@ $(document).ready(function() {
 				+ liElement + "Updated!" + '</li>');
 		});
 	});
+
+	// Submit form
+	$('#dispatchForm').submit(function(e) {
+		e.preventDefault();
+		postDispatchCall();
+	})
 
 });
 
@@ -159,9 +167,8 @@ function updateAmbulances(mymap) {
 				ambulanceMarkers[item.id]._icon.id = item.id;
 				// Collapse panel on icon hover.
 				ambulanceMarkers[item.id].on('mouseover', function(e){
-					$('#panel_' + item.id).collapse('show');
+					// open popup bubble
 					this.openPopup().on('mouseout', function(e){
-						$('#panel_' + item.id).collapse('hide');
 						this.closePopup();
 					});
 
@@ -308,15 +315,23 @@ function createAmbulanceGrid() {
  * @return void.
  */
  function postDispatchCall() {
- 	var formData;
+ 	var formData = {};
+
+ 	formData["street"] = $('#street').val();
+ 	formData["priority"] = 'B';
+
+ 	alert(JSON.stringify(formData));
 
  	$.ajax({
- 		url: 'api/ambulances/call',
+ 		url: 'api/calls',
  		type: 'POST',
  		dataType: 'json',
  		data: formData,
  		success: function(data) {
  			alert(JSON.stringify(data));
+ 		},
+ 		error: function(jqXHR, textStatus, errorThrown) {
+ 			alert(JSON.stringify(jqXHR) + ' ' + textStatus);
  		}
  	});
  }

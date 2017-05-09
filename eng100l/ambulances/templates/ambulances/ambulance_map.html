@@ -25,36 +25,8 @@
                     <div id="ambulance-grid"></div>
                 
                 </div>   
-                 <!-- Commented out temporarily for demo -->
                 <br>
                 <!-- End of Ambulance Grid Row -->
-                <!--
-                <div class="row">
-                    <div class="panel-group" id="accordion">
-                        {% for ambulance in object_list %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion"
-                                           href="#panel_{{ ambulance.license_plate }}" class="ambulance-panel"
-                                           id="{{ ambulance.license_plate }}">Ambulance: {{ ambulance.license_plate }}</a>
-                                    </h4>
-                                </div>
-                                <div id="panel_{{ ambulance.license_plate }}" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <ul class="list-group" style="list-style: none; padding-left: 10px;">   -->
-                                            <!--update details by ajax calls-->
-                 <!--                           <li class="list-group-list">Status: {{ ambulance.status }}</li>
-                                            <li class="list-group-list">Latitude: {{ ambulance.location.y }}</li>
-                                            <li class="list-group-list">Longitude: {{ ambulance.location.x }}</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div> 
-                </div>      -->
-                <!--end row-->        
 
                 <!--        Ambulance info panel      -->
                 <div class="row">
@@ -75,7 +47,7 @@
 
                 <!--        Dispatch panel      -->
                 <div class="row">
-                <form method="POST" action="#">
+                <form id="dispatchForm" method="POST" action="#">
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <h4 class="panel-title">
@@ -86,8 +58,8 @@
                         <div class="panel-body" style="height:400px; overflow-y:scroll;">
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Location:
-                            <input type="text" name="street" class="form-control" placeholder="Street"/>
-                            <input type="text" name="address" class="form-control" placeholder="Address"/>
+                            <input id="street" type="text" name="street" class="form-control" placeholder="Street"/>
+                            <input id="address" type="text" name="address" class="form-control" placeholder="Address"/>
                             <br/>
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Description:
