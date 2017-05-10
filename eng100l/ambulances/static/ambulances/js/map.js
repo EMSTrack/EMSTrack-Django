@@ -27,7 +27,7 @@ var ajaxUrl = "api/ambulances";
  */
 var STATUS_IN_SERVICE = "In Service";
 var STATUS_AVAILABLE = "Available";
-var STATUS_OUT_OF_SERVICE = "Out of Service";
+var STATUS_OUT_OF_SERVICE = "Out of service";
 
 // Ajax update frequency (in milliseconds)
 var UPDATE_FREQUENCY = 1000;
@@ -139,7 +139,7 @@ function updateAmbulances(mymap) {
 			statusWithMarkers = {}; // clear all statuses from previous ajax call.
 			var i = 0;
 			$.each(arr, function(index, item) {
-				
+				console.log("Status: " + item.status);
 				// set icon by status
 				let coloredIcon = ambulanceIcon;
 				if(item.status === STATUS_AVAILABLE)
