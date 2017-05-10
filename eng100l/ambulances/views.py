@@ -20,17 +20,12 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
-<<<<<<< HEAD
-from .models import Ambulances, Status, Region, Call, Hospital, Base
-from .forms import AmbulanceCreateForm, StatusCreateForm, CallCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, BaseSerializer
-from rest_framework import generics
-=======
-from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Route
-from .forms import AmbulanceCreateForm, StatusCreateForm, AmbulanceUpdateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer
 
->>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656
+from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Base, Route
+from .forms import AmbulanceCreateForm, StatusCreateForm, AmbulanceUpdateForm, CallCreateForm
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer, BaseSerializer
+
+
 
 class AmbulanceView(CreateView):
     model = Ambulances
@@ -108,11 +103,9 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StatusSerializer
 
 
-<<<<<<< HEAD
-class CallViewSet(viewsets.ModelViewSet):
-=======
+
 class CallViewSet(ListCreateViewSet):
->>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656
+
     queryset = Call.objects.all()
     serializer_class = CallSerializer
 
@@ -126,12 +119,11 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('name', 'address')
 
-<<<<<<< HEAD
+
 class BaseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Base.objects.all()
     serializer_class = BaseSerializer
-=======
+
 class RouteViewSet(ListCreateViewSet):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
->>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656

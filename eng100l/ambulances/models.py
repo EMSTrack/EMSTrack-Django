@@ -89,21 +89,17 @@ class Equipment(models.Model):
 
 
 class EquipmentCount(models.Model):
-<<<<<<< HEAD
+
     id = models.AutoField(primary_key=True)
-    hospital = models.ForeignKey(Hospital, related_name='equipment',
-=======
-    hospital = models.ForeignKey(Hospital, related_name='equipment',
->>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656
-        on_delete=models.CASCADE, null=True)
+    hospital = models.ForeignKey(Hospital, related_name='equipment',on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
-<<<<<<< HEAD
+
 class Base(models.Model):
     name = models.CharField(max_length=254, unique=True)
     location = models.PointField(srid=4326, null=True)
-=======
+
 
 class Route(models.Model):
     name = models.CharField(max_length=50, null=False, default="Default Route Name")
@@ -116,4 +112,3 @@ class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
     ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
     timestamp = models.DateTimeField()
->>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656
