@@ -1,9 +1,5 @@
-from django.contrib.auth.models import User
-from django.conf import settings
 from django import forms
-from django.contrib.gis import forms as gis_forms
-from django.contrib.gis.forms import widgets as gis_widgets
-from django.core.serializers import serialize
+
 
 from .models import Ambulances, TrackableDevice, Status, Call
 
@@ -29,21 +25,17 @@ class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
                        })
         return super().render(name, value, attrs)
 
+
 class AmbulanceCreateForm(forms.ModelForm):
-  class Meta:
-    model = Ambulances
-    fields = ['license_plate', 'name']
+    class Meta:
+        model = Ambulances
+        fields = ['license_plate', 'name', 'status']
 
-
-class StatusCreateForm(forms.ModelForm):
-  class Meta:
-    model = Status
-    fields = ['name']
 
 class AmbulanceUpdateForm(forms.ModelForm):
-  class Meta:
-    model = Ambulances
-    fields = [ 'status']
+    class Meta:
+        model = Ambulances
+        fields = ['license_plate', 'name', 'status']
 
 class TrackableDeviceCreateForm(forms.ModelForm):
   class Meta:
@@ -55,3 +47,9 @@ class CallCreateForm(forms.ModelForm):
   class Meta:
     model = Call
     fields = '__all__'
+
+
+class StatusCreateForm(forms.ModelForm):
+    class Meta:
+        model = Status
+        fields = ['name']

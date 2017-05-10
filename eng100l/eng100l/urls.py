@@ -26,6 +26,7 @@ schema_view = get_swagger_view(title='Pastebin API')
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    #url(r'^', include('drf_autodocs.urls')),
     url(r'^docs/', schema_view),
     url(r'^ambulances/', include('ambulances.urls')),
     url(r'^auth/', include('crlogin.urls')),

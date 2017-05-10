@@ -5,8 +5,6 @@
     <link rel="stylesheet" type="text/css"
           href="{% static 'ambulances/css/form.css' %}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-          href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
     {{ form.media }}
 {% endblock %}
 
@@ -38,10 +36,11 @@
             {% if ambulance.license_plate != "" %}
                 <li>
                     {{ ambulance.license_plate }};
+                    {{ ambulance.name }};
                     {{ ambulance.status }};
                     {{ ambulance.location }};
                     {% if user.is_authenticated %}
-                        <a href="ambulance_map">Edit (does nothing right now)</a>
+                        <a href="{% url 'ambulance_update' pk=ambulance.license_plate %}">Edit</a>
                     {% endif %}
                 </li>
             {% endif %}

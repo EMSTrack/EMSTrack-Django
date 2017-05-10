@@ -8,16 +8,18 @@
   <meta name="viewpoint" content="width=device-width, initial-scale=1">
   <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
   <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
   <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}"/>
   <link rel="stylesheet" type="text/css" href="{% static '/css/auth.css' %}"/>
+
 </head>
 
 <body>
-
   <!-- Navigation Bar -->
   <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -75,55 +77,47 @@
   </div>
   {% endif %}
 
+  <div class="container" id="wrap">
+    <div class="row"> 
+      <div class="col-md-6 col-md-offset-3"> 
+        <form method="post" action="/auth/signup/">{% csrf_token %} 
+          
+          <!-- Registration header --> 
+          <div class="upper-box">
+            <h3>Cruz Roja Registration</h3>
+          </div>
 
-  <div class="container">
-    <div class="row">
-    <section class="login-box" style="padding-top: 80px;">
-    <div class="box">
-      
-      <div class="upper-box">
-        <h3>Cruz Roja Registration</h3>
-        <div class="line">
-          <hr class="line-hr">
-          <span class="line-span">  </span>
-        </div>
-      </div>
+          <!-- First and Last name --> 
+          <div class="row input_form">
+            <div class="col-xs-6 col-md-6"> 
+              <input type="text" name="firstname" id="fname" class="form-control input-lg" placeholder="First Name" required>
+            </div>
+            <div class="col-xs-6 col-md-6"> 
+              <input type="text" name="lastname" id="lname" class="form-control input-lg" placeholder="Last Name" required>
+            </div>
+          </div>
 
-      <div class="lower-box"> 
-        <form class="form-horizontal" method="post" action="/auth/signup/">{% csrf_token %}
+          <!-- user email, password, confirm password--> 
+          <input type="email" name="email" class="form-control input-lg input_form" placeholder="Your Email" id="inputUserEmail" required/>
+          <input type="password" name="password1" pattern="^\[a-zA-Z0-9]{4,}" placeholder="Password" class="form-control input-lg input_form" required>
+          <input type="password" name="password2" pattern="^\[a-zA-Z0-9]{4,}" placeholder="Confirm Password" class="form-control input-lg input_form" required>
 
-        <div class="form-group">
-          <label for="fullname">Full Name</label>
-          <input type="text" pattern="[a-zA-Z]+ [a-zA-Z]+" placeholder="John Smith" class="form-control" name="fullname" id="inputUserName" required>
-        </div>
+          <!-- User groups --> 
+          <select class="form-control selectpicker" required name="position">
+            <option data-hidden="true">Select Your Position</option>
+            <option value="Admin">Admin</option>
+            <option value="Ambulance Driver">Driver</option>
+            <option value="Dispatcher">Dispatcher</option>
+            <option value="EMT">EMT</option>
+            <option value="Hospital Staff">Hospital Staff</option>
+          </select>
 
-        <div class="form-group">
-          <label for="emailAddress">Email Address</label>
-          <input type="email" class="form-control" placeholder="john@email.com" name="email" id="inputUserEmail" required>
-        </div>
-
-        <div class="form-group">
-          <label for="phoneNumber">Phone Number</label>
-          <input type="tel" placeholder="xxx-xxx-xxxx" pattern="^\d{3}-\d{3}-\d{4}$" class="form-control" name="phone" id="inputUserPhone" required>
-        </div>
-
-        <div class="form-group">
-          <label for="inputPassword">Password</label>
-          <input type="password" pattern="^\[a-zA-Z0-9]{4,}" placeholder="****" class="form-control" name="password1" id="inputUserPassword1" required>
-        </div>
-
-        <div class="form-group">
-          <label for="inputPassword">Re-enter Password</label>
-          <input type="password" class="form-control" placeholder="****" name="password2" id="inputUserPassword2" required>
-        </div>
-
-        <button type="submit" class="btn btn btn-primary btn-success" value="signup">Signup</button>
+          <button type="submit" class="btn btn-lg btn-primary btn-success" value="signup">Signup</button>
+        
         </form>
       </div>
-
     </div>
-    </section>
-  </div>
   </div>
 </body>
 </html>
+

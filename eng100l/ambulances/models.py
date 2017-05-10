@@ -6,14 +6,15 @@ from django.utils import timezone
 
 from django.db import models
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import LineString, Point
 
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
+DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Create your models here.
 
 class Status(models.Model):
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(max_length=254, unique=True, default="")
 
     def __str__(self):
         return "{}".format(self.name)
@@ -24,7 +25,9 @@ class TrackableDevice(models.Model):
 
 class Ambulances(models.Model):
     license_plate = models.CharField(max_length=254, primary_key=True)
-    name = models.CharField(max_length=254, default = "1")
+
+    name = models.CharField(max_length=254, default="")
+
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
     location      = models.PointField(srid=4326, default=Tijuana)
     # device        = models.OneToOneField(TrackableDevice, blank=True, null=True)
@@ -69,7 +72,6 @@ class Region(models.Model):
     center = models.PointField(srid=4326, null=True)
 
 class Hospital(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254, default="")
     address = models.CharField(max_length=254, default="")
 
@@ -77,20 +79,41 @@ class Hospital(models.Model):
         return "{}".format(self.name)
 
 class Equipment(models.Model):
-    id = models.AutoField(primary_key=True)
+
     name = models.CharField(max_length=254)
+    equipment_type = models.CharField(max_length=254)
+    toggleable = models.BooleanField(default=0)
 
     def __str__(self):
         return "{}".format(self.name)
 
 
 class EquipmentCount(models.Model):
+<<<<<<< HEAD
     id = models.AutoField(primary_key=True)
     hospital = models.ForeignKey(Hospital, related_name='equipment',
+=======
+    hospital = models.ForeignKey(Hospital, related_name='equipment',
+>>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656
         on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
+<<<<<<< HEAD
 class Base(models.Model):
     name = models.CharField(max_length=254, unique=True)
     location = models.PointField(srid=4326, null=True)
+=======
+
+class Route(models.Model):
+    name = models.CharField(max_length=50, null=False, default="Default Route Name")
+    path = models.LineStringField(srid=4326, null=False, default=DefaultRoute)
+    # Think about abstraction?
+    type = models.CharField(max_length=50, null=False, default="Default Type")
+
+
+class LocationPoint(models.Model):
+    location = models.PointField(srid=4326, default=Tijuana)
+    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
+    timestamp = models.DateTimeField()
+>>>>>>> b3bd75c82d03f1afabc333cab39223d7c0657656
