@@ -30,17 +30,13 @@ class StatusField(serializers.Field):
 class AmbulancesSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
-    id = serializers.SerializerMethodField('get_alternate_name')
     status = StatusField()
     capability = serializers.SerializerMethodField('get_capability_name')
 
     class Meta:
         model = Ambulances
-        fields = ['id', 'location', 'status', 'priority', 'orientation', 'capability']
+        fields = ['id', 'location', 'status', 'priority', 'orientation', 'capability', 'license_plate']
         read_only_fields = ('priority',)
-
-    def get_alternate_name(self, obj):
-        return obj.license_plate
 
     def get_status_name(self, obj):
         return Status.objects.filter(id=(obj.status).id).first().name
