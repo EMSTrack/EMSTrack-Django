@@ -20,6 +20,11 @@ class TrackableDevice(models.Model):
     device_id = models.CharField(max_length=254, primary_key=True)
     location = models.PointField(srid=4326, default=Tijuana)
 
+class Capabilities(models.Model):
+    name = models.CharField(max_length=254, unique=True)
+    def __str__(self):
+        return "{}".format(self.name)
+
 class Ambulances(models.Model):
     license_plate = models.CharField(max_length=254)
     name = models.CharField(max_length=254, default="")
@@ -28,6 +33,7 @@ class Ambulances(models.Model):
     orientation = models.FloatField(null=True)
     # device = models.OneToOneField(TrackableDevice, blank=True, null=True)
     priority = models.CharField(max_length=254, default="High")
+    capability = models.ForeignKey(Capabilities, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return "{}: ({}), {}".format(self.license_plate,
@@ -59,9 +65,9 @@ class Equipment(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
-
 class EquipmentCount(models.Model):
     hospital = models.ForeignKey(Hospital, related_name='equipment', 
         on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
+

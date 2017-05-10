@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount
+from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Capabilities
 from drf_extra_fields.geo_fields import PointField
 from drf_writable_nested import WritableNestedModelSerializer
 
@@ -32,10 +32,11 @@ class AmbulancesSerializer(serializers.ModelSerializer):
     location = PointField(required=False)
     id = serializers.SerializerMethodField('get_alternate_name')
     status = StatusField()
+    capability = serializers.SerializerMethodField('get_capability_name')
 
     class Meta:
         model = Ambulances
-        fields = ['id', 'location', 'status', 'priority', 'orientation']
+        fields = ['id', 'location', 'status', 'priority', 'orientation', 'capability']
         read_only_fields = ('priority',)
 
     def get_alternate_name(self, obj):
@@ -44,6 +45,10 @@ class AmbulancesSerializer(serializers.ModelSerializer):
     def get_status_name(self, obj):
         return Status.objects.filter(id=(obj.status).id).first().name
 
+    def get_capability_name(self, obj):
+        capability = Capabilities.objects.filter(id=(obj.capability).id).first()
+        if(hasattr(capability, 'name')):
+            return capability.name
 
 class CallSerializer(serializers.ModelSerializer):
 
