@@ -41,9 +41,10 @@ class AmbulancesSerializer(serializers.ModelSerializer):
         return Status.objects.filter(id=(obj.status).id).first().name
 
     def get_capability_name(self, obj):
-        capability = Capabilities.objects.filter(id=(obj.capability).id).first()
-        if(hasattr(capability, 'name')):
-            return capability.name
+        if(obj.capability != None):
+            capability = Capabilities.objects.filter(id=(obj.capability).id).first()
+            if(hasattr(capability, 'name')):
+                return capability.name
 
 class CallSerializer(serializers.ModelSerializer):
 
