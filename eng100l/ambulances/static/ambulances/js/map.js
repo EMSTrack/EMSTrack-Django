@@ -282,7 +282,7 @@ function updateAmbulances(mymap) {
  	console.log(apiAmbulanceUrl);
  	$.get(apiAmbulanceUrl, function(data) {
 		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
-			"Status: " + data.status + "<br/>" + 
+			"Statusx: " + data.status + "<br/>" + 
 			"Priority: " + data.priority);
 	});
  }
@@ -299,8 +299,10 @@ function createAmbulanceGrid() {
 		for(i = 0; i < data.length; i++) {
 			ambulanceId = data[i].id;
 			ambulanceStatus = data[i].status;
-			if(ambulanceStatus === STATUS_AVAILABLE)
+			if(ambulanceStatus === STATUS_AVAILABLE) {
 				$('#ambulance-grid').append('<button type="button" class="btn btn-success" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+				$('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceId + ' </label><br/>');
+			}
 			if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
 				$('#ambulance-grid').append('<button type="button" class="btn btn-default" style="margin: 5px 5px;">' + ambulanceId + '</button>');
 			if(ambulanceStatus === STATUS_IN_SERVICE)
@@ -316,9 +318,16 @@ function createAmbulanceGrid() {
  */
  function postDispatchCall() {
  	var formData = {};
+ 	var assigned_ambulances = [];
 
  	formData["street"] = $('#street').val();
- 	formData["priority"] = 'B';
+ 	formData["address"] = $('#address').val();
+ 	formData["description"] = $('description').val();
+ 	formData["priority"] = $('input:radio[name=priority]:checked').val();
+ 	$('input:checkbox[name="ambulance_assignment"]:checked').each(function(i) {
+ 		assigned_ambulances[i] = $(this).val();
+ 	});
+ 	formData["ambulances"] = assigned_ambulances;
 
  	alert(JSON.stringify(formData));
 
@@ -328,10 +337,15 @@ function createAmbulanceGrid() {
  		dataType: 'json',
  		data: formData,
  		success: function(data) {
- 			alert(JSON.stringify(data));
+ 			// alert(JSON.stringify(data));
+ 			$('.modal-title').append('Successfully Dispached');
+ 			$('.modal-body').append(JSON.stringify(data));
+ 			$("#dispatchModal").modal('show');
  		},
  		error: function(jqXHR, textStatus, errorThrown) {
  			alert(JSON.stringify(jqXHR) + ' ' + textStatus);
+ 			$('.modal-title').append('Dispatch failed');
+ 			$("#dispatchModal").modal('show');
  		}
  	});
  }
