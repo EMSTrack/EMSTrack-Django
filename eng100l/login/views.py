@@ -2,10 +2,11 @@ from django.contrib.auth import views as auth_views
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
+from braces.views import CsrfExemptMixin
+
 from login.forms import AuthenticationForm
 
-@method_decorator(csrf_exempt, name='dispatch')
-class MQTTLoginView(auth_views.LoginView):
+class MQTTLoginView(CsrfExemptMixin, auth_views.LoginView):
     template_name = 'login/login.html'
     authentication_form = AuthenticationForm
     
