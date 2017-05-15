@@ -1,14 +1,20 @@
+from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import FormView
 
 from braces.views import CsrfExemptMixin
 
 from login.forms import AuthenticationForm
 
-class MQTTLoginView(CsrfExemptMixin, auth_views.LoginView):
-    template_name = 'login/login.html'
-    authentication_form = AuthenticationForm
+class MQTTLoginView(CsrfExemptMixin, FormView):
+    template_name = 'login/mqtt_login.html'
+    form_class = AuthenticationForm
+    
+    def form_invalid(self, form):
+        return HttpResponseForbidden()
+    
+    def form_valid(self, form):
+        return HttpResponse('OK')
     
 class LoginView(auth_views.LoginView):
     template_name = 'login/login.html'
