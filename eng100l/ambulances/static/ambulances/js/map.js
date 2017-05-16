@@ -360,10 +360,11 @@ function updateAmbulanceGrid(ambulanceId) {
  	});
  	formData["ambulances"] = assigned_ambulances;
 
- 	alert(JSON.stringify(formData));
+ 	let postJsonUrl = 'api/calls/';
+ 	alert(JSON.stringify(formData) + '\n' + postJsonUrl);
 
  	$.ajax({
- 		url: 'api/calls',
+ 		url: postJsonUrl,
  		type: 'POST',
  		dataType: 'json',
  		data: formData,

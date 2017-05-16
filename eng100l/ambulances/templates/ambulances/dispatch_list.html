@@ -1,0 +1,36 @@
+{% extends "ambulances/base.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'ambulances/css/form.css' %}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Dispatch List</h1>
+
+    <br/>
+    <div id="calls"></div>
+    <ul>
+        {% for dispatched in calls %}
+            
+                <li>
+                    {{ dispatched }}
+                    {{ dispatched.zipcode }};
+                    {{ dispatched.city }};
+                </li>
+        {% endfor %}
+    </ul>
+
+    <script type="text/javascript">
+        $.getJSON('api/calls', function(data) {
+            $.each(data, function(index) {
+                $('#calls').append(data[index].zipcode + '<br/>' + data[index].city);
+            })
+
+        })
+    </script>
+{% endblock %}

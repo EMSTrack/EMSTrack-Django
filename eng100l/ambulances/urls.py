@@ -38,4 +38,8 @@ urlpatterns = [
         views.AmbulanceMap.as_view(),
         name="ambulance_map"),
 
+    url(r'^call_list$',
+        views.CallView.as_view(),
+        name="call_list"),
+
 ]

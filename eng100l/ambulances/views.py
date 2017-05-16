@@ -40,6 +40,16 @@ class AmbulanceView(CreateView):
         return context
 
 
+class CallView(ListView):
+    model = Call
+    template_name = 'ambulances/dispatch_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(CallView, self).get_context_data(**kwargs)
+        return context
+
+
+
 class AmbulanceUpdateView(UpdateView):
     model = Ambulances
     form_class = AmbulanceUpdateForm
@@ -108,6 +118,7 @@ class CallViewSet(ListCreateViewSet):
 
     queryset = Call.objects.all()
     serializer_class = CallSerializer
+
 
 class EquipmentCountViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = EquipmentCount.objects.all()
