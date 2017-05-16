@@ -45,7 +45,6 @@ class Ambulances(models.Model):
                                      self.location)
 
 class Call(models.Model):
-    id = models.AutoField(primary_key=True, default="1")
     name = models.CharField(max_length=254, default = "")
     # address-related info
     residential_unit = models.CharField(max_length=254, default = "None")
