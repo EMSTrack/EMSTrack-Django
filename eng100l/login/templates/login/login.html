@@ -1,11 +1,4 @@
-{% extends "ambulances/base.html" %}
-{% load static %}
-
-{% block title %}Cruz Roja Login{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" type="text/css" href="{% static '/css/auth.css' %}"/>
-{% endblock %}
+{% extends "login/base.html" %}
 
 {% block content %}
 
@@ -36,9 +29,11 @@
 	
         <div class="row input_form">
 	  
-	  {{ form.username }}
-	  
-	  {{ form.password }}
+	  {% for field in form %}
+	  <p>
+            {{ field }}
+	  </p>
+	  {% endfor %}
 	  
           <button type="submit"
 		  class="btn btn btn-primary btn-success"

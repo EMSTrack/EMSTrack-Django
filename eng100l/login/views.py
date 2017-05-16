@@ -6,32 +6,21 @@ from django.contrib.auth.models import User
 
 from braces.views import CsrfExemptMixin
 
-from login.forms import AuthenticationForm
+from login.forms import AuthenticationForm, SignupForm
 
+# signup
+class SignupView(FormView):
+    template_name = 'login/signup.html'
+    form_class = SignupForm
+
+# login
 class LoginView(auth_views.LoginView):
     template_name = 'login/login.html'
     authentication_form = AuthenticationForm
 
+# logout
 class LogoutView(auth_views.LogoutView):
     next_page = '/ambulances'
-
-class PasswordChangeView(auth_views.PasswordChangeView):
-    pass
-
-class PasswordChangeDoneView(auth_views.PasswordChangeDoneView):
-    pass
-
-class PasswordResetView(auth_views.PasswordResetView):
-    pass
-
-class PasswordResetDoneView(auth_views.PasswordResetDoneView):
-    pass
-
-class PasswordResetConfirmView(auth_views.PasswordResetConfirmView):
-    pass
-
-class PasswordResetCompleteView(auth_views.PasswordResetCompleteView):
-    pass
 
 # MQTT login views
 
