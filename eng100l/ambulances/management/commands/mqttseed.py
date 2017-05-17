@@ -26,12 +26,12 @@ class Client(BaseClient):
         for h in hospitals:
             k = k + 1
             if self.verbosity > 0:
-                self.stdout.write(" {:2d}. {}".format(k, h))
+                self.stdout.write("  {:2d}. {}".format(k, h))
             equipment = EquipmentCount.objects.filter(hospital = h)
             for e in equipment:
                 if self.verbosity > 0:
-                    self.stdout.write("     {}: {}".format(e.equipment,
-                                                           e.quantity))
+                    self.stdout.write("      {}: {}".format(e.equipment,
+                                                            e.quantity))
                 # publish message
                 client.publish('hospital/{}/equipment/{}'.format(h.id,
                                                                  e.equipment),

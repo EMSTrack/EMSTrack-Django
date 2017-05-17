@@ -46,7 +46,7 @@ class BaseClient():
 
         # success!
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Connected to the mqtt brocker {} on port {}".format(self.broker['HOST'], self.broker['PORT'])))
+            self.stdout.write(self.style.SUCCESS(">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'], self.broker['PORT'])))
 
         return True
 
