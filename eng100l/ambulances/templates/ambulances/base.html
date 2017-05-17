@@ -31,17 +31,10 @@
                 <li><a href="{% url 'ambulance' %}">Ambulances</a></li>
                 <li><a href="{% url 'status' %}">Statuses</a></li>
                 <li><a href="{% url 'ambulance_map' %}">Map</a></li>
+                <li><a href="{% url 'call_list' %}">Dispatch List</a></li>
+                
                 {% if user.is_authenticated %}
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Call Ambulance<span
-                                class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Page 1-1</a></li>
-                            <li><a href="#">Page 1-2</a></li>
-                            <li><a href="#">Page 1-3</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Past Records</a></li>
+                    <li><a href="{% url 'call_list' %}">Past Records</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/auth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>

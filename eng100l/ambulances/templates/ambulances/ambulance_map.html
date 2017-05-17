@@ -5,7 +5,7 @@
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
-
+    <script src="{% static 'ambulances/js/form-button.js' %}"></script>
 {% endblock %}
 <!-- link rel="stylesheet" href="styles.css" -->
 
@@ -47,7 +47,8 @@
 
                 <!--        Dispatch panel      -->
                 <div class="row">
-                <form id="dispatchForm" method="POST" action="#">
+                <form id="dispatchForm" method="POST" action="">
+                {% csrf_token %}
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <h4 class="panel-title">
@@ -68,42 +69,50 @@
                             </div>
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Priority:
-                            <div class="btn-group" role="group">
-                              <button type="button" class="btn btn-default">A</button>
-                              <button type="button" class="btn btn-default">B</button>
-                              <button type="button" class="btn btn-default">C</button>
-                              <button type="button" class="btn btn-default">D</button>
-                              <button type="button" class="btn btn-default">E</button>
-                            </div><br/><br/>
+                            <form>
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="A">A
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="B">B
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="C">C
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="D">D
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="E">E
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                </div>
+ 
+                            </form>
+                            <br/><br/>
 
+                            <!--
                             <span class="glyphicon glyphicon-chevron-right"></span> Number of ambulance:
                             <input type="number" class="form-control" id="usr"><br/>
-
+                            -->
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Dispatch Ambulance(s)<br/>
 
                             <div class="panel panel-default" >
                                 <div class="panel-body" style="line-height: 1.5px;">
+
+                                <div id="ambulance-selection"></div>
+                                    <!-- Fancy button here, but not works for map.js
                                     <span class="button-checkbox">
                                         <button type="button" class="btn btn-sm" data-color="danger">Amb 1</button>
                                         <input type="checkbox" class="hidden" checked />
                                     </span>
-                                    <span class="button-checkbox">
-                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 2</button>
-                                        <input type="checkbox" class="hidden" checked />
-                                    </span>
-                                    <span class="button-checkbox">
-                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 3</button>
-                                        <input type="checkbox" class="hidden" checked />
-                                    </span>
-                                    <span class="button-checkbox">
-                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 4</button>
-                                        <input type="checkbox" class="hidden" checked />
-                                    </span>
-                                    <span class="button-checkbox">
-                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 5</button>
-                                        <input type="checkbox" class="hidden" checked />
-                                    </span>
+                                    -->
                                 </div>
                             </div>
                             <br/><br/>
@@ -117,6 +126,28 @@
             </div><!--end col-md-3-->
         </div><!--end row -->
     </div><!--end container-->
+
+    <!-- This is modals for ambulance dispatcher's panel -->
+    <!-- Modal -->
+    <div id="dispatchModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>

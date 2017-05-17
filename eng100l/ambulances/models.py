@@ -45,7 +45,6 @@ class Ambulances(models.Model):
                                      self.location)
 
 class Call(models.Model):
-    id = models.AutoField(primary_key=True, default="1")
     name = models.CharField(max_length=254, default = "")
     # address-related info
     residential_unit = models.CharField(max_length=254, default = "None")
@@ -67,6 +66,9 @@ class Call(models.Model):
     transfer_time = models.DateTimeField(blank = True, null = True)
     hospital_time = models.DateTimeField(blank = True, null = True)
     base_time = models.DateTimeField(blank = True, null = True)
+
+    def __str__(self):
+        return "({}): {}, {}".format(self.priority, self.residential_unit, self.stmain_number)
 
 
 

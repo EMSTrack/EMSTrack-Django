@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^docs/', schema_view),
     url(r'^ambulances/', include('ambulances.urls')),
     url(r'^auth/', include('crlogin.urls')),
+    url(r'^aauth/', include('login.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', RedirectView.as_view(url='http://cruzroja.ucsd.edu/wiki')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

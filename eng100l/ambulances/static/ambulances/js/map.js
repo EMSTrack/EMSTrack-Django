@@ -73,7 +73,7 @@ $(document).ready(function() {
 	});
 
     // Create ambulance grid (move somewhere else if not appropriate here)
-    createAmbulanceGrid();
+    createAmbulanceGrid(mymap);
 
     // Update the ambulances on the map.
    	updateAmbulances(mymap);
@@ -139,6 +139,9 @@ function updateAmbulances(mymap) {
 			statusWithMarkers = {}; // clear all statuses from previous ajax call.
 			var i = 0;
 			$.each(arr, function(index, item) {
+				// Update ambulance grid
+				updateAmbulanceGrid(item.id);
+
 				console.log("Status: " + item.status);
 				// set icon by status
 				let coloredIcon = ambulanceIcon;
@@ -287,25 +290,76 @@ function updateAmbulances(mymap) {
 	});
  }
 
+function onGridButtonClick(ambulanceId, mymap) {
+	return function(e) {
+		// Update detail panel
+		updateDetailPanel(ambulanceId);
+
+		// Center icon on map
+		var position = ambulanceMarkers[ambulanceId].getLatLng();
+		mymap.setView(position, 12);
+
+		// Open popup for 2.5 seconds.
+		ambulanceMarkers[ambulanceId].openPopup();
+		setTimeout(function(){
+			ambulanceMarkers[ambulanceId].closePopup();
+		}, 2500);
+
+	}
+}
 
 /*
  * createAmbulanceGrid creates the ambulance grid using the data from the server (status indicated by color of button, ID of ambulance on buttons)
  *
  */
-function createAmbulanceGrid() {
+function createAmbulanceGrid(mymap) {
 	$.get('api/ambulances/', function(data) {
 		var i, ambulanceId;
 		//console.log(data);
 		for(i = 0; i < data.length; i++) {
 			ambulanceId = data[i].id;
+			ambulanceLicensePlate = data[i].license_plate;
+			console.log(ambulanceId);
+			console.log(ambulanceLicensePlate);
 			ambulanceStatus = data[i].status;
-			if(ambulanceStatus === STATUS_AVAILABLE)
-				$('#ambulance-grid').append('<button type="button" class="btn btn-success" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+			if(ambulanceStatus === STATUS_AVAILABLE) {
+				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+				$('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceLicensePlate + ' </label><br/>');
+			}
 			if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
-				$('#ambulance-grid').append('<button type="button" class="btn btn-default" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
 			if(ambulanceStatus === STATUS_IN_SERVICE)
-				$('#ambulance-grid').append('<button type="button" class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceId + '</button>');
+				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		
+			// Open popup on panel click.
+			// For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
+			$('#grid-button' + ambulanceId).click(onGridButtonClick(ambulanceId,mymap));
 		}
+	});
+}
+
+/*
+ * updateAmbulanceGrid updates the ambulance grid. Will be called in AJAX call to update grid dynamically
+ *
+ */
+function updateAmbulanceGrid(ambulanceId) {
+ 	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
+
+ 	$.get(apiAmbulanceUrl, function(data) {
+		var buttonId = "#grid-button" + data.id;
+
+		// console.log(buttonId);
+		// Updating button license plate identifier dynamically
+		$(buttonId).html(data.license_plate);
+
+		// Updated button color/status dynamically
+		if(data.status === STATUS_AVAILABLE) 
+			$(buttonId).attr( "class", "btn btn-success" );
+		if(data.status === STATUS_OUT_OF_SERVICE)
+			$(buttonId).attr( "class", "btn btn-default" );
+		if(data.status === STATUS_IN_SERVICE)
+			$(buttonId).attr( "class", "btn btn-danger" );
+		
 	});
 }
 
@@ -316,22 +370,65 @@ function createAmbulanceGrid() {
  */
  function postDispatchCall() {
  	var formData = {};
+ 	var assigned_ambulances = [];
 
- 	formData["street"] = $('#street').val();
- 	formData["priority"] = 'B';
+ 	// Extract form value to JSON
+ 	formData["stmain_number"] = $('#street').val();
+ 	formData["residential_unit"] = $('#address').val();
+ 	formData["description"] = $('#comment').val();
+ 	formData["priority"] = $('input:radio[name=priority]:checked').val();
+ 	$('input:checkbox[name="ambulance_assignment"]:checked').each(function(i) {
+ 		assigned_ambulances[i] = $(this).val();
+ 	});
+ 	formData["ambulance"] = assigned_ambulances.toString();
 
- 	alert(JSON.stringify(formData));
+ 	let postJsonUrl = 'api/calls/';
+ 	alert(JSON.stringify(formData) + '\n' + postJsonUrl);
+
+ 	var csrftoken = getCookie('csrftoken');
+
+ 	$.ajaxSetup({
+ 		beforeSend: function(xhr, settings) {
+ 			if(!csrfSafeMethod(settings.type) && !this.crossDomain) {
+ 				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+ 			}
+ 		}
+ 	})
 
  	$.ajax({
- 		url: 'api/calls',
+ 		url: postJsonUrl,
  		type: 'POST',
  		dataType: 'json',
  		data: formData,
  		success: function(data) {
- 			alert(JSON.stringify(data));
+ 			// alert(JSON.stringify(data));
+ 			$('.modal-title').append('Successfully Dispached');
+ 			$('.modal-body').append(JSON.stringify(data));
+ 			$("#dispatchModal").modal('show');
  		},
  		error: function(jqXHR, textStatus, errorThrown) {
  			alert(JSON.stringify(jqXHR) + ' ' + textStatus);
+ 			$('.modal-title').append('Dispatch failed');
+ 			$("#dispatchModal").modal('show');
  		}
  	});
+ }
+
+ function csrfSafeMethod(method) {
+ 	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+ }
+
+ function getCookie(name) {
+ 	var cookieValue = null;
+ 	if(document.cookie && document.cookie !== '') {
+ 		var cookies = document.cookie.split(';');
+ 		for(var i = 0; i < cookies.length; i++) {
+ 			var cookie = $.trim(cookies[i]);
+ 			if(cookie.substring(0, name.length + 1) === (name + '=')) {
+ 				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+ 				break;
+ 			}
+ 		}
+ 	}
+ 	return cookieValue;
  }
