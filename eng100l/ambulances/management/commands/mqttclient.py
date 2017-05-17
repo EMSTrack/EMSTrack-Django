@@ -10,7 +10,17 @@ from ambulances.models import Hospital, EquipmentCount, Equipment
 # Client
         
 class Client(BaseClient):
-        
+
+    # initialization
+    def __init__(self,
+                 broker,
+                 stdout,
+                 style,
+                 verbosity = 1):
+
+        super().__init__(broker, stdout, style)
+        self.verbosity = verbosity
+    
     # The callback for when the client receives a CONNACK
     # response from the server.
     def on_connect(self, client, userdata, flags, rc):
@@ -26,8 +36,9 @@ class Client(BaseClient):
         # hospital message handler
         self.client.message_callback_add('hospital/+/#',
                                          self.on_hospital)
-        
-        self.stdout.write(self.style.SUCCESS("Listening to messages..."))
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS("Listening to messages..."))
 
         return True
         
@@ -37,9 +48,9 @@ class Client(BaseClient):
         # handle unknown messages
         self.stdout.write(
             self.style.WARNING(
-                "Unknown message topic {} {}".format(msg.topic,
-                                                     msg.payload)))
-
+                "*> Unknown message topic {} {}".format(msg.topic,
+                                                        msg.payload)))
+        
     # Update hospital resources
     def on_hospital(self, client, userdata, msg):
 
@@ -53,7 +64,8 @@ class Client(BaseClient):
         
         quantity = int(msg.payload)
 
-        self.stdout.write("{} {}".format(msg.topic, quantity))
+        if self.verbosity > 1:
+            self.stdout.write(" > {} {}".format(msg.topic, quantity))
 
         try:
             
@@ -64,13 +76,15 @@ class Client(BaseClient):
             if e.quantity != quantity:
                 e.quantity = quantity
                 e.save()
-                self.stdout.write(
-                    self.style.SUCCESS("Hospital '{}' equipment '{}' updated to '{}'".format(e.hospital.name, equipment, quantity)))
+                if self.verbosity > 0:
+                    self.stdout.write(
+                        self.style.SUCCESS(">> Hospital '{}' equipment '{}' updated to '{}'".format(e.hospital.name, equipment, quantity)))
 
         except:
-            
-            self.stdout.write(
-                self.style.ERROR("hospital/{}/equipment/{} is not available".format(hospital, equipment)))
+
+            if self.verbosity > 0:
+                self.stdout.write(
+                    self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
 
 
 class Command(BaseCommand):
@@ -88,8 +102,13 @@ class Command(BaseCommand):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
+
+        verbosity = 1
+        if options['verbosity']:
+            verbosity = options['verbosity']
         
-        client = Client(broker, self.stdout, self.style)
+        client = Client(broker, self.stdout, self.style,
+                        verbosity = verbosity)
                 
         try:
             client.loop_forever()

@@ -39,11 +39,11 @@ class BaseClient():
         
         if rc:
             self.stdout.write(
-                self.style.ERROR("Could not connect to brocker. Return code '" + str(rc) + "'"))
+                self.style.ERROR("*> Could not connect to brocker. Return code '" + str(rc) + "'"))
             return False
 
         # success!
-        self.stdout.write(self.style.SUCCESS("Connected to the mqtt brocker {} on port {}".format(self.broker['HOST'], self.broker['PORT'])))
+        self.stdout.write(self.style.SUCCESS(">> Connected to the mqtt brocker {} on port {}".format(self.broker['HOST'], self.broker['PORT'])))
 
         return True
 
