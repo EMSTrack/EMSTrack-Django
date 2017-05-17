@@ -17,11 +17,9 @@ class BaseClient():
         self.style = style
         self.broker = broker
 
-        self.stdout.write("Broker settings = {}".format(self.broker))
-        
-        if self.broker.CLIENT_ID:
-            self.client = mqtt.Client(self.broker.CLIENT_ID,
-                                      self.broker.CLEAN_SESSION)
+        if self.broker['CLIENT_ID']:
+            self.client = mqtt.Client(self.broker['CLIENT_ID'],
+                                      self.broker['CLEAN_SESSION'])
         else:
             self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
@@ -29,13 +27,13 @@ class BaseClient():
         # default message handler
         self.client.on_message = self.on_message
 
-        if self.broker.USERNAME and self.broker.PASSWORD:
-            self.client.username_pw_set(self.broker.USERNAME,
-                                        self.broker.PASSWORD)
+        if self.broker['USERNAME'] and self.broker['PASSWORD']:
+            self.client.username_pw_set(self.broker['USERNAME'],
+                                        self.broker['PASSWORD'])
             
-        self.client.connect(self.broker.HOST,
-                            self.broker.PORT,
-                            self.broker.KEEPALIVE)
+        self.client.connect(self.broker['HOST'],
+                            self.broker['PORT'],
+                            self.broker['KEEPALIVE'])
 
         # populated?
         self.populated = False
