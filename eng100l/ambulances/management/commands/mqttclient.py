@@ -1,7 +1,7 @@
 # mqttclient application command
 
 from django.core.management.base import BaseCommand
-from django.conf.settings import settings
+from django.conf import settings
 
 from ambulances.management.commands._client import Client
 
