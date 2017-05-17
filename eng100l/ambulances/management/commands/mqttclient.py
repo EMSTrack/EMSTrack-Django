@@ -20,6 +20,7 @@ class Command(BaseCommand):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
+        self.stdout.write("Broker settings = {}".format(broker))
         
         client = Client(broker, self.stdout, self.style)
                 
