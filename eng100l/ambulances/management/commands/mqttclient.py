@@ -28,7 +28,7 @@ class Client(BaseClient):
                                          self.on_hospital)
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS("Listening to messages..."))
+            self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
 
         return True
         
@@ -92,12 +92,8 @@ class Command(BaseCommand):
         }
         broker.update(settings.MQTT)
 
-        verbosity = 1
-        if options['verbosity']:
-            verbosity = options['verbosity']
-        
         client = Client(broker, self.stdout, self.style,
-                        verbosity = verbosity)
+                        verbosity = options['verbosity'])
                 
         try:
             client.loop_forever()
