@@ -150,3 +150,11 @@ LOGIN_URL = '/aauth/login'
 # email settings
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = 'webmaster@cruzroja.ucsd.edu'
+
+# MQTT settings
+MQTT = {
+    'USERNAME': 'YOUR MQTT USERNAME HERE',
+    'PASSWORD': 'YOUR MQTT PASSWORD HERE',
+    'HOST': 'YOUR MQTT HOST HERE',
+    'PORT': YOUR MQTT PORT HERE,
+}

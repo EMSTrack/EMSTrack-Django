@@ -1,6 +1,7 @@
 # mqttclient application command
 
 from django.core.management.base import BaseCommand
+from django.conf.settings import settings
 
 from ambulances.management.commands._client import Client
 
@@ -9,8 +10,18 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        client = Client('brian', 'cruzroja',
-                        self.stdout, self.style)
+        broker = {
+            'USERNAME': '',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLIENT_ID': 'django',
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
+        
+        client = Client(broker, self.stdout, self.style)
                 
         try:
             client.loop_forever()

@@ -4,44 +4,71 @@ import paho.mqtt.client as mqtt
 from django.core.management.base import BaseCommand
 from ambulances.models import Hospital, EquipmentCount, Equipment
 
-class Client():
+class BaseClient():
     
     # initialize client
     def __init__(self,
-                 username,
-                 password,
+                 broker,
                  stdout,
-                 style,
-                 host = 'localhost',
-                 port = 1883):
+                 style):
         
         # initialize client
-        self.client = mqtt.Client()
+        self.broker = broker
+
+        if broker.CLIENT_ID:
+            self.client = mqtt.Client(broker.CLIENT_ID,
+                                      broker.CLEAN_SESSION)
+        else:
+            self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
         self.stdout = stdout
         self.style = style
         
         # default message handler
         self.client.on_message = self.on_message
-        
-        self.client.username_pw_set(username, password)
-        self.client.connect(host, port, 60)
+
+        if self.broker.USERNAME and self.broker.PASSWORD:
+            self.client.username_pw_set(broker.USERNAME,
+                                        broker.PASSWORD)
+            
+        self.client.connect(self.broker.HOST,
+                            self.broker.PORT,
+                            self.broker.KEEPALIVE)
 
         # populated?
         self.populated = False
 
-    # The callback for when the client receives a CONNACK
-    # response from the server.
     def on_connect(self, client, userdata, flags, rc):
-
+        
         if rc:
             self.stdout.write(
                 self.style.ERROR("Could not connect to brocker. Return code '" + str(rc) + "'"))
-            return
+            return False
 
         # success!
         self.stdout.write(self.style.SUCCESS("Connected to the mqtt brocker"))
 
+        return True
+
+    # disconnect
+    def disconnect(self):
+        self.client.disconnect()
+        
+    # loop forever
+    def loop_forever(self):
+        self.client.loop_forever()
+
+# Client
+        
+class Client(BaseClient):
+        
+    # The callback for when the client receives a CONNACK
+    # response from the server.
+    def on_connect(self, client, userdata, flags, rc):
+
+        if not super().on_connect(client, userdata, flags, rc):
+            return False
+        
         # populate messages
         if not self.populated:
 
@@ -77,6 +104,8 @@ class Client():
                                          self.on_hospital)
         
         self.stdout.write(self.style.SUCCESS("Listening to messages..."))
+
+        return True
         
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -119,14 +148,6 @@ class Client():
             self.stdout.write(
                 self.style.ERROR("hospital/{}/equipment/{} is not available".format(hospital, equipment)))
                 
-    # disconnect
-    def disconnect(self):
-        self.client.disconnect()
-        
-    # loop forever
-    def loop_forever(self):
-        self.client.loop_forever()
-
 if __name__ == "__main__":
     
     class style:
