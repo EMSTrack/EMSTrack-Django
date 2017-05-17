@@ -17,7 +17,7 @@ class BaseClient():
         self.style = style
         self.broker = broker
 
-        self.stdout.write("Broker settings = {}".format(broker))
+        self.stdout.write("Broker settings = {}".format(self.broker))
         
         if self.broker.CLIENT_ID:
             self.client = mqtt.Client(self.broker.CLIENT_ID,
