@@ -87,7 +87,6 @@ class Hospital(models.Model):
 class Equipment(models.Model):
 
     name = models.CharField(max_length=254)
-    equipment_type = models.CharField(max_length=254)
     toggleable = models.BooleanField(default=0)
 
     def __str__(self):
