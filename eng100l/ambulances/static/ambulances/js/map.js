@@ -73,7 +73,7 @@ $(document).ready(function() {
 	});
 
     // Create ambulance grid (move somewhere else if not appropriate here)
-    createAmbulanceGrid();
+    createAmbulanceGrid(mymap);
 
     // Update the ambulances on the map.
    	updateAmbulances(mymap);
@@ -290,12 +290,29 @@ function updateAmbulances(mymap) {
 	});
  }
 
+function onGridButtonClick(ambulanceId, mymap) {
+	return function(e) {
+		// Update detail panel
+		updateDetailPanel(ambulanceId);
+
+		// Center icon on map
+		var position = ambulanceMarkers[ambulanceId].getLatLng();
+		mymap.setView(position, 12);
+
+		// Open popup for 2.5 seconds.
+		ambulanceMarkers[ambulanceId].openPopup();
+		setTimeout(function(){
+			ambulanceMarkers[ambulanceId].closePopup();
+		}, 2500);
+
+	}
+}
 
 /*
  * createAmbulanceGrid creates the ambulance grid using the data from the server (status indicated by color of button, ID of ambulance on buttons)
  *
  */
-function createAmbulanceGrid() {
+function createAmbulanceGrid(mymap) {
 	$.get('api/ambulances/', function(data) {
 		var i, ambulanceId;
 		//console.log(data);
@@ -313,6 +330,10 @@ function createAmbulanceGrid() {
 				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
 			if(ambulanceStatus === STATUS_IN_SERVICE)
 				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		
+			// Open popup on panel click.
+			// For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
+			$('#grid-button' + ambulanceId).click(onGridButtonClick(ambulanceId,mymap));
 		}
 	});
 }

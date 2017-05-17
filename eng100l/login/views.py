@@ -13,14 +13,14 @@ class SignupView(FormView):
     template_name = 'login/signup.html'
     form_class = SignupForm
 
-# login
-class LoginView(auth_views.LoginView):
-    template_name = 'login/login.html'
-    authentication_form = AuthenticationForm
+# # login
+# class LoginView(auth_views.LoginView):
+#     template_name = 'login/login.html'
+#     authentication_form = AuthenticationForm
 
-# logout
-class LogoutView(auth_views.LogoutView):
-    next_page = '/ambulances'
+# # logout
+# class LogoutView(auth_views.LogoutView):
+#     next_page = '/ambulances'
 
 # MQTT login views
 
