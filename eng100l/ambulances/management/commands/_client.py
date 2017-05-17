@@ -13,6 +13,8 @@ class BaseClient():
                  style):
         
         # initialize client
+        self.stdout = stdout
+        self.style = style
         self.broker = broker
 
         self.stdout.write("Broker settings = {}".format(broker))
@@ -23,8 +25,6 @@ class BaseClient():
         else:
             self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
-        self.stdout = stdout
-        self.style = style
         
         # default message handler
         self.client.on_message = self.on_message
