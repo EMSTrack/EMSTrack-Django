@@ -94,7 +94,12 @@ class Command(BaseCommand):
 
         client = Client(broker, self.stdout, self.style,
                         verbosity = options['verbosity'])
-                
+
+        self.stdout.write("""* * * * * * * * * * * * * * * *
+* *  M Q T T   C L I E N T  * *
+* * * * * * * * * * * * * * * *
+""")
+        
         try:
             client.loop_forever()
 
