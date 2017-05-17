@@ -5,6 +5,8 @@ from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
+from ambulances.models import Hospital, EquipmentCount, Equipment
+
 class Client(BaseClient):
 
     # The callback for when the client receives a CONNACK
