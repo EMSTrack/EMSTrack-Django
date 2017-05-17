@@ -43,10 +43,7 @@ class AmbulanceView(CreateView):
 class CallView(ListView):
     model = Call
     template_name = 'ambulances/dispatch_list.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(CallView, self).get_context_data(**kwargs)
-        return context
+    context_object_name = "ambulance_call"
 
 
 

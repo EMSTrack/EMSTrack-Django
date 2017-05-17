@@ -48,6 +48,7 @@
                 <!--        Dispatch panel      -->
                 <div class="row">
                 <form id="dispatchForm" method="POST" action="">
+                {% csrf_token %}
                     <div class="panel panel-info">
                         <div class="panel-heading">
                             <h4 class="panel-title">
@@ -91,7 +92,7 @@
                                         <span class="glyphicon giyphicon ok"></span></input>
                                     </label>
                                 </div>
-
+ 
                             </form>
                             <br/><br/>
 

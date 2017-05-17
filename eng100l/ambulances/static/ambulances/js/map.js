@@ -285,7 +285,7 @@ function updateAmbulances(mymap) {
  	console.log(apiAmbulanceUrl);
  	$.get(apiAmbulanceUrl, function(data) {
 		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
-			"Statusx: " + data.status + "<br/>" + 
+			"Status: " + data.status + "<br/>" + 
 			"Priority: " + data.priority);
 	});
  }
@@ -351,17 +351,28 @@ function updateAmbulanceGrid(ambulanceId) {
  	var formData = {};
  	var assigned_ambulances = [];
 
- 	formData["street"] = $('#street').val();
- 	formData["address"] = $('#address').val();
- 	formData["description"] = $('description').val();
+ 	// Extract form value to JSON
+ 	formData["stmain_number"] = $('#street').val();
+ 	formData["residential_unit"] = $('#address').val();
+ 	formData["description"] = $('#comment').val();
  	formData["priority"] = $('input:radio[name=priority]:checked').val();
  	$('input:checkbox[name="ambulance_assignment"]:checked').each(function(i) {
  		assigned_ambulances[i] = $(this).val();
  	});
- 	formData["ambulances"] = assigned_ambulances;
+ 	formData["ambulance"] = assigned_ambulances.toString();
 
  	let postJsonUrl = 'api/calls/';
  	alert(JSON.stringify(formData) + '\n' + postJsonUrl);
+
+ 	var csrftoken = getCookie('csrftoken');
+
+ 	$.ajaxSetup({
+ 		beforeSend: function(xhr, settings) {
+ 			if(!csrfSafeMethod(settings.type) && !this.crossDomain) {
+ 				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+ 			}
+ 		}
+ 	})
 
  	$.ajax({
  		url: postJsonUrl,
@@ -380,4 +391,23 @@ function updateAmbulanceGrid(ambulanceId) {
  			$("#dispatchModal").modal('show');
  		}
  	});
+ }
+
+ function csrfSafeMethod(method) {
+ 	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+ }
+
+ function getCookie(name) {
+ 	var cookieValue = null;
+ 	if(document.cookie && document.cookie !== '') {
+ 		var cookies = document.cookie.split(';');
+ 		for(var i = 0; i < cookies.length; i++) {
+ 			var cookie = $.trim(cookies[i]);
+ 			if(cookie.substring(0, name.length + 1) === (name + '=')) {
+ 				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+ 				break;
+ 			}
+ 		}
+ 	}
+ 	return cookieValue;
  }

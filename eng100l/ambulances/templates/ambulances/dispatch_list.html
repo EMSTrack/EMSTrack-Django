@@ -14,23 +14,33 @@
 
     <br/>
     <div id="calls"></div>
-    <ul>
-        {% for dispatched in calls %}
-            
-                <li>
-                    {{ dispatched }}
-                    {{ dispatched.zipcode }};
-                    {{ dispatched.city }};
-                </li>
+
+    {% if ambulance_call %}
+    <div class="container">
+        <ul class="call-list">
+        {% for call in ambulance_call %}
+            <li class="call">
+                <strong>Ambulance:</strong> {{ call.ambulance }} <br/>
+                <strong>Priority:</strong> {{ call.priority }} <br/>
+                <strong>Call Time:</strong> {{ call.call_time }} <br/>
+                <strong>Street:</strong> {{ call.stmain_number }} <br/>
+                <strong>Address:</strong> {{ call.residential_unit }} <br/>
+                <strong>Description:</strong> {{ call.description }} <br/>
+            </li>
+            <br/>
         {% endfor %}
-    </ul>
+        </ul>
+    </div>
+    {% else %}
+        <p>No dispatched ambulance.</p>
+    {% endif %}
 
     <script type="text/javascript">
-        $.getJSON('api/calls', function(data) {
-            $.each(data, function(index) {
-                $('#calls').append(data[index].zipcode + '<br/>' + data[index].city);
-            })
+        // $.getJSON('api/calls', function(data) {
+        //     $.each(data, function(index) {
+        //         $('#calls').append(data[index].zipcode + '<br/>' + data[index].city);
+        //     })
 
-        })
+        // })
     </script>
 {% endblock %}
