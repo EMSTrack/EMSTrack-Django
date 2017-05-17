@@ -15,9 +15,9 @@ class BaseClient():
         # initialize client
         self.broker = broker
 
-        if broker.CLIENT_ID:
-            self.client = mqtt.Client(broker.CLIENT_ID,
-                                      broker.CLEAN_SESSION)
+        if self.broker.CLIENT_ID:
+            self.client = mqtt.Client(self.broker.CLIENT_ID,
+                                      self.broker.CLEAN_SESSION)
         else:
             self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
@@ -28,8 +28,8 @@ class BaseClient():
         self.client.on_message = self.on_message
 
         if self.broker.USERNAME and self.broker.PASSWORD:
-            self.client.username_pw_set(broker.USERNAME,
-                                        broker.PASSWORD)
+            self.client.username_pw_set(self.broker.USERNAME,
+                                        self.broker.PASSWORD)
             
         self.client.connect(self.broker.HOST,
                             self.broker.PORT,
@@ -61,6 +61,13 @@ class BaseClient():
 # Client
         
 class Client(BaseClient):
+        
+    # initialize client
+    def __init__(self,
+                 broker,
+                 stdout,
+                 style):
+        super().__init__(broker, stdout, style)
         
     # The callback for when the client receives a CONNACK
     # response from the server.
