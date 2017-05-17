@@ -50,6 +50,9 @@ class BaseClient():
 
         return True
 
+    def on_message(self, client, userdata, msg):
+        pass
+    
     # disconnect
     def disconnect(self):
         self.client.disconnect()
