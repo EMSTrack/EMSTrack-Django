@@ -16,17 +16,21 @@ class Client(BaseClient):
         # is connected?
         if not super().on_connect(client, userdata, flags, rc):
             return False
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding hospitals"))
         
         # seeding hospitals
-        self.stdout.write(self.style.SUCCESS("Seeding hospitals"))
         hospitals = Hospital.objects.all()
         k = 0
         for h in hospitals:
             k = k + 1
-            self.stdout.write(" {:2d}. {}".format(k, h))
+            if self.verbosity > 0:
+                self.stdout.write(" {:2d}. {}".format(k, h))
             equipment = EquipmentCount.objects.filter(hospital = h)
             for e in equipment:
-                self.stdout.write("     {}: {}".format(e.equipment,
+                if self.verbosity > 0:
+                    self.stdout.write("     {}: {}".format(e.equipment,
                                                            e.quantity))
                 # publish message
                 client.publish('hospital/{}/equipment/{}'.format(h.id,
@@ -35,7 +39,8 @@ class Client(BaseClient):
                                qos=2,
                                retain=True)
                 
-        self.stdout.write(self.style.SUCCESS("Done seeding hospitals"))
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Done seeding hospitals"))
 
         # all done, disconnect
         self.disconnect()
