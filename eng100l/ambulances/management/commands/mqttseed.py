@@ -1,4 +1,4 @@
-# mqttclient application command
+# mqttseed application command
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -41,7 +41,7 @@ class Client(BaseClient):
         self.disconnect()
 
 class Command(BaseCommand):
-    help = 'Connect to the mqtt broker'
+    help = 'Seed the mqtt broker'
 
     def handle(self, *args, **options):
 
