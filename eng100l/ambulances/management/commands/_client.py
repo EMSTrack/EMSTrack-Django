@@ -15,6 +15,8 @@ class BaseClient():
         # initialize client
         self.broker = broker
 
+        self.stdout.write("Broker settings = {}".format(broker))
+        
         if self.broker.CLIENT_ID:
             self.client = mqtt.Client(self.broker.CLIENT_ID,
                                       self.broker.CLEAN_SESSION)
@@ -61,13 +63,6 @@ class BaseClient():
 # Client
         
 class Client(BaseClient):
-        
-    # initialize client
-    def __init__(self,
-                 broker,
-                 stdout,
-                 style):
-        super().__init__(broker, stdout, style)
         
     # The callback for when the client receives a CONNACK
     # response from the server.
