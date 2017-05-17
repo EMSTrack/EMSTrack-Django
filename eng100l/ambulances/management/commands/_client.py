@@ -46,7 +46,7 @@ class BaseClient():
             return False
 
         # success!
-        self.stdout.write(self.style.SUCCESS("Connected to the mqtt brocker"))
+        self.stdout.write(self.style.SUCCESS("Connected to the mqtt brocker {} on port {}".format(self.broker['HOST'], self.broker['PORT'])))
 
         return True
 
