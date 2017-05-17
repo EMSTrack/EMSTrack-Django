@@ -53,7 +53,7 @@ class Client(BaseClient):
         
         quantity = int(msg.payload)
 
-        self.stdout.write("on_hospital: {} {}".format(msg.topic, quantity))
+        self.stdout.write("{} {}".format(msg.topic, quantity))
 
         try:
             
