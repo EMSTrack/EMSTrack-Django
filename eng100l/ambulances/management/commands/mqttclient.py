@@ -96,10 +96,10 @@ class Command(BaseCommand):
                         verbosity = options['verbosity'])
 
         self.stdout.write(
-            self.style.SUCCESS("""* * * * * * * * * * * * * * * *
-* *  M Q T T   C L I E N T  * *
-* * * * * * * * * * * * * * * *
-"""))
+            self.style.SUCCESS("""
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+* * *                    M Q T T   C L I E N T                    * * *
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"""))
         
         try:
             client.loop_forever()
