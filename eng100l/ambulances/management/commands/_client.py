@@ -66,6 +66,7 @@ class Client(BaseClient):
     # response from the server.
     def on_connect(self, client, userdata, flags, rc):
 
+        # is connected?
         if not super().on_connect(client, userdata, flags, rc):
             return False
         
