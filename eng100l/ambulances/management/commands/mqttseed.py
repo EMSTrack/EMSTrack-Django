@@ -61,7 +61,8 @@ class Command(BaseCommand):
         }
         broker.update(settings.MQTT)
         
-        client = Client(broker, self.stdout, self.style)
+        client = Client(broker, self.stdout, self.style,
+                        verbosity = options['verbosity'])
                 
         try:
             client.loop_forever()
