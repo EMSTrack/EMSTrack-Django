@@ -7,12 +7,14 @@ class BaseClient():
     def __init__(self,
                  broker,
                  stdout,
-                 style):
+                 style,
+                 verbosity = 1):
         
         # initialize client
         self.stdout = stdout
         self.style = style
         self.broker = broker
+        self.verbosity = verbosity
 
         if self.broker['CLIENT_ID']:
             self.client = mqtt.Client(self.broker['CLIENT_ID'],
@@ -43,7 +45,8 @@ class BaseClient():
             return False
 
         # success!
-        self.stdout.write(self.style.SUCCESS(">> Connected to the mqtt brocker {} on port {}".format(self.broker['HOST'], self.broker['PORT'])))
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Connected to the mqtt brocker {} on port {}".format(self.broker['HOST'], self.broker['PORT'])))
 
         return True
 

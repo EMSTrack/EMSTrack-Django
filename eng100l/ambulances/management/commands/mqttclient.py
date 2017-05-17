@@ -11,16 +11,6 @@ from ambulances.models import Hospital, EquipmentCount, Equipment
         
 class Client(BaseClient):
 
-    # initialization
-    def __init__(self,
-                 broker,
-                 stdout,
-                 style,
-                 verbosity = 1):
-
-        super().__init__(broker, stdout, style)
-        self.verbosity = verbosity
-    
     # The callback for when the client receives a CONNACK
     # response from the server.
     def on_connect(self, client, userdata, flags, rc):
@@ -82,9 +72,8 @@ class Client(BaseClient):
 
         except:
 
-            if self.verbosity > 0:
-                self.stdout.write(
-                    self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
+            self.stdout.write(
+                self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
 
 
 class Command(BaseCommand):
