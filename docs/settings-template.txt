@@ -15,22 +15,20 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
 # Sessions
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_COOKIE_AGE = 30 * 60
 SESSION_SAVE_EVERY_REQUEST = True
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+#DEBUG = True
+#ALLOWED_HOSTS = [ ]
 
 SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
@@ -39,11 +37,16 @@ SWAGGER_SETTINGS = {
     'LOGOUT_URL': 'rest_framework:logout'
 }
 
+#DEBUG = False
+DEBUG = True
+ALLOWED_HOSTS = [ 'cruzroja.ucsd.edu', 'localhost', '127.0.0.1' ]
+
 # Application definition
 
 INSTALLED_APPS = [
     'ambulances.apps.AmbulancesConfig',
     'crlogin.apps.CrloginConfig',
+    'login.apps.LoginConfig',
     'rest_framework',
     'rest_framework_swagger',
     'django.contrib.admin',
@@ -93,9 +96,9 @@ WSGI_APPLICATION = 'eng100l.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': '[INPUT DATABASE NAME HERE]',
-        'USER':'[INPUT USERNAME HERE]',
-        'PASSWORD': '[INPUT PASSWORD HERE]',
+        'NAME': 'YOUR DATABASE NAME HERE',
+        'USER': 'YOUR DATABASE USER HERE',
+        'PASSWORD': 'YOUR DATABASE PASSWORD HERE',
         'HOST': 'localhost',
         'PORT': 5432,
     }
@@ -106,20 +109,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME':
-'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME':
-'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME':
-'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME':
-'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -141,6 +140,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+STATIC_ROOT = './static/'
 STATIC_URL = '/static/'
 
+# login redirect
+LOGIN_REDIRECT_URL = '/ambulances'
+LOGIN_URL = '/aauth/login'
 
+# email settings
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'webmaster@cruzroja.ucsd.edu'
