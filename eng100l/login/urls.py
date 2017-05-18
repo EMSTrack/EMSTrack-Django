@@ -3,10 +3,10 @@ from django.contrib.auth import views as auth_views
 from login import views
 
 urlpatterns = [
-    # url(r'^login/$', views.LoginView.as_view(), name='login'),
-    # url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
+    url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
 
-    # url(r'^signup/$', views.SignupView.as_view(), name='signup'),
+    url(r'^signup/$', views.SignupView.as_view(), name='signup'),
 
     # # password change
     # url(r'^password_change/$', auth_views.PasswordChangeView.as_view(), name='password_change'),
