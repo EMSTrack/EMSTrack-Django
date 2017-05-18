@@ -402,8 +402,12 @@ function updateAmbulanceGrid(ambulanceId) {
  		data: formData,
  		success: function(data) {
  			// alert(JSON.stringify(data));
+ 			 var successMsg = '<strong>Success</strong><br/>' + 
+ 			 	+ 'Ambulance: ' + data['ambulance']
+ 				+ ' dispatched to <br/>' + data['residential_unit']
+ 				+ ', '+ data['stmain_number'];
+ 			$('.modal-body').html(successMsg).addClass('alert-success');
  			$('.modal-title').append('Successfully Dispached');
- 			$('.modal-body').append(JSON.stringify(data));
  			$("#dispatchModal").modal('show');
  		},
  		error: function(jqXHR, textStatus, errorThrown) {
