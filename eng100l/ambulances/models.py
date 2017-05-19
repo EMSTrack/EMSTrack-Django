@@ -101,6 +101,9 @@ class EquipmentCount(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
     quantity = models.IntegerField()
 
+    class Meta:
+        unique_together = ('hospital', 'equipment',)
+
 class Base(models.Model):
     name = models.CharField(max_length=254, unique=True)
     location = models.PointField(srid=4326, null=True)
