@@ -10,6 +10,7 @@ class BaseClient():
                  style,
                  verbosity = 1):
         
+
         # initialize client
         self.stdout = stdout
         self.style = style
@@ -22,7 +23,9 @@ class BaseClient():
         else:
             self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
-        
+
+        self.client.on_publish = self.on_publish
+
         # default message handler
         self.client.on_message = self.on_message
 
@@ -51,7 +54,11 @@ class BaseClient():
         return True
 
     def on_message(self, client, userdata, msg):
+        print("hello1")
         pass
+
+    def on_publish(self, client, userdata, mid):
+        print("mid: " + str(mid))
     
     # disconnect
     def disconnect(self):

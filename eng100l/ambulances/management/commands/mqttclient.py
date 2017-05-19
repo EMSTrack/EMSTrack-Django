@@ -11,6 +11,15 @@ from ambulances.models import Hospital, EquipmentCount, Equipment
         
 class Client(BaseClient):
 
+    def __init__(self,
+                 broker,
+                 stdout,
+                 style,
+                 verbosity = 1):
+        print("hello") 
+        super.init
+
+
     # The callback for when the client receives a CONNACK
     # response from the server.
     def on_connect(self, client, userdata, flags, rc):

@@ -32,6 +32,7 @@ class Client(BaseClient):
                 if self.verbosity > 0:
                     self.stdout.write("      {}: {}".format(e.equipment,
                                                             e.quantity))
+
                 # publish message
                 client.publish('hospital/{}/equipment/{}'.format(h.id,
                                                                  e.equipment),
@@ -43,7 +44,7 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospitals"))
 
         # all done, disconnect
-        self.disconnect()
+        #self.disconnect()
 
 class Command(BaseCommand):
     help = 'Seed the mqtt broker'
