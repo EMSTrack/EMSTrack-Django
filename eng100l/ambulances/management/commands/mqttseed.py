@@ -46,6 +46,7 @@ class Client(BaseClient):
         # all done, disconnect
         #self.disconnect()
 
+    # Message publish callback
     def on_publish(self, client, userdata, mid):
         pass
 
