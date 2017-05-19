@@ -54,7 +54,7 @@ class AmbulanceUpdateView(UpdateView):
     success_url = reverse_lazy('ambulance')
 
     def get_object(self, queryset=None):
-        obj = Ambulances.objects.get(license_plate=self.kwargs['pk'])
+        obj = Ambulances.objects.get(id=self.kwargs['pk'])
         return obj
 
     def get_context_data(self, **kwargs):
