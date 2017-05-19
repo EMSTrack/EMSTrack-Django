@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-    <h1>Edit Ambulance {{ license_plate }}</h1>
+    <h1>Edit Status {{ id }}</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {% for field in form %}
         <div class="fieldWrapper">

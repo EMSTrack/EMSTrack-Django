@@ -2,29 +2,14 @@ from django.core.urlresolvers import reverse_lazy
 
 from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
-from django.views import View
-
-from . import response_msg
-
-from django.http import HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
-import ast
 
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
-from django.http import JsonResponse
-from django.shortcuts import redirect, get_object_or_404, render
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-
-
 from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Base, Route
-from .forms import AmbulanceCreateForm, StatusCreateForm, AmbulanceUpdateForm, CallCreateForm
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, StatusCreateForm, StatusUpdateForm, CallCreateForm
 from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer, BaseSerializer
-
 
 
 class AmbulanceView(CreateView):
@@ -40,13 +25,6 @@ class AmbulanceView(CreateView):
         return context
 
 
-class CallView(ListView):
-    model = Call
-    template_name = 'ambulances/dispatch_list.html'
-    context_object_name = "ambulance_call"
-
-
-
 class AmbulanceUpdateView(UpdateView):
     model = Ambulances
     form_class = AmbulanceUpdateForm
@@ -59,8 +37,14 @@ class AmbulanceUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceUpdateView, self).get_context_data(**kwargs)
-        context['id'] = self.kwargs['pk']
+        context['license_plate'] = self.kwargs['license_plate']
         return context
+
+
+class CallView(ListView):
+    model = Call
+    template_name = 'ambulances/dispatch_list.html'
+    context_object_name = "ambulance_call"
 
 
 class StatusCreateView(CreateView):
@@ -71,7 +55,23 @@ class StatusCreateView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
-        context['statuses'] = Status.objects.all()
+        context['statuses'] = Status.objects.all().order_by('id')
+        return context
+
+
+class StatusUpdateView(UpdateView):
+    model = Status
+    form_class = StatusUpdateForm
+    template_name = 'ambulances/status_edit.html'
+    success_url = reverse_lazy('status')
+
+    def get_object(self, queryset=None):
+        obj = Status.objects.get(id=self.kwargs['pk'])
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(StatusUpdateView, self).get_context_data(**kwargs)
+        context['id'] = self.kwargs['pk']
         return context
 
 
@@ -90,6 +90,7 @@ class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
                                 mixins.UpdateModelMixin,
                                 viewsets.GenericViewSet):
     pass
+
 
 class ListCreateViewSet(mixins.ListModelMixin,
                         mixins.RetrieveModelMixin,
@@ -110,9 +111,7 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StatusSerializer
 
 
-
 class CallViewSet(ListCreateViewSet):
-
     queryset = Call.objects.all()
     serializer_class = CallSerializer
 
@@ -120,6 +119,7 @@ class CallViewSet(ListCreateViewSet):
 class EquipmentCountViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
     queryset = EquipmentCount.objects.all()
     serializer_class = EquipmentCountSerializer
+
 
 class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
@@ -131,6 +131,7 @@ class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
 class BaseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Base.objects.all()
     serializer_class = BaseSerializer
+
 
 class RouteViewSet(ListCreateViewSet):
     queryset = Route.objects.all()

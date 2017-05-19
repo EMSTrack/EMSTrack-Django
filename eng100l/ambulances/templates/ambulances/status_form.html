@@ -40,6 +40,9 @@
             {% if status.name != "" %}
                 <li>
                     {{ status.name }}
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'status_update' pk=status.id %}">Edit</a>
+                    {% endif %}
                 </li>
             {% endif %}
         {% endfor %}

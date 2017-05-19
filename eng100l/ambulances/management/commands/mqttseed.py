@@ -17,6 +17,12 @@ class Client(BaseClient):
         if not super().on_connect(client, userdata, flags, rc):
             return False
 
+        self.seed_hospitals(client)
+
+        # all done, disconnect
+        #self.disconnect()
+
+    def seed_hospitals(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospitals"))
         
@@ -42,9 +48,6 @@ class Client(BaseClient):
                 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospitals"))
-
-        # all done, disconnect
-        #self.disconnect()
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):

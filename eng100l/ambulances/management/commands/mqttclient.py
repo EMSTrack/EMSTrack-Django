@@ -10,6 +10,7 @@ from ambulances.serializers import MQTTLocationSerializer
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 
 # Client
         
@@ -37,7 +38,7 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
 
         return True
-        
+
     # The callback for when a PUBLISH message is received from the server.
     def on_message(self, client, userdata, msg):
 
@@ -46,7 +47,7 @@ class Client(BaseClient):
             self.style.WARNING(
                 "*> Unknown message topic {} {}".format(msg.topic,
                                                         msg.payload)))
-        
+
     # Update hospital resources
     def on_hospital(self, client, userdata, msg):
 
@@ -74,8 +75,7 @@ class Client(BaseClient):
                     self.stdout.write(
                         self.style.SUCCESS(">> Hospital '{}' equipment '{}' updated to '{}'".format(e.hospital.name, equipment, quantity)))
 
-        except:
-
+        except Exception:
             self.stdout.write(
                 self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
 
@@ -103,14 +103,33 @@ class Client(BaseClient):
         if serializer.is_valid():
             try:
                 lp = serializer.save()
+
+                # Publish ambulance location as soon as user location saved
                 self.stdout.write(
                         self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(user, ambulance)))
-            except:
+            except Exception:
                 self.stdout.write(
                     self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create".format(user, ambulance)))
+
+            # Surround with try catch?
+            self.pub_ambulance_loc(client, ambulance, lp)
+
         else:
             self.stdout.write(
                 self.style.ERROR("*> Input data for user location invalid"))
+
+    # Publish location for ambulance
+    def pub_ambulance_loc(self, client, amb_id, lp):
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Publishing location for ambulance {}".format(amb_id)))
+        
+        # Convert obj back to json
+        serializer = MQTTLocationSerializer(lp)
+        json = JSONRenderer().render(serializer.data)
+
+        # Publish json
+        client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
+
 
 
 class Command(BaseCommand):
