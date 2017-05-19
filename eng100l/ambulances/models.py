@@ -23,13 +23,13 @@ class TrackableDevice(models.Model):
     device_id = models.CharField(max_length=254, primary_key=True)
     location = models.PointField(srid=4326, default=Tijuana)
 
-class Capabilities(models.Model):
+class Capability(models.Model):
     name = models.CharField(max_length=254, unique=True)
     def __str__(self):
         return "{}".format(self.name)
 
 class Ambulances(models.Model):
-    license_plate = models.CharField(max_length=254)
+    license_plate = models.CharField(max_length=20)
     name = models.CharField(max_length=254, default="")
 
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
@@ -37,7 +37,7 @@ class Ambulances(models.Model):
     orientation = models.FloatField(null=True)
     # device = models.OneToOneField(TrackableDevice, blank=True, null=True)
     priority = models.CharField(max_length=254, default="High")
-    capability = models.ForeignKey(Capabilities, on_delete=models.CASCADE, null=True, blank=True)
+    capability = models.ForeignKey(Capability, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return "{}: ({}), {}".format(self.license_plate,
@@ -117,3 +117,4 @@ class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
     ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
     timestamp = models.DateTimeField()
+    type = models.CharField(max_length=50, null=False, default="Default Type")

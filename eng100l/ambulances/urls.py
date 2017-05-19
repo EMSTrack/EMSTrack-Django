@@ -28,7 +28,9 @@ urlpatterns = [
         views.AmbulanceView.as_view(),
         name="ambulance"),
 
-    url(r'^ambulance/(?P<pk>\d+)/update/$', AmbulanceUpdateView.as_view(), name='ambulance_update'),
+    url(r'^ambulance/(?P<pk>\d+)/update/$', 
+        AmbulanceUpdateView.as_view(), 
+        name='ambulance_update'),
 
     url(r'^status$',
         views.StatusCreateView.as_view(),

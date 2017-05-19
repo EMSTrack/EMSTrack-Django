@@ -46,6 +46,9 @@ class Client(BaseClient):
         # all done, disconnect
         #self.disconnect()
 
+    def on_publish(self, client, userdata, mid):
+        pass
+
 class Command(BaseCommand):
     help = 'Seed the mqtt broker'
 

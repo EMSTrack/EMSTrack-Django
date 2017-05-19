@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capabilities
+from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
 
 from drf_extra_fields.geo_fields import PointField
 
@@ -42,7 +42,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     def get_capability_name(self, obj):
         if(obj.capability != None):
-            capability = Capabilities.objects.filter(id=(obj.capability).id).first()
+            capability = Capability.objects.filter(id=(obj.capability).id).first()
             if(hasattr(capability, 'name')):
                 return capability.name
 
@@ -85,8 +85,20 @@ class BaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Base
         fields = '__all__'
+
 class RouteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Route
         fields = '__all__'
+
+class MQTTLocationSerializer(serializers.ModelSerializer):
+
+    location = PointField(required=True)
+
+    def create(self, validated_data):
+        return LocationPoint.objects.create(**validated_data)
+
+    class Meta:
+        model = LocationPoint
+        fields = ['location', 'timestamp', 'ambulance']

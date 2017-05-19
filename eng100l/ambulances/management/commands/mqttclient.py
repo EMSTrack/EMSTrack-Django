@@ -6,19 +6,14 @@ from django.conf import settings
 from ambulances.management.commands._client import BaseClient
 
 from ambulances.models import Hospital, EquipmentCount, Equipment
+from ambulances.serializers import MQTTLocationSerializer
+
+from django.utils.six import BytesIO
+from rest_framework.parsers import JSONParser
 
 # Client
         
 class Client(BaseClient):
-
-    def __init__(self,
-                 broker,
-                 stdout,
-                 style,
-                 verbosity = 1):
-        print("hello") 
-        super.init
-
 
     # The callback for when the client receives a CONNACK
     # response from the server.
@@ -35,6 +30,8 @@ class Client(BaseClient):
         # hospital message handler
         self.client.message_callback_add('hospital/+/#',
                                          self.on_hospital)
+
+        self.client.message_callback_add('user/+/location', self.on_user_loc)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
@@ -60,14 +57,12 @@ class Client(BaseClient):
 
         if not msg.payload:
             return
-        
-        quantity = int(msg.payload)
-
-        if self.verbosity > 1:
-            self.stdout.write(" > {} {}".format(msg.topic, quantity))
 
         try:
-            
+            quantity = int(msg.payload)
+            if self.verbosity > 1:
+                self.stdout.write(" > {} {}".format(msg.topic, quantity))
+
             e = EquipmentCount.objects.get(hospital = hospital,
                                            equipment__name = equipment)
 
@@ -83,6 +78,39 @@ class Client(BaseClient):
 
             self.stdout.write(
                 self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
+
+
+    # Update user location
+    def on_user_loc(self, client, userdata, msg):
+
+        topic = msg.topic.split('/')
+        user = topic[1]
+
+        if not msg.payload:
+            return
+
+        # Parse data into json dict
+        stream = BytesIO(msg.payload)
+        data = JSONParser().parse(stream)
+
+        # TODO Find out which ambulance is linked to user
+        ambulance = 2
+        data['ambulance'] = ambulance
+
+        # Serialize data into object
+        serializer = MQTTLocationSerializer(data=data)
+
+        if serializer.is_valid():
+            try:
+                lp = serializer.save()
+                self.stdout.write(
+                        self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(user, ambulance)))
+            except:
+                self.stdout.write(
+                    self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create".format(user, ambulance)))
+        else:
+            self.stdout.write(
+                self.style.ERROR("*> Input data for user location invalid"))
 
 
 class Command(BaseCommand):

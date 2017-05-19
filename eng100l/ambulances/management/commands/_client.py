@@ -54,11 +54,10 @@ class BaseClient():
         return True
 
     def on_message(self, client, userdata, msg):
-        print("hello1")
         pass
 
     def on_publish(self, client, userdata, mid):
-        print("mid: " + str(mid))
+        pass
     
     # disconnect
     def disconnect(self):
