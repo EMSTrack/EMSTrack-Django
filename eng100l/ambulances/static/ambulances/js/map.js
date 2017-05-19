@@ -35,8 +35,9 @@ var UPDATE_FREQUENCY = 1000;
 /**
  * This is a handler for when the page is loaded.
  */
+var mymap;
 $(document).ready(function() {
-	var mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
+	mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
 
 	// Add layer to map.
@@ -129,7 +130,7 @@ var layergroups = {}; // The layer groups that will be part of the map.
  * @return void.
  */
 function updateAmbulances(mymap) {
-	console.log('ajax request sent');
+	// console.log('ajax request sent');
 	$.ajax({
 		type: 'GET',
 		datatype: "json",
@@ -142,7 +143,7 @@ function updateAmbulances(mymap) {
 				// Update ambulance grid
 				updateAmbulanceGrid(item.id);
 
-				console.log("Status: " + item.status);
+				//console.log("Status: " + item.status);
 				// set icon by status
 				let coloredIcon = ambulanceIcon;
 				if(item.status === STATUS_AVAILABLE)
@@ -375,6 +376,10 @@ function updateAmbulanceGrid(ambulanceId) {
  	// Extract form value to JSON
  	formData["stmain_number"] = $('#street').val();
  	formData["residential_unit"] = $('#address').val();
+ 	formData["latitude"] = document.getElementById('curr-lat').innerHTML;
+ 	formData["longitude"] = document.getElementById('curr-lng').innerHTML
+
+ 	console.log(formData["latitude"]);
  	formData["description"] = $('#comment').val();
  	formData["priority"] = $('input:radio[name=priority]:checked').val();
  	$('input:checkbox[name="ambulance_assignment"]:checked').each(function(i) {
@@ -405,10 +410,11 @@ function updateAmbulanceGrid(ambulanceId) {
  			 var successMsg = '<strong>Success</strong><br/>' + 
  			 	+ 'Ambulance: ' + data['ambulance']
  				+ ' dispatched to <br/>' + data['residential_unit']
- 				+ ', '+ data['stmain_number'];
+ 				+ ', '+ data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
  			$('.modal-body').html(successMsg).addClass('alert-success');
  			$('.modal-title').append('Successfully Dispached');
  			$("#dispatchModal").modal('show');
+ 			circlesGroup.clearLayers();
  		},
  		error: function(jqXHR, textStatus, errorThrown) {
  			alert(JSON.stringify(jqXHR) + ' ' + textStatus);
@@ -436,3 +442,64 @@ function updateAmbulanceGrid(ambulanceId) {
  	}
  	return cookieValue;
  }
+
+/* Functions to fill autocomplete AND to click specific locations */
+
+function initAutocomplete() {
+    // Create the autocomplete object, restricting the search to geographical
+    autocomplete = new google.maps.places.Autocomplete((document.getElementById('street')),
+        {types: ['geocode']});
+        //autocomplete.addListener('place_changed', fillInAddress);
+}
+
+/* Dispatch area - Should be eliminate after dispatching */
+
+var circlesGroup = new L.LayerGroup();
+var markersGroup = new L.LayerGroup();
+
+$("#street").change(function(data){
+
+    var addressInput = document.getElementById('street').value;
+	console.log(addressInput);
+	circlesGroup.clearLayers();
+
+	var geocoder = new google.maps.Geocoder();
+
+	geocoder.geocode({address: addressInput}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+      		var coordinate = results[0].geometry.location;
+
+      		document.getElementById('curr-lat').innerHTML = coordinate.lat();
+      		document.getElementById('curr-lng').innerHTML = coordinate.lng();
+
+      		L.circle([coordinate.lat(),coordinate.lng()],{
+      			color: 'red',
+      			fillColor: '#f03',
+      			fillOpacity: 0.5,
+      			radius: 10
+      		}).addTo(circlesGroup);
+
+      		circlesGroup.addTo(mymap);
+      		mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()),17);
+		}
+		else {
+			alert("There is error from Google map server");
+		}
+	});
+
+});
+
+$(function(){
+	mymap.on('click', function(e){
+		markersGroup.clearLayers();
+		console.log(e.latlng.lat);
+		document.getElementById('curr-lat').innerHTML = e.latlng.lat;
+		document.getElementById('curr-lng').innerHTML = e.latlng.lng;
+		L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
+		markersGroup.addTo(mymap);
+	});
+});
+
+
+
+

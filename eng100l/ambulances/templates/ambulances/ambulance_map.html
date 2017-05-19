@@ -63,6 +63,12 @@
                             <input id="address" type="text" name="address" class="form-control" placeholder="Address"/>
                             <br/>
 
+                            <span class="glyphicon glyphicon-chevron-right"></span> Coordinates:
+                            <div class="alert alert-info">
+                                <strong>Latitude:</strong> <div id="curr-lat" style="display: inline-block;"></div><br/>
+                                <strong>Longitude:</strong> <div id="curr-lng" style="display: inline-block;"></div>
+                            </div>
+
                             <span class="glyphicon glyphicon-chevron-right"></span> Description:
                             <div class="form-group">
                                 <textarea class="form-control" name="description" rows="5" id="comment"></textarea>
@@ -153,6 +159,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=initAutocomplete"
+        async defer></script>
     <script src="{% static 'ambulances/js/map.js' %}"></script>
     
 {% endblock %}
