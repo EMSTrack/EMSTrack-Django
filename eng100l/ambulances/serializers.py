@@ -102,3 +102,12 @@ class MQTTLocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = LocationPoint
         fields = ['location', 'timestamp', 'ambulance']
+
+
+class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
+
+    location = PointField(required=True)
+
+    class Meta:
+        model = Ambulances
+        fields = ['location', 'orientation']

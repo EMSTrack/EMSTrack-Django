@@ -5,8 +5,8 @@ from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import Hospital, EquipmentCount, Equipment
-from ambulances.serializers import MQTTLocationSerializer
+from ambulances.models import EquipmentCount, Ambulances, Status
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
@@ -118,24 +118,46 @@ class Client(BaseClient):
             self.stdout.write(
                 self.style.ERROR("*> Input data for user location invalid"))
 
-    # Publish location for ambulance
+    # Publish location for ambulance - after ambulance starts querying location table,
+    # take out the dependency on the lp generated
     def pub_ambulance_loc(self, client, amb_id, lp):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Publishing location for ambulance {}".format(amb_id)))
-        
-        # Convert obj back to json
-        serializer = MQTTLocationSerializer(lp)
-        json = JSONRenderer().render(serializer.data)
 
-        # Publish json
-        client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
+        try:
+            ambulance = Ambulances.objects.get(id=amb_id)
 
+            # Set new location of the ambulance; later we will want to abstract
+            # this out and instead just query location table
+            ambulance.location = lp.location
+
+            # Set status and grab latest location; status should be calculated
+            # rather than what this code is doing
+            status = Status.objects.all().first()
+            ambulance.status = status
+
+            # Save changes made to ambulance
+            ambulance.save()
+
+            # Convert obj back to json
+            serializer = MQTTAmbulanceLocSerializer(ambulance)
+            json = JSONRenderer().render(serializer.data)
+
+            # Publish json - be sure to do this in the seeder
+            client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
+            client.publish('ambulance/{}/status'.format(amb_id), status.id, qos=2, retain=True)
+
+        except Exception as e:
+            print(str(e))
+            self.stdout.write(
+                self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
 
 
 class Command(BaseCommand):
     help = 'Connect to the mqtt broker'
 
     def handle(self, *args, **options):
+
 
         broker = {
             'USERNAME': '',
