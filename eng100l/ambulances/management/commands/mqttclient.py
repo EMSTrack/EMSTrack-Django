@@ -147,8 +147,7 @@ class Client(BaseClient):
             client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
             client.publish('ambulance/{}/status'.format(amb_id), status.id, qos=2, retain=True)
 
-        except Exception as e:
-            print(str(e))
+        except Exception:
             self.stdout.write(
                 self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
 
