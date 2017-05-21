@@ -1,11 +1,14 @@
 # mqttseed application command
-
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import Hospital, EquipmentCount, Equipment
+from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer
+from django.utils.six import BytesIO
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 
 class Client(BaseClient):
 
@@ -18,14 +21,36 @@ class Client(BaseClient):
             return False
 
         self.seed_hospitals(client)
+        self.seed_ambulance_location(client)
 
         # all done, disconnect
         #self.disconnect()
+    def seed_ambulance_location(self, client):
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
+
+        # seeding ambulance locations
+        ambulances = Ambulances.objects.all();
+
+        for a in ambulances:
+            serializer = MQTTAmbulanceLocSerializer(a)
+            json = JSONRenderer().render(serializer.data)
+            
+            stream = BytesIO(json)
+            data = JSONParser().parse(stream)
+            #self.stdout.write(data)
+            # Publish json - be sure to do this in the seeder
+            client.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
+            if self.verbosity > 0:
+                self.stdout.write(" ambulance {} : {}".format(a.id,data))
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
 
     def seed_hospitals(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospitals"))
-        
+
         # seeding hospitals
         hospitals = Hospital.objects.all()
         k = 0
@@ -45,7 +70,7 @@ class Client(BaseClient):
                                e.quantity,
                                qos=2,
                                retain=True)
-                
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospitals"))
 
@@ -68,10 +93,10 @@ class Command(BaseCommand):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        
+
         client = Client(broker, self.stdout, self.style,
                         verbosity = options['verbosity'])
-                
+
         try:
             client.loop_forever()
 
