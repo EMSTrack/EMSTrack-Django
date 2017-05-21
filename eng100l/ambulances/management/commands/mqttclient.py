@@ -94,7 +94,7 @@ class Client(BaseClient):
         data = JSONParser().parse(stream)
 
         # TODO Find out which ambulance is linked to user
-        ambulance = 2
+        ambulance = 1
         data['ambulance'] = ambulance
 
         # Serialize data into object
@@ -127,10 +127,6 @@ class Client(BaseClient):
         try:
             ambulance = Ambulances.objects.get(id=amb_id)
 
-            # Set new location of the ambulance; later we will want to abstract
-            # this out and instead just query location table
-            ambulance.location = lp.location
-
             # Set status and grab latest location; status should be calculated
             # rather than what this code is doing
             status = Status.objects.all().first()
@@ -141,13 +137,15 @@ class Client(BaseClient):
 
             # Convert obj back to json
             serializer = MQTTAmbulanceLocSerializer(ambulance)
+            
             json = JSONRenderer().render(serializer.data)
 
             # Publish json - be sure to do this in the seeder
             client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
             client.publish('ambulance/{}/status'.format(amb_id), status.id, qos=2, retain=True)
 
-        except Exception:
+        except Exception as e:
+            print(e)
             self.stdout.write(
                 self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
 

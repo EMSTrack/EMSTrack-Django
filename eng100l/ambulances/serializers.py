@@ -1,3 +1,5 @@
+import json
+
 from rest_framework import serializers
 
 from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
@@ -28,7 +30,7 @@ class StatusField(serializers.Field):
 
 class AmbulancesSerializer(serializers.ModelSerializer):
 
-    location = PointField(required=False)
+    location = serializers.SerializerMethodField('get_amb_loc')
     status = StatusField()
     capability = serializers.SerializerMethodField('get_capability_name')
 
@@ -37,14 +39,23 @@ class AmbulancesSerializer(serializers.ModelSerializer):
         fields = ['id', 'location', 'status', 'priority', 'orientation', 'capability', 'license_plate']
         read_only_fields = ('priority',)
 
-    def get_status_name(self, obj):
-        return Status.objects.filter(id=(obj.status).id).first().name
-
     def get_capability_name(self, obj):
-        if(obj.capability != None):
+        if obj.capability != None:
             capability = Capability.objects.filter(id=(obj.capability).id).first()
-            if(hasattr(capability, 'name')):
+            if hasattr(capability, 'name'):
                 return capability.name
+
+    # Obtain serialized location
+    def get_amb_loc(self, obj):
+
+        # Obtain latest ambulance location
+        loc = LocationPoint.objects.filter(ambulance=obj.id).order_by('timestamp').last()
+
+        # Instantiate a location serializer to serialize location point into fields
+        loc_serializer = LocationSerializer(loc)
+
+        # Return the data (JSON format of fields)
+        return loc_serializer.data
 
 class CallSerializer(serializers.ModelSerializer):
 
@@ -73,6 +84,7 @@ class EquipmentCountSerializer(serializers.ModelSerializer):
 
     def get_toggle(self, obj):
         return Equipment.objects.filter(id=(obj.equipment).id).first().toggleable
+
 
 class HospitalSerializer(serializers.ModelSerializer):
     equipment = EquipmentCountSerializer(many=True)
@@ -106,8 +118,30 @@ class MQTTLocationSerializer(serializers.ModelSerializer):
 
 class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
 
-    location = PointField(required=True)
+    location = serializers.SerializerMethodField('get_amb_loc')
 
     class Meta:
         model = Ambulances
         fields = ['location', 'orientation']
+
+    # Obtain serialized location
+    def get_amb_loc(self, obj):
+        loc = LocationPoint.objects.filter(ambulance=obj.id).order_by('timestamp').last()
+        loc_serializer = LocationSerializer(loc)
+        return loc_serializer.data
+
+
+class LocationSerializer(serializers.ModelSerializer):
+
+    latitude = serializers.SerializerMethodField('get_lat')
+    longitude = serializers.SerializerMethodField('get_long')
+
+    class Meta:
+        model = LocationPoint
+        fields = ['latitude', 'longitude']
+
+    def get_lat(self, obj):
+        return obj.location.y
+
+    def get_long(self, obj):
+        return obj.location.x

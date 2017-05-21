@@ -25,6 +25,7 @@ class TrackableDevice(models.Model):
 
 class Capability(models.Model):
     name = models.CharField(max_length=254, unique=True)
+
     def __str__(self):
         return "{}".format(self.name)
 
@@ -33,16 +34,14 @@ class Ambulances(models.Model):
     name = models.CharField(max_length=254, default="")
 
     status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
-    location = models.PointField(srid=4326, default=Tijuana)
+    # location = models.PointField(srid=4326, default=Tijuana)
     orientation = models.FloatField(null=True)
     # device = models.OneToOneField(TrackableDevice, blank=True, null=True)
     priority = models.CharField(max_length=254, default="High")
     capability = models.ForeignKey(Capability, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return "{}: ({}), {}".format(self.license_plate,
-                                     self.status,
-                                     self.location)
+        return self.license_plate
 
 class Call(models.Model):
     name = models.CharField(max_length=254, default = "")
