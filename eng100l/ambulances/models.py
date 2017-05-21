@@ -41,6 +41,8 @@ class Ambulances(models.Model):
         return self.license_plate
 
 class Call(models.Model):
+    # ambulance assigned to Call (Foreign Key)
+    ambulance = models.ForeignKey(Ambulances, related_name='ambulances',on_delete=models.CASCADE)
     name = models.CharField(max_length=254, default = "")
     # address-related info
     residential_unit = models.CharField(max_length=254, default = "None")
@@ -54,14 +56,14 @@ class Call(models.Model):
     assignment = models.CharField(max_length=254, default = "None")
     # short description of the patient's injury
     description = models.CharField(max_length=500, default = "None")
-    # ambulance assigned to Call
-    ambulance = models.CharField(max_length=254, default = "None")
     # response time related info
     call_time = models.DateTimeField(default = timezone.now)
     departure_time = models.DateTimeField(blank = True, null = True)
     transfer_time = models.DateTimeField(blank = True, null = True)
     hospital_time = models.DateTimeField(blank = True, null = True)
     base_time = models.DateTimeField(blank = True, null = True)
+
+
 
     def __str__(self):
         return "({}): {}, {}".format(self.priority, self.residential_unit, self.stmain_number)
