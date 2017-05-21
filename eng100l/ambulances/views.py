@@ -1,62 +1,78 @@
 from django.core.urlresolvers import reverse_lazy
 
-from django.views.generic import ListView, CreateView
+from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
-from django.views import View
-
-from . import response_msg
-
-from django.http import HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
-import ast
-
-from django.contrib.gis.geos import Point
 
 from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
 
-from .models import Ambulances, Status, Region, Call, Hospital
-from .forms import AmbulanceCreateForm, StatusCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer
+from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Base, Route
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, StatusCreateForm, StatusUpdateForm, CallCreateForm
+from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer, BaseSerializer
 
 
 class AmbulanceView(CreateView):
     model = Ambulances
     context_object_name = "ambulance_form"
     form_class = AmbulanceCreateForm
-    success_url = reverse_lazy('ambulance_create')
+    success_url = reverse_lazy('ambulance')
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
-        context['ambulances'] = Ambulances.objects.all().order_by('license_plate')
+        #context['ambulances'] = Ambulances.objects.all().extra(select={'order': "CAST(license_plate as INTEGER)"}).order_by('order')
+        context['ambulances'] = Ambulances.objects.all().order_by('id')
         return context
+
+
+class AmbulanceUpdateView(UpdateView):
+    model = Ambulances
+    form_class = AmbulanceUpdateForm
+    template_name = 'ambulances/ambulance_edit.html'
+    success_url = reverse_lazy('ambulance')
+
+    def get_object(self, queryset=None):
+        obj = Ambulances.objects.get(id=self.kwargs['pk'])
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(AmbulanceUpdateView, self).get_context_data(**kwargs)
+        context['license_plate'] = self.kwargs['license_plate']
+        return context
+
+
+class CallView(ListView):
+    model = Call
+    template_name = 'ambulances/dispatch_list.html'
+    context_object_name = "ambulance_call"
 
 
 class StatusCreateView(CreateView):
     model = Status
     context_object_name = "status_form"
     form_class = StatusCreateForm
-    success_url = reverse_lazy("status_create")
+    success_url = reverse_lazy('status')
 
     def get_context_data(self, **kwargs):
         context = super(StatusCreateView, self).get_context_data(**kwargs)
-        context['statuses'] = Status.objects.all()
+        context['statuses'] = Status.objects.all().order_by('id')
         return context
 
 
-class CreateRoute(views.JSONResponseMixin, View):
-    def post(self, request):
-        # json_data = json.loads(request.body)
-        points = ast.literal_eval(request.body)
-        text = ""
-        for p in points:
-            text = text + p["alex"] + "\n"
-        return HttpResponse(text)
+class StatusUpdateView(UpdateView):
+    model = Status
+    form_class = StatusUpdateForm
+    template_name = 'ambulances/status_edit.html'
+    success_url = reverse_lazy('status')
+
+    def get_object(self, queryset=None):
+        obj = Status.objects.get(id=self.kwargs['pk'])
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(StatusUpdateView, self).get_context_data(**kwargs)
+        context['id'] = self.kwargs['pk']
+        return context
 
 
 class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
@@ -76,6 +92,13 @@ class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
     pass
 
 
+class ListCreateViewSet(mixins.ListModelMixin,
+                        mixins.RetrieveModelMixin,
+                        mixins.CreateModelMixin,
+                        viewsets.GenericViewSet):
+    pass
+
+
 class AmbulancesViewSet(ListRetrieveUpdateViewSet):
     queryset = Ambulances.objects.all()
     serializer_class = AmbulancesSerializer
@@ -88,13 +111,28 @@ class StatusViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = StatusSerializer
 
 
-class CallViewSet(viewsets.ReadOnlyModelViewSet):
+class CallViewSet(ListCreateViewSet):
     queryset = Call.objects.all()
     serializer_class = CallSerializer
 
 
-class HospitalViewSet(ListRetrieveUpdateViewSet):
+class EquipmentCountViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    queryset = EquipmentCount.objects.all()
+    serializer_class = EquipmentCountSerializer
+
+
+class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = ('name', 'address')
+
+
+class BaseViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Base.objects.all()
+    serializer_class = BaseSerializer
+
+
+class RouteViewSet(ListCreateViewSet):
+    queryset = Route.objects.all()
+    serializer_class = RouteSerializer

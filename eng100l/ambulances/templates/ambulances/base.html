@@ -23,25 +23,18 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/ambulances">Cruz Roja</a>
+            <a class="navbar-brand" href="{% url 'ambulance_map' %}">Cruz Roja</a>
         </div>
         <!-- Navbar Menu -->
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li><a href="/ambulances/">Ambulances</a></li>
-                <li><a href="/ambulances/status">Statuses</a></li>
-                <li><a href="/ambulances/ambulance_map">Map</a></li>
+                <li><a href="{% url 'ambulance' %}">Ambulances</a></li>
+                <li><a href="{% url 'status' %}">Statuses</a></li>
+                <li><a href="{% url 'ambulance_map' %}">Map</a></li>
+                <li><a href="{% url 'call_list' %}">Dispatch List</a></li>
+                
                 {% if user.is_authenticated %}
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Call Ambulance<span
-                                class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Page 1-1</a></li>
-                            <li><a href="#">Page 1-2</a></li>
-                            <li><a href="#">Page 1-3</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Past Records</a></li>
+                    <li><a href="{% url 'call_list' %}">Past Records</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="/auth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>

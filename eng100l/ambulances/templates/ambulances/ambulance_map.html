@@ -5,77 +5,162 @@
 {% block head %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
-
+    <script src="{% static 'ambulances/js/form-button.js' %}"></script>
 {% endblock %}
 <!-- link rel="stylesheet" href="styles.css" -->
 
 {% block content %}
     <div class="container">
-        <h3>Track Ambulances</h3>
 
         <div class="row">
 
             <div class="col-md-9">
-                <div id="live-map" style="width: 800px; height: 600px"></div>
+                <div id="live-map" style="width: 800px; height: 700px"></div>
             </div><!--end col-md-9-->
 
             <div class="col-md-3">
                 <!-- Start of Ambulance Grid -->
                 <div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >
                     <h3>Ambulances</h3>
-                    <div class="row" style="margin-top: 5px; margin-bottom: 5px;">
-                        <button type="button" class="btn btn-default">12345678</button>
-                        <button type="button" class="btn btn-default">12345678</button>
-                        <button type="button" class="btn btn-default">12345678</button>
-                    </div>
-                    <div class="row" style="margin-top: 5px; margin-bottom: 5px;">
-                        <button type="button" class="btn btn-default">12345678</button>
-                        <button type="button" class="btn btn-default">12345678</button>
-                        <button type="button" class="btn btn-default">12345678</button>
-                    </div>
-                    <div class="row" style="margin-top: 5px; margin-bottom: 10px;">
-                        <button type="button" class="btn btn-default">12345678</button>
-                        <button type="button" class="btn btn-default">12345678</button>
-                        <button type="button" class="btn btn-default">12345678</button>
-                    </div>
-
-                </div>
+                    <div id="ambulance-grid"></div>
+                
+                </div>   
                 <br>
                 <!-- End of Ambulance Grid Row -->
+
+                <!--        Ambulance info panel      -->
                 <div class="row">
-                    <div class="panel-group" id="accordion">
-                        {% for ambulance in object_list %}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h4 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#accordion"
-                                           href="#collapse{{ ambulance.license_plate }}" class="ambulance-panel"
-                                           id="{{ ambulance.license_plate }}">Ambulance: {{ ambulance.license_plate }}</a>
-                                    </h4>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <b>Ambulance Info</b>
+                                </h4>
+                        </div>
+                        <div class="panel-body ambulance-detail">
+                            Ambulance: <br/>
+                            Priority: <br/>
+                            Street: <br/>
+                            Address: <br/>
+                        </div>
+                    </div>
+                </div><!--        end of Ambulance info panel      -->
+
+                <!--        Dispatch panel      -->
+                <div class="row">
+                <form id="dispatchForm" method="POST" action="">
+                {% csrf_token %}
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <b>Dispatch Ambulance(s)</b>
+                            </h4>
+                        </div>
+                        <!-- Dispatch Panel window -->
+                        <div class="panel-body" style="height:400px; overflow-y:scroll;">
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Location:
+                            <input id="street" type="text" name="street" class="form-control" placeholder="Street"/>
+                            <input id="address" type="text" name="address" class="form-control" placeholder="Address"/>
+                            <br/>
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Coordinates:
+                            <div class="alert alert-info">
+                                <strong>Latitude:</strong> <div id="curr-lat" style="display: inline-block;"></div><br/>
+                                <strong>Longitude:</strong> <div id="curr-lng" style="display: inline-block;"></div>
+                            </div>
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Description:
+                            <div class="form-group">
+                                <textarea class="form-control" name="description" rows="5" id="comment"></textarea>
+                            </div>
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Priority:
+                            <form>
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="A">A
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="B">B
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="C">C
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="D">D
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
+                                    <label class="btn btn-default">
+                                        <input type="radio" name="priority" value="E">E
+                                        <span class="glyphicon giyphicon ok"></span></input>
+                                    </label>
                                 </div>
-                                <div id="collapse{{ ambulance.license_plate }}" class="panel-collapse collapse">
-                                    <div class="panel-body">
-                                        <ul class="list-group" style="list-style: none; padding-left: 10px;">
-                                            <!--update details by ajax calls-->
-                                            <li class="list-group-list">Status: {{ ambulance.status }}</li>
-                                            <li class="list-group-list">Latitude: {{ ambulance.location.y }}</li>
-                                            <li class="list-group-list">Longitude: {{ ambulance.location.x }}</li>
-                                        </ul>
-                                    </div>
+ 
+                            </form>
+                            <br/><br/>
+
+                            <!--
+                            <span class="glyphicon glyphicon-chevron-right"></span> Number of ambulance:
+                            <input type="number" class="form-control" id="usr"><br/>
+                            -->
+
+                            <span class="glyphicon glyphicon-chevron-right"></span> Dispatch Ambulance(s)<br/>
+
+                            <div class="panel panel-default" >
+                                <div class="panel-body" style="line-height: 1.5px;">
+
+                                <div id="ambulance-selection"></div>
+                                    <!-- Fancy button here, but not works for map.js
+                                    <span class="button-checkbox">
+                                        <button type="button" class="btn btn-sm" data-color="danger">Amb 1</button>
+                                        <input type="checkbox" class="hidden" checked />
+                                    </span>
+                                    -->
                                 </div>
                             </div>
-                        {% endfor %}
+                            <br/><br/>
+                            <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">Dispatch</button>
+                        </div>
                     </div>
-                </div><!--end row-->
+                </form>
+
+                </div><!--        end of row Dispatch panel      -->
 
             </div><!--end col-md-3-->
         </div><!--end row -->
     </div><!--end container-->
 
+    <!-- This is modals for ambulance dispatcher's panel -->
+    <!-- Modal -->
+    <div id="dispatchModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title"></h4>
+          </div>
+          <div class="modal-body">
+            
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=initAutocomplete"
+        async defer></script>
     <script src="{% static 'ambulances/js/map.js' %}"></script>
     
 {% endblock %}

@@ -4,7 +4,7 @@ from rest_framework_swagger.views import get_swagger_view
 from rest_framework import routers
 
 from . import views
-from .views import StatusViewSet, AmbulancesViewSet, CallViewSet, HospitalViewSet
+from .views import StatusViewSet, AmbulancesViewSet, CallViewSet, HospitalViewSet, EquipmentCountViewSet, RouteViewSet, AmbulanceUpdateView, StatusUpdateView
 
 schema_view = get_swagger_view(title='Ambulances API')
 
@@ -13,6 +13,8 @@ router.register(r'status', StatusViewSet)
 router.register(r'ambulances', AmbulancesViewSet)
 router.register(r'calls', CallViewSet)
 router.register(r'hospitals', HospitalViewSet)
+router.register(r'equipment', EquipmentCountViewSet)
+router.register(r'routes', RouteViewSet)
 
 urlpatterns = [
 
@@ -24,18 +26,26 @@ urlpatterns = [
 
     url(r'^$',
         views.AmbulanceView.as_view(),
-        name="ambulance_create"),
+        name="ambulance"),
+
+    url(r'^ambulance/(?P<pk>\d+)/update/$',
+        AmbulanceUpdateView.as_view(),
+        name='ambulance_update'),
+
+    url(r'^status/(?P<pk>\d+)/update/$',
+        StatusUpdateView.as_view(),
+        name='status_update'),
 
     url(r'^status$',
         views.StatusCreateView.as_view(),
-        name="status_create"),
-
-    url(r'^create_route$',
-        csrf_exempt(views.CreateRoute.as_view()),
-        name="create_route"),
+        name="status"),
 
     url(r'^ambulance_map$',
         views.AmbulanceMap.as_view(),
         name="ambulance_map"),
+
+    url(r'^call_list$',
+        views.CallView.as_view(),
+        name="call_list"),
 
 ]

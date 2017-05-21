@@ -9,8 +9,8 @@ Install Homebrew (https://brew.sh/)
 INSTALLING PYTHON AND DJANGO
 
 brew install python3
-pip install django
-pip install django-braces
+pip3 install django
+pip3 install django-braces
 
 INSTALLING POSTGRESQL AND POSTGIS
 
@@ -40,22 +40,20 @@ pql        (to enter psql)
 
 INSTALL OTHER DEPENDENCIES
 
-pip install psycopg2;
+pip3 install psycopg2;
 
-INSTALL REST FRAMEWORK (if you have pip)
+INSTALL REST FRAMEWORK (if you have pip - use pip3 instead please!)
 
-pip install djangorestframework
-pip install markdown
-pip install django-filter
-pip install django-rest-swagger
-pip install django-extra-fields
+pip3 install djangorestframework
+pip3 install markdown
+pip3 install django-filter
+pip3 install django-rest-swagger
+pip3 install django-extra-fields
 
-(if you have pip3)
-pip install djangorestframework
-pip install markdown
-pip install django-filter
-pip install django-rest-swagger
-pip install django-extra-fields
+INSTALL MQTT
+
+brew install mosquitto
+pip3 install paho-mqtt
 
 SETTINGS FILES
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import TrackableDevice, Ambulances, Status, Call, Region, Hospital, Equipment, EquipmentCount
+from .models import TrackableDevice, Ambulances, Status, Call, Region, Hospital, Equipment, EquipmentCount, Capability, LocationPoint
 
 admin.site.register(TrackableDevice)
 admin.site.register(Ambulances)
@@ -12,3 +12,5 @@ admin.site.register(Call)
 admin.site.register(Hospital)
 admin.site.register(Equipment)
 admin.site.register(EquipmentCount)
+admin.site.register(Capability)
+admin.site.register(LocationPoint)

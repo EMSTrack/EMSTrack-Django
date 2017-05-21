@@ -11,20 +11,33 @@ var ambulanceIconBlack = L.icon({
 	iconUrl: '/static/icons/ambulance_icon_black.png',
 	iconSize: [60, 60],
 });
+var ambulanceIconBlue = L.icon({
+	iconUrl: '/static/icons/ambulance_blue.png',
+	iconSize: [60, 40],
+});
 var hospitalIcon = L.icon({
-		iconUrl: '/static/icons/hospital_icon.png',
-		iconSize: [40, 40]
+	iconUrl: '/static/icons/hospital_icon.png',
+	iconSize: [40, 40]
 });
 
 var ajaxUrl = "api/ambulances";
 
+/**
+ * Ambulance statuses 
+ */
+var STATUS_IN_SERVICE = "In Service";
+var STATUS_AVAILABLE = "Available";
+var STATUS_OUT_OF_SERVICE = "Out of service";
 
+// Ajax update frequency (in milliseconds)
+var UPDATE_FREQUENCY = 1000;
 
 /**
  * This is a handler for when the page is loaded.
  */
+var mymap;
 $(document).ready(function() {
-	var mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
+	mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
 
 	// Add layer to map.
@@ -60,13 +73,16 @@ $(document).ready(function() {
    		mymap.addLayer(layer);
 	});
 
+    // Create ambulance grid (move somewhere else if not appropriate here)
+    createAmbulanceGrid(mymap);
+
     // Update the ambulances on the map.
    	updateAmbulances(mymap);
 
     // Calling for ambulance updates every second.
 	window.setInterval(function() {
 		updateAmbulances(mymap);
-	}, 1000);
+	}, UPDATE_FREQUENCY);
 
 
 	// Open popup on panel click.
@@ -84,6 +100,25 @@ $(document).ready(function() {
 		}, 2500);
 	});
 
+	// Update panel details on collapse
+	$('.collapse').on('shown.bs.collapse', function() {
+		let ambulance_id = this.id.slice(6);	// extract id from panel id
+		let getAmbulanceUrl = 'api/ambulances/' + ambulance_id;
+		$.get(getAmbulanceUrl, function(data) {
+			//console.log(JSON.stringify(data));
+			let liElement = '<li class="list-group-list">';
+			$('#panel_'+ambulance_id).find('.list-group').html(liElement + "Status: " + data.status + '</li>'
+				+ liElement + "Latitude: " + data.location.latitude + '</li>'
+				+ liElement + "Longitude: " + data.location.longitude + '</li>'
+				+ liElement + "Updated!" + '</li>');
+		});
+	});
+
+	// Submit form
+	$('#dispatchForm').submit(function(e) {
+		e.preventDefault();
+		postDispatchCall();
+	})
 
 });
 
@@ -95,36 +130,55 @@ var layergroups = {}; // The layer groups that will be part of the map.
  * @return void.
  */
 function updateAmbulances(mymap) {
-	console.log('ajax request sent');
-	console.log(ajaxUrl);
+	// console.log('ajax request sent');
 	$.ajax({
 		type: 'GET',
 		datatype: "json",
 		url: ajaxUrl,
 		success: function(arr) {
+			
 			statusWithMarkers = {}; // clear all statuses from previous ajax call.
 			var i = 0;
 			$.each(arr, function(index, item) {
-				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
-					// set icon by status
-					let coloredIcon = ambulanceIcon;
-					if(item.status !== 'Active')
-						coloredIcon = ambulanceIconBlack;
+				// Update ambulance grid
+				updateAmbulanceGrid(item.id);
 
+				//console.log("Status: " + item.status);
+				// set icon by status
+				let coloredIcon = ambulanceIcon;
+				if(item.status === STATUS_AVAILABLE)
+					coloredIcon = ambulanceIconBlue;
+				if(item.status === STATUS_OUT_OF_SERVICE)
+					coloredIcon = ambulanceIconBlack;
+
+				if(typeof ambulanceMarkers[item.id] == 'undefined' ){
+					// If ambulance marker doesn't exist
 					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
 					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
-
-			    	// Bind id to icons
-					ambulanceMarkers[item.id]._icon.id = item.id;
-					// Collapse panel on icon hover.
-					ambulanceMarkers[item.id].on('mouseover', function(e){
-							$('#collapse' + this._icon.id).collapse('show');
-							this.openPopup().on('mouseout', function(e){
-							$('#collapse' + this._icon.id).collapse('hide');
-							this.closePopup();
-						});
-					}); 
 			    }
+			    else {
+			    	// If ambulance markers exist
+
+			    	// Remove existing marker
+					mymap.removeLayer(ambulanceMarkers[item.id]);
+					
+					// Re-add it but with updated ambulance icon
+					ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+					.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+			    }
+
+			    // Bind id to icons
+				ambulanceMarkers[item.id]._icon.id = item.id;
+				// Collapse panel on icon hover.
+				ambulanceMarkers[item.id].on('mouseover', function(e){
+					// open popup bubble
+					this.openPopup().on('mouseout', function(e){
+						this.closePopup();
+					});
+
+					// update details panel
+					updateDetailPanel(item.id);
+				});
 
 			    // Update ambulance location
 				ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
@@ -136,16 +190,12 @@ function updateAmbulances(mymap) {
 				}
 				else{
 					statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
-				}
-
-
-			 
-
+				}			 
 			});
 			
 			// This is for the first update of the map.
 			if(firstUpdate){
-
+				console.log("FIRST UPDATE!");
 				// Add the checkbox on the top right corner for filtering.
 				var container = L.DomUtil.create('div', 'filter-options');
 
@@ -154,7 +204,6 @@ function updateAmbulances(mymap) {
 				$.get('api/status', function(statuses) {
 					statuses.forEach(function(status){
 						if(statusWithMarkers[status.name] !== undefined) {
-							console.log(status.name);
 							layergroups[status.name] = L.layerGroup(statusWithMarkers[status.name]);
 							layergroups[status.name].addTo(mymap);
 						}
@@ -203,12 +252,10 @@ function updateAmbulances(mymap) {
 
 
 			}
-
 			else{
 				// Goes through each layer group and adds or removes accordingly.
 				Object.keys(layergroups).forEach(function(key){
 					layergroups[key].clearLayers();
-					console.log(layergroups);
 					for(var i = 0; i < statusWithMarkers[key].length; i++){
 						// Add the ambulances in the layer if it is checked.
 						if($(".chk[data-status='" + key + "']").is(':checked')){
@@ -223,9 +270,236 @@ function updateAmbulances(mymap) {
 
 			});
 
-			}
-		
+			}		
 
 		}
 	});
 }
+
+/*
+ * updateDetailPanel updates the detail panel with the ambulance's details.
+ * @param ambulanceId is the unique id used in the ajax call url.
+ * @return void.
+ */
+ function updateDetailPanel(ambulanceId) {
+ 	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
+ 	console.log(apiAmbulanceUrl);
+ 	$.get(apiAmbulanceUrl, function(data) {
+		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
+			"Status: " + data.status + "<br/>" + 
+			"Priority: " + data.priority);
+	});
+ }
+
+function onGridButtonClick(ambulanceId, mymap) {
+	return function(e) {
+		// Update detail panel
+		updateDetailPanel(ambulanceId);
+
+		// Center icon on map
+		var position = ambulanceMarkers[ambulanceId].getLatLng();
+		mymap.setView(position, 12);
+
+		// Open popup for 2.5 seconds.
+		ambulanceMarkers[ambulanceId].openPopup();
+		setTimeout(function(){
+			ambulanceMarkers[ambulanceId].closePopup();
+		}, 2500);
+
+	}
+}
+
+/*
+ * createAmbulanceGrid creates the ambulance grid using the data from the server (status indicated by color of button, ID of ambulance on buttons)
+ *
+ */
+function createAmbulanceGrid(mymap) {
+	$.get('api/ambulances/', function(data) {
+		var i, ambulanceId;
+		//console.log(data);
+		for(i = 0; i < data.length; i++) {
+			ambulanceId = data[i].id;
+			ambulanceLicensePlate = data[i].license_plate;
+			console.log(ambulanceId);
+			console.log(ambulanceLicensePlate);
+			ambulanceStatus = data[i].status;
+			if(ambulanceStatus === STATUS_AVAILABLE) {
+				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+				$('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceLicensePlate + ' </label><br/>');
+			}
+			if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
+				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+			if(ambulanceStatus === STATUS_IN_SERVICE)
+				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		
+			// Open popup on panel click.
+			// For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
+			$('#grid-button' + ambulanceId).click(onGridButtonClick(ambulanceId,mymap));
+		}
+	});
+}
+
+/*
+ * updateAmbulanceGrid updates the ambulance grid. Will be called in AJAX call to update grid dynamically
+ *
+ */
+function updateAmbulanceGrid(ambulanceId) {
+ 	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
+
+ 	$.get(apiAmbulanceUrl, function(data) {
+		var buttonId = "#grid-button" + data.id;
+
+		// console.log(buttonId);
+		// Updating button license plate identifier dynamically
+		$(buttonId).html(data.license_plate);
+
+		// Updated button color/status dynamically
+		if(data.status === STATUS_AVAILABLE) 
+			$(buttonId).attr( "class", "btn btn-success" );
+		if(data.status === STATUS_OUT_OF_SERVICE)
+			$(buttonId).attr( "class", "btn btn-default" );
+		if(data.status === STATUS_IN_SERVICE)
+			$(buttonId).attr( "class", "btn btn-danger" );
+		
+	});
+}
+
+/*
+ * postDispatchCall makes an ajax post request to post dispatched ambulance.
+ * @param void.
+ * @return void.
+ */
+ function postDispatchCall() {
+ 	var formData = {};
+ 	var assigned_ambulances = [];
+
+ 	// Extract form value to JSON
+ 	formData["stmain_number"] = $('#street').val();
+ 	formData["residential_unit"] = $('#address').val();
+ 	formData["latitude"] = document.getElementById('curr-lat').innerHTML;
+ 	formData["longitude"] = document.getElementById('curr-lng').innerHTML
+
+ 	console.log(formData["latitude"]);
+ 	formData["description"] = $('#comment').val();
+ 	formData["priority"] = $('input:radio[name=priority]:checked').val();
+ 	$('input:checkbox[name="ambulance_assignment"]:checked').each(function(i) {
+ 		assigned_ambulances[i] = $(this).val();
+ 	});
+ 	formData["ambulance"] = assigned_ambulances.toString();
+
+ 	let postJsonUrl = 'api/calls/';
+ 	alert(JSON.stringify(formData) + '\n' + postJsonUrl);
+
+ 	var csrftoken = getCookie('csrftoken');
+
+ 	$.ajaxSetup({
+ 		beforeSend: function(xhr, settings) {
+ 			if(!csrfSafeMethod(settings.type) && !this.crossDomain) {
+ 				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+ 			}
+ 		}
+ 	})
+
+ 	$.ajax({
+ 		url: postJsonUrl,
+ 		type: 'POST',
+ 		dataType: 'json',
+ 		data: formData,
+ 		success: function(data) {
+ 			// alert(JSON.stringify(data));
+ 			 var successMsg = '<strong>Success</strong><br/>' + 
+ 			 	+ 'Ambulance: ' + data['ambulance']
+ 				+ ' dispatched to <br/>' + data['residential_unit']
+ 				+ ', '+ data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
+ 			$('.modal-body').html(successMsg).addClass('alert-success');
+ 			$('.modal-title').append('Successfully Dispached');
+ 			$("#dispatchModal").modal('show');
+ 			circlesGroup.clearLayers();
+ 		},
+ 		error: function(jqXHR, textStatus, errorThrown) {
+ 			alert(JSON.stringify(jqXHR) + ' ' + textStatus);
+ 			$('.modal-title').append('Dispatch failed');
+ 			$("#dispatchModal").modal('show');
+ 		}
+ 	});
+ }
+
+ function csrfSafeMethod(method) {
+ 	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+ }
+
+ function getCookie(name) {
+ 	var cookieValue = null;
+ 	if(document.cookie && document.cookie !== '') {
+ 		var cookies = document.cookie.split(';');
+ 		for(var i = 0; i < cookies.length; i++) {
+ 			var cookie = $.trim(cookies[i]);
+ 			if(cookie.substring(0, name.length + 1) === (name + '=')) {
+ 				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+ 				break;
+ 			}
+ 		}
+ 	}
+ 	return cookieValue;
+ }
+
+/* Functions to fill autocomplete AND to click specific locations */
+
+function initAutocomplete() {
+    // Create the autocomplete object, restricting the search to geographical
+    autocomplete = new google.maps.places.Autocomplete((document.getElementById('street')),
+        {types: ['geocode']});
+        //autocomplete.addListener('place_changed', fillInAddress);
+}
+
+/* Dispatch area - Should be eliminate after dispatching */
+
+var circlesGroup = new L.LayerGroup();
+var markersGroup = new L.LayerGroup();
+
+$("#street").change(function(data){
+
+    var addressInput = document.getElementById('street').value;
+	console.log(addressInput);
+	circlesGroup.clearLayers();
+
+	var geocoder = new google.maps.Geocoder();
+
+	geocoder.geocode({address: addressInput}, function(results, status) {
+		if (status == google.maps.GeocoderStatus.OK) {
+      		var coordinate = results[0].geometry.location;
+
+      		document.getElementById('curr-lat').innerHTML = coordinate.lat();
+      		document.getElementById('curr-lng').innerHTML = coordinate.lng();
+
+      		L.circle([coordinate.lat(),coordinate.lng()],{
+      			color: 'red',
+      			fillColor: '#f03',
+      			fillOpacity: 0.5,
+      			radius: 10
+      		}).addTo(circlesGroup);
+
+      		circlesGroup.addTo(mymap);
+      		mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()),17);
+		}
+		else {
+			alert("There is error from Google map server");
+		}
+	});
+
+});
+
+$(function(){
+	mymap.on('click', function(e){
+		markersGroup.clearLayers();
+		console.log(e.latlng.lat);
+		document.getElementById('curr-lat').innerHTML = e.latlng.lat;
+		document.getElementById('curr-lng').innerHTML = e.latlng.lng;
+		L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
+		markersGroup.addTo(mymap);
+	});
+});
+
+
+
+
