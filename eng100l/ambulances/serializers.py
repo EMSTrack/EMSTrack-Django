@@ -1,10 +1,11 @@
-import json
-
 from rest_framework import serializers
 
 from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
 
+from .fields import StatusField
+
 from drf_extra_fields.geo_fields import PointField
+
 
 class StatusSerializer(serializers.ModelSerializer):
 
@@ -12,20 +13,11 @@ class StatusSerializer(serializers.ModelSerializer):
         model = Status
         fields = '__all__'
 
+
 class TrackableDeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrackableDevice
         fields = '__all__'
-
-
-# To translate between status id and status name in the returned JSON
-class StatusField(serializers.Field):
-
-    def to_representation(self, obj):
-        return Status.objects.filter(id=obj.id).first().name
-
-    def to_internal_value(self, data):
-        return Status.objects.filter(name=data).first()
 
 
 class AmbulancesSerializer(serializers.ModelSerializer):
@@ -93,16 +85,19 @@ class HospitalSerializer(serializers.ModelSerializer):
         model = Hospital
         fields = ['id', 'name', 'equipment']
 
+
 class BaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Base
         fields = '__all__'
+
 
 class RouteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Route
         fields = '__all__'
+
 
 class MQTTLocationSerializer(serializers.ModelSerializer):
 

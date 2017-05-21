@@ -132,12 +132,14 @@ class Client(BaseClient):
             status = Status.objects.all().first()
             ambulance.status = status
 
+            # Calculate ambulance orientation?
+            ambulance.orientation = 200
+
             # Save changes made to ambulance
             ambulance.save()
 
             # Convert obj back to json
             serializer = MQTTAmbulanceLocSerializer(ambulance)
-            
             json = JSONRenderer().render(serializer.data)
 
             # Publish json - be sure to do this in the seeder
