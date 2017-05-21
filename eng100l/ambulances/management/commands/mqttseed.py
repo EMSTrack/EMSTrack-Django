@@ -24,7 +24,8 @@ class Client(BaseClient):
         self.seed_ambulance_location(client)
 
         # all done, disconnect
-        #self.disconnect()
+        self.disconnect()
+
     def seed_ambulance_location(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
@@ -42,7 +43,7 @@ class Client(BaseClient):
             # Publish json - be sure to do this in the seeder
             client.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
             if self.verbosity > 0:
-                self.stdout.write(" ambulance {} : {}".format(a.id,data))
+                self.stdout.write(" ambulance {} : {}".format(a.id, data))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
