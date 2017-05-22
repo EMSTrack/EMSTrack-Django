@@ -23,9 +23,11 @@ class Client(BaseClient):
         self.seed_hospitals(client)
         self.seed_ambulance_location(client)
         self.seed_hospital_list(client)
+        self.seed_ambulance_status(client)
 
         # all done, disconnect
         self.disconnect()
+
 
     def seed_ambulance_location(self, client):
         if self.verbosity > 0:
@@ -37,17 +39,27 @@ class Client(BaseClient):
         for a in ambulances:
             serializer = MQTTAmbulanceLocSerializer(a)
             json = JSONRenderer().render(serializer.data)
-            
+
             stream = BytesIO(json)
             data = JSONParser().parse(stream)
-            #self.stdout.write(data)
-            # Publish json - be sure to do this in the seeder
+
             client.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
             if self.verbosity > 0:
-                self.stdout.write(" ambulance {} : {}".format(a.id, data))
+                self.stdout.write(" ambulance {} : {}".format(a.id,data))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
+
+    def seed_ambulance_status(self, client):
+        ambulances = Ambulances.objects.all();
+
+        for a in ambulances:
+            client.publish('ambulance/{}/status'.format(a.status), qos=2, retain=True)
+            if self.verbosity > 0:
+                self.stdout.write(" ambulance {} : {}".format(a.id,a.status))
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance status"))
 
     def seed_hospitals(self, client):
         if self.verbosity > 0:
@@ -103,6 +115,7 @@ class Client(BaseClient):
     # Message publish callback
     def on_publish(self, client, userdata, mid):
         pass
+
 
 class Command(BaseCommand):
     help = 'Seed the mqtt broker'
