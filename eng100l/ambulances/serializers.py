@@ -140,3 +140,8 @@ class LocationSerializer(serializers.ModelSerializer):
 
     def get_long(self, obj):
         return obj.location.x
+
+class MQTTHospitalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hospital
+        fields = ['id', 'name']
