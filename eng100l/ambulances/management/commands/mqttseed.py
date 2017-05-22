@@ -5,7 +5,7 @@ from django.conf import settings
 from ambulances.management.commands._client import BaseClient
 
 from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -23,6 +23,7 @@ class Client(BaseClient):
         self.seed_hospitals(client)
         self.seed_ambulance_location(client)
         self.seed_hospital_list(client)
+        self.seed_hospital_config(client)
 
         # all done, disconnect
         #self.disconnect()
@@ -76,6 +77,24 @@ class Client(BaseClient):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospitals"))
 
+    def seed_hospital_config(self, client):
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding hospital configurations"))
+
+        hospitals = Hospital.objects.all()
+        for h in hospitals:
+            serializer = MQTTHospitalEquipmentSerializer(h)
+            json = JSONRenderer().render(serializer.data)
+
+            stream = BytesIO(json)
+            data = JSONParser().parse(stream)
+            client.publish('hospital/{}/config'.format(h.id), json, qos=2, retain=True)
+
+            if self.verbosity > 0:
+                # print out hospital id + config json
+                self.stdout.write(" hospital {} : {}".format(h.name, data))
+
+
     def seed_hospital_list(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding list of hospitals"))
@@ -103,6 +122,7 @@ class Client(BaseClient):
     # Message publish callback
     def on_publish(self, client, userdata, mid):
         pass
+
 
 class Command(BaseCommand):
     help = 'Seed the mqtt broker'

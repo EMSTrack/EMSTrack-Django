@@ -29,7 +29,7 @@ class Client(BaseClient):
         client.subscribe('#', 2)
 
         # hospital message handler
-        self.client.message_callback_add('hospital/+/#',
+        self.client.message_callback_add('hospital/+/equipment/#',
                                          self.on_hospital)
 
         self.client.message_callback_add('user/+/location', self.on_user_loc)
