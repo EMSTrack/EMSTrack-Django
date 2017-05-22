@@ -1,6 +1,7 @@
 # mqttseed application command
 from django.core.management.base import BaseCommand
 from django.conf import settings
+from django.contrib.auth.models import User
 
 from ambulances.management.commands._client import BaseClient
 
@@ -20,23 +21,24 @@ class Client(BaseClient):
         if not super().on_connect(client, userdata, flags, rc):
             return False
 
-        # Begin seeding
+        # Seed hospitals
+        self.seed_hospital_equipment(client)
         self.seed_hospitals(client)
-        self.seed_ambulance_location(client)
-        self.seed_hospital_list(client)
-        self.seed_ambulance_status(client)
         self.seed_hospital_config(client)
+
+        # Seed ambulances
+        self.seed_ambulance_location(client)
+        self.seed_ambulance_status(client)
 
         # all done, disconnect
         self.disconnect()
-
 
     def seed_ambulance_location(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
 
         # seeding ambulance locations
-        ambulances = Ambulances.objects.all();
+        ambulances = Ambulances.objects.all()
 
         for a in ambulances:
             serializer = MQTTAmbulanceLocSerializer(a)
@@ -47,25 +49,23 @@ class Client(BaseClient):
 
             client.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
             if self.verbosity > 0:
-                self.stdout.write(" ambulance {} : {}".format(a.id,data))
+                self.stdout.write("Status of ambulance {}: {}".format(a.id, data))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
 
-
     def seed_ambulance_status(self, client):
-        ambulances = Ambulances.objects.all();
+        ambulances = Ambulances.objects.all()
 
         for a in ambulances:
             client.publish('ambulance/{}/status'.format(a.status), qos=2, retain=True)
             if self.verbosity > 0:
-                self.stdout.write(" ambulance {} : {}".format(a.id,a.status))
+                self.stdout.write("Status of ambulance {}: {}".format(a.id, a.status))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance status"))
 
-
-    def seed_hospitals(self, client):
+    def seed_hospital_equipment(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospitals"))
 
@@ -76,7 +76,7 @@ class Client(BaseClient):
             k = k + 1
             if self.verbosity > 0:
                 self.stdout.write("  {:2d}. {}".format(k, h))
-            equipment = EquipmentCount.objects.filter(hospital = h)
+            equipment = EquipmentCount.objects.filter(hospital=h)
             for e in equipment:
                 if self.verbosity > 0:
                     self.stdout.write("      {}: {}".format(e.equipment,
@@ -101,39 +101,36 @@ class Client(BaseClient):
             serializer = MQTTHospitalEquipmentSerializer(h)
             json = JSONRenderer().render(serializer.data)
 
-            stream = BytesIO(json)
-            data = JSONParser().parse(stream)
             client.publish('hospital/{}/config'.format(h.id), json, qos=2, retain=True)
 
             if self.verbosity > 0:
                 # print out hospital id + config json
-                self.stdout.write(" hospital {} : {}".format(h.name, data))
+                self.stdout.write("Seeded config for hospital {}".format(h.name))
 
-
-    def seed_hospital_list(self, client):
+    def seed_hospitals(self, client):
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding list of hospitals"))
+            self.stdout.write(self.style.SUCCESS(">> User hospital lists"))
 
-        # seeding list of hospitals with their ids
-        hospitals = Hospital.objects.all();
+        # For now, each user will have access to all hospitals
+        hospitals = Hospital.objects.all()
+        users = User.objects.all()
 
-        for h in hospitals:
-            serializer = MQTTHospitalSerializer(h)
-            json = JSONRenderer().render(serializer.data)
+        # Seed hospital list for all users
+        for user in users:
+            for h in hospitals:
+                serializer = MQTTHospitalSerializer(h)
+                json = JSONRenderer().render(serializer.data)
 
-            stream = BytesIO(json)
-            data = JSONParser().parse(stream)
-
-            # Publish json - be sure to do this in the seeder
-            # TODO change h.id to actual user id.
-            client.publish('user/{}/hospital'.format(h.id), json, qos=2, retain=True)
+                # Publish json - be sure to do this in the seeder
+                client.publish('user/{}/hospital'.format(user.username), json, qos=2, retain=True)
 
             if self.verbosity > 0:
-                self.stdout.write(" hospital {} : {}".format(h.id, data))
+                self.stdout.write(">> Hospital seed - user: {}".format(user.username))
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding list of hosptials"))
-            
+                self.stdout.write(self.style.SUCCESS(">> Seeded hospital list for every user"))
+
+
     # Message publish callback
     def on_publish(self, client, userdata, mid):
         pass

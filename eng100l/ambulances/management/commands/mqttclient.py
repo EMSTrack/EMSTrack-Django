@@ -12,8 +12,8 @@ from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+
 # Client
-        
 class Client(BaseClient):
 
     # The callback for when the client receives a CONNACK
@@ -23,7 +23,7 @@ class Client(BaseClient):
         # is connected?
         if not super().on_connect(client, userdata, flags, rc):
             return False
-        
+
         # Subscribing in on_connect() means that if we lose the
         # connection and reconnect then subscriptions will be renewed.
         client.subscribe('#', 2)
@@ -64,8 +64,8 @@ class Client(BaseClient):
             if self.verbosity > 1:
                 self.stdout.write(" > {} {}".format(msg.topic, quantity))
 
-            e = EquipmentCount.objects.get(hospital = hospital,
-                                           equipment__name = equipment)
+            e = EquipmentCount.objects.get(hospital=hospital,
+                                           equipment__name=equipment)
 
             # update quantity
             if e.quantity != quantity:
