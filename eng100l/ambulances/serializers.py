@@ -145,3 +145,27 @@ class MQTTHospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = ['id', 'name']
+
+
+class MQTTEquipmentCountSerializer(serializers.ModelSerializer):
+
+    name = serializers.SerializerMethodField('get_equipment_name')
+    toggleable = serializers.SerializerMethodField('get_toggle')
+
+    class Meta:
+        model = EquipmentCount
+        fields = ['name', 'toggleable']
+
+    def get_equipment_name(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().name
+
+    def get_toggle(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().toggleable
+
+
+class MQTTHospitalEquipmentSerializer(serializers.ModelSerializer):
+    equipment = MQTTEquipmentCountSerializer(many=True)
+
+    class Meta:
+        model = Hospital
+        fields = ['equipment']
