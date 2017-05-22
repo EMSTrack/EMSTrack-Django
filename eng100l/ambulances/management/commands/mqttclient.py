@@ -144,7 +144,7 @@ class Client(BaseClient):
 
             # Publish json - be sure to do this in the seeder
             client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
-            client.publish('ambulance/{}/status'.format(amb_id), status.id, qos=2, retain=True)
+            client.publish('ambulance/{}/status'.format(amb_id), status.name, qos=2, retain=True)
 
         except Exception as e:
             print(e)

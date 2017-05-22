@@ -50,6 +50,7 @@ class Client(BaseClient):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
 
+
     def seed_ambulance_status(self, client):
         ambulances = Ambulances.objects.all();
 
@@ -60,6 +61,7 @@ class Client(BaseClient):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance status"))
+
 
     def seed_hospitals(self, client):
         if self.verbosity > 0:
