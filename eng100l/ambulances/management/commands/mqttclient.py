@@ -107,16 +107,17 @@ class Client(BaseClient):
                 lp = serializer.save()
 
                 # Publish ambulance location as soon as user location saved
+                try:
+                    self.pub_ambulance_loc(client, ambulance, lp)
+                except Exception as e:
+                    self.stdout.write(
+                        self.style.ERROR("*> Failed to publish location. Exception: {}".format(e)))
+
                 self.stdout.write(
                         self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(user, ambulance)))
             except Exception as e:
-                # MAURICIO: added exception to the message
                 self.stdout.write(
                     self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create. Exception: {}".format(user, ambulance, e)))
-
-            # Surround with try catch?
-            # MAURICIO: YES
-            self.pub_ambulance_loc(client, ambulance, lp)
 
         else:
             self.stdout.write(

@@ -55,7 +55,7 @@ class Client(BaseClient):
         ambulances = Ambulances.objects.all()
 
         for a in ambulances:
-            client.publish('ambulance/{}/status'.format(a.id), status.name, qos=2, retain=True)
+            client.publish('ambulance/{}/status'.format(a.id), a.status.name, qos=2, retain=True)
             if self.verbosity > 0:
                 self.stdout.write("Status of ambulance {}: {}".format(a.id, a.status))
 
