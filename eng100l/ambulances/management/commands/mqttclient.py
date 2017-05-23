@@ -32,6 +32,7 @@ class Client(BaseClient):
         self.client.message_callback_add('hospital/+/equipment/#',
                                          self.on_hospital)
 
+        # user location handler
         self.client.message_callback_add('user/+/location', self.on_user_loc)
 
         if self.verbosity > 0:
@@ -102,16 +103,19 @@ class Client(BaseClient):
 
         if serializer.is_valid():
             try:
+                # MAURICIO: Does that save the location to the database? Are we saving the user location as well?
                 lp = serializer.save()
 
                 # Publish ambulance location as soon as user location saved
                 self.stdout.write(
                         self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(user, ambulance)))
-            except Exception:
+            except Exception as e:
+                # MAURICIO: added exception to the message
                 self.stdout.write(
-                    self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create".format(user, ambulance)))
+                    self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create. Exception: {}".format(user, ambulance, e)))
 
             # Surround with try catch?
+            # MAURICIO: YES
             self.pub_ambulance_loc(client, ambulance, lp)
 
         else:
