@@ -125,40 +125,41 @@ $(document).ready(function() {
 	})
 
 	//Create a client instance
-	var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
+	// var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
 
-	// set callback handlers
-	client.onMessageArrived = function(message) {
-		console.log(message.payloadString);
-	};
+	// // set callback handlers
+	// client.onMessageArrived = function(message) {
+	// 	console.log(message.payloadString);
+	// };
 
-	var options = {
-	     //connection attempt timeout in seconds
-	     timeout: 3,
-	 	 userName: "brian",
-	 	 password: "cruzroja",
-	 	 useSSL: true,
-	 	 cleanSession: true,
+	// var options = {
+	//      //connection attempt timeout in seconds
+	//      timeout: 3,
+	//  	 userName: "brian",
+	//  	 password: "cruzroja",
+	//  	 useSSL: true,
+	//  	 cleanSession: true,
 
-	     //Gets Called if the connection has successfully been established
-	     onSuccess: function () {
-	         // alert("Connected");
+	//      //Gets Called if the connection has successfully been established
+	//      onSuccess: function () {
+	//          alert("Connected");
 
-	         // client.subscribe("test", {qos: 2});
-	         // message = new Paho.MQTT.Message("Hello");
-			 // message.destinationName = "test";
-			 // client.send(message);
+	//          client.subscribe("test", {qos: 2});
+	//          message = new Paho.MQTT.Message("Hello");
+	// 		 message.destinationName = "test";
+	// 		 client.send(message);
 
-			 // client.subscribe("ambulance/1/status");
-	     },
-	     //Gets Called if the connection could not be established
-	     onFailure: function (message) {
-	         alert("Connection failed: " + message.errorMessage);
-	     }
+	// 		 client.subscribe("hospital/1/equipment/emergency_beds");
+	//      },
+	//      //Gets Called if the connection could not be established
+	//      onFailure: function (message) {
+	//          alert("Connection failed: " + message.errorMessage);
+	//      },
 	 
-	 };
+	//  };
 
-	client.connect(options);
+	// client.connect(options);
+
 
 });
 
@@ -323,13 +324,23 @@ function updateAmbulances(mymap) {
  */
  function updateDetailPanel(ambulanceId) {
  	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
- 	console.log(apiAmbulanceUrl);
+ 	//console.log(apiAmbulanceUrl);
  	$.get(apiAmbulanceUrl, function(data) {
 		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
 			"Status: " + data.status + "<br/>" + 
 			"Priority: " + data.priority);
 	});
+	$('#status-dropdown').empty();
+	$.get('api/status/', function(data) {
+		$.each(data, function (index, val) {
+			$('#status-dropdown').append('<option value="' + val.name + 
+				'">' + val.name + '</option>');
+		});
+	});
+ 	$('#change-status').show();
+
  }
+
 
 function onGridButtonClick(ambulanceId, mymap) {
 	return function(e) {
@@ -360,8 +371,8 @@ function createAmbulanceGrid(mymap) {
 		for(i = 0; i < data.length; i++) {
 			ambulanceId = data[i].id;
 			ambulanceLicensePlate = data[i].license_plate;
-			console.log(ambulanceId);
-			console.log(ambulanceLicensePlate);
+			// console.log(ambulanceId);
+			// console.log(ambulanceLicensePlate);
 			ambulanceStatus = data[i].status;
 			if(ambulanceStatus === STATUS_AVAILABLE) {
 				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
@@ -500,7 +511,7 @@ var markersGroup = new L.LayerGroup();
 $("#street").change(function(data){
 
     var addressInput = document.getElementById('street').value;
-	console.log(addressInput);
+	//console.log(addressInput);
 	circlesGroup.clearLayers();
 
 	var geocoder = new google.maps.Geocoder();
@@ -532,7 +543,7 @@ $("#street").change(function(data){
 $(function(){
 	mymap.on('click', function(e){
 		markersGroup.clearLayers();
-		console.log(e.latlng.lat);
+		//console.log(e.latlng.lat);
 		document.getElementById('curr-lat').innerHTML = e.latlng.lat;
 		document.getElementById('curr-lng').innerHTML = e.latlng.lng;
 		L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
