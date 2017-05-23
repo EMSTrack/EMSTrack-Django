@@ -32,11 +32,13 @@ var STATUS_OUT_OF_SERVICE = "Out of service";
 // Ajax update frequency (in milliseconds)
 var UPDATE_FREQUENCY = 1000;
 
+
 /**
  * This is a handler for when the page is loaded.
  */
 var mymap;
 $(document).ready(function() {
+
 	mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
 
@@ -50,6 +52,8 @@ $(document).ready(function() {
 
 	// Add hospital marker.
 	L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
+
+	
 
     // Add the drawing toolbar and the layer of the drawings.
 	var drawnItems = new L.FeatureGroup();
@@ -119,6 +123,42 @@ $(document).ready(function() {
 		e.preventDefault();
 		postDispatchCall();
 	})
+
+	//Create a client instance
+	var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
+
+	// set callback handlers
+	client.onMessageArrived = function(message) {
+		console.log(message.payloadString);
+	};
+
+	var options = {
+	     //connection attempt timeout in seconds
+	     timeout: 3,
+	 	 userName: "brian",
+	 	 password: "cruzroja",
+	 	 useSSL: true,
+	 	 cleanSession: true,
+
+	     //Gets Called if the connection has successfully been established
+	     onSuccess: function () {
+	         // alert("Connected");
+
+	         // client.subscribe("test", {qos: 2});
+	         // message = new Paho.MQTT.Message("Hello");
+			 // message.destinationName = "test";
+			 // client.send(message);
+
+			 // client.subscribe("ambulance/1/status");
+	     },
+	     //Gets Called if the connection could not be established
+	     onFailure: function (message) {
+	         alert("Connection failed: " + message.errorMessage);
+	     }
+	 
+	 };
+
+	client.connect(options);
 
 });
 
