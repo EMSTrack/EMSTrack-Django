@@ -44,6 +44,7 @@ class Client(BaseClient):
             serializer = MQTTAmbulanceLocSerializer(a)
             json = JSONRenderer().render(serializer.data)
 
+            # MAURICIO: stream and data are not used anywhere
             stream = BytesIO(json)
             data = JSONParser().parse(stream)
 
@@ -58,6 +59,7 @@ class Client(BaseClient):
         ambulances = Ambulances.objects.all()
 
         for a in ambulances:
+            # MAURICIO: this is the wrong format, {} should be id then the status is the message
             client.publish('ambulance/{}/status'.format(a.status), qos=2, retain=True)
             if self.verbosity > 0:
                 self.stdout.write("Status of ambulance {}: {}".format(a.id, a.status))
@@ -101,6 +103,7 @@ class Client(BaseClient):
             serializer = MQTTHospitalEquipmentSerializer(h)
             json = JSONRenderer().render(serializer.data)
 
+            # MAURICIO: I liked metadata instead of config
             client.publish('hospital/{}/config'.format(h.id), json, qos=2, retain=True)
 
             if self.verbosity > 0:
@@ -115,6 +118,8 @@ class Client(BaseClient):
         hospitals = Hospital.objects.all()
         users = User.objects.all()
 
+        # MAURICIO: the permission will have to be reflected on the database. ok for now i think
+        
         # Seed hospital list for all users
         for user in users:
             for h in hospitals:
