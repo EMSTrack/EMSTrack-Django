@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
+from .models import Status, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
 
 from .fields import StatusField
 
@@ -11,12 +11,6 @@ class StatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Status
-        fields = '__all__'
-
-
-class TrackableDeviceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrackableDevice
         fields = '__all__'
 
 

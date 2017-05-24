@@ -1,7 +1,8 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.core.urlresolvers import reverse
-import datetime
 from django.utils import timezone
 
 from django.db import models
@@ -11,17 +12,13 @@ from django.contrib.gis.geos import LineString, Point
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
-# Create your models here.
+# Model schemas for the database
 
 class Status(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
         return "{}".format(self.name)
-
-class TrackableDevice(models.Model):
-    device_id = models.CharField(max_length=254, primary_key=True)
-    location = models.PointField(srid=4326, default=Tijuana)
 
 class Capability(models.Model):
     name = models.CharField(max_length=254, unique=True)
@@ -78,6 +75,9 @@ class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
     center = models.PointField(srid=4326, null=True)
 
+    def __str__(self):
+        return self.name
+
 class Hospital(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254, default="")
@@ -104,9 +104,15 @@ class EquipmentCount(models.Model):
     class Meta:
         unique_together = ('hospital', 'equipment',)
 
+    def __str__(self):
+        return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.quantity)
+
 class Base(models.Model):
     name = models.CharField(max_length=254, unique=True)
     location = models.PointField(srid=4326, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Route(models.Model):
@@ -119,5 +125,10 @@ class Route(models.Model):
 class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
     ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
+    # Remove nullable in the future
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True)
     timestamp = models.DateTimeField()
     type = models.CharField(max_length=50, null=False, default="Default Type")
+
+    def __str__(self):
+        return "Ambulance: {} at {}".format(self.ambulance.license_plate, self.location)
