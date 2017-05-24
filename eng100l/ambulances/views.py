@@ -11,7 +11,9 @@ from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, StatusCreateForm, StatusUpdateForm, CallCreateForm
 from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer, BaseSerializer
 
+# Defines the view for a user when a url is accessed
 
+# Ambulance list page
 class AmbulanceView(CreateView):
     model = Ambulances
     context_object_name = "ambulance_form"
@@ -25,6 +27,7 @@ class AmbulanceView(CreateView):
         return context
 
 
+# Ambulance update page
 class AmbulanceUpdateView(UpdateView):
     model = Ambulances
     form_class = AmbulanceUpdateForm
@@ -41,12 +44,14 @@ class AmbulanceUpdateView(UpdateView):
         return context
 
 
+# Call list page
 class CallView(ListView):
     model = Call
     template_name = 'ambulances/dispatch_list.html'
     context_object_name = "ambulance_call"
 
 
+# Status list page
 class StatusCreateView(CreateView):
     model = Status
     context_object_name = "status_form"
@@ -59,6 +64,7 @@ class StatusCreateView(CreateView):
         return context
 
 
+# Status update page
 class StatusUpdateView(UpdateView):
     model = Status
     form_class = StatusUpdateForm
@@ -75,6 +81,7 @@ class StatusUpdateView(UpdateView):
         return context
 
 
+# Ambulance map page
 class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     template_name = 'ambulances/ambulance_map.html'
 
@@ -99,10 +106,20 @@ class ListCreateViewSet(mixins.ListModelMixin,
     pass
 
 
+# Defines viewsets
+# Viewsets combine different request types (GET, PUSH, etc.) in a single view class
 class AmbulancesViewSet(ListRetrieveUpdateViewSet):
+
+    # Specify model to expose
     queryset = Ambulances.objects.all()
+
+    # Specify the serializer to package the data in JSON
     serializer_class = AmbulancesSerializer
+
+    # Specify django REST's filtering system
     filter_backends = (filters.DjangoFilterBackend,)
+
+    # Specify fields that user can filter GET by
     filter_fields = ('license_plate', 'status')
 
 

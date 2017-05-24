@@ -13,6 +13,8 @@ schema_view = get_swagger_view(title='Ambulances API')
 
 # Defines a router which groups Django REST Viewsets
 router = routers.DefaultRouter()
+
+# Register urls to viewsets
 router.register(r'status', StatusViewSet)
 router.register(r'ambulances', AmbulancesViewSet)
 router.register(r'calls', CallViewSet)
