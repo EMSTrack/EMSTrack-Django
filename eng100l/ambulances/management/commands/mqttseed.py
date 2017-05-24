@@ -21,6 +21,9 @@ class Client(BaseClient):
         if not super().on_connect(client, userdata, flags, rc):
             return False
 
+        # initialize pubcount
+        self.pubcount = 0
+        
         # Seed hospitals
         self.seed_hospital_equipment(client)
         self.seed_hospitals(client)
@@ -30,9 +33,11 @@ class Client(BaseClient):
         self.seed_ambulance_location(client)
         self.seed_ambulance_status(client)
 
-        # all done, disconnect
-        self.disconnect()
-
+    def publish(self, topic, message, *vargs, **kwargs):
+        # increment pubcount then publish
+        self.pubcount += 1
+        self.client.publish(topic, message, *vargs, **kwargs)
+        
     def seed_ambulance_location(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
@@ -44,7 +49,7 @@ class Client(BaseClient):
             serializer = MQTTAmbulanceLocSerializer(a)
             json = JSONRenderer().render(serializer.data)
 
-            client.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
+            self.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
             if self.verbosity > 0:
                 self.stdout.write("Location of ambulance {}: {}".format(a.id, serializer.data))
 
@@ -55,7 +60,7 @@ class Client(BaseClient):
         ambulances = Ambulances.objects.all()
 
         for a in ambulances:
-            client.publish('ambulance/{}/status'.format(a.id), a.status.name, qos=2, retain=True)
+            self.publish('ambulance/{}/status'.format(a.id), a.status.name, qos=2, retain=True)
             if self.verbosity > 0:
                 self.stdout.write("Status of ambulance {}: {}".format(a.id, a.status))
 
@@ -80,7 +85,7 @@ class Client(BaseClient):
                                                             e.quantity))
 
                 # publish message
-                client.publish('hospital/{}/equipment/{}'.format(h.id,
+                self.publish('hospital/{}/equipment/{}'.format(h.id,
                                                                  e.equipment),
                                e.quantity,
                                qos=2,
@@ -98,7 +103,7 @@ class Client(BaseClient):
             serializer = MQTTHospitalEquipmentSerializer(h)
             json = JSONRenderer().render(serializer.data)
 
-            client.publish('hospital/{}/metadata'.format(h.id), json, qos=2, retain=True)
+            self.publish('hospital/{}/metadata'.format(h.id), json, qos=2, retain=True)
 
             if self.verbosity > 0:
                 # print out hospital id + config json
@@ -109,19 +114,13 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> User hospital lists"))
 
         # For now, each user will have access to all hospitals
-        hospitals = Hospital.objects.all()
-        users = User.objects.all()
+        for user in User.objects.all():
+            queryset = Hospital.objects.all()
+            serializer = MQTTHospitalSerializer(queryset, many = True)
+            json = JSONRenderer().render(serializer.data)
 
-        # MAURICIO: the permission will have to be reflected on the database. ok for now i think
-
-        # Seed hospital list for all users
-        for user in users:
-            for h in hospitals:
-                serializer = MQTTHospitalSerializer(h)
-                json = JSONRenderer().render(serializer.data)
-
-                # Publish json - be sure to do this in the seeder
-                client.publish('user/{}/hospital'.format(user.username), json, qos=2, retain=True)
+            # Publish json - be sure to do this in the seeder
+            self.publish('user/{}/hospital'.format(user.username), json, qos=2, retain=True)
 
             if self.verbosity > 0:
                 self.stdout.write(">> Hospital seed - user: {}".format(user.username))
@@ -132,8 +131,10 @@ class Client(BaseClient):
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
-        pass
-
+        # make sure all is published before disconnecting
+        self.pubcount -= 1
+        if self.pubcount == 0:
+            self.disconnect()
 
 class Command(BaseCommand):
     help = 'Seed the mqtt broker'

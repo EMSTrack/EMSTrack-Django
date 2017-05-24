@@ -151,10 +151,10 @@ class LocationSerializer(serializers.ModelSerializer):
         return obj.location.x
 
 class MQTTHospitalSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Hospital
         fields = ['id', 'name']
-
 
 class MQTTEquipmentCountSerializer(serializers.ModelSerializer):
 
