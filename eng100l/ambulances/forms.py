@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Ambulances, TrackableDevice, Status, Call, Capability
+from .models import Ambulances, Status, Call, Capability
 
 class AmbulanceCreateForm(forms.ModelForm):
     class Meta:
@@ -12,12 +12,6 @@ class AmbulanceUpdateForm(forms.ModelForm):
     class Meta:
         model = Ambulances
         fields = ['license_plate', 'name', 'status']
-
-
-class TrackableDeviceCreateForm(forms.ModelForm):
-    class Meta:
-        model = TrackableDevice
-        fields = ['device_id']
 
 
 # front end team to choose which fields to display?

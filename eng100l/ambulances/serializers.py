@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
-from .models import Status, TrackableDevice, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
+from .models import Status, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
 
 from .fields import StatusField
 
 from drf_extra_fields.geo_fields import PointField
 
+# Serializers: Takes a model and defines how it should be represented as a JSON Object
 
 class StatusSerializer(serializers.ModelSerializer):
 
@@ -14,25 +15,25 @@ class StatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class TrackableDeviceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = TrackableDevice
-        fields = '__all__'
-
-
 class AmbulancesSerializer(serializers.ModelSerializer):
 
+    # Define functions that will query for these custom fields
     location = serializers.SerializerMethodField('get_amb_loc')
-    status = StatusField()
     capability = serializers.SerializerMethodField('get_capability_name')
 
+    # Assign status to a custom field in fields.py
+    status = StatusField()
+
     class Meta:
+
+        # Define model, fields, and access permissions for the serializer
         model = Ambulances
         fields = ['id', 'location', 'status', 'priority', 'orientation', 'capability', 'license_plate']
         read_only_fields = ('priority',)
 
+    # Queries for the capability of the ambulance
     def get_capability_name(self, obj):
-        if obj.capability != None:
+        if obj.capability is not None:
             capability = Capability.objects.filter(id=(obj.capability).id).first()
             if hasattr(capability, 'name'):
                 return capability.name
@@ -52,6 +53,8 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 class CallSerializer(serializers.ModelSerializer):
 
     class Meta:
+
+        # Return all fields of the call in auto serialized format
         model = Call
         fields = '__all__'
 
@@ -64,6 +67,7 @@ class RegionSerializer(serializers.ModelSerializer):
 
 class EquipmentCountSerializer(serializers.ModelSerializer):
 
+    # Define functions that will query for these custom fields
     name = serializers.SerializerMethodField('get_equipment_name')
     toggleable = serializers.SerializerMethodField('get_toggle')
 
@@ -79,6 +83,8 @@ class EquipmentCountSerializer(serializers.ModelSerializer):
 
 
 class HospitalSerializer(serializers.ModelSerializer):
+
+    # Nest a serializer within a serializer
     equipment = EquipmentCountSerializer(many=True)
 
     class Meta:
@@ -101,8 +107,10 @@ class RouteSerializer(serializers.ModelSerializer):
 
 class MQTTLocationSerializer(serializers.ModelSerializer):
 
+    # Define location as a Pointfield (drf-extra-field package auto serializes this)
     location = PointField(required=True)
 
+    # Defines a way to create a model from the JSON data
     def create(self, validated_data):
         return LocationPoint.objects.create(**validated_data)
 
@@ -128,6 +136,7 @@ class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
 
 class LocationSerializer(serializers.ModelSerializer):
 
+    # Define functions that will query for these custom fields
     latitude = serializers.SerializerMethodField('get_lat')
     longitude = serializers.SerializerMethodField('get_long')
 
@@ -142,6 +151,33 @@ class LocationSerializer(serializers.ModelSerializer):
         return obj.location.x
 
 class MQTTHospitalSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Hospital
         fields = ['id', 'name']
+
+class MQTTEquipmentCountSerializer(serializers.ModelSerializer):
+
+    # Define functions that will query for these custom fields
+    name = serializers.SerializerMethodField('get_equipment_name')
+    toggleable = serializers.SerializerMethodField('get_toggle')
+
+    class Meta:
+        model = EquipmentCount
+        fields = ['name', 'toggleable']
+
+    def get_equipment_name(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().name
+
+    def get_toggle(self, obj):
+        return Equipment.objects.filter(id=(obj.equipment).id).first().toggleable
+
+
+class MQTTHospitalEquipmentSerializer(serializers.ModelSerializer):
+
+    # Define a serializer within a serializer
+    equipment = MQTTEquipmentCountSerializer(many=True)
+
+    class Meta:
+        model = Hospital
+        fields = ['equipment']

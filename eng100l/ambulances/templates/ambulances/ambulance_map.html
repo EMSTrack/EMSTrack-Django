@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
     <script src="{% static 'ambulances/js/form-button.js' %}"></script>
+
 {% endblock %}
 <!-- link rel="stylesheet" href="styles.css" -->
 
@@ -41,6 +42,10 @@
                             Priority: <br/>
                             Street: <br/>
                             Address: <br/>
+                        </div>
+                        <div id="change-status" style="text-align: center; padding-bottom: 10px; display: none;">
+                            <select id="status-dropdown" style="margin: auto;">
+                            </select>
                         </div>
                     </div>
                 </div><!--        end of Ambulance info panel      -->
@@ -161,6 +166,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=initAutocomplete"
         async defer></script>
+    
     <script src="{% static 'ambulances/js/map.js' %}"></script>
     
 {% endblock %}

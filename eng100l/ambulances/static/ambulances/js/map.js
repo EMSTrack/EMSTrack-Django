@@ -32,11 +32,13 @@ var STATUS_OUT_OF_SERVICE = "Out of service";
 // Ajax update frequency (in milliseconds)
 var UPDATE_FREQUENCY = 1000;
 
+
 /**
  * This is a handler for when the page is loaded.
  */
 var mymap;
 $(document).ready(function() {
+
 	mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
 
@@ -50,6 +52,8 @@ $(document).ready(function() {
 
 	// Add hospital marker.
 	L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
+
+	
 
     // Add the drawing toolbar and the layer of the drawings.
 	var drawnItems = new L.FeatureGroup();
@@ -119,6 +123,43 @@ $(document).ready(function() {
 		e.preventDefault();
 		postDispatchCall();
 	})
+
+	//Create a client instance
+	// var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
+
+	// // set callback handlers
+	// client.onMessageArrived = function(message) {
+	// 	console.log(message.payloadString);
+	// };
+
+	// var options = {
+	//      //connection attempt timeout in seconds
+	//      timeout: 3,
+	//  	 userName: "brian",
+	//  	 password: "cruzroja",
+	//  	 useSSL: true,
+	//  	 cleanSession: true,
+
+	//      //Gets Called if the connection has successfully been established
+	//      onSuccess: function () {
+	//          alert("Connected");
+
+	//          client.subscribe("test", {qos: 2});
+	//          message = new Paho.MQTT.Message("Hello");
+	// 		 message.destinationName = "test";
+	// 		 client.send(message);
+
+	// 		 client.subscribe("hospital/1/equipment/emergency_beds");
+	//      },
+	//      //Gets Called if the connection could not be established
+	//      onFailure: function (message) {
+	//          alert("Connection failed: " + message.errorMessage);
+	//      },
+	 
+	//  };
+
+	// client.connect(options);
+
 
 });
 
@@ -283,13 +324,23 @@ function updateAmbulances(mymap) {
  */
  function updateDetailPanel(ambulanceId) {
  	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
- 	console.log(apiAmbulanceUrl);
+ 	//console.log(apiAmbulanceUrl);
  	$.get(apiAmbulanceUrl, function(data) {
 		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
 			"Status: " + data.status + "<br/>" + 
 			"Priority: " + data.priority);
 	});
+	$('#status-dropdown').empty();
+	$.get('api/status/', function(data) {
+		$.each(data, function (index, val) {
+			$('#status-dropdown').append('<option value="' + val.name + 
+				'">' + val.name + '</option>');
+		});
+	});
+ 	$('#change-status').show();
+
  }
+
 
 function onGridButtonClick(ambulanceId, mymap) {
 	return function(e) {
@@ -320,8 +371,8 @@ function createAmbulanceGrid(mymap) {
 		for(i = 0; i < data.length; i++) {
 			ambulanceId = data[i].id;
 			ambulanceLicensePlate = data[i].license_plate;
-			console.log(ambulanceId);
-			console.log(ambulanceLicensePlate);
+			// console.log(ambulanceId);
+			// console.log(ambulanceLicensePlate);
 			ambulanceStatus = data[i].status;
 			if(ambulanceStatus === STATUS_AVAILABLE) {
 				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
@@ -460,7 +511,7 @@ var markersGroup = new L.LayerGroup();
 $("#street").change(function(data){
 
     var addressInput = document.getElementById('street').value;
-	console.log(addressInput);
+	//console.log(addressInput);
 	circlesGroup.clearLayers();
 
 	var geocoder = new google.maps.Geocoder();
@@ -492,7 +543,7 @@ $("#street").change(function(data){
 $(function(){
 	mymap.on('click', function(e){
 		markersGroup.clearLayers();
-		console.log(e.latlng.lat);
+		//console.log(e.latlng.lat);
 		document.getElementById('curr-lat').innerHTML = e.latlng.lat;
 		document.getElementById('curr-lng').innerHTML = e.latlng.lng;
 		L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
