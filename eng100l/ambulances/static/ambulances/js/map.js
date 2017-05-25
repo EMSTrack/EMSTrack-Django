@@ -125,40 +125,40 @@ $(document).ready(function() {
 	})
 
 	//Create a client instance
-	// var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
+	var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
 
-	// // set callback handlers
-	// client.onMessageArrived = function(message) {
-	// 	console.log(message.payloadString);
-	// };
+	// set callback handlers
+	client.onMessageArrived = function(message) {
+		console.log("Topic Name: " + message.destinationName + ", Message Received: "  + message.payloadString);
+	};
 
-	// var options = {
-	//      //connection attempt timeout in seconds
-	//      timeout: 3,
-	//  	 userName: "brian",
-	//  	 password: "cruzroja",
-	//  	 useSSL: true,
-	//  	 cleanSession: true,
+	var options = {
+	     //connection attempt timeout in seconds
+	     timeout: 3,
+	 	 userName: "brian",
+	 	 password: "cruzroja",
+	 	 useSSL: true,
+	 	 cleanSession: true,
 
-	//      //Gets Called if the connection has successfully been established
-	//      onSuccess: function () {
-	//          alert("Connected");
+	     //Gets Called if the connection has successfully been established
+	     onSuccess: function () {
+	         alert("Connected");
 
-	//          client.subscribe("test", {qos: 2});
-	//          message = new Paho.MQTT.Message("Hello");
-	// 		 message.destinationName = "test";
-	// 		 client.send(message);
+	   		 // message = new Paho.MQTT.Message("Hello");
+			 // message.destinationName = "test";
+			 // client.send(message);
 
-	// 		 client.subscribe("hospital/1/equipment/emergency_beds");
-	//      },
-	//      //Gets Called if the connection could not be established
-	//      onFailure: function (message) {
-	//          alert("Connection failed: " + message.errorMessage);
-	//      },
+			 // Subscribes to both topics ambulance/1/location & ambulance/1/status
+			 client.subscribe("ambulance/1/#");
+	     },
+	     //Gets Called if the connection could not be established
+	     onFailure: function (message) {
+	         alert("Connection failed: " + message.errorMessage);
+	     },
 	 
-	//  };
+	 };
 
-	// client.connect(options);
+	client.connect(options);
 
 
 });
