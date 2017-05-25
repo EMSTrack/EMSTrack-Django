@@ -5,8 +5,8 @@ from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import EquipmentCount, Ambulances, Status
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer
+from ambulances.models import EquipmentCount, Ambulances, Status, Call
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
@@ -31,6 +31,8 @@ class Client(BaseClient):
         # hospital message handler
         self.client.message_callback_add('hospital/+/equipment/#',
                                          self.on_hospital)
+
+        self.client.message_callback_add('ambulance/+/call', self.on_call)
 
         # user location handler
         self.client.message_callback_add('user/+/location', self.on_user_loc)
@@ -86,32 +88,35 @@ class Client(BaseClient):
         topic = msg.topic.split('/')
         ambulance_id = topic[1]
 
-        # Parse data into json dict
-        stream = BytesIO(msg.payload)
-        data = JSONParser().parse(stream)
-
         if not msg.payload:
             return
 
-        name = data['name']
-        residential_unit = data['residential_unit']
-        stmain_number = data['stmain_number']
-        delegation = data['delegation']        
-        zipcode = data['zipcode']
-        city = data['city']
-        state = data['state']
-        location = data['location']
-        assignment = data['assignment']
-        description = data['description']
-        call_time = data['call_time']
-        departure_time = data['departure_time']
-        transfer_time = data['transfer_time']
-        hospital_time = data['hospital_time']
-        base_time = data['base_time']
-
+        try:
+            # Parse data into json dict
+            stream = BytesIO(msg.payload)
+            data = JSONParser().parse(stream)
+        except Exception:
+            self.stdout.write(self.style.ERROR("ERROR PARSING CALL JSON"))
 
         try:
+            name = data['name']
+            residential_unit = data['residential_unit']
+            stmain_number = data['stmain_number']
+            delegation = data['delegation']        
+            zipcode = data['zipcode']
+            city = data['city']
+            state = data['state']
+            location = data['location']
+            assignment = data['assignment']
+            description = data['description']
+            call_time = data['call_time']
+            departure_time = data['departure_time']
+            transfer_time = data['transfer_time']
+            hospital_time = data['hospital_time']
+            base_time = data['base_time']
             call = Call.objects.get(ambulance = ambulance_id)
+
+            self.stdout.write("Updating Call in Database")
 
             # update name
             if(call.name != name):
@@ -173,9 +178,18 @@ class Client(BaseClient):
             if(call.base_time != base_time):        
                 call.base_time = base_time
         except Exception:
-            self.stdout.write(
-                self.style.ERROR(""))
-    
+            serializer = CallSerializer(data=data)
+
+            if serializer.is_valid():
+               try:
+                   call = serializer.save()
+                   self.stdout.write("Wrote Call to database")
+               except Exception:
+                   self.stdout.write(self.style.ERROR("Error writing Call to database"))
+            else:
+                self.stdout.write("Serializer Not Valid" + str(data))
+
+
     # Update user location
     def on_user_loc(self, client, userdata, msg):
 
