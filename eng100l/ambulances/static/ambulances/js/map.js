@@ -465,12 +465,13 @@ function updateAmbulanceGrid(ambulanceId) {
  			$('.modal-body').html(successMsg).addClass('alert-success');
  			$('.modal-title').append('Successfully Dispached');
  			$("#dispatchModal").modal('show');
- 			circlesGroup.clearLayers();
+ 			finishDispatching();
  		},
  		error: function(jqXHR, textStatus, errorThrown) {
  			alert(JSON.stringify(jqXHR) + ' ' + textStatus);
  			$('.modal-title').append('Dispatch failed');
  			$("#dispatchModal").modal('show');
+ 			finishDispatching();
  		}
  	});
  }
@@ -507,6 +508,7 @@ function initAutocomplete() {
 
 var circlesGroup = new L.LayerGroup();
 var markersGroup = new L.LayerGroup();
+var is_dispatching;
 
 $("#street").change(function(data){
 
@@ -523,34 +525,52 @@ $("#street").change(function(data){
       		document.getElementById('curr-lat').innerHTML = coordinate.lat();
       		document.getElementById('curr-lng').innerHTML = coordinate.lng();
 
-      		L.circle([coordinate.lat(),coordinate.lng()],{
+      		/*L.circle([coordinate.lat(),coordinate.lng()],{
       			color: 'red',
       			fillColor: '#f03',
       			fillOpacity: 0.5,
       			radius: 10
-      		}).addTo(circlesGroup);
+      		}).addTo(circlesGroup);*/
 
-      		circlesGroup.addTo(mymap);
+      		L.marker([coordinate.lat(),coordinate.lng()]).addTo(markersGroup);
+      		markersGroup.addTo(mymap);
       		mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()),17);
 		}
 		else {
 			alert("There is error from Google map server");
 		}
 	});
-
 });
 
-$(function(){
+var dispatching = function() {
+	console.log('Click dispatching button');
+	is_dispatching = true;
+	document.getElementById('dispatch_work').innerHTML = '<span class="glyphicon glyphicon-chevron-left"></span><button onclick="finishDispatching()">Go back</button>';
+	$('#dispatchForm').collapse('show');
+	$('#collapse1').collapse('hide');
+	$('#collapse2').collapse('hide');
+
 	mymap.on('click', function(e){
 		markersGroup.clearLayers();
 		//console.log(e.latlng.lat);
 		document.getElementById('curr-lat').innerHTML = e.latlng.lat;
 		document.getElementById('curr-lng').innerHTML = e.latlng.lng;
-		L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
-		markersGroup.addTo(mymap);
+		if(is_dispatching) {
+			L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
+			markersGroup.addTo(mymap);
+		}
 	});
-});
 
+}
 
+var finishDispatching = function() {
+	is_dispatching = false;
+	markersGroup.clearLayers();
+	console.log('Click dispatching button');
+	document.getElementById('dispatch_work').innerHTML = '<button class="btn btn-primary" style="display: block; width: 100%;" data-toggle="collapse" href="#dispatchForm" onclick="dispatching()">Dispatch</button>';
+	$('#dispatchForm').collapse('hide');
+	$('#collapse1').collapse('show');
+	$('#collapse2').collapse('show');
+}
 
 
