@@ -42,7 +42,7 @@ class Ambulances(models.Model):
 
 class Call(models.Model):
     # ambulance assigned to Call (Foreign Key)
-    ambulance = models.ForeignKey(Ambulances, related_name='ambulances',on_delete=models.CASCADE)
+    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=254, default = "")
     # address-related info
     residential_unit = models.CharField(max_length=254, default = "None")
