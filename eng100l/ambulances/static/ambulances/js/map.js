@@ -2,6 +2,8 @@ var ambulanceMarkers = {};	// Store ambulance markers
 
 var statusWithMarkers = {}; //A JSON to map statuses with arrays of ambulances with that status.
 
+var ambulances = {} ;
+
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
 		iconUrl: '/static/icons/ambulance_icon.png',
@@ -84,39 +86,10 @@ $(document).ready(function() {
    	updateAmbulances(mymap);
 
     // Calling for ambulance updates every second.
-	window.setInterval(function() {
-		updateAmbulances(mymap);
-	}, UPDATE_FREQUENCY);
+	// window.setInterval(function() {
+	// 	updateAmbulances(mymap);
+	// }, UPDATE_FREQUENCY);
 
-
-	// Open popup on panel click.
-	$('.ambulance-panel').click(function(){
-		var id = $(this).attr('id');
-
-		// Center icon on map
-		var position = ambulanceMarkers[id].getLatLng();
-		mymap.setView(position, 12);
-
-		// Open popup for 2.5 seconds.
-		ambulanceMarkers[id].openPopup();
-		setTimeout(function(){
-			ambulanceMarkers[id].closePopup();
-		}, 2500);
-	});
-
-	// Update panel details on collapse
-	$('.collapse').on('shown.bs.collapse', function() {
-		let ambulance_id = this.id.slice(6);	// extract id from panel id
-		let getAmbulanceUrl = 'api/ambulances/' + ambulance_id;
-		$.get(getAmbulanceUrl, function(data) {
-			//console.log(JSON.stringify(data));
-			let liElement = '<li class="list-group-list">';
-			$('#panel_'+ambulance_id).find('.list-group').html(liElement + "Status: " + data.status + '</li>'
-				+ liElement + "Latitude: " + data.location.latitude + '</li>'
-				+ liElement + "Longitude: " + data.location.longitude + '</li>'
-				+ liElement + "Updated!" + '</li>');
-		});
-	});
 
 	// Submit form
 	$('#dispatchForm').submit(function(e) {
@@ -130,6 +103,22 @@ $(document).ready(function() {
 	// set callback handlers
 	client.onMessageArrived = function(message) {
 		console.log("Topic Name: " + message.destinationName + ", Message Received: "  + message.payloadString);
+
+		var res = message.destinationName.split("/");
+
+		console.log(res[2]);
+
+
+		// anything(payloadString)
+		updateStatus(res[1], message.payloadString);
+		/* Have 2 functions
+		 * 1) for status
+		 * 2) for location
+		 * updateLocation(id, message)
+		 * - extract id & topic name by splitting destination name by "/"
+		 *
+		 *
+		 */ 
 	};
 
 	var options = {
@@ -149,7 +138,7 @@ $(document).ready(function() {
 			 // client.send(message);
 
 			 // Subscribes to both topics ambulance/1/location & ambulance/1/status
-			 client.subscribe("ambulance/1/#");
+			 client.subscribe("ambulance/#");
 	     },
 	     //Gets Called if the connection could not be established
 	     onFailure: function (message) {
@@ -165,6 +154,56 @@ $(document).ready(function() {
 
 var firstUpdate = true; // Flags if this is the first update to the map (initial update).
 var layergroups = {}; // The layer groups that will be part of the map.
+
+
+function updateStatus(ambulanceId, ambulanceMessage) {
+	ambulances[ambulanceId].status = ambulanceMessage;
+
+	let coloredIcon = ambulanceIcon;
+	if(ambulanceMessage === STATUS_AVAILABLE)
+		coloredIcon = ambulanceIconBlue;
+	if(ambulanceMessage === STATUS_OUT_OF_SERVICE)
+		coloredIcon = ambulanceIconBlack;
+    
+
+	// Remove existing marker
+	mymap.removeLayer(ambulanceMarkers[ambulanceId]);
+	
+	var item = ambulances[ambulanceId];
+
+	// Re-add it but with updated ambulance icon
+	ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+	.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+
+    // Bind id to icons
+	ambulanceMarkers[item.id]._icon.id = item.id;
+	// Collapse panel on icon hover.
+	ambulanceMarkers[item.id].on('mouseover', function(e){
+		// open popup bubble
+		this.openPopup().on('mouseout', function(e){
+			this.closePopup();
+		});
+
+		// update details panel
+		updateDetailPanel(item.id);
+	});
+
+    // Update ambulance location
+	ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
+	ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
+
+	//Add to a map to differentiate the layers between statuses.
+	if(statusWithMarkers[item.status]){
+		statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
+	}
+	else{
+		statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
+	}
+}
+
+function updateLocation(ambulanceId, ambulanceMessage) {
+
+}
 /*
  * updateAmbulances updates the map with the new ambulance's status.
  * @param mymap is the map UI.
@@ -181,6 +220,8 @@ function updateAmbulances(mymap) {
 			statusWithMarkers = {}; // clear all statuses from previous ajax call.
 			var i = 0;
 			$.each(arr, function(index, item) {
+
+				ambulances[item.id] = item;
 				// Update ambulance grid
 				updateAmbulanceGrid(item.id);
 
