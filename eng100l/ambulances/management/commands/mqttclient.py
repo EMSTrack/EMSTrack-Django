@@ -114,9 +114,8 @@ class Client(BaseClient):
             transfer_time = data['transfer_time']
             hospital_time = data['hospital_time']
             base_time = data['base_time']
-            call = Call.objects.get(ambulance = ambulance_id)
-
-            self.stdout.write("Updating Call in Database")
+            ambulance = data['ambulance']
+            call = Call.objects.get(ambulance = ambulance)
 
             # update name
             if(call.name != name):
@@ -177,6 +176,8 @@ class Client(BaseClient):
             # update base_time
             if(call.base_time != base_time):        
                 call.base_time = base_time
+
+            call.save()
         except Exception:
             serializer = CallSerializer(data=data)
 
