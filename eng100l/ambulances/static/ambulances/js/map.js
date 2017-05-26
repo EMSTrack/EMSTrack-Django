@@ -525,14 +525,12 @@ $("#street").change(function(data){
       		document.getElementById('curr-lat').innerHTML = coordinate.lat();
       		document.getElementById('curr-lng').innerHTML = coordinate.lng();
 
-      		/*L.circle([coordinate.lat(),coordinate.lng()],{
-      			color: 'red',
-      			fillColor: '#f03',
-      			fillOpacity: 0.5,
-      			radius: 10
-      		}).addTo(circlesGroup);*/
+      		var placeIcon = L.icon({
+			    iconUrl: '/static/icons/place_marker.png',
+			    iconSize:     [50, 50], // size of the icon
+			});
 
-      		L.marker([coordinate.lat(),coordinate.lng()]).addTo(markersGroup);
+      		L.marker([coordinate.lat(),coordinate.lng()],{icon: placeIcon}).addTo(markersGroup);
       		markersGroup.addTo(mymap);
       		mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()),17);
 		}
@@ -545,7 +543,7 @@ $("#street").change(function(data){
 var dispatching = function() {
 	console.log('Click dispatching button');
 	is_dispatching = true;
-	document.getElementById('dispatch_work').innerHTML = '<span class="glyphicon glyphicon-chevron-left"></span><button onclick="finishDispatching()">Go back</button>';
+	document.getElementById('dispatch_work').innerHTML = '<button type="button" class="btn btn-link" onclick="finishDispatching()"><span class="glyphicon glyphicon-chevron-left"></span> Go back</button>';
 	$('#dispatchForm').collapse('show');
 	$('#collapse1').collapse('hide');
 	$('#collapse2').collapse('hide');
@@ -556,7 +554,11 @@ var dispatching = function() {
 		document.getElementById('curr-lat').innerHTML = e.latlng.lat;
 		document.getElementById('curr-lng').innerHTML = e.latlng.lng;
 		if(is_dispatching) {
-			L.marker([e.latlng.lat,e.latlng.lng]).addTo(markersGroup);
+			var placeIcon = L.icon({
+			    iconUrl: '/static/icons/place_marker.png',
+			    iconSize:     [50, 50], // size of the icon
+			});
+			L.marker([e.latlng.lat,e.latlng.lng],{icon: placeIcon}).addTo(markersGroup);
 			markersGroup.addTo(mymap);
 		}
 	});
