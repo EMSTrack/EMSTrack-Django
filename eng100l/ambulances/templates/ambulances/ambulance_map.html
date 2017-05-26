@@ -80,8 +80,8 @@
                         <div class="panel-body">
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Location:
-                            <input id="street" type="text" name="street" class="form-control" placeholder="Street"/>
-                            <input id="address" type="text" name="address" class="form-control" placeholder="Address"/>
+                            <input id="street" type="text" name="street" class="form-control" placeholder="Address" required/>
+                            <!--<input id="address" type="text" name="address" class="form-control" placeholder="Address"/>-->
                             <br/>
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Coordinates:
@@ -107,11 +107,11 @@
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Description:
                             <div class="form-group">
-                                <textarea class="form-control" name="description" rows="5" id="comment"></textarea>
+                                <textarea class="form-control" name="description" rows="5" id="comment" required></textarea>
                             </div>
 
                             <span class="glyphicon glyphicon-chevron-right"></span> Priority:
-                            <form>
+                            <form required>
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-default">
                                         <input type="radio" name="priority" value="A">A

@@ -428,7 +428,7 @@ function updateAmbulanceGrid(ambulanceId) {
  	formData["stmain_number"] = $('#street').val();
  	formData["residential_unit"] = $('#address').val();
  	formData["latitude"] = document.getElementById('curr-lat').innerHTML;
- 	formData["longitude"] = document.getElementById('curr-lng').innerHTML
+ 	formData["longitude"] = document.getElementById('curr-lng').innerHTML;
 
  	console.log(formData["latitude"]);
  	formData["description"] = $('#comment').val();
@@ -436,6 +436,17 @@ function updateAmbulanceGrid(ambulanceId) {
  	$('input:checkbox[name="ambulance_assignment"]:checked').each(function(i) {
  		assigned_ambulances[i] = $(this).val();
  	});
+
+ 	if(formData["priority"] == undefined) {
+ 		alert("Please click one of priorities");
+ 		return;
+ 	}
+
+ 	if(assigned_ambulances.length == 0) {
+ 		alert("Please dispatch at least one ambulance");
+ 		return;
+ 	}
+
  	formData["ambulance"] = assigned_ambulances.toString();
 
  	let postJsonUrl = 'api/calls/';
