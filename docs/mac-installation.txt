@@ -66,6 +66,8 @@ folder).
 3. Change the values specified in the settings file to your db name, user, and
 password.
 4. Add a secret key by generating a django key online
+5. Change values specified in settings file to mqtt username, password (specify
+localhost as the server if using localhost)
 
 RUNNING THE PROJECT
 
@@ -74,6 +76,7 @@ python manage.py makemigrations
 python manage.py makemigrations ambulances
 python manage.py migrate
 python manage.py loaddata ../docs/db.json
+python manage.py mqttseed
 python manage.py createsuperuser  (and input user and pass)
 python manage.py runserver
 
