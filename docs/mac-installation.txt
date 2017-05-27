@@ -53,6 +53,9 @@ pip3 install django-extra-fields
 INSTALL MQTT
 
 brew install mosquitto
+[follow instruction to start mosquitto server]
+mosquitto_passwd --help
+[follow instuction to create a mosquitto password]
 pip3 install paho-mqtt
 
 SETTINGS FILES
@@ -67,10 +70,11 @@ password.
 RUNNING THE PROJECT
 
 (go to directory with manage.py in it)
-python manage.py createsuperuser  (and input user and pass)
 python manage.py makemigrations
 python manage.py makemigrations ambulances
 python manage.py migrate
+python manage.py loaddata ../docs/db.json
+python manage.py createsuperuser  (and input user and pass)
 python manage.py runserver
 
 IF THERE IS AN ERROR WHEN RUNNING 'python manage.py makemigrations ambulances'
