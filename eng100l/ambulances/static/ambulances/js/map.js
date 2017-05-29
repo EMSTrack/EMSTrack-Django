@@ -2,7 +2,7 @@ var ambulanceMarkers = {};	// Store ambulance markers
 
 var statusWithMarkers = {}; //A JSON to map statuses with arrays of ambulances with that status.
 
-var ambulances = {} ;
+var ambulances = {};	// Store ambulance details
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
@@ -104,13 +104,15 @@ $(document).ready(function() {
 	client.onMessageArrived = function(message) {
 		console.log("Topic Name: " + message.destinationName + ", Message Received: "  + message.payloadString);
 
-		var res = message.destinationName.split("/");
+		var destinationNameArr = message.destinationName.split("/");
 
-		console.log(res[2]);
+		let topicName = destinationNameArr[2];
+		let ambulanceId = destinationNameArr[1];
 
-
-		// anything(payloadString)
-		updateStatus(res[1], message.payloadString);
+		if(topicName === 'status')
+			updateStatus(ambulanceId, message.payloadString);
+		if(topicName === 'location')
+			updateLocation(ambulanceId, message.payloadString);
 		/* Have 2 functions
 		 * 1) for status
 		 * 2) for location
@@ -138,7 +140,7 @@ $(document).ready(function() {
 			 // client.send(message);
 
 			 // Subscribes to both topics ambulance/1/location & ambulance/1/status
-			 client.subscribe("ambulance/#");
+			 client.subscribe("ambulance/4/#");
 	     },
 	     //Gets Called if the connection could not be established
 	     onFailure: function (message) {
@@ -202,7 +204,18 @@ function updateStatus(ambulanceId, ambulanceMessage) {
 }
 
 function updateLocation(ambulanceId, ambulanceMessage) {
+	console.log('updateLoc');
+	let messageLocation = JSON.parse(ambulanceMessage);
+	console.log(messageLocation);
+	let item = ambulances[ambulanceId];
+	item.location.latitude = messageLocation.location.latitude;
+	item.location.longitude = messageLocation.location.longitude;
 
+	console.log('ambulance json: ' + JSON.stringify(item));
+
+	// Update ambulance location
+	ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
+	ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
 }
 /*
  * updateAmbulances updates the map with the new ambulance's status.
@@ -371,7 +384,7 @@ function updateAmbulances(mymap) {
 			"Status: " + data.status + "<br/>" + 
 			"Priority: " + data.priority);
 	});
-	$('#status-dropdown').empty();
+	$('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
 	$.get('api/status/', function(data) {
 		$.each(data, function (index, val) {
 			$('#status-dropdown').append('<option value="' + val.name + 
