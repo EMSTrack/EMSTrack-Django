@@ -9,6 +9,8 @@ from ambulances.models import EquipmentCount, Ambulances, Status, Call
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer
 
 from django.utils.six import BytesIO
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.gis.geos import Point
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
@@ -98,6 +100,7 @@ class Client(BaseClient):
         except Exception:
             self.stdout.write(self.style.ERROR("ERROR PARSING CALL JSON"))
 
+        # Try to update existing call if it exists
         try:
             name = data['name']
             residential_unit = data['residential_unit']
@@ -106,7 +109,8 @@ class Client(BaseClient):
             zipcode = data['zipcode']
             city = data['city']
             state = data['state']
-            location = data['location']
+            latitude = data['latitude']
+            longitude = data['longitude']
             assignment = data['assignment']
             description = data['description']
             call_time = data['call_time']
@@ -115,81 +119,88 @@ class Client(BaseClient):
             hospital_time = data['hospital_time']
             base_time = data['base_time']
             ambulance = data['ambulance']
-            call = Call.objects.get(ambulance = ambulance)
+
+            # Obtain call object
+            call = Call.objects.filter(ambulance=ambulance).first()
 
             # update name
-            if(call.name != name):
+            if call.name != name:
                 call.name = name
 
-            # update residential_unit 
-            if(call.residential_unit != residential_unit):
+            # update residential_unit
+            if call.residential_unit != residential_unit:
                 call.residential_unit = residential_unit
 
             # update stmain_number
-            if(call.stmain_number != stmain_number):
+            if call.stmain_number != stmain_number:
                 call.stmain_number = stmain_number
 
             # update delegation
-            if(call.delegation != delegation):
+            if call.delegation != delegation:
                 call.delegation = delegation
 
             # update zipcode
-            if(call.zipcode != zipcode):
+            if call.zipcode != zipcode:
                 call.zipcode = zipcode
 
             # update city
-            if(call.city != city):
+            if call.city != city:
                 call.city = city
 
             # update state
-            if(call.state != state):
+            if call.state != state:
                 call.state = state
 
             # update location
-            if(call.location != location):
-                call.location = location
+            if call.location.x != longitude or call.location.y != latitude:
+                call.location = Point(longitude, latitude, srid=4326)
 
             # update assignment
-            if(call.assignment != assignment):
+            if call.assignment != assignment:
                 call.assignment = assignment
 
             # update description
-            if(call.description != description):
+            if call.description != description:
                 call.description = description
 
             # update call_time
-            if(call.call_time != call_time):
-                call.call_time = call_time                 
+            if call.call_time != call_time:
+                call.call_time = call_time
 
             # update departure_time
-            if(call.departure_time != departure_time):        
+            if call.departure_time != departure_time:
                 call.departure_time = departure_time
 
             # update transfer_time
-            if(call.transfer_time != transfer_time):        
+            if call.transfer_time != transfer_time:
                 call.transfer_time = transfer_time
 
-            # update hospital_time 
-            if(call.hospital_time != hospital_time):        
+            # update hospital_time
+            if call.hospital_time != hospital_time:
                 call.hospital_time = hospital_time
 
             # update base_time
-            if(call.base_time != base_time):        
+            if call.base_time != base_time:
                 call.base_time = base_time
 
             call.save()
-        except Exception:
+            self.stdout.write(self.style.SUCCESS("Updated Call to database"))
+
+        # If object does not exist on database, create it
+        except ObjectDoesNotExist:
             serializer = CallSerializer(data=data)
 
             if serializer.is_valid():
                try:
                    call = serializer.save()
-                   self.stdout.write("Wrote Call to database")
+                   self.stdout.write(self.style.SUCCESS("Wrote Call to database"))
                except Exception:
                    self.stdout.write(self.style.ERROR("Error writing Call to database"))
             else:
                 self.stdout.write("Serializer Not Valid" + str(data))
 
+        except Exception as e:
+            self.stdout.write(self.style.ERROR("Error with parsing call fields"))
 
     # Update user location
     def on_user_loc(self, client, userdata, msg):
