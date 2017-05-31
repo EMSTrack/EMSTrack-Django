@@ -52,6 +52,8 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
 
+    location = PointField(required=True)
+
     class Meta:
 
         # Return all fields of the call in auto serialized format
