@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer
+from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -23,7 +23,7 @@ class Client(BaseClient):
 
         # initialize pubcount
         self.pubcount = 0
-        
+
         # Seed hospitals
         self.seed_hospital_equipment(client)
         self.seed_hospitals(client)
@@ -33,11 +33,14 @@ class Client(BaseClient):
         self.seed_ambulance_location(client)
         self.seed_ambulance_status(client)
 
+        # Seed calls
+        self.seed_calls(client)
+
     def publish(self, topic, message, *vargs, **kwargs):
         # increment pubcount then publish
         self.pubcount += 1
         self.client.publish(topic, message, *vargs, **kwargs)
-        
+
     def seed_ambulance_location(self, client):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
@@ -111,7 +114,7 @@ class Client(BaseClient):
 
     def seed_hospitals(self, client):
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> User hospital lists"))
+            self.stdout.write(self.style.SUCCESS(">> Seeding user hospital lists"))
 
         # For now, each user will have access to all hospitals
         for user in User.objects.all():
@@ -128,6 +131,22 @@ class Client(BaseClient):
         if self.verbosity > 0:
                 self.stdout.write(self.style.SUCCESS(">> Seeded hospital list for every user"))
 
+    def seed_calls(self, client):
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding calls"))
+
+        for call in Call.objects.all():
+            amb_id = call.ambulance.id
+            serializer = CallSerializer(call)
+            json = JSONRenderer().render(serializer.data)
+
+            self.publish('ambulance/{}/call'.format(amb_id), json, qos=2, retain=True)
+
+            if self.verbosity > 0:
+                self.stdout.write(">> Call seed - ambulance: {}".format(amb_id))
+
+        if self.verbosity > 0:
+                self.stdout.write(self.style.SUCCESS(">> Seeded calls for every ambulance"))
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
