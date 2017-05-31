@@ -34,10 +34,14 @@ class Client(BaseClient):
         self.client.message_callback_add('hospital/+/equipment/#',
                                          self.on_hospital)
 
+        # call handler
         self.client.message_callback_add('ambulance/+/call', self.on_call)
 
         # user location handler
         self.client.message_callback_add('user/+/location', self.on_user_loc)
+
+        # status handler
+        self.client.message_callback_add('ambulance/+/status', self.on_status)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
@@ -105,7 +109,7 @@ class Client(BaseClient):
             name = data['name']
             residential_unit = data['residential_unit']
             stmain_number = data['stmain_number']
-            delegation = data['delegation']        
+            delegation = data['delegation']
             zipcode = data['zipcode']
             city = data['city']
             state = data['state']
@@ -184,7 +188,7 @@ class Client(BaseClient):
                 call.base_time = base_time
 
             call.save()
-            self.stdout.write(self.style.SUCCESS("Updated Call to database"))
+            self.stdout.write(self.style.SUCCESS(">> Updated call {} in database").format(call.id))
 
         # If object does not exist on database, create it
         except ObjectDoesNotExist:
@@ -192,15 +196,16 @@ class Client(BaseClient):
 
             if serializer.is_valid():
                try:
+                    # Save the call to the db with the serializer
                    call = serializer.save()
-                   self.stdout.write(self.style.SUCCESS("Wrote Call to database"))
+                   self.stdout.write(self.style.SUCCESS(">> Wrote new call {} to database").format(call.id))
                except Exception:
-                   self.stdout.write(self.style.ERROR("Error writing Call to database"))
+                   self.stdout.write(self.style.ERROR("*> Error writing Call to database"))
             else:
                 self.stdout.write("Serializer Not Valid" + str(data))
 
         except Exception as e:
-            self.stdout.write(self.style.ERROR("Error with parsing call fields"))
+            self.stdout.write(self.style.ERROR("*> Error with parsing call fields"))
 
     # Update user location
     def on_user_loc(self, client, userdata, msg):
@@ -272,10 +277,51 @@ class Client(BaseClient):
             client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
             client.publish('ambulance/{}/status'.format(amb_id), ambulance.status.name, qos=2, retain=True)
 
+        except ObjectDoesNotExist:
+            self.stdout.write(
+                self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
+
         except Exception as e:
             print(e)
             self.stdout.write(
+                self.style.ERROR("Error parsing data"))
+
+    # Update status from dispatch team
+    def on_status(self, client, userdata, msg):
+        topic = msg.topic.split('/')
+        amb_id = topic[1]
+
+        if not msg.payload:
+            return
+
+        status_str = msg.payload.decode("utf-8")
+        ambulance = None
+
+        try:
+            ambulance = Ambulances.objects.get(id=amb_id)
+
+        except ObjectDoesNotExist:
+            self.stdout.write(
                 self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
+            return
+
+        try:
+            status = Status.objects.get(name=status_str)
+            if ambulance.status.name != status_str:
+                ambulance.status = status
+                ambulance.save()
+            self.stdout.write(self.style.SUCCESS(
+                ">> Successful status update: {} for ambulance {}").format(status_str, amb_id))
+
+        except ObjectDoesNotExist:
+            self.stdout.write(
+                self.style.ERROR("*> Status {} does not exist".format(status_str)))
+            return
+
+        except Exception as e:
+            print(e)
+            self.stdout.write(
+                self.style.ERROR("*> Error saving status for ambulance {}".format(amb_id)))
 
 
 class Command(BaseCommand):
