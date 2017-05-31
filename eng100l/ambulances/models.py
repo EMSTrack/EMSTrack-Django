@@ -1,8 +1,4 @@
-import datetime
-
 from django.contrib.auth.models import User
-from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.utils import timezone
 
 from django.db import models
@@ -14,17 +10,20 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
 
+
 class Status(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
         return "{}".format(self.name)
 
+
 class Capability(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
         return "{}".format(self.name)
+
 
 class Ambulances(models.Model):
     license_plate = models.CharField(max_length=20)
@@ -39,6 +38,7 @@ class Ambulances(models.Model):
 
     def __str__(self):
         return self.license_plate
+
 
 class Call(models.Model):
     # ambulance assigned to Call (Foreign Key)
@@ -62,16 +62,12 @@ class Call(models.Model):
     transfer_time = models.DateTimeField(blank = True, null = True)
     hospital_time = models.DateTimeField(blank = True, null = True)
     base_time = models.DateTimeField(blank = True, null = True)
-
-
+    PRIORITIES = [('A','A'),('B','B'),('C','C'),('D','D'),('E','E')]
+    priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
 
     def __str__(self):
         return "({}): {}, {}".format(self.priority, self.residential_unit, self.stmain_number)
 
-
-
-    PRIORITIES = [('A','A'),('B','B'),('C','C'),('D','D'),('E','E')]
-    priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
 
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
@@ -79,6 +75,7 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Hospital(models.Model):
     id = models.AutoField(primary_key=True)
@@ -88,6 +85,7 @@ class Hospital(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
+
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254)
@@ -95,6 +93,7 @@ class Equipment(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+
 
 class EquipmentCount(models.Model):
 
@@ -108,6 +107,7 @@ class EquipmentCount(models.Model):
 
     def __str__(self):
         return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.quantity)
+
 
 class Base(models.Model):
     name = models.CharField(max_length=254, unique=True)

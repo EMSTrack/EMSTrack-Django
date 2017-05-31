@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from .models import Status, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
+from .models import Status, Ambulances, Region, Call, Hospital, \
+    Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
 
 from .fields import StatusField
-
-from django.db.models.fields import DateTimeField
 
 from drf_extra_fields.geo_fields import PointField
 

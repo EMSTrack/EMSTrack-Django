@@ -7,11 +7,16 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
-from .models import Ambulances, Status, Region, Call, Hospital, EquipmentCount, Base, Route
-from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, StatusCreateForm, StatusUpdateForm, CallCreateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, RegionSerializer, CallSerializer, HospitalSerializer, EquipmentCountSerializer, RouteSerializer, BaseSerializer
+from .models import Ambulances, Status, Call, Hospital, \
+    EquipmentCount, Base, Route
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, \
+    StatusCreateForm, StatusUpdateForm
+from .serializers import AmbulancesSerializer, StatusSerializer, \
+    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
+    RouteSerializer, BaseSerializer
 
 # Defines the view for a user when a url is accessed
+
 
 # Ambulance list page
 class AmbulanceView(CreateView):
@@ -22,7 +27,6 @@ class AmbulanceView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
-        #context['ambulances'] = Ambulances.objects.all().extra(select={'order': "CAST(license_plate as INTEGER)"}).order_by('order')
         context['ambulances'] = Ambulances.objects.all().order_by('id')
         return context
 
