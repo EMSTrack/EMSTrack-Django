@@ -1,10 +1,11 @@
 from django.conf.urls import url, include
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework import routers
 
 from . import views
-from .views import StatusViewSet, AmbulancesViewSet, CallViewSet, HospitalViewSet, EquipmentCountViewSet, RouteViewSet, AmbulanceUpdateView, StatusUpdateView
+from .views import StatusViewSet, AmbulancesViewSet, CallViewSet, \
+    HospitalViewSet, EquipmentCountViewSet, RouteViewSet, \
+    AmbulanceUpdateView, StatusUpdateView
 
 # Defines the url routing within the website
 

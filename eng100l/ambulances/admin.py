@@ -2,7 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Ambulances, Status, Call, Region, Hospital, Equipment, EquipmentCount, Capability, LocationPoint
+from .models import Ambulances, Status, Call, Region, \
+    Hospital, Equipment, EquipmentCount, Capability, LocationPoint
 
 admin.site.register(Ambulances)
 admin.site.register(Status)

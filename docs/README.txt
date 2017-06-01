@@ -1,4 +1,6 @@
 READ THIS BEFORE INSTALLING!
 
-You can either use Docker or the Mac Install guide. Windows users will likely
-have less trouble setting up on Docker so use that instead.
+If you have a Mac, use mac-installation.txt. If you have linux,
+use linux-installation.txt. If you have windows, you should either
+virtual box or dual boot. If all else fails, follow the docker installation
+guide.

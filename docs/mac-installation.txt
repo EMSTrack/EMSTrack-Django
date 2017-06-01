@@ -38,11 +38,11 @@ pql        (to enter psql)
 	SELECT * FROM pgr_version();
 	\q     (to exit sql)
 
-INSTALL OTHER DEPENDENCIES
+INSTALL OTHER DEPENDENCIES (Can instead run the pip.sh script)
 
 pip3 install psycopg2;
 
-INSTALL REST FRAMEWORK (if you have pip - use pip3 instead please!)
+INSTALL REST FRAMEWORK (pip or pip3; included in pip.sh script)
 
 pip3 install djangorestframework
 pip3 install markdown
@@ -50,9 +50,12 @@ pip3 install django-filter
 pip3 install django-rest-swagger
 pip3 install django-extra-fields
 
-INSTALL MQTT
+INSTALL MQTT (highly advised to run on localhost)
 
 brew install mosquitto
+[follow instruction to start mosquitto server]
+mosquitto_passwd --help
+[follow instuction to create a mosquitto password]
 pip3 install paho-mqtt
 
 SETTINGS FILES
@@ -63,15 +66,19 @@ folder).
 3. Change the values specified in the settings file to your db name, user, and
 password.
 4. Add a secret key by generating a django key online
+5. Change values specified in settings file to mqtt username, password (specify
+localhost as the server if using localhost)
 
 RUNNING THE PROJECT
 
 (go to directory with manage.py in it)
-python manage.py createsuperuser  (and input user and pass)
 python manage.py makemigrations
 python manage.py makemigrations ambulances
 python manage.py migrate
-python manage.py runserver
+python manage.py loaddata ../docs/db.json
+python manage.py mqttseed
+python manage.py createsuperuser  (and input user and pass)
+python manage.py runserver (at this point app should run)
 
 IF THERE IS AN ERROR WHEN RUNNING 'python manage.py makemigrations ambulances'
 

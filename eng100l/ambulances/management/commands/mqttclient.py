@@ -5,10 +5,12 @@ from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import EquipmentCount, Ambulances, Status
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer
+from ambulances.models import EquipmentCount, Ambulances, Status, Call
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer
 
 from django.utils.six import BytesIO
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.gis.geos import Point
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
@@ -32,8 +34,14 @@ class Client(BaseClient):
         self.client.message_callback_add('hospital/+/equipment/#',
                                          self.on_hospital)
 
+        # call handler
+        self.client.message_callback_add('ambulance/+/call', self.on_call)
+
         # user location handler
         self.client.message_callback_add('user/+/location', self.on_user_loc)
+
+        # status handler
+        self.client.message_callback_add('ambulance/+/status', self.on_status)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
@@ -80,6 +88,124 @@ class Client(BaseClient):
             self.stdout.write(
                 self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
 
+    # Update call on database or create new call if doesn't exist
+    def on_call(self, client, userdata, msg):
+        # parse message
+        topic = msg.topic.split('/')
+        ambulance_id = topic[1]
+
+        if not msg.payload:
+            return
+
+        try:
+            # Parse data into json dict
+            stream = BytesIO(msg.payload)
+            data = JSONParser().parse(stream)
+        except Exception:
+            self.stdout.write(self.style.ERROR("ERROR PARSING CALL JSON"))
+
+        # Try to update existing call if it exists
+        try:
+            name = data['name']
+            residential_unit = data['residential_unit']
+            stmain_number = data['stmain_number']
+            delegation = data['delegation']
+            zipcode = data['zipcode']
+            city = data['city']
+            state = data['state']
+            latitude = data['latitude']
+            longitude = data['longitude']
+            assignment = data['assignment']
+            description = data['description']
+            call_time = data['call_time']
+            departure_time = data['departure_time']
+            transfer_time = data['transfer_time']
+            hospital_time = data['hospital_time']
+            base_time = data['base_time']
+            ambulance = data['ambulance']
+
+            # Obtain call object
+            call = Call.objects.filter(ambulance=ambulance).first()
+
+            # update name
+            if call.name != name:
+                call.name = name
+
+            # update residential_unit
+            if call.residential_unit != residential_unit:
+                call.residential_unit = residential_unit
+
+            # update stmain_number
+            if call.stmain_number != stmain_number:
+                call.stmain_number = stmain_number
+
+            # update delegation
+            if call.delegation != delegation:
+                call.delegation = delegation
+
+            # update zipcode
+            if call.zipcode != zipcode:
+                call.zipcode = zipcode
+
+            # update city
+            if call.city != city:
+                call.city = city
+
+            # update state
+            if call.state != state:
+                call.state = state
+
+            # update location
+            if call.location.x != longitude or call.location.y != latitude:
+                call.location = Point(longitude, latitude, srid=4326)
+
+            # update assignment
+            if call.assignment != assignment:
+                call.assignment = assignment
+
+            # update description
+            if call.description != description:
+                call.description = description
+
+            # update call_time
+            if call.call_time != call_time:
+                call.call_time = call_time
+
+            # update departure_time
+            if call.departure_time != departure_time:
+                call.departure_time = departure_time
+
+            # update transfer_time
+            if call.transfer_time != transfer_time:
+                call.transfer_time = transfer_time
+
+            # update hospital_time
+            if call.hospital_time != hospital_time:
+                call.hospital_time = hospital_time
+
+            # update base_time
+            if call.base_time != base_time:
+                call.base_time = base_time
+
+            call.save()
+            self.stdout.write(self.style.SUCCESS(">> Updated call {} in database").format(call.id))
+
+        # If object does not exist on database, create it
+        except ObjectDoesNotExist:
+            serializer = CallSerializer(data=data)
+
+            if serializer.is_valid():
+               try:
+                    # Save the call to the db with the serializer
+                   call = serializer.save()
+                   self.stdout.write(self.style.SUCCESS(">> Wrote new call {} to database").format(call.id))
+               except Exception:
+                   self.stdout.write(self.style.ERROR("*> Error writing Call to database"))
+            else:
+                self.stdout.write("Serializer Not Valid" + str(data))
+
+        except Exception as e:
+            self.stdout.write(self.style.ERROR("*> Error with parsing call fields"))
 
     # Update user location
     def on_user_loc(self, client, userdata, msg):
@@ -151,10 +277,51 @@ class Client(BaseClient):
             client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
             client.publish('ambulance/{}/status'.format(amb_id), ambulance.status.name, qos=2, retain=True)
 
+        except ObjectDoesNotExist:
+            self.stdout.write(
+                self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
+
         except Exception as e:
             print(e)
             self.stdout.write(
+                self.style.ERROR("Error parsing data"))
+
+    # Update status from dispatch team
+    def on_status(self, client, userdata, msg):
+        topic = msg.topic.split('/')
+        amb_id = topic[1]
+
+        if not msg.payload:
+            return
+
+        status_str = msg.payload.decode("utf-8")
+        ambulance = None
+
+        try:
+            ambulance = Ambulances.objects.get(id=amb_id)
+
+        except ObjectDoesNotExist:
+            self.stdout.write(
                 self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
+            return
+
+        try:
+            status = Status.objects.get(name=status_str)
+            if ambulance.status.name != status_str:
+                ambulance.status = status
+                ambulance.save()
+            self.stdout.write(self.style.SUCCESS(
+                ">> Successful status update: {} for ambulance {}").format(status_str, amb_id))
+
+        except ObjectDoesNotExist:
+            self.stdout.write(
+                self.style.ERROR("*> Status {} does not exist".format(status_str)))
+            return
+
+        except Exception as e:
+            print(e)
+            self.stdout.write(
+                self.style.ERROR("*> Error saving status for ambulance {}".format(amb_id)))
 
 
 class Command(BaseCommand):
