@@ -44,7 +44,7 @@ class AmbulanceUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceUpdateView, self).get_context_data(**kwargs)
-        context['license_plate'] = self.kwargs['license_plate']
+        context['license_plate'] = self.kwargs['pk']
         return context
 
 
