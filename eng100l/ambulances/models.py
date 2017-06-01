@@ -62,12 +62,8 @@ class Call(models.Model):
     transfer_time = models.DateTimeField(blank = True, null = True)
     hospital_time = models.DateTimeField(blank = True, null = True)
     base_time = models.DateTimeField(blank = True, null = True)
-
     def __str__(self):
         return "({}): {}, {}".format(self.priority, self.residential_unit, self.stmain_number)
-
-
-
     PRIORITIES = [('A','A'),('B','B'),('C','C'),('D','D'),('E','E')]
     priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
 
