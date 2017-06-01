@@ -109,10 +109,14 @@ $(document).ready(function() {
 		let topicName = destinationNameArr[2];
 		let ambulanceId = destinationNameArr[1];
 
-		if(topicName === 'status')
+		if(topicName === 'status') {
+			console.log('topicname == status');
 			updateStatus(ambulanceId, message.payloadString);
-		if(topicName === 'location')
+		}
+		if(topicName === 'location') {
+			console.log('topicname == location');
 			updateLocation(ambulanceId, message.payloadString);
+		}
 		/* Have 2 functions
 		 * 1) for status
 		 * 2) for location
@@ -122,6 +126,11 @@ $(document).ready(function() {
 		 *
 		 */ 
 	};
+				 $.getJSON('/ambulances/api/ambulances/', function(data) {
+			  	$.each(data, function(index) {
+			  		console.log(data[index].id);
+			  	});
+			 })
 
 	var options = {
 	     //connection attempt timeout in seconds
@@ -140,7 +149,15 @@ $(document).ready(function() {
 			 // client.send(message);
 
 			 // Subscribes to both topics ambulance/1/location & ambulance/1/status
-			 client.subscribe("ambulance/4/#");
+			 $.getJSON('/ambulances/api/ambulances/', function(data) {
+			  	$.each(data, function(index) {
+			  		let topicName = "ambulance/" + data[index].id + "/#";
+			  		client.subscribe(topicName);
+			  		console.log('subscribe to topic: ' + topicName);
+			  	});
+			 })
+			// client.subscribe("ambulance/#");
+			// client.subscribe("ambulance/4/#");
 	     },
 	     //Gets Called if the connection could not be established
 	     onFailure: function (message) {
