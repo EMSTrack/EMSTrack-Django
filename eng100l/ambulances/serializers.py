@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import Status, Ambulances, Region, Call, Hospital, Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
+from .models import Status, Ambulances, Region, Call, Hospital, \
+    Equipment, EquipmentCount, Base, Route, Capability, LocationPoint
 
 from .fields import StatusField
 
@@ -52,11 +53,20 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
 
+    latitude = serializers.SerializerMethodField('get_lat')
+    longitude = serializers.SerializerMethodField('get_long')
+
     class Meta:
 
         # Return all fields of the call in auto serialized format
         model = Call
-        fields = '__all__'
+        exclude = ('location',)
+
+    def get_lat(self, obj):
+        return obj.location.y
+
+    def get_long(self, obj):
+        return obj.location.x
 
 
 class RegionSerializer(serializers.ModelSerializer):
