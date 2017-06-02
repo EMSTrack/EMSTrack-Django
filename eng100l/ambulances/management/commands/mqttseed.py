@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from ambulances.management.commands._client import BaseClient
 
 from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -95,7 +95,7 @@ class Client(BaseClient):
                                retain=True)
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding hospitals"))
+            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital equipment"))
 
     def seed_hospital_config(self, client):
         if self.verbosity > 0:
@@ -118,8 +118,8 @@ class Client(BaseClient):
 
         # For now, each user will have access to all hospitals
         for user in User.objects.all():
-            queryset = Hospital.objects.all()
-            serializer = MQTTHospitalSerializer(queryset, many = True)
+            
+            serializer = MQTTHospitalListSerializer(user)
             json = JSONRenderer().render(serializer.data)
 
             # Publish json - be sure to do this in the seeder
