@@ -1,11 +1,10 @@
 # mqttseed application command
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from django.contrib.auth.models import User
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call
+from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call, User
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser

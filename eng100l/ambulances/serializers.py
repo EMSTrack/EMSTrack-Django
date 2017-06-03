@@ -195,16 +195,10 @@ class MQTTHospitalEquipmentSerializer(serializers.ModelSerializer):
 
 # Want to switch to using user hospital list later
 class MQTTHospitalListSerializer(serializers.ModelSerializer):
+    hospitals = HospitalSerializer(read_only=True, many=True)
 
-    # grab all hospitals for now
-    hospitals = serializers.SerializerMethodField('get_all_hospitals')
+#hospitals = serializers.SerializerMethodField('get_all_hospitals')
 
     class Meta:
         model = User
         fields = ['hospitals']
-
-    def get_all_hospitals(self, obj):
-        hospitals = []
-        for h in Hospital.objects.all():
-            hospitals.append(MQTTHospitalSerializer(h).data)
-        return hospitals
