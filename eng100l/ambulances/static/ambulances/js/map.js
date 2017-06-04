@@ -107,6 +107,8 @@ $(document).ready(function() {
 		if(topicName === 'status') {
 			console.log('topicname == status');
 			updateStatus(ambulanceId, message.payloadString);
+
+			updateAmbulanceGrid(ambulanceId, message.payloadString);
 		}
 		if(topicName === 'location') {
 			console.log('topicname == location');
@@ -419,30 +421,43 @@ function createAmbulanceGrid(mymap) {
 	});
 }
 
+function updateAmbulanceGrid(ambulanceId, ambulanceStatus) {
+		var buttonId = "#grid-button" + ambulanceId;
+
+		// Updated button color/status dynamically
+		if(ambulanceStatus === STATUS_AVAILABLE) 
+			$(buttonId).attr( "class", "btn btn-success" );
+		if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
+			$(buttonId).attr( "class", "btn btn-default" );
+		if(ambulanceStatus === STATUS_IN_SERVICE)
+			$(buttonId).attr( "class", "btn btn-danger" );
+
+}
+
 /*
  * updateAmbulanceGrid updates the ambulance grid. Will be called in AJAX call to update grid dynamically
  *
  */
-function updateAmbulanceGrid(ambulanceId) {
- 	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
+// function updateAmbulanceGrid(ambulanceId) {
+//  	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
 
- 	$.get(apiAmbulanceUrl, function(data) {
-		var buttonId = "#grid-button" + data.id;
+//  	$.get(apiAmbulanceUrl, function(data) {
+// 		var buttonId = "#grid-button" + data.id;
 
-		// console.log(buttonId);
-		// Updating button license plate identifier dynamically
-		$(buttonId).html(data.license_plate);
+// 		// console.log(buttonId);
+// 		// Updating button license plate identifier dynamically
+// 		$(buttonId).html(data.license_plate);
 
-		// Updated button color/status dynamically
-		if(data.status === STATUS_AVAILABLE) 
-			$(buttonId).attr( "class", "btn btn-success" );
-		if(data.status === STATUS_OUT_OF_SERVICE)
-			$(buttonId).attr( "class", "btn btn-default" );
-		if(data.status === STATUS_IN_SERVICE)
-			$(buttonId).attr( "class", "btn btn-danger" );
+// 		// Updated button color/status dynamically
+// 		if(data.status === STATUS_AVAILABLE) 
+// 			$(buttonId).attr( "class", "btn btn-success" );
+// 		if(data.status === STATUS_OUT_OF_SERVICE)
+// 			$(buttonId).attr( "class", "btn btn-default" );
+// 		if(data.status === STATUS_IN_SERVICE)
+// 			$(buttonId).attr( "class", "btn btn-danger" );
 		
-	});
-}
+// 	});
+// }
 
 /*
  * postDispatchCall makes an ajax post request to post dispatched ambulance.
