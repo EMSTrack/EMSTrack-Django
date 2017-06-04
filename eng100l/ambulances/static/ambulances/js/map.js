@@ -31,8 +31,8 @@ var STATUS_IN_SERVICE = "In Service";
 var STATUS_AVAILABLE = "Available";
 var STATUS_OUT_OF_SERVICE = "Out of service";
 
-// Ajax update frequency (in milliseconds)
-var UPDATE_FREQUENCY = 1000;
+// global client variable for mqtt
+var client;
 
 
 /**
@@ -93,7 +93,7 @@ $(document).ready(function() {
 	})
 
 	//Create a client instance
-	var client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
+	client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
 
 	// set callback handlers
 	client.onMessageArrived = function(message) {
@@ -144,6 +144,15 @@ $(document).ready(function() {
 
 	client.connect(options);
 
+	// Publish to mqtt on status change from details options dropdown
+ 	$('#status-dropdown').change(function() {
+ 		var statusMessage = new Paho.MQTT.Message(this.value);
+ 		var ambId = $('#status-change-ambId').val();
+ 		statusMessage.destinationName = "ambulance/" + ambId + "/status";
+ 		statusMessage.qos = 2;
+ 		client.send(statusMessage);
+ 		console.log("send message: " + this.value + " by ambulance " + ambId);
+ 	});
 
 });
 
@@ -202,8 +211,6 @@ function updateLocation(ambulanceId, ambulanceMessage) {
 	let item = ambulances[ambulanceId];
 	item.location.latitude = messageLocation.location.latitude;
 	item.location.longitude = messageLocation.location.longitude;
-
-	console.log('ambulance json: ' + JSON.stringify(item));
 
 	// Update ambulance location
 	ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
@@ -265,7 +272,7 @@ function createStatusFilter(mymap) {
 }
 
 /*
- * updateAmbulances updates the map with the new ambulance's status.
+ * getAmbulances updates the map with the new ambulance's status.
  * @param mymap is the map UI.
  * @return void.
  */
@@ -307,10 +314,6 @@ function getAmbulances(mymap) {
 					updateDetailPanel(item.id);
 				});
 
-			 //    // Update ambulance location
-				// ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
-				// ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
-
 				//Add to a map to differentiate the layers between statuses.
 				if(statusWithMarkers[item.status]){
 					statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
@@ -319,11 +322,6 @@ function getAmbulances(mymap) {
 					statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
 				}			 
 			});
-			
-				
-
-
-	
 
 			// // Goes through each layer group and adds or removes accordingly.
 			// Object.keys(layergroups).forEach(function(key){
@@ -341,9 +339,6 @@ function getAmbulances(mymap) {
 			// 	}
 
 			// });
-
-		
-
 		}
 	});
 }
@@ -355,21 +350,24 @@ function getAmbulances(mymap) {
  */
  function updateDetailPanel(ambulanceId) {
  	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
- 	//console.log(apiAmbulanceUrl);
+ 	// Fill details
  	$.get(apiAmbulanceUrl, function(data) {
+ 		var currentStatus = data.status;
 		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
 			"Status: " + data.status + "<br/>" + 
 			"Priority: " + data.priority);
 	});
+	// Create dropdown
 	$('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
 	$.get('api/status/', function(data) {
 		$.each(data, function (index, val) {
-			$('#status-dropdown').append('<option value="' + val.name + 
-				'">' + val.name + '</option>');
+				$('#status-dropdown').append('<option value="' + val.name + 
+					'">' + val.name + '</option>');
 		});
 	});
  	$('#change-status').show();
 
+ 	$('#status-change-ambId').val(ambulanceId);
  }
 
 
