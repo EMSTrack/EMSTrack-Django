@@ -41,6 +41,9 @@ class Ambulances(models.Model):
 
 
 class Call(models.Model):
+    #call metadata (status not required for now)
+    active = models.BooleanField(default=False)
+    status = models.CharField(max_length=254, default= "", blank=True)
     # ambulance assigned to Call (Foreign Key)
     ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=254, default = "")
