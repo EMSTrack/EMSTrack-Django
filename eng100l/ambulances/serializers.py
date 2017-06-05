@@ -166,6 +166,12 @@ class MQTTHospitalSerializer(serializers.ModelSerializer):
         model = Hospital
         fields = ['id', 'name']
 
+class MQTTAmbulanceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ambulances
+        fields = ['id', 'license_plate']
+
 class MQTTEquipmentCountSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
@@ -208,3 +214,20 @@ class MQTTHospitalListSerializer(serializers.ModelSerializer):
         for h in Hospital.objects.all():
             hospitals.append(MQTTHospitalSerializer(h).data)
         return hospitals
+
+
+# Do we still use model serializer?
+class MQTTAmbulanceListSerializer(serializers.ModelSerializer):
+
+    # grab all hospitals for now
+    ambulances = serializers.SerializerMethodField('get_all_ambulances')
+
+    class Meta:
+        model = User
+        fields = ['ambulances']
+
+    def get_all_ambulances(self, obj):
+        ambulances = []
+        for a in Ambulances.objects.all():
+            ambulances.append(MQTTAmbulanceSerializer(a).data)
+        return ambulances
