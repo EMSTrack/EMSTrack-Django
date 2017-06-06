@@ -199,11 +199,8 @@ class MQTTHospitalEquipmentSerializer(serializers.ModelSerializer):
         fields = ['equipment']
 
 
-# Want to switch to using user hospital list later
 class MQTTHospitalListSerializer(serializers.ModelSerializer):
-    hospitals = HospitalSerializer(read_only=True, many=True)
-
-    #hospitals = serializers.SerializerMethodField('get_all_hospitals')
+    hospitals = MQTTHospitalSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
