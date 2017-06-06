@@ -203,12 +203,11 @@ class MQTTHospitalEquipmentSerializer(serializers.ModelSerializer):
 class MQTTHospitalListSerializer(serializers.ModelSerializer):
     hospitals = HospitalSerializer(read_only=True, many=True)
 
-#hospitals = serializers.SerializerMethodField('get_all_hospitals')
+    #hospitals = serializers.SerializerMethodField('get_all_hospitals')
 
     class Meta:
         model = User
         fields = ['hospitals']
-<<<<<<< HEAD
 
     def get_all_hospitals(self, obj):
         hospitals = []
@@ -232,5 +231,3 @@ class MQTTAmbulanceListSerializer(serializers.ModelSerializer):
         for a in Ambulances.objects.all():
             ambulances.append(MQTTAmbulanceSerializer(a).data)
         return ambulances
-=======
->>>>>>> CustomUser
