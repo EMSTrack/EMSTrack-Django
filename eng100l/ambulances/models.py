@@ -1,9 +1,9 @@
-from django.contrib.auth.models import User
 from django.utils import timezone
 
 from django.db import models
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import LineString, Point
+from django.contrib.auth.models import AbstractUser
 
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
@@ -126,6 +126,9 @@ class Route(models.Model):
     # Think about abstraction?
     type = models.CharField(max_length=50, null=False, default="Default Type")
 
+class User(AbstractUser):
+    hospitals = models.ManyToManyField(Hospital)
+    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, null=True, blank=True)
 
 class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
