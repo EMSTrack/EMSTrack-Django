@@ -5,7 +5,7 @@ from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import EquipmentCount, Ambulances, Status, Call
+from ambulances.models import EquipmentCount, Ambulances, Status, Call, User
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer
 
 from django.utils.six import BytesIO
@@ -42,6 +42,9 @@ class Client(BaseClient):
 
         # status handler
         self.client.message_callback_add('ambulance/+/status', self.on_status)
+
+        # ambulance linking handler
+        self.client.message_callback_add('user/+/ambulance_sel', self.on_amb_sel)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
@@ -251,6 +254,46 @@ class Client(BaseClient):
             print(e)
             self.stdout.write(
                 self.style.ERROR("*> Error saving status for ambulance {}".format(amb_id)))
+
+    def on_amb_sel(self, client, userdata, msg):
+        topic = msg.topic.split('/')
+        username = topic[1]
+
+        if not msg.payload:
+            return
+
+        amb_id = int(msg.payload.decode("utf-8"))
+
+        # Obtain user
+        user = None
+        try:
+            user = User.objects.get(username=username)
+
+        except ObjectDoesNotExist:
+            self.stdout.write(
+                self.style.ERROR("*> User {} does not exist".format(username)))
+            return
+
+        try:
+            if amb_id == -1:
+                user.ambulance = None
+            else:
+                ambulance = Ambulances.objects.get(id=amb_id)
+                user.ambulance = ambulance
+            user.save()
+
+            self.stdout.write(self.style.SUCCESS(
+                ">> Successfully hooked user {} to ambulance {}").format(username, amb_id))
+
+        except ObjectDoesNotExist:
+                self.stdout.write(
+                    self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
+
+        except Exception as e:
+            print(e)
+            self.stdout.write(
+                self.style.ERROR("*> Error saving ambulance for user {}".format(username)))
+
 
 
 class Command(BaseCommand):
