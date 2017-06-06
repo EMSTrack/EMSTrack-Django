@@ -101,111 +101,40 @@ class Client(BaseClient):
             # Parse data into json dict
             stream = BytesIO(msg.payload)
             data = JSONParser().parse(stream)
+            data.pop("id", None)
         except Exception:
             self.stdout.write(self.style.ERROR("ERROR PARSING CALL JSON"))
 
         # Try to update existing call if it exists
         try:
-            name = data['name']
-            residential_unit = data['residential_unit']
-            stmain_number = data['stmain_number']
-            delegation = data['delegation']
-            zipcode = data['zipcode']
-            city = data['city']
-            state = data['state']
-            latitude = data['latitude']
-            longitude = data['longitude']
-            assignment = data['assignment']
-            description = data['description']
-            call_time = data['call_time']
-            departure_time = data['departure_time']
-            transfer_time = data['transfer_time']
-            hospital_time = data['hospital_time']
-            base_time = data['base_time']
-            ambulance = data['ambulance']
+
+            # Obtain ambulance
+            amb = Ambulances.objects.filter(id=ambulance_id).first()
 
             # Obtain call object
-            call = Call.objects.filter(ambulance=ambulance).first()
+            call = Call.objects.filter(ambulance=amb, active=True).first()
 
-            # update name
-            if call.name != name:
-                call.name = name
-
-            # update residential_unit
-            if call.residential_unit != residential_unit:
-                call.residential_unit = residential_unit
-
-            # update stmain_number
-            if call.stmain_number != stmain_number:
-                call.stmain_number = stmain_number
-
-            # update delegation
-            if call.delegation != delegation:
-                call.delegation = delegation
-
-            # update zipcode
-            if call.zipcode != zipcode:
-                call.zipcode = zipcode
-
-            # update city
-            if call.city != city:
-                call.city = city
-
-            # update state
-            if call.state != state:
-                call.state = state
-
-            # update location
-            if call.location.x != longitude or call.location.y != latitude:
-                call.location = Point(longitude, latitude, srid=4326)
-
-            # update assignment
-            if call.assignment != assignment:
-                call.assignment = assignment
-
-            # update description
-            if call.description != description:
-                call.description = description
-
-            # update call_time
-            if call.call_time != call_time:
-                call.call_time = call_time
-
-            # update departure_time
-            if call.departure_time != departure_time:
-                call.departure_time = departure_time
-
-            # update transfer_time
-            if call.transfer_time != transfer_time:
-                call.transfer_time = transfer_time
-
-            # update hospital_time
-            if call.hospital_time != hospital_time:
-                call.hospital_time = hospital_time
-
-            # update base_time
-            if call.base_time != base_time:
-                call.base_time = base_time
-
-            call.save()
-            self.stdout.write(self.style.SUCCESS(">> Updated call {} in database").format(call.id))
-
-        # If object does not exist on database, create it
-        except ObjectDoesNotExist:
-            serializer = CallSerializer(data=data)
+            serializer = None
+            success_text = ">> Updated call {} in database"
+            failure_text = "*> Failed to update call {} in database"
+            if call is None:
+                serializer = CallSerializer(data=data)
+                success_text = ">> Created call {} in database"
+                failure_text = "*> Failed to create call {} in database"
+            else:
+                serializer = CallSerializer(call, data=data)
 
             if serializer.is_valid():
-               try:
-                    # Save the call to the db with the serializer
-                   call = serializer.save()
-                   self.stdout.write(self.style.SUCCESS(">> Wrote new call {} to database").format(call.id))
-               except Exception:
-                   self.stdout.write(self.style.ERROR("*> Error writing Call to database"))
+                try:
+                    call = serializer.save()
+                    self.stdout.write(self.style.SUCCESS(success_text.format(call.id)))
+                except Exception as e:
+                    self.stdout.write(self.style.ERROR(failure_text.format(call.id)))
             else:
-                self.stdout.write("Serializer Not Valid" + str(data))
+                self.stdout.write(self.style.ERROR("*> Error with data format"))
 
         except Exception as e:
-            self.stdout.write(self.style.ERROR("*> Error with parsing call fields"))
+            self.stdout.write(self.style.ERROR("Ambulance {} does not exist".format(ambulance_id)))
 
     # Update user location
     def on_user_loc(self, client, userdata, msg):
