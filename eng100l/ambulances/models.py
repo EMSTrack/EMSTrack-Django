@@ -130,9 +130,9 @@ class Route(models.Model):
 class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
     ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
-    call = models.ForeignKey(Call, on_delete=models.CASCADE, null=True)
+    call = models.ForeignKey(Call, on_delete=models.CASCADE, null=True, blank=True)
     # Remove nullable in the future
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True, blank=True)
     timestamp = models.DateTimeField()
     type = models.CharField(max_length=50, null=False, default="Default Type")
 
