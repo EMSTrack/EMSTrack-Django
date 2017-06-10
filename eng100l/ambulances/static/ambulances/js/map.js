@@ -160,7 +160,7 @@ $(document).ready(function() {
 
 var layergroups = {}; // The layer groups that will be part of the map.
 
-
+/* Handle 'ambulance/+/status' mqtt messages */
 function updateStatus(ambulanceId, ambulanceMessage) {
 	ambulances[ambulanceId].status = ambulanceMessage;
 
@@ -206,6 +206,7 @@ function updateStatus(ambulanceId, ambulanceMessage) {
 	}
 }
 
+/* Handle 'ambulance/+/location' mqtt messages */
 function updateLocation(ambulanceId, ambulanceMessage) {
 	console.log('updateLoc');
 	let messageLocation = JSON.parse(ambulanceMessage);
@@ -219,6 +220,7 @@ function updateLocation(ambulanceId, ambulanceMessage) {
 	ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
 }
 
+/* Create status filter on the top right corner of the map */
 function createStatusFilter(mymap) {
 	// Add the checkbox on the top right corner for filtering.
 	var container = L.DomUtil.create('div', 'filter-options');
@@ -237,6 +239,24 @@ function createStatusFilter(mymap) {
 		container.innerHTML = filterHtml;
 		// Initialize checked to true for all statuses.
 		$('.chk').attr('checked', true);
+		// Add listener to remove status layer when filter checkbox is clicked
+		$('.chk').click(function() {
+			// Goes through each layer group and adds or removes accordingly.
+			Object.keys(layergroups).forEach(function(key){
+				layergroups[key].clearLayers();
+				for(var i = 0; i < statusWithMarkers[key].length; i++){
+					// Add the ambulances in the layer if it is checked.
+					if($(".chk[data-status='" + key + "']").is(':checked')){
+						layergroups[key].addLayer(statusWithMarkers[key][i])
+					}
+					// Remove from layer if it is not checked.
+					else{
+						layergroups[key].removeLayer(statusWithMarkers[key][i]);
+						mymap.removeLayer(statusWithMarkers[key][i]);
+					}
+				}
+			});
+		});
 	});
 
 	// Add the checkboxes.
@@ -324,23 +344,6 @@ function getAmbulances(mymap) {
 					statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
 				}			 
 			});
-
-			// // Goes through each layer group and adds or removes accordingly.
-			// Object.keys(layergroups).forEach(function(key){
-			// 	layergroups[key].clearLayers();
-			// 	for(var i = 0; i < statusWithMarkers[key].length; i++){
-			// 		// Add the ambulances in the layer if it is checked.
-			// 		if($(".chk[data-status='" + key + "']").is(':checked')){
-			// 			layergroups[key].addLayer(statusWithMarkers[key][i])
-			// 		}
-			// 		// Remove from layer if it is not checked.
-			// 		else{
-			// 			layergroups[key].removeLayer(statusWithMarkers[key][i]);
-			// 			mymap.removeLayer(statusWithMarkers[key][i]);
-			// 		}
-			// 	}
-
-			// });
 		}
 	});
 }
