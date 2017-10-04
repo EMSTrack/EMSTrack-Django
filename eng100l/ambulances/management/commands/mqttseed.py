@@ -172,6 +172,7 @@ class Client(BaseClient):
     def on_publish(self, client, userdata, mid):
         # make sure all is published before disconnecting
         self.pubcount -= 1
+        # print("on_publish: '{}', '{}'".format(client, userdata))
         if self.pubcount == 0:
             self.disconnect()
 
