@@ -44,7 +44,7 @@ class Client(BaseClient):
         self.client.message_callback_add('ambulance/+/status', self.on_status)
 
         # ambulance linking handler
-        self.client.message_callback_add('user/+/ambulance_sel', self.on_amb_sel)
+        self.client.message_callback_add('user/+/ambulance', self.on_amb_sel)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
