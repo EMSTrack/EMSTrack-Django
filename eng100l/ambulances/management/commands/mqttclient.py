@@ -5,7 +5,7 @@ from django.conf import settings
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import EquipmentCount, Ambulances, Status, Call, User
+from ambulances.models import EquipmentCount, Ambulances, Status, Call, User, Hospital
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer
 
 from django.utils.six import BytesIO
@@ -45,6 +45,9 @@ class Client(BaseClient):
 
         # ambulance linking handler
         self.client.message_callback_add('user/+/ambulance', self.on_amb_sel)
+
+        # ambulance linking handler
+        self.client.message_callback_add('user/+/hospital', self.on_hosp_sel)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
@@ -293,6 +296,51 @@ class Client(BaseClient):
             print(e)
             self.stdout.write(
                 self.style.ERROR("*> Error saving ambulance for user {}".format(username)))
+
+
+    def on_hosp_sel(self, client, userdata, msg):
+        topic = msg.topic.split('/')
+        username = topic[1]
+
+        if not msg.payload:
+            return
+
+        try:
+            hosp_id = int(msg.payload.decode("utf-8"))
+        except ValueError:
+            self.stdout.write(
+                self.style.ERROR("*> {} is not an int".format(msg.payload)))
+            return
+
+        # Obtain user
+        user = None
+        try:
+            user = User.objects.get(username=username)
+
+        except ObjectDoesNotExist:
+            self.stdout.write(
+                self.style.ERROR("*> User {} does not exist".format(username)))
+            return
+
+        try:
+            if hosp_id == -1:
+                user.hospital = None
+            else:
+                hospital = Hospital.objects.get(id=hosp_id)
+                user.hospital = hospital
+            user.save()
+
+            self.stdout.write(self.style.SUCCESS(
+                ">> Successfully hooked user {} to hospital {}").format(username, hosp_id))
+
+        except ObjectDoesNotExist:
+                self.stdout.write(
+                    self.style.ERROR("*> Hospital {} does not exist".format(hosp_id)))
+
+        except Exception as e:
+            print(e)
+            self.stdout.write(
+                self.style.ERROR("*> Error saving hospital for user {}".format(username)))
 
 
 
