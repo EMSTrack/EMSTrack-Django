@@ -146,7 +146,8 @@ class Client(BaseClient):
     def on_user_loc(self, client, userdata, msg):
 
         topic = msg.topic.split('/')
-        user = topic[1]
+        username = topic[1]
+        user = User.objects.get(username=username)
 
         if not msg.payload:
             return
@@ -156,8 +157,14 @@ class Client(BaseClient):
         data = JSONParser().parse(stream)
 
         # TODO Find out which ambulance is linked to user
-        ambulance = 1
-        data['ambulance'] = ambulance
+        ambulance = user.ambulance_id
+
+        try:
+            data['ambulance'] = ambulance
+        except TypeError:
+            self.stdout.write(
+                self.style.ERROR("*> Failed to assign ambulance to location point. {} is formatted incorrectly.".format(msg.payload)))
+            return
 
         # Serialize data into object
         serializer = MQTTLocationSerializer(data=data)
@@ -175,10 +182,10 @@ class Client(BaseClient):
                         self.style.ERROR("*> Failed to publish location. Exception: {}".format(e)))
 
                 self.stdout.write(
-                        self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(user, ambulance)))
+                        self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(username, ambulance)))
             except Exception as e:
                 self.stdout.write(
-                    self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create. Exception: {}".format(user, ambulance, e)))
+                    self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create. Exception: {}".format(username, ambulance, e)))
 
         else:
             self.stdout.write(
