@@ -16,7 +16,7 @@ class CustomUserChangeForm(UserChangeForm):
 # adds the new fields to the form
 class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
-    fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('hospitals', 'ambulance',)}),)
+    fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('hospitals', 'hospital', 'ambulances', 'ambulance',)}),)
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Ambulances)

@@ -206,25 +206,12 @@ class MQTTHospitalListSerializer(serializers.ModelSerializer):
         model = User
         fields = ['hospitals']
 
-    def get_all_hospitals(self, obj):
-        hospitals = []
-        for h in Hospital.objects.all():
-            hospitals.append(MQTTHospitalSerializer(h).data)
-        return hospitals
 
-
-# Do we still use model serializer?
 class MQTTAmbulanceListSerializer(serializers.ModelSerializer):
 
     # grab all hospitals for now
-    ambulances = serializers.SerializerMethodField('get_all_ambulances')
+    ambulances = MQTTAmbulanceSerializer(read_only=True, many=True)
 
     class Meta:
         model = User
         fields = ['ambulances']
-
-    def get_all_ambulances(self, obj):
-        ambulances = []
-        for a in Ambulances.objects.all():
-            ambulances.append(MQTTAmbulanceSerializer(a).data)
-        return ambulances
