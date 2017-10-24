@@ -159,7 +159,6 @@ class Client(BaseClient):
         # TODO Find out which ambulance is linked to user
         ambulance = user.ambulance_id
         data['ambulance'] = ambulance
-        print(ambulance)
 
         # Serialize data into object
         serializer = MQTTLocationSerializer(data=data)
