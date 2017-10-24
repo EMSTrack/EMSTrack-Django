@@ -158,7 +158,13 @@ class Client(BaseClient):
 
         # TODO Find out which ambulance is linked to user
         ambulance = user.ambulance_id
-        data['ambulance'] = ambulance
+
+        try:
+            data['ambulance'] = ambulance
+        except TypeError:
+            self.stdout.write(
+                self.style.ERROR("*> Failed to assign ambulance to location point. {} is formatted incorrectly.".format(msg.payload)))
+            return
 
         # Serialize data into object
         serializer = MQTTLocationSerializer(data=data)
