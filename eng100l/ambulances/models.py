@@ -128,7 +128,11 @@ class Route(models.Model):
 
 class User(AbstractUser):
     hospitals = models.ManyToManyField(Hospital)
-    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, null=True, blank=True)
+    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True, blank=True, related_name="hosp_id")
+    ambulances = models.ManyToManyField(Ambulances)
+    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, null=True, blank=True, related_name ="ambul_id")
+
+
 
 class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
