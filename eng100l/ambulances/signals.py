@@ -9,4 +9,4 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 @receiver(post_save, sender=Ambulances)
 def ambulances_mqtt_trigger(sender, **kwargs):
     # do mqtt transactions here
-    print('Triggered')
+    print('Saved: {}'.format(kwargs['instance'].__dict__))
