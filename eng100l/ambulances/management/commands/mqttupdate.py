@@ -94,6 +94,24 @@ class UpdateClient(BaseClient):
             json = JSONRenderer().render(serializer.data)
             self.publish('hospital/{}/metadata'.format(h.id), json, qos=2, retain=True)
 
+    def create_equipment_count(self, obj):
+        # Publish new equipment count topic
+        hospital = obj.hospital
+        print('hospital/{}/equipment/{}'.format(hospital.id, obj.equipment))
+        self.publish('hospital/{}/equipment/{}'.format(hospital.id,
+                                                            obj.equipment),
+                        obj.quantity,
+                        qos=2,
+                        retain=True)
+
+        # Update the hospital configuration topics to account for the new/edited equipment
+        equipment = Equipment.objects.filter(id=obj.equipment.id).first()
+        self.edit_equipment(equipment)
+
+    def edit_equipment_count(self, obj):
+        # Editing EquipmentCount value is the same as creating a new EquipmentCount
+        self.create_equipment_count(obj)
+
     # Message publish callback
     def on_publish(self, client, userdata, mid):
         # make sure all is published before disconnecting
