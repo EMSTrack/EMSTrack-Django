@@ -70,12 +70,24 @@ class UpdateClient(BaseClient):
             json = JSONRenderer().render(serializer.data)
             self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
 
+    def create_equipment(self, obj):
+        # don't do anything
+        self.disconnect()
+
     def edit_equipment(self, obj):
         # Publish hospital configurations for hospitals that contain the edited equipment
         hospitals = []
 
+        # Find all the hospitals that have the edited equipment
+        # Create new topics for the edited equipment
         for equipmentCount in EquipmentCount.objects.filter(equipment=obj.id):
-            hospitals.append(equipmentCount.hospital)
+            hospital = equipmentCount.hospital
+            hospitals.append(hospital)
+            self.publish('hospital/{}/equipment/{}'.format(hospital.id,
+                                                                equipmentCount.equipment),
+                            equipmentCount.quantity,
+                            qos=2,
+                            retain=True)
 
         for h in hospitals:
             serializer = MQTTHospitalEquipmentSerializer(h)
