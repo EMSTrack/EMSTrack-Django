@@ -25,6 +25,7 @@ def connect_mqtt(model_name, args):
         'CLIENT_ID': 'django',
         'CLEAN_SESSION': True
     }
+
     broker.update(settings.MQTT)
 
     # Start client
@@ -56,5 +57,6 @@ def hospital_mqtt_trigger(sender, **kwargs):
 @receiver(post_delete, sender=Equipment)
 @receiver(post_save, sender=Equipment)
 def hospital_equipment_mqtt_trigger(sender, **kwargs):
-    # TODO
-    print("TODO")
+    connect_mqtt("equipment", kwargs)
+
+

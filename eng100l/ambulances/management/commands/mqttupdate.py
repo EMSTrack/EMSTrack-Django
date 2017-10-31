@@ -70,6 +70,18 @@ class UpdateClient(BaseClient):
             json = JSONRenderer().render(serializer.data)
             self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
 
+    def edit_equipment(self, obj):
+        # Publish hospital configurations for hospitals that contain the edited equipment
+        hospitals = []
+
+        for equipmentCount in EquipmentCount.objects.filter(equipment=obj.id):
+            hospitals.append(Hospital.objects.filter(id=equipmentCount.hospital))
+
+        for h in hospitals:
+            serializer = MQTTHospitalEquipmentSerializer(h)
+            json = JSONRenderer().render(serializer.data)
+            self.publish('hospital/{}/metadata'.format(h.id), json, qos=2, retain=True)
+
     # Message publish callback
     def on_publish(self, client, userdata, mid):
         # make sure all is published before disconnecting
