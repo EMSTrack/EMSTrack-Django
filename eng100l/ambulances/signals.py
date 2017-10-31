@@ -41,4 +41,7 @@ def ambulances_mqtt_trigger(sender, **kwargs):
     print('Saved: {}'.format(kwargs['instance'].__dict__))
 
     id = kwargs['instance'].__dict__['id']
-    connect_mqtt("create_ambulance", id)
+
+    func_name = "create_ambulance" if kwargs['created'] else "edit_ambulance"
+
+    connect_mqtt(func_name, id)
