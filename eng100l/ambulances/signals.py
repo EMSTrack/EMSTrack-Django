@@ -9,8 +9,13 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 from .management.commands.mqttupdate import UpdateClient
 
 
-# Connecting to mqtt
-def connect_mqtt(func, obj):
+# Connect to mqtt
+def connect_mqtt(model_name, args):
+
+    # Generate (name of) function to call
+    func = ("create_" if args['created'] else "edit_") + model_name
+
+    # Instantiate broker
     broker = {
         'USERNAME': '',
         'PASSWORD': '',
@@ -21,8 +26,11 @@ def connect_mqtt(func, obj):
         'CLEAN_SESSION': True
     }
     broker.update(settings.MQTT)
-    client = UpdateClient(broker, None, None, func, obj, 0)
 
+    # Start client
+    client = UpdateClient(broker, None, None, func, args['instance'], 0)
+
+    # Loop until client disconnects
     try:
     	client.loop_forever()
 
@@ -35,9 +43,18 @@ def connect_mqtt(func, obj):
 
 @receiver(post_delete, sender=Ambulances)
 @receiver(post_save, sender=Ambulances)
-def ambulances_mqtt_trigger(sender, **kwargs):
-    # Determine MQTT function to run
-    func_name = "create_ambulance" if kwargs['created'] else "edit_ambulance"
+def ambulance_mqtt_trigger(sender, **kwargs):
+    # Connect to mqtt
+    connect_mqtt("ambulance", kwargs)
 
-    # Connecto to MQTT and execute
-    connect_mqtt(func_name, kwargs['instance'])
+@receiver(post_delete, sender=Hospital)
+@receiver(post_save, sender=Hospital)
+def hospital_mqtt_trigger(sender, **kwargs):
+    # Connect to mqtt
+    connect_mqtt("hospital", kwargs)
+
+@receiver(post_delete, sender=Equipment)
+@receiver(post_save, sender=Equipment)
+def hospital_equipment_mqtt_trigger(sender, **kwargs):
+    # TODO
+    print("TODO")

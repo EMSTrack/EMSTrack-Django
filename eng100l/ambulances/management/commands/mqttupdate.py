@@ -2,7 +2,7 @@
 from ambulances.management.commands._client import BaseClient
 
 from ambulances.models import Ambulances, User
-from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer
+from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer, MQTTHospitalEquipmentSerializer, MQTTHospitalListSerializer
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
@@ -42,20 +42,33 @@ class UpdateClient(BaseClient):
 
     def create_ambulance(self, obj):
 
-        # Publish location
+        # Publish to new location topic
         serializer = MQTTAmbulanceLocSerializer(obj)
         json = JSONRenderer().render(serializer.data)
         self.publish('ambulance/{}/location'.format(obj.id), json, qos=2, retain=True)
 
-        # Publish status
+        # Publish to new status topic
         self.publish('ambulance/{}/status'.format(obj.id), obj.status.name, qos=2, retain=True)
 
     def edit_ambulance(self, obj):
-        # Change ambulance lists for all users
+        # Publish new ambulance lists for all users
         for user in User.objects.filter(ambulances=obj.id):
             serializer = MQTTAmbulanceListSerializer(user)
             json = JSONRenderer().render(serializer.data)
             self.publish('user/{}/ambulances'.format(user.username), json, qos=2, retain=True)
+
+    def create_hospital(self, obj):
+        # Publish config file for hospital
+        serializer = MQTTHospitalEquipmentSerializer(obj)
+        json = JSONRenderer().render(serializer.data)
+        self.publish('hospital/{}/metadata'.format(obj.id), json, qos=2, retain=True)
+
+    def edit_hospital(self, obj):
+        # Publish new hospital lists for all users
+        for user in User.objects.filter(hospitals=obj.id):
+            serializer = MQTTHospitalListSerializer(user)
+            json = JSONRenderer().render(serializer.data)
+            self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
