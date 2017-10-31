@@ -6,10 +6,11 @@ from django.conf import settings
 from .models import Status, Ambulances, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
 
-from .management.commands.mqttsignal import SignalClient
+from .management.commands.mqttupdate import UpdateClient
 
 
-def connect_mqtt(func, id):
+# Connecting to mqtt
+def connect_mqtt(func, obj):
     broker = {
         'USERNAME': '',
         'PASSWORD': '',
@@ -19,10 +20,8 @@ def connect_mqtt(func, id):
         'CLIENT_ID': 'django',
         'CLEAN_SESSION': True
     }
-
     broker.update(settings.MQTT)
-
-    client = SignalClient(broker, None, None, func, id, 0)
+    client = UpdateClient(broker, None, None, func, obj, 0)
 
     try:
     	client.loop_forever()
@@ -37,11 +36,8 @@ def connect_mqtt(func, id):
 @receiver(post_delete, sender=Ambulances)
 @receiver(post_save, sender=Ambulances)
 def ambulances_mqtt_trigger(sender, **kwargs):
-    # do mqtt transactions here
-    print('Saved: {}'.format(kwargs['instance'].__dict__))
-
-    id = kwargs['instance'].__dict__['id']
-
+    # Determine MQTT function to run
     func_name = "create_ambulance" if kwargs['created'] else "edit_ambulance"
 
-    connect_mqtt(func_name, id)
+    # Connecto to MQTT and execute
+    connect_mqtt(func_name, kwargs['instance'])
