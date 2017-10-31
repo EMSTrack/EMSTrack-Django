@@ -1,7 +1,7 @@
 
 from ambulances.management.commands._client import BaseClient
 
-from ambulances.models import Ambulances, User
+from ambulances.models import Ambulances, User, Equipment, EquipmentCount, Hospital
 from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer, MQTTHospitalEquipmentSerializer, MQTTHospitalListSerializer
 
 from django.utils.six import BytesIO
@@ -75,7 +75,7 @@ class UpdateClient(BaseClient):
         hospitals = []
 
         for equipmentCount in EquipmentCount.objects.filter(equipment=obj.id):
-            hospitals.append(Hospital.objects.filter(id=equipmentCount.hospital))
+            hospitals.append(equipmentCount.hospital)
 
         for h in hospitals:
             serializer = MQTTHospitalEquipmentSerializer(h)
