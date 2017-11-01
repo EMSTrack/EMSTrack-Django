@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.management.commands._client import BaseClient
+from ambulances.management._client import BaseClient
 
 from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call, User
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer, MQTTAmbulanceListSerializer
@@ -120,10 +120,9 @@ class Client(BaseClient):
         # For now, each user will have access to all hospitals
         for user in User.objects.all():
 
+            # Serialize and publish
             serializer = MQTTHospitalListSerializer(user)
             json = JSONRenderer().render(serializer.data)
-
-            # Publish json - be sure to do this in the seeder
             self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
 
             if self.verbosity > 0:
@@ -139,10 +138,9 @@ class Client(BaseClient):
         # For now, each user will have access to all hospitals
         for user in User.objects.all():
 
+            # Serialize and publish
             serializer = MQTTAmbulanceListSerializer(user)
             json = JSONRenderer().render(serializer.data)
-
-            # Publish json - be sure to do this in the seeder
             self.publish('user/{}/ambulances'.format(user.username), json, qos=2, retain=True)
 
             if self.verbosity > 0:
