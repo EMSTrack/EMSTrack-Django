@@ -11,6 +11,8 @@ from .management.mqttupdate import UpdateClient
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
 
+import sys
+
 # Connect to mqtt
 def connect_mqtt(model_name, args):
 
