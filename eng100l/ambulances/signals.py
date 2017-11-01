@@ -72,10 +72,10 @@ def hospital_equipment_mqtt_trigger(sender, **kwargs):
 def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
     connect_mqtt("equipment_count", kwargs)
 
-#@receiver(post_save, sender=User)
-#def user_trigger(sender, **kwargs):
-#    if kwargs['created']:
-#        connect_mqtt("user", kwargs)
+@receiver(post_save, sender=User)
+def user_trigger(sender, **kwargs):
+    if kwargs['created']:
+        connect_mqtt("user", kwargs)
 
 @receiver(m2m_changed, sender=User.ambulances.through)
 def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
