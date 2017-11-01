@@ -57,6 +57,9 @@ class UpdateClient(BaseClient):
             json = JSONRenderer().render(serializer.data)
             self.publish('user/{}/ambulances'.format(user.username), json, qos=2, retain=True)
 
+        # Publish to new status topic
+        self.publish('ambulance/{}/status'.format(obj.id), obj.status.name, qos=2, retain=True)
+
     def create_hospital(self, obj):
         # Publish config file for hospital
         serializer = MQTTHospitalEquipmentSerializer(obj)
