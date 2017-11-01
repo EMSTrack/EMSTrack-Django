@@ -1,5 +1,5 @@
 
-from ambulances.management.commands._client import BaseClient
+from ambulances.management._client import BaseClient
 
 from ambulances.models import Ambulances, User, Equipment, EquipmentCount, Hospital
 from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer, MQTTHospitalEquipmentSerializer, MQTTHospitalListSerializer
@@ -114,19 +114,27 @@ class UpdateClient(BaseClient):
         self.create_equipment_count(obj)
 
     def create_user(self, obj):
+        self.create_user_ambulance_list(obj)
+        self.create_user_hospital_list(obj)
+
+    def create_user_hospital_list(self, obj):
         # Publish hospital access list
         serializer = MQTTHospitalListSerializer(obj)
         json = JSONRenderer().render(serializer.data)
         self.publish('user/{}/hospitals'.format(obj.username), json, qos=2, retain=True)
 
+    def create_user_ambulance_list(self, obj):
         # Publish ambulance access list
         serializer = MQTTAmbulanceListSerializer(obj)
         json = JSONRenderer().render(serializer.data)
         self.publish('user/{}/ambulances'.format(obj.username), json, qos=2, retain=True)
 
-    def edit_user(self, obj):
+    def edit_user_hospital_list(self, obj):
         # Editing user does the same thing that create user does
-        self.create_user(obj)
+        self.create_user_hospital_list(obj)
+
+    def edit_user_ambulance_list(self, obj):
+        self.create_user_ambulance_list(obj)
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):

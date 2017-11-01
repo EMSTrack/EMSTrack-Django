@@ -6,7 +6,7 @@ from django.conf import settings
 from .models import Status, Ambulances, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
 
-from .management.commands.mqttupdate import UpdateClient
+from .management.mqttupdate import UpdateClient
 
 
 # Connect to mqtt
@@ -64,9 +64,19 @@ def hospital_equipment_mqtt_trigger(sender, **kwargs):
 def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
     connect_mqtt("equipment_count", kwargs)
 
+@receiver(post_save, sender=User)
+def user_trigger(sender, **kwargs):
+    if kwargs['created']:
+        connect_mqtt("user", kwargs)
+
 @receiver(m2m_changed, sender=User.ambulances.through)
-@receiver(m2m_changed, sender=User.hospitals.through)
-def user_mqtt_trigger(sender, action, instance, **kwargs):
+def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
     kwargs['instance'] = instance
     kwargs['created'] = False
-    connect_mqtt("user", kwargs)
+    connect_mqtt("user_ambulance_list", kwargs)
+
+@receiver(m2m_changed, sender=User.hospitals.through)
+def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
+    kwargs['instance'] = instance
+    kwargs['created'] = False
+    connect_mqtt("user_hospital_list", kwargs)

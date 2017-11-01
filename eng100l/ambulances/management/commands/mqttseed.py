@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.management.commands._client import BaseClient
+from ambulances.management._client import BaseClient
 
 from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call, User
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer, MQTTAmbulanceListSerializer
