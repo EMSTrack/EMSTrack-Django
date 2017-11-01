@@ -8,6 +8,8 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 
 from .management.mqttupdate import UpdateClient
 
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style, no_style
 
 # Connect to mqtt
 def connect_mqtt(model_name, args):
@@ -29,7 +31,11 @@ def connect_mqtt(model_name, args):
     broker.update(settings.MQTT)
 
     # Start client
-    client = UpdateClient(broker, None, None, func, args['instance'], 0)
+    stdout = OutputWrapper(sys.stdout)
+    style = color_style()
+    
+    client = UpdateClient(broker, stdout, style,
+                          func, args['instance'], 0)
 
     # Loop until client disconnects
     try:
