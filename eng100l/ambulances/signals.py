@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
 
 from django.conf import settings
@@ -64,7 +64,9 @@ def hospital_equipment_mqtt_trigger(sender, **kwargs):
 def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
     connect_mqtt("equipment_count", kwargs)
 
-@receiver(post_delete, sender=User)
-@receiver(post_save, sender=User)
-def user_mqtt_trigger(sender, **kwargs):
+@receiver(m2m_changed, sender=User.ambulances.through)
+@receiver(m2m_changed, sender=User.hospitals.through)
+def user_mqtt_trigger(sender, action, instance, **kwargs):
+    kwargs['instance'] = instance
+    kwargs['created'] = False
     connect_mqtt("user", kwargs)
