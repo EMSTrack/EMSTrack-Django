@@ -113,6 +113,21 @@ class UpdateClient(BaseClient):
         # Editing EquipmentCount value is the same as creating a new EquipmentCount
         self.create_equipment_count(obj)
 
+    def create_user(self, obj):
+        # Publish hospital access list
+        serializer = MQTTHospitalListSerializer(obj)
+        json = JSONRenderer().render(serializer.data)
+        self.publish('user/{}/hospitals'.format(obj.username), json, qos=2, retain=True)
+
+        # Publish ambulance access list
+        serializer = MQTTAmbulanceListSerializer(obj)
+        json = JSONRenderer().render(serializer.data)
+        self.publish('user/{}/ambulances'.format(obj.username), json, qos=2, retain=True)
+
+    def edit_user(self, obj):
+        # Editing user does the same thing that create user does
+        self.create_user(obj)
+
     # Message publish callback
     def on_publish(self, client, userdata, mid):
         # make sure all is published before disconnecting

@@ -61,5 +61,10 @@ def hospital_equipment_mqtt_trigger(sender, **kwargs):
 
 @receiver(post_delete, sender=EquipmentCount)
 @receiver(post_save, sender=EquipmentCount)
-def hospital_equipment_count_trigger(sender, **kwargs):
+def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
     connect_mqtt("equipment_count", kwargs)
+
+@receiver(post_delete, sender=User)
+@receiver(post_save, sender=User)
+def user_mqtt_trigger(sender, **kwargs):
+    connect_mqtt("user", kwargs)

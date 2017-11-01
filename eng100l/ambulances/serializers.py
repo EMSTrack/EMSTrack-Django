@@ -208,8 +208,6 @@ class MQTTHospitalListSerializer(serializers.ModelSerializer):
 
 
 class MQTTAmbulanceListSerializer(serializers.ModelSerializer):
-
-    # grab all hospitals for now
     ambulances = MQTTAmbulanceSerializer(read_only=True, many=True)
 
     class Meta:

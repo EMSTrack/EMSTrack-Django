@@ -120,10 +120,9 @@ class Client(BaseClient):
         # For now, each user will have access to all hospitals
         for user in User.objects.all():
 
+            # Serialize and publish
             serializer = MQTTHospitalListSerializer(user)
             json = JSONRenderer().render(serializer.data)
-
-            # Publish json - be sure to do this in the seeder
             self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
 
             if self.verbosity > 0:
@@ -139,10 +138,9 @@ class Client(BaseClient):
         # For now, each user will have access to all hospitals
         for user in User.objects.all():
 
+            # Serialize and publish
             serializer = MQTTAmbulanceListSerializer(user)
             json = JSONRenderer().render(serializer.data)
-
-            # Publish json - be sure to do this in the seeder
             self.publish('user/{}/ambulances'.format(user.username), json, qos=2, retain=True)
 
             if self.verbosity > 0:
