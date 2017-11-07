@@ -157,7 +157,7 @@ class Client(BaseClient):
         data = JSONParser().parse(stream)
 
         # TODO Find out which ambulance is linked to user
-        ambulance = user.ambulance_id
+        ambulance = user.ambulance.id
 
         try:
             data['ambulance'] = ambulance
