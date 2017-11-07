@@ -6,7 +6,7 @@ from django.conf import settings
 from ambulances.management._client import BaseClient
 
 from ambulances.models import EquipmentCount, Ambulances, Status, Call, User, Hospital
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer
+from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer, MQTTUserLocationSerializer
 
 from django.utils.six import BytesIO
 from django.core.exceptions import ObjectDoesNotExist
@@ -157,9 +157,10 @@ class Client(BaseClient):
         data = JSONParser().parse(stream)
 
         # TODO Find out which ambulance is linked to user
-        ambulance = user.ambulance_id
+        ambulance = user.ambulance.id
 
         try:
+            data['user'] = user.id
             data['ambulance'] = ambulance
         except TypeError:
             self.stdout.write(
@@ -167,7 +168,7 @@ class Client(BaseClient):
             return
 
         # Serialize data into object
-        serializer = MQTTLocationSerializer(data=data)
+        serializer = MQTTUserLocationSerializer(data=data)
 
         if serializer.is_valid():
             try:
