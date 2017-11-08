@@ -218,7 +218,7 @@ class Client(BaseClient):
 
             # Publish json - be sure to do this in the seeder
             client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
-            client.publish('ambulance/{}/status'.format(amb_id), ambulance.status.name, qos=2, retain=True)
+            # client.publish('ambulance/{}/status'.format(amb_id), ambulance.status.name, qos=2, retain=True)
 
         except ObjectDoesNotExist:
             self.stdout.write(
@@ -239,21 +239,10 @@ class Client(BaseClient):
             return
 
         status_str = msg.payload.decode("utf-8")
-        ambulance = None
-
-        try:
-            ambulance = Ambulances.objects.get(id=user.ambulance.id)
-
-        except ObjectDoesNotExist:
-            self.stdout.write(
-                self.style.ERROR("*> Ambulance {} does not exist".format(user.ambulance.id)))
-            return
 
         try:
             status = Status.objects.get(name=status_str)
-            if ambulance.status.name != status_str:
-                ambulance.status = status
-                ambulance.save()
+            Ambulances.objects.filter(id=user.ambulance.id).update(status=status)
             self.stdout.write(self.style.SUCCESS(
                 ">> Successful status update: {} for ambulance {}").format(status_str, user.ambulance.id))
 
