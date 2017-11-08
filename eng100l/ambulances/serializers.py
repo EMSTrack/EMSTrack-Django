@@ -128,6 +128,18 @@ class MQTTLocationSerializer(serializers.ModelSerializer):
         model = LocationPoint
         fields = ['location', 'timestamp', 'ambulance']
 
+class MQTTUserLocationSerializer(serializers.ModelSerializer):
+
+    # Define location as a Pointfield (drf-extra-field package auto serializes this)
+    location = PointField(required=True)
+
+    # Defines a way to create a model from the JSON data
+    def create(self, validated_data):
+        return LocationPoint.objects.create(**validated_data)
+
+    class Meta:
+        model = LocationPoint
+        fields = ['location', 'timestamp', 'ambulance', 'user']
 
 class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
 
