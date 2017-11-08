@@ -41,7 +41,7 @@ class Client(BaseClient):
         self.client.message_callback_add('user/+/location', self.on_user_loc)
 
         # status handler
-        self.client.message_callback_add('ambulance/+/status', self.on_status)
+        self.client.message_callback_add('user/+/status', self.on_user_status)
 
         # ambulance linking handler
         self.client.message_callback_add('user/+/ambulance', self.on_amb_sel)
@@ -230,9 +230,10 @@ class Client(BaseClient):
                 self.style.ERROR("Error parsing data"))
 
     # Update status from dispatch team
-    def on_status(self, client, userdata, msg):
+    def on_user_status(self, client, userdata, msg):
         topic = msg.topic.split('/')
-        amb_id = topic[1]
+        username = topic[1]
+        user = User.objects.get(username=username)
 
         if not msg.payload:
             return
@@ -241,11 +242,11 @@ class Client(BaseClient):
         ambulance = None
 
         try:
-            ambulance = Ambulances.objects.get(id=amb_id)
+            ambulance = Ambulances.objects.get(id=user.ambulance.id)
 
         except ObjectDoesNotExist:
             self.stdout.write(
-                self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
+                self.style.ERROR("*> Ambulance {} does not exist".format(user.ambulance.id)))
             return
 
         try:
@@ -254,7 +255,7 @@ class Client(BaseClient):
                 ambulance.status = status
                 ambulance.save()
             self.stdout.write(self.style.SUCCESS(
-                ">> Successful status update: {} for ambulance {}").format(status_str, amb_id))
+                ">> Successful status update: {} for ambulance {}").format(status_str, user.ambulance.id))
 
         except ObjectDoesNotExist:
             self.stdout.write(
@@ -264,7 +265,7 @@ class Client(BaseClient):
         except Exception as e:
             print(e)
             self.stdout.write(
-                self.style.ERROR("*> Error saving status for ambulance {}".format(amb_id)))
+                self.style.ERROR("*> Error saving status for ambulance {}".format(user.ambulance.id)))
 
     def on_amb_sel(self, client, userdata, msg):
         topic = msg.topic.split('/')
