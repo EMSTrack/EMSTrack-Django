@@ -71,7 +71,7 @@ class Client(BaseClient):
         # increment pubcount then publish
         self.pubcount += 1
         result, mid = self.client.publish(topic, message, *vargs, **kwargs)
-        print('< Publishing[{}]: {} {}'.format(mid, topic, message))
+        print('< Publishing [{}]: {} {}'.format(mid, topic, message))
         
     def on_publish(self, client, userdata, mid):
         # make sure all is published before disconnecting
@@ -96,8 +96,8 @@ broker = {
     'HOST': 'localhost',
     'PORT': 1883,
     'KEEPALIVE': 60,
-    'CLIENT_ID': 'django',
-    'CLEAN_SESSION': True
+    'CLIENT_ID': 'test',
+    'CLEAN_SESSION': False
 }
 broker.update(MQTT)
 
@@ -203,12 +203,12 @@ def test2():
 
             # modify equipment
             self.publish('hospital/4/equipment/Tomography', 1,
-                         qos=2, retain=False)
+                         qos=2, retain=True)
             client.expect('hospital/4/equipment/Tomography', '1')
 
             # revert back
             self.publish('hospital/4/equipment/Tomography', 3,
-                         qos=2, retain=False)
+                         qos=2, retain=True)
             client.expect('hospital/4/equipment/Tomography', '3')
             
         def hospital_logout(self):
