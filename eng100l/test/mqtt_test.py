@@ -1,6 +1,7 @@
 import pytest
 
 import sys, time
+import json
 
 from ambulances.management._client import BaseClient
 
@@ -59,6 +60,11 @@ class Client(BaseClient):
             if not self.expect_fifo[msg.topic]:
                 del self.expect_fifo[msg.topic]
 
+            # parse json
+            if value and value[0] == '{' and value[-1] == '}':
+                print('parse json')
+                value = json.loads(value)
+                
             print('> MATCH: {} {} == {}'.format(msg.topic, value, expect))
 
             self.expectcount -= 1
@@ -139,7 +145,7 @@ def test1():
 
             # list of hospitals
             client.expect('user/testuser1/hospitals',
-                          '{"hospitals":[{"id":4,"name":"General Hospital"},{"id":5,"name":"Popular Insurance IMSS Clinic"}]}')
+                          {"hospitals": [{"id":4,"name":"General Hospital"},{"id":5,"name":"Popular Insurance IMSS Clinic"}]})
             
             # login to hospital
             self.publish('user/testuser1/hospital', 4,
@@ -148,7 +154,7 @@ def test1():
 
             # get hospital metadata
             client.expect('hospital/4/metadata',
-                          '{"equipment":[{"name":"Tomography","toggleable":true},{"name":"Blood laboratory","toggleable":true},{"name":"Ultrasound","toggleable":true},{"name":"Radiograph","toggleable":true}]}')
+                          {"equipment":[{"name":"Tomography","toggleable":True},{"name":"Blood laboratory","toggleable":True},{"name":"Ultrasound","toggleable":True},{"name":"Radiograph","toggleable":True}]})
 
             # get hospital equipment
             client.expect('hospital/4/equipment/Tomography', '3')
@@ -188,7 +194,7 @@ def test2():
 
             # list of hospitals
             client.expect('user/testuser1/hospitals',
-                          '{"hospitals":[{"id":4,"name":"General Hospital"},{"id":5,"name":"Popular Insurance IMSS Clinic"}]}')
+                          {"hospitals":[{"id":4,"name":"General Hospital"},{"id":5,"name":"Popular Insurance IMSS Clinic"}]})
             
             # login to hospital
             self.publish('user/testuser1/hospital', 4,
@@ -197,7 +203,7 @@ def test2():
 
             # get hospital metadata
             client.expect('hospital/4/metadata',
-                          '{"equipment":[{"name":"Tomography","toggleable":true},{"name":"Blood laboratory","toggleable":true},{"name":"Ultrasound","toggleable":true},{"name":"Radiograph","toggleable":true}]}')
+                          {"equipment":[{"name":"Tomography","toggleable":True},{"name":"Blood laboratory","toggleable":True},{"name":"Ultrasound","toggleable":True},{"name":"Radiograph","toggleable":True}]})
 
         def hospital_equipment(self):
 
