@@ -60,8 +60,8 @@ class Client(BaseClient):
         # handle unknown messages
         self.stdout.write(
             self.style.WARNING(
-                "*> Unknown message topic {} {}".format(msg.topic,
-                                                        msg.payload)))
+                "*> Ignoring message topic {} {}".format(msg.topic,
+                                                         msg.payload)))
 
     # Update hospital resources
     def on_hospital(self, client, userdata, msg):

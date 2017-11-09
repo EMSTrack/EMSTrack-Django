@@ -63,6 +63,18 @@ class BaseClient():
     def disconnect(self):
         self.client.disconnect()
         
+    # loop
+    def loop(self, *args, **kwargs):
+        self.client.loop(*args, **kwargs)
+        
+    # loop_start
+    def loop_start(self):
+        self.client.loop_start()
+
+    # loop_stop
+    def loop_stop(self, *args, **kwargs):
+        self.client.loop_stop(*args, **kwargs)
+        
     # loop forever
     def loop_forever(self):
         self.client.loop_forever()

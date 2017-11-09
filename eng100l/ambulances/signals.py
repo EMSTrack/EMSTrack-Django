@@ -31,7 +31,6 @@ def connect_mqtt(model_name, args):
         'CLIENT_ID': 'django',
         'CLEAN_SESSION': True
     }
-
     broker.update(settings.MQTT)
 
     # Start client

@@ -1,0 +1,8 @@
+sudo supervisorctl stop mqttclient
+sudo service mosquitto stop
+sudo rm /var/lib/mosquitto/mosquitto.db
+python3 manage.py flush
+python3 manage.py loaddata ../docs/db.json
+sudo service mosquitto start
+python3 manage.py mqttseed
+sudo supervisorctl start mqttclient
