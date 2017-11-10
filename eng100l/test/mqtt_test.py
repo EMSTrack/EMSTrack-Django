@@ -19,7 +19,7 @@ def compare_json(a, b):
             
         # iterate over sorted list
         for ia, ib in zip(sorted(a), sorted(b)):
-            if not compare(ia, ib):
+            if not compare_json(ia, ib):
                 return False
                 
         # same list!
@@ -34,7 +34,7 @@ def compare_json(a, b):
             
         # iterate over dictionary keys
         for k, v in a.items():
-            if not compare(v, b[k]):
+            if not compare_json(v, b[k]):
                 return False
                 
         # same dict
