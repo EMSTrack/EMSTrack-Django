@@ -156,6 +156,12 @@ class Client(BaseClient):
         stream = BytesIO(msg.payload)
         data = JSONParser().parse(stream)
 
+        # has ambulance?
+        if not user.ambulance:
+            self.stdout.write(
+                self.style.ERROR("*> User '{}' is not currently assigned to any ambulances.".format(username)))
+            return
+            
         # TODO Find out which ambulance is linked to user
         ambulance = user.ambulance.id
 
@@ -184,6 +190,7 @@ class Client(BaseClient):
 
                 self.stdout.write(
                         self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(username, ambulance)))
+                
             except Exception as e:
                 self.stdout.write(
                     self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create. Exception: {}".format(username, ambulance, e)))
@@ -355,7 +362,7 @@ class Command(BaseCommand):
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLIENT_ID': 'django',
-            'CLEAN_SESSION': False
+            'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
 

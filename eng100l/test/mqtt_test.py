@@ -10,17 +10,18 @@ from eng100l.settings import MQTT
 
 def compare_json(a, b):
 
-    print('a = {}, b = {}'.format(a, b))
+    #print('a = {}, b = {}'.format(a, b))
     
     # lists
     if isinstance(a, list):
 
         # list of same size?
-        if not isinstance(b, list) or len(a) != len(b):
+        if (not isinstance(b, list)) or len(a) != len(b):
             return False
             
         # iterate over sorted list
-        for ia, ib in zip(sorted(a), sorted(b)):
+        for ia, ib in zip(sorted(a, key=lambda k: str(k)),
+                          sorted(b, key=lambda k: str(k))):
             if not compare_json(ia, ib):
                 return False
                 
@@ -31,7 +32,7 @@ def compare_json(a, b):
     if isinstance(a, dict):
 
         # dict of same size?
-        if not isinstance (b, dict) or len(a) != len(b):
+        if (not isinstance (b, dict)) or len(a) != len(b):
             return False
             
         # iterate over dictionary keys
@@ -85,19 +86,13 @@ class Client(BaseClient):
         # subscribe to everything
         client.subscribe('#', 2)
         
-        # initialize pubcount
-        self.pubcount = 0
-
-        # initialize expectcount
-        self.expectcount = 0
-        
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
         if msg.topic in self.expect_fifo:
 
             # pop from expected list
-            expect = self.expect_fifo[msg.topic].pop()
+            expect = self.expect_fifo[msg.topic].pop(0)
             value = msg.payload.decode()
 
             # remove topic if empty list
@@ -113,8 +108,10 @@ class Client(BaseClient):
 
             self.expectcount -= 1
             assert compare_json(value, expect)
+
+            print('< expectcount: {}'.format(self.expectcount))
             
-        elif False:
+        elif True: #False:
             print('* ignored message: {} {}'.format(msg.topic, msg.payload))
 
     def publish(self, topic, message, *vargs, **kwargs):
@@ -131,25 +128,28 @@ class Client(BaseClient):
     def expect(self, topic, msg):
         print('> Expecting: {} {}'.format(topic, msg))
         if topic in self.expect_fifo:
-            self.expect_fifo[topic].insert(0, msg)
+            self.expect_fifo[topic].append(msg)
         else:
             self.expect_fifo[topic] = [msg]
         self.expectcount += 1 
 
+        print('> expectcount: {}'.format(self.expectcount))
+        
     # user defined testing
     def test(self):
         print('WARNING: NO TESTING PERFORMED. YOU MUST OVERLOAD test')
 
 style = Style()
-        
-broker = {
+
+broker = {}
+broker.update(MQTT)
+broker.update({
     'HOST': 'localhost',
     'PORT': 1883,
     'KEEPALIVE': 60,
     'CLIENT_ID': 'test',
-    'CLEAN_SESSION': False
-}
-broker.update(MQTT)
+    'CLEAN_SESSION': True
+})
 
 def run_test(client):
 
@@ -163,16 +163,18 @@ def run_test(client):
         while not client.done():
             time.sleep(1)
             
+        time.sleep(4)
+        
         client.loop_stop()
             
+        time.sleep(4)
+        
     except KeyboardInterrupt:
         pass
         
     finally:
         client.disconnect()
 
-    print('done = {}'.format(client.done()))
-        
 def test1():
 
     class TestHospitalLogin(Client):
@@ -181,7 +183,11 @@ def test1():
 
             self.hospital_login()
 
-            time.sleep(1)
+            time.sleep(4)
+            
+            self.hospital_equipment()
+            
+            time.sleep(4)
             
             self.hospital_logout()
             
@@ -204,49 +210,8 @@ def test1():
             client.expect('hospital/4/equipment/Tomography', '3')
             client.expect('hospital/4/equipment/Blood laboratory', '2')
             client.expect('hospital/4/equipment/Ultrasound', '6')
-            client.expect('hospital/4/equipment/Radiography', '5')
+            client.expect('hospital/4/equipment/Radiograph', '5')
             
-        def hospital_logout(self):
-
-            self.publish('user/testuser1/hospital', -1,
-                         qos=2,
-                         retain=False)
-
-            client.expect('user/testuser1/hospital', '-1')
-            
-    client = TestHospitalLogin(broker, sys.stdout, style, verbosity = 1)
-
-    run_test(client)
-
-def test2():
-
-    class TestHospitalEquipment(Client):
-
-        def test(self):
-
-            self.hospital_login()
-
-            self.hospital_equipment()
-            
-            time.sleep(1)
-            
-            self.hospital_logout()
-            
-        def hospital_login(self):
-
-            # list of hospitals
-            client.expect('user/testuser1/hospitals',
-                          {"hospitals":[{"id":4,"name":"General Hospital"},{"id":5,"name":"Popular Insurance IMSS Clinic"}]})
-            
-            # login to hospital
-            self.publish('user/testuser1/hospital', 4,
-                         qos=2, retain=False)
-            client.expect('user/testuser1/hospital', '4')
-
-            # get hospital metadata
-            client.expect('hospital/4/metadata',
-                          {"equipment":[{"name":"Tomography","toggleable":True},{"name":"Blood laboratory","toggleable":True},{"name":"Ultrasound","toggleable":True},{"name":"Radiograph","toggleable":True}]})
-
         def hospital_equipment(self):
 
             # modify equipment
@@ -267,11 +232,11 @@ def test2():
 
             client.expect('user/testuser1/hospital', '-1')
             
-    client = TestHospitalEquipment(broker, sys.stdout, style, verbosity = 1)
+    client = TestHospitalLogin(broker, sys.stdout, style, verbosity = 1)
 
     run_test(client)
     
-def _test3():
+def test2():
 
     class TestAmbulances(Client):
 
@@ -281,7 +246,7 @@ def _test3():
 
             self.ambulance_location()
             
-            #self.ambulance_logout()
+            self.ambulance_logout()
             
         def ambulance_login(self):
 
@@ -301,7 +266,7 @@ def _test3():
                          '{"location":{"latitude":32.41902124227067,"longitude":-116.9496227294922},"timestamp": "2019-11-9 14:31:59"}',
                          qos=2, retain=True)
             client.expect('ambulance/12/location',
-                          {"location":{"latitude":32.48102124227067,"longitude":-116.9496227294922},"orientation":0.0})
+                          {"location":{"latitude":32.41902124227067,"longitude":-116.9496227294922},"orientation":200.0})
 
         def ambulance_logout(self):
 

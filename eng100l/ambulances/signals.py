@@ -74,17 +74,17 @@ def hospital_mqtt_trigger(sender, **kwargs):
     # Connect to mqtt
     connect_mqtt("hospital", kwargs)
 
-@receiver(post_delete, sender=Equipment)
-@receiver(post_save, sender=Equipment)
-@disable_for_loaddata
-def hospital_equipment_mqtt_trigger(sender, **kwargs):
-    connect_mqtt("equipment", kwargs)
+#@receiver(post_delete, sender=Equipment)
+#@receiver(post_save, sender=Equipment)
+#@disable_for_loaddata
+#def hospital_equipment_mqtt_trigger(sender, **kwargs):
+#    connect_mqtt("equipment", kwargs)
 
-@receiver(post_delete, sender=EquipmentCount)
-@receiver(post_save, sender=EquipmentCount)
-@disable_for_loaddata
-def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
-    connect_mqtt("equipment_count", kwargs)
+#@receiver(post_delete, sender=EquipmentCount)
+#@receiver(post_save, sender=EquipmentCount)
+#@disable_for_loaddata
+#def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
+#    connect_mqtt("equipment_count", kwargs)
 
 @receiver(post_save, sender=User)
 @disable_for_loaddata
