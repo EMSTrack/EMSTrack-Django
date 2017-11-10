@@ -8,6 +8,42 @@ from ambulances.management._client import BaseClient
 # instead of settings
 from eng100l.settings import MQTT
 
+def compare_json(a, b):
+
+    # lists
+    if isinstance(a, list):
+
+        # list of same size?
+        if not isinstance(b, list) or len(a) != len(b):
+            return False
+            
+        # iterate over sorted list
+        for ia, ib in zip(sorted(a), sorted(b)):
+            if not compare(ia, ib):
+                return False
+                
+        # same list!
+        return True
+
+    # dict
+    if isinstance(a, dict):
+
+        # dict of same size?
+        if not isinstance (b, dict) or len(a) != len(b):
+            return False
+            
+        # iterate over dictionary keys
+        for k, v in a.items():
+            if not compare(v, b[k]):
+                return False
+                
+        # same dict
+        return True
+
+    # simple value - compare both value and type for equality
+    return a == b and type(a) is type(b)
+
+
 class Style():
 
     def ERROR(self, message):
@@ -64,11 +100,11 @@ class Client(BaseClient):
             if value and value[0] == '{' and value[-1] == '}':
                 print('parse json')
                 value = json.loads(value)
-                
+
             print('> MATCH: {} {} == {}'.format(msg.topic, value, expect))
 
             self.expectcount -= 1
-            assert expect == value
+            assert compare_json(value, expect)
             
         elif False:
             print('* ignored message: {} {}'.format(msg.topic, msg.payload))
