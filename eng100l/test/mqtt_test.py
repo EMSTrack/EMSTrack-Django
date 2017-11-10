@@ -10,6 +10,8 @@ from eng100l.settings import MQTT
 
 def compare_json(a, b):
 
+    print('a = {}, b = {}'.format(a, b))
+    
     # lists
     if isinstance(a, list):
 
@@ -83,6 +85,12 @@ class Client(BaseClient):
         # subscribe to everything
         client.subscribe('#', 2)
         
+        # initialize pubcount
+        self.pubcount = 0
+
+        # initialize expectcount
+        self.expectcount = 0
+        
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
@@ -152,7 +160,7 @@ def run_test(client):
         
         client.test()
         
-        while client.done():
+        while not client.done():
             time.sleep(1)
             
         client.loop_stop()
@@ -163,18 +171,18 @@ def run_test(client):
     finally:
         client.disconnect()
 
+    print('done = {}'.format(client.done()))
+        
 def test1():
 
     class TestHospitalLogin(Client):
-
-        def consume(self, topic):
-            
-            return self.topics.pop(topic).decode()
 
         def test(self):
 
             self.hospital_login()
 
+            time.sleep(1)
+            
             self.hospital_logout()
             
         def hospital_login(self):
@@ -214,15 +222,13 @@ def test2():
 
     class TestHospitalEquipment(Client):
 
-        def consume(self, topic):
-            
-            return self.topics.pop(topic).decode()
-
         def test(self):
 
             self.hospital_login()
 
             self.hospital_equipment()
+            
+            time.sleep(1)
             
             self.hospital_logout()
             
@@ -265,6 +271,50 @@ def test2():
 
     run_test(client)
     
+def _test3():
+
+    class TestAmbulances(Client):
+
+        def test(self):
+
+            self.ambulance_login()
+
+            self.ambulance_location()
+            
+            #self.ambulance_logout()
+            
+        def ambulance_login(self):
+
+            # list of ambulances
+            client.expect('user/testuser1/ambulances',
+                          {"ambulances":[{"id":12,"license_plate":"BC-179"},{"id":11,"license_plate":"BC-160"},{"id":10,"license_plate":"BC-183"}]})
+            
+            # login to ambulance
+            self.publish('user/testuser1/ambulance', 12,
+                         qos=2, retain=False)
+            client.expect('user/testuser1/ambulance', '12')
+
+        def ambulance_location(self):
+
+            # modify equipment
+            self.publish('user/testuser1/location',
+                         '{"location":{"latitude":32.41902124227067,"longitude":-116.9496227294922},"timestamp": "2019-11-9 14:31:59"}',
+                         qos=2, retain=True)
+            client.expect('ambulance/12/location',
+                          {"location":{"latitude":32.48102124227067,"longitude":-116.9496227294922},"orientation":0.0})
+
+        def ambulance_logout(self):
+
+            self.publish('user/testuser1/ambulance', -1,
+                         qos=2,
+                         retain=False)
+
+            client.expect('user/testuser1/ambulance', '-1')
+            
+    client = TestAmbulances(broker, sys.stdout, style, verbosity = 1)
+
+    run_test(client)
+
 if __name__ == '__main__':
 
     test1()    

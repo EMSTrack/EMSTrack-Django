@@ -355,7 +355,7 @@ class Command(BaseCommand):
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLIENT_ID': 'django',
-            'CLEAN_SESSION': True
+            'CLEAN_SESSION': False
         }
         broker.update(settings.MQTT)
 
