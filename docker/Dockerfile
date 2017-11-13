@@ -111,8 +111,9 @@ RUN /etc/init.d/postgresql start &&\
     python manage.py migrate
 
 # Install certificates
-COPY docker/certificates/example-com.cert.pem /etc/certificates/example.com/example-com.cert.pem
-COPY docker/certificates/example-com.key.pem /etc/certificates/example.com/example-com.key.pem
+COPY docker/certificates/example-com.ca.crt /etc/certificates/example.com/example-com.ca.crt
+COPY docker/certificates/example-com.srv.crt /etc/certificates/example.com/example-com.srv.crt
+COPY docker/certificates/example-com.srv.key /etc/certificates/example.com/example-com.srv.key
 
 # Setup mosquitto
 RUN useradd -M mosquitto
