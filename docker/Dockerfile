@@ -29,7 +29,8 @@ RUN apt-get install -y postgresql postgresql-contrib
 RUN apt-get install -y postgis
 RUN apt-get install -y gdal-bin libgdal-dev python3-gdal
 RUN apt-get install -y openssl cmake
-RUN apt-get install -y vim
+
+RUN apt-get install -y vim sudo
 
 # Install python requirements
 RUN pip install -r requirements.txt
@@ -73,6 +74,9 @@ RUN sed -e 's/BACKEND_MYSQL ?= yes/BACKEND_MYSQL ?= no/' \
 	config.mk.in > config.mk
 RUN make; cp auth-plug.so /usr/local/lib
 
+# Run ldconfig
+RUN ldconfig
+
 # Setup Postgres
 WORKDIR /app/docker
 RUN sed -i'' \
@@ -104,16 +108,40 @@ RUN /etc/init.d/postgresql start &&\
     python manage.py migrate
 
 # Setup mosquitto
-# RUN useradd -M mosquitto
-# RUN usermod -L mosquitto
+RUN useradd -M mosquitto
+RUN usermod -L mosquitto
 COPY eng100l/docker/mosquitto/mosquitto.conf /etc/mosquitto/mosquitto.conf
 COPY eng100l/docker/mosquitto/conf.d /etc/mosquitto/conf.d
 COPY eng100l/docker/init.d/mosquitto /etc/init.d/mosquitto
 RUN chmod +x /etc/init.d/mosquitto
 RUN update-rc.d mosquitto defaults
+RUN mkdir /var/log/mosquitto
+RUN chown -R mosquitto:mosquitto /var/log/mosquitto
+RUN mkdir /var/lib/mosquitto
+RUN chown -R mosquitto:mosquitto /var/lib/mosquitto
+
+# Expose the mosquitto posts
+EXPOSE 1883
+EXPOSE 8883
+EXPOSE 8884
+
+EXPOSE 8000
+
+# Go back to home
+WORKDIR /app
+
+# Configure application
+COPY docs/db.json docker/db.json
+RUN service postgresql start &&\
+    service mosquitto start &&\
+    nohup bash -c "python manage.py runserver 2>&1 &" &&\
+    python manage.py flush --no-input &&\
+    python manage.py loaddata docker/db.json
 
 # Add VOLUMEs to allow backup of config, logs and databases
 VOLUME ["/etc/postgresql", "/var/log/postgresql", "/var/lib/postgresql", \
         "/etc/mosquitto", "/var/log/mosquitto", "/var/lib/mosquitto" ]
 
-WORKDIR /app
+CMD service postgresql start &&\
+    service mosquitto start &&\
+    python manage.py runserver 0.0.0.0:8000

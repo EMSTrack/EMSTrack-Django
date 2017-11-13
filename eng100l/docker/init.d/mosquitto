@@ -17,5 +17,4 @@ fi
 
 DESC="Description of the service"
 DAEMON=/usr/local/sbin/mosquitto
-DAEMON_OPTS="-c /etc/mosquitto/mosquitto.conf"
-#START_ARGS="--chuid mosquitto:mosquitto"
+DAEMON_ARGS="-d -c /etc/mosquitto/mosquitto.conf"
