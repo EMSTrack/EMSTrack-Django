@@ -78,7 +78,8 @@ RUN make; cp auth-plug.so /usr/local/lib
 RUN ldconfig
 
 # Setup Postgres
-WORKDIR /app/docker
+WORKDIR /app
+COPY docker/init.psql init.psql
 RUN sed -i'' \
         -e 's/\[username\]/'"$USERNAME"'/g' \
         -e 's/\[password\]/'"$PASSWORD"'/g' \
@@ -92,7 +93,9 @@ RUN rm init.psql
 
 # Setup Django
 WORKDIR /app
-RUN sed -e 's/\[username\]/'"$USERNAME"'/g' \
+COPY docker/settings.py eng100l/settings.py
+RUN sed -i'' \
+        -e 's/\[username\]/'"$USERNAME"'/g' \
         -e 's/\[password\]/'"$PASSWORD"'/g' \
         -e 's/\[database\]/'"$DATABASE"'/g' \
         -e 's/\[secret-key\]/'"$SECRET_KEY"'/g' \
@@ -101,18 +104,22 @@ RUN sed -e 's/\[username\]/'"$USERNAME"'/g' \
         -e 's/\[mqtt-username\]/'"$MQTT_USERNAME"'/g' \
         -e 's/\[mqtt-email\]/'"$MQTT_EMAIL"'/g' \
         -e 's/\[mqtt-clientid\]/'"$MQTT_CLIENTID"'/g' \
-	docker/settings.py > eng100l/settings.py
+	eng100l/settings.py
 RUN /etc/init.d/postgresql start &&\
     python manage.py makemigrations &&\
     python manage.py makemigrations ambulances &&\
     python manage.py migrate
 
+# Install certificates
+COPY docker/example-com.cert.pem /etc/certificates/example.com/example-com.cert.pem
+COPY docker/example-com.key.pem /etc/certificates/example.com/example-com.key.pem
+
 # Setup mosquitto
 RUN useradd -M mosquitto
 RUN usermod -L mosquitto
-COPY eng100l/docker/mosquitto/mosquitto.conf /etc/mosquitto/mosquitto.conf
-COPY eng100l/docker/mosquitto/conf.d /etc/mosquitto/conf.d
-COPY eng100l/docker/init.d/mosquitto /etc/init.d/mosquitto
+COPY docker/mosquitto/mosquitto.conf /etc/mosquitto/mosquitto.conf
+COPY docker/mosquitto/conf.d /etc/mosquitto/conf.d
+COPY docker/init.d/mosquitto /etc/init.d/mosquitto
 RUN chmod +x /etc/init.d/mosquitto
 RUN update-rc.d mosquitto defaults
 RUN mkdir /var/log/mosquitto
