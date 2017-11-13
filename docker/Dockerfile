@@ -79,7 +79,7 @@ RUN ldconfig
 
 # Setup Postgres
 WORKDIR /app
-COPY docker/init.psql init.psql
+COPY docker/postgresql/init.psql init.psql
 RUN sed -i'' \
         -e 's/\[username\]/'"$USERNAME"'/g' \
         -e 's/\[password\]/'"$PASSWORD"'/g' \
@@ -111,8 +111,8 @@ RUN /etc/init.d/postgresql start &&\
     python manage.py migrate
 
 # Install certificates
-COPY docker/example-com.cert.pem /etc/certificates/example.com/example-com.cert.pem
-COPY docker/example-com.key.pem /etc/certificates/example.com/example-com.key.pem
+COPY docker/certificates/example-com.cert.pem /etc/certificates/example.com/example-com.cert.pem
+COPY docker/certificates/example-com.key.pem /etc/certificates/example.com/example-com.key.pem
 
 # Setup mosquitto
 RUN useradd -M mosquitto
