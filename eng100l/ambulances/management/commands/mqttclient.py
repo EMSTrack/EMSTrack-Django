@@ -209,6 +209,9 @@ class Client(BaseClient):
             # Save changes made to ambulance
             # Ambulances.objects.filter(id=user.ambulance.id).update(orientation=200)
 
+            # query for the ambulance
+            ambulance = Ambulances.objects.get(id=amb_id)
+
             # Convert obj back to json
             serializer = MQTTAmbulanceLocSerializer(ambulance)
             json = JSONRenderer().render(serializer.data)
