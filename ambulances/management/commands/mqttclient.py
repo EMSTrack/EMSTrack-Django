@@ -206,18 +206,18 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Publishing location for ambulance {}".format(amb_id)))
 
         try:
-            ambulance = Ambulances.objects.get(id=amb_id)
-
             # Set status and grab latest location; status should be calculated
             # rather than what this code is doing
             # status = Status.objects.all().first()
             # ambulance.status = status
 
             # Calculate ambulance orientation?
-            ambulance.orientation = 200
 
             # Save changes made to ambulance
-            ambulance.save()
+            # Ambulances.objects.filter(id=user.ambulance.id).update(orientation=200)
+
+            # query for the ambulance
+            ambulance = Ambulances.objects.get(id=amb_id)
 
             # Convert obj back to json
             serializer = MQTTAmbulanceLocSerializer(ambulance)
