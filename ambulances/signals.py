@@ -28,7 +28,7 @@ def connect_mqtt(model_name, args):
         'HOST': 'localhost',
         'PORT': 1883,
         'KEEPALIVE': 60,
-        'CLIENT_ID': 'django',
+        'CLIENT_ID': 'django_signals',
         'CLEAN_SESSION': True
     }
     broker.update(settings.MQTT)
