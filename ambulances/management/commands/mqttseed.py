@@ -182,7 +182,7 @@ class Command(BaseCommand):
         broker = {
             'USERNAME': '',
             'PASSWORD': '',
-            'HOST': 'localhost',
+            'HOST': '127.0.0.1',
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLIENT_ID': 'django',

@@ -1,8 +1,11 @@
 import inspect
 import os
+import sys
 
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style, no_style
 
 from django.conf import settings
 from django.utils.functional import wraps
@@ -11,6 +14,8 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
 
 from .management.mqttupdate import UpdateClient
+
+
 
 # Instantiate broker
 broker = {
@@ -22,14 +27,34 @@ broker = {
     'CLIENT_ID': 'os.getpid()',
     'CLEAN_SESSION': True
 }
-
 broker.update(settings.MQTT)
 
 # Start client
-client = UpdateClient(broker, None, None, 0)
+stdout = OutputWrapper(sys.stdout)
+style = color_style()
+
 
 # Loop until client disconnects
 try:
+
+    # Instantiate broker
+    broker = {
+        'USERNAME': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': 1883,
+        'KEEPALIVE': 60,
+        'CLIENT_ID': 'django_signals',
+        'CLEAN_SESSION': True
+    }
+
+    broker.update(settings.MQTT)
+
+    # Start client
+    stdout = OutputWrapper(sys.stdout)
+    style = color_style()
+    
+    client = UpdateClient(broker, stdout, style, 0)
     client.loop()
 
 except KeyboardInterrupt:
@@ -108,13 +133,9 @@ def user_trigger(sender, **kwargs):
 @receiver(m2m_changed, sender=User.ambulances.through)
 @disable_for_loaddata
 def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
-    kwargs['instance'] = instance
-    instance = kwargs['instance']
     client.edit_user_ambulance_list(instance)
 
 @receiver(m2m_changed, sender=User.hospitals.through)
 @disable_for_loaddata
 def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
-    kwargs['instance'] = instance
-    instance = kwargs['instance']
     client.edit_user_hospital_list(instance)

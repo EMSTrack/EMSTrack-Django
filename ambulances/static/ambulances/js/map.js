@@ -118,7 +118,7 @@ $(document).ready(function() {
 
 	var options = {
 	     //connection attempt timeout in seconds
-	     timeout: 10,
+	     timeout: 60,
 	 	 userName: "admin",
 	 	 password: "cruzrojaadmin",
 	 	 useSSL: true,
