@@ -82,3 +82,6 @@ class BaseClient():
     # loop forever
     def loop(self):
         self.client.loop()
+
+    def loop_start(self):
+        self.client.loop_start()

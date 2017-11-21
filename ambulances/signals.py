@@ -15,8 +15,12 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 
 from .management.mqttupdate import UpdateClient
 
+# Loop until client disconnects
 
-
+# Start client
+stdout = OutputWrapper(sys.stdout)
+style = color_style()
+    
 # Instantiate broker
 broker = {
     'USERNAME': '',
@@ -27,35 +31,13 @@ broker = {
     'CLIENT_ID': 'os.getpid()',
     'CLEAN_SESSION': True
 }
+
+client = UpdateClient(broker, stdout, style, 0)
 broker.update(settings.MQTT)
 
-# Start client
-stdout = OutputWrapper(sys.stdout)
-style = color_style()
-
-
-# Loop until client disconnects
 try:
 
-    # Instantiate broker
-    broker = {
-        'USERNAME': '',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': 1883,
-        'KEEPALIVE': 60,
-        'CLIENT_ID': 'django_signals',
-        'CLEAN_SESSION': True
-    }
-
-    broker.update(settings.MQTT)
-
-    # Start client
-    stdout = OutputWrapper(sys.stdout)
-    style = color_style()
-    
-    client = UpdateClient(broker, stdout, style, 0)
-    client.loop()
+    client.loop_start()
 
 except KeyboardInterrupt:
     pass

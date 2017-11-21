@@ -1,4 +1,3 @@
-
 from ambulances.management._client import BaseClient
 
 from ambulances.models import Ambulances, User, Equipment, EquipmentCount, Hospital
@@ -15,7 +14,6 @@ class UpdateClient(BaseClient):
         self.client.publish(topic, message, *vargs, **kwargs)
 
     def create_ambulance(self, obj):
-
         # Publish to new location topic
         serializer = MQTTAmbulanceLocSerializer(obj)
         json = JSONRenderer().render(serializer.data)
