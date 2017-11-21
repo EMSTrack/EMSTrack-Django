@@ -10,34 +10,8 @@ from rest_framework.renderers import JSONRenderer
 
 class UpdateClient(BaseClient):
 
-    def __init__(self,
-                 broker,
-                 stdout,
-                 style,
-                 signal_func,
-                 obj,
-                 verbosity = 1):
-        super().__init__(broker, stdout, style, verbosity)
-
-        self.signal_func = getattr(self, signal_func)
-        self.obj = obj
-        self.pubcount = 0
-
-    # The callback for when the client receives a CONNACK
-    # response from the server.
-    def on_connect(self, client, userdata, flags, rc):
-
-        # is connected?
-        if not super().on_connect(client, userdata, flags, rc):
-            return False
-
-        self.signal_func(self.obj)
-
-        return True
-
     def publish(self, topic, message, *vargs, **kwargs):
         # increment pubcount then publish
-        self.pubcount += 1
         self.client.publish(topic, message, *vargs, **kwargs)
 
     def create_ambulance(self, obj):
@@ -75,7 +49,7 @@ class UpdateClient(BaseClient):
 
     def create_equipment(self, obj):
         # don't do anything
-        self.disconnect()
+        return
 
     def edit_equipment(self, obj):
         # Publish hospital configurations for hospitals that contain the edited equipment
@@ -138,12 +112,3 @@ class UpdateClient(BaseClient):
 
     def edit_user_ambulance_list(self, obj):
         self.create_user_ambulance_list(obj)
-
-    # Message publish callback
-    def on_publish(self, client, userdata, mid):
-        # make sure all is published before disconnecting
-        self.pubcount -= 1
-        # print("on_publish: '{}', '{}'".format(client, userdata))
-        if self.pubcount == 0:
-            self.disconnect()
-        

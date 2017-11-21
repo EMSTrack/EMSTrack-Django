@@ -66,3 +66,7 @@ class BaseClient():
     # loop forever
     def loop_forever(self):
         self.client.loop_forever()
+
+    # loop forever
+    def loop(self):
+        self.client.loop()

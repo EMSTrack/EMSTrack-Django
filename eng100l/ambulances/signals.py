@@ -1,4 +1,6 @@
 import inspect
+import os
+
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
 
@@ -10,38 +12,31 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 
 from .management.mqttupdate import UpdateClient
 
+# Instantiate broker
+broker = {
+    'USERNAME': '',
+    'PASSWORD': '',
+    'HOST': 'localhost',
+    'PORT': 1883,
+    'KEEPALIVE': 60,
+    'CLIENT_ID': 'os.getpid()',
+    'CLEAN_SESSION': True
+}
 
-# Connect to mqtt
-def connect_mqtt(model_name, args):
+broker.update(settings.MQTT)
 
-    # Generate (name of) function to call
-    func = ("create_" if args['created'] else "edit_") + model_name
+# Start client
+client = UpdateClient(broker, None, None, 0)
 
-    # Instantiate broker
-    broker = {
-        'USERNAME': '',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': 1883,
-        'KEEPALIVE': 60,
-        'CLIENT_ID': 'django',
-        'CLEAN_SESSION': True
-    }
+# Loop until client disconnects
+try:
+    client.loop()
 
-    broker.update(settings.MQTT)
+except KeyboardInterrupt:
+    pass
 
-    # Start client
-    client = UpdateClient(broker, None, None, func, args['instance'], 0)
-
-    # Loop until client disconnects
-    try:
-    	client.loop_forever()
-
-    except KeyboardInterrupt:
-        pass
-
-    finally:
-        client.disconnect()
+finally:
+    client.disconnect()
 
 # function to disable signals when loading data from fixture (loaddata)
 def disable_for_loaddata(signal_handler):
@@ -57,44 +52,69 @@ def disable_for_loaddata(signal_handler):
 @receiver(post_save, sender=Ambulances)
 @disable_for_loaddata
 def ambulance_mqtt_trigger(sender, **kwargs):
-    # Connect to mqtt
-    connect_mqtt("ambulance", kwargs)
+    created = kwargs['created']
+    instance = kwargs['instance']
+
+    if(created):
+        client.create_ambulance(instance)
+    else:
+        client.edit_ambulance(instance)
 
 @receiver(post_delete, sender=Hospital)
 @receiver(post_save, sender=Hospital)
 @disable_for_loaddata
 def hospital_mqtt_trigger(sender, **kwargs):
-    # Connect to mqtt
-    connect_mqtt("hospital", kwargs)
+    created = kwargs['created']
+    instance = kwargs['instance']
+
+    if(created):
+        client.create_hospital(instance)
+    else:
+        client.edit_hospital(instance)
 
 @receiver(post_delete, sender=Equipment)
 @receiver(post_save, sender=Equipment)
 @disable_for_loaddata
 def hospital_equipment_mqtt_trigger(sender, **kwargs):
-    connect_mqtt("equipment", kwargs)
+    created = kwargs['created']
+    instance = kwargs['instance']
+
+    if(created):
+        client.create_equipment(instance)
+    else:
+        client.edit_equipment(instance)
 
 @receiver(post_delete, sender=EquipmentCount)
 @receiver(post_save, sender=EquipmentCount)
 @disable_for_loaddata
 def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
-    connect_mqtt("equipment_count", kwargs)
+    created = kwargs['created']
+    instance = kwargs['instance']
+
+    if(created):
+        client.create_equipment_count(instance)
+    else:
+        client.edit_equipment_count(instance)
 
 @receiver(post_save, sender=User)
 @disable_for_loaddata
 def user_trigger(sender, **kwargs):
+
+    instance = kwargs['instance']
+
     if kwargs['created']:
-        connect_mqtt("user", kwargs)
+        client.create_user(instance)
 
 @receiver(m2m_changed, sender=User.ambulances.through)
 @disable_for_loaddata
 def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
     kwargs['instance'] = instance
-    kwargs['created'] = False
-    connect_mqtt("user_ambulance_list", kwargs)
+    instance = kwargs['instance']
+    client.edit_user_ambulance_list(instance)
 
 @receiver(m2m_changed, sender=User.hospitals.through)
 @disable_for_loaddata
 def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
     kwargs['instance'] = instance
-    kwargs['created'] = False
-    connect_mqtt("user_hospital_list", kwargs)
+    instance = kwargs['instance']
+    client.edit_user_hospital_list(instance)
