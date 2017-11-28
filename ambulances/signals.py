@@ -103,6 +103,12 @@ def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
     else:
         client.edit_equipment_count(instance)
 
+# needs validation
+@receiver(post_save, sender=Call)
+@disable_for_loaddata
+def call_mqtt_trigger(sender, **kwargs):
+    connect_mqtt("call", kwargs)   
+
 @receiver(post_save, sender=User)
 @disable_for_loaddata
 def user_trigger(sender, **kwargs):
