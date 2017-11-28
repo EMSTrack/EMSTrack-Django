@@ -96,8 +96,8 @@ ENV/
 *~
 
 # Migrations and static
-eng100l/eng100l/settings.py
-eng100l/ambulances/migrations
+eng100l/settings.py
+ambulances/migrations
 eng100l/crlogin/migrations
 eng100l/static
 
