@@ -145,7 +145,14 @@ class Client(BaseClient):
             if serializer.is_valid(raise_exception=True):
                 try:
                     if exists:
-                        call = serializer.update(instance=call, validated_data=serializer.validated_data)
+                        latitude = data.pop('latitude')
+                        longitude = data.pop('longitude')
+
+                        location = Point(longitude, latitude)
+                        data['location'] = location
+
+                        Call.objects.filter(id=id).update(**data)
+                        # call = serializer.update(instance=call, validated_data=serializer.validated_data)
                     else:
                         call = serializer.save()
 
