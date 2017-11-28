@@ -28,7 +28,7 @@ broker = {
     'HOST': 'localhost',
     'PORT': 1883,
     'KEEPALIVE': 60,
-    'CLIENT_ID': 'os.getpid()',
+    'CLIENT_ID': str(os.getpid()),
     'CLEAN_SESSION': True
 }
 
