@@ -107,40 +107,55 @@ class Client(BaseClient):
             # Parse data into json dict
             stream = BytesIO(msg.payload)
             data = JSONParser().parse(stream)
-            data.pop("id", None)
+            # data.pop("id", None)
         except Exception:
             self.stdout.write(self.style.ERROR("ERROR PARSING CALL JSON"))
 
-        # Try to update existing call if it exists
+        # Obtain call ID to update/create
+        id = data["id"]
+
+        # Obtain ambulance
         try:
+            amb = Ambulances.objects.get(id=ambulance_id)
+        except ObjectDoesNotExist as e:
+            self.stdout.write(self.style.ERROR("Ambulance {} does not exist".format(ambulance_id)))
+            return
 
-            # Obtain ambulance
-            amb = Ambulances.objects.filter(id=ambulance_id).first()
+        # Obtain call object
+        call = Call.objects.filter(id=id).first()
 
-            # Obtain call object
-            call = Call.objects.filter(ambulance=amb, active=True).first()
+        serializer = None
+        success_text = ">> Updated call {} in database"
+        failure_text = "*> Failed to update call {} in database"
 
-            serializer = None
-            success_text = ">> Updated call {} in database"
-            failure_text = "*> Failed to update call {} in database"
-            if call is None:
-                serializer = CallSerializer(data=data)
-                success_text = ">> Created call {} in database"
-                failure_text = "*> Failed to create call {} in database"
-            else:
-                serializer = CallSerializer(call, data=data)
+        exists = False
 
-            if serializer.is_valid():
+        # Should never run because all calls originate from a POST request to the server (unless this is changed)
+        if call is None:
+            serializer = CallSerializer(data=data)
+            success_text = ">> Created call {} in database"
+            failure_text = "*> Failed to create call {} in database"
+
+        # If the call does exist, update it
+        else:
+            serializer = CallSerializer(data=data)
+            exists = True
+
+        try:
+            if serializer.is_valid(raise_exception=True):
                 try:
-                    call = serializer.save()
+                    if exists:
+                        call = serializer.update(instance=call, validated_data=serializer.validated_data)
+                    else:
+                        call = serializer.save()
+
                     self.stdout.write(self.style.SUCCESS(success_text.format(call.id)))
                 except Exception as e:
+                    print(e)
                     self.stdout.write(self.style.ERROR(failure_text.format(call.id)))
-            else:
-                self.stdout.write(self.style.ERROR("*> Error with data format"))
-
         except Exception as e:
-            self.stdout.write(self.style.ERROR("Ambulance {} does not exist".format(ambulance_id)))
+            print(e)
+            self.stdout.write(self.style.ERROR("*> Error with data format"))
 
     # Update user location
     def on_user_loc(self, client, userdata, msg):
@@ -273,22 +288,18 @@ class Client(BaseClient):
         amb_id = int(msg.payload.decode("utf-8"))
 
         # Obtain user
-        user = None
-        try:
-            user = User.objects.get(username=username)
-
-        except ObjectDoesNotExist:
+        user = User.objects.filter(username=username)
+        if not user:
             self.stdout.write(
                 self.style.ERROR("*> User {} does not exist".format(username)))
             return
 
         try:
-            if amb_id == -1:
-                user.ambulance = None
+            # If -1 is published to topic, unhook user from any ambulance
+            if amb_id < 0:
+                user.update(ambulance=None)
             else:
-                ambulance = Ambulances.objects.get(id=amb_id)
-                user.ambulance = ambulance
-            user.save()
+                user.update(ambulance=Ambulances.objects.get(id=amb_id))
 
             self.stdout.write(self.style.SUCCESS(
                 ">> Successfully hooked user {} to ambulance {}").format(username, amb_id))
@@ -318,22 +329,17 @@ class Client(BaseClient):
             return
 
         # Obtain user
-        user = None
-        try:
-            user = User.objects.get(username=username)
-
-        except ObjectDoesNotExist:
+        user = User.objects.filter(username=username)
+        if not user:
             self.stdout.write(
                 self.style.ERROR("*> User {} does not exist".format(username)))
             return
 
         try:
-            if hosp_id == -1:
-                user.hospital = None
+            if hosp_id < 0:
+                user.update(hospital=None)
             else:
-                hospital = Hospital.objects.get(id=hosp_id)
-                user.hospital = hospital
-            user.save()
+                user.update(hospital=Hospital.objects.get(id=hosp_id))
 
             self.stdout.write(self.style.SUCCESS(
                 ">> Successfully hooked user {} to hospital {}").format(username, hosp_id))
