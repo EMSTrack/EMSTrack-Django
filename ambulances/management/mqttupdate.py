@@ -1,7 +1,7 @@
 from ambulances.management._client import BaseClient
 
 from ambulances.models import Ambulances, User, Equipment, EquipmentCount, Hospital
-from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer, MQTTHospitalEquipmentSerializer, MQTTHospitalListSerializer
+from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer, MQTTHospitalEquipmentSerializer, MQTTHospitalListSerializer, CallSerializer
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
@@ -44,6 +44,29 @@ class UpdateClient(BaseClient):
             serializer = MQTTHospitalListSerializer(user)
             json = JSONRenderer().render(serializer.data)
             self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
+
+    #Needs validation
+    def create_call(self, obj):
+        #Publish to new call topic
+        #if active publish
+
+        if (obj.active):
+            serializer = CallSerializer(obj)
+            json = JSONRenderer().render(serializer.data)
+            self.publish('ambulance/{}/call'.format(obj.ambulance.id), json, qos=2, retain=True)
+        else:
+            print ("Hello")
+
+
+    #Needs validation
+    def edit_call(self, obj):
+        #Publish new call list for all users
+        # if active publish
+
+        if (obj.active):
+            serializer = CallSerializer(obj)
+            json = JSONRenderer().render(serializer.data)
+            self.publish('ambulance/{}/call'.format(obj.ambulance.id), json, qos=2, retain=True)
 
     def create_equipment(self, obj):
         # don't do anything
