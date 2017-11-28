@@ -50,7 +50,7 @@ class UpdateClient(BaseClient):
         #Publish to new call topic
         #if active publish
 
-        if (obj.active):
+        if obj.active:
             serializer = CallSerializer(obj)
             json = JSONRenderer().render(serializer.data)
             self.publish('ambulance/{}/call'.format(obj.ambulance.id), json, qos=2, retain=True)

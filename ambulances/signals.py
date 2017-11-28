@@ -95,10 +95,10 @@ def hospital_equipment_mqtt_trigger(sender, **kwargs):
 @receiver(post_save, sender=EquipmentCount)
 @disable_for_loaddata
 def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
-    created = kwargs['created']
+    
     instance = kwargs['instance']
 
-    if(created):
+    if kwargs['created']:
         client.create_equipment_count(instance)
     else:
         client.edit_equipment_count(instance)
@@ -107,7 +107,13 @@ def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
 @receiver(post_save, sender=Call)
 @disable_for_loaddata
 def call_mqtt_trigger(sender, **kwargs):
-    connect_mqtt("call", kwargs)   
+    
+    instance = kwargs['instance']
+
+    if kwargs['created']:
+        client.create_call(instance)  
+    else:
+        client.edit_call(instance)
 
 @receiver(post_save, sender=User)
 @disable_for_loaddata
