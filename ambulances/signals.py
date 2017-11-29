@@ -18,7 +18,7 @@ from .management.mqttupdate import UpdateClient
 # Are we in loaddata or flush?
 install_signals = True
 for fr in inspect.stack():
-    if inspect.getmodulename(fr[1]) == 'loaddata' or inspect.getmodulename(fr[1]) == 'loaddata':
+    if inspect.getmodulename(fr[1]) == 'loaddata' or inspect.getmodulename(fr[1]) == 'flush':
         install_signals = False
         break
 
