@@ -15,12 +15,19 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 
 from .management.mqttupdate import UpdateClient
 
+# Are we in loaddata?
+is_loaddata = False
+for fr in inspect.stack():
+    if inspect.getmodulename(fr[1]) == 'loaddata':
+        is_loaddata = True
+        return
+
 # Loop until client disconnects
 
 # Start client
 stdout = OutputWrapper(sys.stdout)
 style = color_style()
-    
+
 # Instantiate broker
 broker = {
     'USERNAME': '',
