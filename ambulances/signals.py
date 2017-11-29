@@ -22,6 +22,8 @@ for fr in inspect.stack():
         install_signals = False
         break
 
+print('> Install signals? {}'.format(install_signals))
+
 if install_signals:
     
     # Loop until client disconnects

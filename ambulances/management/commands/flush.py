@@ -10,4 +10,3 @@ class Command(flush.Command):
 
     def handle(self, *args, **options):
         super(Command, self).handle(*args, **options)
-        self.stdout.write("Here is a further treatment! :)")
