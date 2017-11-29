@@ -4,7 +4,10 @@ import sys
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eng100l.settings")
-    os.environ.setdefault("DJANGO_ENABLE_SIGNALS", "True")
+    if len(sys.argv) > 1 and (sys.argv[1] == 'flush' or sys.argv[1] == 'loaddata'):
+        os.environ.setdefault("DJANGO_ENABLE_SIGNALS", "False")
+    else:
+        os.environ.setdefault("DJANGO_ENABLE_SIGNALS", "True")
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
@@ -20,5 +23,4 @@ if __name__ == "__main__":
                 "forget to activate a virtual environment?"
             )
         raise
-    print(sys.argv)
     execute_from_command_line(sys.argv)
