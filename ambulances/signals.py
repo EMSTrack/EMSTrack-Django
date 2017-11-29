@@ -16,133 +16,125 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 from .management.mqttupdate import UpdateClient
 
 # Are we in loaddata or flush?
-install_signals = False
-for fr in inspect.stack():
-    if inspect.getmodulename(fr[1]) == 'loaddata' or inspect.getmodulename(fr[1]) == 'flush':
-        install_signals = False
-        break
+enable_signals = bool(os.getenv("DJANGO_ENABLE_SIGNALS"))
+print('enable_signals = {}'.format(enable_signals))
 
-print('> Install signals? {}'.format(install_signals))
+# Loop until client disconnects
 
-if install_signals:
-    
-    # Loop until client disconnects
+# Start client
+stdout = OutputWrapper(sys.stdout)
+style = color_style()
 
-    # Start client
-    stdout = OutputWrapper(sys.stdout)
-    style = color_style()
+# Instantiate broker
+broker = {
+    'USERNAME': '',
+    'PASSWORD': '',
+    'HOST': 'localhost',
+    'PORT': 1883,
+    'KEEPALIVE': 60,
+    'CLIENT_ID': str(os.getpid()),
+    'CLEAN_SESSION': True
+}
 
-    # Instantiate broker
-    broker = {
-        'USERNAME': '',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': 1883,
-        'KEEPALIVE': 60,
-        'CLIENT_ID': str(os.getpid()),
-        'CLEAN_SESSION': True
-    }
+client = UpdateClient(broker, stdout, style, 0)
+broker.update(settings.MQTT)
 
-    client = UpdateClient(broker, stdout, style, 0)
-    broker.update(settings.MQTT)
+try:
+    client.loop_start()
 
-    try:
+except KeyboardInterrupt:
+    pass
 
-        client.loop_start()
+finally:
+    client.disconnect()
 
-    except KeyboardInterrupt:
-        pass
+# function to disable signals when loading data from fixture (loaddata)
+def disable_for_loaddata(signal_handler):
+    @wraps(signal_handler)
+    def wrapper(*args, **kwargs):
+        for fr in inspect.stack():
+            if inspect.getmodulename(fr[1]) == 'loaddata':
+                return
+            signal_handler(*args, **kwargs)
+    return wrapper
 
-    finally:
-        client.disconnect()
+@receiver(post_delete, sender=Ambulances)
+@receiver(post_save, sender=Ambulances)
+@disable_for_loaddata
+def ambulance_mqtt_trigger(sender, **kwargs):
+    created = kwargs['created']
+    instance = kwargs['instance']
 
-    # function to disable signals when loading data from fixture (loaddata)
-    def disable_for_loaddata(signal_handler):
-        @wraps(signal_handler)
-        def wrapper(*args, **kwargs):
-            for fr in inspect.stack():
-                if inspect.getmodulename(fr[1]) == 'loaddata':
-                    return
-                signal_handler(*args, **kwargs)
-        return wrapper
+    if(created):
+        client.create_ambulance(instance)
+    else:
+        client.edit_ambulance(instance)
 
-    @receiver(post_delete, sender=Ambulances)
-    @receiver(post_save, sender=Ambulances)
-    @disable_for_loaddata
-    def ambulance_mqtt_trigger(sender, **kwargs):
-        created = kwargs['created']
-        instance = kwargs['instance']
+@receiver(post_delete, sender=Hospital)
+@receiver(post_save, sender=Hospital)
+@disable_for_loaddata
+def hospital_mqtt_trigger(sender, **kwargs):
+    created = kwargs['created']
+    instance = kwargs['instance']
 
-        if(created):
-            client.create_ambulance(instance)
-        else:
-            client.edit_ambulance(instance)
+    if(created):
+        client.create_hospital(instance)
+    else:
+        client.edit_hospital(instance)
 
-    @receiver(post_delete, sender=Hospital)
-    @receiver(post_save, sender=Hospital)
-    @disable_for_loaddata
-    def hospital_mqtt_trigger(sender, **kwargs):
-        created = kwargs['created']
-        instance = kwargs['instance']
+@receiver(post_delete, sender=Equipment)
+@receiver(post_save, sender=Equipment)
+@disable_for_loaddata
+def hospital_equipment_mqtt_trigger(sender, **kwargs):
+    created = kwargs['created']
+    instance = kwargs['instance']
 
-        if(created):
-            client.create_hospital(instance)
-        else:
-            client.edit_hospital(instance)
+    if(created):
+        client.create_equipment(instance)
+    else:
+        client.edit_equipment(instance)
 
-    @receiver(post_delete, sender=Equipment)
-    @receiver(post_save, sender=Equipment)
-    @disable_for_loaddata
-    def hospital_equipment_mqtt_trigger(sender, **kwargs):
-        created = kwargs['created']
-        instance = kwargs['instance']
+@receiver(post_delete, sender=EquipmentCount)
+@receiver(post_save, sender=EquipmentCount)
+@disable_for_loaddata
+def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
 
-        if(created):
-            client.create_equipment(instance)
-        else:
-            client.edit_equipment(instance)
+    instance = kwargs['instance']
 
-    @receiver(post_delete, sender=EquipmentCount)
-    @receiver(post_save, sender=EquipmentCount)
-    @disable_for_loaddata
-    def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
+    if kwargs['created']:
+        client.create_equipment_count(instance)
+    else:
+        client.edit_equipment_count(instance)
 
-        instance = kwargs['instance']
+# needs validation
+@receiver(post_save, sender=Call)
+@disable_for_loaddata
+def call_mqtt_trigger(sender, **kwargs):
 
-        if kwargs['created']:
-            client.create_equipment_count(instance)
-        else:
-            client.edit_equipment_count(instance)
+    instance = kwargs['instance']
 
-    # needs validation
-    @receiver(post_save, sender=Call)
-    @disable_for_loaddata
-    def call_mqtt_trigger(sender, **kwargs):
+    print(instance.active)
 
-        instance = kwargs['instance']
+    if kwargs['created']:
+        client.create_call(instance)  
+    else:
+        client.edit_call(instance)
 
-        print(instance.active)
+@receiver(post_save, sender=User)
+@disable_for_loaddata
+def user_trigger(sender, **kwargs):
 
-        if kwargs['created']:
-            client.create_call(instance)  
-        else:
-            client.edit_call(instance)
+    instance = kwargs['instance']
 
-    @receiver(post_save, sender=User)
-    @disable_for_loaddata
-    def user_trigger(sender, **kwargs):
+    if kwargs['created']:
+        client.create_user(instance)
 
-        instance = kwargs['instance']
+@receiver(m2m_changed, sender=User.ambulances.through)
+@disable_for_loaddata
+def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
+    client.edit_user_ambulance_list(instance)
 
-        if kwargs['created']:
-            client.create_user(instance)
-
-    @receiver(m2m_changed, sender=User.ambulances.through)
-    @disable_for_loaddata
-    def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
-        client.edit_user_ambulance_list(instance)
-
-    @receiver(m2m_changed, sender=User.hospitals.through)
-    @disable_for_loaddata
-    def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
-        client.edit_user_hospital_list(instance)
+@receiver(m2m_changed, sender=User.hospitals.through)
+@disable_for_loaddata
+def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
+    client.edit_user_hospital_list(instance)
