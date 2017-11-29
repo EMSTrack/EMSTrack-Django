@@ -17,7 +17,6 @@ from .management.mqttupdate import UpdateClient
 
 # Are we in loaddata or flush?
 enable_signals = os.environ.get("DJANGO_ENABLE_SIGNALS", "True") == "True"
-print('enable_signals = {}'.format(enable_signals))
 
 if enable_signals:
 
@@ -29,17 +28,16 @@ if enable_signals:
 
     # Instantiate broker
     broker = {
-        'USERNAME': '',
-        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': 1883,
         'KEEPALIVE': 60,
-        'CLIENT_ID': str(os.getpid()),
         'CLEAN_SESSION': True
     }
 
-    client = UpdateClient(broker, stdout, style, 0)
     broker.update(settings.MQTT)
+    broker['CLIENT_ID'] = 'signals_' + str(os.getpid())
+    
+    client = UpdateClient(broker, stdout, style, 0)
 
     try:
         client.loop_start()
@@ -50,19 +48,8 @@ if enable_signals:
     finally:
         client.disconnect()
 
-    # function to disable signals when loading data from fixture (loaddata)
-    def disable_for_loaddata(signal_handler):
-        @wraps(signal_handler)
-        def wrapper(*args, **kwargs):
-            for fr in inspect.stack():
-                if inspect.getmodulename(fr[1]) == 'loaddata':
-                    return
-                signal_handler(*args, **kwargs)
-        return wrapper
-
     @receiver(post_delete, sender=Ambulances)
     @receiver(post_save, sender=Ambulances)
-    @disable_for_loaddata
     def ambulance_mqtt_trigger(sender, **kwargs):
         created = kwargs['created']
         instance = kwargs['instance']
@@ -74,7 +61,6 @@ if enable_signals:
 
     @receiver(post_delete, sender=Hospital)
     @receiver(post_save, sender=Hospital)
-    @disable_for_loaddata
     def hospital_mqtt_trigger(sender, **kwargs):
         created = kwargs['created']
         instance = kwargs['instance']
@@ -86,7 +72,6 @@ if enable_signals:
 
     @receiver(post_delete, sender=Equipment)
     @receiver(post_save, sender=Equipment)
-    @disable_for_loaddata
     def hospital_equipment_mqtt_trigger(sender, **kwargs):
         created = kwargs['created']
         instance = kwargs['instance']
@@ -98,7 +83,6 @@ if enable_signals:
 
     @receiver(post_delete, sender=EquipmentCount)
     @receiver(post_save, sender=EquipmentCount)
-    @disable_for_loaddata
     def hospital_equipment_count_mqtt_trigger(sender, **kwargs):
 
         instance = kwargs['instance']
@@ -110,7 +94,6 @@ if enable_signals:
 
     # needs validation
     @receiver(post_save, sender=Call)
-    @disable_for_loaddata
     def call_mqtt_trigger(sender, **kwargs):
 
         instance = kwargs['instance']
@@ -123,7 +106,6 @@ if enable_signals:
             client.edit_call(instance)
 
     @receiver(post_save, sender=User)
-    @disable_for_loaddata
     def user_trigger(sender, **kwargs):
 
         instance = kwargs['instance']
@@ -132,11 +114,9 @@ if enable_signals:
             client.create_user(instance)
 
     @receiver(m2m_changed, sender=User.ambulances.through)
-    @disable_for_loaddata
     def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
         client.edit_user_ambulance_list(instance)
 
     @receiver(m2m_changed, sender=User.hospitals.through)
-    @disable_for_loaddata
     def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
         client.edit_user_hospital_list(instance)

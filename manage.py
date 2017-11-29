@@ -7,7 +7,6 @@ if __name__ == "__main__":
     print(sys.argv)
     if len(sys.argv) > 1 and (sys.argv[1] == 'flush' or sys.argv[1] == 'loaddata'):
         os.environ.setdefault("DJANGO_ENABLE_SIGNALS", "False")
-        print("FALSE")
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
