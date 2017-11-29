@@ -1,12 +1,12 @@
 """
 Additional treatment for the loaddata command.
-Location example: project/app/management/commands/loaddata.py
+Location example: project/app/management/commands/flush.py
 """
 from django.core.management.base import BaseCommand, CommandError
-from django.core.management.commands import loaddata
+from django.core.management.commands import flush
 
 
-class Command(loaddata.Command):
+class Command(flush.Command):
 
     def handle(self, *args, **options):
         super(Command, self).handle(*args, **options)
