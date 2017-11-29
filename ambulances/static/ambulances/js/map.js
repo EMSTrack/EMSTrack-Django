@@ -476,6 +476,9 @@ function updateAmbulanceGrid(ambulanceId, ambulanceStatus) {
  	formData["residential_unit"] = $('#address').val();
  	formData["latitude"] = document.getElementById('curr-lat').innerHTML;
  	formData["longitude"] = document.getElementById('curr-lng').innerHTML;
+ 	formData["active"] = true
+ 	formData["name"] = "Make Dynamic for Future"
+ 	console.log(formData["active"])
 
  	console.log(formData["latitude"]);
  	formData["description"] = $('#comment').val();

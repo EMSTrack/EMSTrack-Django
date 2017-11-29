@@ -110,6 +110,8 @@ def call_mqtt_trigger(sender, **kwargs):
     
     instance = kwargs['instance']
 
+    print(instance.active)
+
     if kwargs['created']:
         client.create_call(instance)  
     else:

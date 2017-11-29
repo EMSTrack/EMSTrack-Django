@@ -174,9 +174,14 @@ class Client(BaseClient):
         if not msg.payload:
             return
 
-        # Parse data into json dict
-        stream = BytesIO(msg.payload)
-        data = JSONParser().parse(stream)
+        try:
+            # Parse data into json dict
+            stream = BytesIO(msg.payload)
+            data = JSONParser().parse(stream)
+        except Exception as e:
+            self.stdout.write(
+                self.style.ERROR("*> JSON formatted incorrectly: {}".format(msg.payload)))
+            return
 
         # has ambulance?
         if not user.ambulance:
