@@ -16,7 +16,7 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 from .management.mqttupdate import UpdateClient
 
 # Are we in loaddata or flush?
-enable_signals = bool(os.getenv("DJANGO_ENABLE_SIGNALS"))
+enable_signals = os.environ.get("DJANGO_ENABLE_SIGNALS", True)
 print('enable_signals = {}'.format(enable_signals))
 
 if enable_signals:
