@@ -15,14 +15,14 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 
 from .management.mqttupdate import UpdateClient
 
-# Are we in loaddata?
-is_loaddata = False
+# Are we in loaddata or flush?
+install_signals = True
 for fr in inspect.stack():
-    if inspect.getmodulename(fr[1]) == 'loaddata':
-        is_loaddata = True
+    if inspect.getmodulename(fr[1]) == 'loaddata' or inspect.getmodulename(fr[1]) == 'loaddata':
+        install_signals = False
         break
 
-if not is_loaddata:
+if install_signals:
     
     # Loop until client disconnects
 
