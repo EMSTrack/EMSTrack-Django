@@ -16,7 +16,7 @@ from .models import Status, Ambulances, Region, Call, Hospital, \
 from .management.mqttupdate import UpdateClient
 
 # Are we in loaddata or flush?
-install_signals = True
+install_signals = False
 for fr in inspect.stack():
     if inspect.getmodulename(fr[1]) == 'loaddata' or inspect.getmodulename(fr[1]) == 'flush':
         install_signals = False
