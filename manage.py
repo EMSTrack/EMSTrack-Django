@@ -4,7 +4,6 @@ import sys
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "eng100l.settings")
-    print(sys.argv)
     if len(sys.argv) > 1 and (sys.argv[1] == 'flush' or sys.argv[1] == 'loaddata'):
         os.environ.setdefault("DJANGO_ENABLE_SIGNALS", "False")
     try:
