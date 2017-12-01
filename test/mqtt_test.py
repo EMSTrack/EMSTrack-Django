@@ -139,147 +139,115 @@ class Client(BaseClient):
     def test(self):
         print('WARNING: NO TESTING PERFORMED. YOU MUST OVERLOAD test')
 
-style = Style()
+def run_test(label, tests):
 
-broker = {}
-broker.update(MQTT)
-broker.update({
-    'HOST': 'localhost',
-    'PORT': 1883,
-    'KEEPALIVE': 60,
-    'CLIENT_ID': 'test',
-    'CLEAN_SESSION': True
-})
+    print('\n* Testing {}'.format(label))
 
-def run_test(client):
-
-    print('\n* Testing {}'.format(type(client)))
+    style = Style()
     
+    broker = {}
+    broker.update(MQTT)
+    broker.update({
+        'USERNAME': 'testuser1',
+        'PASSWORD': 'cruzrojauser1',
+        'HOST': 'localhost',
+        'PORT': 1883,
+        'KEEPALIVE': 60,
+        'CLIENT_ID': 'test',
+        'CLEAN_SESSION': True
+    })
+
+    broker['CLIENT_ID'] = 'test' + label
+    client = Client(broker, sys.stdout, style, verbosity = 1)
+
     try:
+        
         client.loop_start()
         
-        client.test()
+        tests(client)
         
         while not client.done():
             time.sleep(1)
             
-        time.sleep(4)
-        
         client.loop_stop()
             
-        time.sleep(4)
-        
     except KeyboardInterrupt:
         pass
         
     finally:
         client.disconnect()
 
+def hospital_login(client):
+
+    # list of hospitals
+    client.expect('user/testuser1/hospitals',
+                  {"hospitals": [{"id":4,"name":"General Hospital"},
+                                 {"id":5,"name":"Popular Insurance IMSS Clinic"}]})
+    
+    # login to hospital
+    client.publish('user/testuser1/hospital', 4,
+                 qos=2, retain=False)
+    client.expect('user/testuser1/hospital', '4')
+    
+    # get hospital metadata
+    client.expect('hospital/4/metadata',
+                  {"equipment":[{"name":"Tomography","toggleable":True},{"name":"Blood laboratory","toggleable":True},{"name":"Ultrasound","toggleable":True},{"name":"Radiograph","toggleable":True}]})
+    
+    # get hospital equipment
+    client.expect('hospital/4/equipment/Tomography', '3')
+    client.expect('hospital/4/equipment/Blood laboratory', '2')
+    client.expect('hospital/4/equipment/Ultrasound', '6')
+    client.expect('hospital/4/equipment/Radiograph', '5')
+
+    # modify equipment
+    client.publish('hospital/4/equipment/Tomography', 1,
+                   qos=2, retain=True)
+    client.expect('hospital/4/equipment/Tomography', '1')
+
+    # revert back
+    client.publish('hospital/4/equipment/Tomography', 3,
+                   qos=2, retain=True)
+    client.expect('hospital/4/equipment/Tomography', '3')
+    
+    client.publish('user/testuser1/hospital', -1,
+                   qos=2,
+                   retain=False)
+    
+    client.expect('user/testuser1/hospital', '-1')
+
+def ambulance_login(client):
+    
+    # list of ambulances
+    client.expect('user/testuser1/ambulances',
+                  {"ambulances":[{"id":12,"license_plate":"BC-179"},{"id":11,"license_plate":"BC-160"},{"id":10,"license_plate":"BC-183"}]})
+    
+    # login to ambulance
+    client.publish('user/testuser1/ambulance', 12,
+                 qos=2, retain=False)
+    client.expect('user/testuser1/ambulance', '12')
+    
+    # publish location
+    client.publish('user/testuser1/location',
+                 '{"location":{"latitude":32.41902124227067,"longitude":-116.9496227294922},"timestamp": "2019-11-9 14:31:59"}',
+                 qos=2, retain=True)
+    client.expect('ambulance/12/location',
+                  {"location":{"latitude":32.41902124227067,"longitude": -116.9496227294922},"orientation":0.0})
+    
+    # logout
+    client.publish('user/testuser1/ambulance', -1,
+                 qos=2,
+                 retain=False)
+    
+    client.expect('user/testuser1/ambulance', '-1')
+    
 def test1():
 
-    class TestHospitalLogin(Client):
+    run_test('hospital_login', hospital_login)
 
-        def test(self):
-
-            self.hospital_login()
-
-            time.sleep(4)
-            
-            self.hospital_equipment()
-            
-            time.sleep(4)
-            
-            self.hospital_logout()
-            
-        def hospital_login(self):
-
-            # list of hospitals
-            client.expect('user/testuser1/hospitals',
-                          {"hospitals": [{"id":4,"name":"General Hospital"},{"id":5,"name":"Popular Insurance IMSS Clinic"}]})
-            
-            # login to hospital
-            self.publish('user/testuser1/hospital', 4,
-                         qos=2, retain=False)
-            client.expect('user/testuser1/hospital', '4')
-
-            # get hospital metadata
-            client.expect('hospital/4/metadata',
-                          {"equipment":[{"name":"Tomography","toggleable":True},{"name":"Blood laboratory","toggleable":True},{"name":"Ultrasound","toggleable":True},{"name":"Radiograph","toggleable":True}]})
-
-            # get hospital equipment
-            client.expect('hospital/4/equipment/Tomography', '3')
-            client.expect('hospital/4/equipment/Blood laboratory', '2')
-            client.expect('hospital/4/equipment/Ultrasound', '6')
-            client.expect('hospital/4/equipment/Radiograph', '5')
-            
-        def hospital_equipment(self):
-
-            # modify equipment
-            self.publish('hospital/4/equipment/Tomography', 1,
-                         qos=2, retain=True)
-            client.expect('hospital/4/equipment/Tomography', '1')
-
-            # revert back
-            self.publish('hospital/4/equipment/Tomography', 3,
-                         qos=2, retain=True)
-            client.expect('hospital/4/equipment/Tomography', '3')
-            
-        def hospital_logout(self):
-
-            self.publish('user/testuser1/hospital', -1,
-                         qos=2,
-                         retain=False)
-
-            client.expect('user/testuser1/hospital', '-1')
-            
-    client = TestHospitalLogin(broker, sys.stdout, style, verbosity = 1)
-
-    run_test(client)
-    
 def test2():
 
-    class TestAmbulances(Client):
-
-        def test(self):
-
-            self.ambulance_login()
-
-            self.ambulance_location()
-            
-            self.ambulance_logout()
-            
-        def ambulance_login(self):
-
-            # list of ambulances
-            client.expect('user/testuser1/ambulances',
-                          {"ambulances":[{"id":12,"license_plate":"BC-179"},{"id":11,"license_plate":"BC-160"},{"id":10,"license_plate":"BC-183"}]})
-            
-            # login to ambulance
-            self.publish('user/testuser1/ambulance', 12,
-                         qos=2, retain=False)
-            client.expect('user/testuser1/ambulance', '12')
-
-        def ambulance_location(self):
-
-            # modify equipment
-            self.publish('user/testuser1/location',
-                         '{"location":{"latitude":32.41902124227067,"longitude":-116.9496227294922},"timestamp": "2019-11-9 14:31:59"}',
-                         qos=2, retain=True)
-            client.expect('ambulance/12/location',
-                          {"location":{"latitude":32.41902124227067,"longitude":-116.9496227294922},"orientation":200.0})
-
-        def ambulance_logout(self):
-
-            self.publish('user/testuser1/ambulance', -1,
-                         qos=2,
-                         retain=False)
-
-            client.expect('user/testuser1/ambulance', '-1')
-            
-    client = TestAmbulances(broker, sys.stdout, style, verbosity = 1)
-
-    run_test(client)
-
+    run_test('ambulance_login', ambulance_login)
+    
 if __name__ == '__main__':
 
     test1()    
