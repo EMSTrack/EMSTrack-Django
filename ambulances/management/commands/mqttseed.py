@@ -188,6 +188,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        import os
+
         broker = {
             'USERNAME': '',
             'PASSWORD': '',
