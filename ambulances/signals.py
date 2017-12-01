@@ -1,6 +1,7 @@
 import inspect
 import os
 import sys
+import atexit
 
 from django.db.models.signals import post_save, post_delete, m2m_changed
 from django.dispatch import receiver
@@ -39,15 +40,15 @@ if enable_signals:
     
     client = UpdateClient(broker, stdout, style, 0)
 
-    try:
-        client.loop_start()
+    # register atexit handler to make sure it disconnects at exit
+    atexit.register(client.disconnect)
 
-    except KeyboardInterrupt:
-        pass
+    # start client on its own thread
+    client.loop_start()
 
-    finally:
-        client.disconnect()
 
+    # register signals
+    
     @receiver(post_delete, sender=Ambulances)
     @receiver(post_save, sender=Ambulances)
     def ambulance_mqtt_trigger(sender, **kwargs):
