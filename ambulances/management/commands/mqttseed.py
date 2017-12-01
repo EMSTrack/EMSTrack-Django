@@ -200,7 +200,7 @@ class Command(BaseCommand):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = broker['CLIENT_ID'] + '_' + str(os.getpid())
+        broker['CLIENT_ID'] = 'mqttseed_' + str(os.getpid())
 
         client = Client(broker, self.stdout, self.style,
                         verbosity = options['verbosity'])
