@@ -23,6 +23,7 @@ class Client(BaseClient):
 
         # initialize pubcount
         self.pubcount = 0
+        self.can_disconnect = False
 
         # Seed hospitals
         self.seed_hospital_equipment(client)
@@ -37,6 +38,9 @@ class Client(BaseClient):
         # Seed calls
         self.seed_calls(client)
 
+        # Good to disconnect
+        self.can_disconnect = True
+        
     def publish(self, topic, message, *vargs, **kwargs):
         # increment pubcount then publish
         self.pubcount += 1
@@ -154,6 +158,11 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding calls"))
 
         for call in Call.objects.all():
+
+            # Only seed active calls
+            if not call.active:
+                continue
+            
             amb_id = call.ambulance.id
             serializer = CallSerializer(call)
             json = JSONRenderer().render(serializer.data)
@@ -171,7 +180,7 @@ class Client(BaseClient):
         # make sure all is published before disconnecting
         self.pubcount -= 1
         # print("on_publish: '{}', '{}'".format(client, userdata))
-        if self.pubcount == 0:
+        if self.pubcount == 0 and self.can_disconnect:
             self.disconnect()
 
 class Command(BaseCommand):
@@ -189,6 +198,7 @@ class Command(BaseCommand):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = broker['CLIENT_ID'] + '_' + str(os.getpid())
 
         client = Client(broker, self.stdout, self.style,
                         verbosity = options['verbosity'])
