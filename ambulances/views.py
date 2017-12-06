@@ -1,5 +1,6 @@
 import django_filters.rest_framework
-from django.core.urlresolvers import reverse_lazy
+#from django.core.urlresolvers import reverse_lazy
+from django.urls import reverse_lazy
 
 from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
