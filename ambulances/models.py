@@ -10,7 +10,6 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
 
-
 class Status(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
