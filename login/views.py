@@ -89,7 +89,7 @@ class MQTTAclView(CsrfExemptMixin, View):
 
             if acc == 1:
                 
-                # permission to subscribe
+                # permission to subscribe:
 
                 #  - user/*username*/hospitals
                 #  - user/*username*/ambulances
@@ -125,7 +125,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         
             elif acc == 2:
                 
-                # permission to publish on:
+                # permission to publish:
                 
                 #  - user/*username*/hospital
                 #  - user/*username*/ambulance
