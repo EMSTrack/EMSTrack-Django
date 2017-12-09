@@ -111,7 +111,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                     # is user authorized?
                     try:
 
-                        h = user.hospitals.get(id=hostpital_id)
+                        h = user.hospitals.get(id=hospital_id)
                         print('h = {}'.format(h))
             
                         if ((len(topic) == 3 and topic[2] == 'metadata') or
