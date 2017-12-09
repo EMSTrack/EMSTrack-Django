@@ -17,44 +17,44 @@ class CreateUser(TestCase):
         self.factory = RequestFactory()
 
         # Add hospitals
-        h1 = Hospital(name='hospital1', address='somewhere')
-        h1.save()
-        h2 = Hospital(name='hospital2', address='somewhere else')
-        h2.save()
-        h3 = Hospital(name='hospital3', address='somewhere other')
-        h3.save()
+        self.h1 = Hospital(name='hospital1', address='somewhere')
+        self.h1.save()
+        self.h2 = Hospital(name='hospital2', address='somewhere else')
+        self.h2.save()
+        self.h3 = Hospital(name='hospital3', address='somewhere other')
+        self.h3.save()
         
         # Add users
-        u1 = User.objects.create_user(
+        self.u1 = User.objects.create_user(
             username='admin',
             email='admin@user.com',
             password='admin',
             is_superuser=True)
         
-        u2 = User.objects.create_user(
+        self.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
-        u2.hospitals.add(h1, h3)
-        u2.save()
+        self.u2.hospitals.add(self.h1, self.h3)
+        self.u2.save()
         
-        u3 = User.objects.create_user(
+        self.u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
-        u3.hospitals.add(h1, h2)
-        u3.save()
+        self.u3.hospitals.add(self.h1, self.h2)
+        self.u3.save()
 
-        print('h1 = {}'.format(h1))
-        print('h2 = {}'.format(h2))
-        print('h3 = {}'.format(h3))
+        print('h1 = {}'.format(self.h1))
+        print('h2 = {}'.format(self.h2))
+        print('h3 = {}'.format(self.h3))
 
-        print('u1 = {}'.format(u1))
-        print('u1 = {}'.format(u1.hospitals.all()))
-        print('u2 = {}'.format(u2))
-        print('u2 = {}'.format(u2.hospitals.all()))
-        print('u3 = {}'.format(u3))
-        print('u3 = {}'.format(u3.hospitals.all()))
+        print('u1 = {}'.format(self.u1))
+        print('u1 = {}'.format(self.u1.hospitals.all()))
+        print('u2 = {}'.format(self.u2))
+        print('u2 = {}'.format(self.u2.hospitals.all()))
+        print('u3 = {}'.format(self.u3))
+        print('u3 = {}'.format(self.u3.hospitals.all()))
         
     def test_login(self):
 
@@ -400,9 +400,27 @@ class CreateUser(TestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospitals/1/metadata' },
+                                 'topic': '/hospitals/{}/metadata'.format(self.h1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 200)
+
+        # can subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
+                                 'topic': '/hospitals/{}/metadata'.format(self.h2.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can't subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
+                                 'topic': '/hospitals/{}/metadata'.format(self.h3.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
 
         # can subscribe
         response = client.post('/aauth/mqtt/acl/',
@@ -412,12 +430,3 @@ class CreateUser(TestCase):
                                  'topic': '/user/testuser1/ambulances' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        
-        # can't publish
-        response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/ambulances' },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
