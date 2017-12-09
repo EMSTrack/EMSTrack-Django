@@ -46,8 +46,11 @@ class CreateUser(TestCase):
         u3.hospitals.add(h2)
 
         print('u1 = {}'.format(u1))
+        print('u1 = {}'.format(u1.hospitals))
         print('u2 = {}'.format(u2))
+        print('u2 = {}'.format(u2.hospitals))
         print('u3 = {}'.format(u3))
+        print('u3 = {}'.format(u3.hospitals))
         
     def test_login(self):
 
