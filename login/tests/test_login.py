@@ -5,7 +5,7 @@ User = get_user_model()
 
 from django.test import Client
 
-from ..views import views
+from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
 class CreateUser(TestCase):
 
@@ -26,6 +26,6 @@ class CreateUser(TestCase):
         #request.user = self.user
         #request.user = AnonymousUser()
 
-        response = views.LoginView.as_view()(request)
+        response = LoginView.as_view()(request)
         
         self.assertEqual(response.status_code, 200)
