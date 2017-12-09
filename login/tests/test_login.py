@@ -35,16 +35,14 @@ class CreateUser(TestCase):
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
-        u2.hospitals.add(h1)
-        u2.hospitals.add(h3)
+        u2.hospitals.add(h1, h3)
         u2.save()
         
         u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
-        u3.hospitals.add(h1)
-        u3.hospitals.add(h2)
+        u3.hospitals.add(h1, h2)
         u3.save()
 
         print('h1 = {}'.format(h1))
@@ -52,11 +50,11 @@ class CreateUser(TestCase):
         print('h3 = {}'.format(h3))
 
         print('u1 = {}'.format(u1))
-        print('u1 = {}'.format(u1.hospitals))
+        print('u1 = {}'.format(u1.hospitals.all()))
         print('u2 = {}'.format(u2))
-        print('u2 = {}'.format(u2.hospitals))
+        print('u2 = {}'.format(u2.hospitals.all()))
         print('u3 = {}'.format(u3))
-        print('u3 = {}'.format(u3.hospitals))
+        print('u3 = {}'.format(u3.hospitals.all()))
         
     def test_login(self):
 
