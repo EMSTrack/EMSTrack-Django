@@ -84,17 +84,36 @@ class MQTTAclView(CsrfExemptMixin, View):
             if acc == '1':
                 
                 # permission to subscribe
-                #  - all (for now)
+                #  - user/*username*/hospitals
+                #  - user/*username*/ambulances
+                if (len(topic) == 3 and
+                    topic[0] == 'user' and
+                    topic[1] == user.username):
+
+                    if (topic[2] == 'hospitals' or
+                        topic[2] == 'ambulances'):
+                        
+                        return HttpResponse('OK')
+
+                #  - hospital/+/metadata
+                #  - hospital/+/equipment/+
+                elif (len(topic) >= 3 and
+                      topic[0] == 'hospital'):
+                    
+                    hospital_id = topic[1]
+                    # is user authorized?
+                    if (hostpital_id in user.hospitals and
+                        (topic[2] == 'metadata' or topic[2] == 'equipment')):
+                        
+                        return HttpResponse('OK')
                 
-                return HttpResponse('OK')
-            
             elif acc == '2':
                 
                 # permission to publish on:
                 #  - user/*username*/hospital
                 #  - user/*username*/ambulance
                 #  - user/*username*/location
-                if (len(topic) >= 3 and
+                if (len(topic) == 3 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
