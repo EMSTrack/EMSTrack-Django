@@ -119,7 +119,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         
                             return HttpResponse('OK')
 
-                    except ambulance.models.DoesNotExist:
+                    except ambulances.models.DoesNotExist:
                         pass
                         
             elif acc == 2:
