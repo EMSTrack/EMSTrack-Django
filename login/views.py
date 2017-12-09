@@ -80,6 +80,8 @@ class MQTTAclView(CsrfExemptMixin, View):
             # get user
             user = User.objects.get(username=data.get('username'),
                                     is_active=True)
+
+            print('topic = {}'.format(topic))
             print('user = {}'.format(user))
             print('user.hospitals = {}'.format(user.hospitals.all()))
 
@@ -104,8 +106,9 @@ class MQTTAclView(CsrfExemptMixin, View):
                       topic[0] == 'hospital'):
                     
                     hospital_id = int(topic[1])
-                    # is user authorized?
+                    print('hospital_id = {}'.format(hospital_id))
 
+                    # is user authorized?
                     try:
 
                         h = user.hospitals.get(id=hostpital_id)

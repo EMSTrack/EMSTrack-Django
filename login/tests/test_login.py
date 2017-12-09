@@ -400,7 +400,7 @@ class CreateUser(TestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospitals/{}/metadata'.format(self.h1.id) },
+                                 'topic': '/hospital/{}/metadata'.format(self.h1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -409,7 +409,7 @@ class CreateUser(TestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospitals/{}/metadata'.format(self.h2.id) },
+                                 'topic': '/hospital/{}/metadata'.format(self.h2.id) },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -418,7 +418,7 @@ class CreateUser(TestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospitals/{}/metadata'.format(self.h3.id) },
+                                 'topic': '/hospital/{}/metadata'.format(self.h3.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
