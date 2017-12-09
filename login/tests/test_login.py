@@ -65,4 +65,24 @@ class CreateUser(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
 
-    
+        # login user2
+        response = client.post('/aauth/login/', { 'username': 'testuser2',
+                                                  'password': 'very_secret' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated, True)
+        self.assertEqual(response.context['user'].username, 'testuser2')
+
+        # login admin
+        response = client.post('/aauth/login/', { 'username': 'admin',
+                                                  'password': 'admin' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated, True)
+        self.assertEqual(response.context['user'].username, 'admin')
+
+        # logout
+        response = client.get('/aauth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated, False)
+        
