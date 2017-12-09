@@ -279,7 +279,7 @@ class CreateUser(TestCase):
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/hospital' },
+                                 'topic': '/user/admin/hospital' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         
@@ -288,7 +288,7 @@ class CreateUser(TestCase):
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/ambulance' },
+                                 'topic': '/user/admin/ambulance' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -297,7 +297,7 @@ class CreateUser(TestCase):
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/location' },
+                                 'topic': '/user/admin/location' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -306,7 +306,7 @@ class CreateUser(TestCase):
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/llocation' },
+                                 'topic': '/user/admin/llocation' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
