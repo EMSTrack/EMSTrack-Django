@@ -11,17 +11,17 @@
 {% block content %}
 {% if user.is_authenticated %}
 <form id="ambulances_form" action="" method="post">{% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <div id="buttons">
-        {% if object %}
-        <input class="button save" type="submit" value="Save"/>
-        <a class="button cancel" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
-        {% else %}
-        <input class="button save" type="submit" value="Create Ambulance"/>
-        {% endif %}
-    </div>
+  <table>
+    {{ form.as_table }}
+  </table>
+  <div id="buttons">
+    {% if object %}
+    <input class="button save" type="submit" value="Save"/>
+    <a class="button cancel" href="{{ request.META.HTTP_REFERER }}">Cancel</a>
+    {% else %}
+    <input class="button save" type="submit" value="Create Ambulance"/>
+    {% endif %}
+  </div>
 </form>
 
 <br/><br/>
@@ -30,9 +30,9 @@
 <h1>Ambulance List</h1>
 
 <style>
-th {
-    text-align: left;
-    }
+  th {
+  text-align: left;
+  }
 </style>
 
 <br/>
@@ -42,53 +42,39 @@ th {
             <table class="table table-striped table-condensed">
                 <thead>
                 <tr>
-                    <th>Ambulance Unique ID</th>
-                    <th>Ambulance Name</th>
+                    <th>Identifier</th>
                     <th>Status</th>
                     <th>Location</th>
                     <th>Capability</th>
+                    <th>Comments</th>
                 </tr>
                 </thead>
                 <tbody>
                     {% for ambulance in ambulances %}
-                    {% if ambulance.license_plate != "" %}
                     <tr>
-                     <td> {{ ambulance.license_plate }} {% if user.is_authenticated %}
-                         <a href="{% url 'ambulance_update' pk=ambulance.id %}">Edit</a>
-                            {% endif %}</td>
-                        <td>{{ ambulance.name }}</td>
-                        {% if ambulance.status == "Available" %}
-                            <td><span class="label label-success">{{ ambulance.status }}</span>
-                        {%endif%}
-                         <td><span class="label label-warning">{{ ambulance.status }}</span>
-
-                        <td>{{ ambulance.location }}</td>
-                        <td>{{ambulance.capability}}</td>
+                      <td>
+			{% if user.is_authenticated %}<a href="{% url 'ambulance_update' pk=ambulance.id %}">{% endif %}
+			  {{ ambulance.license_plate }} 
+			{% if user.is_authenticated %}</a>{% endif %}
+		      </td>
+                      <td>
+			<span class="label label-success">
+			{{ ambulance.status }}
+			</span>
+		      </td>
+                      <td>
+			{{ ambulance.location }}
+		      </td>
+                      <td>
+			{{ambulance.capability}}
+		      </td>
+                      <td>
+			{{ ambulance.name }}
+		      </td>
                     </tr>
-                    {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-<!--
-<ul>
-    {% for ambulance in ambulances %}
-    {% if ambulance.license_plate != "" %}
-    <li>
-        {{ ambulance.license_plate }};
-        {{ ambulance.name }};
-        {{ ambulance.status }};
-        {{ ambulance.location }};
-        {% if user.is_authenticated %}
-        <a href="{% url 'ambulance_update' pk=ambulance.id %}">Edit</a>
-        {% endif %}
-    </li>
-    {% endif %}
-    {% endfor %}
-</ul>
-{% endblock %}
--->
-
