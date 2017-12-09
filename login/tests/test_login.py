@@ -27,23 +27,24 @@ class CreateUser(TestCase):
         response = client.get('/aauth/login/')
         self.assertEqual(response.status_code, 200)
 
+        # incorrect username
+        response = client.post('/aauth/login/', { 'username': 'testuser11',
+                                                  'password': 'top_secret' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated, False)
+        
+        # incorrect password
+        response = client.post('/aauth/login/', { 'username': 'testuser1',
+                                                  'password': 'top_secret0' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated, False)
+        
         # correct login
         response = client.post('/aauth/login/', { 'username': 'testuser1',
                                                   'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-
-        # incorrect username
-        response = client.post('/aauth/login/', { 'username': 'testuser11',
-                                                 'password': 'top_secret' },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'errors', 'This field is required.')
-
-        # incorrect password
-        response = client.post('/aauth/login/', { 'username': 'testuser1',
-                                                 'password': 'top_secret0' },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertFormError(response, 'form', 'errors', 'This field is required.')
+        self.assertEqual(response.context['user'].is_authenticated, True)
         
