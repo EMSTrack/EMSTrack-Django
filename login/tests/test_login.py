@@ -5,7 +5,7 @@ User = get_user_model()
 
 from django.test import Client
 
-from .views import views
+from ..views import views
 
 class CreateUser(TestCase):
 
