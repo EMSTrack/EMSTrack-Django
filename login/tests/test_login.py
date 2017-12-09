@@ -374,6 +374,15 @@ class CreateUser(TestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
+                                 'topic': '/hospitals/1/metadata' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
                                  'topic': '/user/testuser1/ambulances' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
