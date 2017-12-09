@@ -178,7 +178,7 @@ class CreateUser(TestCase):
         response = client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_mqtt_acl(self):
+    def test_mqtt_acl_publish(self):
         
         # instantiate client
         client = Client()
@@ -345,3 +345,27 @@ class CreateUser(TestCase):
                                  'topic': '' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
+
+    def test_mqtt_acl_subscribe(self):
+        
+        # instantiate client
+        client = Client()
+        
+        # can subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/hospitals' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/ambulances' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        
