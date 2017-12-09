@@ -80,6 +80,8 @@ class MQTTAclView(CsrfExemptMixin, View):
             # get user
             user = User.objects.get(username=data.get('username'),
                                     is_active=True)
+            print('user = {}'.format(user))
+            print('user.hospitals = {}'.format(user.hospitals.all()))
 
             if acc == '1':
                 
@@ -107,7 +109,8 @@ class MQTTAclView(CsrfExemptMixin, View):
                     try:
 
                         h = user.hospitals.get(id=hostpital_id)
-                        
+                        print('h = {}'.format(h))
+            
                         if ((len(topic) == 3 and topic[2] == 'metadata') or
                             (len(topic) == 3 and topic[2] == 'equipment')):
                         
