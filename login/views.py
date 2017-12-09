@@ -117,7 +117,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         print('h = {}'.format(h))
             
                         if ((len(topic) == 3 and topic[2] == 'metadata') or
-                            (len(topic) == 3 and topic[2] == 'equipment')):
+                            (len(topic) == 4 and topic[2] == 'equipment')):
                         
                             return HttpResponse('OK')
 
