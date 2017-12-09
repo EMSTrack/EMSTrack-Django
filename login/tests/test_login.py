@@ -155,6 +155,12 @@ class CreateUser(TestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
+        # incorrect username superuser
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'admin' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
         # login admin
         response = client.post('/aauth/mqtt/login/',
                                { 'username': 'admin',
