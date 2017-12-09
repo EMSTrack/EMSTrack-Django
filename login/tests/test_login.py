@@ -155,11 +155,11 @@ class CreateUser(TestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
-        # incorrect username superuser
+        # username superuser
         response = client.post('/aauth/mqtt/superuser/',
                                { 'username': 'admin' },
                                follow=True)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
         
         # login admin
         response = client.post('/aauth/mqtt/login/',
@@ -168,7 +168,7 @@ class CreateUser(TestCase):
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # incorrect username superuser
+        # username superuser
         response = client.post('/aauth/mqtt/superuser/',
                                { 'username': 'admin' },
                                follow=True)
@@ -176,4 +176,49 @@ class CreateUser(TestCase):
         
         # logout
         response = client.get('/aauth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_mqtt_acl(self):
+        
+        # instantiate client
+        client = Client()
+
+        # login
+        response = client.post('/aauth/mqtt/login/',
+                               { 'username': 'testuser1',
+                                 'password': 'top_secret' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # not super
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'testuser1' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can publish
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/hospital' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        # can publish
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/ambulance' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can publish
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/location' },
+                               follow=True)
         self.assertEqual(response.status_code, 200)
