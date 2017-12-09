@@ -17,7 +17,8 @@ class CreateUser(TestCase):
         self.user = User.objects.create_user(
             username='admin',
             email='admin@user.com',
-            password='admin')
+            password='admin',
+            is_superuser=True)
 
         self.user = User.objects.create_user(
             username='testuser1',
@@ -59,6 +60,7 @@ class CreateUser(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
         self.assertEqual(response.context['user'].username, 'testuser1')
+        self.assertEqual(response.context['user'].is_superuser, False)
 
         # logout
         response = client.get('/aauth/logout/', follow=True)
@@ -72,6 +74,7 @@ class CreateUser(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
         self.assertEqual(response.context['user'].username, 'testuser2')
+        self.assertEqual(response.context['user'].is_superuser, False)
 
         # login admin
         response = client.post('/aauth/login/', { 'username': 'admin',
@@ -80,6 +83,7 @@ class CreateUser(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
         self.assertEqual(response.context['user'].username, 'admin')
+        self.assertEqual(response.context['user'].is_superuser, True)
 
         # logout
         response = client.get('/aauth/logout/', follow=True)
