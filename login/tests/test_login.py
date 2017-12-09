@@ -1,12 +1,16 @@
 from django.test import TestCase, RequestFactory
 
-from ambulances.models import User
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from django.test import Client
+
+from .views import views
 
 class CreateUser(TestCase):
 
     def setUp(self):
+
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
         self.user = User.objects.create_user(
@@ -16,4 +20,12 @@ class CreateUser(TestCase):
 
     def test_login(self):
 
-        self.assertEqual(True,True);
+        # Create an instance of a GET request.
+        request = self.factory.get('/aauth/login')
+
+        #request.user = self.user
+        #request.user = AnonymousUser()
+
+        response = views.LoginView.as_view()(request)
+        
+        self.assertEqual(response.status_code, 200)
