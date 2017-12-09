@@ -38,12 +38,12 @@ class CreateUser(TestCase):
                                                  'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        print(response)
+        print(response.__dict__)
 
         # incorrect password
         response = client.post('/aauth/login/', { 'username': 'testuser1',
                                                  'password': 'top_secret0' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        print(response)
+        print(response.__dict__)
         
