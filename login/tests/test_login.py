@@ -16,27 +16,34 @@ class CreateUser(TestCase):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
 
+        # Add hospitals
+        h1 = Hospital(name='hospital1', address='somewhere')
+        h1.save()
+        h2 = Hospital(name='hospital2', address='somewhere else')
+        h2.save()
+        h3 = Hospital(name='hospital3', address='somewhere other')
+        h3.save()
+        
         # Add users
-        User.objects.create_user(
+        u1 = User.objects.create_user(
             username='admin',
             email='admin@user.com',
             password='admin',
             is_superuser=True)
         
-        User.objects.create_user(
+        u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
+        u2.hospitals.add(h1)
+        u2.hospitals.add(h3)
         
-        User.objects.create_user(
+        u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
-        
-        # Add hospitals
-        Hospital(name='hospital1', address='somewhere').save()
-        Hospital(name='hospital2', address='somewhere else').save()
-        Hospital(name='hospital3', address='somewhere other').save()
+        u3.hospitals.add(h1)
+        u3.hospitals.add(h2)
         
     def test_login(self):
 
