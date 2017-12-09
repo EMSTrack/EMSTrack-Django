@@ -103,8 +103,10 @@ class MQTTAclView(CsrfExemptMixin, View):
                     
                     hospital_id = topic[1]
                     # is user authorized?
-                    if (hostpital_id in user.hospitals and
-                        (topic[2] == 'metadata' or topic[2] == 'equipment')):
+
+                    if (user.filter(hospitals__id=hostpital_id) and 
+                        (len(topic) == 3 and topic[2] == 'metadata') or
+                        (len(topic) == 3 and topic[2] == 'equipment')):
                         
                         return HttpResponse('OK')
                 
