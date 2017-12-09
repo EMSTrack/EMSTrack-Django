@@ -116,9 +116,6 @@ class CreateUser(TestCase):
                                                        'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, True)
-        self.assertEqual(response.context['user'].username, 'testuser1')
-        self.assertEqual(response.context['user'].is_superuser, False)
 
         # logout
         response = client.get('/aauth/logout/', follow=True)
@@ -130,18 +127,12 @@ class CreateUser(TestCase):
                                                        'password': 'very_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, True)
-        self.assertEqual(response.context['user'].username, 'testuser2')
-        self.assertEqual(response.context['user'].is_superuser, False)
 
         # login admin
         response = client.post('/aauth/mqtt/login/', { 'username': 'admin',
                                                        'password': 'admin' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, True)
-        self.assertEqual(response.context['user'].username, 'admin')
-        self.assertEqual(response.context['user'].is_superuser, True)
 
         # logout
         response = client.get('/aauth/logout/', follow=True)
