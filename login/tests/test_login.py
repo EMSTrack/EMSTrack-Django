@@ -20,12 +20,25 @@ class CreateUser(TestCase):
 
     def test_login(self):
 
-        # Create an instance of a GET request.
-        request = self.factory.get('/aauth/login')
+        # instantiate client
+        client = Client()
 
-        #request.user = self.user
-        #request.user = AnonymousUser()
-
-        response = LoginView.as_view()(request)
-        
+        # blank login
+        response = client.get('/aauth/login')
         self.assertEqual(response.status_code, 200)
+
+        # correct login
+        response = client.post('/aauth/login', { 'username': 'testuser1',
+                                                 'password': 'top_secret' })
+        self.assertEqual(response.status_code, 200)
+
+        # incorrect username
+        response = client.post('/aauth/login', { 'username': 'testuser11',
+                                                 'password': 'top_secret' })
+        self.assertEqual(response.status_code, 200)
+
+        # incorrect password
+        response = client.post('/aauth/login', { 'username': 'testuser1',
+                                                 'password': 'top_secret0' })
+        self.assertEqual(response.status_code, 200)
+        
