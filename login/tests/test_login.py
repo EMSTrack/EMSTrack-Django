@@ -24,21 +24,21 @@ class CreateUser(TestCase):
         client = Client()
 
         # blank login
-        response = client.get('/aauth/login')
+        response = client.get('/aauth/login/')
         self.assertEqual(response.status_code, 200)
 
         # correct login
-        response = client.post('/aauth/login', { 'username': 'testuser1',
+        response = client.post('/aauth/login/', { 'username': 'testuser1',
                                                  'password': 'top_secret' })
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = client.post('/aauth/login', { 'username': 'testuser11',
+        response = client.post('/aauth/login/', { 'username': 'testuser11',
                                                  'password': 'top_secret' })
         self.assertEqual(response.status_code, 301)
 
         # incorrect password
-        response = client.post('/aauth/login', { 'username': 'testuser1',
+        response = client.post('/aauth/login/', { 'username': 'testuser1',
                                                  'password': 'top_secret0' })
         self.assertEqual(response.status_code, 301)
         
