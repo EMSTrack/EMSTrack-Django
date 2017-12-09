@@ -103,15 +103,13 @@ class CreateUser(TestCase):
         response = client.post('/aauth/mqtt/login/', { 'username': 'testuser11',
                                                        'password': 'top_secret' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, False)
+        self.assertEqual(response.status_code, 403)
         
         # incorrect password
         response = client.post('/aauth/mqtt/login/', { 'username': 'testuser1',
                                                        'password': 'top_secret0' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, False)
+        self.assertEqual(response.status_code, 403)
         
         # correct login
         response = client.post('/aauth/mqtt/login/', { 'username': 'testuser1',
