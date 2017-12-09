@@ -3,6 +3,8 @@ from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+from ambulances.models import Hospital
+
 from django.test import Client
 
 from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperuserView, MQTTAclView
@@ -14,21 +16,27 @@ class CreateUser(TestCase):
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
 
-        self.user = User.objects.create_user(
+        # Add users
+        User.objects.create_user(
             username='admin',
             email='admin@user.com',
             password='admin',
             is_superuser=True)
-
-        self.user = User.objects.create_user(
+        
+        User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
-
-        self.user = User.objects.create_user(
+        
+        User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
+        
+        # Add hospitals
+        Hospital(name='hospital1', address='somewhere').save()
+        Hospital(name='hospital2', address='somewhere else').save()
+        Hospital(name='hospital3', address='somewhere other').save()
         
     def test_login(self):
 
