@@ -355,7 +355,7 @@ class CreateUser(TestCase):
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
-                                 'acc': '2',
+                                 'acc': '1',
                                  'topic': '/user/testuser1/hospitals' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
@@ -364,7 +364,7 @@ class CreateUser(TestCase):
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
-                                 'acc': '2',
+                                 'acc': '1',
                                  'topic': '/user/testuser1/ambulances' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
