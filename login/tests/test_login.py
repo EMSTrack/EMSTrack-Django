@@ -13,11 +13,22 @@ class CreateUser(TestCase):
 
         # Every test needs access to the request factory.
         self.factory = RequestFactory()
+
+        self.user = User.objects.create_user(
+            username='admin',
+            email='admin@user.com',
+            password='admin')
+
         self.user = User.objects.create_user(
             username='testuser1',
-            email='test@user.com',
+            email='test1@user.com',
             password='top_secret')
 
+        self.user = User.objects.create_user(
+            username='testuser2',
+            email='test2@user.com',
+            password='very_secret')
+        
     def test_login(self):
 
         # instantiate client
@@ -47,6 +58,7 @@ class CreateUser(TestCase):
                                follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
+        self.assertEqual(response.context['user'].username, 'testuser1')
 
         # logout
         response = client.get('/aauth/logout/', follow=True)
