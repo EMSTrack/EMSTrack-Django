@@ -100,41 +100,74 @@ class CreateUser(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = client.post('/aauth/mqtt/login/', { 'username': 'testuser11',
-                                                       'password': 'top_secret' },
+        response = client.post('/aauth/mqtt/login/',
+                               { 'username': 'testuser11',
+                                 'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
+        # incorrect username superuser
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'testuser11' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+
         # incorrect password
-        response = client.post('/aauth/mqtt/login/', { 'username': 'testuser1',
-                                                       'password': 'top_secret0' },
+        response = client.post('/aauth/mqtt/login/',
+                               { 'username': 'testuser1',
+                                 'password': 'top_secret0' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # incorrect username superuser
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'testuser1' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
         # correct login
-        response = client.post('/aauth/mqtt/login/', { 'username': 'testuser1',
-                                                       'password': 'top_secret' },
+        response = client.post('/aauth/mqtt/login/',
+                               { 'username': 'testuser1',
+                                 'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
+        # incorrect username superuser
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'testuser1' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
         # logout
         response = client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, False)
 
         # login user2
-        response = client.post('/aauth/mqtt/login/', { 'username': 'testuser2',
-                                                       'password': 'very_secret' },
+        response = client.post('/aauth/mqtt/login/',
+                               { 'username': 'testuser2',
+                                 'password': 'very_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
+        # incorrect username superuser
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'testuser2' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
         # login admin
-        response = client.post('/aauth/mqtt/login/', { 'username': 'admin',
-                                                       'password': 'admin' },
+        response = client.post('/aauth/mqtt/login/',
+                               { 'username': 'admin',
+                                 'password': 'admin' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
+        # incorrect username superuser
+        response = client.post('/aauth/mqtt/superuser/',
+                               { 'username': 'admin' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        
         # logout
         response = client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, False)
