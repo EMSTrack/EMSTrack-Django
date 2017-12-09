@@ -42,6 +42,6 @@ class CreateUser(TestCase):
         # incorrect password
         response = client.post('/aauth/login/', { 'username': 'testuser1',
                                                  'password': 'top_secret0' },
-                               follow=True))
+                               follow=True)
         self.assertEqual(response.status_code, 301)
         
