@@ -38,12 +38,12 @@ class CreateUser(TestCase):
                                                  'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        print(response.__dict__)
+        self.assertFormError(response, 'form', 'errors', 'This field is required.')
 
         # incorrect password
         response = client.post('/aauth/login/', { 'username': 'testuser1',
                                                  'password': 'top_secret0' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
-        print(response.__dict__)
+        self.assertFormError(response, 'form', 'errors', 'This field is required.')
         
