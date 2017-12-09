@@ -85,7 +85,7 @@ class Hospital(models.Model):
     address = models.CharField(max_length=254, default="")
 
     def __str__(self):
-        return "{}".format(self.name)
+        return "{}: {} ({})".format(self.id, self.name, self.address)
 
 
 class Equipment(models.Model):
@@ -94,11 +94,9 @@ class Equipment(models.Model):
     toggleable = models.BooleanField(default=0)
 
     def __str__(self):
-        return "{}".format(self.name)
-
+        return "{}: {} ({})".format(self.id, self.name, self.toggleable)
 
 class EquipmentCount(models.Model):
-
     id = models.AutoField(primary_key=True)
     hospital = models.ForeignKey(Hospital, related_name='equipment',on_delete=models.CASCADE, null=True)
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
