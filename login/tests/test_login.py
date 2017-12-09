@@ -37,6 +37,7 @@ class CreateUser(TestCase):
             password='top_secret')
         u2.hospitals.add(h1)
         u2.hospitals.add(h3)
+        u2.save()
         
         u3 = User.objects.create_user(
             username='testuser2',
@@ -44,6 +45,11 @@ class CreateUser(TestCase):
             password='very_secret')
         u3.hospitals.add(h1)
         u3.hospitals.add(h2)
+        u3.save()
+
+        print('h1 = {}'.format(h1))
+        print('h2 = {}'.format(h2))
+        print('h3 = {}'.format(h3))
 
         print('u1 = {}'.format(u1))
         print('u1 = {}'.format(u1.hospitals))
