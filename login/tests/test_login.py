@@ -52,3 +52,5 @@ class CreateUser(TestCase):
         response = client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
+
+    
