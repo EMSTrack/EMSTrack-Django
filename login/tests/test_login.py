@@ -45,16 +45,16 @@ class CreateUser(TestCase):
         self.u3.hospitals.add(self.h1, self.h2)
         self.u3.save()
 
-        print('h1 = {}'.format(self.h1))
-        print('h2 = {}'.format(self.h2))
-        print('h3 = {}'.format(self.h3))
+        #print('h1 = {}'.format(self.h1))
+        #print('h2 = {}'.format(self.h2))
+        #print('h3 = {}'.format(self.h3))
 
-        print('u1 = {}'.format(self.u1))
-        print('u1 = {}'.format(self.u1.hospitals.all()))
-        print('u2 = {}'.format(self.u2))
-        print('u2 = {}'.format(self.u2.hospitals.all()))
-        print('u3 = {}'.format(self.u3))
-        print('u3 = {}'.format(self.u3.hospitals.all()))
+        #print('u1 = {}'.format(self.u1))
+        #print('u1 = {}'.format(self.u1.hospitals.all()))
+        #print('u2 = {}'.format(self.u2))
+        #print('u2 = {}'.format(self.u2.hospitals.all()))
+        #print('u3 = {}'.format(self.u3))
+        #print('u3 = {}'.format(self.u3.hospitals.all()))
         
     def test_login(self):
 
