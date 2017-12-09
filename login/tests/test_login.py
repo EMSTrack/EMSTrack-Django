@@ -92,6 +92,9 @@ class CreateUser(TestCase):
         
     def test_mqtt_login(self):
 
+        # instantiate client
+        client = Client()
+        
         # blank login
         response = client.get('/aauth/mqtt/login/')
         self.assertEqual(response.status_code, 200)
