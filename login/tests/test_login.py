@@ -222,3 +222,48 @@ class CreateUser(TestCase):
                                  'topic': '/user/testuser1/location' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
+
+        # can publish wrong topic
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/llocation' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can publish wrong user in topic
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser2/location' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can publish wrong topic
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/location' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # can publish wrong topic
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # can publish wrong topic
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
