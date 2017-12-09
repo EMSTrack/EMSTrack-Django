@@ -69,7 +69,7 @@ class MQTTAclView(CsrfExemptMixin, View):
 
         # Check permissions
         username = data.get('username')
-        acc = data.get('acc') # 1 == sub, 2 == pub
+        acc = int(data.get('acc')) # 1 == sub, 2 == pub
 
         # get topic and remove first '/'
         topic = data.get('topic').split('/')
@@ -83,7 +83,7 @@ class MQTTAclView(CsrfExemptMixin, View):
             print('user = {}'.format(user))
             print('user.hospitals = {}'.format(user.hospitals.all()))
 
-            if acc == '1':
+            if acc == 1:
                 
                 # permission to subscribe
 
@@ -103,7 +103,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                 elif (len(topic) >= 3 and
                       topic[0] == 'hospital'):
                     
-                    hospital_id = topic[1]
+                    hospital_id = int(topic[1])
                     # is user authorized?
 
                     try:
@@ -119,7 +119,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                     except Hospital.DoesNotExist:
                         pass
                         
-            elif acc == '2':
+            elif acc == 2:
                 
                 # permission to publish on:
                 
