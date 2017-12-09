@@ -268,11 +268,11 @@ class CreateUser(TestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # super
+        # super behaves the same because it never gets acl tested
         response = client.post('/aauth/mqtt/superuser/',
                                { 'username': 'admin' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
         # can publish
         response = client.post('/aauth/mqtt/acl/',
@@ -288,7 +288,7 @@ class CreateUser(TestCase):
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/admin/ambulance' },
+                                 'topic': '/user/testuser1/ambulance' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -301,48 +301,47 @@ class CreateUser(TestCase):
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can publish wrong topic
+        # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/testuser1/llocation' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
-        # can publish wrong user in topic
+        # can't publish wrong user in topic
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/testuser2/location' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
-        # can publish wrong topic
+        # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/location' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
         
-        # can publish wrong topic
+        # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
         
-        # can publish wrong topic
+        # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
                                { 'username': 'admin',
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '' },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
-        
+        self.assertEqual(response.status_code, 403)
