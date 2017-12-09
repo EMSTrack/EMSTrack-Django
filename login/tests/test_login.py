@@ -427,6 +427,33 @@ class CreateUser(TestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
+                                 'topic': '/hospital/{}/equipment/rx'.format(self.h1.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
+                                 'topic': '/hospital/{}/equipment/beds'.format(self.h3.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can't subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
+                                 'topic': '/hospital/{}/equipment/rx'.format(self.h2.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # can subscribe
+        response = client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
                                  'topic': '/user/testuser1/ambulances' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
