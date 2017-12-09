@@ -272,7 +272,7 @@ class CreateUser(TestCase):
         response = client.post('/aauth/mqtt/superuser/',
                                { 'username': 'admin' },
                                follow=True)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
         # can publish
         response = client.post('/aauth/mqtt/acl/',
