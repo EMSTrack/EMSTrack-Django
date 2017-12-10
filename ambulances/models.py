@@ -10,12 +10,23 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
 
+class User(AbstractUser):
+    hospitals = models.ManyToManyField(Hospital)
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE,
+                                 null=True, blank=True,
+                                 related_name="hosp_id")
+    ambulances = models.ManyToManyField(Ambulances)
+    ambulance = models.ForeignKey(Ambulances,
+                                  on_delete=models.CASCADE,
+                                  null=True, blank=True,
+                                  related_name ="ambul_id")
+
 class Status(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
         return "{}".format(self.name)
-
 
 class Capability(models.Model):
     name = models.CharField(max_length=254, unique=True)
@@ -23,13 +34,12 @@ class Capability(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
-
 class Ambulances(models.Model):
     identifier = models.CharField(max_length=50, unique=True)
     comment = models.CharField(max_length=254, default="")
     capability = models.ForeignKey(Capability, on_delete=models.CASCADE, null=True, blank=True)
     
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)
     location = models.PointField(srid=4326, default=Tijuana)
     orientation = models.FloatField(null=True)
     
@@ -123,11 +133,6 @@ class Route(models.Model):
     # Think about abstraction?
     type = models.CharField(max_length=50, null=False, default="Default Type")
 
-class User(AbstractUser):
-    hospitals = models.ManyToManyField(Hospital)
-    hospital = models.ForeignKey(Hospital, on_delete=models.CASCADE, null=True, blank=True, related_name="hosp_id")
-    ambulances = models.ManyToManyField(Ambulances)
-    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, null=True, blank=True, related_name ="ambul_id")
 
 class LocationPoint(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)

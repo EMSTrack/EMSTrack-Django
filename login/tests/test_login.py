@@ -1,4 +1,4 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -12,9 +12,6 @@ from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperu
 class CreateUser(TestCase):
 
     def setUp(self):
-
-        # Every test needs access to the request factory.
-        self.factory = RequestFactory()
 
         # Add hospitals
         self.h1 = Hospital(name='hospital1', address='somewhere')
