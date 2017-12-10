@@ -10,18 +10,6 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
 
-class User(AbstractUser):
-    hospitals = models.ManyToManyField(Hospital)
-    hospital = models.ForeignKey(Hospital,
-                                 on_delete=models.CASCADE,
-                                 null=True, blank=True,
-                                 related_name="hosp_id")
-    ambulances = models.ManyToManyField(Ambulances)
-    ambulance = models.ForeignKey(Ambulances,
-                                  on_delete=models.CASCADE,
-                                  null=True, blank=True,
-                                  related_name ="ambul_id")
-
 class Status(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
@@ -97,6 +85,17 @@ class Hospital(models.Model):
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
+class User(AbstractUser):
+    hospitals = models.ManyToManyField(Hospital)
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE,
+                                 null=True, blank=True,
+                                 related_name="hosp_id")
+    ambulances = models.ManyToManyField(Ambulances)
+    ambulance = models.ForeignKey(Ambulances,
+                                  on_delete=models.CASCADE,
+                                  null=True, blank=True,
+                                  related_name ="ambul_id")
 
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
