@@ -17,20 +17,24 @@ class UpdateClient(BaseClient):
         # Publish to new location topic
         serializer = MQTTAmbulanceLocSerializer(obj)
         json = JSONRenderer().render(serializer.data)
-        self.publish('ambulance/{}/location'.format(obj.id), json, qos=2, retain=True)
+        self.publish('ambulance/{}/location'.format(obj.id), json,
+                     qos=2, retain=True)
 
         # Publish to new status topic
-        self.publish('ambulance/{}/status'.format(obj.id), obj.status.name, qos=2, retain=True)
+        self.publish('ambulance/{}/status'.format(obj.id), obj.status.name,
+                     qos=2, retain=True)
 
     def edit_ambulance(self, obj):
         # Publish new ambulance lists for all users
         for user in User.objects.filter(ambulances=obj.id):
             serializer = MQTTAmbulanceListSerializer(user)
             json = JSONRenderer().render(serializer.data)
-            self.publish('user/{}/ambulances'.format(user.username), json, qos=2, retain=True)
+            self.publish('user/{}/ambulances'.format(user.username), json,
+                         qos=2, retain=True)
 
         # Publish to status topic
-        self.publish('ambulance/{}/status'.format(obj.id), obj.status.name, qos=2, retain=True)
+        self.publish('ambulance/{}/status'.format(obj.id), obj.status.name,
+                     qos=2, retain=True)
 
     def create_hospital(self, obj):
         # Publish config file for hospital

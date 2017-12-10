@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
 
     url(r'^$',
-        login_required(views.AmbulanceView.as_view()),
+        login_required(views.AmbulanceListView.as_view()),
         name="ambulance"),
 
     url(r'^ambulance_map$',

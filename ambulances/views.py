@@ -19,6 +19,11 @@ from .serializers import AmbulancesSerializer, StatusSerializer, \
 
 # Defines the view for a user when a url is accessed
 
+# Ambulance list page
+class AmbulanceListView(ListView):
+    model = Ambulances
+    template_name = 'ambulances/ambulance_list.html'
+    context_object_name = "ambulances"
 
 # Ambulance list page
 class AmbulanceView(CreateView):
@@ -31,7 +36,6 @@ class AmbulanceView(CreateView):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
         context['ambulances'] = Ambulances.objects.all().order_by('id')
         return context
-
 
 # Ambulance update page
 class AmbulanceUpdateView(UpdateView):

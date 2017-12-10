@@ -48,7 +48,7 @@ class CreateAmbulance(TestCase):
             result = { 'id': s.pk, 'name': s.name }
             self.assertEqual(serializer.data, result)
 
-        # test 
+        # test AmbulancesSerializer
         for a in (self.a1, self.a2):
             serializer = AmbulancesSerializer(a)
             result = { 'id': a.pk, 'identifier': a.identifier,
