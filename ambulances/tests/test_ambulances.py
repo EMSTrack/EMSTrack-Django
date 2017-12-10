@@ -43,7 +43,7 @@ class CreateAmbulance(TestCase):
     def test_ambulances(self):
 
         serializer = StatusSerializer(self.s1)
-        result = "{'id': {}, 'name': '{}'}".format(self.s1.pk, self.s1.name)
+        result = "\{'id': {}, 'name': '{}'\}".format(self.s1.pk, self.s1.name)
         self.assertEqual(serializer.data, result)
 
         serializer = StatusSerializer(self.s2)
