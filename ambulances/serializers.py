@@ -20,23 +20,16 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
     location = serializers.SerializerMethodField('get_amb_loc')
-    capability = serializers.SerializerMethodField('get_capability_name')
 
-    # Assign status to a custom field in fields.py
+    # Assign status and capability
     status = StatusField()
+    capability = CapabilityField()
 
     class Meta:
 
         # Define model, fields, and access permissions for the serializer
         model = Ambulances
-        fields = ['id', 'location', 'status', 'orientation', 'identifier']
-
-    # Queries for the capability of the ambulance
-    def get_capability_name(self, obj):
-        if obj.capability is not None:
-            capability = Capability.objects.filter(id=(obj.capability).id).first()
-            if hasattr(capability, 'name'):
-                return capability.name
+        fields = ['id', 'identifier', 'comment', 'status', 'location', 'capability', 'orientation']
 
     # Obtain serialized location
     def get_amb_loc(self, obj):

@@ -42,9 +42,18 @@ class CreateAmbulance(TestCase):
 
     def test_ambulances(self):
 
+        # test StatusSerializer
         for s in (self.s1, self.s2, self.s3):
             serializer = StatusSerializer(s)
             result = { 'id': s.pk, 'name': s.name }
             self.assertEqual(serializer.data, result)
 
+        # test 
+        for a in (self.a1, self.a2):
+            serializer = AmbulanceSerializer(s)
+            result = { 'id': a.pk, 'identifier': a.identifier,
+                       'comment': a.comment, 'status': a.status.name,
+                       'capability': a.capability.name,
+                       'orientation': a.orientation }
+            self.assertEqual(serializer.data, result)
         
