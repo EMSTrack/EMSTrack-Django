@@ -19,7 +19,7 @@ class StatusSerializer(serializers.ModelSerializer):
 class AmbulancesSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
-    location = serializers.SerializerMethodField('get_location')
+    location = serializers.SerializerMethodField('get_lat_long')
 
     # Assign status and capability
     status = StatusField()
@@ -32,7 +32,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier', 'comment', 'status', 'location', 'capability', 'orientation']
 
     # Obtain serialized location
-    def get_location(self, obj):
+    def get_lat_long(self, obj):
 
         # Return the data (JSON format of fields)
         return LocationSerializer(obj).data
