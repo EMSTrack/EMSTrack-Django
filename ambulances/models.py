@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import LineString, Point
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
@@ -22,18 +22,6 @@ class AmbulanceCapability(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
-class User(AbstractUser):
-    hospitals = models.ManyToManyField(Hospital)
-    hospital = models.ForeignKey(Hospital,
-                                 on_delete=models.CASCADE,
-                                 null=True, blank=True,
-                                 related_name="hosp_id")
-    ambulances = models.ManyToManyField(Ambulance)
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE,
-                                  null=True, blank=True,
-                                  related_name ="ambul_id")
-    
 class UserLocation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.PointField(srid=4326)
@@ -81,7 +69,20 @@ class Hospital(models.Model):
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
-       
+class UserApps(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE,
+                                 null=True, blank=True,
+                                 related_name="hosp_id")
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE,
+                                  null=True, blank=True,
+                                  related_name ="ambul_id")
+    
+    hospitals = models.ManyToManyField(Hospital)
+    ambulances = models.ManyToManyField(Ambulance)
+    
 class Call(models.Model):
     #call metadata (status not required for now)
     active = models.BooleanField(default=False)
@@ -120,8 +121,6 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
-
-
 
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
