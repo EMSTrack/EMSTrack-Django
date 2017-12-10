@@ -42,7 +42,8 @@ class CreateAmbulance(TestCase):
 
     def test_ambulances(self):
 
-        serializer = StatusSerializer(s1)
+        serializer = StatusSerializer(self.s1)
         result = '{ }'
+        
         self.assertEqual(serializer, result)
 
