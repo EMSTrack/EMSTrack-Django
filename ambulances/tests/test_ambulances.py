@@ -45,5 +45,5 @@ class CreateAmbulance(TestCase):
         serializer = StatusSerializer(self.s1)
         result = '{ }'
         
-        self.assertEqual(serializer, result)
+        self.assertEqual(serializer.data, result)
 
