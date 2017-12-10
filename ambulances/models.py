@@ -22,6 +22,18 @@ class AmbulanceCapability(models.Model):
     def __str__(self):
         return "{}".format(self.name)
 
+class User(AbstractUser):
+    hospitals = models.ManyToManyField(Hospital)
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE,
+                                 null=True, blank=True,
+                                 related_name="hosp_id")
+    ambulances = models.ManyToManyField(Ambulance)
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE,
+                                  null=True, blank=True,
+                                  related_name ="ambul_id")
+    
 class UserLocation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.PointField(srid=4326)
@@ -69,17 +81,6 @@ class Hospital(models.Model):
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
-class User(AbstractUser):
-    hospitals = models.ManyToManyField(Hospital)
-    hospital = models.ForeignKey(Hospital,
-                                 on_delete=models.CASCADE,
-                                 null=True, blank=True,
-                                 related_name="hosp_id")
-    ambulances = models.ManyToManyField(Ambulance)
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE,
-                                  null=True, blank=True,
-                                  related_name ="ambul_id")
        
 class Call(models.Model):
     #call metadata (status not required for now)
