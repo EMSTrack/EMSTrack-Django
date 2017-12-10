@@ -11,7 +11,7 @@ from django.core.management.color import color_style, no_style
 from django.conf import settings
 from django.utils.functional import wraps
 
-from .models import Status, Ambulance, Region, Call, Hospital, \
+from .models import AmbulanceStatus, Ambulance, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
 
 from .management.mqttupdate import UpdateClient
