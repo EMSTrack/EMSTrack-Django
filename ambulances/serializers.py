@@ -29,8 +29,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
 
         # Define model, fields, and access permissions for the serializer
         model = Ambulances
-        fields = ['id', 'location', 'status', 'priority', 'orientation', 'capability', 'license_plate']
-        read_only_fields = ('priority',)
+        fields = ['id', 'location', 'status', 'orientation', 'identifier']
 
     # Queries for the capability of the ambulance
     def get_capability_name(self, obj):
@@ -182,7 +181,7 @@ class MQTTAmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulances
-        fields = ['id', 'license_plate']
+        fields = ['id', 'identifier']
 
 class MQTTEquipmentCountSerializer(serializers.ModelSerializer):
 

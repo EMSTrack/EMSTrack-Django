@@ -46,9 +46,8 @@ class AmbulanceUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceUpdateView, self).get_context_data(**kwargs)
-        context['license_plate'] = self.kwargs['pk']
+        context['identifier'] = self.kwargs['pk']
         return context
-
 
 # Call list page
 class CallView(ListView):
@@ -131,7 +130,7 @@ class AmbulancesViewSet(ListRetrieveUpdateViewSet):
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
 
     # Specify fields that user can filter GET by
-    filter_fields = ('license_plate', 'status')
+    filter_fields = ('identifier', 'status')
 
 
 class StatusViewSet(viewsets.ReadOnlyModelViewSet):

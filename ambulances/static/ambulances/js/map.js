@@ -404,7 +404,7 @@ function createAmbulanceGrid(mymap) {
 		//console.log(data);
 		for(i = 0; i < data.length; i++) {
 			ambulanceId = data[i].id;
-			ambulanceLicensePlate = data[i].license_plate;
+			ambulanceLicensePlate = data[i].identifier;
 			// console.log(ambulanceId);
 			// console.log(ambulanceLicensePlate);
 			ambulanceStatus = data[i].status;

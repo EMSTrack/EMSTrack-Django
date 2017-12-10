@@ -25,19 +25,19 @@ class Capability(models.Model):
 
 
 class Ambulances(models.Model):
-    license_plate = models.CharField(max_length=20)
-    name = models.CharField(max_length=254, default="")
-
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
-    # location = models.PointField(srid=4326, default=Tijuana)
-    orientation = models.FloatField(null=True)
-    # device = models.OneToOneField(TrackableDevice, blank=True, null=True)
-    priority = models.CharField(max_length=254, default="High")
+    identifier = models.CharField(max_length=50, unique=True)
+    comment = models.CharField(max_length=254, default="")
     capability = models.ForeignKey(Capability, on_delete=models.CASCADE, null=True, blank=True)
+    
+    status = models.ForeignKey(Status, on_delete=models.CASCADE, default=1)
+    location = models.PointField(srid=4326, default=Tijuana)
+    orientation = models.FloatField(null=True)
+    
+    # device = models.OneToOneField(TrackableDevice, blank=True, null=True)
+    #priority = models.CharField(max_length=254, default="High")
 
     def __str__(self):
-        return self.license_plate
-
+        return self.identifier
 
 class Call(models.Model):
     #call metadata (status not required for now)
@@ -139,4 +139,4 @@ class LocationPoint(models.Model):
     type = models.CharField(max_length=50, null=False, default="Default Type")
 
     def __str__(self):
-        return "Ambulance: {} at {}".format(self.ambulance.license_plate, self.location)
+        return "Ambulance: {} at {}".format(self.ambulance.identifier, self.location)
