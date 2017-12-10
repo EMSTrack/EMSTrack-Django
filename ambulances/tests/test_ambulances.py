@@ -50,7 +50,7 @@ class CreateAmbulance(TestCase):
 
         # test 
         for a in (self.a1, self.a2):
-            serializer = AmbulanceSerializer(s)
+            serializer = AmbulancesSerializer(s)
             result = { 'id': a.pk, 'identifier': a.identifier,
                        'comment': a.comment, 'status': a.status.name,
                        'capability': a.capability.name,
