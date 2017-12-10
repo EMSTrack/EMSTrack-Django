@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Status, Ambulances, Region, Call, Hospital, \
+from .models import Status, Ambulance, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
 
 from .fields import StatusField, CapabilityField
@@ -16,7 +16,7 @@ class StatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AmbulancesSerializer(serializers.ModelSerializer):
+class AmbulanceSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
     location = serializers.SerializerMethodField('get_lat_long')
@@ -28,7 +28,7 @@ class AmbulancesSerializer(serializers.ModelSerializer):
     class Meta:
 
         # Define model, fields, and access permissions for the serializer
-        model = Ambulances
+        model = Ambulance
         fields = ['id', 'identifier', 'comment', 'status', 'location', 'capability', 'orientation']
 
     # Obtain serialized location
@@ -132,7 +132,7 @@ class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField('get_amb_loc')
 
     class Meta:
-        model = Ambulances
+        model = Ambulance
         fields = ['location', 'orientation']
 
     # Obtain serialized location
@@ -167,7 +167,7 @@ class MQTTHospitalSerializer(serializers.ModelSerializer):
 class MQTTAmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Ambulances
+        model = Ambulance
         fields = ['id', 'identifier']
 
 class MQTTEquipmentCountSerializer(serializers.ModelSerializer):

@@ -1,17 +1,17 @@
 from django import forms
 
-from .models import Ambulances, Status, Call, Capability
+from .models import Ambulance, Status, Call, Capability
 
 
 class AmbulanceCreateForm(forms.ModelForm):
     class Meta:
-        model = Ambulances
+        model = Ambulance
         fields = ['identifier', 'comment', 'status']
         
 
 class AmbulanceUpdateForm(forms.ModelForm):
     class Meta:
-        model = Ambulances
+        model = Ambulance
         fields = ['identifier', 'comment', 'status']
 
 

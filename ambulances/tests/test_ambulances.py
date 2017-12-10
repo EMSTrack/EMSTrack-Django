@@ -1,8 +1,8 @@
 from django.test import TestCase, RequestFactory
 
-from ..models import Ambulances, Capability, Status
+from ..models import Ambulance, Capability, Status
 
-from ..serializers import StatusSerializer, AmbulancesSerializer
+from ..serializers import StatusSerializer, AmbulanceSerializer
 
 from django.test import Client
 
@@ -27,14 +27,14 @@ class CreateAmbulance(TestCase):
         self.c3.save()
         
         # Add ambulances
-        self.a1 = Ambulances(
+        self.a1 = Ambulance(
             identifier='BC-179',
             comment='Maintenance due',
             capability=self.c1,
             status=self.s1)
         
         # Add ambulances
-        self.a2 = Ambulances(
+        self.a2 = Ambulance(
             identifier='BC-180',
             comment='Need painting',
             capability=self.c2,
@@ -48,9 +48,9 @@ class CreateAmbulance(TestCase):
             result = { 'id': s.pk, 'name': s.name }
             self.assertEqual(serializer.data, result)
 
-        # test AmbulancesSerializer
+        # test AmbulanceSerializer
         for a in (self.a1, self.a2):
-            serializer = AmbulancesSerializer(a)
+            serializer = AmbulanceSerializer(a)
             result = { 'id': a.pk, 'identifier': a.identifier,
                        'location': {'latitude': a.location.y,
                                     'longitude': a.location.x}, 

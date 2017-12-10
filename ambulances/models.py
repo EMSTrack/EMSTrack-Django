@@ -10,36 +10,83 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
 
-class Status(models.Model):
+class AmbulanceStatus(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
         return "{}".format(self.name)
 
-class Capability(models.Model):
+class AmbulanceCapability(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def __str__(self):
         return "{}".format(self.name)
 
-class Ambulances(models.Model):
+class UserLocation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    location = models.PointField(srid=4326)
+    timestamp = models.DateTimeField()
+
+    def __str__(self):
+        return "{}".format(self.location)
+
+class AmbulanceLocation(models.Model):
+    location = models.ForeignKey(UserLocation, on_delete=models.CASCADE)
+    status = models.ForeignKey(AmbulanceStatus, on_delete=models.CASCADE)
+    orientation = models.FloatField(null=True)
+
+    def __str__(self):
+        return "{}".format(self.location)
+    
+class Ambulance(models.Model):
     identifier = models.CharField(max_length=50, unique=True)
     comment = models.CharField(max_length=254, default="")
-    capability = models.ForeignKey(Capability, on_delete=models.CASCADE, null=True, blank=True)
+    capability = models.ForeignKey(AmbulanceCapability,
+                                   on_delete=models.CASCADE,
+                                   null=True, blank=True)
     
-    status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)
-    location = models.PointField(srid=4326, default=Tijuana)
-    orientation = models.FloatField(null=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    location =  models.ForeignKey(AmbulanceLocation,
+                                  on_delete=models.CASCADE,
+                                  null=True)
     
     def __str__(self):
         return self.identifier
 
+class AmbulanceRoute(models.Model):
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+    active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    points = models.ManyToManyField(AmbulanceLocation)
+    
+class Hospital(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=254, default="")
+    address = models.CharField(max_length=254, default="")
+
+    def __str__(self):
+        return "{}: {} ({})".format(self.id, self.name, self.address)
+
+class User(AbstractUser):
+    hospitals = models.ManyToManyField(Hospital)
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE,
+                                 null=True, blank=True,
+                                 related_name="hosp_id")
+    ambulances = models.ManyToManyField(Ambulance)
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE,
+                                  null=True, blank=True,
+                                  related_name ="ambul_id")
+       
 class Call(models.Model):
     #call metadata (status not required for now)
     active = models.BooleanField(default=False)
     status = models.CharField(max_length=254, default= "", blank=True)
     # ambulance assigned to Call (Foreign Key)
-    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
+    ambulance = models.ForeignKey(Ambulance, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=254, default = "")
     # address-related info
     residential_unit = models.CharField(max_length=254, default = "None")
@@ -74,25 +121,6 @@ class Region(models.Model):
         return self.name
 
 
-class Hospital(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=254, default="")
-    address = models.CharField(max_length=254, default="")
-
-    def __str__(self):
-        return "{}: {} ({})".format(self.id, self.name, self.address)
-
-class User(AbstractUser):
-    hospitals = models.ManyToManyField(Hospital)
-    hospital = models.ForeignKey(Hospital,
-                                 on_delete=models.CASCADE,
-                                 null=True, blank=True,
-                                 related_name="hosp_id")
-    ambulances = models.ManyToManyField(Ambulances)
-    ambulance = models.ForeignKey(Ambulances,
-                                  on_delete=models.CASCADE,
-                                  null=True, blank=True,
-                                  related_name ="ambul_id")
 
 class Equipment(models.Model):
     id = models.AutoField(primary_key=True)
@@ -122,21 +150,5 @@ class Base(models.Model):
     def __str__(self):
         return self.name
 
-class Route(models.Model):
-    name = models.CharField(max_length=50, null=False, default="Default Route Name")
-    path = models.LineStringField(srid=4326, null=False, default=DefaultRoute)
-    # Think about abstraction?
-    type = models.CharField(max_length=50, null=False, default="Default Type")
 
 
-class LocationPoint(models.Model):
-    location = models.PointField(srid=4326, default=Tijuana)
-    ambulance = models.ForeignKey(Ambulances, on_delete=models.CASCADE, default=1)
-    call = models.ForeignKey(Call, on_delete=models.CASCADE, null=True, blank=True)
-    # Remove nullable in the future
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1, null=True, blank=True)
-    timestamp = models.DateTimeField()
-    type = models.CharField(max_length=50, null=False, default="Default Type")
-
-    def __str__(self):
-        return "Ambulance: {} at {}".format(self.ambulance.identifier, self.location)

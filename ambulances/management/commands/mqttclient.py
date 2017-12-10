@@ -5,7 +5,7 @@ from django.conf import settings
 
 from ambulances.management._client import BaseClient
 
-from ambulances.models import EquipmentCount, Ambulances, Status, Call, User, Hospital
+from ambulances.models import EquipmentCount, Ambulance, Status, Call, User, Hospital
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer, MQTTUserLocationSerializer
 
 from django.utils.six import BytesIO
@@ -116,7 +116,7 @@ class Client(BaseClient):
 
         # Obtain ambulance
         try:
-            amb = Ambulances.objects.get(id=ambulance_id)
+            amb = Ambulance.objects.get(id=ambulance_id)
         except ObjectDoesNotExist as e:
             self.stdout.write(self.style.ERROR("Ambulance {} does not exist".format(ambulance_id)))
             return
@@ -241,10 +241,10 @@ class Client(BaseClient):
             # Calculate ambulance orientation?
 
             # Save changes made to ambulance
-            # Ambulances.objects.filter(id=user.ambulance.id).update(orientation=200)
+            # Ambulance.objects.filter(id=user.ambulance.id).update(orientation=200)
 
             # query for the ambulance
-            ambulance = Ambulances.objects.get(id=amb_id)
+            ambulance = Ambulance.objects.get(id=amb_id)
 
             # Convert obj back to json
             serializer = MQTTAmbulanceLocSerializer(ambulance)
@@ -276,7 +276,7 @@ class Client(BaseClient):
 
         try:
             status = Status.objects.get(name=status_str)
-            Ambulances.objects.filter(id=user.ambulance.id).update(status=status)
+            Ambulance.objects.filter(id=user.ambulance.id).update(status=status)
             self.stdout.write(self.style.SUCCESS(
                 ">> Successful status update: {} for ambulance {}").format(status_str, user.ambulance.id))
 
@@ -311,7 +311,7 @@ class Client(BaseClient):
             if amb_id < 0:
                 user.update(ambulance=None)
             else:
-                user.update(ambulance=Ambulances.objects.get(id=amb_id))
+                user.update(ambulance=Ambulance.objects.get(id=amb_id))
 
             self.stdout.write(self.style.SUCCESS(
                 ">> Successfully hooked user {} to ambulance {}").format(username, amb_id))

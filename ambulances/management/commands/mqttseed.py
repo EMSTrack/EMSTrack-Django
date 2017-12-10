@@ -4,7 +4,7 @@ from django.conf import settings
 
 from ambulances.management._client import BaseClient
 
-from ambulances.models import Ambulances, Hospital, EquipmentCount, Equipment, Call, User
+from ambulances.models import Ambulance, Hospital, EquipmentCount, Equipment, Call, User
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer, MQTTAmbulanceListSerializer
 
 from django.utils.six import BytesIO
@@ -51,7 +51,7 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
 
         # seeding ambulance locations
-        ambulances = Ambulances.objects.all()
+        ambulances = Ambulance.objects.all()
 
         for a in ambulances:
             serializer = MQTTAmbulanceLocSerializer(a)
@@ -65,7 +65,7 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
 
     def seed_ambulance_status(self, client):
-        ambulances = Ambulances.objects.all()
+        ambulances = Ambulance.objects.all()
 
         for a in ambulances:
             self.publish('ambulance/{}/status'.format(a.id), a.status.name, qos=2, retain=True)

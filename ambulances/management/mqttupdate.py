@@ -1,6 +1,6 @@
 from ambulances.management._client import BaseClient
 
-from ambulances.models import Ambulances, User, Equipment, EquipmentCount, Hospital
+from ambulances.models import Ambulance, User, Equipment, EquipmentCount, Hospital
 from ambulances.serializers import MQTTAmbulanceLocSerializer, MQTTAmbulanceListSerializer, MQTTHospitalEquipmentSerializer, MQTTHospitalListSerializer, CallSerializer
 
 from django.utils.six import BytesIO

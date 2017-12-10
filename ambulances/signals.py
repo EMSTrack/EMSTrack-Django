@@ -11,7 +11,7 @@ from django.core.management.color import color_style, no_style
 from django.conf import settings
 from django.utils.functional import wraps
 
-from .models import Status, Ambulances, Region, Call, Hospital, \
+from .models import Status, Ambulance, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
 
 from .management.mqttupdate import UpdateClient
@@ -49,8 +49,8 @@ if enable_signals:
 
     # register signals
     
-    @receiver(post_delete, sender=Ambulances)
-    @receiver(post_save, sender=Ambulances)
+    @receiver(post_delete, sender=Ambulance)
+    @receiver(post_save, sender=Ambulance)
     def ambulance_mqtt_trigger(sender, **kwargs):
         created = kwargs['created']
         instance = kwargs['instance']

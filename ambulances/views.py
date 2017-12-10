@@ -9,11 +9,11 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
-from .models import Ambulances, Status, Call, Hospital, \
+from .models import Ambulance, Status, Call, Hospital, \
     EquipmentCount, Base, Route
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, \
     StatusCreateForm, StatusUpdateForm
-from .serializers import AmbulancesSerializer, StatusSerializer, \
+from .serializers import AmbulanceSerializer, StatusSerializer, \
     CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
     RouteSerializer, BaseSerializer
 
@@ -21,31 +21,31 @@ from .serializers import AmbulancesSerializer, StatusSerializer, \
 
 # Ambulance list page
 class AmbulanceListView(ListView):
-    model = Ambulances
+    model = Ambulance
     template_name = 'ambulances/ambulance_list.html'
     context_object_name = "ambulances"
 
 # Ambulance list page
 class AmbulanceView(CreateView):
-    model = Ambulances
+    model = Ambulance
     context_object_name = "ambulance_form"
     form_class = AmbulanceCreateForm
     success_url = reverse_lazy('ambulance')
 
     def get_context_data(self, **kwargs):
         context = super(AmbulanceView, self).get_context_data(**kwargs)
-        context['ambulances'] = Ambulances.objects.all().order_by('id')
+        context['ambulances'] = Ambulance.objects.all().order_by('id')
         return context
 
 # Ambulance update page
 class AmbulanceUpdateView(UpdateView):
-    model = Ambulances
+    model = Ambulance
     form_class = AmbulanceUpdateForm
     template_name = 'ambulances/ambulance_edit.html'
     success_url = reverse_lazy('ambulance')
 
     def get_object(self, queryset=None):
-        obj = Ambulances.objects.get(id=self.kwargs['pk'])
+        obj = Ambulance.objects.get(id=self.kwargs['pk'])
         return obj
 
     def get_context_data(self, **kwargs):
@@ -100,7 +100,7 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
     template_name = 'ambulances/ambulance_map.html'
 
     def get_queryset(self):
-        return Ambulances.objects.all()
+        return Ambulance.objects.all()
 
 
 # Viewsets
@@ -122,13 +122,13 @@ class ListCreateViewSet(mixins.ListModelMixin,
 
 # Defines viewsets
 # Viewsets combine different request types (GET, PUSH, etc.) in a single view class
-class AmbulancesViewSet(ListRetrieveUpdateViewSet):
+class AmbulanceViewSet(ListRetrieveUpdateViewSet):
 
     # Specify model to expose
-    queryset = Ambulances.objects.all()
+    queryset = Ambulance.objects.all()
 
     # Specify the serializer to package the data in JSON
-    serializer_class = AmbulancesSerializer
+    serializer_class = AmbulanceSerializer
 
     # Specify django REST's filtering system
     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
