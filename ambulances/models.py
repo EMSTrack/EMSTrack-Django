@@ -31,9 +31,6 @@ class Ambulances(models.Model):
     location = models.PointField(srid=4326, default=Tijuana)
     orientation = models.FloatField(null=True)
     
-    # device = models.OneToOneField(TrackableDevice, blank=True, null=True)
-    #priority = models.CharField(max_length=254, default="High")
-
     def __str__(self):
         return self.identifier
 
@@ -124,7 +121,6 @@ class Base(models.Model):
 
     def __str__(self):
         return self.name
-
 
 class Route(models.Model):
     name = models.CharField(max_length=50, null=False, default="Default Route Name")
