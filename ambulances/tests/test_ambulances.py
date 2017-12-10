@@ -2,6 +2,8 @@ from django.test import TestCase, RequestFactory
 
 from ..models import Ambulances, Capability, Status
 
+from ..serializers import StatusSerializer, AmbulanceSerializer
+
 from django.test import Client
 
 class CreateAmbulance(TestCase):
@@ -40,5 +42,7 @@ class CreateAmbulance(TestCase):
 
     def test_ambulances(self):
 
-        self.assertEqual(True, True)
+        serializer = StatusSerializer(s1)
+        result = '{ }'
+        self.assertEqual(serializer, result)
 

@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 # Defines custom fields for Django REST Serializers
 
-
 # To translate between status id and status name in the returned JSON
 class StatusField(serializers.Field):
 
