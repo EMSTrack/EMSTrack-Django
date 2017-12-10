@@ -16,65 +16,63 @@
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Navbar toggle -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url 'ambulance_map' %}">EMSTrack</a>
-        </div>
-        <!-- Navbar Menu -->
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'ambulance' %}">Ambulances</a></li>
-                <li><a href="{% url 'status' %}">Statuses</a></li>
-                <li><a href="{% url 'ambulance_map' %}">Map</a></li>
-                <li><a href="{% url 'call_list' %}">Dispatch</a></li>
-                
-                {% if user.is_authenticated %}
-                    <li><a href="{% url 'call_list' %}">History</a></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/aauth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>
-                        <li><a href="/aauth/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout, {{request.user.first_name}}</a>
-                        </li>
-                    </ul>
-                {% else %}
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="/aauth/signup"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-                        <li><a href="/aauth/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
-                    </ul>
-                {% endif %}
-        </div>
+  <div class="container-fluid">
+    <!-- Navbar toggle -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{% url 'ambulance_map' %}">EMSTrack</a>
     </div>
+    <!-- Navbar Menu -->
+    <div class="collapse navbar-collapse" id="myNavbar">
+      {% if user.is_authenticated %}
+      <ul class="nav navbar-nav">
+        <li><a href="{% url 'ambulance' %}">Ambulances</a></li>
+        <li><a href="{% url 'status' %}">Status</a></li>
+        <li><a href="{% url 'ambulance_map' %}">Map</a></li>
+        <li><a href="{% url 'call_list' %}">Dispatch</a></li>
+        <li><a href="{% url 'call_list' %}">History</a></li>
+        <li><a href="{% url 'admin' %}">Admin</a></li>
+      </ul>
+      {% endif %}
+      <ul class="nav navbar-nav navbar-right">
+	{% if user.is_authenticated %}
+        <li><a href="/aauth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>
+        <li><a href="/aauth/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout, {{request.user.first_name}}</a>
+        </li>
+	{% else %}
+	<li><a href="/aauth/signup"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
+	<li><a href="/aauth/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+	{% endif %}
+      </ul>
+    </div>
+  </div>
 </nav>
 
-
 <script>
-    // make current page active
-    var pname = $(location).attr('pathname').split('/', 3).join('/');
-    $('.menuitem a[href^="' + pname + '"]').addClass('menuitem active');
+  // make current page active
+  var pname = $(location).attr('pathname').split('/', 3).join('/');
+  $('.menuitem a[href^="' + pname + '"]').addClass('menuitem active');
 </script>
 
 <div class="content">
-    {% block content %}
-    {% endblock %}
+  {% block content %}
+  {% endblock %}
 </div>
 
 <footer class="site-footer">
-    {% block footer %}
-    {% endblock %}
-    <div class="container">
-        <ul>
-            <li><a href="craed/about">About</a></li>
-            <li><a href="craed/contact">Contact</a></li>
-            <li><a href="http://www.emstrack.org">EMSTrack</a></li>
-        </ul>
-    </div>
+  {% block footer %}
+  {% endblock %}
+  <div class="container">
+    <ul>
+      <li><a href="craed/about">About</a></li>
+      <li><a href="craed/contact">Contact</a></li>
+      <li><a href="http://www.emstrack.org">EMSTrack</a></li>
+    </ul>
+  </div>
 </footer>
 </body>
 </html>

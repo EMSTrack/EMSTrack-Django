@@ -56,7 +56,12 @@ class CallView(ListView):
     template_name = 'ambulances/dispatch_list.html'
     context_object_name = "ambulance_call"
 
-
+# Admin page
+class AdminView(ListView):
+    model = Call
+    template_name = 'ambulances/dispatch_list.html'
+    context_object_name = "ambulance_call"
+    
 # Status list page
 class StatusCreateView(CreateView):
     model = Status
