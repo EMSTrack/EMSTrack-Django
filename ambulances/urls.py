@@ -28,46 +28,37 @@ router.register(r'routes', RouteViewSet)
 urlpatterns = [
 
     # Swagger Documentation
-    @login_required
     url(r'^docs/', schema_view),
 
     # Router API urls
-    @login_required
     url(r'^api/', include(router.urls)),
 
-    @login_required
     url(r'^$',
-        views.AmbulanceView.as_view(),
+        login_required(views.AmbulanceView.as_view()),
         name="ambulance"),
 
-    @login_required
     url(r'^ambulance_map$',
-        views.AmbulanceMap.as_view(),
+        login_required(views.AmbulanceMap.as_view()),
         name="ambulance_map"),
     
-    @login_required
     url(r'^ambulance/(?P<pk>\d+)/update/$',
-        AmbulanceUpdateView.as_view(),
+        login_required(AmbulanceUpdateView.as_view()),
         name='ambulance_update'),
 
-    @login_required
     url(r'^status/(?P<pk>\d+)/update/$',
-        StatusUpdateView.as_view(),
+        login_required(StatusUpdateView.as_view()),
         name='status_update'),
 
-    @login_required
     url(r'^status$',
-        views.StatusCreateView.as_view(),
+        login_required(views.StatusCreateView.as_view()),
         name="status"),
 
-    @login_required
     url(r'^call_list$',
-        views.CallView.as_view(),
+        login_required(views.CallView.as_view()),
         name="call_list"),
 
-    @login_required
     url(r'^admin$',
-        views.AdminView.as_view(),
+        login_required(views.AdminView.as_view()),
         name="admin"),
     
 ]
