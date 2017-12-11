@@ -7,7 +7,7 @@ from django.contrib.auth.forms import UserChangeForm
 from .models import Ambulance, AmbulanceStatus, AmbulanceCapability, \
     AmbulanceLocation, \
     User, UserLocation, \
-    Hospital, Equipment, EquipmentCount, Capability, LocationPoint, \
+    Hospital, Equipment, EquipmentCount, UserLocation, \
     Call, Region
 
 # creates the form with new fields using the UserModel
