@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 
+from rest_framework import serializers
+
 from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     AmbulanceLocation, UserLocation
 
@@ -108,7 +110,7 @@ class CreateAmbulance(TestCase):
             result = { 'user_id': ul.user.pk,
                        'latitude': ul.location.y,
                        'longitude': ul.location.x,
-                       'timestamp': ul.timestamp}
+                       'timestamp': serializers.DateTimeField(ul.timestamp)}
             print('result = {}'.format(result))
             self.assertEqual(serializer.data, result)
             
