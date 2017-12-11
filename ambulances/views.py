@@ -164,6 +164,6 @@ class BaseViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BaseSerializer
 
 
-class RouteViewSet(ListCreateViewSet):
-    queryset = Route.objects.all()
-    serializer_class = RouteSerializer
+class AmbulanceRouteViewSet(ListCreateViewSet):
+    queryset = AmbulanceRoute.objects.all()
+    serializer_class = AmbulanceRouteSerializer
