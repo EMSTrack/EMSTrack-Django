@@ -12,7 +12,7 @@ from django.conf import settings
 from django.utils.functional import wraps
 
 from .models import AmbulanceStatus, Ambulance, Region, Call, Hospital, \
-    Equipment, EquipmentCount, Base, Capability, LocationPoint, User
+    Equipment, EquipmentCount, Base, User
 
 from .management.mqttupdate import UpdateClient
 
