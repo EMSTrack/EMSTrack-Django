@@ -109,6 +109,7 @@ class CreateAmbulance(TestCase):
                        'latitude': ul.location.y,
                        'longitude': ul.location.x,
                        'timestamp': ul.timestamp}
+            print('result = {}'.format(result))
             self.assertEqual(serializer.data, result)
             
         # # Location
