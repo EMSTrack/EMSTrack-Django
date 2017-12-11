@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 
-from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus
+from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
+    AmbulanceLocation, UserLocation
 
 from ..serializers import AmbulanceStatusSerializer, \
     AmbulanceCapabilitySerializer, AmbulanceSerializer
