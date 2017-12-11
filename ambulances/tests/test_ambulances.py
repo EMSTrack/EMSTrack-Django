@@ -2,7 +2,8 @@ from django.test import TestCase, RequestFactory
 
 from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus
 
-from ..serializers import AmbulanceStatusSerializer, AmbulanceSerializer
+from ..serializers import AmbulanceStatusSerializer, \
+    AmbulanceCapabilitySerializer, AmbulanceSerializer
 
 from django.test import Client
 
