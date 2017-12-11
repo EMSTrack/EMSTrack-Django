@@ -1,5 +1,8 @@
 from django.test import TestCase, RequestFactory
 
+from django.contrib.gis.geos import Point
+from django.utils import timezone
+
 from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus
 
 from ..serializers import AmbulanceStatusSerializer, \
@@ -39,6 +42,23 @@ class CreateAmbulance(TestCase):
             comment='Need painting',
             capability=self.c2)
 
+        # Add users
+        self.u1 = User.objects.create_user(
+            username='admin',
+            email='admin@user.com',
+            password='admin',
+            is_superuser=True)
+        
+        self.u2 = User.objects.create_user(
+            username='testuser1',
+            email='test1@user.com',
+            password='top_secret')
+        
+        self.u3 = User.objects.create_user(
+            username='testuser2',
+            email='test2@user.com',
+            password='very_secret')
+        
     def test_ambulances(self):
 
         # test AmbulanceStatusSerializer
@@ -64,3 +84,10 @@ class CreateAmbulance(TestCase):
                        'location': None}
             self.assertEqual(serializer.data, result)
         
+        # Location
+        time = timezone.now()
+        AmbulanceLocation(location=UserLocation(user=self.u1,
+                                                location=Point(1,1),
+                                                timestamp=time),
+                          status=self.s1,
+                          orientation=0.0)

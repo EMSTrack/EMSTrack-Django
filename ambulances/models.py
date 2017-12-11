@@ -33,7 +33,7 @@ class UserLocation(models.Model):
 class AmbulanceLocation(models.Model):
     location = models.ForeignKey(UserLocation, on_delete=models.CASCADE)
     status = models.ForeignKey(AmbulanceStatus, on_delete=models.CASCADE)
-    orientation = models.FloatField(null=True)
+    orientation = models.FloatField(default=0.0)
 
     def __str__(self):
         return "{}".format(self.location)
