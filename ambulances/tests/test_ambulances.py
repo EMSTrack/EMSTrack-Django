@@ -52,8 +52,6 @@ class CreateAmbulance(TestCase):
             result = { 'id': a.pk,
                        'identifier': a.identifier,
                        'comment': a.comment, 
-                       'status': a.status.name,
-                       'capability': a.capability.name,
-                       'orientation': a.orientation }
+                       'capability': a.capability.name }
             self.assertEqual(serializer.data, result)
         
