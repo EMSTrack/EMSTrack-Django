@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Ambulance, Status, Call, Capability
+from .models import Ambulance, AmbulanceStatus, Call, AmbulanceCapability
 
 
 class AmbulanceCreateForm(forms.ModelForm):
@@ -22,15 +22,15 @@ class CallCreateForm(forms.ModelForm):
         fields = '__all__'
 
 
-class StatusCreateForm(forms.ModelForm):
+class AmbulanceStatusCreateForm(forms.ModelForm):
     class Meta:
-        model = Status
+        model = AmbulanceStatus
         fields = '__all__'
 
 
-class StatusUpdateForm(forms.ModelForm):
+class AmbulanceStatusUpdateForm(forms.ModelForm):
     class Meta:
-        model = Status
+        model = AmbulanceStatus
         fields = '__all__'
 
 

@@ -9,13 +9,13 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
-from .models import Ambulance, Status, Call, Hospital, \
-    EquipmentCount, Base, Route
+from .models import Ambulance, AmbulanceStatus, Call, Hospital, \
+    EquipmentCount, Base, AmbulanceRoute
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, \
-    StatusCreateForm, StatusUpdateForm
-from .serializers import AmbulanceSerializer, StatusSerializer, \
+    AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
+from .serializers import AmbulanceSerializer, AmbulanceStatusSerializer, \
     CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
-    RouteSerializer, BaseSerializer
+    AmbulanceRouteSerializer, BaseSerializer
 
 # Defines the view for a user when a url is accessed
 
@@ -65,32 +65,32 @@ class AdminView(ListView):
     template_name = 'ambulances/dispatch_list.html'
     context_object_name = "ambulance_call"
     
-# Status list page
-class StatusCreateView(CreateView):
-    model = Status
-    context_object_name = "status_form"
-    form_class = StatusCreateForm
+# AmbulanceStatus list page
+class AmbulanceStatusCreateView(CreateView):
+    model = AmbulanceStatus
+    context_object_name = "ambulance_status_form"
+    form_class = AmbulanceStatusCreateForm
     success_url = reverse_lazy('status')
 
     def get_context_data(self, **kwargs):
-        context = super(StatusCreateView, self).get_context_data(**kwargs)
-        context['statuses'] = Status.objects.all().order_by('id')
+        context = super(AmbulanceStatusCreateView, self).get_context_data(**kwargs)
+        context['statuses'] = AmbulanceStatus.objects.all().order_by('id')
         return context
 
 
-# Status update page
-class StatusUpdateView(UpdateView):
-    model = Status
-    form_class = StatusUpdateForm
-    template_name = 'ambulances/status_edit.html'
+# AmbulanceStatus update page
+class AmbulanceStatusUpdateView(UpdateView):
+    model = AmbulanceStatus
+    form_class = AmbulanceStatusUpdateForm
+    template_name = 'ambulances/ambulance_status_edit.html'
     success_url = reverse_lazy('status')
 
     def get_object(self, queryset=None):
-        obj = Status.objects.get(id=self.kwargs['pk'])
+        obj = AmbulanceStatus.objects.get(id=self.kwargs['pk'])
         return obj
 
     def get_context_data(self, **kwargs):
-        context = super(StatusUpdateView, self).get_context_data(**kwargs)
+        context = super(AmbulanceStatusUpdateView, self).get_context_data(**kwargs)
         context['id'] = self.kwargs['pk']
         return context
 
@@ -137,9 +137,9 @@ class AmbulanceViewSet(ListRetrieveUpdateViewSet):
     filter_fields = ('identifier', 'status')
 
 
-class StatusViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Status.objects.all()
-    serializer_class = StatusSerializer
+class AmbulanceStatusViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = AmbulanceStatus.objects.all()
+    serializer_class = AmbulanceStatusSerializer
 
 
 class CallViewSet(ListCreateViewSet):
