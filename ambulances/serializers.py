@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import AmbulanceStatus, Ambulance, Region, Call, Hospital, \
-    Equipment, EquipmentCount, Base, AmbulanceCapability, LocationPoint, User
+    Equipment, EquipmentCount, Base, AmbulanceCapability, UserLocation, User
 
 from .fields import AmbulanceStatusField, AmbulanceCapabilityField
 
@@ -108,10 +108,10 @@ class MQTTLocationSerializer(serializers.ModelSerializer):
 
     # Defines a way to create a model from the JSON data
     def create(self, validated_data):
-        return LocationPoint.objects.create(**validated_data)
+        return UserLocation.objects.create(**validated_data)
 
     class Meta:
-        model = LocationPoint
+        model = UserLocation
         fields = ['location', 'timestamp', 'ambulance']
 
 class MQTTUserLocationSerializer(serializers.ModelSerializer):
@@ -121,10 +121,10 @@ class MQTTUserLocationSerializer(serializers.ModelSerializer):
 
     # Defines a way to create a model from the JSON data
     def create(self, validated_data):
-        return LocationPoint.objects.create(**validated_data)
+        return UserLocation.objects.create(**validated_data)
 
     class Meta:
-        model = LocationPoint
+        model = UserLocation
         fields = ['location', 'timestamp', 'ambulance', 'user']
 
 class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
@@ -137,19 +137,19 @@ class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
 
     # Obtain serialized location
     def get_amb_loc(self, obj):
-        loc = LocationPoint.objects.filter(ambulance=obj.id).order_by('timestamp').last()
-        loc_serializer = LocationSerializer(loc)
+        loc = UserLocation.objects.filter(ambulance=obj.id).order_by('timestamp').last()
+        loc_serializer = UserLocationSerializer(loc)
         return loc_serializer.data
 
 
-class LocationSerializer(serializers.ModelSerializer):
+class UserLocationSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
     latitude = serializers.SerializerMethodField('get_lat')
     longitude = serializers.SerializerMethodField('get_long')
 
     class Meta:
-        model = LocationPoint
+        model = UserLocation
         fields = ['latitude', 'longitude']
 
     def get_lat(self, obj):
