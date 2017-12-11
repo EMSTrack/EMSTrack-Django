@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from ambulances.models import Hospital
+from ambulances.models import Hospital, UserApps
 
 from django.test import Client
 
@@ -32,15 +32,19 @@ class CreateUser(TestCase):
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
-        self.u2.hospitals.add(self.h1, self.h3)
-        self.u2.save()
         
         self.u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
-        self.u3.hospitals.add(self.h1, self.h2)
-        self.u3.save()
+
+        self.a2 = UserApps(user = self.u2)
+        self.a2.save()
+        self.a2.hospitals.add(self.h1, self.h3)
+        
+        self.a3 = UserApps(user = self.u3)
+        self.a3.save()
+        self.a3.hospitals.add(self.h1, self.h2)
 
         #print('h1 = {}'.format(self.h1))
         #print('h2 = {}'.format(self.h2))
