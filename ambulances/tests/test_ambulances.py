@@ -112,7 +112,7 @@ class CreateAmbulance(TestCase):
                        'longitude': ul.location.x,
                        'timestamp': ul.timestamp}
             result = UserLocationSerializer(data=result)
-            self.assertEqual(serializer.data, result.validate_data)
+            self.assertEqual(serializer.data, result.validated_data)
             
         # # Location
         # time = timezone.now()
