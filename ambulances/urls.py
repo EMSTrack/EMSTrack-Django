@@ -5,9 +5,9 @@ from rest_framework import routers
 from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
-from .views import StatusViewSet, AmbulanceViewSet, CallViewSet, \
-    HospitalViewSet, EquipmentCountViewSet, RouteViewSet, \
-    AmbulanceUpdateView, StatusUpdateView, AdminView
+from .views import AmbulanceStatusViewSet, AmbulanceViewSet, CallViewSet, \
+    HospitalViewSet, EquipmentCountViewSet, AmbulanceRouteViewSet, \
+    AmbulanceUpdateView, AmbulanceStatusUpdateView, AdminView
 
 # Defines the url routing within the website
 
@@ -46,11 +46,11 @@ urlpatterns = [
         name='ambulance_update'),
 
     url(r'^status/(?P<pk>\d+)/update/$',
-        login_required(StatusUpdateView.as_view()),
+        login_required(AmbulanceStatusUpdateView.as_view()),
         name='status_update'),
 
     url(r'^status$',
-        login_required(views.StatusCreateView.as_view()),
+        login_required(views.AmbulanceStatusCreateView.as_view()),
         name="status"),
 
     url(r'^call_list$',
