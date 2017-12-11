@@ -18,7 +18,7 @@ schema_view = get_swagger_view(title='Ambulances API')
 router = routers.DefaultRouter()
 
 # Register urls to viewsets
-router.register(r'status', StatusViewSet)
+router.register(r'status', AmbulanceStatusViewSet)
 router.register(r'ambulances', AmbulanceViewSet)
 router.register(r'calls', CallViewSet)
 router.register(r'hospitals', HospitalViewSet)
