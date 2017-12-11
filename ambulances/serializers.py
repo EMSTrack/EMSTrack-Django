@@ -16,6 +16,11 @@ class AmbulanceStatusSerializer(serializers.ModelSerializer):
         model = AmbulanceStatus
         fields = '__all__'
 
+class AmbulanceCapabilitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AmbulanceCapability
+        fields = '__all__'
 
 class UserLocationSerializer(serializers.ModelSerializer):
 
