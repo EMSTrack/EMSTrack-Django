@@ -6,13 +6,13 @@ from .models import Ambulance, AmbulanceStatus, Call, AmbulanceCapability
 class AmbulanceCreateForm(forms.ModelForm):
     class Meta:
         model = Ambulance
-        fields = ['identifier', 'comment', 'status']
+        fields = ['identifier', 'comment']
         
 
 class AmbulanceUpdateForm(forms.ModelForm):
     class Meta:
         model = Ambulance
-        fields = ['identifier', 'comment', 'status']
+        fields = ['identifier', 'comment']
 
 
 # front end team to choose which fields to display?
