@@ -17,6 +17,25 @@ class AmbulanceStatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class UserLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        # Define model, fields, and access permissions for the serializer
+        model = UserLocation
+        fields = ['user', 'location', 'timestamp']
+        
+class AmbulanceLocationSerializer(serializers.ModelSerializer):
+
+    # Assign status and capability
+    status = AmbulanceStatusField()
+
+    class Meta:
+
+        # Define model, fields, and access permissions for the serializer
+        model = AmbulanceLocation
+        fields = ['location', 'status', 'orientation']
+
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
@@ -29,24 +48,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         model = Ambulance
         fields = ['id', 'identifier', 'comment', 'capability', 'updated_at', 'location']
 
-class AmbulanceLocationSerializer(serializers.ModelSerializer):
 
-    # Assign status and capability
-    status = AmbulanceStatusField()
-
-    class Meta:
-
-        # Define model, fields, and access permissions for the serializer
-        model = AmbulanceLocation
-        fields = ['location', 'status', 'orientation']
-
-class UserLocationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-
-        # Define model, fields, and access permissions for the serializer
-        model = UserLocation
-        fields = ['user', 'location', 'timestamp']
         
 class CallSerializer(serializers.ModelSerializer):
 
