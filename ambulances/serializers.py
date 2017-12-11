@@ -27,6 +27,7 @@ class UserLocationSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField('get_uid')
     latitude = serializers.SerializerMethodField('get_lat')
     longitude = serializers.SerializerMethodField('get_long')
+    timestamp = serializers.DateTimeField()
     
     class Meta:
 
