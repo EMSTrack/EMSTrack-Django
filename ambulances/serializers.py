@@ -24,12 +24,33 @@ class AmbulanceCapabilitySerializer(serializers.ModelSerializer):
 
 class UserLocationSerializer(serializers.ModelSerializer):
 
+    # Define functions that will query for these custom fields
+
+    class Meta:
+        model = UserLocation
+        fields = ['latitude', 'longitude']
+
+class UserLocationSerializer(serializers.ModelSerializer):
+
+    user = serializers.SerializerMethodField('get_uid')
+    latitude = serializers.SerializerMethodField('get_lat')
+    longitude = serializers.SerializerMethodField('get_long')
+    
     class Meta:
 
         # Define model, fields, and access permissions for the serializer
         model = UserLocation
-        fields = ['user', 'location', 'timestamp']
+        fields = ['user_id', 'latitude', 'longitude', 'timestamp']
         
+    def get_uid(self, obj):
+        return obj.user.pk
+    
+    def get_lat(self, obj):
+        return obj.location.y
+
+    def get_long(self, obj):
+        return obj.location.x
+
 class AmbulanceLocationSerializer(serializers.ModelSerializer):
 
     # Assign status and capability
@@ -157,22 +178,6 @@ class MQTTAmbulanceLocSerializer(serializers.ModelSerializer):
         loc_serializer = UserLocationSerializer(loc)
         return loc_serializer.data
 
-
-class UserLocationSerializer(serializers.ModelSerializer):
-
-    # Define functions that will query for these custom fields
-    latitude = serializers.SerializerMethodField('get_lat')
-    longitude = serializers.SerializerMethodField('get_long')
-
-    class Meta:
-        model = UserLocation
-        fields = ['latitude', 'longitude']
-
-    def get_lat(self, obj):
-        return obj.location.y
-
-    def get_long(self, obj):
-        return obj.location.x
 
 class MQTTHospitalSerializer(serializers.ModelSerializer):
 
