@@ -14,7 +14,7 @@ class AmbulanceStatusField(serializers.Field):
         return AmbulanceStatus.objects.filter(name=data).first()
 
 # To translate between capability id and capability name in the returned JSON
-class CapabilityField(serializers.Field):
+class AmbulanceCapabilityField(serializers.Field):
 
     def to_representation(self, obj):
         return AmbulanceCapability.objects.filter(id=obj.id).first().name
