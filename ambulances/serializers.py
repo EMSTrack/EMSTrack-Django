@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import AmbulanceStatus, Ambulance, Region, Call, Hospital, \
+from .models import AmbulanceRoute, AmbulanceStatus, Ambulance, \
+    Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, AmbulanceCapability, UserLocation, User
 
 from .fields import AmbulanceStatusField, AmbulanceCapabilityField
@@ -94,10 +95,10 @@ class BaseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RouteSerializer(serializers.ModelSerializer):
+class AmbulanceRouteSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Route
+        model = AmbulanceRoute
         fields = '__all__'
 
 
