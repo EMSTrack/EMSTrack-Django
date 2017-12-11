@@ -34,7 +34,7 @@ class AmbulanceStatusUpdateForm(forms.ModelForm):
         fields = '__all__'
 
 
-class CapabilityCreateForm(forms.ModelForm):
+class AmbulanceCapabilityCreateForm(forms.ModelForm):
     class Meta:
-        model = Capability
+        model = AmbulanceCapability
         fields = '__all__'
