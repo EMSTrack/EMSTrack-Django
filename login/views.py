@@ -11,7 +11,7 @@ from braces.views import CsrfExemptMixin
 
 from login.forms import AuthenticationForm, SignupForm
 
-from ambulances.models import Hospital
+from ambulances.models import Hospital, UserApps
 
 # signup
 class SignupView(FormView):
@@ -112,15 +112,16 @@ class MQTTAclView(CsrfExemptMixin, View):
 
                     # is user authorized?
                     try:
-
-                        user.hospitals.get(id=hospital_id)
+                        
+                        apps = UserApps.objects.get(user=user.pk)
+                        apps.hospitals.get(id=hospital_id)
             
                         if ((len(topic) == 3 and topic[2] == 'metadata') or
                             (len(topic) == 4 and topic[2] == 'equipment')):
                         
                             return HttpResponse('OK')
 
-                    except Hospital.DoesNotExist:
+                    except Hospital.DoesNotExist, UserApps.DoesNotExist:
                         pass
                         
             elif acc == 2:
