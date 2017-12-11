@@ -107,12 +107,12 @@ class CreateAmbulance(TestCase):
         # test UserLocationSerializer
         for ul in (self.ul1, self.ul2):
             serializer = UserLocationSerializer(ul)
-            result = { 'user_id': ul.user.pk,
+            data = { 'user_id': ul.user.pk,
                        'latitude': ul.location.y,
                        'longitude': ul.location.x,
-                       'timestamp': serializers.DateTimeField()(ul.timestamp)}
-            print('result = {}'.format(result))
-            self.assertEqual(serializer.data, result)
+                       'timestamp': ul.timestamp}
+            result = UserLocationSerializer(data=result)
+            self.assertEqual(serializer.data, result.validate_data)
             
         # # Location
         # time = timezone.now()
