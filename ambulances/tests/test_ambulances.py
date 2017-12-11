@@ -9,7 +9,8 @@ from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     AmbulanceLocation, UserLocation
 
 from ..serializers import AmbulanceStatusSerializer, \
-    AmbulanceCapabilitySerializer, AmbulanceSerializer
+    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
+    UserLocationSerializer
 
 from django.test import Client
 
