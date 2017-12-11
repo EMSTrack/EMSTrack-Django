@@ -21,7 +21,7 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('hospitals', 'hospital', 'ambulances', 'ambulance',)}),)
 
 #admin.site.register(User, CustomUserAdmin)
-admin.site.register(User)
+# admin.site.register(User)
 admin.site.register(Ambulance)
 admin.site.register(AmbulanceStatus)
 admin.site.register(AmbulanceCapability)
