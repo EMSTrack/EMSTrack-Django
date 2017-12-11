@@ -23,7 +23,7 @@ router.register(r'ambulances', AmbulanceViewSet)
 router.register(r'calls', CallViewSet)
 router.register(r'hospitals', HospitalViewSet)
 router.register(r'equipment', EquipmentCountViewSet)
-router.register(r'routes', RouteViewSet)
+router.register(r'routes', AmbulanceRouteViewSet)
 
 urlpatterns = [
 
