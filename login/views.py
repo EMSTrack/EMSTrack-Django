@@ -121,7 +121,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         
                             return HttpResponse('OK')
 
-                    except Hospital.DoesNotExist, UserApps.DoesNotExist:
+                    except (Hospital.DoesNotExist, UserApps.DoesNotExist):
                         pass
                         
             elif acc == 2:
