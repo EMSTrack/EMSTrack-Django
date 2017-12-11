@@ -1,18 +1,18 @@
 from rest_framework import serializers
 
-from .models import Status, Ambulance, Region, Call, Hospital, \
-    Equipment, EquipmentCount, Base, Route, Capability, LocationPoint, User
+from .models import AmbulanceStatus, Ambulance, Region, Call, Hospital, \
+    Equipment, EquipmentCount, Base, AmbulanceCapability, LocationPoint, User
 
-from .fields import StatusField, CapabilityField
+from .fields import AmbulanceStatusField, AmbulanceCapabilityField
 
 from drf_extra_fields.geo_fields import PointField
 
 # Serializers: Takes a model and defines how it should be represented as a JSON Object
 
-class StatusSerializer(serializers.ModelSerializer):
+class AmbulanceStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Status
+        model = AmbulanceStatus
         fields = '__all__'
 
 
@@ -22,8 +22,8 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     location = serializers.SerializerMethodField('get_lat_long')
 
     # Assign status and capability
-    status = StatusField()
-    capability = CapabilityField()
+    status = AmbulanceStatusField()
+    capability = AmbulanceCapabilityField()
 
     class Meta:
 
