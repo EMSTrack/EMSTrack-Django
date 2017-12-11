@@ -114,10 +114,10 @@ if enable_signals:
         if kwargs['created']:
             client.create_user(instance)
 
-    @receiver(m2m_changed, sender=User.ambulances.through)
-    def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
-        client.edit_user_ambulance_list(instance)
+#    @receiver(m2m_changed, sender=User.ambulances.through)
+#    def user_ambulances_mqtt_trigger(sender, action, instance, **kwargs):
+#        client.edit_user_ambulance_list(instance)
 
-    @receiver(m2m_changed, sender=User.hospitals.through)
-    def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
-        client.edit_user_hospital_list(instance)
+#    @receiver(m2m_changed, sender=User.hospitals.through)
+#    def user_hospitals_mqtt_trigger(sender, action, instance, **kwargs):
+#        client.edit_user_hospital_list(instance)
