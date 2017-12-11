@@ -35,7 +35,7 @@ class UserLocationSerializer(serializers.ModelSerializer):
         fields = ['user_id', 'latitude', 'longitude', 'timestamp']
         
     def get_uid(self, obj):
-        return obj.user.pk
+        return obj.user.id
     
     def get_lat(self, obj):
         return obj.location.y
