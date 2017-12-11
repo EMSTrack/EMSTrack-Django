@@ -110,7 +110,7 @@ class CreateAmbulance(TestCase):
             result = { 'user_id': ul.user.pk,
                        'latitude': ul.location.y,
                        'longitude': ul.location.x,
-                       'timestamp': serializers.DateTimeField(ul.timestamp)}
+                       'timestamp': serializers.DateTimeField()(ul.timestamp)}
             print('result = {}'.format(result))
             self.assertEqual(serializer.data, result)
             
