@@ -62,6 +62,20 @@ class CreateAmbulance(TestCase):
             email='test2@user.com',
             password='very_secret')
         
+        # Add UserLocation
+        self.t1 = timezone.now()
+        self.ul1 = UserLocation(user=self.u1,
+                                location=Point(1,1),
+                                timestamp=self.t1)
+        self.ul1.save()
+        
+        # Add UserLocation
+        self.t2 = timezone.now()
+        self.ul2 = UserLocation(user=self.u2,
+                                location=Point(3,-1),
+                                timestamp=self.t2)
+        self.ul2.save()
+        
     def test_ambulances(self):
 
         # test AmbulanceStatusSerializer
@@ -87,10 +101,18 @@ class CreateAmbulance(TestCase):
                        'location': None}
             self.assertEqual(serializer.data, result)
         
-        # Location
-        time = timezone.now()
-        AmbulanceLocation(location=UserLocation(user=self.u1,
-                                                location=Point(1,1),
-                                                timestamp=time),
-                          status=self.s1,
-                          orientation=0.0)
+        # test UserLocationSerializer
+        for ul in (self.ul1, self.ul2):
+            serializer = UserLocationSerializer(ul)
+            result = { 'user': ul.user,
+                       'location': ul.location,
+                       'timestamp': ul.timestamp}
+            self.assertEqual(serializer.data, result)
+            
+        # # Location
+        # time = timezone.now()
+        # AmbulanceLocation(location=UserLocation(user=self.u1,
+        #                                         location=Point(1,1),
+        #                                         timestamp=time),
+        #                   status=self.s1,
+        #                   orientation=0.0)
