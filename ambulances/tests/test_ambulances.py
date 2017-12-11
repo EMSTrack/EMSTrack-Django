@@ -112,6 +112,7 @@ class CreateAmbulance(TestCase):
                        'longitude': ul.location.x,
                        'timestamp': ul.timestamp}
             result = UserLocationSerializer(data=result)
+            self.assertEqual(result.is_valid(), True)
             self.assertEqual(serializer.data, result.validated_data)
             
         # # Location
