@@ -20,7 +20,8 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     fieldsets = UserAdmin.fieldsets + ((None, {'fields': ('hospitals', 'hospital', 'ambulances', 'ambulance',)}),)
 
-admin.site.register(User, CustomUserAdmin)
+#admin.site.register(User, CustomUserAdmin)
+admin.site.register(User)
 admin.site.register(Ambulance)
 admin.site.register(AmbulanceStatus)
 admin.site.register(AmbulanceCapability)
@@ -30,5 +31,4 @@ admin.site.register(Call)
 admin.site.register(Hospital)
 admin.site.register(Equipment)
 admin.site.register(EquipmentCount)
-admin.site.register(Capability)
-admin.site.register(LocationPoint)
+admin.site.register(UserLocation)
