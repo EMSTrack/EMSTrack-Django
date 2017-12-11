@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import AmbulanceRoute, AmbulanceStatus, Ambulance, \
-    Region, Call, Hospital, \
+from .models import  AmbulanceStatus, AmbulanceLocation, Ambulance, \
+    AmbulanceRoute, Region, Call, Hospital, \
     Equipment, EquipmentCount, Base, AmbulanceCapability, UserLocation, User
 
 from .fields import AmbulanceStatusField, AmbulanceCapabilityField
