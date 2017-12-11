@@ -39,7 +39,7 @@ class AmbulanceLocationSerializer(serializers.ModelSerializer):
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
-    location = AmbulanceLocationSerializers()
+    location = AmbulanceLocationSerializer()
     capability = AmbulanceCapabilityField()
 
     class Meta:
