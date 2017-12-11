@@ -49,10 +49,10 @@ class CreateAmbulance(TestCase):
         # test AmbulanceSerializer
         for a in (self.a1, self.a2):
             serializer = AmbulanceSerializer(a)
-            result = { 'id': a.pk, 'identifier': a.identifier,
-                       'location': {'latitude': a.location.y,
-                                    'longitude': a.location.x}, 
-                       'comment': a.comment, 'status': a.status.name,
+            result = { 'id': a.pk,
+                       'identifier': a.identifier,
+                       'comment': a.comment, 
+                       'status': a.status.name,
                        'capability': a.capability.name,
                        'orientation': a.orientation }
             self.assertEqual(serializer.data, result)

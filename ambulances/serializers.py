@@ -47,8 +47,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         # Define model, fields, and access permissions for the serializer
         model = Ambulance
         fields = ['id', 'identifier', 'comment', 'capability', 'updated_at', 'location']
-
-
         
 class CallSerializer(serializers.ModelSerializer):
 
