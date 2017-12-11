@@ -24,15 +24,7 @@ class AmbulanceCapabilitySerializer(serializers.ModelSerializer):
 
 class UserLocationSerializer(serializers.ModelSerializer):
 
-    # Define functions that will query for these custom fields
-
-    class Meta:
-        model = UserLocation
-        fields = ['latitude', 'longitude']
-
-class UserLocationSerializer(serializers.ModelSerializer):
-
-    user = serializers.SerializerMethodField('get_uid')
+    user_id = serializers.SerializerMethodField('get_uid')
     latitude = serializers.SerializerMethodField('get_lat')
     longitude = serializers.SerializerMethodField('get_long')
     
