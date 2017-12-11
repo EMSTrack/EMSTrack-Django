@@ -20,24 +20,34 @@ class AmbulanceStatusSerializer(serializers.ModelSerializer):
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     # Define functions that will query for these custom fields
-    location = serializers.SerializerMethodField('get_lat_long')
-
-    # Assign status and capability
-    status = AmbulanceStatusField()
+    location = AmbulanceLocationSerializers()
     capability = AmbulanceCapabilityField()
 
     class Meta:
 
         # Define model, fields, and access permissions for the serializer
         model = Ambulance
-        fields = ['id', 'identifier', 'comment', 'status', 'location', 'capability', 'orientation']
+        fields = ['id', 'identifier', 'comment', 'capability', 'updated_at', 'location']
 
-    # Obtain serialized location
-    def get_lat_long(self, obj):
+class AmbulanceLocationSerializer(serializers.ModelSerializer):
 
-        # Return the data (JSON format of fields)
-        return LocationSerializer(obj).data
+    # Assign status and capability
+    status = AmbulanceStatusField()
 
+    class Meta:
+
+        # Define model, fields, and access permissions for the serializer
+        model = AmbulanceLocation
+        fields = ['location', 'status', 'orientation']
+
+class UserLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+
+        # Define model, fields, and access permissions for the serializer
+        model = UserLocation
+        fields = ['user', 'location', 'timestamp']
+        
 class CallSerializer(serializers.ModelSerializer):
 
     latitude = serializers.SerializerMethodField('get_lat')
