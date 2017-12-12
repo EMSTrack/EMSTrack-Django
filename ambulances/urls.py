@@ -44,11 +44,11 @@ urlpatterns = [
         name="ambulance_map"),
     
     url(r'^ambulance/(?P<pk>\d+)/update/$',
-        login_required(AmbulanceUpdateView.as_view()),
+        login_required(views.AmbulanceUpdateView.as_view()),
         name='ambulance_update'),
 
     url(r'^status/(?P<pk>\d+)/update/$',
-        login_required(AmbulanceStatusUpdateView.as_view()),
+        login_required(views.AmbulanceStatusUpdateView.as_view()),
         name='status_update'),
 
     url(r'^status$',
