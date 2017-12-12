@@ -107,10 +107,10 @@ class CreateAmbulance(TestCase):
         # test UserLocationSerializer
         for ul in (self.ul1, self.ul2):
             serializer = UserLocationSerializer(ul)
-            data = { 'user_id': ul.user.pk,
-                       'latitude': ul.location.y,
-                       'longitude': ul.location.x,
-                       'timestamp': ul.timestamp}
+            data = { 'user_id': ul.user,
+                     'latitude': ul.location.y,
+                     'longitude': ul.location.x,
+                     'timestamp': ul.timestamp}
             result = UserLocationSerializer(data=result)
             self.assertEqual(result.is_valid(), True)
             self.assertEqual(serializer.data, result.validated_data)

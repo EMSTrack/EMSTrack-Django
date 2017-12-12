@@ -2,7 +2,6 @@ from django import forms
 
 from .models import Ambulance, AmbulanceStatus, Call, AmbulanceCapability
 
-
 class AmbulanceCreateForm(forms.ModelForm):
     class Meta:
         model = Ambulance

@@ -1,4 +1,5 @@
 from django.conf.urls import url, include
+
 from rest_framework_swagger.views import get_swagger_view
 from rest_framework import routers
 
@@ -18,12 +19,12 @@ schema_view = get_swagger_view(title='Ambulances API')
 router = routers.DefaultRouter()
 
 # Register urls to viewsets
-router.register(r'status', AmbulanceStatusViewSet)
-router.register(r'ambulances', AmbulanceViewSet)
-router.register(r'calls', CallViewSet)
-router.register(r'hospitals', HospitalViewSet)
-router.register(r'equipment', EquipmentCountViewSet)
-router.register(r'routes', AmbulanceRouteViewSet)
+#router.register(r'status', AmbulanceStatusViewSet)
+#router.register(r'ambulances', AmbulanceViewSet)
+#router.register(r'calls', CallViewSet)
+#router.register(r'hospitals', HospitalViewSet)
+#router.register(r'equipment', EquipmentCountViewSet)
+#router.register(r'routes', AmbulanceRouteViewSet)
 
 urlpatterns = [
 
