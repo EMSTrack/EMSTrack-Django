@@ -2,7 +2,10 @@ import django.contrib.auth.forms as auth_forms
 import django.forms as forms
 from django.utils.translation import ugettext_lazy as _
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+from django.contrib.auth.models import Group
 
 class SignupForm(auth_forms.UserCreationForm):
     username = auth_forms.UsernameField(
