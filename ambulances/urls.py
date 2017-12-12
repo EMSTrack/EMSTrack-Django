@@ -6,9 +6,10 @@ from rest_framework import routers
 from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
-from .views import AmbulanceStatusViewSet, AmbulanceViewSet, CallViewSet, \
-    HospitalViewSet, EquipmentCountViewSet, AmbulanceRouteViewSet, \
-    AmbulanceUpdateView, AmbulanceStatusUpdateView, AdminView
+
+#from .views import AmbulanceStatusViewSet, AmbulanceViewSet, CallViewSet, \
+#    HospitalViewSet, EquipmentCountViewSet, AmbulanceRouteViewSet, \
+#    AmbulanceUpdateView, AmbulanceStatusUpdateView, AdminView
 
 # Defines the url routing within the website
 
