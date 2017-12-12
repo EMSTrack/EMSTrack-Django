@@ -1,0 +1,42 @@
+/* leaflet-tooltip */
+
+.leaflet-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.leaflet-tooltip .leaflet-tooltiptext {
+    visibility: hidden;
+    width: 100px;
+    background-color: #ffffee;
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* Position the leaflet-tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -20px;
+    left: 120%;
+}
+
+.leaflet-tooltip:hover .leaflet-tooltiptext {
+    visibility: visible;
+}
+
+/* leaflet add marker checkbox */
+.leaflet-add-marker div { cursor: pointer; 
+			  height: 26px; 
+			  width: 26px; }
+.leaflet-add-marker-input { display: none; }
+.leaflet-add-marker label { display: block; 
+			    width: 26px; height: 26px; 
+			    border-radius: 4px;
+			    background-color: white; 
+			    background-image: url('/static/icons/pin/blue.svg'); 
+			    cursor: pointer; }
+.leaflet-add-marker-input:checked + label { 
+    background-color: #aaaaaa; 
+}

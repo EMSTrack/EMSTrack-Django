@@ -1,0 +1,103 @@
+/* map */
+#mapid {
+    width: 600px; 
+    height: 500px;
+}
+
+/* searchbox */
+
+div#aedlist {
+    float: left;
+    padding-right: 1px;
+    height: 500px;
+}
+
+div#searchbox {
+    width: 300px;
+    height: 62px;
+    background-color: #dddddd;
+}
+
+div#results {
+    overflow: scroll;
+    height: 438px;
+}
+
+div#searchfieldandbutton {
+    height: 30px;
+}
+
+input#searchfield {
+    width: 200px;
+    background-color: white;
+    padding-right: 5px;
+    height: 30px;
+    -webkit-appearance:none;
+}
+input#searchbutton {
+    float: right;
+    width: 100px;
+    height: 30px;
+    font-size: medium;
+    font-family: serif;
+    background-color: #aaaaaa;
+}
+
+.searchoption {
+    width: 20px;
+    padding: 0px 0px 0px 0px;
+}
+
+div#searchoptions {
+    font-family: Sans-Serif;
+    font-size: small;
+    padding: 5px 0px 5px 0px;
+    text-align: left;
+}
+
+#searchoptionslabel {
+    padding-right: 10px;
+    font-size: large;
+}
+
+/* aeds */
+
+h3#aedlist {
+    margin: 0 0 0 0px;
+}
+
+ul.aeds {
+    padding: 0 0 0 0px;
+    margin: 2px 0 2px 0;
+    width: 300px;
+}
+
+li.aeds {
+    color: black;
+    cursor: pointer;
+    font-family: Sans-Serif;
+    font-size: medium;
+    margin-left: 2em;
+    text-indent: -2em;
+    padding: 2px 0 2px 0;
+}
+
+li.aeds.public {
+    list-style-type: none;
+}
+
+li.aeds.private {
+    list-style-type: none;
+    color: #ff4444;
+}
+
+li.aeds.unverified {
+    list-style-type: none;
+    font-weight: lighter;
+    color: #999999;
+}
+
+li.aeds.selected {
+    list-style-type: none;
+    font-weight: bold;
+}

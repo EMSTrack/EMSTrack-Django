@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html>
+<body>
+<form id="myform" method="post" action="/ambulances/create_ambulance">
+    {% csrf_token %}
+    <input type="hidden" name="flag" value="2"/>
+    <a href="#" onclick="document.forms[0].submit();return false;">Let's go!</a>
+</form>
+</body>
+</html>
