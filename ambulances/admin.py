@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 # Register your models here.
 
-from .models import User \
+from .models import User, \
     Ambulance, AmbulanceStatus, AmbulanceCapability, \
     AmbulanceLocation, \
     User, UserLocation, \
