@@ -3,8 +3,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 
-from django.contrib.auth.models import User
-
+#from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -12,7 +11,7 @@ from braces.views import CsrfExemptMixin
 
 from login.forms import AuthenticationForm, SignupForm
 
-from ambulances.models import Hospital, UserApps
+from ambulances.models import Hospital, Profile
 
 # signup
 class SignupView(FormView):
@@ -114,15 +113,14 @@ class MQTTAclView(CsrfExemptMixin, View):
                     # is user authorized?
                     try:
                         
-                        apps = UserApps.objects.get(user=user.pk)
-                        apps.hospitals.get(id=hospital_id)
+                        user.profile.hospitals.get(id=hospital_id)
             
                         if ((len(topic) == 3 and topic[2] == 'metadata') or
                             (len(topic) == 4 and topic[2] == 'equipment')):
                         
                             return HttpResponse('OK')
 
-                    except (Hospital.DoesNotExist, UserApps.DoesNotExist):
+                    except Profile.DoesNotExist:
                         pass
                         
             elif acc == 2:

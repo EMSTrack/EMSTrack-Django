@@ -7,6 +7,9 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import LineString, Point
 from django.contrib.auth.models import AbstractUser
 
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
@@ -75,12 +78,12 @@ class Hospital(models.Model):
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
-class UserApps(models.Model):
+class Profile(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
-                                 null=True, blank=True,
+                                 null=True, blank=True, 
                                  related_name="hosp_id")
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE,
@@ -89,6 +92,15 @@ class UserApps(models.Model):
     
     hospitals = models.ManyToManyField(Hospital)
     ambulances = models.ManyToManyField(Ambulance)
+    
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()
     
 class Call(models.Model):
     #call metadata (status not required for now)
