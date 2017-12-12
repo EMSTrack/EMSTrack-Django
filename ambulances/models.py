@@ -1,14 +1,19 @@
 from django.utils import timezone
 
 from django.db import models
+from django.conf import settings
+
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import LineString, Point
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
+
+class User(AbstractUser):
+    pass
 
 class AmbulanceStatus(models.Model):
     name = models.CharField(max_length=254, unique=True)
@@ -23,7 +28,8 @@ class AmbulanceCapability(models.Model):
         return "{}".format(self.name)
 
 class UserLocation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     location = models.PointField(srid=4326)
     timestamp = models.DateTimeField()
 
@@ -70,7 +76,8 @@ class Hospital(models.Model):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
 class UserApps(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
                                  null=True, blank=True,
