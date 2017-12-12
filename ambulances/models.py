@@ -93,12 +93,12 @@ class Profile(models.Model):
     hospitals = models.ManyToManyField(Hospital)
     ambulances = models.ManyToManyField(Ambulance)
     
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=sender=settings.AUTH_USER_MODEL)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=sender=settings.AUTH_USER_MODEL)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
     
