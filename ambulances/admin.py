@@ -3,10 +3,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 # Register your models here.
 
-from .models import Profile, \
+from .models import User, Profile, \
     Ambulance, AmbulanceStatus, AmbulanceCapability, \
     AmbulanceLocation, \
-    User, UserLocation, \
+    UserLocation, \
     Hospital, Equipment, EquipmentCount, UserLocation, \
     Call, Region
 
