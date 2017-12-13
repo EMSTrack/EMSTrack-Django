@@ -92,7 +92,7 @@ class CreateAmbulance(TestCase):
             result = []
             for e in u.profile.ambulances.all():
                 result.append({ 'id': e.pk, 'identifier': e.identifier })
-            self.assertEqual(serializer.data, result)
+            self.assertEqual(serializer.data, {'ambulances': result})
         
     def dtest_ambulances(self):
 
