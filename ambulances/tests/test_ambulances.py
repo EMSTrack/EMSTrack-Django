@@ -118,8 +118,6 @@ class CreateAmbulance(TestCase):
         # test UserAmbulancesSerializer
         for u in (self.u1, self.u2, self.u3):
             serializer = ProfileSerializer(u.profile)
-            for e in u.profile.ambulances.all():
-                print(e.can_read)
             result = {
                 'ambulances': [
                     { 'id': e.ambulance.pk,
@@ -136,6 +134,7 @@ class CreateAmbulance(TestCase):
                     for e in u.profile.hospitals.all()
                 ]
             }
+            print('result = {}'.format(result))
             self.assertEqual(serializer.data, result)
             
         

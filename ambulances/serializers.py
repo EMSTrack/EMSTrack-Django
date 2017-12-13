@@ -13,7 +13,7 @@ class AmbulancePermissionSerializer(serializers.ModelSerializer):
     ambulance_identifier = serializers.CharField(source='ambulance.identifier')
     
     class Meta:
-        model = Ambulance
+        model = AmbulancePermission
         fields = ('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')
         read_only_fields = ('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')
 
@@ -23,7 +23,7 @@ class HospitalPermissionSerializer(serializers.ModelSerializer):
     hospital_name = serializers.CharField(source='hospital.name')
     
     class Meta:
-        model = Hospital
+        model = HospitalPermission
         fields = ('hospital_id', 'hospital_name', 'can_read', 'can_write')
         read_only_fields = ('hospital_id', 'hospital_name', 'can_read', 'can_write')
         
