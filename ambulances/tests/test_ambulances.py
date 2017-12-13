@@ -7,11 +7,11 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from ..models import Ambulance, AmbulanceStatus, AmbulanceCapability, \
+from ambulances.models import Ambulance, AmbulanceStatus, AmbulanceCapability, \
     AmbulancePermission, HospitalPermission, \
     AmbulanceLocation, UserLocation, Hospital
 
-from ..serializers import ProfileSerializer
+from ambulances.serializers import ProfileSerializer
 # AmbulanceStatusSerializer, \
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
@@ -111,6 +111,9 @@ class CreateAmbulance(TestCase):
             AmbulancePermission.objects.create(ambulance=self.a3,
                                                can_write=True)
         )
+
+        
+
         
         # test UserAmbulancesSerializer
         for u in (self.u1, self.u2, self.u3):
