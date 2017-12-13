@@ -115,19 +115,22 @@ class CreateAmbulance(TestCase):
         # test UserAmbulancesSerializer
         for u in (self.u1, self.u2, self.u3):
             serializer = ProfileSerializer(u.profile)
-            result = {}
-            result['ambulances'] = []
-            for e in u.profile.ambulances.all():
-                result.append({ 'id': e.ambulance.pk,
-                                'identifier': e.ambulance.identifier,
-                                'can_read': e.can_read,
-                                'can_write': e.can_write })
-            result['hospitals'] = []
-            for e in u.profile.hospitals.all():
-                result.append({ 'id': e.hospital.pk,
-                                'name': e.hospital.name,
-                                'can_read': e.can_read,
-                                'can_write': e.can_write })
+            result = {
+                'ambulances': [
+                    { 'id': e.ambulance.pk,
+                      'identifier': e.ambulance.identifier,
+                      'can_read': e.can_read,
+                      'can_write': e.can_write }
+                    for e in u.profile.ambulances.all()
+                ],
+                'hospitals': [
+                    { 'id': e.hospital.pk,
+                      'name': e.hospital.name,
+                      'can_read': e.can_read,
+                      'can_write': e.can_write }
+                    for e in u.profile.hospitals.all()
+                ]
+            }
             self.assertEqual(serializer.data, result)
             
         
