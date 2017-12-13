@@ -17,17 +17,7 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 from django.contrib.auth.models import User
 
-class AmbulanceStatus(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-
-    def __str__(self):
-        return "{}".format(self.name)
-
-class AmbulanceCapability(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-
-    def __str__(self):
-        return "{}".format(self.name)
+# User and ambulance location models
 
 class UserLocation(models.Model):
     user = models.ForeignKey(User,
@@ -45,13 +35,28 @@ class AmbulanceLocation(models.Model):
 
     def __str__(self):
         return "{}".format(self.location)
+
+# Ambulance model
     
 class Ambulance(models.Model):
     identifier = models.CharField(max_length=50, unique=True)
     comment = models.CharField(max_length=254, default="")
-    capability = models.ForeignKey(AmbulanceCapability,
-                                   on_delete=models.CASCADE,
-                                   null=True, blank=True)
+
+    CAPABILITY_CHOICES = [
+        ('B','Basic'),
+        ('A','Advanced'),
+        ('R','Rescue')
+    ]
+    STATUS_CHOICES = [
+        ('A','Available'),
+        ('O','Out of service'),
+        ('PB','Patient bound'),
+        ('AP','At patient'),
+        ('HB','Hospital bound'),
+        ('AH','At hospital'),
+    ]
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES)
+    capability = models.CharField(max_length=1, choices = CAPABILITIES_CHOICES)
     
     updated_at = models.DateTimeField(auto_now=True)
     location =  models.ForeignKey(AmbulanceLocation,
@@ -75,10 +80,13 @@ class AmbulancePermission(models.Model):
     can_read = models.BooleanField(default=True)
     can_write = models.BooleanField(default=False)
     
+# Hospital model
+
 class Hospital(models.Model):
     name = models.CharField(max_length=254, default="")
     address = models.CharField(max_length=254, default="")
-
+    location = models.PointField(srid=4326, null=True, blank=True)
+    
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
@@ -87,7 +95,9 @@ class HospitalPermission(models.Model):
                                   on_delete=models.CASCADE)
     can_read = models.BooleanField(default=True)
     can_write = models.BooleanField(default=False)
-   
+
+# Profile and state
+
 class Profile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
@@ -103,6 +113,8 @@ class State(models.Model):
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE,
                                   null=True, blank=True)
+
+# THESE NEED REVISING
     
 class Call(models.Model):
     #call metadata (status not required for now)

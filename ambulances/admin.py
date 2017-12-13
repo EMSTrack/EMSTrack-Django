@@ -4,11 +4,11 @@ from django.contrib.auth.models import User
 
 # Register your models here.
 
-from .models import Profile, \
-    Ambulance, AmbulanceStatus, AmbulanceCapability, \
-    AmbulanceLocation, \
+from .models import Profile, State, \
+    Ambulance, AmbulanceLocation, AmbulancePermission, \
+    Hospital, HospitalPermission, \
     UserLocation, \
-    Hospital, Equipment, EquipmentCount, UserLocation, \
+    Equipment, EquipmentCount, UserLocation, \
     Call, Region
 
 # Define an inline admin descriptor for Profile model
@@ -18,9 +18,14 @@ class ProfileInline(admin.StackedInline):
     can_delete = False
     verbose_name_plural = 'profile'
 
+class StateInline(admin.StackedInline):
+    model = State
+    can_delete = False
+    verbose_name_plural = 'state'
+    
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    inlines = (ProfileInline, )
+    inlines = (ProfileInline, StateInline)
 
 # Re-register UserAdmin
 admin.site.unregister(User)
