@@ -6,4 +6,5 @@ markdown
 django-filter
 django-rest-swagger
 django-extra-fields
+django-nose
 paho-mqtt
