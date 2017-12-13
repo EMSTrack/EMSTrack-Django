@@ -11,6 +11,9 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 from .models import Ambulance, Call, Hospital, \
     EquipmentCount, Base, AmbulanceRoute, \
     Profile
@@ -117,6 +120,9 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
 class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
+
+    authentication_classes = (SessionAuthentication, BasicAuthentication)
+    permission_classes = (IsAuthenticated,)
     
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
