@@ -1,6 +1,7 @@
 import django_filters.rest_framework
 #from django.core.urlresolvers import reverse_lazy
 from django.urls import reverse_lazy
+from django.http import Http404
 
 from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
@@ -120,10 +121,17 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     serializer_class = ProfileSerializer
     
     def get_object(self):
+
+        # retrieve pk
         pk = self.kwargs.get('pk')
 
-        print('pk = {}'.format(pk))
-        print('user = {}'.format(repr(self.request.user)))
+        # super can see all profiles
+        if self.request.user.is_superuser:
+            return pk
+
+        # users can only see theirs
+        if pk != self.request.user.id:
+            raise Http404('You are not authorized to query this profile')
         
         return self.request.user
         
