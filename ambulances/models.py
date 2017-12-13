@@ -1,11 +1,9 @@
 from django.utils import timezone
 
 from django.db import models
-from django.conf import settings
 
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import LineString, Point
-from django.contrib.auth.models import AbstractUser
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -15,8 +13,12 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 # Model schemas for the database
 
-class User(AbstractUser):
-    pass
+#from django.contrib.auth.models import AbstractUser
+#from django.conf import settings
+#class User(AbstractUser):
+#    pass
+
+from django.contrib.auth.models import User
 
 class AmbulanceStatus(models.Model):
     name = models.CharField(max_length=254, unique=True)
@@ -31,7 +33,7 @@ class AmbulanceCapability(models.Model):
         return "{}".format(self.name)
 
 class UserLocation(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+    user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
     location = models.PointField(srid=4326)
     timestamp = models.DateTimeField()
@@ -79,7 +81,7 @@ class Hospital(models.Model):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
 class Profile(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+    user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
@@ -93,12 +95,12 @@ class Profile(models.Model):
     hospitals = models.ManyToManyField(Hospital)
     ambulances = models.ManyToManyField(Ambulance)
     
-@receiver(post_save, sender=sender=settings.AUTH_USER_MODEL)
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-@receiver(post_save, sender=sender=settings.AUTH_USER_MODEL)
+@receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
     
