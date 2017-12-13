@@ -7,7 +7,8 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
+from ..models import Ambulance, AmbulanceStatus, AmbulanceCapability, \
+    AmbulancePermission, HospitalPermission, \
     AmbulanceLocation, UserLocation, Hospital
 
 from ..serializers import UserAmbulancesSerializer, UserHospitalsSerializer
@@ -21,31 +22,21 @@ class CreateAmbulance(TestCase):
 
     def setUp(self):
 
-        # Add status
-        self.s1 = AmbulanceStatus.objects.create(name='Out of service')
-        self.s2 = AmbulanceStatus.objects.create(name='In service')
-        self.s3 = AmbulanceStatus.objects.create(name='Available')
-        
-        # Add capability
-        self.c1 = AmbulanceCapability.objects.create(name='Basic')
-        self.c2 = AmbulanceCapability.objects.create(name='Advanced')
-        self.c3 = AmbulanceCapability.objects.create(name='Rescue')
-        
         # Add ambulances
         self.a1 = Ambulance.objects.create(
             identifier='BC-179',
             comment='Maintenance due',
-            capability=self.c1)
+            capability=AmbulanceCapability.B.name)
         
         self.a2 = Ambulance.objects.create(
             identifier='BC-180',
             comment='Need painting',
-            capability=self.c2)
+            capability=AmbulanceCapability.A.name)
 
         self.a3 = Ambulance.objects.create(
             identifier='BC-181',
             comment='Engine overhaul',
-            capability=self.c3)
+            capability=AmbulanceCapability.R.name)
         
         # Add hospitals
         self.h1 = Hospital.objects.create(
@@ -110,10 +101,17 @@ class CreateAmbulance(TestCase):
     def test_hospitals(self):
 
         # add hospitals to users
-        self.u1.profile.hospitals.add(self.h2)
+        self.u1.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=self.h1,
+                                              can_write=True),
+            HospitalPermission.objects.create(hospital=self.h3)
+        )
         
-        self.u2.profile.hospitals.add(self.h1)
-        self.u2.profile.hospitals.add(self.h2)
+        self.u1.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=self.h1),
+            HospitalPermission.objects.create(hospital=self.h2,
+                                              can_write=True)
+        )
 
         # u3 has no hospitals
         

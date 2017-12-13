@@ -1,3 +1,4 @@
+from enum import Enum
 from django.utils import timezone
 
 from django.db import models
@@ -21,17 +22,19 @@ class UserLocation(models.Model):
     def __str__(self):
         return "{}".format(self.location)
 
+class AmbulanceStatus(Enum):
+    AV = 'Available'
+    OS = 'Out of service'
+    PB = 'Patient bound'
+    AP = 'At patient'
+    HB = 'Hospital bound'
+    AH = 'At hospital'
+    
 class AmbulanceLocation(models.Model):
     location = models.ForeignKey(UserLocation, on_delete=models.CASCADE)
     
-    AMBULANCE_STATUS_CHOICES = [
-        ('AV','Available'),
-        ('OS','Out of service'),
-        ('PB','Patient bound'),
-        ('AP','At patient'),
-        ('HB','Hospital bound'),
-        ('AH','At hospital'),
-    ]
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
     status = models.CharField(max_length=2,
                               choices=AMBULANCE_STATUS_CHOICES)
     
@@ -41,16 +44,18 @@ class AmbulanceLocation(models.Model):
         return "{}".format(self.location)
 
 # Ambulance model
+
+class AmbulanceCapability(Enum):
+    B = 'Basic'
+    A = 'Advanced'
+    R = 'Rescue'
     
 class Ambulance(models.Model):
     identifier = models.CharField(max_length=50, unique=True)
     comment = models.CharField(max_length=254, default="")
 
-    AMBULANCE_CAPABILITY_CHOICES = [
-        ('B','Basic'),
-        ('A','Advanced'),
-        ('R','Rescue')
-    ]
+    AMBULANCE_CAPABILITY_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCapability]
     capability = models.CharField(max_length=1,
                                   choices = AMBULANCE_CAPABILITY_CHOICES)
     
