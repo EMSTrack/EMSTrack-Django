@@ -52,7 +52,7 @@ class Ambulance(models.Model):
         ('R','Rescue')
     ]
     capability = models.CharField(max_length=1,
-                                  choices = AMBULANCE_CAPABILITIES_CHOICES)
+                                  choices = AMBULANCE_CAPABILITY_CHOICES)
     
     updated_at = models.DateTimeField(auto_now=True)
     location =  models.ForeignKey(AmbulanceLocation,
