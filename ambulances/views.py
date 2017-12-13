@@ -13,6 +13,7 @@ from rest_framework import mixins
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import permissions
 
 from .models import Ambulance, Call, Hospital, \
     EquipmentCount, Base, AmbulanceRoute, \
@@ -117,31 +118,37 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
 
 # Viewsets
+class IsUserOrAdmin(permissions.BasePermission):
+    """
+    Only user or staff can see or modify
+    """
 
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_staff or obj.user == request.user 
+    
 class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
 
-    authentication_classes = (SessionAuthentication, BasicAuthentication)
-    permission_classes = (IsAuthenticated,)
-    
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,
+                          IsUserOrAdmin,)
     
-    def get_object(self):
+    # def get_object(self):
 
-        # retrieve pk
-        pk = self.kwargs.get('pk')
+    #     # retrieve pk
+    #     pk = self.kwargs.get('pk')
 
-        # super can see all profiles
-        if self.request.user.is_superuser:
-            queryset = self.get_queryset()
-            return get_object_or_404(queryset, pk=pk)
+    #     # super can see all profiles
+    #     if self.request.user.is_superuser:
+    #         queryset = self.get_queryset()
+    #         return get_object_or_404(queryset, pk=pk)
 
-        # users can only see theirs
-        if pk != self.request.user.id:
-            raise Http404('You are not authorized to query this profile')
+    #     # users can only see theirs
+    #     if pk != self.request.user.id:
+    #         raise Http404('You are not authorized to query this profile')
         
-        return self.request.user
+    #     return self.request.user
         
 # Custom viewset that only allows listing, retrieving, and updating
 class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
