@@ -141,8 +141,6 @@ class CreateAmbulance(TestCase):
                     for e in u.profile.hospitals.all()
                 ]
             }
-            print('> result = {}'.format(result))
-            print('< answer = {}'.format(serializer.data))
             self.assertDictEqual(serializer.data, result)
             
         
