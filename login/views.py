@@ -120,12 +120,9 @@ class MQTTAclView(CsrfExemptMixin, View):
                         
                             return HttpResponse('OK')
 
-                    except Hospital.DoesNotExist:
+                    except User.DoesNotExist:
                         pass
 
-                    except Exception as e:
-                        print(e)
-                        
             elif acc == 2:
                 
                 # permission to publish:
