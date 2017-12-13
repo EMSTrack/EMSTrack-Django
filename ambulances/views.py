@@ -120,7 +120,11 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     serializer_class = ProfileSerializer
     
     def get_object(self):
-        print('user = {}'.format(self.request.user))
+        pk = self.kwargs.get('pk')
+
+        print('pk = {}'.format(pk))
+        print('user = {}'.format(repr(self.request.user)))
+        
         return self.request.user
         
 # Custom viewset that only allows listing, retrieving, and updating
