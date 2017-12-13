@@ -96,14 +96,11 @@ class Profile(models.Model):
     ambulances = models.ManyToManyField(Ambulance)
     
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_or_save_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    print('kwargs = {}'.format(kwargs))
-    instance.profile.save()
+    else:
+        instance.profile.save()
     
 class Call(models.Model):
     #call metadata (status not required for now)
