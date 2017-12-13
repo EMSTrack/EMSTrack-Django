@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User
 
-from .models import Profile, Hospital, Ambulance \
+from .models import Profile, Hospital, Ambulance, \
     UserLocation, AmbulanceLocation
 
 class UserHospitalSerializer(serializers.ModelSerializer):
