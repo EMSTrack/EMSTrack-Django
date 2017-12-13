@@ -10,7 +10,9 @@ from rest_framework import filters
 from rest_framework import mixins
 
 from .models import Ambulance, Call, Hospital, \
-    EquipmentCount, Base, AmbulanceRoute
+    EquipmentCount, Base, AmbulanceRoute, \
+    Profile
+
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
     # AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
 
