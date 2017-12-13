@@ -116,12 +116,12 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     
-    #queryset = Profile.objects.all()
+    queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     
-    def get_queryset(self):
+    def get_object(self):
         print('user = {}'.format(self.request.user))
-        queryset = Profile.objects.all().filter(user__username=self.request.user)
+        return self.request.user
         
 # Custom viewset that only allows listing, retrieving, and updating
 class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
