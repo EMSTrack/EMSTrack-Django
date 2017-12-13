@@ -17,6 +17,8 @@ from ambulances.serializers import ProfileSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
+import collections
+
 from django.test import Client
 
 class CreateAmbulance(TestCase):
