@@ -118,6 +118,8 @@ class CreateAmbulance(TestCase):
         # test UserAmbulancesSerializer
         for u in (self.u1, self.u2, self.u3):
             serializer = ProfileSerializer(u.profile)
+            for e in u.profile.ambulances.all():
+                print(e)
             result = {
                 'ambulances': [
                     { 'id': e.ambulance.pk,
