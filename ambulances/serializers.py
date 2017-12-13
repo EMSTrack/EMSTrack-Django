@@ -9,8 +9,8 @@ from .models import Profile, Hospital, Ambulance, \
 
 class AmbulancePermissionSerializer(serializers.ModelSerializer):
 
-    ambulance_id = serializer.CharField(source='ambulance.id')
-    ambulance_identifier = serializer.CharField(source='ambulance.identifier')
+    ambulance_id = serializers.CharField(source='ambulance.id')
+    ambulance_identifier = serializers.CharField(source='ambulance.identifier')
     
     class Meta:
         model = Ambulance
@@ -19,8 +19,8 @@ class AmbulancePermissionSerializer(serializers.ModelSerializer):
 
 class HospitalPermissionSerializer(serializers.ModelSerializer):
 
-    hospital_id = serializer.CharField(source='hospital.id')
-    hospital_name = serializer.CharField(source='hospital.name')
+    hospital_id = serializers.CharField(source='hospital.id')
+    hospital_name = serializers.CharField(source='hospital.name')
     
     class Meta:
         model = Hospital
