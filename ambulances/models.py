@@ -78,8 +78,8 @@ class Hospital(models.Model):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
 class Profile(models.Model):
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
                                  null=True, blank=True, 
