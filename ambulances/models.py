@@ -23,7 +23,18 @@ class UserLocation(models.Model):
 
 class AmbulanceLocation(models.Model):
     location = models.ForeignKey(UserLocation, on_delete=models.CASCADE)
-    status = models.ForeignKey(AmbulanceStatus, on_delete=models.CASCADE)
+    
+    AMBULANCE_STATUS_CHOICES = [
+        ('AV','Available'),
+        ('OS','Out of service'),
+        ('PB','Patient bound'),
+        ('AP','At patient'),
+        ('HB','Hospital bound'),
+        ('AH','At hospital'),
+    ]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES)
+    
     orientation = models.FloatField(default=0.0)
 
     def __str__(self):
@@ -40,16 +51,8 @@ class Ambulance(models.Model):
         ('A','Advanced'),
         ('R','Rescue')
     ]
-    STATUS_CHOICES = [
-        ('AV','Available'),
-        ('OS','Out of service'),
-        ('PB','Patient bound'),
-        ('AP','At patient'),
-        ('HB','Hospital bound'),
-        ('AH','At hospital'),
-    ]
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES)
-    capability = models.CharField(max_length=1, choices = CAPABILITIES_CHOICES)
+    capability = models.CharField(max_length=1,
+                                  choices = AMBULANCE_CAPABILITIES_CHOICES)
     
     updated_at = models.DateTimeField(auto_now=True)
     location =  models.ForeignKey(AmbulanceLocation,

@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from .models import Profile, Hospital, Ambulance, \
     UserLocation, AmbulanceLocation
 
+# Profile serializers
+
 class AmbulancePermissionSerializer(serializers.ModelSerializer):
 
     ambulance_id = serializer.CharField(source='ambulance.id')
@@ -34,6 +36,8 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('ambulances','hospitals')
 
+# Ambulance location serializers
+        
 class UserLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
