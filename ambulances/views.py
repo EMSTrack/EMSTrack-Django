@@ -116,6 +116,7 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 class ProfileViewSet(viewsets.ModelViewSet):
     
     #queryset = Profile.objects.all()
+    base_name = 'profile'
     serializer_class = ProfileSerializer
     
     def get_queryset(self):
