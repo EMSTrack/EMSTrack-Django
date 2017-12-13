@@ -41,14 +41,14 @@ class CreateUser(TestCase):
 
         # Add permissions
         self.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(ambulance=self.h1,
+            HospitalPermission.objects.create(hospital=self.h1,
                                               can_write=True),
-            HospitalPermission.objects.create(ambulance=self.h3)
+            HospitalPermission.objects.create(hospital=self.h3)
         )
             
         self.u3.profile.hospitals.add(
-            HospitalPermission.objects.create(ambulance=self.h1),
-            HospitalPermission.objects.create(ambulance=self.h2,
+            HospitalPermission.objects.create(hospital=self.h1),
+            HospitalPermission.objects.create(hospital=self.h2,
                                               can_write=True)
         )
 
