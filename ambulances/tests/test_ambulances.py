@@ -122,6 +122,7 @@ class CreateAmbulance(TestCase):
                                 'can_read': e.can_read,
                                 'can_write': e.can_write })
             result['hospitals'] = []
+            for e in u.profile.hospitals.all():
                 result.append({ 'id': e.hospital.pk,
                                 'name': e.hospital.name,
                                 'can_read': e.can_read,
