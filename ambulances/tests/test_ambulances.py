@@ -91,7 +91,7 @@ class CreateAmbulance(TestCase):
             serializer = UserAmbulancesSerializer(u)
             result = []
             for e in u.profile.ambulances.all():
-                result.push({ 'id': e.pk, 'identifier': e.identifier })
+                result.append({ 'id': e.pk, 'identifier': e.identifier })
             self.assertEqual(serializer.data, result)
         
     def dtest_ambulances(self):
