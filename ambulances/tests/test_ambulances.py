@@ -88,7 +88,7 @@ class CreateAmbulance(TestCase):
         for u in (self.u1, self.u2, self.u3):
             serializer = UserAmbulancesSerializer(u)
             result = []
-            for e in u.profile.ambulances:
+            for e in u.profile.ambulances.all():
                 result.add({ 'id': e.pk, 'identifier': e.identifier })
             self.assertEqual(serializer.data, result)
         
