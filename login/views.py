@@ -12,6 +12,7 @@ from braces.views import CsrfExemptMixin
 from login.forms import AuthenticationForm, SignupForm
 
 from ambulances.models import Hospital, Profile
+from django.core.exceptions import ObjectDoesNotExist
 
 # signup
 class SignupView(FormView):
@@ -120,7 +121,7 @@ class MQTTAclView(CsrfExemptMixin, View):
                         
                             return HttpResponse('OK')
 
-                    except User.DoesNotExist:
+                    except ObjectDoesNotExist:
                         pass
 
             elif acc == 2:
