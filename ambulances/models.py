@@ -41,8 +41,8 @@ class Ambulance(models.Model):
         ('R','Rescue')
     ]
     STATUS_CHOICES = [
-        ('A','Available'),
-        ('O','Out of service'),
+        ('AV','Available'),
+        ('OS','Out of service'),
         ('PB','Patient bound'),
         ('AP','At patient'),
         ('HB','Hospital bound'),
