@@ -113,8 +113,7 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
 # Viewsets
 
-class ProfileViewSet(mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     
     #queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
