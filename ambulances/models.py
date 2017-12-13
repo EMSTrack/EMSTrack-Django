@@ -92,11 +92,6 @@ class Profile(models.Model):
     hospitals = models.ManyToManyField(Hospital)
     ambulances = models.ManyToManyField(Ambulance)
     
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        Profile.objects.create(user=instance)
-    
 class Call(models.Model):
     #call metadata (status not required for now)
     active = models.BooleanField(default=False)
