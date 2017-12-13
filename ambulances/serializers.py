@@ -30,4 +30,5 @@ class UserAmbulancesSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
+        fields = (,)
         read_only_fields = ('ambulances',)
