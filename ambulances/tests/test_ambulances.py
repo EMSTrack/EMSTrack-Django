@@ -10,7 +10,7 @@ from rest_framework import serializers
 from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     AmbulanceLocation, UserLocation
 
-from ..serializers import UserHospitalsSerializer
+from ..serializers import UserAmbulancesSerializer, UserHospitalsSerializer
 # AmbulanceStatusSerializer, \
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
