@@ -5,9 +5,6 @@ from django.db import models
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import LineString, Point
 
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
@@ -96,11 +93,9 @@ class Profile(models.Model):
     ambulances = models.ManyToManyField(Ambulance)
     
 @receiver(post_save, sender=User)
-def create_or_save_user_profile(sender, instance, created, **kwargs):
+def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-    else:
-        instance.profile.save()
     
 class Call(models.Model):
     #call metadata (status not required for now)
