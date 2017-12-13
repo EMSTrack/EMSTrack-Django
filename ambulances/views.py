@@ -119,6 +119,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     
     def get_queryset(self):
+        print('user = {}'.format(self.request.user))
         queryset = Profile.objects.all().filter(user__username=self.request.user)
         
 # Custom viewset that only allows listing, retrieving, and updating
