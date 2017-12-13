@@ -22,33 +22,27 @@ class CreateAmbulance(TestCase):
     def setUp(self):
 
         # Add status
-        self.s1 = AmbulanceStatus(name='Out of service')
-        self.s1.save()
-        self.s2 = AmbulanceStatus(name='In service')
-        self.s2.save()
-        self.s3 = AmbulanceStatus(name='Available')
-        self.s3.save()
+        self.s1 = AmbulanceStatus.objects.create(name='Out of service')
+        self.s2 = AmbulanceStatus.objects.create(name='In service')
+        self.s3 = AmbulanceStatus.objects.create(name='Available')
         
         # Add capability
-        self.c1 = AmbulanceCapability(name='Basic')
-        self.c1.save()
-        self.c2 = AmbulanceCapability(name='Advanced')
-        self.c2.save()
-        self.c3 = AmbulanceCapability(name='Rescue')
-        self.c3.save()
+        self.c1 = AmbulanceCapability.objects.create(name='Basic')
+        self.c2 = AmbulanceCapability.objects.create(name='Advanced')
+        self.c3 = AmbulanceCapability.objects.create(name='Rescue')
         
         # Add ambulances
-        self.a1 = Ambulance(
+        self.a1 = Ambulance.objects.create(
             identifier='BC-179',
             comment='Maintenance due',
             capability=self.c1)
         
-        self.a2 = Ambulance(
+        self.a2 = Ambulance.objects.create(
             identifier='BC-180',
             comment='Need painting',
             capability=self.c2)
 
-        self.a3 = Ambulance(
+        self.a3 = Ambulance.objects.create(
             identifier='BC-181',
             comment='Engine overhaul',
             capability=self.c3)
@@ -72,17 +66,15 @@ class CreateAmbulance(TestCase):
 
         # Add UserLocation
         self.t1 = timezone.now()
-        self.ul1 = UserLocation(user=self.u1,
-                                location=Point(1,1),
-                                timestamp=self.t1)
-        self.ul1.save()
+        self.ul1 = UserLocation.objects.create(user=self.u1,
+                                               location=Point(1,1),
+                                               timestamp=self.t1)
         
         # Add UserLocation
         self.t2 = timezone.now()
-        self.ul2 = UserLocation(user=self.u2,
-                                location=Point(3,-1),
-                                timestamp=self.t2)
-        self.ul2.save()
+        self.ul2 = UserLocation.objects.create(user=self.u2,
+                                               location=Point(3,-1),
+                                               timestamp=self.t2)
 
     def test_hospitals(self):
 
