@@ -137,6 +137,6 @@ class CreateAmbulance(TestCase):
             }
             print('> result = {}'.format(result))
             print('< answer = {}'.format(serializer.data))
-            self.assertEqual(serializer.data, result)
+            self.assertDictEqual(serializer.data, result)
             
         
