@@ -11,7 +11,7 @@ from ..models import Ambulance, AmbulanceStatus, AmbulanceCapability, \
     AmbulancePermission, HospitalPermission, \
     AmbulanceLocation, UserLocation, Hospital
 
-from ..serializers import UserAmbulancesSerializer, UserHospitalsSerializer
+from ..serializers import ProfileSerializer
 # AmbulanceStatusSerializer, \
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
@@ -80,25 +80,7 @@ class CreateAmbulance(TestCase):
                                                location=Point(3,-1),
                                                timestamp=self.t2)
 
-    def test_ambulances(self):
-
-        # add ambulances to users
-        self.u1.profile.ambulances.add(self.a2)
-        
-        self.u2.profile.ambulances.add(self.a1)
-        self.u2.profile.ambulances.add(self.a2)
-
-        # u3 has no ambulances
-        
-        # test UserAmbulancesSerializer
-        for u in (self.u1, self.u2, self.u3):
-            serializer = UserAmbulancesSerializer(u.profile)
-            result = []
-            for e in u.profile.ambulances.all():
-                result.append({ 'id': e.pk, 'identifier': e.identifier })
-            self.assertEqual(serializer.data, {'ambulances': result})
-        
-    def test_hospitals(self):
+    def test_profile(self):
 
         # add hospitals to users
         self.u1.profile.hospitals.add(
@@ -107,19 +89,43 @@ class CreateAmbulance(TestCase):
             HospitalPermission.objects.create(hospital=self.h3)
         )
         
-        self.u1.profile.hospitals.add(
+        self.u2.profile.hospitals.add(
             HospitalPermission.objects.create(hospital=self.h1),
             HospitalPermission.objects.create(hospital=self.h2,
                                               can_write=True)
         )
 
-        # u3 has no hospitals
+        # u3 has no hospitals 
         
-        # test UserHospitalsSerializer
+        # add ambulances to users
+        self.u1.profile.ambulances.add(
+            AmbulancePermission.objects.create(ambulance=self.a2,
+                                               can_write=True)
+        )
+        
+        # u2 has no ambulances
+        
+        self.u3.profile.ambulances.add(
+            AmbulancePermission.objects.create(ambulance=self.a1,
+                                               can_read=False)
+            AmbulancePermission.objects.create(ambulance=self.a3,
+                                               can_write=True)
+        )
+        
+        # test UserAmbulancesSerializer
         for u in (self.u1, self.u2, self.u3):
-            serializer = UserHospitalsSerializer(u.profile)
-            result = []
-            for e in u.profile.hospitals.all():
-                result.append({ 'id': e.pk, 'name': e.name })
-            self.assertEqual(serializer.data, {'hospitals': result})
+            serializer = ProfileSerializer(u.profile)
+            result['ambulances'] = []
+            for e in u.profile.ambulances.all():
+                result.append({ 'id': e.ambulance.pk,
+                                'identifier': e.ambulance.identifier,
+                                'can_read': e.can_read,
+                                'can_write': e.can_write })
+            result['hospitals'] = []
+                result.append({ 'id': e.hospital.pk,
+                                'name': e.hospital.name,
+                                'can_read': e.can_read,
+                                'can_write': e.can_write })
+            self.assertEqual(serializer.data, result)
+            
         
