@@ -11,7 +11,7 @@ from braces.views import CsrfExemptMixin
 
 from login.forms import AuthenticationForm, SignupForm
 
-from ambulances.models import Hospital, Profile, DoesNotExist
+from ambulances.models import Hospital, Profile
 
 # signup
 class SignupView(FormView):
@@ -120,8 +120,11 @@ class MQTTAclView(CsrfExemptMixin, View):
                         
                             return HttpResponse('OK')
 
-                    except DoesNotExist:
+                    except Hospital.DoesNotExist:
                         pass
+
+                    except Exception as e:
+                        print(e)
                         
             elif acc == 2:
                 
