@@ -46,7 +46,7 @@ class Ambulance(models.Model):
     identifier = models.CharField(max_length=50, unique=True)
     comment = models.CharField(max_length=254, default="")
 
-    CAPABILITY_CHOICES = [
+    AMBULANCE_CAPABILITY_CHOICES = [
         ('B','Basic'),
         ('A','Advanced'),
         ('R','Rescue')
