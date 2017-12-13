@@ -79,6 +79,8 @@ class CreateAmbulance(TestCase):
     def test_hospitals(self):
 
         # add ambulances
+        self.u1.profile.ambulances.add(self.a2)
+        
         self.u2.profile.ambulances.add(self.a1)
         self.u2.profile.ambulances.add(self.a2)
         
