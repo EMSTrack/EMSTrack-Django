@@ -15,12 +15,12 @@ class CreateUser(TestCase):
     def setUp(self):
 
         # Add hospitals
-        self.h1 = Hospital(name='hospital1', address='somewhere')
-        self.h1.save()
-        self.h2 = Hospital(name='hospital2', address='somewhere else')
-        self.h2.save()
-        self.h3 = Hospital(name='hospital3', address='somewhere other')
-        self.h3.save()
+        self.h1 = Hospital.objects.create(name='hospital1',
+                                          address='somewhere')
+        self.h2 = Hospital.objects.create(name='hospital2',
+                                          address='somewhere else')
+        self.h3 = Hospital.objects.create(name='hospital3',
+                                          address='somewhere other')
         
         # Add users
         self.u1 = User.objects.create_user(
@@ -39,21 +39,19 @@ class CreateUser(TestCase):
             email='test2@user.com',
             password='very_secret')
 
-        self.u2.profile.hospitals.add(self.h1, self.h3)
-        
-        self.u3.profile.hospitals.add(self.h1, self.h2)
+        # Add permissions
+        self.u2.profile.hospitals.add(
+            HospitalPermission.objects.create(ambulance=self.h1,
+                                              can_write=True),
+            HospitalPermission.objects.create(ambulance=self.h3)
+        )
+            
+        self.u3.profile.hospitals.add(
+            HospitalPermission.objects.create(ambulance=self.h1),
+            HospitalPermission.objects.create(ambulance=self.h2,
+                                              can_write=True)
+        )
 
-        #print('h1 = {}'.format(self.h1))
-        #print('h2 = {}'.format(self.h2))
-        #print('h3 = {}'.format(self.h3))
-
-        #print('u1 = {}'.format(self.u1))
-        #print('u1 = {}'.format(self.u1.hospitals.all()))
-        #print('u2 = {}'.format(self.u2))
-        #print('u2 = {}'.format(self.u2.hospitals.all()))
-        #print('u3 = {}'.format(self.u3))
-        #print('u3 = {}'.format(self.u3.hospitals.all()))
-        
     def test_login(self):
 
         # instantiate client
