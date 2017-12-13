@@ -113,7 +113,7 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
 # Viewsets
 
-class ProfileViewSet(mixins.RetrieveModelMixin,,
+class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
     
     #queryset = Profile.objects.all()
