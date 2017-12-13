@@ -8,7 +8,7 @@ class UserHospitalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Hospital
-        fields = ('id', 'identifier')
+        read_only_fields = ('id', 'identifier')
 
 class UserHospitalsSerializer(serializers.ModelSerializer):
 
@@ -16,13 +16,13 @@ class UserHospitalsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
-
+        read_only_fields = ('hospitals',)
         
 class UserAmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulance
-        fields = ('id', 'identifier')
+        read_only_fields = ('id', 'identifier')
         
 class UserAmbulancesSerializer(serializers.ModelSerializer):
 
@@ -30,3 +30,4 @@ class UserAmbulancesSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Profile
+        read_only_fields = ('ambulances',)
