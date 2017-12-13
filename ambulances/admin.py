@@ -32,8 +32,6 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Ambulance)
-admin.site.register(AmbulanceStatus)
-admin.site.register(AmbulanceCapability)
 admin.site.register(AmbulanceLocation)
 admin.site.register(Region)
 admin.site.register(Call)
