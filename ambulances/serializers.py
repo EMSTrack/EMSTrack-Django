@@ -33,3 +33,17 @@ class UserAmbulancesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('ambulances',)
+
+class UserLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserLocation
+        fields = ('location', 'timestamp')
+       
+class AmbulanceLocationSerializer(serializers.ModelSerializer):
+
+    location = UserLocationSerializer()
+    
+    class Meta:
+        model = AmbulanceLocation
+        fields = ('location','status','orientation')
