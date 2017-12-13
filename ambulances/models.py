@@ -69,28 +69,40 @@ class AmbulanceRoute(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     points = models.ManyToManyField(AmbulanceLocation)
     
+class AmbulancePermission(models.Model):
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+    can_read = models.BooleanField(default=True)
+    can_write = models.BooleanField(default=False)
+    
 class Hospital(models.Model):
-    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=254, default="")
     address = models.CharField(max_length=254, default="")
 
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.address)
 
+class HospitalPermission(models.Model):
+    hospital = models.ForeignKey(Hospital,
+                                  on_delete=models.CASCADE)
+    can_read = models.BooleanField(default=True)
+    can_write = models.BooleanField(default=False)
+   
 class Profile(models.Model):
+    user = models.OneToOneField(User,
+                                on_delete=models.CASCADE)
+    ambulances = models.ManyToManyField(AmbulancePermission)
+    hospitals = models.ManyToManyField(HospitalPermission)
+
+class State(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
-                                 null=True, blank=True, 
-                                 related_name="hosp_id")
+                                 null=True, blank=True)
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE,
-                                  null=True, blank=True,
-                                  related_name ="ambul_id")
-    
-    hospitals = models.ManyToManyField(Hospital)
-    ambulances = models.ManyToManyField(Ambulance)
+                                  null=True, blank=True)
     
 class Call(models.Model):
     #call metadata (status not required for now)
