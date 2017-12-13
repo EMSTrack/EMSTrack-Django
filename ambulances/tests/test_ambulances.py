@@ -121,7 +121,7 @@ class CreateAmbulance(TestCase):
             serializer = ProfileSerializer(u.profile)
             result = {
                 'ambulances': [
-                    OrderedDict([
+                    collections.OrderedDict([
                         ('ambulance_id', e.ambulance.pk),
                         ('ambulance_identifier', e.ambulance.identifier),
                         ('can_read', e.can_read),
@@ -130,7 +130,7 @@ class CreateAmbulance(TestCase):
                     for e in u.profile.ambulances.all()
                 ],
                 'hospitals': [
-                    OrderedDict([
+                    collections.OrderedDict([
                         ('hospital_id', e.hospital.pk),
                         ('hospital_name', e.hospital.name),
                         ('can_read', e.can_read),
