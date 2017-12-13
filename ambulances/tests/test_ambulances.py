@@ -121,15 +121,15 @@ class CreateAmbulance(TestCase):
             serializer = ProfileSerializer(u.profile)
             result = {
                 'ambulances': [
-                    { 'id': e.ambulance.pk,
-                      'identifier': e.ambulance.identifier,
+                    { 'ambulance_id': e.ambulance.pk,
+                      'ambulance_identifier': e.ambulance.identifier,
                       'can_read': e.can_read,
                       'can_write': e.can_write }
                     for e in u.profile.ambulances.all()
                 ],
                 'hospitals': [
-                    { 'id': e.hospital.pk,
-                      'name': e.hospital.name,
+                    { 'hospital_id': e.hospital.pk,
+                      'hospital_name': e.hospital.name,
                       'can_read': e.can_read,
                       'can_write': e.can_write }
                     for e in u.profile.hospitals.all()
