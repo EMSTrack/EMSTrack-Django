@@ -114,10 +114,11 @@ class MQTTAclView(CsrfExemptMixin, View):
                     # is user authorized?
                     try:
                         
-                        user.profile.hospitals.get(id=hospital_id)
+                        perm = user.profile.hospitals.get(hospital=hospital_id)
             
-                        if ((len(topic) == 3 and topic[2] == 'metadata') or
-                            (len(topic) == 4 and topic[2] == 'equipment')):
+                        if (perm.can_read and
+                            ((len(topic) == 3 and topic[2] == 'metadata') or
+                             (len(topic) == 4 and topic[2] == 'equipment'))):
                         
                             return HttpResponse('OK')
 
