@@ -9,10 +9,10 @@ from rest_framework import viewsets
 from rest_framework import filters
 from rest_framework import mixins
 
-from .models import Ambulance, AmbulanceStatus, Call, Hospital, \
+from .models import Ambulance, Call, Hospital, \
     EquipmentCount, Base, AmbulanceRoute
-from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, \
-    AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
+    # AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
 
 #from .serializers import AmbulanceSerializer, AmbulanceStatusSerializer, \
 #    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
@@ -66,34 +66,34 @@ class AdminView(ListView):
     template_name = 'ambulances/dispatch_list.html'
     context_object_name = "ambulance_call"
     
-# AmbulanceStatus list page
-class AmbulanceStatusCreateView(CreateView):
-    model = AmbulanceStatus
-    context_object_name = "ambulance_status_form"
-    form_class = AmbulanceStatusCreateForm
-    success_url = reverse_lazy('status')
+# # AmbulanceStatus list page
+# class AmbulanceStatusCreateView(CreateView):
+#     model = AmbulanceStatus
+#     context_object_name = "ambulance_status_form"
+#     form_class = AmbulanceStatusCreateForm
+#     success_url = reverse_lazy('status')
 
-    def get_context_data(self, **kwargs):
-        context = super(AmbulanceStatusCreateView, self).get_context_data(**kwargs)
-        context['statuses'] = AmbulanceStatus.objects.all().order_by('id')
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(AmbulanceStatusCreateView, self).get_context_data(**kwargs)
+#         context['statuses'] = AmbulanceStatus.objects.all().order_by('id')
+#         return context
 
 
-# AmbulanceStatus update page
-class AmbulanceStatusUpdateView(UpdateView):
-    model = AmbulanceStatus
-    form_class = AmbulanceStatusUpdateForm
-    template_name = 'ambulances/ambulance_status_edit.html'
-    success_url = reverse_lazy('status')
+# # AmbulanceStatus update page
+# class AmbulanceStatusUpdateView(UpdateView):
+#     model = AmbulanceStatus
+#     form_class = AmbulanceStatusUpdateForm
+#     template_name = 'ambulances/ambulance_status_edit.html'
+#     success_url = reverse_lazy('status')
 
-    def get_object(self, queryset=None):
-        obj = AmbulanceStatus.objects.get(id=self.kwargs['pk'])
-        return obj
+#     def get_object(self, queryset=None):
+#         obj = AmbulanceStatus.objects.get(id=self.kwargs['pk'])
+#         return obj
 
-    def get_context_data(self, **kwargs):
-        context = super(AmbulanceStatusUpdateView, self).get_context_data(**kwargs)
-        context['id'] = self.kwargs['pk']
-        return context
+#     def get_context_data(self, **kwargs):
+#         context = super(AmbulanceStatusUpdateView, self).get_context_data(**kwargs)
+#         context['id'] = self.kwargs['pk']
+#         return context
 
 
 # Ambulance map page

@@ -47,13 +47,13 @@ urlpatterns = [
         login_required(views.AmbulanceUpdateView.as_view()),
         name='ambulance_update'),
 
-    url(r'^status/(?P<pk>\d+)/update/$',
-        login_required(views.AmbulanceStatusUpdateView.as_view()),
-        name='status_update'),
+    # url(r'^status/(?P<pk>\d+)/update/$',
+    #     login_required(views.AmbulanceStatusUpdateView.as_view()),
+    #     name='status_update'),
 
-    url(r'^status$',
-        login_required(views.AmbulanceStatusCreateView.as_view()),
-        name="status"),
+    # url(r'^status$',
+    #     login_required(views.AmbulanceStatusCreateView.as_view()),
+    #     name="status"),
 
     url(r'^call_list$',
         login_required(views.CallView.as_view()),
