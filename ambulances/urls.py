@@ -27,6 +27,9 @@ router = routers.DefaultRouter()
 #router.register(r'equipment', EquipmentCountViewSet)
 #router.register(r'routes', AmbulanceRouteViewSet)
 
+router.register(r'profile', views.ProfileViewSet)
+
+
 urlpatterns = [
 
     # Swagger Documentation

@@ -14,6 +14,11 @@ from .models import Ambulance, Call, Hospital, \
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
     # AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
 
+from .serializers import ProfileSerializer
+#    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
+#    AmbulanceRouteSerializer, BaseSerializer
+
+    
 #from .serializers import AmbulanceSerializer, AmbulanceStatusSerializer, \
 #    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
 #    AmbulanceRouteSerializer, BaseSerializer
@@ -105,6 +110,13 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
 
 # Viewsets
+
+class ProfileViewSet(mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+    
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    
 
 # Custom viewset that only allows listing, retrieving, and updating
 class ListRetrieveUpdateViewSet(mixins.ListModelMixin,

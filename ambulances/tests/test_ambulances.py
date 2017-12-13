@@ -114,11 +114,8 @@ class CreateAmbulance(TestCase):
             AmbulancePermission.objects.create(ambulance=self.a3,
                                                can_write=True)
         )
-
         
-
-        
-        # test UserAmbulancesSerializer
+        # test ProfileSerializer
         for u in (self.u1, self.u2, self.u3):
             serializer = ProfileSerializer(u.profile)
             result = {
