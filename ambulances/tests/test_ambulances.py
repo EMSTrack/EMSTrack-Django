@@ -47,6 +47,19 @@ class CreateAmbulance(TestCase):
             comment='Engine overhaul',
             capability=self.c3)
         
+        # Add hospitals
+        self.h1 = Hospital.objects.create(
+            name='Hospital General',
+            address="Don't know")
+        
+        self.h2 = Hospital.objects.create(
+            name='Hospital CruzRoja',
+            address='Forgot')
+
+        self.h3 = Hospital.objects.create(
+            name='Hospital Nuevo',
+            address='Not built yet')
+        
         # Add users
         self.u1 = User.objects.create_user(
             username='admin',
@@ -76,9 +89,9 @@ class CreateAmbulance(TestCase):
                                                location=Point(3,-1),
                                                timestamp=self.t2)
 
-    def test_hospitals(self):
+    def test_ambulances(self):
 
-        # add ambulances
+        # add ambulances to users
         self.u1.profile.ambulances.add(self.a2)
         
         self.u2.profile.ambulances.add(self.a1)
@@ -94,46 +107,21 @@ class CreateAmbulance(TestCase):
                 result.append({ 'id': e.pk, 'identifier': e.identifier })
             self.assertEqual(serializer.data, {'ambulances': result})
         
-    def dtest_ambulances(self):
+    def test_hospitals(self):
 
-        # test AmbulanceStatusSerializer
-        for s in (self.s1, self.s2, self.s3):
-            serializer = AmbulanceStatusSerializer(s)
-            result = [{ 'id': s.pk, 'name': s.name }]
-            self.assertEqual(serializer.data, result)
-
-        # test AmbulanceCapabilitySerializer
-        for c in (self.c1, self.c2, self.c3):
-            serializer = AmbulanceCapabilitySerializer(c)
-            result = { 'id': c.pk, 'name': c.name }
-            self.assertEqual(serializer.data, result)
-            
-        # test AmbulanceSerializer
-        for a in (self.a1, self.a2):
-            serializer = AmbulanceSerializer(a)
-            result = { 'id': a.pk,
-                       'identifier': a.identifier,
-                       'comment': a.comment, 
-                       'capability': a.capability.name,
-                       'updated_at': None,
-                       'location': None}
-            self.assertEqual(serializer.data, result)
+        # add hospitals to users
+        self.u1.profile.hospitals.add(self.h2)
         
-        # test UserLocationSerializer
-        for ul in (self.ul1, self.ul2):
-            serializer = UserLocationSerializer(ul)
-            data = { 'user_id': ul.user,
-                     'latitude': ul.location.y,
-                     'longitude': ul.location.x,
-                     'timestamp': ul.timestamp}
-            result = UserLocationSerializer(data=result)
-            self.assertEqual(result.is_valid(), True)
-            self.assertEqual(serializer.data, result.validated_data)
-            
-        # # Location
-        # time = timezone.now()
-        # AmbulanceLocation(location=UserLocation(user=self.u1,
-        #                                         location=Point(1,1),
-        #                                         timestamp=time),
-        #                   status=self.s1,
-        #                   orientation=0.0)
+        self.u2.profile.hospitals.add(self.h1)
+        self.u2.profile.hospitals.add(self.h2)
+
+        # u3 has no hospitals
+        
+        # test UserHospitalsSerializer
+        for u in (self.u1, self.u2, self.u3):
+            serializer = UserHospitalsSerializer(u.profile)
+            result = []
+            for e in u.profile.hospitals.all():
+                result.append({ 'id': e.pk, 'name': e.name })
+            self.assertEqual(serializer.data, {'hospitals': result})
+        
