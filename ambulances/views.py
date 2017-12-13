@@ -134,11 +134,9 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
         # super can see all profiles
         if self.request.user.is_superuser:
-            print('is super')
             queryset = self.get_queryset()
             return get_object_or_404(queryset, pk=pk)
 
-        print('not super')
         # users can only see theirs
         if pk != self.request.user.id:
             raise Http404('You are not authorized to query this profile')
