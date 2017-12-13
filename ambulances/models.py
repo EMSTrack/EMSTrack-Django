@@ -8,13 +8,6 @@ from django.contrib.gis.geos import LineString, Point
 Tijuana = Point(-117.0382, 32.5149, srid=4326)
 DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
-# Model schemas for the database
-
-#from django.contrib.auth.models import AbstractUser
-#from django.conf import settings
-#class User(AbstractUser):
-#    pass
-
 from django.contrib.auth.models import User
 
 # User and ambulance location models
