@@ -107,7 +107,7 @@ class CreateAmbulance(TestCase):
         
         self.u3.profile.ambulances.add(
             AmbulancePermission.objects.create(ambulance=self.a1,
-                                               can_read=False)
+                                               can_read=False),
             AmbulancePermission.objects.create(ambulance=self.a3,
                                                can_write=True)
         )
