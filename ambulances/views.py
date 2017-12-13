@@ -2,6 +2,7 @@ import django_filters.rest_framework
 #from django.core.urlresolvers import reverse_lazy
 from django.urls import reverse_lazy
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
@@ -127,8 +128,11 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
         # super can see all profiles
         if self.request.user.is_superuser:
-            return pk
+            print('is super')
+            queryset = self.get_queryset()
+            return get_object_or_404(queryset, pk=pk)
 
+        print('not super')
         # users can only see theirs
         if pk != self.request.user.id:
             raise Http404('You are not authorized to query this profile')
