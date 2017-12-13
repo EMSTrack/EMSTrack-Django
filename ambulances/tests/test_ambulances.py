@@ -83,8 +83,8 @@ class CreateAmbulance(TestCase):
         
         self.u2.profile.ambulances.add(self.a1)
         self.u2.profile.ambulances.add(self.a2)
-        
-        self.u3.profile.ambulances.add(self.a3)
+
+        # u3 has no ambulances
         
         # test UserAmbulancesSerializer
         for u in (self.u1, self.u2, self.u3):
