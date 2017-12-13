@@ -8,7 +8,7 @@ from django.utils import timezone
 from rest_framework import serializers
 
 from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    AmbulanceLocation, UserLocation
+    AmbulanceLocation, UserLocation, Hospital
 
 from ..serializers import UserAmbulancesSerializer, UserHospitalsSerializer
 # AmbulanceStatusSerializer, \
