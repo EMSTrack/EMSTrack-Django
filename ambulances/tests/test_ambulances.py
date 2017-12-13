@@ -10,7 +10,8 @@ from rest_framework import serializers
 from ..models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     AmbulanceLocation, UserLocation
 
-#from ..serializers import AmbulanceStatusSerializer, \
+from ..serializers import UserHospitalsSerializer
+# AmbulanceStatusSerializer, \
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
@@ -42,12 +43,16 @@ class CreateAmbulance(TestCase):
             comment='Maintenance due',
             capability=self.c1)
         
-        # Add ambulances
         self.a2 = Ambulance(
             identifier='BC-180',
             comment='Need painting',
             capability=self.c2)
 
+        self.a3 = Ambulance(
+            identifier='BC-181',
+            comment='Engine overhaul',
+            capability=self.c3)
+        
         # Add users
         self.u1 = User.objects.create_user(
             username='admin',
@@ -64,7 +69,7 @@ class CreateAmbulance(TestCase):
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
-        
+
         # Add UserLocation
         self.t1 = timezone.now()
         self.ul1 = UserLocation(user=self.u1,
@@ -78,13 +83,29 @@ class CreateAmbulance(TestCase):
                                 location=Point(3,-1),
                                 timestamp=self.t2)
         self.ul2.save()
+
+    def test_hospitals(self):
+
+        # add ambulances
+        self.u2.profile.ambulances.add(self.a1)
+        self.u2.profile.ambulances.add(self.a2)
+        
+        self.u3.profile.ambulances.add(self.a3)
+        
+        # test UserAmbulancesSerializer
+        for u in (self.u1, self.u2, self.u3):
+            serializer = UserAmbulancesSerializer(s)
+            result = []
+            for e in u.profile.ambulances:
+                result.add({ 'id': e.pk, 'identifier': e.identifier })
+            self.assertEqual(serializer.data, result)
         
     def dtest_ambulances(self):
 
         # test AmbulanceStatusSerializer
         for s in (self.s1, self.s2, self.s3):
             serializer = AmbulanceStatusSerializer(s)
-            result = { 'id': s.pk, 'name': s.name }
+            result = [{ 'id': s.pk, 'name': s.name }]
             self.assertEqual(serializer.data, result)
 
         # test AmbulanceCapabilitySerializer
