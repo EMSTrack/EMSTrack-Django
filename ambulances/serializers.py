@@ -10,6 +10,14 @@ class UserHospitalSerializer(serializers.ModelSerializer):
         model = Hospital
         fields = ('id', 'identifier')
 
+class UserHospitalsSerializer(serializers.ModelSerializer):
+
+    hospitals = UserHospitalSerializer(read_only=True, many=True)
+    
+    class Meta:
+        model = Profile
+
+        
 class UserAmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
