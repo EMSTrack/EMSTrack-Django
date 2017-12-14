@@ -78,34 +78,11 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
             return obj
 
         # return ambulance if user can read it
-        permission = user.profile.ambulances.filter(ambulance=pk)
+        permission = user.profile.ambulances.objects.filter(ambulance=pk)
         if permission and permission[0].can_read:
             return obj
 
         return Http404()
-        
-class CanReadAmbulanceOrHospital(permissions.BasePermission):
-
-    def __init__(self, model):
-
-        super().__init__()
-        self.model = model
-    
-    def has_object_permission(self, request, view, obj):
-
-        if request.user.is_superuser or request.user.is_staff:
-            return True
-
-        if (self.model == 'Ambulance' and
-            request.user.profile.ambulances.objects.filter(id=obj.id)):
-            return True
-        elif (self.model == 'Hospital' and
-            request.user.profile.hospitals.objects.filter(id=obj.id)):
-            return True
-        
-        return False
-    
-
     
 # Ambulance list page
 class AmbulanceListView(ListView):
