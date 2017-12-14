@@ -61,28 +61,44 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 class AmbulanceViewSet(mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
 
-    queryset = Ambulance.objects.all()
+    #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
 
-    def get_object(self):
+    def get_queryset(self):
 
-        queryset = self.get_queryset()
-        pk = self.kwargs['pk']
+        # return all ambulance if superuser
         user = self.request.user
-
-        # retrieve object
-        obj = get_object_or_404(queryset, pk=pk)
-
-        # return ambulance if superuser
         if user.is_superuser:
-            return obj
+            return Ambulance.objects.all()
 
-        # return ambulance if user can read it
-        permission = user.profile.ambulances.all().filter(ambulance__id=pk)
-        if permission and permission[0].can_read:
-            return obj
+        # otherwise only return ambulance that the user can read
+        return user.profile.Ambulances.filter(can_read=True).ambulances.all()
 
-        raise Http404()
+# class AmbulanceViewSet(mixins.RetrieveModelMixin,
+#                        viewsets.GenericViewSet):
+
+#     queryset = Ambulance.objects.all()
+#     serializer_class = AmbulanceSerializer
+
+#     def get_object(self):
+
+#         queryset = self.get_queryset()
+#         pk = self.kwargs['pk']
+#         user = self.request.user
+
+#         # retrieve object
+#         obj = get_object_or_404(queryset, pk=pk)
+
+#         # return ambulance if superuser
+#         if user.is_superuser:
+#             return obj
+
+#         # return ambulance if user can read it
+#         permission = user.profile.ambulances.all().filter(ambulance__id=pk)
+#         if permission and permission[0].can_read:
+#             return obj
+
+#         raise Http404()
     
 # Ambulance list page
 class AmbulanceListView(ListView):
