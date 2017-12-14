@@ -150,7 +150,7 @@ class CreateAmbulance(TestCase):
         client = Client()
 
         # login as admin
-        client.login(username=self.u1.username, password=self.u1.password)
+        client.login(username='admin', password='admin')
 
         # retrieve own
         response = client.get('/ambulances/api/profile/' + str(self.u1.id),
@@ -180,7 +180,7 @@ class CreateAmbulance(TestCase):
         client.logout()
 
         # login as testuser1
-        client.login(username=self.u2.username, password=self.u2.password)
+        client.login(username='testuser1', password='top_secret')
         
         # retrieve own
         response = client.get('/ambulances/api/profile/' + str(self.u2.id),
