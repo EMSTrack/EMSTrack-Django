@@ -144,7 +144,7 @@ class CreateAmbulance(TestCase):
             self.assertDictEqual(serializer.data, result)
             
 
-    def test_api_profile(self):
+    def test_profile_viewset(self):
 
         # instantiate client
         client = Client()
@@ -220,5 +220,64 @@ class CreateAmbulance(TestCase):
                 result['status'] = a.location.status
             self.assertDictEqual(serializer.data, result)
         
+    def test_profile_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve any ambulance
+        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = AmbulanceSerializer(self.a1).data
+        self.assertDictEqual(result, answer)
+
+    def asdomasda(self):
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u3.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve own
+        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/' + str(self.u1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # logout
+        client.logout()
 
         

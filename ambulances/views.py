@@ -46,6 +46,40 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
                 request.user.is_staff or
                 obj.user == request.user)
 
+# Profile viewset
+
+class ProfileViewSet(mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,
+                          IsUserOrAdminOrSuper,)
+
+# Ambulance viewset
+
+class AmbulanceViewSet(mixins.RetrieveModelMixin,
+                       viewsets.GenericViewSet):
+
+    #queryset = Ambulance.objects.all()
+    serializer_class = AmbulanceSerializer
+
+    def get_object(self):
+
+        pk = self.kwargs('pk')
+        user = self.request.user
+
+        # return ambulance if superuser
+        if user.is_superuser:
+            return get_object_or_404(Ambulance, pk=pk)
+
+        # return ambulance if user can read it
+        permission = user.profile.ambulances.objects.filter(ambulance=pk)
+        if permission and permission[0].can_read:
+            return permission[0].ambulance
+
+        return Http404()
+        
 class CanReadAmbulanceOrHospital(permissions.BasePermission):
 
     def __init__(self, model):
@@ -67,26 +101,8 @@ class CanReadAmbulanceOrHospital(permissions.BasePermission):
         
         return False
     
-# Profile viewset
 
-class ProfileViewSet(mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
-
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = (permissions.IsAuthenticated,
-                          IsUserOrAdminOrSuper,)
-
-# Ambulance viewset
-
-class AmbulanceViewSet(mixins.RetrieveModelMixin,
-                       viewsets.GenericViewSet):
-
-    queryset = Ambulance.objects.all()
-    serializer_class = AmbulanceSerializer
-    permission_classes = (permissions.IsAuthenticated,
-                          CanReadAmbulanceOrHospital('Ambulance'),)
-
+    
 # Ambulance list page
 class AmbulanceListView(ListView):
     model = Ambulance
