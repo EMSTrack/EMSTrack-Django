@@ -80,12 +80,15 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
         print('queryset = {}'.format(queryset))
         print('user = {}'.format(user))
         print('pk = {}'.format(pk))
-
+        print('obj = {}'.format(obj))
+        
         # return ambulance if user can read it
         permission = user.profile.ambulances.all().filter(ambulance=pk)
         if permission and permission[0].can_read:
             return obj
 
+        print('denied')
+        
         return Http404()
     
 # Ambulance list page
