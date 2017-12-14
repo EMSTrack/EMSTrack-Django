@@ -38,9 +38,17 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances','hospitals')
 
 # Ambulance serializers
+
+class UserLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserLocation
+        fields = ('location', 'timestamp')
+
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     status = serializers.CharField(source='location.status', allow_null=True)
+    location = UserLocationSerializer()
     
     class Meta:
         model = Ambulance
@@ -50,11 +58,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         
 # Ambulance location serializers
         
-class UserLocationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserLocation
-        fields = ('location', 'timestamp')
        
 class AmbulanceLocationSerializer(serializers.ModelSerializer):
 
