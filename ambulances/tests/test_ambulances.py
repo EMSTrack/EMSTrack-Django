@@ -263,7 +263,7 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.a3).data
+        answer = AmbulanceSerializer(self.a3).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
