@@ -40,10 +40,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
+    status = serializers.CharField(source='location.status')
+    
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'comment', 'capability',
-                  'location', 'updated_on')
+                  'status', 'location', 'updated_on')
 
         
 # Ambulance location serializers
