@@ -66,17 +66,21 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
 
     def get_object(self):
 
+        queryset = self.get_queryset()
         pk = self.kwargs['pk']
         user = self.request.user
 
+        # retrieve object
+        obj = get_object_or_404(queryset, pk=pk)
+
         # return ambulance if superuser
         if user.is_superuser:
-            return get_object_or_404(Ambulance, pk=pk)
+            return obj
 
         # return ambulance if user can read it
         permission = user.profile.ambulances.objects.filter(ambulance=pk)
         if permission and permission[0].can_read:
-            return permission[0].ambulance
+            return obj
 
         return Http404()
         
