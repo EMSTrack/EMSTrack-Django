@@ -92,7 +92,7 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
 
         print('denied')
         
-        return Http404()
+        raise Http404()
     
 # Ambulance list page
 class AmbulanceListView(ListView):
