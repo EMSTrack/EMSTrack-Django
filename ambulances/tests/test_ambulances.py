@@ -259,7 +259,7 @@ class CreateAmbulance(TestCase):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/' + str(self.a3.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -271,7 +271,7 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
-        response = client.get('/ambulances/api/ambulance/' + str(self.a3.id),
+        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
