@@ -259,19 +259,19 @@ class CreateAmbulance(TestCase):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/profile/' + str(self.a2.id),
+        response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.a2.profile).data
+        answer = ProfileSerializer(self.a2).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
-        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+        response = client.get('/ambulances/api/ambulance/' + str(self.u3.id),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
