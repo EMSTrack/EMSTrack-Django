@@ -150,7 +150,7 @@ class CreateAmbulance(TestCase):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=self.u1.username, password=self.u1.password)
 
         # retrieve own
         response = client.get('/ambulances/api/profile/' + str(self.u1.id),
@@ -163,7 +163,6 @@ class CreateAmbulance(TestCase):
         # retrieve someone else's
         response = client.get('/ambulances/api/profile/' + str(self.u2.id),
                               follow=True)
-        print(response.content)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = ProfileSerializer(self.u2.profile).data
@@ -176,4 +175,23 @@ class CreateAmbulance(TestCase):
         result = JSONParser().parse(BytesIO(response.content))
         answer = ProfileSerializer(self.u3.profile).data
         self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username=self.u2.username, password=self.u2.password)
+        
+        # retrieve own
+        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
         
