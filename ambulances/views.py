@@ -72,8 +72,7 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
             return Ambulance.objects.all()
 
         # otherwise only return ambulance that the user can read
-        return Ambulance.objects.filter(ambulancepermission__can_read=True,
-                                        ambulancepermission__user=user.pk)
+        return user.profile.ambulances.filter(can_read=True)
 
 # class AmbulanceViewSet(mixins.RetrieveModelMixin,
 #                        viewsets.GenericViewSet):
