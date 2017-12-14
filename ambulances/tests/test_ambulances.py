@@ -163,6 +163,7 @@ class CreateAmbulance(TestCase):
         # retrieve someone else's
         response = client.get('/ambulances/api/profile/' + str(self.u2.id),
                               follow=True)
+        print(response.body)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = ProfileSerializer(self.u2.profile).data
