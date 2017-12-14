@@ -311,7 +311,10 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        print(result)
+        answer = [AmbulanceSerializer(self.a1).data,
+                  AmbulanceSerializer(self.a2).data,
+                  AmbulanceSerializer(self.a3).data]
+        self.assertDictEqual(result, answer)
         
         # logout
         client.logout()
