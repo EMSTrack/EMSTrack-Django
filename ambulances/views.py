@@ -64,9 +64,8 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
     #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
 
-    def get_object(self):
+    def get_object(self, pk):
 
-        pk = self.kwargs('pk')
         user = self.request.user
 
         # return ambulance if superuser
