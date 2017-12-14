@@ -40,7 +40,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    status = serializers.CharField(source='location.status')
+    status = serializers.CharField(source='location.status', allow_null=True)
     
     class Meta:
         model = Ambulance
