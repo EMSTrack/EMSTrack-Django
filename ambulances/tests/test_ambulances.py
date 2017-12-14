@@ -12,8 +12,8 @@ from ambulances.models import Ambulance, \
     AmbulancePermission, HospitalPermission, \
     AmbulanceLocation, UserLocation, Hospital
 
-from ambulances.serializers import ProfileSerializer
-# AmbulanceStatusSerializer, \
+from ambulances.serializers import ProfileSerializer, \
+    AmbulanceSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
