@@ -319,4 +319,31 @@ class CreateAmbulance(TestCase):
         # logout
         client.logout()
 
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+
+        # retrieve ambulances
+        response = client.get('/ambulances/api/ambulance/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = []
+        self.assertEqual(result, answer)
         
+        # logout
+        client.logout()
+        
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        # retrieve ambulances
+        response = client.get('/ambulances/api/ambulance/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [AmbulanceSerializer(self.a1).data,
+                  AmbulanceSerializer(self.a3).data]
+        self.assertEqual(result, answer)
+        
+        # logout
+        client.logout()
