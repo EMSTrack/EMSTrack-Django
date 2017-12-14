@@ -77,6 +77,10 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
         if user.is_superuser:
             return obj
 
+        print('queryset = {}'.format(queryset))
+        print('user = {}'.format(user))
+        print('pk = {}'.format(pk))
+
         # return ambulance if user can read it
         permission = user.profile.ambulances.objects.filter(ambulance=pk)
         if permission and permission[0].can_read:
