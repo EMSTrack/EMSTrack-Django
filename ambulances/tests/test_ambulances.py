@@ -71,20 +71,6 @@ class CreateAmbulance(TestCase):
             email='test2@user.com',
             password='very_secret')
 
-        # Add UserLocation
-        self.t1 = timezone.now()
-        self.ul1 = UserLocation.objects.create(user=self.u1,
-                                               location=Point(1,1),
-                                               timestamp=self.t1)
-        
-        # Add UserLocation
-        self.t2 = timezone.now()
-        self.ul2 = UserLocation.objects.create(user=self.u2,
-                                               location=Point(3,-1),
-                                               timestamp=self.t2)
-
-    def test_profile(self):
-
         # add hospitals to users
         self.u1.profile.hospitals.add(
             HospitalPermission.objects.create(hospital=self.h1,
@@ -115,6 +101,20 @@ class CreateAmbulance(TestCase):
                                                can_write=True)
         )
         
+        # Add UserLocation
+        self.t1 = timezone.now()
+        self.ul1 = UserLocation.objects.create(user=self.u1,
+                                               location=Point(1,1),
+                                               timestamp=self.t1)
+        
+        # Add UserLocation
+        self.t2 = timezone.now()
+        self.ul2 = UserLocation.objects.create(user=self.u2,
+                                               location=Point(3,-1),
+                                               timestamp=self.t2)
+
+    def test_profile(self):
+
         # test ProfileSerializer
         for u in (self.u1, self.u2, self.u3):
             serializer = ProfileSerializer(u.profile)
@@ -140,4 +140,13 @@ class CreateAmbulance(TestCase):
             }
             self.assertDictEqual(serializer.data, result)
             
+
+    def test_api_profile(self):
+
+        # instantiate client
+        client = Client()
+
+        # blank login
+        response = client.get('/ambulances/api/profile/')
+        self.assertEqual(response.status_code, 200)
         

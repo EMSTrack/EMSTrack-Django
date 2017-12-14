@@ -33,6 +33,24 @@ from .serializers import ProfileSerializer
 
 # Defines the view for a user when a url is accessed
 
+
+# Viewsets
+class IsUserOrAdmin(permissions.BasePermission):
+    """
+    Only user or staff can see or modify
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return request.user.is_staff or obj.user == request.user 
+    
+class ProfileViewSet(mixins.RetrieveModelMixin,
+                     viewsets.GenericViewSet):
+
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,
+                          IsUserOrAdmin,)
+
 # Ambulance list page
 class AmbulanceListView(ListView):
     model = Ambulance
@@ -117,38 +135,6 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
         return Ambulance.objects.all()
 
 
-# Viewsets
-class IsUserOrAdmin(permissions.BasePermission):
-    """
-    Only user or staff can see or modify
-    """
-
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_staff or obj.user == request.user 
-    
-class ProfileViewSet(mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
-
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = (permissions.IsAuthenticated,
-                          IsUserOrAdmin,)
-    
-    # def get_object(self):
-
-    #     # retrieve pk
-    #     pk = self.kwargs.get('pk')
-
-    #     # super can see all profiles
-    #     if self.request.user.is_superuser:
-    #         queryset = self.get_queryset()
-    #         return get_object_or_404(queryset, pk=pk)
-
-    #     # users can only see theirs
-    #     if pk != self.request.user.id:
-    #         raise Http404('You are not authorized to query this profile')
-        
-    #     return self.request.user
         
 # Custom viewset that only allows listing, retrieving, and updating
 class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
