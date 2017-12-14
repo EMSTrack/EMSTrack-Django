@@ -153,11 +153,5 @@ class CreateAmbulance(TestCase):
         response = client.get('/ambulances/api/profile/' + str(self.u1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
-        print(response)
-
-        # try without logging in
-        response = client.get('/ambulances/api/profile/' + str(self.u1.id) + '.json',
-                              follow=True)
-        print(response)
-        self.assertEqual(response.status_code, 200)
+        print(repr(response))
         
