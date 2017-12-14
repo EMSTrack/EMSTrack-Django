@@ -212,6 +212,7 @@ class CreateAmbulance(TestCase):
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
+                'status': a.location.status,
                 'location': a.location,
                 'updated_on': a.updated_on.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
             }
