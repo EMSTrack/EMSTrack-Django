@@ -236,22 +236,20 @@ class CreateAmbulance(TestCase):
         answer = AmbulanceSerializer(self.a1).data
         self.assertDictEqual(result, answer)
 
-    def asdomasda(self):
-        
-        # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+        # retrieve any ambulance
+        response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u2.profile).data
+        answer = AmbulanceSerializer(self.a2).data
         self.assertDictEqual(result, answer)
 
-        # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+        # retrieve any ambulance
+        response = client.get('/ambulances/api/ambulance/' + str(self.a3.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u3.profile).data
+        answer = AmbulanceSerializer(self.a3).data
         self.assertDictEqual(result, answer)
         
         # logout
@@ -261,15 +259,15 @@ class CreateAmbulance(TestCase):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+        response = client.get('/ambulances/api/profile/' + str(self.a2.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u2.profile).data
+        answer = ProfileSerializer(self.a2.profile).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.u1.id),
+        response = client.get('/ambulances/api/profile/' + str(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
