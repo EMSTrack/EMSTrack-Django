@@ -35,6 +35,7 @@ from .serializers import ProfileSerializer
 
 
 # Viewsets
+
 class IsUserOrAdminOrSuper(permissions.BasePermission):
     """
     Only user or staff can see or modify
@@ -44,7 +45,30 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
         return (request.user.is_superuser or
                 request.user.is_staff or
                 obj.user == request.user)
+
+class CanReadAmbulanceOrHospital(permissions.BasePermission):
+
+    def __init__(self, model):
+
+        super().__init__()
+        self.model = model
     
+    def has_object_permission(self, request, view, obj):
+
+        if request.user.is_superuser or request.user.is_staff:
+            return True
+
+        if (self.model == 'Ambulance' and
+            request.user.profile.ambulances.objects.filter(id=obj.id)):
+            return True
+        elif (self.model == 'Hospital' and
+            request.user.profile.hospitals.objects.filter(id=obj.id)):
+            return True
+        
+        return False
+    
+# Profile viewset
+
 class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
 
@@ -52,6 +76,16 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     serializer_class = ProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
+
+# Ambulance viewset
+
+class AmbulanceViewSet(mixins.RetrieveModelMixin,
+                       viewsets.GenericViewSet):
+
+    queryset = Ambulance.objects.all()
+    serializer_class = AmbulanceSerializer
+    permission_classes = (permissions.IsAuthenticated,
+                          CanReadAmbulanceOrHospital('Ambulance'),)
 
 # Ambulance list page
 class AmbulanceListView(ListView):
