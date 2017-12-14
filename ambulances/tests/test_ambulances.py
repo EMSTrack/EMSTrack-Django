@@ -18,6 +18,8 @@ from ambulances.serializers import ProfileSerializer
 #    UserLocationSerializer
 
 import collections
+
+from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 
 from django.test import Client
@@ -154,7 +156,8 @@ class CreateAmbulance(TestCase):
         response = client.get('/ambulances/api/profile/' + str(self.u1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(response.content.decode('utf-8'))
+        stream = BytesIO(response.content)
+        result = JSONParser().parse(stream)
         answer = ProfileSerializer(self.u1)
         self.assertDictEqual(result, answer)
         
