@@ -22,7 +22,7 @@ from .models import Ambulance, Call, Hospital, \
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
     # AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
 
-from .serializers import ProfileSerializer
+from .serializers import ProfileSerializer, AmbulanceSerializer
 #    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
 #    AmbulanceRouteSerializer, BaseSerializer
 
