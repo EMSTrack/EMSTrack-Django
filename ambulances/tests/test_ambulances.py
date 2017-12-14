@@ -149,14 +149,30 @@ class CreateAmbulance(TestCase):
         # instantiate client
         client = Client()
 
-        # login
+        # login as admin
         client.login(username='admin', password='admin')
 
-        # try without logging in
+        # retrieve own
         response = client.get('/ambulances/api/profile/' + str(self.u1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = ProfileSerializer(self.u1.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u3.profile).data
         self.assertDictEqual(result, answer)
         
