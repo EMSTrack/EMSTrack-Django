@@ -116,7 +116,7 @@ class CreateAmbulance(TestCase):
                                                location=Point(3,-1),
                                                timestamp=self.t2)
 
-    def test_profile(self):
+    def test_profile_serializer(self):
 
         # test ProfileSerializer
         for u in (self.u1, self.u2, self.u3):
@@ -201,3 +201,19 @@ class CreateAmbulance(TestCase):
         
         # logout
         client.logout()
+
+    def test_ambulance_serializer(self):
+
+        # test AmbulanceSerializer
+        for a in (self.a1, self.a2, self.a3):
+            serializer = AmbulanceSerializer(a)
+            result = {
+                'id': a.pk,
+                'identifier': a.identifier,
+                'comment': a.comment,
+                'capability': a.capability,
+            }
+            self.assertDictEqual(serializer.data, result)
+        
+
+        
