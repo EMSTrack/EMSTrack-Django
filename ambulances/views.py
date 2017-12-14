@@ -81,6 +81,7 @@ class AmbulanceViewSet(mixins.RetrieveModelMixin,
         print('user = {}'.format(user))
         print('pk = {}'.format(pk))
         print('obj = {}'.format(obj))
+        print('user.profile.ambulances.all() = {}'.format(user.profile.ambulances.all()))
         
         # return ambulance if user can read it
         permission = user.profile.ambulances.all().filter(ambulance__id=pk)
