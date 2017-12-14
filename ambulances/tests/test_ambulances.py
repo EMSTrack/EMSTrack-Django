@@ -314,7 +314,7 @@ class CreateAmbulance(TestCase):
         answer = [AmbulanceSerializer(self.a1).data,
                   AmbulanceSerializer(self.a2).data,
                   AmbulanceSerializer(self.a3).data]
-        self.assertDictEqual(result, answer)
+        self.assertEqual(result, answer)
         
         # logout
         client.logout()
