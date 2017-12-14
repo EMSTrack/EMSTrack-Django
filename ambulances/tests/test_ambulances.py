@@ -217,7 +217,7 @@ class CreateAmbulance(TestCase):
             }
             if a.location:
                 'status': a.location.status
-            else
+            else:
                 'status': None
             self.assertDictEqual(serializer.data, result)
         
