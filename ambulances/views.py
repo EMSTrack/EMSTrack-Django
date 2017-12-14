@@ -51,7 +51,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
-                          IsUserOrAdmin,)
+                          IsUserOrAdminOrSuper,)
 
 # Ambulance list page
 class AmbulanceListView(ListView):
