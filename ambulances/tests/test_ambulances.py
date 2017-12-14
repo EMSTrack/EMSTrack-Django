@@ -213,7 +213,7 @@ class CreateAmbulance(TestCase):
                 'comment': a.comment,
                 'capability': a.capability,
                 'location': a.location,
-                'updated_on': a.updated_on,
+                'updated_on': serializers.DateTimeField(a.updated_on),
             }
             self.assertDictEqual(serializer.data, result)
         
