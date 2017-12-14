@@ -154,7 +154,7 @@ class CreateAmbulance(TestCase):
         response = client.get('/ambulances/api/profile/' + str(self.u1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(response.content)
+        result = JSONParser().parse(response.content.decode('utf-8'))
         answer = ProfileSerializer(self.u1)
         self.assertDictEqual(result, answer)
         
