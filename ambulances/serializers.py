@@ -37,6 +37,15 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ('ambulances','hospitals')
 
+# Ambulance serializers
+class AmbulanceSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ambulance
+        fields = ('id', 'identifier', 'comment', 'capability',
+                  'location', 'updated_on')
+
+        
 # Ambulance location serializers
         
 class UserLocationSerializer(serializers.ModelSerializer):

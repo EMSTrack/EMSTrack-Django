@@ -59,7 +59,7 @@ class Ambulance(models.Model):
     capability = models.CharField(max_length=1,
                                   choices = AMBULANCE_CAPABILITY_CHOICES)
     
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(auto_now=True)
     location =  models.ForeignKey(AmbulanceLocation,
                                   on_delete=models.CASCADE,
                                   null=True)
@@ -71,8 +71,8 @@ class AmbulanceRoute(models.Model):
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
     points = models.ManyToManyField(AmbulanceLocation)
     
 class AmbulancePermission(models.Model):
