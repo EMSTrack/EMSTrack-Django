@@ -212,6 +212,8 @@ class CreateAmbulance(TestCase):
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
+                'location': a.location,
+                'updated_on': a.updated_on,
             }
             self.assertDictEqual(serializer.data, result)
         
