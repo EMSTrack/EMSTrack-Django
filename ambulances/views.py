@@ -75,6 +75,11 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # otherwise only return ambulance that the user can read
         can_read = user.profile.ambulances.filter(can_read=True)
         return Ambulance.objects.filter(id__in=can_read)
+
+    @detail_route(methods=['get'])
+    def status(self, request, pk=None):
+        ambulance = self.get_object()
+        return Response(ambulance.location.status)
     
 # Ambulance list page
 class AmbulanceListView(ListView):
