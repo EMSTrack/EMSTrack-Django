@@ -269,11 +269,11 @@ class CreateAmbulance(TestCase):
         # retrieve someone else's
         response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
                               follow=True)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 404)
         
         response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
                               follow=True)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 404)
         
         # logout
         client.logout()
