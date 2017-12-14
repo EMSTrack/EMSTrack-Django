@@ -58,7 +58,8 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
 # Ambulance viewset
 
-class AmbulanceViewSet(mixins.RetrieveModelMixin,
+class AmbulanceViewSet(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
 
     #queryset = Ambulance.objects.all()
