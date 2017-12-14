@@ -270,7 +270,8 @@ class CreateAmbulance(TestCase):
         response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
                               follow=True)
         self.assertEqual(response.status_code, 404)
-        
+
+        # can't read
         response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 404)
@@ -341,7 +342,7 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = [AmbulanceSerializer(self.a1).data,
+        answer = [ # AmbulanceSerializer(self.a1).data, # can't read
                   AmbulanceSerializer(self.a3).data]
         self.assertEqual(result, answer)
         
