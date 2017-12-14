@@ -150,6 +150,7 @@ class CreateAmbulance(TestCase):
         client.login(username='admin', password='admin')
 
         # try without logging in
-        response = client.get('/ambulances/api/profile/' + str(self.u1.id))
+        response = client.get('/ambulances/api/profile/' + str(self.u1.id),
+                              follow=True))
         self.assertEqual(response.status_code, 202)
         
