@@ -213,7 +213,7 @@ class CreateAmbulance(TestCase):
                 'comment': a.comment,
                 'capability': a.capability,
                 'location': a.location,
-                'updated_on': a.updated_on.isoformat(),
+                'updated_on': a.updated_on.isoformat(timespec='microseconds'),
             }
             self.assertDictEqual(serializer.data, result)
         
