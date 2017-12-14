@@ -54,15 +54,4 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         model = Ambulance
         fields = ('id', 'identifier', 'comment', 'capability',
                   'status', 'location', 'updated_on')
-
         
-# Ambulance location serializers
-        
-       
-class AmbulanceLocationSerializer(serializers.ModelSerializer):
-
-    location = UserLocationSerializer()
-    
-    class Meta:
-        model = AmbulanceLocation
-        fields = ('location','status','orientation')
