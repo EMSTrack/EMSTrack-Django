@@ -61,7 +61,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 class AmbulanceViewSet(mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
 
-    #queryset = Ambulance.objects.all()
+    queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
 
     def get_object(self, pk):
