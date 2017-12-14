@@ -158,6 +158,6 @@ class CreateAmbulance(TestCase):
         self.assertEqual(response.status_code, 200)
         stream = BytesIO(response.content)
         result = JSONParser().parse(stream)
-        answer = ProfileSerializer(self.u1)
+        answer = ProfileSerializer(self.u1).data
         self.assertDictEqual(result, answer)
         
