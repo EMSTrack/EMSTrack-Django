@@ -35,13 +35,15 @@ from .serializers import ProfileSerializer
 
 
 # Viewsets
-class IsUserOrAdmin(permissions.BasePermission):
+class IsUserOrAdminOrSuper(permissions.BasePermission):
     """
     Only user or staff can see or modify
     """
 
     def has_object_permission(self, request, view, obj):
-        return request.user.is_staff or obj.user == request.user 
+        return (request.user.is_superuser or
+                request.user.is_staff or
+                obj.user == request.user)
     
 class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
