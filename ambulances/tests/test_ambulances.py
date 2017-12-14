@@ -154,6 +154,6 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         print(repr(response.content_type))
-        print(repr(response.body))
+        print(repr(response.content))
         self.assertEqual(response.content_type, "application/json")
         
