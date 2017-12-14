@@ -220,7 +220,7 @@ class CreateAmbulance(TestCase):
                 result['status'] = a.location.status
             self.assertDictEqual(serializer.data, result)
         
-    def test_profile_viewset(self):
+    def test_ambulance_viewset(self):
 
         # instantiate client
         client = Client()
@@ -255,7 +255,7 @@ class CreateAmbulance(TestCase):
         # logout
         client.logout()
 
-        # login as testuser1
+        # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
         # retrieve own
@@ -274,6 +274,44 @@ class CreateAmbulance(TestCase):
         response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+        
+    def test_ambulance_list_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve ambulances
+        response = client.get('/ambulances/api/ambulance/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        print(result)
         
         # logout
         client.logout()
