@@ -104,17 +104,17 @@ class CreateAmbulance(TestCase):
                                                can_write=True)
         )
         
-        # Add UserLocation
-        self.t1 = timezone.now()
-        self.ul1 = UserLocation.objects.create(user=self.u1,
-                                               location=Point(1,1),
-                                               timestamp=self.t1)
+        # # Add UserLocation
+        # self.t1 = timezone.now()
+        # self.ul1 = UserLocation.objects.create(user=self.u1,
+        #                                        location=Point(1,1),
+        #                                        timestamp=self.t1)
         
-        # Add UserLocation
-        self.t2 = timezone.now()
-        self.ul2 = UserLocation.objects.create(user=self.u2,
-                                               location=Point(3,-1),
-                                               timestamp=self.t2)
+        # # Add UserLocation
+        # self.t2 = timezone.now()
+        # self.ul2 = UserLocation.objects.create(user=self.u2,
+        #                                        location=Point(3,-1),
+        #                                        timestamp=self.t2)
 
     def test_profile_serializer(self):
 
