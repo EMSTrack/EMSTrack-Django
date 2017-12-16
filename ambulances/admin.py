@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 # Register your models here.
 
 from .models import Profile, State, \
-    Ambulance, AmbulanceLocation, AmbulancePermission, \
+    Ambulance, AmbulanceUpdate, AmbulancePermission, \
     Hospital, HospitalPermission, \
     UserLocation, \
     Equipment, EquipmentCount, UserLocation, \
@@ -32,7 +32,7 @@ admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 admin.site.register(Ambulance)
-admin.site.register(AmbulanceLocation)
+admin.site.register(AmbulanceUpdate)
 admin.site.register(Region)
 admin.site.register(Call)
 admin.site.register(Hospital)

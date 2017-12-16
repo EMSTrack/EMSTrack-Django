@@ -13,15 +13,6 @@ from django.contrib.auth.models import User
 
 # User and ambulance location models
 
-class UserLocation(models.Model):
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
-    location = models.PointField(srid=4326)
-    timestamp = models.DateTimeField()
-
-    def __str__(self):
-        return "{}".format(self.location)
-
 class AmbulanceStatus(Enum):
     AV = 'Available'
     OS = 'Out of service'
@@ -30,8 +21,9 @@ class AmbulanceStatus(Enum):
     HB = 'Hospital bound'
     AH = 'At hospital'
     
-class AmbulanceLocation(models.Model):
-    location = models.ForeignKey(UserLocation, on_delete=models.CASCADE)
+class AmbulanceUpdate(models.Model):
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
     
     AMBULANCE_STATUS_CHOICES = \
         [(m.name, m.value) for m in AmbulanceStatus]
@@ -39,6 +31,8 @@ class AmbulanceLocation(models.Model):
                               choices=AMBULANCE_STATUS_CHOICES)
     
     orientation = models.FloatField(default=0.0)
+    location = models.PointField(srid=4326)
+    timestamp = models.DateTimeField()
 
     def __str__(self):
         return "{}".format(self.location)
@@ -60,7 +54,7 @@ class Ambulance(models.Model):
                                   choices = AMBULANCE_CAPABILITY_CHOICES)
     
     updated_on = models.DateTimeField(auto_now=True)
-    location =  models.ForeignKey(AmbulanceLocation,
+    location =  models.ForeignKey(AmbulanceUpdate,
                                   on_delete=models.CASCADE,
                                   null=True)
     
@@ -73,7 +67,7 @@ class AmbulanceRoute(models.Model):
     active = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    points = models.ManyToManyField(AmbulanceLocation)
+    points = models.ManyToManyField(AmbulanceUpdate)
     
 class AmbulancePermission(models.Model):
     ambulance = models.ForeignKey(Ambulance,

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from .models import Profile, Hospital, Ambulance, \
     AmbulancePermission, HospitalPermission, \
-    UserLocation, AmbulanceLocation
+    UserLocation, AmbulanceUpdate
 
 # Profile serializers
 
