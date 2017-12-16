@@ -213,8 +213,9 @@ class CreateAmbulance(TestCase):
                 'comment': a.comment,
                 'capability': a.capability,
                 'status': None,
-                'location': a.location,
-                'updated_on': a.updated_on.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
+                'location': a.last_update.location,
+                'timestamp': a.last_update.timestamp.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
+                'updated_on': a.last_update.updated_on.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
             }
             if a.location:
                 result['status'] = a.location.status
