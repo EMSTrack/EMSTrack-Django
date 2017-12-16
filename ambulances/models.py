@@ -54,9 +54,9 @@ class Ambulance(models.Model):
                                   choices = AMBULANCE_CAPABILITY_CHOICES)
     
     updated_on = models.DateTimeField(auto_now=True)
-    location =  models.ForeignKey(AmbulanceUpdate,
-                                  on_delete=models.CASCADE,
-                                  null=True)
+    last_update =  models.ForeignKey(AmbulanceUpdate,
+                                     on_delete=models.CASCADE,
+                                     null=True)
     
     def __str__(self):
         return self.identifier

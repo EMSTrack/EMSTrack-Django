@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 from .models import Profile, Hospital, Ambulance, \
     AmbulancePermission, HospitalPermission, \
-    UserLocation, AmbulanceUpdate
+    AmbulanceUpdate
 
 # Profile serializers
 
@@ -39,19 +39,12 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 # Ambulance serializers
 
-class UserLocationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = UserLocation
-        fields = ('location', 'timestamp')
-
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     status = serializers.CharField(source='location.status', allow_null=True)
-    location = UserLocationSerializer()
     
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'comment', 'capability',
-                  'status', 'location', 'updated_on')
+                  'status', 'last_update', 'updated_on')
         

@@ -7,8 +7,7 @@ from django.contrib.auth.models import User
 from .models import Profile, State, \
     Ambulance, AmbulanceUpdate, AmbulancePermission, \
     Hospital, HospitalPermission, \
-    UserLocation, \
-    Equipment, EquipmentCount, UserLocation, \
+    Equipment, EquipmentCount, \
     Call, Region
 
 # Define an inline admin descriptor for Profile model
@@ -38,4 +37,3 @@ admin.site.register(Call)
 admin.site.register(Hospital)
 admin.site.register(Equipment)
 admin.site.register(EquipmentCount)
-admin.site.register(UserLocation)
