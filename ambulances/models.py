@@ -33,6 +33,7 @@ class AmbulanceUpdate(models.Model):
     orientation = models.FloatField(default=0.0)
     location = models.PointField(srid=4326)
     timestamp = models.DateTimeField()
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.location)
@@ -53,7 +54,6 @@ class Ambulance(models.Model):
     capability = models.CharField(max_length=1,
                                   choices = AMBULANCE_CAPABILITY_CHOICES)
     
-    updated_on = models.DateTimeField(auto_now=True)
     last_update =  models.ForeignKey(AmbulanceUpdate,
                                      on_delete=models.CASCADE,
                                      null=True)

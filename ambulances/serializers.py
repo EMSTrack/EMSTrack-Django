@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from drf_extra_fields.geo_fields import PointField as PointFieldSerializer
 
 from django.contrib.auth.models import User
 
@@ -41,10 +42,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    status = serializers.CharField(source='location.status', allow_null=True)
+    status = serializers.CharField(source='last_update.status', allow_null=True)
+    location = PointFieldSerializer(source='last_update.location', allow_null=True)
+    timestamp = serializers.DateTimeField(source='last_update.timestamp', allow_null=True)
+    updated_on = serializers.DateTimeField(source='last_update.updated_on', allow_null=True)
     
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'comment', 'capability',
-                  'status', 'last_update', 'updated_on')
+                  'status', 'location', 'timestamp', 'updated_on')
         

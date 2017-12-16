@@ -10,7 +10,7 @@ from rest_framework import serializers
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
     AmbulancePermission, HospitalPermission, \
-    AmbulanceUpdate, UserLocation, Hospital
+    AmbulanceUpdate, Hospital
 
 from ambulances.serializers import ProfileSerializer, \
     AmbulanceSerializer
