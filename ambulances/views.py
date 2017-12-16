@@ -77,6 +77,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         can_read = user.profile.ambulances.filter(can_read=True)
         return Ambulance.objects.filter(id__in=can_read)
 
+
+    
 # Ambulance list page
 class AmbulanceListView(ListView):
     model = Ambulance

@@ -96,18 +96,10 @@ ENV/
 *~
 
 # Migrations and static
-eng100l/settings.py
+emstrack/settings.py
 ambulances/migrations
-eng100l/crlogin/migrations
-eng100l/static
-
-# Legacy directories
-eng100l/eng100l/settings.py
-eng100l/ambulances/migrations
-
-# Docker
-eng100l/Dockerfile
-eng100l/docker-compose.yml
+emstrack/crlogin/migrations
+emstrack/static
 
 # IntelliJ
-/eng100l/.idea/
+/emstrack/.idea/
