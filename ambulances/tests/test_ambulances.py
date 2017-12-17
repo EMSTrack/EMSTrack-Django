@@ -248,7 +248,6 @@ class CreateAmbulance(TestCase):
                 result.update({
                     'last_update': PrivateAmbulanceUpdateSerializer(a.last_update).data,
                 })
-            print(result)
             self.assertDictEqual(serializer.data, result)
             
     def test_ambulance_viewset(self):
@@ -397,7 +396,6 @@ class CreateAmbulance(TestCase):
 
         # check result
         a = Ambulance.objects.get(id=self.a1.id)
-        print('a = {}'.format(a))
         serializer = AmbulanceSerializer(a)
         result = {
             'id': a.pk,
@@ -411,8 +409,6 @@ class CreateAmbulance(TestCase):
                 'timestamp': date2iso(timestamp)
             }
         }
-        print('result = {}'.format(result))
-        print('serializer.data = {}'.format(serializer.data))
         self.assertDictEqual(serializer.data, result)
 
         
