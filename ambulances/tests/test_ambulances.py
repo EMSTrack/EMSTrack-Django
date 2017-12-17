@@ -237,7 +237,7 @@ class CreateAmbulance(TestCase):
             }
             if a.last_update:
                 result.update({
-                    'last_update': a.last_update,
+                    'last_update': AmbulanceUpdateSerializer(a.last_update).data,
                 })
             self.assertDictEqual(serializer.data, result)
             
