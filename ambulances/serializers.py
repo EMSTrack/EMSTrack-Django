@@ -41,6 +41,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
+    updated_by = serializers.HiddenField(
+        default=serializers.CurrentUserDefault()
+    )
+    
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'capability',
@@ -61,7 +65,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             
             if not data['location'] and data['location_timestamp']:
                 raise serializers.ValidationError('location_timestamp cannot be set without location')
-            
+
         return data
         
     def update(self, instance, validated_data):
