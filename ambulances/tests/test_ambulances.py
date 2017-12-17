@@ -25,8 +25,11 @@ from rest_framework.parsers import JSONParser
 
 from django.test import Client
 
-def toiso(date):
+def date2iso(date):
     return date.isoformat().replace('+00:00','Z')
+
+def point2iso(date):
+    return 'SRID=4326;' + str(point)
 
 class CreateAmbulance(TestCase):
 
@@ -404,8 +407,8 @@ class CreateAmbulance(TestCase):
             'last_update': {
                 'user': self.u1.id,
                 'status': AmbulanceStatus.AV.name,
-                'location': str(Point(1,-3)),
-                'timestamp': toiso(timestamp)
+                'location': point2str(Point(1,-3)),
+                'timestamp': data2iso(timestamp)
             }
         }
         print('result = {}'.format(result))
