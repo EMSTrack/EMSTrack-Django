@@ -21,18 +21,8 @@ from .models import Ambulance, Call, Hospital, \
     Profile
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
-    # AmbulanceStatusCreateForm, AmbulanceStatusUpdateForm
 
 from .serializers import ProfileSerializer, AmbulanceSerializer
-#    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
-#    AmbulanceRouteSerializer, BaseSerializer
-
-    
-#from .serializers import AmbulanceSerializer, AmbulanceStatusSerializer, \
-#    CallSerializer, HospitalSerializer, EquipmentCountSerializer, \
-#    AmbulanceRouteSerializer, BaseSerializer
-
-# Defines the view for a user when a url is accessed
 
 # Django REST Viewsets
 
