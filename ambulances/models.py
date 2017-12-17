@@ -46,8 +46,9 @@ class AmbulanceCapability(Enum):
     R = 'Rescue'
     
 class Ambulance(models.Model):
+
+    # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
-    comment = models.CharField(max_length=254, default="")
 
     AMBULANCE_CAPABILITY_CHOICES = \
         [(m.name, m.value) for m in AmbulanceCapability]
@@ -57,7 +58,24 @@ class Ambulance(models.Model):
     last_update =  models.ForeignKey(AmbulanceUpdate,
                                      on_delete=models.CASCADE,
                                      null=True)
+
+    # comment, status and location
     
+    comment = models.CharField(max_length=254, default="")
+    
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              null=True, blank=True)
+    
+    orientation = models.FloatField(null=True, blank=True)
+    location = models.PointField(srid=4326, null=True, blank=True)
+    
+    reported_by = models.ForeignKey(User,
+                                    on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+
     def __str__(self):
         return self.identifier
 

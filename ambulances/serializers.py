@@ -70,9 +70,9 @@ class PrivateAmbulanceUpdateSerializer(serializers.ModelSerializer):
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    last_update = PrivateAmbulanceUpdateSerializer()
-    
     class Meta:
         model = Ambulance
-        fields = ('id', 'identifier', 'comment', 'capability', 'last_update')
+        fields = ('id', 'identifier', 'capability',
+                  'comment', 'status', 'location',
+                  'timestamp', 'reported_by')
         
