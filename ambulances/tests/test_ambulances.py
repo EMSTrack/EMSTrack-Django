@@ -29,7 +29,8 @@ def date2iso(date):
     return date.isoformat().replace('+00:00','Z')
 
 def point2str(point):
-    return 'SRID=4326;' + str(point)
+    #return 'SRID=4326;' + str(point)
+    return str(point)
 
 class CreateAmbulance(TestCase):
 
