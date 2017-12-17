@@ -2,6 +2,7 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField as PointFieldSerializer
 
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 
 from .models import Profile, Hospital, Ambulance, \
     AmbulancePermission, HospitalPermission
@@ -61,7 +62,15 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
 
         # can this user update this ambulance?
-        
+        user = User.objects.get(id=self.validated_data['updated_by'])
+
+        # if super yes, otherwise
+        if not user.is_superuser:
+            # check credentials
+            if not user.profile.ambulances.filter(can_write=True,
+                                                  ambulance=instance.id):
+                raise PermissionDenied()
+
         # calculate orientation
 
         # save to route
