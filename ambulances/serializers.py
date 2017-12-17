@@ -70,7 +70,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
 
         # can this user update this ambulance?
-        user = User.objects.get(id=self.validated_data['updated_by'].id)
+        user = User.objects.get(id=self.data['updated_by'].id)
 
         # if super yes, otherwise
         if not user.is_superuser:
