@@ -239,6 +239,7 @@ class CreateAmbulance(TestCase):
                 result.update({
                     'last_update': AmbulanceUpdateSerializer(a.last_update).data,
                 })
+            print(result)
             self.assertDictEqual(serializer.data, result)
             
     def test_ambulance_viewset(self):
