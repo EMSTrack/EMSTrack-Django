@@ -409,6 +409,8 @@ class CreateAmbulance(TestCase):
             'capability': a.capability,
             'last_update': update
         }
+        print('result = {}'.format(result))
+        print('serializer.data = {}'.format(serializer.data))
         self.assertDictEqual(serializer.data, result)
 
         # test AmbulanceUpdateSerializer
