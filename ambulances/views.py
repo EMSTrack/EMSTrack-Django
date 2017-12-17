@@ -69,13 +69,13 @@ class AmbulanceViewSet(mixins.UpdateModelMixin,
             raise PermissionDenied()
 
         # otherwise only return ambulances that the user can read or write to
-        if request.method == 'GET':
+        if self.request.method == 'GET':
             # ambulances that the user can read
             can_do = user.profile.ambulances.filter(can_read=True)
 
-        elif (request.method == 'PUT' or
-              request.method == 'PATCH' or
-              request.method == 'DELETE'):
+        elif (self.request.method == 'PUT' or
+              self.request.method == 'PATCH' or
+              self.request.method == 'DELETE'):
             # ambulances that the user can write to
             can_do = user.profile.ambulances.filter(can_write=True)
 
