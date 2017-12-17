@@ -212,7 +212,7 @@ class CreateAmbulance(TestCase):
                 'location': None,
                 'location_timestamp': None,
                 'updated_by': None,
-                'updated_on': None
+                'updated_on': a.updated_on
             }
             self.assertDictEqual(serializer.data, result)
 
