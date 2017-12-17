@@ -41,9 +41,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    updated_by = serializers.HiddenField(
-        default=serializers.CurrentUserDefault()
-    )
+    updated_by = serializers.PrimaryKeyRelatedField(read_only=True,
+                                                    default=serializers.CurrentUserDefault())
     
     class Meta:
         model = Ambulance
