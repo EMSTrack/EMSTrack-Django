@@ -74,6 +74,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         model = Ambulance
         fields = ('id', 'identifier', 'capability',
                   'comment', 'status', 'location',
-                  'location_timestamp',
+                  'location_timestamp', 'orientation',
                   'updated_by', 'updated_on')
         
