@@ -28,7 +28,7 @@ from django.test import Client
 def date2iso(date):
     return date.isoformat().replace('+00:00','Z')
 
-def point2str(date):
+def point2str(point):
     return 'SRID=4326;' + str(point)
 
 class CreateAmbulance(TestCase):
