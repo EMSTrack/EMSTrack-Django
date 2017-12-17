@@ -354,7 +354,6 @@ class CreateAmbulance(TestCase):
         client.logout()
 
     def test_ambulance_update_serializer(self):
-
         
         # superuser first
         
