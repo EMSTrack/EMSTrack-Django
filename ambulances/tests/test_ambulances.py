@@ -389,7 +389,9 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         serializer.save()
 
+        # check result
         a = Ambulance.objects.get(id=self.a1.id)
+        serializer = AmbulanceSerializer(a)
         result = {
             'id': a.pk,
             'identifier': a.identifier,
@@ -402,24 +404,6 @@ class CreateAmbulance(TestCase):
                 'last_update': PrivateAmbulanceUpdateSerializer(a.last_update).data,
             })
         print(result)
-            
-    def delse(self):
-        
-        # check result
-        serializer = AmbulanceSerializer(self.a1)
-        result = {
-            'id': self.a1.pk,
-            'identifier': self.a1.identifier,
-            'comment': self.a1.comment,
-            'capability': self.a1.capability,
-            'last_update': {
-                'user': self.u1.pk,
-                'status': AmbulanceStatus.AV.name,
-                'location': Point(1,1),
-                'timestamp': timestamp
-            }
-        }
         print(serializer.data)
         print(result)
-        print(self.a1.last_update)
         self.assertDictEqual(serializer.data, result)
