@@ -35,35 +35,6 @@ class CreateAmbulance(TestCase):
 
     def setUp(self):
 
-        # Add ambulances
-        self.a1 = Ambulance.objects.create(
-            identifier='BC-179',
-            comment='Maintenance due',
-            capability=AmbulanceCapability.B.name)
-        
-        self.a2 = Ambulance.objects.create(
-            identifier='BC-180',
-            comment='Need painting',
-            capability=AmbulanceCapability.A.name)
-
-        self.a3 = Ambulance.objects.create(
-            identifier='BC-181',
-            comment='Engine overhaul',
-            capability=AmbulanceCapability.R.name)
-        
-        # Add hospitals
-        self.h1 = Hospital.objects.create(
-            name='Hospital General',
-            address="Don't know")
-        
-        self.h2 = Hospital.objects.create(
-            name='Hospital CruzRoja',
-            address='Forgot')
-
-        self.h3 = Hospital.objects.create(
-            name='Hospital Nuevo',
-            address='Not built yet')
-        
         # Add users
         self.u1 = User.objects.create_user(
             username='admin',
@@ -80,7 +51,39 @@ class CreateAmbulance(TestCase):
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
+        
+        # Add ambulances
+        self.a1 = Ambulance.objects.create(
+            identifier='BC-179',
+            comment='Maintenance due',
+            capability=AmbulanceCapability.B.name,
+            updated_by=self.u1)
+        
+        self.a2 = Ambulance.objects.create(
+            identifier='BC-180',
+            comment='Need painting',
+            capability=AmbulanceCapability.A.name,
+            updated_by=self.u1)
 
+        self.a3 = Ambulance.objects.create(
+            identifier='BC-181',
+            comment='Engine overhaul',
+            capability=AmbulanceCapability.R.name,
+            updated_by=self.u1)
+        
+        # Add hospitals
+        self.h1 = Hospital.objects.create(
+            name='Hospital General',
+            address="Don't know")
+        
+        self.h2 = Hospital.objects.create(
+            name='Hospital CruzRoja',
+            address='Forgot')
+
+        self.h3 = Hospital.objects.create(
+            name='Hospital Nuevo',
+            address='Not built yet')
+        
         # add hospitals to users
         self.u1.profile.hospitals.add(
             HospitalPermission.objects.create(hospital=self.h1,
