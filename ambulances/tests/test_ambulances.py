@@ -13,7 +13,8 @@ from ambulances.models import Ambulance, \
     AmbulanceUpdate, Hospital
 
 from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer, AmbulanceUpdateSerializer
+    AmbulanceSerializer, AmbulanceUpdateSerializer \
+    PrivateAmbulanceUpdateSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
@@ -239,7 +240,7 @@ class CreateAmbulance(TestCase):
             }
             if a.last_update:
                 result.update({
-                    'last_update': AmbulanceUpdateSerializer(a.last_update).data,
+                    'last_update': PrivateAmbulanceUpdateSerializer(a.last_update).data,
                 })
             print(result)
             self.assertDictEqual(serializer.data, result)

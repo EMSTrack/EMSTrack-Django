@@ -39,8 +39,26 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances','hospitals')
 
 # Ambulance serializers
-# Ambulance serializers
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
+
+    ambulance_id = serializer.IntegerField()
+    
+    class Meta:
+        model = AmbulanceUpdate
+        fields = ('ambulance_id', 'user', 'status', 'location', 'timestamp')
+
+    def create(self, validated_data):
+        
+        ambulance_id = validated_data.pop('ambulance_id')
+        update = AmbulanceUpdate.objects.create(**validated_data)
+
+        ambulance = Ambulance.objects.get(id=ambulance_id)
+        ambulance.last_update = update
+        ambulance.save()
+        
+        return update
+
+class PrivateAmbulanceUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceUpdate
@@ -48,7 +66,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    last_update = AmbulanceUpdateSerializer()
+    last_update = PrivateAmbulanceUpdateSerializer()
     
     class Meta:
         model = Ambulance
