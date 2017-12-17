@@ -42,9 +42,11 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
+    ambulance_set = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = AmbulanceUpdate
-        fields = ('ambulance_id', 'user', 'status', 'location', 'timestamp')
+        fields = ('ambulance_set', 'user', 'status', 'location', 'timestamp')
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
