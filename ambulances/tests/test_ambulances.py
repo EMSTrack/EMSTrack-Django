@@ -404,7 +404,7 @@ class CreateAmbulance(TestCase):
             'last_update': {
                 'user': self.u1.id,
                 'status': AmbulanceStatus.AV.name,
-                'location': Point(1,-3),
+                'location': str(Point(1,-3)),
                 'timestamp': toiso(timestamp)
             }
         }
