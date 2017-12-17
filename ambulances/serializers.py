@@ -62,6 +62,9 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if not data['location'] and data['location_timestamp']:
                 raise serializers.ValidationError('location_timestamp cannot be set without location')
 
+        if 'updated_by' is not in data or not data['updated_by']:
+            raise serializers.ValidationError('updated_by is mandatory')
+            
         return data
         
     def update(self, instance, validated_data):
