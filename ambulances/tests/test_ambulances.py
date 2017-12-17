@@ -368,8 +368,7 @@ class CreateAmbulance(TestCase):
                                              'updated_by': user
                                          }, partial="True")
         serializer.is_valid()
-        print(serializer.initial_data)
-        print(serializer.validated_data)
+        print(serializer.errors)
         serializer.save()
 
         # test
