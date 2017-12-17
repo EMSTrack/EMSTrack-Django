@@ -39,16 +39,18 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances','hospitals')
 
 # Ambulance serializers
+class AmbulanceStatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ambulance
+        fields = ('user', 'status', 'location', 'timestamp')
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    user = serializers.CharField(source='last_update.user', allow_null=True)
-    status = serializers.CharField(source='last_update.status', allow_null=True)
-    location = PointFieldSerializer(source='last_update.location', allow_null=True)
-    timestamp = serializers.DateTimeField(source='last_update.timestamp')
+    last_update = serializers.AmbulanceSerializer()
     
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'comment', 'capability',
-                  'user', 'status', 'location', 'timestamp')
+                  'last_update')
         

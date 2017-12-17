@@ -212,17 +212,11 @@ class CreateAmbulance(TestCase):
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
-                'user': None,
-                'status': None,
-                'location': None,
-                'timestamp': None
+                'last_update': None
             }
             if a.last_update:
                 result.update({
-                    'user': a.last_update.user,
-                    'status': a.last_update.status,
-                    'location': a.last_update.location,
-                    'timestamp': a.last_update.timestamp.isoformat(timespec='microseconds').replace('+00:00', 'Z')
+                    'last_update': a.last_update,
                 })
             self.assertDictEqual(serializer.data, result)
         
