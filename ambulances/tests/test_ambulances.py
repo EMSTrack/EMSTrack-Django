@@ -374,6 +374,7 @@ class CreateAmbulance(TestCase):
                                          context=context)
         serializer.is_valid()
         print(serializer.initial_data)
+        print(serializer.data)
         print(serializer.validated_data)
         serializer.save()
 
