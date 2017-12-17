@@ -403,4 +403,6 @@ class CreateAmbulance(TestCase):
                 'timestamp': timestamp
             }
         }
+        print(serializer.data)
+        print(result)
         self.assertDictEqual(serializer.data, result)
