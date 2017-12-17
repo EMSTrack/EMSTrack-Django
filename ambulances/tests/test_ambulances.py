@@ -388,3 +388,19 @@ class CreateAmbulance(TestCase):
         serializer = AmbulanceUpdateSerializer(data=data)
         serializer.is_valid()
         serializer.save()
+
+        # check result
+        serializer = AmbulanceSerializer(self.a1)
+        result = {
+            'id': self.a1.pk,
+            'identifier': self.a1.identifier,
+            'comment': self.a1.comment,
+            'capability': self.a.capability,
+            'last_update': PrivateAmbulanceUpdateSerializer({
+                'user': self.u1.pk,
+                'status': AmbulanceStatus.AV.name,
+                'location': Point(1,1),
+                'timestamp': timestamp
+            }).data,
+        }
+        self.assertDictEqual(serializer.data, result)
