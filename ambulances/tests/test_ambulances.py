@@ -382,7 +382,7 @@ class CreateAmbulance(TestCase):
             'ambulance_id': self.a1.id,
             'user_id': self.u1.pk,
             'status': AmbulanceStatus.AV.name,
-            'location': location=Point(1,1),
+            'location': Point(1,1),
             'timestamp': timestamp
         }
         serializer = AmbulanceUpdateSerializer(data=data)
