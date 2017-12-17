@@ -387,7 +387,8 @@ class CreateAmbulance(TestCase):
         a = self.a1
         u = self.u1
         status = AmbulanceStatus.AV.name
-        
+
+        # create AmbulanceUpdate
         data = {
             'ambulance': a.id,
             'user': u.id,
@@ -400,10 +401,9 @@ class CreateAmbulance(TestCase):
         serializer.save()
 
         # check result
-        a = Ambulance.objects.get(id=a.id)
-        serializer = AmbulanceSerializer(a)
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id))
         result = {
-            'id': a.pk,
+            'id': a.id,
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
