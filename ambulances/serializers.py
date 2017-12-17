@@ -39,7 +39,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances','hospitals')
 
 # Ambulance serializers
-class AmbulanceStatusSerializer(serializers.ModelSerializer):
+class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulance
