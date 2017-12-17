@@ -47,7 +47,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    last_update = serializers.AmbulanceUpdateSerializer()
+    last_update = AmbulanceUpdateSerializer()
     
     class Meta:
         model = Ambulance
