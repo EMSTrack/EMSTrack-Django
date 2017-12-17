@@ -211,7 +211,6 @@ class CreateAmbulance(TestCase):
         for a in (self.a1, self.a2, self.a3):
             serializer = AmbulanceSerializer(a)
             result = {
-                'id': a.pk,
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
