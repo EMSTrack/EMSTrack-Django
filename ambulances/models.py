@@ -59,23 +59,25 @@ class Ambulance(models.Model):
                                      on_delete=models.CASCADE,
                                      null=True)
 
-    # comment, status and location
-    
+    # comment
     comment = models.CharField(max_length=254, default="")
-    
+
+    # status
     AMBULANCE_STATUS_CHOICES = \
         [(m.name, m.value) for m in AmbulanceStatus]
     status = models.CharField(max_length=2,
                               choices=AMBULANCE_STATUS_CHOICES,
                               null=True, blank=True)
     
+    # location
     orientation = models.FloatField(null=True, blank=True)
     location = models.PointField(srid=4326, null=True, blank=True)
+    location_timestamp = models.DateTimeField(null=True, blank=True)
     
-    reported_by = models.ForeignKey(User,
-                                    on_delete=models.CASCADE,
-                                    null=True, blank=True)
-    timestamp = models.DateTimeField(null=True, blank=True)
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE,
+                                   null=True, blank=True)
+    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.identifier

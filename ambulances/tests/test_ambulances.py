@@ -221,14 +221,17 @@ class CreateAmbulance(TestCase):
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
-                'last_update': None
+                'status': None,
+                'orientation': None,
+                'location': None,
+                'location_timestamp': None,
+                'updated_by': None,
+                'updated_on': None
             }
-            if a.last_update:
-                result.update({
-                    'last_update': a.last_update,
-                })
             self.assertDictEqual(serializer.data, result)
 
+        return
+    
         # add AmbulanceUpdate
         self.a1.last_update = self.lu1
         self.a1.save()
