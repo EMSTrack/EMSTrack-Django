@@ -280,7 +280,23 @@ class CreateAmbulance(TestCase):
         #print('\n< answer = {}'.format(serializer.data))
         #print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
-            
+        
+        # Update ambulance
+        location_timestamp = timezone.now()
+        location = Point(1,-3)
+        a = self.a1
+        user = self.u2
+        status = AmbulanceStatus.AV.name
+        
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                             'location': point2str(location),
+                                             'location_timestamp': date2iso(location_timestamp),
+                                             'updated_by': user.id
+                                         })
+        a.save()
+        
     def test_ambulance_viewset(self):
 
         # instantiate client
