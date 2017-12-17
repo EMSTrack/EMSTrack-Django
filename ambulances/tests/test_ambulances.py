@@ -10,11 +10,10 @@ from rest_framework import serializers
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
     AmbulancePermission, HospitalPermission, \
-    AmbulanceUpdate, Hospital
+    Hospital
 
 from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer, AmbulanceUpdateSerializer, \
-    PrivateAmbulanceUpdateSerializer
+    AmbulanceSerializer 
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
@@ -112,19 +111,6 @@ class CreateAmbulance(TestCase):
                                                can_write=True)
         )
         
-        # Ambulance update
-        self.t1 = timezone.now()
-        self.lu1 = AmbulanceUpdate.objects.create(user=self.u1,
-                                                  status=AmbulanceStatus.AV.name,
-                                                  location=Point(1,1),
-                                                  timestamp=self.t1)
-        
-        self.t2 = timezone.now()
-        self.lu2 = AmbulanceUpdate.objects.create(user=self.u2,
-                                                  status=AmbulanceStatus.PB.name,
-                                                  location=Point(3,-1),
-                                                  timestamp=self.t2)
-
     def test_profile_serializer(self):
 
         # test ProfileSerializer
@@ -272,6 +258,21 @@ class CreateAmbulance(TestCase):
         a.updated_by = u
         a.save()
             
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.pk,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': status,
+            'orientation': None,
+            'location': location,
+            'location_timestamp': location_timestamp,
+            'updated_by': u,
+            'updated_on': a.updated_on
+        }
+        self.assertDictEqual(serializer.data, result)
             
     def test_ambulance_viewset(self):
 
@@ -402,43 +403,3 @@ class CreateAmbulance(TestCase):
         # logout
         client.logout()
 
-    def test_ambulance_update_serializer(self):
-
-        # test AmbulanceUpdateSerializer
-        timestamp = timezone.now()
-        point = Point(1,-3)
-        a = self.a1
-        u = self.u1
-        status = AmbulanceStatus.AV.name
-
-        # create AmbulanceUpdate
-        data = {
-            'ambulance': a.id,
-            'user': u.id,
-            'status': status,
-            'location': point,
-            'timestamp': timestamp
-        }
-        serializer = AmbulanceUpdateSerializer(data=data)
-        serializer.is_valid()
-        serializer.save()
-
-        # check result
-        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id))
-        result = {
-            'id': a.id,
-            'identifier': a.identifier,
-            'comment': a.comment,
-            'capability': a.capability,
-            'last_update': {
-                'user': u.id,
-                'status': status,
-                'location': point2str(point),
-                'timestamp': date2iso(timestamp)
-            }
-        }
-        print('> answer = {}'.format(serializer.data))
-        print('< result = {}'.format(result))
-        self.assertDictEqual(serializer.data, result)
-
-        
