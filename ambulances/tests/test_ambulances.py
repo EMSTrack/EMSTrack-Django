@@ -398,7 +398,12 @@ class CreateAmbulance(TestCase):
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
-            'last_update': None
+            'last_update': {
+                'user': self.u1.id,
+                'status': AmbulanceStatus.AV.name,
+                'location': Point(1,-3),
+                'timestamp': timestamp
+            }
         }
         print('result = {}'.format(result))
         print('serializer.data = {}'.format(serializer.data))
