@@ -396,11 +396,11 @@ class CreateAmbulance(TestCase):
             'identifier': self.a1.identifier,
             'comment': self.a1.comment,
             'capability': self.a1.capability,
-            'last_update': PrivateAmbulanceUpdateSerializer({
+            'last_update': {
                 'user': self.u1.pk,
                 'status': AmbulanceStatus.AV.name,
                 'location': Point(1,1),
                 'timestamp': timestamp
-            }).data,
+            }
         }
         self.assertDictEqual(serializer.data, result)
