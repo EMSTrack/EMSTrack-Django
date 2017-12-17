@@ -350,69 +350,8 @@ class CreateAmbulance(TestCase):
 
     def test_ambulance_update_serializer(self):
 
-        # Update ambulance
-        location_timestamp = timezone.now()
-        location = Point(1,-3)
-        a = self.a1
-        u = self.u2
-        status = AmbulanceStatus.AV.name
-
-        a.status = status
-        a.location = location
-        a.location_timestamp = location_timestamp
-        a.updated_by = u
-        a.save()
-
-        # test
-        serializer = AmbulanceSerializer(a)
-        result = {
-            'id': a.pk,
-            'identifier': a.identifier,
-            'comment': a.comment,
-            'capability': a.capability,
-            'status': status,
-            'orientation': None,
-            'location': point2str(location),
-            'location_timestamp': date2iso(location_timestamp),
-            'updated_by': u.id,
-            'updated_on': date2iso(a.updated_on)
-        }
-        #print('\n< answer = {}'.format(serializer.data))
-        #print('\n> result = {}'.format(result))
-        self.assertDictEqual(serializer.data, result)
-
-        # Update ambulance
-        location_timestamp = timezone.now()
-        location = Point(5,-1)
-        a = self.a2
-        user = self.u3
-        status = AmbulanceStatus.PB.name
-
-        a.status = status
-        a.location = location
-        a.location_timestamp = location_timestamp
-        a.updated_by = user
-        a.save()
-            
-        # test
-        serializer = AmbulanceSerializer(a)
-        result = {
-            'id': a.pk,
-            'identifier': a.identifier,
-            'comment': a.comment,
-            'capability': a.capability,
-            'status': status,
-            'orientation': None,
-            'location': point2str(location),
-            'location_timestamp': date2iso(location_timestamp),
-            'updated_by': user.id,
-            'updated_on': date2iso(a.updated_on)
-        }
-        #print('\n< answer = {}'.format(serializer.data))
-        #print('\n> result = {}'.format(result))
-        self.assertDictEqual(serializer.data, result)
-        
         # Update ambulance status
+        a = self.a1
         user = self.u1
         status = AmbulanceStatus.AH.name
         
