@@ -107,13 +107,13 @@ class CreateAmbulance(TestCase):
         # Ambulance update
         self.t1 = timezone.now()
         self.ul1 = AmbulanceUpdate.objects.create(user=self.u1,
-                                                  status=AmbulanceStatus.AV,
+                                                  status=AmbulanceStatus.AV.name,
                                                   location=Point(1,1),
                                                   timestamp=self.t1)
         
         self.t2 = timezone.now()
         self.ul2 = AmbulanceUpdate.objects.create(user=self.u2,
-                                                  status=AmbulanceStatus.PB,
+                                                  status=AmbulanceStatus.PB.name,
                                                   location=Point(3,-1),
                                                   timestamp=self.t2)
 
