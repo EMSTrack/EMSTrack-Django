@@ -63,6 +63,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
         ambulance.last_update = update
         ambulance.save()
         print('ambulance = {}'.format(ambulance))
+        print('ambulance.last_update = {}'.format(ambulance.last_update))
         
         return update
 
