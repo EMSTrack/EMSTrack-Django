@@ -403,7 +403,7 @@ class CreateAmbulance(TestCase):
                 'status': AmbulanceStatus.AV.name,
                 'location': Point(1,1),
                 'timestamp': timestamp
-            })
+            }).data
         }
         self.assertDictEqual(serializer.data, result)
 
