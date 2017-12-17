@@ -529,3 +529,16 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         self.assertRaises(PermissionDenied, serializer.save)
 
+        # Update ambulance status
+        a = self.a1
+        user = self.u2
+        status = AmbulanceStatus.AH.name
+        
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                             'updated_by': user.id
+                                         }, partial="True")
+        serializer.is_valid()
+        self.assertRaises(PermissionDenied, serializer.save)
+        
