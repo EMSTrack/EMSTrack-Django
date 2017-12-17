@@ -403,7 +403,7 @@ class CreateAmbulance(TestCase):
             })
         print(result)
             
-    def else(self):
+    def delse(self):
         
         # check result
         serializer = AmbulanceSerializer(self.a1)
