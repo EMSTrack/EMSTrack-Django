@@ -104,17 +104,18 @@ class CreateAmbulance(TestCase):
                                                can_write=True)
         )
         
-        # # Add UserLocation
-        # self.t1 = timezone.now()
-        # self.ul1 = UserLocation.objects.create(user=self.u1,
-        #                                        location=Point(1,1),
-        #                                        timestamp=self.t1)
+        # Ambulance update
+        self.t1 = timezone.now()
+        self.ul1 = AmbulanceUpdate.objects.create(user=self.u1,
+                                                  status=AmbulanceStatus.AV,
+                                                  location=Point(1,1),
+                                                  timestamp=self.t1)
         
-        # # Add UserLocation
-        # self.t2 = timezone.now()
-        # self.ul2 = UserLocation.objects.create(user=self.u2,
-        #                                        location=Point(3,-1),
-        #                                        timestamp=self.t2)
+        self.t2 = timezone.now()
+        self.ul2 = AmbulanceUpdate.objects.create(user=self.u2,
+                                                  status=AmbulanceStatus.PB,
+                                                  location=Point(3,-1),
+                                                  timestamp=self.t2)
 
     def test_profile_serializer(self):
 
@@ -219,7 +220,9 @@ class CreateAmbulance(TestCase):
                     'last_update': a.last_update,
                 })
             self.assertDictEqual(serializer.data, result)
-        
+
+        # add AmbulanceUpdate
+            
     def test_ambulance_viewset(self):
 
         # instantiate client
