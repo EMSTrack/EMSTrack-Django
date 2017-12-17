@@ -41,16 +41,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
-    ambulance_id = serializers.IntegerField()
+    ambulance = serializers.IntegerField()
     
     class Meta:
         model = AmbulanceUpdate
-        fields = ('ambulance_id', 'user_id', 'status', 'location', 'timestamp')
+        fields = ('ambulance', 'user', 'status', 'location', 'timestamp')
 
     def create(self, validated_data):
 
         # get ambulance
-        ambulance_id = validated_data.pop('ambulance_id')
+        ambulance_id = validated_data.pop('ambulance')
         ambulance = Ambulance.objects.get(id=ambulance_id)
 
         # create update

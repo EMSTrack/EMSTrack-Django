@@ -379,8 +379,8 @@ class CreateAmbulance(TestCase):
         # test AmbulanceUpdateSerializer
         timestamp = timezone.now()
         data = {
-            'ambulance_id': self.a1.id,
-            'user_id': self.u1.pk,
+            'ambulance': self.a1.id,
+            'user': self.u1.pk,
             'status': AmbulanceStatus.AV.name,
             'location': Point(1,1),
             'timestamp': timestamp
