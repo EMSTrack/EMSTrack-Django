@@ -51,12 +51,16 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     def validate(self, data):
 
         # location and location_timestamp must be defined together
-        if data['location'] and not data['location_timestamp']:
-            raise serializers.ValidationError('location cannot be set without location_timestamp')
+        if 'location' in data or 'location_timestamp' in data:
 
-        if not data['location'] and data['location_timestamp']:
-            raise serializers.ValidationError('location_timestamp cannot be set without location')
-
+            if (('location' in data and not 'location_timestamp' in data) or
+                (data['location'] and not data['location_timestamp'])):
+                raise serializers.ValidationError('location cannot be set without location_timestamp')
+            
+            if ((not 'location' in data and 'location_timestamp' in data) or
+                (not data['location'] and data['location_timestamp'])):
+                raise serializers.ValidationError('location_timestamp cannot be set without location')
+            
         return data
         
     def update(self, instance, validated_data):
