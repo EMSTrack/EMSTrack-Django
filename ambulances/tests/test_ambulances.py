@@ -249,7 +249,7 @@ class CreateAmbulance(TestCase):
 
         # Update ambulance
         location_timestamp = timezone.now()
-        location = Point(1,-3)
+        location = Point(5,-1)
         a = self.a2
         u = self.u3
         status = AmbulanceStatus.PB.name
