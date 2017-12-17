@@ -75,7 +75,7 @@ class Ambulance(models.Model):
     reported_by = models.ForeignKey(User,
                                     on_delete=models.CASCADE,
                                     null=True, blank=True)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return self.identifier
