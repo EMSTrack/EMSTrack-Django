@@ -296,10 +296,9 @@ class CreateAmbulance(TestCase):
                                              'capability': a.capability,
                                              'status': status,
                                              'orientation': None,
-                                             'location': point2str(location),
-                                             'location_timestamp': date2iso(location_timestamp),
-                                             'updated_by': user.id,
-                                             'updated_on': date2iso(a.updated_on)
+                                             'location': location,
+                                             'location_timestamp': location_timestamp,
+                                             'updated_by': user.id
                                          })
         serializer.is_valid()
         print('errors = {}'.format(serializer.errors))
