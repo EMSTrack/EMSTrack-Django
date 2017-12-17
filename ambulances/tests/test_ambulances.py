@@ -397,13 +397,42 @@ class CreateAmbulance(TestCase):
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
+            'last_update': PrivateAmbulanceUpdateSerializer({
+                'ambulance': self.a1.id,
+                'user': self.u1.pk,
+                'status': AmbulanceStatus.AV.name,
+                'location': Point(1,1),
+                'timestamp': timestamp
+            })
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # test AmbulanceUpdateSerializer
+        timestamp = timezone.now()
+        data = {
+            'ambulance': self.a2.id,
+            'user': self.u2.pk,
+            'status': AmbulanceStatus.AV.name,
+            'location': Point(-1,3),
+            'timestamp': timestamp
+        }
+        serializer = AmbulanceUpdateSerializer(data=data)
+        serializer.is_valid()
+        serializer.save()
+
+        # check result
+        a = Ambulance.objects.get(id=self.a2.id)
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.pk,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
             'last_update': None
         }
         if a.last_update:
             result.update({
                 'last_update': PrivateAmbulanceUpdateSerializer(a.last_update).data,
             })
-        print(result)
-        print(serializer.data)
-        print(result)
         self.assertDictEqual(serializer.data, result)
+        
