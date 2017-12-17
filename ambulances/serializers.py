@@ -53,12 +53,13 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         # location and location_timestamp must be defined together
         if 'location' in data or 'location_timestamp' in data:
 
-            if (('location' in data and not 'location_timestamp' in data) or
-                (data['location'] and not data['location_timestamp'])):
+            if not ('location' in data and 'location_timestamp' in data):
+                raise serializers.ValidationError('location and location_timestamp must be set together')
+            
+            if data['location'] and not data['location_timestamp']:
                 raise serializers.ValidationError('location cannot be set without location_timestamp')
             
-            if ((not 'location' in data and 'location_timestamp' in data) or
-                (not data['location'] and data['location_timestamp'])):
+            if not data['location'] and data['location_timestamp']:
                 raise serializers.ValidationError('location_timestamp cannot be set without location')
             
         return data
