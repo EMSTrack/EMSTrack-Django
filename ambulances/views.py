@@ -35,7 +35,7 @@ from .serializers import ProfileSerializer, AmbulanceSerializer
 # Defines the view for a user when a url is accessed
 
 
-# Viewsets
+# Django REST Viewsets
 
 class IsUserOrAdminOrSuper(permissions.BasePermission):
     """
@@ -90,7 +90,9 @@ class AmbulanceViewSet(mixins.UpdateModelMixin,
         
     def perform_update(self, serializer):
         self.serializer_save(serializer)
-    
+
+# Django views
+                
 # Ambulance list page
 class AmbulanceListView(ListView):
     model = Ambulance
