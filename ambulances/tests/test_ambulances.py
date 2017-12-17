@@ -414,6 +414,8 @@ class CreateAmbulance(TestCase):
                 'timestamp': date2iso(timestamp)
             }
         }
+        print('> answer = {}'.format(serializer.data))
+        print('< result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
 
         
