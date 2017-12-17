@@ -212,13 +212,18 @@ class CreateAmbulance(TestCase):
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
+                'user': None,
                 'status': None,
-                'location': a.last_update.location,
-                'timestamp': a.last_update.timestamp.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
-                'updated_on': a.last_update.updated_on.isoformat(timespec='microseconds').replace('+00:00', 'Z'),
+                'location': None,
+                'timestamp': None
             }
-            if a.location:
-                result['status'] = a.location.status
+            if a.last_update:
+                result.update({
+                    'user': a.last_update.user,
+                    'status': a.last_update.status,
+                    'location': a.last_update.location,
+                    'timestamp': a.last_update.timestamp.isoformat(timespec='microseconds').replace('+00:00', 'Z')
+                })
             self.assertDictEqual(serializer.data, result)
         
     def test_ambulance_viewset(self):

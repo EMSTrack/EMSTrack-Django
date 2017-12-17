@@ -28,12 +28,12 @@ class AmbulanceUpdate(models.Model):
     AMBULANCE_STATUS_CHOICES = \
         [(m.name, m.value) for m in AmbulanceStatus]
     status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES)
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              null=True, blank=True)
     
-    orientation = models.FloatField(default=0.0)
-    location = models.PointField(srid=4326)
+    orientation = models.FloatField(null=True, blank=True)
+    location = models.PointField(srid=4326, null=True, blank=True)
     timestamp = models.DateTimeField()
-    updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "{}".format(self.location)

@@ -44,8 +44,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     status = serializers.CharField(source='last_update.status', allow_null=True)
     location = PointFieldSerializer(source='last_update.location', allow_null=True)
-    timestamp = serializers.DateTimeField(source='last_update.timestamp', allow_null=True)
-    updated_on = serializers.DateTimeField(source='last_update.updated_on', allow_null=True)
+    timestamp = serializers.DateTimeField(source='last_update.timestamp')
     
     class Meta:
         model = Ambulance
