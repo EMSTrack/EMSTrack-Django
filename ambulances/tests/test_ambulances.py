@@ -386,4 +386,5 @@ class CreateAmbulance(TestCase):
             'timestamp': timestamp
         }
         serializer = AmbulanceUpdateSerializer(data=data)
+        serializer.is_valid()
         serializer.save()
