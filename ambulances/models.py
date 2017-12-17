@@ -73,7 +73,8 @@ class Ambulance(models.Model):
     location = models.PointField(srid=4326, null=True, blank=True)
     
     reported_by = models.ForeignKey(User,
-                                    on_delete=models.CASCADE)
+                                    on_delete=models.CASCADE,
+                                    null=True, blank=True)
     timestamp = models.DateTimeField()
 
     def __str__(self):
