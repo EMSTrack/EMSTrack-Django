@@ -354,6 +354,8 @@ class CreateAmbulance(TestCase):
 
     def test_ambulance_update_serializer(self):
 
+        # superuser first
+        
         # Update ambulance status
         a = self.a1
         user = self.u1
@@ -384,7 +386,82 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance location
-        user = self.u1
+        location_timestamp = timezone.now()
+        location = Point(-2,7)
+        
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location': location,
+                                             'location_timestamp': location_timestamp,
+                                             'updated_by': user.id
+                                         }, partial="True")
+        serializer.is_valid()
+        serializer.save()
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.pk,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': None,
+            'location': point2str(location),
+            'location_timestamp': date2iso(location_timestamp),
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # error update location with timestamp
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location': location,
+                                             'updated_by': user.id
+                                         }, partial="True")
+        self.assertEqual(serializer.is_valid(), False)
+
+        # error update timestamp without location
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_timestamp': location_timestamp,
+                                             'updated_by': user.id
+                                         }, partial="True")
+        self.assertEqual(serializer.is_valid(), False)
+        
+        # regular user
+        
+        # Update ambulance status
+        a = self.a3
+        user = self.u3
+        status = AmbulanceStatus.AH.name
+        
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                             'updated_by': user.id
+                                         }, partial="True")
+        serializer.is_valid()
+        serializer.save()
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.pk,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': status,
+            'orientation': None,
+            'location': point2str(a.location),
+            'location_timestamp': date2iso(a.location_timestamp),
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+        
+        # Update ambulance location
         location_timestamp = timezone.now()
         location = Point(-2,7)
         
