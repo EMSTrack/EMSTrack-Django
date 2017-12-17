@@ -13,7 +13,7 @@ from ambulances.models import Ambulance, \
     AmbulanceUpdate, Hospital
 
 from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer, AmbulanceUpdateSerializer \
+    AmbulanceSerializer, AmbulanceUpdateSerializer, \
     PrivateAmbulanceUpdateSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
