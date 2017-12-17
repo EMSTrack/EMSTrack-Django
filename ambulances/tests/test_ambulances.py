@@ -407,7 +407,7 @@ class CreateAmbulance(TestCase):
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
-            'last_update': update
+            'last_update': update.validated_data
         }
         print('result = {}'.format(result))
         print('serializer.data = {}'.format(serializer.data))
