@@ -285,7 +285,7 @@ class CreateAmbulance(TestCase):
         location_timestamp = timezone.now()
         location = Point(1,-3)
         a = self.a1
-        user = self.u2
+        user = self.u1
         status = AmbulanceStatus.AV.name
         
         serializer = AmbulanceSerializer(a,
