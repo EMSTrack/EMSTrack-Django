@@ -389,15 +389,6 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         serializer.save()
 
-        update = PrivateAmbulanceUpdateSerializer(data={
-            'user': self.u1.id,
-            'status': AmbulanceStatus.AV.name,
-            'location': Point(1,-3),
-            'timestamp': timestamp
-        })
-        update.is_valid()
-        print('update = {}'.format(update.validated_data))
-        
         # check result
         a = Ambulance.objects.get(id=self.a1.id)
         print('a = {}'.format(a))
@@ -407,7 +398,7 @@ class CreateAmbulance(TestCase):
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
-            'last_update': update.validated_data
+            'last_update': None
         }
         print('result = {}'.format(result))
         print('serializer.data = {}'.format(serializer.data))
