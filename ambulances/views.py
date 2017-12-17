@@ -59,7 +59,8 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
 # Ambulance viewset
 
-class AmbulanceViewSet(mixins.ListModelMixin,
+class AmbulanceViewSet(mixins.UpdateModelMixin,
+                       mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        viewsets.GenericViewSet):
 
