@@ -106,13 +106,13 @@ class CreateAmbulance(TestCase):
         
         # Ambulance update
         self.t1 = timezone.now()
-        self.ul1 = AmbulanceUpdate.objects.create(user=self.u1,
+        self.lu1 = AmbulanceUpdate.objects.create(user=self.u1,
                                                   status=AmbulanceStatus.AV.name,
                                                   location=Point(1,1),
                                                   timestamp=self.t1)
         
         self.t2 = timezone.now()
-        self.ul2 = AmbulanceUpdate.objects.create(user=self.u2,
+        self.lu2 = AmbulanceUpdate.objects.create(user=self.u2,
                                                   status=AmbulanceStatus.PB.name,
                                                   location=Point(3,-1),
                                                   timestamp=self.t2)
@@ -222,6 +222,24 @@ class CreateAmbulance(TestCase):
             self.assertDictEqual(serializer.data, result)
 
         # add AmbulanceUpdate
+        self.a1.last_update = self.lu1
+        self.a2.last_update = self.lu2
+            
+        # test AmbulanceSerializer
+        for a in (self.a1, self.a2, self.a3):
+            serializer = AmbulanceSerializer(a)
+            result = {
+                'id': a.pk,
+                'identifier': a.identifier,
+                'comment': a.comment,
+                'capability': a.capability,
+                'last_update': None
+            }
+            if a.last_update:
+                result.update({
+                    'last_update': a.last_update,
+                })
+            self.assertDictEqual(serializer.data, result)
             
     def test_ambulance_viewset(self):
 
