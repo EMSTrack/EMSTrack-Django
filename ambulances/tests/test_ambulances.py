@@ -362,16 +362,11 @@ class CreateAmbulance(TestCase):
         user = self.u1
         status = AmbulanceStatus.AH.name
         
-        request = test.APIRequestFactory().post('/')
-        request.user = user
-        context = {'request': request}
-        
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': status,
                                              'updated_by': user
-                                         }, partial="True",
-                                         context=context)
+                                         }, partial="True")
         serializer.is_valid()
         print(serializer.initial_data)
         print(serializer.validated_data)
