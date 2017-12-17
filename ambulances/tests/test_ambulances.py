@@ -377,7 +377,6 @@ class CreateAmbulance(TestCase):
         # test
         serializer = AmbulanceSerializer(a)
         result = {
-            'id': a.pk,
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
@@ -406,7 +405,6 @@ class CreateAmbulance(TestCase):
         # test
         serializer = AmbulanceSerializer(a)
         result = {
-            'id': a.pk,
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
