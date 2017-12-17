@@ -389,6 +389,9 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         serializer.save()
 
+        update = PrivateAmbulanceUpdateSerializer(data=data)
+        print('update = {}'.format(update.data))
+        
         # check result
         a = Ambulance.objects.get(id=self.a1.id)
         print('a = {}'.format(a))
