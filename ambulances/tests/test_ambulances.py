@@ -230,29 +230,48 @@ class CreateAmbulance(TestCase):
             }
             self.assertDictEqual(serializer.data, result)
 
-        return
-    
-        # add AmbulanceUpdate
-        self.a1.last_update = self.lu1
-        self.a1.save()
-        self.a2.last_update = self.lu2
-        self.a2.save()
+        # Update ambulance
+        location_timestamp = timezone.now()
+        location = Point(1,-3)
+        a = self.a1
+        u = self.u1
+        status = AmbulanceStatus.AV.name
+
+        a.status = status
+        a.location = location
+        a.location_timestamp = location_timestamp
+        a.updated_by = u
+        a.save()
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.pk,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': status,
+            'orientation': None,
+            'location': location,
+            'location_timestamp': location_timestamp,
+            'updated_by': u,
+            'updated_on': a.updated_on
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # Update ambulance
+        location_timestamp = timezone.now()
+        location = Point(1,-3)
+        a = self.a2
+        u = self.u3
+        status = AmbulanceStatus.PB.name
+
+        a.status = status
+        a.location = location
+        a.location_timestamp = location_timestamp
+        a.updated_by = u
+        a.save()
             
-        # test AmbulanceSerializer
-        for a in (self.a1, self.a2, self.a3):
-            serializer = AmbulanceSerializer(a)
-            result = {
-                'id': a.pk,
-                'identifier': a.identifier,
-                'comment': a.comment,
-                'capability': a.capability,
-                'last_update': None
-            }
-            if a.last_update:
-                result.update({
-                    'last_update': PrivateAmbulanceUpdateSerializer(a.last_update).data,
-                })
-            self.assertDictEqual(serializer.data, result)
             
     def test_ambulance_viewset(self):
 
