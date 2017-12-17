@@ -405,4 +405,5 @@ class CreateAmbulance(TestCase):
         }
         print(serializer.data)
         print(result)
+        print(self.a1.last_update)
         self.assertDictEqual(serializer.data, result)

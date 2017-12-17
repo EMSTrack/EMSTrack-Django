@@ -79,6 +79,5 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Ambulance
-        fields = ('id', 'identifier', 'comment', 'capability',
-                  'last_update')
+        fields = ('id', 'identifier', 'comment', 'capability', 'last_update')
         
