@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
+from django.core.exceptions import PermissionDenied
 from django.views.generic import ListView, CreateView, UpdateView
 from braces import views
 
@@ -65,9 +66,9 @@ class AmbulanceViewSet(mixins.UpdateModelMixin,
 
         # return nothing if anonymous
         if user.is_anonymous:
-            return []
+            raise PermissionDenied()
             
-        # otherwise only return ambulance that the user can read
+        # otherwise only return ambulances that the user can read
         can_read = user.profile.ambulances.filter(can_read=True)
         return Ambulance.objects.filter(id__in=can_read)
 
