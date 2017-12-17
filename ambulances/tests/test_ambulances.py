@@ -281,7 +281,7 @@ class CreateAmbulance(TestCase):
         #print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
         
-        # Update ambulance
+        # Update ambulance status
         user = self.u1
         status = AmbulanceStatus.AH.name
         
@@ -311,13 +311,15 @@ class CreateAmbulance(TestCase):
         print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
         
-        # Update ambulance status
+        # Update ambulance location
         user = self.u1
-        status = AmbulanceStatus.AH.name
+        location_timestamp = timezone.now()
+        location = Point(-2,7)
         
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'status': status,
+                                             'location': point2str(location),
+                                             'location_timestamp': date2iso(location_timestamp),
                                              'updated_by': user.id
                                          }, partial="True")
         serializer.is_valid()
