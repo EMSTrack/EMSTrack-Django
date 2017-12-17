@@ -389,6 +389,22 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         serializer.save()
 
+        a = Ambulance.objects.get(id=self.a1.id)
+        result = {
+            'id': a.pk,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'last_update': None
+        }
+        if a.last_update:
+            result.update({
+                'last_update': PrivateAmbulanceUpdateSerializer(a.last_update).data,
+            })
+        print(result)
+            
+    def else(self):
+        
         # check result
         serializer = AmbulanceSerializer(self.a1)
         result = {
