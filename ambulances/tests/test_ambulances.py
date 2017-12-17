@@ -290,9 +290,17 @@ class CreateAmbulance(TestCase):
         
         serializer = AmbulanceSerializer(a,
                                          data={
+                                             'id': a.pk,
+                                             'identifier': a.identifier,
+                                             'comment': a.comment,
+                                             'capability': a.capability,
                                              'status': status,
-                                             'updated_by': user.id
-                                         }, partial=True)
+                                             'orientation': None,
+                                             'location': point2str(location),
+                                             'location_timestamp': date2iso(location_timestamp),
+                                             'updated_by': u.id,
+                                             'updated_on': date2iso(a.updated_on)
+                                         })
         serializer.is_valid()
         print('errors = {}'.format(serializer.errors))
         serializer.save()
