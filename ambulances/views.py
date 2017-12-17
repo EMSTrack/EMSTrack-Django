@@ -67,10 +67,19 @@ class AmbulanceViewSet(mixins.UpdateModelMixin,
         # return nothing if anonymous
         if user.is_anonymous:
             raise PermissionDenied()
-            
-        # otherwise only return ambulances that the user can read
-        can_read = user.profile.ambulances.filter(can_read=True)
-        return Ambulance.objects.filter(id__in=can_read)
+
+        # otherwise only return ambulances that the user can read or write to
+        if request.method == 'GET':
+            # ambulances that the user can read
+            can_do = user.profile.ambulances.filter(can_read=True)
+
+        elif (request.method == 'PUT' or
+              request.method == 'PATCH' or
+              request.method == 'DELETE'):
+            # ambulances that the user can write to
+            can_do = user.profile.ambulances.filter(can_write=True)
+
+        return Ambulance.objects.filter(id__in=can_do)
 
     def serializer_save(self, serializer):
         user = self.request.user
