@@ -294,7 +294,6 @@ class CreateAmbulance(TestCase):
                                              'updated_by': user.id
                                          }, partial="True")
         serializer.is_valid()
-        print('errors = {}'.format(serializer.errors))
         serializer.save()
 
         # test
@@ -309,7 +308,7 @@ class CreateAmbulance(TestCase):
             'location': point2str(location),
             'location_timestamp': date2iso(location_timestamp),
             'updated_by': user.id,
-            'updated_on': date2iso(a.updated_on)
+            'updated_on': date2iso(serializer.data.updated_on)
         }
         print('\n< answer = {}'.format(serializer.data))
         print('\n> result = {}'.format(result))
