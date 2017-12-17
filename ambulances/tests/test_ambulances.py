@@ -25,6 +25,9 @@ from rest_framework.parsers import JSONParser
 
 from django.test import Client
 
+def toiso(date):
+    return date.isoformat().replace('+00:00','Z')
+
 class CreateAmbulance(TestCase):
 
     def setUp(self):
@@ -402,7 +405,7 @@ class CreateAmbulance(TestCase):
                 'user': self.u1.id,
                 'status': AmbulanceStatus.AV.name,
                 'location': Point(1,-3),
-                'timestamp': timestamp.isoformat()
+                'timestamp': toiso(timestamp)
             }
         }
         print('result = {}'.format(result))
