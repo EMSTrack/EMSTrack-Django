@@ -63,6 +63,10 @@ class AmbulanceViewSet(mixins.UpdateModelMixin,
         if user.is_superuser:
             return Ambulance.objects.all()
 
+        # return nothing if anonymous
+        if user.is_anonymous:
+            return []
+            
         # otherwise only return ambulance that the user can read
         can_read = user.profile.ambulances.filter(can_read=True)
         return Ambulance.objects.filter(id__in=can_read)
