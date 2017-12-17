@@ -295,6 +295,7 @@ class CreateAmbulance(TestCase):
                                              'location_timestamp': date2iso(location_timestamp),
                                              'updated_by': user.id
                                          })
+        serializer.is_valid()
         serializer.save()
         
         # test
