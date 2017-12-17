@@ -74,8 +74,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             # check credentials
             if not user.profile.ambulances.filter(can_write=True,
                                                   ambulance=instance.id):
-                # raise PermissionDenied()
-                pass
+                raise PermissionDenied()
 
         # calculate orientation
 
