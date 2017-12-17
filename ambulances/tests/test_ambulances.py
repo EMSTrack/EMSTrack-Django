@@ -389,13 +389,14 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         serializer.save()
 
-        update = PrivateAmbulanceUpdateSerializer({
+        update = PrivateAmbulanceUpdateSerializer(data={
             'user': self.u1.id,
             'status': AmbulanceStatus.AV.name,
             'location': Point(1,-3),
             'timestamp': timestamp
         })
-        print('update = {}'.format(update.data))
+        update.is_valid()
+        print('update = {}'.format(update.validated_data))
         
         # check result
         a = Ambulance.objects.get(id=self.a1.id)
