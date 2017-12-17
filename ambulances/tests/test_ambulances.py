@@ -430,7 +430,7 @@ class CreateAmbulance(TestCase):
                                          }, partial="True")
         self.assertEqual(serializer.is_valid(), False)
         
-        # regular user
+        # regular authorized user
         
         # Update ambulance status
         a = self.a3
@@ -506,3 +506,18 @@ class CreateAmbulance(TestCase):
                                          }, partial="True")
         self.assertEqual(serializer.is_valid(), False)
         
+        # unauthorized user
+        
+        # Update ambulance status
+        a = self.a3
+        user = self.u2
+        status = AmbulanceStatus.AH.name
+        
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                             'updated_by': user.id
+                                         }, partial="True")
+        serializer.is_valid()
+        serializer.save()
+
