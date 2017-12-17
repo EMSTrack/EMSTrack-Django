@@ -408,7 +408,7 @@ class CreateAmbulance(TestCase):
                 'user': self.u1.id,
                 'status': AmbulanceStatus.AV.name,
                 'location': point2str(Point(1,-3)),
-                'timestamp': data2iso(timestamp)
+                'timestamp': date2iso(timestamp)
             }
         }
         print('result = {}'.format(result))
