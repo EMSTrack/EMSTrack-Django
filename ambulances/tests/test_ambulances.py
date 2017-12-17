@@ -355,6 +355,7 @@ class CreateAmbulance(TestCase):
 
     def test_ambulance_update_serializer(self):
 
+        
         # superuser first
         
         # Update ambulance status
@@ -362,10 +363,14 @@ class CreateAmbulance(TestCase):
         user = self.u1
         status = AmbulanceStatus.AH.name
         
+        context = {
+            "request": { 'user': user }
+        }
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': status
-                                         }, partial="True")
+                                         }, partial="True",
+                                         context=context)
         serializer.is_valid()
         serializer.save()
 
