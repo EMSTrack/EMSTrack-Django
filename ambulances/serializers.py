@@ -51,14 +51,18 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
         # get ambulance
         ambulance_id = validated_data.pop('ambulance')
+        print('ambulance_id = {}'.format(ambulance_id))
         ambulance = Ambulance.objects.get(id=ambulance_id)
+        print('ambulance = {}'.format(ambulance))
 
         # create update
         update = AmbulanceUpdate.objects.create(**validated_data)
+        print('update = {}'.format(update))
 
         # update ambulance
         ambulance.last_update = update
         ambulance.save()
+        print('ambulance = {}'.format(ambulance))
         
         return update
 
