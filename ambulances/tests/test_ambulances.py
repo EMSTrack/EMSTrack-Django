@@ -291,7 +291,7 @@ class CreateAmbulance(TestCase):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': status,
-                                             'updated_by': user.id
+                                             'updated_by': user
                                          }, partial=True)
         serializer.is_valid()
         print('errors = {}'.format(serializer.errors))
