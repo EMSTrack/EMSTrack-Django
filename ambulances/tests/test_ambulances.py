@@ -419,7 +419,8 @@ class CreateAmbulance(TestCase):
                                              'location': location,
                                              'updated_by': user.id
                                          }, partial="True")
-        self.assertDictEqual(serializer.is_valid(), False)
+        print(serializer.is_valid())
+        self.assertDictEqual(serializer.errors, False)
 
         # error update timestamp without location
         serializer = AmbulanceSerializer(a,
