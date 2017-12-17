@@ -389,7 +389,7 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         serializer.save()
 
-        update = PrivateAmbulanceUpdateSerializer(data=data)
+        update = PrivateAmbulanceUpdateSerializer(data)
         print('update = {}'.format(update.data))
         
         # check result
