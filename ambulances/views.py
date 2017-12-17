@@ -78,7 +78,11 @@ class AmbulanceViewSet(mixins.UpdateModelMixin,
         can_read = user.profile.ambulances.filter(can_read=True)
         return Ambulance.objects.filter(id__in=can_read)
 
-
+    def perform_create(self, serializer):
+        instance = serializer.save(updated_by=user=self.request.user)
+        
+    def perform_update(self, serializer):
+        instance = serializer.save(updated_by=user=self.request.user)
     
 # Ambulance list page
 class AmbulanceListView(ListView):
