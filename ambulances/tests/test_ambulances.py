@@ -411,7 +411,12 @@ class CreateAmbulance(TestCase):
             'user': self.u2.pk,
             'status': AmbulanceStatus.AV.name,
             'location': Point(-1,3),
-            'timestamp': timestamp
+            'timestamp': {
+                'user': self.u1.id,
+                'status': AmbulanceStatus.AV.name,
+                'location': Point(1,-3),
+                'timestamp': timestamp
+            }
         }
         serializer = AmbulanceUpdateSerializer(data=data)
         serializer.is_valid()
