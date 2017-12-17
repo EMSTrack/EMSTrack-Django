@@ -254,13 +254,13 @@ class CreateAmbulance(TestCase):
         location_timestamp = timezone.now()
         location = Point(5,-1)
         a = self.a2
-        u = self.u3
+        user = self.u3
         status = AmbulanceStatus.PB.name
 
         a.status = status
         a.location = location
         a.location_timestamp = location_timestamp
-        a.updated_by = u
+        a.updated_by = user
         a.save()
             
         # test
@@ -274,7 +274,7 @@ class CreateAmbulance(TestCase):
             'orientation': None,
             'location': point2str(location),
             'location_timestamp': date2iso(location_timestamp),
-            'updated_by': u.id,
+            'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         #print('\n< answer = {}'.format(serializer.data))
@@ -282,11 +282,8 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance
-        location_timestamp = timezone.now()
-        location = Point(1,-3)
-        a = self.a1
         user = self.u1
-        status = AmbulanceStatus.AV.name
+        status = AmbulanceStatus.AH.name
         
         serializer = AmbulanceSerializer(a,
                                          data={
@@ -307,7 +304,7 @@ class CreateAmbulance(TestCase):
             'orientation': None,
             'location': point2str(location),
             'location_timestamp': date2iso(location_timestamp),
-            'updated_by': user.id,
+            'updated_by': u.id,
             'updated_on': date2iso(a.updated_on)
         }
         print('\n< answer = {}'.format(serializer.data))
