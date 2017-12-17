@@ -294,7 +294,7 @@ class CreateAmbulance(TestCase):
                                              'location': point2str(location),
                                              'location_timestamp': date2iso(location_timestamp),
                                              'updated_by': user.id
-                                         })
+                                         }, partial=True)
         serializer.is_valid()
         print(serializer.errors)
         serializer.save()
