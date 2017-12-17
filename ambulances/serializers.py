@@ -42,6 +42,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
+    user = serializers.CharField(source='last_update.user', allow_null=True)
     status = serializers.CharField(source='last_update.status', allow_null=True)
     location = PointFieldSerializer(source='last_update.location', allow_null=True)
     timestamp = serializers.DateTimeField(source='last_update.timestamp')
@@ -49,5 +50,5 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'comment', 'capability',
-                  'status', 'location', 'timestamp', 'updated_on')
+                  'user', 'status', 'location', 'timestamp')
         
