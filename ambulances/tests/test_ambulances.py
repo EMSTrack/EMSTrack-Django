@@ -431,6 +431,13 @@ class CreateAmbulance(TestCase):
                                          }, partial="True")
         self.assertEqual(serializer.is_valid(), False)
         
+        # error status without user
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status
+                                         }, partial="True")
+        self.assertEqual(serializer.is_valid(), False)
+        
         # regular authorized user
         
         # Update ambulance status
