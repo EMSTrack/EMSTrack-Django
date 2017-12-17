@@ -243,6 +243,8 @@ class CreateAmbulance(TestCase):
             'updated_by': u,
             'updated_on': a.updated_on
         }
+        print('\n< answer = {}'.format(serializer.data))
+        print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
 
         # Update ambulance
