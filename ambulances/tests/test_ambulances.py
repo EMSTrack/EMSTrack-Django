@@ -223,7 +223,9 @@ class CreateAmbulance(TestCase):
 
         # add AmbulanceUpdate
         self.a1.last_update = self.lu1
+        self.a1.save()
         self.a2.last_update = self.lu2
+        self.a2.save()
             
         # test AmbulanceSerializer
         for a in (self.a1, self.a2, self.a3):
