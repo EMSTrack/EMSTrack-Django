@@ -13,6 +13,8 @@ from django.contrib.auth.models import User
 
 # User and ambulance location models
 
+# Ambulance model
+
 class AmbulanceStatus(Enum):
     AV = 'Available'
     OS = 'Out of service'
@@ -21,25 +23,6 @@ class AmbulanceStatus(Enum):
     HB = 'Hospital bound'
     AH = 'At hospital'
     
-class AmbulanceUpdate(models.Model):
-    user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
-    
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
-                              null=True, blank=True)
-    
-    orientation = models.FloatField(null=True, blank=True)
-    location = models.PointField(srid=4326, null=True, blank=True)
-    timestamp = models.DateTimeField()
-
-    def __str__(self):
-        return "{}".format(self.location)
-
-# Ambulance model
-
 class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'

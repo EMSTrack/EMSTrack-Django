@@ -4,8 +4,7 @@ from drf_extra_fields.geo_fields import PointField as PointFieldSerializer
 from django.contrib.auth.models import User
 
 from .models import Profile, Hospital, Ambulance, \
-    AmbulancePermission, HospitalPermission, \
-    AmbulanceUpdate
+    AmbulancePermission, HospitalPermission
 
 # Profile serializers
 
@@ -39,35 +38,6 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances','hospitals')
 
 # Ambulance serializers
-class AmbulanceUpdateSerializer(serializers.ModelSerializer):
-
-    ambulance = serializers.IntegerField()
-    
-    class Meta:
-        model = AmbulanceUpdate
-        fields = ('ambulance', 'user', 'status', 'location', 'timestamp')
-
-    def create(self, validated_data):
-
-        # get ambulance
-        ambulance_id = validated_data.pop('ambulance')
-        ambulance = Ambulance.objects.get(id=ambulance_id)
-
-        # create update
-        update = AmbulanceUpdate.objects.create(**validated_data)
-
-        # update ambulance
-        ambulance.last_update = update
-        ambulance.save()
-        
-        return update
-
-class PrivateAmbulanceUpdateSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AmbulanceUpdate
-        fields = ('user', 'status', 'location', 'timestamp')
-
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
