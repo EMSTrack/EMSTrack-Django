@@ -41,7 +41,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
-    ambulance_id = serializer.IntegerField()
+    ambulance_id = serializers.IntegerField()
     
     class Meta:
         model = AmbulanceUpdate
