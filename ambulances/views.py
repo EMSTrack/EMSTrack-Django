@@ -34,7 +34,6 @@ from .serializers import ProfileSerializer, AmbulanceSerializer
 
 # Defines the view for a user when a url is accessed
 
-
 # Django REST Viewsets
 
 class IsUserOrAdminOrSuper(permissions.BasePermission):
