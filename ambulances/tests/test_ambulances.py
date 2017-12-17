@@ -214,7 +214,7 @@ class CreateAmbulance(TestCase):
                 'orientation': None,
                 'location': None,
                 'location_timestamp': None,
-                'updated_by': None,
+                'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
             self.assertDictEqual(serializer.data, result)
@@ -223,7 +223,7 @@ class CreateAmbulance(TestCase):
         location_timestamp = timezone.now()
         location = Point(1,-3)
         a = self.a1
-        u = self.u1
+        u = self.u2
         status = AmbulanceStatus.AV.name
 
         a.status = status
