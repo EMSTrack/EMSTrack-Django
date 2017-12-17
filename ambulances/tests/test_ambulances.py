@@ -238,13 +238,13 @@ class CreateAmbulance(TestCase):
             'capability': a.capability,
             'status': status,
             'orientation': None,
-            'location': location,
-            'location_timestamp': location_timestamp,
-            'updated_by': u,
+            'location': point2str(location),
+            'location_timestamp': date2iso(location_timestamp),
+            'updated_by': u.id,
             'updated_on': date2iso(a.updated_on)
         }
-        print('\n< answer = {}'.format(serializer.data))
-        print('\n> result = {}'.format(result))
+        #print('\n< answer = {}'.format(serializer.data))
+        #print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
 
         # Update ambulance
@@ -269,11 +269,13 @@ class CreateAmbulance(TestCase):
             'capability': a.capability,
             'status': status,
             'orientation': None,
-            'location': location,
-            'location_timestamp': location_timestamp,
-            'updated_by': u,
-            'updated_on': a.updated_on
+            'location': point2str(location),
+            'location_timestamp': date2iso(location_timestamp),
+            'updated_by': u.id,
+            'updated_on': date2iso(a.updated_on)
         }
+        #print('\n< answer = {}'.format(serializer.data))
+        #print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
             
     def test_ambulance_viewset(self):
