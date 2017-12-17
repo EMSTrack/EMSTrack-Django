@@ -212,7 +212,7 @@ class CreateAmbulance(TestCase):
                 'location': None,
                 'location_timestamp': None,
                 'updated_by': None,
-                'updated_on': a.updated_on
+                'updated_on': date2iso(a.updated_on)
             }
             self.assertDictEqual(serializer.data, result)
 
@@ -241,7 +241,7 @@ class CreateAmbulance(TestCase):
             'location': location,
             'location_timestamp': location_timestamp,
             'updated_by': u,
-            'updated_on': a.updated_on
+            'updated_on': date2iso(a.updated_on)
         }
         print('\n< answer = {}'.format(serializer.data))
         print('\n> result = {}'.format(result))
