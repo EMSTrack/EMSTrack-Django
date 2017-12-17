@@ -383,11 +383,16 @@ class CreateAmbulance(TestCase):
 
         # test AmbulanceUpdateSerializer
         timestamp = timezone.now()
+        point = Point(1,-3)
+        a = self.a1
+        u = self.u1
+        status = AmbulanceStatus.AV.name
+        
         data = {
-            'ambulance': self.a1.id,
-            'user': self.u1.id,
-            'status': AmbulanceStatus.AV.name,
-            'location': Point(1,-3),
+            'ambulance': a.id,
+            'user': u.id,
+            'status': status,
+            'location': point,
             'timestamp': timestamp
         }
         serializer = AmbulanceUpdateSerializer(data=data)
@@ -395,7 +400,7 @@ class CreateAmbulance(TestCase):
         serializer.save()
 
         # check result
-        a = Ambulance.objects.get(id=self.a1.id)
+        a = Ambulance.objects.get(id=a.id)
         serializer = AmbulanceSerializer(a)
         result = {
             'id': a.pk,
@@ -403,9 +408,9 @@ class CreateAmbulance(TestCase):
             'comment': a.comment,
             'capability': a.capability,
             'last_update': {
-                'user': self.u1.id,
-                'status': AmbulanceStatus.AV.name,
-                'location': point2str(Point(1,-3)),
+                'user': u.id,
+                'status': status,
+                'location': point2str(point),
                 'timestamp': date2iso(timestamp)
             }
         }
