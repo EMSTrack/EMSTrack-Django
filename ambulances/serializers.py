@@ -45,14 +45,18 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = AmbulanceUpdate
-        fields = ('ambulance_id', 'user', 'status', 'location', 'timestamp')
+        fields = ('ambulance_id', 'user_id', 'status', 'location', 'timestamp')
 
     def create(self, validated_data):
-        
+
+        # get ambulance
         ambulance_id = validated_data.pop('ambulance_id')
+        ambulance = Ambulance.objects.get(id=ambulance_id)
+
+        # create update
         update = AmbulanceUpdate.objects.create(**validated_data)
 
-        ambulance = Ambulance.objects.get(id=ambulance_id)
+        # update ambulance
         ambulance.last_update = update
         ambulance.save()
         

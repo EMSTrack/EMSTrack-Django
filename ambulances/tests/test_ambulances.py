@@ -373,3 +373,17 @@ class CreateAmbulance(TestCase):
         
         # logout
         client.logout()
+
+    def test_ambulance_update_serializer(self):
+
+        # test AmbulanceUpdateSerializer
+        timestamp = timezone.now()
+        data = {
+            'ambulance_id': self.a1.id,
+            'user_id': self.u1.pk,
+            'status': AmbulanceStatus.AV.name,
+            'location': location=Point(1,1),
+            'timestamp': timestamp
+        }
+        serializer = AmbulanceUpdateSerializer(data=data)
+        serializer.save()
