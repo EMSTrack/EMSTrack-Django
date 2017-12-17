@@ -519,5 +519,5 @@ class CreateAmbulance(TestCase):
                                              'updated_by': user.id
                                          }, partial="True")
         serializer.is_valid()
-        serializer.save()
+        self.assertRaises(PermissionDenied, serializer.save)
 
