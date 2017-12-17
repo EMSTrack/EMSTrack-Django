@@ -25,11 +25,15 @@ from rest_framework.parsers import JSONParser
 from django.test import Client
 
 def date2iso(date):
-    return date.isoformat().replace('+00:00','Z')
+    if date is not None:
+        return date.isoformat().replace('+00:00','Z')
+    return date
 
 def point2str(point):
     #return 'SRID=4326;' + str(point)
-    return str(point)
+    if point is not None:
+        return str(point)
+    return point
 
 class CreateAmbulance(TestCase):
 
