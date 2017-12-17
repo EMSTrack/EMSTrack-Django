@@ -311,8 +311,8 @@ class CreateAmbulance(TestCase):
             'updated_by': u.id,
             'updated_on': date2iso(a.updated_on)
         }
-        #print('\n< answer = {}'.format(serializer.data))
-        #print('\n> result = {}'.format(result))
+        print('\n< answer = {}'.format(serializer.data))
+        print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
         
     def test_ambulance_viewset(self):
