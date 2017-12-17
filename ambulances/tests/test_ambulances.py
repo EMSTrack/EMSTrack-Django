@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 
-from rest_framework import serializers
+from rest_framework import serializers, test
 
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
@@ -362,9 +362,10 @@ class CreateAmbulance(TestCase):
         user = self.u1
         status = AmbulanceStatus.AH.name
         
-        context = {
-            "request": { 'user': user }
-        }
+        request = test.APIRequestFactory().post('/')
+        request.user = user
+        context = {'request': request}
+        
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': status,
