@@ -46,4 +46,21 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                   'comment', 'status', 'location',
                   'location_timestamp', 'orientation',
                   'updated_by', 'updated_on')
+
+    def validate(self, data):
+
+        # location and location_timestamp must be defined together
+        if data['location'] and data['location_timestamp']:
+            return data
+
+        raise serializers.ValidationError('location and location_timestamp must be both defined')
+    
+    def update(self, instance, validated_data):
+
+        # can this user update this ambulance?
         
+        # calculate orientation
+
+        # save to route
+        
+        return super().update(instance, validated_data)

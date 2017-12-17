@@ -54,8 +54,7 @@ class Ambulance(models.Model):
     location_timestamp = models.DateTimeField(null=True, blank=True)
     
     updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE,
-                                   null=True, blank=True)
+                                   on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
