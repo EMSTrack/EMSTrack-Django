@@ -395,7 +395,7 @@ class CreateAmbulance(TestCase):
             'id': self.a1.pk,
             'identifier': self.a1.identifier,
             'comment': self.a1.comment,
-            'capability': self.a.capability,
+            'capability': self.a1.capability,
             'last_update': PrivateAmbulanceUpdateSerializer({
                 'user': self.u1.pk,
                 'status': AmbulanceStatus.AV.name,
