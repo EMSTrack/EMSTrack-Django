@@ -381,8 +381,6 @@ class CreateAmbulance(TestCase):
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
-        print('\n< answer = {}'.format(serializer.data))
-        print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance location
@@ -406,13 +404,11 @@ class CreateAmbulance(TestCase):
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
-            'status': status,
+            'status': a.status,
             'orientation': None,
             'location': point2str(location),
             'location_timestamp': date2iso(location_timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
-        print('\n< answer = {}'.format(serializer.data))
-        print('\n> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
