@@ -391,6 +391,7 @@ class CreateAmbulance(TestCase):
 
         # check result
         a = Ambulance.objects.get(id=self.a1.id)
+        print('a = {}'.format(a))
         serializer = AmbulanceSerializer(a)
         result = {
             'id': a.pk,
