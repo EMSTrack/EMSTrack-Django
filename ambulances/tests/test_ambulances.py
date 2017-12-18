@@ -573,7 +573,7 @@ class CreateAmbulance(TestCase):
         response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'locationa': str(location)
+                                    'crazy': str(location)
                                 }),
         )
         self.assertEqual(response.status_code, 200)
