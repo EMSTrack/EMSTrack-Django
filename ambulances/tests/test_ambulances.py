@@ -637,7 +637,22 @@ class CreateAmbulance2(TestCase):
             'updated_by': self.u1.id
         })
         serializer.is_valid()
-        print('errors = {}'.format(serializer.errors))
         serializer.save()
         
+        # test AmbulanceSerializer
+        a = Ambulance.objects.get(identifier='NEW-1897')
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': 'NEW-1897',
+            'comment': 'no comments',
+            'capability': AmbulanceCapability.R.name,
+            'status': AmbulanceStatus.UK.name,
+            'orientation': None,
+            'location': None,
+            'location_timestamp': None,
+            'updated_by': self.u1.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
 
