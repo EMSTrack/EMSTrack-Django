@@ -563,11 +563,11 @@ class CreateAmbulance(TestCase):
 
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.post('/ambulances/api/ambulance/' + str(self.a1.id),
-                               {
-                                   'status': status,
-                               },
-                               follow=True)
+        response = client.patch('/ambulances/api/ambulance/' + str(self.a1.id),
+                                {
+                                    'status': status,
+                                },
+                                follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         print(result)
