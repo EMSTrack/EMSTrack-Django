@@ -532,7 +532,7 @@ class CreateAmbulance(TestCase):
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
-                                }),
+                                })
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -554,7 +554,7 @@ class CreateAmbulance(TestCase):
                                 data = json.dumps({
                                     'location': str(location),
                                     'location_timestamp': date2iso(location_timestamp),
-                                }),
+                                })
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -574,16 +574,15 @@ class CreateAmbulance(TestCase):
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': 'will fail'
-                                }),
+                                })
         )
         self.assertEqual(response.status_code, 400)
         
         # set wrong ambulance id
         response = client.patch('/ambulances/api/ambulance/100/'
-                                content_type='application/json',
                                 data = json.dumps({
                                     'status': status
-                                }),
+                                })
         )
         self.assertEqual(response.status_code, 400)
         
