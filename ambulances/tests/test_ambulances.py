@@ -511,34 +511,6 @@ class CreateAmbulance(TestCase):
                                          }, partial="True")
         self.assertEqual(serializer.is_valid(), False)
         
-        # unauthorized user
-        
-        # Update ambulance status
-        a = self.a3
-        user = self.u2
-        status = AmbulanceStatus.AH.name
-        
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'status': status,
-                                             'updated_by': user.id
-                                         }, partial="True")
-        serializer.is_valid()
-        self.assertRaises(PermissionDenied, serializer.save)
-
-        # Update ambulance status
-        a = self.a1
-        user = self.u2
-        status = AmbulanceStatus.AH.name
-        
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'status': status,
-                                             'updated_by': user.id
-                                         }, partial="True")
-        serializer.is_valid()
-        self.assertRaises(PermissionDenied, serializer.save)
-
     def test_ambulance_patch_viewset(self):
 
         # instantiate client
