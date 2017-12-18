@@ -16,6 +16,7 @@ from django.contrib.auth.models import User
 # Ambulance model
 
 class AmbulanceStatus(Enum):
+    UK = 'Unknown'
     AV = 'Available'
     OS = 'Out of service'
     PB = 'Patient bound'
@@ -46,7 +47,7 @@ class Ambulance(models.Model):
         [(m.name, m.value) for m in AmbulanceStatus]
     status = models.CharField(max_length=2,
                               choices=AMBULANCE_STATUS_CHOICES,
-                              null=True, blank=True)
+                              default=AmbulanceStatus.UK.name)
     
     # location
     orientation = models.FloatField(null=True, blank=True)
@@ -58,7 +59,17 @@ class Ambulance(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.identifier
+        return ('> Ambulance {} ({}) [{}]:\n' +
+                '    Status: {}\n' +
+                '  Location: {} @ {}\n' +
+                '   Updated: {} by {}').format(self.identifier,
+                                               AmbulanceStatus(self.capability).value,
+                                               self.comment,
+                                               self.status,
+                                               self.location,
+                                               self.location_timestamp,
+                                               self.updated_by,
+                                               self.updated_on)
 
 class AmbulanceRoute(models.Model):
     ambulance = models.ForeignKey(Ambulance,
@@ -73,6 +84,14 @@ class AmbulancePermission(models.Model):
                                   on_delete=models.CASCADE)
     can_read = models.BooleanField(default=True)
     can_write = models.BooleanField(default=False)
+
+    def __str__(self):
+        retval = self.ambulance.identifier + ': '
+        if self.can_read:
+            retval + ' +read'
+        if self.can_write:
+            retval + ' +write'
+        return retval
     
 # Hospital model
 
@@ -98,6 +117,12 @@ class Profile(models.Model):
     ambulances = models.ManyToManyField(AmbulancePermission)
     hospitals = models.ManyToManyField(HospitalPermission)
 
+    def __str__(self):
+        return ('> Ambulances:\n' +
+                '\n'.join('  {}'.format(k) for k in self.ambulances) +
+                '> Hospitals:\n' +
+                '\n'.join('  {}'.format(k) for k in self.hospitals))
+    
 class State(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
