@@ -652,12 +652,52 @@ class CreateAmbulance(TestCase):
         )
         self.assertEqual(response.status_code, 404)
         
+        # set status ambulance
+        status = AmbulanceStatus.OS.name
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
         # logout
         client.logout()
 
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
                 
+        # set status ambulance
+        status = AmbulanceStatus.OS.name
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        # set status ambulance
+        status = AmbulanceStatus.OS.name
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+
+        # set status ambulance
+        status = AmbulanceStatus.OS.name
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
         # logout
         client.logout()
         
