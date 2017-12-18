@@ -86,12 +86,10 @@ class AmbulancePermission(models.Model):
     can_write = models.BooleanField(default=False)
 
     def __str__(self):
-        retval = self.ambulance.identifier + ': '
-        if self.can_read:
-            retval + ' +read'
-        if self.can_write:
-            retval + ' +write'
-        return retval
+        return  '{}(id={}) : read[{}] write[{}]'.format(self.ambulance.identifier,
+                                                 self.ambulance.id,
+                                                 self.can_read,
+                                                 self.can_write)
     
 # Hospital model
 
@@ -110,12 +108,10 @@ class HospitalPermission(models.Model):
     can_write = models.BooleanField(default=False)
 
     def __str__(self):
-        retval = self.hospital.name + ': '
-        if self.can_read:
-            retval + ' +read'
-        if self.can_write:
-            retval + ' +write'
-        return retval + '[{}][{}]'.format(self.can_read,self.can_write)
+        return  '{}(id={}) : read[{}] write[{}]'.format(self.hospital.name,
+                                                 self.hospital.id,
+                                                 self.can_read,
+                                                 self.can_write)
     
 # Profile and state
 
