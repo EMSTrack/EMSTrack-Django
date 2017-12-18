@@ -563,7 +563,7 @@ class CreateAmbulance(TestCase):
 
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                                 data = {
                                     'status': status,
                                 })
