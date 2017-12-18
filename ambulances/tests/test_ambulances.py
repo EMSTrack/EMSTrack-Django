@@ -520,8 +520,7 @@ class CreateAmbulance(TestCase):
         client.login(username='admin', password='admin')
 
         # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                              follow=True)
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(self.a1).data
@@ -541,8 +540,7 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance status
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                              follow=True)
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -564,13 +562,23 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                              follow=True)
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         self.assertEqual(result['location'], 'SRID=4326;' + str(location))
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        
+        # set wrong attribute
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'locationa': str(location)
+                                }),
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        print(result)
         
         # logout
         client.logout()
