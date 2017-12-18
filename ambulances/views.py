@@ -60,8 +60,8 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
 
     def get_queryset(self):
 
-        print('@get_queryset {}({})'.format(self.request.user,
-                                            self.request.method))
+        #print('@get_queryset {}({})'.format(self.request.user,
+        #                                    self.request.method))
         
         # return all ambulance if superuser
         user = self.request.user
@@ -116,14 +116,14 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
 
             
     def perform_create(self, serializer):
-        print('@perform_create')
+        #print('@perform_create')
         if self.request.user.is_superuser:
             self.serializer_save(serializer)
         else:
             raise PermissionDenied()
         
     def perform_update(self, serializer):
-        print('@perform_update')
+        #print('@perform_update')
         self.serializer_save(serializer)
 
 # Django views
