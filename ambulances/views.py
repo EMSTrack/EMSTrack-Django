@@ -92,7 +92,7 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
 
     def serializer_save(self, serializer):
         user = self.request.user
-        if user.is_superuser:
+        if user.is_superuser and 'updated_by' in serializer.validated_data:
             serializer.save()
         else:
             serializer.save(updated_by=user)
