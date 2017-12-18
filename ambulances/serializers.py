@@ -66,7 +66,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         
     def update(self, instance, validated_data, **kwargs):
 
-        print('@update {}'.format(kwargs))
+        print('@update' + kwargs)
         
         # updated_by not present? Abort!
         if 'updated_by' not in self.validated_data:
