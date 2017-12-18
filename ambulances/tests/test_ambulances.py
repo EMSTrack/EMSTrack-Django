@@ -579,7 +579,7 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertDictEqual(result.status, status)
+        self.assertDictEqual(result['status'], status)
         
         # logout
         client.logout()
