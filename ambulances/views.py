@@ -69,6 +69,7 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
         if user.is_anonymous:
             raise PermissionDenied()
 
+        print('> METHOD = {}'.format(self.request.method))
         # otherwise only return ambulances that the user can read or write to
         if self.request.method == 'GET':
             # ambulances that the user can read
