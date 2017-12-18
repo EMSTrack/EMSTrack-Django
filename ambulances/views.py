@@ -84,6 +84,7 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
         else:
             raise PermissionDenied()
 
+        can_do = user.profile.ambulances.filter(can_read=True)
         return Ambulance.objects.filter(id__in=can_do)
 
     def serializer_save(self, serializer):
