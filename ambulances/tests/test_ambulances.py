@@ -223,7 +223,7 @@ class CreateAmbulance(TestCase):
             }
             self.assertDictEqual(serializer.data, result)
 
-    def test_ambulance_viewset(self):
+    def test_ambulance_get_viewset(self):
 
         # instantiate client
         client = Client()
@@ -302,7 +302,7 @@ class CreateAmbulance(TestCase):
         # logout
         client.logout()
         
-    def test_ambulance_list_viewset(self):
+    def test_ambulance_get_list_viewset(self):
 
         # instantiate client
         client = Client()
@@ -354,8 +354,14 @@ class CreateAmbulance(TestCase):
 
     def test_ambulance_create_serializer(self):
 
-        pass
-    
+        serializer = AmbulanceSerializer(data={
+            'identifies': 'NEW-1897',
+            'capability': AmbulanceCapability.R.name,
+            'comment': 'no comments'
+        })
+        serializer.is_valid()
+        serializer.save()
+        
     def test_ambulance_update_serializer(self):
         
         # superuser first
