@@ -356,20 +356,6 @@ class CreateAmbulance(TestCase):
         # logout
         client.logout()
 
-    def test_ambulance_create_serializer(self):
-
-        serializer = AmbulanceSerializer(data={
-            'identifier': 'NEW-1897',
-            'capability': AmbulanceCapability.R.name,
-            'comment': 'no comments',
-            'updated_by': self.u1.id
-        })
-        serializer.is_valid()
-        print('errors = {}'.format(serializer.errors))
-        serializer.save()
-        
-class Nothing():
-        
     def test_ambulance_update_serializer(self):
         
         # superuser first
@@ -559,3 +545,18 @@ class Nothing():
         serializer.is_valid()
         self.assertRaises(PermissionDenied, serializer.save)
         
+class Nothing():
+
+    def test_ambulance_create_serializer(self):
+
+        serializer = AmbulanceSerializer(data={
+            'identifier': 'NEW-1897',
+            'capability': AmbulanceCapability.R.name,
+            'comment': 'no comments',
+            'updated_by': self.u1.id
+        })
+        serializer.is_valid()
+        print('errors = {}'.format(serializer.errors))
+        serializer.save()
+        
+
