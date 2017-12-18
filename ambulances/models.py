@@ -115,7 +115,7 @@ class HospitalPermission(models.Model):
             retval + ' +read'
         if self.can_write:
             retval + ' +write'
-        return retval
+        return retval + '[{}][{}]'.format(self.can_read,self.can_write)
     
 # Profile and state
 

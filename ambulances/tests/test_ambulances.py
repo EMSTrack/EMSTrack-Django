@@ -121,7 +121,7 @@ class CreateAmbulance(TestCase):
 
         print('u1:\n{}'.format(self.u1.profile))
         print('u2:\n{}'.format(self.u2.profile))
-        print('u2:\n{}'.format(self.u3.profile))
+        print('u3:\n{}'.format(self.u3.profile))
         
     def test_profile_serializer(self):
 
