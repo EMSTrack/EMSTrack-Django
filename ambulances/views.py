@@ -116,14 +116,14 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
 
             
     def perform_create(self, serializer):
-        #print('@perform_create')
+        print('@perform_create')
         if self.request.user.is_superuser:
             self.serializer_save(serializer)
         else:
             raise PermissionDenied()
         
     def perform_update(self, serializer):
-        #print('@perform_update')
+        print('@perform_update')
         self.serializer_save(serializer)
 
 # Django views
