@@ -119,9 +119,9 @@ class CreateAmbulance(TestCase):
                                                can_write=True)
         )
 
-        print('profile u1:\n {}'.format(self.u1.profile))
-        print('profile u2:\n {}'.format(self.u2.profile))
-        print('profile u2:\n {}'.format(self.u3.profile))
+        print('u1:\n{}'.format(self.u1.profile))
+        print('u2:\n{}'.format(self.u2.profile))
+        print('u2:\n{}'.format(self.u3.profile))
         
     def test_profile_serializer(self):
 

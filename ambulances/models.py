@@ -109,6 +109,14 @@ class HospitalPermission(models.Model):
     can_read = models.BooleanField(default=True)
     can_write = models.BooleanField(default=False)
 
+    def __str__(self):
+        retval = self.hospital.identifier + ': '
+        if self.can_read:
+            retval + ' +read'
+        if self.can_write:
+            retval + ' +write'
+        return retval
+    
 # Profile and state
 
 class Profile(models.Model):
