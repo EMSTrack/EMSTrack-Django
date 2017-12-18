@@ -69,11 +69,11 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         print('@update {}[{}]'.format(validated_data, kwargs))
         
         # updated_by not present? Abort!
-        if 'updated_by' not in self.validated_data:
+        if 'updated_by' not in validated_data:
             raise PermissionDenied('updated_by is mandatory')
         
         # can this user update this ambulance?
-        user = User.objects.get(id=self.validated_data['updated_by'].id)
+        user = User.objects.get(id=validated_data['updated_by'].id)
 
         print('user: {}'.format(user))
         
