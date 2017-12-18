@@ -584,7 +584,7 @@ class CreateAmbulance(TestCase):
                                     'status': status
                                 })
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         
         # logout
         client.logout()
