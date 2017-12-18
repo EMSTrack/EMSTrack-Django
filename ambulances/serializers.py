@@ -43,11 +43,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulance
-        fields = (#'id',
-                  'identifier', 'capability',
-                  'comment', 'status', 'location',
-                  'location_timestamp', 'orientation',
-                  'updated_by', 'updated_on')
+        fields = '__all__'
 
     def validate(self, data):
 
