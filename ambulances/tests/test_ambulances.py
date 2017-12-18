@@ -822,11 +822,11 @@ class CreateAmbulance2(TestCase):
 
         # create ambulance
         response = client.post('/ambulances/api/ambulance/',
-                               data = json.dumps({
+                               {
                                    'identifier': 'NEW-1897',
                                    'capability': AmbulanceCapability.R.name,
                                    'comment': 'no comments',
-                               })
+                               }
         )
         self.assertEqual(response.status_code, 200)
         
