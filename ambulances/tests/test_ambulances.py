@@ -555,7 +555,7 @@ class CreateAmbulance(TestCase):
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': str(location),
-                                    'location_timestamp': location_timestamp,
+                                    'location_timestamp': date2iso(location_timestamp),
                                 }),
         )
         self.assertEqual(response.status_code, 200)
