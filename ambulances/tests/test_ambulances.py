@@ -828,6 +828,7 @@ class CreateAmbulance2(TestCase):
                                    'comment': 'no comments',
                                }
         )
+        print(response.content)
         self.assertEqual(response.status_code, 200)
         
 
