@@ -642,6 +642,16 @@ class CreateAmbulance(TestCase):
         self.assertEqual(result['location'], 'SRID=4326;' + str(location))
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
+        # set status ambulance
+        status = AmbulanceStatus.OS.name
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
         # logout
         client.logout()
 
