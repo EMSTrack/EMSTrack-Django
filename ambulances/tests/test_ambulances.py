@@ -579,7 +579,7 @@ class CreateAmbulance(TestCase):
         self.assertEqual(response.status_code, 400)
         
         # set wrong ambulance id
-        response = client.patch('/ambulances/api/ambulance/100/'
+        response = client.patch('/ambulances/api/ambulance/100/',
                                 data = json.dumps({
                                     'status': status
                                 })
