@@ -66,6 +66,8 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         
     def update(self, instance, validated_data):
 
+        print('@update')
+        
         # updated_by not present? Abort!
         if 'updated_by' not in self.validated_data:
             raise PermissionDenied('updated_by is mandatory')
