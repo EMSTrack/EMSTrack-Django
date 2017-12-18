@@ -554,7 +554,7 @@ class CreateAmbulance(TestCase):
         response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'location': location,
+                                    'location': str(location),
                                     'location_timestamp': location_timestamp,
                                 }),
         )
