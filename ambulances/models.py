@@ -110,7 +110,7 @@ class HospitalPermission(models.Model):
     can_write = models.BooleanField(default=False)
 
     def __str__(self):
-        retval = self.hospital.identifier + ': '
+        retval = self.hospital.name + ': '
         if self.can_read:
             retval + ' +read'
         if self.can_write:
