@@ -356,8 +356,6 @@ class CreateAmbulance(TestCase):
         # logout
         client.logout()
 
-class Nothing():
-        
     def test_ambulance_create_serializer(self):
 
         serializer = AmbulanceSerializer(data={
@@ -369,6 +367,8 @@ class Nothing():
         serializer.is_valid()
         print('errors = {}'.format(serializer.errors))
         serializer.save()
+        
+class Nothing():
         
     def test_ambulance_update_serializer(self):
         
