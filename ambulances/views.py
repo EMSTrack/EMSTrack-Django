@@ -79,6 +79,8 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
               self.request.method == 'DELETE'):
             # ambulances that the user can write to
             can_do = user.profile.ambulances.filter(can_write=True)
+        else:
+            raise PermissionDenied()
 
         return Ambulance.objects.filter(id__in=can_do)
 
