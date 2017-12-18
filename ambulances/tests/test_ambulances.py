@@ -361,6 +361,7 @@ class CreateAmbulance(TestCase):
             'comment': 'no comments'
         })
         serializer.is_valid()
+        print('errors = {}'.format(serializer.errors))
         serializer.save()
         
     def test_ambulance_update_serializer(self):
