@@ -825,7 +825,7 @@ class CreateAmbulance2(TestCase):
                                {
                                    'identifier': 'NEW-1897',
                                    'capability': AmbulanceCapability.R.name,
-                                   'comment': 'no comments',
+                                   'comment': 'no comments'
                                }
         )
         print(response.content)
