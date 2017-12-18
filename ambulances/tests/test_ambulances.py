@@ -219,7 +219,7 @@ class CreateAmbulance(TestCase):
                 'identifier': a.identifier,
                 'comment': a.comment,
                 'capability': a.capability,
-                'status': None,
+                'status': AmbulanceStatus.UK.name,
                 'orientation': None,
                 'location': None,
                 'location_timestamp': None,
