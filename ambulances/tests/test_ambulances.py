@@ -358,7 +358,8 @@ class CreateAmbulance(TestCase):
         serializer = AmbulanceSerializer(data={
             'identifier': 'NEW-1897',
             'capability': AmbulanceCapability.R.name,
-            'comment': 'no comments'
+            'comment': 'no comments',
+            'updated_by': self.u1
         })
         serializer.is_valid()
         print('errors = {}'.format(serializer.errors))
