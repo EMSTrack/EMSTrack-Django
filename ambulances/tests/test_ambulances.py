@@ -346,6 +346,7 @@ class CreateAmbulance(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
+        print('result = {}'.format(result))
         answer = [ # AmbulanceSerializer(self.a1).data, # can't read
                   AmbulanceSerializer(self.a3).data]
         self.assertEqual(result, answer)
