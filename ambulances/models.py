@@ -120,7 +120,7 @@ class Profile(models.Model):
     def __str__(self):
         return ('> Ambulances:\n' +
                 '\n'.join('  {}'.format(k) for k in self.ambulances.all()) +
-                '> Hospitals:\n' +
+                '\n> Hospitals:\n' +
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
     
 class State(models.Model):
