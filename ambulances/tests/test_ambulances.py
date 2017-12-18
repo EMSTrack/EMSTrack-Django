@@ -569,8 +569,8 @@ class CreateAmbulance(TestCase):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        self.assertEqual(result['location'], location)
-        self.assertEqual(result['location_timestamp'], location_timestamp)
+        self.assertEqual(result['location'], str(location))
+        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
         # logout
         client.logout()
