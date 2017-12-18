@@ -22,6 +22,7 @@ import collections
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
+import json
 
 from django.test import Client
 
