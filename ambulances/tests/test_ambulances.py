@@ -356,7 +356,7 @@ class CreateAmbulance(TestCase):
     def test_ambulance_create_serializer(self):
 
         serializer = AmbulanceSerializer(data={
-            'identifies': 'NEW-1897',
+            'identifier': 'NEW-1897',
             'capability': AmbulanceCapability.R.name,
             'comment': 'no comments'
         })
