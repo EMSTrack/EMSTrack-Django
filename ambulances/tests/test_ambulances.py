@@ -533,12 +533,12 @@ class CreateAmbulance(TestCase):
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
-                                }))
-        #self.assertEqual(response.status_code, 200)
-        #result = JSONParser().parse(BytesIO(response.content))
-        print(response.content)
-        #answer = AmbulanceSerializer(self.a1).data
-        #self.assertDictEqual(result, answer)
+                                }),
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = AmbulanceSerializer(self.a1).data
+        self.assertDictEqual(result, answer)
         
         # retrieve new ambulance status
         response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
