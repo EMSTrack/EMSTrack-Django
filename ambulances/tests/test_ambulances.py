@@ -359,7 +359,7 @@ class CreateAmbulance(TestCase):
             'identifier': 'NEW-1897',
             'capability': AmbulanceCapability.R.name,
             'comment': 'no comments',
-            'updated_by': self.u1
+            'updated_by': self.u1.id
         })
         serializer.is_valid()
         print('errors = {}'.format(serializer.errors))
