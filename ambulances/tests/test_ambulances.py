@@ -825,7 +825,7 @@ class CreateAmbulance2(TestCase):
                                data = json.dumps({
                                    'identifier': 'NEW-1897',
                                    'capability': AmbulanceCapability.R.name,
-                                   'comment': 'no comments'
+                                   'comment': 'no comments',
                                })
         )
         self.assertEqual(response.status_code, 200)
