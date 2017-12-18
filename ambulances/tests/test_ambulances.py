@@ -544,6 +544,49 @@ class CreateAmbulance(TestCase):
                                          }, partial="True")
         serializer.is_valid()
         self.assertRaises(PermissionDenied, serializer.save)
+
+    def test_ambulance_patch_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve ambulance
+        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = AmbulanceSerializer(self.a1).data
+        self.assertDictEqual(result, answer)
+
+        # set status ambulance
+        status = AmbulanceStatus.OS.name
+        response = client.post('/ambulances/api/ambulance/' + str(self.a1.id),
+                               {
+                                   'status': status,
+                               },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        #result = JSONParser().parse(BytesIO(response.content))
+        #answer = AmbulanceSerializer(self.a1).data
+        self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+                
+        # logout
+        client.logout()
         
 class CreateAmbulance2(TestCase):
 
