@@ -537,7 +537,7 @@ class CreateAmbulance(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(self.a1).data
+        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance status
