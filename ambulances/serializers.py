@@ -75,6 +75,8 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         # can this user update this ambulance?
         user = User.objects.get(id=self.validated_data['updated_by'].id)
 
+        print('user: {}'.format(user))
+        
         # if super yes, otherwise
         if not user.is_superuser:
             # check credentials
