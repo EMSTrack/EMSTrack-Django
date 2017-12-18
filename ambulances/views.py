@@ -90,7 +90,10 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
             serializer.save(updated_by=user)
     
     def perform_create(self, serializer):
-        self.serializer_save(serializer)
+        if self.request.user:
+            self.serializer_save(serializer)
+        else:
+            raise PermissionDenied()
         
     def perform_update(self, serializer):
         self.serializer_save(serializer)
