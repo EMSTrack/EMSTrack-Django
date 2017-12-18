@@ -160,7 +160,7 @@ class CreateAmbulance(TestCase):
         client.login(username='admin', password='admin')
 
         # retrieve own
-        response = client.get('/ambulances/api/profile/' + str(self.u1.id),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -168,7 +168,7 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -176,7 +176,7 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -190,7 +190,7 @@ class CreateAmbulance(TestCase):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/profile/' + str(self.u2.id),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -198,11 +198,11 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/' + str(self.u1.id),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
-        response = client.get('/ambulances/api/profile/' + str(self.u3.id),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
@@ -237,7 +237,7 @@ class CreateAmbulance(TestCase):
         client.login(username='admin', password='admin')
 
         # retrieve any ambulance
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -245,7 +245,7 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
 
         # retrieve any ambulance
-        response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -253,7 +253,7 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
 
         # retrieve any ambulance
-        response = client.get('/ambulances/api/ambulance/' + str(self.a3.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -267,7 +267,7 @@ class CreateAmbulance(TestCase):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/ambulance/' + str(self.a3.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -275,12 +275,12 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # can't read
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -291,16 +291,16 @@ class CreateAmbulance(TestCase):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/ambulance/' + str(self.a2.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -520,7 +520,7 @@ class CreateAmbulance(TestCase):
         client.login(username='admin', password='admin')
 
         # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -541,7 +541,30 @@ class CreateAmbulance(TestCase):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance status
-        response = client.get('/ambulances/api/ambulance/' + str(self.a1.id),
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        
+        # set status location
+        location_timestamp = timezone.now()
+        location = Point(-2,7)
+        
+        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'location': location,
+                                    'location_timestamp': location_timestamp,
+                                }),
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve new ambulance location
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
