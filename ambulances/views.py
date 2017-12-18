@@ -91,16 +91,33 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
         return Ambulance.objects.filter(id__in=can_do)
 
     def serializer_save(self, serializer):
+
+        # get current user
         user = self.request.user
-        if 'updated_by' in serializer.validated_data:
-            print('updated_by = {}'.format(serializer.validated_data['updated_by']))
+
+        # issuper?
+        if user.is_superuser:
+            if 'updated_by' in serializer.validated_data:
+                serializer.save()
+            else:
+                serializer.save(updated_by=user)
+
+        # regular folks
         else:
-            print('MISSING updated_by!')
-        if user.is_superuser and 'updated_by' in serializer.validated_data:
-            serializer.save()
-        else:
+
+            if not serializer.instance:
+                # abort, regular folks cannot create
+                raise PermissionDenied()
+        
+            # otherwise check credentials
+            if not user.profile.ambulances.filter(can_write=True,
+                                                  ambulance=serializer.instance.id):
+                raise PermissionDenied()
+
+            # give up and save
             serializer.save(updated_by=user)
-    
+
+            
     def perform_create(self, serializer):
         print('@perform_create')
         if self.request.user.is_superuser:

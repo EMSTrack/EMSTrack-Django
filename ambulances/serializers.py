@@ -59,30 +59,9 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if not data['location'] and data['location_timestamp']:
                 raise serializers.ValidationError('location_timestamp cannot be set without location')
 
-        #if 'updated_by' not in data or not data['updated_by']:
-        #    raise serializers.ValidationError('updated_by is mandatory')
-            
         return data
         
-    def update(self, instance, validated_data, **kwargs):
-
-        print('@update {}[{}]'.format(validated_data, kwargs))
-        
-        # updated_by not present? Abort!
-        if 'updated_by' not in validated_data:
-            raise PermissionDenied('updated_by is mandatory')
-        
-        # can this user update this ambulance?
-        user = User.objects.get(id=validated_data['updated_by'].id)
-
-        print('user: {}'.format(user))
-        
-        # if super yes, otherwise
-        if not user.is_superuser:
-            # check credentials
-            if not user.profile.ambulances.filter(can_write=True,
-                                                  ambulance=instance.id):
-                raise PermissionDenied()
+    def update(self, instance, validated_data):
 
         # calculate orientation
 
