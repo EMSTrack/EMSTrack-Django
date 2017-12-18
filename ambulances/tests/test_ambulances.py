@@ -545,7 +545,7 @@ class CreateAmbulance(TestCase):
         serializer.is_valid()
         self.assertRaises(PermissionDenied, serializer.save)
         
-class Nothing():
+class CreateAmbulance2(TestCase):
 
     def test_ambulance_create_serializer(self):
 
