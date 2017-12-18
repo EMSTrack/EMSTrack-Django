@@ -105,11 +105,8 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
         # regular folks
         else:
 
-            if not serializer.instance:
-                # abort, regular folks cannot create
-                raise PermissionDenied()
-        
-            # otherwise check credentials
+            # check credentials
+            # serializer.instance will always exist!
             if not user.profile.ambulances.filter(can_write=True,
                                                   ambulance=serializer.instance.id):
                 raise PermissionDenied()
