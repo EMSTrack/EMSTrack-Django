@@ -827,7 +827,7 @@ class CreateAmbulance2(TestCase):
                                   'capability': AmbulanceCapability.R.name,
                                   'comment': 'no comments'
                               })
-        })
+        )
         self.assertEqual(response.status_code, 200)
 
 
