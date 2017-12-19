@@ -61,7 +61,18 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError('location_timestamp cannot be set without location')
 
         return data
-        
+
+    def create(self, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        if not user.is_superuser:
+            raise PermissionDenied()
+    
+        return super().create(validated_data)
+    
     def update(self, instance, validated_data):
 
         # get current user
