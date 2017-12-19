@@ -64,8 +64,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         
     def update(self, instance, validated_data):
 
-        print(validated_data)
-        
         # get current user
         user = validated_data['updated_by']
 

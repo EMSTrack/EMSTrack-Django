@@ -104,20 +104,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     def perform_update(self, serializer):
 
         #print('@perform_update')
-
-        # get current user
-        user = self.request.user
-
-        # regular folks
-        if not user.is_superuser:
-
-            # check credentials
-            # serializer.instance will always exist!
-            if not user.profile.ambulances.filter(can_write=True,
-                                                  ambulance=serializer.instance.id):
-                raise PermissionDenied()
-
-        # save
         serializer.save(updated_by=user)
 
 # Django views
