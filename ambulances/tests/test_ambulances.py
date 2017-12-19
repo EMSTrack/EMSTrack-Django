@@ -831,7 +831,9 @@ class CreateAmbulance2(TestCase):
                                }
         )
         print(response.content)
-        print(AmbulanceViewSet.__dict__)
+
+        [print(func) for func in dir(AmbulanceViewSet) if callable(getattr(AmbulanceViewSet, func))]
+
         self.assertEqual(response.status_code, 200)
         
 
