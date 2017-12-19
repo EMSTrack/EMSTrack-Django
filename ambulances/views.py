@@ -60,8 +60,8 @@ class AmbulanceViewSet(mixins.CreateModelMixin,
 
     def get_queryset(self):
 
-        #print('@get_queryset {}({})'.format(self.request.user,
-        #                                    self.request.method))
+        print('@get_queryset {}({})'.format(self.request.user,
+                                            self.request.method))
         
         # return all ambulance if superuser
         user = self.request.user

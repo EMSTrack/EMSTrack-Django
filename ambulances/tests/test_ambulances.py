@@ -821,6 +821,7 @@ class CreateAmbulance2(TestCase):
         client.login(username='admin', password='admin')
 
         # create ambulance
+        print('***')
         response = client.post('/ambulances/api/ambulance/',
                                {
                                    'identifier': 'NEW-1897',
