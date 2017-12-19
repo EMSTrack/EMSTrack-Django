@@ -61,10 +61,10 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
         return data
         
-    def update(self, instance, validated_data):
+    # #def update(self, instance, validated_data):
 
-        # calculate orientation
+    #     # calculate orientation
 
-        # save to route
+    #     # save to route
         
-        return super().update(instance, validated_data)
+    #   #  return super().update(instance, validated_data)
