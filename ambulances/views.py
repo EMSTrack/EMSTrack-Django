@@ -98,15 +98,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # get current user
         user = self.request.user
 
-        # issuper?
-        if user.is_superuser:
-            if 'updated_by' in serializer.validated_data:
-                serializer.save()
-            else:
-                serializer.save(updated_by=user)
-
         # regular folks
-        else:
+        if not user.is_superuser:
 
             # check credentials
             # serializer.instance will always exist!
@@ -114,8 +107,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                                                   ambulance=serializer.instance.id):
                 raise PermissionDenied()
 
-            # give up and save
-            serializer.save(updated_by=user)
+        # save
+        serializer.save(updated_by=user)
 
     def perform_create(self, serializer):
         print('@perform_create')
