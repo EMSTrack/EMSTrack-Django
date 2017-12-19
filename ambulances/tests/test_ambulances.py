@@ -26,7 +26,7 @@ import json
 
 from django.test import Client
 
-from ambulances.views import AmbulanceViewSet
+from ambulances.viewsets import AmbulanceViewSet
 
 def date2iso(date):
     if date is not None:
