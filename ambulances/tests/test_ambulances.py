@@ -373,7 +373,7 @@ class CreateAmbulance(TestCase):
                                              'status': status,
                                          }, partial="True")
         serializer.is_valid()
-        serializer.save(updated_by=user.id)
+        serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -401,7 +401,7 @@ class CreateAmbulance(TestCase):
                                              'location_timestamp': location_timestamp,
                                          }, partial="True")
         serializer.is_valid()
-        serializer.save(updated_by=user.id)
+        serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
