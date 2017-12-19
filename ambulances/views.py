@@ -94,7 +94,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     
     def perform_create(self, serializer):
         
-        #print('@perform_create')
+        print('@perform_create')
         if not self.request.user.is_superuser:
             raise PermissionDenied()
         
