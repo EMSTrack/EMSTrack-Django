@@ -835,6 +835,17 @@ class CreateAmbulance2(TestCase):
         answer = AmbulanceSerializer(a).data
         self.assertDictEqual(result, answer)
 
+        # create ambulance (repeated identifier)
+        response = client.post('/ambulances/api/ambulance/',
+                               {
+                                   'identifier': 'NEW-1897',
+                                   'capability': AmbulanceCapability.R.name,
+                                   'comment': 'no comments'
+                               }
+        )
+        self.assertEqual(response.status_code, 201)
+        a = Ambulance.objects.get(identifier='NEW-1897')
+        
         # logout
         client.logout()
 
