@@ -68,6 +68,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         user = validated_data['updated_by']
 
         # check credentials
+        # only super can create
         if not user.is_superuser:
             raise PermissionDenied()
     
