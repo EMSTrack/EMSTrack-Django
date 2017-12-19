@@ -104,7 +104,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     def perform_update(self, serializer):
 
         #print('@perform_update')
-        serializer.save(updated_by=reques.user)
+        serializer.save(updated_by=self.request.user)
 
 # Django views
                 
