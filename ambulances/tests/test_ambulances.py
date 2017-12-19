@@ -474,11 +474,10 @@ class CreateAmbulance(TestCase):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                             'location_timestamp': location_timestamp,
-                                             'updated_by': user.id
+                                             'location_timestamp': location_timestamp
                                          }, partial="True")
         serializer.is_valid()
-        serializer.save()
+        serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -499,8 +498,7 @@ class CreateAmbulance(TestCase):
         # error update location with timestamp
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location': location,
-                                             'updated_by': user.id
+                                             'location': location
                                          }, partial="True")
         self.assertEqual(serializer.is_valid(), False)
 
@@ -508,7 +506,6 @@ class CreateAmbulance(TestCase):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location_timestamp': location_timestamp,
-                                             'updated_by': user.id
                                          }, partial="True")
         self.assertEqual(serializer.is_valid(), False)
         
