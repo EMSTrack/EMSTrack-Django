@@ -791,8 +791,8 @@ class CreateAmbulance2(TestCase):
         serializer = AmbulanceSerializer(data={
             'identifier': 'NEW-1897',
             'capability': AmbulanceCapability.R.name,
-            'comment': 'no comments',
-            'updated_by': self.u1.id
+            'comment': 'no comments'
+            # ,'updated_by': self.u1.id
         })
         serializer.is_valid()
         serializer.save()
