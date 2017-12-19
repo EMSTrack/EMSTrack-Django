@@ -39,7 +39,7 @@ def point2str(point):
         return str(point)
     return point
 
-class TestProfile(TestCase):
+class TestSetup(TestCase):
 
     def setUp(self):
 
@@ -125,6 +125,8 @@ class TestProfile(TestCase):
         #print('u1: {}\n{}'.format(self.u1, self.u1.profile))
         #print('u2: {}\n{}'.format(self.u2, self.u2.profile))
         #print('u3: {}\n{}'.format(self.u3, self.u3.profile))
+
+class TestProfile(TestSetup):
 
     def test_profile_serializer(self):
 
@@ -211,92 +213,7 @@ class TestProfile(TestCase):
         # logout
         client.logout()
 
-class TestAmbulanceAmbulance1(TestCase):
-
-    def setUp(self):
-
-        # Add users
-        self.u1 = User.objects.create_user(
-            username='admin',
-            email='admin@user.com',
-            password='admin',
-            is_superuser=True)
-        
-        self.u2 = User.objects.create_user(
-            username='testuser1',
-            email='test1@user.com',
-            password='top_secret')
-        
-        self.u3 = User.objects.create_user(
-            username='testuser2',
-            email='test2@user.com',
-            password='very_secret')
-        
-        # Add ambulances
-        self.a1 = Ambulance.objects.create(
-            identifier='BC-179',
-            comment='Maintenance due',
-            capability=AmbulanceCapability.B.name,
-            updated_by=self.u1)
-        
-        self.a2 = Ambulance.objects.create(
-            identifier='BC-180',
-            comment='Need painting',
-            capability=AmbulanceCapability.A.name,
-            updated_by=self.u1)
-
-        self.a3 = Ambulance.objects.create(
-            identifier='BC-181',
-            comment='Engine overhaul',
-            capability=AmbulanceCapability.R.name,
-            updated_by=self.u1)
-        
-        # Add hospitals
-        self.h1 = Hospital.objects.create(
-            name='Hospital General',
-            address="Don't know")
-        
-        self.h2 = Hospital.objects.create(
-            name='Hospital CruzRoja',
-            address='Forgot')
-
-        self.h3 = Hospital.objects.create(
-            name='Hospital Nuevo',
-            address='Not built yet')
-        
-        # add hospitals to users
-        self.u1.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1,
-                                              can_write=True),
-            HospitalPermission.objects.create(hospital=self.h3)
-        )
-        
-        self.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1),
-            HospitalPermission.objects.create(hospital=self.h2,
-                                              can_write=True)
-        )
-
-        # u3 has no hospitals 
-        
-        # add ambulances to users
-        self.u1.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=self.a2,
-                                               can_write=True)
-        )
-        
-        # u2 has no ambulances
-        
-        self.u3.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=self.a1,
-                                               can_read=False),
-            AmbulancePermission.objects.create(ambulance=self.a3,
-                                               can_write=True)
-        )
-
-        #print('u1: {}\n{}'.format(self.u1, self.u1.profile))
-        #print('u2: {}\n{}'.format(self.u2, self.u2.profile))
-        #print('u3: {}\n{}'.format(self.u3, self.u3.profile))
+class TestAmbulanceAmbulance1(TestSetup):
 
     def test_ambulance_serializer(self):
 
@@ -788,88 +705,7 @@ class TestAmbulanceAmbulance1(TestCase):
         # logout
         client.logout()
 
-class TestAmbulance2(TestCase):
-
-    def setUp(self):
-        
-        # Add users
-        self.u1 = User.objects.create_user(
-            username='admin',
-            email='admin@user.com',
-            password='admin',
-            is_superuser=True)
-        
-        self.u2 = User.objects.create_user(
-            username='testuser1',
-            email='test1@user.com',
-            password='top_secret')
-        
-        self.u3 = User.objects.create_user(
-            username='testuser2',
-            email='test2@user.com',
-            password='very_secret')
-        
-        # Add ambulances
-        self.a1 = Ambulance.objects.create(
-            identifier='BC-179',
-            comment='Maintenance due',
-            capability=AmbulanceCapability.B.name,
-            updated_by=self.u1)
-        
-        self.a2 = Ambulance.objects.create(
-            identifier='BC-180',
-            comment='Need painting',
-            capability=AmbulanceCapability.A.name,
-            updated_by=self.u1)
-
-        self.a3 = Ambulance.objects.create(
-            identifier='BC-181',
-            comment='Engine overhaul',
-            capability=AmbulanceCapability.R.name,
-            updated_by=self.u1)
-        
-        # Add hospitals
-        self.h1 = Hospital.objects.create(
-            name='Hospital General',
-            address="Don't know")
-        
-        self.h2 = Hospital.objects.create(
-            name='Hospital CruzRoja',
-            address='Forgot')
-
-        self.h3 = Hospital.objects.create(
-            name='Hospital Nuevo',
-            address='Not built yet')
-        
-        # add hospitals to users
-        self.u1.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1,
-                                              can_write=True),
-            HospitalPermission.objects.create(hospital=self.h3)
-        )
-        
-        self.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1),
-            HospitalPermission.objects.create(hospital=self.h2,
-                                              can_write=True)
-        )
-
-        # u3 has no hospitals 
-        
-        # add ambulances to users
-        self.u1.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=self.a2,
-                                               can_write=True)
-        )
-        
-        # u2 has no ambulances
-        
-        self.u3.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=self.a1,
-                                               can_read=False),
-            AmbulancePermission.objects.create(ambulance=self.a3,
-                                               can_write=True)
-        )
+class TestAmbulance2(TestSetup):
 
     def test_ambulance_create_serializer(self):
 
