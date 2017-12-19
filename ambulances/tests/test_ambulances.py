@@ -843,7 +843,8 @@ class CreateAmbulance2(TestCase):
                                    'comment': 'no comments'
                                }
         )
-        self.assertEqual(response.status_code, 201)
+        print(response.content)
+        self.assertEqual(response.status_code, 401)
         a = Ambulance.objects.get(identifier='NEW-1897')
         
         # logout
