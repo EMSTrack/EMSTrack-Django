@@ -91,10 +91,18 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         #print('user = {}, can_do = {}'.format(user, can_do))
         return Ambulance.objects.filter(id__in=can_do)
 
-    def serializer_save(self, serializer):
-
-        print('> @serializer_save')
+    
+    def perform_create(self, serializer):
         
+        #print('@perform_create')
+        if not self.request.user.is_superuser:
+            raise PermissionDenied()
+        serializer.save(updated_by=user)
+        
+
+    def perform_update(self, serializer):
+        #print('@perform_update')
+
         # get current user
         user = self.request.user
 
@@ -109,17 +117,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         # save
         serializer.save(updated_by=user)
-
-    def perform_create(self, serializer):
-        print('@perform_create')
-        if self.request.user.is_superuser:
-            self.serializer_save(serializer)
-        else:
-            raise PermissionDenied()
-        
-    def perform_update(self, serializer):
-        print('@perform_update')
-        self.serializer_save(serializer)
 
 # Django views
                 
