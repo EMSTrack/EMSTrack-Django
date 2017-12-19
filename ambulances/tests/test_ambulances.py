@@ -330,7 +330,7 @@ class TestAmbulanceAmbulance1(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(self.a1).data
+        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve any ambulance
@@ -338,7 +338,7 @@ class TestAmbulanceAmbulance1(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(self.a2).data
+        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a2.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve any ambulance
@@ -346,7 +346,7 @@ class TestAmbulanceAmbulance1(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(self.a3).data
+        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
         self.assertDictEqual(result, answer)
         
         # logout
@@ -360,7 +360,7 @@ class TestAmbulanceAmbulance1(TestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(self.a3).data
+        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
