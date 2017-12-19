@@ -97,7 +97,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         #print('@perform_create')
         if not self.request.user.is_superuser:
             raise PermissionDenied()
-        serializer.save(updated_by=user)
+        
+        serializer.save(updated_by=self.request.user)
         
 
     def perform_update(self, serializer):
