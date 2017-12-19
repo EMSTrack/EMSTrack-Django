@@ -54,7 +54,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        mixins.CreateModelMixin,
                        mixins.UpdateModelMixin,
-                       viewsets.BulkModelViewSet):
+                       viewsets.ModelViewSet):
 
     #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
