@@ -433,8 +433,9 @@ class TestAmbulanceAmbulance1(TestCase):
         
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
-
-        print(User.objects.get(username='testuser2').profile.ambulances)
+        user = User.objects.get(username='testuser2')
+                    
+        print(user.profile.ambulances)
         
         # retrieve ambulances
         response = client.get('/ambulances/api/ambulance/',
