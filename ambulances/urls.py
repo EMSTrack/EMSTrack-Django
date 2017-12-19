@@ -31,7 +31,6 @@ router.register(r'profile', views.ProfileViewSet)
 router.register(r'ambulance', views.AmbulanceViewSet,
                 base_name='ambulance')
 
-
 urlpatterns = [
 
     # Swagger Documentation
