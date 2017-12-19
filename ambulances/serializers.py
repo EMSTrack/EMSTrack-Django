@@ -62,10 +62,17 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
         return data
         
-    # #def update(self, instance, validated_data):
+    def update(self, instance, validated_data):
 
-    #     # calculate orientation
+        # get current user
+        user = validated_data['updated_by']
 
-    #     # save to route
-        
-    #   #  return super().update(instance, validated_data)
+        # check credentials
+        if not user.is_superuser:
+
+            # serializer.instance will always exist!
+            if not user.profile.ambulances.filter(can_write=True,
+                                                  ambulance=serializer.instance.id):
+                raise PermissionDenied()
+
+        return super().update(instance, validated_data)
