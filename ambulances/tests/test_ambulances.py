@@ -213,7 +213,7 @@ class TestProfile(TestSetup):
         # logout
         client.logout()
 
-class TestAmbulanceAmbulance1(TestSetup):
+class TestAmbulance1(TestSetup):
 
     def test_ambulance_serializer(self):
 
@@ -369,6 +369,8 @@ class TestAmbulanceAmbulance1(TestSetup):
         # logout
         client.logout()
 
+class TestAmbulance2(TestSetup):
+    
     def test_ambulance_update_serializer(self):
         
         # superuser first
@@ -705,7 +707,7 @@ class TestAmbulanceAmbulance1(TestSetup):
         # logout
         client.logout()
 
-class TestAmbulance2(TestSetup):
+class TestAmbulance3(TestSetup):
 
     def test_ambulance_create_serializer(self):
 
