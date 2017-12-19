@@ -44,7 +44,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ambulance
         fields = '__all__'
-        read_only_fields = ('updated_by')
+        read_only_fields = ('updated_by',)
 
     def validate(self, data):
 
