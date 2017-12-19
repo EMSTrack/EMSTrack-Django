@@ -826,80 +826,20 @@ class CreateAmbulance2(TestCase):
                                }
         )
         self.assertEqual(response.status_code, 201)
-        
-
-        return
+        a = Ambulances.objects.get(identifier='NEW-1897')
         
         # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(a.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(self.a1).data
+        answer = AmbulanceSerializer(a).data
         self.assertDictEqual(result, answer)
 
-        # set status ambulance
-        status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                                content_type='application/json',
-                                data = json.dumps({
-                                    'status': status,
-                                })
-        )
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve new ambulance status
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result['status'], status)
-        
-        # set status location
-        location_timestamp = timezone.now()
-        location = Point(-2,7)
-        
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                                content_type='application/json',
-                                data = json.dumps({
-                                    'location': str(location),
-                                    'location_timestamp': date2iso(location_timestamp),
-                                })
-        )
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve new ambulance location
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result['status'], status)
-        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
-        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
-        
-        # set wrong attribute
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                                content_type='application/json',
-                                data = json.dumps({
-                                    'status': 'will fail'
-                                })
-        )
-        self.assertEqual(response.status_code, 400)
-        
-        # set wrong ambulance id
-        response = client.patch('/ambulances/api/ambulance/100/',
-                                data = json.dumps({
-                                    'status': status
-                                })
-        )
-        self.assertEqual(response.status_code, 404)
-        
         # logout
         client.logout()
 
+        return
+        
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
