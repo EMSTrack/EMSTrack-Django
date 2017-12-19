@@ -826,7 +826,7 @@ class CreateAmbulance2(TestCase):
                                }
         )
         self.assertEqual(response.status_code, 201)
-        a = Ambulances.objects.get(identifier='NEW-1897')
+        a = Ambulance.objects.get(identifier='NEW-1897')
         
         # retrieve ambulance
         response = client.get('/ambulances/api/ambulance/{}/'.format(str(a.id)))
