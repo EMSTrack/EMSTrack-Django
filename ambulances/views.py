@@ -101,6 +101,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         
 
     def perform_update(self, serializer):
+
         #print('@perform_update')
 
         # get current user
