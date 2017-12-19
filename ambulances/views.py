@@ -117,11 +117,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
             # give up and save
             serializer.save(updated_by=user)
 
-    def create(self, request, *args, **kwargs):
-        print('> @create')
-        super().create(request, *args, **kwargs)
-        print('< @create')
-            
     def perform_create(self, serializer):
         print('@perform_create')
         if self.request.user.is_superuser:
