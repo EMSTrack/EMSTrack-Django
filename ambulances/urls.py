@@ -6,6 +6,7 @@ from rest_framework import routers
 from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
+from . import viewsets
 
 #from .views import AmbulanceStatusViewSet, AmbulanceViewSet, CallViewSet, \
 #    HospitalViewSet, EquipmentCountViewSet, AmbulanceRouteViewSet, \
@@ -27,8 +28,8 @@ router = routers.DefaultRouter()
 #router.register(r'equipment', EquipmentCountViewSet)
 #router.register(r'routes', AmbulanceRouteViewSet)
 
-router.register(r'profile', views.ProfileViewSet)
-router.register(r'ambulance', views.AmbulanceViewSet,
+router.register(r'profile', viewsets.ProfileViewSet)
+router.register(r'ambulance', viewsets.AmbulanceViewSet,
                 base_name='ambulance')
 
 urlpatterns = [
