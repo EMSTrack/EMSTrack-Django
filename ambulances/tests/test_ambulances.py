@@ -845,7 +845,7 @@ class CreateAmbulance2(TestCase):
         )
         self.assertEqual(response.status_code, 400)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result.identifier,
+        self.assertEqual(result['identifier'],
                          'ambulance with this identifier already exists')
         
         # logout
