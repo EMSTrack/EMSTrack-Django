@@ -74,7 +74,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
             # serializer.instance will always exist!
             if not user.profile.ambulances.filter(can_write=True,
-                                                  ambulance=serializer.instance.id):
+                                                  ambulance=instance.id):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)
