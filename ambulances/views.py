@@ -49,10 +49,10 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
 # Ambulance viewset
 
-class AmbulanceViewSet(mixins.CreateModelMixin,
-                       mixins.UpdateModelMixin,
-                       mixins.ListModelMixin,
+class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
+                       mixins.CreateModelMixin,
+                       mixins.UpdateModelMixin,
                        viewsets.GenericViewSet):
 
     #queryset = Ambulance.objects.all()
