@@ -41,7 +41,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    update_by = serializers.PrimaryKeyRelatedField(default=None)
+    update_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
+                                                   default=None)
     
     class Meta:
         model = Ambulance
