@@ -39,7 +39,179 @@ def point2str(point):
         return str(point)
     return point
 
-class CreateAmbulance(TestCase):
+class TestProfile(TestCase):
+
+    def setUp(self):
+
+        # Add users
+        self.u1 = User.objects.create_user(
+            username='admin',
+            email='admin@user.com',
+            password='admin',
+            is_superuser=True)
+        
+        self.u2 = User.objects.create_user(
+            username='testuser1',
+            email='test1@user.com',
+            password='top_secret')
+        
+        self.u3 = User.objects.create_user(
+            username='testuser2',
+            email='test2@user.com',
+            password='very_secret')
+        
+        # Add ambulances
+        self.a1 = Ambulance.objects.create(
+            identifier='BC-179',
+            comment='Maintenance due',
+            capability=AmbulanceCapability.B.name,
+            updated_by=self.u1)
+        
+        self.a2 = Ambulance.objects.create(
+            identifier='BC-180',
+            comment='Need painting',
+            capability=AmbulanceCapability.A.name,
+            updated_by=self.u1)
+
+        self.a3 = Ambulance.objects.create(
+            identifier='BC-181',
+            comment='Engine overhaul',
+            capability=AmbulanceCapability.R.name,
+            updated_by=self.u1)
+        
+        # Add hospitals
+        self.h1 = Hospital.objects.create(
+            name='Hospital General',
+            address="Don't know")
+        
+        self.h2 = Hospital.objects.create(
+            name='Hospital CruzRoja',
+            address='Forgot')
+
+        self.h3 = Hospital.objects.create(
+            name='Hospital Nuevo',
+            address='Not built yet')
+        
+        # add hospitals to users
+        self.u1.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=self.h1,
+                                              can_write=True),
+            HospitalPermission.objects.create(hospital=self.h3)
+        )
+        
+        self.u2.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=self.h1),
+            HospitalPermission.objects.create(hospital=self.h2,
+                                              can_write=True)
+        )
+
+        # u3 has no hospitals 
+        
+        # add ambulances to users
+        self.u1.profile.ambulances.add(
+            AmbulancePermission.objects.create(ambulance=self.a2,
+                                               can_write=True)
+        )
+        
+        # u2 has no ambulances
+        
+        self.u3.profile.ambulances.add(
+            AmbulancePermission.objects.create(ambulance=self.a1,
+                                               can_read=False),
+            AmbulancePermission.objects.create(ambulance=self.a3,
+                                               can_write=True)
+        )
+
+        #print('u1: {}\n{}'.format(self.u1, self.u1.profile))
+        #print('u2: {}\n{}'.format(self.u2, self.u2.profile))
+        #print('u3: {}\n{}'.format(self.u3, self.u3.profile))
+
+    def test_profile_serializer(self):
+
+        # test ProfileSerializer
+        for u in (self.u1, self.u2, self.u3):
+            serializer = ProfileSerializer(u.profile)
+            result = {
+                'ambulances': [
+                    {
+                        'ambulance_id': e.ambulance.pk,
+                        'ambulance_identifier': e.ambulance.identifier,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.ambulances.all()
+                ],
+                'hospitals': [
+                    {
+                        'hospital_id': e.hospital.pk,
+                        'hospital_name': e.hospital.name,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.hospitals.all()
+                ]
+            }
+            self.assertDictEqual(serializer.data, result)
+
+    def test_profile_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve own
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u1.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u3.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve own
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # logout
+        client.logout()
+
+class TestAmbulanceAmbulance1(TestCase):
 
     def setUp(self):
 
@@ -694,8 +866,8 @@ class CreateAmbulance(TestCase):
         
         # logout
         client.logout()
-        
-class CreateAmbulance2(TestCase):
+
+class TestAmbulance2(TestCase):
 
     def setUp(self):
         

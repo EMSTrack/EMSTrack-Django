@@ -1,32 +1,18 @@
-import django_filters.rest_framework
-#from django.core.urlresolvers import reverse_lazy
-from django.urls import reverse_lazy
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-
 from django.core.exceptions import PermissionDenied
-from django.views.generic import ListView, CreateView, UpdateView
-from braces import views
 
 from rest_framework import viewsets
-from rest_framework import filters
 from rest_framework import mixins
 from rest_framework import generics
+from rest_framework import filters
 
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
-from rest_framework.decorators import detail_route
 
-from .models import Ambulance, Call, Hospital, \
-    EquipmentCount, Base, AmbulanceRoute, \
-    Profile
-
-from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
+from .models import Ambulance, Profile
 
 from .serializers import ProfileSerializer, AmbulanceSerializer
 
-# DRF Viewsets
+# Django REST Framework Viewsets
 
 class IsUserOrAdminOrSuper(permissions.BasePermission):
     """
