@@ -794,7 +794,7 @@ class CreateAmbulance2(TestCase):
             'comment': 'no comments'
         })
         serializer.is_valid()
-        serializer.save(updated_by = self.u1.id)
+        serializer.save(updated_by = self.u1)
         
         # test AmbulanceSerializer
         a = Ambulance.objects.get(identifier='NEW-1897')
