@@ -41,7 +41,8 @@ def point2str(point):
 
 class TestSetup(TestCase):
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(self):
 
         # Add users
         self.u1 = User.objects.create_user(
