@@ -41,12 +41,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    updated_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(),
-                                                    default=None)
-    
     class Meta:
         model = Ambulance
         fields = '__all__'
+        read_only_fields = ('updated_by')
 
     def validate(self, data):
 
