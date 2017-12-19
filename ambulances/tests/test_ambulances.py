@@ -440,7 +440,7 @@ class TestAmbulanceAmbulance1(TestCase):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [ # AmbulanceSerializer(self.a1).data, # can't read
-                  AmbulanceSerializer(self.a3).data]
+                  AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data]
         self.assertEqual(result, answer)
         
         # logout
