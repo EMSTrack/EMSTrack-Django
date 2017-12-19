@@ -42,90 +42,90 @@ def point2str(point):
 class TestSetup(TestCase):
 
     @classmethod
-    def setUpTestData(self):
+    def setUpTestData(cls):
 
         # Add users
-        self.u1 = User.objects.create_user(
+        cls.u1 = User.objects.create_user(
             username='admin',
             email='admin@user.com',
             password='admin',
             is_superuser=True)
         
-        self.u2 = User.objects.create_user(
+        cls.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
         
-        self.u3 = User.objects.create_user(
+        cls.u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
         
         # Add ambulances
-        self.a1 = Ambulance.objects.create(
+        cls.a1 = Ambulance.objects.create(
             identifier='BC-179',
             comment='Maintenance due',
             capability=AmbulanceCapability.B.name,
-            updated_by=self.u1)
+            updated_by=cls.u1)
         
-        self.a2 = Ambulance.objects.create(
+        cls.a2 = Ambulance.objects.create(
             identifier='BC-180',
             comment='Need painting',
             capability=AmbulanceCapability.A.name,
-            updated_by=self.u1)
+            updated_by=cls.u1)
 
-        self.a3 = Ambulance.objects.create(
+        cls.a3 = Ambulance.objects.create(
             identifier='BC-181',
             comment='Engine overhaul',
             capability=AmbulanceCapability.R.name,
-            updated_by=self.u1)
+            updated_by=cls.u1)
         
         # Add hospitals
-        self.h1 = Hospital.objects.create(
+        cls.h1 = Hospital.objects.create(
             name='Hospital General',
             address="Don't know")
         
-        self.h2 = Hospital.objects.create(
+        cls.h2 = Hospital.objects.create(
             name='Hospital CruzRoja',
             address='Forgot')
 
-        self.h3 = Hospital.objects.create(
+        cls.h3 = Hospital.objects.create(
             name='Hospital Nuevo',
             address='Not built yet')
         
         # add hospitals to users
-        self.u1.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1,
+        cls.u1.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=cls.h1,
                                               can_write=True),
-            HospitalPermission.objects.create(hospital=self.h3)
+            HospitalPermission.objects.create(hospital=cls.h3)
         )
         
-        self.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1),
-            HospitalPermission.objects.create(hospital=self.h2,
+        cls.u2.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=cls.h1),
+            HospitalPermission.objects.create(hospital=cls.h2,
                                               can_write=True)
         )
 
         # u3 has no hospitals 
         
         # add ambulances to users
-        self.u1.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=self.a2,
+        cls.u1.profile.ambulances.add(
+            AmbulancePermission.objects.create(ambulance=cls.a2,
                                                can_write=True)
         )
         
         # u2 has no ambulances
         
-        self.u3.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=self.a1,
+        cls.u3.profile.ambulances.add(
+            AmbulancePermission.objects.create(ambulance=cls.a1,
                                                can_read=False),
-            AmbulancePermission.objects.create(ambulance=self.a3,
+            AmbulancePermission.objects.create(ambulance=cls.a3,
                                                can_write=True)
         )
 
-        #print('u1: {}\n{}'.format(self.u1, self.u1.profile))
-        #print('u2: {}\n{}'.format(self.u2, self.u2.profile))
-        #print('u3: {}\n{}'.format(self.u3, self.u3.profile))
+        #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
+        #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
+        #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
 class TestProfile(TestSetup):
 
