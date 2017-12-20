@@ -62,7 +62,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
 #                     'ambulance_identifier': p['ambulance__identifier'],
 #                     'can_read': p['can_read'],
 #                     'can_write': p['can_write']} for p in obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')]
-            serializer = AmbulancePermissionSerializer(obj.ambulances)
+            serializer = AmbulancePermissionSerializer(obj.ambulances, many=True)
             return serializer.data
         
     def get_hospitals(self, obj):
