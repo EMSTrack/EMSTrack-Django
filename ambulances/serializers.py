@@ -59,9 +59,9 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                      'can_write': p['can_write']} for p in Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField()))]
         else:
 #            return [{'ambulance_id': p['ambulance_id'],
-                     'ambulance_identifier': p['ambulance__identifier'],
-                     'can_read': p['can_read'],
-                     'can_write': p['can_write']} for p in obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')]
+#                     'ambulance_identifier': p['ambulance__identifier'],
+#                     'can_read': p['can_read'],
+#                     'can_write': p['can_write']} for p in obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')]
             serializer = AmbulancePermissionSerializer(obj)
             return serializer.data
         
