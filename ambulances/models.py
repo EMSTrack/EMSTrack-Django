@@ -66,7 +66,6 @@ class Ambulance(models.Model):
                                                AmbulanceCapability(self.capability).value,
                                                self.comment,
                                                AmbulanceStatus(self.status).value,
-                                               self.status,
                                                self.location,
                                                self.location_timestamp,
                                                self.updated_by,
