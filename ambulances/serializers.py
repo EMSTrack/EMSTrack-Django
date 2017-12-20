@@ -41,7 +41,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals', 'all_ambulances')
 
     def get_all_ambulances(self, obj):
-        return Ambulance.objects.all()
+        return Ambulance.objects.all().values('id','identifier')
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
