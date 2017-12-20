@@ -33,11 +33,16 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     ambulances = AmbulancePermissionSerializer(read_only=True, many=True)
     hospitals = HospitalPermissionSerializer(read_only=True, many=True)
+
+    all_ambulances = serializers.SerializerMethodField()
     
     class Meta:
         model = Profile
-        fields = ('ambulances','hospitals')
+        fields = ('ambulances', 'hospitals', 'all_ambulances')
 
+    def get_all_ambulances(self, obj):
+        return Ambulance.objects.all()
+        
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
