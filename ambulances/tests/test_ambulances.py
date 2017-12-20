@@ -161,6 +161,8 @@ class TestProfile(TestSetup):
         self.maxDiff = None
         
         # test ProfileSerializer
+
+        # regular users is just like ProfileSerializer
         for u in (self.u2, self.u3):
             serializer = ExtendedProfileSerializer(u.profile)
             result = {
@@ -185,6 +187,7 @@ class TestProfile(TestSetup):
             }
             self.assertDictEqual(serializer.data, result)
 
+        # super will see all ambulances and hospitals
         u = self.u1
         serializer = ExtendedProfileSerializer(u.profile)
         result = {
@@ -195,7 +198,7 @@ class TestProfile(TestSetup):
                     'can_read': True,
                     'can_write': True
                 }
-                for e in Ambulances.objects.all()
+                for e in Ambulance.objects.all()
             ],
             'hospitals': [
                 {
