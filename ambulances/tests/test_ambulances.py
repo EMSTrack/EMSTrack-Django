@@ -158,6 +158,8 @@ class TestProfile(TestSetup):
 
     def test_extended_profile_serializer(self):
 
+        self.maxDiff = None
+        
         # test ProfileSerializer
         for u in (self.u2, self.u3):
             serializer = ExtendedProfileSerializer(u.profile)
@@ -185,8 +187,6 @@ class TestProfile(TestSetup):
 
     def test_profile_viewset(self):
 
-        self.maxDiff = None
-        
         # instantiate client
         client = Client()
 
