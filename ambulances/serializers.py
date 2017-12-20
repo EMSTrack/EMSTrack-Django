@@ -42,6 +42,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals') #, 'all_ambulances')
 
     def get_all_ambulances(self, obj):
+        #if obj.user.is_superuser:
         return Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField()))
         
 # Ambulance serializers
