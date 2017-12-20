@@ -58,8 +58,8 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             print(obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write'))
             return [{'ambulance_id': p['ambulance_id'],
                      'ambulance_identifier': p['ambulance__identifier'],
-                     'can_read': p.can_read,
-                     'can_write': p.can_write} for p in obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')]
+                     'can_read': p['can_read'],
+                     'can_write': p['can_write']} for p in obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')]
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
