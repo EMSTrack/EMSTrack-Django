@@ -183,6 +183,8 @@ class TestProfile(TestSetup):
                     for e in u.profile.hospitals.all()
                 ]
             }
+            print('< answer = {}'.format(serializer.data))
+            print('> result = {}'.format(result))
             self.assertDictEqual(serializer.data, result)
 
     def test_profile_viewset(self):
