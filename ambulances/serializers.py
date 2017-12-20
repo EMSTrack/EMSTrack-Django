@@ -35,11 +35,11 @@ class ProfileSerializer(serializers.ModelSerializer):
     ambulances = AmbulancePermissionSerializer(read_only=True, many=True)
     hospitals = HospitalPermissionSerializer(read_only=True, many=True)
 
-    all_ambulances = serializers.SerializerMethodField()
+    #all_ambulances = serializers.SerializerMethodField()
     
     class Meta:
         model = Profile
-        fields = ('ambulances', 'hospitals', 'all_ambulances')
+        fields = ('ambulances', 'hospitals') #, 'all_ambulances')
 
     def get_all_ambulances(self, obj):
         return Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField()))
