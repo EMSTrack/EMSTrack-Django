@@ -158,6 +158,8 @@ class TestProfile(TestSetup):
 
     def test_profile_viewset(self):
 
+        self.maxDiff = None
+        
         # instantiate client
         client = Client()
 
