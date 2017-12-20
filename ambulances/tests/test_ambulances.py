@@ -190,12 +190,12 @@ class TestProfile(TestSetup):
         result = {
             'ambulances': [
                 {
-                    'ambulance_id': e.ambulance.pk,
-                    'ambulance_identifier': e.ambulance.identifier,
-                    'can_read': e.can_read,
-                    'can_write': e.can_write
+                    'ambulance_id': e.pk,
+                    'ambulance_identifier': e.identifier,
+                    'can_read': True,
+                    'can_write': True
                 }
-                for e in u.profile.ambulances.all()
+                for e in Ambulances.objects.all()
             ],
             'hospitals': [
                 {
