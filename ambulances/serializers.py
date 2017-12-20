@@ -53,23 +53,21 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
 
     def get_ambulances(self, obj):
         if obj.user.is_superuser:
-            return ({'ambulance_id': p['id'],
+            return [{'ambulance_id': p['id'],
                      'ambulance_identifier': p['identifier'],
                      'can_read': True,
-                     'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier'))
+                     'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')]
         else:
-            serializer = AmbulancePermissionSerializer(obj.ambulances, many=True)
-            return serializer.data
+            return AmbulancePermissionSerializer(obj.ambulances, many=True).data
         
     def get_hospitals(self, obj):
         if obj.user.is_superuser:
-            return ({'hospital_id': p['id'],
+            return [{'hospital_id': p['id'],
                      'hospital_name': p['name'],
                      'can_read': True,
-                     'can_write': True} for p in Hospital.objects.all().values('id', 'name'))
+                     'can_write': True} for p in Hospital.objects.all().values('id', 'name')]
         else:
-            serializer = HospitalPermissionSerializer(obj.hospitals, many=True)
-            return serializer.data
+            return HospitalPermissionSerializer(obj.hospitals, many=True).data
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
