@@ -3,6 +3,7 @@ from drf_extra_fields.geo_fields import PointField as PointFieldSerializer
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
+import django.db.models as models
 
 from .models import Profile, Hospital, Ambulance, \
     AmbulancePermission, HospitalPermission
@@ -41,7 +42,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals', 'all_ambulances')
 
     def get_all_ambulances(self, obj):
-        return Ambulance.objects.all().values('id','identifier').annotate(can_read=True, can_write=True)
+        return Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField()))
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
