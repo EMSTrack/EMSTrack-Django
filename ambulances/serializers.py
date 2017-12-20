@@ -45,7 +45,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ExtendedProfileSerializer(serializers.ModelSerializer):
 
     ambulances = serializers.SerializerMethodField()
-    hospitals = HospitalPermissionSerializer(read_only=True, many=True)
+    hospitals = serializers.SerializerMethodField()
     
     class Meta:
         model = Profile
@@ -62,6 +62,18 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                      'ambulance_identifier': p['ambulance__identifier'],
                      'can_read': p['can_read'],
                      'can_write': p['can_write']} for p in obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')]
+        
+    def get_hospitals(self, obj):
+        if obj.user.is_superuser:
+            return [{'hospital_id': p['id'],
+                     'hospital_name': p['name'],
+                     'can_read': p['can_read'],
+                     'can_write': p['can_write']} for p in Hospital.objects.all().values('id', 'name').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField()))]
+        else:
+            return [{'hospital_id': p['hospital_id'],
+                     'hospital_name': p['hospital__name'],
+                     'can_read': p['can_read'],
+                     'can_write': p['can_write']} for p in obj.hospitals.values('hospital_id', 'hospital__name', 'can_read', 'can_write')]
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):

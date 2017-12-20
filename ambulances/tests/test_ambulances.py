@@ -202,16 +202,14 @@ class TestProfile(TestSetup):
             ],
             'hospitals': [
                 {
-                    'hospital_id': e.hospital.pk,
-                    'hospital_name': e.hospital.name,
-                    'can_read': e.can_read,
-                    'can_write': e.can_write
+                    'hospital_id': e.pk,
+                    'hospital_name': e.name,
+                    'can_read': True,
+                    'can_write': True
                 }
-                for e in u.profile.hospitals.all()
+                for e in Hospital.objects.all()
             ]
         }
-        print('< answer = {}'.format(serializer.data))
-        print('> result = {}'.format(result))
         self.assertDictEqual(serializer.data, result)
             
 
