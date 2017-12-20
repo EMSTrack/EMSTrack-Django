@@ -138,7 +138,7 @@ class TestProfile(TestSetup):
                 'ambulances': [
                     {
                         'ambulance_id': e.ambulance.pk,
-                        'ambulance_identifier': e.ambulance.identifier,
+                        'ambulance__identifier': e.ambulance.identifier,
                         'can_read': e.can_read,
                         'can_write': e.can_write
                     }
@@ -147,7 +147,7 @@ class TestProfile(TestSetup):
                 'hospitals': [
                     {
                         'hospital_id': e.hospital.pk,
-                        'hospital_name': e.hospital.name,
+                        'hospital__name': e.hospital.name,
                         'can_read': e.can_read,
                         'can_write': e.can_write
                     }
@@ -167,7 +167,7 @@ class TestProfile(TestSetup):
                 'ambulances': [
                     {
                         'ambulance_id': e.ambulance.pk,
-                        'ambulance_identifier': e.ambulance.identifier,
+                        'ambulance__identifier': e.ambulance.identifier,
                         'can_read': e.can_read,
                         'can_write': e.can_write
                     }
@@ -176,7 +176,7 @@ class TestProfile(TestSetup):
                 'hospitals': [
                     {
                         'hospital_id': e.hospital.pk,
-                        'hospital_name': e.hospital.name,
+                        'hospital__name': e.hospital.name,
                         'can_read': e.can_read,
                         'can_write': e.can_write
                     }
