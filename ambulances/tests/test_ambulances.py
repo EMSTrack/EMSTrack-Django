@@ -14,7 +14,7 @@ from ambulances.models import Ambulance, \
     Hospital
 
 from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer 
+    AmbulanceSerializer, ExtendedProfileSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
@@ -134,6 +134,33 @@ class TestProfile(TestSetup):
         # test ProfileSerializer
         for u in (self.u1, self.u2, self.u3):
             serializer = ProfileSerializer(u.profile)
+            result = {
+                'ambulances': [
+                    {
+                        'ambulance_id': e.ambulance.pk,
+                        'ambulance_identifier': e.ambulance.identifier,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.ambulances.all()
+                ],
+                'hospitals': [
+                    {
+                        'hospital_id': e.hospital.pk,
+                        'hospital_name': e.hospital.name,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.hospitals.all()
+                ]
+            }
+            self.assertDictEqual(serializer.data, result)
+
+    def test_extended_profile_serializer(self):
+
+        # test ProfileSerializer
+        for u in (self.u2, self.u3):
+            serializer = ExtendedProfileSerializer(u.profile)
             result = {
                 'ambulances': [
                     {
