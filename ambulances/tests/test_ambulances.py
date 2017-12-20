@@ -183,9 +183,34 @@ class TestProfile(TestSetup):
                     for e in u.profile.hospitals.all()
                 ]
             }
-            print('< answer = {}'.format(serializer.data))
-            print('> result = {}'.format(result))
             self.assertDictEqual(serializer.data, result)
+
+        u = self.u1
+        serializer = ExtendedProfileSerializer(u.profile)
+        result = {
+            'ambulances': [
+                {
+                    'ambulance_id': e.ambulance.pk,
+                    'ambulance_identifier': e.ambulance.identifier,
+                    'can_read': e.can_read,
+                    'can_write': e.can_write
+                }
+                for e in u.profile.ambulances.all()
+            ],
+            'hospitals': [
+                {
+                    'hospital_id': e.hospital.pk,
+                    'hospital_name': e.hospital.name,
+                    'can_read': e.can_read,
+                    'can_write': e.can_write
+                }
+                for e in u.profile.hospitals.all()
+            ]
+        }
+        print('< answer = {}'.format(serializer.data))
+        print('> result = {}'.format(result))
+        self.assertDictEqual(serializer.data, result)
+            
 
     def test_profile_viewset(self):
 
