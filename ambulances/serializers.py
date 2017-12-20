@@ -18,7 +18,7 @@ class AmbulancePermissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = AmbulancePermission
         fields = ('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')
-        read_only_fields = ('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')
+        read_only_fields = ('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')
 
 class HospitalPermissionSerializer(serializers.ModelSerializer):
 
