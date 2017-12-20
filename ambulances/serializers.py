@@ -53,9 +53,9 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
 
     def get_ambulances(self, obj):
         if obj.user.is_superuser:
-            return Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField()))
+            return list(Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField())))
         else:
-            return obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')
+            return list(obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write'))
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
