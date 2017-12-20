@@ -13,7 +13,7 @@ from .models import Profile, Hospital, Ambulance, \
 class AmbulancePermissionSerializer(serializers.ModelSerializer):
 
     ambulance_id = serializers.IntegerField(source='ambulance.id')
-    ambulance_identifier = serializers.CharField(source='ambulance.identifier')
+    ambulance__identifier = serializers.CharField(source='ambulance.identifier')
     
     class Meta:
         model = AmbulancePermission
@@ -23,7 +23,7 @@ class AmbulancePermissionSerializer(serializers.ModelSerializer):
 class HospitalPermissionSerializer(serializers.ModelSerializer):
 
     hospital_id = serializers.IntegerField(source='hospital.id')
-    hospital_name = serializers.CharField(source='hospital.name')
+    hospital__name = serializers.CharField(source='hospital.name')
     
     class Meta:
         model = HospitalPermission
