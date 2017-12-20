@@ -13,22 +13,22 @@ from .models import Profile, Hospital, Ambulance, \
 class AmbulancePermissionSerializer(serializers.ModelSerializer):
 
     ambulance_id = serializers.IntegerField(source='ambulance.id')
-    ambulance__identifier = serializers.CharField(source='ambulance.identifier')
+    ambulance_identifier = serializers.CharField(source='ambulance.identifier')
     
     class Meta:
         model = AmbulancePermission
-        fields = ('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')
-        read_only_fields = ('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write')
+        fields = ('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')
+        read_only_fields = ('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')
 
 class HospitalPermissionSerializer(serializers.ModelSerializer):
 
     hospital_id = serializers.IntegerField(source='hospital.id')
-    hospital__name = serializers.CharField(source='hospital.name')
+    hospital_name = serializers.CharField(source='hospital.name')
     
     class Meta:
         model = HospitalPermission
-        fields = ('hospital_id', 'hospital__name', 'can_read', 'can_write')
-        read_only_fields = ('hospital_id', 'hospital__name', 'can_read', 'can_write')
+        fields = ('hospital_id', 'hospital_name', 'can_read', 'can_write')
+        read_only_fields = ('hospital_id', 'hospital_name', 'can_read', 'can_write')
         
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -55,7 +55,10 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         if obj.user.is_superuser:
             return list(Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField())))
         else:
-            return list(obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write').annotate(ambulance_identifier='ambulance__identifier'))
+            return [{'ambulance_id': p.ambulance_id,
+                     'ambulance_identifier': p.ambulance__identifier,
+                     'can_read': p.can_read,
+                     'can_write': p.can_write} for p in obj.ambulances.values('ambulance_id', 'ambulance_identifier', 'can_read', 'can_write')]
         
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
