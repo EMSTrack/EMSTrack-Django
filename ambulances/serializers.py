@@ -55,6 +55,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         if obj.user.is_superuser:
             return list(Ambulance.objects.all().values('id', 'identifier').annotate(can_read=models.Value(True,models.BooleanField()), can_write=models.Value(True,models.BooleanField())))
         else:
+            print(obj.ambulances.values('ambulance_id', 'ambulance__identifier', 'can_read', 'can_write'))
             return [{'ambulance_id': p.ambulance_id,
                      'ambulance_identifier': p.ambulance__identifier,
                      'can_read': p.can_read,
