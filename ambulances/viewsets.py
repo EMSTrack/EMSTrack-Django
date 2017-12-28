@@ -30,7 +30,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
                      viewsets.GenericViewSet):
 
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = ExtendedProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
     lookup_field = 'user__username'
