@@ -226,7 +226,7 @@ class TestProfile(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u1.profile).data
+        answer = ExtendedProfileSerializer(self.u1.profile).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
@@ -234,7 +234,7 @@ class TestProfile(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u2.profile).data
+        answer = ExtendedProfileSerializer(self.u2.profile).data
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
@@ -242,7 +242,7 @@ class TestProfile(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u3.profile).data
+        answer = ExtendedProfileSerializer(self.u3.profile).data
         self.assertDictEqual(result, answer)
         
         # logout
@@ -256,7 +256,7 @@ class TestProfile(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ProfileSerializer(self.u2.profile).data
+        answer = ExtendedProfileSerializer(self.u2.profile).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
