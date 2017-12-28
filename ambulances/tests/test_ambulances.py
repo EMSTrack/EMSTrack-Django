@@ -222,7 +222,7 @@ class TestProfile(TestSetup):
         client.login(username='admin', password='admin')
 
         # retrieve own
-        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.id)),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
