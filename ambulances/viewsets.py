@@ -33,7 +33,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     serializer_class = ProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
-    lookup_field = ('username',)
+    lookup_field = 'username'
 
 # Ambulance viewset
 
