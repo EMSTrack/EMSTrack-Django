@@ -23,6 +23,8 @@
             <th>Status</th>
             <th>Location</th>
             <th>Comments</th>
+            <th>Updated on</th>
+            <th>by</th>
           </tr>
         </thead>
         <tbody>
@@ -44,6 +46,12 @@
 	    </td>
             <td>
 	      {{ ambulance.comment }}
+	    </td>
+            <td>
+	      {{ ambulance.updated_on }}
+	    </td>
+            <td>
+	      {{ ambulance.updated_by.username }}
 	    </td>
           </tr>
           {% endfor %}
