@@ -44,7 +44,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
     #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
-
+    lookup_fields = ('username',)
+    
     def get_queryset(self):
 
         #print('@get_queryset {}({})'.format(self.request.user,
