@@ -24,6 +24,7 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
                 request.user.is_staff or
                 obj.user == request.user)
 
+
 # Profile viewset
 
 class ProfileViewSet(mixins.RetrieveModelMixin,
@@ -34,6 +35,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
     lookup_field = 'user__username'
+
 
 # Ambulance viewset
 
@@ -88,3 +90,5 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         #print('@perform_update')
         serializer.save(updated_by=self.request.user)
 
+
+# Hospital viewset

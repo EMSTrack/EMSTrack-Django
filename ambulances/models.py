@@ -99,7 +99,11 @@ class Hospital(models.Model):
     location = models.PointField(srid=4326, null=True, blank=True)
     
     def __str__(self):
-        return "{}: {} ({})".format(self.id, self.name, self.address)
+        return ('> Hospital {}\n' +
+                '   Address: {}\n' +
+                '  Location: {}'.format(self.name,
+                                        self.address,
+                                        self.location))
 
 class HospitalPermission(models.Model):
     hospital = models.ForeignKey(Hospital,
@@ -113,6 +117,42 @@ class HospitalPermission(models.Model):
                                                        self.can_read,
                                                        self.can_write)
     
+class EquipmentType(Enum):
+    B = 'Boolean'
+    I = 'Integer'
+    S = 'String'
+    
+class Equipment(models.Model):
+    name = models.CharField(max_length=254)
+
+    EQUIPMENT_ETYPE_CHOICES = \
+        [(m.name, m.value) for m in EquipmentType]
+    etype = models.CharField(max_length=1,
+                             choices = EQUIPMENT_ETYPE_CHOICES)
+    
+    toggleable = models.BooleanField(default=0)
+
+    def __str__(self):
+        return "{}: {} ({})".format(self.id, self.name, self.toggleable)
+
+class HospitalEquipment(models.Model):
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE)
+    equipment = models.ForeignKey(Equipment,
+                                  on_delete=models.CASCADE)
+
+    value = models.CharField(max_length=254)
+    comment = models.CharField(max_length=254)
+    
+    quantity = models.IntegerField()
+    
+    class Meta:
+        unique_together = ('hospital', 'equipment',)
+
+    def __str__(self):
+        return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.quantity)
+
+
 # Profile and state
 
 class Profile(models.Model):
@@ -177,26 +217,6 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
-
-class Equipment(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=254)
-    toggleable = models.BooleanField(default=0)
-
-    def __str__(self):
-        return "{}: {} ({})".format(self.id, self.name, self.toggleable)
-
-class EquipmentCount(models.Model):
-    id = models.AutoField(primary_key=True)
-    hospital = models.ForeignKey(Hospital, related_name='equipment',on_delete=models.CASCADE, null=True)
-    equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-
-    class Meta:
-        unique_together = ('hospital', 'equipment',)
-
-    def __str__(self):
-        return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.quantity)
 
 
 class Base(models.Model):

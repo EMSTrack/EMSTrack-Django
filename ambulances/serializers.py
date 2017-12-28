@@ -119,3 +119,12 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)
+
+
+# Hospital serializers
+class HospitalSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Hospital
+        fields = '__all__'
+        read_only_fields = ('updated_by',)
