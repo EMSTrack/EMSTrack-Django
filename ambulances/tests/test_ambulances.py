@@ -230,7 +230,7 @@ class TestProfile(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.id)),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -238,7 +238,7 @@ class TestProfile(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.id)),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -252,7 +252,7 @@ class TestProfile(TestSetup):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.id)),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u2.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -260,11 +260,11 @@ class TestProfile(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.id)),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.username)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
-        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.id)),
+        response = client.get('/ambulances/api/profile/{}/'.format(str(self.u3.username)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
         
