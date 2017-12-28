@@ -19,7 +19,7 @@ from rest_framework import permissions
 from rest_framework.decorators import detail_route
 
 from .models import Ambulance, Call, Hospital, \
-    EquipmentCount, Base, AmbulanceRoute, \
+    HospitalEquipment, Base, AmbulanceRoute, \
     Profile
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
