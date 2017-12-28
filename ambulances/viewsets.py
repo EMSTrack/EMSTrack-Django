@@ -33,6 +33,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     serializer_class = ProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
+    lookup_fields = ('username',)
 
 # Ambulance viewset
 
@@ -44,7 +45,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
     #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
-    lookup_fields = ('username',)
     
     def get_queryset(self):
 
