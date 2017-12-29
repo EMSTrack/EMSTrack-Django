@@ -1235,7 +1235,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-f.h2.id,equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data,
             HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data
         ]
         self.assertCountEqual(result, answer)
