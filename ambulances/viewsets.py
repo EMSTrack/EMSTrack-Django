@@ -154,6 +154,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
     # make sure both fields are looked up
     def get_object(self):
+        print('> get_object {}'.format(self.kwargs))
         queryset = self.get_queryset()
         filter = {}
         for field in self.lookup_fields:
