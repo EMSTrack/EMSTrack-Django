@@ -8,7 +8,7 @@ from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 
-from .models import Ambulance, Profile
+from .models import Ambulance, Hospital, Profile
 
 from .serializers import ExtendedProfileSerializer, \
     AmbulanceSerializer, HospitalSerializer
