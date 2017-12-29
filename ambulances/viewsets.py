@@ -134,6 +134,7 @@ class HospitalViewSet(mixins.ListModelMixin,
 
         print('user = {}, can_do = {}'.format(user, can_do))
         print('hospitals = {}'.format(Hospital.objects.all()))
+        print('filtered hospitals = {}'.format(Hospital.objects.filter(id__in=can_do)))
         return Hospital.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
