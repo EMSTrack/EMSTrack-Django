@@ -43,6 +43,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
 class AmbulancePermissionViewSet(viewsets.GenericViewSet):
 
+    filter_field = 'id'
     queryset = Ambulance.objects.all()
     
     def get_queryset(self):
@@ -77,7 +78,9 @@ class AmbulancePermissionViewSet(viewsets.GenericViewSet):
         #print('> user = {}, can_do = {}'.format(user, can_do))
         #print('> ambulances = {}'.format(Ambulance.objects.all()))
         #print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
-        return self.queryset.filter(id__in=can_do)
+        filter = {}
+        filter[self.filter_field + '__in'] = can_do
+        return self.queryset.filter(**filter)
 
 
 # HospitalPermission
