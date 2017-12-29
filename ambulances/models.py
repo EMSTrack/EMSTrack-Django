@@ -59,10 +59,11 @@ class Ambulance(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return ('> Ambulance {} ({}) [{}]:\n' +
+        return ('> Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
+                                               self.id,
                                                AmbulanceCapability[self.capability].value,
                                                self.comment,
                                                AmbulanceStatus[self.status].value,
@@ -94,6 +95,7 @@ class AmbulancePermission(models.Model):
 # Hospital model
 
 class Hospital(models.Model):
+    
     name = models.CharField(max_length=254, default="")
     address = models.CharField(max_length=254, default="")
     location = models.PointField(srid=4326, null=True, blank=True)
@@ -103,10 +105,11 @@ class Hospital(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return ('> Hospital {}\n' +
+        return ('> Hospital {}(id={})\n' +
                 '   Address: {}\n' +
                 '  Location: {}\n' +
                 '   Updated: {} by {}').format(self.name,
+                                               self.id,
                                                self.address,
                                                self.location,
                                                self.updated_by,
