@@ -73,6 +73,7 @@ class Ambulance(models.Model):
                                                self.updated_on)
 
 class AmbulanceRoute(models.Model):
+
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
@@ -81,6 +82,7 @@ class AmbulanceRoute(models.Model):
     #points = models.ManyToManyField(AmbulanceUpdate)
     
 class AmbulancePermission(models.Model):
+
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
     can_read = models.BooleanField(default=True)
@@ -116,6 +118,7 @@ class Hospital(models.Model):
                                                self.updated_on)
 
 class HospitalPermission(models.Model):
+
     hospital = models.ForeignKey(Hospital,
                                   on_delete=models.CASCADE)
     can_read = models.BooleanField(default=True)
@@ -133,7 +136,8 @@ class EquipmentType(Enum):
     S = 'String'
     
 class Equipment(models.Model):
-    name = models.CharField(max_length=254)
+
+    name = models.CharField(max_length=254, unique=True)
 
     EQUIPMENT_ETYPE_CHOICES = \
         [(m.name, m.value) for m in EquipmentType]
@@ -145,7 +149,9 @@ class Equipment(models.Model):
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.toggleable)
 
+
 class HospitalEquipment(models.Model):
+
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment,
@@ -170,6 +176,7 @@ class HospitalEquipment(models.Model):
 # Profile and state
 
 class Profile(models.Model):
+
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
     ambulances = models.ManyToManyField(AmbulancePermission)
@@ -182,6 +189,7 @@ class Profile(models.Model):
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
     
 class State(models.Model):
+
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
@@ -194,6 +202,7 @@ class State(models.Model):
 # THESE NEED REVISING
     
 class Call(models.Model):
+
     #call metadata (status not required for now)
     active = models.BooleanField(default=False)
     status = models.CharField(max_length=254, default= "", blank=True)

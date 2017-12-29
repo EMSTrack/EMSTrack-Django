@@ -95,6 +95,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
 
 # Hospital viewset
+
 class HospitalViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
                       mixins.CreateModelMixin,
@@ -145,3 +146,15 @@ class HospitalViewSet(mixins.ListModelMixin,
     def perform_update(self, serializer):
 
         serializer.save(updated_by=self.request.user)
+
+# HospitalEquipment viewset
+
+class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
+                               viewsets.GenericViewSet):
+    
+    queryset = Profile.objects.all()
+    serializer_class = ExtendedProfileSerializer
+    permission_classes = (permissions.IsAuthenticated,
+                          IsUserOrAdminOrSuper,)
+    lookup_field = 'user__username'
+        
