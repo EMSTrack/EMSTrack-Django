@@ -1209,3 +1209,46 @@ class TestHospitalEquipment(TestSetup):
         
         # logout
         client.logout()
+
+    def test_hospital_equipment_list_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve all hospital equipment
+        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e2.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h3.id,equipment=self.e1.id)).data
+        ]
+        self.assertCountEqual(result, answer)
+
+        # retrieve inexistent
+        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(1000),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # logout
+        client.logout()
+        

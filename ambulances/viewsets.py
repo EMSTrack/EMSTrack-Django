@@ -141,7 +141,8 @@ class HospitalViewSet(mixins.ListModelMixin,
     
 # HospitalEquipment viewset
 
-class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
+class HospitalEquipmentViewSet(mixins.ListModelMixin,
+                               mixins.RetrieveModelMixin,
                                HospitalPermissionViewSet):
     
     filter_field = 'hospital_id'
