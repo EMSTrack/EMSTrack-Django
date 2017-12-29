@@ -919,24 +919,26 @@ class TestHospital1(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
-        # retrieve own
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+        # retrieve own's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
-        # can't read
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
-                              follow=True)
-        self.assertEqual(response.status_code, 404)
-        
         # logout
         client.logout()
 
@@ -953,7 +955,8 @@ class TestHospital1(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
