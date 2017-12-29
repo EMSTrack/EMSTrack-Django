@@ -73,15 +73,14 @@ class AmbulanceViewSet(mixins.ListModelMixin,
               self.request.method == 'PATCH' or
               self.request.method == 'DELETE'):
             # ambulances that the user can write to
-            can_do = user.profile.ambulances.filter(can_write=True)
+            can_do = user.profile.ambulances.filter(can_write=True).values('ambulance_id')
             
         else:
             raise PermissionDenied()
 
-        print('> user = {}, can_do = {}'.format(user, can_do))
-        print('> ambulances = {}'.format(Ambulance.objects.all()))
-        print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
-        print('> filtered ambulances query = {}'.format(Ambulance.objects.filter(id__in=can_do).query))
+        #print('> user = {}, can_do = {}'.format(user, can_do))
+        #print('> ambulances = {}'.format(Ambulance.objects.all()))
+        #print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
         return Ambulance.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
@@ -130,7 +129,7 @@ class HospitalViewSet(mixins.ListModelMixin,
               self.request.method == 'PATCH' or
               self.request.method == 'DELETE'):
             # hospitals that the user can write to
-            can_do = user.profile.hospitals.filter(can_write=True)
+            can_do = user.profile.hospitals.filter(can_write=True).values('hospital_id')
             
         else:
             raise PermissionDenied()
@@ -138,7 +137,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         print('> user = {}, can_do = {}'.format(user, can_do))
         print('> hospitals = {}'.format(Hospital.objects.all()))
         print('> filtered hospitals = {}'.format(Hospital.objects.filter(id__in=can_do)))
-        print('> filtered hospitals query = {}'.format(Hospital.objects.filter(id__in=can_do).query))
+        # print('> filtered hospitals query = {}'.format(Hospital.objects.filter(id__in=can_do).query))
         return Hospital.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
