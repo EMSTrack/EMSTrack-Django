@@ -122,13 +122,13 @@ class HospitalViewSet(mixins.ListModelMixin,
         # otherwise only return hospitals that the user can read or write to
         if self.request.method == 'GET':
             # hospitals that the user can read
-            can_do = user.profile.hospitals.filter(can_read=True).values('hospital_id')
+            can_do = user.profile.hospitals.filter(can_read=True)#.values('hospital_id')
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
               self.request.method == 'DELETE'):
             # hospitals that the user can write to
-            can_do = user.profile.hospitals.filter(can_write=True).values('hospital_id')
+            can_do = user.profile.hospitals.filter(can_write=True)#.values('hospital_id')
             
         else:
             raise PermissionDenied()
