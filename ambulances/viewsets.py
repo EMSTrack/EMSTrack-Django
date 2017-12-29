@@ -1,13 +1,10 @@
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
-from rest_framework import viewsets
-from rest_framework import mixins
-from rest_framework import generics
-from rest_framework import filters
-
+from rest_framework import viewsets, mixins, generics, filters, permissions
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
+from rest_framework.response import Response
 
 from .models import Ambulance, Hospital, Profile, HospitalEquipment
 
@@ -138,6 +135,16 @@ class HospitalViewSet(mixins.ListModelMixin,
                       HospitalPermissionViewSet):
     
     serializer_class = HospitalSerializer
+
+    @list_route()
+    def metadata(self, request):
+
+        qset = self.get_queryset()
+        equipment = Equipment.objects.filter(id__in=qset)
+        serializer = EquipmentMetadataSerializer(equipment)
+        return Response(serializer.data)
+    
+
     
 # HospitalEquipment viewset
 

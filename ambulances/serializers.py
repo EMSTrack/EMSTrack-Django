@@ -170,3 +170,10 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
                   'value', 'comment',
                   'updated_by', 'updated_on')
         read_only_fields = ('updated_by',)
+
+# EquipmentMetadata serializer
+class EquipmentMetadata(serializers.ModelSerializer)
+
+    class Meta:
+        model = Equipment
+        fields = '__all__'
