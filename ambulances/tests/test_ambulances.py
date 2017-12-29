@@ -391,7 +391,7 @@ class TestAmbulance1(TestSetup):
         answer = [AmbulanceSerializer(self.a1).data,
                   AmbulanceSerializer(self.a2).data,
                   AmbulanceSerializer(self.a3).data]
-        self.assertEqual(result, answer)
+        self.assertCountEqual(result, answer)
         
         # logout
         client.logout()
@@ -405,7 +405,7 @@ class TestAmbulance1(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = []
-        self.assertEqual(result, answer)
+        self.assertCountEqual(result, answer)
         
         # logout
         client.logout()
@@ -420,7 +420,7 @@ class TestAmbulance1(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         answer = [ # AmbulanceSerializer(self.a1).data, # can't read
                   AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data]
-        self.assertEqual(result, answer)
+        self.assertCountEqual(result, answer)
         
         # logout
         client.logout()
@@ -881,7 +881,7 @@ class TestHospital1(TestSetup):
             }
             self.assertDictEqual(serializer.data, result)
 
-    def _test_hospital_get_viewset(self):
+    def test_hospital_get_viewset(self):
 
         # instantiate client
         client = Client()
@@ -980,7 +980,7 @@ class TestHospital1(TestSetup):
         answer = [HospitalSerializer(self.h1).data,
                   HospitalSerializer(self.h2).data,
                   HospitalSerializer(self.h3).data]
-        self.assertEqual(result, answer)
+        self.assertCountEqual(result, answer)
         
         # logout
         client.logout()
@@ -994,8 +994,8 @@ class TestHospital1(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data,
-            HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
+            HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data,
+            HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
         ]
         self.assertCountEqual(result, answer)
         
@@ -1011,7 +1011,7 @@ class TestHospital1(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = []
-        self.assertEqual(result, answer)
+        self.assertCountEqual(result, answer)
         
         # logout
         client.logout()
