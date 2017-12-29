@@ -86,42 +86,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.UpdateModelMixin,
                        AmbulancePermissionViewSet):
 
-    #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
-    
-    def _get_queryset(self):
-
-        #print('@get_queryset {}({})'.format(self.request.user,
-        #                                    self.request.method))
-        
-        # return all ambulances if superuser
-        user = self.request.user
-        if user.is_superuser:
-            return Ambulance.objects.all()
-
-        # return nothing if anonymous
-        if user.is_anonymous:
-            raise PermissionDenied()
-
-        # print('> METHOD = {}'.format(self.request.method))
-        # otherwise only return ambulances that the user can read or write to
-        if self.request.method == 'GET':
-            # ambulances that the user can read
-            can_do = user.profile.ambulances.filter(can_read=True).values('ambulance_id')
-
-        elif (self.request.method == 'PUT' or
-              self.request.method == 'PATCH' or
-              self.request.method == 'DELETE'):
-            # ambulances that the user can write to
-            can_do = user.profile.ambulances.filter(can_write=True).values('ambulance_id')
-            
-        else:
-            raise PermissionDenied()
-
-        #print('> user = {}, can_do = {}'.format(user, can_do))
-        #print('> ambulances = {}'.format(Ambulance.objects.all()))
-        #print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
-        return Ambulance.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
         
