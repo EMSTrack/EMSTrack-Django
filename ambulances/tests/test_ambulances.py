@@ -108,7 +108,7 @@ class TestSetup(TestCase):
             etype=EquipmentType.I.name)
         
         cls.e3 = Equipment.objects.create(
-            name='MRI - Ressonance',
+            name='MRI - Ressonance',     # name with space!
             etype=EquipmentType.B.name,
             toggleable=True)
 
