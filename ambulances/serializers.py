@@ -7,7 +7,7 @@ import django.db.models as models
 
 from .models import Profile, \
     AmbulancePermission, Ambulance, \
-    HospitalPermission, Hospital, HospitalEquipment
+    HospitalPermission, Hospital, Equipment, HospitalEquipment
 
 # Profile serializers
 
