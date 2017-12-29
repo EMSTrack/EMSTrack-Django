@@ -154,7 +154,7 @@ class HospitalEquipment(models.Model):
     value = models.CharField(max_length=254)
     comment = models.CharField(max_length=254)
     
-    quantity = models.IntegerField()
+    quantity = models.IntegerField(default=0)
     
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
