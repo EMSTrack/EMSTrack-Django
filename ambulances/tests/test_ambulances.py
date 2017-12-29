@@ -1055,7 +1055,7 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
-class TestHospital2(TestSetup):
+class TestHospitalEquipment(TestSetup):
 
     def test_hospital_equipment_serializer(self):
 
@@ -1074,7 +1074,7 @@ class TestHospital2(TestSetup):
             }
             self.assertDictEqual(serializer.data, result)
 
-    def _test_hospital_equipment_get_viewset(self):
+    def test_hospital_equipment_get_viewset(self):
 
         # instantiate client
         client = Client()
@@ -1082,33 +1082,19 @@ class TestHospital2(TestSetup):
         # login as admin
         client.login(username='admin', password='admin')
 
-        # retrieve any hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
-        # retrieve any hospital
-        response = client.get('/hospitals/api/hospital/{}/'.format(str(self.h2.id)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
-        self.assertDictEqual(result, answer)
-
-        # retrieve any hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
-        self.assertDictEqual(result, answer)
-        
         # logout
         client.logout()
 
+    def _test_hospital_equipment_get_viewset(self):
+        
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
