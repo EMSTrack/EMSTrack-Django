@@ -156,3 +156,14 @@ class HospitalSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
+# HospitalEquipment serializers
+class HospitalEquipmentSerializer(serializers.ModelSerializer):
+
+    hospital_name = serializers.CharField(source='hospital.name')
+    equipment_name = serializers.CharField(source='equipment.name')
+    
+    class Meta:
+        model = HospitalEquipment
+        fields = ('hospital_id', 'hospital_name',
+                  'equipment_id', 'equipment_name',
+                  'value', 'comment')
