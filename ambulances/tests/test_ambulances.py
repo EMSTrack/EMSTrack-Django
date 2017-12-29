@@ -1125,7 +1125,7 @@ class TestHospitalEquipment(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
         
         # retrieve inexistent
