@@ -154,12 +154,24 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
     # make sure both fields are looked up
     def get_object(self):
+
         print('> get_object {}'.format(self.kwargs))
-        queryset = self.get_queryset()
+        qset = self.get_queryset()
+        #filter = {}
+        #for field in self.lookup_fields:
+        #    filter[field] = self.kwargs[field]
+        #obj = get_object_or_404(qset, **filter)
+        obj = get_object_or_404(qset)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+    def get_queryset(self):
+
+        print('> get_queryset {}'.format(self.kwargs))
+        qset = super().get_queryset()
         filter = {}
         for field in self.lookup_fields:
             filter[field] = self.kwargs[field]
 
-        obj = get_object_or_404(queryset, **filter)
-        self.check_object_permissions(self.request, obj)
-        return obj
+        return qset.filter(**filter)
+            
