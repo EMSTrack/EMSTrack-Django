@@ -1017,7 +1017,7 @@ class TestHospital1(TestSetup):
 
 class TestHospital2(TestSetup):
 
-    def _test_hospital_equipment_serializer(self):
+    def test_hospital_equipment_serializer(self):
 
         # test HospitalSerializer
         for h in (self.h1, self.h2, self.h3):
@@ -1034,7 +1034,7 @@ class TestHospital2(TestSetup):
             }
             self.assertDictEqual(serializer.data, result)
 
-    def _test_hospital_get_viewset(self):
+    def test_hospital_equipment_get_viewset(self):
 
         # instantiate client
         client = Client()
