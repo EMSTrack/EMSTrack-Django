@@ -152,9 +152,19 @@ class HospitalViewSet(mixins.ListModelMixin,
 class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
                                viewsets.GenericViewSet):
     
-    queryset = Profile.objects.all()
-    serializer_class = ExtendedProfileSerializer
-    permission_classes = (permissions.IsAuthenticated,
-                          IsUserOrAdminOrSuper,)
-    lookup_field = 'user__username'
-        
+    queryset = HospitalEquipmentProfile.objects.all()
+    serializer_class = HospitalEquipmentSerializer
+    lookup_field = 'equipment__name'
+    lookup_fields = ('hospital_id', 'equipment__name')
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        filter = {}
+        for field in self.lookup_fields:
+            filter[field] = self.kwargs[field]
+
+        print('filter = {}'.format(filter))
+            
+        obj = get_object_or_404(queryset, **filter)
+        self.check_object_permissions(self.request, obj)
+        return obj

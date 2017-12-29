@@ -28,11 +28,16 @@ router = routers.DefaultRouter()
 #router.register(r'equipment', EquipmentCountViewSet)
 #router.register(r'routes', AmbulanceRouteViewSet)
 
-router.register(r'profile', viewsets.ProfileViewSet)
-router.register(r'ambulance', viewsets.AmbulanceViewSet,
+router.register(r'profile',
+                viewsets.ProfileViewSet)
+router.register(r'ambulance',
+                viewsets.AmbulanceViewSet,
                 base_name='ambulance')
-router.register(r'hospital', viewsets.HospitalViewSet,
+router.register(r'hospital',
+                viewsets.HospitalViewSet,
                 base_name='hospital')
+router.register(r'hospital-equipment/(?P<pk>[0-9]+)',
+                viewsets.HospitalEquipmentViewSet)
 
 urlpatterns = [
 
