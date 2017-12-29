@@ -15,7 +15,7 @@ from ambulances.models import Ambulance, \
 
 from ambulances.serializers import ProfileSerializer, \
     AmbulanceSerializer, ExtendedProfileSerializer, \
-    HospitalEquipmentSerializer
+    HospitalSerializer, HospitalEquipmentSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
