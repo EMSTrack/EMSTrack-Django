@@ -106,8 +106,8 @@ class HospitalViewSet(mixins.ListModelMixin,
     
     def get_queryset(self):
 
-        print('@get_queryset {}({})'.format(self.request.user,
-                                            self.request.method))
+        #print('@get_queryset {}({})'.format(self.request.user,
+        #                                    self.request.method))
         
         # return all hospitals if superuser
         user = self.request.user
@@ -118,8 +118,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         if user.is_anonymous:
             raise PermissionDenied()
 
-        print('> METHOD = {}'.format(self.request.method))
-        
+        #print('> METHOD = {}'.format(self.request.method))
         # otherwise only return hospitals that the user can read or write to
         if self.request.method == 'GET':
             # hospitals that the user can read
