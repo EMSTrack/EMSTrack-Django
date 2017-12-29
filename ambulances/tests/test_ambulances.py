@@ -916,8 +916,6 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
-    def _test_hospital_get_viewset(self):
-        
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
         
@@ -928,6 +926,8 @@ class TestHospital1(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
         self.assertDictEqual(result, answer)
+        
+    def _test_hospital_get_viewset(self):
         
         response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
                               follow=True)
