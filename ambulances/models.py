@@ -63,9 +63,9 @@ class Ambulance(models.Model):
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
-                                               AmbulanceCapability(self.capability).value,
+                                               AmbulanceCapability[self.capability].value,
                                                self.comment,
-                                               AmbulanceStatus(self.status).value,
+                                               AmbulanceStatus[self.status].value,
                                                self.location,
                                                self.location_timestamp,
                                                self.updated_by,
