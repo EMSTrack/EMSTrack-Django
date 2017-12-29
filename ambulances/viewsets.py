@@ -158,17 +158,13 @@ class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
     lookup_field = 'equipment__name'
     lookup_fields = ('hospital_id', 'equipment__name')
 
+    # make sure both fields are looked up
     def get_object(self):
         queryset = self.get_queryset()
         filter = {}
-
-        print('kwargs = {}'.format(self.kwargs))
-        
         for field in self.lookup_fields:
             filter[field] = self.kwargs[field]
 
-        print('filter = {}'.format(filter))
-            
         obj = get_object_or_404(queryset, **filter)
         self.check_object_permissions(self.request, obj)
         return obj
