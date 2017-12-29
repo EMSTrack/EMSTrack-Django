@@ -964,7 +964,7 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
         
-    def _test_hospital_get_list_viewset(self):
+    def test_hospital_get_list_viewset(self):
 
         # instantiate client
         client = Client()
