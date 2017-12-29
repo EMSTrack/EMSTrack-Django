@@ -150,18 +150,16 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
-    lookup_fields = ('hospital_id', 'equipment__name')
+    hospital_lookup_field = 'hospital_id'
 
     # make sure both fields are looked up
     def get_object(self):
 
         print('> get_object {}'.format(self.kwargs))
         qset = self.get_queryset()
-        #filter = {}
-        #for field in self.lookup_fields:
-        #    filter[field] = self.kwargs[field]
-        #obj = get_object_or_404(qset, **filter)
-        obj = get_object_or_404(qset)
+        filter = { lookup_field: self.kwargs[lookup_field] }
+        obj = get_object_or_404(qset, **filter)
+        
         self.check_object_permissions(self.request, obj)
         return obj
 
@@ -169,9 +167,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
         print('> get_queryset {}'.format(self.kwargs))
         qset = super().get_queryset()
-        filter = {}
-        for field in self.lookup_fields:
-            filter[field] = self.kwargs[field]
+        filter = { hospital_lookup_field: self.kwargs[hospital_lookup_field] }
 
         return qset.filter(**filter)
             
