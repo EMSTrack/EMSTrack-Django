@@ -83,15 +83,18 @@ class TestSetup(TestCase):
         # Add hospitals
         cls.h1 = Hospital.objects.create(
             name='Hospital General',
-            address="Don't know")
+            address="Don't know",
+            updated_by=cls.u1)
         
         cls.h2 = Hospital.objects.create(
             name='Hospital CruzRoja',
-            address='Forgot')
+            address='Forgot',
+            updated_by=cls.u1)
 
         cls.h3 = Hospital.objects.create(
             name='Hospital Nuevo',
-            address='Not built yet')
+            address='Not built yet',
+            updated_by=cls.u1)
         
         # add hospitals to users
         cls.u1.profile.hospitals.add(
