@@ -150,13 +150,11 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
-    hospital_lookup_field = 'hospital_id'
 
     # make sure both fields are looked up
     def get_queryset(self):
 
         qset = super().get_queryset()
-        filter = { self.hospital_lookup_field: self.kwargs[self.hospital_lookup_field] }
+        filter = { 'hospital_id': self.kwargs['id'] }
 
         return qset.filter(**filter)
-            
