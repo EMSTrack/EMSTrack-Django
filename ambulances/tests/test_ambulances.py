@@ -1235,7 +1235,10 @@ class TestHospitalEquipment(TestSetup):
         # retrieve inexistent
         response = client.get('/ambulances/api/hospital-equipment/{}/'.format(1000),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        answer = [
+        ]
+        self.assertCountEqual(result, answer)
         
         # logout
         client.logout()
