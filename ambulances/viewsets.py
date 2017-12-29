@@ -81,6 +81,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         print('> user = {}, can_do = {}'.format(user, can_do))
         print('> ambulances = {}'.format(Ambulance.objects.all()))
         print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
+        print('> filtered ambulances query = {}'.format(Ambulance.objects.filter(id__in=can_do).query))
         return Ambulance.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
