@@ -31,6 +31,8 @@ router = routers.DefaultRouter()
 router.register(r'profile', viewsets.ProfileViewSet)
 router.register(r'ambulance', viewsets.AmbulanceViewSet,
                 base_name='ambulance')
+router.register(r'hospital', viewsets.HospitalViewSet,
+                base_name='hospital')
 
 urlpatterns = [
 

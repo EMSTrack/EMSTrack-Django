@@ -53,7 +53,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         #print('@get_queryset {}({})'.format(self.request.user,
         #                                    self.request.method))
         
-        # return all ambulance if superuser
+        # return all ambulances if superuser
         user = self.request.user
         if user.is_superuser:
             return Ambulance.objects.all()
@@ -92,3 +92,46 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
 
 # Hospital viewset
+class HospitalViewSet(mixins.ListModelMixin,
+                       mixins.RetrieveModelMixin,
+                       mixins.CreateModelMixin,
+                       mixins.UpdateModelMixin,
+                       viewsets.GenericViewSet):
+
+    #queryset = Hospital.objects.all()
+    serializer_class = HospitalSerializer
+    
+    def get_queryset(self):
+
+        # return all hospitals if superuser
+        user = self.request.user
+        if user.is_superuser:
+            return Hospital.objects.all()
+
+        # return nothing if anonymous
+        if user.is_anonymous:
+            raise PermissionDenied()
+
+        # otherwise only return hospitals that the user can read or write to
+        if self.request.method == 'GET':
+            # hospitals that the user can read
+            can_do = user.profile.hospitals.filter(can_read=True)
+
+        elif (self.request.method == 'PUT' or
+              self.request.method == 'PATCH' or
+              self.request.method == 'DELETE'):
+            # hospitals that the user can write to
+            can_do = user.profile.hospitals.filter(can_write=True)
+            
+        else:
+            raise PermissionDenied()
+
+        return Hospital.objects.filter(id__in=can_do)
+
+    def perform_create(self, serializer):
+        
+        serializer.save(updated_by=self.request.user)
+
+    def perform_update(self, serializer):
+
+        serializer.save(updated_by=self.request.user)

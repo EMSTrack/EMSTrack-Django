@@ -128,3 +128,31 @@ class HospitalSerializer(serializers.ModelSerializer):
         model = Hospital
         fields = '__all__'
         read_only_fields = ('updated_by',)
+
+    def create(self, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        # only super can create
+        if not user.is_superuser:
+            raise PermissionDenied()
+    
+        return super().create(validated_data)
+    
+    def update(self, instance, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        if not user.is_superuser:
+            
+            # serializer.instance will always exist!
+            if not user.profile.hospitals.filter(can_write=True,
+                                                 hospital=instance.id):
+                raise PermissionDenied()
+
+        return super().update(instance, validated_data)
+
