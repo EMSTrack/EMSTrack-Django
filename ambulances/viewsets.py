@@ -160,6 +160,9 @@ class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
     def get_object(self):
         queryset = self.get_queryset()
         filter = {}
+
+        print('kwargs = {}'.format(self.kwargs))
+        
         for field in self.lookup_fields:
             filter[field] = self.kwargs[field]
 
