@@ -137,6 +137,12 @@ class TestSetup(TestCase):
             value='True',
             updated_by=cls.u1)
         
+        cls.he5 = HospitalEquipment.objects.create(
+            hospital=cls.h3,
+            equipment=cls.e1,
+            value='True',
+            updated_by=cls.u1)
+        
         # add hospitals to users
         cls.u1.profile.hospitals.add(
             HospitalPermission.objects.create(hospital=cls.h1,
@@ -1114,6 +1120,14 @@ class TestHospitalEquipment(TestSetup):
         answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data
         self.assertDictEqual(result, answer)
         
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data
+        self.assertDictEqual(result, answer)
+        
         # retrieve inexistent
         response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
@@ -1122,7 +1136,18 @@ class TestHospitalEquipment(TestSetup):
         # logout
         client.logout()
 
-    def _test_hospital_equipment_get_viewset(self):
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+    def _test(self):
         
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
@@ -1148,22 +1173,4 @@ class TestHospitalEquipment(TestSetup):
         # logout
         client.logout()
 
-        # login as testuser1
-        client.login(username='testuser1', password='top_secret')
         
-        # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
-                              follow=True)
-        self.assertEqual(response.status_code, 404)
-        
-        # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
-                              follow=True)
-        self.assertEqual(response.status_code, 404)
-        
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
-                              follow=True)
-        self.assertEqual(response.status_code, 404)
-        
-        # logout
-        client.logout()
