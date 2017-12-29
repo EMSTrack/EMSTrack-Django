@@ -70,24 +70,6 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         else:
             return HospitalPermissionSerializer(obj.hospitals, many=True).data
 
-# CreateModelMixin
-class CreateModelMixin(serializers.ModelSerializer):
-
-    def create(self, validated_data):
-
-        # get current user
-        user = validated_data['updated_by']
-
-        # check credentials
-        # only super can create
-        if not user.is_superuser:
-            raise PermissionDenied()
-    
-        return super().create(validated_data)
-    
-# UpdateModelMixin
-class UpdateModelMixin(serializers.ModelSerializer):
-        
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
