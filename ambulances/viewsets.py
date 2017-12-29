@@ -8,10 +8,10 @@ from rest_framework import filters
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 
-from .models import Ambulance, Hospital, Profile
+from .models import Ambulance, Hospital, Profile, HospitalEquipment
 
 from .serializers import ExtendedProfileSerializer, \
-    AmbulanceSerializer, HospitalSerializer
+    AmbulanceSerializer, HospitalSerializer, HospitalEquipmentSerializer
 
 # Django REST Framework Viewsets
 
