@@ -1267,6 +1267,35 @@ class TestHospitalEquipment(TestSetup):
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
 
+        # retrieve all hospital equipment
+        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e2.id)).data
+        ]
+        print('result = {}'.format(result))
+        
+        self.assertCountEqual(result, answer)
+
+        # retrieve all hospital equipment
+        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data
+        ]
+        self.assertCountEqual(result, answer)
+        
+        # retrieve all hospital equipment
+        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
         # logout
         client.logout()
 
