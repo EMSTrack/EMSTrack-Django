@@ -923,6 +923,7 @@ class TestHospital1(TestSetup):
         response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
+        print('response = {}'.format(response.content))
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
         self.assertDictEqual(result, answer)
