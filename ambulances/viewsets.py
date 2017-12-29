@@ -38,7 +38,45 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
                           IsUserOrAdminOrSuper,)
     lookup_field = 'user__username'
 
+# CheckPermission
+class AmbulancePermissionView(viewsets.GenericViewSet):
 
+    queryset = Ambulance.objects.all()
+    
+    def get_queryset(self):
+
+        #print('@get_queryset {}({})'.format(self.request.user,
+        #                                    self.request.method))
+        
+        # return all ambulances if superuser
+        user = self.request.user
+        if user.is_superuser:
+            return self.queryset
+
+        # return nothing if anonymous
+        if user.is_anonymous:
+            raise PermissionDenied()
+
+        # print('> METHOD = {}'.format(self.request.method))
+        # otherwise only return ambulances that the user can read or write to
+        if self.request.method == 'GET':
+            # ambulances that the user can read
+            can_do = user.profile.ambulances.filter(can_read=True).values('ambulance_id')
+
+        elif (self.request.method == 'PUT' or
+              self.request.method == 'PATCH' or
+              self.request.method == 'DELETE'):
+            # ambulances that the user can write to
+            can_do = user.profile.ambulances.filter(can_write=True).values('ambulance_id')
+            
+        else:
+            raise PermissionDenied()
+
+        #print('> user = {}, can_do = {}'.format(user, can_do))
+        #print('> ambulances = {}'.format(Ambulance.objects.all()))
+        #print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
+        return self.queryset.filter(id__in=can_do)
+        
 # Ambulance viewset
 
 class AmbulanceViewSet(mixins.ListModelMixin,
@@ -158,6 +196,40 @@ class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
     lookup_field = 'equipment__name'
     lookup_fields = ('hospital_id', 'equipment__name')
 
+    def get_queryset(self):
+
+        #print('@get_queryset {}({})'.format(self.request.user,
+        #                                    self.request.method))
+        
+        # return all hospitals if superuser
+        user = self.request.user
+        if user.is_superuser:
+            return HospitalEquipment.objects.all()
+
+        # return nothing if anonymous
+        if user.is_anonymous:
+            raise PermissionDenied()
+
+        #print('> METHOD = {}'.format(self.request.method))
+        # otherwise only return hospitals that the user can read or write to
+        if self.request.method == 'GET':
+            # hospitals that the user can read
+            can_do = user.profile.hospitals.filter(can_read=True).values('hospital_id')
+
+        elif (self.request.method == 'PUT' or
+              self.request.method == 'PATCH' or
+              self.request.method == 'DELETE'):
+            # hospitals that the user can write to
+            can_do = user.profile.hospitals.filter(can_write=True).values('hospital_id')
+            
+        else:
+            raise PermissionDenied()
+
+        #print('> user = {}, can_do = {}'.format(user, can_do))
+        #print('> hospitals = {}'.format(HospitalEquipment.objects.all()))
+        #print('> filtered hospitals = {}'.format(HospitalEquipment.objects.filter(id__in=can_do)))
+        return HospitalEquipment.objects.filter(id__in=can_do)
+    
     # make sure both fields are looked up
     def get_object(self):
         queryset = self.get_queryset()
