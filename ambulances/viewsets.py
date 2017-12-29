@@ -10,7 +10,8 @@ from rest_framework import permissions
 
 from .models import Ambulance, Profile
 
-from .serializers import ExtendedProfileSerializer, AmbulanceSerializer
+from .serializers import ExtendedProfileSerializer, \
+    AmbulanceSerializer, HospitalSerializer
 
 # Django REST Framework Viewsets
 
