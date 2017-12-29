@@ -136,11 +136,11 @@ class HospitalViewSet(mixins.ListModelMixin,
     
     serializer_class = HospitalSerializer
 
-    @list_route()
-    def metadata(self, request):
+    @detail_route()
+    def metadata(self, request, pk=None):
 
-        qset = self.get_queryset()
-        equipment = Equipment.objects.filter(id__in=qset)
+        hospital = self.get_object()
+        equipment = Equipment.objects.filter(id__in=hospital.equipment)
         serializer = EquipmentMetadataSerializer(equipment)
         return Response(serializer.data)
 
