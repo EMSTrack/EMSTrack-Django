@@ -136,7 +136,7 @@ class HospitalViewSet(mixins.ListModelMixin,
     
     serializer_class = HospitalSerializer
 
-    @list_route(url_path='metadata')
+    @list_route()
     def metadata(self, request):
 
         qset = self.get_queryset()
