@@ -1089,7 +1089,7 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='admin', password='admin')
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1097,7 +1097,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1105,7 +1105,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1113,7 +1113,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e3.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1121,7 +1121,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1129,7 +1129,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve inexistent
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e2.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1140,12 +1140,12 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1153,7 +1153,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1161,7 +1161,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1169,7 +1169,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e3.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1183,27 +1183,27 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e3.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1219,7 +1219,7 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='admin', password='admin')
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h1.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1231,7 +1231,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h2.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1242,7 +1242,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h3.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1252,7 +1252,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve inexistent
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(1000),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(1000),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1267,7 +1267,7 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h1.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1280,7 +1280,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h2.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1291,7 +1291,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h3.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1306,7 +1306,7 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h1.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1315,7 +1315,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h2.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1324,7 +1324,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital-equipment/{}/'.format(str(self.h3.id)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
