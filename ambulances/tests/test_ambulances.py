@@ -1129,7 +1129,7 @@ class TestHospitalEquipment(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve inexistent
-        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
