@@ -96,7 +96,7 @@ class AmbulancePermission(models.Model):
 
 class Hospital(models.Model):
     
-    name = models.CharField(max_length=254, default="")
+    name = models.CharField(max_length=254, unique=True)
     address = models.CharField(max_length=254, default="")
     location = models.PointField(srid=4326, null=True, blank=True)
     
