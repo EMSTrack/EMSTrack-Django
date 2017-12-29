@@ -122,7 +122,6 @@ class HospitalPermissionViewSet(viewsets.GenericViewSet):
         filter = {}
         filter[self.filter_field + '__in'] = can_do
         return self.queryset.filter(**filter)
-        # return self.queryset.filter(id__in=can_do)
 
     
 # Ambulance viewset
@@ -169,6 +168,7 @@ class HospitalViewSet(mixins.ListModelMixin,
 class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
                                HospitalPermissionViewSet):
     
+    filter_field = 'hospital_id'
     queryset = HospitalEquipment.objects.all()
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
