@@ -11,7 +11,8 @@ from rest_framework import serializers, test
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
     AmbulancePermission, HospitalPermission, \
-    Hospital
+    Hospital, \
+    Equipment, HospitalEquipment, EquipmentType
 
 from ambulances.serializers import ProfileSerializer, \
     AmbulanceSerializer, ExtendedProfileSerializer, \
@@ -96,6 +97,23 @@ class TestSetup(TestCase):
             name='Hospital Nuevo',
             address='Not built yet',
             updated_by=cls.u1)
+
+        # add equipment
+        cls.e1 = Equipment.objects.create(
+            name='X-ray',
+            etype=EquipmentType.B.name
+            )
+
+        cls.e2 = Equipment.objects.create(
+            name='Beds',
+            etype=EquipmentType.I.name
+            )
+        
+        cls.e3 = Equipment.objects.create(
+            name='MRI',
+            etype=EquipmentType.B.name,
+            toggleable=True
+            )
         
         # add hospitals to users
         cls.u1.profile.hospitals.add(

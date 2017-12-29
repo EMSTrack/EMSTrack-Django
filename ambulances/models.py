@@ -140,7 +140,7 @@ class Equipment(models.Model):
     etype = models.CharField(max_length=1,
                              choices = EQUIPMENT_ETYPE_CHOICES)
     
-    toggleable = models.BooleanField(default=0)
+    toggleable = models.BooleanField(default=False)
 
     def __str__(self):
         return "{}: {} ({})".format(self.id, self.name, self.toggleable)
