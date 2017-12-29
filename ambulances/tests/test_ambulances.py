@@ -916,8 +916,8 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
-        # login as testuser2
-        client.login(username='testuser2', password='very_secret')
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
         
         # retrieve own's
         response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
@@ -942,8 +942,8 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
-        # login as testuser1
-        client.login(username='testuser1', password='top_secret')
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
         
         # retrieve someone else's
         response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
