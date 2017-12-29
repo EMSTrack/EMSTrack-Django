@@ -94,16 +94,19 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
 # Hospital viewset
 class HospitalViewSet(mixins.ListModelMixin,
-                       mixins.RetrieveModelMixin,
-                       mixins.CreateModelMixin,
-                       mixins.UpdateModelMixin,
-                       viewsets.GenericViewSet):
-
+                      mixins.RetrieveModelMixin,
+                      mixins.CreateModelMixin,
+                      mixins.UpdateModelMixin,
+                      viewsets.GenericViewSet):
+    
     #queryset = Hospital.objects.all()
     serializer_class = HospitalSerializer
     
     def get_queryset(self):
 
+        print('@get_queryset {}({})'.format(self.request.user,
+                                            self.request.method))
+        
         # return all hospitals if superuser
         user = self.request.user
         if user.is_superuser:
@@ -113,6 +116,8 @@ class HospitalViewSet(mixins.ListModelMixin,
         if user.is_anonymous:
             raise PermissionDenied()
 
+        print('> METHOD = {}'.format(self.request.method))
+        
         # otherwise only return hospitals that the user can read or write to
         if self.request.method == 'GET':
             # hospitals that the user can read
@@ -127,6 +132,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         else:
             raise PermissionDenied()
 
+        print('user = {}, can_do = {}'.format(user, can_do))
         return Hospital.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
