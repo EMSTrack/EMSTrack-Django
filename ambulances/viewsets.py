@@ -124,7 +124,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         # otherwise only return hospitals that the user can read or write to
         if self.request.method == 'GET':
             # hospitals that the user can read
-            can_do = user.profile.hospitals.filter(can_read=True)
+            can_do = user.profile.hospitals.filter(can_read=True).values('hospital_id')
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
