@@ -994,8 +994,8 @@ class TestHospital1(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data,
-            HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
+            HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data,
+            HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
         ]
         self.assertEqual(result, answer)
         
