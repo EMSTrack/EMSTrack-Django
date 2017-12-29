@@ -108,7 +108,7 @@ class TestSetup(TestCase):
             etype=EquipmentType.I.name)
         
         cls.e3 = Equipment.objects.create(
-            name='MRI',
+            name='MRI - Ressonance',
             etype=EquipmentType.B.name,
             toggleable=True)
 
@@ -1204,5 +1204,3 @@ class TestHospitalEquipment(TestSetup):
         
         # logout
         client.logout()
-
-        
