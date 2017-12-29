@@ -36,7 +36,7 @@ router.register(r'ambulance',
 router.register(r'hospital',
                 viewsets.HospitalViewSet,
                 base_name='hospital')
-router.register(r'hospital-equipment/(?P<pk>[0-9]+)',
+router.register(r'hospital-equipment/(?P<hospital_id>[0-9]+)',
                 viewsets.HospitalEquipmentViewSet)
 
 urlpatterns = [
