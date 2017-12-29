@@ -153,13 +153,17 @@ class HospitalEquipment(models.Model):
     
     quantity = models.IntegerField()
     
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField(auto_now=True)
+    
     class Meta:
         unique_together = ('hospital', 'equipment',)
 
     def __str__(self):
         return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.quantity)
 
-
+    
 # Profile and state
 
 class Profile(models.Model):

@@ -167,4 +167,6 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
         model = HospitalEquipment
         fields = ('hospital_id', 'hospital_name',
                   'equipment_id', 'equipment_name',
-                  'value', 'comment')
+                  'value', 'comment',
+                  'updated_by', 'updated_on')
+        read_only_fields = ('updated_by',)

@@ -14,7 +14,8 @@ from ambulances.models import Ambulance, \
     Hospital
 
 from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer, ExtendedProfileSerializer
+    AmbulanceSerializer, ExtendedProfileSerializer, \
+    HospitalEquipmentSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
@@ -863,3 +864,248 @@ class TestAmbulance3(TestSetup):
         # logout
         client.logout()
         
+class TestHospital1(TestSetup):
+
+    def test_hospital_serializer(self):
+
+        # test HospitalSerializer
+        for h in (self.h1, self.h2, self.h3):
+            serializer = HospitalSerializer(h)
+            result = {
+                'id': h.id,
+                'name': h.name,
+                'address': h.address,
+                'location': None,
+                'updated_by': h.updated_by.id,
+                'updated_on': date2iso(h.updated_on)
+            }
+            self.assertDictEqual(serializer.data, result)
+
+    def test_hospital_get_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve any hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve any hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve any hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # retrieve own
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # can't read
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+        
+    def test_hospital_get_list_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve hospitals
+        response = client.get('/ambulances/api/hospital/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [HospitalSerializer(self.h1).data,
+                  HospitalSerializer(self.h2).data,
+                  HospitalSerializer(self.h3).data]
+        self.assertEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+
+        # retrieve hospitals
+        response = client.get('/ambulances/api/hospital/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = []
+        self.assertEqual(result, answer)
+        
+        # logout
+        client.logout()
+        
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # retrieve hospitals
+        response = client.get('/ambulances/api/hospital/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [ # HospitalSerializer(self.h1).data, # can't read
+                  HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data]
+        self.assertEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+
+
+class TestHospital2(TestSetup):
+
+    def test_hospital_equipment_serializer(self):
+
+        # test HospitalSerializer
+        for h in (self.h1, self.h2, self.h3):
+            serializer = HospitalEquipmentSerializer(h)
+            result = {
+                'hospital_id': h.hospital.id,
+                'hospital_name': h.hospital.name,
+                'equipment_id': h.equipment.id,
+                'equipment_name': h.equipment.name,
+                'value': h.value,
+                'comment': h.comment,
+                'updated_by': h.updated_by.id,
+                'updated_on': date2iso(h.updated_on)
+            }
+            self.assertDictEqual(serializer.data, result)
+
+    def test_hospital_get_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve any hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve any hospital
+        response = client.get('/hospitals/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve any hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # retrieve own
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # can't read
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
