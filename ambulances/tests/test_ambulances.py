@@ -881,7 +881,7 @@ class TestHospital1(TestSetup):
             }
             self.assertDictEqual(serializer.data, result)
 
-    def _test_hospital_get_viewset(self):
+    def test_hospital_get_viewset(self):
 
         # instantiate client
         client = Client()
@@ -916,6 +916,8 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
+    def _test_hospital_get_viewset(self):
+        
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
         
