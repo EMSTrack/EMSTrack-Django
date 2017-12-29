@@ -152,7 +152,7 @@ class HospitalViewSet(mixins.ListModelMixin,
 class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
                                viewsets.GenericViewSet):
     
-    queryset = HospitalEquipmentProfile.objects.all()
+    queryset = HospitalEquipment.objects.all()
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
     lookup_fields = ('hospital_id', 'equipment__name')
