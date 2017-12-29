@@ -67,7 +67,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # otherwise only return ambulances that the user can read or write to
         if self.request.method == 'GET':
             # ambulances that the user can read
-            can_do = user.profile.ambulances.filter(can_read=True)
+            can_do = user.profile.ambulances.filter(can_read=True).values('ambulance_id')
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
