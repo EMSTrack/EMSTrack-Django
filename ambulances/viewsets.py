@@ -38,8 +38,9 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
                           IsUserOrAdminOrSuper,)
     lookup_field = 'user__username'
 
-# CheckPermission
-class AmbulancePermissionView(viewsets.GenericViewSet):
+# AmbulancePermission
+
+class AmbulancePermissionViewSet(viewsets.GenericViewSet):
 
     queryset = Ambulance.objects.all()
     
@@ -83,12 +84,12 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        mixins.CreateModelMixin,
                        mixins.UpdateModelMixin,
-                       viewsets.GenericViewSet):
+                       AmbulancePermissionViewSet):
 
     #queryset = Ambulance.objects.all()
     serializer_class = AmbulanceSerializer
     
-    def get_queryset(self):
+    def _get_queryset(self):
 
         #print('@get_queryset {}({})'.format(self.request.user,
         #                                    self.request.method))
