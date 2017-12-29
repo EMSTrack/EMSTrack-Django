@@ -997,7 +997,7 @@ class TestHospital1(TestSetup):
             HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data,
             HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
         ]
-        self.assertEqual(sort(result), sort(answer))
+        self.assertEqual(sorted(result), sorted(answer))
         
         # logout
         client.logout()
