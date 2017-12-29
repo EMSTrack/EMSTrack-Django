@@ -78,9 +78,9 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         else:
             raise PermissionDenied()
 
-        print('user = {}, can_do = {}'.format(user, can_do))
-        print('ambulances = {}'.format(Ambulance.objects.all()))
-        print('filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
+        print('> user = {}, can_do = {}'.format(user, can_do))
+        print('> ambulances = {}'.format(Ambulance.objects.all()))
+        print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
         return Ambulance.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
@@ -134,9 +134,9 @@ class HospitalViewSet(mixins.ListModelMixin,
         else:
             raise PermissionDenied()
 
-        print('user = {}, can_do = {}'.format(user, can_do))
-        print('hospitals = {}'.format(Hospital.objects.all()))
-        print('filtered hospitals = {}'.format(Hospital.objects.filter(id__in=can_do)))
+        print('> user = {}, can_do = {}'.format(user, can_do))
+        print('> hospitals = {}'.format(Hospital.objects.all()))
+        print('> filtered hospitals = {}'.format(Hospital.objects.filter(id__in=can_do)))
         return Hospital.objects.filter(id__in=can_do)
 
     def perform_create(self, serializer):
