@@ -12,14 +12,6 @@ class CreateUser(TestCase):
 
     def setUp(self):
 
-        # Add hospitals
-        self.h1 = Hospital.objects.create(name='hospital1',
-                                          address='somewhere')
-        self.h2 = Hospital.objects.create(name='hospital2',
-                                          address='somewhere else')
-        self.h3 = Hospital.objects.create(name='hospital3',
-                                          address='somewhere other')
-        
         # Add users
         self.u1 = User.objects.create_user(
             username='admin',
@@ -36,6 +28,17 @@ class CreateUser(TestCase):
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
+        
+        # Add hospitals
+        self.h1 = Hospital.objects.create(name='hospital1',
+                                          address='somewhere',
+                                          updated_by=self.u1)
+        self.h2 = Hospital.objects.create(name='hospital2',
+                                          address='somewhere else',
+                                          updated_by=self.u1)
+        self.h3 = Hospital.objects.create(name='hospital3',
+                                          address='somewhere other',
+                                          updated_by=self.u1)
 
         # Add permissions
         self.u2.profile.hospitals.add(
