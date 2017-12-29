@@ -5,8 +5,9 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 import django.db.models as models
 
-from .models import Profile, Hospital, Ambulance, \
-    AmbulancePermission, HospitalPermission
+from .models import Profile, \
+    AmbulancePermission, Ambulance, \
+    HospitalPermission, Hospital, HospitalEquipment
 
 # Profile serializers
 
