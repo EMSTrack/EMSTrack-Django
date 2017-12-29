@@ -163,47 +163,13 @@ class HospitalViewSet(mixins.ListModelMixin,
 # HospitalEquipment viewset
 
 class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
-                               viewsets.GenericViewSet):
+                               HospitalPermissionViewSet):
     
     queryset = HospitalEquipment.objects.all()
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
     lookup_fields = ('hospital_id', 'equipment__name')
 
-    def get_queryset(self):
-
-        #print('@get_queryset {}({})'.format(self.request.user,
-        #                                    self.request.method))
-        
-        # return all hospitals if superuser
-        user = self.request.user
-        if user.is_superuser:
-            return HospitalEquipment.objects.all()
-
-        # return nothing if anonymous
-        if user.is_anonymous:
-            raise PermissionDenied()
-
-        #print('> METHOD = {}'.format(self.request.method))
-        # otherwise only return hospitals that the user can read or write to
-        if self.request.method == 'GET':
-            # hospitals that the user can read
-            can_do = user.profile.hospitals.filter(can_read=True).values('hospital_id')
-
-        elif (self.request.method == 'PUT' or
-              self.request.method == 'PATCH' or
-              self.request.method == 'DELETE'):
-            # hospitals that the user can write to
-            can_do = user.profile.hospitals.filter(can_write=True).values('hospital_id')
-            
-        else:
-            raise PermissionDenied()
-
-        #print('> user = {}, can_do = {}'.format(user, can_do))
-        #print('> hospitals = {}'.format(HospitalEquipment.objects.all()))
-        #print('> filtered hospitals = {}'.format(HospitalEquipment.objects.filter(id__in=can_do)))
-        return HospitalEquipment.objects.filter(id__in=can_do)
-    
     # make sure both fields are looked up
     def get_object(self):
         queryset = self.get_queryset()
