@@ -103,45 +103,42 @@ class HospitalPermissionViewSet(BasePermissionViewSet):
     profile_values = 'hospital_id'
     queryset = Hospital.objects.all()
 
+# CreateModelUpdateByMixin
+
+class CreateModelUpdateByMixin(mixins.CreateModelMixin):
+
+    def perform_create(self, serializer):
+        
+        serializer.save(updated_by=self.request.user)
+    
+# UpdateModelUpdateByMixin
+
+class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
+
+    def perform_update(self, serializer):
+        
+        serializer.save(updated_by=self.request.user)
+
 # Ambulance viewset
 
 class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
-                       mixins.CreateModelMixin,
-                       mixins.UpdateModelMixin,
+                       CreateModelUpdateByMixin,
+                       UpdateModelUpdateByMixin,
                        AmbulancePermissionViewSet):
 
     serializer_class = AmbulanceSerializer
-
-    def perform_create(self, serializer):
-        
-        #print('@perform_create')
-        serializer.save(updated_by=self.request.user)
-
-    def perform_update(self, serializer):
-
-        #print('@perform_update')
-        serializer.save(updated_by=self.request.user)
-
 
 # Hospital viewset
 
 class HospitalViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
-                      mixins.CreateModelMixin,
-                      mixins.UpdateModelMixin,
+                      CreateModelUpdateByMixin,
+                      UpdateModelUpdateByMixin,
                       HospitalPermissionViewSet):
     
     serializer_class = HospitalSerializer
     
-    def perform_create(self, serializer):
-        
-        serializer.save(updated_by=self.request.user)
-
-    def perform_update(self, serializer):
-
-        serializer.save(updated_by=self.request.user)
-
 # HospitalEquipment viewset
 
 class HospitalEquipmentViewSet(mixins.RetrieveModelMixin,
