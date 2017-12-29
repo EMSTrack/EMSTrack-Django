@@ -1256,6 +1256,7 @@ class TestHospitalEquipment(TestSetup):
         response = client.get('/ambulances/api/hospital-equipment/{}/'.format(1000),
                               follow=True)
         self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
         answer = [
         ]
         self.assertCountEqual(result, answer)
