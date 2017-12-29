@@ -84,8 +84,9 @@ class AmbulancePermissionViewSet(viewsets.GenericViewSet):
 
 class HospitalPermissionViewSet(viewsets.GenericViewSet):
     
+    filter_field = 'id'
     queryset = Hospital.objects.all()
-    
+
     def get_queryset(self):
 
         #print('@get_queryset {}({})'.format(self.request.user,
@@ -118,7 +119,10 @@ class HospitalPermissionViewSet(viewsets.GenericViewSet):
         #print('> user = {}, can_do = {}'.format(user, can_do))
         #print('> hospitals = {}'.format(Hospital.objects.all()))
         #print('> filtered hospitals = {}'.format(Hospital.objects.filter(id__in=can_do)))
-        return self.queryset.filter(id__in=can_do)
+        filter = {}
+        filter[self.filter_field + '__in'] = can_do
+        return self.queryset.filter(**filter)
+        # return self.queryset.filter(id__in=can_do)
 
     
 # Ambulance viewset
