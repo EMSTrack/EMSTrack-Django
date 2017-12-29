@@ -1179,26 +1179,31 @@ class TestHospitalEquipment(TestSetup):
         # logout
         client.logout()
 
-    def _test(self):
-        
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
-        # retrieve own
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalSerializer(Hospital.objects.get(id=self.h3.id)).data
-        self.assertDictEqual(result, answer)
+        self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
-        # can't read
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h1.id), str(self.e2.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e1.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+        
+        # retrieve someone else's
+        response = client.get('/ambulances/api/hospital-equipment/{}/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
