@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from .models import Ambulance, Hospital, Profile, HospitalEquipment, Equipment
 
 from .serializers import ExtendedProfileSerializer, \
-    AmbulanceSerializer, HospitalSerializer, HospitalEquipmentSerializer
+    AmbulanceSerializer, HospitalSerializer, HospitalEquipmentSerializer, \
+    EquipmentMetadataSerializer
 
 # Django REST Framework Viewsets
 
