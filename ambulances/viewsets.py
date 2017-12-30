@@ -138,7 +138,7 @@ class HospitalViewSet(mixins.ListModelMixin,
     serializer_class = HospitalSerializer
 
     @detail_route()
-    def metadata(self, request, pk=None):
+    def metadata(self, request, pk=None, **kwargs):
 
         hospital = self.get_object()
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
