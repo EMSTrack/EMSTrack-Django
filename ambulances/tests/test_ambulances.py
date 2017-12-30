@@ -1351,8 +1351,9 @@ class TestHospitalEquipment(TestSetup):
         answer = [
             EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
             EquipmentSerializer(Equipment.objects.get(id=self.e2.id)).data,
-            EquipmentSerializer(Equipment.objects.get(id=self.e3.id)).data,
+            EquipmentSerializer(Equipment.objects.get(id=self.e3.id)).data
             ]
+        print('> result = {}'.format(result))
         self.assertCountEqual(result, answer)
 
         # logout
