@@ -143,7 +143,10 @@ class HospitalViewSet(mixins.ListModelMixin,
         hospital = self.get_object()
         print('> hospital = {}'.format(hospital))
 
-        equipment = hospital.hospitalequipment_set.all()
+        hospital_equipment = hospital.hospitalequipment_set.all()
+        print('> hospital_equipment = {}'.format(hospital_equipment))
+        
+        equipment = hospital_equipment.equipment.all()
         print('> equipment = {}'.format(equipment))
         
         serializer = EquipmentMetadataSerializer(equipment, many=True)
