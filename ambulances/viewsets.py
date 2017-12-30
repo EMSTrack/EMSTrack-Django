@@ -10,7 +10,7 @@ from .models import Ambulance, Hospital, Profile, HospitalEquipment, Equipment
 
 from .serializers import ExtendedProfileSerializer, \
     AmbulanceSerializer, HospitalSerializer, HospitalEquipmentSerializer, \
-    EquipmentMetadataSerializer
+    EquipmentSerializer
 
 # Django REST Framework Viewsets
 
@@ -149,8 +149,8 @@ class HospitalViewSet(mixins.ListModelMixin,
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
         print('> equipment = {}'.format(equipment))
         
-        serializer = EquipmentMetadataSerializer(equipment,
-                                                 many=True)
+        serializer = EquipmentSerializer(equipment,
+                                         many=True)
         return Response(serializer.data)
     
 # HospitalEquipment viewset

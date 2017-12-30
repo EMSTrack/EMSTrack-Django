@@ -16,7 +16,8 @@ from ambulances.models import Ambulance, \
 
 from ambulances.serializers import ProfileSerializer, \
     AmbulanceSerializer, ExtendedProfileSerializer, \
-    HospitalSerializer, HospitalEquipmentSerializer
+    HospitalSerializer, HospitalEquipmentSerializer, \
+    EquipmentSerializer
 #    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
 #    UserLocationSerializer
 
@@ -1346,45 +1347,12 @@ class TestHospitalEquipment(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
-        self.assertDictEqual(result, answer)
+        answer = [
+            EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
+            EquipmentSerializer(Equipment.objects.get(id=self.e2.id)).data,
+            EquipmentSerializer(Equipment.objects.get(id=self.e3.id)).data,
+            ]
+        self.assertCountEqual(result, answer)
 
-        # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e2.id)).data
-        self.assertDictEqual(result, answer)
-
-        # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e3.id)).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h3.id,equipment=self.e1.id)).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve inexistent
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e2.name)),
-                              follow=True)
-        self.assertEqual(response.status_code, 404)
-        
         # logout
         client.logout()
