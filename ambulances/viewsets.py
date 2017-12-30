@@ -152,6 +152,8 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
                                viewsets.GenericViewSet):
     
+    queryset = HospitalEquipment.objects.all()
+    
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
 
