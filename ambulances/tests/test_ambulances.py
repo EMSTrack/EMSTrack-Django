@@ -1346,7 +1346,7 @@ class TestHospitalEquipment(TestSetup):
         response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
-        print('> response = {}'.format(response))
+        print('> content = {}'.format(response.content))
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
             EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
