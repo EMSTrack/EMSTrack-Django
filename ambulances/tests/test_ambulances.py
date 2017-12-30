@@ -1255,11 +1255,7 @@ class TestHospitalEquipment(TestSetup):
         # retrieve inexistent
         response = client.get('/ambulances/api/hospital/{}/equipment/'.format(1000),
                               follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = [
-        ]
-        self.assertCountEqual(result, answer)
+        self.assertEqual(response.status_code, 404)
         
         # logout
         client.logout()
