@@ -1346,14 +1346,33 @@ class TestHospitalEquipment(TestSetup):
         response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
-        print('> content = {}'.format(response.content))
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
             EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
             EquipmentSerializer(Equipment.objects.get(id=self.e2.id)).data
             ]
-        print('> result = {}'.format(result))
         self.assertCountEqual(result, answer)
 
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
+            EquipmentSerializer(Equipment.objects.get(id=self.e3.id)).data
+            ]
+        self.assertCountEqual(result, answer)
+        
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data
+            ]
+        self.assertCountEqual(result, answer)
+        
         # logout
         client.logout()
