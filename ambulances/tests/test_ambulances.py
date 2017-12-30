@@ -1343,7 +1343,7 @@ class TestHospitalEquipment(TestSetup):
         client.login(username='admin', password='admin')
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
