@@ -1376,3 +1376,74 @@ class TestHospitalEquipment(TestSetup):
         
         # logout
         client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
+            EquipmentSerializer(Equipment.objects.get(id=self.e2.id)).data
+            ]
+        self.assertCountEqual(result, answer)
+
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            EquipmentSerializer(Equipment.objects.get(id=self.e1.id)).data,
+            EquipmentSerializer(Equipment.objects.get(id=self.e3.id)).data
+            ]
+        self.assertCountEqual(result, answer)
+        
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+        ]
+        self.assertCountEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            ]
+        self.assertCountEqual(result, answer)
+
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h2.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            ]
+        self.assertCountEqual(result, answer)
+        
+        # retrieve any hospital equipment
+        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h3.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [
+            ]
+        self.assertCountEqual(result, answer)
+        
+        # logout
+        client.logout()
+        
