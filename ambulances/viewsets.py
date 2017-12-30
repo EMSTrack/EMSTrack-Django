@@ -141,16 +141,9 @@ class HospitalViewSet(mixins.ListModelMixin,
     def metadata(self, request, pk=None):
 
         hospital = self.get_object()
-        print('> hospital = {}'.format(hospital))
-
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-        print('> hospital_equipment = {}'.format(hospital_equipment))
-
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
-        print('> equipment = {}'.format(equipment))
-        
-        serializer = EquipmentSerializer(equipment,
-                                         many=True)
+        serializer = EquipmentSerializer(equipment, many=True)
         return Response(serializer.data)
     
 # HospitalEquipment viewset
