@@ -50,7 +50,7 @@ class BasePermissionViewSet(viewsets.GenericViewSet):
         #print('@get_queryset {}({})'.format(self.request.user,
         #                                    self.request.method))
         
-        # return all ambulances if superuser
+        # return all objects if superuser
         user = self.request.user
         if user.is_superuser:
             return self.queryset
@@ -60,25 +60,25 @@ class BasePermissionViewSet(viewsets.GenericViewSet):
             raise PermissionDenied()
 
         # print('> METHOD = {}'.format(self.request.method))
-        # otherwise only return ambulances that the user can read or write to
+        # otherwise only return objects that the user can read or write to
         if self.request.method == 'GET':
-            # ambulances that the user can read
+            # objects that the user can read
             can_do = getattr(user.profile,
                              self.profile_field).filter(can_read=True).values(self.profile_values)
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
               self.request.method == 'DELETE'):
-            # ambulances that the user can write to
+            # objects that the user can write to
             can_do = getattr(user.profile,
-                             self.profile_field).filter(can_write=True).values('ambulance_id')
+                             self.profile_field).filter(can_write=True).values(self.profile_values)
             
         else:
             raise PermissionDenied()
 
         #print('> user = {}, can_do = {}'.format(user, can_do))
-        #print('> ambulances = {}'.format(Ambulance.objects.all()))
-        #print('> filtered ambulances = {}'.format(Ambulance.objects.filter(id__in=can_do)))
+        #print('> objects = {}'.format(Object.objects.all()))
+        #print('> filtered objects = {}'.format(Object.objects.filter(id__in=can_do)))
         filter = {}
         filter[self.filter_field + '__in'] = can_do
         return self.queryset.filter(**filter)
