@@ -150,10 +150,7 @@ class HospitalViewSet(mixins.ListModelMixin,
 
 class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
-                               HospitalPermissionViewSet):
-    
-    filter_field = 'hospital_id'
-    queryset = HospitalEquipment.objects.all()
+                               viewsets.GenericViewSet):
     
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
@@ -161,7 +158,39 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     # make sure both fields are looked up
     def get_queryset(self):
 
-        qset = super().get_queryset()
-        filter = { 'hospital_id': self.kwargs['id'] }
+        # retrieve user
+        user = self.request.user
+        
+        # retrieve id
+        id = self.kwargs['id']
 
-        return qset.filter(**filter)
+        # return nothing if anonymous
+        if user.is_anonymous:
+            raise PermissionDenied()
+        
+        # retrieve hospital or 404 if it does not exist
+        hospital = get_object_or_404(Hospital.objects.all(), id=id)
+        
+        # build queryset
+        filter = { 'hospital_id': id }
+        qset = self.queryset.filter(**filter)
+
+        # return qset if superuser
+        if user.is_superuser:
+            return qset
+
+        # otherwise check permission
+        if self.request.method == 'GET':
+            # objects that the user can read
+            get_object_or_404(user.profile.hospitals,
+                              hospital_id=id, can_read=True)
+
+        elif (self.request.method == 'PUT' or
+              self.request.method == 'PATCH' or
+              self.request.method == 'DELETE'):
+            # objects that the user can write to
+            get_object_or_404(user.profile.hospitals,
+                              hospital_id=id, can_write=True)
+
+        # and return qset
+        return qset
