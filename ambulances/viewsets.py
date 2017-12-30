@@ -6,7 +6,7 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import Ambulance, Hospital, Profile, HospitalEquipment
+from .models import Ambulance, Hospital, Profile, HospitalEquipment, Equipment
 
 from .serializers import ExtendedProfileSerializer, \
     AmbulanceSerializer, HospitalSerializer, HospitalEquipmentSerializer
