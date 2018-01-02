@@ -32,6 +32,12 @@ class UpdateClient(BaseClient):
                      qos=qos,
                      retain=retain)
         
+    def remove_topic(self, topic, serializer, qos=0):
+        # Publish null to retained topic
+        self.publish(topic,
+                     null,
+                     qos=qos,
+                     retain=True)
 
 # Loop until client disconnects
 
@@ -60,30 +66,52 @@ client.loop_start()
 
 # register signals
 
-@receiver(post_delete, sender=Ambulance)
+# Ambulance signals
+
 @receiver(post_save, sender=Ambulance)
 def mqtt_update_ambulance(sender, **kwargs):
     obj = kwargs['instance']
-    client.update('ambulance/{}/data'.format(obj.id),
-                  AmbulanceSerializer(obj),
-                  qos=2,
-                  retain=True)
+    client.update_topic('ambulance/{}/data'.format(obj.id),
+                        AmbulanceSerializer(obj),
+                        qos=2,
+                        retain=True)
 
-@receiver(post_delete, sender=Hospital)
+@receiver(post_delete, sender=Ambulance)
+def mqtt_remove_ambulance(sender, **kwargs):
+    obj = kwargs['instance']
+    client.remove_topic('ambulance/{}/data'.format(obj.id))
+
+
+# Hospital signals
+    
 @receiver(post_save, sender=Hospital)
 def mqtt_update_ambulance(sender, **kwargs):
     obj = kwargs['instance']
-    client.update('hospital/{}/data'.format(obj.id),
-                  HospitalSerializer(obj),
-                  qos=2,
-                  retain=True)
+    client.update_topic('hospital/{}/data'.format(obj.id),
+                        HospitalSerializer(obj),
+                        qos=2,
+                        retain=True)
     
-@receiver(post_delete, sender=HospitalEquipment)
+@receiver(post_delete, sender=Hospital)
+def mqtt_remove_ambulance(sender, **kwargs):
+    obj = kwargs['instance']
+    client.remove_topic('hospital/{}/data'.format(obj.id))
+
+
+# HospitalEquipment signals
+    
 @receiver(post_save, sender=HospitalEquipment)
 def mqtt_update_hospital_equipment(sender, **kwargs):
     obj = kwargs['instance']
-    client.update('hospital/{}/equipment/{}'.format(obj.id,
-                                                    obj.equipment.name),
-                  HospitalEquipmentSerializer(obj),
-                  qos=2,
-                  retain=True)
+    client.update_topic('hospital/{}/equipment/{}'.format(obj.id,
+                                                          obj.equipment.name),
+                        HospitalEquipmentSerializer(obj),
+                        qos=2,
+                        retain=True)
+
+@receiver(post_delete, sender=HospitalEquipment)
+def mqtt_remove_hospital_equipment(sender, **kwargs):
+    obj = kwargs['instance']
+    client.remove_topic('hospital/{}/equipment/{}'.format(obj.id,
+                                                          obj.equipment.name))
+    
