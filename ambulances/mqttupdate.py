@@ -100,14 +100,14 @@ def mqtt_remove_hospital(sender, **kwargs):
 
 # HospitalEquipment signals
 
-def mqtt_update_hospital_metadata(hospital_id):
+def mqtt_update_hospital_metadata(hospital_id, qos=2, retain=True):
     hospital = Hospital.objects.get(id=hospital_id)
     hospital_equipment = hospital.hospitalequipment_set.values('equipment')
     equipment = Equipment.objects.filter(id__in=hospital_equipment)
     client.update_topic('hospital/{}/metadata'.format(hospital_id),
                         EquipmentSerializer(equipment, many=True),
-                        qos=2,
-                        retain=True)
+                        qos=qos,
+                        retain=retain)
 
 @receiver(post_save, sender=HospitalEquipment)
 def mqtt_update_hospital_equipment(sender, **kwargs):
@@ -121,7 +121,9 @@ def mqtt_update_hospital_equipment(sender, **kwargs):
 
     # update hospital metadata
     if created:
-        mqtt_update_hospital_metadata(obj.hospital.id)
+        mqtt_update_hospital_metadata(obj.hospital.id,
+                                      qos=2,
+                                      retain=True)
 
 @receiver(pre_delete, sender=HospitalEquipment)
 def mqtt_remove_hospital_equipment(sender, **kwargs):
