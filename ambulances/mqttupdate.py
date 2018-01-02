@@ -104,7 +104,7 @@ def mqtt_update_hospital_metadata(hospital_id):
     hospital = Hospital.objects.get(id=hospital_id)
     hospital_equipment = hospital.hospitalequipment_set.values('equipment')
     equipment = Equipment.objects.filter(id__in=hospital_equipment)
-    client.update_topic('hospital/{}/metadata'.format(obj.hospital),
+    client.update_topic('hospital/{}/metadata'.format(hospital_id),
                         EquipmentSerializer(equipment, many=True),
                         qos=2,
                         retain=True)
