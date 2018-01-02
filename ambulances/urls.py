@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^docs/', login_required(schema_view)),
 
     # Router API urls
-    url(r'^api/', login_required(include(router.urls))),
+    url(r'^api/', include(router.urls)),
 
     url(r'^$',
         login_required(views.AmbulanceListView.as_view()),
