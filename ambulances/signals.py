@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.dispatch import receiver
 
 from django.contrib.auth.models import User
@@ -15,3 +15,4 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(pre_save, sender=Ambulance)
 def add_to_route(sender, instance, **kwargs):
     pass
+

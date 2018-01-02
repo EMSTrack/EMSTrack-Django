@@ -5,3 +5,4 @@ class AmbulancesConfig(AppConfig):
 
     def ready(self):
         import ambulances.signals
+        import ambulances.mqttupdate
