@@ -42,7 +42,7 @@ router.register(r'hospital/(?P<id>[0-9]+)/equipment',
 urlpatterns = [
 
     # Swagger Documentation
-    url(r'^docs/', schema_view),
+    url(r'^docs/', login_required(schema_view)),
 
     # Router API urls
     url(r'^api/', include(router.urls)),
