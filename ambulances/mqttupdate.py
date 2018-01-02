@@ -4,7 +4,7 @@ from django.utils.six import BytesIO
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
 
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.conf import settings
 
@@ -22,7 +22,6 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
 class UpdateClient(BaseClient):
 
     def publish(self, topic, message, *vargs, **kwargs):
-        # increment pubcount then publish
         self.client.publish(topic, message, *vargs, **kwargs)
 
     def update_topic(self, topic, serializer, qos=0, retain=False):
@@ -76,7 +75,7 @@ def mqtt_update_ambulance(sender, **kwargs):
                         qos=2,
                         retain=True)
 
-@receiver(post_delete, sender=Ambulance)
+@receiver(pre_delete, sender=Ambulance)
 def mqtt_remove_ambulance(sender, **kwargs):
     obj = kwargs['instance']
     client.remove_topic('ambulance/{}/data'.format(obj.id))
@@ -85,33 +84,50 @@ def mqtt_remove_ambulance(sender, **kwargs):
 # Hospital signals
     
 @receiver(post_save, sender=Hospital)
-def mqtt_update_ambulance(sender, **kwargs):
+def mqtt_update_hospital(sender, **kwargs):
     obj = kwargs['instance']
     client.update_topic('hospital/{}/data'.format(obj.id),
                         HospitalSerializer(obj),
                         qos=2,
                         retain=True)
     
-@receiver(post_delete, sender=Hospital)
-def mqtt_remove_ambulance(sender, **kwargs):
+@receiver(pre_delete, sender=Hospital)
+def mqtt_remove_hospital(sender, **kwargs):
     obj = kwargs['instance']
     client.remove_topic('hospital/{}/data'.format(obj.id))
+    client.remove_topic('hospital/{}/metadata'.format(obj.id))
 
 
 # HospitalEquipment signals
-    
+
+def mqtt_update_hospital_metadata(hospital_id):
+    hospital = Hospital.get(id=hospital_id)
+    hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+    equipment = Equipment.objects.filter(id__in=hospital_equipment)
+    client.update_topic('hospital/{}/metadata'.format(obj.hospital),
+                        EquipmentSerializer(equipment, many=True),
+                        qos=2,
+                        retain=True)
+
 @receiver(post_save, sender=HospitalEquipment)
 def mqtt_update_hospital_equipment(sender, **kwargs):
+    created = kwargs['created']
     obj = kwargs['instance']
-    client.update_topic('hospital/{}/equipment/{}'.format(obj.id,
+    client.update_topic('hospital/{}/equipment/{}'.format(obj.hospital.id,
                                                           obj.equipment.name),
                         HospitalEquipmentSerializer(obj),
                         qos=2,
                         retain=True)
 
-@receiver(post_delete, sender=HospitalEquipment)
+    # update hospital metadata
+    if created:
+        mqtt_update_hospital_metadata(obj.hospital.id)
+
+@receiver(pre_delete, sender=HospitalEquipment)
 def mqtt_remove_hospital_equipment(sender, **kwargs):
     obj = kwargs['instance']
-    client.remove_topic('hospital/{}/equipment/{}'.format(obj.id,
+    client.remove_topic('hospital/{}/equipment/{}'.format(obj.hospital.id,
                                                           obj.equipment.name))
-    
+
+    # update hospital metadata
+    mqtt_update_hospital_metadata(obj.hospital.id)
