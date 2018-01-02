@@ -25,37 +25,13 @@ class UpdateClient(BaseClient):
         # increment pubcount then publish
         self.client.publish(topic, message, *vargs, **kwargs)
 
-    def update_ambulance(self, obj):
+    def update_topic(self, topic, serializer, qos=0, retain=False):
+        # Publish to topic
+        self.publish(topic,
+                     JSONRenderer().render(serializer.data),
+                     qos=qos,
+                     retain=retain)
         
-        # Publish to ambulance topic
-        serializer = AmbulanceSerializer(obj)
-        json = JSONRenderer().render(serializer.data)
-        self.publish('ambulance/{}/data'.format(obj.id),
-                     json,
-                     qos=2,
-                     retain=True)
-
-    def update_hospital(self, obj):
-        
-        # Publish to hospital topic
-        serializer = HospitalSerializer(obj)
-        json = JSONRenderer().render(serializer.data)
-        self.publish('hospital/{}/data'.format(obj.id),
-                     json,
-                     qos=2,
-                     retain=True)
-        
-    def update_hospital_equipment(self, obj):
-
-        # Publish to hospital equipment topic
-        serializer = HospitalEquipmentSerializer(obj)
-        json = JSONRenderer().render(serializer.data)
-        self.publish('hospital/{}/equipment/{}'.format(obj.id,
-                                                       obj.equipment.name),
-                     json,
-                     qos=2,
-                     retain=True)
-
 
 # Loop until client disconnects
 
@@ -87,9 +63,27 @@ client.loop_start()
 @receiver(post_delete, sender=Ambulance)
 @receiver(post_save, sender=Ambulance)
 def mqtt_update_ambulance(sender, **kwargs):
-    client.update_ambulance(kwargs['instance'])
+    obj = kwargs['instance']
+    client.update('ambulance/{}/data'.format(obj.id),
+                  AmbulanceSerializer(obj),
+                  qos=2,
+                  retain=True)
 
+@receiver(post_delete, sender=Hospital)
+@receiver(post_save, sender=Hospital)
+def mqtt_update_ambulance(sender, **kwargs):
+    obj = kwargs['instance']
+    client.update('hospital/{}/data'.format(obj.id),
+                  HospitalSerializer(obj),
+                  qos=2,
+                  retain=True)
+    
 @receiver(post_delete, sender=HospitalEquipment)
 @receiver(post_save, sender=HospitalEquipment)
 def mqtt_update_hospital_equipment(sender, **kwargs):
-    client.update_hospital_equipment(kwargs['instance'])
+    obj = kwargs['instance']
+    client.update('hospital/{}/equipment/{}'.format(obj.id,
+                                                    obj.equipment.name),
+                  HospitalEquipmentSerializer(obj),
+                  qos=2,
+                  retain=True)
