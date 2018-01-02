@@ -150,6 +150,7 @@ class HospitalViewSet(mixins.ListModelMixin,
 
 class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
+                               UpdateModelUpdateByMixin,
                                viewsets.GenericViewSet):
     
     queryset = HospitalEquipment.objects.all()
