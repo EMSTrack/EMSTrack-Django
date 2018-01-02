@@ -101,7 +101,7 @@ def mqtt_remove_hospital(sender, **kwargs):
 # HospitalEquipment signals
 
 def mqtt_update_hospital_metadata(hospital_id):
-    hospital = Hospital.get(id=hospital_id)
+    hospital = Hospital.objects.get(id=hospital_id)
     hospital_equipment = hospital.hospitalequipment_set.values('equipment')
     equipment = Equipment.objects.filter(id__in=hospital_equipment)
     client.update_topic('hospital/{}/metadata'.format(obj.hospital),
