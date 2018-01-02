@@ -1,4 +1,6 @@
 import atexit
+import sys
+
 from .management._client import BaseClient
 
 from django.utils.six import BytesIO
