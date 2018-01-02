@@ -4,7 +4,7 @@ from django.utils.six import BytesIO
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
 
-from django.db.models.signals import pre_save, post_save, m2m_changed
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.conf import settings
 
