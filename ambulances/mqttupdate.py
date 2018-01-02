@@ -14,7 +14,7 @@ from rest_framework.renderers import JSONRenderer
 from .management._client import BaseClient
 from .models import Ambulance, Equipment, HospitalEquipment, Hospital
 from .serializers import AmbulanceSerializer, HospitalSerializer, \
-    HospitalEquipmentSerializer
+    HospitalEquipmentSerializer, EquipmentSerializer
 
 
 # UpdateClient class
