@@ -1,5 +1,4 @@
-import atexit
-import sys
+import atexit, sys, os
 
 from .management._client import BaseClient
 
