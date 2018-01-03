@@ -323,7 +323,7 @@ class TestProfile(TestSetup):
         # logout
         client.logout()
 
-class TestAmbulance1(TestSetup):
+class TestAmbulanceGetList(TestSetup):
 
     def test_ambulance_serializer(self):
 
@@ -473,7 +473,7 @@ class TestAmbulance1(TestSetup):
         # logout
         client.logout()
 
-class TestAmbulance2(TestSetup):
+class TestAmbulanceUpdate(TestSetup):
     
     def test_ambulance_update_serializer(self):
         
@@ -811,7 +811,7 @@ class TestAmbulance2(TestSetup):
         # logout
         client.logout()
 
-class TestAmbulance3(TestSetup):
+class TestAmbulanceCreate(TestSetup):
 
     def test_ambulance_create_serializer(self):
 
@@ -912,7 +912,7 @@ class TestAmbulance3(TestSetup):
         # logout
         client.logout()
         
-class TestHospital1(TestSetup):
+class TestHospitalGetList(TestSetup):
 
     def test_hospital_serializer(self):
 
@@ -1064,7 +1064,7 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
-class TestHospital2(TestSetup):
+class TestHospitalUpdate(TestSetup):
     
     def test_hospital_update_serializer(self):
         
@@ -1342,7 +1342,7 @@ class TestHospital2(TestSetup):
         client.logout()
 
         
-class TestHospitalEquipment(TestSetup):
+class TestHospitalEquipmentGetList(TestSetup):
 
     def test_hospital_equipment_serializer(self):
 
@@ -1594,6 +1594,9 @@ class TestHospitalEquipment(TestSetup):
         
         # logout
         client.logout()
+
+
+class TestHospitalEquipmentMetadata(TestSetup):
         
     def test_hospital_equipment_metadata_viewset(self):
 
