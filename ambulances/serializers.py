@@ -162,6 +162,7 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
 
     hospital_name = serializers.CharField(source='hospital.name')
     equipment_name = serializers.CharField(source='equipment.name')
+    equipment_etype = serializers.CharField(source='equipment.etype')
     
     class Meta:
         model = HospitalEquipment
@@ -170,7 +171,7 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
                   'value', 'comment',
                   'updated_by', 'updated_on')
         read_only_fields = ('hospital_id', 'hospital_name',
-                            'equipment_id', 'equipment_name',
+                            'equipment_id', 'equipment_name', 'equipment_etype',
                             'updated_by',)
 
 # EquipmentMetadata serializer
