@@ -38,6 +38,14 @@ class UpdateClient(BaseClient):
                      qos=qos,
                      retain=True)
 
+    def update_hospital_metadata(self, hospital, qos=2, retain=True):
+        hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+        equipment = Equipment.objects.filter(id__in=hospital_equipment)
+        client.update_topic('hospital/{}/metadata'.format(hospital.id),
+                            EquipmentSerializer(equipment, many=True),
+                            qos=qos,
+                            retain=retain)
+        
 # Loop until client disconnects
 
 # Start client
@@ -121,9 +129,10 @@ def mqtt_update_hospital_equipment(sender, **kwargs):
 
     # update hospital metadata
     if created:
-        mqtt_update_hospital_metadata(obj.hospital.id,
-                                      qos=2,
-                                      retain=True)
+        hospital = Hospital.objects.get(id=obj.hospital.id)
+        client.update_hospital_metadata(hospital,
+                                        qos=2,
+                                        retain=True)
 
 @receiver(pre_delete, sender=HospitalEquipment)
 def mqtt_remove_hospital_equipment(sender, **kwargs):

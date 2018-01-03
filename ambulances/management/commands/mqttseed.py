@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.management._client import BaseClient
+from ambulances.mqttupdate import UpdateClient
 
 from ambulances.models import Ambulance, Hospital, EquipmentCount, Equipment, Call, User
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer, MQTTAmbulanceListSerializer
@@ -26,154 +26,117 @@ class Client(BaseClient):
         self.can_disconnect = False
 
         # Seed hospitals
-        self.seed_hospital_equipment(client)
-        self.seed_hospital_lists(client)
-        self.seed_hospital_config(client)
+        self.seed_hospital_data(client)
+        self.seed_hospital_equipment_data(client)
+        self.seed_hospital_metadata(client)
 
         # Seed ambulances
-        self.seed_ambulance_location(client)
-        self.seed_ambulance_status(client)
-        self.seed_ambulance_lists(client)
+        self.seed_ambulance_data(client)
 
         # Seed calls
-        self.seed_calls(client)
+        # self.seed_calls(client)
 
         # Good to disconnect
         self.can_disconnect = True
         
     def publish(self, topic, message, *vargs, **kwargs):
+
         # increment pubcount then publish
         self.pubcount += 1
         self.client.publish(topic, message, *vargs, **kwargs)
 
-    def seed_ambulance_location(self, client):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding ambulance locations"))
+    def seed_ambulance_data(self, client):
 
-        # seeding ambulance locations
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding ambulance data"))
+
+        # seeding ambulances
         ambulances = Ambulance.objects.all()
 
-        for a in ambulances:
-            serializer = MQTTAmbulanceLocSerializer(a)
-            json = JSONRenderer().render(serializer.data)
-
-            self.publish('ambulance/{}/location'.format(a.id), json, qos=2, retain=True)
-            if self.verbosity > 0:
-                self.stdout.write("Location of ambulance {}: {}".format(a.id, serializer.data))
-
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance locations"))
-
-    def seed_ambulance_status(self, client):
-        ambulances = Ambulance.objects.all()
-
-        for a in ambulances:
-            self.publish('ambulance/{}/status'.format(a.id), a.status.name, qos=2, retain=True)
-            if self.verbosity > 0:
-                self.stdout.write("Status of ambulance {}: {}".format(a.id, a.status))
-
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance status"))
-
-    def seed_hospital_equipment(self, client):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding hospitals"))
-
-        # seeding hospitals
-        hospitals = Hospital.objects.all()
-        k = 0
-        for h in hospitals:
-            k = k + 1
-            if self.verbosity > 0:
-                self.stdout.write("  {:2d}. {}".format(k, h))
-            equipment = EquipmentCount.objects.filter(hospital=h)
-            for e in equipment:
-                if self.verbosity > 0:
-                    self.stdout.write("      {}: {}".format(e.equipment,
-                                                            e.quantity))
-
-                # publish message
-                self.publish('hospital/{}/equipment/{}'.format(h.id,
-                                                                 e.equipment),
-                               e.quantity,
-                               qos=2,
-                               retain=True)
-
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital equipment"))
-
-    def seed_hospital_config(self, client):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding hospital configurations"))
-
-        hospitals = Hospital.objects.all()
-        for h in hospitals:
-            serializer = MQTTHospitalEquipmentSerializer(h)
-            json = JSONRenderer().render(serializer.data)
-
-            self.publish('hospital/{}/metadata'.format(h.id), json, qos=2, retain=True)
-
-            if self.verbosity > 0:
-                # print out hospital id + config json
-                self.stdout.write("Seeded config for hospital {}".format(h.name))
-
-    def seed_hospital_lists(self, client):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding user hospital lists"))
-
-        # For now, each user will have access to all hospitals
-        for user in User.objects.all():
-
-            # Serialize and publish
-            serializer = MQTTHospitalListSerializer(user)
-            json = JSONRenderer().render(serializer.data)
-            self.publish('user/{}/hospitals'.format(user.username), json, qos=2, retain=True)
-
-            if self.verbosity > 0:
-                self.stdout.write(">> Hospital seed - user: {}".format(user.username))
-
-        if self.verbosity > 0:
-                self.stdout.write(self.style.SUCCESS(">> Seeded hospital list for every user"))
-
-    def seed_ambulance_lists(self, client):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding user ambulance lists"))
-
-        # For now, each user will have access to all hospitals
-        for user in User.objects.all():
-
-            # Serialize and publish
-            serializer = MQTTAmbulanceListSerializer(user)
-            json = JSONRenderer().render(serializer.data)
-            self.publish('user/{}/ambulances'.format(user.username), json, qos=2, retain=True)
-
-            if self.verbosity > 0:
-                self.stdout.write(">> Ambulance seed - user: {}".format(user.username))
-
-        if self.verbosity > 0:
-                self.stdout.write(self.style.SUCCESS(">> Seeded ambulance list for every user"))
-
-    def seed_calls(self, client):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding calls"))
-
-        for call in Call.objects.all():
-
-            # Only seed active calls
-            if not call.active:
-                continue
+        for obj in ambulances:
+            serializer = AmbulanceSerializer(obj)
+            client.update_topic('ambulance/{}/data'.format(obj.id),
+                                serializer,
+                                qos=2,
+                                retain=True)
             
-            amb_id = call.ambulance.id
-            serializer = CallSerializer(call)
-            json = JSONRenderer().render(serializer.data)
-
-            self.publish('ambulance/{}/call'.format(amb_id), json, qos=2, retain=True)
-
             if self.verbosity > 0:
-                self.stdout.write(">> Call seed - ambulance: {}".format(amb_id))
+                self.stdout.write("   Ambulance {}: {}".format(obj.id,
+                                                               serializer.data))
 
         if self.verbosity > 0:
-                self.stdout.write(self.style.SUCCESS(">> Seeded calls for every ambulance"))
+            self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance data"))
+
+    def seed_hospital_data(self, client):
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding hospital data"))
+
+        # seeding hospital 
+        hospitals = Hospital.objects.all()
+
+        for obj in hospitals:
+            serializer = HospitalSerializer(obj)
+            client.update_topic('hospital/{}/data'.format(obj.id),
+                                serializer,
+                                qos=2,
+                                retain=True)
+            
+            if self.verbosity > 0:
+                self.stdout.write("   Hospital {}: {}".format(obj.id,
+                                                              serializer.data))
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital data"))
+
+            
+    def seed_hospital_equipment_data(self, client):
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding hospital equipment data"))
+
+        # seeding hospital 
+        hospital_equipments = HospitalEquipment.objects.all()
+
+        for obj in hospital_equipments:
+            serializer = HospitalEquipmentSerializer(obj)
+            client.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
+                                                                       obj.equipment.name),
+                                serializer,
+                                qos=2,
+                                retain=True)
+            
+            if self.verbosity > 0:
+                self.stdout.write("   Hospital Equipment {}: {}".format(obj.id,
+                                                                        serializer.data))
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital equipment data"))
+
+            
+    def seed_hospital_metadata(self, client):
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding hospital metadata"))
+
+        # seeding hospital metadata
+        hospitals = Hospital.objects.all()
+
+        for hospital in hospitals:
+            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=hospital_equipment)
+            serializer = EquipmentSerializer(equipment, many=True)
+            client.update_topic('hospital/{}/metadata'.format(hospital_id),
+                                serializer,
+                                qos=2,
+                                retain=True)
+            
+            if self.verbosity > 0:
+                self.stdout.write("   Hospital metadata {}: {}".format(hospital.id,
+                                                                       serializer.data))
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital metadata"))
+
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):

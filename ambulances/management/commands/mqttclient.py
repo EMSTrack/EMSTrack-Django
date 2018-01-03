@@ -3,7 +3,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.management._client import BaseClient
+from ambulances.mqttclient import BaseClient
 
 from ambulances.models import EquipmentCount, Ambulance, Status, Call, User, Hospital
 from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer, MQTTUserLocationSerializer
