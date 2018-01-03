@@ -1062,6 +1062,301 @@ class TestHospital1(TestSetup):
         # logout
         client.logout()
 
+class TestHospital2(TestSetup):
+    
+    def test_hospital_update_serializer(self):
+        
+        # superuser first
+        
+        # Update hospital address
+        h = self.h1
+        user = self.u1
+        address = 'new address'
+        
+        serializer = HospitalSerializer(h,
+                                        data={
+                                            'address': address,
+                                        }, partial="True")
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = HospitalSerializer(h)
+        result = {
+            'id': h.id,
+            'name': h.name,
+            'comment': h.comment,
+            'address': address,
+            'location': point2str(h.location),
+            'updated_by': user.id,
+            'updated_on': date2iso(h.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+        
+        # Update hospital location
+        location = Point(-2,7)
+        
+        serializer = HospitalSerializer(h,
+                                        data={
+                                            'location': location,
+                                        }, partial="True")
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = HospitalSerializer(h)
+        result = {
+            'id': h.id,
+            'name': h.name,
+            'comment': h.comment,
+            'address': h.address,
+            'location': point2str(location),
+            'updated_by': user.id,
+            'updated_on': date2iso(h.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # regular authorized user
+        
+        # Update hospital address
+        h = self.h2
+        user = self.u2
+        address = 'new address'
+        
+        serializer = HospitalSerializer(h,
+                                        data={
+                                            'address': address,
+                                        }, partial="True")
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = HospitalSerializer(h)
+        result = {
+            'id': h.id,
+            'name': h.name,
+            'comment': h.comment,
+            'address': address,
+            'location': point2str(h.location),
+            'updated_by': user.id,
+            'updated_on': date2iso(h.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+        
+        # Update hospital location
+        location = Point(-2,7)
+        
+        serializer = HospitalSerializer(h,
+                                        data={
+                                            'location': location,
+                                        }, partial="True")
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = HospitalSerializer(h)
+        result = {
+            'id': h.id,
+            'name': h.name,
+            'comment': h.comment,
+            'address': h.address,
+            'location': point2str(location),
+            'updated_by': user.id,
+            'updated_on': date2iso(h.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+        
+    def test_hospital_patch_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username='admin', password='admin')
+
+        # retrieve hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.a1.id)))
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(self.a1).data
+        self.assertDictEqual(result, answer)
+
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.a1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve new hospital status
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.a1.id)))
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        
+        # set status location
+        location_timestamp = timezone.now()
+        location = Point(-2,7)
+        
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'location': str(location),
+                                    'location_timestamp': date2iso(location_timestamp),
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.a1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve new hospital location
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.a1.id)))
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
+        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        
+        # set wrong attribute
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': 'will fail'
+                                })
+        )
+        self.assertEqual(response.status_code, 400)
+        
+        # set wrong hospital id
+        response = client.patch('/ambulances/api/hospital/100/',
+                                data = json.dumps({
+                                    'status': status
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+        
+        # retrieve hospital
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.a3.id)))
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(self.a3).data
+        self.assertDictEqual(result, answer)
+
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a3.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.a3.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve new hospital status
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.a3.id)))
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        
+        # set status location
+        location_timestamp = timezone.now()
+        location = Point(-2,7)
+        
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a3.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'location': str(location),
+                                    'location_timestamp': date2iso(location_timestamp),
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalSerializer(Hospital.objects.get(id=self.a3.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve new hospital location
+        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.a3.id)))
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
+        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a2.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+                
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a1.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a2.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+
+        # set status hospital
+        status = HospitalStatus.OS.name
+        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.a3.id)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'status': status,
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
+        # logout
+        client.logout()
+
+        
 class TestHospitalEquipment(TestSetup):
 
     def test_hospital_equipment_serializer(self):

@@ -102,6 +102,9 @@ class Hospital(models.Model):
     address = models.CharField(max_length=254, default="")
     location = models.PointField(srid=4326, null=True, blank=True)
     
+    # comment
+    comment = models.CharField(max_length=254, default="")
+    
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
