@@ -11,7 +11,7 @@ from django.conf import settings
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from .management._client import BaseClient
+from .management.mqttclient import BaseClient
 from .models import Ambulance, Equipment, HospitalEquipment, Hospital
 from .serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
