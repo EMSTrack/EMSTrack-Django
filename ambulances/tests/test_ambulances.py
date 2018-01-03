@@ -1690,7 +1690,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
         
         # retrieve equipment value
@@ -1702,7 +1702,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # set equipment comment
         comment = 'some new comment'
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'comment': comment
@@ -1710,7 +1710,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id,equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
         
         # retrieve equipment comment
