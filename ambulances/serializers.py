@@ -166,7 +166,7 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = HospitalEquipment
         fields = ('hospital_id', 'hospital_name',
-                  'equipment_id', 'equipment_name',
+                  'equipment_id', 'equipment_name', 'equipment_etype',
                   'value', 'comment',
                   'updated_by', 'updated_on')
         read_only_fields = ('hospital_id', 'hospital_name',
