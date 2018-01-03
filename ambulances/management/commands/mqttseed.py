@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.mqttupdate import UpdateClient
+from ambulances.mqttclient import UpdateClient
 
 from ambulances.models import Ambulance, Hospital, HospitalEquipment
 
@@ -10,7 +10,7 @@ from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-class Client(BaseClient):
+class Client(UpdateClient):
 
     # The callback for when the client receives a CONNACK
     # response from the server.
