@@ -1615,6 +1615,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                               })
         )
         self.assertEqual(response.status_code, 200)
+        print('result = {}'.format(result.content))
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
