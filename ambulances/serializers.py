@@ -174,6 +174,13 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
                             'equipment_id', 'equipment_name', 'equipment_etype',
                             'updated_by',)
 
+    def validate(self, data):
+
+        # call super
+        super().validate(data)
+
+        # TODO: validate equipment value using equipment_etype
+        
 # EquipmentMetadata serializer
 class EquipmentSerializer(serializers.ModelSerializer):
 

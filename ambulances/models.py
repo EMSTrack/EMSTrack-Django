@@ -132,7 +132,7 @@ class HospitalPermission(models.Model):
                                                        self.hospital.id,
                                                        self.can_read,
                                                        self.can_write)
-    
+
 class EquipmentType(Enum):
     B = 'Boolean'
     I = 'Integer'
