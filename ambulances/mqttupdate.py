@@ -113,8 +113,8 @@ def mqtt_update_hospital_metadata(hospital_id, qos=2, retain=True):
 def mqtt_update_hospital_equipment(sender, **kwargs):
     created = kwargs['created']
     obj = kwargs['instance']
-    client.update_topic('hospital/{}/equipment/{}'.format(obj.hospital.id,
-                                                          obj.equipment.name),
+    client.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
+                                                               obj.equipment.name),
                         HospitalEquipmentSerializer(obj),
                         qos=2,
                         retain=True)
@@ -128,8 +128,8 @@ def mqtt_update_hospital_equipment(sender, **kwargs):
 @receiver(pre_delete, sender=HospitalEquipment)
 def mqtt_remove_hospital_equipment(sender, **kwargs):
     obj = kwargs['instance']
-    client.remove_topic('hospital/{}/equipment/{}'.format(obj.hospital.id,
-                                                          obj.equipment.name))
+    client.remove_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
+                                                               obj.equipment.name))
 
     # update hospital metadata
     mqtt_update_hospital_metadata(obj.hospital.id)
