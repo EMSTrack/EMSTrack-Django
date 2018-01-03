@@ -1654,7 +1654,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'comment': comment
                                 })
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         
         # set wrong ambulance id
         response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id+100), str(self.e1.name)),
