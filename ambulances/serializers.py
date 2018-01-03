@@ -156,7 +156,7 @@ class HospitalSerializer(serializers.ModelSerializer):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)
-
+    
 # HospitalEquipment serializers
 class HospitalEquipmentSerializer(serializers.ModelSerializer):
 
