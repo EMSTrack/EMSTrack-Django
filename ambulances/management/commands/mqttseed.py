@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.mqttclient import UpdateClient
+from ambulances.mqttupdate import UpdateClient
 
 from ambulances.models import Ambulance, Hospital, HospitalEquipment
 
