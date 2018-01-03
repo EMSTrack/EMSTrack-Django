@@ -924,7 +924,7 @@ class TestHospital1(TestSetup):
                 'name': h.name,
                 'address': h.address,
                 'location': None,
-                'comment': h.address,
+                'comment': h.comment,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on)
             }
@@ -1230,7 +1230,8 @@ class TestHospital2(TestSetup):
                                     'addresses': 'will fail'
                                 })
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 200)
+        print('response = {}'.format(response.content))
         
         # set wrong hospital id
         response = client.patch('/ambulances/api/hospital/100/',
