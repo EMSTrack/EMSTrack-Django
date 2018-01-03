@@ -8,7 +8,7 @@ if __name__ == "__main__":
                               sys.argv[1] == 'loaddata' or
                               sys.argv[1] == 'mqttclient' or
                               sys.argv[1] == 'mqttseed'):
-        os.environ.setdefault("DJANGO_ENABLE_SIGNALS", "False")
+        os.environ.setdefault("DJANGO_ENABLE_MQTT_SIGNALS", "False")
     try:
         from django.core.management import execute_from_command_line
     except ImportError:
