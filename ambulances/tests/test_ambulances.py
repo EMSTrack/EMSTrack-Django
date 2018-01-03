@@ -1682,7 +1682,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # set equipment value
         value = 'False'
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
@@ -1694,7 +1694,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve equipment value
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1714,15 +1714,15 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve equipment comment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['value'], value)
         self.assertEqual(result['comment'], comment)
 
-        # not permitted
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        # not permitted to write
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
