@@ -1680,6 +1680,56 @@ class TestHospitalEquipmentUpdate(TestSetup):
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
         
+        # set equipment value
+        value = 'False'
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'value': value
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve equipment value
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['value'], value)
+        
+        # set equipment comment
+        comment = 'some new comment'
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'comment': comment
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve equipment comment
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['value'], value)
+        self.assertEqual(result['comment'], comment)
+
+        # not permitted
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'value': value
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
+        
         # logout
         client.logout()
         
@@ -1693,7 +1743,16 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'value': value
                                 })
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
+        
+        # set equipment value
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'value': value
+                                })
+        )
+        self.assertEqual(response.status_code, 404)
         
         # logout
         client.logout()
