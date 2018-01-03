@@ -1647,6 +1647,15 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(result['value'], value)
         self.assertEqual(result['comment'], comment)
 
+        # set inexistent equipment
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e3.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'comment': comment
+                                })
+        )
+        self.assertEqual(response.status_code, 400)
+        
         # set wrong ambulance id
         response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id+100), str(self.e1.name)),
                                 content_type='application/json',
@@ -1676,6 +1685,15 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
+        
+        # set equipment value
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'value': value
+                                })
+        )
+        self.assertEqual(response.status_code, 400)
         
         # logout
         client.logout()
