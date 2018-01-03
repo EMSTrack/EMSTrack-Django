@@ -1611,7 +1611,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               content_type='application/json',
                               data = json.dumps({
-                                  'value': value,
+                                  'value': value
                               })
         )
         self.assertEqual(response.status_code, 200)
