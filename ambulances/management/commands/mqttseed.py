@@ -51,18 +51,11 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance data"))
 
         # seeding ambulances
-        ambulances = Ambulance.objects.all()
-
-        for obj in ambulances:
-            serializer = AmbulanceSerializer(obj)
-            client.update_topic('ambulance/{}/data'.format(obj.id),
-                                serializer,
-                                qos=2,
-                                retain=True)
+        for obj in Ambulance.objects.all():
+            client.update_ambulance(obj)
             
             if self.verbosity > 0:
-                self.stdout.write("   Ambulance {}: {}".format(obj.id,
-                                                               serializer.data))
+                self.stdout.write("   {}".format(obj))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance data"))
@@ -73,18 +66,11 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital data"))
 
         # seeding hospital 
-        hospitals = Hospital.objects.all()
-
-        for obj in hospitals:
-            serializer = HospitalSerializer(obj)
-            client.update_topic('hospital/{}/data'.format(obj.id),
-                                serializer,
-                                qos=2,
-                                retain=True)
+        for obj in Hospital.objects.all():
+            client.update_hospital(obj)
             
             if self.verbosity > 0:
-                self.stdout.write("   Hospital {}: {}".format(obj.id,
-                                                              serializer.data))
+                self.stdout.write("   {}".format(obj))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospital data"))
@@ -96,19 +82,11 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital equipment data"))
 
         # seeding hospital 
-        hospital_equipments = HospitalEquipment.objects.all()
-
-        for obj in hospital_equipments:
-            serializer = HospitalEquipmentSerializer(obj)
-            client.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
-                                                                       obj.equipment.name),
-                                serializer,
-                                qos=2,
-                                retain=True)
+        for obj in hospital_HospitalEquipment.objects.all():
+            client.update_hospital_equipment(obj)
             
             if self.verbosity > 0:
-                self.stdout.write("   Hospital Equipment {}: {}".format(obj.id,
-                                                                        serializer.data))
+                self.stdout.write("   {}".format(obj))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospital equipment data"))
@@ -119,20 +97,11 @@ class Client(BaseClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital metadata"))
 
         # seeding hospital metadata
-        hospitals = Hospital.objects.all()
-
-        for hospital in hospitals:
-            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            serializer = EquipmentSerializer(equipment, many=True)
-            client.update_topic('hospital/{}/metadata'.format(hospital_id),
-                                serializer,
-                                qos=2,
-                                retain=True)
+        for hospital in Hospital.objects.all():
+            client.update_hospital_metadata(hospital)
             
             if self.verbosity > 0:
-                self.stdout.write("   Hospital metadata {}: {}".format(hospital.id,
-                                                                       serializer.data))
+                self.stdout.write("   Hospital metadata for hospital {}".format(hospital.id)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospital metadata"))
