@@ -87,6 +87,7 @@ class TestSetup(TestCase):
         cls.h1 = Hospital.objects.create(
             name='Hospital General',
             address="Don't know",
+            comment="no comments",
             updated_by=cls.u1)
         
         cls.h2 = Hospital.objects.create(
@@ -923,6 +924,7 @@ class TestHospital1(TestSetup):
                 'name': h.name,
                 'address': h.address,
                 'location': None,
+                'comment': h.address,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on)
             }
