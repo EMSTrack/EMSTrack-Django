@@ -4,8 +4,7 @@ from django.conf import settings
 
 from ambulances.mqttupdate import UpdateClient
 
-from ambulances.models import Ambulance, Hospital, EquipmentCount, Equipment, Call, User
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, MQTTHospitalSerializer, MQTTHospitalEquipmentSerializer, CallSerializer, MQTTHospitalListSerializer, MQTTAmbulanceListSerializer
+from ambulances.models import Ambulance, Hospital, HospitalEquipment
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
