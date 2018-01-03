@@ -1654,7 +1654,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'comment': comment
                                 })
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
         # set wrong equipment name
         response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name+'wrong')),
@@ -1663,7 +1663,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'comment': comment
                                 })
         )
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
         
         # logout
         client.logout()
