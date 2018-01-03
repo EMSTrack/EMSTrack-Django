@@ -1606,7 +1606,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         # login as admin
         client.login(username='admin', password='admin')
 
-        # set any hospital equipment value
+        # set equipment value
         value = 'True'
         response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                                 content_type='application/json',
@@ -1619,12 +1619,33 @@ class TestHospitalEquipmentUpdate(TestSetup):
         answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
         
-        # retrieve any hospital equipment
+        # retrieve equipment value
         response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['value'], value)
+        
+        # set equipment comment
+        comment = 'some comment'
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'comment': comment
+                                })
+        )
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id,equipment=self.e1.id)).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve equipment comment
+        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['value'], value)
+        self.assertEqual(result['comment'], comment)
         
     def _test(self):
                               
