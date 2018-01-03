@@ -1608,11 +1608,11 @@ class TestHospitalEquipmentUpdate(TestSetup):
 
         # set any hospital equipment value
         value = 'True'
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
-                              content_type='application/json',
-                              data = json.dumps({
-                                  'value': value
-                              })
+        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+                                content_type='application/json',
+                                data = json.dumps({
+                                    'value': value
+                                })
         )
         self.assertEqual(response.status_code, 200)
         print('result = {}'.format(result.content))
