@@ -1223,16 +1223,6 @@ class TestHospital2(TestSetup):
         self.assertEqual(result['address'], address)
         self.assertEqual(result['location'], 'SRID=4326;' + str(location))
         
-        # set wrong attribute
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
-                                content_type='application/json',
-                                data = json.dumps({
-                                    'addresses': 'will fail'
-                                })
-        )
-        self.assertEqual(response.status_code, 200)
-        print('response = {}'.format(response.content))
-        
         # set wrong hospital id
         response = client.patch('/ambulances/api/hospital/100/',
                                 data = json.dumps({
