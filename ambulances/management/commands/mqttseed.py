@@ -101,7 +101,7 @@ class Client(BaseClient):
             client.update_hospital_metadata(hospital)
             
             if self.verbosity > 0:
-                self.stdout.write("   Hospital metadata for hospital {}".format(hospital.id)
+                self.stdout.write("   Hospital metadata for hospital {}".format(hospital.id))
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Done seeding hospital metadata"))
