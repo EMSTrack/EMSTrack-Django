@@ -41,18 +41,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
 
-        # determine server and port
-        host, port = self.live_server_url.split(':')
-        
-        # stop mosquito server
-        retval = subprocess.run(["service", "stop", "mosquito"])
-
-        # change default host and port
-        cat = subprocess.check_output(["cat", "/etc/mosquitto/conf.d/default.conf"])
-        sed1 = subprocess.check_output(["sed", "s/127.0.0.1/{}".format(host), "/etc/mosquitto/conf.d/default.conf"], stdin=cat)
-        sed2 = subprocess.check_output(["sed", "s/8000/{}".format(port)], stdin=sed1)
-        print('sed2 = {}'.format(sed2))
-
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
@@ -197,6 +185,18 @@ class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
         
+        # determine server and port
+        host, port = self.live_server_url.split(':')
+        
+        # stop mosquito server
+        retval = subprocess.run(["service", "stop", "mosquito"])
+
+        # change default host and port
+        cat = subprocess.check_output(["cat", "/etc/mosquitto/conf.d/default.conf"])
+        sed1 = subprocess.check_output(["sed", "s/127.0.0.1/{}".format(host), "/etc/mosquitto/conf.d/default.conf"], stdin=cat)
+        sed2 = subprocess.check_output(["sed", "s/8000/{}".format(port)], stdin=sed1)
+        print('sed2 = {}'.format(sed2))
+
         from django.core import management
 
         print('server address = {}'.format(self.live_server_url))
