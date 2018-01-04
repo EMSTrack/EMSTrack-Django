@@ -41,6 +41,12 @@ class LiveTestSetup(StaticLiveServerTestCase):
     def setUpClass(cls):
         super().setUpClass()
 
+        # determine server and port
+        protocol, host, port = cls.live_server_url.split(':')
+        host = host[2:]
+        
+        print('{} = {}:{}'.format(cls.live_server_url, host, port))
+
     @classmethod
     def tearDownClass(cls):
         super().tearDownClass()
@@ -196,17 +202,12 @@ class TestMQTTSeed(LiveTestSetup):
                                  "mosquitto",
                                  "stop"])
 
-        # move current configuration file
-        retval = subprocess.run(["mv",
-                                 "/etc/mosquitto/conf.d/default.conf",
-                                 "/etc/mosquitto/conf.d/default.conf.org"])
-
         # create test configuration file
         with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
             
             # change default host and port
             cat = subprocess.Popen(["cat",
-                                    "/etc/mosquitto/conf.d/default.conf.org"],
+                                    "/etc/mosquitto/conf.d/default.conf"],
                                    stdout= subprocess.PIPE)
             print('cat = {}'.format(cat.stdout))
             sed1 = subprocess.Popen(["sed",
@@ -219,6 +220,11 @@ class TestMQTTSeed(LiveTestSetup):
                                   stdin=sed1.stdout,
                                   stdout=outfile)
         
+        # move current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf",
+                                 "/etc/mosquitto/conf.d/default.conf.org"])
+
         # start mosquito server
         retval = subprocess.run(["service",
                                  "mosquitto",
