@@ -46,7 +46,7 @@ class Client(UpdateClient):
 
         # echo if verbosity > 0
         if self.verbosity > 0:
-            print("  {}: {}".format(topic, message))
+            self.stdout.write("   {}: {}".format(topic, message))
 
     def seed_ambulance_data(self, client):
 
