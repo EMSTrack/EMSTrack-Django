@@ -42,6 +42,8 @@ class TestSetup(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
+        super().setUpClass()
+
         # determine server and port
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
@@ -85,8 +87,6 @@ class TestSetup(StaticLiveServerTestCase):
                                  "start"])
         time.sleep(5)
         
-        super().setUpClass()
-
         # setUpTestData
         cls.setUpTestData()
         
