@@ -33,7 +33,7 @@ def point2str(point):
         return str(point)
     return point
 
-class TestSetup(StaticLiveServerTestCase):
+class LiveTestSetup(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -179,7 +179,7 @@ class TestSetup(StaticLiveServerTestCase):
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
 
-class TestMQTTSeed(TestSetup):
+class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
         
@@ -189,3 +189,6 @@ class TestMQTTSeed(TestSetup):
         
         management.call_command('mqttseed',
                                 verbosity=0)
+
+        print('done')
+        
