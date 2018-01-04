@@ -188,7 +188,8 @@ class TestMQTTSeed(LiveTestSetup):
         print('server address = {}'.format(self.live_server_url))
         
         # determine server and port
-        protocal, host, port = self.live_server_url.split(':')
+        protocol, host, port = self.live_server_url.split(':')
+        host = host(2:)
         
         # stop mosquito server
         retval = subprocess.run(["service", "stop", "mosquito"])
