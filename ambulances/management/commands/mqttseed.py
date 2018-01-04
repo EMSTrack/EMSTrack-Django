@@ -46,6 +46,10 @@ class Client(UpdateClient):
         result = self.client.publish(topic, message, *vargs, **kwargs)
         self.pubset.add(result.mid)
 
+        # echo if verbosity > 0
+        if self.verbosity > 0:
+            print("  {}: {}".format(topic, message))
+
     def seed_ambulance_data(self, client):
 
         if self.verbosity > 0:
@@ -110,10 +114,6 @@ class Client(UpdateClient):
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
-
-        # echo if verbosity > 0
-        if self.verbosity > 0:
-            print("  {}".format(userdata))
 
         # make sure all is published before disconnecting
         self.pubcount -= 1
