@@ -1,4 +1,5 @@
-from django.test import TestCase, LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.test import TestCase
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -32,7 +33,7 @@ def point2str(point):
         return str(point)
     return point
 
-class TestSetup(TestCase):
+class TestSetup(StaticLiveServerTestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -170,7 +171,7 @@ class TestSetup(TestCase):
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
 
-class TestMQTTSeed(LiveServerTestCase):
+class TestMQTTSeed(TestSetup):
         
     def test_mqttseed(self):
         
