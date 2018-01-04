@@ -145,8 +145,7 @@ class Equipment(models.Model):
     EQUIPMENT_ETYPE_CHOICES = \
         [(m.name, m.value) for m in EquipmentType]
     etype = models.CharField(max_length=1,
-                             choices = EQUIPMENT_ETYPE_CHOICES,
-                             default=EquipmentType.B.name)
+                             choices = EQUIPMENT_ETYPE_CHOICES)
     
     toggleable = models.BooleanField(default=False)
 
