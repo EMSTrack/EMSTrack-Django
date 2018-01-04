@@ -1,4 +1,4 @@
-from django.test import TestCase, RequestFactory
+from django.test import TestCase
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -6,7 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.gis.geos import Point
 from django.utils import timezone
 
-from rest_framework import serializers, test
+from rest_framework import serializers
 
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
@@ -18,18 +18,8 @@ from ambulances.serializers import ProfileSerializer, \
     AmbulanceSerializer, ExtendedProfileSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer, \
     EquipmentSerializer
-#    AmbulanceCapabilitySerializer, AmbulanceSerializer, \
-#    UserLocationSerializer
-
-import collections
-
-from django.utils.six import BytesIO
-from rest_framework.parsers import JSONParser
-import json
 
 from django.test import Client
-
-from ambulances.viewsets import AmbulanceViewSet
 
 def date2iso(date):
     if date is not None:
@@ -1857,11 +1847,3 @@ class TestHospitalEquipmentMetadata(TestSetup):
         # logout
         client.logout()
         
-class TestMQTTSeed(TestSetup):
-        
-    def test_mqttseed(self):
-        
-        from django.core import management
-
-        management.call_command('mqttseed',
-                                verbosity=0)
