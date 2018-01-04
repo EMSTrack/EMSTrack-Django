@@ -1864,5 +1864,4 @@ class TestMQTTSeed(TestSetup):
         from django.core import management
 
         management.call_command('mqttseed',
-                                verbosity=0,
-                                interactive=False)
+                                verbosity=0)
