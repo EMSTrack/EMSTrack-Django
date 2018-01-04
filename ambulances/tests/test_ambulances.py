@@ -81,10 +81,10 @@ class TestSetup(StaticLiveServerTestCase):
         print('>> Start mosquitto with test settings')
 
         # start mosquito server
-        time.sleep(1)
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
+        time.sleep(1)
         
         # setUpTestData
         cls.setUpTestData()
@@ -111,11 +111,11 @@ class TestSetup(StaticLiveServerTestCase):
         print('>> Starting mosquitto')
         
         # start mosquito server
-        time.sleep(1)
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
-
+        time.sleep(1)
+        
         super().tearDownClass()
         
     @classmethod
