@@ -185,6 +185,8 @@ class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
         
+        print('server address = {}'.format(self.live_server_url))
+        
         # determine server and port
         host, port = self.live_server_url.split(':')
         
@@ -199,7 +201,6 @@ class TestMQTTSeed(LiveTestSetup):
 
         from django.core import management
 
-        print('server address = {}'.format(self.live_server_url))
         
         #management.call_command('mqttseed',
         #                        verbosity=0)
