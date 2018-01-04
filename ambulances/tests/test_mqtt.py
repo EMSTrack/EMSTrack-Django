@@ -187,8 +187,8 @@ class TestMQTTSeed(LiveTestSetup):
 
         print('server address = {}'.format(self.live_server_url))
         
-        management.call_command('mqttseed',
-                                verbosity=0)
+        #management.call_command('mqttseed',
+        #                        verbosity=0)
 
         print('done')
         
