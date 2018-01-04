@@ -36,6 +36,14 @@ def point2str(point):
 class TestSetup(StaticLiveServerTestCase):
 
     @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+
+    @classmethod
     def setUpTestData(cls):
 
         # Add users
