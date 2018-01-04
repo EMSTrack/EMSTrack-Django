@@ -105,8 +105,9 @@ class TestSetup(StaticLiveServerTestCase):
                                  "stop"])
         
         # remove test configuration file
-        retval = subprocess.run(["rm",
-                                 "/etc/mosquitto/conf.d/test.conf"])
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/test.conf",
+                                 "/etc/mosquitto/conf.d/test.conf.old"])
         
         # restore current configuration file
         retval = subprocess.run(["mv",
