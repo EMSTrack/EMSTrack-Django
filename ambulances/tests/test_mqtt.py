@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, LiveServerTestCase
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -170,11 +170,13 @@ class TestSetup(TestCase):
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
 
-class TestMQTTSeed(TestSetup):
+class TestMQTTSeed(LiveServerTestCase):
         
     def test_mqttseed(self):
         
         from django.core import management
 
+        print('server address = {}'.format(self.live_server_url))
+        
         management.call_command('mqttseed',
                                 verbosity=0)
