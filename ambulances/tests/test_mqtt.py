@@ -219,6 +219,11 @@ class TestMQTTSeed(LiveTestSetup):
                                   stdin=sed1.stdout,
                                   stdout=outfile)
         
+        # start mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "start"])
+        
         from django.core import management
     
         #management.call_command('mqttseed',
@@ -226,10 +231,19 @@ class TestMQTTSeed(LiveTestSetup):
         
         print('done')
         
+        # stop mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "stop"])
+        
+        # remove test configuration file
+        retval = subprocess.run(["rm",
+                                 "/etc/mosquitto/conf.d/test.conf"])
+        
         # restore current configuration file
         retval = subprocess.run(["mv",
                                  "/etc/mosquitto/conf.d/default.conf.org",
-                                 "/etc/mosquitto/conf.d/default.conf", ])
+                                 "/etc/mosquitto/conf.d/default.conf"])
 
         # start mosquito server
         retval = subprocess.run(["service",
