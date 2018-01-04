@@ -45,12 +45,75 @@ class LiveTestSetup(StaticLiveServerTestCase):
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
         
-        print('{} = {}:{}'.format(cls.live_server_url, host, port))
+        print('\n>> Starting django server at {}:{}\n'.format(cls.live_server_url, host, port))
+        
+
+        print('>> Stoping mosquitto')
+        
+        # stop mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "stop"])
+
+        # create test configuration file
+        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
+            
+            # change default host and port
+            cat = subprocess.Popen(["cat",
+                                    "/etc/mosquitto/conf.d/default.conf"],
+                                   stdout= subprocess.PIPE)
+            print('cat = {}'.format(cat.stdout))
+            sed1 = subprocess.Popen(["sed",
+                                     "s/127.0.0.1/{}/".format(host)],
+                                    stdin=cat.stdout,
+                                    stdout=subprocess.PIPE)
+            print('sed1 = {}'.format(sed1.stdout))
+            sed2 = subprocess.run(["sed",
+                                   "s/8000/{}/".format(port)],
+                                  stdin=sed1.stdout,
+                                  stdout=outfile)
+        
+        # move current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf",
+                                 "/etc/mosquitto/conf.d/default.conf.org"])
+
+        print('>> Start mosquitto with test settings')
+        
+        # start mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "start"])
+        
 
     @classmethod
     def tearDownClass(cls):
-        super().tearDownClass()
+        
+        print('>> Stopping mosquitto with test settings')
+        
+        # stop mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "stop"])
+        
+        # remove test configuration file
+        retval = subprocess.run(["rm",
+                                 "/etc/mosquitto/conf.d/test.conf"])
+        
+        # restore current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf.org",
+                                 "/etc/mosquitto/conf.d/default.conf"])
 
+        print('>> Starting mosquitto')
+        
+        # start mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "start"])
+
+        super().tearDownClass()
+        
     @classmethod
     def setUpTestData(cls):
 
@@ -191,68 +254,10 @@ class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
         
-        # determine server and port
-        protocol, host, port = self.live_server_url.split(':')
-        host = host[2:]
-        
-        print('{} = {}:{}'.format(self.live_server_url, host, port))
-        
-        # stop mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "stop"])
-
-        # create test configuration file
-        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
-            
-            # change default host and port
-            cat = subprocess.Popen(["cat",
-                                    "/etc/mosquitto/conf.d/default.conf"],
-                                   stdout= subprocess.PIPE)
-            print('cat = {}'.format(cat.stdout))
-            sed1 = subprocess.Popen(["sed",
-                                     "s/127.0.0.1/{}/".format(host)],
-                                    stdin=cat.stdout,
-                                    stdout=subprocess.PIPE)
-            print('sed1 = {}'.format(sed1.stdout))
-            sed2 = subprocess.run(["sed",
-                                   "s/8000/{}/".format(port)],
-                                  stdin=sed1.stdout,
-                                  stdout=outfile)
-        
-        # move current configuration file
-        retval = subprocess.run(["mv",
-                                 "/etc/mosquitto/conf.d/default.conf",
-                                 "/etc/mosquitto/conf.d/default.conf.org"])
-
-        # start mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "start"])
-        
         from django.core import management
     
         #management.call_command('mqttseed',
         #                        verbosity=0)
         
         print('done')
-        
-        # stop mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "stop"])
-        
-        # remove test configuration file
-        retval = subprocess.run(["rm",
-                                 "/etc/mosquitto/conf.d/test.conf"])
-        
-        # restore current configuration file
-        retval = subprocess.run(["mv",
-                                 "/etc/mosquitto/conf.d/default.conf.org",
-                                 "/etc/mosquitto/conf.d/default.conf"])
-
-        # start mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "start"])
         
