@@ -22,6 +22,7 @@ class Client(UpdateClient):
 
         # initialize pubcount
         self.pubcount = 0
+        self.pubset = set()
         self.can_disconnect = False
 
         # Seed hospitals
@@ -42,7 +43,8 @@ class Client(UpdateClient):
 
         # increment pubcount then publish
         self.pubcount += 1
-        self.client.publish(topic, message, *vargs, **kwargs)
+        result = self.client.publish(topic, message, *vargs, **kwargs)
+        self.pubset.add(result.mid)
 
     def seed_ambulance_data(self, client):
 
@@ -115,6 +117,8 @@ class Client(UpdateClient):
 
         # make sure all is published before disconnecting
         self.pubcount -= 1
+        self.pubset.remove(mid)
+        print('count = {}, set = {}'.format(self.pubcount, self.pubset))
         if self.pubcount == 0 and self.can_disconnect:
             self.disconnect()
 
