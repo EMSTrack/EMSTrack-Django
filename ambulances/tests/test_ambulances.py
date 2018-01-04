@@ -1,4 +1,4 @@
-import subprocess, time
+import subprocess, time, os
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase, Client
@@ -42,6 +42,10 @@ class TestSetup(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
+        # disable mqtt signals
+        os.environ["DJANGO_ENABLE_MQTT_SIGNALS"] = "False"
+
+        # Create server
         super().setUpClass()
 
         # determine server and port
