@@ -39,26 +39,26 @@ class UpdateClient(BaseClient):
                      retain=True)
 
     def update_ambulance(self, obj, qos=2, retain=True):
-        client.update_topic('ambulance/{}/data'.format(obj.id),
+        self.update_topic('ambulance/{}/data'.format(obj.id),
                             AmbulanceSerializer(obj),
                             qos=qos,
                             retain=retain)
 
     def remove_ambulance(self, obj):
-        client.remove_topic('ambulance/{}/data'.format(obj.id))
+        self.remove_topic('ambulance/{}/data'.format(obj.id))
         
     def update_hospital(self, obj, qos=2, retain=True):
-        client.update_topic('hospital/{}/data'.format(obj.id),
+        self.update_topic('hospital/{}/data'.format(obj.id),
                             HospitalSerializer(obj),
                             qos=qos,
                             retain=retain)
 
     def remove_hospital(self, obj):
-        client.remove_topic('hospital/{}/data'.format(obj.id))
-        client.remove_topic('hospital/{}/metadata'.format(obj.id))
+        self.remove_topic('hospital/{}/data'.format(obj.id))
+        self.remove_topic('hospital/{}/metadata'.format(obj.id))
         
     def update_hospital_equipment(self, obj, qos=2, retain=True):
-        client.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
+        self.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
                                                                    obj.equipment.name),
                             HospitalEquipmentSerializer(obj),
                             qos=qos,
@@ -67,13 +67,13 @@ class UpdateClient(BaseClient):
     def update_hospital_metadata(self, hospital, qos=2, retain=True):
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
-        client.update_topic('hospital/{}/metadata'.format(hospital.id),
+        self.update_topic('hospital/{}/metadata'.format(hospital.id),
                             EquipmentSerializer(equipment, many=True),
                             qos=qos,
                             retain=retain)
 
     def remove_hospital_equipment(self, obj):
-        client.remove_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
+        self.remove_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
                                                                    obj.equipment.name))
 
         
@@ -142,4 +142,4 @@ def mqtt_remove_hospital_equipment(sender, **kwargs):
     client.remove_hospital_equipment(obj)
 
     # update hospital metadata
-    mqtt_update_hospital_metadata(obj.hospital.id)
+    client.update_hospital_metadata(obj.hospital.id)
