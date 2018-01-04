@@ -251,6 +251,7 @@ class TestSetup(StaticLiveServerTestCase):
         #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
+        
 class TestProfile(TestSetup):
 
     def test_profile_serializer(self):
