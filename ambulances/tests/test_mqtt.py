@@ -196,29 +196,31 @@ class TestMQTTSeed(LiveTestSetup):
                                  "mosquitto",
                                  "stop"])
 
-        # copy current configuration file
+        # move current configuration file
         retval = subprocess.run(["mv",
                                  "/etc/mosquitto/conf.d/default.conf",
                                  "/etc/mosquitto/conf.d/default.conf.org"])
 
-        # change default host and port
-        cat = subprocess.Popen(["cat",
-                                "/etc/mosquitto/conf.d/default.conf.org"],
-                               stdout= subprocess.PIPE)
-        print('cat = {}'.format(cat.stdout))
-        sed1 = subprocess.Popen(["sed",
-                                 "s/127.0.0.1/{}/".format(host)],
-                                stdin=cat.stdout,
-                                stdout=subprocess.PIPE)
-        print('sed1 = {}'.format(sed1.stdout))
-        sed2 = subprocess.check_output(["sed",
-                                        "s/8000/{}/".format(port)],
-                                       stdin=sed1.stdout)
-        print('sed2 = {}'.format(sed2))
+        # create test configuration file
+        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
+            
+            # change default host and port
+            cat = subprocess.Popen(["cat",
+                                    "/etc/mosquitto/conf.d/default.conf.org"],
+                                   stdout= subprocess.PIPE)
+            print('cat = {}'.format(cat.stdout))
+            sed1 = subprocess.Popen(["sed",
+                                     "s/127.0.0.1/{}/".format(host)],
+                                    stdin=cat.stdout,
+                                    stdout=subprocess.PIPE)
+            print('sed1 = {}'.format(sed1.stdout))
+            sed2 = subprocess.run(["sed",
+                                   "s/8000/{}/".format(port)],
+                                  stdin=sed1.stdout,
+                                  stdout=outfile)
         
         from django.core import management
     
-        
         #management.call_command('mqttseed',
         #                        verbosity=0)
         
