@@ -20,8 +20,7 @@ class Client(UpdateClient):
         if not super().on_connect(client, userdata, flags, rc):
             return False
 
-        # initialize pubcount
-        self.pubcount = 0
+        # initialize pubset
         self.pubset = set()
         self.can_disconnect = False
 
@@ -42,7 +41,6 @@ class Client(UpdateClient):
     def publish(self, topic, message, *vargs, **kwargs):
 
         # increment pubcount then publish
-        self.pubcount += 1
         result = self.client.publish(topic, message, *vargs, **kwargs)
         self.pubset.add(result.mid)
 
@@ -59,11 +57,8 @@ class Client(UpdateClient):
         for obj in Ambulance.objects.all():
             self.update_ambulance(obj)
             
-            if self.verbosity > 0:
-                self.stdout.write("   {}".format(obj))
-
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding ambulance data"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding ambulance data"))
 
     def seed_hospital_data(self, client):
 
@@ -74,11 +69,8 @@ class Client(UpdateClient):
         for obj in Hospital.objects.all():
             self.update_hospital(obj)
             
-            if self.verbosity > 0:
-                self.stdout.write("   {}".format(obj))
-
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital data"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital data"))
 
             
     def seed_hospital_equipment_data(self, client):
@@ -90,11 +82,8 @@ class Client(UpdateClient):
         for obj in HospitalEquipment.objects.all():
             self.update_hospital_equipment(obj)
             
-            if self.verbosity > 0:
-                self.stdout.write("   {}".format(obj))
-
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital equipment data"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital equipment data"))
 
             
     def seed_hospital_metadata(self, client):
@@ -109,17 +98,15 @@ class Client(UpdateClient):
                 self.stdout.write("   Hospital metadata for hospital {}".format(hospital.id))
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Done seeding hospital metadata"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
 
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
 
         # make sure all is published before disconnecting
-        self.pubcount -= 1
         self.pubset.remove(mid)
-        print('count = {}, set = {}'.format(self.pubcount, self.pubset))
-        if self.pubcount == 0 and self.can_disconnect:
+        if len(self.pubset) == 0 and self.can_disconnect:
             self.disconnect()
 
 class Command(BaseCommand):
