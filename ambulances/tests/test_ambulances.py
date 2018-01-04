@@ -1857,3 +1857,12 @@ class TestHospitalEquipmentMetadata(TestSetup):
         # logout
         client.logout()
         
+class TestMQTTSeed(TestSetup):
+        
+    def test_mqttseed(self):
+        
+        from django.core import management
+
+        management.call_command('mqttseed',
+                                verbosity=0,
+                                interactive=False)
