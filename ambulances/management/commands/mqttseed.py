@@ -51,7 +51,7 @@ class Client(UpdateClient):
 
         # seeding ambulances
         for obj in Ambulance.objects.all():
-            client.update_ambulance(obj)
+            self.update_ambulance(obj)
             
             if self.verbosity > 0:
                 self.stdout.write("   {}".format(obj))
@@ -66,7 +66,7 @@ class Client(UpdateClient):
 
         # seeding hospital 
         for obj in Hospital.objects.all():
-            client.update_hospital(obj)
+            self.update_hospital(obj)
             
             if self.verbosity > 0:
                 self.stdout.write("   {}".format(obj))
@@ -82,7 +82,7 @@ class Client(UpdateClient):
 
         # seeding hospital 
         for obj in hospital_HospitalEquipment.objects.all():
-            client.update_hospital_equipment(obj)
+            self.update_hospital_equipment(obj)
             
             if self.verbosity > 0:
                 self.stdout.write("   {}".format(obj))
@@ -97,7 +97,7 @@ class Client(UpdateClient):
 
         # seeding hospital metadata
         for hospital in Hospital.objects.all():
-            client.update_hospital_metadata(hospital)
+            self.update_hospital_metadata(hospital)
             
             if self.verbosity > 0:
                 self.stdout.write("   Hospital metadata for hospital {}".format(hospital.id))
