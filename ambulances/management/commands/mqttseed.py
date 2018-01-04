@@ -108,9 +108,13 @@ class Client(UpdateClient):
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
+
+        # echo if verbosity > 0
+        if self.verbosity > 0:
+            print("  {}".format(userdata))
+
         # make sure all is published before disconnecting
         self.pubcount -= 1
-        # print("on_publish: '{}', '{}'".format(client, userdata))
         if self.pubcount == 0 and self.can_disconnect:
             self.disconnect()
 
