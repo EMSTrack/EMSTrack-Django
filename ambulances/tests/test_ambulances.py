@@ -52,7 +52,7 @@ class TestSetup(StaticLiveServerTestCase):
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
         
-        print('\n>> Starting django server at {}:{}'.format(cls.live_server_url, host, port))
+        print('\n>> Starting django server at {}, {}:{}'.format(cls.live_server_url, host, port))
         
 
         print('>> Stoping mosquitto')
