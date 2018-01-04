@@ -45,8 +45,10 @@ class Client(UpdateClient):
         self.pubset.add(result.mid)
 
         # echo if verbosity > 0
-        if self.verbosity > 0:
+        if self.verbosity > 1:
             self.stdout.write("   {}: {}".format(topic, message))
+        elif self.verbosity > 0:
+            self.stdout.write("   {}".format(topic))
 
     def seed_ambulance_data(self, client):
 
