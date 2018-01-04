@@ -193,7 +193,7 @@ class TestMQTTSeed(LiveTestSetup):
         
         # stop mosquito server
         retval = subprocess.run(["service",
-                                 "mosquito",
+                                 "mosquitto",
                                  "stop"])
 
         # copy current configuration file
@@ -231,6 +231,6 @@ class TestMQTTSeed(LiveTestSetup):
 
         # start mosquito server
         retval = subprocess.run(["service",
-                                 "mosquito",
+                                 "mosquitto",
                                  "start"])
         
