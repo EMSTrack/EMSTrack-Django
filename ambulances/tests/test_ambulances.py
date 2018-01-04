@@ -1,3 +1,4 @@
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase, Client
 
 from django.contrib.auth.models import User
@@ -34,8 +35,85 @@ def point2str(point):
         return str(point)
     return point
 
-class TestSetup(TestCase):
+class TestSetup(StaticLiveServerTestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+
+        # determine server and port
+        protocol, host, port = cls.live_server_url.split(':')
+        host = host[2:]
+        
+        print('\n>> Starting django server at {}:{}'.format(cls.live_server_url, host, port))
+        
+
+        print('>> Stoping mosquitto')
+        
+        # stop mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "stop"])
+
+        # create test configuration file
+        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
+            
+            # change default host and port
+            cat = subprocess.Popen(["cat",
+                                    "/etc/mosquitto/conf.d/default.conf"],
+                                   stdout= subprocess.PIPE)
+            sed1 = subprocess.Popen(["sed",
+                                     "s/127.0.0.1/{}/".format(host)],
+                                    stdin=cat.stdout,
+                                    stdout=subprocess.PIPE)
+            sed2 = subprocess.run(["sed",
+                                   "s/8000/{}/".format(port)],
+                                  stdin=sed1.stdout,
+                                  stdout=outfile)
+        
+        # move current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf",
+                                 "/etc/mosquitto/conf.d/default.conf.org"])
+
+        print('>> Start mosquitto with test settings')
+
+        # start mosquito server
+        time.sleep(1)
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "start"])
+        
+
+    @classmethod
+    def tearDownClass(cls):
+        
+        print('>> Stopping mosquitto with test settings')
+        
+        # stop mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "stop"])
+        
+        # remove test configuration file
+        retval = subprocess.run(["rm",
+                                 "/etc/mosquitto/conf.d/test.conf"])
+        
+        # restore current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf.org",
+                                 "/etc/mosquitto/conf.d/default.conf"])
+
+        print('>> Starting mosquitto')
+        
+        # start mosquito server
+        time.sleep(1)
+        retval = subprocess.run(["service",
+                                 "mosquitto",
+                                 "start"])
+
+        super().tearDownClass()
+        
     @classmethod
     def setUpTestData(cls):
 
