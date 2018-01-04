@@ -185,17 +185,18 @@ class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
         
-        print('server address = {}'.format(self.live_server_url))
-        
         # determine server and port
         protocol, host, port = self.live_server_url.split(':')
         host = host[2:]
         
+        print('{} = {}:{}'.format(self.live_server_url, host, port))
+        
         # stop mosquito server
-        retval = subprocess.run(["service", "stop", "mosquito"])
+        #retval = subprocess.run(["service", "mosquito", "stop"])
 
         # change default host and port
         cat = subprocess.check_output(["cat", "/etc/mosquitto/conf.d/default.conf"])
+        print('cat = {}'.format(cat))
         sed1 = subprocess.check_output(["sed", "s/127.0.0.1/{}".format(host), "/etc/mosquitto/conf.d/default.conf"], stdin=cat)
         sed2 = subprocess.check_output(["sed", "s/8000/{}".format(port)], stdin=sed1)
         print('sed2 = {}'.format(sed2))
