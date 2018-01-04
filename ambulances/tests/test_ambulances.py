@@ -86,7 +86,9 @@ class TestSetup(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "start"])
         
-
+        # setUpTestData
+        cls.setUpTestData()
+        
     @classmethod
     def tearDownClass(cls):
         
@@ -119,6 +121,8 @@ class TestSetup(StaticLiveServerTestCase):
     @classmethod
     def setUpTestData(cls):
 
+        print('>> setUpTestData')
+        
         # Add users
         cls.u1 = User.objects.create_user(
             username='admin',
