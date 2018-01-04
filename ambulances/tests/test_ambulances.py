@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
+from io import BytesIO
 
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
