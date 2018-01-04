@@ -195,11 +195,12 @@ class TestMQTTSeed(LiveTestSetup):
         #retval = subprocess.run(["service", "mosquito", "stop"])
 
         # change default host and port
-        cat = subprocess.check_output(["cat", "/etc/mosquitto/conf.d/default.conf"])
-        print('cat = {}'.format(cat))
-        sed1 = subprocess.check_output(["sed", "s/127.0.0.1/{}".format(host), "/etc/mosquitto/conf.d/default.conf"], stdin=cat)
-        sed2 = subprocess.check_output(["sed", "s/8000/{}".format(port)], stdin=sed1)
-        print('sed2 = {}'.format(sed2))
+        cat = subprocess.run(["cat", "/etc/mosquitto/conf.d/default.conf"], check=True, stdout= subprocess.PIPE)
+        print('cat = {}'.format(cat.stdout))
+        sed1 = subprocess.run(["sed", "s/127.0.0.1/{}".format(host)], stdin=cat.stdout, stdout=subprocess.PIPE, check=True)
+        print('sed1 = {}'.format(sed1.stdout))
+        sed2 = subprocess.run(["sed", "s/8000/{}".format(port)], stdin=sed1, stdout=subprocess.PIPE, check=True)
+        print('sed2 = {}'.format(sed2.stdout))
 
         from django.core import management
 
