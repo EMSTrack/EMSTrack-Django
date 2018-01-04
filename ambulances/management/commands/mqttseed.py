@@ -81,7 +81,7 @@ class Client(UpdateClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital equipment data"))
 
         # seeding hospital 
-        for obj in hospital_HospitalEquipment.objects.all():
+        for obj in HospitalEquipment.objects.all():
             self.update_hospital_equipment(obj)
             
             if self.verbosity > 0:
