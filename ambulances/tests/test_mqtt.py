@@ -33,7 +33,7 @@ def point2str(point):
         return str(point)
     return point
 
-import subprocess
+import subprocess, time
 
 class LiveTestSetup(StaticLiveServerTestCase):
 
@@ -45,7 +45,7 @@ class LiveTestSetup(StaticLiveServerTestCase):
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
         
-        print('\n>> Starting django server at {}:{}\n'.format(cls.live_server_url, host, port))
+        print('\n>> Starting django server at {}:{}'.format(cls.live_server_url, host, port))
         
 
         print('>> Stoping mosquitto')
@@ -62,12 +62,10 @@ class LiveTestSetup(StaticLiveServerTestCase):
             cat = subprocess.Popen(["cat",
                                     "/etc/mosquitto/conf.d/default.conf"],
                                    stdout= subprocess.PIPE)
-            print('cat = {}'.format(cat.stdout))
             sed1 = subprocess.Popen(["sed",
                                      "s/127.0.0.1/{}/".format(host)],
                                     stdin=cat.stdout,
                                     stdout=subprocess.PIPE)
-            print('sed1 = {}'.format(sed1.stdout))
             sed2 = subprocess.run(["sed",
                                    "s/8000/{}/".format(port)],
                                   stdin=sed1.stdout,
@@ -79,8 +77,9 @@ class LiveTestSetup(StaticLiveServerTestCase):
                                  "/etc/mosquitto/conf.d/default.conf.org"])
 
         print('>> Start mosquitto with test settings')
-        
+
         # start mosquito server
+        time.sleep(1)
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
@@ -108,6 +107,7 @@ class LiveTestSetup(StaticLiveServerTestCase):
         print('>> Starting mosquitto')
         
         # start mosquito server
+        time.sleep(1)
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
