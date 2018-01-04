@@ -192,21 +192,45 @@ class TestMQTTSeed(LiveTestSetup):
         print('{} = {}:{}'.format(self.live_server_url, host, port))
         
         # stop mosquito server
-        #retval = subprocess.run(["service", "mosquito", "stop"])
+        retval = subprocess.run(["service",
+                                 "mosquito",
+                                 "stop"])
+
+        # copy current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf",
+                                 "/etc/mosquitto/conf.d/default.conf.org"])
 
         # change default host and port
-        cat = subprocess.Popen(["cat", "/etc/mosquitto/conf.d/default.conf"], stdout= subprocess.PIPE)
+        cat = subprocess.Popen(["cat",
+                                "/etc/mosquitto/conf.d/default.conf.org"],
+                               stdout= subprocess.PIPE)
         print('cat = {}'.format(cat.stdout))
-        sed1 = subprocess.Popen(["sed", "s/127.0.0.1/{}/".format(host)], stdin=cat.stdout, stdout=subprocess.PIPE)
+        sed1 = subprocess.Popen(["sed",
+                                 "s/127.0.0.1/{}/".format(host)],
+                                stdin=cat.stdout,
+                                stdout=subprocess.PIPE)
         print('sed1 = {}'.format(sed1.stdout))
-        sed2 = subprocess.check_output(["sed", "s/8000/{}/".format(port)], stdin=sed1.stdout)
+        sed2 = subprocess.check_output(["sed",
+                                        "s/8000/{}/".format(port)],
+                                       stdin=sed1.stdout)
         print('sed2 = {}'.format(sed2))
-
+        
         from django.core import management
-
+    
         
         #management.call_command('mqttseed',
         #                        verbosity=0)
-
+        
         print('done')
+        
+        # restore current configuration file
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/default.conf.org",
+                                 "/etc/mosquitto/conf.d/default.conf", ])
+
+        # start mosquito server
+        retval = subprocess.run(["service",
+                                 "mosquito",
+                                 "start"])
         
