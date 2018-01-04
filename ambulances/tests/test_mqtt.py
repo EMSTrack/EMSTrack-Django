@@ -48,9 +48,9 @@ class LiveTestSetup(StaticLiveServerTestCase):
         retval = subprocess.run(["service", "stop", "mosquito"])
 
         # change default host and port
-        cat = subprocess.check_output(["cat", "/etc/mosquitto/conf.d/default.conf"]))
-        sed1 = subprocess.check_output(["sed", "s/127.0.0.1/{}".format(host), "/etc/mosquitto/conf.d/default.conf"], stdin=cat))
-        sed2 = subprocess.check_output(["sed", "s/8000/{}".format(port)], stdin=sed1))
+        cat = subprocess.check_output(["cat", "/etc/mosquitto/conf.d/default.conf"])
+        sed1 = subprocess.check_output(["sed", "s/127.0.0.1/{}".format(host), "/etc/mosquitto/conf.d/default.conf"], stdin=cat)
+        sed2 = subprocess.check_output(["sed", "s/8000/{}".format(port)], stdin=sed1)
         print('sed2 = {}'.format(sed2))
 
     @classmethod
