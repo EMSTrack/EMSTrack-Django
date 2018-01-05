@@ -310,7 +310,7 @@ class MQTTTestClient(BaseClient):
             self.expecting[topic].append(msg)
         else:
             self.expecting[topic] = [msg]
-            client.subscribe(topic, 2)
+            self.client.subscribe(topic, 2)
         
 class TestMQTTSeed(LiveTestSetup):
         
