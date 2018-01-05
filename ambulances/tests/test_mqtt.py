@@ -331,7 +331,7 @@ class TestMQTTSeed(LiveTestSetup):
         }
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttseed'
-        client = Client(broker, sys.stdout, style, verbosity = 1)
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
 
         # seeding ambulances
         #for obj in Ambulance.objects.all():
