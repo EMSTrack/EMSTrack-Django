@@ -250,13 +250,113 @@ class LiveTestSetup(StaticLiveServerTestCase):
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
 
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style, no_style
+from .mqttclient import BaseClient
+        
+# MQTTTestClient
+class MQTTTestClient(BaseClient):
+
+    def __init__(self, *args, **kwargs):
+
+        # call supper
+        super().__init__(*args, **kwargs)
+
+        # expect
+        self.expectset = {}
+
+        # initialize pubcount
+        self.pubset = set()
+
+    def done(self):
+
+        return len(self.pubset) == 0 and len(self.expectset) == 0
+        
+    # The callback for when the client receives a CONNACK
+    # response from the server.
+    def on_connect(self, client, userdata, flags, rc):
+
+        # is connected?
+        if not super().on_connect(client, userdata, flags, rc):
+            return False
+
+        # subscribe to everything
+        client.subscribe('#', 2)
+        
+    # The callback for when a subscribed message is received from the server.
+    def on_message(self, client, userdata, msg):
+
+        if msg.topic in self.expect_fifo:
+
+            # pop from expected list
+            expect = self.expect_fifo[msg.topic].pop(0)
+            value = msg.payload.decode()
+
+            # remove topic if empty list
+            if not self.expect_fifo[msg.topic]:
+                del self.expect_fifo[msg.topic]
+
+            # assert content
+            assert compare_json(value, expect)
+
+        else
+        
+            raise Exception("Unexpected message topic '{}'".format(msg.topic))
+
+        # disconnect
+        if self.done():
+            self.disconnect()
+            
+    def expect(self, topic, msg):
+
+        if topic in self.expect_fifo:
+            self.expect_fifo[topic].append(msg)
+        else:
+            self.expect_fifo[topic] = [msg]
+        
 class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
-        
+
+        # Start client
+        stdout = OutputWrapper(sys.stdout)
+        style = color_style()
+
+        # Instantiate broker
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttseed'
+        client = Client(broker, sys.stdout, style, verbosity = 1)
+
+        # seeding ambulances
+        #for obj in Ambulance.objects.all():
+            #self.update_ambulance(obj)
+
         from django.core import management
     
         management.call_command('mqttseed',
                                 verbosity=0)
         
+
+        try:
+        
+            client.loop_start()
+        
+            tests(client)
+            
+            while not client.done():
+                time.sleep(1)
+            
+            client.loop_stop()
+            
+        except KeyboardInterrupt:
+            pass
+        
+        finally:
+            client.disconnect()
         
