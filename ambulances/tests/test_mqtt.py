@@ -252,7 +252,7 @@ class LiveTestSetup(StaticLiveServerTestCase):
 
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
-from .mqttclient import BaseClient
+from ambulances.mqttclient import BaseClient
         
 # MQTTTestClient
 class MQTTTestClient(BaseClient):
