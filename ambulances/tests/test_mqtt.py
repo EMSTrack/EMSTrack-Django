@@ -8,6 +8,7 @@ from django.core.exceptions import PermissionDenied
 
 from django.contrib.gis.geos import Point
 from django.utils import timezone
+from django.conf import settings
 
 from rest_framework import serializers
 
@@ -40,6 +41,13 @@ class LiveTestSetup(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
+        # Add admin user
+        cls.u1 = User.objects.create_user(
+            username=settings.MQTT['USERNAME'],
+            email='admin@user.com',
+            password=settings.MQTT['PASSWORD'],
+            is_superuser=True)
+        
         # Create server
         super().setUpClass()
 
@@ -64,14 +72,10 @@ class LiveTestSetup(StaticLiveServerTestCase):
             cat = subprocess.Popen(["cat",
                                     "/etc/mosquitto/conf.d/default.conf"],
                                    stdout= subprocess.PIPE)
-            #sed1 = subprocess.Popen(["sed",
-            #                         "s/127.0.0.1/{}/".format(host)],
-            #                        stdin=cat.stdout,
-            #                        stdout=subprocess.PIPE)
-            sed2 = subprocess.run(["sed",
-                                   "s/8000/{}/".format(port)],
-                                  stdin=cat.stdout,
-                                  stdout=outfile)
+            sed = subprocess.run(["sed",
+                                  "s/8000/{}/".format(port)],
+                                 stdin=cat.stdout,
+                                 stdout=outfile)
             
         # move current configuration file
         retval = subprocess.run(["mv",
@@ -84,10 +88,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
-
-        import importlib
-        m1 = importlib.import_module('ambulances.mqttupdate')
-        importlib.reload(m1)
 
         cls.setUpTestData()
 
@@ -124,12 +124,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
     def setUpTestData(cls):
 
         # Add users
-        cls.u1 = User.objects.create_user(
-            username='admin',
-            email='admin@user.com',
-            password='admin',
-            is_superuser=True)
-        
         cls.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
