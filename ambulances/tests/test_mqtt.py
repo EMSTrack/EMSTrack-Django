@@ -299,7 +299,7 @@ class MQTTTestClient(BaseClient):
             # assert content
             assert compare_json(value, expect)
 
-        else
+        else:
         
             raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
