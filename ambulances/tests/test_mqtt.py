@@ -294,7 +294,7 @@ class MQTTTestClient(BaseClient):
                 del self.expecting[msg.topic]
 
             # assert content
-            assert compare_json(value, expect)
+            self.test.assertEqual(value, expect)
 
         else:
         
@@ -337,7 +337,8 @@ class TestMQTTSeed(LiveTestSetup):
         broker['CLIENT_ID'] = 'test_mqttseed'
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-
+        client.test = self
+        
         # Expect all ambulances
         for obj in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(obj.id),
