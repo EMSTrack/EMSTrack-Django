@@ -10,6 +10,8 @@ from django.contrib.gis.geos import Point
 from django.utils import timezone
 from django.conf import settings
 
+from rest_framework.renderers import JSONRenderer
+
 from rest_framework import serializers
 
 from ambulances.models import Ambulance, \
@@ -342,12 +344,12 @@ class TestMQTTSeed(LiveTestSetup):
         # Expect all ambulances
         for obj in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(obj.id),
-                          AmbulanceSerializer(obj))
+                          JSONRenderer().render(AmbulanceSerializer(obj).data))
 
         # Expect all hospitals
         for obj in Hospital.objects.all():
             client.expect('hospital/{}/data'.format(obj.id),
-                          HospitalSerializer(obj))
+                          JSONRenderer().render(HospitalSerializer(obj).data))
         
         try:
         
