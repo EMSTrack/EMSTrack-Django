@@ -88,9 +88,12 @@ class LiveTestSetup(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "start"])
         time.sleep(5)
-        
-        # setUpTestData
+
+        import importlib
+        importlib.reload(ambulances.mqttupdate)
+
         cls.setUpTestData()
+
         
     @classmethod
     def tearDownClass(cls):
