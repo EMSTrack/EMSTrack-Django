@@ -256,8 +256,7 @@ class TestMQTTSeed(LiveTestSetup):
         
         from django.core import management
     
-        #management.call_command('mqttseed',
-        #                        verbosity=0)
+        management.call_command('mqttseed',
+                                verbosity=0)
         
-        print('done')
         
