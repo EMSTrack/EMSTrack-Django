@@ -263,14 +263,14 @@ class MQTTTestClient(BaseClient):
         super().__init__(*args, **kwargs)
 
         # expect
-        self.expectset = {}
+        self.expecting = {}
 
         # initialize pubcount
         self.pubset = set()
 
     def done(self):
 
-        return len(self.pubset) == 0 and len(self.expectset) == 0
+        return len(self.pubset) == 0 and len(self.expecting) == 0
         
     # The callback for when the client receives a CONNACK
     # response from the server.
@@ -283,15 +283,15 @@ class MQTTTestClient(BaseClient):
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
-        if msg.topic in self.expect_fifo:
+        if msg.topic in self.expecting:
 
             # pop from expected list
-            expect = self.expect_fifo[msg.topic].pop(0)
+            expect = self.expecting[msg.topic].pop(0)
             value = msg.payload.decode()
 
             # remove topic if empty list
-            if not self.expect_fifo[msg.topic]:
-                del self.expect_fifo[msg.topic]
+            if not self.expecting[msg.topic]:
+                del self.expecting[msg.topic]
 
             # assert content
             assert compare_json(value, expect)
@@ -306,10 +306,10 @@ class MQTTTestClient(BaseClient):
             
     def expect(self, topic, msg):
 
-        if topic in self.expect_fifo:
-            self.expect_fifo[topic].append(msg)
+        if topic in self.expecting:
+            self.expecting[topic].append(msg)
         else:
-            self.expect_fifo[topic] = [msg]
+            self.expecting[topic] = [msg]
             client.subscribe(topic, 2)
         
 class TestMQTTSeed(LiveTestSetup):
