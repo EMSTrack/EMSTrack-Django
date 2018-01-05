@@ -356,10 +356,10 @@ class TestMQTTSeed(LiveTestSetup):
                           JSONRenderer().render(EquipmentSerializer(equipment).data))
 
         # Expect all hospital equipments
-        for equipment in HospitalEquipment.objects.all():
-            client.expect('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                 equipment.equipment.name),
-                          JSONRenderer().render(HospitalEquipmentSerializer(equipment).data))
+        for e in HospitalEquipment.objects.all():
+            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
+                                                                 e.equipment.name),
+                          JSONRenderer().render(HospitalEquipmentSerializer(e).data))
 
         # subscribe to all just in case
         client.subscribe('#',2)
