@@ -362,7 +362,7 @@ class TestMQTTSeed(LiveTestSetup):
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data))
 
         # subscribe to all just in case
-        client.subscribe('#',2)
+        client.client.subscribe('#',2)
             
         try:
         
