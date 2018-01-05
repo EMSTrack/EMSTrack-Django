@@ -40,9 +40,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
-        # disable mqtt signals
-        os.environ["DJANGO_ENABLE_MQTT_SIGNALS"] = "False"
-
         # Create server
         super().setUpClass()
 
@@ -87,7 +84,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
-        time.sleep(5)
 
         import importlib
         m1 = importlib.import_module('ambulances.mqttupdate')
@@ -95,7 +91,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
 
         cls.setUpTestData()
 
-        
     @classmethod
     def tearDownClass(cls):
         
@@ -122,7 +117,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
-        time.sleep(1)
         
         super().tearDownClass()
         

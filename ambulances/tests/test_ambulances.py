@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 
 from django.contrib.gis.geos import Point
 from django.utils import timezone
+from django.conf import settings
 
 from rest_framework import serializers
 from rest_framework.parsers import JSONParser
@@ -41,9 +42,9 @@ class TestSetup(TestCase):
 
         # Add users
         cls.u1 = User.objects.create_user(
-            username='admin',
+            username=settings.MQTT['USERNAME'],
             email='admin@user.com',
-            password='admin',
+            password=settings.MQTT['PASSWORD'],
             is_superuser=True)
         
         cls.u2 = User.objects.create_user(
@@ -264,7 +265,7 @@ class TestProfile(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve own
         response = client.get('/ambulances/api/profile/{}/'.format(str(self.u1.username)),
@@ -343,7 +344,7 @@ class TestAmbulanceGetList(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any ambulance
         response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
@@ -422,7 +423,7 @@ class TestAmbulanceGetList(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulances
         response = client.get('/ambulances/api/ambulance/',
@@ -620,7 +621,7 @@ class TestAmbulanceUpdate(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulance
         response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
@@ -839,7 +840,7 @@ class TestAmbulanceCreate(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create ambulance
         response = client.post('/ambulances/api/ambulance/',
@@ -929,7 +930,7 @@ class TestHospitalGetList(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any hospital
         response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
@@ -1011,7 +1012,7 @@ class TestHospitalGetList(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve hospitals
         response = client.get('/ambulances/api/hospital/',
@@ -1167,7 +1168,7 @@ class TestHospitalUpdate(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve hospital
         response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)))
@@ -1361,7 +1362,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any hospital equipment
         response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
@@ -1491,7 +1492,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve all hospital equipment
         response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
@@ -1598,7 +1599,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # set equipment value
         value = 'True'
@@ -1759,7 +1760,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username='admin', password='admin')
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any hospital equipment
         response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
