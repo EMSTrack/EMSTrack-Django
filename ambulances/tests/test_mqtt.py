@@ -322,7 +322,7 @@ class TestMQTTSeed(LiveTestSetup):
         from django.core import management
     
         management.call_command('mqttseed',
-                                verbosity=2)
+                                verbosity=0)
         
         # Start client
         stdout = OutputWrapper(sys.stdout)
