@@ -289,7 +289,7 @@ class MQTTTestClient(BaseClient):
 
             # pop from expected list
             expect = self.expecting[msg.topic].pop(0)
-            value = msg.payload.decode()
+            value = msg.payload
 
             # remove topic if empty list
             if not self.expecting[msg.topic]:
