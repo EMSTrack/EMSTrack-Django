@@ -39,8 +39,6 @@ class TestSetup(TestCase):
     @classmethod
     def setUpTestData(cls):
 
-        print('>> setUpTestData')
-        
         # Add users
         cls.u1 = User.objects.create_user(
             username='admin',
