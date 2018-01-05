@@ -1,5 +1,3 @@
-#import subprocess, time, os
-
 from django.test import TestCase, Client
 
 from django.contrib.auth.models import User
