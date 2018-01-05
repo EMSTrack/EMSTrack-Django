@@ -119,6 +119,8 @@ class LiveTestSetup(StaticLiveServerTestCase):
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
+
+        time.sleep(1)
         
         super().tearDownClass()
         
