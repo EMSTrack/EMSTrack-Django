@@ -280,9 +280,6 @@ class MQTTTestClient(BaseClient):
         if not super().on_connect(client, userdata, flags, rc):
             return False
 
-        # subscribe to everything
-        client.subscribe('#', 2)
-        
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
@@ -313,11 +310,18 @@ class MQTTTestClient(BaseClient):
             self.expect_fifo[topic].append(msg)
         else:
             self.expect_fifo[topic] = [msg]
+            client.subscribe(topic, 2)
         
 class TestMQTTSeed(LiveTestSetup):
         
     def test_mqttseed(self):
 
+        # seed
+        from django.core import management
+    
+        management.call_command('mqttseed',
+                                verbosity=2)
+        
         # Start client
         stdout = OutputWrapper(sys.stdout)
         style = color_style()
@@ -331,18 +335,19 @@ class TestMQTTSeed(LiveTestSetup):
         }
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttseed'
+        
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
 
-        # seeding ambulances
-        #for obj in Ambulance.objects.all():
-            #self.update_ambulance(obj)
+        # Expect all ambulances
+        for obj in Ambulance.objects.all():
+            client.expect('ambulance/{}/data'.format(obj.id),
+                          AmbulanceSerializer(obj))
 
-        from django.core import management
-    
-        management.call_command('mqttseed',
-                                verbosity=2)
+        # Expect all hospitals
+        for obj in Hospital.objects.all():
+            client.expect('hospital/{}/data'.format(obj.id),
+                          HospitalSerializer(obj))
         
-
         try:
         
             client.loop_start()
