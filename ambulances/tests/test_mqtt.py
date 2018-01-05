@@ -347,8 +347,6 @@ class TestMQTTSeed(LiveTestSetup):
         
             client.loop_start()
         
-            tests(client)
-            
             while not client.done():
                 time.sleep(1)
             
