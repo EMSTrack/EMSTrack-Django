@@ -96,6 +96,8 @@ class LiveTestSetup(StaticLiveServerTestCase):
     @classmethod
     def tearDownClass(cls):
         
+        super().tearDownClass()
+        
         print('>> Stopping mosquitto with test settings')
         
         # stop mosquito server
@@ -119,10 +121,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
-
-        time.sleep(1)
-        
-        super().tearDownClass()
         
     @classmethod
     def setUpTestData(cls):
