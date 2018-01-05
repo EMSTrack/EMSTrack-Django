@@ -33,19 +33,22 @@ def point2str(point):
         return str(point)
     return point
 
-import subprocess, time
-
 class LiveTestSetup(StaticLiveServerTestCase):
 
     @classmethod
     def setUpClass(cls):
+
+        # disable mqtt signals
+        os.environ["DJANGO_ENABLE_MQTT_SIGNALS"] = "False"
+
+        # Create server
         super().setUpClass()
 
         # determine server and port
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
         
-        print('\n>> Starting django server at {}:{}'.format(cls.live_server_url, host, port))
+        print('\n>> Starting django server at {}, {}:{}'.format(cls.live_server_url, host, port))
         
 
         print('>> Stoping mosquitto')
@@ -62,15 +65,15 @@ class LiveTestSetup(StaticLiveServerTestCase):
             cat = subprocess.Popen(["cat",
                                     "/etc/mosquitto/conf.d/default.conf"],
                                    stdout= subprocess.PIPE)
-            sed1 = subprocess.Popen(["sed",
-                                     "s/127.0.0.1/{}/".format(host)],
-                                    stdin=cat.stdout,
-                                    stdout=subprocess.PIPE)
+            #sed1 = subprocess.Popen(["sed",
+            #                         "s/127.0.0.1/{}/".format(host)],
+            #                        stdin=cat.stdout,
+            #                        stdout=subprocess.PIPE)
             sed2 = subprocess.run(["sed",
                                    "s/8000/{}/".format(port)],
-                                  stdin=sed1.stdout,
+                                  stdin=cat.stdout,
                                   stdout=outfile)
-        
+            
         # move current configuration file
         retval = subprocess.run(["mv",
                                  "/etc/mosquitto/conf.d/default.conf",
@@ -79,12 +82,14 @@ class LiveTestSetup(StaticLiveServerTestCase):
         print('>> Start mosquitto with test settings')
 
         # start mosquito server
-        time.sleep(1)
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
+        time.sleep(5)
         
-
+        # setUpTestData
+        cls.setUpTestData()
+        
     @classmethod
     def tearDownClass(cls):
         
@@ -96,8 +101,9 @@ class LiveTestSetup(StaticLiveServerTestCase):
                                  "stop"])
         
         # remove test configuration file
-        retval = subprocess.run(["rm",
-                                 "/etc/mosquitto/conf.d/test.conf"])
+        retval = subprocess.run(["mv",
+                                 "/etc/mosquitto/conf.d/test.conf",
+                                 "/etc/mosquitto/conf.d/test.conf.old"])
         
         # restore current configuration file
         retval = subprocess.run(["mv",
@@ -107,11 +113,11 @@ class LiveTestSetup(StaticLiveServerTestCase):
         print('>> Starting mosquitto')
         
         # start mosquito server
-        time.sleep(1)
         retval = subprocess.run(["service",
                                  "mosquitto",
                                  "start"])
-
+        time.sleep(1)
+        
         super().tearDownClass()
         
     @classmethod
