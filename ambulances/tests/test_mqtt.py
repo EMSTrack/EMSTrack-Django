@@ -90,7 +90,7 @@ class LiveTestSetup(StaticLiveServerTestCase):
         time.sleep(5)
 
         import importlib
-        importlib.reload(ambulances.mqttupdate)
+        importlib.reload(mqttupdate)
 
         cls.setUpTestData()
 
