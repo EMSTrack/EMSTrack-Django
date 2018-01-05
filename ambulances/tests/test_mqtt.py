@@ -342,15 +342,28 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
         
         # Expect all ambulances
-        for obj in Ambulance.objects.all():
-            client.expect('ambulance/{}/data'.format(obj.id),
-                          JSONRenderer().render(AmbulanceSerializer(obj).data))
+        for ambulance in Ambulance.objects.all():
+            client.expect('ambulance/{}/data'.format(ambulance.id),
+                          JSONRenderer().render(AmbulanceSerializer(ambulance).data))
 
         # Expect all hospitals
-        for obj in Hospital.objects.all():
-            client.expect('hospital/{}/data'.format(obj.id),
-                          JSONRenderer().render(HospitalSerializer(obj).data))
-        
+        for hospital in Hospital.objects.all():
+            client.expect('hospital/{}/data'.format(hospital.id),
+                          JSONRenderer().render(HospitalSerializer(hospital).data))
+            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=hospital_equipment)
+            client.expect('hospital/{}/metadata'.format(hospital.id),
+                          JSONRenderer().render(EquipmentSerializer(equipment).data))
+
+        # Expect all hospital equipments
+        for equipment in HospitalEquipment.objects.all():
+            client.expect('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
+                                                                 equipment.equipment.name),
+                          JSONRenderer().render(HospitalEquipmentSerializer(equipment).data))
+
+        # subscribe to all just in case
+        client.subscribe('#',2)
+            
         try:
         
             client.loop_start()
