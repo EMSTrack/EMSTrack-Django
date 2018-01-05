@@ -353,7 +353,7 @@ class TestMQTTSeed(LiveTestSetup):
             hospital_equipment = hospital.hospitalequipment_set.values('equipment')
             equipment = Equipment.objects.filter(id__in=hospital_equipment)
             client.expect('hospital/{}/metadata'.format(hospital.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment).data))
+                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data))
 
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.all():

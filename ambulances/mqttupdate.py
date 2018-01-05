@@ -57,13 +57,6 @@ class UpdateClient(BaseClient):
         self.remove_topic('hospital/{}/data'.format(obj.id))
         self.remove_topic('hospital/{}/metadata'.format(obj.id))
         
-    def update_hospital_equipment(self, obj, qos=2, retain=True):
-        self.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
-                                                                   obj.equipment.name),
-                            HospitalEquipmentSerializer(obj),
-                            qos=qos,
-                            retain=retain)
-        
     def update_hospital_metadata(self, hospital, qos=2, retain=True):
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
@@ -72,6 +65,13 @@ class UpdateClient(BaseClient):
                             qos=qos,
                             retain=retain)
 
+    def update_hospital_equipment(self, obj, qos=2, retain=True):
+        self.update_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
+                                                                 obj.equipment.name),
+                            HospitalEquipmentSerializer(obj),
+                            qos=qos,
+                            retain=retain)
+        
     def remove_hospital_equipment(self, obj):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
                                                                    obj.equipment.name))
