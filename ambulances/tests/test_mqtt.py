@@ -59,7 +59,6 @@ class LiveTestSetup(StaticLiveServerTestCase):
         
         print('\n>> Starting django server at {}'.format(cls.live_server_url))
         
-
         print('>> Stoping mosquitto')
         
         # stop mosquito server
@@ -67,6 +66,12 @@ class LiveTestSetup(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
 
+        # saving persistence file
+        retval = subprocess.run(["mv",
+                                 "-f", 
+                                 "/var/lib/mosquitto/mosquitto.db",
+                                 "/var/lib/mosquitto/mosquitto.db.org"])
+        
         # create test configuration file
         with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
             
@@ -115,6 +120,12 @@ class LiveTestSetup(StaticLiveServerTestCase):
                                  "/etc/mosquitto/conf.d/default.conf.org",
                                  "/etc/mosquitto/conf.d/default.conf"])
 
+        # restore persistence file
+        retval = subprocess.run(["mv",
+                                 "-f", 
+                                 "/var/lib/mosquitto/mosquitto.db.org",
+                                 "/var/lib/mosquitto/mosquitto.db"])
+        
         print('>> Starting mosquitto')
         
         # start mosquito server
