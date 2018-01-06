@@ -394,24 +394,6 @@ class TestMQTTSeed(LiveTestSetup):
         finally:
             client.disconnect()
         
-        # Start client as common user with wrong password
-        broker['USERNAME'] = 'testuser1'
-        broker['PASSWORD'] = 'top_secreto'
-        broker['CLIENT_ID'] = 'test_mqttseed_testuser1_wrong'
-
-        # with self.assertRaises():
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client.test = self
-
-        with self.assertRaises(MQTTException) as cm:
-            while True:
-                client.loop()
-        
-        self.assertEqual(client.connected, False)
-        self.assertEqual(cm.exception.value, 5)
-
-        client.disconnect()
-        
         print('<< testuser1')
         
         # Start client as common user
@@ -445,4 +427,23 @@ class TestMQTTSeed(LiveTestSetup):
         finally:
             client.disconnect()
 
+    def _test(self):
             
+        # Start client as common user with wrong password
+        broker['USERNAME'] = 'testuser1'
+        broker['PASSWORD'] = 'top_secreto'
+        broker['CLIENT_ID'] = 'test_mqttseed_testuser1_wrong'
+
+        # with self.assertRaises():
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client.test = self
+
+        with self.assertRaises(MQTTException) as cm:
+            while True:
+                client.loop()
+        
+        self.assertEqual(client.connected, False)
+        self.assertEqual(cm.exception.value, 5)
+
+        client.disconnect()
+        
