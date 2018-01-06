@@ -425,20 +425,8 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
         
+        client.loop()
+        
         self.assertEqual(client.connected, False)
         
-        try:
-        
-            client.loop_start()
-        
-            while not client.done():
-                time.sleep(1)
-            
-            client.loop_stop()
-            
-        except KeyboardInterrupt:
-            pass
-        
-        finally:
-            client.disconnect()
         
