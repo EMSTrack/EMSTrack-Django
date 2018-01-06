@@ -427,10 +427,10 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
 
-        with self.assertRaises(ConnectionException) as excpt:
+        with self.assertRaises(ConnectionException) as cm:
             client.loop_forever()
         
         self.assertEqual(client.connected, False)
-        self.assertEqual(excpt.rc, 5)
+        self.assertEqual(cm.exception.rc, 5)
         
         
