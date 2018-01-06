@@ -410,6 +410,8 @@ class TestMQTTSeed(LiveTestSetup):
         self.assertEqual(client.connected, False)
         self.assertEqual(cm.exception.value, 5)
 
+        client.disconnect()
+        
         print('<< testuser1')
         
         # Start client as common user
