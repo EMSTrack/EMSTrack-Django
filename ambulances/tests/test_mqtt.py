@@ -421,4 +421,23 @@ class TestMQTTSeed(LiveTestSetup):
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secreto'
 
+        # with self.assertRaises():
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+
+        client.test = self
+        
+        try:
+        
+            client.loop_start()
+        
+            while not client.done():
+                time.sleep(1)
+            
+            client.loop_stop()
+            
+        except KeyboardInterrupt:
+            pass
+        
+        finally:
+            client.disconnect()
+        
