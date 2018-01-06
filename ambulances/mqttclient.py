@@ -83,7 +83,7 @@ class BaseClient():
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
-        if mid in self.subscribed[mid]:
+        if mid in self.subscribed:
             # TODO: check granted_qos?
             # remove from list of subscribed
             del self.subscribed[mid]
