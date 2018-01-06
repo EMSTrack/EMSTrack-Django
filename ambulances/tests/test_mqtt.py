@@ -401,12 +401,12 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
         
-        self.assertEqual(client.connected, True)
-        
         try:
         
             client.loop_start()
         
+            self.assertEqual(client.connected, True)
+            
             while not client.done():
                 time.sleep(1)
             
