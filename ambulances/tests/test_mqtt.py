@@ -417,6 +417,13 @@ class TestMQTTSeed(LiveTestSetup):
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
                           2)
         
+        # Hospitals
+        can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
+        for hospital in Hospital.objects.filter(id__in=can_read):
+            client.expect('hospital/{}/data'.format(hospital.id),
+                          JSONRenderer().render(HospitalSerializer(hospital).data),
+                          2)
+            
         try:
         
             client.loop_start()
