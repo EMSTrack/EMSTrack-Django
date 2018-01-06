@@ -326,6 +326,7 @@ class TestMQTTSeed(LiveTestSetup):
 
     MAX_TRIES = 100
     
+    
     def test_mqttseed(self):
 
         # seed
