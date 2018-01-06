@@ -349,8 +349,6 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
 
-        self.assertEqual(client.connected, True)
-        
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(ambulance.id),
@@ -384,6 +382,8 @@ class TestMQTTSeed(LiveTestSetup):
         try:
         
             client.loop_start()
+        
+            self.assertEqual(client.connected, True)
         
             while not client.done():
                 time.sleep(1)
