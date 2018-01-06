@@ -1,6 +1,9 @@
 import time
 import paho.mqtt.client as mqtt
 
+class BaseClientException(Exception):
+    pass
+
 class BaseClient():
     
     # initialize client
