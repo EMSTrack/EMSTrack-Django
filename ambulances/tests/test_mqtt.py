@@ -419,8 +419,6 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
 
-    def _test(self):
-        
         # Expect user profile
         obj = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
