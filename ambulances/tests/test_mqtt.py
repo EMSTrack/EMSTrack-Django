@@ -298,12 +298,13 @@ class MQTTTestClient(BaseClient):
 
         if msg.topic in self.expecting:
 
-            print('> topic = {}'.format(msg.topic))
         
             # pop from expected list
             expect = self.expecting[msg.topic].pop(0)
             value = msg.payload
 
+            print('> topic = {}, {}'.format(msg.topic, value))
+            
             # remove topic if empty list
             if not self.expecting[msg.topic]:
                 del self.expecting[msg.topic]
@@ -313,7 +314,7 @@ class MQTTTestClient(BaseClient):
 
         else:
         
-            print('< unknown topic = {}'.format(msg.topic))
+            print('< unknown topic = {}, {}'.format(msg.topic, msg.payload))
             # raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
     def expect(self, topic, msg):
