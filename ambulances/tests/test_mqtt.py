@@ -14,7 +14,7 @@ from rest_framework.renderers import JSONRenderer
 
 from rest_framework import serializers
 
-from ambulances.models import Ambulance, \
+from ambulances.models import Profile, Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
     AmbulancePermission, HospitalPermission, \
     Hospital, \
