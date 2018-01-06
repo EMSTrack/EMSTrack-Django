@@ -301,7 +301,7 @@ class MQTTTestClient(BaseClient):
         if msg.topic in self.expecting_topics:
 
             # first time got topic
-            if self.expecting_topics[msg.topic]:
+            if self.expecting_topics[msg.topic] == 0:
                 self.expecting -= 1
 
             # add to count
