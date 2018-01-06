@@ -557,6 +557,12 @@ class TestMQTTSeed(LiveTestSetup):
 
         self.assertEqual(len(client.subscribed), 0)
         
+        # Process all messages
+        while not client.done():
+            client.loop()
+            
+        client.disconnect()
+        
     def _test(self):
 
         print('<< testuser1')
