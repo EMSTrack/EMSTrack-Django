@@ -277,6 +277,7 @@ class MQTTTestClient(BaseClient):
 
         # expect
         self.expecting = {}
+        self.remove_expecting = {}
 
         # initialize pubcount
         self.pubset = set()
@@ -295,7 +296,7 @@ class MQTTTestClient(BaseClient):
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
-        print('> topic = {}'.format(msg.topic))
+        # print('> topic = {}'.format(msg.topic))
             
         if msg.topic in self.expecting:
 
@@ -304,7 +305,7 @@ class MQTTTestClient(BaseClient):
             value = msg.payload
 
             # remove topic if empty list
-            if not self.expecting[msg.topic]:
+            if self.remove_expecting[msg.topic] and not self.expecting[msg.topic]:
                 del self.expecting[msg.topic]
 
             # assert content
@@ -314,12 +315,13 @@ class MQTTTestClient(BaseClient):
         
             raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
-    def expect(self, topic, msg, qos = 2):
+    def expect(self, topic, msg, qos = 2, remove = False):
 
         if topic in self.expecting:
             self.expecting[topic].append(msg)
         else:
             self.expecting[topic] = [msg]
+            self.remove_expecting[topic] = remove
             self.subscribe(topic, qos)
         
 class TestMQTTSeed(LiveTestSetup):
