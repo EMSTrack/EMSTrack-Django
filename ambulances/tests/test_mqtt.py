@@ -405,10 +405,17 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
 
         # Expect user profile
-        obj = Profile.objects.get(user__username='testuser1')
+        profile = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
-                      JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+                      JSONRenderer().render(ExtendedProfileSerializer(profile).data),
                       0)
+
+        # Ambulances
+        can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
+        for ambulance in Ambulance.objects.filter(id__in=can_read):
+            client.expect('ambulance/{}/data'.format(ambulance.id),
+                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
+                          0)
         
         try:
         
