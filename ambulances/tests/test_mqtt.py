@@ -375,6 +375,12 @@ class TestMQTTSeed(LiveTestSetup):
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           0)
 
+        # Expect all profiles
+        for obj in Profile.objects.all():
+            client.expect('user/{}/profile'.format(obj.id),
+                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+                          0)
+            
         try:
         
             client.loop_start()
