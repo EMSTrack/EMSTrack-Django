@@ -349,6 +349,12 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
 
+        # connected?
+        while not client.connected:
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(ambulance.id),
@@ -378,21 +384,18 @@ class TestMQTTSeed(LiveTestSetup):
             client.expect('user/{}/profile'.format(obj.user.username),
                           JSONRenderer().render(ExtendedProfileSerializer(obj).data),
                           0)
+
+        # Subscribed?
+        while len(client.subscribed):
+            client.loop()
+
+        self.assertEqual(len(client.subscribed), 0)
+
+        # Process all messages
+        while not client.done():
+            client.loop()
             
-        try:
-        
-            client.loop_start()
-        
-            while not client.connected or not client.done():
-                time.sleep(1)
-            
-            client.loop_stop()
-            
-        except KeyboardInterrupt:
-            pass
-        
-        finally:
-            client.disconnect()
+        client.disconnect()
         
         print('<< testuser1')
         
