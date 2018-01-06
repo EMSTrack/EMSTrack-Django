@@ -348,6 +348,8 @@ class TestMQTTSeed(LiveTestSetup):
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
+
+        self.assertEqual(client.connected, True)
         
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
