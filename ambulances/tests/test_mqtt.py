@@ -393,10 +393,13 @@ class TestMQTTSeed(LiveTestSetup):
                           qos)
 
         # Subscribed?
-        while len(client.subscribed):
+        k = 0
+        while len(client.subscribed) and k < self.MAX_TRIES:
+            k += 1
             client.loop()
 
         self.assertEqual(len(client.subscribed), 0)
+        print('>> subscribed')
 
         # Process all messages
         while not client.done():
@@ -449,10 +452,13 @@ class TestMQTTSeed(LiveTestSetup):
                           qos)
 
         # Subscribed?
-        while len(client.subscribed):
+        k = 0
+        while len(client.subscribed) and k < self.MAX_TRIES:
+            k += 1
             client.loop()
 
         self.assertEqual(len(client.subscribed), 0)
+        print('>> subscribed')
 
         # Process all messages
         while not client.done():
@@ -508,10 +514,13 @@ class TestMQTTSeed(LiveTestSetup):
                           qos)
 
         # Subscribed?
-        while len(client.subscribed):
+        k = 0
+        while len(client.subscribed) and k < self.MAX_TRIES:
+            k += 1
             client.loop()
 
         self.assertEqual(len(client.subscribed), 0)
+        print('>> subscribed')
 
         # Process all messages
         while not client.done():
@@ -570,11 +579,14 @@ class TestMQTTSeed(LiveTestSetup):
                           qos)
 
         # Subscribed?
-        while len(client.subscribed):
+        k = 0
+        while len(client.subscribed) and k < self.MAX_TRIES:
+            k += 1
             client.loop()
 
         self.assertEqual(len(client.subscribed), 0)
-        
+        print('>> subscribed')
+
         # Process all messages
         while not client.done():
             client.loop()
