@@ -383,8 +383,9 @@ class TestMQTTSeed(LiveTestSetup):
         
             client.loop_start()
         
-            self.assertEqual(client.connected, True)
-        
+            while not client.connected:
+                time.sleep(1)
+                
             while not client.done():
                 time.sleep(1)
             
