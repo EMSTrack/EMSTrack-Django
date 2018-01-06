@@ -324,7 +324,7 @@ class MQTTTestClient(BaseClient):
         
 class TestMQTTSeed(LiveTestSetup):
 
-    MAX_TRIES = 20
+    MAX_TRIES = 100
     
     def test_mqttseed(self):
 
