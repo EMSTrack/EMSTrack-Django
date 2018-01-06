@@ -436,6 +436,8 @@ class TestMQTTSeed(LiveTestSetup):
             client2.loop_start()
         
             while not client2.connected or not client2.done():
+                print('connected = {}, done = {}'.format(client2.connected,
+                                                         client2.done()))
                 time.sleep(1)
             
             self.assertEqual(client2.connected, True)
