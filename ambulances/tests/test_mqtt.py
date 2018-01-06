@@ -290,7 +290,7 @@ class MQTTTestClient(BaseClient):
     def on_connect(self, client, userdata, flags, rc):
 
         # is connected?
-        return super().on_connect(client, userdata, flags, rc):
+        return super().on_connect(client, userdata, flags, rc)
 
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
