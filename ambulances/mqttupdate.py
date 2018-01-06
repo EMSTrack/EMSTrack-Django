@@ -14,7 +14,8 @@ from rest_framework.renderers import JSONRenderer
 from .mqttclient import BaseClient
 from .models import Ambulance, Equipment, HospitalEquipment, Hospital
 from .serializers import AmbulanceSerializer, HospitalSerializer, \
-    HospitalEquipmentSerializer, EquipmentSerializer
+    HospitalEquipmentSerializer, EquipmentSerializer, \
+    ExtendedProfileSerializer
 
 
 # UpdateClient class
@@ -38,6 +39,12 @@ class UpdateClient(BaseClient):
                      qos=qos,
                      retain=True)
 
+    def update_profile(self, obj, qos=2, retain=True):
+        self.update_topic('user/{}/profile'.format(obj.id),
+                            ExtendedProfileSerializer(obj),
+                            qos=qos,
+                            retain=retain)
+        
     def update_ambulance(self, obj, qos=2, retain=True):
         self.update_topic('ambulance/{}/data'.format(obj.id),
                             AmbulanceSerializer(obj),

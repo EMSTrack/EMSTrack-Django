@@ -32,6 +32,9 @@ class Client(UpdateClient):
         # Seed ambulances
         self.seed_ambulance_data(client)
 
+        # Seed profiles
+        self.seed_profile_data(client)
+        
         # Seed calls
         # self.seed_calls(client)
 
@@ -50,6 +53,18 @@ class Client(UpdateClient):
         elif self.verbosity > 0:
             self.stdout.write("   {}".format(topic))
 
+    def seed_profile_data(self, client):
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding profile data"))
+
+        # seeding profiles
+        for obj in User.objects.all():
+            self.update_profile(obj)
+            
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS("<< Done seeding profile data"))
+            
     def seed_ambulance_data(self, client):
 
         if self.verbosity > 0:
