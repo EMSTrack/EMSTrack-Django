@@ -408,13 +408,15 @@ class TestMQTTSeed(LiveTestSetup):
         
         self.assertEqual(client.connected, False)
         self.assertEqual(cm.exception.rc, 5)
+
+    def _test(self):
         
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
         broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
 
-        print('>> testuser1')
+        print('\n>> testuser1')
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
