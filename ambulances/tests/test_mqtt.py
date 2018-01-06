@@ -276,15 +276,15 @@ class MQTTTestClient(BaseClient):
         super().__init__(*args, **kwargs)
 
         # expect
-        self.expecting = {}
-        self.remove_expecting = {}
+        self.expecting_topics = {}
+        self.expecting = 0
 
         # initialize pubcount
         self.pubset = set()
 
     def done(self):
 
-        return len(self.pubset) == 0 and len(self.expecting) == 0
+        return len(self.pubset) == 0 and self.expecting == 0
         
     # The callback for when the client receives a CONNACK
     # response from the server.
@@ -298,30 +298,24 @@ class MQTTTestClient(BaseClient):
 
         # print('> topic = {}'.format(msg.topic))
             
-        if msg.topic in self.expecting:
+        if msg.topic in self.expecting_topics:
 
-            # pop from expected list
-            expect = self.expecting[msg.topic].pop(0)
-            value = msg.payload
+            # first time got topic
+            if self.expecting_topics[msg.topic]:
+                self.expecting -= 1
 
-            # remove topic if empty list
-            if self.remove_expecting[msg.topic] and not self.expecting[msg.topic]:
-                del self.expecting[msg.topic]
-
-            # assert content
-            self.test.assertEqual(value, expect)
-
+            # add to count
+            self.expecting_topics[msg.topic] += 1
+            
         else:
         
             raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
     def expect(self, topic, msg, qos = 2, remove = False):
 
-        if topic in self.expecting:
-            self.expecting[topic].append(msg)
-        else:
-            self.expecting[topic] = [msg]
-            self.remove_expecting[topic] = remove
+        if not topic in self.expecting:
+            self.expecting_topics[topic] = 0
+            self.expecting += 1
             self.subscribe(topic, qos)
         
 class TestMQTTSeed(LiveTestSetup):
