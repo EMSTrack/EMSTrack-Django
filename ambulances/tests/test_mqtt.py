@@ -407,6 +407,7 @@ class TestMQTTSeed(LiveTestSetup):
             k += 1
             client.loop()
             
+        self.assertEqual(client.done(), True)
         print('<< done')
         
         client.disconnect()
@@ -470,6 +471,7 @@ class TestMQTTSeed(LiveTestSetup):
             k += 1
             client.loop()
             
+        self.assertEqual(client.done(), True)
         print('<< done')
             
         client.disconnect()
@@ -536,6 +538,7 @@ class TestMQTTSeed(LiveTestSetup):
             k += 1
             client.loop()
             
+        self.assertEqual(client.done(), True)
         print('<< done')
             
         client.disconnect()
@@ -605,6 +608,7 @@ class TestMQTTSeed(LiveTestSetup):
             k += 1
             client.loop()
             
+        self.assertEqual(client.done(), True)
         print('<< done')
             
         client.disconnect()
