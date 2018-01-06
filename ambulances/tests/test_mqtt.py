@@ -317,7 +317,7 @@ class MQTTTestClient(BaseClient):
             print('< unknown topic = {}, {}'.format(msg.topic, msg.payload))
             # raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
-    def expect(self, topic, msg, qos = 0):
+    def expect(self, topic, msg, qos = 2):
 
         if topic in self.expecting:
             self.expecting[topic].append(msg)
@@ -355,22 +355,26 @@ class TestMQTTSeed(LiveTestSetup):
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data))
+                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
+                          0)
 
         # Expect all hospitals
         for hospital in Hospital.objects.all():
             client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data))
+                          JSONRenderer().render(HospitalSerializer(hospital).data),
+                          0)
             hospital_equipment = hospital.hospitalequipment_set.values('equipment')
             equipment = Equipment.objects.filter(id__in=hospital_equipment)
             client.expect('hospital/{}/metadata'.format(hospital.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data))
+                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+                          0)
 
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.name),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data))
+                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+                          0)
 
         # subscribe to all just in case
         client.client.subscribe('#',2)
