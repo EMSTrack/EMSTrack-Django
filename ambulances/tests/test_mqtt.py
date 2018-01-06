@@ -394,8 +394,6 @@ class TestMQTTSeed(LiveTestSetup):
         finally:
             client.disconnect()
         
-    def _test(self):
-        
         # Start client as common user with wrong password
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secreto'
@@ -421,6 +419,8 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
 
+    def _test(self):
+        
         # Expect user profile
         obj = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
