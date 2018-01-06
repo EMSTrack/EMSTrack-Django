@@ -358,6 +358,7 @@ class TestMQTTSeed(LiveTestSetup):
             client.loop()
 
         self.assertEqual(client.connected, True)
+        print('>> connected')
 
         qos = 0
         
@@ -409,11 +410,14 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
 
         # connected?
-        while not client.connected:
+        k = 0
+        while not client.connected and k < self.MAX_TRIES:
+            k += 1
             client.loop()
 
         self.assertEqual(client.connected, True)
-        
+        print('>> connected')
+
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(ambulance.id),
@@ -463,8 +467,13 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
 
         # connected?
-        while not client.connected:
+        k = 0
+        while not client.connected and k < self.MAX_TRIES:
+            k += 1
             client.loop()
+
+        self.assertEqual(client.connected, True)
+        print('>> connected')
 
         self.assertEqual(client.connected, True)
         
@@ -523,8 +532,13 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
 
         # connected?
-        while not client.connected:
+        k = 0
+        while not client.connected and k < self.MAX_TRIES:
+            k += 1
             client.loop()
+
+        self.assertEqual(client.connected, True)
+        print('>> connected')
 
         self.assertEqual(client.connected, True)
         
