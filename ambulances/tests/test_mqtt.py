@@ -375,7 +375,7 @@ class TestMQTTSeed(LiveTestSetup):
 
         # Expect all profiles
         for obj in Profile.objects.all():
-            client.expect('user/{}/profile'.format(obj.username),
+            client.expect('user/{}/profile'.format(obj.user.username),
                           JSONRenderer().render(ExtendedProfileSerializer(obj).data),
                           0)
             
