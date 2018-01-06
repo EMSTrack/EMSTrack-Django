@@ -317,13 +317,13 @@ class MQTTTestClient(BaseClient):
             print('< unknown topic = {}, {}'.format(msg.topic, msg.payload))
             # raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
-    def expect(self, topic, msg):
+    def expect(self, topic, msg, qos = 0):
 
         if topic in self.expecting:
             self.expecting[topic].append(msg)
         else:
             self.expecting[topic] = [msg]
-            self.client.subscribe(topic, 2)
+            self.client.subscribe(topic, qos)
         
 class TestMQTTSeed(LiveTestSetup):
         
