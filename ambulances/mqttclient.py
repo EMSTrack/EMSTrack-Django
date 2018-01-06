@@ -31,7 +31,11 @@ class BaseClient():
             self.client = mqtt.Client()
         self.client.on_connect = self.on_connect
 
+        self.subscribed = {}
+        self.published = set()
+        
         self.client.on_publish = self.on_publish
+        self.client.on_subscribe = self.on_subscribe
 
         # default message handler
         self.client.on_message = self.on_message
@@ -67,11 +71,23 @@ class BaseClient():
         pass
 
     def subscribe(self, topic, qos = 0):
+
+        # try to subscribe
         result, mid = self.client.subscribe(topic, qos)
         if result:
             raise MQTTExpection('Could not subscribe to topic',
                                 result)
-    
+
+        # otherwise add to dictionary of subscribed
+        self.subscribed[mid] = (topic, qos)
+
+    def on_subscribe(self, client, userdata, mid, granted_qos):
+
+        if mid in self.subscribed[mid]:
+            # TODO: check granted_qos?
+            # remove from list of subscribed
+            del self.subscribed[mid]
+        
     # disconnect
     def disconnect(self):
         self.client.disconnect()
