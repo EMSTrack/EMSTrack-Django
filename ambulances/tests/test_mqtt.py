@@ -296,10 +296,10 @@ class MQTTTestClient(BaseClient):
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
-        print('topic = {}'.format(msg.topic))
-        
         if msg.topic in self.expecting:
 
+            print('> topic = {}'.format(msg.topic))
+        
             # pop from expected list
             expect = self.expecting[msg.topic].pop(0)
             value = msg.payload
@@ -313,7 +313,8 @@ class MQTTTestClient(BaseClient):
 
         else:
         
-            raise Exception("Unexpected message topic '{}'".format(msg.topic))
+            print('< unknown topic = {}'.format(msg.topic))
+            # raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
     def expect(self, topic, msg):
 
