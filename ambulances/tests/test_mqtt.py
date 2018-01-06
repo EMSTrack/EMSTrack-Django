@@ -396,17 +396,6 @@ class TestMQTTSeed(LiveTestSetup):
             client.disconnect()
         
         # Start client as common user
-        stdout = OutputWrapper(sys.stdout)
-        style = color_style()
-
-        # Instantiate broker
-        broker = {
-            'HOST': 'localhost',
-            'PORT': 1883,
-            'KEEPALIVE': 60,
-            'CLEAN_SESSION': True
-        }
-        broker.update(settings.MQTT)
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
         
@@ -427,3 +416,9 @@ class TestMQTTSeed(LiveTestSetup):
         
         finally:
             client.disconnect()
+
+        # Start client as common user with wrong password
+        broker['USERNAME'] = 'testuser1'
+        broker['PASSWORD'] = 'top_secreto'
+
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
