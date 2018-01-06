@@ -42,9 +42,7 @@ class BaseClient():
     def on_connect(self, client, userdata, flags, rc):
         
         if rc:
-            self.stdout.write(
-                self.style.ERROR("*> Could not connect to brocker. Return code '" + str(rc) + "'"))
-            return False
+            raise Exception("Could not connect to brocker. Return code '{}'".format(rc))
 
         self.connected = True
         
