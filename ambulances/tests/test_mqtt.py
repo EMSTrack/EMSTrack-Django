@@ -313,7 +313,6 @@ class MQTTTestClient(BaseClient):
 
         else:
         
-            print('< unknown topic = {}, {}'.format(msg.topic, msg.payload))
             raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
     def expect(self, topic, msg, qos = 2):
