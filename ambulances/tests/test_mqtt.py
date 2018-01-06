@@ -417,7 +417,7 @@ class TestMQTTSeed(LiveTestSetup):
 
         # Expect user profile
         obj = Profile.objects.get(user__username='testuser1')
-        client.expect('user/testuser1/profile'
+        client.expect('user/testuser1/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(obj).data),
                       0)
         
