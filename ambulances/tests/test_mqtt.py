@@ -404,7 +404,8 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
 
         with self.assertRaises(MQTTException) as cm:
-            client.loop_forever()
+            while True:
+                client.loop()
         
         self.assertEqual(client.connected, False)
         self.assertEqual(cm.exception.value, 5)
