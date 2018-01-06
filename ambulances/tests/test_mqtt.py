@@ -413,6 +413,8 @@ class TestMQTTSeed(LiveTestSetup):
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
         broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
+
+        print('>> testuser1')
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
@@ -421,7 +423,7 @@ class TestMQTTSeed(LiveTestSetup):
         obj = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(obj).data),
-                      2)
+                      0)
         
         try:
         
