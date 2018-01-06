@@ -377,7 +377,7 @@ class TestMQTTSeed(LiveTestSetup):
                           0)
 
         # subscribe to all just in case
-        client.client.subscribe('#',2)
+        client.client.subscribe('#', 0)
             
         try:
         
