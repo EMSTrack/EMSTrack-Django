@@ -4,6 +4,7 @@ from django.conf import settings
 
 from ambulances.mqttupdate import UpdateClient
 
+from django.contrib.auth.models import User
 from ambulances.models import Ambulance, Hospital, HospitalEquipment
 
 from django.utils.six import BytesIO
