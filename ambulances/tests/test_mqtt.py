@@ -57,7 +57,7 @@ class LiveTestSetup(StaticLiveServerTestCase):
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
         
-        print('\n>> Starting django server at {}, {}:{}'.format(cls.live_server_url, host, port))
+        print('\n>> Starting django server at {}'.format(cls.live_server_url))
         
 
         print('>> Stoping mosquitto')
@@ -285,6 +285,8 @@ class MQTTTestClient(BaseClient):
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
+        print('topic = {}'.format(msg.topic))
+        
         if msg.topic in self.expecting:
 
             # pop from expected list
