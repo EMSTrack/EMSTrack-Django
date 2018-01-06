@@ -323,7 +323,9 @@ class MQTTTestClient(BaseClient):
             self.subscribe(topic, qos)
         
 class TestMQTTSeed(LiveTestSetup):
-        
+
+    MAX_TRIES = 10
+    
     def test_mqttseed(self):
 
         # seed
@@ -350,7 +352,9 @@ class TestMQTTSeed(LiveTestSetup):
         client.test = self
 
         # connected?
-        while not client.connected:
+        k = 0
+        while not client.connected and k < MAX_TRIES:
+            k += 1
             client.loop()
 
         self.assertEqual(client.connected, True)
@@ -528,28 +532,28 @@ class TestMQTTSeed(LiveTestSetup):
         profile = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(profile).data),
-                      2)
+                      qos)
 
         # Ambulances
         can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
         for ambulance in Ambulance.objects.filter(id__in=can_read):
             client.expect('ambulance/{}/data'.format(ambulance.id),
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          2)
+                          qos)
         
         # Hospitals
         can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
         for hospital in Hospital.objects.filter(id__in=can_read):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
-                          2)
+                          qos)
             
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.name),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
-                          2)
+                          qos)
 
         # Subscribed?
         while len(client.subscribed):
