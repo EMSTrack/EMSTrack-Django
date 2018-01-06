@@ -394,6 +394,8 @@ class TestMQTTSeed(LiveTestSetup):
         finally:
             client.disconnect()
         
+    def _test(self):
+        
         # Start client as common user with wrong password
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secreto'
@@ -409,8 +411,6 @@ class TestMQTTSeed(LiveTestSetup):
         self.assertEqual(client.connected, False)
         self.assertEqual(cm.exception.rc, 5)
 
-    def _test(self):
-        
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
