@@ -396,7 +396,62 @@ class TestMQTTSeed(LiveTestSetup):
             client.loop()
             
         client.disconnect()
+
+        # Repeat with same client
         
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client.test = self
+
+        # connected?
+        while not client.connected:
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
+        # Expect all ambulances
+        for ambulance in Ambulance.objects.all():
+            client.expect('ambulance/{}/data'.format(ambulance.id),
+                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
+                          0)
+
+        # Expect all hospitals
+        for hospital in Hospital.objects.all():
+            client.expect('hospital/{}/data'.format(hospital.id),
+                          JSONRenderer().render(HospitalSerializer(hospital).data),
+                          0)
+            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=hospital_equipment)
+            client.expect('hospital/{}/metadata'.format(hospital.id),
+                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+                          0)
+
+        # Expect all hospital equipments
+        for e in HospitalEquipment.objects.all():
+            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
+                                                                 e.equipment.name),
+                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+                          0)
+
+        # Expect all profiles
+        for obj in Profile.objects.all():
+            client.expect('user/{}/profile'.format(obj.user.username),
+                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+                          0)
+
+        # Subscribed?
+        while len(client.subscribed):
+            client.loop()
+
+        self.assertEqual(len(client.subscribed), 0)
+
+        # Process all messages
+        while not client.done():
+            client.loop()
+            
+        client.disconnect()
+        
+    def _test(self):
+
         print('<< testuser1')
         
         # Start client as common user
