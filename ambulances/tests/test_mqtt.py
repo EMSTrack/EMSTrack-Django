@@ -376,9 +376,6 @@ class TestMQTTSeed(LiveTestSetup):
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           0)
 
-        # subscribe to all just in case
-        client.client.subscribe('#', 0)
-            
         try:
         
             client.loop_start()
