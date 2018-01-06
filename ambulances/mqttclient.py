@@ -87,6 +87,10 @@ class BaseClient():
             # TODO: check granted_qos?
             # remove from list of subscribed
             del self.subscribed[mid]
+            print('granted_qos = {}'.format(granted_qos))
+
+        else:
+            raise MQTTException('Unknown subscribe mid', mid)
         
     # disconnect
     def disconnect(self):
