@@ -330,7 +330,7 @@ class TestMQTTSeed(LiveTestSetup):
         from django.core import management
     
         management.call_command('mqttseed',
-                                verbosity=2)
+                                verbosity=1)
         
         # Start client as admin
         stdout = OutputWrapper(sys.stdout)
@@ -419,7 +419,7 @@ class TestMQTTSeed(LiveTestSetup):
         obj = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(obj).data),
-                      0)
+                      2)
         
         try:
         
