@@ -505,65 +505,82 @@ class TestMQTTSeed(LiveTestSetup):
             client.loop()
             
         client.disconnect()
-        
-    def _test(self):
 
-        print('<< testuser1')
-        
+        # repeat with another user
+
+        qos = 0
+
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
         broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
 
-        client2 = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client2.test = self
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client.test = self
 
+        # connected?
+        while not client.connected:
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
         # Expect user profile
         profile = Profile.objects.get(user__username='testuser1')
-        client2.expect('user/testuser1/profile',
+        client.expect('user/testuser1/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(profile).data),
                       2)
 
         # Ambulances
         can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
         for ambulance in Ambulance.objects.filter(id__in=can_read):
-            client2.expect('ambulance/{}/data'.format(ambulance.id),
+            client.expect('ambulance/{}/data'.format(ambulance.id),
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
                           2)
         
         # Hospitals
         can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
         for hospital in Hospital.objects.filter(id__in=can_read):
-            client2.expect('hospital/{}/data'.format(hospital.id),
+            client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           2)
             
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
-            client2.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
+            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.name),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           2)
+
+        # Subscribed?
+        while len(client.subscribed):
+            client.loop()
+
+        self.assertEqual(len(client.subscribed), 0)
+        
+    def _test(self):
+
+        print('<< testuser1')
+        
             
         try:
         
-            client2.loop_start()
+            client.loop_start()
         
-            while not client2.connected or not client2.done():
-                print('connected = {}, done = {}'.format(client2.connected,
-                                                         client2.done()))
-                print('subscribed = {}'.format(client2.subscribed))
+            while not client.connected or not client.done():
+                print('connected = {}, done = {}'.format(client.connected,
+                                                         client.done()))
+                print('subscribed = {}'.format(client.subscribed))
                 time.sleep(1)
             
-            self.assertEqual(client2.connected, True)
+            self.assertEqual(client.connected, True)
 
-            client2.loop_stop()
+            client.loop_stop()
             
         except KeyboardInterrupt:
             pass
         
         finally:
-            client2.disconnect()
+            client.disconnect()
 
     def _test(self):
             
