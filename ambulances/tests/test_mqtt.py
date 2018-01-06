@@ -344,7 +344,7 @@ class TestMQTTSeed(LiveTestSetup):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttseed'
+        broker['CLIENT_ID'] = 'test_mqttseed_admin'
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
@@ -397,6 +397,7 @@ class TestMQTTSeed(LiveTestSetup):
         # Start client as common user with wrong password
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secreto'
+        broker['CLIENT_ID'] = 'test_mqttseed_testuser1_wrong'
 
         # with self.assertRaises():
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
@@ -411,6 +412,7 @@ class TestMQTTSeed(LiveTestSetup):
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
+        broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
