@@ -410,6 +410,8 @@ class TestMQTTSeed(LiveTestSetup):
         self.assertEqual(client.connected, False)
         self.assertEqual(cm.exception.value, 5)
 
+        print('<< testuser1')
+        
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
