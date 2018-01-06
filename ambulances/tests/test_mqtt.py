@@ -295,7 +295,7 @@ class MQTTTestClient(BaseClient):
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
-        # print('> topic = {}'.format(msg.topic))
+        print('> topic = {}'.format(msg.topic))
             
         if msg.topic in self.expecting:
 
