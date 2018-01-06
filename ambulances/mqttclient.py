@@ -1,12 +1,12 @@
 import time
 import paho.mqtt.client as mqtt
 
-class ConnectionException(Exception):
+class MQTTException(Exception):
     
-    def __init__(self, message, rc):
+    def __init__(self, message, value):
         
         super().__init__(message)
-        self.rc = rc
+        self.value = value
 
 class BaseClient():
     
@@ -49,9 +49,9 @@ class BaseClient():
     def on_connect(self, client, userdata, flags, rc):
         
         if rc:
-            raise ConnectionException('Could not connect to brocker',
-                                      rc)
-
+            raise MQTTException('Could not connect to brocker',
+                                rc)
+        
         self.connected = True
         
         # success!
@@ -65,6 +65,12 @@ class BaseClient():
 
     def on_publish(self, client, userdata, mid):
         pass
+
+    def subscribe(self, topic, qos = 0):
+        result, mid = self.client.subscribe(topic, qos)
+        if result:
+            raise MQTTExpection('Could not subscribe to topic',
+                                result)
     
     # disconnect
     def disconnect(self):

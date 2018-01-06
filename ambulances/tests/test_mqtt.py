@@ -265,7 +265,7 @@ class LiveTestSetup(StaticLiveServerTestCase):
 
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
-from ambulances.mqttclient import BaseClient, ConnectionException
+from ambulances.mqttclient import BaseClient, MQTTException
         
 # MQTTTestClient
 class MQTTTestClient(BaseClient):
@@ -403,11 +403,11 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
 
-        with self.assertRaises(ConnectionException) as cm:
+        with self.assertRaises(MQTTException) as cm:
             client.loop_forever()
         
         self.assertEqual(client.connected, False)
-        self.assertEqual(cm.exception.rc, 5)
+        self.assertEqual(cm.exception.value, 5)
 
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
