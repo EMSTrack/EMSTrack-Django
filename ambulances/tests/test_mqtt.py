@@ -402,9 +402,13 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        while not client.done():
+        k = 0
+        while not client.done()and k < self.MAX_TRIES:
+            k += 1
             client.loop()
             
+        print('<< done')
+        
         client.disconnect()
 
         # Repeat with same client
@@ -461,8 +465,12 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        while not client.done():
+        k = 0
+        while not client.done()and k < self.MAX_TRIES:
+            k += 1
             client.loop()
+            
+        print('<< done')
             
         client.disconnect()
         
@@ -523,8 +531,12 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        while not client.done():
+        k = 0
+        while not client.done()and k < self.MAX_TRIES:
+            k += 1
             client.loop()
+            
+        print('<< done')
             
         client.disconnect()
 
@@ -588,8 +600,12 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        while not client.done():
+        k = 0
+        while not client.done()and k < self.MAX_TRIES:
+            k += 1
             client.loop()
+            
+        print('<< done')
             
         client.disconnect()
         
