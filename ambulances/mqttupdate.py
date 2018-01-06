@@ -40,7 +40,7 @@ class UpdateClient(BaseClient):
                      retain=True)
 
     def update_profile(self, obj, qos=2, retain=True):
-        self.update_topic('user/{}/profile'.format(obj.id),
+        self.update_topic('user/{}/profile'.format(obj.username),
                             ExtendedProfileSerializer(obj),
                             qos=qos,
                             retain=retain)

@@ -375,7 +375,7 @@ class TestMQTTSeed(LiveTestSetup):
 
         # Expect all profiles
         for obj in Profile.objects.all():
-            client.expect('user/{}/profile'.format(obj.id),
+            client.expect('user/{}/profile'.format(obj.username),
                           JSONRenderer().render(ExtendedProfileSerializer(obj).data),
                           0)
             
@@ -394,31 +394,6 @@ class TestMQTTSeed(LiveTestSetup):
         finally:
             client.disconnect()
         
-        # Start client as common user
-        broker['USERNAME'] = 'testuser1'
-        broker['PASSWORD'] = 'top_secret'
-        
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client.test = self
-        
-        try:
-        
-            client.loop_start()
-        
-            while not client.connected or not client.done():
-                time.sleep(1)
-            
-            self.assertEqual(client.connected, True)
-            
-            client.loop_stop()
-            
-        except KeyboardInterrupt:
-            pass
-        
-        finally:
-            client.disconnect()
-
-            
         # Start client as common user with wrong password
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secreto'
@@ -433,4 +408,34 @@ class TestMQTTSeed(LiveTestSetup):
         self.assertEqual(client.connected, False)
         self.assertEqual(cm.exception.rc, 5)
         
+        # Start client as common user
+        broker['USERNAME'] = 'testuser1'
+        broker['PASSWORD'] = 'top_secret'
         
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client.test = self
+
+        # Expect user profile
+        obj = Profile.objects.get(user__username='testuser1')
+        client.expect('user/testuser1/profile'
+                      JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+                      0)
+        
+        try:
+        
+            client.loop_start()
+        
+            while not client.connected or not client.done():
+                time.sleep(1)
+            
+            self.assertEqual(client.connected, True)
+
+            client.loop_stop()
+            
+        except KeyboardInterrupt:
+            pass
+        
+        finally:
+            client.disconnect()
+
+            
