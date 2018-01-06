@@ -311,6 +311,7 @@ class MQTTTestClient(BaseClient):
             print('> topic count = {}'.format(self.expecting_topics[msg.topic]))
             print('> expecting = {}'.format(self.expecting))
             print('> done = {}'.format(self.done()))
+            print('> connected = {}'.format(self.connected))
             
         else:
         
