@@ -304,10 +304,6 @@ class MQTTTestClient(BaseClient):
         
             raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
-        # disconnect
-        if self.done():
-            self.disconnect()
-            
     def expect(self, topic, msg):
 
         if topic in self.expecting:
