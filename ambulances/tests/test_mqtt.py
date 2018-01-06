@@ -290,8 +290,7 @@ class MQTTTestClient(BaseClient):
     def on_connect(self, client, userdata, flags, rc):
 
         # is connected?
-        if not super().on_connect(client, userdata, flags, rc):
-            return False
+        return super().on_connect(client, userdata, flags, rc):
 
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -402,6 +401,8 @@ class TestMQTTSeed(LiveTestSetup):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
         
+        self.assertEqual(client.connected, True)
+        
         try:
         
             client.loop_start()
@@ -417,14 +418,16 @@ class TestMQTTSeed(LiveTestSetup):
         finally:
             client.disconnect()
 
+            
         # Start client as common user with wrong password
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secreto'
 
         # with self.assertRaises():
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-
         client.test = self
+        
+        self.assertEqual(client.connected, False)
         
         try:
         

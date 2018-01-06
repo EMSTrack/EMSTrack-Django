@@ -32,13 +32,12 @@ class BaseClient():
         if self.broker['USERNAME'] and self.broker['PASSWORD']:
             self.client.username_pw_set(self.broker['USERNAME'],
                                         self.broker['PASSWORD'])
-            
+
+        self.connected = False
+        
         self.client.connect(self.broker['HOST'],
                             self.broker['PORT'],
                             self.broker['KEEPALIVE'])
-
-        # populated?
-        self.populated = False
 
     def on_connect(self, client, userdata, flags, rc):
         
@@ -47,6 +46,8 @@ class BaseClient():
                 self.style.ERROR("*> Could not connect to brocker. Return code '" + str(rc) + "'"))
             return False
 
+        self.connected = True
+        
         # success!
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'], self.broker['PORT'])))
