@@ -313,7 +313,7 @@ class MQTTTestClient(BaseClient):
 
     def expect(self, topic, msg, qos = 2, remove = False):
 
-        if not topic in self.expecting:
+        if not topic in self.expecting_topics:
             self.expecting_topics[topic] = 0
             self.expecting += 1
             self.subscribe(topic, qos)
