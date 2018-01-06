@@ -5,7 +5,8 @@ from django.conf import settings
 from ambulances.mqttupdate import UpdateClient
 
 from django.contrib.auth.models import User
-from ambulances.models import Ambulance, Hospital, HospitalEquipment
+from ambulances.models import Profile, \
+    Ambulance, Hospital, HospitalEquipment
 
 from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
@@ -60,7 +61,7 @@ class Client(UpdateClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding profile data"))
 
         # seeding profiles
-        for obj in User.objects.all():
+        for obj in Profile.objects.all():
             self.update_profile(obj)
             
         if self.verbosity > 0:
