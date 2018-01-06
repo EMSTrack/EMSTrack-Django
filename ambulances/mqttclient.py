@@ -6,7 +6,7 @@ class ConnectionException(Exception):
     def __init__(self, message, rc):
         
         super().__init__(message)
-        this.rc = rc
+        self.rc = rc
 
 class BaseClient():
     
