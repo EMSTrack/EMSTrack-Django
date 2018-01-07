@@ -25,7 +25,7 @@ class CreateUser(MQTTTestCase):
         cls.setUpTestData()
         
         # instantiate client
-        self.client = Client()
+        cls.client = Client()
 
     @classmethod
     def setUpTestData(cls):
