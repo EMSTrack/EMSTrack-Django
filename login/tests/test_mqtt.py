@@ -205,7 +205,11 @@ class MQTTTestClient(BaseClient):
             self.subscribe(topic, qos)
 
 class TestMQTTAuth(LiveTestSetup):
-            
+
+    def test(self):
+
+        pass
+    
     def _test_mqtt_login(self):
 
         # instantiate client
