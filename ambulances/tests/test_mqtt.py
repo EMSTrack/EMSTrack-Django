@@ -1,5 +1,4 @@
 import subprocess, time, os, sys
-
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 
