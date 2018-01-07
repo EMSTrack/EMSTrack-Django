@@ -15,11 +15,12 @@ class MQTTTestCase(StaticLiveServerTestCase):
     def setUpClass(cls):
 
         # Add admin user
-        cls.u1 = User.objects.create_user(
-            username=settings.MQTT['USERNAME'],
-            email='admin@user.com',
-            password=settings.MQTT['PASSWORD'],
-            is_superuser=True)
+        if not User.objects.get(username=settings.MQTT['USERNAME']):
+            User.objects.create_user(
+                username=settings.MQTT['USERNAME'],
+                email='admin@user.com',
+                password=settings.MQTT['PASSWORD'],
+                is_superuser=True)
         
         # call super to create server
         super().setUpClass()
