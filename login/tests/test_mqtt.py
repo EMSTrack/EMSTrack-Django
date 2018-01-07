@@ -27,6 +27,8 @@ class LiveTestCase(MQTTTestCase):
     def setUpTestData(cls):
 
         # Add users
+
+        cls.u1 = User.objects.get(username=settings.MQTT['USERNAME'])
         
         cls.u2 = User.objects.create_user(
             username='testuser1',
