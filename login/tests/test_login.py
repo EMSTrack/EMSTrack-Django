@@ -34,39 +34,39 @@ class CreateUser(MQTTTestCase):
         # flag
         data_ready = True
         
-        self.u1 = User.objects.get(username=settings.MQTT['USERNAME'])
+        cls.u1 = User.objects.get(username=settings.MQTT['USERNAME'])
             
-        self.u2 = User.objects.create_user(
+        cls.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
         
-        self.u3 = User.objects.create_user(
+        cls.u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
         
         # Add hospitals
-        self.h1 = Hospital.objects.create(name='hospital1',
+        cls.h1 = Hospital.objects.create(name='hospital1',
                                           address='somewhere',
-                                          updated_by=self.u1)
-        self.h2 = Hospital.objects.create(name='hospital2',
+                                          updated_by=cls.u1)
+        cls.h2 = Hospital.objects.create(name='hospital2',
                                           address='somewhere else',
-                                          updated_by=self.u1)
-        self.h3 = Hospital.objects.create(name='hospital3',
+                                          updated_by=cls.u1)
+        cls.h3 = Hospital.objects.create(name='hospital3',
                                           address='somewhere other',
-                                          updated_by=self.u1)
+                                          updated_by=cls.u1)
 
         # Add permissions
-        self.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1,
+        cls.u2.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=cls.h1,
                                               can_write=True),
-            HospitalPermission.objects.create(hospital=self.h3)
+            HospitalPermission.objects.create(hospital=cls.h3)
         )
             
-        self.u3.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=self.h1),
-            HospitalPermission.objects.create(hospital=self.h2,
+        cls.u3.profile.hospitals.add(
+            HospitalPermission.objects.create(hospital=cls.h1),
+            HospitalPermission.objects.create(hospital=cls.h2,
                                               can_write=True)
         )
 
