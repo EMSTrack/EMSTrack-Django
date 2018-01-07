@@ -11,8 +11,6 @@ from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperu
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
-data_ready = False
-
 class CreateUser(MQTTTestCase):
 
     global data_ready
@@ -23,54 +21,62 @@ class CreateUser(MQTTTestCase):
         # create server
         super().setUpClass()
 
-        if not data_ready:
-        
-            # set up data
-            cls.setUpTestData()
+        # set up data
+        cls.setUpTestData()
 
     @classmethod
     def setUpTestData(cls):
 
-        print('setUpTestData')
-        
-        # flag
-        data_ready = True
-        
+        # Retrieve admin
         cls.u1 = User.objects.get(username=settings.MQTT['USERNAME'])
-            
-        cls.u2 = User.objects.create_user(
-            username='testuser1',
-            email='test1@user.com',
-            password='top_secret')
-        
-        cls.u3 = User.objects.create_user(
-            username='testuser2',
-            email='test2@user.com',
-            password='very_secret')
-        
-        # Add hospitals
-        cls.h1 = Hospital.objects.create(name='hospital1',
-                                          address='somewhere',
-                                          updated_by=cls.u1)
-        cls.h2 = Hospital.objects.create(name='hospital2',
-                                          address='somewhere else',
-                                          updated_by=cls.u1)
-        cls.h3 = Hospital.objects.create(name='hospital3',
-                                          address='somewhere other',
-                                          updated_by=cls.u1)
 
-        # Add permissions
-        cls.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1,
-                                              can_write=True),
-            HospitalPermission.objects.create(hospital=cls.h3)
-        )
+        try:
             
-        cls.u3.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1),
-            HospitalPermission.objects.create(hospital=cls.h2,
-                                              can_write=True)
-        )
+            # Add users
+            cls.u2 = User.objects.get(username='testuser1')
+            cls.u3 = User.objects.get(username='testuser2')
+
+            # Add hospitals
+            cls.h1 = Hospital.objects.get(name='hospital1')
+            cls.h2 = Hospital.objects.get(name='hospital2')
+            cls.h3 = Hospital.objects.get(name='hospital3')
+
+        except:
+
+            # Add users
+            cls.u2 = User.objects.create_user(
+                username='testuser1',
+                email='test1@user.com',
+                password='top_secret')
+        
+            cls.u3 = User.objects.create_user(
+                username='testuser2',
+                email='test2@user.com',
+                password='very_secret')
+        
+            # Add hospitals
+            cls.h1 = Hospital.objects.create(name='hospital1',
+                                             address='somewhere',
+                                             updated_by=cls.u1)
+            cls.h2 = Hospital.objects.create(name='hospital2',
+                                             address='somewhere else',
+                                             updated_by=cls.u1)
+            cls.h3 = Hospital.objects.create(name='hospital3',
+                                             address='somewhere other',
+                                             updated_by=cls.u1)
+            
+            # Add permissions
+            cls.u2.profile.hospitals.add(
+                HospitalPermission.objects.create(hospital=cls.h1,
+                                                  can_write=True),
+                HospitalPermission.objects.create(hospital=cls.h3)
+            )
+            
+            cls.u3.profile.hospitals.add(
+                HospitalPermission.objects.create(hospital=cls.h1),
+                HospitalPermission.objects.create(hospital=cls.h2,
+                                                  can_write=True)
+            )
 
     def test_login(self):
 
