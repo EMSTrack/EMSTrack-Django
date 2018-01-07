@@ -18,12 +18,17 @@ class CreateUser(MQTTTestCase):
         # create server
         super().setUpClass()
 
-        # set up data
-        cls.setUpTestData()
+        if not hasattr(cls, 'testData'):
+        
+            # set up data
+            cls.setUpTestData()
 
     @classmethod
     def setUpTestData(cls):
-
+        
+        # flag
+        cls.testData = True
+        
         # Add users
         self.u1 = User.objects.create_user(
             username='admin',
