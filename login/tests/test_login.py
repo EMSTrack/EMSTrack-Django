@@ -23,6 +23,9 @@ class CreateUser(MQTTTestCase):
 
         # set up data
         cls.setUpTestData()
+        
+        # instantiate client
+        self.client = Client()
 
     @classmethod
     def setUpTestData(cls):
@@ -80,29 +83,26 @@ class CreateUser(MQTTTestCase):
 
     def test_login(self):
 
-        # instantiate client
-        client = Client()
-
         # blank login
-        response = client.get('/aauth/login/')
+        response = self.client.get('/aauth/login/')
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = client.post('/aauth/login/', { 'username': 'testuser11',
+        response = self.client.post('/aauth/login/', { 'username': 'testuser11',
                                                   'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
         # incorrect password
-        response = client.post('/aauth/login/', { 'username': 'testuser1',
+        response = self.client.post('/aauth/login/', { 'username': 'testuser1',
                                                   'password': 'top_secret0' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
         # correct login
-        response = client.post('/aauth/login/', { 'username': 'testuser1',
+        response = self.client.post('/aauth/login/', { 'username': 'testuser1',
                                                   'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
@@ -111,12 +111,12 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.context['user'].is_superuser, False)
 
         # logout
-        response = client.get('/aauth/logout/', follow=True)
+        response = self.client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
 
         # login user2
-        response = client.post('/aauth/login/', { 'username': 'testuser2',
+        response = self.client.post('/aauth/login/', { 'username': 'testuser2',
                                                   'password': 'very_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
@@ -125,7 +125,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.context['user'].is_superuser, False)
 
         # login admin
-        response = client.post('/aauth/login/', { 'username': settings.MQTT['USERNAME'],
+        response = self.client.post('/aauth/login/', { 'username': settings.MQTT['USERNAME'],
                                                   'password': settings.MQTT['PASSWORD'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
@@ -134,118 +134,112 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.context['user'].is_superuser, True)
 
         # logout
-        response = client.get('/aauth/logout/', follow=True)
+        response = self.client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
     def test_mqtt_login(self):
 
-        # instantiate client
-        client = Client()
-        
         # blank login
-        response = client.get('/aauth/mqtt/login/')
+        response = self.client.get('/aauth/mqtt/login/')
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = client.post('/aauth/mqtt/login/',
+        response = self.client.post('/aauth/mqtt/login/',
                                { 'username': 'testuser11',
                                  'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
         # incorrect username superuser
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': 'testuser11' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
         # incorrect password
-        response = client.post('/aauth/mqtt/login/',
+        response = self.client.post('/aauth/mqtt/login/',
                                { 'username': 'testuser1',
                                  'password': 'top_secret0' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
         # incorrect username superuser
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': 'testuser1' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
         # correct login
-        response = client.post('/aauth/mqtt/login/',
+        response = self.client.post('/aauth/mqtt/login/',
                                { 'username': 'testuser1',
                                  'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # incorrect username superuser
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': 'testuser1' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
         # logout
-        response = client.get('/aauth/logout/', follow=True)
+        response = self.client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
         # login user2
-        response = client.post('/aauth/mqtt/login/',
+        response = self.client.post('/aauth/mqtt/login/',
                                { 'username': 'testuser2',
                                  'password': 'very_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # incorrect username superuser
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': 'testuser2' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
         # username superuser
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': settings.MQTT['USERNAME'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         
         # login admin
-        response = client.post('/aauth/mqtt/login/',
+        response = self.client.post('/aauth/mqtt/login/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'password': settings.MQTT['PASSWORD'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # username superuser
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': settings.MQTT['USERNAME'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         
         # logout
-        response = client.get('/aauth/logout/', follow=True)
+        response = self.client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
     def test_mqtt_acl_publish(self):
         
-        # instantiate client
-        client = Client()
-
         # login
-        response = client.post('/aauth/mqtt/login/',
+        response = self.client.post('/aauth/mqtt/login/',
                                { 'username': 'testuser1',
                                  'password': 'top_secret' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # not super
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': 'testuser1' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -254,7 +248,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
         
         # can publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -263,7 +257,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -272,7 +266,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -281,7 +275,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish wrong user in topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -290,7 +284,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -299,7 +293,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
         
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -308,7 +302,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
         
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -317,13 +311,13 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
 
         # super behaves the same because it never gets acl tested
-        response = client.post('/aauth/mqtt/superuser/',
+        response = self.client.post('/aauth/mqtt/superuser/',
                                { 'username': settings.MQTT['USERNAME'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -332,7 +326,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
         
         # can publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -341,7 +335,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -350,7 +344,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -359,7 +353,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish wrong user in topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -368,7 +362,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -377,7 +371,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
         
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -386,7 +380,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
         
         # can't publish wrong topic
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -396,11 +390,8 @@ class CreateUser(MQTTTestCase):
 
     def test_mqtt_acl_subscribe(self):
         
-        # instantiate client
-        client = Client()
-        
         # can subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -409,7 +400,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't publish
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
@@ -418,7 +409,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
         
         # can subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -427,7 +418,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -436,7 +427,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -445,7 +436,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -454,7 +445,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -463,7 +454,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
@@ -472,7 +463,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 403)
         
         # can subscribe
-        response = client.post('/aauth/mqtt/acl/',
+        response = self.client.post('/aauth/mqtt/acl/',
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
