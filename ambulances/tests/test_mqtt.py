@@ -603,15 +603,19 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
+        client.loop_start()
+        
         k = 0
         while not client.done()and k < self.MAX_TRIES:
             k += 1
-            client.loop()
+            time.sleep(1)
             
         self.assertEqual(client.done(), True)
         print('<< done')
             
         client.disconnect()
+        
+        client.loop_stop()
         
     def _test(self):
 
