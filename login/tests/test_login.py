@@ -10,6 +10,8 @@ from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperu
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
+data_ready = False
+
 class CreateUser(MQTTTestCase):
 
     @classmethod
@@ -18,7 +20,7 @@ class CreateUser(MQTTTestCase):
         # create server
         super().setUpClass()
 
-        if not hasattr(cls, 'testData'):
+        if not data_ready:
         
             # set up data
             cls.setUpTestData()
@@ -27,7 +29,7 @@ class CreateUser(MQTTTestCase):
     def setUpTestData(cls):
         
         # flag
-        cls.testData = True
+        data_ready = True
         
         # Add users
         self.u1 = User.objects.create_user(
