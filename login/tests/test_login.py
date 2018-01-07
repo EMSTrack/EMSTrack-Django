@@ -33,13 +33,8 @@ class CreateUser(MQTTTestCase):
         # flag
         data_ready = True
         
-        # Add users
-        self.u1 = User.objects.create_user(
-            username='admin',
-            email='admin@user.com',
-            password='admin',
-            is_superuser=True)
-        
+        self.u1 = User.objects.get(username=settings.MQTT['USERNAME'])
+            
         self.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
