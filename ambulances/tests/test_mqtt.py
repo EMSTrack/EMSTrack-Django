@@ -321,7 +321,22 @@ class MQTTTestClient(BaseClient):
             self.expecting_topics[topic] = 0
             self.expecting += 1
             self.subscribe(topic, qos)
+
+def process_messages(client, max_tries = 10):
+
+    # Process all messages
+    client.loop_start()
         
+    k = 0
+    while not client.done()and k < max_tries:
+        k += 1
+        time.sleep(1)
+            
+    client.disconnect()
+        
+    client.loop_stop()
+
+            
 class TestMQTTSeed(LiveTestSetup):
 
     MAX_TRIES = 100
@@ -402,16 +417,10 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        k = 0
-        while not client.done()and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
-            
+        process_messages(client)
         self.assertEqual(client.done(), True)
         print('<< done')
         
-        client.disconnect()
-
         # Repeat with same client
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
@@ -466,16 +475,10 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        k = 0
-        while not client.done()and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
-            
+        process_messages(client)
         self.assertEqual(client.done(), True)
         print('<< done')
             
-        client.disconnect()
-        
         # Repeat with same client and different qos
 
         qos = 2
@@ -533,15 +536,9 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        k = 0
-        while not client.done()and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
-            
+        process_messages(client)
         self.assertEqual(client.done(), True)
         print('<< done')
-            
-        client.disconnect()
 
         # repeat with another user
 
@@ -603,19 +600,9 @@ class TestMQTTSeed(LiveTestSetup):
         print('>> subscribed')
 
         # Process all messages
-        client.loop_start()
-        
-        k = 0
-        while not client.done()and k < self.MAX_TRIES:
-            k += 1
-            time.sleep(1)
-            
+        process_messages(client)
         self.assertEqual(client.done(), True)
         print('<< done')
-            
-        client.disconnect()
-        
-        client.loop_stop()
         
     def _test(self):
 
