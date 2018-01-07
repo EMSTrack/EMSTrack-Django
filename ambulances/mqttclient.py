@@ -36,6 +36,7 @@ class BaseClient():
         
         self.client.on_publish = self.on_publish
         self.client.on_subscribe = self.on_subscribe
+        self.client.on_disconnect = self.on_disconnect
 
         # default message handler
         self.client.on_message = self.on_message
@@ -91,6 +92,9 @@ class BaseClient():
 
         else:
             raise MQTTException('Unknown subscribe mid', mid)
+
+    def on_disconnect(self, client, userdata, rc):
+        print('>> disconnecting reason {}'.format(rc))
         
     # disconnect
     def disconnect(self):
