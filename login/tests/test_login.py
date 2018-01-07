@@ -8,9 +8,21 @@ from django.test import Client
 
 from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
-class CreateUser(TestCase):
+from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
-    def setUp(self):
+class CreateUser(MQTTTestCase):
+
+    @classmethod
+    def setUpClass(cls):
+
+        # create server
+        super().setUpClass()
+
+        # set up data
+        cls.setUpTestData()
+
+    @classmethod
+    def setUpTestData(cls):
 
         # Add users
         self.u1 = User.objects.create_user(
