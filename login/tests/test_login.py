@@ -15,6 +15,8 @@ data_ready = False
 
 class CreateUser(MQTTTestCase):
 
+    global data_ready
+    
     @classmethod
     def setUpClass(cls):
 
