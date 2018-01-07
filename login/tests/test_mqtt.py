@@ -67,7 +67,7 @@ class LiveTestCase(MQTTTestCase):
 
 class TestMQTTAuth(LiveTestCase):
 
-    def test_mqtt_login(self):
+    def _test_mqtt_login(self):
 
         print('hi')
         
