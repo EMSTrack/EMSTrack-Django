@@ -206,12 +206,12 @@ class MQTTTestClient(BaseClient):
 
 class TestMQTTAuth(LiveTestSetup):
 
-    def test(self):
+    def test_mqtt_login(self):
 
-        pass
-    
-    def _test_mqtt_login(self):
-
+        print('hi')
+        
+    def _test(self):
+        
         # instantiate client
         client = Client()
         
