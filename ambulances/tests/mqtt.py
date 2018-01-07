@@ -14,8 +14,14 @@ class MQTTTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
-        # Add admin user
-        if not User.objects.get(username=settings.MQTT['USERNAME']):
+        try:
+
+            # can get user?
+            User.objects.get(username=settings.MQTT['USERNAME'])
+
+        except:
+
+            # Add admin user
             User.objects.create_user(
                 username=settings.MQTT['USERNAME'],
                 email='admin@user.com',
