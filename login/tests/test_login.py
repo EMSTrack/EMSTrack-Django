@@ -27,6 +27,8 @@ class CreateUser(MQTTTestCase):
 
     @classmethod
     def setUpTestData(cls):
+
+        print('setUpTestData')
         
         # flag
         data_ready = True
