@@ -223,7 +223,7 @@ class CreateUser(MQTTTestCase):
         response = self.client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_mqtt_acl_publish(self):
+    #def test_mqtt_acl_publish(self):
         
         # login
         response = self.client.post('/aauth/mqtt/login/',
