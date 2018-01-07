@@ -124,18 +124,13 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.context['user'].username, 'testuser2')
         self.assertEqual(response.context['user'].is_superuser, False)
 
-        # logout
-        response = client.get('/aauth/logout/', follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['user'].is_authenticated, False)
-        
         # login admin
-        response = client.post('/aauth/login/', { 'username': 'admin',
-                                                  'password': 'admin' },
+        response = client.post('/aauth/login/', { 'username': settings.MQTT['USERNAME'],
+                                                  'password': settings.MQTT['PASSWORD'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
-        self.assertEqual(response.context['user'].username, 'admin')
+        self.assertEqual(response.context['user'].username, settings.MQTT['USERNAME'])
         self.assertEqual(response.context['user'].is_superuser, True)
 
         # logout
@@ -210,20 +205,20 @@ class CreateUser(MQTTTestCase):
         
         # username superuser
         response = client.post('/aauth/mqtt/superuser/',
-                               { 'username': 'admin' },
+                               { 'username': settings.MQTT['USERNAME'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         
         # login admin
         response = client.post('/aauth/mqtt/login/',
-                               { 'username': 'admin',
-                                 'password': 'admin' },
+                               { 'username': settings.MQTT['USERNAME'],
+                                 'password': settings.MQTT['PASSWORD'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # username superuser
         response = client.post('/aauth/mqtt/superuser/',
-                               { 'username': 'admin' },
+                               { 'username': settings.MQTT['USERNAME'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
         
@@ -323,13 +318,13 @@ class CreateUser(MQTTTestCase):
 
         # super behaves the same because it never gets acl tested
         response = client.post('/aauth/mqtt/superuser/',
-                               { 'username': 'admin' },
+                               { 'username': settings.MQTT['USERNAME'] },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can publish
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/admin/hospital' },
@@ -338,7 +333,7 @@ class CreateUser(MQTTTestCase):
         
         # can publish
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/admin/ambulance' },
@@ -347,7 +342,7 @@ class CreateUser(MQTTTestCase):
 
         # can publish
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/admin/location' },
@@ -356,7 +351,7 @@ class CreateUser(MQTTTestCase):
 
         # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/admin/llocation' },
@@ -365,7 +360,7 @@ class CreateUser(MQTTTestCase):
 
         # can't publish wrong user in topic
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/testuser2/location' },
@@ -374,7 +369,7 @@ class CreateUser(MQTTTestCase):
 
         # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user/location' },
@@ -383,7 +378,7 @@ class CreateUser(MQTTTestCase):
         
         # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '/user' },
@@ -392,7 +387,7 @@ class CreateUser(MQTTTestCase):
         
         # can't publish wrong topic
         response = client.post('/aauth/mqtt/acl/',
-                               { 'username': 'admin',
+                               { 'username': settings.MQTT['USERNAME'],
                                  'clientid': 'test_client',
                                  'acc': '2',
                                  'topic': '' },
