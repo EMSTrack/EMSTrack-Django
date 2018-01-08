@@ -90,7 +90,7 @@ class Ambulance(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
-        client.update_ambulance(self, **kwargs):
+        client.update_ambulance(self, **kwargs)
 
     def delete(self, *args, **kwargs):
         client.remove_ambulance(self)
@@ -149,7 +149,7 @@ class Hospital(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
-        client.update_hospital(self, **kwargs):
+        client.update_hospital(self, **kwargs)
 
     def delete(self, *args, **kwargs):
         client.remove_hospital(self)
