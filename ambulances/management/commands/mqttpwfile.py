@@ -15,11 +15,11 @@ class Command(BaseCommand):
             self.stdout.write('> Creating mosquitto-auth-plugin compatible pwfile')
 
         with open('pwfile', 'w') as file:
-
+            
             # Retrieve current users
             for u in User.objects.filter(issuper=True):
                 file.write('{}:{}\n'.format(u.username,
-                                            u.password)
+                                            u.password))
         
         if options['verbosity'] >= 1:
             self.stdout.write(
