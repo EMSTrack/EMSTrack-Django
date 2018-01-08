@@ -65,15 +65,15 @@ class Command(BaseCommand):
 
         if username:
 
+            # generate password file
+            with open('pwfile', 'w') as file:
+                file.write('{}:{}\n'.format(username, generate_hash('password')))
+            
             # create superuser
             user_data[model.USERNAME_FIELD] = username
             user_data['password'] = mqtt['PASSWORD']
             model._default_manager.db_manager(database).create_superuser(**user_data)
 
-            # generate password file
-            with open('pwfile', 'w') as file:
-                file.write('{}:{}\n'.format(username, generate_hash('password')))
-            
             if options['verbosity'] >= 1:
                 self.stdout.write(
                     self.style.SUCCESS("Superuser created successfully."))
