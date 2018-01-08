@@ -274,7 +274,7 @@ class TestMQTTSeed(MQTTTestCase):
 
         # Expect user profile
         profile = Profile.objects.get(user__username='testuser2')
-        client.expect('user/testuser1/profile',
+        client.expect('user/testuser2/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(profile).data),
                       qos)
 
