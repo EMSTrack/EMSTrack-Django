@@ -333,7 +333,7 @@ class MQTTTestClient(BaseClient):
         
             raise Exception("Unexpected message topic '{}'".format(msg.topic))
 
-    def expect(self, topic, msg, qos = 2, remove = False):
+    def expect(self, topic, msg = None, qos = 2, remove = False):
 
         if not topic in self.expecting_topics:
             self.expecting_topics[topic] = 0
