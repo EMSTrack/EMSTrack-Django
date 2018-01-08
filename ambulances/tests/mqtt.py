@@ -270,8 +270,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                                   can_write=True)
             )
 
-            # u3 has no hospitals 
-            
             # add ambulances to users
             cls.u1.profile.ambulances.add(
                 AmbulancePermission.objects.create(ambulance=cls.a2,
