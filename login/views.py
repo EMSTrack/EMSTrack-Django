@@ -92,19 +92,18 @@ class MQTTAclView(CsrfExemptMixin, View):
                 
                 # permission to subscribe:
 
-                #  - user/*username*/hospitals
-                #  - user/*username*/ambulances
+                #  - user/*username*/profile
                 if (len(topic) == 3 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
-                    if (topic[2] == 'hospitals' or
-                        topic[2] == 'ambulances'):
+                    if (topic[2] == 'profile'):
                         
                         return HttpResponse('OK')
 
+                #  - hospital/+/data
                 #  - hospital/+/metadata
-                #  - hospital/+/equipment/+
+                #  - hospital/+/equipment/+/data
                 elif (len(topic) >= 3 and
                       topic[0] == 'hospital'):
                     
@@ -117,8 +116,10 @@ class MQTTAclView(CsrfExemptMixin, View):
                         perm = user.profile.hospitals.get(hospital=hospital_id)
             
                         if (perm.can_read and
-                            ((len(topic) == 3 and topic[2] == 'metadata') or
-                             (len(topic) == 4 and topic[2] == 'equipment'))):
+                            ((len(topic) == 3 and topic[2] == 'data') or
+                             (len(topic) == 3 and topic[2] == 'metadata') or
+                             (len(topic) == 5 and topic[2] == 'equipment'
+                                              and topic[4] == 'data'))):
                         
                             return HttpResponse('OK')
 
