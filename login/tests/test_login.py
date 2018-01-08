@@ -454,7 +454,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                  'acc': '1',
                                  'topic': '/hospital/{}/metadata'.format(self.h1.id) },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
         # can't subscribe
         response = self.client.post('/aauth/mqtt/acl/',
@@ -463,7 +463,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                  'acc': '1',
                                  'topic': '/hospital/{}/metadata'.format(self.h3.id) },
                                follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
 
         # can't subscribe
         response = self.client.post('/aauth/mqtt/acl/',
