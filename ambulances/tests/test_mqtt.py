@@ -273,7 +273,7 @@ class TestMQTTSeed(MQTTTestCase):
         self.is_connected(client)
 
         # Expect user profile
-        profile = Profile.objects.get(user__username='testuser1')
+        profile = Profile.objects.get(user__username='testuser2')
         client.expect('user/testuser1/profile',
                       JSONRenderer().render(ExtendedProfileSerializer(profile).data),
                       qos)
