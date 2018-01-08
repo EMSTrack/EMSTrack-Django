@@ -353,7 +353,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/user/testuser1/hospitals' },
+                                 'topic': '/user/testuser1/profile' },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -362,7 +362,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/hospitals' },
+                                 'topic': '/user/testuser1/profile' },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
@@ -420,11 +420,3 @@ class TestMQTTACLSubscribe(MyTestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
-        # can subscribe
-        response = self.client.post('/aauth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/user/testuser1/ambulances' },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
