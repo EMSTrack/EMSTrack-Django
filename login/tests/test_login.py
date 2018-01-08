@@ -11,7 +11,8 @@ from ambulances.models import Profile, Ambulance, \
 
 from django.test import Client
 
-from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperuserView, MQTTAclView
+from ..views import LoginView, SignupView, LogoutView, \
+    MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
