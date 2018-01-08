@@ -19,7 +19,8 @@ class Command(BaseCommand):
             # Retrieve current users
             for u in User.objects.filter(is_superuser=True):
                 file.write('{}:{}\n'.format(u.username,
-                                            u.password.replace('_','$',1)))
+                                            u.password.replace('pbkdf2_',
+                                                               'PBKDF2$',1)))
         
         if options['verbosity'] >= 1:
             self.stdout.write(
