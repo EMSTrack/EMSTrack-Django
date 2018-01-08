@@ -14,9 +14,6 @@ from django.test import Client
 from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
-import sys
-from django.core.management.base import OutputWrapper
-from django.core.management.color import color_style, no_style
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
 class MyTestCase(MQTTTestCase):
@@ -490,7 +487,23 @@ class TestMQTTConnect(MyTestCase):
 
     MAX_TRIES = 10
 
+    def is_connected(self, client):
+
+        client.test = self
+
+        # connected?
+        k = 0
+        while not client.connected and k < self.MAX_TRIES:
+            k += 1
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
     def test_connect(self):
+
+        import sys
+        from django.core.management.base import OutputWrapper
+        from django.core.management.color import color_style, no_style
         
         # Start client as admin
         stdout = OutputWrapper(sys.stdout)
@@ -506,14 +519,26 @@ class TestMQTTConnect(MyTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
         
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client.test = self
+        self.is_connected(MQTTTestClient(broker,
+                                         sys.stdout,
+                                         style,
+                                         verbosity = 1))
+        
+        # Start client as common user
+        broker['USERNAME'] = 'testuser1'
+        broker['PASSWORD'] = 'top_secret'
 
-        # connected?
-        k = 0
-        while not client.connected and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
+        self.is_connected(MQTTTestClient(broker,
+                                         sys.stdout,
+                                         style,
+                                         verbosity = 1))
 
-        self.assertEqual(client.connected, True)
+        # Start client as common user
+        broker['USERNAME'] = 'testuser2'
+        broker['PASSWORD'] = 'very_secret'
+
+        self.is_connected(MQTTTestClient(broker,
+                                         sys.stdout,
+                                         style,
+                                         verbosity = 1))
         
