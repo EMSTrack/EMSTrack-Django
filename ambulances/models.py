@@ -11,6 +11,36 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 from django.contrib.auth.models import User
 
+# MessageUpdateClient
+
+class MessageUpdateClient():
+
+    def update_profile(self, profile, **kwargs):
+        pass
+        
+    def update_ambulance(self, ambulance, **kwargs):
+        pass
+
+    def remove_ambulance(self, ambulance, **kwargs):
+        pass
+        
+    def update_hospital(self, hospital, **kwargs):
+        pass
+
+    def remove_hospital(self, hospital, **kwargs):
+        pass
+        
+    def update_hospital_metadata(self, hospital, **kwargs):
+        pass
+
+    def update_hospital_equipment(self, hospital, **kwargs):
+        pass
+        
+    def remove_hospital_equipment(self, hospital, **kwargs):
+        pass
+
+client = MessageUpdateClient()
+    
 # User and ambulance location models
 
 # Ambulance model
@@ -58,6 +88,14 @@ class Ambulance(models.Model):
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs) 
+        client.update_ambulance(self, **kwargs):
+
+    def delete(self, *args, **kwargs):
+        client.remove_ambulance(self)
+        super().delete(*args, **kwargs) 
+    
     def __str__(self):
         return ('> Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
@@ -109,6 +147,14 @@ class Hospital(models.Model):
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
     
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs) 
+        client.update_hospital(self, **kwargs):
+
+    def delete(self, *args, **kwargs):
+        client.remove_hospital(self)
+        super().delete(*args, **kwargs)
+        
     def __str__(self):
         return ('> Hospital {}(id={})\n' +
                 '   Address: {}\n' +
@@ -169,6 +215,18 @@ class HospitalEquipment(models.Model):
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
     
+    def save(self, *args, **kwargs):
+        created = self.pk is None
+        super().save(*args, **kwargs) 
+        client.update_hospital_equipment(self)
+        if created:
+            client.update_hospital_metadata(self.hospital)
+
+    def delete(self, *args, **kwargs):
+        client.remove_hospital_equipment(self)
+        client.update_hospital_metadata(self.hospital)
+        super().delete(*args, **kwargs)
+        
     class Meta:
         unique_together = ('hospital', 'equipment',)
 
@@ -251,6 +309,3 @@ class Base(models.Model):
 
     def __str__(self):
         return self.name
-
-
-
