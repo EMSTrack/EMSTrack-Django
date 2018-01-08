@@ -17,7 +17,6 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer, \
     ExtendedProfileSerializer
 
-
 # UpdateClient class
 
 class UpdateClient(BaseClient):
@@ -83,48 +82,65 @@ class UpdateClient(BaseClient):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(obj.hospital.id,
                                                                    obj.equipment.name))
 
+import threading
         
-# Loop until client disconnects
+class UpdateClientThread(threading.Thread):
 
-# Start client
-stdout = OutputWrapper(sys.stdout)
-style = color_style()
+    def __init__(self):
 
-# Instantiate broker
-broker = {
-    'HOST': 'localhost',
-    'PORT': 1883,
-    'KEEPALIVE': 60,
-    'CLEAN_SESSION': True
-}
+        super().__init__()
 
-broker.update(settings.MQTT)
-broker['CLIENT_ID'] = 'signals_' + str(os.getpid())
+        self.client = None
 
-connected = False
-attempts = 0
-while not connected and attempts < 10:
-
-    try:
-
-        # try to connect
-        print('Connecting to MQTT brocker..')
-        client = UpdateClient(broker, stdout, style, 0)
+    def run(self):
         
-    except MQTTException as e:
+        # Start client
+        stdout = OutputWrapper(sys.stdout)
+        style = color_style()
 
-        if e.value == 5:
-            time.sleep(1)
-            print('Could not connect to MQTT brocker. Retrying...')
-            attempts += 1
-        else:
-            raise e
-    
+        # Instantiate broker
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'signals_' + str(os.getpid())
+
+        connected = False
+        attempts = 0
+        while not connected:
+            
+            try:
+
+                # try to connect
+                print('Connecting to MQTT brocker..')
+                self.client = UpdateClient(broker, stdout, style, 0)
+        
+            except MQTTException as e:
+
+                if attempts < 10:
+                    time.sleep(1)
+                    attempts += 1
+                    print('Could not connect to MQTT brocker. Retrying...')
+                else:
+                    raise e
+
+        # start client on its own thread
+        self.client.loop_start()
+
+    def disconnect(self):
+
+        if self.client:
+            self.client.disconnect()
+
+client = UpdateClientThread()
+client.start()
+            
 # register atexit handler to make sure it disconnects at exit
 atexit.register(client.disconnect)
-
-# start client on its own thread
-client.loop_start()
 
 # register signals
 
