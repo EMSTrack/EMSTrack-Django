@@ -494,7 +494,7 @@ class TestMQTTConnect(MyTestCase):
 
         # connected?
         k = 0
-        while not client.connected and k < self.MAX_TRIES:
+        while not client.connected and k < MAX_TRIES:
             k += 1
             client.loop()
 
