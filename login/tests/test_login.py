@@ -485,6 +485,7 @@ class TestMQTTACLPublish(MyTestCase):
 
 class TestMQTTConnect(MyTestCase):
 
+    MAX_TRIES = 10
 
     def test_connect(self):
         
