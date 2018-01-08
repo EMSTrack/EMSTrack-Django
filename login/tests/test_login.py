@@ -138,7 +138,7 @@ class TestLogin(MyTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
-class TestMQTTLogin(MyTestCase):
+#class TestMQTTLogin(MyTestCase):
 
     def test_mqtt_login(self):
 
