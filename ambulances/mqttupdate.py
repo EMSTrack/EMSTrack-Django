@@ -19,6 +19,9 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
 
 # UpdateClient class
 
+print('*** ambulances.mqttupdate ***')
+
+
 class UpdateClient(BaseClient):
 
     def publish(self, topic, message, *vargs, **kwargs):
