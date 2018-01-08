@@ -1,4 +1,4 @@
-import atexit, sys, os
+import atexit, sys, os, time
 
 from django.utils.six import BytesIO
 from django.core.management.base import OutputWrapper
