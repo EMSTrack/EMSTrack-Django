@@ -376,7 +376,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/ambulance/1/data' },
+                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
@@ -385,7 +385,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/ambulance/2/data' },
+                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a2.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
@@ -394,18 +394,38 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/ambulance/3/data' },
+                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a3.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/aauth/mqtt/acl/',
-                               { 'username': 'testuser2',
+                               { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser2/ambulance/1/data' },
+                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
+        
+        # can't publish
+        response = self.client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a2.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can publish
+        response = self.client.post('/aauth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '2',
+                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a3.id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        
         
         # can't publish
         response = self.client.post('/aauth/mqtt/acl/',
