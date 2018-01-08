@@ -1,3 +1,4 @@
+import time
 from django.test import TestCase
 
 from django.contrib.auth.models import User
@@ -580,6 +581,7 @@ class TestMQTTSubscribe(MyTestCase):
         while len(client.subscribed) and k < MAX_TRIES:
             k += 1
             client.loop()
+            time.sleep(1)
             
         self.assertEqual(len(client.subscribed), 0)
     
