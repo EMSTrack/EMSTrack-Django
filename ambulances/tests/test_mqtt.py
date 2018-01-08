@@ -215,8 +215,6 @@ class TestMQTTSeed(MQTTTestCase):
         # Done?
         self.loop(client)
 
-    def _test(self):
-        
         # repeat with another user
 
         qos = 0
@@ -225,6 +223,49 @@ class TestMQTTSeed(MQTTTestCase):
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
         broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
+
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        self.is_connected(client)
+
+        qos = 2
+        
+        # Expect all ambulances
+        for ambulance in Ambulance.objects.all():
+            client.expect('ambulance/{}/data'.format(ambulance.id),
+                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
+                          qos)
+
+        # Expect all hospitals
+        for hospital in Hospital.objects.all():
+            client.expect('hospital/{}/data'.format(hospital.id),
+                          JSONRenderer().render(HospitalSerializer(hospital).data),
+                          qos)
+            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=hospital_equipment)
+            client.expect('hospital/{}/metadata'.format(hospital.id),
+                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+                          qos)
+
+        # Expect all hospital equipments
+        for e in HospitalEquipment.objects.all():
+            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
+                                                                 e.equipment.name),
+                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+                          qos)
+
+        # Expect all profiles
+        for obj in Profile.objects.all():
+            client.expect('user/{}/profile'.format(obj.user.username),
+                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+                          qos)
+
+        # Subscribed?
+        self.is_subscribed(client)
+
+        # Done?
+        self.loop(client)
+
+    def _test(self):
 
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         client.test = self
