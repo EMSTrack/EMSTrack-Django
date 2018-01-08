@@ -11,7 +11,7 @@ from django.conf import settings
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from .mqttclient import BaseClient
+from .mqttclient import BaseClient, MQTTException
 from .models import Ambulance, Equipment, HospitalEquipment, Hospital
 from .serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer, \
@@ -100,9 +100,25 @@ broker = {
 
 broker.update(settings.MQTT)
 broker['CLIENT_ID'] = 'signals_' + str(os.getpid())
-    
-client = UpdateClient(broker, stdout, style, 0)
 
+connected = False
+attempts = 0
+while not connected and attempts < 10:
+
+    try:
+
+        # try to connect
+        client = UpdateClient(broker, stdout, style, 0)
+        
+    except MQTTException as e:
+
+        if e.value == 5:
+            time.sleep()
+            print('Could not connect to MQTT brocker. Retrying...')
+            attempts += 1
+        else:
+            raise e
+    
 # register atexit handler to make sure it disconnects at exit
 atexit.register(client.disconnect)
 
