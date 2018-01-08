@@ -23,7 +23,7 @@ def make_hash(password,
                               iterations,
                               128)
 
-    return 'PBKDF2${}${}${}${}'.format(hash_functions,
+    return 'PBKDF2${}${}${}${}'.format(hash_function,
                                        iterations,
                                        salt,
                                        b64encode(key))
