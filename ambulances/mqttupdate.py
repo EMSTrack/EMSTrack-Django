@@ -12,7 +12,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from .mqttclient import BaseClient, MQTTException
-from .models import Ambulance, Equipment, HospitalEquipment, Hospital
+from .models import client, Ambulance, Equipment, \
+    HospitalEquipment, Hospital
 from .serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer, \
     ExtendedProfileSerializer
@@ -108,17 +109,19 @@ try:
 
     # try to connect
     print('Connecting to MQTT brocker...')
-    client = UpdateClient(broker, stdout, style, 0)
+    local_client = UpdateClient(broker, stdout, style, 0)
     
     # wait for connection
-    while not client.connected:
-        client.loop()
+    while not local_client.connected:
+        local_client.loop()
 
     # start loop
-    client.loop_start()
+    local_client.loop_start()
     
     # register atexit handler to make sure it disconnects at exit
-    atexit.register(client.disconnect)
+    atexit.register(local_client.disconnect)
+
+    client = local_client
     
 except Exception as e:
 
