@@ -116,7 +116,7 @@ class UpdateClientThread(threading.Thread):
             try:
 
                 # try to connect
-                print('Connecting to MQTT brocker..')
+                print('Connecting to MQTT brocker...')
                 self.client = UpdateClient(broker, stdout, style, 0)
                 connected = self.client.connected
         
@@ -129,7 +129,7 @@ class UpdateClientThread(threading.Thread):
                     raise e
 
             if not connected:
-                time.sleep(10)
+                time.sleep(1)
                 
         # start client on its own thread
         self.client.loop_start()
