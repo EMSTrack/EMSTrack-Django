@@ -27,8 +27,7 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
 
 # Profile viewset
 
-class ProfileViewSet(mixins.RetrieveModelMixin,
-                     viewsets.GenericViewSet):
+class ProfileViewSet(viewsets.GenericViewSet):
 
     queryset = Profile.objects.all()
     serializer_class = ExtendedProfileSerializer
