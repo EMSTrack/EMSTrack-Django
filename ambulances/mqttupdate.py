@@ -122,7 +122,7 @@ class UpdateClientThread(threading.Thread):
             except MQTTException as e:
 
                 if attempts < 10:
-                    time.sleep(1)
+                    time.sleep(10)
                     attempts += 1
                     print('Could not connect to MQTT brocker. Retrying...')
                 else:
