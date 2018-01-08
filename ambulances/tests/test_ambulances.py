@@ -481,7 +481,7 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': status,
-                                         }, partial="True")
+                                         }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -509,7 +509,7 @@ class TestAmbulanceUpdate(TestSetup):
                                          data={
                                              'location': location,
                                              'location_timestamp': location_timestamp,
-                                         }, partial="True")
+                                         }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -533,14 +533,14 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                         }, partial="True")
+                                         }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
 
         # error update timestamp without location
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location_timestamp': location_timestamp,
-                                         }, partial="True")
+                                         }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
         
         # regular authorized user
@@ -553,7 +553,7 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': status,
-                                         }, partial="True")
+                                         }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -581,7 +581,7 @@ class TestAmbulanceUpdate(TestSetup):
                                          data={
                                              'location': location,
                                              'location_timestamp': location_timestamp
-                                         }, partial="True")
+                                         }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -605,14 +605,14 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location
-                                         }, partial="True")
+                                         }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
 
         # error update timestamp without location
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location_timestamp': location_timestamp,
-                                         }, partial="True")
+                                         }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
         
     def test_ambulance_patch_viewset(self):
@@ -1072,7 +1072,7 @@ class TestHospitalUpdate(TestSetup):
         serializer = HospitalSerializer(h,
                                         data={
                                             'address': address,
-                                        }, partial="True")
+                                        }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -1095,7 +1095,7 @@ class TestHospitalUpdate(TestSetup):
         serializer = HospitalSerializer(h,
                                         data={
                                             'location': location,
-                                        }, partial="True")
+                                        }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -1122,7 +1122,7 @@ class TestHospitalUpdate(TestSetup):
         serializer = HospitalSerializer(h,
                                         data={
                                             'address': address,
-                                        }, partial="True")
+                                        }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
@@ -1145,7 +1145,7 @@ class TestHospitalUpdate(TestSetup):
         serializer = HospitalSerializer(h,
                                         data={
                                             'location': location,
-                                        }, partial="True")
+                                        }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 

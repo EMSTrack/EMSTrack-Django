@@ -3,7 +3,10 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.mqttclient import BaseClient
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
+
+from ambulances.mqttclient import BaseClient, MQTTException
 
 from ambulances.models import EquipmentCount, Ambulance, Status, Call, User, Hospital
 
@@ -20,41 +23,73 @@ class Client(BaseClient):
 
         # Subscribing in on_connect() means that if we lose the
         # connection and reconnect then subscriptions will be renewed.
-        client.subscribe('#', 2)
+        # client.subscribe('#', 2)
 
-        # hospital message handler
-        self.client.message_callback_add('hospital/+/equipment/#',
+        # ambulance handler
+        self.client.message_callback_add('user/+/ambulance/+/data',
+                                         self.on_ambulance)
+        
+        # hospital handler
+        self.client.message_callback_add('user/+/hospital/+/data',
                                          self.on_hospital)
 
+        # hospital equipment handler
+        self.client.message_callback_add('hospital/+/equipment/+/data',
+                                         self.on_hospital_equipment)
+        
         # call handler
-        self.client.message_callback_add('ambulance/+/call', self.on_call)
-
-        # user location handler
-        self.client.message_callback_add('user/+/location', self.on_user_loc)
-
-        # status handler
-        self.client.message_callback_add('user/+/status', self.on_user_status)
-
-        # ambulance linking handler
-        self.client.message_callback_add('user/+/ambulance', self.on_amb_sel)
-
-        # ambulance linking handler
-        self.client.message_callback_add('user/+/hospital', self.on_hosp_sel)
+        #self.client.message_callback_add('ambulance/+/call',
+        #                                 self.on_call)
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Listening to messages..."))
+            self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
 
         return True
 
-    # The callback for when a PUBLISH message is received from the server.
-    def on_message(self, client, userdata, msg):
+    # Update ambulance
+    def on_ambulance(self, client, userdata, msg):
 
-        # handle unknown messages
-        self.stdout.write(
-            self.style.WARNING(
-                "*> Ignoring message topic {} {}".format(msg.topic,
-                                                         msg.payload)))
+        # parse topic
+        _user, username, _ambulance, ambulance_id, _data = msg.topic.split('/')
+        user = User.objects.get(username=username)
 
+        if not msg.payload:
+            # empty payload
+            return
+
+        # otherwise parse data
+        
+        try:
+            
+            # Parse data into json dict
+            data = JSONParser().parse(BytesIO(msg.payload))
+            
+        except Exception as e:
+            
+            self.stdout.write(
+                self.style.ERROR("*> JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
+            return
+        
+        try:
+
+            # retrieve ambulance
+            ambulance = Ambulances.get(id=ambulance_id)
+
+        except ObjectDoesNotExist:
+
+            self.stdout.write(
+                self.style.ERROR("*> Ambulance with id {} does not exist".format(ambulance_id)))
+            return
+            
+        try:
+            
+            # update ambulance
+            serializer = AmbulanceSerializer(ambulance,
+                                             data=data,
+                                             partial=True)
+            serializer.is_valid()
+            serializer.save(updated_by=user)
+            
     # Update hospital resources
     def on_hospital(self, client, userdata, msg):
 
