@@ -37,7 +37,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
     lookup_field = 'user__username'
 
     @detail_route(methods=['get'])
-    def profile(self, request, pk):
+    def profile(self, request, pk, **kwargs):
         return self.get_object()
     
 # BasePermissionViewSet
