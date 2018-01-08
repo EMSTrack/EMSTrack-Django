@@ -80,6 +80,7 @@ class MQTTAclView(CsrfExemptMixin, View):
             del topic[0]
 
         try:
+            
             # get user
             user = User.objects.get(username=data.get('username'),
                                     is_active=True)
@@ -150,19 +151,55 @@ class MQTTAclView(CsrfExemptMixin, View):
                 
                 # permission to publish:
                 
-                #  - user/*username*/hospital
-                #  - user/*username*/ambulance
-                #  - user/*username*/location
-                if (len(topic) == 3 and
+                if (len(topic) >= 5 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
-                    if (topic[2] == 'hospital' or
-                        topic[2] == 'ambulance' or
-                        topic[2] == 'location'):
+                    #  - user/*username*/ambulance/+/data
+                    if (len(topic) == 5 and
+                        topic[2] == 'ambulance' and
+                        topic[4] == 'data'):
+
+                        ambulance_id = int(topic[3])
+                        #print('ambulance_id = {}'.format(ambulance_id))
+
+                        # is user authorized?
+                        try:
                         
-                        return HttpResponse('OK')
-        
+                            perm = user.profile.ambulances.get(ambulance=ambulance_id)
+            
+                            if perm.can_write:
+                        
+                                return HttpResponse('OK')
+
+                        except ObjectDoesNotExist:
+                            pass
+
+                    #  - user/*username*/hospital/+/data
+                    #  - user/*username*/hospital/+/equipment/+/data
+                    elif ((len(topic) == 5 and
+                           topic[2] == 'hospital' and
+                           topic[4] == 'data') or
+                          (len(topic) == 7 and
+                           topic[2] == 'hospital' and
+                           topic[4] == 'equipment' and
+                           topic[6] == 'data')):
+
+                        hospital_id = int(topic[3])
+                        #print('hospital_id = {}'.format(hospital_id))
+
+                        # is user authorized?
+                        try:
+                        
+                            perm = user.profile.hospitals.get(hospital=hospital_id)
+            
+                            if perm.can_write:
+                        
+                                return HttpResponse('OK')
+
+                        except ObjectDoesNotExist:
+                            pass
+                        
         except User.DoesNotExist:
             pass
         
