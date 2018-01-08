@@ -118,6 +118,7 @@ class UpdateClientThread(threading.Thread):
                 # try to connect
                 print('Connecting to MQTT brocker..')
                 self.client = UpdateClient(broker, stdout, style, 0)
+                connected = self.client.connected
         
             except MQTTException as e:
 
