@@ -126,6 +126,26 @@ class MQTTAclView(CsrfExemptMixin, View):
                     except ObjectDoesNotExist:
                         pass
 
+                #  - ambulance/+/data
+                elif (len(topic) == 3 and
+                      topic[0] == 'ambulance' and
+                      topic[2] == 'data'):
+                    
+                    ambulance_id = int(topic[1])
+                    #print('ambulance_id = {}'.format(ambulance_id))
+
+                    # is user authorized?
+                    try:
+                        
+                        perm = user.profile.ambulances.get(ambulance=ambulance_id)
+            
+                        if perm.can_read:
+                        
+                            return HttpResponse('OK')
+
+                    except ObjectDoesNotExist:
+                        pass
+                    
             elif acc == 2:
                 
                 # permission to publish:
