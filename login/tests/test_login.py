@@ -138,7 +138,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
-    #def test_mqtt_login(self):
+    def test_mqtt_login(self):
 
         # blank login
         response = self.client.get('/aauth/mqtt/login/')
