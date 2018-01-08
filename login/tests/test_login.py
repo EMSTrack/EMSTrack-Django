@@ -11,10 +11,8 @@ from ..views import LoginView, SignupView, LogoutView, MQTTLoginView, MQTTSuperu
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
-class CreateUser(MQTTTestCase):
+class MyTestCase(MQTTTestCase):
 
-    global data_ready
-    
     @classmethod
     def setUpClass(cls):
 
@@ -81,6 +79,8 @@ class CreateUser(MQTTTestCase):
                                                   can_write=True)
             )
 
+class CreateUser(MyTestCase):
+            
     def test_login(self):
 
         # blank login
@@ -138,7 +138,7 @@ class CreateUser(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
-    def test_mqtt_login(self):
+    #def test_mqtt_login(self):
 
         # blank login
         response = self.client.get('/aauth/mqtt/login/')
