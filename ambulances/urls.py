@@ -28,7 +28,7 @@ router = routers.DefaultRouter()
 #router.register(r'equipment', EquipmentCountViewSet)
 #router.register(r'routes', AmbulanceRouteViewSet)
 
-router.register(r'profile',
+router.register(r'user',
                 viewsets.ProfileViewSet)
 router.register(r'ambulance',
                 viewsets.AmbulanceViewSet,
