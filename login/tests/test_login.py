@@ -563,6 +563,16 @@ class TestMQTTConnect(MyTestCase):
 
 class TestMQTTSubscribe(MyTestCase):
 
+    def is_connected(self, client, MAX_TRIES = 10):
+
+        # connected?
+        k = 0
+        while not client.connected and k < MAX_TRIES:
+            k += 1
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
     def is_subscribed(self, client, MAX_TRIES = 10):
 
         # connected?
@@ -598,6 +608,8 @@ class TestMQTTSubscribe(MyTestCase):
                                 style,
                                 verbosity = 1)
 
+        self.is_connected(client)
+        
         # subscribe to topics
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
