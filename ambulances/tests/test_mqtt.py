@@ -260,79 +260,48 @@ class TestMQTTSeed(MQTTTestCase):
         # Done?
         self.loop(client)
 
-    def _test(self):
+        # repeat with another user
+
+        qos = 0
+
+        # Start client as common user
+        broker['USERNAME'] = 'testuser2'
+        broker['PASSWORD'] = 'very_secret'
+        broker['CLIENT_ID'] = 'test_mqttseed_testuser2'
 
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client.test = self
+        self.is_connected(client)
 
-        # connected?
-        k = 0
-        while not client.connected and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
+        # Expect user profile
+        profile = Profile.objects.get(user__username='testuser1')
+        client.expect('user/testuser1/profile',
+                      JSONRenderer().render(ExtendedProfileSerializer(profile).data),
+                      qos)
 
-        self.assertEqual(client.connected, True)
-        print('>> connected')
-
-        self.assertEqual(client.connected, True)
+        # User Ambulances
+        can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
+        for ambulance in Ambulance.objects.filter(id__in=can_read):
+            client.expect('ambulance/{}/data'.format(ambulance.id),
+                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
+                          qos)
         
+        # User Hospitals
+        can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
+        for hospital in Hospital.objects.filter(id__in=can_read):
+            client.expect('hospital/{}/data'.format(hospital.id),
+                          JSONRenderer().render(HospitalSerializer(hospital).data),
+                          qos)
+            
+        # Expect all user hospital equipments
+        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
+            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
+                                                                 e.equipment.name),
+                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+                          qos)
 
         # Subscribed?
-        k = 0
-        while len(client.subscribed) and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
+        self.is_subscribed(client)
 
-        self.assertEqual(len(client.subscribed), 0)
-        print('>> subscribed')
+        # Done?
+        self.loop(client)
 
-        # Process all messages
-        process_messages(client)
-        self.assertEqual(client.done(), True)
-        print('<< done')
-        
-    def _test(self):
-
-        print('<< testuser1')
-        
-            
-        try:
-        
-            client.loop_start()
-        
-            while not client.connected or not client.done():
-                print('connected = {}, done = {}'.format(client.connected,
-                                                         client.done()))
-                print('subscribed = {}'.format(client.subscribed))
-                time.sleep(1)
-            
-            self.assertEqual(client.connected, True)
-
-            client.loop_stop()
-            
-        except KeyboardInterrupt:
-            pass
-        
-        finally:
-            client.disconnect()
-
-    def _test(self):
-            
-        # Start client as common user with wrong password
-        broker['USERNAME'] = 'testuser1'
-        broker['PASSWORD'] = 'top_secreto'
-        broker['CLIENT_ID'] = 'test_mqttseed_testuser1_wrong'
-
-        # with self.assertRaises():
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client.test = self
-
-        with self.assertRaises(MQTTException) as cm:
-            while True:
-                client.loop()
-        
-        self.assertEqual(client.connected, False)
-        self.assertEqual(cm.exception.value, 5)
-
-        client.disconnect()
-        
