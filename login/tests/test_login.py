@@ -486,9 +486,7 @@ class TestMQTTACLPublish(MyTestCase):
 
 class TestMQTTConnect(MyTestCase):
 
-    def is_connected(self, client, value = True, MAX_TRIES = 10):
-
-        client.test = self
+    def is_connected(self, client, MAX_TRIES = 10):
 
         # connected?
         k = 0
@@ -496,7 +494,7 @@ class TestMQTTConnect(MyTestCase):
             k += 1
             client.loop()
 
-        self.assertEqual(client.connected, value)
+        self.assertEqual(client.connected, True)
         
     def test_connect(self):
 
@@ -562,3 +560,55 @@ class TestMQTTConnect(MyTestCase):
                                              sys.stdout,
                                              style,
                                              verbosity = 1))
+
+class TestMQTTSubscribe(MyTestCase):
+
+    def is_subscribed(self, client, MAX_TRIES = 10):
+
+        # connected?
+        k = 0
+        while len(client.subscribed) and k < self.MAX_TRIES:
+            k += 1
+            client.loop()
+            
+        self.assertEqual(len(client.subscribed), 0)
+    
+    def test_subscribe(self):
+
+        import sys
+        from django.core.management.base import OutputWrapper
+        from django.core.management.color import color_style, no_style
+        
+        # Start client as admin
+        stdout = OutputWrapper(sys.stdout)
+        style = color_style()
+
+        # Instantiate broker
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
+        
+        client = MQTTTestClient(broker,
+                                sys.stdout,
+                                style,
+                                verbosity = 1))
+
+        # subscribe to topics
+        client.expect('ambulance/{}/data'.format(self.a1.id))
+        client.expect('ambulance/{}/data'.format(self.a2.id))
+        client.expect('ambulance/{}/data'.format(self.a3.id))
+
+        client.expect('hospital/{}/data'.format(self.h1.id))
+        client.expect('hospital/{}/data'.format(self.h2.id))
+        client.expect('hospital/{}/data'.format(self.h3.id))
+            
+        client.expect('hospital/{}/equipment/+/data'.format(self.h1.id))
+        client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
+        client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
+
+        self.is_subscribed(client)
