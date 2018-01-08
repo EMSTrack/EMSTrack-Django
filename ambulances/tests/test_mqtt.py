@@ -227,36 +227,31 @@ class TestMQTTSeed(MQTTTestCase):
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         self.is_connected(client)
 
-        qos = 2
-        
-        # Expect all ambulances
-        for ambulance in Ambulance.objects.all():
+        # Expect user profile
+        profile = Profile.objects.get(user__username='testuser1')
+        client.expect('user/testuser1/profile',
+                      JSONRenderer().render(ExtendedProfileSerializer(profile).data),
+                      qos)
+
+        # User Ambulances
+        can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
+        for ambulance in Ambulance.objects.filter(id__in=can_read):
             client.expect('ambulance/{}/data'.format(ambulance.id),
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
                           qos)
-
-        # Expect all hospitals
-        for hospital in Hospital.objects.all():
+        
+        # User Hospitals
+        can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
+        for hospital in Hospital.objects.filter(id__in=can_read):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
-            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            client.expect('hospital/{}/metadata'.format(hospital.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-                          qos)
-
-        # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
+            
+        # Expect all user hospital equipments
+        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.name),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
-                          qos)
-
-        # Expect all profiles
-        for obj in Profile.objects.all():
-            client.expect('user/{}/profile'.format(obj.user.username),
-                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
                           qos)
 
         # Subscribed?
@@ -281,32 +276,6 @@ class TestMQTTSeed(MQTTTestCase):
 
         self.assertEqual(client.connected, True)
         
-        # Expect user profile
-        profile = Profile.objects.get(user__username='testuser1')
-        client.expect('user/testuser1/profile',
-                      JSONRenderer().render(ExtendedProfileSerializer(profile).data),
-                      qos)
-
-        # Ambulances
-        can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
-        for ambulance in Ambulance.objects.filter(id__in=can_read):
-            client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          qos)
-        
-        # Hospitals
-        can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
-        for hospital in Hospital.objects.filter(id__in=can_read):
-            client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data),
-                          qos)
-            
-        # Expect all hospital equipments
-        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
-            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.name),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
-                          qos)
 
         # Subscribed?
         k = 0
