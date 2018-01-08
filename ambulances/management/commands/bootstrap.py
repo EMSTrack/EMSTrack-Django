@@ -5,9 +5,32 @@ from django.conf import settings
 
 from django.db import DEFAULT_DB_ALIAS
 
+import hashlib, os
+from base64 import b64encode, b64decode
+
 class Command(BaseCommand):
     help = 'Create admin user'
 
+    def make_hash(password,
+                  salt_length = 12,
+                  key_length = 24,
+                  hash_function = 'sha256',
+                  iterations = 901):
+
+        password = password.encode('utf-8')
+        salt = b64encode(os.urandom(salt_length))
+
+        key = hashlib.pbkdf2_hmac(hash_function,
+                                  password,
+                                  salt,
+                                  iterations,
+                                  128)
+        
+        return 'PBKDF2${}${}${}${}'.format(hash_functions,
+                                           iterations,
+                                           salt,
+                                           b64encode(key))
+    
     def handle(self, *args, **options):
 
         if options['verbosity'] >= 1:
@@ -39,13 +62,18 @@ class Command(BaseCommand):
             else:
                 raise CommandError("Could not retrieve '{}' from settings.".format(field_name))
 
-        # Create superuser
         if username:
+            # create superuser
             user_data[model.USERNAME_FIELD] = username
             user_data['password'] = mqtt['PASSWORD']
             model._default_manager.db_manager(database).create_superuser(**user_data)
 
-        if options['verbosity'] >= 1:
-            self.stdout.write(
-                self.style.SUCCESS("Superuser created successfully."))
+            # generate password file
+            import hashlib
+            with 
+
+            
+            if options['verbosity'] >= 1:
+                self.stdout.write(
+                    self.style.SUCCESS("Superuser created successfully."))
 
