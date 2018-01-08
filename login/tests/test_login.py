@@ -596,7 +596,7 @@ class TestMQTTSubscribe(MyTestCase):
         client = MQTTTestClient(broker,
                                 sys.stdout,
                                 style,
-                                verbosity = 1))
+                                verbosity = 1)
 
         # subscribe to topics
         client.expect('ambulance/{}/data'.format(self.a1.id))
