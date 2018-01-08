@@ -12,7 +12,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         if options['verbosity'] >= 1:
-            self.stdout.write('Bootstraping ambulance application')
+            self.stdout.write('> Bootstraping ambulance application')
         
         # Retrieve defaults from settings
         mqtt = {
@@ -51,6 +51,3 @@ class Command(BaseCommand):
                 self.stdout.write(
                     self.style.SUCCESS("Superuser created successfully."))
 
-        if options['verbosity'] >= 1:
-            self.stdout.write(
-                self.style.SUCCESS("Done."))
