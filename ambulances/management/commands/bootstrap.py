@@ -21,12 +21,12 @@ def make_hash(password,
                               password,
                               salt,
                               iterations,
-                              128)
+                              key_length)
 
     return 'PBKDF2${}${}${}${}'.format(hash_function,
                                        iterations,
-                                       salt,
-                                       b64encode(key))
+                                       salt.decode(),
+                                       b64encode(key).decode())
 
 class Command(BaseCommand):
     help = 'Create admin user'
