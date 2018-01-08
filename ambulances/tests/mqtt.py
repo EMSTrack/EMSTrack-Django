@@ -351,4 +351,4 @@ class MQTTTestClient(BaseClient):
             self.expecting += 1
             self.subscribe(topic, qos)
         
-        self.expecting_messages[topic].add(msg)
+        self.expecting_messages[topic].append(msg)
