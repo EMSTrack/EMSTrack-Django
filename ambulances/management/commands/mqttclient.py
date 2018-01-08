@@ -99,7 +99,7 @@ class Client(BaseClient):
         try:
 
             # retrieve ambulance
-            ambulance = Ambulance.get(id=ambulance_id)
+            ambulance = Ambulance.objects.get(id=ambulance_id)
 
         except ObjectDoesNotExist:
 
@@ -131,7 +131,7 @@ class Client(BaseClient):
         try:
 
             # retrieve hospital
-            hospital = Hospital.get(id=hospital_id)
+            hospital = Hospital.objects.get(id=hospital_id)
 
         except ObjectDoesNotExist:
 
@@ -163,8 +163,8 @@ class Client(BaseClient):
         try:
 
             # retrieve hospital equipment
-            hospital_equipment = HospitalEquipment.get(hospital=hospital_id,
-                                                       equipment__name=equipment_name)
+            hospital_equipment = HospitalEquipment.objects.get(hospital=hospital_id,
+                                                               equipment__name=equipment_name)
 
         except ObjectDoesNotExist:
 
