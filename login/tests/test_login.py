@@ -3,7 +3,9 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from ambulances.models import Hospital, HospitalPermission
+from ambulances.models import Ambulance, Hospital, \
+    Equipment, HospitalEquipment, HospitalPermission, \
+    AmbulancePermission
 
 from django.test import Client
 
