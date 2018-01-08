@@ -583,7 +583,6 @@ class TestMQTTSubscribe(MyTestCase):
         while len(client.subscribed) and k < MAX_TRIES:
             k += 1
             time.sleep(1)
-            print('retrying...')
             
         client.loop_stop()
         
@@ -630,3 +629,30 @@ class TestMQTTSubscribe(MyTestCase):
         client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
 
         self.is_subscribed(client)
+
+        # Start client as common user
+        broker['USERNAME'] = 'testuser1'
+        broker['PASSWORD'] = 'top_secret'
+
+        client = MQTTTestClient(broker,
+                                sys.stdout,
+                                style,
+                                verbosity = 1)
+
+        self.is_connected(client)
+        
+        # subscribe to topics
+        client.expect('ambulance/{}/data'.format(self.a1.id))
+        client.expect('ambulance/{}/data'.format(self.a2.id))
+        client.expect('ambulance/{}/data'.format(self.a3.id))
+
+        client.expect('hospital/{}/data'.format(self.h1.id))
+        client.expect('hospital/{}/data'.format(self.h2.id))
+        client.expect('hospital/{}/data'.format(self.h3.id))
+            
+        client.expect('hospital/{}/equipment/+/data'.format(self.h1.id))
+        client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
+        client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
+
+        self.is_subscribed(client)
+        
