@@ -6,14 +6,6 @@ from django.conf import settings
 from ambulances.mqttclient import BaseClient
 
 from ambulances.models import EquipmentCount, Ambulance, Status, Call, User, Hospital
-from ambulances.serializers import MQTTLocationSerializer, MQTTAmbulanceLocSerializer, CallSerializer, MQTTUserLocationSerializer
-
-from django.utils.six import BytesIO
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.gis.geos import Point
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
-
 
 # Client
 class Client(BaseClient):

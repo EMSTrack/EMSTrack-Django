@@ -1,19 +1,13 @@
 import atexit, sys, os, time
 
-from django.utils.six import BytesIO
-from django.core.management.base import OutputWrapper
-from django.core.management.color import color_style, no_style
-
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
-from django.conf import settings
-
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from .mqttclient import BaseClient, MQTTException
+
 from .models import client, Ambulance, Equipment, \
     HospitalEquipment, Hospital
+
 from .serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer, \
     ExtendedProfileSerializer
@@ -90,6 +84,10 @@ class UpdateClient(BaseClient):
                                                                  equipment.equipment.name))
 
 # Start client
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style, no_style
+from django.conf import settings
+
 stdout = OutputWrapper(sys.stdout)
 style = color_style()
 
