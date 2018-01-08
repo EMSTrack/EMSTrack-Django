@@ -138,7 +138,7 @@ class TestLogin(MyTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
-#class TestMQTTLogin(MyTestCase):
+class TestMQTTLogin(MyTestCase):
 
     def test_mqtt_login(self):
 
@@ -225,7 +225,9 @@ class TestLogin(MyTestCase):
         response = self.client.get('/aauth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
-    #def test_mqtt_acl_publish(self):
+class TestMQTTACLPublish(MyTestCase):
+
+    def test_mqtt_acl_publish(self):
         
         # login
         response = self.client.post('/aauth/mqtt/login/',
@@ -390,7 +392,9 @@ class TestLogin(MyTestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
-    #def test_mqtt_acl_subscribe(self):
+class TestMQTTACLSubscribe(MyTestCase):
+
+    def test_mqtt_acl_subscribe(self):
         
         # can subscribe
         response = self.client.post('/aauth/mqtt/acl/',
