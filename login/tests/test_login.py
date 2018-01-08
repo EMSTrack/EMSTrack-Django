@@ -482,3 +482,34 @@ class TestMQTTACLPublish(MyTestCase):
                                  'topic': '/user/testuser2/hospital/{}/data'.format(self.a3.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
+
+class TestMQTTConnect(MyTestCase):
+
+
+    def test_connect(self):
+        
+        # Start client as admin
+        stdout = OutputWrapper(sys.stdout)
+        style = color_style()
+
+        # Instantiate broker
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
+        
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client.test = self
+
+        # connected?
+        k = 0
+        while not client.connected and k < self.MAX_TRIES:
+            k += 1
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
