@@ -108,6 +108,7 @@ while not connected and attempts < 10:
     try:
 
         # try to connect
+        print('Connecting to MQTT brocker..')
         client = UpdateClient(broker, stdout, style, 0)
         
     except MQTTException as e:
