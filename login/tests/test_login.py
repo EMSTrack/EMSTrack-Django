@@ -26,9 +26,6 @@ class MyTestCase(MQTTTestCase):
         # create server
         super().setUpClass()
 
-        # set up data
-        cls.setUpTestData()
-        
         # instantiate client
         cls.client = Client()
 
