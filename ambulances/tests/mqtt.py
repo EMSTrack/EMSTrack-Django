@@ -295,6 +295,7 @@ class MQTTTestClient(BaseClient):
 
         # expect
         self.expecting_topics = {}
+        self.expecting_messages = {}
         self.expecting = 0
 
         # initialize pubcount
