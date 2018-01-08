@@ -23,6 +23,7 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
 class UpdateClient(BaseClient):
 
     def on_disconnect(self, client, userdata, rc):
+        # Exception is generated only if never connected
         if not self.connected and rc:
             raise MQTTException('Disconnected',
                                 rc)
