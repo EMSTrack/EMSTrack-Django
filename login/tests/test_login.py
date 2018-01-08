@@ -14,6 +14,8 @@ from django.test import Client
 from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style, no_style
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 
 class MyTestCase(MQTTTestCase):
