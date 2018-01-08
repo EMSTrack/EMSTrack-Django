@@ -22,10 +22,10 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
 
 class UpdateClient(BaseClient):
 
-    #def on_disconnect(self, client, userdata, rc):
-    #    if rc:
-    #        raise MQTTException('Disconnected',
-    #                            rc)
+    def on_disconnect(self, client, userdata, rc):
+        if not self.connected and rc:
+            raise MQTTException('Disconnected',
+                                rc)
     
     def publish(self, topic, message, *vargs, **kwargs):
         self.client.publish(topic, message, *vargs, **kwargs)
