@@ -20,8 +20,6 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
 
 # UpdateClient class
 
-print('*** ambulances.mqttupdate ***')
-
 class UpdateClient(BaseClient):
 
     def on_disconnect(self, client, userdata, rc):
