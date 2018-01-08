@@ -327,7 +327,7 @@ class MQTTTestClient(BaseClient):
             # is message expected? remove
             try:
 
-                self.expecting_topics[msg.topic].remove(msg.payload)
+                self.expecting_messages[msg.topic].remove(msg.payload)
 
             except ValueError:
 
