@@ -113,7 +113,7 @@ while not connected and attempts < 10:
     except MQTTException as e:
 
         if e.value == 5:
-            time.sleep()
+            time.sleep(1)
             print('Could not connect to MQTT brocker. Retrying...')
             attempts += 1
         else:
