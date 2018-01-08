@@ -582,6 +582,7 @@ class TestMQTTSubscribe(MyTestCase):
             k += 1
             client.loop()
             time.sleep(1)
+            print('retrying...')
             
         self.assertEqual(len(client.subscribed), 0)
     
