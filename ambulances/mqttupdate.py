@@ -24,12 +24,19 @@ class UpdateClient(BaseClient):
     def publish(self, topic, message, *vargs, **kwargs):
         self.client.publish(topic, message, *vargs, **kwargs)
 
-    def update_topic(self, topic, serializer, qos=0, retain=False): #
-    Publish to topic self.publish(topic,
-    JSONRenderer().render(serializer.data), qos=qos, retain=retain)
+    def update_topic(self, topic, serializer, qos=0, retain=False):
+        # Publish to topic
+        self.publish(topic,
+                     JSONRenderer().render(serializer.data),
+                     qos=qos,
+                     retain=retain)
         
-    def remove_topic(self, topic, serializer, qos=0): # Publish null
-    to retained topic self.publish(topic, null, qos=qos, retain=True)
+    def remove_topic(self, topic, serializer, qos=0):
+        # Publish null to retained topic
+        self.publish(topic,
+                     null,
+                     qos=qos,
+                     retain=True)
 
     def update_profile(self, obj, qos=2, retain=True):
         self.update_topic('user/{}/profile'.format(obj.user.username),
