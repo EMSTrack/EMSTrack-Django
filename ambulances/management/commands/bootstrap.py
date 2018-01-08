@@ -8,28 +8,29 @@ from django.db import DEFAULT_DB_ALIAS
 import hashlib, os
 from base64 import b64encode, b64decode
 
+def make_hash(password,
+              salt_length = 12,
+              key_length = 24,
+              hash_function = 'sha256',
+              iterations = 901):
+    
+    password = password.encode('utf-8')
+    salt = b64encode(os.urandom(salt_length))
+    
+    key = hashlib.pbkdf2_hmac(hash_function,
+                              password,
+                              salt,
+                              iterations,
+                              128)
+
+    return 'PBKDF2${}${}${}${}'.format(hash_functions,
+                                       iterations,
+                                       salt,
+                                       b64encode(key))
+
 class Command(BaseCommand):
     help = 'Create admin user'
 
-    def make_hash(password,
-                  salt_length = 12,
-                  key_length = 24,
-                  hash_function = 'sha256',
-                  iterations = 901):
-
-        password = password.encode('utf-8')
-        salt = b64encode(os.urandom(salt_length))
-
-        key = hashlib.pbkdf2_hmac(hash_function,
-                                  password,
-                                  salt,
-                                  iterations,
-                                  128)
-        
-        return 'PBKDF2${}${}${}${}'.format(hash_functions,
-                                           iterations,
-                                           salt,
-                                           b64encode(key))
     
     def handle(self, *args, **options):
 
