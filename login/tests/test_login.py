@@ -398,7 +398,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospital/{}/equipment/rx'.format(self.h1.id) },
+                                 'topic': '/hospital/{}/equipment/rx/data'.format(self.h1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -407,7 +407,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospital/{}/equipment/beds'.format(self.h3.id) },
+                                 'topic': '/hospital/{}/equipment/beds/data'.format(self.h3.id) },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -416,7 +416,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '1',
-                                 'topic': '/hospital/{}/equipment/rx'.format(self.h2.id) },
+                                 'topic': '/hospital/{}/equipment/rx/data'.format(self.h2.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
