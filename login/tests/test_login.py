@@ -79,7 +79,7 @@ class MyTestCase(MQTTTestCase):
                                                   can_write=True)
             )
 
-class CreateUser(MyTestCase):
+class TestLogin(MyTestCase):
             
     def test_login(self):
 
@@ -138,7 +138,7 @@ class CreateUser(MyTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
         
-class CreateUser(MyTestCase):
+class TestMQTTLogin(MyTestCase):
 
     def test_mqtt_login(self):
 
