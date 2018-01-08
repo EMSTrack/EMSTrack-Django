@@ -121,15 +121,14 @@ class UpdateClientThread(threading.Thread):
                 connected = self.client.connected
         
             except MQTTException as e:
+                pass
 
-                if attempts < 10:
-                    attempts += 1
-                    print('Could not connect to MQTT brocker. Retrying...')
-                else:
-                    raise e
-
-            if not connected:
+            if attempts < 10:
+                attempts += 1
+                print('Could not connect to MQTT brocker. Retrying...')
                 time.sleep(1)
+            else:
+                raise MQTTException('Failed to connect', -1)
                 
         # start client on its own thread
         self.client.loop_start()
