@@ -15,6 +15,7 @@ from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
+from ambulances.mqttclient import MQTTException
 
 class MyTestCase(MQTTTestCase):
 
@@ -485,9 +486,6 @@ class TestMQTTACLPublish(MyTestCase):
 
 class TestMQTTConnect(MyTestCase):
 
-    def is_not_connected(self, client):
-        self.is_connected(client, value = False, MAX_TRIES = 10)
-
     def is_connected(self, client, value = True, MAX_TRIES = 10):
 
         client.test = self
@@ -547,16 +545,20 @@ class TestMQTTConnect(MyTestCase):
         broker['USERNAME'] = 'testuser22'
         broker['PASSWORD'] = 'very_secret'
 
-        self.is_not_connected(MQTTTestClient(broker,
+        with self.assertRaise(MQTTException):
+        
+            self.is_connected(MQTTTestClient(broker,
                                              sys.stdout,
                                              style,
                                              verbosity = 1))
-
+            
         # wrong password
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secreto'
 
-        self.is_not_connected(MQTTTestClient(broker,
+        with self.assertRaise(MQTTException):
+
+            self.is_connected(MQTTTestClient(broker,
                                              sys.stdout,
                                              style,
                                              verbosity = 1))
