@@ -323,6 +323,15 @@ class MQTTTestClient(BaseClient):
             # add to count
             self.expecting_topics[msg.topic] += 1
 
+            # is message expected? remove
+            try:
+
+                self.expecting_topics[msg.topic].remove(msg.payload)
+
+            except ValueError:
+
+                raise Exception('Unexpected message')
+            
             #print('> topic = {}'.format(msg.topic))
             #print('> topic count = {}'.format(self.expecting_topics[msg.topic]))
             #print('> expecting = {}'.format(self.expecting))
@@ -340,3 +349,4 @@ class MQTTTestClient(BaseClient):
             self.expecting += 1
             self.subscribe(topic, qos)
         
+        self.expecting_messages[topic].add(msg)
