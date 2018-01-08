@@ -8,11 +8,11 @@ from django.db import DEFAULT_DB_ALIAS
 import hashlib, os
 from base64 import b64encode, b64decode
 
-def make_hash(password,
-              salt_length = 12,
-              key_length = 24,
-              hash_function = 'sha256',
-              iterations = 901):
+def generate_hash(password,
+                  salt_length = 12,
+                  key_length = 24,
+                  hash_function = 'sha256',
+                  iterations = 901):
     
     password = password.encode('utf-8')
     salt = b64encode(os.urandom(salt_length))
@@ -65,15 +65,15 @@ class Command(BaseCommand):
 
         if username:
 
-            print('hash = {}'.format(make_hash('password')))
-
+            # generate password file
+            with open('pwfile', 'w') as file:
+                file.write('{}:{}'.format(username, make_hash('password')))
             
             # create superuser
             user_data[model.USERNAME_FIELD] = username
             user_data['password'] = mqtt['PASSWORD']
             model._default_manager.db_manager(database).create_superuser(**user_data)
 
-            # generate password file
             
             if options['verbosity'] >= 1:
                 self.stdout.write(
