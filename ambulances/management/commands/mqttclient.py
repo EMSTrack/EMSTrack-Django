@@ -3,12 +3,17 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
+from django.contrib.auth.models import User
+
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
 from ambulances.mqttclient import BaseClient, MQTTException
 
-from ambulances.models import EquipmentCount, Ambulance, Status, Call, User, Hospital
+from ambulances.models import Ambulance, Hospital, HospitalEquipment
+
+from ambulances.serializers import AmbulanceSerializer, \
+    HospitalSerializer, HospitalEquipmentSerializer
 
 # Client
 class Client(BaseClient):
@@ -46,355 +51,144 @@ class Client(BaseClient):
 
         return True
 
-    # Update ambulance
-    def on_ambulance(self, client, userdata, msg):
-
-        # parse topic
-        _user, username, _ambulance, ambulance_id, _data = msg.topic.split('/')
-        user = User.objects.get(username=username)
+    def parse_topic(self, msg):
 
         if not msg.payload:
             # empty payload
             return
-
-        # otherwise parse data
         
+        # parse topic
+        values = msg.topic.split('/')
+
+        try:
+
+            # retrieve user
+            user = User.objects.get(username=values[1])
+
+        except ObjectDoesNotExist:
+            
+            # TODO: send message to user
+            pass
+            
+        # parse data
         try:
             
             # Parse data into json dict
             data = JSONParser().parse(BytesIO(msg.payload))
             
         except Exception as e:
-            
+
+            # TODO: send message to user
             self.stdout.write(
                 self.style.ERROR("*> JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
             return
+
+        if len(values) == 5:
+            return (user, data, values[3])
+    
+        elif len(values) == 7:
+            
+            return (user, data, values[3], values[5])
         
+    # Update ambulance
+    def on_ambulance(self, client, userdata, msg):
+
+        # parse topic
+        user, data, ambulance_id = self.parse_topic(msg)
+
         try:
 
             # retrieve ambulance
-            ambulance = Ambulances.get(id=ambulance_id)
+            ambulance = Ambulance.get(id=ambulance_id)
 
         except ObjectDoesNotExist:
 
+            # TODO: send message to user
             self.stdout.write(
                 self.style.ERROR("*> Ambulance with id {} does not exist".format(ambulance_id)))
             return
             
-        try:
-            
-            # update ambulance
-            serializer = AmbulanceSerializer(ambulance,
-                                             data=data,
-                                             partial=True)
-            serializer.is_valid()
+        # update ambulance
+        serializer = AmbulanceSerializer(ambulance,
+                                         data=data,
+                                         partial=True)
+        if serializer.is_valid():
+
+            # save to database
             serializer.save(updated_by=user)
+
+        else:
             
-    # Update hospital resources
+            # TODO: send message to user
+            pass
+            
+    # Update hospital
     def on_hospital(self, client, userdata, msg):
 
-        # parse message
-        topic = msg.topic.split('/')
-        hospital = topic[1]
-        equipment = topic[3]
-
-        if not msg.payload:
-            return
+        # parse topic
+        user, data, hospital_id = self.parse_topic(msg)
 
         try:
-            quantity = int(msg.payload)
-            if self.verbosity > 1:
-                self.stdout.write(" > {} {}".format(msg.topic, quantity))
 
-            e = EquipmentCount.objects.get(hospital=hospital,
-                                           equipment__name=equipment)
+            # retrieve hospital
+            hospital = Hospital.get(id=hospital_id)
 
-            # update quantity
-            if e.quantity != quantity:
-                e.quantity = quantity
-                e.save()
-                if self.verbosity > 0:
-                    self.stdout.write(
-                        self.style.SUCCESS(">> Hospital '{}' equipment '{}' updated to '{}'".format(e.hospital.name, equipment, quantity)))
+        except ObjectDoesNotExist:
 
-        except Exception:
+            # TODO: send message to user
             self.stdout.write(
-                self.style.ERROR("*> hospital/{}/equipment/{} is not available".format(hospital, equipment)))
-
-    # Update call on database or create new call if doesn't exist
-    def on_call(self, client, userdata, msg):
-        # parse message
-        topic = msg.topic.split('/')
-        ambulance_id = topic[1]
-
-        if not msg.payload:
-            return
-
-        try:
-            # Parse data into json dict
-            stream = BytesIO(msg.payload)
-            data = JSONParser().parse(stream)
-            # data.pop("id", None)
-        except Exception:
-            self.stdout.write(self.style.ERROR("ERROR PARSING CALL JSON"))
-
-        # Obtain call ID to update/create
-        id = data["id"]
-
-        # Obtain ambulance
-        try:
-            amb = Ambulance.objects.get(id=ambulance_id)
-        except ObjectDoesNotExist as e:
-            self.stdout.write(self.style.ERROR("Ambulance {} does not exist".format(ambulance_id)))
-            return
-
-        # Obtain call object
-        call = Call.objects.filter(id=id).first()
-
-        serializer = None
-        success_text = ">> Updated call {} in database"
-        failure_text = "*> Failed to update call {} in database"
-
-        exists = False
-
-        # Should never run because all calls originate from a POST request to the server (unless this is changed)
-        if call is None:
-            serializer = CallSerializer(data=data)
-            success_text = ">> Created call {} in database"
-            failure_text = "*> Failed to create call {} in database"
-
-        # If the call does exist, update it
-        else:
-            serializer = CallSerializer(data=data)
-            exists = True
-
-        try:
-            if serializer.is_valid(raise_exception=True):
-                try:
-                    if exists:
-                        latitude = data.pop('latitude')
-                        longitude = data.pop('longitude')
-
-                        location = Point(longitude, latitude)
-                        data['location'] = location
-
-                        Call.objects.filter(id=id).update(**data)
-                        # call = serializer.update(instance=call, validated_data=serializer.validated_data)
-                    else:
-                        call = serializer.save()
-
-                    self.stdout.write(self.style.SUCCESS(success_text.format(call.id)))
-                except Exception as e:
-                    print(e)
-                    self.stdout.write(self.style.ERROR(failure_text.format(call.id)))
-        except Exception as e:
-            print(e)
-            self.stdout.write(self.style.ERROR("*> Error with data format"))
-
-    # Update user location
-    def on_user_loc(self, client, userdata, msg):
-
-        topic = msg.topic.split('/')
-        username = topic[1]
-        user = User.objects.get(username=username)
-
-        if not msg.payload:
-            return
-
-        try:
-            # Parse data into json dict
-            stream = BytesIO(msg.payload)
-            data = JSONParser().parse(stream)
-        except Exception as e:
-            self.stdout.write(
-                self.style.ERROR("*> JSON formatted incorrectly: {}".format(msg.payload)))
-            return
-
-        # has ambulance?
-        if not user.ambulance:
-            self.stdout.write(
-                self.style.ERROR("*> User '{}' is not currently assigned to any ambulances.".format(username)))
+                self.style.ERROR("*> Hospital with id {} does not exist".format(hospital_id)))
             return
             
-        # TODO Find out which ambulance is linked to user
-        ambulance = user.ambulance.id
-
-        try:
-            data['user'] = user.id
-            data['ambulance'] = ambulance
-        except TypeError:
-            self.stdout.write(
-                self.style.ERROR("*> Failed to assign ambulance to location point. {} is formatted incorrectly.".format(msg.payload)))
-            return
-
-        # Serialize data into object
-        serializer = MQTTUserLocationSerializer(data=data)
-
+        # update hospital
+        serializer = HospitalSerializer(hospital,
+                                        data=data,
+                                        partial=True)
         if serializer.is_valid():
-            try:
-                # MAURICIO: Does that save the location to the database? Are we saving the user location as well?
-                lp = serializer.save()
 
-                # Publish ambulance location as soon as user location saved
-                try:
-                    self.pub_ambulance_loc(client, ambulance, lp)
-                except Exception as e:
-                    self.stdout.write(
-                        self.style.ERROR("*> Failed to publish location. Exception: {}".format(e)))
-
-                self.stdout.write(
-                        self.style.SUCCESS(">> LocationPoint for user {} in ambulance {} successfully created.".format(username, ambulance)))
-                
-            except Exception as e:
-                self.stdout.write(
-                    self.style.ERROR("*> LocationPoint for user {} in ambulance {} failed to create. Exception: {}".format(username, ambulance, e)))
+            # save to database
+            serializer.save(updated_by=user)
 
         else:
-            self.stdout.write(
-                self.style.ERROR("*> Input data for user location invalid"))
+            
+            # TODO: send message to user
+            pass
 
-    # Publish location for ambulance - after ambulance starts querying location table,
-    # take out the dependency on the lp generated
-    def pub_ambulance_loc(self, client, amb_id, lp):
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Publishing location for ambulance {}".format(amb_id)))
+    # Update hospital equipment
+    def on_hospital_equipment(self, client, userdata, msg):
+
+        # parse topic
+        user, data, hospital_id, equipment_name = self.parse_topic(msg)
 
         try:
-            # Set status and grab latest location; status should be calculated
-            # rather than what this code is doing
-            # status = Status.objects.all().first()
-            # ambulance.status = status
 
-            # Calculate ambulance orientation?
-
-            # Save changes made to ambulance
-            # Ambulance.objects.filter(id=user.ambulance.id).update(orientation=200)
-
-            # query for the ambulance
-            ambulance = Ambulance.objects.get(id=amb_id)
-
-            # Convert obj back to json
-            serializer = MQTTAmbulanceLocSerializer(ambulance)
-            json = JSONRenderer().render(serializer.data)
-
-            # Publish json - be sure to do this in the seeder
-            client.publish('ambulance/{}/location'.format(amb_id), json, qos=2, retain=True)
-            # client.publish('ambulance/{}/status'.format(amb_id), ambulance.status.name, qos=2, retain=True)
+            # retrieve hospital equipment
+            hospital_equipment = HospitalEquipment.get(hospital=hospital_id,
+                                                       equipment__name=equipment_name)
 
         except ObjectDoesNotExist:
+
+            # TODO: send message to user
             self.stdout.write(
-                self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
-
-        except Exception as e:
-            print(e)
-            self.stdout.write(
-                self.style.ERROR("Error parsing data"))
-
-    # Update status from dispatch team
-    def on_user_status(self, client, userdata, msg):
-        topic = msg.topic.split('/')
-        username = topic[1]
-        user = User.objects.get(username=username)
-
-        if not msg.payload:
+                self.style.ERROR("*> Hospital equipment with id {} and {} does not exist".format(hospital_id, equipment_name)))
             return
-
-        status_str = msg.payload.decode("utf-8")
-
-        try:
-            status = Status.objects.get(name=status_str)
-            Ambulance.objects.filter(id=user.ambulance.id).update(status=status)
-            self.stdout.write(self.style.SUCCESS(
-                ">> Successful status update: {} for ambulance {}").format(status_str, user.ambulance.id))
-
-        except ObjectDoesNotExist:
-            self.stdout.write(
-                self.style.ERROR("*> Status {} does not exist".format(status_str)))
-            return
-
-        except Exception as e:
-            print(e)
-            self.stdout.write(
-                self.style.ERROR("*> Error saving status for ambulance {}".format(user.ambulance.id)))
-
-    def on_amb_sel(self, client, userdata, msg):
-        topic = msg.topic.split('/')
-        username = topic[1]
-
-        if not msg.payload:
-            return
-
-        amb_id = int(msg.payload.decode("utf-8"))
-
-        # Obtain user
-        user = User.objects.filter(username=username)
-        if not user:
-            self.stdout.write(
-                self.style.ERROR("*> User {} does not exist".format(username)))
-            return
-
-        try:
-            # If -1 is published to topic, unhook user from any ambulance
-            if amb_id < 0:
-                user.update(ambulance=None)
-            else:
-                user.update(ambulance=Ambulance.objects.get(id=amb_id))
-
-            self.stdout.write(self.style.SUCCESS(
-                ">> Successfully hooked user {} to ambulance {}").format(username, amb_id))
-
-        except ObjectDoesNotExist:
-                self.stdout.write(
-                    self.style.ERROR("*> Ambulance {} does not exist".format(amb_id)))
-
-        except Exception as e:
-            print(e)
-            self.stdout.write(
-                self.style.ERROR("*> Error saving ambulance for user {}".format(username)))
-
-
-    def on_hosp_sel(self, client, userdata, msg):
-        topic = msg.topic.split('/')
-        username = topic[1]
-
-        if not msg.payload:
-            return
-
-        try:
-            hosp_id = int(msg.payload.decode("utf-8"))
-        except ValueError:
-            self.stdout.write(
-                self.style.ERROR("*> {} is not an int".format(msg.payload)))
-            return
-
-        # Obtain user
-        user = User.objects.filter(username=username)
-        if not user:
-            self.stdout.write(
-                self.style.ERROR("*> User {} does not exist".format(username)))
-            return
-
-        try:
-            if hosp_id < 0:
-                user.update(hospital=None)
-            else:
-                user.update(hospital=Hospital.objects.get(id=hosp_id))
-
-            self.stdout.write(self.style.SUCCESS(
-                ">> Successfully hooked user {} to hospital {}").format(username, hosp_id))
-
-        except ObjectDoesNotExist:
-                self.stdout.write(
-                    self.style.ERROR("*> Hospital {} does not exist".format(hosp_id)))
-
-        except Exception as e:
-            print(e)
-            self.stdout.write(
-                self.style.ERROR("*> Error saving hospital for user {}".format(username)))
-
-
-
+            
+        # update hospital equipment
+        serializer = HospitalEquipmentSerializer(hospital_equipment,
+                                                 data=data,
+                                                 partial=True)
+        if serializer.is_valid():
+            
+            # save to database
+            serializer.save(updated_by=user)
+            
+        else:
+            
+            # TODO: send message to user
+            pass
+            
 class Command(BaseCommand):
+    
     help = 'Connect to the mqtt broker'
 
     def handle(self, *args, **options):
