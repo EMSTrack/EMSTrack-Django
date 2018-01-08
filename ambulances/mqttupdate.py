@@ -102,7 +102,7 @@ broker = {
 }
 
 broker.update(settings.MQTT)
-broker['CLIENT_ID'] = 'signals_' + str(os.getpid())
+broker['CLIENT_ID'] = 'mqttupdate_' + str(os.getpid())
 
 try:
 
@@ -126,44 +126,4 @@ except Exception as e:
 
     print('Could not connect to MQTT brocker. Using dumb client...')
 
-# register signals
 
-# Ambulance signals
-
-# @receiver(post_save, sender=Ambulance)
-# def mqtt_update_ambulance(sender, **kwargs):
-#     client.client.update_ambulance(kwargs['instance'])
-
-# @receiver(pre_delete, sender=Ambulance)
-# def mqtt_remove_ambulance(sender, **kwargs):
-#     client.client.remove_ambulance(kwargs['instance'])
-
-# Hospital signals
-    
-# @receiver(post_save, sender=Hospital)
-# def mqtt_update_hospital(sender, **kwargs):
-#     client.client.update_hospital(kwargs['instance'])
-    
-# @receiver(pre_delete, sender=Hospital)
-# def mqtt_remove_hospital(sender, **kwargs):
-#     client.client.remove_hospital(kwargs['instance'])
-
-# HospitalEquipment signals
-
-# @receiver(post_save, sender=HospitalEquipment)
-# def mqtt_update_hospital_equipment(sender, **kwargs):
-#     created = kwargs['created']
-#     obj = kwargs['instance']
-#     client.client.update_hospital_equipment(obj)
-
-#     # update hospital metadata
-#     if created:
-#         client.client.update_hospital_metadata(Hospital.objects.get(id=obj.hospital.id))
-
-# @receiver(pre_delete, sender=HospitalEquipment)
-# def mqtt_remove_hospital_equipment(sender, **kwargs):
-#     obj = kwargs['instance']
-#     client.client.remove_hospital_equipment(obj)
-
-#     # update hospital metadata
-#     client.client.update_hospital_metadata(obj.hospital.id)
