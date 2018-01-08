@@ -567,7 +567,7 @@ class TestMQTTSubscribe(MyTestCase):
 
         # connected?
         k = 0
-        while len(client.subscribed) and k < self.MAX_TRIES:
+        while len(client.subscribed) and k < MAX_TRIES:
             k += 1
             client.loop()
             
