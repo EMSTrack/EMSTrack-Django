@@ -67,7 +67,7 @@ class Command(BaseCommand):
 
             # generate password file
             with open('pwfile', 'w') as file:
-                file.write('{}:{}'.format(username, generate_hash('password')))
+                file.write('{}:{}\n'.format(username, generate_hash('password')))
             
             # create superuser
             user_data[model.USERNAME_FIELD] = username
