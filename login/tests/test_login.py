@@ -545,7 +545,7 @@ class TestMQTTConnect(MyTestCase):
         broker['USERNAME'] = 'testuser22'
         broker['PASSWORD'] = 'very_secret'
 
-        with self.assertRaise(MQTTException):
+        with self.assertRaises(MQTTException):
         
             self.is_connected(MQTTTestClient(broker,
                                              sys.stdout,
@@ -556,7 +556,7 @@ class TestMQTTConnect(MyTestCase):
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secreto'
 
-        with self.assertRaise(MQTTException):
+        with self.assertRaises(MQTTException):
 
             self.is_connected(MQTTTestClient(broker,
                                              sys.stdout,
