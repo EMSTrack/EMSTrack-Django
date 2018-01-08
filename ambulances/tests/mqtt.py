@@ -298,6 +298,8 @@ class MQTTTestClient(BaseClient):
         self.expecting_messages = {}
         self.expecting = 0
 
+        self.strict = True
+        
         # initialize pubcount
         self.pubset = set()
 
@@ -326,12 +328,11 @@ class MQTTTestClient(BaseClient):
 
             # is message expected? remove
             try:
-
                 self.expecting_messages[msg.topic].remove(msg.payload)
 
             except ValueError:
-
-                raise Exception('Unexpected message')
+                if self.strict:
+                    raise Exception('Unexpected message')
             
             #print('> topic = {}'.format(msg.topic))
             #print('> topic count = {}'.format(self.expecting_topics[msg.topic]))
