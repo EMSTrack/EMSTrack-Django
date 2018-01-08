@@ -24,8 +24,44 @@ from ambulances.mqttclient import MQTTException
             
 class TestMQTTSeed(MQTTTestCase):
 
-    MAX_TRIES = 100
+    def is_connected(self, client, MAX_TRIES = 10):
+
+        # connected?
+        k = 0
+        while not client.connected and k < MAX_TRIES:
+            k += 1
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
+    def is_subscribed(self, client, MAX_TRIES = 10):
+
+        client.loop_start()
+        
+        # connected?
+        k = 0
+        while len(client.subscribed) and k < MAX_TRIES:
+            k += 1
+            time.sleep(1)
+            
+        client.loop_stop()
+        
+        self.assertEqual(len(client.subscribed), 0)
     
+    def loop(self, client, MAX_TRIES = 10):
+
+        client.loop_start()
+        
+        # connected?
+        k = 0
+        while not client.done() and k < MAX_TRIES:
+            k += 1
+            time.sleep(1)
+            
+        client.loop_stop()
+        
+        self.assertEqual(client.done(), True)
+        
     def test_mqttseed(self):
 
         import sys
@@ -53,16 +89,8 @@ class TestMQTTSeed(MQTTTestCase):
         broker['CLIENT_ID'] = 'test_mqttseed_admin'
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        client.test = self
 
-        # connected?
-        k = 0
-        while not client.connected and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
-
-        self.assertEqual(client.connected, True)
-        print('>> connected')
+        self.is_connected(client)
 
         qos = 0
         
@@ -97,18 +125,12 @@ class TestMQTTSeed(MQTTTestCase):
                           qos)
 
         # Subscribed?
-        k = 0
-        while len(client.subscribed) and k < self.MAX_TRIES:
-            k += 1
-            client.loop()
+        self.is_subscribed(client)
 
-        self.assertEqual(len(client.subscribed), 0)
-        print('>> subscribed')
+        # Done?
+        self.loop(client)
 
-        # Process all messages
-        process_messages(client)
-        self.assertEqual(client.done(), True)
-        print('<< done')
+    def _test(self):
         
         # Repeat with same client
         
