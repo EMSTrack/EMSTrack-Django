@@ -21,9 +21,13 @@ from .serializers import AmbulanceSerializer, HospitalSerializer, \
 
 print('*** ambulances.mqttupdate ***')
 
-
 class UpdateClient(BaseClient):
 
+    def on_disconnect(self, client, userdata, rc):
+        if rc:
+            raise MQTTException('Disconnected',
+                                rc)
+    
     def publish(self, topic, message, *vargs, **kwargs):
         self.client.publish(topic, message, *vargs, **kwargs)
 
