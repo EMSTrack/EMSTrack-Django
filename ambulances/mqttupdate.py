@@ -151,21 +151,21 @@ atexit.register(client.disconnect)
 
 @receiver(post_save, sender=Ambulance)
 def mqtt_update_ambulance(sender, **kwargs):
-    client.update_ambulance(kwargs['instance'])
+    client.client.update_ambulance(kwargs['instance'])
 
 @receiver(pre_delete, sender=Ambulance)
 def mqtt_remove_ambulance(sender, **kwargs):
-    client.remove_ambulance(kwargs['instance'])
+    client.client.remove_ambulance(kwargs['instance'])
 
 # Hospital signals
     
 @receiver(post_save, sender=Hospital)
 def mqtt_update_hospital(sender, **kwargs):
-    client.update_hospital(kwargs['instance'])
+    client.client.update_hospital(kwargs['instance'])
     
 @receiver(pre_delete, sender=Hospital)
 def mqtt_remove_hospital(sender, **kwargs):
-    client.remove_hospital(kwargs['instance'])
+    client.client.remove_hospital(kwargs['instance'])
 
 # HospitalEquipment signals
 
@@ -173,16 +173,16 @@ def mqtt_remove_hospital(sender, **kwargs):
 def mqtt_update_hospital_equipment(sender, **kwargs):
     created = kwargs['created']
     obj = kwargs['instance']
-    client.update_hospital_equipment(obj)
+    client.client.update_hospital_equipment(obj)
 
     # update hospital metadata
     if created:
-        client.update_hospital_metadata(Hospital.objects.get(id=obj.hospital.id))
+        client.client.update_hospital_metadata(Hospital.objects.get(id=obj.hospital.id))
 
 @receiver(pre_delete, sender=HospitalEquipment)
 def mqtt_remove_hospital_equipment(sender, **kwargs):
     obj = kwargs['instance']
-    client.remove_hospital_equipment(obj)
+    client.client.remove_hospital_equipment(obj)
 
     # update hospital metadata
-    client.update_hospital_metadata(obj.hospital.id)
+    client.client.update_hospital_metadata(obj.hospital.id)
