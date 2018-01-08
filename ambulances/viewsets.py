@@ -38,7 +38,7 @@ class ProfileViewSet(mixins.RetrieveModelMixin,
 
     @detail_route(methods=['get'])
     def profile(self, request, **kwargs):
-        return Response(self.get_object())
+        return Response(ExtendedProfileSerializer(self.get_object()).data)
     
 # BasePermissionViewSet
 
