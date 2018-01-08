@@ -69,9 +69,6 @@ class Command(BaseCommand):
             model._default_manager.db_manager(database).create_superuser(**user_data)
 
             # generate password file
-            import hashlib
-            with 
-
             
             if options['verbosity'] >= 1:
                 self.stdout.write(
