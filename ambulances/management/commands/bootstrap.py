@@ -63,6 +63,10 @@ class Command(BaseCommand):
                 raise CommandError("Could not retrieve '{}' from settings.".format(field_name))
 
         if username:
+
+            print('hash = {}'.format(make_hash('password')))
+
+            
             # create superuser
             user_data[model.USERNAME_FIELD] = username
             user_data['password'] = mqtt['PASSWORD']
