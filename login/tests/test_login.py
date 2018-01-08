@@ -37,11 +37,38 @@ class MyTestCase(MQTTTestCase):
             cls.u2 = User.objects.get(username='testuser1')
             cls.u3 = User.objects.get(username='testuser2')
 
-            # Add hospitals
-            cls.h1 = Hospital.objects.get(name='hospital1')
-            cls.h2 = Hospital.objects.get(name='hospital2')
-            cls.h3 = Hospital.objects.get(name='hospital3')
+            # Add ambulances
+            cls.a1 = Ambulance.objects.get(identifier='BC-179')
+            cls.a2 = Ambulance.objects.get(identifier='BC-180')
+            cls.a3 = Ambulance.objects.get(identifier='BC-181')
 
+            # Add hospitals
+            cls.h1 = Hospital.objects.get(name='Hospital General')
+            cls.h2 = Hospital.objects.get(name='Hospital CruzRoja')
+            cls.h3 = Hospital.objects.get(name='Hospital Nuevo')
+
+            # Add equipment
+            cls.e1 = Equipment.objects.get(name='X-ray')
+            cls.e2 = Equipment.objects.get(name='Beds')
+            cls.e3 = Equipment.objects.get(name='MRI - Ressonance')
+            
+            # add hospital equipment
+            cls.he1 = HospitalEquipment.objects.get(hospital=cls.h1,
+                                                    equipment=cls.e1)
+            
+            cls.he2 = HospitalEquipment.objects.get(hospital=cls.h1,
+                                                    equipment=cls.e2)
+
+            cls.he3 = HospitalEquipment.objects.get(hospital=cls.h2,
+                                                    equipment=cls.e1)
+            
+            cls.he4 = HospitalEquipment.objects.get(hospital=cls.h2,
+                                                    equipment=cls.e3)
+            
+            cls.he5 = HospitalEquipment.objects.get(hospital=cls.h3,
+                                                    equipment=cls.e1)
+
+            
         except:
 
             # Add users
@@ -55,16 +82,86 @@ class MyTestCase(MQTTTestCase):
                 email='test2@user.com',
                 password='very_secret')
         
+            # Add ambulances
+            cls.a1 = Ambulance.objects.create(
+                identifier='BC-179',
+                comment='Maintenance due',
+                capability=AmbulanceCapability.B.name,
+                updated_by=cls.u1)
+            
+            cls.a2 = Ambulance.objects.create(
+                identifier='BC-180',
+                comment='Need painting',
+                capability=AmbulanceCapability.A.name,
+                updated_by=cls.u1)
+            
+            cls.a3 = Ambulance.objects.create(
+                identifier='BC-181',
+                comment='Engine overhaul',
+                capability=AmbulanceCapability.R.name,
+                updated_by=cls.u1)
+        
             # Add hospitals
-            cls.h1 = Hospital.objects.create(name='hospital1',
-                                             address='somewhere',
-                                             updated_by=cls.u1)
-            cls.h2 = Hospital.objects.create(name='hospital2',
-                                             address='somewhere else',
-                                             updated_by=cls.u1)
-            cls.h3 = Hospital.objects.create(name='hospital3',
-                                             address='somewhere other',
-                                             updated_by=cls.u1)
+            cls.h1 = Hospital.objects.create(
+                name='Hospital General',
+                address="Don't know",
+                comment="no comments",
+                updated_by=cls.u1)
+            
+            cls.h2 = Hospital.objects.create(
+                name='Hospital CruzRoja',
+                address='Forgot',
+                updated_by=cls.u1)
+            
+            cls.h3 = Hospital.objects.create(
+                name='Hospital Nuevo',
+                address='Not built yet',
+                updated_by=cls.u1)
+            
+            # add equipment
+            cls.e1 = Equipment.objects.create(
+                name='X-ray',
+                etype=EquipmentType.B.name)
+            
+            cls.e2 = Equipment.objects.create(
+                name='Beds',
+                etype=EquipmentType.I.name)
+            
+            cls.e3 = Equipment.objects.create(
+                name='MRI - Ressonance',     # name with space!
+                etype=EquipmentType.B.name,
+                toggleable=True)
+            
+            # add hospital equipment
+            cls.he1 = HospitalEquipment.objects.create(
+                hospital=cls.h1,
+                equipment=cls.e1,
+                value='True',
+                updated_by=cls.u1)
+            
+            cls.he2 = HospitalEquipment.objects.create(
+                hospital=cls.h1,
+                equipment=cls.e2,
+                value='45',
+                updated_by=cls.u1)
+
+            cls.he3 = HospitalEquipment.objects.create(
+                hospital=cls.h2,
+                equipment=cls.e1,
+                value='False',
+                updated_by=cls.u1)
+            
+            cls.he4 = HospitalEquipment.objects.create(
+                hospital=cls.h2,
+                equipment=cls.e3,
+                value='True',
+                updated_by=cls.u1)
+            
+            cls.he5 = HospitalEquipment.objects.create(
+                hospital=cls.h3,
+                equipment=cls.e1,
+                value='True',
+                updated_by=cls.u1)
             
             # Add permissions
             cls.u2.profile.hospitals.add(
@@ -79,6 +176,23 @@ class MyTestCase(MQTTTestCase):
                                                   can_write=True)
             )
 
+            # u3 has no hospitals 
+            
+            # add ambulances to users
+            cls.u1.profile.ambulances.add(
+                AmbulancePermission.objects.create(ambulance=cls.a2,
+                                                   can_write=True)
+            )
+            
+            # u2 has no ambulances
+            
+            cls.u3.profile.ambulances.add(
+                AmbulancePermission.objects.create(ambulance=cls.a1,
+                                                   can_read=False),
+                AmbulancePermission.objects.create(ambulance=cls.a3,
+                                                   can_write=True)
+            )
+            
 class TestLogin(MyTestCase):
             
     def test_login(self):
