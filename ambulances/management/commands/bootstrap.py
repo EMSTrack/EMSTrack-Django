@@ -26,7 +26,7 @@ def generate_hash(password,
     return 'PBKDF2${}${}${}${}'.format(hash_function,
                                        iterations,
                                        salt.encode('utf-8'),
-                                       b64encode(key)..encode('utf-8'))
+                                       b64encode(key).encode('utf-8'))
 
 class Command(BaseCommand):
     help = 'Create admin user'
