@@ -17,7 +17,7 @@ class Command(BaseCommand):
         with open('pwfile', 'w') as file:
             
             # Retrieve current users
-            for u in User.objects.filter(issuper=True):
+            for u in User.objects.filter(is_superuser=True):
                 file.write('{}:{}\n'.format(u.username,
                                             u.password))
         
