@@ -344,9 +344,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         #test_client.strict = False
         self.is_subscribed(test_client)
 
+        print('expecting = {}'.format(test_client.expecting))
+        
         # process messages
         test_client.loop()
 
+        print('expecting = {}'.format(test_client.expecting))
+        
         # Must have two messages
         #self.assertEqual(test_client.expecting_topics[topic], 1)
         
