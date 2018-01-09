@@ -81,6 +81,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "start"])
 
+        time.sleep(1)
+        
         cls.setUpTestData()
 
     @classmethod
