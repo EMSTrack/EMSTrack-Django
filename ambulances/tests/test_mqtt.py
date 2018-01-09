@@ -445,7 +445,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                                          self.e1.name))
 
         # change ambulance
-        print(Ambulance.objects.all())
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
         
