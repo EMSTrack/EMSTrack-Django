@@ -74,6 +74,8 @@ class BaseClient():
 
     def publish(self, topic, payload = None, qos = 0, retain = False):
 
+        # NOTE: The whole forgive mid thing is necessary because
+        # on_publish was getting called before publish ended
         # forgive mid if qos = 0
         if qos == 0:
             self.forgive_mid = True
