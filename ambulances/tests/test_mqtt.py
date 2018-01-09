@@ -443,7 +443,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                                          self.e1.name))
 
         # change ambulance
-        obj = Ambulance.objects.get(identifier = 'BC-179')
+        print(Ambulance.objects.all())
+        obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
         
         test_client.publish(topics[0],
@@ -455,8 +456,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
 
         # expect update twice because django runs in two threads
-        test_client.expect('ambulance/{}/data'.format(obj.id))
-        test_client.expect('ambulance/{}/data'.format(obj.id))
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
         
         # loop subscribe_client
         subscribe_client.loop()
