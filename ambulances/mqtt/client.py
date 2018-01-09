@@ -118,7 +118,7 @@ class BaseClient():
             del self.published[mid]
 
         else:
-            self.published[result.mid] = None
+            self.published[mid] = None
             if not self.forgive_mid:
                 raise MQTTException('Unknown publish mid', mid)
 
