@@ -64,7 +64,7 @@ class Client(PublishClient):
 
         # seeding profiles
         for obj in Profile.objects.all():
-            self.update_profile(obj)
+            self.publish_profile(obj)
             
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding profile data"))
@@ -76,7 +76,7 @@ class Client(PublishClient):
 
         # seeding ambulances
         for obj in Ambulance.objects.all():
-            self.update_ambulance(obj)
+            self.publish_ambulance(obj)
             
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding ambulance data"))
@@ -88,7 +88,7 @@ class Client(PublishClient):
 
         # seeding hospital 
         for obj in Hospital.objects.all():
-            self.update_hospital(obj)
+            self.publish_hospital(obj)
             
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital data"))
@@ -101,7 +101,7 @@ class Client(PublishClient):
 
         # seeding hospital 
         for obj in HospitalEquipment.objects.all():
-            self.update_hospital_equipment(obj)
+            self.publish_hospital_equipment(obj)
             
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital equipment data"))
@@ -113,7 +113,7 @@ class Client(PublishClient):
 
         # seeding hospital metadata
         for hospital in Hospital.objects.all():
-            self.update_hospital_metadata(hospital)
+            self.publish_hospital_metadata(hospital)
             
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
