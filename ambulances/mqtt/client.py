@@ -24,6 +24,8 @@ class BaseClient():
         self.broker = broker
         self.verbosity = verbosity
 
+        self.debug = False
+        
         if self.broker['CLIENT_ID']:
             self.client = mqtt.Client(self.broker['CLIENT_ID'],
                                       self.broker['CLEAN_SESSION'])
@@ -69,7 +71,14 @@ class BaseClient():
         pass
 
     def publish(self, topic, payload = None, qos = 0, retain = False):
-
+        
+        # debug? 
+        if self.debug:
+            print("> Will publish '{}:{}'(qos={},retain={})".format(topic,
+                                                                    payload,
+                                                                    qos,
+                                                                    retain))
+            
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
@@ -83,8 +92,10 @@ class BaseClient():
 
     def on_publish(self, client, userdata, mid):
 
-        #print('userdata = {}, mid = {}'.format(userdata, mid))
-        
+        # debug? 
+        if self.debug:
+            print("> Published '{}'[{}] at {}".format(userdata, mid, client)
+                  
         if mid in self.published:
             # TODO: check granted_qos?
             # remove from list of subscribed

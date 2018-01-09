@@ -16,11 +16,6 @@ from ..serializers import AmbulanceSerializer, HospitalSerializer, \
 
 class PublishClient(BaseClient):
 
-    def __init__(self):
-
-        super().__init__()
-        self.debug = True
-    
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
@@ -29,12 +24,6 @@ class PublishClient(BaseClient):
     
     def publish_topic(self, topic, serializer, qos=0, retain=False):
         # Publish to topic
-        if self.debug:
-            print("> Will publish '{}:{}'(qos={},retain={})".format(topic,
-                                                                    JSONRenderer().render(serializer.data),
-                                                                    
-                                                                    qos,
-                                                                    retain))
         self.publish(topic,
                      JSONRenderer().render(serializer.data),
                      qos=qos,
