@@ -75,8 +75,6 @@ class BaseClient():
         
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
-        print("> result = {}".format(result))
-        
         if result.rc:
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
@@ -91,9 +89,6 @@ class BaseClient():
                                                                           payload,
                                                                           qos,
                                                                           retain))
-            
-
-        #print('topic = {}, result = {}'.format(topic, result))
 
     def on_publish(self, client, userdata, mid):
 
@@ -107,8 +102,7 @@ class BaseClient():
             del self.published[mid]
 
         else:
-            #raise MQTTException('Unknown publish mid', mid)
-            print("MQTTException('Unknown publish mid', mid)")
+            raise MQTTException('Unknown publish mid', mid)
 
     def subscribe(self, topic, qos = 0):
 
