@@ -377,12 +377,14 @@ class TestMQTTSubscribe(MQTTTestCase):
         # instantiate client
         http_client = Client()
 
-        # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                              follow=True)
+        # retrieve ambulance via http
+        response = http_client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                                   follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
 
+
+        
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
         
