@@ -329,8 +329,8 @@ class TestMQTTSeed(MQTTTestCase):
         broker['CLIENT_ID'] = 'test_mqttclient'
         
         subscribe = SubscribeClient(broker,
-                                    self.stdout,
-                                    self.style,
+                                    sys.stdout,
+                                    style,
                                     verbosity = options['verbosity'])
         
         self.is_connected(subscribe)
