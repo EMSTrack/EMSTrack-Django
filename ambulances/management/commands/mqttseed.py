@@ -6,7 +6,7 @@ from django.utils.six import BytesIO
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from ambulances.mqtt.update import PublishClient
+from ambulances.mqtt.publish import PublishClient
 
 from django.contrib.auth.models import User
 
