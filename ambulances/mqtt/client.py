@@ -26,6 +26,7 @@ class BaseClient():
         self.verbosity = verbosity
 
         self.debug = kwargs.pop('debug', False)
+        self.forgive_mid = False
         
         if self.broker['CLIENT_ID']:
             self.client = mqtt.Client(self.broker['CLIENT_ID'],
@@ -72,6 +73,10 @@ class BaseClient():
         pass
 
     def publish(self, topic, payload = None, qos = 0, retain = False):
+
+        # forgive mid if qos = 0
+        if qos == 0:
+            self.forgive_mid = True
         
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
@@ -79,17 +84,26 @@ class BaseClient():
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
 
-        # otherwise add to dictionary of published
-        self.published[result.mid] = (topic, payload, qos, retain)
-        
+        if qos == 0 and result.mid in self.self.published:
+            if self.published.pop(result.mid) is not None:
+                raise MQTTException('Cannot make sense of mid', result.mid)
+        else:
+            # otherwise add to dictionary of published
+            self.published[result.mid] = (topic, payload, qos, retain)
+
+        # reset forgive_mid
+        if qos == 0:
+            self.forgive_mid = False
+            
         # debug? 
         if self.debug:
-            print("> Just published '{}[mid={}]:{}'(qos={},retain={})".format(topic,
-                                                                          result.mid,
-                                                                          payload,
-                                                                          qos,
-                                                                          retain))
-
+            print(("> Just published '{}[mid={}]:{}'" +
+                   "(qos={},retain={})").format(topic,
+                                                result.mid,
+                                                payload,
+                                                qos,
+                                                retain))
+            
     def on_publish(self, client, userdata, mid):
 
         # debug? 
@@ -102,7 +116,9 @@ class BaseClient():
             del self.published[mid]
 
         else:
-            raise MQTTException('Unknown publish mid', mid)
+            self.published[result.mid] = None
+            if not self.forgive_mid:
+                raise MQTTException('Unknown publish mid', mid)
 
     def subscribe(self, topic, qos = 0):
 
