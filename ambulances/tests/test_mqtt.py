@@ -335,7 +335,7 @@ class TestMQTTSubscribe(MQTTTestCase):
         
         self.assertEqual(len(client.subscribed), 0)
     
-    def test_mqttclient(self):
+    def _test_mqtt_subscribe(self):
 
         import sys
         from django.core.management.base import OutputWrapper
