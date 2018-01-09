@@ -11,36 +11,16 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 from django.contrib.auth.models import User
 
-# MessagePublishClient
+import .mqtt.publish as mqtt
 
-class MessagePublishClient():
+# lazy client property
+client = None
+def get_client():
 
-    def publish_profile(self, profile, **kwargs):
-        pass
-        
-    def publish_ambulance(self, ambulance, **kwargs):
-        pass
+    if not client:
+        client = mqtt.get_client()
+    return client
 
-    def remove_ambulance(self, ambulance, **kwargs):
-        pass
-        
-    def publish_hospital(self, hospital, **kwargs):
-        pass
-
-    def remove_hospital(self, hospital, **kwargs):
-        pass
-        
-    def publish_hospital_metadata(self, hospital, **kwargs):
-        pass
-
-    def publish_hospital_equipment(self, hospital, **kwargs):
-        pass
-        
-    def remove_hospital_equipment(self, hospital, **kwargs):
-        pass
-
-client = MessagePublishClient()
-    
 # User and ambulance location models
 
 # Ambulance model
@@ -90,11 +70,10 @@ class Ambulance(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        print('will publish to client {}'.format(client))
-        client.publish_ambulance(self, **kwargs)
+        get_client().publish_ambulance(self, **kwargs)
 
     def delete(self, *args, **kwargs):
-        client.remove_ambulance(self)
+        get_client().remove_ambulance(self)
         super().delete(*args, **kwargs) 
     
     def __str__(self):
@@ -150,10 +129,10 @@ class Hospital(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
-        client.publish_hospital(self, **kwargs)
+        get_client().publish_hospital(self, **kwargs)
 
     def delete(self, *args, **kwargs):
-        client.remove_hospital(self)
+        get_client().remove_hospital(self)
         super().delete(*args, **kwargs)
         
     def __str__(self):
@@ -219,13 +198,13 @@ class HospitalEquipment(models.Model):
     def save(self, *args, **kwargs):
         created = self.pk is None
         super().save(*args, **kwargs) 
-        client.publish_hospital_equipment(self)
+        get_client().publish_hospital_equipment(self)
         if created:
-            client.publish_hospital_metadata(self.hospital)
+            get_client().publish_hospital_metadata(self.hospital)
 
     def delete(self, *args, **kwargs):
-        client.remove_hospital_equipment(self)
-        client.publish_hospital_metadata(self.hospital)
+        get_client().remove_hospital_equipment(self)
+        get_client().publish_hospital_metadata(self.hospital)
         super().delete(*args, **kwargs)
         
     class Meta:

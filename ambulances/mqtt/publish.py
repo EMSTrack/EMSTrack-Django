@@ -12,9 +12,35 @@ from ..serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer, \
     ExtendedProfileSerializer
 
-# PublishClient class
+# MessagePublishClient class
 
-class PublishClient(BaseClient):
+class MessagePublishClient():
+
+    def publish_profile(self, profile, **kwargs):
+        pass
+        
+    def publish_ambulance(self, ambulance, **kwargs):
+        pass
+
+    def remove_ambulance(self, ambulance, **kwargs):
+        pass
+        
+    def publish_hospital(self, hospital, **kwargs):
+        pass
+
+    def remove_hospital(self, hospital, **kwargs):
+        pass
+        
+    def publish_hospital_metadata(self, hospital, **kwargs):
+        pass
+
+    def publish_hospital_equipment(self, hospital, **kwargs):
+        pass
+        
+    def remove_hospital_equipment(self, hospital, **kwargs):
+        pass
+
+class PublishClient(MessagePublishClient, BaseClient):
 
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
@@ -80,46 +106,52 @@ class PublishClient(BaseClient):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name))
 
-# Start client
-from django.core.management.base import OutputWrapper
-from django.core.management.color import color_style, no_style
-from django.conf import settings
+# to be used with the lazy constructor
+        
+def get_client():
 
-stdout = OutputWrapper(sys.stdout)
-style = color_style()
+    # Start client
+    from django.core.management.base import OutputWrapper
+    from django.core.management.color import color_style, no_style
+    from django.conf import settings
 
-# Instantiate broker
-broker = {
-    'HOST': 'localhost',
-    'PORT': 1883,
-    'KEEPALIVE': 60,
-    'CLEAN_SESSION': True
-}
+    stdout = OutputWrapper(sys.stdout)
+    style = color_style()
 
-broker.update(settings.MQTT)
-broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
+    # Instantiate broker
+    broker = {
+        'HOST': 'localhost',
+        'PORT': 1883,
+        'KEEPALIVE': 60,
+        'CLEAN_SESSION': True
+    }
 
-try:
+    broker.update(settings.MQTT)
+    broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
 
-    # try to connect
-    print('Connecting to MQTT brocker...')
-    local_client = PublishClient(broker, stdout, style,
-                                 verbosity=1, debug=True)
-    
-    # wait for connection
-    while not local_client.connected:
-        local_client.loop()
+    try:
 
-    # start loop
-    local_client.loop_start()
-    
-    # register atexit handler to make sure it disconnects at exit
-    atexit.register(local_client.disconnect)
+        # try to connect
+        print('Connecting to MQTT brocker...')
+        local_client = PublishClient(broker, stdout, style,
+                                     verbosity=1, debug=True)
 
-    client = local_client
-    
-except Exception as e:
+        # wait for connection
+        while not local_client.connected:
+            local_client.loop()
 
-    print('Could not connect to MQTT brocker. Using dummy client...')
+        # start loop
+        local_client.loop_start()
+
+        # register atexit handler to make sure it disconnects at exit
+        atexit.register(local_client.disconnect)
+
+    except Exception as e:
+
+        print('Could not connect to MQTT brocker. Using dummy client...')
+
+        local_client = MessagePublishClient()
+
+    return local_client
 
 
