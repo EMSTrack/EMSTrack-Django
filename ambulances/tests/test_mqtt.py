@@ -377,7 +377,11 @@ class TestMQTTSubscribe(MQTTTestCase):
         # instantiate client
         http_client = Client()
 
+        # login as admin and
         # retrieve ambulance via http
+        http_client.login(username=settings.MQTT['USERNAME'],
+                          password=settings.MQTT['PASSWORD'])
+        
         response = http_client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
@@ -388,6 +392,7 @@ class TestMQTTSubscribe(MQTTTestCase):
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
         
+        http_client.logout()
         
         # stop processing messages
         subscribe_client.loop_stop()
