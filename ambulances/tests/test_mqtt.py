@@ -338,13 +338,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         self.is_connected(test_client)
 
-        # subscribe to user/+/ambulance/+/data
-        test_client.expect('user/+/ambulance/+/data')
+        # subscribe to user/admin/ambulance/+/data
+        topic = 'user/admin/ambulance/{}/data'.format(self.a1.id)
+        test_client.expect(topic)
         test_client.strict = False
         
         # process messages
         test_client.loop()
 
+        # Must have two messages
+        self.assertEqual(test_client.expecting_topics[topic], 2)
+        
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
 
