@@ -81,6 +81,9 @@ class BaseClient():
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
 
+        # otherwise add to dictionary of published
+        self.published[result.mid] = (topic, payload, qos, retain)
+        
         # debug? 
         if self.debug:
             print("> Just published '{}[mid={}]:{}'(qos={},retain={})".format(topic,
@@ -89,8 +92,6 @@ class BaseClient():
                                                                           qos,
                                                                           retain))
             
-        # otherwise add to dictionary of published
-        self.published[result.mid] = (topic, payload, qos, retain)
 
         #print('topic = {}, result = {}'.format(topic, result))
 
