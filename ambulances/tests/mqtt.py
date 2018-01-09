@@ -332,12 +332,12 @@ class MQTTTestClient(BaseClient):
             except ValueError:
                 if self.strict:
                     raise Exception('Unexpected message')
-            
-            #print('> topic = {}'.format(msg.topic))
-            #print('> topic count = {}'.format(self.expecting_topics[msg.topic]))
-            #print('> expecting = {}'.format(self.expecting))
-            #print('> done = {}'.format(self.done()))
-            #print('> connected = {}'.format(self.connected))
+
+            if self.debug:
+                print('> Just received {}[count={},expecting={}]:{}'.format(msg.topic,
+                                                                            self.expecting_topics[msg.topic],
+                                                                            self.expecting,
+                                                                            msg.payload))
             
         else:
         
