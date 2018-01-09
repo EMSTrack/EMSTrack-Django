@@ -374,8 +374,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # modify data in hospital and save should trigger message
         obj = Hospital.objects.get(id = self.h1.id)
-        self.assertEqual(obj.comment, '')
-        obj.comment = 'no comments'
+        self.assertEqual(obj.comment, 'no comments')
+        obj.comment = 'yet no comments'
         obj.save()
         
         # modify data in hospital_equipment and save should trigger message
@@ -390,7 +390,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # assert changes
         obj = Hospital.objects.get(id=self.a1.id)
-        self.assertEqual(obj.comment, 'no comments')
+        self.assertEqual(obj.comment, 'yet no comments')
         
         obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
                                             equipment_id = self.e1.id)
