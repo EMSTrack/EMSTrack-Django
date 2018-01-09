@@ -4,11 +4,11 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from io import BytesIO
 
-from .mqtt.client import BaseClient, MQTTException
+from .client import BaseClient, MQTTException
 
-from .models import Ambulance, Hospital, HospitalEquipment
+from ..models import Ambulance, Hospital, HospitalEquipment
 
-from .serializers import AmbulanceSerializer, \
+from ..serializers import AmbulanceSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer
 
 # SubscribeClient
