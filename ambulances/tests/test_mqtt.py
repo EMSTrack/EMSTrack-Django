@@ -436,9 +436,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # publish messages that change database
-        topics = ('ambulance/{}/data'.format(self.a1.id),
-                  'hospital/{}/data'.format(self.h1.id),
-                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
+        topics = ('user/admin/ambulance/{}/data'.format(self.a1.id),
+                  'user/admin/hospital/{}/data'.format(self.h1.id),
+                  'user/admin/hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                          self.e1.name))
 
         # change ambulance
