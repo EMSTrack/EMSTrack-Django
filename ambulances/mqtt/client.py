@@ -75,7 +75,7 @@ class BaseClient():
         
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
-        print("> result = {}".format(repr(result)))
+        print("> result = {}".format(result))
         
         if result.rc:
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),

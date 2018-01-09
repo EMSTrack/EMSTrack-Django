@@ -448,7 +448,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish(topics[0],
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
-                            }), qos=2)
+                            }), qos=0)
         
         # process messages
         self.loop(test_client)
