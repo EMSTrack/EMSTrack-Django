@@ -103,7 +103,7 @@ try:
 
     # try to connect
     print('Connecting to MQTT brocker...')
-    local_client = PublishClient(broker, stdout, style, 0)
+    local_client = PublishClient(broker, stdout, style, 0, debug=True)
     
     # wait for connection
     while not local_client.connected:
