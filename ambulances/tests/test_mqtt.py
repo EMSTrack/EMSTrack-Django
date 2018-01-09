@@ -325,7 +325,7 @@ class TestMQTTSeed(MQTTTestCase):
         # Start subscribe client
         
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = broker['CLIENT_ID'] + '_' + str(os.getpid())
+        broker['CLIENT_ID'] = 'test_mqttclient'
         
         subscribe = SubscribeClient(broker,
                                     self.stdout,
