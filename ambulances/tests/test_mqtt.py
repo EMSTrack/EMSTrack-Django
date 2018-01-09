@@ -453,4 +453,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
 
-        time.sleep(1)
+        # verify change
+        obj = Ambulance.objects.get(id = self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+        
