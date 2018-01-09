@@ -338,7 +338,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
         
         test_client = MQTTTestClient(broker, sys.stdout, style,
-                                     verbosity = 1, strict = False,
+                                     verbosity = 1, check_payload = False,
                                      debug=True)
         self.is_connected(test_client)
 
@@ -357,14 +357,15 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # modify data in ambulance and save should trigger message
         a = Ambulance.objects.get(id = self.a1.id)
+        self.assertDictEqual(a.status, AmbulanceStatus.UK.name)
         a.status = AmbulanceStatus.OS.name
         a.save()
         
         # process messages
         self.loop(test_client)
         
-        #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
-        #self.assertDictEqual(result, answer)
+        a = Ambulance.objects.get(id=self.a1.id)
+        self.assertDictEqual(a.status, AmbulanceStatus.OS.name)
 
     def _test_mqtt_subscribe(self):
 

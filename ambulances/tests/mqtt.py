@@ -299,7 +299,7 @@ class MQTTTestClient(BaseClient):
         self.expecting_messages = {}
         self.expecting = 0
 
-        self.strict = kwargs.pop('strict', True)
+        self.check_payload = kwargs.pop('check_payload', True)
         
     def done(self):
 
@@ -327,7 +327,7 @@ class MQTTTestClient(BaseClient):
                 self.expecting_messages[msg.topic].remove(msg.payload)
 
             except ValueError:
-                if self.strict:
+                if self.check_payload:
                     raise Exception('Unexpected message')
 
             if self.debug:
