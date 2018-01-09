@@ -342,7 +342,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         topic = 'user/admin/ambulance/{}/data'.format(self.a1.id)
         test_client.expect(topic)
         test_client.strict = False
-        
+        self.is_subscribed(test_client)
+
         # process messages
         test_client.loop()
 
