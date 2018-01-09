@@ -293,6 +293,8 @@ class MQTTTestClient(BaseClient):
 
     def __init__(self, *args, **kwargs):
 
+        self.check_payload = kwargs.pop('check_payload', True)
+        
         # call supper
         super().__init__(*args, **kwargs)
 
@@ -301,11 +303,12 @@ class MQTTTestClient(BaseClient):
         self.expecting_messages = {}
         self.expecting = 0
 
-        self.check_payload = kwargs.pop('check_payload', True)
+        # publishing
+        self.publishing = 0
         
     def done(self):
 
-        return self.expecting == 0
+        return self.expecting == 0 and self.publishing == 0
         
     # The callback for when the client receives a CONNACK
     # response from the server.
@@ -314,6 +317,19 @@ class MQTTTestClient(BaseClient):
         # is connected?
         return super().on_connect(client, userdata, flags, rc)
 
+    def publish(self, topic, payload = None, qos = 0, retain = False):
+
+        # publish
+        self.publishing +=1 
+        super().publish(topic, payload, qos, retain)
+
+
+    def on_publish(self, client, userdata, mid):
+
+        # did publish?
+        super().on_publish(client, userdata, mid)
+        self.publishing -=1 
+        
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
