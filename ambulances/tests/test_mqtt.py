@@ -389,7 +389,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         
         # assert changes
-        obj = Hospital.objects.get(id=self.a1.id)
+        obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
         
         obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
