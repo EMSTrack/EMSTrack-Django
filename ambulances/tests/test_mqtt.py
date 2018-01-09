@@ -315,6 +315,16 @@ def is_service_running(name):
         
 class TestMQTTSeed(MQTTTestCase):
 
+    def is_connected(self, client, MAX_TRIES = 10):
+
+        # connected?
+        k = 0
+        while not client.connected and k < MAX_TRIES:
+            k += 1
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
     def test_mqttclient(self):
 
         import sys
@@ -325,17 +335,30 @@ class TestMQTTSeed(MQTTTestCase):
         stdout = OutputWrapper(sys.stdout)
         style = color_style()
 
-        # Instantiate broker
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
         }
+        
+        # Start subscribe client
+        
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = broker['CLIENT_ID'] + '_' + str(os.getpid())
+        
+        subscribe = SubscribeClient(broker,
+                                    self.stdout,
+                                    self.style,
+                                    verbosity = options['verbosity'])
+        
+        self.is_connected(subscribe)
+
+        # Start test client
+        
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttseed_admin'
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         self.is_connected(client)
-
-        print('Done!')
+        
