@@ -22,9 +22,6 @@ class UpdateClient(BaseClient):
             raise MQTTException('Disconnected',
                                 rc)
     
-    def publish(self, topic, message, *vargs, **kwargs):
-        self.client.publish(topic, message, *vargs, **kwargs)
-
     def update_topic(self, topic, serializer, qos=0, retain=False):
         # Publish to topic
         self.publish(topic,
