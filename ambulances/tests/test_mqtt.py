@@ -392,7 +392,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.a1.id)
         self.assertEqual(obj.comment, 'no comments')
         
-        obj = HospitalEquipment.objects.get((hospital_id = self.h1.id,
+        obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
