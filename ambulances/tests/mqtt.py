@@ -323,7 +323,6 @@ class MQTTTestClient(BaseClient):
         self.publishing +=1 
         super().publish(topic, payload, qos, retain)
 
-
     def on_publish(self, client, userdata, mid):
 
         # did publish?
