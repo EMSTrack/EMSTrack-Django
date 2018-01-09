@@ -396,6 +396,8 @@ class TestMQTTSubscribe(MQTTTestCase):
                                 'status': status,
                             })
         )
+
+        time.sleep(1)
         
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
