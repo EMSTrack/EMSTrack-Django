@@ -86,17 +86,22 @@ class BaseClient():
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
 
-        if qos == 0 and result.mid in self.published:
-            if self.published.pop(result.mid) is not None:
-                raise MQTTException('Cannot make sense of mid', result.mid)
-        else:
-            # otherwise add to dictionary of published
+        if qos != 0:
+            # add to dictionary of published
             self.published[result.mid] = (topic, payload, qos, retain)
+        else:
 
-        # reset forgive_mid
-        if qos == 0:
+            # reset forgive_mid
             self.forgive_mid = False
-            
+
+            # on_published already called?
+            if result.mid in self.published:
+                if self.published.pop(result.mid) is not None:
+                    raise MQTTException('Cannot make sense of mid', result.mid)
+            else:
+                # add to dictionary of published
+                self.published[result.mid] = (topic, payload, qos, retain)
+
         # debug? 
         if self.debug:
             print(("> Just published '{}[mid={}]:{}'" +
