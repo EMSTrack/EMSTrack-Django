@@ -432,7 +432,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
         
         test_client = MQTTTestClient(broker, sys.stdout, style,
-                                     verbosity = 1, debug = True)
+                                     verbosity = 1, check_payload = False,
+                                     debug = True)
         self.is_connected(test_client)
 
         # publish messages that change database
@@ -453,12 +454,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
 
+        # expect update
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        
         # loop subscribe_client
         subscribe_client.loop()
 
+        # process messages
+        self.loop(test_client)
+        
         # verify change
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
-        time.sleep(1)
-        
