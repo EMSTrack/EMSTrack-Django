@@ -57,7 +57,7 @@ class BaseClient():
     def on_connect(self, client, userdata, flags, rc):
         
         if rc:
-            raise MQTTException('Could not connect to brocker',
+            raise MQTTException('Could not connect to brocker (rc = {})'.format(rc),
                                 rc)
         
         self.connected = True
@@ -76,7 +76,7 @@ class BaseClient():
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
-            raise MQTTException('Could not publish to topic',
+            raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
 
         # debug? 
