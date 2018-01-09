@@ -429,7 +429,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start test client
         
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttseed_admin'
+        broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
         
         test_client = MQTTTestClient(broker, sys.stdout, style,
                                      verbosity = 1, debug = True)
