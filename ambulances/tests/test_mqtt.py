@@ -320,7 +320,7 @@ class TestMQTTSubscribe(MQTTTestCase):
             client.loop()
 
         self.assertEqual(client.connected, True)
-        
+
     def is_subscribed(self, client, MAX_TRIES = 10):
 
         client.loop_start()
@@ -335,6 +335,43 @@ class TestMQTTSubscribe(MQTTTestCase):
         
         self.assertEqual(len(client.subscribed), 0)
     
+    def test_mqtt_publish(self):
+
+        import sys
+        from django.core.management.base import OutputWrapper
+        from django.core.management.color import color_style, no_style
+
+        # Start client as admin
+        stdout = OutputWrapper(sys.stdout)
+        style = color_style()
+
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        
+        # Start test client
+        
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        
+        test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        self.is_connected(test_client)
+
+        # subscribe to user/+/ambulance/+/data
+        test_client.subscribe('user/+/ambulance/+/data')
+        
+        # process messages
+        test_client.loop_start()
+
+        #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
+        #self.assertDictEqual(result, answer)
+        
+        # stop processing messages
+        test_client.loop_stop()
+
     def _test_mqtt_subscribe(self):
 
         import sys
@@ -407,4 +444,5 @@ class TestMQTTSubscribe(MQTTTestCase):
         # stop processing messages
         subscribe_client.loop_stop()
         test_client.loop_stop()
+        
         
