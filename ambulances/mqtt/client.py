@@ -86,7 +86,7 @@ class BaseClient():
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
 
-        if qos == 0 and result.mid in self.self.published:
+        if qos == 0 and result.mid in self.published:
             if self.published.pop(result.mid) is not None:
                 raise MQTTException('Cannot make sense of mid', result.mid)
         else:
