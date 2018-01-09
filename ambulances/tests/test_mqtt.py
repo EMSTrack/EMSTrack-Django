@@ -396,7 +396,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
-    def _test_mqtt_subscribe(self):
+    def test_mqtt_subscribe(self):
 
         import sys
         from django.core.management.base import OutputWrapper
