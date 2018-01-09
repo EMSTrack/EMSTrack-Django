@@ -340,8 +340,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1, debug=True)
         self.is_connected(test_client)
 
-        # subscribe to user/admin/ambulance/+/data
-        topic = 'user/admin/ambulance/{}/data'.format(self.a1.id)
+        # subscribe to ambulance/+/data
+        topic = 'ambulance/{}/data'.format(self.a1.id)
         test_client.expect(topic)
         #test_client.strict = False
         self.is_subscribed(test_client)
