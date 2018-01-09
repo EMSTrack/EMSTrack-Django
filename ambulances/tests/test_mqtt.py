@@ -424,6 +424,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                            verbosity = 1,
                                            debug = True)
         self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
 
     def _test(self):
         
