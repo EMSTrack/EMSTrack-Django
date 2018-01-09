@@ -61,6 +61,8 @@ class SubscribeClient(BaseClient):
         # parse topic
         values = msg.topic.split('/')
 
+        print('values = {}'.format(values))
+        
         try:
 
             # retrieve user
