@@ -346,7 +346,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         #test_client.strict = False
         self.is_subscribed(test_client)
 
-        # modify data in ambulance and save
+        # modify data in ambulance and save should trigger message
         a = Ambulance.object.get(id = self.a1.id)
         a.status = AmbulanceStatus.OS.name
         a.save()
