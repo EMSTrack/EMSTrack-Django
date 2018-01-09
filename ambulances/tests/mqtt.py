@@ -348,7 +348,7 @@ class MQTTTestClient(BaseClient):
         if not topic in self.expecting_topics:
             self.expecting_topics[topic] = 0
             self.expecting_messages[topic] = []
-            self.expecting += 1
             self.subscribe(topic, qos)
         
+        self.expecting += 1
         self.expecting_messages[topic].append(msg)
