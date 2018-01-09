@@ -426,8 +426,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
 
-    def _test(self):
-        
         # Start test client
         
         broker.update(settings.MQTT)
@@ -437,40 +435,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # process messages
-        subscribe_client.loop_start()
-        test_client.loop_start()
+        self.loop(test_client)
 
-        # Start http client
-
-        # instantiate client
-        http_client = Client()
-
-        # login as admin and
-        # retrieve ambulance via http
-        http_client.login(username=settings.MQTT['USERNAME'],
-                          password=settings.MQTT['PASSWORD'])
-        
-        response = http_client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
-                                   follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-
-        status = AmbulanceStatus.OS.name
-        test_client.publish('user/admin/ambulance/{}/data'.format(str(self.a1.id)),
-                            json.dumps({
-                                'status': status,
-                            })
-        )
-
-        time.sleep(1)
-        
-        #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
-        #self.assertDictEqual(result, answer)
-        
-        http_client.logout()
-        
-        # stop processing messages
-        subscribe_client.loop_stop()
-        test_client.loop_stop()
         
         
