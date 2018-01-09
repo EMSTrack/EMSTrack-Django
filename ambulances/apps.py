@@ -10,8 +10,8 @@ class AmbulancesConfig(AppConfig):
         import ambulances.signals
 
         # enable mqtt signals
-        if os.environ.get("DJANGO_ENABLE_MQTT_SIGNALS", "True") == "True":
+        # if os.environ.get("DJANGO_ENABLE_MQTT_SIGNALS", "True") == "True":
 
-            print('importing ambulances.mqtt.publish')
+        #     print('importing ambulances.mqtt.publish')
             
-            import ambulances.mqtt.publish
+        #     import ambulances.mqtt.publish
