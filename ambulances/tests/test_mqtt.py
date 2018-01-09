@@ -318,6 +318,8 @@ class TestMQTTSeed(MQTTTestCase):
                 management.call_command('mqttclient',
                                         verbosity=1)
                 
+        print('Thread!')
+        
         # span thread with mqttclient
         thread = MQTTClient()
         thread.start() 
@@ -342,3 +344,5 @@ class TestMQTTSeed(MQTTTestCase):
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         self.is_connected(client)
+
+        print('Done!')
