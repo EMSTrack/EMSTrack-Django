@@ -341,26 +341,3 @@ class TestMQTTSeed(MQTTTestCase):
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
         self.is_connected(client)
-
-        
-import os
-import subprocess
-
-def is_service_running(name):
-    with open(os.devnull, 'wb') as hide_output:
-        exit_code = subprocess.Popen(['service', name, 'status'], stdout=hide_output, stderr=hide_output).wait()
-        return exit_code == 0
-        
-class TestMQTTSeed(MQTTTestCase):
-
-    def is_connected(self, client, MAX_TRIES = 10):
-
-        # connected?
-        k = 0
-        while not client.connected and k < MAX_TRIES:
-            k += 1
-            client.loop()
-
-        self.assertEqual(client.connected, True)
-        
-        
