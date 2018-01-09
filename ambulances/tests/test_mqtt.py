@@ -346,11 +346,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         #test_client.strict = False
         self.is_subscribed(test_client)
 
+        # modify data in ambulance and save
+        a = Ambulance.object.get(id = self.a1.id)
+        a.status = AmbulanceStatus.OS.name
+        a.save()
+        
         # process messages
         self.loop(test_client)
-
-        # Must have two messages
-        self.assertEqual(test_client.expecting_topics[topic], 2)
         
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
