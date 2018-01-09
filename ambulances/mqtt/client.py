@@ -81,7 +81,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Just published '{}[{}]:{}'(qos={},retain={})".format(topic,
+            print("> Just published '{}[mid={}]:{}'(qos={},retain={})".format(topic,
                                                                           result.mid,
                                                                           payload,
                                                                           qos,
@@ -96,7 +96,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Published '{}'[mid={}]".format(userdata, mid))
+            print("> Published mid={}".format(mid))
                   
         if mid in self.published:
             # TODO: check granted_qos?
@@ -108,17 +108,19 @@ class BaseClient():
 
     def subscribe(self, topic, qos = 0):
 
-        # debug? 
-        if self.debug:
-            print("> Will subscribe to '{}'[qos={},retain={}]".format(topic,
-                                                                      qos))
-            
         # try to subscribe
         result, mid = self.client.subscribe(topic, qos)
         if result:
             raise MQTTExpection('Could not subscribe to topic',
                                 result)
 
+        # debug? 
+        if self.debug:
+            print("> Just subscribed to '{}'[mid={}][qos={}]".format(topic,
+                                                                    mid
+                                                                     qos))
+            
+            
         # otherwise add to dictionary of subscribed
         self.subscribed[mid] = (topic, qos)
 
@@ -128,7 +130,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Subscribed '{}'[mid={},qos=]".format(userdata, mid, granted_qos))
+            print("> Subscribed mid={}, qos={}".format(mid, granted_qos))
         
         if mid in self.subscribed:
             # TODO: check granted_qos?
