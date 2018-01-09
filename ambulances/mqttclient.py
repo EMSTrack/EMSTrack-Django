@@ -81,9 +81,12 @@ class BaseClient():
 
         # otherwise add to dictionary of subscribed
         self.subscribed[mid] = (topic, qos)
+        print('topic = {}, mid = {}'.format(topic, mid))
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
+        print('userdata = {}, mid = {}'.format(userdata, mid))
+        
         if mid in self.subscribed:
             # TODO: check granted_qos?
             # remove from list of subscribed
