@@ -66,6 +66,7 @@ class SubscribeClient(BaseClient):
         try:
 
             # retrieve user
+            print(User.objects.all())
             user = User.objects.get(username=values[1])
 
         except ObjectDoesNotExist:
