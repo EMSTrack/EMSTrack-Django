@@ -3,18 +3,18 @@ import atexit, sys, os, time
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-from .mqtt.client import BaseClient, MQTTException
+from .client import BaseClient, MQTTException
 
-from .models import client, Ambulance, Equipment, \
+from ..models import client, Ambulance, Equipment, \
     HospitalEquipment, Hospital
 
-from .serializers import AmbulanceSerializer, HospitalSerializer, \
+from ..serializers import AmbulanceSerializer, HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer, \
     ExtendedProfileSerializer
 
-# UpdateClient class
+# PublishClient class
 
-class UpdateClient(BaseClient):
+class PublishClient(BaseClient):
 
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
@@ -22,7 +22,7 @@ class UpdateClient(BaseClient):
             raise MQTTException('Disconnected',
                                 rc)
     
-    def update_topic(self, topic, serializer, qos=0, retain=False):
+    def publish_topic(self, topic, serializer, qos=0, retain=False):
         # Publish to topic
         self.publish(topic,
                      JSONRenderer().render(serializer.data),
@@ -36,14 +36,14 @@ class UpdateClient(BaseClient):
                      qos=qos,
                      retain=True)
 
-    def update_profile(self, profile, qos=2, retain=True):
-        self.update_topic('user/{}/profile'.format(profile.user.username),
+    def publish_profile(self, profile, qos=2, retain=True):
+        self.publish_topic('user/{}/profile'.format(profile.user.username),
                           ExtendedProfileSerializer(profile),
                           qos=qos,
                           retain=retain)
         
-    def update_ambulance(self, ambulance, qos=2, retain=True):
-        self.update_topic('ambulance/{}/data'.format(ambulance.id),
+    def publish_ambulance(self, ambulance, qos=2, retain=True):
+        self.publish_topic('ambulance/{}/data'.format(ambulance.id),
                           AmbulanceSerializer(ambulance),
                           qos=qos,
                           retain=retain)
@@ -51,8 +51,8 @@ class UpdateClient(BaseClient):
     def remove_ambulance(self, ambulance):
         self.remove_topic('ambulance/{}/data'.format(ambulance.id))
         
-    def update_hospital(self, hospital, qos=2, retain=True):
-        self.update_topic('hospital/{}/data'.format(hospital.id),
+    def publish_hospital(self, hospital, qos=2, retain=True):
+        self.publish_topic('hospital/{}/data'.format(hospital.id),
                           HospitalSerializer(hospital),
                           qos=qos,
                           retain=retain)
@@ -61,16 +61,16 @@ class UpdateClient(BaseClient):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
         self.remove_topic('hospital/{}/metadata'.format(hospital.id))
         
-    def update_hospital_metadata(self, hospital, qos=2, retain=True):
+    def publish_hospital_metadata(self, hospital, qos=2, retain=True):
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
-        self.update_topic('hospital/{}/metadata'.format(hospital.id),
+        self.publish_topic('hospital/{}/metadata'.format(hospital.id),
                           EquipmentSerializer(equipment, many=True),
                           qos=qos,
                           retain=retain)
 
-    def update_hospital_equipment(self, equipment, qos=2, retain=True):
-        self.update_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
+    def publish_hospital_equipment(self, equipment, qos=2, retain=True):
+        self.publish_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name),
                           HospitalEquipmentSerializer(equipment),
                           qos=qos,
@@ -97,13 +97,13 @@ broker = {
 }
 
 broker.update(settings.MQTT)
-broker['CLIENT_ID'] = 'mqttupdate_' + str(os.getpid())
+broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
 
 try:
 
     # try to connect
     print('Connecting to MQTT brocker...')
-    local_client = UpdateClient(broker, stdout, style, 0)
+    local_client = PublishClient(broker, stdout, style, 0)
     
     # wait for connection
     while not local_client.connected:

@@ -1,18 +1,20 @@
 # mqttseed application command
 from django.core.management.base import BaseCommand
 from django.conf import settings
-
-from ambulances.mqttupdate import UpdateClient
-
-from django.contrib.auth.models import User
-from ambulances.models import Profile, \
-    Ambulance, Hospital, HospitalEquipment
-
 from django.utils.six import BytesIO
+
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
-class Client(UpdateClient):
+from ambulances.mqtt.update import PublishClient
+
+from django.contrib.auth.models import User
+
+from ambulances.models import Profile, \
+    Ambulance, Hospital, HospitalEquipment
+
+
+class Client(PublishClient):
 
     # The callback for when the client receives a CONNACK
     # response from the server.

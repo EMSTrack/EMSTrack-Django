@@ -11,35 +11,35 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 from django.contrib.auth.models import User
 
-# MessageUpdateClient
+# MessagePublishClient
 
-class MessageUpdateClient():
+class MessagePublishClient():
 
-    def update_profile(self, profile, **kwargs):
+    def publish_profile(self, profile, **kwargs):
         pass
         
-    def update_ambulance(self, ambulance, **kwargs):
+    def publish_ambulance(self, ambulance, **kwargs):
         pass
 
     def remove_ambulance(self, ambulance, **kwargs):
         pass
         
-    def update_hospital(self, hospital, **kwargs):
+    def publish_hospital(self, hospital, **kwargs):
         pass
 
     def remove_hospital(self, hospital, **kwargs):
         pass
         
-    def update_hospital_metadata(self, hospital, **kwargs):
+    def publish_hospital_metadata(self, hospital, **kwargs):
         pass
 
-    def update_hospital_equipment(self, hospital, **kwargs):
+    def publish_hospital_equipment(self, hospital, **kwargs):
         pass
         
     def remove_hospital_equipment(self, hospital, **kwargs):
         pass
 
-client = MessageUpdateClient()
+client = MessagePublishClient()
     
 # User and ambulance location models
 
