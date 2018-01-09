@@ -343,17 +343,18 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # subscribe to ambulance/+/data
-        topic = 'ambulance/{}/data'.format(self.a1.id)
-        test_client.expect(topic)
+        topics = ('ambulance/{}/data'.format(self.a1.id),
+                  'hospital/{}/data'.format(self.h1.id),
+                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                         self.e1.name))
+        [test_client.expect(t) for t in topics]
         self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
 
-        print('>> Moving on...')
-
-        # expect more
-        test_client.expect(topic)
+        # expect more ambulance
+        test_client.expect(topics[0])
 
         # modify data in ambulance and save should trigger message
         a = Ambulance.objects.get(id = self.a1.id)
