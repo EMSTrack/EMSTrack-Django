@@ -11,7 +11,7 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 from django.contrib.auth.models import User
 
-from . import mqtt.publish as mqtt
+from .mqtt import publish as mqtt
 
 # lazy client property
 client = None
