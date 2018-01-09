@@ -71,7 +71,7 @@ class Ambulance(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        get_client().publish_ambulance(self, **kwargs)
+        get_client().publish_ambulance(self)
 
     def delete(self, *args, **kwargs):
         get_client().remove_ambulance(self)
@@ -130,7 +130,7 @@ class Hospital(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
-        get_client().publish_hospital(self, **kwargs)
+        get_client().publish_hospital(self)
 
     def delete(self, *args, **kwargs):
         get_client().remove_hospital(self)
@@ -199,13 +199,15 @@ class HospitalEquipment(models.Model):
     def save(self, *args, **kwargs):
         created = self.pk is None
         super().save(*args, **kwargs) 
-        get_client().publish_hospital_equipment(self)
+        client = get_client()
+        client.publish_hospital_equipment(self)
         if created:
-            get_client().publish_hospital_metadata(self.hospital)
+            client.publish_hospital_metadata(self.hospital)
 
     def delete(self, *args, **kwargs):
-        get_client().remove_hospital_equipment(self)
-        get_client().publish_hospital_metadata(self.hospital)
+        client = get_client()
+        client.remove_hospital_equipment(self)
+        client.publish_hospital_metadata(self.hospital)
         super().delete(*args, **kwargs)
         
     class Meta:
