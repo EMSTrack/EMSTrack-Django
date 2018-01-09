@@ -5,7 +5,7 @@ from rest_framework.renderers import JSONRenderer
 
 from .client import BaseClient, MQTTException
 
-from ..models import client, Ambulance, Equipment, \
+from ..models import Ambulance, Equipment, \
     HospitalEquipment, Hospital
 
 from ..serializers import AmbulanceSerializer, HospitalSerializer, \
@@ -133,25 +133,25 @@ def get_client():
 
         # try to connect
         print('Connecting to MQTT brocker...')
-        local_client = PublishClient(broker, stdout, style,
-                                     verbosity=1, debug=True)
+        client = PublishClient(broker, stdout, style,
+                               verbosity=1, debug=True)
 
         # wait for connection
-        while not local_client.connected:
-            local_client.loop()
+        while not client.connected:
+            client.loop()
 
         # start loop
-        local_client.loop_start()
+        client.loop_start()
 
         # register atexit handler to make sure it disconnects at exit
-        atexit.register(local_client.disconnect)
+        atexit.register(client.disconnect)
 
     except Exception as e:
 
         print('Could not connect to MQTT brocker. Using dummy client...')
 
-        local_client = MessagePublishClient()
+        client = MessagePublishClient()
 
-    return local_client
+    return client
 
 
