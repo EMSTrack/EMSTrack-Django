@@ -79,6 +79,8 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
     
         management.call_command('mqttseed',
                                 verbosity=1)
+
+        print('>> Processing messages...')
         
         # Start client as admin
         stdout = OutputWrapper(sys.stdout)
