@@ -337,7 +337,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
         
-        test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1, debug = True)
         self.is_connected(test_client)
 
         # subscribe to user/admin/ambulance/+/data

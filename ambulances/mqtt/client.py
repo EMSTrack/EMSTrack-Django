@@ -15,7 +15,8 @@ class BaseClient():
                  broker,
                  stdout,
                  style,
-                 verbosity = 1):
+                 verbosity = 1,
+                 **kwargs):
         
 
         # initialize client
@@ -24,7 +25,7 @@ class BaseClient():
         self.broker = broker
         self.verbosity = verbosity
 
-        self.debug = False
+        self.debug = kwargs.pop('debug', False)
         
         if self.broker['CLIENT_ID']:
             self.client = mqtt.Client(self.broker['CLIENT_ID'],
