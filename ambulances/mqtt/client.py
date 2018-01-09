@@ -106,7 +106,8 @@ class BaseClient():
             del self.published[mid]
 
         else:
-            raise MQTTException('Unknown publish mid', mid)
+            #raise MQTTException('Unknown publish mid', mid)
+            print("MQTTException('Unknown publish mid', mid)")
 
     def subscribe(self, topic, qos = 0):
 
