@@ -350,6 +350,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
 
+        print('>> Moving on...')
+
         # expect more
         test_client.expect(topic)
 
