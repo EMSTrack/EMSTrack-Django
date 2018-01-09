@@ -313,7 +313,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Done?
         self.loop(client)
 
-class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
+class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
     def test_mqtt_publish(self):
 
@@ -396,6 +396,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
+class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
+    
     def test_mqtt_subscribe(self):
 
         import sys
