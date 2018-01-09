@@ -73,19 +73,20 @@ class BaseClient():
 
     def publish(self, topic, payload = None, qos = 0, retain = False):
         
-        # debug? 
-        if self.debug:
-            print("> Will publish '{}:{}'(qos={},retain={})".format(topic,
-                                                                    payload,
-                                                                    qos,
-                                                                    retain))
-            
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
             raise MQTTExpection('Could not publish to topic',
                                 result.rc)
 
+        # debug? 
+        if self.debug:
+            print("> Just published '{}[{}]:{}'(qos={},retain={})".format(topic,
+                                                                          result.mid,
+                                                                          payload,
+                                                                          qos,
+                                                                          retain))
+            
         # otherwise add to dictionary of published
         self.published[result.mid] = (topic, payload, qos, retain)
 
