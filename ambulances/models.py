@@ -89,7 +89,8 @@ class Ambulance(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)
+        print('will publish to client {}'.format(client))
         client.publish_ambulance(self, **kwargs)
 
     def delete(self, *args, **kwargs):
