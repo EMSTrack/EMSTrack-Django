@@ -95,7 +95,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Published '{}'[{}] at {}".format(userdata, mid, client))
+            print("> Published '{}'[mid={}]".format(userdata, mid))
                   
         if mid in self.published:
             # TODO: check granted_qos?
@@ -107,6 +107,11 @@ class BaseClient():
 
     def subscribe(self, topic, qos = 0):
 
+        # debug? 
+        if self.debug:
+            print("> Will subscribe to '{}'[qos={},retain={}]".format(topic,
+                                                                      qos))
+            
         # try to subscribe
         result, mid = self.client.subscribe(topic, qos)
         if result:
@@ -120,7 +125,9 @@ class BaseClient():
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
-        #print('userdata = {}, mid = {}'.format(userdata, mid))
+        # debug? 
+        if self.debug:
+            print("> Subscribed '{}'[mid={},qos=]".format(userdata, mid, granted_qos))
         
         if mid in self.subscribed:
             # TODO: check granted_qos?
