@@ -301,12 +301,9 @@ class MQTTTestClient(BaseClient):
 
         self.strict = True
         
-        # initialize pubcount
-        self.pubset = set()
-
     def done(self):
 
-        return len(self.pubset) == 0 and self.expecting == 0
+        return self.expecting == 0
         
     # The callback for when the client receives a CONNACK
     # response from the server.
@@ -329,6 +326,7 @@ class MQTTTestClient(BaseClient):
 
             # is message expected? remove
             try:
+                
                 self.expecting_messages[msg.topic].remove(msg.payload)
 
             except ValueError:

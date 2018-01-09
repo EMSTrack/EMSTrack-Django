@@ -26,7 +26,7 @@ from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
 from ambulances.mqtt.client import MQTTException
 from ambulances.mqtt.subscribe import SubscribeClient
             
-class TestMQTTSeed(MQTTTestCase):
+class TestMQTT():
 
     def is_connected(self, client, MAX_TRIES = 10):
 
@@ -65,7 +65,9 @@ class TestMQTTSeed(MQTTTestCase):
         client.loop_stop()
         
         self.assertEqual(client.done(), True)
-        
+
+class TestMQTTSeed(TestMQTT, MQTTTestCase):
+
     def test_mqttseed(self):
 
         import sys
@@ -309,32 +311,8 @@ class TestMQTTSeed(MQTTTestCase):
         # Done?
         self.loop(client)
 
-class TestMQTTSubscribe(MQTTTestCase):
+class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
-    def is_connected(self, client, MAX_TRIES = 10):
-
-        # connected?
-        k = 0
-        while not client.connected and k < MAX_TRIES:
-            k += 1
-            client.loop()
-
-        self.assertEqual(client.connected, True)
-
-    def is_subscribed(self, client, MAX_TRIES = 10):
-
-        client.loop_start()
-        
-        # connected?
-        k = 0
-        while len(client.subscribed) and k < MAX_TRIES:
-            k += 1
-            time.sleep(1)
-            
-        client.loop_stop()
-        
-        self.assertEqual(len(client.subscribed), 0)
-    
     def test_mqtt_publish(self):
 
         import sys
@@ -361,16 +339,14 @@ class TestMQTTSubscribe(MQTTTestCase):
         self.is_connected(test_client)
 
         # subscribe to user/+/ambulance/+/data
-        test_client.subscribe('user/+/ambulance/+/data')
+        test_client.expect('user/+/ambulance/+/data')
+        test_client.strict = False
         
         # process messages
-        test_client.loop_start()
+        test_client.loop()
 
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
-        
-        # stop processing messages
-        test_client.loop_stop()
 
     def _test_mqtt_subscribe(self):
 
