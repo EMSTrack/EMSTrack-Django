@@ -23,7 +23,7 @@ from ambulances.serializers import ProfileSerializer, \
 from django.test import Client
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
-from ambulances.mqttclient import MQTTException
+from ambulances.mqtt.client import MQTTException
 from ambulances.mqttsubscribe import SubscribeClient
             
 class TestMQTTSeed(MQTTTestCase):

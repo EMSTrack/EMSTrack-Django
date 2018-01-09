@@ -16,7 +16,7 @@ from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
 from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
-from ambulances.mqttclient import MQTTException
+from ambulances.mqtt.client import MQTTException
 
 class MyTestCase(MQTTTestCase):
 
