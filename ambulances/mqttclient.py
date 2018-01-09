@@ -79,11 +79,11 @@ class BaseClient():
         # otherwise add to dictionary of published
         self.published[result.mid] = (topic, payload, qos, retain)
 
-        #print('topic = {}, mid = {}'.format(topic, mid))
+        print('topic = {}, result = {}'.format(topic, result))
 
     def on_publish(self, client, userdata, mid):
 
-        #print('userdata = {}, mid = {}'.format(userdata, mid))
+        print('userdata = {}, mid = {}'.format(userdata, mid))
         
         if mid in self.published:
             # TODO: check granted_qos?
