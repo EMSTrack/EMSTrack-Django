@@ -94,7 +94,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Published '{}'[{}] at {}".format(userdata, mid, client)
+            print("> Published '{}'[{}] at {}".format(userdata, mid, client))
                   
         if mid in self.published:
             # TODO: check granted_qos?
