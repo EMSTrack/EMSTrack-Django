@@ -32,7 +32,7 @@ class BaseClient():
         self.client.on_connect = self.on_connect
 
         self.subscribed = {}
-        self.published = set()
+        self.published = {}
         
         self.client.on_publish = self.on_publish
         self.client.on_subscribe = self.on_subscribe
@@ -68,8 +68,30 @@ class BaseClient():
     def on_message(self, client, userdata, msg):
         pass
 
+    def publish(self, topic, payload, qos = 0, retain = False):
+
+        # try to publish
+        result = self.client.publish(topic, payload, qos, retain)
+        if result.rc:
+            raise MQTTExpection('Could not publish to topic',
+                                result.rc)
+
+        # otherwise add to dictionary of published
+        self.published[result.mid] = (topic, payload, qos, retain)
+
+        #print('topic = {}, mid = {}'.format(topic, mid))
+
     def on_publish(self, client, userdata, mid):
-        pass
+
+        #print('userdata = {}, mid = {}'.format(userdata, mid))
+        
+        if mid in self.published:
+            # TODO: check granted_qos?
+            # remove from list of subscribed
+            del self.published[mid]
+
+        else:
+            raise MQTTException('Unknown publish mid', mid)
 
     def subscribe(self, topic, qos = 0):
 

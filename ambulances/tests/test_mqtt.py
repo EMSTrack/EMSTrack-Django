@@ -390,7 +390,12 @@ class TestMQTTSubscribe(MQTTTestCase):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
 
-
+        status = AmbulanceStatus.OS.name
+        test_client.publish('user/admin/ambulance/{}/data'.format(str(self.a1.id)),
+                            json.dumps({
+                                'status': status,
+                            })
+        )
         
         #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         #self.assertDictEqual(result, answer)
