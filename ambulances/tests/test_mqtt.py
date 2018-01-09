@@ -421,9 +421,12 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client = SubscribeClient(broker,
                                            sys.stdout,
                                            style,
-                                        verbosity = 1)
+                                           verbosity = 1,
+                                           debug = True)
         self.is_connected(subscribe_client)
 
+    def _test(self):
+        
         # Start test client
         
         broker.update(settings.MQTT)
