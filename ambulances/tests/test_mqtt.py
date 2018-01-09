@@ -343,7 +343,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # subscribe to ambulance/+/data
         topic = 'ambulance/{}/data'.format(self.a1.id)
         test_client.expect(topic)
-        #test_client.strict = False
+        test_client.strict = False
         self.is_subscribed(test_client)
 
         # modify data in ambulance and save should trigger message
