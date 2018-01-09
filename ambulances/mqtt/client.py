@@ -75,6 +75,7 @@ class BaseClient():
         
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
+        self.published[result.mid] = (topic, payload, qos, retain)
         print("> result = {}".format(result))
         
         if result.rc:
