@@ -68,7 +68,7 @@ class BaseClient():
     def on_message(self, client, userdata, msg):
         pass
 
-    def publish(self, topic, payload, qos = 0, retain = False):
+    def publish(self, topic, payload = None, qos = 0, retain = False):
 
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)

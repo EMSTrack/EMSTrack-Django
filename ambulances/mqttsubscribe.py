@@ -79,6 +79,7 @@ class SubscribeClient(BaseClient):
         except Exception as e:
 
             # TODO: send message to user
+            print(e)
             self.stdout.write(
                 self.style.ERROR("*> JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
             return
