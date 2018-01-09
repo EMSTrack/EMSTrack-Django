@@ -608,7 +608,8 @@ class TestMQTTSubscribe(MyTestCase):
         client = MQTTTestClient(broker,
                                 sys.stdout,
                                 style,
-                                verbosity = 1)
+                                verbosity = 1,
+                                check_payload = False)
 
         self.is_connected(client)
         
