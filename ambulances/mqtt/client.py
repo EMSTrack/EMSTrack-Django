@@ -76,7 +76,7 @@ class BaseClient():
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
-            raise MQTTExpection('Could not publish to topic',
+            raise MQTTException('Could not publish to topic',
                                 result.rc)
 
         # debug? 
@@ -111,7 +111,7 @@ class BaseClient():
         # try to subscribe
         result, mid = self.client.subscribe(topic, qos)
         if result:
-            raise MQTTExpection('Could not subscribe to topic',
+            raise MQTTException('Could not subscribe to topic',
                                 result)
 
         # debug? 
