@@ -331,7 +331,7 @@ class TestMQTTSeed(MQTTTestCase):
         subscribe = SubscribeClient(broker,
                                     sys.stdout,
                                     style,
-                                    verbosity = options['verbosity'])
+                                    verbosity = 1)
         
         self.is_connected(subscribe)
 
