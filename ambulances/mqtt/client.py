@@ -117,7 +117,7 @@ class BaseClient():
         # debug? 
         if self.debug:
             print("> Just subscribed to '{}'[mid={}][qos={}]".format(topic,
-                                                                    mid
+                                                                     mid,
                                                                      qos))
             
             
