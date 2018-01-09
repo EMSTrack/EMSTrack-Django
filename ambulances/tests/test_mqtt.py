@@ -354,17 +354,40 @@ class TestMQTTSubscribe(MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'
         
-        subscribe = SubscribeClient(broker,
-                                    sys.stdout,
-                                    style,
-                                    verbosity = 1)
-        
-        self.is_connected(subscribe)
+        subscribe_client = SubscribeClient(broker,
+                                           sys.stdout,
+                                           style,
+                                        verbosity = 1)
+        self.is_connected(subscribe_client)
 
         # Start test client
         
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttseed_admin'
         
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
-        self.is_connected(client)
+        test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        self.is_connected(test_client)
+
+        # process messages
+        subscribe_client.loop_start()
+        test_client.loop_start()
+
+        # Start http client
+
+        # instantiate client
+        http_client = Client()
+
+        # retrieve ambulance
+        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+
+        #answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
+        #self.assertDictEqual(result, answer)
+        
+        
+        # stop processing messages
+        subscribe_client.loop_stop()
+        test_client.loop_stop()
+        
