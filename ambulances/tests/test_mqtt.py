@@ -305,25 +305,18 @@ class TestMQTTSeed(MQTTTestCase):
         # Done?
         self.loop(client)
 
+import os
+import subprocess
+
+def is_service_running(name):
+    with open(os.devnull, 'wb') as hide_output:
+        exit_code = subprocess.Popen(['service', name, 'status'], stdout=hide_output, stderr=hide_output).wait()
+        return exit_code == 0
+        
+class TestMQTTSeed(MQTTTestCase):
+
     def test_mqttclient(self):
 
-        import threading
-        
-        class MQTTClient(threading.Thread):
-
-            def run(self):
-
-                from django.core import management
-    
-                management.call_command('mqttclient',
-                                        verbosity=1)
-                
-        print('Thread!')
-        
-        # span thread with mqttclient
-        thread = MQTTClient()
-        thread.start() 
-                
         import sys
         from django.core.management.base import OutputWrapper
         from django.core.management.color import color_style, no_style
