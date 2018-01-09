@@ -115,7 +115,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Published mid={}, userdata={}".format(mid, userdata))
+            print("> Published mid={}".format(mid))
                   
         if mid in self.published:
             # TODO: check granted_qos?
