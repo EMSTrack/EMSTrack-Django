@@ -357,7 +357,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # modify data in ambulance and save should trigger message
         a = Ambulance.objects.get(id = self.a1.id)
-        self.assertDictEqual(a.status, AmbulanceStatus.UK.name)
+        self.assertEqual(a.status, AmbulanceStatus.UK.name)
         a.status = AmbulanceStatus.OS.name
         a.save()
         
@@ -365,7 +365,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         
         a = Ambulance.objects.get(id=self.a1.id)
-        self.assertDictEqual(a.status, AmbulanceStatus.OS.name)
+        self.assertEqual(a.status, AmbulanceStatus.OS.name)
 
     def _test_mqtt_subscribe(self):
 
