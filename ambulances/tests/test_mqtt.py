@@ -454,7 +454,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
 
-        # expect update
+        # expect update twice because django runs in two threads
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         
         # loop subscribe_client
