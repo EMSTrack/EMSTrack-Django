@@ -42,9 +42,9 @@ class SubscribeClient(BaseClient):
         #                                 self.on_call)
 
         # subscribe
-        self.client.subscribe('user/+/ambulance/+/data', 2)
-        self.client.subscribe('user/+/hospital/+/data', 2)
-        self.client.subscribe('user/+/hospital/+/equipment/+/data', 2)
+        self.subscribe('user/+/ambulance/+/data', 2)
+        self.subscribe('user/+/hospital/+/data', 2)
+        self.subscribe('user/+/hospital/+/equipment/+/data', 2)
         
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
