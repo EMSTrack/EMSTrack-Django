@@ -431,11 +431,26 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttseed_admin'
         
-        test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        test_client = MQTTTestClient(broker, sys.stdout, style,
+                                     verbosity = 1, debug = True)
         self.is_connected(test_client)
 
+        # publish messages that change database
+        topics = ('ambulance/{}/data'.format(self.a1.id),
+                  'hospital/{}/data'.format(self.h1.id),
+                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                         self.e1.name))
+
+        # change ambulance
+        obj = Ambulance.objects.get(id = self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+        
+        test_client.publish(topics[0],
+                            json.dumps({
+                                'status': AmbulanceStatus.OS.name,
+                            }))
+        
         # process messages
         self.loop(test_client)
 
-        
-        
+        time.sleep(1)
