@@ -75,7 +75,6 @@ class BaseClient():
         
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
-        self.published[result.mid] = (topic, payload, qos, retain)
         print("> result = {}".format(result))
         
         if result.rc:
@@ -100,7 +99,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Published mid={}".format(mid))
+            print("> Published mid={}, userdata={}".format(mid, userdata))
                   
         if mid in self.published:
             # TODO: check granted_qos?
