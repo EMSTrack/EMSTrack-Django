@@ -305,3 +305,40 @@ class TestMQTTSeed(MQTTTestCase):
         # Done?
         self.loop(client)
 
+    def test_mqttclient(self):
+
+        import threading
+        
+        class MQTTClient(threading.Thread):
+
+            def run(self):
+
+                from django.core import management
+    
+                management.call_command('mqttclient',
+                                        verbosity=1)
+                
+        # span thread with mqttclient
+        thread = MQTTClient()
+        thread.start() 
+                
+        import sys
+        from django.core.management.base import OutputWrapper
+        from django.core.management.color import color_style, no_style
+
+        # Start client as admin
+        stdout = OutputWrapper(sys.stdout)
+        style = color_style()
+
+        # Instantiate broker
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttseed_admin'
+        
+        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        self.is_connected(client)
