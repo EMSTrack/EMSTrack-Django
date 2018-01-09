@@ -299,7 +299,7 @@ class MQTTTestClient(BaseClient):
         self.expecting_messages = {}
         self.expecting = 0
 
-        self.strict = True
+        self.strict = kwargs.pop('strict', True)
         
     def done(self):
 

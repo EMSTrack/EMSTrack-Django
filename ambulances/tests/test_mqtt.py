@@ -337,19 +337,26 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
         
-        test_client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1, debug=True)
+        test_client = MQTTTestClient(broker, sys.stdout, style,
+                                     verbosity = 1, strict = False,
+                                     debug=True)
         self.is_connected(test_client)
 
         # subscribe to ambulance/+/data
         topic = 'ambulance/{}/data'.format(self.a1.id)
         test_client.expect(topic)
-        test_client.strict = False
         self.is_subscribed(test_client)
 
+        # process messages
+        self.loop(test_client)
+
+        # expect more
+        test_client.expect(topic)
+
         # modify data in ambulance and save should trigger message
-        #a = Ambulance.objects.get(id = self.a1.id)
-        #a.status = AmbulanceStatus.OS.name
-        #a.save()
+        a = Ambulance.objects.get(id = self.a1.id)
+        a.status = AmbulanceStatus.OS.name
+        a.save()
         
         # process messages
         self.loop(test_client)
