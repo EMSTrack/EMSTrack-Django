@@ -14,7 +14,6 @@ from ..models import Profile, AmbulancePermission, HospitalPermission
 
 from ..serializers import ProfileSerializer, ExtendedProfileSerializer
 
-
 from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
@@ -33,7 +32,7 @@ class MyTestCase(MQTTTestCase):
         cls.client = Client()
 
             
-class TestProfile(TestSetup):
+class TestProfile(MyTestCase):
 
     def test_profile_serializer(self):
 
