@@ -14,13 +14,13 @@ from login.models import Profile, AmbulancePermission, HospitalPermission
 from login.serializers import ExtendedProfileSerializer
 
 from ambulances.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, \
-    Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
+    AmbulanceStatus, AmbulanceCapability
+from ambulances.serializers import AmbulanceSerializer
 
-from ambulances.serializers import AmbulanceSerializer, \
-    HospitalSerializer, HospitalEquipmentSerializer, \
-    EquipmentSerializer
+from hospital.models import Hospital, \
+    Equipment, HospitalEquipment, EquipmentType
+from hospital.serializers import EquipmentSerializer, \
+    HospitalSerializer, HospitalEquipmentSerializer
 
 from django.test import Client
 
