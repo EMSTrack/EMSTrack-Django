@@ -117,6 +117,7 @@ class TestProfile(MyTestCase):
         }
         self.assertDictEqual(serializer.data, result)
             
+class TestProfileViewset(MyTestCase):
 
     def test_profile_viewset(self):
 
