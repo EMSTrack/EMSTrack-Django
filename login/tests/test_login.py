@@ -603,7 +603,7 @@ class TestMQTTSubscribe(MyTestCase):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
+        broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
         
         client = MQTTTestClient(broker,
                                 sys.stdout,
