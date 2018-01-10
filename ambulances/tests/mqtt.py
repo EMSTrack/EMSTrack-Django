@@ -1,4 +1,5 @@
-import subprocess, time, os, sys
+import subprocess, time, os, sys, re
+
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from django.conf import settings
@@ -301,7 +302,7 @@ class MQTTTestClient(BaseClient):
         # expect
         self.expecting_topics = {}
         self.expecting_messages = {}
-        self.expecting_patterns = set()
+        self.expecting_patterns = {}
         self.expecting = 0
         
         # publishing
@@ -335,39 +336,53 @@ class MQTTTestClient(BaseClient):
 
         if msg.topic in self.expecting_topics:
 
-            # add to count
-            self.expecting_topics[msg.topic] += 1
-            self.expecting -= 1
+            # regular topic
+            topic = msg.topic
 
-            # is message expected? remove
-            try:
-                
-                self.expecting_messages[msg.topic].remove(msg.payload)
-
-            except ValueError:
-                if self.check_payload:
-                    raise Exception('Unexpected message')
-
-            if self.debug:
-                print('> Just received {}[count={},expecting={}]:{}'.format(msg.topic,
-                                                                            self.expecting_topics[msg.topic],
-                                                                            self.expecting,
-                                                                            msg.payload))
-            
         else:
-        
-            raise Exception("Unexpected message topic '{}'".format(msg.topic))
+            
+            # can it be a pattern?
+            match = False
+            for k, p in self.expecting_patterns.items():
+                if p.match(msg.topic):
+                    # initialize topic
+                    topic = k
+                    match = True
+                    break
+
+            if not match:
+                # did not match
+                raise Exception("Unexpected message topic '{}'".format(msg.topic))
+
+        # handle expected message
+        self.expecting_topics[topic] += 1
+        self.expecting -= 1
+
+        # is message payload expected? remove
+        try:
+                
+            self.expecting_messages[topic].remove(msg.payload)
+
+        except ValueError:
+            if self.check_payload:
+                raise Exception('Unexpected message')
+
+        if self.debug:
+            print('> Just received {}[count={},expecting={}]:{}'.format(msg.topic,
+                                                                        self.expecting_topics[msg.topic],
+                                                                        self.expecting,
+                                                                        msg.payload))
 
     def expect(self, topic, msg = None, qos = 2, remove = False):
 
+        # pattern topic?
         if '+' in topic or '#' in topic:
-            # pattern topic
-            pattern = topic.replace('+', '[^/]*').replace('#', '[a-zA-Z0-9_/ ]+')
+            pattern = topic.replace('+', '[^/]+').replace('#', '[a-zA-Z0-9_/ ]+')
             print('pattern = {}'.format(pattern))
-            self.expecting_patterns.add(pattern)
+            self.expecting_patterns[topic] = re.compile(pattern)
 
-        elif not topic in self.expecting_topics:
-            # regular topic
+        # already subscribed?
+        if not topic in self.expecting_topics:
             self.expecting_topics[topic] = 0
             self.expecting_messages[topic] = []
             self.subscribe(topic, qos)
