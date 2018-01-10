@@ -1,5 +1,13 @@
 from django.test import TestCase
 
+from django.contrib.auth.models import User
+
+from ambulance.models import Ambulance, \
+    AmbulanceStatus, AmbulanceCapability
+
+from hospital.models import Hospital, \
+    Equipment, HospitalEquipment, EquipmentType
+
 class TestSetupData():
 
     @classmethod

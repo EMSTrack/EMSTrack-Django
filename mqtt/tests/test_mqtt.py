@@ -24,10 +24,10 @@ from hospital.serializers import EquipmentSerializer, \
 
 from django.test import Client
 
-from mqtt.tests.client import MQTTTestCase, MQTTTestClient
+from .client import MQTTTestCase, MQTTTestClient
 
-from mqtt.client import MQTTException
-from mqtt.subscribe import SubscribeClient
+from ..client import MQTTException
+from ..subscribe import SubscribeClient
             
 class TestMQTT():
 
