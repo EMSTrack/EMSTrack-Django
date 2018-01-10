@@ -44,7 +44,7 @@ class MessagePublishClient():
 
 # Uses Alex Martelli's Borg for making PublishClient act like a singleton
 
-class PublishClient(MessagePublishClient, BaseClient):
+class PublishClient(BaseClient, MessagePublishClient):
 
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
