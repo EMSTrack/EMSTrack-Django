@@ -12,7 +12,9 @@ from django.contrib.auth.models import User
 
 from login.models import Profile
     
-from ambulances.models import Ambulance, Hospital, HospitalEquipment
+from ambulances.models import Ambulance
+
+from hospital.models import Hospital, HospitalEquipment
 
 class Client(PublishClient):
 
