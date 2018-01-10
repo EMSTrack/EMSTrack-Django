@@ -1,51 +1,10 @@
 from django.conf.urls import url, include
 
-from rest_framework_swagger.views import get_swagger_view
-from rest_framework import routers
-
 from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
-from . import viewsets
-
-#from .views import AmbulanceStatusViewSet, AmbulanceViewSet, CallViewSet, \
-#    HospitalViewSet, EquipmentCountViewSet, AmbulanceRouteViewSet, \
-#    AmbulanceUpdateView, AmbulanceStatusUpdateView, AdminView
-
-# Defines the url routing within the website
-
-# Load swagger
-schema_view = get_swagger_view(title='Ambulances API')
-
-# Defines a router which groups Django REST Viewsets
-router = routers.DefaultRouter()
-
-# Register urls to viewsets
-#router.register(r'status', AmbulanceStatusViewSet)
-#router.register(r'ambulances', AmbulanceViewSet)
-#router.register(r'calls', CallViewSet)
-#router.register(r'hospitals', HospitalViewSet)
-#router.register(r'equipment', EquipmentCountViewSet)
-#router.register(r'routes', AmbulanceRouteViewSet)
-
-#router.register(r'user',
-#                viewsets.ProfileViewSet)
-router.register(r'ambulance',
-                viewsets.AmbulanceViewSet,
-                base_name='ambulance')
-router.register(r'hospital',
-                viewsets.HospitalViewSet,
-                base_name='hospital')
-router.register(r'hospital/(?P<id>[0-9]+)/equipment',
-                viewsets.HospitalEquipmentViewSet)
 
 urlpatterns = [
-
-    # Swagger Documentation
-    url(r'^docs/', login_required(schema_view)),
-
-    # Router API urls
-    url(r'^api/', include(router.urls)),
 
     url(r'^$',
         login_required(views.AmbulanceListView.as_view()),
