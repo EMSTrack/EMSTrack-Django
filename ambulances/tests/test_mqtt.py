@@ -9,14 +9,16 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
-from ambulances.models import Profile, Ambulance, \
+from login.models import Profile, AmbulancePermission, HospitalPermission
+
+from login.serializers import ExtendedProfileSerializer
+
+from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
-    AmbulancePermission, HospitalPermission, \
     Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer, ExtendedProfileSerializer, \
+from ambulances.serializers import AmbulanceSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer, \
     EquipmentSerializer
 
