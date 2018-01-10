@@ -31,6 +31,16 @@ router = routers.DefaultRouter()
 router.register(r'user',
                 ProfileViewSet)
 
+router.register(r'ambulance',
+                AmbulanceViewSet,
+                base_name='ambulance')
+
+router.register(r'hospital',
+                HospitalViewSet,
+                base_name='hospital')
+router.register(r'hospital/(?P<id>[0-9]+)/equipment',
+                HospitalEquipmentViewSet)
+
 urlpatterns = [
     #url(r'^', include('drf_autodocs.urls')),
     # Router API urls
