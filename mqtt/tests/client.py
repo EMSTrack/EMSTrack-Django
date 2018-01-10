@@ -31,6 +31,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         k = 0
         success = False
         while not success and k < MAX_TRIES:
+            if k > 0:
+                time.sleep(1)
             k += 1
             retval = subprocess.run(*args, **kwargs)
             success = retval.return_code
@@ -46,6 +48,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         k = 0
         success = True
         while success and k < MAX_TRIES:
+            if k > 0:
+                time.sleep(1)
             k += 1
             retval = subprocess.run(*args, **kwargs)
             success = retval.return_code
