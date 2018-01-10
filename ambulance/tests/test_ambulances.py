@@ -23,16 +23,7 @@ from hospital.models import Hospital, \
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
-def date2iso(date):
-    if date is not None:
-        return date.isoformat().replace('+00:00','Z')
-    return date
-
-def point2str(point):
-    #return 'SRID=4326;' + str(point)
-    if point is not None:
-        return str(point)
-    return point
+from util.test import date2iso, point2str
 
 class TestSetup(TestCase):
 
