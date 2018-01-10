@@ -46,6 +46,11 @@ class MessagePublishClient():
 
 class PublishClient(BaseClient, MessagePublishClient):
 
+    def __init__(self, **kwargs):
+
+        # initialize BaseClient
+        super().__init__(**kwargs)
+    
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
