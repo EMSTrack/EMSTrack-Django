@@ -1,5 +1,6 @@
 import time
 from django.test import TestCase
+from django.test import Client
 
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -9,12 +10,11 @@ from ambulances.models import Ambulance, \
     Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from .models import Profile, AmbulancePermission, HospitalPermission
+from ..models import Profile, AmbulancePermission, HospitalPermission
 
-from .serializers import ProfileSerializer, \
+from ..serializers import ProfileSerializer, \
     AmbulanceSerializer, ExtendedProfileSerializer
 
-from django.test import Client
 
 from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
