@@ -15,8 +15,8 @@ def get_client():
     global client
     
     if not client:
-        from ambulances.mqtt import publish as mqtt
-        client = mqtt.get_client()
+        from mqtt import publish
+        client = publish.get_client()
     return client
 
 # Hospital model

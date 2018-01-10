@@ -24,7 +24,7 @@ from hospital.serializers import EquipmentSerializer, \
 
 from django.test import Client
 
-from ambulances.tests.mqtt import MQTTTestCase, MQTTTestClient
+from mqtt.tests.client import MQTTTestCase, MQTTTestClient
 
 from mqtt.client import MQTTException
 from mqtt.subscribe import SubscribeClient
