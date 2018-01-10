@@ -622,7 +622,7 @@ class TestMQTTACLPublish(MyTestCase):
                                  'acc': '2',
                                  'topic': '/user/testuser2/hospital/{}/data'.format(self.h2.id) },
                                follow=True)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
 
         # can publish
         response = self.client.post('/auth/mqtt/acl/',
