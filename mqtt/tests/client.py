@@ -18,9 +18,40 @@ from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
 from login.models import AmbulancePermission, HospitalPermission
-        
+
+
 class MQTTTestCase(StaticLiveServerTestCase):
 
+    def run_until_success(self, *args, **kwargs):
+
+        # parameters
+        MAX_TRIES = kwargs.pop('MAX_TRIES', 10),
+        
+        # keep trying 
+        k = 0
+        success = False
+        while not success and k < MAX_TRIES:
+            k += 1
+            retval = subprocess.run(*args, **kwargs)
+            success = retval.return_code
+
+        self.assertEqual(not success, False)
+
+    def run_until_fail(self, *args, **kwargs):
+
+        # parameters
+        MAX_TRIES = kwargs.pop('MAX_TRIES', 10),
+        
+        # keep trying 
+        k = 0
+        success = True
+        while success and k < MAX_TRIES:
+            k += 1
+            retval = subprocess.run(*args, **kwargs)
+            success = retval.return_code
+
+        self.assertEqual(not success, True)
+        
     @classmethod
     def setUpClass(cls):
 
@@ -54,7 +85,11 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
 
-        time.sleep(1)
+
+        # Wait for shutdown
+        run_until_fail(["service",
+                        "mosquitto",
+                        "status"])
         
         # saving persistence file
         retval = subprocess.run(["mv",
@@ -86,7 +121,10 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "start"])
 
-        time.sleep(1)
+        # Wait for start
+        run_until_success(["service",
+                           "mosquitto",
+                           "status"])
         
         cls.setUpTestData()
 
@@ -103,7 +141,10 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
         
-        time.sleep(1)
+        # Wait for shutdown
+        run_until_fail(["service",
+                        "mosquitto",
+                        "status"])
         
         # remove test configuration file
         retval = subprocess.run(["mv",
@@ -128,7 +169,10 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "start"])
         
-        time.sleep(1)
+        # Wait for start
+        run_until_success(["service",
+                           "mosquitto",
+                           "status"])
         
     @classmethod
     def setUpTestData(cls):
