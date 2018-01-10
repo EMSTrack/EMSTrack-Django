@@ -5,6 +5,9 @@ from django.test import Client
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from rest_framework.parsers import JSONParser
+from io import BytesIO
+
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
     Hospital, \
