@@ -1,18 +1,14 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 
 from django.contrib.auth.models import User
-#from django.contrib.auth import get_user_model
-#User = get_user_model()
 
 from braces.views import CsrfExemptMixin
 
-from login.forms import AuthenticationForm, SignupForm
-
-from ambulances.models import Hospital, Profile
-from django.core.exceptions import ObjectDoesNotExist
+from .forms import AuthenticationForm, SignupForm
 
 # signup
 class SignupView(FormView):
