@@ -4,11 +4,15 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from ambulances.models import Profile, Ambulance, \
+from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
-    AmbulancePermission, HospitalPermission, \
     Hospital, \
     Equipment, HospitalEquipment, EquipmentType
+
+from .models Profile, AmbulancePermission, HospitalPermission
+
+from .serializers import ProfileSerializer, \
+    AmbulanceSerializer, ExtendedProfileSerializer
 
 from django.test import Client
 
@@ -30,6 +34,150 @@ class MyTestCase(MQTTTestCase):
         cls.client = Client()
 
             
+class TestProfile(TestSetup):
+
+    def test_profile_serializer(self):
+
+        # test ProfileSerializer
+        for u in (self.u1, self.u2, self.u3):
+            serializer = ProfileSerializer(u.profile)
+            result = {
+                'ambulances': [
+                    {
+                        'ambulance_id': e.ambulance.pk,
+                        'ambulance_identifier': e.ambulance.identifier,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.ambulances.all()
+                ],
+                'hospitals': [
+                    {
+                        'hospital_id': e.hospital.pk,
+                        'hospital_name': e.hospital.name,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.hospitals.all()
+                ]
+            }
+            self.assertDictEqual(serializer.data, result)
+
+    def test_extended_profile_serializer(self):
+
+        self.maxDiff = None
+        
+        # test ProfileSerializer
+
+        # regular users is just like ProfileSerializer
+        for u in (self.u2, self.u3):
+            serializer = ExtendedProfileSerializer(u.profile)
+            result = {
+                'ambulances': [
+                    {
+                        'ambulance_id': e.ambulance.pk,
+                        'ambulance_identifier': e.ambulance.identifier,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.ambulances.all()
+                ],
+                'hospitals': [
+                    {
+                        'hospital_id': e.hospital.pk,
+                        'hospital_name': e.hospital.name,
+                        'can_read': e.can_read,
+                        'can_write': e.can_write
+                    }
+                    for e in u.profile.hospitals.all()
+                ]
+            }
+            self.assertDictEqual(serializer.data, result)
+
+        # super will see all ambulances and hospitals
+        u = self.u1
+        serializer = ExtendedProfileSerializer(u.profile)
+        result = {
+            'ambulances': [
+                {
+                    'ambulance_id': e.pk,
+                    'ambulance_identifier': e.identifier,
+                    'can_read': True,
+                    'can_write': True
+                }
+                for e in Ambulance.objects.all()
+            ],
+            'hospitals': [
+                {
+                    'hospital_id': e.pk,
+                    'hospital_name': e.name,
+                    'can_read': True,
+                    'can_write': True
+                }
+                for e in Hospital.objects.all()
+            ]
+        }
+        self.assertDictEqual(serializer.data, result)
+            
+
+    def test_profile_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # retrieve own
+        response = client.get('/api/user/{}/profile/'.format(str(self.u1.username)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ExtendedProfileSerializer(self.u1.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/api/user/{}/profile/'.format(str(self.u2.username)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ExtendedProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve someone else's
+        response = client.get('/api/user/{}/profile/'.format(str(self.u3.username)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ExtendedProfileSerializer(self.u3.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+        
+        # retrieve own
+        response = client.get('/api/user/{}/profile/'.format(str(self.u2.username)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ExtendedProfileSerializer(self.u2.profile).data
+        self.assertDictEqual(result, answer)
+        
+        # retrieve someone else's
+        response = client.get('/api/user/{}/profile/'.format(str(self.u1.username)),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        response = client.get('/api/user/{}/profile/'.format(str(self.u3.username)),
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # logout
+        client.logout()
+        
 class TestLogin(MyTestCase):
             
     def test_login(self):

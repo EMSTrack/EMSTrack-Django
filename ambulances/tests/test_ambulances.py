@@ -14,12 +14,12 @@ import json
 
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, \
-    AmbulancePermission, HospitalPermission, \
     Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from ambulances.serializers import ProfileSerializer, \
-    AmbulanceSerializer, ExtendedProfileSerializer, \
+from login.models import AmbulancePermission, HospitalPermission
+
+from ambulances.serializers import AmbulanceSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer, \
     EquipmentSerializer
 
@@ -172,150 +172,7 @@ class TestSetup(TestCase):
         #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
-        
-class TestProfile(TestSetup):
-
-    def test_profile_serializer(self):
-
-        # test ProfileSerializer
-        for u in (self.u1, self.u2, self.u3):
-            serializer = ProfileSerializer(u.profile)
-            result = {
-                'ambulances': [
-                    {
-                        'ambulance_id': e.ambulance.pk,
-                        'ambulance_identifier': e.ambulance.identifier,
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    }
-                    for e in u.profile.ambulances.all()
-                ],
-                'hospitals': [
-                    {
-                        'hospital_id': e.hospital.pk,
-                        'hospital_name': e.hospital.name,
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    }
-                    for e in u.profile.hospitals.all()
-                ]
-            }
-            self.assertDictEqual(serializer.data, result)
-
-    def test_extended_profile_serializer(self):
-
-        self.maxDiff = None
-        
-        # test ProfileSerializer
-
-        # regular users is just like ProfileSerializer
-        for u in (self.u2, self.u3):
-            serializer = ExtendedProfileSerializer(u.profile)
-            result = {
-                'ambulances': [
-                    {
-                        'ambulance_id': e.ambulance.pk,
-                        'ambulance_identifier': e.ambulance.identifier,
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    }
-                    for e in u.profile.ambulances.all()
-                ],
-                'hospitals': [
-                    {
-                        'hospital_id': e.hospital.pk,
-                        'hospital_name': e.hospital.name,
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    }
-                    for e in u.profile.hospitals.all()
-                ]
-            }
-            self.assertDictEqual(serializer.data, result)
-
-        # super will see all ambulances and hospitals
-        u = self.u1
-        serializer = ExtendedProfileSerializer(u.profile)
-        result = {
-            'ambulances': [
-                {
-                    'ambulance_id': e.pk,
-                    'ambulance_identifier': e.identifier,
-                    'can_read': True,
-                    'can_write': True
-                }
-                for e in Ambulance.objects.all()
-            ],
-            'hospitals': [
-                {
-                    'hospital_id': e.pk,
-                    'hospital_name': e.name,
-                    'can_read': True,
-                    'can_write': True
-                }
-                for e in Hospital.objects.all()
-            ]
-        }
-        self.assertDictEqual(serializer.data, result)
-            
-
-    def test_profile_viewset(self):
-
-        # instantiate client
-        client = Client()
-
-        # login as admin
-        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
-
-        # retrieve own
-        response = client.get('/ambulances/api/user/{}/profile/'.format(str(self.u1.username)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u1.profile).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve someone else's
-        response = client.get('/ambulances/api/user/{}/profile/'.format(str(self.u2.username)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u2.profile).data
-        self.assertDictEqual(result, answer)
-
-        # retrieve someone else's
-        response = client.get('/ambulances/api/user/{}/profile/'.format(str(self.u3.username)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u3.profile).data
-        self.assertDictEqual(result, answer)
-        
-        # logout
-        client.logout()
-
-        # login as testuser1
-        client.login(username='testuser1', password='top_secret')
-        
-        # retrieve own
-        response = client.get('/ambulances/api/user/{}/profile/'.format(str(self.u2.username)),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u2.profile).data
-        self.assertDictEqual(result, answer)
-        
-        # retrieve someone else's
-        response = client.get('/ambulances/api/user/{}/profile/'.format(str(self.u1.username)),
-                              follow=True)
-        self.assertEqual(response.status_code, 403)
-        
-        response = client.get('/ambulances/api/user/{}/profile/'.format(str(self.u3.username)),
-                              follow=True)
-        self.assertEqual(response.status_code, 403)
-        
-        # logout
-        client.logout()
+    
 
 class TestAmbulanceGetList(TestSetup):
 
@@ -347,7 +204,7 @@ class TestAmbulanceGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -355,7 +212,7 @@ class TestAmbulanceGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -363,7 +220,7 @@ class TestAmbulanceGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -377,7 +234,7 @@ class TestAmbulanceGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve own
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -385,12 +242,12 @@ class TestAmbulanceGetList(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # can't read
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -401,16 +258,16 @@ class TestAmbulanceGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -426,7 +283,7 @@ class TestAmbulanceGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulances
-        response = client.get('/ambulances/api/ambulance/',
+        response = client.get('/api/ambulance/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -442,7 +299,7 @@ class TestAmbulanceGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve ambulances
-        response = client.get('/ambulances/api/ambulance/',
+        response = client.get('/api/ambulance/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -456,7 +313,7 @@ class TestAmbulanceGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve ambulances
-        response = client.get('/ambulances/api/ambulance/',
+        response = client.get('/api/ambulance/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -624,7 +481,7 @@ class TestAmbulanceUpdate(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(self.a1).data
@@ -632,7 +489,7 @@ class TestAmbulanceUpdate(TestSetup):
 
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -644,7 +501,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance status
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -653,7 +510,7 @@ class TestAmbulanceUpdate(TestSetup):
         location_timestamp = timezone.now()
         location = Point(-2,7)
         
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': str(location),
@@ -666,7 +523,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -674,7 +531,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
         # set wrong attribute
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': 'will fail'
@@ -683,7 +540,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 400)
         
         # set wrong ambulance id
-        response = client.patch('/ambulances/api/ambulance/100/',
+        response = client.patch('/api/ambulance/100/',
                                 data = json.dumps({
                                     'status': status
                                 })
@@ -697,7 +554,7 @@ class TestAmbulanceUpdate(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(self.a3).data
@@ -705,7 +562,7 @@ class TestAmbulanceUpdate(TestSetup):
 
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -717,7 +574,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance status
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -726,7 +583,7 @@ class TestAmbulanceUpdate(TestSetup):
         location_timestamp = timezone.now()
         location = Point(-2,7)
         
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': str(location),
@@ -739,7 +596,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -748,7 +605,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -758,7 +615,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -774,7 +631,7 @@ class TestAmbulanceUpdate(TestSetup):
                 
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a1.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -784,7 +641,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a2.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -794,7 +651,7 @@ class TestAmbulanceUpdate(TestSetup):
 
         # set status ambulance
         status = AmbulanceStatus.OS.name
-        response = client.patch('/ambulances/api/ambulance/{}/'.format(str(self.a3.id)),
+        response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'status': status,
@@ -843,7 +700,7 @@ class TestAmbulanceCreate(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create ambulance
-        response = client.post('/ambulances/api/ambulance/',
+        response = client.post('/api/ambulance/',
                                {
                                    'identifier': 'NEW-1897',
                                    'capability': AmbulanceCapability.R.name,
@@ -854,14 +711,14 @@ class TestAmbulanceCreate(TestSetup):
         a = Ambulance.objects.get(identifier='NEW-1897')
         
         # retrieve ambulance
-        response = client.get('/ambulances/api/ambulance/{}/'.format(str(a.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(a.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(a).data
         self.assertDictEqual(result, answer)
 
         # create ambulance (repeated identifier)
-        response = client.post('/ambulances/api/ambulance/',
+        response = client.post('/api/ambulance/',
                                {
                                    'identifier': 'NEW-1897',
                                    'capability': AmbulanceCapability.R.name,
@@ -879,7 +736,7 @@ class TestAmbulanceCreate(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
-        response = client.post('/ambulances/api/ambulance/',
+        response = client.post('/api/ambulance/',
                                {
                                    'identifier': 'NEW-NEW-1897',
                                    'capability': AmbulanceCapability.B.name,
@@ -894,7 +751,7 @@ class TestAmbulanceCreate(TestSetup):
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
                 
-        response = client.post('/ambulances/api/ambulance/',
+        response = client.post('/api/ambulance/',
                                {
                                    'identifier': 'NEW-NEW-1897',
                                    'capability': AmbulanceCapability.B.name,
@@ -933,7 +790,7 @@ class TestHospitalGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -941,7 +798,7 @@ class TestHospitalGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -949,7 +806,7 @@ class TestHospitalGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -963,14 +820,14 @@ class TestHospitalGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve own's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
         self.assertDictEqual(result, answer)
         
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -978,7 +835,7 @@ class TestHospitalGetList(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
@@ -989,17 +846,17 @@ class TestHospitalGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1015,7 +872,7 @@ class TestHospitalGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve hospitals
-        response = client.get('/ambulances/api/hospital/',
+        response = client.get('/api/hospital/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1031,7 +888,7 @@ class TestHospitalGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve hospitals
-        response = client.get('/ambulances/api/hospital/',
+        response = client.get('/api/hospital/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1048,7 +905,7 @@ class TestHospitalGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve hospitals
-        response = client.get('/ambulances/api/hospital/',
+        response = client.get('/api/hospital/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1171,7 +1028,7 @@ class TestHospitalUpdate(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)))
+        response = client.get('/api/hospital/{}/'.format(str(self.h1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalSerializer(self.h1).data
@@ -1179,7 +1036,7 @@ class TestHospitalUpdate(TestSetup):
 
         # set address hospital
         address = 'new address'
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1191,7 +1048,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new hospital address
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)))
+        response = client.get('/api/hospital/{}/'.format(str(self.h1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['address'], address)
@@ -1199,7 +1056,7 @@ class TestHospitalUpdate(TestSetup):
         # set hospital location
         location = Point(-2,7)
         
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': str(location)
@@ -1211,14 +1068,14 @@ class TestHospitalUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new hospital location
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h1.id)))
+        response = client.get('/api/hospital/{}/'.format(str(self.h1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['address'], address)
         self.assertEqual(result['location'], 'SRID=4326;' + str(location))
         
         # set wrong hospital id
-        response = client.patch('/ambulances/api/hospital/100/',
+        response = client.patch('/api/hospital/100/',
                                 data = json.dumps({
                                     'address': address
                                 })
@@ -1232,7 +1089,7 @@ class TestHospitalUpdate(TestSetup):
         client.login(username='testuser1', password='top_secret')
                 
         # retrieve hospital
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)))
+        response = client.get('/api/hospital/{}/'.format(str(self.h2.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalSerializer(self.h2).data
@@ -1240,7 +1097,7 @@ class TestHospitalUpdate(TestSetup):
 
         # set address hospital
         address = 'another address'
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1252,7 +1109,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new hospital address
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)))
+        response = client.get('/api/hospital/{}/'.format(str(self.h2.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['address'], address)
@@ -1260,7 +1117,7 @@ class TestHospitalUpdate(TestSetup):
         # set hospital location
         location = Point(-2,7)
         
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': str(location)
@@ -1272,7 +1129,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve new hospital location
-        response = client.get('/ambulances/api/hospital/{}/'.format(str(self.h2.id)))
+        response = client.get('/api/hospital/{}/'.format(str(self.h2.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['address'], address)
@@ -1280,7 +1137,7 @@ class TestHospitalUpdate(TestSetup):
         
         # set status hospital (no permission)
         address = 'yet another hospital'
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1290,7 +1147,7 @@ class TestHospitalUpdate(TestSetup):
         
         # set address hospital (no permission)
         address = 'another one address'
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h3.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1306,7 +1163,7 @@ class TestHospitalUpdate(TestSetup):
         
         # set address hospital
         address = 'some address'
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h1.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1315,7 +1172,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertEqual(response.status_code, 404)
         
         # set address hospital
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1324,7 +1181,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertEqual(response.status_code, 404)
 
         # set address hospital
-        response = client.patch('/ambulances/api/hospital/{}/'.format(str(self.h2.id)),
+        response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'address': address,
@@ -1365,7 +1222,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1373,7 +1230,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1381,7 +1238,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1389,7 +1246,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1397,7 +1254,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1405,7 +1262,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve inexistent
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e2.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1416,12 +1273,12 @@ class TestHospitalEquipmentGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1429,7 +1286,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1437,7 +1294,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1445,7 +1302,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve own hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1459,27 +1316,27 @@ class TestHospitalEquipmentGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve someone else's
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1495,7 +1352,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1507,7 +1364,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1518,7 +1375,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1528,7 +1385,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve inexistent
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(1000),
+        response = client.get('/api/hospital/{}/equipment/'.format(1000),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1539,7 +1396,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1551,7 +1408,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1562,7 +1419,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1573,17 +1430,17 @@ class TestHospitalEquipmentGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # retrieve all hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/equipment/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1603,7 +1460,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
 
         # set equipment value
         value = 'True'
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
@@ -1615,7 +1472,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve equipment value
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1623,7 +1480,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # set equipment comment
         comment = 'some comment'
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'comment': comment
@@ -1635,7 +1492,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve equipment comment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1643,7 +1500,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(result['comment'], comment)
 
         # set inexistent equipment
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e3.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e3.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'comment': comment
@@ -1652,7 +1509,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 404)
         
         # set wrong ambulance id
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id+100), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id+100), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'comment': comment
@@ -1661,7 +1518,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 404)
 
         # set wrong equipment name
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name+'wrong')),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name+'wrong')),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'comment': comment
@@ -1677,7 +1534,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # set equipment value
         value = 'False'
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
@@ -1689,7 +1546,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve equipment value
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1697,7 +1554,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # set equipment comment
         comment = 'some new comment'
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'comment': comment
@@ -1709,7 +1566,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertDictEqual(result, answer)
         
         # retrieve equipment comment
-        response = client.get('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
+        response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1717,7 +1574,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(result['comment'], comment)
 
         # not permitted to write
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
@@ -1732,7 +1589,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # set equipment value
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
@@ -1741,7 +1598,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 404)
         
         # set equipment value
-        response = client.patch('/ambulances/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
+        response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'value': value
@@ -1763,7 +1620,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1774,7 +1631,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1785,7 +1642,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1801,7 +1658,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1812,7 +1669,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         self.assertCountEqual(result, answer)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1823,7 +1680,7 @@ class TestHospitalEquipmentMetadata(TestSetup):
         self.assertCountEqual(result, answer)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
@@ -1834,17 +1691,17 @@ class TestHospitalEquipmentMetadata(TestSetup):
         client.login(username='testuser2', password='very_secret')
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h1.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h2.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h2.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
         # retrieve any hospital equipment
-        response = client.get('/ambulances/api/hospital/{}/metadata/'.format(str(self.h3.id)),
+        response = client.get('/api/hospital/{}/metadata/'.format(str(self.h3.id)),
                               follow=True)
         self.assertEqual(response.status_code, 404)
         
