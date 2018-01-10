@@ -16,14 +16,8 @@ from login.serializers import ExtendedProfileSerializer
 
 # MessagePublishClient class
 
-class MessagePublishClient():
+class MessagePublishClient(BaseClient):
 
-    def __init__(self, **kwargs):
-
-        # initialize BaseClient
-        print('MessagePublishClient')
-        super().__init__()
-        
     def publish_profile(self, profile, **kwargs):
         pass
         
@@ -50,14 +44,8 @@ class MessagePublishClient():
 
 # Uses Alex Martelli's Borg for making PublishClient act like a singleton
 
-class PublishClient(BaseClient, MessagePublishClient):
+class PublishClient(MessagePublishClient):
 
-    def __init__(self, **kwargs):
-
-        # initialize BaseClient
-        print('PublishClient')
-        super().__init__(**kwargs)
-    
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
