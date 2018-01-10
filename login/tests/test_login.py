@@ -8,7 +8,7 @@ from django.conf import settings
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 
-from ambulances.models import Ambulance, \
+from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
 
 from hospital.models import Hospital, \

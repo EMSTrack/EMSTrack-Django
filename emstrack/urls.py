@@ -23,7 +23,7 @@ from rest_framework_swagger.views import get_swagger_view
 
 from login.viewsets import ProfileViewSet
 
-from ambulances.viewsets import AmbulanceViewSet
+from ambulance.viewsets import AmbulanceViewSet
 
 from hospital.viewsets import HospitalViewSet, HospitalEquipmentViewSet
 
@@ -50,8 +50,8 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     url(r'^docs/', login_required(schema_view)),
 
-    # ambulances
-    url(r'^ambulances/', include('ambulances.urls')),
+    # ambulance
+    url(r'^ambulance/', include('ambulance.urls')),
 
     # login
     url(r'^auth/', include('login.urls')),

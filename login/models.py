@@ -2,7 +2,7 @@ from django.db import models
 
 from django.contrib.auth.models import User
 
-from ambulances.models import Ambulance
+from ambulance.models import Ambulance
 
 from hospital.models import Hospital
 

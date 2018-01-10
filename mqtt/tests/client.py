@@ -11,7 +11,7 @@ from django.core.management.color import color_style, no_style
 
 from mqtt.client import BaseClient, MQTTException
 
-from ambulances.models import Ambulance, \
+from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
 
 from hospital.models import Hospital, \

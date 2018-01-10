@@ -13,9 +13,9 @@ from login.models import Profile, AmbulancePermission, HospitalPermission
 
 from login.serializers import ExtendedProfileSerializer
 
-from ambulances.models import Ambulance, \
+from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
-from ambulances.serializers import AmbulanceSerializer
+from ambulance.serializers import AmbulanceSerializer
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType

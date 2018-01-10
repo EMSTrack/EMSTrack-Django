@@ -6,8 +6,8 @@ from io import BytesIO
 
 from .client import BaseClient, MQTTException
 
-from ambulances.models import Ambulance
-from ambulances.serializers import AmbulanceSerializer
+from ambulance.models import Ambulance
+from ambulance.serializers import AmbulanceSerializer
 
 from hospital.models import Hospital, HospitalEquipment
 from hospital.serializers import HospitalSerializer, \
