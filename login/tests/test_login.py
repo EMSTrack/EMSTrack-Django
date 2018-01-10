@@ -584,7 +584,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.a1.id) },
+                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.h1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
@@ -593,7 +593,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.a2.id) },
+                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.h2.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
@@ -602,7 +602,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser1',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.a3.id) },
+                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.h3.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
@@ -611,7 +611,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser2',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.a1.id) },
+                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.h1.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
         
@@ -620,7 +620,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser2',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.a2.id) },
+                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.h2.id) },
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -629,7 +629,7 @@ class TestMQTTACLPublish(MyTestCase):
                                { 'username': 'testuser2',
                                  'clientid': 'test_client',
                                  'acc': '2',
-                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.a3.id) },
+                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.h3.id) },
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
