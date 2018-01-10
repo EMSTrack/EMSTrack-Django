@@ -6,10 +6,12 @@ from io import BytesIO
 
 from .client import BaseClient, MQTTException
 
-from ..models import Ambulance, Hospital, HospitalEquipment
+from ambulances.models import Ambulance
+from ambulances.serializers import AmbulanceSerializer
 
-from ..serializers import AmbulanceSerializer, \
-    HospitalSerializer, HospitalEquipmentSerializer
+from hospital.models import Hospital, HospitalEquipment
+from hospital.serializers import HospitalSerializer, \
+    HospitalEquipmentSerializer
 
 # SubscribeClient
 class SubscribeClient(BaseClient):
