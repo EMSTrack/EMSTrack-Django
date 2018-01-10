@@ -24,6 +24,8 @@ schema_view = get_swagger_view(title='Pastebin API')
 
 from login.viewsets import ProfileViewSet
 
+from ambulances.viewsets import AmbulanceViewSet, HospitalViewSet, HospitalEquipmentViewSet
+
 router = routers.DefaultRouter()
 
 router.register(r'user',
