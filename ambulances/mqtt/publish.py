@@ -18,6 +18,11 @@ from login.serializers import ExtendedProfileSerializer
 
 class MessagePublishClient():
 
+    def __init__(self, **kwargs):
+
+        # initialize BaseClient
+        super().__init__(**kwargs)
+        
     def publish_profile(self, profile, **kwargs):
         pass
         
