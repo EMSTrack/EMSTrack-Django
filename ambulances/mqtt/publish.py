@@ -5,10 +5,11 @@ from rest_framework.renderers import JSONRenderer
 
 from .client import BaseClient, MQTTException
 
-from ..models import Ambulance, Equipment, \
-    HospitalEquipment, Hospital
+from ambulances.models import Ambulance
+from ambulance.serializers import AmbulanceSerializer
 
-from ..serializers import AmbulanceSerializer, HospitalSerializer, \
+from hospital.models import Equipment, HospitalEquipment, Hospital
+from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
 from login.serializers import ExtendedProfileSerializer
