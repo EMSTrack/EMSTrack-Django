@@ -18,8 +18,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
 from rest_framework.decorators import detail_route
 
-from .models import Ambulance, Call, Hospital, \
-    HospitalEquipment, Base, AmbulanceRoute
+from .models import Ambulance, Call, Base, AmbulanceRoute
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 

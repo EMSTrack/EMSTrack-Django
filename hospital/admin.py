@@ -4,9 +4,8 @@ from django.contrib.auth.models import User
 
 # Register your models here.
 
-from .models import Ambulance, Call, Region
+from .models import Hospital, Equipment, HospitalEquipment
 
-admin.site.register(Ambulance)
-
-admin.site.register(Region)
-admin.site.register(Call)
+admin.site.register(Hospital)
+admin.site.register(Equipment)
+admin.site.register(HospitalEquipment)

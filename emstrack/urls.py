@@ -22,7 +22,9 @@ from rest_framework_swagger.views import get_swagger_view
 
 from login.viewsets import ProfileViewSet
 
-from ambulances.viewsets import AmbulanceViewSet, HospitalViewSet, HospitalEquipmentViewSet
+from ambulances.viewsets import AmbulanceViewSet
+
+from hospital.viewsets import HospitalViewSet, HospitalEquipmentViewSet
 
 schema_view = get_swagger_view(title='EMSTrack API')
 
