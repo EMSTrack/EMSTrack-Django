@@ -21,6 +21,7 @@ class MessagePublishClient():
     def __init__(self, **kwargs):
 
         # initialize BaseClient
+        print('MessagePublishClient')
         super().__init__(**kwargs)
         
     def publish_profile(self, profile, **kwargs):
@@ -54,6 +55,7 @@ class PublishClient(BaseClient, MessagePublishClient):
     def __init__(self, **kwargs):
 
         # initialize BaseClient
+        print('PublishClient')
         super().__init__(**kwargs)
     
     def on_disconnect(self, client, userdata, rc):
@@ -126,6 +128,8 @@ class SingletonPublishClient(PublishClient):
 
     def __init__(self, **kwargs):
 
+        print('SingletonPublishClient')
+        
         # Makes sure it is a singleton
         self.__dict__ = self._shared_state
 
