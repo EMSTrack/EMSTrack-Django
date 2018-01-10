@@ -628,6 +628,8 @@ class TestMQTTSubscribe(MyTestCase):
 
         self.is_subscribed(client)
 
+    def _test(self):
+        
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
