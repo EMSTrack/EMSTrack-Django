@@ -54,6 +54,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
 
+        time.sleep(1)
+        
         # saving persistence file
         retval = subprocess.run(["mv",
                                  "-f", 
@@ -101,6 +103,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
         
+        time.sleep(1)
+        
         # remove test configuration file
         retval = subprocess.run(["mv",
                                  "/etc/mosquitto/conf.d/test.conf",
@@ -124,7 +128,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "start"])
         
-
+        time.sleep(1)
+        
     @classmethod
     def setUpTestData(cls):
 
