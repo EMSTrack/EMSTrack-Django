@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import RedirectView
+from django.contrib.auth.decorators import login_required, permission_required
 
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
@@ -47,7 +48,7 @@ urlpatterns = [
 
     # Router API urls
     url(r'^api/', include(router.urls)),
-    url(r'^docs/', schema_view),
+    url(r'^docs/', login_required(schema_view)),
 
     # ambulances
     url(r'^ambulances/', include('ambulances.urls')),
