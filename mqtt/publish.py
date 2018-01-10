@@ -158,7 +158,8 @@ def get_client():
         # try to connect
         print('Connecting to MQTT brocker...')
         client = SingletonPublishClient(broker, stdout, style,
-                                        verbosity=1, debug=True)
+                                        verbosity=1,
+                                        debug=False)
 
         # wait for connection
         while not client.connected:
