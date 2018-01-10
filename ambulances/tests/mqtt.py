@@ -12,8 +12,9 @@ from django.core.management.color import color_style, no_style
 from ambulances.mqtt.client import BaseClient, MQTTException
 
 from ambulances.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, \
-    Hospital, \
+    AmbulanceStatus, AmbulanceCapability
+
+from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
 from login.models import AmbulancePermission, HospitalPermission
