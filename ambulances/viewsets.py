@@ -29,6 +29,24 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
         
         serializer.save(updated_by=self.request.user)
 
+# AmbulancePermission
+
+class AmbulancePermissionViewSet(BasePermissionViewSet):
+
+    filter_field = 'id'
+    profile_field = 'ambulances'
+    profile_values = 'ambulance_id'
+    queryset = Ambulance.objects.all()
+    
+# HospitalPermission
+
+class HospitalPermissionViewSet(BasePermissionViewSet):
+    
+    filter_field = 'id'
+    profile_field = 'hospitals'
+    profile_values = 'hospital_id'
+    queryset = Hospital.objects.all()
+    
 # Ambulance viewset
 
 class AmbulanceViewSet(mixins.ListModelMixin,
