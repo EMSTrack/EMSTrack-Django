@@ -25,7 +25,7 @@ from hospital.serializers import HospitalSerializer, \
 
 from util.test import date2iso, point2str
 
-from login.tests.setup import TestSetup
+from login.tests.setup_data import TestSetup
 
 class TestAmbulanceGetList(TestSetup):
 
