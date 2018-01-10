@@ -19,12 +19,11 @@ from rest_framework import permissions
 from rest_framework.decorators import detail_route
 
 from .models import Ambulance, Call, Hospital, \
-    HospitalEquipment, Base, AmbulanceRoute, \
-    Profile
+    HospitalEquipment, Base, AmbulanceRoute
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
-from .serializers import ProfileSerializer, AmbulanceSerializer
+from .serializers import AmbulanceSerializer
 
 # Django views
                 
