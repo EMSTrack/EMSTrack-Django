@@ -42,8 +42,24 @@ class MessagePublishClient():
     def remove_hospital_equipment(self, hospital, **kwargs):
         pass
 
+# Uses Alex Martelli's Borg for making PublishClient act like a singleton
+
 class PublishClient(MessagePublishClient, BaseClient):
 
+    _shared_state = {}
+
+    def __init__(self, **kwargs):
+
+        # Makes sure it is a singleton
+        self.__dict__ = self._shared_state
+
+        # Do not initialize if already initialized
+        if not self.__dict__ == {}:
+            return
+
+        # initialize BaseClient
+        super().__init__(**kwargs)
+    
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
