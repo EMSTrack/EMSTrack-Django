@@ -22,10 +22,17 @@ from rest_framework_swagger.views import get_swagger_view
 
 schema_view = get_swagger_view(title='Pastebin API')
 
+from login.viewsets import ProfileViewSet
+
 router = routers.DefaultRouter()
+
+router.register(r'user',
+                ProfileViewSet)
 
 urlpatterns = [
     #url(r'^', include('drf_autodocs.urls')),
+    # Router API urls
+    url(r'^api/', include(router.urls)),
     url(r'^docs/', schema_view),
     url(r'^ambulances/', include('ambulances.urls')),
     url(r'^auth/', include('login.urls')),
@@ -33,5 +40,3 @@ urlpatterns = [
     url(r'^$', RedirectView.as_view(url='http://cruzroja.ucsd.edu/wiki')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
-
-urlpatterns += router.urls
