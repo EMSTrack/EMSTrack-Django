@@ -3,6 +3,8 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from login.models import Profile, AmbulancePermission, HospitalPermission
+
 from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
 
