@@ -22,7 +22,7 @@ class LoginView(auth_views.LoginView):
 
 # logout
 class LogoutView(auth_views.LogoutView):
-     next_page = '/ambulances'
+     next_page = '/ambulance'
 
 # MQTT login views
 
