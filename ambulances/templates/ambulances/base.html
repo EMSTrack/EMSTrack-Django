@@ -39,12 +39,12 @@
       {% endif %}
       <ul class="nav navbar-nav navbar-right">
 	{% if user.is_authenticated %}
-        <li><a href="/aauth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>
-        <li><a href="/aauth/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout, {{request.user.first_name}}</a>
+        <li><a href="/auth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>
+        <li><a href="/auth/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout, {{request.user.first_name}}</a>
         </li>
 	{% else %}
-	<li><a href="/aauth/signup"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-	<li><a href="/aauth/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+	<li><a href="/auth/signup"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
+	<li><a href="/auth/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
 	{% endif %}
       </ul>
     </div>
