@@ -15,8 +15,8 @@ import json
 from login.models import AmbulancePermission, HospitalPermission
 
 from ambulances.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, \
-from ambulances.serializers import AmbulanceSerializer,
+    AmbulanceStatus, AmbulanceCapability
+from ambulances.serializers import AmbulanceSerializer
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
