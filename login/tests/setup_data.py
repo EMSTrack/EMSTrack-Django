@@ -115,13 +115,13 @@ class TestSetupData():
             updated_by=cls.u1)
         
         # add hospitals to users
-        cls.u2.profile.hospitals.add(
+        cls.u1.profile.hospitals.add(
             HospitalPermission.objects.create(hospital=cls.h1,
                                               can_write=True),
             HospitalPermission.objects.create(hospital=cls.h3)
         )
         
-        cls.u3.profile.hospitals.add(
+        cls.u2.profile.hospitals.add(
             HospitalPermission.objects.create(hospital=cls.h1),
             HospitalPermission.objects.create(hospital=cls.h2,
                                               can_write=True)
