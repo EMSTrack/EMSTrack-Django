@@ -9,7 +9,7 @@ from ambulances.models import Ambulance, \
     Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from .models Profile, AmbulancePermission, HospitalPermission
+from .models import Profile, AmbulancePermission, HospitalPermission
 
 from .serializers import ProfileSerializer, \
     AmbulanceSerializer, ExtendedProfileSerializer
