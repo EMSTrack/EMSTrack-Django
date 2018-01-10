@@ -9,8 +9,9 @@ from ..models import Ambulance, Equipment, \
     HospitalEquipment, Hospital
 
 from ..serializers import AmbulanceSerializer, HospitalSerializer, \
-    HospitalEquipmentSerializer, EquipmentSerializer, \
-    ExtendedProfileSerializer
+    HospitalEquipmentSerializer, EquipmentSerializer
+
+from login.serializers import ExtendedProfileSerializer
 
 # MessagePublishClient class
 
