@@ -12,17 +12,16 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
-from ambulances.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, \
-    Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
-
 from login.models import AmbulancePermission, HospitalPermission
 
-from ambulances.serializers import AmbulanceSerializer, \
-    HospitalSerializer, HospitalEquipmentSerializer, \
-    EquipmentSerializer
+from ambulances.models import Ambulance, \
+    AmbulanceStatus, AmbulanceCapability, \
+from ambulances.serializers import AmbulanceSerializer,
 
+from hospital.models import Hospital, \
+    Equipment, HospitalEquipment, EquipmentType
+from hospital.serializers import HospitalSerializer, \
+    HospitalEquipmentSerializer, EquipmentSerializer
 
 def date2iso(date):
     if date is not None:
