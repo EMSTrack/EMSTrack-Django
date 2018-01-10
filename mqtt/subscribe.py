@@ -63,12 +63,12 @@ class SubscribeClient(BaseClient):
         # parse topic
         values = msg.topic.split('/')
 
-        print('values = {}'.format(values))
+        #print('values = {}'.format(values))
         
         try:
 
             # retrieve user
-            print(User.objects.all())
+            #print(User.objects.all())
             user = User.objects.get(username=values[1])
 
         except ObjectDoesNotExist:
@@ -85,7 +85,6 @@ class SubscribeClient(BaseClient):
         except Exception as e:
 
             # TODO: send message to user
-            print(e)
             self.stdout.write(
                 self.style.ERROR("*> JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
             return

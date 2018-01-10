@@ -116,7 +116,7 @@ class SingletonPublishClient(PublishClient):
 
     def __init__(self, *args, **kwargs):
 
-        print('SingletonPublishClient')
+        #print('SingletonPublishClient')
         
         # Makes sure it is a singleton
         self.__dict__ = self._shared_state
@@ -173,7 +173,7 @@ def get_client():
 
     except Exception as e:
 
-        print('Exception {}'.format(e))
+        #print('Exception {}'.format(e))
         print('Could not connect to MQTT brocker. Using dummy client...')
 
         client = MessagePublishClient()
