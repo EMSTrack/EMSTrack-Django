@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
 
-from ambulances.mqtt.client import BaseClient, MQTTException
+from mqtt.client import BaseClient, MQTTException
 
 from ambulances.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
