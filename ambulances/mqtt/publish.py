@@ -22,7 +22,7 @@ class MessagePublishClient():
 
         # initialize BaseClient
         print('MessagePublishClient')
-        super().__init__(**kwargs)
+        super().__init__()
         
     def publish_profile(self, profile, **kwargs):
         pass
