@@ -46,20 +46,6 @@ class MessagePublishClient():
 
 class PublishClient(MessagePublishClient, BaseClient):
 
-    _shared_state = {}
-
-    def __init__(self, **kwargs):
-
-        # Makes sure it is a singleton
-        self.__dict__ = self._shared_state
-
-        # Do not initialize if already initialized
-        if not self.__dict__ == {}:
-            return
-
-        # initialize BaseClient
-        super().__init__(**kwargs)
-    
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
@@ -124,6 +110,24 @@ class PublishClient(MessagePublishClient, BaseClient):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name))
 
+class SingletonPublishClient(PublishClient):
+
+    _shared_state = {}
+
+    def __init__(self, **kwargs):
+
+        # Makes sure it is a singleton
+        self.__dict__ = self._shared_state
+
+        # Do not initialize if already initialized
+        if not self.__dict__ == {}:
+            print('*** SKIP INITIALIZATION ***')
+            return
+
+        # initialize BaseClient
+        super().__init__(**kwargs)
+
+        
 # to be used with the lazy constructor
         
 def get_client():
@@ -151,8 +155,8 @@ def get_client():
 
         # try to connect
         print('Connecting to MQTT brocker...')
-        client = PublishClient(broker, stdout, style,
-                               verbosity=1, debug=True)
+        client = SingletonPublishClient(broker, stdout, style,
+                                        verbosity=1, debug=True)
 
         # wait for connection
         while not client.connected:
@@ -166,6 +170,7 @@ def get_client():
 
     except Exception as e:
 
+        print('Exception {}'.format(e))
         print('Could not connect to MQTT brocker. Using dummy client...')
 
         client = MessagePublishClient()
