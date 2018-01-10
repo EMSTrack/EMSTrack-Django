@@ -10,9 +10,9 @@ from ambulances.mqtt.publish import PublishClient
 
 from django.contrib.auth.models import User
 
-from ambulances.models import Profile, \
-    Ambulance, Hospital, HospitalEquipment
-
+from login.models import Profile
+    
+from ambulances.models import Ambulance, Hospital, HospitalEquipment
 
 class Client(PublishClient):
 
