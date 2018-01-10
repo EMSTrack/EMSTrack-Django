@@ -6,7 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from .client import BaseClient, MQTTException
 
 from ambulances.models import Ambulance
-from ambulance.serializers import AmbulanceSerializer
+from ambulances.serializers import AmbulanceSerializer
 
 from hospital.models import Equipment, HospitalEquipment, Hospital
 from hospital.serializers import HospitalSerializer, \
