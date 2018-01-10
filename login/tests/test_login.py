@@ -9,8 +9,9 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 
 from ambulances.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, \
-    Hospital, \
+    AmbulanceStatus, AmbulanceCapability
+
+from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
 from ..models import Profile, AmbulancePermission, HospitalPermission
