@@ -3,7 +3,7 @@
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
-from ambulances.mqtt.subscribe import SubscribeClient
+from mqtt.subscribe import SubscribeClient
 
 class Command(BaseCommand):
     
