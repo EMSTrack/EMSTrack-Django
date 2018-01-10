@@ -20,11 +20,11 @@ from rest_framework import routers
 
 from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title='Pastebin API')
-
 from login.viewsets import ProfileViewSet
 
 from ambulances.viewsets import AmbulanceViewSet, HospitalViewSet, HospitalEquipmentViewSet
+
+schema_view = get_swagger_view(title='EMSTrack API')
 
 router = routers.DefaultRouter()
 
@@ -42,13 +42,20 @@ router.register(r'hospital/(?P<id>[0-9]+)/equipment',
                 HospitalEquipmentViewSet)
 
 urlpatterns = [
-    #url(r'^', include('drf_autodocs.urls')),
     # Router API urls
     url(r'^api/', include(router.urls)),
     url(r'^docs/', schema_view),
+
+    # ambulances
     url(r'^ambulances/', include('ambulances.urls')),
+
+    # login
     url(r'^auth/', include('login.urls')),
+
+    # admin
     url(r'^admin/', admin.site.urls),
+    
     url(r'^$', RedirectView.as_view(url='http://cruzroja.ucsd.edu/wiki')),
+    
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
