@@ -114,7 +114,7 @@ class SingletonPublishClient(PublishClient):
 
     _shared_state = {}
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         print('SingletonPublishClient')
         
@@ -127,7 +127,7 @@ class SingletonPublishClient(PublishClient):
             return
 
         # initialize BaseClient
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
 
         
 # to be used with the lazy constructor
