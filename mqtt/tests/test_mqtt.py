@@ -342,7 +342,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         
         test_client = MQTTTestClient(broker, sys.stdout, style,
                                      verbosity = 1, check_payload = False,
-                                     debug=True)
+                                     debug=False)
         self.is_connected(test_client)
 
         # subscribe to ambulance/+/data
@@ -427,7 +427,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                            sys.stdout,
                                            style,
                                            verbosity = 1,
-                                           debug = True)
+                                           debug=False)
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
 
@@ -438,7 +438,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         test_client = MQTTTestClient(broker, sys.stdout, style,
                                      verbosity = 1, check_payload = False,
-                                     debug = True)
+                                     debug=False)
         self.is_connected(test_client)
 
         # publish messages that change database
