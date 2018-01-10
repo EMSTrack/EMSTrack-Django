@@ -12,8 +12,7 @@ from ambulances.models import Ambulance, \
 
 from ..models import Profile, AmbulancePermission, HospitalPermission
 
-from ..serializers import ProfileSerializer, \
-    AmbulanceSerializer, ExtendedProfileSerializer
+from ..serializers import ProfileSerializer, ExtendedProfileSerializer
 
 
 from ..views import LoginView, SignupView, LogoutView, \
