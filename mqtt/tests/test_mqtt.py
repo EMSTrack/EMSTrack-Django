@@ -422,25 +422,20 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                      debug=False)
         self.is_connected(test_client)
 
-        # retrive whatever is there already
+        
+        # Modify ambulance
+        
+        # retrive message that is there already due to creation
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
 
         # process messages
         self.loop(test_client)
         
-        # publish messages that change database
-        topics = ('user/admin/ambulance/{}/data'.format(self.a1.id),
-                  'user/admin/hospital/{}/data'.format(self.h1.id),
-                  'user/admin/hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.name))
-
         # change ambulance
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        print('##################################')
-        
-        test_client.publish(topics[0],
+        test_client.publish('ambulance/{}/data'.format(self.a1.id),
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
@@ -457,11 +452,86 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
 
+        # verify change
+        obj = Ambulance.objects.get(id = self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+
+        
+        # Modify hospital
+        
+        # retrive message that is there already due to creation
+        test_client.expect('hospital/{}/data'.format(self.h1.id))
+
+        # process messages
+        self.loop(test_client)
+        
+        # change hospital
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'no comments')
+
+        test_client.publish('hospital/{}/data'.format(self.h1.id),
+                            json.dumps({
+                                'comment': 'no more comments',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client)
+
+        # expect update once
+        test_client.expect('hospital/{}/data'.format(self.h1.id))
+        
+        # loop subscribe_client
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+
+        # verify change
+        obj = Hospital.objects.get(id = self.h1.id)
+        self.assertEqual(obj.comment, 'no more change')
+
+
+        # Modify hospital equipment
+        
+        # retrive message that is there already due to creation
+        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                                  self.e1.name))
+
+        # process messages
+        self.loop(test_client)
+        
+        # change hospital
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'True')
+
+        test_client.publish('hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                                  self.e1.name)),
+                            json.dumps({
+                                'value': 'False',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client)
+
+        # expect update once
+        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                                  self.e1.name))
+        
+        # loop subscribe_client
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+
+        # verify change
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'False')
+
+
         # disconnect
         test_client.wait()
         subscribe_client.wait()
 
-        # verify change
-        obj = Ambulance.objects.get(id = self.a1.id)
-        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
