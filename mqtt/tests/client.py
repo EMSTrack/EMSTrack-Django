@@ -39,7 +39,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             print('returncode = {}'.format(retval.returncode))
             success = retval.returncode == 0
 
-        cls.assertEqual(not success, False)
+        cls.assertEqual(success, True)
 
     @classmethod
     def run_until_fail(cls, args, **kwargs):
@@ -58,7 +58,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             print('returncode = {}'.format(retval.returncode))
             success = retval.returncode == 0
 
-        cls.assertEqual(not success, True)
+        cls.assertEqual(success, False)
         
     @classmethod
     def setUpClass(cls):
