@@ -29,7 +29,47 @@ from .client import MQTTTestCase, MQTTTestClient
 from ..client import MQTTException
 from ..subscribe import SubscribeClient
             
-class TestMQTT1(MQTTTestCase):
+class TestMQTT():
+
+    def is_connected(self, client, MAX_TRIES = 10):
+
+        # connected?
+        k = 0
+        while not client.connected and k < MAX_TRIES:
+            k += 1
+            client.loop()
+
+        self.assertEqual(client.connected, True)
+        
+    def is_subscribed(self, client, MAX_TRIES = 10):
+
+        client.loop_start()
+        
+        # connected?
+        k = 0
+        while len(client.subscribed) and k < MAX_TRIES:
+            k += 1
+            time.sleep(1)
+            
+        client.loop_stop()
+        
+        self.assertEqual(len(client.subscribed), 0)
+    
+    def loop(self, client, MAX_TRIES = 10):
+
+        client.loop_start()
+        
+        # connected?
+        k = 0
+        while not client.done() and k < MAX_TRIES:
+            k += 1
+            time.sleep(1)
+            
+        client.loop_stop()
+        
+        self.assertEqual(client.done(), True)
+        
+class TestMQTT1(TestMQTT, MQTTTestCase):
 
     def test(self):
 
