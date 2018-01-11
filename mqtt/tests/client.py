@@ -418,6 +418,11 @@ class MQTTTestClient(BaseClient):
         # did publish?
         super().on_publish(client, userdata, mid)
         self.publishing -=1 
+
+        if self.debug:
+            print('> Just published mid={}[publishing={}]'.format(mid,
+                                                                  self.publishing))
+
         
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
