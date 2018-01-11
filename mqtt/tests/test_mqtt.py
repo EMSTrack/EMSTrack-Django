@@ -427,6 +427,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # retrive message that is there already due to creation
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
@@ -461,6 +462,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # retrive message that is there already due to creation
         test_client.expect('hospital/{}/data'.format(self.h1.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
@@ -496,6 +498,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # retrive message that is there already due to creation
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
