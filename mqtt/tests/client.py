@@ -155,7 +155,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "status"])
 
 
-        time.sleep(2)
+        time.sleep(5)
         
         cls.setUpTestData()
 
@@ -205,7 +205,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "mosquitto",
                                 "status"])
         
-        time.sleep(2)
+        time.sleep(5)
         
     @classmethod
     def setUpTestData(cls):
