@@ -29,7 +29,7 @@ from .client import MQTTTestCase, MQTTTestClient
 from ..client import MQTTException
 from ..subscribe import SubscribeClient
             
-class TestMQTTSeed(TestMQTT, MQTTTestCase):
+class TestMQTTSeed(MQTTTestCase):
 
     def test_mqttseed(self):
 
