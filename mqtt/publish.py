@@ -44,25 +44,41 @@ class MessagePublishClient():
 
 class PublishClient(BaseClient):
 
+    def __init__(self, broker, **kwargs):
+
+        # call super
+        super().__init__(broker, **kwargs)
+
+        # set as active
+        self.active = True
+    
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
             raise MQTTException('Disconnected',
                                 rc)
+        # call super
+        super().on_disconnect(self, client, userdata, rc)
     
     def publish_topic(self, topic, serializer, qos=0, retain=False):
-        # Publish to topic
-        self.publish(topic,
-                     JSONRenderer().render(serializer.data),
-                     qos=qos,
-                     retain=retain)
+
+        if self.active:
+
+            # Publish to topic
+            self.publish(topic,
+                         JSONRenderer().render(serializer.data),
+                         qos=qos,
+                         retain=retain)
         
     def remove_topic(self, topic, serializer, qos=0):
-        # Publish null to retained topic
-        self.publish(topic,
-                     null,
-                     qos=qos,
-                     retain=True)
+
+        if self.active:
+        
+            # Publish null to retained topic
+            self.publish(topic,
+                         null,
+                         qos=qos,
+                         retain=True)
 
     def publish_profile(self, profile, qos=2, retain=True):
         self.publish_topic('user/{}/profile'.format(profile.user.username),
@@ -114,7 +130,7 @@ class SingletonPublishClient(PublishClient):
 
     _shared_state = {}
 
-    def __init__(self, broker, **kwargs):
+    def __init__(self, **kwargs):
 
         # Makes sure it is a singleton
         self.__dict__ = self._shared_state
@@ -125,16 +141,47 @@ class SingletonPublishClient(PublishClient):
             return
 
         # initialization
+        from django.conf import settings
+        
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        broker.update(settings.MQTT)
         
         # override client_id
         broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
         
-        # initialize BaseClient
-        super().__init__(broker, **kwargs)
+        try:
+
+            # try to connect
+            print('Connecting to MQTT brocker...')
+        
+            # initialize PublishClient
+            super().__init__(broker, **kwargs)
+
+            # wait for connection
+            while not self.connected:
+                self.loop()
+
+            # start loop
+            self.loop_start()
+
+            # register atexit handler to make sure it disconnects at exit
+            atexit.register(self.disconnect)
+
+        except MQTTException as e:
+
+            self.active = False
+            
+            print('Failed connect to MQTT brocker. Will not publish updates to MQTT...')
+            print('Generated exception: {}'.format(e))
         
 # to be used with the lazy constructor
         
-def get_client():
+def old_get_client():
 
     # Start client
     from django.conf import settings
@@ -172,6 +219,21 @@ def get_client():
         print('Generated exception: {}'.format(e))
 
         client = MessagePublishClient()
+        
+    return client
+
+
+def get_client():
+
+    try:
+
+        # try to create
+        client = SingletonPublishClient(debug=False)
+
+    except Exception as e:
+
+        client = MessagePublishClient()
+        print('Generated exception: {}'.format(e))
         
     return client
 
