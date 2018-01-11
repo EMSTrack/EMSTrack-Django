@@ -179,20 +179,3 @@ class SingletonPublishClient(PublishClient):
             print('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
             print('Generated exception: {}'.format(e))
         
-# to be used with the lazy constructor
-
-def get_client():
-
-    try:
-
-        # try to create
-        client = SingletonPublishClient(debug=False)
-
-    except Exception as e:
-
-        client = MessagePublishClient()
-        print('Generated exception: {}'.format(e))
-        
-    return client
-
-

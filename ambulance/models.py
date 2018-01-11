@@ -11,17 +11,6 @@ DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
 
 from django.contrib.auth.models import User
 
-# lazy client property
-client = None
-def get_client():
-
-    global client
-    
-    if not client:
-        from mqtt import publish
-        client = publish.get_client()
-    return client
-
 # User and ambulance location models
 
 # Ambulance model
@@ -75,7 +64,8 @@ class Ambulance(models.Model):
         SingletonPublishClient().publish_ambulance(self)
 
     def delete(self, *args, **kwargs):
-        get_client().remove_ambulance(self)
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_ambulance(self)
         super().delete(*args, **kwargs) 
     
     def __str__(self):
