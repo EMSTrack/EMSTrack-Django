@@ -506,7 +506,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'True')
 
         test_client.publish('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.name)),
+                                                                  self.e1.name),
                             json.dumps({
                                 'value': 'False',
                             }), qos=0)
