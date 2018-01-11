@@ -8,17 +8,6 @@ from django.contrib.gis.geos import Point
 
 from django.contrib.auth.models import User
 
-# lazy client property
-client = None
-def get_client():
-
-    global client
-    
-    if not client:
-        from mqtt import publish
-        client = publish.get_client()
-    return client
-
 # Hospital model
 
 class Hospital(models.Model):
@@ -36,10 +25,12 @@ class Hospital(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
-        get_client().publish_hospital(self)
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_hospital(self)
 
     def delete(self, *args, **kwargs):
-        get_client().remove_hospital(self)
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_hospital(self)
         super().delete(*args, **kwargs)
         
     def __str__(self):
@@ -92,13 +83,15 @@ class HospitalEquipment(models.Model):
     def save(self, *args, **kwargs):
         created = self.pk is None
         super().save(*args, **kwargs) 
-        client = get_client()
+        from mqtt.publish import SingletonPublishClient
+        client = SingletonPublishClient()
         client.publish_hospital_equipment(self)
         if created:
             client.publish_hospital_metadata(self.hospital)
 
     def delete(self, *args, **kwargs):
-        client = get_client()
+        from mqtt.publish import SingletonPublishClient
+        client = SingletonPublishClient()
         client.remove_hospital_equipment(self)
         client.publish_hospital_metadata(self.hospital)
         super().delete(*args, **kwargs)
