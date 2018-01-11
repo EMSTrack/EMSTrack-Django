@@ -1,4 +1,4 @@
-import subprocess, time, os, sys, re
+import subprocess, time, os, sys, re, pathlib
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
@@ -98,14 +98,32 @@ class MQTTTestCase(StaticLiveServerTestCase):
         cls.run_until_fail(["service",
                             "mosquitto",
                             "status"])
-            
-        # saving persistence file
-        retval = subprocess.run(["mv",
-                                 "/var/lib/mosquitto/mosquitto.db",
-                                 "/var/lib/mosquitto/mosquitto.db.org"])
+
+        try:
+
+            # saving persistence file
+            os.rename("/var/lib/mosquitto/mosquitto.db",
+                      "/var/lib/mosquitto/mosquitto.db.bak")
+
+        except:
+            pass
+
+        # Does configuration exist?
+        config = Path("/etc/mosquitto/conf.d/default.conf")
+        if not config.is_file():
+
+            # Can't find configuration, can we recover from backup?
+            try:
+
+                # move current configuration file
+                os.rename("/etc/mosquitto/conf.d/default.conf.bak",
+                          "/etc/mosquitto/conf.d/default.conf")
+
+            except:
+                raise Exception("Can't find /etc/mosquitto/conf.d/default.conf.")
         
         # create test configuration file
-        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
+            with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
             
             # change default host and port
             cat = subprocess.Popen(["cat",
@@ -117,9 +135,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  stdout=outfile)
             
         # move current configuration file
-        retval = subprocess.run(["mv",
-                                 "/etc/mosquitto/conf.d/default.conf",
-                                 "/etc/mosquitto/conf.d/default.conf.org"])
+        os.rename("/etc/mosquitto/conf.d/default.conf",
+                  "/etc/mosquitto/conf.d/default.conf.bak")
 
         print('>> Start mosquitto with test settings')
 
@@ -157,20 +174,21 @@ class MQTTTestCase(StaticLiveServerTestCase):
                              "status"])
         
         # remove test configuration file
-        retval = subprocess.run(["mv",
-                                 "/etc/mosquitto/conf.d/test.conf",
-                                 "/etc/mosquitto/conf.d/test.conf.org"])
+        os.rename("/etc/mosquitto/conf.d/test.conf",
+                  "/etc/mosquitto/conf.d/test.conf.bak")
         
         # restore current configuration file
-        retval = subprocess.run(["mv",
-                                 "/etc/mosquitto/conf.d/default.conf.org",
-                                 "/etc/mosquitto/conf.d/default.conf"])
+        os.rename("/etc/mosquitto/conf.d/default.conf.bak",
+                  "/etc/mosquitto/conf.d/default.conf")
 
-        # restore persistence file
-        retval = subprocess.run(["mv",
-                                 "/var/lib/mosquitto/mosquitto.db.org",
-                                 "/var/lib/mosquitto/mosquitto.db"])
-        
+        try:
+            
+            # restore persistence file
+            os.rename("/var/lib/mosquitto/mosquitto.db.bak",
+                      "/var/lib/mosquitto/mosquitto.db")
+        except:
+            pass
+            
         print('>> Starting mosquitto')
         
         # start mosquito server
