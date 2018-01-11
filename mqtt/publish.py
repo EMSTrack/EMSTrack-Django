@@ -174,6 +174,8 @@ def get_client():
 
         client = MessagePublishClient()
 
+        raise e
+        
     return client
 
 
