@@ -436,7 +436,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.id,
+        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
@@ -472,7 +472,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
 
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.id,
+        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
                                                               self.h1.id),
                             json.dumps({
                                 'comment': 'no more comments',
@@ -510,7 +510,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'True')
 
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.id,
+        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                            self.h1.id,
                                                                            self.e1.name),
                             json.dumps({
