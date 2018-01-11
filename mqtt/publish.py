@@ -157,7 +157,7 @@ class SingletonPublishClient(PublishClient):
         try:
 
             # try to connect
-            print('Connecting to MQTT brocker...')
+            print('>> Connecting to MQTT brocker...')
         
             # initialize PublishClient
             super().__init__(broker, **kwargs)
@@ -176,52 +176,10 @@ class SingletonPublishClient(PublishClient):
 
             self.active = False
             
-            print('Failed connect to MQTT brocker. Will not publish updates to MQTT...')
+            print('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
             print('Generated exception: {}'.format(e))
         
 # to be used with the lazy constructor
-        
-def old_get_client():
-
-    # Start client
-    from django.conf import settings
-
-    # Instantiate broker
-    broker = {
-        'HOST': 'localhost',
-        'PORT': 1883,
-        'KEEPALIVE': 60,
-        'CLEAN_SESSION': True
-    }
-
-    broker.update(settings.MQTT)
-    broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
-
-    try:
-
-        # try to connect
-        print('Connecting to MQTT brocker...')
-        client = SingletonPublishClient(broker, debug=False)
-
-        # wait for connection
-        while not client.connected:
-            client.loop()
-
-        # start loop
-        client.loop_start()
-
-        # register atexit handler to make sure it disconnects at exit
-        atexit.register(client.disconnect)
-
-    except Exception as e:
-
-        print('Could not connect to MQTT brocker. Using dummy client...')
-        print('Generated exception: {}'.format(e))
-
-        client = MessagePublishClient()
-        
-    return client
-
 
 def get_client():
 
