@@ -37,7 +37,7 @@ class SubscribeClient(BaseClient):
                                          self.on_hospital)
 
         # hospital equipment handler
-        self.client.message_callback_add('hospital/+/equipment/+/data',
+        self.client.message_callback_add('user/+/hospital/+/equipment/+/data',
                                          self.on_hospital_equipment)
         
         # call handler
