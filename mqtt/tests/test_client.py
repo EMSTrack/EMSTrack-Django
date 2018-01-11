@@ -33,6 +33,18 @@ class TestMQTT1(MQTTTestCase):
 
     def test(self):
 
+        import sys
+        from django.core.management.base import OutputWrapper
+        from django.core.management.color import color_style, no_style
+        
+        # seed
+        from django.core import management
+    
+        management.call_command('mqttseed',
+                                verbosity=1)
+
+        print('>> Processing messages...')
+        
         self.assertEqual(True, True)
 
 class TestMQTT2(MQTTTestCase):
