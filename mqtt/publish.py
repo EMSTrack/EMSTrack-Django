@@ -169,8 +169,8 @@ def get_client():
 
     except Exception as e:
 
-        #print('Exception {}'.format(e))
         print('Could not connect to MQTT brocker. Using dummy client...')
+        print('Generated exception: {}'.format(e))
 
         client = MessagePublishClient()
 
