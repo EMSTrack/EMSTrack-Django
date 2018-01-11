@@ -101,7 +101,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
             
         # saving persistence file
         retval = subprocess.run(["mv",
-                                 "-f", 
                                  "/var/lib/mosquitto/mosquitto.db",
                                  "/var/lib/mosquitto/mosquitto.db.org"])
         
@@ -135,7 +134,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "status"])
 
 
-        time.sleep(1)
+        time.sleep(2)
         
         cls.setUpTestData()
 
@@ -169,7 +168,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
         # restore persistence file
         retval = subprocess.run(["mv",
-                                 "-f", 
                                  "/var/lib/mosquitto/mosquitto.db.org",
                                  "/var/lib/mosquitto/mosquitto.db"])
         
@@ -185,7 +183,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "mosquitto",
                                 "status"])
         
-        time.sleep(1)
+        time.sleep(2)
         
     @classmethod
     def setUpTestData(cls):
