@@ -106,7 +106,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                       "/var/lib/mosquitto/mosquitto.db.bak")
 
         except:
-            pass
+            print("* * * CAN'T BACKUP MOSQUITTO PERSISTENCE FILE * * *")
 
         # Does configuration exist?
         config = Path("/etc/mosquitto/conf.d/default.conf")
@@ -119,20 +119,22 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 os.rename("/etc/mosquitto/conf.d/default.conf.bak",
                           "/etc/mosquitto/conf.d/default.conf")
 
+                print('* * * MOSQUITTO/DEFAULT.CONF RECOVERED * * *')
+                
             except:
                 raise Exception("Can't find /etc/mosquitto/conf.d/default.conf.")
         
         # create test configuration file
             with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
             
-            # change default host and port
-            cat = subprocess.Popen(["cat",
-                                    "/etc/mosquitto/conf.d/default.conf"],
-                                   stdout= subprocess.PIPE)
-            sed = subprocess.run(["sed",
-                                  "s/8000/{}/".format(port)],
-                                 stdin=cat.stdout,
-                                 stdout=outfile)
+                # change default host and port
+                cat = subprocess.Popen(["cat",
+                                        "/etc/mosquitto/conf.d/default.conf"],
+                                       stdout= subprocess.PIPE)
+                sed = subprocess.run(["sed",
+                                      "s/8000/{}/".format(port)],
+                                     stdin=cat.stdout,
+                                     stdout=outfile)
             
         # move current configuration file
         os.rename("/etc/mosquitto/conf.d/default.conf",
@@ -187,7 +189,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             os.rename("/var/lib/mosquitto/mosquitto.db.bak",
                       "/var/lib/mosquitto/mosquitto.db")
         except:
-            pass
+            print("* * * CAN'T RECOVER MOSQUITTO PERSISTENCE FILE * * *")
             
         print('>> Starting mosquitto')
         
