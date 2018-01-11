@@ -1,4 +1,5 @@
-import subprocess, time, os, sys, re, pathlib
+import subprocess, time, os, sys, re
+from pathlib import Path
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
