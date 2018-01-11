@@ -162,7 +162,7 @@ class BaseClient():
             raise MQTTException('Unknown subscribe mid', mid)
 
     def on_disconnect(self, client, userdata, rc):
-        print('>> disconnecting reason {}'.format(rc))
+        # print('>> disconnecting reason {}'.format(rc))
         self.connected = False
         
     # disconnect

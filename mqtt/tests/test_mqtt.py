@@ -139,7 +139,8 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Done?
         self.loop(client)
-
+        client.wait()
+        
         # Repeat with same client
         
         client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
@@ -182,6 +183,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Done?
         self.loop(client)
+        client.wait()
             
         # Repeat with same client and different qos
 
@@ -225,6 +227,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Done?
         self.loop(client)
+        client.wait()
 
         # repeat with another user
 
@@ -270,6 +273,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Done?
         self.loop(client)
+        client.wait()
 
         # repeat with another user
 
@@ -315,6 +319,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Done?
         self.loop(client)
+        client.wait()
 
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
@@ -340,24 +345,24 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
         
-        test_client = MQTTTestClient(broker, sys.stdout, style,
+        client = MQTTTestClient(broker, sys.stdout, style,
                                      verbosity = 1, check_payload = False,
                                      debug=False)
-        self.is_connected(test_client)
+        self.is_connected(client)
 
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                          self.e1.name))
-        [test_client.expect(t) for t in topics]
-        self.is_subscribed(test_client)
+        [client.expect(t) for t in topics]
+        self.is_subscribed(client)
 
         # process messages
-        self.loop(test_client)
+        self.loop(client)
 
         # expect more ambulance
-        test_client.expect(topics[0])
+        client.expect(topics[0])
 
         # modify data in ambulance and save should trigger message
         obj = Ambulance.objects.get(id = self.a1.id)
@@ -366,14 +371,14 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
         
         # process messages
-        self.loop(test_client)
+        self.loop(client)
 
         # assert change
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
         # expect more hospital and equipment
-        [test_client.expect(t) for t in topics[1:]]
+        [client.expect(t) for t in topics[1:]]
 
         # modify data in hospital and save should trigger message
         obj = Hospital.objects.get(id = self.h1.id)
@@ -389,7 +394,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
         
         # process messages
-        self.loop(test_client)
+        self.loop(client)
+        client.wait()
         
         # assert changes
         obj = Hospital.objects.get(id=self.h1.id)
@@ -468,7 +474,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(test_client)
-        
+
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
         # verify change
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
