@@ -779,6 +779,8 @@ class TestMQTTSubscribe(MyTestCase):
 
         self.is_subscribed(client)
 
+        client.wait()
+        
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
@@ -807,6 +809,8 @@ class TestMQTTSubscribe(MyTestCase):
         # client doesn't know!
         self.is_subscribed(client)
 
+        client.wait()
+        
         # Start client as common user
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secret'
@@ -835,3 +839,4 @@ class TestMQTTSubscribe(MyTestCase):
         # client doesn't know!
         self.is_subscribed(client)
         
+        client.wait()
