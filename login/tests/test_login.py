@@ -647,15 +647,7 @@ class TestMQTTConnect(MyTestCase):
         
     def test_connect(self):
 
-        import sys
-        from django.core.management.base import OutputWrapper
-        from django.core.management.color import color_style, no_style
-        
         # Start client as admin
-        stdout = OutputWrapper(sys.stdout)
-        style = color_style()
-
-        # Instantiate broker
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
@@ -665,28 +657,19 @@ class TestMQTTConnect(MyTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
         
-        self.is_connected(MQTTTestClient(broker,
-                                         sys.stdout,
-                                         style,
-                                         verbosity = 1))
+        self.is_connected(MQTTTestClient(broker))
         
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
         
-        self.is_connected(MQTTTestClient(broker,
-                                         sys.stdout,
-                                         style,
-                                         verbosity = 1))
+        self.is_connected(MQTTTestClient(broker))
 
         # Start client as common user
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secret'
 
-        self.is_connected(MQTTTestClient(broker,
-                                         sys.stdout,
-                                         style,
-                                         verbosity = 1))
+        self.is_connected(MQTTTestClient(broker))
         
         # wrong username
         broker['USERNAME'] = 'testuser22'
@@ -694,10 +677,7 @@ class TestMQTTConnect(MyTestCase):
 
         with self.assertRaises(MQTTException):
         
-            self.is_connected(MQTTTestClient(broker,
-                                             sys.stdout,
-                                             style,
-                                             verbosity = 1))
+            self.is_connected(MQTTTestClient(broker))
             
         # wrong password
         broker['USERNAME'] = 'testuser2'
@@ -705,10 +685,7 @@ class TestMQTTConnect(MyTestCase):
 
         with self.assertRaises(MQTTException):
 
-            self.is_connected(MQTTTestClient(broker,
-                                             sys.stdout,
-                                             style,
-                                             verbosity = 1))
+            self.is_connected(MQTTTestClient(broker))
 
 class TestMQTTSubscribe(MyTestCase):
 
@@ -738,15 +715,7 @@ class TestMQTTSubscribe(MyTestCase):
     
     def test_subscribe(self):
 
-        import sys
-        from django.core.management.base import OutputWrapper
-        from django.core.management.color import color_style, no_style
-        
         # Start client as admin
-        stdout = OutputWrapper(sys.stdout)
-        style = color_style()
-
-        # Instantiate broker
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
@@ -757,9 +726,6 @@ class TestMQTTSubscribe(MyTestCase):
         broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
         
         client = MQTTTestClient(broker,
-                                sys.stdout,
-                                style,
-                                verbosity = 1,
                                 check_payload = False)
 
         self.is_connected(client)
@@ -786,9 +752,6 @@ class TestMQTTSubscribe(MyTestCase):
         broker['PASSWORD'] = 'top_secret'
 
         client = MQTTTestClient(broker,
-                                sys.stdout,
-                                style,
-                                verbosity = 1,
                                 check_payload = False)
 
         self.is_connected(client)
@@ -816,9 +779,6 @@ class TestMQTTSubscribe(MyTestCase):
         broker['PASSWORD'] = 'very_secret'
 
         client = MQTTTestClient(broker,
-                                sys.stdout,
-                                style,
-                                verbosity = 1,
                                 check_payload = False)
 
         self.is_connected(client)

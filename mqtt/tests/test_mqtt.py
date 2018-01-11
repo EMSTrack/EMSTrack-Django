@@ -317,14 +317,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
     def test_mqtt_publish(self):
 
-        import sys
-        from django.core.management.base import OutputWrapper
-        from django.core.management.color import color_style, no_style
-
         # Start client as admin
-        stdout = OutputWrapper(sys.stdout)
-        style = color_style()
-
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
@@ -401,14 +394,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
     
     def test_mqtt_subscribe(self):
 
-        import sys
-        from django.core.management.base import OutputWrapper
-        from django.core.management.color import color_style, no_style
-
         # Start client as admin
-        stdout = OutputWrapper(sys.stdout)
-        style = color_style()
-
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
