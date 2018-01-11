@@ -25,7 +25,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
     def run_until_success(self, *args, **kwargs):
 
         # parameters
-        MAX_TRIES = kwargs.pop('MAX_TRIES', 10),
+        MAX_TRIES = kwargs.pop('MAX_TRIES', 10)
         
         # keep trying 
         k = 0
@@ -42,7 +42,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
     def run_until_fail(self, *args, **kwargs):
 
         # parameters
-        MAX_TRIES = kwargs.pop('MAX_TRIES', 10),
+        MAX_TRIES = kwargs.pop('MAX_TRIES', 10)
         
         # keep trying 
         k = 0
