@@ -126,19 +126,17 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 raise Exception("Can't find /etc/mosquitto/conf.d/default.conf.")
         
         # create test configuration file
-            with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
+        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
             
-                # change default host and port
-                cat = subprocess.Popen(["cat",
-                                        "/etc/mosquitto/conf.d/default.conf"],
-                                       stdout= subprocess.PIPE)
-                sed = subprocess.run(["sed",
-                                      "s/8000/{}/".format(port)],
-                                     stdin=cat.stdout,
-                                     stdout=outfile)
+            # change default host and port
+            cat = subprocess.Popen(["cat",
+                                    "/etc/mosquitto/conf.d/default.conf"],
+                                   stdout= subprocess.PIPE)
+            sed = subprocess.run(["sed",
+                                  "s/8000/{}/".format(port)],
+                                 stdin=cat.stdout,
+                                 stdout=outfile)
 
-                cat.wait()
-                
         # move current configuration file
         os.rename("/etc/mosquitto/conf.d/default.conf",
                   "/etc/mosquitto/conf.d/default.conf.bak")
