@@ -392,7 +392,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
     
-    def test_mqtt_subscribe(self):
+    def test(self):
 
         # Start client as admin
         broker = {
@@ -431,6 +431,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # change ambulance
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        print('##################################')
         
         test_client.publish(topics[0],
                             json.dumps({
