@@ -91,7 +91,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
 
         # Wait for shutdown
-        self.run_until_fail(["service",
+        cls.run_until_fail(["service",
                              "mosquitto",
                              "status"])
         
@@ -126,7 +126,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "start"])
 
         # Wait for start
-        self.run_until_success(["service",
+        cls.run_until_success(["service",
                                 "mosquitto",
                                 "status"])
         
@@ -146,7 +146,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "stop"])
         
         # Wait for shutdown
-        self.run_until_fail(["service",
+        cls.run_until_fail(["service",
                              "mosquitto",
                              "status"])
         
@@ -174,7 +174,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "start"])
         
         # Wait for start
-        self.run_until_success(["service",
+        cls.run_until_success(["service",
                                 "mosquitto",
                                 "status"])
         
