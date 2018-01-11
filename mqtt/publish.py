@@ -125,7 +125,6 @@ class SingletonPublishClient(PublishClient):
             return
 
         # initialization
-        broker, stdout, style, verbosity = 1,
         
         # override client_id
         broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
