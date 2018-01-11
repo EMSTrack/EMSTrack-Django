@@ -29,8 +29,15 @@ from .client import MQTTTestCase, MQTTTestClient
 from ..client import MQTTException
 from ..subscribe import SubscribeClient
             
-class TestMQTTSeed(MQTTTestCase):
+class TestMQTT1(MQTTTestCase):
 
-    def test_mqttseed(self):
+    def test(self):
 
         self.assertEqual(True, True)
+
+class TestMQTT2(MQTTTestCase):
+
+    def test(self):
+
+        self.assertEqual(True, True)
+        
