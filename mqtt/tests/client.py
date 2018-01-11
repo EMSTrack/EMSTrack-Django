@@ -473,3 +473,8 @@ class MQTTTestClient(BaseClient):
         
         self.expecting += 1
         self.expecting_messages[topic].append(msg)
+
+    def on_disconnect(self, client, userdata, rc):
+        pass
+        # print('>> disconnecting reason {}'.format(rc))
+        

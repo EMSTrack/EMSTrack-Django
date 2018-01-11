@@ -140,7 +140,7 @@ class TestMQTT1(TestMQTT, MQTTTestCase):
         # Done?
         self.loop(client)
 
-        self.disconnect()
+        client.wait()
         
         # Repeat with same client
         
@@ -185,7 +185,7 @@ class TestMQTT1(TestMQTT, MQTTTestCase):
         # Done?
         self.loop(client)
         
-        self.disconnect()
+        client.wait()
         
 class TestMQTT2(MQTTTestCase):
 

@@ -3,7 +3,7 @@ import paho.mqtt.client as mqtt
 
 class MQTTException(Exception):
     
-    def __init__(self, message, value):
+    def __init__(self, message, value = None):
         
         super().__init__(message)
         self.value = value
@@ -162,7 +162,7 @@ class BaseClient():
             raise MQTTException('Unknown subscribe mid', mid)
 
     def on_disconnect(self, client, userdata, rc):
-        pass
+        self.connected = False
         # print('>> disconnecting reason {}'.format(rc))
         
     # disconnect
@@ -191,3 +191,14 @@ class BaseClient():
 
     def loop_start(self):
         self.client.loop_start()
+
+    # wait for disconnect
+    def wait(self, MAX_TRIES = 10):
+        self.disconnect()
+        k = 0
+        while self.connected and k < MAX_TRIES:
+            k += 1
+            time.sleep(1)
+
+        if self.connected:
+            raise MQTTException('Could not disconnect')
