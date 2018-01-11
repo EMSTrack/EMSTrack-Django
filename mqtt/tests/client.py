@@ -136,6 +136,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                   "s/8000/{}/".format(port)],
                                  stdin=cat.stdout,
                                  stdout=outfile)
+            cat.wait()
 
         # move current configuration file
         os.rename("/etc/mosquitto/conf.d/default.conf",
