@@ -1,5 +1,9 @@
-import time
+import time, sys
+
 import paho.mqtt.client as mqtt
+
+from django.core.management.base import OutputWrapper
+from django.core.management.color import color_style
 
 class MQTTException(Exception):
     
@@ -11,20 +15,13 @@ class MQTTException(Exception):
 class BaseClient():
     
     # initialize client
-    def __init__(self,
-                 broker,
-                 stdout,
-                 style,
-                 verbosity = 1,
-                 **kwargs):
-        
+    def __init__(self, broker, **kwargs):
 
         # initialize client
-        self.stdout = stdout
-        self.style = style
         self.broker = broker
-        self.verbosity = verbosity
-
+        self.stdout = kwargs.pop('stdout', OutputWrapper(sys.stdout))
+        self.style = kwargs.pop('style', color_style())
+        self.verbosity = kwargs.pop('verbosity', 1)
         self.debug = kwargs.pop('debug', False)
         self.forgive_mid = False
         

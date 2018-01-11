@@ -26,8 +26,8 @@ class Command(BaseCommand):
         broker['CLIENT_ID'] = broker['CLIENT_ID'] + '_' + str(os.getpid())
 
         client = SubscribeClient(broker,
-                                 self.stdout,
-                                 self.style,
+                                 stdout = self.stdout,
+                                 style = self.style,
                                  verbosity = options['verbosity'])
         
         self.stdout.write(

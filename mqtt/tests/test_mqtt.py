@@ -73,10 +73,6 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
     def test_mqttseed(self):
 
-        import sys
-        from django.core.management.base import OutputWrapper
-        from django.core.management.color import color_style, no_style
-        
         # seed
         from django.core import management
     
@@ -86,10 +82,6 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         print('>> Processing messages...')
         
         # Start client as admin
-        stdout = OutputWrapper(sys.stdout)
-        style = color_style()
-
-        # Instantiate broker
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
@@ -99,7 +91,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttseed_admin'
         
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client = MQTTTestClient(broker)
         self.is_connected(client)
 
         qos = 0
@@ -143,7 +135,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         
         # Repeat with same client
         
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client = MQTTTestClient(broker)
         self.is_connected(client)
 
         qos = 0
@@ -187,7 +179,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
             
         # Repeat with same client and different qos
 
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client = MQTTTestClient(broker)
         self.is_connected(client)
 
         qos = 2
@@ -238,7 +230,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         broker['PASSWORD'] = 'top_secret'
         broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
 
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client = MQTTTestClient(broker)
         self.is_connected(client)
 
         # Expect user profile
@@ -284,7 +276,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         broker['PASSWORD'] = 'very_secret'
         broker['CLIENT_ID'] = 'test_mqttseed_testuser2'
 
-        client = MQTTTestClient(broker, sys.stdout, style, verbosity = 1)
+        client = MQTTTestClient(broker)
         self.is_connected(client)
 
         # Expect user profile
@@ -345,9 +337,9 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
         
-        client = MQTTTestClient(broker, sys.stdout, style,
-                                     verbosity = 1, check_payload = False,
-                                     debug=False)
+        client = MQTTTestClient(broker,
+                                check_payload = False,
+                                debug=False)
         self.is_connected(client)
 
         # subscribe to ambulance/+/data
@@ -430,9 +422,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = 'test_mqttclient'
         
         subscribe_client = SubscribeClient(broker,
-                                           sys.stdout,
-                                           style,
-                                           verbosity = 1,
                                            debug=False)
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
@@ -442,8 +431,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
         
-        test_client = MQTTTestClient(broker, sys.stdout, style,
-                                     verbosity = 1, check_payload = False,
+        test_client = MQTTTestClient(broker,
+                                     check_payload = False,
                                      debug=False)
         self.is_connected(test_client)
 

@@ -148,7 +148,9 @@ class Command(BaseCommand):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'mqttseed_' + str(os.getpid())
 
-        client = Client(broker, self.stdout, self.style,
+        client = Client(broker,
+                        stdout = self.stdout,
+                        style = self.style,
                         verbosity = options['verbosity'])
 
         try:

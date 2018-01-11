@@ -42,8 +42,6 @@ class MessagePublishClient():
     def remove_hospital_equipment(self, hospital, **kwargs):
         pass
 
-# Uses Alex Martelli's Borg for making PublishClient act like a singleton
-
 class PublishClient(BaseClient):
 
     def on_disconnect(self, client, userdata, rc):
@@ -110,37 +108,37 @@ class PublishClient(BaseClient):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name))
 
+# Uses Alex Martelli's Borg for making PublishClient act like a singleton
+
 class SingletonPublishClient(PublishClient):
 
     _shared_state = {}
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, broker, **kwargs):
 
-        #print('SingletonPublishClient')
-        
         # Makes sure it is a singleton
         self.__dict__ = self._shared_state
 
         # Do not initialize if already initialized
         if not self.__dict__ == {}:
-            print('*** SKIP INITIALIZATION ***')
+            # skip initialization
             return
 
+        # initialization
+        broker, stdout, style, verbosity = 1,
+        
+        # override client_id
+        broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
+        
         # initialize BaseClient
-        super().__init__(*args, **kwargs)
-
+        super().__init__(broker, **kwargs)
         
 # to be used with the lazy constructor
         
 def get_client():
 
     # Start client
-    from django.core.management.base import OutputWrapper
-    from django.core.management.color import color_style, no_style
     from django.conf import settings
-
-    stdout = OutputWrapper(sys.stdout)
-    style = color_style()
 
     # Instantiate broker
     broker = {
@@ -157,9 +155,7 @@ def get_client():
 
         # try to connect
         print('Connecting to MQTT brocker...')
-        client = SingletonPublishClient(broker, stdout, style,
-                                        verbosity=1,
-                                        debug=False)
+        client = SingletonPublishClient(broker, debug=False)
 
         # wait for connection
         while not client.connected:
