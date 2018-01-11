@@ -37,7 +37,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             k += 1
             retval = subprocess.run(args, **kwargs)
             print('returncode = {}'.format(retval.returncode))
-            success = retval.returncode
+            success = retval.returncode == 0
 
         cls.assertEqual(not success, False)
 
@@ -56,7 +56,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             k += 1
             retval = subprocess.run(args, **kwargs)
             print('returncode = {}'.format(retval.returncode))
-            success = retval.returncode
+            success = retval.returncode == 0
 
         cls.assertEqual(not success, True)
         
