@@ -58,7 +58,7 @@ class PublishClient(BaseClient):
             raise MQTTException('Disconnected',
                                 rc)
         # call super
-        super().on_disconnect(self, client, userdata, rc)
+        super().on_disconnect(client, userdata, rc)
     
     def publish_topic(self, topic, serializer, qos=0, retain=False):
 
