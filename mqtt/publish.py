@@ -172,8 +172,6 @@ def get_client():
         print('Generated exception: {}'.format(e))
 
         client = MessagePublishClient()
-
-        raise e
         
     return client
 
