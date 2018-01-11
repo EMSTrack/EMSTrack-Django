@@ -91,9 +91,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
 
         # Wait for shutdown
-        run_until_fail(["service",
-                        "mosquitto",
-                        "status"])
+        self.run_until_fail(["service",
+                             "mosquitto",
+                             "status"])
         
         # saving persistence file
         retval = subprocess.run(["mv",
@@ -126,9 +126,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "start"])
 
         # Wait for start
-        run_until_success(["service",
-                           "mosquitto",
-                           "status"])
+        self.run_until_success(["service",
+                                "mosquitto",
+                                "status"])
         
         cls.setUpTestData()
 
@@ -146,9 +146,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "stop"])
         
         # Wait for shutdown
-        run_until_fail(["service",
-                        "mosquitto",
-                        "status"])
+        self.run_until_fail(["service",
+                             "mosquitto",
+                             "status"])
         
         # remove test configuration file
         retval = subprocess.run(["mv",
@@ -174,9 +174,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "start"])
         
         # Wait for start
-        run_until_success(["service",
-                           "mosquitto",
-                           "status"])
+        self.run_until_success(["service",
+                                "mosquitto",
+                                "status"])
         
     @classmethod
     def setUpTestData(cls):
