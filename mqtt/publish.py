@@ -177,5 +177,5 @@ class SingletonPublishClient(PublishClient):
             self.active = False
             
             print('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
-            print('Generated exception: {}'.format(e))
+            print('>> Generated exception: {}'.format(e))
         
