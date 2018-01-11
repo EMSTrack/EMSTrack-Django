@@ -133,6 +133,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
         cls.run_until_success(["service",
                                 "mosquitto",
                                 "status"])
+
+
+        time.sleep(1)
         
         cls.setUpTestData()
 
@@ -181,6 +184,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         cls.run_until_success(["service",
                                 "mosquitto",
                                 "status"])
+        
+        time.sleep(1)
         
     @classmethod
     def setUpTestData(cls):
