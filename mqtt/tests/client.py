@@ -39,7 +39,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
             print('returncode = {}'.format(retval.returncode))
             success = retval.returncode == 0
 
-        cls.assertEqual(success, True)
+        if not success:
+            raise Exception('Did not succeed!')
 
     @classmethod
     def run_until_fail(cls, args, **kwargs):
@@ -58,7 +59,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
             print('returncode = {}'.format(retval.returncode))
             success = retval.returncode == 0
 
-        cls.assertEqual(success, False)
+        if success:
+            raise Exception('Did not fail!')
         
     @classmethod
     def setUpClass(cls):
@@ -96,9 +98,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
         # Wait for shutdown
         cls.run_until_fail(["service",
-                             "mosquitto",
-                             "status"])
-        
+                            "mosquitto",
+                            "status"])
+            
         # saving persistence file
         retval = subprocess.run(["mv",
                                  "-f", 
