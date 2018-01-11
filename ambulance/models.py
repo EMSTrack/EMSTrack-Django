@@ -71,7 +71,8 @@ class Ambulance(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        get_client().publish_ambulance(self)
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_ambulance(self)
 
     def delete(self, *args, **kwargs):
         get_client().remove_ambulance(self)
