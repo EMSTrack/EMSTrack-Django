@@ -61,7 +61,7 @@ class Ambulance(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        print('caller = {}'.format(inspect.stack()))
+        print('caller = {}'.format(inspect.stack()[2][3]))
         super().save(*args, **kwargs)
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_ambulance(self)
