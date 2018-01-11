@@ -100,6 +100,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
                             "mosquitto",
                             "status"])
 
+        time.sleep(2)
+        
         try:
 
             # saving persistence file
@@ -155,7 +157,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "status"])
 
 
-        time.sleep(1)
+        time.sleep(2)
         
         cls.setUpTestData()
 
@@ -176,6 +178,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         cls.run_until_fail(["service",
                              "mosquitto",
                              "status"])
+        
+        time.sleep(2)
         
         # remove test configuration file
         os.rename("/etc/mosquitto/conf.d/test.conf",
@@ -205,7 +209,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "mosquitto",
                                 "status"])
         
-        time.sleep(1)
+        time.sleep(2)
         
     @classmethod
     def setUpTestData(cls):
