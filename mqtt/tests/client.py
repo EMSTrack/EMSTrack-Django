@@ -22,7 +22,8 @@ from login.models import AmbulancePermission, HospitalPermission
 
 class MQTTTestCase(StaticLiveServerTestCase):
 
-    def run_until_success(self, args, **kwargs):
+    @classmethod
+    def run_until_success(cls, args, **kwargs):
 
         # parameters
         MAX_TRIES = kwargs.pop('MAX_TRIES', 10)
@@ -37,9 +38,10 @@ class MQTTTestCase(StaticLiveServerTestCase):
             retval = subprocess.run(args, **kwargs)
             success = retval.return_code
 
-        self.assertEqual(not success, False)
+        cls.assertEqual(not success, False)
 
-    def run_until_fail(self, args, **kwargs):
+    @classmethod
+    def run_until_fail(cls, args, **kwargs):
 
         # parameters
         MAX_TRIES = kwargs.pop('MAX_TRIES', 10)
@@ -54,7 +56,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             retval = subprocess.run(args, **kwargs)
             success = retval.return_code
 
-        self.assertEqual(not success, True)
+        cls.assertEqual(not success, True)
         
     @classmethod
     def setUpClass(cls):
