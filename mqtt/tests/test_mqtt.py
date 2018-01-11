@@ -492,7 +492,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # verify change
         obj = Hospital.objects.get(id = self.h1.id)
-        self.assertEqual(obj.comment, 'no more change')
+        self.assertEqual(obj.comment, 'no more comments')
 
 
         # Modify hospital equipment
