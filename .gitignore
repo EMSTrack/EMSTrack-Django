@@ -97,9 +97,12 @@ ENV/
 
 # Migrations and static
 emstrack/settings.py
-ambulances/migrations
-emstrack/crlogin/migrations
-emstrack/static
+ambulance/migrations
+hospital/migrations
+login/migrations
+static
+nohup.out
 
 # IntelliJ
 /emstrack/.idea/
+
