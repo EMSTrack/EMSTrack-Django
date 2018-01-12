@@ -53,6 +53,9 @@ urlpatterns = [
     # ambulance
     url(r'^ambulance/', include('ambulance.urls')),
 
+    # ambulance
+    url(r'^hospital/', include('hospital.urls')),
+    
     # login
     url(r'^auth/', include('login.urls')),
 
