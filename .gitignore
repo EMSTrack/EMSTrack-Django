@@ -100,7 +100,7 @@ emstrack/settings.py
 ambulance/migrations
 hospital/migrations
 login/migrations
-static
+deploy/static
 nohup.out
 
 # IntelliJ
