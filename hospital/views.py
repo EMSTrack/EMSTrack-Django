@@ -10,7 +10,7 @@ from .models import Hospital, HospitalEquipment
 
 class HospitalActionMixin:
 
-    fields = [ ]
+    fields = [ 'name', 'location', 'comment' ]
 
     @property
     def success_message(self):
@@ -34,7 +34,7 @@ class HospitalUpdateView(LoginRequiredMixin,
 
     model = Hospital
     success_message = 'Hospital updated!'
-
+ 
 class HospitalDetailView(LoginRequiredMixin,
                          DetailView):
 
