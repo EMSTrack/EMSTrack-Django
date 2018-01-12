@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h1>Hospital</h1>
+
+<p>
+  <strong>Name:</strong>
+  <a href="{% url 'hospital-update pk=hospital.id %}">{{ hospital.name }}</a>
+</p>
+<p>
+  <strong>Address:</strong>
+  {{ hospital.address }}
+</p>
+<p>
+  <strong>Location:</strong>
+  {{ hospital.location }}
+</p>
+<p>
+  <strong>Comment:</strong>
+  {{ hospital.location }}
+</p>
+<p>
+  <strong>Updated on:</strong>
+  {{ hospital.updated_on }}
+</p>
+<p>
+  <strong>By:</strong>
+  {{ hospital.updated_by }}
+</p>
+
+<hr>
+
+<h2>
+  Equipment:
+</h2>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+    <th>Comment</th>
+    <th>Updated on</th>
+    <th>by</th>
+  </tr>
+  {% for equipment in hospital.hospitalequipment_set.all %}
+  <tr>
+    <td>{{ equipment.name }}</tr>
+    <td>{{ equipment.value }}</tr>
+    <td>{{ equipment.comment }}</tr>
+    <td>{{ equipment.updated_by }}</tr>
+    <td>{{ equipment.updated_on }}</tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

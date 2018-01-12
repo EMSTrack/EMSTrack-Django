@@ -1,21 +1,47 @@
-from django.urls import reverse_lazy
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-from django.core.exceptions import PermissionDenied
-from django.views.generic import ListView, CreateView, UpdateView
-
-import django_filters.rest_framework
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from braces import views
-
-from rest_framework import viewsets, filters, mixins, generics
-
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
-from rest_framework.decorators import detail_route
 
 from .models import Hospital, HospitalEquipment
 
 # Django views
-                
+
+class HospitalActionMixin:
+
+    fields = [ ]
+
+    @property
+    def success_message(self):
+        return NotImplemented
+
+
+    def form_valid(self, form):
+        messages.info(self.request, self.success_message)
+        return super().form_valid(form)
+    
+class HospitalCreateView(LoginRequiredMixin,
+                         HospitalActionMixin,
+                         CreateView):
+
+    model = Hospital
+    success_message = 'Hospital created!'
+
+class HospitalUpdateView(LoginRequiredMixin,
+                         HospitalActionMixin,
+                         UpdateView):
+
+    model = Hospital
+    success_message = 'Hospital updated!'
+
+class HospitalDetailView(LoginRequiredMixin,
+                         DetailView):
+
+    model = Hospital
+
+class HospitalListView(LoginRequiredMixin,
+                       ListView):
+
+    model = Hospital
+    
