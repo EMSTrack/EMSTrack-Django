@@ -7,19 +7,19 @@ from . import views
 app_name = 'hospital'
 urlpatterns = [
 
-    url('^list/$',
+    url(r'^list/$',
         login_required(views.HospitalListView.as_view()),
         name="list"),
 
-    url('^create/$',
+    url(r'^create/$',
         login_required(views.HospitalCreateView.as_view()),
         name="create"),
     
-    url('^detail/(?P<pk>[0-9]+)$',
+    url(r'^detail/(?P<pk>[0-9]+)$',
         login_required(views.HospitalDetailView.as_view()),
         name="detail"),
 
-    url('^update/(?P<pk>[0-9]+)$',
+    url(r'^update/(?P<pk>[0-9]+)$',
         login_required(views.HospitalUpdateView.as_view()),
         name="update"),
     
