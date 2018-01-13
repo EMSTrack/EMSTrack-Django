@@ -46,7 +46,7 @@
   </tr>
   {% for equipment in hospital.hospitalequipment_set.all %}
   <tr>
-    <td>{{ equipment.name }}</td>
+    <td>{{ equipment.equipment.name }}</td>
     <td>{{ equipment.value }}</td>
     <td>{{ equipment.comment }}</td>
     <td>{{ equipment.updated_by }}</td>
