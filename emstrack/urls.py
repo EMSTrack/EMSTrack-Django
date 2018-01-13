@@ -32,15 +32,16 @@ schema_view = get_swagger_view(title='EMSTrack API')
 router = routers.DefaultRouter()
 
 router.register(r'user',
-                ProfileViewSet)
+                ProfileViewSet,
+                base_name='user-api')
 
 router.register(r'ambulance',
                 AmbulanceViewSet,
-                base_name='ambulance')
+                base_name='ambulance-api')
 
 router.register(r'hospital',
                 HospitalViewSet,
-                base_name='hospital')
+                base_name='hospital-api')
 router.register(r'hospital/(?P<id>[0-9]+)/equipment',
                 HospitalEquipmentViewSet)
 

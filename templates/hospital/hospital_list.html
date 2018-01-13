@@ -5,7 +5,7 @@
 
 <h1>Hospitals</h1>
 
-<a href="{% url 'hospital_create' %}">add</a>
+<a href="{% url 'hospital-create' %}">add</a>
 
 <table class="table table-striped table-condensed">
   <thead>
@@ -22,7 +22,7 @@
     {% for hospital in hospital_list %}
     <tr>
       <td>
-	<a href="{% url 'hospital_detail' pk=hospital.id %}">{{ hospital.name }}</a>
+	<a href="{% url 'hospital-detail' pk=hospital.id %}">{{ hospital.name }}</a>
       </td>
       <td>{{ hospital.address }}</td>
       <td>{{ hospital.location }}</td>
