@@ -6,20 +6,20 @@ from . import views
 
 urlpatterns = [
 
-    url(r'list/',
+    url('list/',
         login_required(views.HospitalListView.as_view()),
-        name="hospital_list"),
+        name="list"),
 
-    url(r'create/',
+    url('create/',
         login_required(views.HospitalCreateView.as_view()),
-        name="hospital_create"),
+        name="create"),
     
-    url(r'detail/<int:pk>/',
+    url('detail/<int:pk>/',
         login_required(views.HospitalDetailView.as_view()),
-        name="hospital_detail"),
+        name="detail"),
 
-    url(r'update/<int:pk>/',
+    url('update/<int:pk>/',
         login_required(views.HospitalUpdateView.as_view()),
-        name="hospital_update"),
+        name="update"),
     
 ]
