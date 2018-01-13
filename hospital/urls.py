@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
 
+app_name = 'hospital'
 urlpatterns = [
 
     url('list/',
