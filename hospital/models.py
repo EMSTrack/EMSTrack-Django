@@ -72,7 +72,7 @@ class HospitalEquipment(models.Model):
                                   on_delete=models.CASCADE)
 
     value = models.CharField(max_length=254)
-    comment = models.CharField(max_length=254)
+    comment = models.CharField(max_length=254, default="")
 
     # to be removed
     quantity = models.IntegerField(default=0)

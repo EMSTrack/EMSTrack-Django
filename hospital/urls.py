@@ -8,18 +8,18 @@ urlpatterns = [
 
     url(r'list/',
         login_required(views.HospitalListView.as_view()),
-        name="hospital-list"),
+        name="hospital_list"),
 
     url(r'create/',
         login_required(views.HospitalCreateView.as_view()),
-        name="hospital-create"),
+        name="hospital_create"),
     
     url(r'detail/<int:pk>/',
         login_required(views.HospitalDetailView.as_view()),
-        name="hospital-detail"),
+        name="hospital_detail"),
 
     url(r'update/<int:pk>/',
         login_required(views.HospitalUpdateView.as_view()),
-        name="hospital-update"),
+        name="hospital_update"),
     
 ]
