@@ -24,8 +24,7 @@ class HospitalActionMixin:
         messages.info(self.request, self.success_message)
 
         # handle formset
-        context = self.get_context_data()
-        formset = context['hospital_equipment_formset']
+        formset = form['hospital_equipment_formset']
         if formset.is_valid():
 
             instances = formset.save(commit=False)
