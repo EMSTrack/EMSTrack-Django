@@ -59,7 +59,8 @@ class HospitalUpdateView(LoginRequiredMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context['hospital_equipment_formset'] = HospitalEquipmentFormset(self.request.POST, instance=self.object)
+            context['hospital_equipment_formset'] = HospitalEquipmentFormset(self.request.POST,
+                                                                             instance=self.object)
             context['hospital_equipment_formset'].full_clean()
         else:
             context['hospital_equipment_formset'] = HospitalEquipmentFormset(instance=self.object)
