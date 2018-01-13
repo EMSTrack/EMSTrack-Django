@@ -22,7 +22,7 @@
     {% for hospital in hospital_list %}
     <tr>
       <td>
-	<a href="{% url 'hospital:detail' hospital.id %}">{{ hospital.name }}</a>
+	<a href="{% url 'hospital:detail' pk=hospital.id %}">{{ hospital.name }}</a>
       </td>
       <td>{{ hospital.address }}</td>
       <td>{{ hospital.location }}</td>

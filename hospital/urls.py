@@ -15,7 +15,7 @@ urlpatterns = [
         login_required(views.HospitalCreateView.as_view()),
         name="create"),
     
-    url('detail/<int:pk>/',
+    url('^detail/(?P<pk>[0-9]+)$',
         login_required(views.HospitalDetailView.as_view()),
         name="detail"),
 
