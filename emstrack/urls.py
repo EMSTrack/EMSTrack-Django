@@ -33,17 +33,19 @@ router = routers.DefaultRouter()
 
 router.register(r'user',
                 ProfileViewSet,
-                base_name='user-api')
+                base_name='api-user')
 
 router.register(r'ambulance',
                 AmbulanceViewSet,
-                base_name='ambulance-api')
+                base_name='api-ambulance')
 
 router.register(r'hospital',
                 HospitalViewSet,
-                base_name='hospital-api')
+                base_name='api-hospital')
+
 router.register(r'hospital/(?P<id>[0-9]+)/equipment',
-                HospitalEquipmentViewSet)
+                HospitalEquipmentViewSet,
+                base_name='api-hospital-equipment')
 
 urlpatterns = [
 
