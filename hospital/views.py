@@ -18,10 +18,35 @@ class HospitalActionMixin:
     def success_message(self):
         return NotImplemented
 
-
     def form_valid(self, form):
+
+        # add message
         messages.info(self.request, self.success_message)
-        return super().form_valid(form)
+
+        # handle formset
+        context = self.get_context_data()
+        formset = context['hospital_equipment_formset']
+        if formset.is_valid():
+
+            instances = formset.save(commit=False)
+            for instance in instances:
+                
+                # add updated_by to formset instance
+                instance.updated_by = self.request.user
+                
+                # then save
+                instance.save()
+
+            # add updated_by to form
+            form.instance.updated_by = self.request.user
+            
+            # call form_valid
+            return super().form_valid(form)
+            
+        else:
+
+            # call form_invalid
+            return super().form_invalid(form)
     
 class HospitalCreateView(LoginRequiredMixin,
                          HospitalActionMixin,
@@ -38,17 +63,6 @@ class HospitalCreateView(LoginRequiredMixin,
             context['hospital_equipment_formset'] = HospitalEquipmentFormset()
         return context
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['hospital_equipment_formset']
-        if formset.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
-            return redirect(self.success_url)
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
-    
 class HospitalUpdateView(LoginRequiredMixin,
                          HospitalActionMixin,
                          UpdateView):
@@ -66,17 +80,6 @@ class HospitalUpdateView(LoginRequiredMixin,
             context['hospital_equipment_formset'] = HospitalEquipmentFormset(instance=self.object)
         return context
 
-    def form_valid(self, form):
-        context = self.get_context_data()
-        formset = context['hospital_equipment_formset']
-        if formset.is_valid():
-            self.object = form.save()
-            formset.instance = self.object
-            formset.save()
-            return redirect(self.success_url)
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
-        
 class HospitalDetailView(LoginRequiredMixin,
                          DetailView):
 
