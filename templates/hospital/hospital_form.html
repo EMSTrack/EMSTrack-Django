@@ -10,9 +10,11 @@
   <table>
     {{ form.as_table }}
   </table>
+  {% for form in hospital_equipment_formset %}
   <table>
-    {{ hospital_equipment_formset }}
+    {{ form.as_table }}
   </table>
+  {% endfor %}
   <button type="submit">Save</button>
 </form>
 
