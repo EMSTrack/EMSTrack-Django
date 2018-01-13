@@ -30,7 +30,7 @@ class HospitalCreateView(LoginRequiredMixin,
     model = Hospital
     success_message = 'Hospital created!'
 
-   def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context['hospital_equipment_formset'] = HospitalEquipmentFormset(self.request.POST)
