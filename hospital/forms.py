@@ -4,5 +4,7 @@ from .models import HospitalEquipment, Hospital
 
 HospitalEquipmentFormset = inlineformset_factory(Hospital,
                                                  HospitalEquipment,
-                                                 fields = ('value', 'comment'),
+                                                 fields = ('equipment.name',
+                                                           'value', 
+                                                           'comment'),
                                                  extra=1)
