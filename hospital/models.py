@@ -65,7 +65,7 @@ class Equipment(models.Model):
     toggleable = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.type)
+        return "{} ({})".format(self.name, self.etype)
 
 
 class HospitalEquipment(models.Model):
