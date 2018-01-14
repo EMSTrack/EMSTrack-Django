@@ -18,12 +18,12 @@ class AddressModel(models.Model):
     number = models.CharField(max_length=30, default = "")
     street = models.CharField(max_length=254, default = "")
     unit = models.CharField(max_length=30, null=True, blank=True)
-    city = models.CharField(max_length=100, default = defaults.city)
-    state = models.CharField(max_length=2, default = defaults.state)
+    city = models.CharField(max_length=100, default = defaults['city'])
+    state = models.CharField(max_length=2, default = defaults['state'])
     zipcode = models.CharField(max_length=12, default = "")
-    country = models.CharField(max_length=2, default = defaults.country)
+    country = models.CharField(max_length=2, default = defaults['country'])
 
-    location = models.PointField(srid=4326, default = defaults.location)
+    location = models.PointField(srid=4326, default = defaults['location'])
     
     class Meta:
         abstract = True
