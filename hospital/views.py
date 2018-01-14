@@ -1,3 +1,5 @@
+from django.http import HttpResponseRedirect
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -28,7 +30,7 @@ class HospitalEquipmentInline(InlineFormSet):
             # then save
             instance.save()
         
-        return super().formset_valid(formset)
+        return HttpResponseRedirect(self.get_success_url())
     
 class HospitalActionMixin:
 
