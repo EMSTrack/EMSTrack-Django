@@ -35,7 +35,7 @@ class Hospital(models.Model):
         super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('hospital:detail', kwargs={'id': self.id})
+        return reverse('hospital:detail', kwargs={'pk': self.id})
         
     def __str__(self):
         return ('> Hospital {}(id={})\n' +
