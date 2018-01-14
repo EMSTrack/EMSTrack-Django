@@ -12,6 +12,8 @@ from .models import Hospital, HospitalEquipment
 
 from .forms import HospitalEquipmentFormset
 
+from util.mixins import BasePermissionMixin
+
 # Django views
 
 class HospitalPermissionMixin(BasePermissionMixin):
