@@ -15,7 +15,6 @@ from .forms import HospitalEquipmentFormset
 class HospitalEquipmentInline(InlineFormSet):
     model = HospitalEquipment
 
-
 class HospitalActionMixin:
 
     fields = [ 'name', 'location', 'comment' ]
@@ -36,7 +35,7 @@ class HospitalActionMixin:
 class HospitalCreateView(LoginRequiredMixin,
                          HospitalActionMixin,
                          CreateWithInlinesView):
-    model = HospitalOrder
+    model = Hospital
     inlines = [HospitalEquipmentInline]
 
     def get_success_url(self):
@@ -46,7 +45,7 @@ class HospitalCreateView(LoginRequiredMixin,
 class HospitalUpdateView(LoginRequiredMixin,
                          HospitalActionMixin,
                          UpdateWithInlinesView):
-    model = Order
+    model = Hospital
     inlines = [HospitalEquipmentInline]
 
     def get_success_url(self):
