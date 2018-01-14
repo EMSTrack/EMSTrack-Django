@@ -30,7 +30,7 @@ class AddressModel(models.Model):
 
 class UpdatedByModel(models.Model):
 
-    comment = models.CharField(max_length=254, default="")
+    comment = models.CharField(max_length=254, null=True, blank=True)
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
