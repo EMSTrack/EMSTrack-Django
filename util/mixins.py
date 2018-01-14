@@ -16,3 +16,4 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
         
         serializer.save(updated_by=self.request.user)
 
+        return super().form_valid(form)
