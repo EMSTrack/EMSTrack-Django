@@ -18,20 +18,6 @@ class HospitalEquipmentInline(InlineFormSet):
     model = HospitalEquipment
     fields = ['equipment', 'value', 'comment']
     extra = 1
-
-    def formset_valid(self, formset):
-
-        self.object_list = formset.save(commit=False)
-        for instance in self.object_list:
-                            
-            # add updated_by to formset instance
-            instance.updated_by = self.request.user
-            
-            # then save
-            instance.save()
-        
-        super().formset_valid(formset)
-        #return HttpResponseRedirect(self.get_success_url())
     
 class HospitalActionMixin:
 
@@ -41,18 +27,27 @@ class HospitalActionMixin:
     def success_message(self):
         return NotImplemented
 
-    def form_valid(self, form):
+
+    def forms_valid(self, form, inlines):
 
         # add message
         messages.info(self.request, self.success_message)
 
-        # add updated_by to form
+        # add updated_by to form and save
         form.instance.updated_by = self.request.user
-        
-        # call super
-        return super().form_valid(form)
+        self.object = form.save()
 
+        # save formsets
+        for formset in inlines:
 
+            # add updated_by to formset instance
+            formset.updated_by = self.request.user
+            
+            # then save
+            formset.save()
+            
+        return HttpResponseRedirect(self.get_success_url())
+    
 class HospitalCreateView(LoginRequiredMixin,
                          HospitalActionMixin,
                          CreateWithInlinesView):
