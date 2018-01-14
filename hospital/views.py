@@ -15,6 +15,7 @@ from .forms import HospitalEquipmentFormset
 class HospitalEquipmentInline(InlineFormSet):
     model = HospitalEquipment
     fields = ['equipment', 'value', 'comment']
+    extra = 1
 
 class HospitalActionMixin:
 
