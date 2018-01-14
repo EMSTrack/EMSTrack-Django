@@ -8,7 +8,6 @@ from rest_framework.response import Response
 
 from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin, \
     BasePermissionMixin
-from util.viewsets import BasePermissionViewSet
 
 from .models import Hospital, HospitalEquipment, Equipment
 
@@ -17,23 +16,19 @@ from .serializers import HospitalSerializer, \
 
 # Django REST Framework Viewsets
     
-# HospitalPermission
-
-class HospitalPermissionViewSet(BasePermissionMixin,
-                                viewsets.GenericViewSet):
-    
-    filter_field = 'id'
-    profile_field = 'hospitals'
-    profile_values = 'hospital_id'
-    queryset = Hospital.objects.all()
-    
 # Hospital viewset
 
 class HospitalViewSet(mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
                       CreateModelUpdateByMixin,
                       UpdateModelUpdateByMixin,
-                      HospitalPermissionViewSet):
+                      BasePermissionMixin,
+                      viewsets.GenericViewSet):
+    
+    filter_field = 'id'
+    profile_field = 'hospitals'
+    profile_values = 'hospital_id'
+    queryset = Hospital.objects.all()
     
     serializer_class = HospitalSerializer
 

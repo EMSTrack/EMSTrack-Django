@@ -8,7 +8,6 @@ from rest_framework.response import Response
 
 from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin, \
     BasePermissionMixin
-from util.viewsets import BasePermissionViewSet
 
 from .models import Ambulance
 
@@ -16,16 +15,6 @@ from .serializers import AmbulanceSerializer
 
 # Django REST Framework Viewsets
 
-# AmbulancePermission
-
-class AmbulancePermissionViewSet(BasePermissionMixin,
-                                viewsets.GenericViewSet):
-
-    filter_field = 'id'
-    profile_field = 'ambulances'
-    profile_values = 'ambulance_id'
-    queryset = Ambulance.objects.all()
-    
 # Ambulance viewset
 
 class AmbulanceViewSet(mixins.ListModelMixin,
