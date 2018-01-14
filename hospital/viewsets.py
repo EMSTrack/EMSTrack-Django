@@ -6,7 +6,8 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin
+from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin, \
+    BasePermissionMixin
 from util.viewsets import BasePermissionViewSet
 
 from .models import Hospital, HospitalEquipment, Equipment
@@ -18,7 +19,8 @@ from .serializers import HospitalSerializer, \
     
 # HospitalPermission
 
-class HospitalPermissionViewSet(BasePermissionViewSet):
+class HospitalPermissionViewSet(BasePermissionMixin,
+                                viewsets.GenericViewSet):
     
     filter_field = 'id'
     profile_field = 'hospitals'
