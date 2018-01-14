@@ -9,20 +9,14 @@ from django.contrib.gis.geos import Point
 
 from django.contrib.auth.models import User
 
-# Hospital model
+from emstrack.models import AddressModel, UpdatedByModel
 
-class Hospital(models.Model):
+# Hospital model
+    
+class Hospital(AddressModel,
+               UpdatedByModel):
     
     name = models.CharField(max_length=254, unique=True)
-    address = models.CharField(max_length=254, default="")
-    location = models.PointField(srid=4326, null=True, blank=True)
-    
-    # comment
-    comment = models.CharField(max_length=254, default="")
-    
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs) 
@@ -39,12 +33,22 @@ class Hospital(models.Model):
         
     def __str__(self):
         return ('> Hospital {}(id={})\n' +
-                '   Address: {}\n' +
+                '   Address: {} {} {}\n' +
+                '            {} {} {}\n' +
+                '            {} \n' +
                 '  Location: {}\n' +
+                '   Comment: {}\n' +
                 '   Updated: {} by {}').format(self.name,
                                                self.id,
-                                               self.address,
+                                               self.number,
+                                               self.street,
+                                               self.unit,
+                                               self.city,
+                                               self.state,
+                                               self.zipcode,
+                                               self.country,
                                                self.location,
+                                               self.comment,
                                                self.updated_by,
                                                self.updated_on)
 
@@ -68,22 +72,13 @@ class Equipment(models.Model):
         return "{} ({})".format(self.name, self.etype)
 
 
-class HospitalEquipment(models.Model):
+class HospitalEquipment(UpdatedByModel):
 
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment,
                                   on_delete=models.CASCADE)
-
     value = models.CharField(max_length=254)
-    comment = models.CharField(max_length=254, default="")
-
-    # to be removed
-    quantity = models.IntegerField(default=0)
-    
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
         created = self.pk is None
