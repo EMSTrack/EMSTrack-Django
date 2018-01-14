@@ -1,15 +1,8 @@
 from enum import Enum
 from django.utils import timezone
 
-from django.db import models
-
+from emstrack.models import AddressModel, UpdatedByModel
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import LineString, Point
-
-Tijuana = Point(-117.0382, 32.5149, srid=4326)
-DefaultRoute = LineString((0, 0), (1, 1), srid=4326)
-
-from django.contrib.auth.models import User
 
 # User and ambulance location models
 
@@ -29,7 +22,7 @@ class AmbulanceCapability(Enum):
     A = 'Advanced'
     R = 'Rescue'
     
-class Ambulance(models.Model):
+class Ambulance(UpdatedByModel):
 
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
@@ -39,9 +32,6 @@ class Ambulance(models.Model):
     capability = models.CharField(max_length=1,
                                   choices = AMBULANCE_CAPABILITY_CHOICES)
     
-    # comment
-    comment = models.CharField(max_length=254, default="")
-
     # status
     AMBULANCE_STATUS_CHOICES = \
         [(m.name, m.value) for m in AmbulanceStatus]
@@ -53,10 +43,6 @@ class Ambulance(models.Model):
     orientation = models.FloatField(null=True, blank=True)
     location = models.PointField(srid=4326, null=True, blank=True)
     location_timestamp = models.DateTimeField(null=True, blank=True)
-    
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -82,18 +68,15 @@ class Ambulance(models.Model):
                                                self.updated_by,
                                                self.updated_on)
 
-class AmbulanceRoute(models.Model):
+# THESE NEED REVISING
+
+class AmbulanceRoute(UpdatedByModel):
 
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-    #points = models.ManyToManyField(AmbulanceUpdate)
 
-# THESE NEED REVISING
-    
-class Call(models.Model):
+class Call(UpdatedByModel):
 
     #call metadata (status not required for now)
     active = models.BooleanField(default=False)
