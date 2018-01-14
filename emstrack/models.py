@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 
 from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 
 defaults = {
     'location': Point(-117.0382, 32.5149, srid=4326),
