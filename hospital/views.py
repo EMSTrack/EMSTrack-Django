@@ -1,6 +1,5 @@
 from django.http import HttpResponseRedirect
 
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView

@@ -4,19 +4,10 @@ from django.urls import reverse_lazy
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
-from django.core.exceptions import PermissionDenied
-from django.views.generic import ListView, CreateView, UpdateView
-from braces import views
-
-from rest_framework import viewsets
-from rest_framework import filters
-from rest_framework import mixins
-from rest_framework import generics
-
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import permissions
-from rest_framework.decorators import detail_route
+from django.urls import reverse
+from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .models import Ambulance, Call, Base, AmbulanceRoute
 
@@ -119,68 +110,3 @@ class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
 
     def get_queryset(self):
         return Ambulance.objects.all()
-
-
-        
-# Custom viewset that only allows listing, retrieving, and updating
-class ListRetrieveUpdateViewSet(mixins.ListModelMixin,
-                                mixins.RetrieveModelMixin,
-                                mixins.UpdateModelMixin,
-                                viewsets.GenericViewSet):
-    pass
-
-
-class ListCreateViewSet(mixins.ListModelMixin,
-                        mixins.RetrieveModelMixin,
-                        mixins.CreateModelMixin,
-                        viewsets.GenericViewSet):
-    pass
-
-
-# Defines viewsets
-# Viewsets combine different request types (GET, PUSH, etc.) in a single view class
-# class AmbulanceViewSet(ListRetrieveUpdateViewSet):
-
-#     # Specify model to expose
-#     queryset = Ambulance.objects.all()
-
-#     # Specify the serializer to package the data in JSON
-#     serializer_class = AmbulanceSerializer
-
-#     # Specify django REST's filtering system
-#     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-
-#     # Specify fields that user can filter GET by
-#     filter_fields = ('identifier', 'status')
-
-
-# class AmbulanceStatusViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = AmbulanceStatus.objects.all()
-#     serializer_class = AmbulanceStatusSerializer
-
-
-# class CallViewSet(ListCreateViewSet):
-#     queryset = Call.objects.all()
-#     serializer_class = CallSerializer
-
-
-# class EquipmentCountViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
-#     queryset = EquipmentCount.objects.all()
-#     serializer_class = EquipmentCountSerializer
-
-
-# class HospitalViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Hospital.objects.all()
-#     serializer_class = HospitalSerializer
-#     filter_backends = (django_filters.rest_framework.DjangoFilterBackend,)
-#     filter_fields = ('name', 'address')
-
-
-# class BaseViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Base.objects.all()
-#     serializer_class = BaseSerializer
-
-
-# class AmbulanceRouteViewSet(ListCreateViewSet):
-#     queryset = AmbulanceRoute.objects.all()
-#     serializer_class = AmbulanceRouteSerializer
