@@ -1,13 +1,8 @@
-import django_filters.rest_framework
-#from django.core.urlresolvers import reverse_lazy
-from django.urls import reverse_lazy
-from django.http import Http404
-from django.shortcuts import get_object_or_404
-
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import TemplateView, ListView, \
+    DetailView, CreateView, UpdateView
 
 from .models import Ambulance, Call, Base, AmbulanceRoute
 
@@ -60,6 +55,14 @@ class AmbulanceUpdateView(LoginRequiredMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+class AmbulanceMap(TemplateView):
+     template_name = reverse('ambulance:map')
+
+     def get_context_data(self, **kwargs):
+         context = super().get_context_data(**kwargs)
+         context['ambulance_list'] = Ambulance.objects.all()
+         return context
+    
 # NEED REVISING
     
 # Call list page

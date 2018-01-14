@@ -11,9 +11,9 @@ urlpatterns = [
         login_required(views.AmbulanceListView.as_view()),
         name="list"),
     
-    # url(r'^map/$',
-    #     login_required(views.AmbulanceMap.as_view()),
-    #     name="map"),
+    url(r'^map/$',
+        login_required(views.AmbulanceMap.as_view()),
+        name="map"),
     
     url(r'^detail/(?P<pk>[0-9]+)$',
         login_required(views.AmbulanceDetailView.as_view()),
