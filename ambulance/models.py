@@ -76,26 +76,22 @@ class AmbulanceRoute(UpdatedByModel):
                                   on_delete=models.CASCADE)
     active = models.BooleanField(default=False)
 
-class Call(UpdatedByModel):
+class Call(AddressModel, UpdatedByModel):
 
     #call metadata (status not required for now)
     active = models.BooleanField(default=False)
     status = models.CharField(max_length=254, default= "", blank=True)
+
     # ambulance assigned to Call (Foreign Key)
     ambulance = models.ForeignKey(Ambulance, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=254, default = "")
-    # address-related info
-    residential_unit = models.CharField(max_length=254, default = "None")
-    stmain_number = models.CharField(max_length=254, default = "None")
-    delegation = models.CharField(max_length=254, default = "None")
-    zipcode = models.CharField(max_length=254, default = "22500")
-    city = models.CharField(max_length=254, default="Tijuana")
-    state = models.CharField(max_length=254, default="Baja California")
-    location = models.PointField(srid=4326, default=Tijuana)
+    
     # assignment = base name and #
     assignment = models.CharField(max_length=254, default = "None")
+    
     # short description of the patient's injury
     description = models.CharField(max_length=500, default = "None")
+    
     # response time related info
     call_time = models.DateTimeField(default = timezone.now)
     departure_time = models.DateTimeField(blank = True, null = True)
