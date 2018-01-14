@@ -104,9 +104,9 @@ class AdminView(ListView):
 #         return context
 
 
-# Ambulance map page
-class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
-    template_name = 'ambulances/ambulance_map.html'
+# # Ambulance map page
+# class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
+#     template_name = 'ambulances/ambulance_map.html'
 
-    def get_queryset(self):
-        return Ambulance.objects.all()
+#     def get_queryset(self):
+#         return Ambulance.objects.all()
