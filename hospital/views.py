@@ -30,7 +30,8 @@ class HospitalEquipmentInline(InlineFormSet):
             # then save
             instance.save()
         
-        return HttpResponseRedirect(self.get_success_url())
+        super().formset_valid(formset)
+        #return HttpResponseRedirect(self.get_success_url())
     
 class HospitalActionMixin:
 
