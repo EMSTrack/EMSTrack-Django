@@ -34,7 +34,7 @@ class HospitalPermission(models.Model):
                                                        self.can_write)
 
 
-# Profile and state
+# Profile
 
 class Profile(models.Model):
 
@@ -49,14 +49,3 @@ class Profile(models.Model):
                 '\n> Hospitals:\n' +
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
     
-class State(models.Model):
-
-    user = models.OneToOneField(User,
-                                on_delete=models.CASCADE)
-    hospital = models.ForeignKey(Hospital,
-                                 on_delete=models.CASCADE,
-                                 null=True, blank=True)
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE,
-                                  null=True, blank=True)
-
