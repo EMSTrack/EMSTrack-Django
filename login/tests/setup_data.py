@@ -55,20 +55,23 @@ class TestSetupData():
         # Add hospitals
         cls.h1 = Hospital.objects.create(
             name='Hospital General',
-            address="Don't know",
+            number="1234",
+            street="don't know",
             comment="no comments",
             updated_by=cls.u1)
         
         cls.h2 = Hospital.objects.create(
             name='Hospital CruzRoja',
-            address='Forgot',
+            number="4321",
+            street='Forgot',
             updated_by=cls.u1)
-
+        
         cls.h3 = Hospital.objects.create(
             name='Hospital Nuevo',
-            address='Not built yet',
+            number="0000",
+            street='Not built yet',
             updated_by=cls.u1)
-
+        
         # add equipment
         cls.e1 = Equipment.objects.create(
             name='X-ray',
