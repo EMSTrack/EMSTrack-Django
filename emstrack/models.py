@@ -7,9 +7,9 @@ class AddressModel(models.Model):
     An abstract base class model that provides address fields.
     """
 
+    number = models.CharField(max_length=30, default = "")
     street = models.CharField(max_length=254, default = "")
-    unit = models.CharField(max_length=30, default = "")
-    number = models.CharField(max_length=30, null=True, blank=True)
+    unit = models.CharField(max_length=30, null=True, blank=True)
     city = models.CharField(max_length=100, default = "")
     state = models.CharField(max_length=2, default = "")
     zipcode = models.CharField(max_length=12, default = "")
