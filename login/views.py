@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
@@ -22,7 +23,7 @@ class LoginView(auth_views.LoginView):
 
 # logout
 class LogoutView(auth_views.LogoutView):
-     next_page = '/ambulance'
+     next_page = reverse('emstrack')
 
 # MQTT login views
 
