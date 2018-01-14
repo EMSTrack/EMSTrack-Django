@@ -7,13 +7,17 @@ from . import views
 app_name = 'ambulance'
 urlpatterns = [
     
+    url(r'^map/$',
+        login_required(views.AmbulanceMap.as_view()),
+        name="map"),
+    
     url(r'^list/$',
         login_required(views.AmbulanceListView.as_view()),
         name="list"),
     
-    url(r'^map/$',
-        login_required(views.AmbulanceMap.as_view()),
-        name="map"),
+    url(r'^create/(?P<pk>[0-9]+)$',
+        login_required(views.AmbulanceUpdateView.as_view()),
+        name='create'),
     
     url(r'^detail/(?P<pk>[0-9]+)$',
         login_required(views.AmbulanceDetailView.as_view()),
@@ -22,7 +26,7 @@ urlpatterns = [
     url(r'^update/(?P<pk>[0-9]+)$',
         login_required(views.AmbulanceUpdateView.as_view()),
         name='update'),
-
+    
     # NEED REVISING
     
     url(r'^call_list$',
