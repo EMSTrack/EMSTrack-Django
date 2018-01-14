@@ -39,6 +39,7 @@ class HospitalCreateView(LoginRequiredMixin,
                          CreateWithInlinesView):
     model = Hospital
     inlines = [HospitalEquipmentInline]
+    success_url = 'hospital:detail'
 
     # def get_success_url(self):
     #     return self.object.get_absolute_url()
@@ -49,6 +50,7 @@ class HospitalUpdateView(LoginRequiredMixin,
                          UpdateWithInlinesView):
     model = Hospital
     inlines = [HospitalEquipmentInline]
+    success_url = 'hospital:detail'
 
     # def get_success_url(self):
     #     return self.object.get_absolute_url()
