@@ -22,7 +22,10 @@ class HospitalEquipmentInline(InlineFormSet):
     
 class HospitalActionMixin:
 
-    fields = [ 'name', 'address', 'location', 'comment' ]
+    fields = [ 'name',
+               'number', 'street', 'unit',
+               'city', 'state', 'zipcode', 'country',
+               'location', 'comment' ]
 
     @property
     def success_message(self):
