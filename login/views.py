@@ -26,7 +26,8 @@ class LogoutView(auth_views.LogoutView):
 
 # MQTT login views
 
-class MQTTLoginView(CsrfExemptMixin, FormView):
+class MQTTLoginView(CsrfExemptMixin,
+                    FormView):
     template_name = 'login/mqtt_login.html'
     form_class = AuthenticationForm
     
@@ -36,14 +37,15 @@ class MQTTLoginView(CsrfExemptMixin, FormView):
     def form_valid(self, form):
         return HttpResponse('OK')
     
-class MQTTSuperuserView(CsrfExemptMixin, View):
+class MQTTSuperuserView(CsrfExemptMixin,
+                        View):
     http_method_names = ['post', 'head', 'options']
 
     def post(self, request, *args, **kwargs):
         data = {}
-        if hasattr(request, 'POST'):  # pragma: no cover
+        if hasattr(request, 'POST'):
             data = request.POST
-        elif hasattr(request, 'DATA'):  # pragma: no cover
+        elif hasattr(request, 'DATA'):
             data = request.DATA
         try:
             if User.objects.get(username=data.get('username'),
@@ -55,14 +57,15 @@ class MQTTSuperuserView(CsrfExemptMixin, View):
         
         return HttpResponseForbidden()
 
-class MQTTAclView(CsrfExemptMixin, View):
+class MQTTAclView(CsrfExemptMixin,
+                  View):
     http_method_names = ['post', 'head', 'options']
 
     def post(self, request, *args, **kwargs):
         data = {}
-        if hasattr(request, 'POST'):  # pragma: no cover
+        if hasattr(request, 'POST'):
             data = request.POST
-        elif hasattr(request, 'DATA'):  # pragma: no cover
+        elif hasattr(request, 'DATA'):
             data = request.DATA
         allow = False
 
