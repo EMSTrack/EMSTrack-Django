@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 
+from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -46,7 +47,7 @@ class HospitalActionMixin:
             # then save
             formset.save()
             
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse(self.get_success_url()))
     
 class HospitalCreateView(LoginRequiredMixin,
                          HospitalActionMixin,
