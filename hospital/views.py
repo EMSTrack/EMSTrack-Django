@@ -47,7 +47,7 @@ class HospitalActionMixin:
             # then save
             formset.save()
             
-        return HttpResponseRedirect(reverse(self.get_success_url()))
+        return HttpResponseRedirect(self.get_success_url())
     
 class HospitalCreateView(LoginRequiredMixin,
                          HospitalActionMixin,
@@ -56,8 +56,8 @@ class HospitalCreateView(LoginRequiredMixin,
     inlines = [HospitalEquipmentInline]
     success_url = 'hospital:detail'
 
-    # def get_success_url(self):
-    #     return self.object.get_absolute_url()
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 class HospitalUpdateView(LoginRequiredMixin,
@@ -65,10 +65,9 @@ class HospitalUpdateView(LoginRequiredMixin,
                          UpdateWithInlinesView):
     model = Hospital
     inlines = [HospitalEquipmentInline]
-    success_url = 'hospital:detail'
 
-    # def get_success_url(self):
-    #     return self.object.get_absolute_url()
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 class HospitalDetailView(LoginRequiredMixin,
                          DetailView):

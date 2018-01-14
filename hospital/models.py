@@ -1,6 +1,7 @@
 from enum import Enum
-from django.utils import timezone
 
+from django.utils import timezone
+from django.urls import reverse
 from django.db import models
 
 from django.contrib.gis.db import models
@@ -32,6 +33,9 @@ class Hospital(models.Model):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_hospital(self)
         super().delete(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('hospital:detail', kwargs={'id': self.id})
         
     def __str__(self):
         return ('> Hospital {}(id={})\n' +
@@ -61,7 +65,7 @@ class Equipment(models.Model):
     toggleable = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{}: {} ({})".format(self.id, self.name, self.toggleable)
+        return "{} ({})".format(self.name, self.type)
 
 
 class HospitalEquipment(models.Model):
