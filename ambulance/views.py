@@ -45,7 +45,7 @@ class AmbulanceListView(LoginRequiredMixin,
     model = Ambulance
 
 class AmbulanceCreateView(LoginRequiredMixin,
-                          HospitalActionMixin,
+                          AmbulanceActionMixin,
                           CreateView):
     model = Ambulance
 
@@ -53,7 +53,7 @@ class AmbulanceCreateView(LoginRequiredMixin,
         return self.object.get_absolute_url()
     
 class AmbulanceUpdateView(LoginRequiredMixin,
-                          HospitalActionMixin,
+                          AmbulanceActionMixin,
                           UpdateView):
     model = Ambulance
 
