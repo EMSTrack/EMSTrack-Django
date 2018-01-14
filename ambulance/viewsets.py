@@ -6,7 +6,8 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin
+from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin, \
+    BasePermissionMixin
 from util.viewsets import BasePermissionViewSet
 
 from .models import Ambulance
@@ -17,7 +18,8 @@ from .serializers import AmbulanceSerializer
 
 # AmbulancePermission
 
-class AmbulancePermissionViewSet(BasePermissionViewSet):
+class AmbulancePermissionViewSet(BasePermissionMixin,
+                                viewsets.GenericViewSet):
 
     filter_field = 'id'
     profile_field = 'ambulances'
@@ -30,7 +32,13 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        CreateModelUpdateByMixin,
                        UpdateModelUpdateByMixin,
-                       AmbulancePermissionViewSet):
+                       BasePermissionMixin,
+                       viewsets.GenericViewSet):
 
+    filter_field = 'id'
+    profile_field = 'ambulances'
+    profile_values = 'ambulance_id'
+    queryset = Ambulance.objects.all()
+    
     serializer_class = AmbulanceSerializer
 
