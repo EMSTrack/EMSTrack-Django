@@ -66,8 +66,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     
     url(r'^$',
-        RedirectView.as_view(url='ambulance/list/'),
-        name = 'emstrack'),
+        RedirectView.as_view(url='ambulance/list/')),
     
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
