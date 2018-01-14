@@ -17,6 +17,19 @@ class HospitalEquipmentInline(InlineFormSet):
     fields = ['equipment', 'value', 'comment']
     extra = 1
 
+    def formset_valid(self, formset):
+
+        self.object_list = formset.save(commit=False)
+        for instance in self.object_list:
+                            
+            # add updated_by to formset instance
+            instance.updated_by = self.request.user
+            
+            # then save
+            instance.save()
+        
+        return super().formset_valid(formset)
+    
 class HospitalActionMixin:
 
     fields = [ 'name', 'location', 'comment' ]
@@ -29,6 +42,9 @@ class HospitalActionMixin:
 
         # add message
         messages.info(self.request, self.success_message)
+
+        # add updated_by to form
+        form.instance.updated_by = self.request.user
         
         # call super
         return super().form_valid(form)
