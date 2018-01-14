@@ -1,10 +1,24 @@
-from django.core.exceptions import PermissionDenied
+from rest_framework import mixins
 
-from rest_framework import viewsets
+# CreateModelUpdateByMixin
 
-# BasePermissionViewSet
+class CreateModelUpdateByMixin(mixins.CreateModelMixin):
 
-class BasePermissionViewSet(viewsets.GenericViewSet):
+    def perform_create(self, serializer):
+        
+        serializer.save(updated_by=self.request.user)
+    
+# UpdateModelUpdateByMixin
+
+class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
+
+    def perform_update(self, serializer):
+        
+        serializer.save(updated_by=self.request.user)
+        
+# BasePermissionMixin
+
+class BasePermissionMixin:
 
     filter_field = 'id'
     profile_field = 'ambulances'
@@ -48,3 +62,4 @@ class BasePermissionViewSet(viewsets.GenericViewSet):
         filter = {}
         filter[self.filter_field + '__in'] = can_do
         return self.queryset.filter(**filter)
+        
