@@ -10,7 +10,16 @@ from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
 from .serializers import AmbulanceSerializer
 
+from util.mixins import BasePermissionMixin
+
 # Django views
+
+class AmbulancePermissionMixin(BasePermissionMixin):
+
+    filter_field = 'id'
+    profile_field = 'ambulances'
+    profile_values = 'ambulance_id'
+    queryset = Ambulance.objects.all()
 
 class AmbulanceActionMixin:
 
@@ -32,24 +41,32 @@ class AmbulanceActionMixin:
         return super().form_valid(form)
 
 class AmbulanceDetailView(LoginRequiredMixin,
+                          AmbulancePermissionMixin,
                           DetailView):
+
     model = Ambulance
     
 class AmbulanceListView(LoginRequiredMixin,
+                        AmbulancePermissionMixin,
                         ListView):
+    
     model = Ambulance
 
 class AmbulanceCreateView(LoginRequiredMixin,
+                          AmbulancePermissionMixin,
                           AmbulanceActionMixin,
                           CreateView):
+    
     model = Ambulance
 
     def get_success_url(self):
         return self.object.get_absolute_url()
     
 class AmbulanceUpdateView(LoginRequiredMixin,
+                          AmbulancePermissionMixin,
                           AmbulanceActionMixin,
                           UpdateView):
+    
     model = Ambulance
 
     def get_success_url(self):
