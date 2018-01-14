@@ -15,7 +15,7 @@ urlpatterns = [
         login_required(views.AmbulanceListView.as_view()),
         name="list"),
     
-    url(r'^create/(?P<pk>[0-9]+)$',
+    url(r'^create/$',
         login_required(views.AmbulanceUpdateView.as_view()),
         name='create'),
     
