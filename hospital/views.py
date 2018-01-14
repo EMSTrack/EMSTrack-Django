@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from extra_views import InlineFormSet, CreateWithInlinesView, \
-    UpdateWithInlinesView,
+    UpdateWithInlinesView
 from extra_views.generic import GenericInlineFormSet
 
 from .models import Hospital, HospitalEquipment
