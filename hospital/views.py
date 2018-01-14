@@ -31,7 +31,6 @@ class HospitalActionMixin:
     def success_message(self):
         return NotImplemented
 
-
     def forms_valid(self, form, inlines):
 
         # add message

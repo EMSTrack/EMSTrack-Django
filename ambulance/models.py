@@ -54,6 +54,9 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().remove_ambulance(self)
         super().delete(*args, **kwargs) 
     
+    def get_absolute_url(self):
+        return reverse('ambulance:detail', kwargs={'pk': self.id})
+    
     def __str__(self):
         return ('> Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +

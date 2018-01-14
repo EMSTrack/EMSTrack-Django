@@ -4,28 +4,27 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
 
+app_name = 'ambulance'
 urlpatterns = [
-
-    url(r'^$',
-        login_required(views.AmbulanceListView.as_view()),
-        name="ambulance"),
-
-    url(r'^ambulance_map$',
-        login_required(views.AmbulanceMap.as_view()),
-        name="ambulance_map"),
     
-    url(r'^ambulance/(?P<pk>\d+)/update/$',
+    url(r'^list/$',
+        login_required(views.AmbulanceListView.as_view()),
+        name="list"),
+    
+    url(r'^map/$',
+        login_required(views.AmbulanceMap.as_view()),
+        name="map"),
+    
+    url(r'^detail/(?P<pk>[0-9]+)$',
+        login_required(views.AmbulanceDetailView.as_view()),
+        name='detail'),
+
+    url(r'^update/(?P<pk>[0-9]+)$',
         login_required(views.AmbulanceUpdateView.as_view()),
-        name='ambulance_update'),
+        name='update'),
 
-    # url(r'^status/(?P<pk>\d+)/update/$',
-    #     login_required(views.AmbulanceStatusUpdateView.as_view()),
-    #     name='status_update'),
-
-    # url(r'^status$',
-    #     login_required(views.AmbulanceStatusCreateView.as_view()),
-    #     name="status"),
-
+    # NEED REVISING
+    
     url(r'^call_list$',
         login_required(views.CallView.as_view()),
         name="call_list"),

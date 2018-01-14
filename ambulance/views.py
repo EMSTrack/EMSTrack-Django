@@ -25,51 +25,62 @@ from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 from .serializers import AmbulanceSerializer
 
 # Django views
-                
-# Ambulance list page
-class AmbulanceListView(ListView):
+
+class AmbulanceActionMixin:
+
+    fields = [ 'identifier', 'capability', 'status', 'comment' ]
+
+    @property
+    def success_message(self):
+        return NotImplemented
+
+    def form_valid(self, form):
+
+        # add message
+        messages.info(self.request, self.success_message)
+
+        # add updated_by to form and save
+        form.instance.updated_by = self.request.user
+
+        # call super
+        return super().form_valid(form)
+
+class AmbulanceDetailView(LoginRequiredMixin,
+                          DetailView):
     model = Ambulance
-    template_name = 'ambulances/ambulance_list.html'
-    context_object_name = "ambulances"
-
-# Ambulance list page
-class AmbulanceView(CreateView):
+    
+class AmbulanceListView(LoginRequiredMixin,
+                        ListView):
     model = Ambulance
-    context_object_name = "ambulance_form"
-    form_class = AmbulanceCreateForm
-    success_url = reverse_lazy('ambulance')
 
-    def get_context_data(self, **kwargs):
-        context = super(AmbulanceView, self).get_context_data(**kwargs)
-        context['ambulances'] = Ambulance.objects.all().order_by('id')
-        return context
-
-# Ambulance update page
-class AmbulanceUpdateView(UpdateView):
+class AmbulanceCreateView(LoginRequiredMixin,
+                          HospitalActionMixin,
+                          CreateView):
     model = Ambulance
-    form_class = AmbulanceUpdateForm
-    template_name = 'ambulances/ambulance_edit.html'
-    success_url = reverse_lazy('ambulance')
 
-    def get_object(self, queryset=None):
-        obj = Ambulance.objects.get(id=self.kwargs['pk'])
-        return obj
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+    
+class AmbulanceUpdateView(LoginRequiredMixin,
+                          HospitalActionMixin,
+                          UpdateView):
+    model = Ambulance
 
-    def get_context_data(self, **kwargs):
-        context = super(AmbulanceUpdateView, self).get_context_data(**kwargs)
-        context['identifier'] = self.kwargs['pk']
-        return context
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
+# NEED REVISING
+    
 # Call list page
 class CallView(ListView):
     model = Call
-    template_name = 'ambulances/dispatch_list.html'
+    template_name = 'ambulance/dispatch_list.html'
     context_object_name = "ambulance_call"
 
 # Admin page
 class AdminView(ListView):
     model = Call
-    template_name = 'ambulances/dispatch_list.html'
+    template_name = 'ambulance/dispatch_list.html'
     context_object_name = "ambulance_call"
     
 # # AmbulanceStatus list page
