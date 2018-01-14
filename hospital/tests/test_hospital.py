@@ -37,7 +37,13 @@ class TestHospitalGetList(TestSetup):
             result = {
                 'id': h.id,
                 'name': h.name,
-                'address': h.address,
+                'number': h.number,
+                'streeet': h.street,
+                'unit': h.unit,
+                'city': h.city,
+                'state': h.state,
+                'zipcode': h.zipcode,
+                'country': h.country,
                 'location': None,
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
@@ -185,14 +191,14 @@ class TestHospitalUpdate(TestSetup):
         
         # superuser first
         
-        # Update hospital address
+        # Update hospital street
         h = self.h1
         user = self.u1
-        address = 'new address'
+        street = 'new street'
         
         serializer = HospitalSerializer(h,
                                         data={
-                                            'address': address,
+                                            'street': street,
                                         }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -202,8 +208,14 @@ class TestHospitalUpdate(TestSetup):
         result = {
             'id': h.id,
             'name': h.name,
+            'number': h.number,
+            'street': street,
+            'unit': h.unit,
+            'city': h.city,
+            'state': h.state,
+            'zipcode': h.zipcode,
+            'country': h.country,
             'comment': h.comment,
-            'address': address,
             'location': point2str(h.location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
@@ -225,8 +237,14 @@ class TestHospitalUpdate(TestSetup):
         result = {
             'id': h.id,
             'name': h.name,
+            'number': h.number,
+            'streeet': h.street,
+            'unit': h.unit,
+            'city': h.city,
+            'state': h.state,
+            'zipcode': h.zipcode,
+            'country': h.country,
             'comment': h.comment,
-            'address': h.address,
             'location': point2str(location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
@@ -235,14 +253,14 @@ class TestHospitalUpdate(TestSetup):
 
         # regular authorized user
         
-        # Update hospital address
+        # Update hospital street
         h = self.h2
         user = self.u2
-        address = 'new address'
+        street = 'new street'
         
         serializer = HospitalSerializer(h,
                                         data={
-                                            'address': address,
+                                            'street': street,
                                         }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -252,8 +270,14 @@ class TestHospitalUpdate(TestSetup):
         result = {
             'id': h.id,
             'name': h.name,
+            'number': h.number,
+            'street': street,
+            'unit': h.unit,
+            'city': h.city,
+            'state': h.state,
+            'zipcode': h.zipcode,
+            'country': h.country,
             'comment': h.comment,
-            'address': address,
             'location': point2str(h.location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
@@ -275,8 +299,14 @@ class TestHospitalUpdate(TestSetup):
         result = {
             'id': h.id,
             'name': h.name,
+            'number': h.number,
+            'streeet': h.street,
+            'unit': h.unit,
+            'city': h.city,
+            'state': h.state,
+            'zipcode': h.zipcode,
+            'country': h.country,
             'comment': h.comment,
-            'address': h.address,
             'location': point2str(location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
@@ -298,12 +328,12 @@ class TestHospitalUpdate(TestSetup):
         answer = HospitalSerializer(self.h1).data
         self.assertDictEqual(result, answer)
 
-        # set address hospital
-        address = 'new address'
+        # set street hospital
+        street = 'new street'
         response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 200)
@@ -311,11 +341,11 @@ class TestHospitalUpdate(TestSetup):
         answer = HospitalSerializer(Hospital.objects.get(id=self.h1.id)).data
         self.assertDictEqual(result, answer)
         
-        # retrieve new hospital address
+        # retrieve new hospital street
         response = client.get('/api/hospital/{}/'.format(str(self.h1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result['address'], address)
+        self.assertEqual(result['street'], street)
         
         # set hospital location
         location = Point(-2,7)
@@ -335,13 +365,13 @@ class TestHospitalUpdate(TestSetup):
         response = client.get('/api/hospital/{}/'.format(str(self.h1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result['address'], address)
+        self.assertEqual(result['street'], street)
         self.assertEqual(result['location'], 'SRID=4326;' + str(location))
         
         # set wrong hospital id
         response = client.patch('/api/hospital/100/',
                                 data = json.dumps({
-                                    'address': address
+                                    'street': street
                                 })
         )
         self.assertEqual(response.status_code, 404)
@@ -359,12 +389,12 @@ class TestHospitalUpdate(TestSetup):
         answer = HospitalSerializer(self.h2).data
         self.assertDictEqual(result, answer)
 
-        # set address hospital
-        address = 'another address'
+        # set street hospital
+        street = 'another street'
         response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 200)
@@ -372,11 +402,11 @@ class TestHospitalUpdate(TestSetup):
         answer = HospitalSerializer(Hospital.objects.get(id=self.h2.id)).data
         self.assertDictEqual(result, answer)
         
-        # retrieve new hospital address
+        # retrieve new hospital street
         response = client.get('/api/hospital/{}/'.format(str(self.h2.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result['address'], address)
+        self.assertEqual(result['street'], street)
         
         # set hospital location
         location = Point(-2,7)
@@ -396,25 +426,25 @@ class TestHospitalUpdate(TestSetup):
         response = client.get('/api/hospital/{}/'.format(str(self.h2.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(result['address'], address)
+        self.assertEqual(result['street'], street)
         self.assertEqual(result['location'], 'SRID=4326;' + str(location))
         
         # set status hospital (no permission)
-        address = 'yet another hospital'
+        street = 'yet another hospital'
         response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 404)
         
-        # set address hospital (no permission)
-        address = 'another one address'
+        # set street hospital (no permission)
+        street = 'another one street'
         response = client.patch('/api/hospital/{}/'.format(str(self.h3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 404)
@@ -425,30 +455,30 @@ class TestHospitalUpdate(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
         
-        # set address hospital
-        address = 'some address'
+        # set street hospital
+        street = 'some street'
         response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 404)
         
-        # set address hospital
+        # set street hospital
         response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 404)
 
-        # set address hospital
+        # set street hospital
         response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'address': address,
+                                    'street': street,
                                 })
         )
         self.assertEqual(response.status_code, 404)
