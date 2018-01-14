@@ -56,7 +56,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
         return self.object.get_absolute_url()
 
 class AmbulanceMap(TemplateView):
-     template_name = reverse('ambulance:map')
+     template_name = 'ambulance/map.html')
 
      def get_context_data(self, **kwargs):
          context = super().get_context_data(**kwargs)
