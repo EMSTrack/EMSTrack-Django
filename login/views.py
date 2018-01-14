@@ -23,7 +23,7 @@ class LoginView(auth_views.LoginView):
 
 # logout
 class LogoutView(auth_views.LogoutView):
-     next_page = reverse('emstrack')
+     next_page = '/'
 
 # MQTT login views
 
