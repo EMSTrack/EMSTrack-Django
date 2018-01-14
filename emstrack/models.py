@@ -9,7 +9,7 @@ class AddressModel(models.Model):
 
     street = models.CharField(max_length=254, default = "")
     unit = models.CharField(max_length=30, default = "")
-    number = models.CharField(max_length=30, default = "", blank = True)
+    number = models.CharField(max_length=30, null=True, blank=True)
     city = models.CharField(max_length=100, default = "")
     state = models.CharField(max_length=2, default = "")
     zipcode = models.CharField(max_length=12, default = "")
