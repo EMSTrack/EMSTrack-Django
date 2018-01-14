@@ -24,7 +24,11 @@
       <td>
 	<a href="{% url 'hospital:detail' pk=hospital.id %}">{{ hospital.name }}</a>
       </td>
-      <td>{{ hospital.address }}</td>
+      <td>
+	{{ hospital.number }} {{ hospital.street }} {{ hospital.unit }},
+	{{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }},
+	{{ hospital.country }} 
+      </td>
       <td>{{ hospital.location }}</td>
       <td>{{ hospital.comment }}</td>
       <td>{{ hospital.updated_on }}</td>
