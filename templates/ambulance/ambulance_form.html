@@ -1,8 +1,8 @@
-{% extends "ambulances/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block content %}
-    <h1>Edit Status {{ id }}</h1>
+    <h1>Ambulance</h1>
     <form method="POST" class="post-form">{% csrf_token %}
         {% for field in form %}
         <div class="fieldWrapper">
@@ -13,3 +13,4 @@
         <button type="submit">Save</button>
     </form>
 {% endblock %}
+
