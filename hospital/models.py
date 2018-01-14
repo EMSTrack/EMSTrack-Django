@@ -2,7 +2,6 @@ from enum import Enum
 
 from django.utils import timezone
 from django.urls import reverse
-from django.db import models
 
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
