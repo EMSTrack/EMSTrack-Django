@@ -11,7 +11,11 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ambulance
-        fields = '__all__'
+        fields = [ 'id', 'identifier', 
+                   'capability', 'status',
+                   'orientation', 'location',
+                   'location_timestamp',
+                   'comment', 'updated_by', 'updated_on' ]
         read_only_fields = ('updated_by',)
 
     def validate(self, data):

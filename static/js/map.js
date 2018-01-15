@@ -22,7 +22,11 @@ var hospitalIcon = L.icon({
 	iconSize: [40, 40]
 });
 
-var ajaxUrl = "api/ambulances";
+var APIUrl = "api/ambulance";
+var MQTTBroker {
+    host: "localhost", //"cruzroja.ucsd.edu",
+    port: 8884
+};
 
 /**
  * Ambulance statuses 
@@ -41,24 +45,23 @@ var client;
 var mymap;
 $(document).ready(function() {
 
-	mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
+    // Set map view
+    mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
-
-	// Add layer to map.
-	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w', {
-		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-		maxZoom: 18,
-		id: 'mapbox.streets',
-		accessToken: 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w'
-	}).addTo(mymap);
-
-	// Add hospital marker.
-	L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
-
-	
-
+    // Add layer to map.
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w', {
+	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+	maxZoom: 18,
+	id: 'mapbox.streets',
+	accessToken: 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w'
+    }).addTo(mymap);
+    
+    // Add hospital marker.
+    // TODO: Update from API
+    L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
+    
     // Add the drawing toolbar and the layer of the drawings.
-	var drawnItems = new L.FeatureGroup();
+    var drawnItems = new L.FeatureGroup();
     mymap.addLayer(drawnItems);
     var drawControl = new L.Control.Draw({
         edit: {
@@ -69,227 +72,232 @@ $(document).ready(function() {
     
     // Event handler for when something is drawn. Only handles 
     // when a new drawing is made for now.
-    mymap.on(L.Draw.Event.CREATED, function (e) {
-    	var type = e.layerType;
-        layer = e.layer;
-   		if (type === 'marker') {
-       	// Do marker specific actions
-   		}
-   		// Do whatever else you need to. (save to db; add to map etc)
-   		mymap.addLayer(layer);
-	});
-
+    mymap.on(L.Draw.Event.CREATED,
+	     function (e) {
+    		 var type = e.layerType;
+		 layer = e.layer;
+   		 if (type === 'marker') {
+       		     // Do marker specific actions
+   		 }
+   		 // Do whatever else you need to. (save to db; add to map etc)
+   		 mymap.addLayer(layer);
+	     });
+    
     // Create ambulance grid (move somewhere else if not appropriate here)
     createAmbulanceGrid(mymap);
 
     // Update the ambulances on the map.
     createStatusFilter(mymap);
-   	getAmbulances(mymap);
-
-	// Submit form
-	$('#dispatchForm').submit(function(e) {
-		e.preventDefault();
-		postDispatchCall();
-	})
-
-	//Create a client instance
-	client = new Paho.MQTT.Client("cruzroja.ucsd.edu", 8884, "clientId");
-
-	// set callback handlers
-	client.onMessageArrived = function(message) {
-		console.log("Topic Name: " + message.destinationName + ", Message Received: "  + message.payloadString);
-
-		var destinationNameArr = message.destinationName.split("/");
-
-		let topicName = destinationNameArr[2];
-		let ambulanceId = destinationNameArr[1];
-
-		if(topicName === 'status') {
-			console.log('topicname == status');
-			updateStatus(ambulanceId, message.payloadString);
-
-			updateAmbulanceGrid(ambulanceId, message.payloadString);
-		}
-		if(topicName === 'location') {
-			console.log('topicname == location');
-			updateLocation(ambulanceId, message.payloadString);
-		}
-	};
-
-	var options = {
-	     //connection attempt timeout in seconds
-	     timeout: 60,
-	 	 userName: "admin",
-	 	 password: "cruzrojaadmin",
-	 	 useSSL: true,
-	 	 cleanSession: true,
-
-	     //Gets Called if the connection has successfully been established
-	     onSuccess: function () {
-	         //alert("Connected");
-
-			 // Subscribes to both topics ambulance/1/location & ambulance/1/status
-			 $.getJSON('/ambulances/api/ambulances/', function(data) {
-			  	$.each(data, function(index) {
-			  		let topicName = "ambulance/" + data[index].id + "/#";
-			  		client.subscribe(topicName);
-			  		console.log('subscribe to topic: ' + topicName);
-			  	});
-			 })
-	     },
-	     //Gets Called if the connection could not be established
-	     onFailure: function (message) {
-	         alert("Connection failed: " + message.errorMessage);
-	     },
-	 
-	 };
-
-	client.connect(options);
-
-	// Publish to mqtt on status change from details options dropdown
- 	$('#status-dropdown').change(function() {
- 		var statusMessage = new Paho.MQTT.Message(this.value);
- 		var ambId = $('#status-change-ambId').val();
- 		statusMessage.destinationName = "ambulance/" + ambId + "/status";
- 		statusMessage.qos = 2;
- 		client.send(statusMessage);
- 		console.log("send message: " + this.value + " by ambulance " + ambId);
- 	});
-
+    getAmbulances(mymap);
+    
+    // Submit form
+    $('#dispatchForm').submit(function(e) {
+	e.preventDefault();
+	postDispatchCall();
+    })
+    
+    // Create a client instance
+    // TODO: client id must be unique
+    // TODO: password cannot be hardcoded
+    client = new Paho.MQTT.Client(MQTTBroker.host,
+				  MQTTBroker.port,
+				  "clientId");
+    
+    // set callback handlers
+    client.onMessageArrived = function(message) {
+	console.log("Topic Name: " + message.destinationName + ", Message Received: "  + message.payloadString);
+	
+	var destinationNameArr = message.destinationName.split("/");
+	
+	let topicName = destinationNameArr[2];
+	let ambulanceId = destinationNameArr[1];
+	
+	if(topicName === 'status') {
+	    console.log('topicname == status');
+	    updateStatus(ambulanceId, message.payloadString);
+	    
+	    updateAmbulanceGrid(ambulanceId, message.payloadString);
+	}
+	if(topicName === 'location') {
+	    console.log('topicname == location');
+	    updateLocation(ambulanceId, message.payloadString);
+	}
+    };
+    
+    var options = {
+	//connection attempt timeout in seconds
+	timeout: 60,
+	userName: "admin",
+	password: "cruzrojaadmin",
+	useSSL: true,
+	cleanSession: true,
+	
+	//Gets Called if the connection has successfully been established
+	onSuccess: function () {
+	    //alert("Connected");
+	    
+	    // Subscribes to both topics ambulance/1/location & ambulance/1/status
+	    $.getJSON('/ambulances/api/ambulances/', function(data) {
+		$.each(data, function(index) {
+		    let topicName = "ambulance/" + data[index].id + "/#";
+		    client.subscribe(topicName);
+		    console.log('subscribe to topic: ' + topicName);
+		});
+	    })
+	},
+	//Gets Called if the connection could not be established
+	onFailure: function (message) {
+	    alert("Connection failed: " + message.errorMessage);
+	},
+	
+    };
+    
+    client.connect(options);
+    
+    // Publish to mqtt on status change from details options dropdown
+    $('#status-dropdown').change(function() {
+ 	var statusMessage = new Paho.MQTT.Message(this.value);
+ 	var ambId = $('#status-change-ambId').val();
+ 	statusMessage.destinationName = "ambulance/" + ambId + "/status";
+ 	statusMessage.qos = 2;
+ 	client.send(statusMessage);
+ 	console.log("send message: " + this.value + " by ambulance " + ambId);
+    });
+    
 });
 
 var layergroups = {}; // The layer groups that will be part of the map.
 
 /* Handle 'ambulance/+/status' mqtt messages */
 function updateStatus(ambulanceId, ambulanceMessage) {
-	ambulances[ambulanceId].status = ambulanceMessage;
-
-	let coloredIcon = ambulanceIcon;
-	if(ambulanceMessage === STATUS_AVAILABLE)
-		coloredIcon = ambulanceIconBlue;
-	if(ambulanceMessage === STATUS_OUT_OF_SERVICE)
-		coloredIcon = ambulanceIconBlack;
+    ambulances[ambulanceId].status = ambulanceMessage;
     
-
-	// Remove existing marker
-	mymap.removeLayer(ambulanceMarkers[ambulanceId]);
-	
-	var item = ambulances[ambulanceId];
-
-	// Re-add it but with updated ambulance icon
-	ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+    let coloredIcon = ambulanceIcon;
+    if(ambulanceMessage === STATUS_AVAILABLE)
+	coloredIcon = ambulanceIconBlue;
+    if(ambulanceMessage === STATUS_OUT_OF_SERVICE)
+	coloredIcon = ambulanceIconBlack;
+    
+    
+    // Remove existing marker
+    mymap.removeLayer(ambulanceMarkers[ambulanceId]);
+    
+    var item = ambulances[ambulanceId];
+    
+    // Re-add it but with updated ambulance icon
+    ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
 	.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
-
+    
     // Bind id to icons
-	ambulanceMarkers[item.id]._icon.id = item.id;
-	// Collapse panel on icon hover.
-	ambulanceMarkers[item.id].on('mouseover', function(e){
-		// open popup bubble
-		this.openPopup().on('mouseout', function(e){
-			this.closePopup();
-		});
-
-		// update details panel
-		updateDetailPanel(item.id);
+    ambulanceMarkers[item.id]._icon.id = item.id;
+    // Collapse panel on icon hover.
+    ambulanceMarkers[item.id].on('mouseover', function(e){
+	// open popup bubble
+	this.openPopup().on('mouseout', function(e){
+	    this.closePopup();
 	});
-
+	
+	// update details panel
+	updateDetailPanel(item.id);
+    });
+    
     // Update ambulance location
-	ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
-	ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
-
-	//Add to a map to differentiate the layers between statuses.
-	if(statusWithMarkers[item.status]){
-		statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
-	}
-	else{
-		statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
-	}
+    ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
+    ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
+    
+    //Add to a map to differentiate the layers between statuses.
+    if(statusWithMarkers[item.status]){
+	statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
+    }
+    else{
+	statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
+    }
 }
 
 /* Handle 'ambulance/+/location' mqtt messages */
 function updateLocation(ambulanceId, ambulanceMessage) {
-	console.log('updateLoc');
-	let messageLocation = JSON.parse(ambulanceMessage);
-	console.log(messageLocation);
-	let item = ambulances[ambulanceId];
-	item.location.latitude = messageLocation.location.latitude;
-	item.location.longitude = messageLocation.location.longitude;
-
-	// Update ambulance location
-	ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
-	ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
+    console.log('updateLoc');
+    let messageLocation = JSON.parse(ambulanceMessage);
+    console.log(messageLocation);
+    let item = ambulances[ambulanceId];
+    item.location.latitude = messageLocation.location.latitude;
+    item.location.longitude = messageLocation.location.longitude;
+    
+    // Update ambulance location
+    ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
+    ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
 }
 
 /* Create status filter on the top right corner of the map */
 function createStatusFilter(mymap) {
-	// Add the checkbox on the top right corner for filtering.
-	var container = L.DomUtil.create('div', 'filter-options');
-
-	//Generate HTML code for checkboxes for each of the statuses.
-	var filterHtml = "";
-	$.get('api/status', function(statuses) {
-		statuses.forEach(function(status){
-			if(statusWithMarkers[status.name] !== undefined) {
-				layergroups[status.name] = L.layerGroup(statusWithMarkers[status.name]);
-				layergroups[status.name].addTo(mymap);
-			}
-			filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status.name + '" type="checkbox" value="">' + status.name + "</label></div>";
-		});
-		// Append html code on success callback function
-		container.innerHTML = filterHtml;
-		// Initialize checked to true for all statuses.
-		$('.chk').attr('checked', true);
-		// Add listener to remove status layer when filter checkbox is clicked
-		$('.chk').click(function() {
-			// Goes through each layer group and adds or removes accordingly.
-			Object.keys(layergroups).forEach(function(key){
-				layergroups[key].clearLayers();
-				for(var i = 0; i < statusWithMarkers[key].length; i++){
-					// Add the ambulances in the layer if it is checked.
-					if($(".chk[data-status='" + key + "']").is(':checked')){
-						layergroups[key].addLayer(statusWithMarkers[key][i])
-					}
-					// Remove from layer if it is not checked.
-					else{
-						layergroups[key].removeLayer(statusWithMarkers[key][i]);
-						mymap.removeLayer(statusWithMarkers[key][i]);
-					}
-				}
-			});
-		});
+    // Add the checkbox on the top right corner for filtering.
+    var container = L.DomUtil.create('div', 'filter-options');
+    
+    //Generate HTML code for checkboxes for each of the statuses.
+    var filterHtml = "";
+    $.get('api/status', function(statuses) {
+	statuses.forEach(function(status){
+	    if(statusWithMarkers[status.name] !== undefined) {
+		layergroups[status.name] = L.layerGroup(statusWithMarkers[status.name]);
+		layergroups[status.name].addTo(mymap);
+	    }
+	    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status.name + '" type="checkbox" value="">' + status.name + "</label></div>";
 	});
-
-	// Add the checkboxes.
-	var customControl = L.Control.extend({
-
-			options: {
-			position: 'topright' 
-			//control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
-			},
-
-			onAdd: function (map) {
-			return container;
-			}
-
-	 });
-	 mymap.addControl(new customControl());
-
-	 // Listener to see if a click on a checkbox leads to a check. If so,
-	 // remove the layer from the map.
-	 $('.chk').each(function(){
-	 	console.log(this);
-	 	$(this).change(function(){
-	 		    console.log("Clicked!!!");
-    			if(!($(this).is(':checked'))){
-    				console.log("Clicked!");
-    				var layersToRemove = statusWithMarkers[this.dataset.status];
-    				console.log(layersToRemove);
-    				for(var i = 0; i < layersToRemove.length; i++){
-    					mymap.removeLayer(layersToRemove[i]);
-    				}
-    			}
-	 	});
-
+	// Append html code on success callback function
+	container.innerHTML = filterHtml;
+	// Initialize checked to true for all statuses.
+	$('.chk').attr('checked', true);
+	// Add listener to remove status layer when filter checkbox is clicked
+	$('.chk').click(function() {
+	    // Goes through each layer group and adds or removes accordingly.
+	    Object.keys(layergroups).forEach(function(key){
+		layergroups[key].clearLayers();
+		for(var i = 0; i < statusWithMarkers[key].length; i++){
+		    // Add the ambulances in the layer if it is checked.
+		    if($(".chk[data-status='" + key + "']").is(':checked')){
+			layergroups[key].addLayer(statusWithMarkers[key][i])
+		    }
+		    // Remove from layer if it is not checked.
+		    else{
+			layergroups[key].removeLayer(statusWithMarkers[key][i]);
+			mymap.removeLayer(statusWithMarkers[key][i]);
+		    }
+		}
+	    });
+	});
+    });
+    
+    // Add the checkboxes.
+    var customControl = L.Control.extend({
+	
+	options: {
+	    position: 'topright' 
+	    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+	},
+	
+	onAdd: function (map) {
+	    return container;
+	}
+	
+    });
+    mymap.addControl(new customControl());
+    
+    // Listener to see if a click on a checkbox leads to a check. If so,
+    // remove the layer from the map.
+    $('.chk').each(function(){
+	console.log(this);
+	$(this).change(function(){
+	    console.log("Clicked!!!");
+    	    if(!($(this).is(':checked'))){
+    		console.log("Clicked!");
+    		var layersToRemove = statusWithMarkers[this.dataset.status];
+    		console.log(layersToRemove);
+    		for(var i = 0; i < layersToRemove.length; i++){
+    		    mymap.removeLayer(layersToRemove[i]);
+    		}
+    	    }
+	});
+	
     });
 }
 
@@ -299,53 +307,54 @@ function createStatusFilter(mymap) {
  * @return void.
  */
 function getAmbulances(mymap) {
-	// console.log('ajax request sent');
-	$.ajax({
-		type: 'GET',
-		datatype: "json",
-		url: ajaxUrl,
-		success: function(arr) {
-			
-			statusWithMarkers = {}; // clear all statuses from previous ajax call.
-			var i = 0;
-			$.each(arr, function(index, item) {
 
-				ambulances[item.id] = item;
-
-				// set icon by status
-				let coloredIcon = ambulanceIcon;
-				if(item.status === STATUS_AVAILABLE)
-					coloredIcon = ambulanceIconBlue;
-				if(item.status === STATUS_OUT_OF_SERVICE)
-					coloredIcon = ambulanceIconBlack;
-
-				// If ambulance marker doesn't exist
-				ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
-				.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
-			    
-			    // Bind id to icons
-				ambulanceMarkers[item.id]._icon.id = item.id;
-				// Collapse panel on icon hover.
-				ambulanceMarkers[item.id].on('mouseover', function(e){
-					// open popup bubble
-					this.openPopup().on('mouseout', function(e){
-						this.closePopup();
-					});
-
-					// update details panel
-					updateDetailPanel(item.id);
-				});
-
-				//Add to a map to differentiate the layers between statuses.
-				if(statusWithMarkers[item.status]){
-					statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
-				}
-				else{
-					statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
-				}			 
-			});
+    // console.log('ajax request sent');
+    $.ajax({
+	type: 'GET',
+	datatype: "json",
+	url: APIUrl,
+	success: function(arr) {
+	    
+	    statusWithMarkers = {}; // clear all statuses from previous ajax call.
+	    var i = 0;
+	    $.each(arr, function(index, item) {
+		
+		ambulances[item.id] = item;
+		
+		// set icon by status
+		let coloredIcon = ambulanceIcon;
+		if(item.status === STATUS_AVAILABLE)
+		    coloredIcon = ambulanceIconBlue;
+		if(item.status === STATUS_OUT_OF_SERVICE)
+		    coloredIcon = ambulanceIconBlack;
+		
+		// If ambulance marker doesn't exist
+		ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
+		    .bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+		
+		// Bind id to icons
+		ambulanceMarkers[item.id]._icon.id = item.id;
+		// Collapse panel on icon hover.
+		ambulanceMarkers[item.id].on('mouseover', function(e){
+		    // open popup bubble
+		    this.openPopup().on('mouseout', function(e){
+			this.closePopup();
+		    });
+		    
+		    // update details panel
+		    updateDetailPanel(item.id);
+		});
+		
+		//Add to a map to differentiate the layers between statuses.
+		if(statusWithMarkers[item.status]){
+		    statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
 		}
-	});
+		else{
+		    statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
+		}			 
+	    });
+	}
+    });
 }
 
 /*
@@ -399,42 +408,50 @@ function onGridButtonClick(ambulanceId, mymap) {
  *
  */
 function createAmbulanceGrid(mymap) {
-	$.get('api/ambulances/', function(data) {
-		var i, ambulanceId;
-		//console.log(data);
-		for(i = 0; i < data.length; i++) {
-			ambulanceId = data[i].id;
-			ambulanceLicensePlate = data[i].identifier;
-			// console.log(ambulanceId);
-			// console.log(ambulanceLicensePlate);
-			ambulanceStatus = data[i].status;
-			if(ambulanceStatus === STATUS_AVAILABLE) {
-				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
-				$('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceLicensePlate + ' </label><br/>');
-			}
-			if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
-				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
-			if(ambulanceStatus === STATUS_IN_SERVICE)
-				$('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
-		
-			// Open popup on panel click.
-			// For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
-			$('#grid-button' + ambulanceId).click(onGridButtonClick(ambulanceId,mymap));
-		}
-	});
+    $.get('api/ambulance/',
+	  function(data) {
+	      
+	      var i, ambulanceId;
+	      
+	      //console.log(data);
+	      for(i = 0; i < data.length; i++) {
+		  
+		  ambulanceId = data[i].id;
+		  ambulanceLicensePlate = data[i].identifier;
+		  ambulanceStatus = data[i].status;
+		  
+		  // console.log(ambulanceId);
+		  // console.log(ambulanceLicensePlate);
+		  
+		  if(ambulanceStatus === STATUS_AVAILABLE) {
+		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		      $('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceLicensePlate + ' </label><br/>');
+		  }
+		  
+		  if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
+		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		  
+		  if(ambulanceStatus === STATUS_IN_SERVICE)
+		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		  
+		  // Open popup on panel click.
+		  // For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
+		  $('#grid-button' + ambulanceId).click(onGridButtonClick(ambulanceId,mymap));
+	      }
+	  });
 }
 
 function updateAmbulanceGrid(ambulanceId, ambulanceStatus) {
-		var buttonId = "#grid-button" + ambulanceId;
-
-		// Updated button color/status dynamically
-		if(ambulanceStatus === STATUS_AVAILABLE) 
-			$(buttonId).attr( "class", "btn btn-success" );
-		if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
-			$(buttonId).attr( "class", "btn btn-default" );
-		if(ambulanceStatus === STATUS_IN_SERVICE)
-			$(buttonId).attr( "class", "btn btn-danger" );
-
+    var buttonId = "#grid-button" + ambulanceId;
+    
+    // Updated button color/status dynamically
+    if(ambulanceStatus === STATUS_AVAILABLE) 
+	$(buttonId).attr( "class", "btn btn-success" );
+    if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
+	$(buttonId).attr( "class", "btn btn-default" );
+    if(ambulanceStatus === STATUS_IN_SERVICE)
+	$(buttonId).attr( "class", "btn btn-danger" );
+    
 }
 
 /*
@@ -544,27 +561,27 @@ function updateAmbulanceGrid(ambulanceId, ambulanceStatus) {
 /*
  * getCookie extracts the csrf token for form submit
  */
- function getCookie(name) {
- 	var cookieValue = null;
- 	if(document.cookie && document.cookie !== '') {
- 		var cookies = document.cookie.split(';');
- 		for(var i = 0; i < cookies.length; i++) {
- 			var cookie = $.trim(cookies[i]);
- 			if(cookie.substring(0, name.length + 1) === (name + '=')) {
- 				cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
- 				break;
- 			}
- 		}
+function getCookie(name) {
+    var cookieValue = null;
+    if(document.cookie && document.cookie !== '') {
+ 	var cookies = document.cookie.split(';');
+ 	for(var i = 0; i < cookies.length; i++) {
+ 	    var cookie = $.trim(cookies[i]);
+ 	    if(cookie.substring(0, name.length + 1) === (name + '=')) {
+ 		cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+ 		break;
+ 	    }
  	}
- 	return cookieValue;
- }
+    }
+    return cookieValue;
+}
 
 /* Functions to fill autocomplete AND to click specific locations */
 function initAutocomplete() {
     // Create the autocomplete object, restricting the search to geographical
     autocomplete = new google.maps.places.Autocomplete((document.getElementById('street')),
-        {types: ['geocode']});
-        //autocomplete.addListener('place_changed', fillInAddress);
+						       {types: ['geocode']});
+    //autocomplete.addListener('place_changed', fillInAddress);
 }
 
 /* Dispatch area - Should be eliminate after dispatching */
