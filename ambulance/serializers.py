@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework_gis.serializers import GeoModelSerializer
+from rest_framework_gis.serializers import GeometrySerializerMethodField
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -8,8 +8,10 @@ import django.db.models as models
 from .models import Ambulance
 
 # Ambulance serializers
-class AmbulanceSerializer(GeoModelSerializer):
+class AmbulanceSerializer(GeoFeatureModelSerializer):
 
+    location = GeometrySerializerMethodField()
+    
     class Meta:
         model = Ambulance
         fields = [ 'id', 'identifier', 
