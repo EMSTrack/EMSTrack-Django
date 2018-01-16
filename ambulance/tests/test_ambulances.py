@@ -213,7 +213,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # Update ambulance location
         location_timestamp = timezone.now()
-        location = Point(-2,7)
+        location = {'latitude': -2, 'longitude': 7}
         
         serializer = AmbulanceSerializer(a,
                                          data={
