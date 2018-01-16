@@ -47,7 +47,7 @@ class TestHospitalGetList(TestSetup):
                 'state': h.state,
                 'zipcode': h.zipcode,
                 'country': h.country,
-                'location': point2str(PointField().to_representation(h.location)),
+                'location': point2str(h.location),
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on)
@@ -219,7 +219,7 @@ class TestHospitalUpdate(TestSetup):
             'zipcode': h.zipcode,
             'country': h.country,
             'comment': h.comment,
-            'location': point2str(PointField().to_representation(h.location)),
+            'location': point2str(h.location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
         }
@@ -281,7 +281,7 @@ class TestHospitalUpdate(TestSetup):
             'zipcode': h.zipcode,
             'country': h.country,
             'comment': h.comment,
-            'location': point2str(PointField().to_representation(h.location)),
+            'location': point2str(h.location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
         }

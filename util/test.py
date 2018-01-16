@@ -1,3 +1,4 @@
+from drf_extra_fields.geo_fields import PointField
 from django.contrib.gis.geos import GEOSGeometry
 
 def date2iso(date):
@@ -16,8 +17,7 @@ def point2str(point):
     if point is None:
         return None
     if isinstance(point, GEOSGeometry):
-        return {'latitude': str(point.y),
-                'longitude': str(point.x)}
+        return PointField().to_representation(point)
     elif isinstance(point, dict):
         return {'latitude': str(point['latitude']),
                 'longitude': str(point['longitude'])}
