@@ -57,7 +57,6 @@ $(document).ready(function() {
     }).addTo(mymap);
     
     // Add hospital marker.
-    // TODO: Update from API
     L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
     
     // Add the drawing toolbar and the layer of the drawings.
@@ -84,10 +83,10 @@ $(document).ready(function() {
 	     });
     
     // Create ambulance grid (move somewhere else if not appropriate here)
-    createAmbulanceGrid(mymap);
+    //createAmbulanceGrid(mymap);
 
     // Update the ambulances on the map.
-    createStatusFilter(mymap);
+    //createStatusFilter(mymap);
     getAmbulances(mymap);
     
     // Submit form
