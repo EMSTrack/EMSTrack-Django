@@ -314,8 +314,15 @@ function getAmbulances(mymap) {
 	type: 'GET',
 	datatype: "json",
 	url: APIBaseUrl + 'ambulance/',
-	success: function(arr) {
 
+	error: function(msg) {
+
+	    alert('getAmbulances:error::' + msg)
+
+	},
+	
+	success: function(arr) {
+	    
 	    console.log('getAmbulances:success')
 	    
 	    statusWithMarkers = {}; // clear all statuses from previous ajax call.
@@ -357,7 +364,12 @@ function getAmbulances(mymap) {
 		}			 
 	    });
 	}
-    });
+    })
+	.done(function( data ) {
+	    if ( console && console.log ) {
+		console.log( "Done with getAmbulances" );
+	    }
+	});
 }
 
 /*
