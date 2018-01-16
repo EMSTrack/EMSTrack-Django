@@ -16,8 +16,8 @@ def point2str(point):
     if point is None:
         return None
     if isinstance(point, GEOSGeometry):
-        return {'latitude': str(value.y),
-                'longitude': str(value.x)}
+        return {'latitude': str(point.y),
+                'longitude': str(point.x)}
     elif isinstance(point, dict):
         return {'latitude': str(point['latitude']),
                 'longitude': str(point['longitude'])}
