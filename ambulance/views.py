@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
+from django.contrib.gis.forms import widgets
 
 from .models import Ambulance, Call, Base, AmbulanceRoute
 
@@ -14,6 +15,30 @@ from util.mixins import BasePermissionMixin
 
 # Django views
 
+from .models import AED
+
+class LeafletPointWidget(widgets.BaseGeometryWidget):
+    template_name = 'leaflet/leaflet.html'
+
+    class Media:
+        css = {
+            'all': ('leaflet/css/LeafletWidget.css',)
+        }
+        js = (
+            'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
+            'leaflet/js/LeafletWidget.js'
+        )
+
+    def render(self, name, value, attrs=None):
+        # add point
+        if value:
+            attrs.update({ 'point': { 'x': value.x,
+                                      'y': value.y,
+                                      'z': value.z,
+                                      'srid': value.srid }
+                       })
+        return super().render(name, value, attrs)
+
 class AmbulancePermissionMixin(BasePermissionMixin):
 
     filter_field = 'id'
@@ -23,7 +48,11 @@ class AmbulancePermissionMixin(BasePermissionMixin):
 
 class AmbulanceActionMixin:
 
-    fields = [ 'identifier', 'capability', 'status', 'comment' ]
+    location = gis_forms.PointField(
+        widget = LeafletPointWidget(attrs={'map_width': 500,
+                                           'map_height': 300}))
+    
+    fields = [ 'identifier', 'capability', 'status', 'comment', 'location' ]
 
     @property
     def success_message(self):
