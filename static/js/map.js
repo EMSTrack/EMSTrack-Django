@@ -454,7 +454,7 @@ function createAmbulanceGrid(mymap) {
 		  ambulanceStatus = data[i].status;
 		  
 		  console.log('Creating ambulance "' + ambulanceIdentifier +
-			      '[id=' ambulanceId +']"' +
+			      '[id=' + ambulanceId + ']"' +
 			      ' on grid entry');
 		  
 		  if(ambulanceStatus === STATUS_AVAILABLE) {
