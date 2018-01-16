@@ -5,32 +5,34 @@
 
 <h1>Hospital</h1>
 
-<p>
-  <strong>Name:</strong>
-  <a href="{% url 'hospital:update' pk=hospital.id %}">{{ hospital.name }}</a>
-</p>
-<p>
-  <strong>Address:</strong>
-  {{ hospital.number }} {{ hospital.street }} {{ hospital.unit }},
-  {{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }},
-  {{ hospital.country }} 
-</p>
-<p>
-  <strong>Location:</strong>
-  {{ hospital.location }}
-</p>
-<p>
-  <strong>Comment:</strong>
-  {{ hospital.comment }}
-</p>
-<p>
-  <strong>Updated on:</strong>
-  {{ hospital.updated_on }}
-</p>
-<p>
-  <strong>By:</strong>
-  {{ hospital.updated_by }}
-</p>
+<div class="container">
+  <p>
+    <strong>Name:</strong>
+    <a href="{% url 'hospital:update' pk=hospital.id %}">{{ hospital.name }}</a>
+  </p>
+  <p>
+    <strong>Address:</strong>
+    {{ hospital.number }} {{ hospital.street }} {{ hospital.unit }},
+    {{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }},
+    {{ hospital.country }} 
+  </p>
+  <p>
+    <strong>Location:</strong>
+    {{ hospital.location }}
+  </p>
+  <p>
+    <strong>Comment:</strong>
+    {{ hospital.comment }}
+  </p>
+  <p>
+    <strong>Updated on:</strong>
+    {{ hospital.updated_on }}
+  </p>
+  <p>
+    <strong>By:</strong>
+    {{ hospital.updated_by }}
+  </p>
+</div>
 
 <hr>
 
@@ -38,23 +40,25 @@
   Equipment:
 </h2>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Value</th>
-    <th>Comment</th>
-    <th>Updated on</th>
-    <th>by</th>
-  </tr>
-  {% for equipment in hospital.hospitalequipment_set.all %}
-  <tr>
-    <td>{{ equipment.equipment.name }}</td>
-    <td>{{ equipment.value }}</td>
-    <td>{{ equipment.comment }}</td>
-    <td>{{ equipment.updated_by }}</td>
-    <td>{{ equipment.updated_on }}</td>
-  </tr>
-  {% endfor %}
-</table>
+<div>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Comment</th>
+      <th>Updated on</th>
+      <th>by</th>
+    </tr>
+    {% for equipment in hospital.hospitalequipment_set.all %}
+    <tr>
+      <td>{{ equipment.equipment.name }}</td>
+      <td>{{ equipment.value }}</td>
+      <td>{{ equipment.comment }}</td>
+      <td>{{ equipment.updated_by }}</td>
+      <td>{{ equipment.updated_on }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 
 {% endblock %}

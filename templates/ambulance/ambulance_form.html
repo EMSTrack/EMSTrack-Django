@@ -5,12 +5,14 @@
 
 <h1>Ambulance</h1>
 
-<form method="POST" class="post-form">
-  {% csrf_token %}
-  <table>
-    {{ form }}
-  </table>
-  <button type="submit">Save</button>
-</form>
-
+<div class="container">
+  <form method="POST" class="post-form">
+    {% csrf_token %}
+    <table>
+      {{ form }}
+    </table>
+    <button type="submit">Save</button>
+  </form>
+</div>
+    
 {% endblock %}

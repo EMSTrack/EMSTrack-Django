@@ -5,17 +5,19 @@
 
 <h1>Hospital</h1>
 
-<form method="POST" class="post-form">
-  {% csrf_token %}
-  <table>
-    {{ form }}
-  </table>
-  {% for form in inlines %}
-  <table>
-    {{ form }}
-  </table>
-  {% endfor %}
-  <button type="submit">Save</button>
-</form>
+<div class="container">
+  <form method="POST" class="post-form">
+    {% csrf_token %}
+    <table>
+      {{ form }}
+    </table>
+    {% for form in inlines %}
+    <table>
+      {{ form }}
+    </table>
+    {% endfor %}
+    <button type="submit">Save</button>
+  </form>
+</div>
 
 {% endblock %}
