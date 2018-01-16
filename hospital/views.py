@@ -47,7 +47,7 @@ class HospitalActionMixin:
         for formset in inlines:
 
             # add updated_by to formset instance
-            formset.updated_by = self.request.user
+            formset.instance.updated_by = self.request.user
             
             # then save
             formset.save()
