@@ -380,7 +380,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
+        self.assertEqual(result['location'], str(location))
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
         # set wrong attribute
@@ -453,7 +453,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
+        self.assertEqual(result['location'], str(location))
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
         # set status ambulance
