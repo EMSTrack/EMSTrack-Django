@@ -23,8 +23,6 @@ class AmbulancePermissionMixin(BasePermissionMixin):
 
 class AmbulanceActionMixin:
 
-    fields = [ 'identifier', 'capability', 'status', 'comment', 'location' ]
-
     @property
     def success_message(self):
         return NotImplemented
