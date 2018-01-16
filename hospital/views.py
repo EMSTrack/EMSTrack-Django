@@ -46,11 +46,17 @@ class HospitalActionMixin:
         # save formsets
         for formset in inlines:
 
-            # add updated_by to formset instance
-            formset.instance.updated_by = self.request.user
+            # save but do not commit
+            instances = formset.save(commit = False)
             
-            # then save
-            formset.save()
+            # save form
+            for obj in instances:
+                
+                # add updated_by to formset instance
+                obj.updated_by = self.request.user
+            
+                # then save
+                obj.save()
             
         return HttpResponseRedirect(self.get_success_url())
     
