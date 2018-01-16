@@ -366,7 +366,7 @@ class TestAmbulanceUpdate(TestSetup):
         response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'location': str(location),
+                                    'location': point2str(location),
                                     'location_timestamp': date2iso(location_timestamp),
                                 })
         )
@@ -380,7 +380,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        self.assertEqual(result['location'], str(location))
+        self.assertEqual(result['location'], point2str(location))
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
         # set wrong attribute
@@ -439,7 +439,7 @@ class TestAmbulanceUpdate(TestSetup):
         response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'location': str(location),
+                                    'location': point2str(location),
                                     'location_timestamp': date2iso(location_timestamp),
                                 })
         )
@@ -453,7 +453,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        self.assertEqual(result['location'], str(location))
+        self.assertEqual(result['location'], point2str(location))
         self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
         
         # set status ambulance
