@@ -22,7 +22,7 @@ var hospitalIcon = L.icon({
 	iconSize: [40, 40]
 });
 
-var APIUrl = "api/ambulance";
+var APIBaseUrl = "http://localhost:8000/api/";
 var MQTTBroker {
     host: "localhost", //"cruzroja.ucsd.edu",
     port: 8884
@@ -137,7 +137,7 @@ $(document).ready(function() {
 	    //alert("Connected");
 	    
 	    // Subscribes to both topics ambulance/1/location & ambulance/1/status
-	    $.getJSON('/ambulances/api/ambulances/', function(data) {
+	    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
 		$.each(data, function(index) {
 		    let topicName = "ambulance/" + data[index].id + "/#";
 		    client.subscribe(topicName);
@@ -235,7 +235,7 @@ function createStatusFilter(mymap) {
     
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
-    $.get('api/status', function(statuses) {
+    $.get(APIBaseUrl + 'status/', function(statuses) {
 	statuses.forEach(function(status){
 	    if(statusWithMarkers[status.name] !== undefined) {
 		layergroups[status.name] = L.layerGroup(statusWithMarkers[status.name]);
@@ -312,7 +312,7 @@ function getAmbulances(mymap) {
     $.ajax({
 	type: 'GET',
 	datatype: "json",
-	url: APIUrl,
+	url: APIBaseUrl + 'ambulance/',
 	success: function(arr) {
 	    
 	    statusWithMarkers = {}; // clear all statuses from previous ajax call.
@@ -362,27 +362,29 @@ function getAmbulances(mymap) {
  * @param ambulanceId is the unique id used in the ajax call url.
  * @return void.
  */
- function updateDetailPanel(ambulanceId) {
- 	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
- 	// Fill details
- 	$.get(apiAmbulanceUrl, function(data) {
- 		var currentStatus = data.status;
-		$('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
-			"Status: " + data.status + "<br/>" + 
-			"Priority: " + data.priority);
-	});
-	// Create dropdown
-	$('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
-	$.get('api/status/', function(data) {
-		$.each(data, function (index, val) {
-				$('#status-dropdown').append('<option value="' + val.name + 
-					'">' + val.name + '</option>');
-		});
-	});
- 	$('#change-status').show();
-
- 	$('#status-change-ambId').val(ambulanceId);
- }
+function updateDetailPanel(ambulanceId) {
+    
+    // Fill details
+    $.get(APIBaseUrl + 'ambulance/' + ambulanceId + '/',
+	  function(data) {
+ 	      var currentStatus = data.status;
+	      $('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
+					  "Status: " + data.status + "<br/>" + 
+					  "Priority: " + data.priority);
+	  });
+    // Create dropdown
+    $('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
+    // $.get(apiBaseUrl ', function(data) {
+    // $.each(data, function (index, val) {
+    // $('#status-dropdown').append('<option value="' + val.name + 
+    // '">' + val.name + '</option>');
+    // });
+    //});
+    
+    $('#change-status').show();
+    
+    $('#status-change-ambId').val(ambulanceId);
+}
 
 
 function onGridButtonClick(ambulanceId, mymap) {
@@ -408,7 +410,7 @@ function onGridButtonClick(ambulanceId, mymap) {
  *
  */
 function createAmbulanceGrid(mymap) {
-    $.get('api/ambulance/',
+    $.get(APIBaseUrl + 'ambulance/',
 	  function(data) {
 	      
 	      var i, ambulanceId;
