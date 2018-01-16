@@ -3,7 +3,7 @@ from enum import Enum
 from django.utils import timezone
 from django.urls import reverse
 
-from emstrack.models import AddressModel, UpdatedByModel
+from emstrack.models import AddressModel, UpdatedByModel, defaults
 from django.contrib.gis.db import models
 
 # User and ambulance location models
@@ -42,8 +42,8 @@ class Ambulance(UpdatedByModel):
                               default=AmbulanceStatus.UK.name)
     
     # location
-    orientation = models.FloatField(null=True, blank=True)
-    location = models.PointField(srid=4326, null=True, blank=True)
+    orientation = models.FloatField(default = 0)
+    location = models.PointField(srid=4326, default = defaults['location'])
     location_timestamp = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
