@@ -15,8 +15,6 @@ from util.mixins import BasePermissionMixin
 
 # Django views
 
-from .models import AED
-
 class LeafletPointWidget(widgets.BaseGeometryWidget):
     template_name = 'leaflet/leaflet.html'
 
