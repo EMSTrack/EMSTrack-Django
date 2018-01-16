@@ -33,7 +33,7 @@ class BasePermissionMixin:
         # return all objects if superuser
         user = self.request.user
         if user.is_superuser:
-            return self.queryset
+            return super().get_queryset()
 
         # return nothing if anonymous
         if user.is_anonymous:
@@ -59,7 +59,10 @@ class BasePermissionMixin:
         #print('> user = {}, can_do = {}'.format(user, can_do))
         #print('> objects = {}'.format(Object.objects.all()))
         #print('> filtered objects = {}'.format(Object.objects.filter(id__in=can_do)))
+        # add filter
         filter = {}
         filter[self.filter_field + '__in'] = can_do
-        return self.queryset.filter(**filter)
+
+        # retrieve query
+        return super().get_queryset().filter(**filter)
         
