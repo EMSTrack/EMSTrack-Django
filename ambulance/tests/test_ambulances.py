@@ -285,7 +285,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # Update ambulance location
         location_timestamp = timezone.now()
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         serializer = AmbulanceSerializer(a,
                                          data={
@@ -361,7 +361,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # set status location
         location_timestamp = timezone.now()
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
@@ -434,7 +434,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # set status location
         location_timestamp = timezone.now()
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
