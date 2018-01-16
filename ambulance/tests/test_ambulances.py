@@ -276,7 +276,7 @@ class TestAmbulanceUpdate(TestSetup):
             'capability': a.capability,
             'status': status,
             'orientation': None,
-            'location': a.location,
+            'location': point2str(a.location),
             'location_timestamp': date2iso(a.location_timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -304,7 +304,7 @@ class TestAmbulanceUpdate(TestSetup):
             'capability': a.capability,
             'status': a.status,
             'orientation': None,
-            'location': location,
+            'location': point2str(location),
             'location_timestamp': date2iso(location_timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
