@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from django-extra-fields import PointField
+from drf_extra_fields.geo_fields import PointField
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
