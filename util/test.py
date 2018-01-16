@@ -12,7 +12,7 @@ def date2iso(date):
 def point2str(point):
     #return 'SRID=4326;' + str(point)
     if point is not None:
-        return {'latitude': str(point.latitude),
-                'longitude': str(point.longitude)}
+        return {'latitude': str(point['latitude']),
+                'longitude': str(point['longitude'])}
     return point
 
