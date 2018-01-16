@@ -213,7 +213,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # Update ambulance location
         location_timestamp = timezone.now()
-        location = {'latitude': -2, 'longitude': 7}
+        location = {'latitude': -2., 'longitude': 7.}
         
         serializer = AmbulanceSerializer(a,
                                          data={
@@ -232,7 +232,7 @@ class TestAmbulanceUpdate(TestSetup):
             'capability': a.capability,
             'status': a.status,
             'orientation': None,
-            'location': point2str(location),
+            'location': location,
             'location_timestamp': date2iso(location_timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -276,7 +276,7 @@ class TestAmbulanceUpdate(TestSetup):
             'capability': a.capability,
             'status': status,
             'orientation': None,
-            'location': point2str(a.location),
+            'location': a.location,
             'location_timestamp': date2iso(a.location_timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -304,7 +304,7 @@ class TestAmbulanceUpdate(TestSetup):
             'capability': a.capability,
             'status': a.status,
             'orientation': None,
-            'location': point2str(location),
+            'location': location,
             'location_timestamp': date2iso(location_timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
