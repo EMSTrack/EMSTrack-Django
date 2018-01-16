@@ -51,7 +51,7 @@ class TestHospitalGetList(TestSetup):
                 'state': h.state,
                 'zipcode': h.zipcode,
                 'country': h.country,
-                'location': h.location,
+                'location': point2str(h.location),
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on)
