@@ -4,9 +4,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
-from django.contrib.gis import forms as gis_forms
-from django.contrib.gis.forms import widgets as gis_widgets
-
 from .models import Ambulance, Call, Base, AmbulanceRoute
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
@@ -17,28 +14,6 @@ from util.mixins import BasePermissionMixin
 
 # Django views
 
-class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
-    template_name = 'leaflet/leaflet.html'
-
-    class Media:
-        css = {
-            'all': ('leaflet/css/LeafletWidget.css',)
-        }
-        js = (
-            'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
-            'leaflet/js/LeafletWidget.js'
-        )
-
-    def render(self, name, value, attrs=None):
-        # add point
-        if value:
-            attrs.update({ 'point': { 'x': value.x,
-                                      'y': value.y,
-                                      'z': value.z,
-                                      'srid': value.srid }
-                       })
-        return super().render(name, value, attrs)
-
 class AmbulancePermissionMixin(BasePermissionMixin):
 
     filter_field = 'id'
@@ -48,10 +23,6 @@ class AmbulancePermissionMixin(BasePermissionMixin):
 
 class AmbulanceActionMixin:
 
-    location = gis_forms.PointField(
-        widget = LeafletPointWidget(attrs={'map_width': 500,
-                                           'map_height': 300}))
-    
     fields = [ 'identifier', 'capability', 'status', 'comment', 'location' ]
 
     @property
@@ -79,7 +50,7 @@ class AmbulanceListView(LoginRequiredMixin,
                         AmbulancePermissionMixin,
                         ListView):
     
-    model = Ambulance
+    model = Ambulance;
 
 class AmbulanceCreateView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
@@ -87,6 +58,7 @@ class AmbulanceCreateView(LoginRequiredMixin,
                           CreateView):
     
     model = Ambulance
+    form_class = AmbulanceCreateForm
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -97,6 +69,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
                           UpdateView):
     
     model = Ambulance
+    form_class = AmbulanceUpdateForm
 
     def get_success_url(self):
         return self.object.get_absolute_url()
