@@ -10,7 +10,7 @@ from .models import Ambulance
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    location = PointField()
+    location = PointField(required=False)
     
     class Meta:
         model = Ambulance
