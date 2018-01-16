@@ -5,7 +5,7 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
 from django.contrib.gis import forms as gis_forms
-from django.contrib.gis.forms import gis_widgets
+from django.contrib.gis.forms import widgets as gis_widgets
 
 from .models import Ambulance, Call, Base, AmbulanceRoute
 
