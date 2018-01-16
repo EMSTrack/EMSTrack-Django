@@ -8,7 +8,7 @@ import django.db.models as models
 from .models import Ambulance
 
 # Ambulance serializers
-class AmbulanceSerializer(GeoFeatureModelSerializer):
+class AmbulanceSerializer(serializer.ModelSerializer):
 
     location = GeometrySerializerMethodField()
     
