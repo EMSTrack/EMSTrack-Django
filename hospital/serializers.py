@@ -1,19 +1,26 @@
-from rest_framework import serializers
-
+import django.db.models as models
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-import django.db.models as models
+
+from rest_framework import serializers
+from drf_extra_fields.geo_fields import PointField
 
 from .models import Hospital, Equipment, HospitalEquipment
 
 # Hospital serializers
 class HospitalSerializer(serializers.ModelSerializer):
 
+    location = PointField(required=False)
+    
     class Meta:
         model = Hospital
-        fields = '__all__'
+        fields = [ 'number', 'street', 'unit',
+                   'city', 'state', 'zipcode', 'country',
+                   'location',
+                   'name',
+                   'comment', 'updated_by', 'updated_on' ]
         read_only_fields = ('updated_by',)
-
+        
     def create(self, validated_data):
 
         # get current user

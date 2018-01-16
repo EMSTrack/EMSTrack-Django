@@ -1,9 +1,9 @@
-from rest_framework import serializers
-from drf_extra_fields.geo_fields import PointField
-
+import django.db.models as models
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-import django.db.models as models
+
+from rest_framework import serializers
+from drf_extra_fields.geo_fields import PointField
 
 from .models import Ambulance
 
