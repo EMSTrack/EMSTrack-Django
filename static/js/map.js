@@ -346,6 +346,12 @@ function getAmbulances(mymap) {
 		else if(item.status === STATUS_OUT_OF_SERVICE)
 		    coloredIcon = ambulanceIconBlack;
 		
+		console.log('Adding ambulance "' + item.identifier +
+			    '[id=' + item.id + ']"' +
+			    '[' + item.location.latitude + ' ' +
+			    item.location.longitude + '] ' +
+			    ' to map');
+		
 		// If ambulance marker doesn't exist
 		ambulanceMarkers[item.id] = L.marker([item.location.latitude,
 						      item.location.longitude],
