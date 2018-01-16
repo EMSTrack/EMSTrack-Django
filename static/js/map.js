@@ -307,12 +307,16 @@ function createStatusFilter(mymap) {
  */
 function getAmbulances(mymap) {
 
+    console.log('getAmbulances')
+    
     // console.log('ajax request sent');
     $.ajax({
 	type: 'GET',
 	datatype: "json",
 	url: APIBaseUrl + 'ambulance/',
 	success: function(arr) {
+
+	    console.log('getAmbulances:success')
 	    
 	    statusWithMarkers = {}; // clear all statuses from previous ajax call.
 	    var i = 0;
