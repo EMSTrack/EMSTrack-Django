@@ -6,7 +6,7 @@ from django.contrib.gis.forms import widgets as gis_widgets
 from .models import Ambulance, Call
 
 class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
-    template_name = 'leaflet/leaflet.html'
+    template_name = '/leaflet/leaflet.html'
 
     class Media:
         css = {
