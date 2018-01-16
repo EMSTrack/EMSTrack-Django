@@ -3,7 +3,9 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
-from django.contrib.gis.forms import widgets
+
+from django.contrib.gis import forms as gis_forms
+from django.contrib.gis.forms import gis_widgets
 
 from .models import Ambulance, Call, Base, AmbulanceRoute
 
@@ -15,7 +17,7 @@ from util.mixins import BasePermissionMixin
 
 # Django views
 
-class LeafletPointWidget(widgets.BaseGeometryWidget):
+class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
     template_name = 'leaflet/leaflet.html'
 
     class Media:
