@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_gis.serializers import GeoModelSerializer
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -7,7 +8,7 @@ import django.db.models as models
 from .models import Ambulance
 
 # Ambulance serializers
-class AmbulanceSerializer(serializers.ModelSerializer):
+class AmbulanceSerializer(serializers.GeoModelSerializer):
 
     class Meta:
         model = Ambulance

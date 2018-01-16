@@ -2,6 +2,7 @@ django
 django-braces
 psycopg2
 djangorestframework
+djangorestframework-gis
 markdown
 django-filter
 django-rest-swagger
