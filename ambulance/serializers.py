@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework_gis.serializers import GeometrySerializerMethodField, GeoFeatureModelSerializer
+from django-extra-fields import PointField
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -8,14 +8,15 @@ import django.db.models as models
 from .models import Ambulance
 
 # Ambulance serializers
-class AmbulanceSerializer(GeoFeatureModelSerializer):
+class AmbulanceSerializer(serializers.ModelSerializer):
 
+    location = PointField()
+    
     class Meta:
         model = Ambulance
-        geo_field = 'location'
         fields = [ 'id', 'identifier', 
                    'capability', 'status',
-                   'orientation',
+                   'orientation', 'location',
                    'location_timestamp',
                    'comment', 'updated_by', 'updated_on' ]
         read_only_fields = ('updated_by',)
