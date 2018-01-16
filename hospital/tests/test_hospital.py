@@ -11,6 +11,7 @@ from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
+from drf_extra_fields.geo_fields import PointField
 
 from login.models import AmbulancePermission, HospitalPermission
 
@@ -33,6 +34,10 @@ class TestHospitalGetList(TestSetup):
 
     def test_hospital_serializer(self):
 
+        from django.contrib.gis.geos import GEOSGeometry
+        
+        location = PointField().to_representation(GEOSGeometry(defaults['location']));
+        
         # test HospitalSerializer
         for h in (self.h1, self.h2, self.h3):
             serializer = HospitalSerializer(h)
@@ -46,7 +51,7 @@ class TestHospitalGetList(TestSetup):
                 'state': h.state,
                 'zipcode': h.zipcode,
                 'country': h.country,
-                'location': point2str(defaults['location']),
+                'location': h.location,
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on)
