@@ -31,9 +31,19 @@ var MQTTBroker = {
 /**
  * Ambulance statuses 
  */
-var STATUS_IN_SERVICE = "In Service";
-var STATUS_AVAILABLE = "Available";
-var STATUS_OUT_OF_SERVICE = "Out of service";
+
+var AmbulanceStatus = {
+    'UK': 'Unknown',
+    'AV': 'Available',
+    'OS': 'Out of service',
+    'PB': 'Patient bound',
+    'AP': 'At patient',
+    'HB': 'Hospital bound',
+    'AH': 'At hospital'
+}
+var STATUS_IN_SERVICE = "IS";
+var STATUS_AVAILABLE = "AV";
+var STATUS_OUT_OF_SERVICE = "OS";
 
 // global client variable for mqtt
 var client;
@@ -83,7 +93,7 @@ $(document).ready(function() {
 	     });
     
     // Create ambulance grid (move somewhere else if not appropriate here)
-    //createAmbulanceGrid(mymap);
+    createAmbulanceGrid(mymap);
 
     // Update the ambulances on the map.
     //createStatusFilter(mymap);
@@ -307,8 +317,6 @@ function createStatusFilter(mymap) {
  */
 function getAmbulances(mymap) {
 
-    console.log('getAmbulances')
-    
     // console.log('ajax request sent');
     $.ajax({
 	type: 'GET',
@@ -335,27 +343,33 @@ function getAmbulances(mymap) {
 		let coloredIcon = ambulanceIcon;
 		if(item.status === STATUS_AVAILABLE)
 		    coloredIcon = ambulanceIconBlue;
-		if(item.status === STATUS_OUT_OF_SERVICE)
+		else if(item.status === STATUS_OUT_OF_SERVICE)
 		    coloredIcon = ambulanceIconBlack;
 		
 		// If ambulance marker doesn't exist
-		ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
-		    .bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+		ambulanceMarkers[item.id] = L.marker([item.location.latitude,
+						      item.location.longitude],
+						     {icon: coloredIcon})
+		    .bindPopup("<strong>" + item.identifier +
+			       "</strong><br/>" + item.status).addTo(mymap);
 		
 		// Bind id to icons
 		ambulanceMarkers[item.id]._icon.id = item.id;
-		// Collapse panel on icon hover.
-		ambulanceMarkers[item.id].on('mouseover', function(e){
-		    // open popup bubble
-		    this.openPopup().on('mouseout', function(e){
-			this.closePopup();
-		    });
-		    
-		    // update details panel
-		    updateDetailPanel(item.id);
-		});
 		
-		//Add to a map to differentiate the layers between statuses.
+		// Collapse panel on icon hover.
+		ambulanceMarkers[item.id].on('mouseover',
+					     function(e){
+						 // open popup bubble
+						 this.openPopup().on('mouseout',
+								     function(e){
+									 this.closePopup();
+								     });
+						 
+						 // update details panel
+						 updateDetailPanel(item.id);
+					     });
+		
+		// Add to a map to differentiate the layers between statuses.
 		if(statusWithMarkers[item.status]){
 		    statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
 		}
@@ -403,21 +417,21 @@ function updateDetailPanel(ambulanceId) {
 
 
 function onGridButtonClick(ambulanceId, mymap) {
-	return function(e) {
-		// Update detail panel
-		updateDetailPanel(ambulanceId);
-
-		// Center icon on map
-		var position = ambulanceMarkers[ambulanceId].getLatLng();
-		mymap.setView(position, 12);
-
-		// Open popup for 2.5 seconds.
-		ambulanceMarkers[ambulanceId].openPopup();
-		setTimeout(function(){
-			ambulanceMarkers[ambulanceId].closePopup();
-		}, 2500);
-
-	}
+    return function(e) {
+	// Update detail panel
+	updateDetailPanel(ambulanceId);
+	
+	// Center icon on map
+	var position = ambulanceMarkers[ambulanceId].getLatLng();
+	mymap.setView(position, 12);
+	
+	// Open popup for 2.5 seconds.
+	ambulanceMarkers[ambulanceId].openPopup();
+	setTimeout(function(){
+	    ambulanceMarkers[ambulanceId].closePopup();
+	}, 2500);
+	
+    }
 }
 
 /*
@@ -427,6 +441,8 @@ function onGridButtonClick(ambulanceId, mymap) {
 function createAmbulanceGrid(mymap) {
     $.get(APIBaseUrl + 'ambulance/',
 	  function(data) {
+
+	      console.log('createAmbulanceGrid');
 	      
 	      var i, ambulanceId;
 	      
@@ -434,26 +450,29 @@ function createAmbulanceGrid(mymap) {
 	      for(i = 0; i < data.length; i++) {
 		  
 		  ambulanceId = data[i].id;
-		  ambulanceLicensePlate = data[i].identifier;
+		  ambulanceIdentifier = data[i].identifier;
 		  ambulanceStatus = data[i].status;
 		  
-		  // console.log(ambulanceId);
-		  // console.log(ambulanceLicensePlate);
+		  console.log('Creating ambulance "' + ambulanceIdentifier +
+			      '[id=' ambulanceId +']"' +
+			      ' on grid entry');
 		  
 		  if(ambulanceStatus === STATUS_AVAILABLE) {
-		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
-		      $('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceLicensePlate + ' </label><br/>');
+		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceIdentifier + '</button>');
+		      $('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceIdentifier + ' </label><br/>');
 		  }
 		  
-		  if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
-		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		  else if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
+		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceIdentifier + '</button>');
 		  
-		  if(ambulanceStatus === STATUS_IN_SERVICE)
-		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceLicensePlate + '</button>');
+		  else // if(ambulanceStatus === STATUS_IN_SERVICE)
+		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceIdentifier + '</button>');
 		  
 		  // Open popup on panel click.
 		  // For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
-		  $('#grid-button' + ambulanceId).click(onGridButtonClick(ambulanceId,mymap));
+		  $('#grid-button' + ambulanceId).click(
+		      onGridButtonClick(ambulanceId,mymap)
+		  );
 	      }
 	  });
 }
@@ -464,9 +483,9 @@ function updateAmbulanceGrid(ambulanceId, ambulanceStatus) {
     // Updated button color/status dynamically
     if(ambulanceStatus === STATUS_AVAILABLE) 
 	$(buttonId).attr( "class", "btn btn-success" );
-    if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
+    else if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
 	$(buttonId).attr( "class", "btn btn-default" );
-    if(ambulanceStatus === STATUS_IN_SERVICE)
+    else // if(ambulanceStatus === STATUS_IN_SERVICE)
 	$(buttonId).attr( "class", "btn btn-danger" );
     
 }
