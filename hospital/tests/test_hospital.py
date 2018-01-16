@@ -225,7 +225,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
         
         # Update hospital location
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         serializer = HospitalSerializer(h,
                                         data={
@@ -287,7 +287,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
         
         # Update hospital location
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         serializer = HospitalSerializer(h,
                                         data={
@@ -350,7 +350,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertEqual(result['street'], street)
         
         # set hospital location
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/hospital/{}/'.format(str(self.h1.id)),
                                 content_type='application/json',
@@ -368,7 +368,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['street'], street)
-        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
+        self.assertEqual(result['location'], point2str(location))
         
         # set wrong hospital id
         response = client.patch('/api/hospital/100/',
@@ -411,12 +411,12 @@ class TestHospitalUpdate(TestSetup):
         self.assertEqual(result['street'], street)
         
         # set hospital location
-        location = Point(-2,7)
+        location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/hospital/{}/'.format(str(self.h2.id)),
                                 content_type='application/json',
                                 data = json.dumps({
-                                    'location': str(location)
+                                    'location': point2str(location)
                                 })
         )
         self.assertEqual(response.status_code, 200)
@@ -429,7 +429,7 @@ class TestHospitalUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['street'], street)
-        self.assertEqual(result['location'], 'SRID=4326;' + str(location))
+        self.assertEqual(result['location'], point2str(location))
         
         # set status hospital (no permission)
         street = 'yet another hospital'
