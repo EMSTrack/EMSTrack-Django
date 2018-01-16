@@ -34,8 +34,6 @@ class TestHospitalGetList(TestSetup):
 
     def test_hospital_serializer(self):
 
-        from django.contrib.gis.geos import GEOSGeometry
-        
         # test HospitalSerializer
         for h in (self.h1, self.h2, self.h3):
             serializer = HospitalSerializer(h)
@@ -221,7 +219,7 @@ class TestHospitalUpdate(TestSetup):
             'zipcode': h.zipcode,
             'country': h.country,
             'comment': h.comment,
-            'location': point2str(h.location),
+            'location': point2str(PointField().to_representation(h.location)),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on)
         }
