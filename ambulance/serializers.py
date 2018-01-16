@@ -8,7 +8,7 @@ import django.db.models as models
 from .models import Ambulance
 
 # Ambulance serializers
-class AmbulanceSerializer(serializers.GeoModelSerializer):
+class AmbulanceSerializer(GeoModelSerializer):
 
     class Meta:
         model = Ambulance
