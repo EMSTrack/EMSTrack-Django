@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
 
 <h1>Ambulance</h1>
