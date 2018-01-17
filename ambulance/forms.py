@@ -10,7 +10,8 @@ class LeafletPointWidget(gis_widgets.BaseGeometryWidget):
 
     class Media:
         css = {
-            'all': ('leaflet/css/LeafletWidget.css',)
+            'all': ('http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css',
+                    'leaflet/css/LeafletWidget.css')
         }
         js = (
             'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
