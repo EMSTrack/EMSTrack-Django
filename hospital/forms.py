@@ -14,10 +14,10 @@ class HospitalCreateForm(forms.ModelForm):
     
     class Meta:
         model = Hospital
-    fields = [ 'name',
-               'number', 'street', 'unit',
-               'city', 'state', 'zipcode', 'country',
-               'location', 'comment' ]
+        fields = [ 'name',
+                   'number', 'street', 'unit',
+                   'city', 'state', 'zipcode', 'country',
+                   'location', 'comment' ]
 
 class HospitalUpdateForm(HospitalCreateForm):
     
