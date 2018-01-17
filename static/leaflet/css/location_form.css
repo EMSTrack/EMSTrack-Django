@@ -1,0 +1,9 @@
+#id_location_map {
+    height: 460px;
+    width: 500px;
+}
+
+.id_location_coords_label {
+    font-size: small;
+}
+
