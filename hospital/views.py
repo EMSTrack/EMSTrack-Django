@@ -10,7 +10,7 @@ from extra_views.generic import GenericInlineFormSet
 
 from .models import Hospital, HospitalEquipment
 
-from .forms import HospitalEquipmentFormset
+from .forms import HospitalCreateForm, HospitalUpdateForm
 
 from util.mixins import BasePermissionMixin
 
@@ -24,11 +24,6 @@ class HospitalPermissionMixin(BasePermissionMixin):
     queryset = Hospital.objects.all()
     
 class HospitalActionMixin:
-
-    fields = [ 'name',
-               'number', 'street', 'unit',
-               'city', 'state', 'zipcode', 'country',
-               'location', 'comment' ]
 
     @property
     def success_message(self):
