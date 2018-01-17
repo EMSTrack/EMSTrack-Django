@@ -10,7 +10,7 @@ from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
 from .serializers import AmbulanceSerializer
 
-from util.mixins import BasePermissionMixin
+from emstrack.mixins import BasePermissionMixin
 
 # Django views
 

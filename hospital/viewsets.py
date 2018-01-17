@@ -6,8 +6,8 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from util.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin, \
-    BasePermissionMixin
+from emstrack.mixins import BasePermissionMixin, \
+    CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 
 from .models import Hospital, HospitalEquipment, Equipment
 

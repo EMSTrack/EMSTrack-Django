@@ -23,7 +23,7 @@ from hospital.models import Hospital, \
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
-from util.test import date2iso, point2str
+from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
 

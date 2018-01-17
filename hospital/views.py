@@ -12,7 +12,7 @@ from .models import Hospital, HospitalEquipment
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from util.mixins import BasePermissionMixin
+from emstrack.mixins import BasePermissionMixin
 
 # Django views
 
