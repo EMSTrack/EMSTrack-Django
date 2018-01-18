@@ -122,15 +122,15 @@ $(document).ready(function() {
 	let topic = message.destinationName.split("/");
 
 	// parse message
-	let message = JSON.parse(message.payloadString);
+	let data = JSON.parse(message.payloadString);
 	    
 	// Look for ambulance/{id}/data
-	let ambulanceId = destinationNameArr[1];
+	let id = topic[1];
 	
 	if(topic[0] === 'ambulance' &&
 	   topic[2] == 'data') {
 	    console.log('Received ambulance ' + ambulanceId + ' data');
-	    updateAmbulance(ambulanceId, message);
+	    updateAmbulance(id, data);
 	}
     };
     
