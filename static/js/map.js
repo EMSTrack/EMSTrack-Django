@@ -124,6 +124,8 @@ $(document).ready(function() {
 	// parse message
 	let data = JSON.parse(message.payloadString);
 	    
+	console.log("data: " + data);
+	
 	// Look for ambulance/{id}/data
 	let id = topic[1];
 	
