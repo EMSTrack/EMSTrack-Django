@@ -5,15 +5,16 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
     <script src="{% static 'js/form-button.js' %}"></script>
+
+    <script>
+      ambulance_status = {{ ambulance_status }};
+      ambulance_capability = {{ ambulance_capability }};
+    </script>
 {% endblock %}
 
 {% block content %}
 <div class="container">
 
-  ---
-  {{ ambulance_status }}
-  ---
-  
   <div class="row">
 
     <div class="col-md-9">
