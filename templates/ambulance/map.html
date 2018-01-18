@@ -58,6 +58,9 @@
             <div id="change-status"
 		 style="text-align: center; padding-bottom: 10px; display: none;">
               <select id="status-dropdown" style="margin: auto;">
+		{% for status in ambulance_status %}
+		<option value="">{{ status }}</option>
+		{% endfor %}
               </select>
             </div>
           </div>
