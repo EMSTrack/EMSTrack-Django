@@ -445,7 +445,7 @@ function updateDetailPanel(ambulance) {
 				"Status: " + ambulance.status );
     
     // Create dropdown
-    $('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
+    //$('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
     // $.get(apiBaseUrl ', function(data) {
     // $.each(data, function (index, val) {
     // $('#status-dropdown').append('<option value="' + val.name + 
