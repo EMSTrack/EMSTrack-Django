@@ -122,27 +122,8 @@ $(document).ready(function() {
 	password: "cruzrojaadmin",
 	useSSL: true,
 	cleanSession: true,
-	
-	//Gets Called if the connection has successfully been established
-	onSuccess: function () {
-
-	    console.log("Connected to MQTT broker")
-		
-	    // Subscribes to ambulance/{id}/data
-	    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
-		$.each(data, function(index) {
-		    let topicName = "ambulance/" + data[index].id + "/data";
-		    client.subscribe(topicName);
-		    console.log('Subscribing to topic: ' + topicName);
-		});
-	    })
-	},
-	
-	//Gets Called if the connection could not be established
-	onFailure: function (message) {
-	    alert("Connection failed: " + message.errorMessage);
-	},
-	
+	onSuccess: onConnect,
+	onFailure: onConnectFailure,
     };
 
     // connect to MQTT broker
@@ -161,6 +142,60 @@ $(document).ready(function() {
 });
 
 var layergroups = {}; // The layer groups that will be part of the map.
+
+/* Handle connect */
+function onConnect() {
+
+    console.log("Connected to MQTT broker")
+    
+    // Subscribes to ambulance/{id}/data
+    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
+	$.each(data, function(index) {
+	    let topicName = "ambulance/" + data[index].id + "/data";
+	    client.subscribe(topicName);
+	    console.log('Subscribing to topic: ' + topicName);
+	});
+    })
+    
+};
+
+/* Handle missconnection */
+function onConnectFailure(message) {
+	
+    alert("Connection to MQTT broker failed: " + message.errorMessage +
+	  "Information will not be updated in real time.");
+
+    // Load data from API
+    $.ajax({
+	type: 'GET',
+	datatype: "json",
+	url: APIBaseUrl + 'ambulance/',
+	
+	error: function(msg) {
+	    
+	    alert('Could not retrieve data from API:' + msg)
+	    
+	},
+	
+	success: function(data) {
+	    
+	    console.log('Got data from API')
+	    
+	    $.each(data, function(i, ambulance) {
+		
+		// update ambulance
+		updateAmbulance(ambulance);
+		
+	    });
+	}
+    })
+	.done(function( data ) {
+	    if ( console && console.log ) {
+		console.log( "Done retrieving data from API" );
+	    }
+	});
+    
+};
 
 /* Handle 'ambulance/+/data' mqtt messages */
 function onMessageArrived(message) {
@@ -183,7 +218,7 @@ function onMessageArrived(message) {
 	if(topic[0] === 'ambulance' &&
 	   topic[2] == 'data') {
 	    let id = topic[1];
-	    updateAmbulance(id, data);
+	    updateAmbulance(data);
 	}
 	
     } catch(e) {
@@ -286,8 +321,12 @@ function addAmbulanceToMap(ambulance) {
     
 };
 
-function updateAmbulance(id, ambulance) {
+function updateAmbulance(ambulance) {
 
+    // retrieve id
+    let id = ambulance.id;
+
+    // already exists?
     if (id in ambulances) {
 
 	// update ambulance
