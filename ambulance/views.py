@@ -4,7 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
-from .models import Ambulance, Call, Base, AmbulanceRoute
+from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
+    Call, Base, AmbulanceRoute
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
@@ -77,7 +78,8 @@ class AmbulanceMap(TemplateView):
 
      def get_context_data(self, **kwargs):
          context = super().get_context_data(**kwargs)
-         context['ambulance_list'] = Ambulance.objects.all()
+         context['ambulance_status'] = AmbulanceStatus
+         context['ambulance_capability'] = AmbulanceCapability
          return context
     
 # NEED REVISING
