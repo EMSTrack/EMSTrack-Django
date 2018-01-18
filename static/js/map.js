@@ -219,8 +219,6 @@ function onMessageArrived(message) {
 	// parse message
 	let data = JSON.parse(message.payloadString);
 	
-	console.log("data: " + data);
-	
 	// Look for ambulance/{id}/data
 	if (topic[0] === 'ambulance' &&
 	    topic[2] == 'data') {
@@ -416,7 +414,7 @@ function addHospitalToMap(hospital) {
     hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,
 					     hospital.location.longitude],
 					    {icon: coloredIcon})
-	.bindPopup("<strong>" + hospital.identifier + "</strong>")
+	.bindPopup("<strong>" + hospital.name + "</strong>")
 	.addTo(mymap);
     
     // Bind id to icons
