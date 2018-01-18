@@ -121,19 +121,26 @@ $(document).ready(function() {
 	// split topic
 	let topic = message.destinationName.split("/");
 
-	// parse message
-	let data = JSON.parse(message.payloadString);
+	try {
 	    
-	console.log("data: " + data);
-	
-	// Look for ambulance/{id}/data
-	let id = topic[1];
-	
-	if(topic[0] === 'ambulance' &&
-	   topic[2] == 'data') {
-	    console.log('Received ambulance ' + ambulanceId + ' data');
-	    updateAmbulance(id, data);
+	    // parse message
+	    let data = JSON.parse(message.payloadString);
+	    
+	    console.log("data: " + data);
+	    
+	    // Look for ambulance/{id}/data
+	    let id = topic[1];
+	    
+	    if(topic[0] === 'ambulance' &&
+	       topic[2] == 'data') {
+		console.log('Received ambulance ' + ambulanceId + ' data');
+		updateAmbulance(id, data);
+	    }
+	    
+	} catch(e) {
+	    alert('Error processing message "' + message.payloadString + '"');
 	}
+	
     };
     
     var options = {
