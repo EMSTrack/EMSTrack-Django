@@ -289,9 +289,9 @@ function updateAmbulance(id, ambulance) {
     if (id in ambulances) {
 
 	// update ambulance
-	ambulances[id].status = data.status;
-	ambulances[id].location.latitude = data.location.latitude;
-	ambulances[id].location.longitude = data.location.longitude;
+	ambulances[id].status = ambulance.status;
+	ambulances[id].location.latitude = ambulance.location.latitude;
+	ambulances[id].location.longitude = ambulance.location.longitude;
 	
 	// Remove existing marker
 	mymap.removeLayer(ambulanceMarkers[id]);
