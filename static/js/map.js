@@ -138,7 +138,9 @@ $(document).ready(function() {
 	    }
 	    
 	} catch(e) {
-	    alert('Error processing message "' + message.payloadString + '"');
+	    alert('Error processing message "' +
+		  message.payloadString + '"' + '<br/>' +
+		 'error = "' + e + '"');
 	}
 	
     };
