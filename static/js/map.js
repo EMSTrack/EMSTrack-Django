@@ -97,7 +97,7 @@ $(document).ready(function() {
 
     // Update the ambulances on the map.
     //createStatusFilter(mymap);
-    getAmbulances(mymap);
+    //getAmbulances(mymap);
     
     // Submit form
     $('#dispatchForm').submit(function(e) {
