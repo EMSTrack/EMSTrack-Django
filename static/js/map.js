@@ -383,7 +383,7 @@ function addAmbulanceToMap(ambulance) {
 				    });
 		
 		// update details panel
-		updateDetailPanel(ambulance.id);
+		updateDetailPanel(ambulance);
 	    });
     
     // Add to a map to differentiate the layers between statuses.
@@ -432,6 +432,31 @@ function addHospitalToMap(hospital) {
 	    });
     
 };
+
+/*
+ * updateDetailPanel updates the detail panel with the ambulance's details.
+ * @param ambulanceId is the unique id used in the ajax call url.
+ * @return void.
+ */
+function updateDetailPanel(ambulance) {
+    
+    $('.ambulance-detail').html("Ambulance: " + ambulance.identifier +
+				"<br/>" +
+				"Status: " + ambulance.status );
+    
+    // Create dropdown
+    $('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
+    // $.get(apiBaseUrl ', function(data) {
+    // $.each(data, function (index, val) {
+    // $('#status-dropdown').append('<option value="' + val.name + 
+    // '">' + val.name + '</option>');
+    // });
+    //});
+    
+    $('#change-status').show();
+    
+    $('#status-change-ambId').val(ambulanceId);
+}
 
 /* Create status filter on the top right corner of the map */
 function createStatusFilter(mymap) {
@@ -506,34 +531,7 @@ function createStatusFilter(mymap) {
     });
 }
 
-/*
- * updateDetailPanel updates the detail panel with the ambulance's details.
- * @param ambulanceId is the unique id used in the ajax call url.
- * @return void.
- */
-function updateDetailPanel(ambulanceId) {
-    
-    // Fill details
-    $.get(APIBaseUrl + 'ambulance/' + ambulanceId + '/',
-	  function(data) {
- 	      var currentStatus = data.status;
-	      $('.ambulance-detail').html("Ambulance: " + data.id + "<br/>" +
-					  "Status: " + data.status + "<br/>" + 
-					  "Priority: " + data.priority);
-	  });
-    // Create dropdown
-    $('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
-    // $.get(apiBaseUrl ', function(data) {
-    // $.each(data, function (index, val) {
-    // $('#status-dropdown').append('<option value="' + val.name + 
-    // '">' + val.name + '</option>');
-    // });
-    //});
-    
-    $('#change-status').show();
-    
-    $('#status-change-ambId').val(ambulanceId);
-}
+
 
 
 function onGridButtonClick(ambulanceId, mymap) {
