@@ -455,7 +455,7 @@ function updateDetailPanel(ambulance) {
     
     $('#change-status').show();
     
-    $('#status-change-ambId').val(ambulanceId);
+    $('#status-change-ambId').val(ambulance.id);
 }
 
 /* Create status filter on the top right corner of the map */
