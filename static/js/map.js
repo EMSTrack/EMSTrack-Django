@@ -256,15 +256,16 @@ function updateAmbulance(id, data) {
     mymap.removeLayer(ambulanceMarkers[id]);
 
     // Recreate marker
-    addAmbulance(ambulances[id]);
+    let ambulance = ambulances[id]
+    addAmbulance(ambulance);
 
     // Update ambulance grid
     var buttonId = "#grid-button" + id;
     
     // Updated button color/status dynamically
-    if(item.status === STATUS_AVAILABLE) 
+    if(ambulance.status === STATUS_AVAILABLE) 
 	$(buttonId).attr( "class", "btn btn-success" );
-    else if(item.tatus === STATUS_OUT_OF_SERVICE)
+    else if(ambulance.tatus === STATUS_OUT_OF_SERVICE)
 	$(buttonId).attr( "class", "btn btn-default" );
     else // if(ambulanceStatus === STATUS_IN_SERVICE)
 	$(buttonId).attr( "class", "btn btn-danger" );
