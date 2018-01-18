@@ -166,7 +166,7 @@ var layergroups = {}; // The layer groups that will be part of the map.
 function onMessageArrived(message) {
 
     console.log('Message "' +
-		message.destinationName + ':' message.payloadString +
+		message.destinationName + ':' + message.payloadString +
 		'" arrived');
     
     // split topic
@@ -188,7 +188,7 @@ function onMessageArrived(message) {
 	
     } catch(e) {
 	alert('Error processing message "' +
-	      message.destinationName + ':' message.payloadString +
+	      message.destinationName + ':' + message.payloadString +
 	      '"' + '<br/>' + 'error = "' + e + '"');
     }
     
