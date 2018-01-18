@@ -121,17 +121,9 @@ $(document).ready(function() {
 	// split topic
 	let topic = message.destinationName.split("/");
 
-	try {
-
-	    // parse message
-	    let message = JSON.parse(message.payloadString);
+	// parse message
+	let message = JSON.parse(message.payloadString);
 	    
-	} catch (e) {
-	    
-	    alert('Unable to parse message: "' + message.payloadString + '"');
-	    
-	}
-	
 	// Look for ambulance/{id}/data
 	let ambulanceId = destinationNameArr[1];
 	
