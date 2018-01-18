@@ -113,37 +113,7 @@ $(document).ready(function() {
 				  "clientId");
     
     // set callback handlers
-    client.onMessageArrived = function(message) {
-	
-	console.log("Topic: " + message.destinationName +
-		    ", Message: "  + message.payloadString);
-
-	// split topic
-	let topic = message.destinationName.split("/");
-
-	try {
-	    
-	    // parse message
-	    let data = JSON.parse(message.payloadString);
-	    
-	    console.log("data: " + data);
-	    
-	    // Look for ambulance/{id}/data
-	    let id = topic[1];
-	    
-	    if(topic[0] === 'ambulance' &&
-	       topic[2] == 'data') {
-		console.log('Received ambulance ' + id + ' data');
-		updateAmbulance(id, data);
-	    }
-	    
-	} catch(e) {
-	    alert('Error processing message "' +
-		  message.payloadString + '"' + '<br/>' +
-		 'error = "' + e + '"');
-	}
-	
-    };
+    client.onMessageArrived = onMessageArrived;
     
     var options = {
 	//connection attempt timeout in seconds
@@ -178,19 +148,52 @@ $(document).ready(function() {
     // connect to MQTT broker
     client.connect(options);
     
-    // Publish to mqtt on status change from details options dropdown
-    $('#status-dropdown').change(function() {
- 	var statusMessage = new Paho.MQTT.Message(this.value);
- 	var ambId = $('#status-change-ambId').val();
- 	statusMessage.destinationName = "ambulance/" + ambId + "/status";
- 	statusMessage.qos = 2;
- 	client.send(statusMessage);
- 	console.log("send message: " + this.value + " by ambulance " + ambId);
-    });
+    // // Publish to mqtt on status change from details options dropdown
+    // $('#status-dropdown').change(function() {
+    // 	var statusMessage = new Paho.MQTT.Message(this.value);
+    // 	var ambId = $('#status-change-ambId').val();
+    // 	statusMessage.destinationName = "ambulance/" + ambId + "/status";
+    // 	statusMessage.qos = 2;
+    // 	client.send(statusMessage);
+    // 	console.log("send message: " + this.value + " by ambulance " + ambId);
+    // });
     
 });
 
 var layergroups = {}; // The layer groups that will be part of the map.
+
+/* Handle 'ambulance/+/data' mqtt messages */
+function onMessageArrived(message) {
+
+    console.log('Message "' +
+		message.destinationName + ':' message.payloadString +
+		'" arrived');
+    
+    // split topic
+    let topic = message.destinationName.split("/");
+    
+    try {
+	
+	// parse message
+	let data = JSON.parse(message.payloadString);
+	
+	console.log("data: " + data);
+	
+	// Look for ambulance/{id}/data
+	if(topic[0] === 'ambulance' &&
+	   topic[2] == 'data') {
+	    let id = topic[1];
+	    updateAmbulance(id, data);
+	}
+	
+    } catch(e) {
+	alert('Error processing message "' +
+	      message.destinationName + ':' message.payloadString +
+	      '"' + '<br/>' + 'error = "' + e + '"');
+    }
+    
+};
+
 
 function addAmbulanceToGrid(ambulance) {
     
@@ -283,7 +286,6 @@ function addAmbulanceToMap(ambulance) {
     
 };
 
-/* Handle 'ambulance/+/data' mqtt messages */
 function updateAmbulance(id, ambulance) {
 
     if (id in ambulances) {
