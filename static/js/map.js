@@ -114,22 +114,31 @@ $(document).ready(function() {
     
     // set callback handlers
     client.onMessageArrived = function(message) {
-	console.log("Topic Name: " + message.destinationName + ", Message Received: "  + message.payloadString);
 	
-	var destinationNameArr = message.destinationName.split("/");
+	console.log("Topic: " + message.destinationName +
+		    ", Message: "  + message.payloadString);
+
+	// split topic
+	let topic = message.destinationName.split("/");
+
+	try {
+
+	    // parse message
+	    let message = JSON.parse(message.payloadString);
+	    
+	} catch (e) {
+	    
+	    alert('Unable to parse message: "' + message.payloadString + '"');
+	    
+	}
 	
-	let topicName = destinationNameArr[2];
+	// Look for ambulance/{id}/data
 	let ambulanceId = destinationNameArr[1];
 	
-	if(topicName === 'status') {
-	    console.log('topicname == status');
-	    updateStatus(ambulanceId, message.payloadString);
-	    
-	    updateAmbulanceGrid(ambulanceId, message.payloadString);
-	}
-	if(topicName === 'location') {
-	    console.log('topicname == location');
-	    updateLocation(ambulanceId, message.payloadString);
+	if(topic[0] === 'ambulance' &&
+	   topic[2] == 'data') {
+	    console.log('Received ambulance ' + ambulanceId + ' data');
+	    updateAmbulance(ambulanceId, message);
 	}
     };
     
@@ -143,25 +152,28 @@ $(document).ready(function() {
 	
 	//Gets Called if the connection has successfully been established
 	onSuccess: function () {
-	    //alert("Connected");
-	    
-	    // Subscribes to both topics ambulance/1/location & ambulance/1/status
+
+	    console.log("Connected to MQTT broker")
+		
+	    // Subscribes to ambulance/{id}/data
 	    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
 		$.each(data, function(index) {
-		    let topicName = "ambulance/" + data[index].id + "/#";
+		    let topicName = "ambulance/" + data[index].id + "/data";
 		    client.subscribe(topicName);
-		    console.log('subscribe to topic: ' + topicName);
+		    console.log('Subscribing to topic: ' + topicName);
 		});
 	    })
 	},
+	
 	//Gets Called if the connection could not be established
 	onFailure: function (message) {
 	    alert("Connection failed: " + message.errorMessage);
 	},
 	
     };
-    
-    //client.connect(options);
+
+    // connect to MQTT broker
+    client.connect(options);
     
     // Publish to mqtt on status change from details options dropdown
     $('#status-dropdown').change(function() {
@@ -177,65 +189,84 @@ $(document).ready(function() {
 
 var layergroups = {}; // The layer groups that will be part of the map.
 
-/* Handle 'ambulance/+/status' mqtt messages */
-function updateStatus(ambulanceId, ambulanceMessage) {
-    ambulances[ambulanceId].status = ambulanceMessage;
+function addAmbulance(ambulance) {
+
+    console.log('Adding ambulance "' + ambulance.identifier +
+		'[id=' + ambulance.id + ']"' +
+		'[' + ambulance.location.latitude + ' ' +
+		ambulance.location.longitude + '] ' +
+		' to map');
     
+    // store ambulance details in an array
+    ambulances[ambulance.id] = ambulance;
+    
+    // set icon by status
     let coloredIcon = ambulanceIcon;
-    if(ambulanceMessage === STATUS_AVAILABLE)
+    if(ambulance.status === STATUS_AVAILABLE)
 	coloredIcon = ambulanceIconBlue;
-    if(ambulanceMessage === STATUS_OUT_OF_SERVICE)
+    else if(ambulance.status === STATUS_OUT_OF_SERVICE)
 	coloredIcon = ambulanceIconBlack;
     
-    
-    // Remove existing marker
-    mymap.removeLayer(ambulanceMarkers[ambulanceId]);
-    
-    var item = ambulances[ambulanceId];
-    
-    // Re-add it but with updated ambulance icon
-    ambulanceMarkers[item.id] = L.marker([item.location.latitude, item.location.longitude], {icon: coloredIcon})
-	.bindPopup("<strong>Ambulance " + item.id + "</strong><br/>" + item.status).addTo(mymap);
+    // If ambulance marker doesn't exist
+    ambulanceMarkers[ambulance.id] = L.marker([ambulance.location.latitude,
+					       ambulance.location.longitude],
+					      {icon: coloredIcon})
+	.bindPopup("<strong>" + ambulance.identifier +
+		   "</strong><br/>" + ambulance.status).addTo(mymap);
     
     // Bind id to icons
-    ambulanceMarkers[item.id]._icon.id = item.id;
+    ambulanceMarkers[ambulance.id]._icon.id = ambulance.id;
+    
     // Collapse panel on icon hover.
-    ambulanceMarkers[item.id].on('mouseover', function(e){
-	// open popup bubble
-	this.openPopup().on('mouseout', function(e){
-	    this.closePopup();
-	});
-	
-	// update details panel
-	updateDetailPanel(item.id);
-    });
+    ambulanceMarkers[ambulance.id]
+	.on('mouseover',
+	    function(e){
+		// open popup bubble
+		this.openPopup().on('mouseout',
+				    function(e){
+					this.closePopup();
+				    });
+		
+		// update details panel
+		updateDetailPanel(ambulance.id);
+	    });
     
-    // Update ambulance location
-    ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
-    ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
-    
-    //Add to a map to differentiate the layers between statuses.
-    if(statusWithMarkers[item.status]){
-	statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
+    // Add to a map to differentiate the layers between statuses.
+    if(statusWithMarkers[ambulance.status]){
+	statusWithMarkers[ambulance.status].push(ambulanceMarkers[ambulance.id]);
     }
     else{
-	statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
+	statusWithMarkers[ambulance.status] = [ambulanceMarkers[ambulance.id]];
     }
-}
-
-/* Handle 'ambulance/+/location' mqtt messages */
-function updateLocation(ambulanceId, ambulanceMessage) {
-    console.log('updateLoc');
-    let messageLocation = JSON.parse(ambulanceMessage);
-    console.log(messageLocation);
-    let item = ambulances[ambulanceId];
-    item.location.latitude = messageLocation.location.latitude;
-    item.location.longitude = messageLocation.location.longitude;
     
-    // Update ambulance location
-    ambulanceMarkers[item.id] = ambulanceMarkers[item.id].setLatLng([item.location.latitude, item.location.longitude]).update();
-    ambulanceMarkers[item.id]._popup.setContent("<strong>Ambulance " + item.id + "</strong><br/>" + item.status);
-}
+};
+
+/* Handle 'ambulance/+/data' mqtt messages */
+function updateAmbulance(id, data) {
+
+    // update status and location
+    ambulances[id].status = data.status;
+    ambulances[id].location.latitude = data.location.latitude;
+    ambulances[id].location.longitude = data.location.longitude;
+    
+    // Remove existing marker
+    mymap.removeLayer(ambulanceMarkers[id]);
+
+    // Recreate marker
+    addAmbulance(ambulances[id]);
+
+    // Update ambulance grid
+    var buttonId = "#grid-button" + ambulanceId;
+    
+    // Updated button color/status dynamically
+    if(item.status === STATUS_AVAILABLE) 
+	$(buttonId).attr( "class", "btn btn-success" );
+    else if(item.tatus === STATUS_OUT_OF_SERVICE)
+	$(buttonId).attr( "class", "btn btn-default" );
+    else // if(ambulanceStatus === STATUS_IN_SERVICE)
+	$(buttonId).attr( "class", "btn btn-danger" );
+    
+};
 
 /* Create status filter on the top right corner of the map */
 function createStatusFilter(mymap) {
@@ -335,53 +366,12 @@ function getAmbulances(mymap) {
 	    
 	    statusWithMarkers = {}; // clear all statuses from previous ajax call.
 	    var i = 0;
-	    $.each(arr, function(index, item) {
+	    $.each(arr, function(index, ambulance) {
+
+		// add ambulance to map
+		addAmbulance(ambulance);
 		
-		ambulances[item.id] = item;
 		
-		// set icon by status
-		let coloredIcon = ambulanceIcon;
-		if(item.status === STATUS_AVAILABLE)
-		    coloredIcon = ambulanceIconBlue;
-		else if(item.status === STATUS_OUT_OF_SERVICE)
-		    coloredIcon = ambulanceIconBlack;
-		
-		console.log('Adding ambulance "' + item.identifier +
-			    '[id=' + item.id + ']"' +
-			    '[' + item.location.latitude + ' ' +
-			    item.location.longitude + '] ' +
-			    ' to map');
-		
-		// If ambulance marker doesn't exist
-		ambulanceMarkers[item.id] = L.marker([item.location.latitude,
-						      item.location.longitude],
-						     {icon: coloredIcon})
-		    .bindPopup("<strong>" + item.identifier +
-			       "</strong><br/>" + item.status).addTo(mymap);
-		
-		// Bind id to icons
-		ambulanceMarkers[item.id]._icon.id = item.id;
-		
-		// Collapse panel on icon hover.
-		ambulanceMarkers[item.id].on('mouseover',
-					     function(e){
-						 // open popup bubble
-						 this.openPopup().on('mouseout',
-								     function(e){
-									 this.closePopup();
-								     });
-						 
-						 // update details panel
-						 updateDetailPanel(item.id);
-					     });
-		
-		// Add to a map to differentiate the layers between statuses.
-		if(statusWithMarkers[item.status]){
-		    statusWithMarkers[item.status].push(ambulanceMarkers[item.id]);
-		}
-		else{
-		    statusWithMarkers[item.status] = [ambulanceMarkers[item.id]];
-		}			 
 	    });
 	}
     })
@@ -483,43 +473,6 @@ function createAmbulanceGrid(mymap) {
 	  });
 }
 
-function updateAmbulanceGrid(ambulanceId, ambulanceStatus) {
-    var buttonId = "#grid-button" + ambulanceId;
-    
-    // Updated button color/status dynamically
-    if(ambulanceStatus === STATUS_AVAILABLE) 
-	$(buttonId).attr( "class", "btn btn-success" );
-    else if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
-	$(buttonId).attr( "class", "btn btn-default" );
-    else // if(ambulanceStatus === STATUS_IN_SERVICE)
-	$(buttonId).attr( "class", "btn btn-danger" );
-    
-}
-
-/*
- * updateAmbulanceGrid updates the ambulance grid. Will be called in AJAX call to update grid dynamically
- *
- */
-// function updateAmbulanceGrid(ambulanceId) {
-//  	let apiAmbulanceUrl = 'api/ambulances/' + ambulanceId;
-
-//  	$.get(apiAmbulanceUrl, function(data) {
-// 		var buttonId = "#grid-button" + data.id;
-
-// 		// console.log(buttonId);
-// 		// Updating button license plate identifier dynamically
-// 		$(buttonId).html(data.license_plate);
-
-// 		// Updated button color/status dynamically
-// 		if(data.status === STATUS_AVAILABLE) 
-// 			$(buttonId).attr( "class", "btn btn-success" );
-// 		if(data.status === STATUS_OUT_OF_SERVICE)
-// 			$(buttonId).attr( "class", "btn btn-default" );
-// 		if(data.status === STATUS_IN_SERVICE)
-// 			$(buttonId).attr( "class", "btn btn-danger" );
-		
-// 	});
-// }
 
 /*
  * postDispatchCall makes an ajax post request to post dispatched ambulance.
