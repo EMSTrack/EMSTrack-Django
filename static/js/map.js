@@ -156,6 +156,15 @@ function onConnect() {
 	    console.log('Subscribing to topic: ' + topicName);
 	});
     })
+
+    // Subscribes to hospital/{id}/data
+    $.getJSON(APIBaseUrl + 'hospital/', function(data) {
+	$.each(data, function(index) {
+	    let topicName = "hospital/" + data[index].id + "/data";
+	    client.subscribe(topicName);
+	    console.log('Subscribing to topic: ' + topicName);
+	});
+    })
     
 };
 
@@ -229,6 +238,46 @@ function onMessageArrived(message) {
     
 };
 
+function updateAmbulance(ambulance) {
+
+    // retrieve id
+    let id = ambulance.id;
+
+    // already exists?
+    if (id in ambulances) {
+
+	// update ambulance
+	ambulances[id].status = ambulance.status;
+	ambulances[id].location.latitude = ambulance.location.latitude;
+	ambulances[id].location.longitude = ambulance.location.longitude;
+	
+	// Remove existing marker
+	mymap.removeLayer(ambulanceMarkers[id]);
+	
+	// Overwrite ambulance
+	ambulance = ambulances[id]
+
+	// Update ambulance grid
+	var buttonId = "#grid-button" + id;
+	
+	// Updated button color/status
+	if(ambulance.status === STATUS_AVAILABLE) 
+	    $(buttonId).attr( "class", "btn btn-success" );
+	else if(ambulance.tatus === STATUS_OUT_OF_SERVICE)
+	    $(buttonId).attr( "class", "btn btn-default" );
+	else
+	    $(buttonId).attr( "class", "btn btn-danger" );
+	
+    } else {
+
+	// Add ambulance to grid
+	addAmbulanceToGrid(ambulance);
+    }
+
+    // add ambulance to map
+    addAmbulanceToMap(ambulance);
+    
+};
 
 function addAmbulanceToGrid(ambulance) {
     
@@ -321,46 +370,6 @@ function addAmbulanceToMap(ambulance) {
     
 };
 
-function updateAmbulance(ambulance) {
-
-    // retrieve id
-    let id = ambulance.id;
-
-    // already exists?
-    if (id in ambulances) {
-
-	// update ambulance
-	ambulances[id].status = ambulance.status;
-	ambulances[id].location.latitude = ambulance.location.latitude;
-	ambulances[id].location.longitude = ambulance.location.longitude;
-	
-	// Remove existing marker
-	mymap.removeLayer(ambulanceMarkers[id]);
-	
-	// Overwrite ambulance
-	ambulance = ambulances[id]
-
-	// Update ambulance grid
-	var buttonId = "#grid-button" + id;
-	
-	// Updated button color/status
-	if(ambulance.status === STATUS_AVAILABLE) 
-	    $(buttonId).attr( "class", "btn btn-success" );
-	else if(ambulance.tatus === STATUS_OUT_OF_SERVICE)
-	    $(buttonId).attr( "class", "btn btn-default" );
-	else
-	    $(buttonId).attr( "class", "btn btn-danger" );
-	
-    } else {
-
-	// Add ambulance to grid
-	addAmbulanceToGrid(ambulance);
-    }
-
-    // add ambulance to map
-    addAmbulanceToMap(ambulance);
-    
-};
 
 /* Create status filter on the top right corner of the map */
 function createStatusFilter(mymap) {
@@ -433,47 +442,6 @@ function createStatusFilter(mymap) {
 	});
 	
     });
-}
-
-/*
- * getAmbulances updates the map with the new ambulance's status.
- * @param mymap is the map UI.
- * @return void.
- */
-function getAmbulances(mymap) {
-
-    // console.log('ajax request sent');
-    $.ajax({
-	type: 'GET',
-	datatype: "json",
-	url: APIBaseUrl + 'ambulance/',
-
-	error: function(msg) {
-
-	    alert('getAmbulances:error::' + msg)
-
-	},
-	
-	success: function(arr) {
-	    
-	    console.log('getAmbulances:success')
-	    
-	    statusWithMarkers = {}; // clear all statuses from previous ajax call.
-	    var i = 0;
-	    $.each(arr, function(index, ambulance) {
-
-		// add ambulance to map
-		addAmbulanceToMap(ambulance);
-		
-		
-	    });
-	}
-    })
-	.done(function( data ) {
-	    if ( console && console.log ) {
-		console.log( "Done with getAmbulances" );
-	    }
-	});
 }
 
 /*
