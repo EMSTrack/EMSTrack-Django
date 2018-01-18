@@ -543,7 +543,7 @@ function onGridButtonClick(ambulanceId, mymap) {
 	
 	// Center icon on map
 	var position = ambulanceMarkers[ambulanceId].getLatLng();
-	mymap.setView(position, 12);
+	mymap.setView(position, mymap.getZoom());
 	
 	// Open popup for 2.5 seconds.
 	ambulanceMarkers[ambulanceId].openPopup();
@@ -553,50 +553,6 @@ function onGridButtonClick(ambulanceId, mymap) {
 	
     }
 }
-
-/*
- * createAmbulanceGrid creates the ambulance grid using the data from the server (status indicated by color of button, ID of ambulance on buttons)
- *
- */
-function createAmbulanceGrid(mymap) {
-    $.get(APIBaseUrl + 'ambulance/',
-	  function(data) {
-
-	      console.log('createAmbulanceGrid');
-	      
-	      var i, ambulanceId;
-	      
-	      //console.log(data);
-	      for(i = 0; i < data.length; i++) {
-		  
-		  ambulanceId = data[i].id;
-		  ambulanceIdentifier = data[i].identifier;
-		  ambulanceStatus = data[i].status;
-		  
-		  console.log('Creating ambulance "' + ambulanceIdentifier +
-			      '[id=' + ambulanceId + ']"' +
-			      ' on grid entry');
-		  
-		  if(ambulanceStatus === STATUS_AVAILABLE) {
-		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-success" style="margin: 5px 5px;">' + ambulanceIdentifier + '</button>');
-		      $('#ambulance-selection').append('<label><input type="checkbox" name="ambulance_assignment" value="' + ambulanceId + '"> Ambulance # ' + ambulanceIdentifier + ' </label><br/>');
-		  }
-		  
-		  else if(ambulanceStatus === STATUS_OUT_OF_SERVICE)
-		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-default" style="margin: 5px 5px;">' + ambulanceIdentifier + '</button>');
-		  
-		  else // if(ambulanceStatus === STATUS_IN_SERVICE)
-		      $('#ambulance-grid').append('<button type="button"' + ' id="' + 'grid-button' + ambulanceId + '" ' + 'class="btn btn-danger" style="margin: 5px 5px;">' + ambulanceIdentifier + '</button>');
-		  
-		  // Open popup on panel click.
-		  // For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
-		  $('#grid-button' + ambulanceId).click(
-		      onGridButtonClick(ambulanceId,mymap)
-		  );
-	      }
-	  });
-}
-
 
 /*
  * postDispatchCall makes an ajax post request to post dispatched ambulance.
