@@ -277,6 +277,9 @@ function updateAmbulance(ambulance) {
 
     // add ambulance to map
     addAmbulanceToMap(ambulance);
+
+    // update detail panel
+    updateDetailPanel(ambulance);
     
 };
 
@@ -440,7 +443,7 @@ function addHospitalToMap(hospital) {
  */
 function updateDetailPanel(ambulance) {
     
-    $('.ambulance-detail').html("Ambulance: " + ambulance.identifier +
+    $('#ambulance-detail').html("Ambulance: " + ambulance.identifier +
 				"<br/>" +
 				"Status: " + ambulance.status );
     
@@ -453,7 +456,7 @@ function updateDetailPanel(ambulance) {
     // });
     //});
     
-    $('#change-status').show();
+    // $('#change-status').show();
     
     $('#status-change-ambId').val(ambulance.id);
 }
@@ -537,7 +540,7 @@ function createStatusFilter(mymap) {
 function onGridButtonClick(ambulanceId, mymap) {
     return function(e) {
 	// Update detail panel
-	updateDetailPanel(ambulanceId);
+	updateDetailPanel(ambulances[ambulanceId]);
 	
 	// Center icon on map
 	var position = ambulanceMarkers[ambulanceId].getLatLng();
