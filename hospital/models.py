@@ -97,5 +97,5 @@ class HospitalEquipment(UpdatedByModel):
         unique_together = ('hospital', 'equipment',)
 
     def __str__(self):
-        return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.quantity)
+        return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.value)
 
