@@ -10,7 +10,9 @@
 {% block content %}
 <div class="container">
 
-  {% ambulance_status %}
+  {% for status in ambulance_status %}
+  {{ status }}
+  {% endfor %}
   
   <div class="row">
 
