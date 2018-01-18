@@ -259,7 +259,7 @@ function updateAmbulance(id, data) {
     addAmbulance(ambulances[id]);
 
     // Update ambulance grid
-    var buttonId = "#grid-button" + ambulanceId;
+    var buttonId = "#grid-button" + id;
     
     // Updated button color/status dynamically
     if(item.status === STATUS_AVAILABLE) 
