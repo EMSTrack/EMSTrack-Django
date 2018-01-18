@@ -78,8 +78,10 @@ class AmbulanceMap(TemplateView):
 
      def get_context_data(self, **kwargs):
          context = super().get_context_data(**kwargs)
-         context['ambulance_status'] = AmbulanceStatus
-         context['ambulance_capability'] = AmbulanceCapability
+         context['ambulance_status'] = {m.name: m.value
+                                        for m in AmbulanceStatus}
+         context['ambulance_capability'] = {m.name: m.value
+                                            for m in AmbulanceCapability}
          return context
     
 # NEED REVISING
