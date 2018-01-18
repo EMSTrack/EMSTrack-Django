@@ -93,7 +93,7 @@ $(document).ready(function() {
 	     });
     
     // Create ambulance grid (move somewhere else if not appropriate here)
-    createAmbulanceGrid(mymap);
+    //createAmbulanceGrid(mymap);
 
     // Update the ambulances on the map.
     //createStatusFilter(mymap);
