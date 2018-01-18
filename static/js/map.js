@@ -1,8 +1,9 @@
-var ambulanceMarkers = {};	// Store ambulance markers
-
-var statusWithMarkers = {}; //A JSON to map statuses with arrays of ambulances with that status.
-
+var ambulanceMarkers = {};  // Store ambulance markers
+var statusWithMarkers = {}; // A JSON to map statuses with arrays of ambulances with that status.
 var ambulances = {};	// Store ambulance details
+
+var hospitalMarkers = {};  // Store hospital markers
+var hospitals = {};	// Store hospital details
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
@@ -224,10 +225,15 @@ function onMessageArrived(message) {
 	console.log("data: " + data);
 	
 	// Look for ambulance/{id}/data
-	if(topic[0] === 'ambulance' &&
-	   topic[2] == 'data') {
-	    let id = topic[1];
+	if (topic[0] === 'ambulance' &&
+	    topic[2] == 'data') {
 	    updateAmbulance(data);
+	}
+	
+	// Look for ambulance/{id}/data
+	else if(topic[0] === 'hospital' &&
+		topic[2] == 'data') {
+	    updateHospital(data);
 	}
 	
     } catch(e) {
@@ -276,6 +282,31 @@ function updateAmbulance(ambulance) {
 
     // add ambulance to map
     addAmbulanceToMap(ambulance);
+    
+};
+
+function updateHospital(hospital) {
+
+    // retrieve id
+    let id = hospital.id;
+
+    // already exists?
+    if (id in hospitals) {
+
+	// update hospital
+	hospitals[id].location.latitude = hospital.location.latitude;
+	hospitals[id].location.longitude = hospital.location.longitude;
+	
+	// Remove existing marker
+	mymap.removeLayer(hospitalMarkers[id]);
+	
+	// Overwrite hospital
+	hospital = hospitals[id]
+
+    } 
+
+    // add hospital to map
+    addHospitalToMap(hospital);
     
 };
 
@@ -370,6 +401,42 @@ function addAmbulanceToMap(ambulance) {
     
 };
 
+function addHospitalToMap(hospital) {
+
+    console.log('Adding hospital "' + hospital.name +
+		'[id=' + hospital.id + ']"' +
+		'[' + hospital.location.latitude + ' ' +
+		hospital.location.longitude + '] ' +
+		' to map');
+    
+    // store hospital details in an array
+    hospitals[hospital.id] = hospital;
+    
+    // set icon by status
+    let coloredIcon = hospitalIcon;
+    
+    // If hospital marker doesn't exist
+    hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,
+					     hospital.location.longitude],
+					    {icon: coloredIcon})
+	.bindPopup("<strong>" + hospital.identifier + "</strong>")
+	.addTo(mymap);
+    
+    // Bind id to icons
+    hospitalMarkers[hospital.id]._icon.id = hospital.id;
+    
+    // Collapse panel on icon hover.
+    hospitalMarkers[hospital.id]
+	.on('mouseover',
+	    function(e){
+		// open popup bubble
+		this.openPopup().on('mouseout',
+				    function(e){
+					this.closePopup();
+				    });		
+	    });
+    
+};
 
 /* Create status filter on the top right corner of the map */
 function createStatusFilter(mymap) {
