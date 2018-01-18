@@ -192,7 +192,46 @@ $(document).ready(function() {
 
 var layergroups = {}; // The layer groups that will be part of the map.
 
-function addAmbulance(ambulance) {
+function addAmbulanceToGrid(ambulance) {
+    
+    console.log('Adding ambulance "' + ambulance.identifier +
+		'[id=' + ambulance.id + ']"' +
+		' to grid');
+
+    let button_class_name = 'btn-danger';
+    if(ambulance.status === STATUS_AVAILABLE) {
+	button_class_name = 'btn-success';
+
+	$('#ambulance-selection')
+	    .append('<label><input type="checkbox"' +
+		    ' name="ambulance_assignment" value="' +
+		    ambulance.id + '"> Ambulance ' +
+		    ambulance.identifier + ' </label><br/>');
+	
+    }
+    else if (ambulance.status === STATUS_OUT_OF_SERVICE) {
+	
+	button_class_name = 'btn-default';
+    
+    }
+
+    // Add to grid
+    $('#ambulance-grid')
+	.append('<button type="button"' +
+		' id="' + 'grid-button' + ambulance.id + '"' +
+		' class="btn ' + button_class_name + '"' +
+		' style="margin: 5px 5px;">' +
+		ambulance.identifier + '</button>');
+    
+    // Open popup on panel click.
+    // For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
+    $('#grid-button' + ambulance.id).click(
+	onGridButtonClick(ambulance.id, mymap)
+    );
+    
+};
+
+function addAmbulanceToMap(ambulance) {
 
     console.log('Adding ambulance "' + ambulance.identifier +
 		'[id=' + ambulance.id + ']"' +
@@ -257,7 +296,7 @@ function updateAmbulance(id, data) {
 
     // Recreate marker
     let ambulance = ambulances[id]
-    addAmbulance(ambulance);
+    addAmbulanceToMap(ambulance);
 
     // Update ambulance grid
     var buttonId = "#grid-button" + id;
@@ -267,7 +306,7 @@ function updateAmbulance(id, data) {
 	$(buttonId).attr( "class", "btn btn-success" );
     else if(ambulance.tatus === STATUS_OUT_OF_SERVICE)
 	$(buttonId).attr( "class", "btn btn-default" );
-    else // if(ambulanceStatus === STATUS_IN_SERVICE)
+    else // if(ambulance.status === STATUS_IN_SERVICE)
 	$(buttonId).attr( "class", "btn btn-danger" );
     
 };
@@ -373,7 +412,7 @@ function getAmbulances(mymap) {
 	    $.each(arr, function(index, ambulance) {
 
 		// add ambulance to map
-		addAmbulance(ambulance);
+		addAmbulanceToMap(ambulance);
 		
 		
 	    });
