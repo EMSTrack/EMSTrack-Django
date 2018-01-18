@@ -284,30 +284,40 @@ function addAmbulanceToMap(ambulance) {
 };
 
 /* Handle 'ambulance/+/data' mqtt messages */
-function updateAmbulance(id, data) {
+function updateAmbulance(id, ambulance) {
 
-    // update status and location
-    ambulances[id].status = data.status;
-    ambulances[id].location.latitude = data.location.latitude;
-    ambulances[id].location.longitude = data.location.longitude;
-    
-    // Remove existing marker
-    mymap.removeLayer(ambulanceMarkers[id]);
+    if (id in ambulances) {
 
-    // Recreate marker
-    let ambulance = ambulances[id]
+	// update ambulance
+	ambulances[id].status = data.status;
+	ambulances[id].location.latitude = data.location.latitude;
+	ambulances[id].location.longitude = data.location.longitude;
+	
+	// Remove existing marker
+	mymap.removeLayer(ambulanceMarkers[id]);
+	
+	// Overwrite ambulance
+	ambulance = ambulances[id]
+
+	// Update ambulance grid
+	var buttonId = "#grid-button" + id;
+	
+	// Updated button color/status
+	if(ambulance.status === STATUS_AVAILABLE) 
+	    $(buttonId).attr( "class", "btn btn-success" );
+	else if(ambulance.tatus === STATUS_OUT_OF_SERVICE)
+	    $(buttonId).attr( "class", "btn btn-default" );
+	else
+	    $(buttonId).attr( "class", "btn btn-danger" );
+	
+    } else {
+
+	// Add ambulance to grid
+	addAmbulanceToGrid(ambulance);
+    }
+
+    // add ambulance to map
     addAmbulanceToMap(ambulance);
-
-    // Update ambulance grid
-    var buttonId = "#grid-button" + id;
-    
-    // Updated button color/status dynamically
-    if(ambulance.status === STATUS_AVAILABLE) 
-	$(buttonId).attr( "class", "btn btn-success" );
-    else if(ambulance.tatus === STATUS_OUT_OF_SERVICE)
-	$(buttonId).attr( "class", "btn btn-default" );
-    else // if(ambulance.status === STATUS_IN_SERVICE)
-	$(buttonId).attr( "class", "btn btn-danger" );
     
 };
 
