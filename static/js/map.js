@@ -67,9 +67,6 @@ $(document).ready(function() {
 	accessToken: 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w'
     }).addTo(mymap);
     
-    // Add hospital marker.
-    L.marker([32.506787, -116.963839], {icon: hospitalIcon}).addTo(mymap);
-    
     // Add the drawing toolbar and the layer of the drawings.
     var drawnItems = new L.FeatureGroup();
     mymap.addLayer(drawnItems);
