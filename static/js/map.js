@@ -133,7 +133,7 @@ $(document).ready(function() {
 	    
 	    if(topic[0] === 'ambulance' &&
 	       topic[2] == 'data') {
-		console.log('Received ambulance ' + ambulanceId + ' data');
+		console.log('Received ambulance ' + id + ' data');
 		updateAmbulance(id, data);
 	    }
 	    
