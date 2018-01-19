@@ -93,12 +93,14 @@ class MQTTAclView(CsrfExemptMixin,
                 
                 # permission to subscribe:
 
+                #  - user/*username*/error
                 #  - user/*username*/profile
                 if (len(topic) == 3 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
-                    if (topic[2] == 'profile'):
+                    if (topic[2] == 'profile' or
+                        topic[2] == 'error'):
                         
                         return HttpResponse('OK')
 
@@ -150,13 +152,19 @@ class MQTTAclView(CsrfExemptMixin,
             elif acc == 2:
                 
                 # permission to publish:
-                
-                if (len(topic) >= 5 and
+
+                if (len(topic) >= 3 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
+                    #  - user/*username*/error
+                    if (len(topic) == 3 and
+                        topic[2] == 'error'):
+                        
+                        return HttpResponse('OK')
+                    
                     #  - user/*username*/ambulance/+/data
-                    if (len(topic) == 5 and
+                    elif (len(topic) == 5 and
                         topic[2] == 'ambulance' and
                         topic[4] == 'data'):
 
