@@ -131,13 +131,13 @@ $(document).ready(function() {
     $('#ambulance-detail-status-select').change(function() {
 	status = JSON.stringify({ 'value': this.value });
 	
-	let message = new Paho.MQTT.Message(status);
 	let id = $('#ambulance-detail-id').val();
-	let user_id = 
-	message.destinationName = "user/" + username + "/ambulance/" + id + "/data";
+	let topic = "user/" + username + "/ambulance/" + id + "/data";
+	let message = new Paho.MQTT.Message(status);
+	message.destinationName = topic
 	message.qos = 2;
+	console.log('Sending message: "' + topic + ':' + status + '"');
 	client.send(message);
-	console.log("sending message: " + message);
 	
     });
     
