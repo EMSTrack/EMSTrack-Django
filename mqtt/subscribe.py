@@ -71,10 +71,10 @@ class SubscribeClient(BaseClient):
             #print(User.objects.all())
             user = User.objects.get(username=values[1])
 
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist as e:
             
-            # TODO: send message to user
-            pass
+            self.publish("User does not exist.")
+            return
             
         # parse data
         try:
@@ -84,9 +84,7 @@ class SubscribeClient(BaseClient):
             
         except Exception as e:
 
-            # TODO: send message to user
-            self.stdout.write(
-                self.style.ERROR("*> JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
+            self.publish("JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
             return
 
         if len(values) == 5:
@@ -95,15 +93,26 @@ class SubscribeClient(BaseClient):
         elif len(values) == 7:
             
             return (user, data, values[3], values[5])
+
+        else:
+            
+            self.publish("Invalid topic '{}'.".format(msg.topic))
+            return
+
         
     # Update ambulance
     def on_ambulance(self, client, userdata, msg):
 
         # parse topic
-        user, data, ambulance_id = self.parse_topic(msg)
-
+        values = self.parse_topic(msg)
+        if not values:
+            return 
+        
         try:
 
+            # retrieve parsed values
+            user, data, ambulance_id = values
+            
             # retrieve ambulance
             ambulance = Ambulance.objects.get(id=ambulance_id)
 
@@ -131,6 +140,10 @@ class SubscribeClient(BaseClient):
     # Update hospital
     def on_hospital(self, client, userdata, msg):
 
+        if not msg.payload:
+            # empty payload
+            return
+        
         # parse topic
         user, data, hospital_id = self.parse_topic(msg)
 
