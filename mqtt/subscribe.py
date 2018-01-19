@@ -73,7 +73,6 @@ class SubscribeClient(BaseClient):
 
         except ObjectDoesNotExist as e:
             
-            self.publish("User does not exist.")
             return
             
         # parse data
@@ -84,7 +83,9 @@ class SubscribeClient(BaseClient):
             
         except Exception as e:
 
-            self.publish("JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload)))
+            self.publish(
+                'user/{}/error'.format(user),
+                "JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload))
             return
 
         if len(values) == 5:
@@ -96,7 +97,9 @@ class SubscribeClient(BaseClient):
 
         else:
             
-            self.publish("Invalid topic '{}'.".format(msg.topic))
+            self.publish(
+                'user/{}/error'.format(user),
+                "Invalid topic '{}'.".format(msg.topic))
             return
 
         
@@ -118,9 +121,9 @@ class SubscribeClient(BaseClient):
 
         except ObjectDoesNotExist:
 
-            # TODO: send message to user
-            self.stdout.write(
-                self.style.ERROR("*> Ambulance with id {} does not exist".format(ambulance_id)))
+            self.publish(
+                'user/{}/error'.format(user),
+                "Ambulance with id '{}' does not exist".format(ambulance_id))
             return
             
         # update ambulance
@@ -134,8 +137,9 @@ class SubscribeClient(BaseClient):
 
         else:
             
-            # TODO: send message to user
-            pass
+            self.publish(
+                'user/{}/error'.format(user),
+                serializer.errors)
             
     # Update hospital
     def on_hospital(self, client, userdata, msg):
