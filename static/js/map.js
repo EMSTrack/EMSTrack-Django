@@ -482,22 +482,24 @@ function createStatusFilter(mymap) {
 	Object.keys(statusGroupLayers).forEach(function(key){
 
 	    statusGroupLayers[key].clearLayers();
-	    statusWithMarkers[key].forEach(function(elem) {
-
-		if($(".chk[data-status='" + key + "']").is(':checked')) {
-
-		    // Add the ambulances in the layer if it is checked.
-		    statusGroupLayers[key].addLayer(statusWithMarkers[key][i])
+	    if($(".chk[data-status='" + key + "']").is(':checked')) {
 		
-		} else {
-
+		// Add the ambulances in the layer if it is checked.
+		statusWithMarkers[key].forEach(function(elem) {
+		    statusGroupLayers[key].addLayer(elem)
+		});
+		
+	    } else {
+		
+		statusWithMarkers[key].forEach(function(elem) {
 		    // Remove from layer if it is not checked.
-		    statusGroupLayers[key].removeLayer(statusWithMarkers[key][i]);
-		    mymap.removeLayer(statusWithMarkers[key][i]);
-		    
-		}
-	    });
+		    statusGroupLayers[key].removeLayer(elem);
+		    mymap.removeLayer(elem);
+		});
+	    }
+	    
 	});
+	
     });
     
     // Add the checkboxes.
@@ -524,7 +526,7 @@ function createStatusFilter(mymap) {
     	    if(!($(this).is(':checked'))){
 		
     		var layersToRemove = statusWithMarkers[this.dataset.status];
-    		console.log(layersToRemove);
+
     		for(var i = 0; i < layersToRemove.length; i++){
     		    mymap.removeLayer(layersToRemove[i]);
     		}
