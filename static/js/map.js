@@ -448,7 +448,7 @@ function updateDetailPanel(ambulance) {
     $('#ambulance-detail-updated-on').html(ambulance.updated_on);
     $('#ambulance-detail-updated-by').html(ambulance.updated_by);
 
-    $('#ambulance-detail-status').val(ambulance.status);
+    $('#ambulance-detail-status-select').val(ambulance.status);
     $('#ambulance-detail-id').val(ambulance.id);
     
     // Select dropdown
