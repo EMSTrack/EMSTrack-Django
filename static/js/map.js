@@ -471,7 +471,7 @@ function createStatusFilter(mymap) {
     var container = L.DomUtil.create('div', 'filter-options');
     
     //Generate HTML code for checkboxes for each of the statuses.
-    var filterHtml = "";
+    var filterHtml = "<p><strong>Status:</strong></p>";
     Object.keys(ambulance_status).forEach(function(status) {
 
 	statusGroupLayers[status] = L.layerGroup(markersByStatus[status]);
