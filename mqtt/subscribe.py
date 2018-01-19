@@ -67,7 +67,7 @@ class SubscribeClient(BaseClient):
 
         except:
 
-            // TODO: LOG
+            # TODO: LOG
             pass
     
     def parse_topic(self, msg):
