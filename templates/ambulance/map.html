@@ -7,8 +7,9 @@
     <script src="{% static 'js/form-button.js' %}"></script>
 
     <script>
-      ambulance_status = {{ ambulance_status|safe }};
-      ambulance_capability = {{ ambulance_capability|safe }};
+      var ambulance_status = {{ ambulance_status|safe }};
+      var ambulance_capability = {{ ambulance_capability|safe }};
+      var username = {{ user.get_username|safe }};
     </script>
 {% endblock %}
 

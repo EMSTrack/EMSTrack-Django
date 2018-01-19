@@ -127,15 +127,19 @@ $(document).ready(function() {
     // connect to MQTT broker
     client.connect(options);
     
-    // // Publish to mqtt on status change from details options dropdown
-    // $('#status-dropdown').change(function() {
-    // 	var statusMessage = new Paho.MQTT.Message(this.value);
-    // 	var ambId = $('#status-change-ambId').val();
-    // 	statusMessage.destinationName = "ambulance/" + ambId + "/status";
-    // 	statusMessage.qos = 2;
-    // 	client.send(statusMessage);
-    // 	console.log("send message: " + this.value + " by ambulance " + ambId);
-    // });
+    // Publish to mqtt on status change from details options dropdown
+    $('#status-dropdown').change(function() {
+	status = { 'value': this.value };
+	
+	let message = new Paho.MQTT.Message(status);
+	let id = $('#ambulance-detail-id').val();
+	let user_id = 
+	message.destinationName = "user/" + username + "/ambulance/" + id + "/data";
+	message.qos = 2;
+	client.send(message);
+	console.log("sending message: " + message);
+	
+    });
     
 });
 
@@ -449,19 +453,6 @@ function updateDetailPanel(ambulance) {
 
     $('#ambulance-detail-status-select').val(ambulance.status);
     $('#ambulance-detail-id').val(ambulance.id);
-    
-    // Select dropdown
-    
-    // Create dropdown
-    //$('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
-    // $.get(apiBaseUrl ', function(data) {
-    // $.each(data, function (index, val) {
-    // $('#status-dropdown').append('<option value="' + val.name + 
-    // '">' + val.name + '</option>');
-    // });
-    //});
-    
-    // $('#change-status').show();
     
 }
 
