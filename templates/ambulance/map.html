@@ -51,13 +51,28 @@
           <div id="collapse2" class="collapse in">
             <div class="panel-body"
 		 id="ambulance-detail">
-            </div>
+	      <p>
+		<strong>Ambulance:</strong>
+		<span id="ambulance-detail-name"/>
+	      </p>
+	      <p>
+		<strong>Capability:</strong>
+		<span id="ambulance-detail-capability"/>
+	      </p>
+	      <p>
+		<strong>Updated on:</strong>
+		<span id="ambulance-detail-updated-on"/>
+		<strong>by:</strong>
+		<span id="ambulance-detail-updated-by"/>
+	      </p>
+            </div>o
             <input type="hidden"
 		   name="change-status-ambulance-id"
-		   id="status-change-ambId">
-            <div id="change-status"
+		   id="ambulance-detail-id">
+            <div id="ambulance-detail-status"
 		 style="text-align: left; padding: 10px;">
-              <select id="status-dropdown" style="margin: auto;">
+              <select id="ambulance-detail-status"
+		      style="margin: auto;">
 		{% for k, v in ambulance_status.items %}
 		<option value="{{ k }}">{{ v }}</option>
 		{% endfor %}

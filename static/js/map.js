@@ -442,10 +442,16 @@ function addHospitalToMap(hospital) {
  * @return void.
  */
 function updateDetailPanel(ambulance) {
+
+    $('#ambulance-detail-name').html(ambulance.identifier);
+    $('#ambulance-detail-capability').html(ambulance.capability);
+    $('#ambulance-detail-updated-on').html(ambulance.updated_on);
+    $('#ambulance-detail-updated-by').html(ambulance.updated_by);
+
+    $('#ambulance-detail-status').val(ambulance.status);
+    $('#ambulance-detail-id').val(ambulance.id);
     
-    $('#ambulance-detail').html("Ambulance: " + ambulance.identifier +
-				"<br/>" +
-				"Status: " + ambulance.status );
+    // Select dropdown
     
     // Create dropdown
     //$('#status-dropdown').empty().append('<option selected="selected">Change Status</option>');
@@ -458,7 +464,6 @@ function updateDetailPanel(ambulance) {
     
     // $('#change-status').show();
     
-    $('#status-change-ambId').val(ambulance.id);
 }
 
 /* Create status filter on the top right corner of the map */
