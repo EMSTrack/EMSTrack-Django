@@ -54,6 +54,22 @@ class SubscribeClient(BaseClient):
 
         return True
 
+    def send_error_message(self, username, topic, payload, error):
+
+        try:
+                
+            message = JSONRenderer.render({
+                'topic': topic,
+                'payload': payload,
+                'error': error
+            })
+            self.publish('user/{}/error'.format(username), message)
+
+        except:
+
+            // TODO: LOG
+            pass
+    
     def parse_topic(self, msg):
 
         if not msg.payload:
@@ -87,9 +103,8 @@ class SubscribeClient(BaseClient):
         except Exception as e:
 
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                "JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload))
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "JSON formatted incorrectly")
             return
 
         if len(values) == 5:
@@ -103,9 +118,8 @@ class SubscribeClient(BaseClient):
         else:
             
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                "Invalid topic '{}'.".format(msg.topic))
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Invalid topic")
             return
 
         
@@ -128,9 +142,8 @@ class SubscribeClient(BaseClient):
         except ObjectDoesNotExist:
 
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                "Ambulance with id '{}' does not exist".format(ambulance_id))
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
             return
             
         # update ambulance
@@ -145,9 +158,8 @@ class SubscribeClient(BaseClient):
         else:
             
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                serializer.errors)
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    serializer.errors)
             
     # Update hospital
     def on_hospital(self, client, userdata, msg):
@@ -168,9 +180,8 @@ class SubscribeClient(BaseClient):
         except ObjectDoesNotExist:
 
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                "Hospital with id '{}' does not exist".format(hospital_id))
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Hospital with id '{}' does not exist".format(hospital_id))
             return
             
         # update hospital
@@ -185,9 +196,8 @@ class SubscribeClient(BaseClient):
         else:
             
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                serializer.errors)
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    serializer.errors)
 
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
@@ -209,9 +219,8 @@ class SubscribeClient(BaseClient):
         except ObjectDoesNotExist:
 
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(hospital_id, equipment_name))
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(hospital_id, equipment_name))
             return
             
         # update hospital equipment
@@ -226,6 +235,5 @@ class SubscribeClient(BaseClient):
         else:
             
             # send error message to user
-            self.publish(
-                'user/{}/error'.format(user),
-                serializer.errors)
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    serializer.errors)

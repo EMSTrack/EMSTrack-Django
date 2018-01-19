@@ -535,7 +535,21 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
 
+        # generate error: JSON formated incorrectly
+        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                               self.a1.id),
+                            '{ value: ',
+                            qos=0)
+        
+        # process messages
+        self.loop(test_client)
 
+        # expect update once
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        
+        # loop subscribe_client
+        subscribe_client.loop()
+        
         # disconnect
         test_client.wait()
         subscribe_client.wait()
