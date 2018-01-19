@@ -551,20 +551,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
         
-        # generate error: wrong topic
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
-        
-        test_client.publish('user/{}/ambulance/{}'.format(self.u1.username,
-                                                          self.a1.id),
-                            json.dumps({
-                                'status': AmbulanceStatus.OS.name,
-                            }), qos=0)
-        
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-        
         # generate error: wrong id
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
