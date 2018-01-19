@@ -93,7 +93,6 @@ $(document).ready(function() {
     // Create status filter on the right hand top corner
     createStatusFilter(mymap);
     
-    
     // Submit form
     $('#dispatchForm').submit(function(e) {
 	e.preventDefault();
@@ -139,8 +138,6 @@ $(document).ready(function() {
     });
     
 });
-
-var layergroups = {}; // The layer groups that will be part of the map.
 
 /* Handle connect */
 function onConnect() {
@@ -459,6 +456,7 @@ function updateDetailPanel(ambulance) {
 }
 
 /* Create status filter on the top right corner of the map */
+var statusGroupLayers = {};
 function createStatusFilter(mymap) {
 
     // Add the checkbox on the top right corner for filtering.
@@ -469,34 +467,35 @@ function createStatusFilter(mymap) {
     Object.keys(ambulance_status).forEach(function(status) {
 
 	if(statusWithMarkers[status] !== undefined) {
-	    layergroups[status.name] = L.layerGroup(statusWithMarkers[status.name]);
-	    layergroups[status.name].addTo(mymap);
+	    statusGroupLayers[status.name] = L.layerGroup(statusWithMarkers[status.name]);
+	    statusGroupLayers[status.name].addTo(mymap);
 	}
     
 	filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status + '" type="checkbox" value="">' + ambulance_status[status] + "</label></div>";
+	
     });
     
     // Append html code to container 
     container.innerHTML = filterHtml;
 
     // Initialize checked to true for all statuses.
-    $('.chk').attr('checked', true);
+    $('.chk').prop('checked', true);
     
     // Add listener to remove status layer when filter checkbox is clicked
     $('.chk').click(function() {
 	
 	// Goes through each layer group and adds or removes accordingly.
-	Object.keys(layergroups).forEach(function(key){
+	Object.keys(statusGroupLayers).forEach(function(key){
 
-	    layergroups[key].clearLayers();
+	    statusGroupLayers[key].clearLayers();
 	    for(var i = 0; i < statusWithMarkers[key].length; i++){
 		// Add the ambulances in the layer if it is checked.
 		if($(".chk[data-status='" + key + "']").is(':checked')){
-		    layergroups[key].addLayer(statusWithMarkers[key][i])
+		    statusGroupLayers[key].addLayer(statusWithMarkers[key][i])
 		}
 		// Remove from layer if it is not checked.
 		else{
-		    layergroups[key].removeLayer(statusWithMarkers[key][i]);
+		    statusGroupLayers[key].removeLayer(statusWithMarkers[key][i]);
 		    mymap.removeLayer(statusWithMarkers[key][i]);
 		}
 	    }
