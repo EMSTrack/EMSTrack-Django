@@ -483,6 +483,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
+        self.is_subscribed(test_client)
         
         # loop subscribe_client
         subscribe_client.loop()
@@ -523,6 +524,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # expect update once
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
+        self.is_subscribed(test_client)
         
         # loop subscribe_client
         subscribe_client.loop()
@@ -546,6 +548,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # expect update once
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
 
         # loop subscribe_client
         subscribe_client.loop()
