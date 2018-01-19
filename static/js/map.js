@@ -1,9 +1,13 @@
 var ambulanceMarkers = {};  // Store ambulance markers
-var statusWithMarkers = {}; // A JSON to map statuses with arrays of ambulances with that status.
 var ambulances = {};	// Store ambulance details
 
 var hospitalMarkers = {};  // Store hospital markers
 var hospitals = {};	// Store hospital details
+
+var statusWithMarkers = {}; // A JSON to map statuses with arrays of ambulances with that status.
+Object.keys(ambulance_status).forEach(function(status) {
+    statusWithMarkers[status] = [];
+};
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
@@ -388,12 +392,7 @@ function addAmbulanceToMap(ambulance) {
 	    });
     
     // Add to a map to differentiate the layers between statuses.
-    if(statusWithMarkers[ambulance.status]){
-	statusWithMarkers[ambulance.status].push(ambulanceMarkers[ambulance.id]);
-    }
-    else{
-	statusWithMarkers[ambulance.status] = [ambulanceMarkers[ambulance.id]];
-    }
+    statusWithMarkers[ambulance.status].push(ambulanceMarkers[ambulance.id]);
     
 };
 
@@ -466,10 +465,8 @@ function createStatusFilter(mymap) {
     var filterHtml = "";
     Object.keys(ambulance_status).forEach(function(status) {
 
-	if(statusWithMarkers[status] !== undefined) {
-	    statusGroupLayers[status.name] = L.layerGroup(statusWithMarkers[status.name]);
-	    statusGroupLayers[status.name].addTo(mymap);
-	}
+	statusGroupLayers[status] = L.layerGroup(statusWithMarkers[status]);
+	statusGroupLayers[status].addTo(mymap);
     
 	filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status + '" type="checkbox" value="" checked>' + ambulance_status[status] + "</label></div>";
 	
@@ -485,15 +482,19 @@ function createStatusFilter(mymap) {
 	Object.keys(statusGroupLayers).forEach(function(key){
 
 	    statusGroupLayers[key].clearLayers();
-	    for(var i = 0; i < statusWithMarkers[key].length; i++){
-		// Add the ambulances in the layer if it is checked.
-		if($(".chk[data-status='" + key + "']").is(':checked')){
+	    statusWithMarkers[key].forEach(function(elem) {
+
+		if($(".chk[data-status='" + key + "']").is(':checked')) {
+
+		    // Add the ambulances in the layer if it is checked.
 		    statusGroupLayers[key].addLayer(statusWithMarkers[key][i])
-		}
-		// Remove from layer if it is not checked.
-		else{
+		
+		} else {
+
+		    // Remove from layer if it is not checked.
 		    statusGroupLayers[key].removeLayer(statusWithMarkers[key][i]);
 		    mymap.removeLayer(statusWithMarkers[key][i]);
+		    
 		}
 	    }
 	});
