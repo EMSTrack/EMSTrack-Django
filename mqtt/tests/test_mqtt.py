@@ -547,17 +547,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # expect update once
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
 
-        print('11111')
-        
         # loop subscribe_client
         subscribe_client.loop()
         
-        print('2222')
-        
         # process messages
         self.loop(test_client)
-        
-        print('3333')
         
         # disconnect
         test_client.wait()
