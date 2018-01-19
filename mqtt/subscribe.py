@@ -63,7 +63,7 @@ class SubscribeClient(BaseClient):
         logger.debug("send_error_message: {}, '{}:{}': {}".format(username,
                                                                   topic,
                                                                   payload,
-                                                                  error)
+                                                                  error))
         
         try:
                 
@@ -80,7 +80,7 @@ class SubscribeClient(BaseClient):
                             "topic = '{}:{}', {}").format(username,
                                                           topic,
                                                           payload,
-                                                          error)
+                                                          error))
 
     def parse_topic(self, msg):
 
