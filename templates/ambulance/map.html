@@ -9,7 +9,7 @@
     <script>
       var ambulance_status = {{ ambulance_status|safe }};
       var ambulance_capability = {{ ambulance_capability|safe }};
-      var username = {{ user.get_username|safe }};
+      var username = '{{ user.get_username|safe }}';
     </script>
 {% endblock %}
 
