@@ -129,15 +129,18 @@ $(document).ready(function() {
     
     // Publish to mqtt on status change from details options dropdown
     $('#ambulance-detail-status-select').change(function() {
+
+	// Get status
 	status = JSON.stringify({ 'status': this.value });
-	
+
+	// Send message
 	let id = $('#ambulance-detail-id').val();
 	let topic = "user/" + username + "/ambulance/" + id + "/data";
 	let message = new Paho.MQTT.Message(status);
 	message.destinationName = topic
 	message.qos = 2;
-	console.log('Sending message: "' + topic + ':' + status + '"');
 	client.send(message);
+	console.log('Sent message: "' + topic + ':' + status + '"');
 	
     });
     
@@ -249,13 +252,17 @@ function updateAmbulance(ambulance) {
     // already exists?
     if (id in ambulances) {
 
+	// Remove existing marker
+	let index = indexOf(statusWithMarkers[ambulance[id].status]);
+	if (index >= 0)  {
+	    statusWithMarkers[ambulance[id].status].splice(index, 1);
+	}
+	mymap.removeLayer(ambulanceMarkers[id]);
+	
 	// update ambulance
 	ambulances[id].status = ambulance.status;
 	ambulances[id].location.latitude = ambulance.location.latitude;
 	ambulances[id].location.longitude = ambulance.location.longitude;
-	
-	// Remove existing marker
-	mymap.removeLayer(ambulanceMarkers[id]);
 	
 	// Overwrite ambulance
 	ambulance = ambulances[id]
@@ -494,10 +501,7 @@ function createStatusFilter(mymap) {
     $('.chk').change(function() {
 
 	// Which layer?
-	console.log('this = ')
-	console.log(this);
 	key = this.getAttribute('data-status');
-	console.log('key = ' + key);
 
 	// Clear layer
 	statusGroupLayers[key].clearLayers();
@@ -521,26 +525,6 @@ function createStatusFilter(mymap) {
 	
     });
     
-    
-    // // Listener to see if a click on a checkbox leads to a check. If so,
-    // // remove the layer from the map.
-    // $('.chk').each(function(){
-
-    // 	$(this).change(function(){
-
-    // 	    if(!($(this).is(':checked'))){
-		
-    // 		var layersToRemove = statusWithMarkers[this.dataset.status];
-
-    // 		for(var i = 0; i < layersToRemove.length; i++){
-    // 		    mymap.removeLayer(layersToRemove[i]);
-    // 		}
-    // 	    }
-	    
-    // 	});
-	
-    // });
-
 };
 
 
