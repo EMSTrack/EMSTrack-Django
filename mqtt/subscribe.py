@@ -60,27 +60,30 @@ class SubscribeClient(BaseClient):
 
     def send_error_message(self, username, topic, payload, error):
 
-        logger.debug("send_error_message: {}, '{}:{}': {}".format(username,
-                                                                  topic,
-                                                                  payload,
-                                                                  error))
+        logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
+                                                                    topic,
+                                                                    payload,
+                                                                    error))
         
         try:
                 
-            message = JSONRenderer.render({
+            message = JSONRenderer().render({
                 'topic': topic,
                 'payload': payload,
                 'error': error
             })
             self.publish('user/{}/error'.format(username), message)
 
-        except:
+        except Exception as e:
                      
             logger.warning(('mqtt.SubscribeClient: {}, ' +
-                            "topic = '{}:{}', {}").format(username,
-                                                          topic,
-                                                          payload,
-                                                          error))
+                            "topic = '{}:{}', " +
+                            "error = '{}', " +
+                            "exception = {}").format(username,
+                                                     topic,
+                                                     payload,
+                                                     error,
+                                                     e))
 
     def parse_topic(self, msg):
 
