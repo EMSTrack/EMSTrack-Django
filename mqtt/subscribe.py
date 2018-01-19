@@ -72,7 +72,10 @@ class SubscribeClient(BaseClient):
             user = User.objects.get(username=values[1])
 
         except ObjectDoesNotExist as e:
-            
+
+            # does not know username
+            # cannot send error message to user
+            # TODO: LOG
             return
             
         # parse data
@@ -83,12 +86,14 @@ class SubscribeClient(BaseClient):
             
         except Exception as e:
 
+            # send error message to user
             self.publish(
                 'user/{}/error'.format(user),
                 "JSON formatted incorrectly: {}:{}".format(msg.topic, msg.payload))
             return
 
         if len(values) == 5:
+
             return (user, data, values[3])
     
         elif len(values) == 7:
@@ -97,6 +102,7 @@ class SubscribeClient(BaseClient):
 
         else:
             
+            # send error message to user
             self.publish(
                 'user/{}/error'.format(user),
                 "Invalid topic '{}'.".format(msg.topic))
@@ -121,6 +127,7 @@ class SubscribeClient(BaseClient):
 
         except ObjectDoesNotExist:
 
+            # send error message to user
             self.publish(
                 'user/{}/error'.format(user),
                 "Ambulance with id '{}' does not exist".format(ambulance_id))
@@ -137,6 +144,7 @@ class SubscribeClient(BaseClient):
 
         else:
             
+            # send error message to user
             self.publish(
                 'user/{}/error'.format(user),
                 serializer.errors)
@@ -144,23 +152,25 @@ class SubscribeClient(BaseClient):
     # Update hospital
     def on_hospital(self, client, userdata, msg):
 
-        if not msg.payload:
-            # empty payload
-            return
-        
         # parse topic
-        user, data, hospital_id = self.parse_topic(msg)
-
+        values = self.parse_topic(msg)
+        if not values:
+            return 
+        
         try:
 
+            # retrieve parsed values
+            user, data, hospital_id = values
+        
             # retrieve hospital
             hospital = Hospital.objects.get(id=hospital_id)
 
         except ObjectDoesNotExist:
 
-            # TODO: send message to user
-            self.stdout.write(
-                self.style.ERROR("*> Hospital with id {} does not exist".format(hospital_id)))
+            # send error message to user
+            self.publish(
+                'user/{}/error'.format(user),
+                "Hospital with id '{}' does not exist".format(hospital_id))
             return
             
         # update hospital
@@ -174,26 +184,34 @@ class SubscribeClient(BaseClient):
 
         else:
             
-            # TODO: send message to user
-            pass
+            # send error message to user
+            self.publish(
+                'user/{}/error'.format(user),
+                serializer.errors)
 
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
 
         # parse topic
-        user, data, hospital_id, equipment_name = self.parse_topic(msg)
+        values = self.parse_topic(msg)
+        if not values:
+            return 
 
         try:
 
+            # retrieve parsed values
+            user, data, hospital_id, equipment_name = values
+            
             # retrieve hospital equipment
             hospital_equipment = HospitalEquipment.objects.get(hospital=hospital_id,
                                                                equipment__name=equipment_name)
 
         except ObjectDoesNotExist:
 
-            # TODO: send message to user
-            self.stdout.write(
-                self.style.ERROR("*> Hospital equipment with id {} and {} does not exist".format(hospital_id, equipment_name)))
+            # send error message to user
+            self.publish(
+                'user/{}/error'.format(user),
+                "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(hospital_id, equipment_name))
             return
             
         # update hospital equipment
@@ -207,5 +225,7 @@ class SubscribeClient(BaseClient):
             
         else:
             
-            # TODO: send message to user
-            pass
+            # send error message to user
+            self.publish(
+                'user/{}/error'.format(user),
+                serializer.errors)
