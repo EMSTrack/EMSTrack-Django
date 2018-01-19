@@ -7,7 +7,7 @@ var hospitals = {};	// Store hospital details
 var statusWithMarkers = {}; // A JSON to map statuses with arrays of ambulances with that status.
 Object.keys(ambulance_status).forEach(function(status) {
     statusWithMarkers[status] = [];
-};
+});
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
