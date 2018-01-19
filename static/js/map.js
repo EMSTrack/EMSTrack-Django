@@ -477,28 +477,30 @@ function createStatusFilter(mymap) {
 
     // Add listener to remove status layer when filter checkbox is clicked
     $('.chk').click(function() {
-	
-	// Goes through each layer group and adds or removes accordingly.
-	Object.keys(statusGroupLayers).forEach(function(key){
 
-	    statusGroupLayers[key].clearLayers();
-	    if($(".chk[data-status='" + key + "']").is(':checked')) {
-		
-		// Add the ambulances in the layer if it is checked.
-		statusWithMarkers[key].forEach(function(elem) {
-		    statusGroupLayers[key].addLayer(elem)
-		});
-		
-	    } else {
-		
-		statusWithMarkers[key].forEach(function(elem) {
-		    // Remove from layer if it is not checked.
-		    statusGroupLayers[key].removeLayer(elem);
-		    mymap.removeLayer(elem);
-		});
-	    }
+	// Which layer?
+	key = this.data-status;
+	console.log('key = ' + key);
+
+	// Clear layer
+	statusGroupLayers[key].clearLayers();
+	
+	if (this.checked) {
+
+	    // Add the ambulances in the layer if it is checked.
+	    statusWithMarkers[key].forEach(function(elem) {
+		statusGroupLayers[key].addLayer(elem)
+	    });
+
+	} else {
 	    
-	});
+	    // Remove from layer if it is not checked.
+	    statusWithMarkers[key].forEach(function(elem) {
+		statusGroupLayers[key].removeLayer(elem);
+		mymap.removeLayer(elem);
+	    });
+	    
+	}
 	
     });
     
@@ -517,24 +519,24 @@ function createStatusFilter(mymap) {
     });
     mymap.addControl(new customControl());
     
-    // Listener to see if a click on a checkbox leads to a check. If so,
-    // remove the layer from the map.
-    $('.chk').each(function(){
+    // // Listener to see if a click on a checkbox leads to a check. If so,
+    // // remove the layer from the map.
+    // $('.chk').each(function(){
 
-	$(this).change(function(){
+    // 	$(this).change(function(){
 
-    	    if(!($(this).is(':checked'))){
+    // 	    if(!($(this).is(':checked'))){
 		
-    		var layersToRemove = statusWithMarkers[this.dataset.status];
+    // 		var layersToRemove = statusWithMarkers[this.dataset.status];
 
-    		for(var i = 0; i < layersToRemove.length; i++){
-    		    mymap.removeLayer(layersToRemove[i]);
-    		}
-    	    }
+    // 		for(var i = 0; i < layersToRemove.length; i++){
+    // 		    mymap.removeLayer(layersToRemove[i]);
+    // 		}
+    // 	    }
 	    
-	});
+    // 	});
 	
-    });
+    // });
 
 };
 
