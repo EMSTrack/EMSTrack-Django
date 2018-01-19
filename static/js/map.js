@@ -4,9 +4,9 @@ var ambulances = {};	// Store ambulance details
 var hospitalMarkers = {};  // Store hospital markers
 var hospitals = {};	// Store hospital details
 
-var statusWithMarkers = {}; // A JSON to map statuses with arrays of ambulances with that status.
+var markersByStatus = {}; // A JSON to map statuses with arrays of ambulances with that status.
 Object.keys(ambulance_status).forEach(function(status) {
-    statusWithMarkers[status] = [];
+    markersByStatus[status] = [];
 });
 
 // Initialize marker icons.
@@ -255,12 +255,9 @@ function updateAmbulance(ambulance) {
 	// Remove existing marker
 	let marker = ambulanceMarkers[id];
 	let status = ambulances[id].status;
-	let index = statusWithMarkers[status].indexOf(marker);
-	console.log('marker = ' + marker);
-	console.log('status = ' + status);
-	console.log('indes = ' + index);
+	let index = markersByStatus[status].indexOf(marker);
 	if (index >= 0)  {
-	    statusWithMarkers[status].splice(index, 1);
+	    markersByStatus[status].splice(index, 1);
 	}
 	mymap.removeLayer(marker);
 	
@@ -404,7 +401,7 @@ function addAmbulanceToMap(ambulance) {
 	    });
     
     // Add to a map to differentiate the layers between statuses.
-    statusWithMarkers[ambulance.status].push(ambulanceMarkers[ambulance.id]);
+    markersByStatus[ambulance.status].push(ambulanceMarkers[ambulance.id]);
     
 };
 
@@ -477,7 +474,7 @@ function createStatusFilter(mymap) {
     var filterHtml = "";
     Object.keys(ambulance_status).forEach(function(status) {
 
-	statusGroupLayers[status] = L.layerGroup(statusWithMarkers[status]);
+	statusGroupLayers[status] = L.layerGroup(markersByStatus[status]);
 	statusGroupLayers[status].addTo(mymap);
     
 	filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status + '" type="checkbox" value="" checked>' + ambulance_status[status] + "</label></div>";
@@ -514,14 +511,14 @@ function createStatusFilter(mymap) {
 	if (this.checked) {
 
 	    // Add the ambulances in the layer if it is checked.
-	    statusWithMarkers[key].forEach(function(elem) {
+	    markersByStatus[key].forEach(function(elem) {
 		statusGroupLayers[key].addLayer(elem)
 	    });
 
 	} else {
 	    
 	    // Remove from layer if it is not checked.
-	    statusWithMarkers[key].forEach(function(elem) {
+	    markersByStatus[key].forEach(function(elem) {
 		statusGroupLayers[key].removeLayer(elem);
 		mymap.removeLayer(elem);
 	    });
