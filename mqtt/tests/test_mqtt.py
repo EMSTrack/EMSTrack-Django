@@ -538,25 +538,23 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
         # generate error: JSON formated incorrectly
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
                             '{ "value": ',
                             qos=0)
-        
+
         # process messages
         self.loop(test_client)
-        
-        # expect update once
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
-
-        # loop subscribe_client
         subscribe_client.loop()
         
-        # process messages
-        self.loop(test_client)
-
         # generate error: wrong topic
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
         test_client.publish('user/{}/ambulance/{}'.format(self.u1.username,
                                                           self.a1.id),
                             json.dumps({
@@ -565,36 +563,21 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client)
-        
-        # expect update once
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        # loop subscribe_client
         subscribe_client.loop()
         
-        # process messages
-        self.loop(test_client)
-
-        
         # generate error: wrong id
-        test_client.publish('user/{}/ambulance/{}'.format(self.u1.username,
-                                                          1111),
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+
+        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                               1111),
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
         
         # process messages
         self.loop(test_client)
-        
-        # expect update once
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        # loop subscribe_client
         subscribe_client.loop()
-        
-        # process messages
-        self.loop(test_client)
-
         
         # disconnect
         test_client.wait()
