@@ -408,7 +408,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = 'test_mqttclient'
         
         subscribe_client = SubscribeClient(broker,
-                                           debug=False)
+                                           debug=True)
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
 
@@ -419,7 +419,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         test_client = MQTTTestClient(broker,
                                      check_payload = False,
-                                     debug=False)
+                                     debug=True)
         self.is_connected(test_client)
 
         
