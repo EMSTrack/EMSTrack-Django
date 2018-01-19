@@ -256,6 +256,9 @@ function updateAmbulance(ambulance) {
 	let marker = ambulanceMarkers[id];
 	let status = ambulances[id].status;
 	let index = statusWithMarkers[status].indexOf(marker);
+	console.log('marker = ' + marker);
+	console.log('status = ' + status);
+	console.log('indes = ' + index);
 	if (index >= 0)  {
 	    statusWithMarkers[status].splice(index, 1);
 	}
