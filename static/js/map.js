@@ -446,7 +446,6 @@ function updateDetailPanel(ambulance) {
     $('#ambulance-detail-name').html(ambulance.identifier);
     $('#ambulance-detail-capability').html(ambulance.capability);
     $('#ambulance-detail-updated-on').html(ambulance.updated_on);
-    $('#ambulance-detail-updated-by').html(ambulance.updated_by);
 
     $('#ambulance-detail-status-select').val(ambulance.status);
     $('#ambulance-detail-id').val(ambulance.id);
