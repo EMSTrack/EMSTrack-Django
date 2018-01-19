@@ -254,9 +254,10 @@ function updateAmbulance(ambulance) {
 
 	// Remove existing marker
 	let marker = ambulanceMarkers[id];
-	let index = statusWithMarkers[ambulance[id].status].indexOf(marker);
+	let status = ambulances[id].status;
+	let index = statusWithMarkers[status].indexOf(marker);
 	if (index >= 0)  {
-	    statusWithMarkers[ambulance[id].status].splice(index, 1);
+	    statusWithMarkers[status].splice(index, 1);
 	}
 	mymap.removeLayer(marker);
 	
