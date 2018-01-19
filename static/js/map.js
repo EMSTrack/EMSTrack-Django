@@ -471,7 +471,7 @@ function createStatusFilter(mymap) {
     var container = L.DomUtil.create('div', 'filter-options');
     
     //Generate HTML code for checkboxes for each of the statuses.
-    var filterHtml = "<p><strong>Status:</strong></p>";
+    var filterHtml = "";
     Object.keys(ambulance_status).forEach(function(status) {
 
 	statusGroupLayers[status] = L.layerGroup(markersByStatus[status]);
@@ -489,7 +489,6 @@ function createStatusFilter(mymap) {
 	
 	options: {
 	    position: 'topright' 
-	    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
 	},
 	
 	onAdd: function (map) {
