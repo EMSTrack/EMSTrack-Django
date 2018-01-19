@@ -253,7 +253,7 @@ function updateAmbulance(ambulance) {
     if (id in ambulances) {
 
 	// Remove existing marker
-	marker = ambulanceMarkers[id];
+	let marker = ambulanceMarkers[id];
 	let index = statusWithMarkers[ambulance[id].status].indexOf(marker);
 	if (index >= 0)  {
 	    statusWithMarkers[ambulance[id].status].splice(index, 1);
