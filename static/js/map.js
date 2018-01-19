@@ -129,7 +129,7 @@ $(document).ready(function() {
     
     // Publish to mqtt on status change from details options dropdown
     $('#ambulance-detail-status-select').change(function() {
-	status = { 'value': this.value };
+	status = JSON.stringify({ 'value': this.value });
 	
 	let message = new Paho.MQTT.Message(status);
 	let id = $('#ambulance-detail-id').val();
