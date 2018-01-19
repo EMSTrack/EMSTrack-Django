@@ -52,6 +52,9 @@
           <div id="collapse2" class="collapse in">
             <div class="panel-body"
 		 id="ambulance-detail">
+	      <input type="hidden"
+		     name="change-status-ambulance-id"
+		     id="ambulance-detail-id">
 	      <p>
 		<strong>Ambulance:</strong>
 		<span id="ambulance-detail-name"/>
@@ -64,18 +67,15 @@
 		<strong>Updated on:</strong>
 		<span id="ambulance-detail-updated-on"/>
 	      </p>
-            </div>
-            <input type="hidden"
-		   name="change-status-ambulance-id"
-		   id="ambulance-detail-id">
-            <div id="ambulance-detail-status"
-		 style="text-align: left; padding: 10px;">
-              <select id="ambulance-detail-status-select"
-		      style="margin: auto;">
-		{% for k, v in ambulance_status.items %}
-		<option value="{{ k }}">{{ v }}</option>
-		{% endfor %}
-              </select>
+	      <p>
+		<strong>Status:</strong>
+		<select id="ambulance-detail-status-select"
+			style="margin: auto;">
+		  {% for k, v in ambulance_status.items %}
+		  <option value="{{ k }}">{{ v }}</option>
+		  {% endfor %}
+		</select>
+	      </p>
             </div>
           </div>
         </div>

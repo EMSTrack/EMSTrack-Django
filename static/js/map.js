@@ -447,12 +447,17 @@ function addHospitalToMap(hospital) {
  */
 function updateDetailPanel(ambulance) {
 
-    $('#ambulance-detail-name').html(ambulance.identifier);
-    $('#ambulance-detail-capability').html(ambulance.capability);
-    $('#ambulance-detail-updated-on').html(ambulance.updated_on);
+    $('#ambulance-detail-name')
+	.html(ambulance.identifier);
+    $('#ambulance-detail-capability')
+	.html(ambulance_capability[ambulance.capability]);
+    $('#ambulance-detail-updated-on')
+	.html(ambulance.updated_on);
 
-    $('#ambulance-detail-status-select').val(ambulance.status);
-    $('#ambulance-detail-id').val(ambulance.id);
+    $('#ambulance-detail-status-select')
+	.val(ambulance.status);
+    $('#ambulance-detail-id')
+	.val(ambulance.id);
     
 }
 
