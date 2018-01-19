@@ -145,22 +145,31 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Ambulance with id '{}' does not exist".format(ambulance_id))
             return
-            
-        # update ambulance
-        serializer = AmbulanceSerializer(ambulance,
-                                         data=data,
-                                         partial=True)
-        if serializer.is_valid():
 
-            # save to database
-            serializer.save(updated_by=user)
+        try:
+        
+            # update ambulance
+            serializer = AmbulanceSerializer(ambulance,
+                                             data=data,
+                                             partial=True)
+            if serializer.is_valid():
+                
+                # save to database
+                serializer.save(updated_by=user)
+                
+            else:
+                
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        serializer.errors)
 
-        else:
-            
+        except Exception as e:
+
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                                    serializer.errors)
+                                    e)
             
+
     # Update hospital
     def on_hospital(self, client, userdata, msg):
 
