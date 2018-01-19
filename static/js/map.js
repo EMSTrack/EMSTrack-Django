@@ -475,8 +475,23 @@ function createStatusFilter(mymap) {
     // Append html code to container 
     container.innerHTML = filterHtml;
 
+    // Add the checkboxes.
+    var customControl = L.Control.extend({
+	
+	options: {
+	    position: 'topright' 
+	    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+	},
+	
+	onAdd: function (map) {
+	    return container;
+	}
+	
+    });
+    mymap.addControl(new customControl());
+
     // Add listener to remove status layer when filter checkbox is clicked
-    $('.chk').click(function() {
+    $('.chk').change(function() {
 
 	// Which layer?
 	key = this.data-status;
@@ -504,20 +519,6 @@ function createStatusFilter(mymap) {
 	
     });
     
-    // Add the checkboxes.
-    var customControl = L.Control.extend({
-	
-	options: {
-	    position: 'topright' 
-	    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
-	},
-	
-	onAdd: function (map) {
-	    return container;
-	}
-	
-    });
-    mymap.addControl(new customControl());
     
     // // Listener to see if a click on a checkbox leads to a check. If so,
     // // remove the layer from the map.
