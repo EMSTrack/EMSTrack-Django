@@ -106,7 +106,14 @@ class SubscribeClient(BaseClient):
 
             # does not know username
             # cannot send error message to user
-            # TODO: LOG
+            logger.warning(('mqtt.SubscribeClient: {}, ' +
+                            "topic = '{}:{}', " +
+                            "error = '{}', " +
+                            "exception = {}").format(username,
+                                                     topic,
+                                                     payload,
+                                                     error,
+                                                     e))
             return
             
         # parse data

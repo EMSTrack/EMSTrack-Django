@@ -538,7 +538,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # generate error: JSON formated incorrectly
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
-                            '{ value: ',
+                            '{ "value": ',
                             qos=0)
         
         # process messages
@@ -552,6 +552,26 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client)
+
+        # generate error: wrong topic
+        test_client.publish('user/{}/ambulance/{}'.format(self.u1.username,
+                                                          self.a1.id),
+                            json.dumps({
+                                'status': AmbulanceStatus.OS.name,
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client)
+        
+        # expect update once
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+        # loop subscribe_client
+        subscribe_client.loop()
+        
+        # process messages
+        self.loop(test_client)
+
         
         # disconnect
         test_client.wait()
