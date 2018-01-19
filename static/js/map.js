@@ -494,7 +494,7 @@ function createStatusFilter(mymap) {
     $('.chk').change(function() {
 
 	// Which layer?
-	key = this.data-status;
+	key = this.prop('data-status');
 	console.log('key = ' + key);
 
 	// Clear layer
