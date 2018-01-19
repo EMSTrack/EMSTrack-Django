@@ -471,16 +471,13 @@ function createStatusFilter(mymap) {
 	    statusGroupLayers[status.name].addTo(mymap);
 	}
     
-	filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status + '" type="checkbox" value="">' + ambulance_status[status] + "</label></div>";
+	filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status + '" type="checkbox" value="" checked>' + ambulance_status[status] + "</label></div>";
 	
     });
     
     // Append html code to container 
     container.innerHTML = filterHtml;
 
-    // Initialize checked to true for all statuses.
-    $('.chk').prop('checked', true);
-    
     // Add listener to remove status layer when filter checkbox is clicked
     $('.chk').click(function() {
 	
