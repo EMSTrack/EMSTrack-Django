@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import User
 
 from rest_framework.parsers import JSONParser
@@ -12,6 +14,8 @@ from ambulance.serializers import AmbulanceSerializer
 from hospital.models import Hospital, HospitalEquipment
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer
+
+logger = logging.getLogger(__name__)
 
 # SubscribeClient
 class SubscribeClient(BaseClient):
@@ -56,6 +60,11 @@ class SubscribeClient(BaseClient):
 
     def send_error_message(self, username, topic, payload, error):
 
+        logger.debug("send_error_message: {}, '{}:{}': {}".format(username,
+                                                                  topic,
+                                                                  payload,
+                                                                  error)
+        
         try:
                 
             message = JSONRenderer.render({
@@ -66,10 +75,13 @@ class SubscribeClient(BaseClient):
             self.publish('user/{}/error'.format(username), message)
 
         except:
+                     
+            logger.warning(('mqtt.SubscribeClient: {}, ' +
+                            "topic = '{}:{}', {}").format(username,
+                                                          topic,
+                                                          payload,
+                                                          error)
 
-            # TODO: LOG
-            pass
-    
     def parse_topic(self, msg):
 
         if not msg.payload:
