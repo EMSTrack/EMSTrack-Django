@@ -496,7 +496,7 @@ function createStatusFilter(mymap) {
 		    mymap.removeLayer(statusWithMarkers[key][i]);
 		    
 		}
-	    }
+	    });
 	});
     });
     
