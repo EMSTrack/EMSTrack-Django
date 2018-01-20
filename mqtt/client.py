@@ -104,19 +104,19 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            logger.debug(("> Just published '{}[mid={}]:{}'" +
-                   "(qos={},retain={})").format(topic,
-                                                result.mid,
-                                                payload,
-                                                qos,
-                                                retain))
+            logger.debug(("Just published '{}[mid={}]:{}'" +
+                          "(qos={},retain={})").format(topic,
+                                                       result.mid,
+                                                       payload,
+                                                       qos,
+                                                       retain))
             
     def on_publish(self, client, userdata, mid):
 
         # debug? 
         if self.debug:
-            logger.debug("> Published mid={}".format(mid))
-                  
+            logger.debug("Published mid={}".format(mid))
+            
         if mid in self.published:
             # TODO: check granted_qos?
             # remove from list of subscribed
@@ -137,9 +137,9 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            logger.debug("> Just subscribed to '{}'[mid={}][qos={}]".format(topic,
-                                                                     mid,
-                                                                     qos))
+            logger.debug("Just subscribed to '{}'[mid={}][qos={}]".format(topic,
+                                                                          mid,
+                                                                          qos))
             
             
         # otherwise add to dictionary of subscribed
@@ -151,7 +151,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            logger.debug("> Subscribed mid={}, qos={}".format(mid, granted_qos))
+            logger.debug("Subscribed mid={}, qos={}".format(mid, granted_qos))
         
         if mid in self.subscribed:
             # TODO: check granted_qos?
@@ -162,7 +162,7 @@ class BaseClient():
             raise MQTTException('Unknown subscribe mid', mid)
 
     def on_disconnect(self, client, userdata, rc):
-        # logger.debug('>> disconnecting reason {}'.format(rc))
+        # logger.debug('disconnecting reason {}'.format(rc))
         self.connected = False
         
     # disconnect

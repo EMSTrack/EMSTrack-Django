@@ -465,10 +465,10 @@ class MQTTTestClient(BaseClient):
                 raise Exception('Unexpected message')
 
         if self.debug:
-            logger.debug('> Just received {}[count={},expecting={}]:{}'.format(msg.topic,
-                                                                               self.expecting_topics[msg.topic],
-                                                                               self.expecting,
-                                                                               msg.payload))
+            logger.debug('Just received {}[count={},expecting={}]:{}'.format(msg.topic,
+                                                                             self.expecting_topics[msg.topic],
+                                                                             self.expecting,
+                                                                             msg.payload))
 
     def expect(self, topic, msg = None, qos = 2, remove = False):
 
