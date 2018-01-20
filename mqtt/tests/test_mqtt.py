@@ -29,6 +29,7 @@ from .client import MQTTTestCase, MQTTTestClient
 
 from ..client import MQTTException
 from ..subscribe import SubscribeClient
+from ..publish import SingletonPublishClient
 
 logger = logging.getLogger(__name__)
 
@@ -599,5 +600,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # disconnect
         test_client.wait()
         subscribe_client.wait()
-
+        SingletonPublishClient().wait()
+        
         time.sleep(2)
