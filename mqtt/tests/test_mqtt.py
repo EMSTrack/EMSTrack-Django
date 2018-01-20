@@ -30,7 +30,7 @@ from .client import MQTTTestCase, MQTTTestClient
 from ..client import MQTTException
 from ..subscribe import SubscribeClient
 
-logger.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 class TestMQTT():
 
