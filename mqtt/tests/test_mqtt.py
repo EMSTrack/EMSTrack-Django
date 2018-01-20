@@ -660,7 +660,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
                                                                self.h1.id),
                             json.dumps({
-                                'point': 'PPOINT()',
+                                'location': 'PPOINT()',
                             }), qos=0)
         
         # process messages
