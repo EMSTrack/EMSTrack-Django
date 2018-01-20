@@ -482,11 +482,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         time.sleep(2)
 
-        from django.db import connections
-
-        for conn in connections.all():
-            conn.close()
-        
 
     def _test(self):
         

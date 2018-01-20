@@ -212,6 +212,11 @@ class MQTTTestCase(StaticLiveServerTestCase):
         
         time.sleep(2)
         
+        from django.db import connections
+
+        for conn in connections.all():
+            conn.close()
+        
     @classmethod
     def setUpTestData(cls):
 
