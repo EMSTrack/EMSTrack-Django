@@ -140,6 +140,8 @@ class SubscribeClient(BaseClient):
         else:
             
             # send error message to user
+            # this should never happen because no subscriptions will match
+            # topics with different sizes
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Invalid topic")
             return
@@ -168,6 +170,13 @@ class SubscribeClient(BaseClient):
                                     "Ambulance with id '{}' does not exist".format(ambulance_id))
             return
 
+        except Exception as e:
+        
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
+            return
+        
         try:
         
             # update ambulance
