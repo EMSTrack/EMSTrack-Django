@@ -561,6 +561,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
         
+        self.loop(test_client)
+        subscribe_client.loop()
 
         # disconnect
         test_client.wait()
