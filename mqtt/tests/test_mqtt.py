@@ -557,7 +557,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
 
-        # generate error: JSON formated incorrectly
+        # generate ERROR: JSON formated incorrectly
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
@@ -570,7 +570,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
         
-        # generate error: wrong id
+        # generate ERROR: wrong id
+        
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
         
@@ -583,7 +584,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
         
-        # generate error: invalid serializer
+        # generate ERROR: invalid serializer
+        
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
         
@@ -596,6 +598,48 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
 
+
+        # generate ERROR: JSON formated incorrectly
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                               self.h1.id),
+                            '{ "value": ',
+                            qos=0)
+
+        # process messages
+        self.loop(test_client, subscribe_client)
+        
+        # generate ERROR: wrong id
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                              1111),
+                            json.dumps({
+                                'comment': 'comment',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client, subscribe_client)
+        
+        # generate ERROR: invalid serializer
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                               self.a1.id),
+                            json.dumps({
+                                'point': 'PPOINT()',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client, subscribe_client)
+        
         
         # disconnect
         test_client.wait()

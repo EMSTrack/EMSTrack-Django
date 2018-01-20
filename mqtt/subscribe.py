@@ -207,8 +207,7 @@ class SubscribeClient(BaseClient):
         except Exception as e:
 
             # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    e)
+            self.send_error_message(user, msg.topic, msg.payload, e)
             
         # logger.debug('on_ambulance: DONE')
 
@@ -235,20 +234,26 @@ class SubscribeClient(BaseClient):
                                     "Hospital with id '{}' does not exist".format(hospital_id))
             return
             
-        # update hospital
-        serializer = HospitalSerializer(hospital,
-                                        data=data,
-                                        partial=True)
-        if serializer.is_valid():
-
-            # save to database
-            serializer.save(updated_by=user)
-
-        else:
+        try:
+        
+            # update hospital
+            serializer = HospitalSerializer(hospital,
+                                            data=data,
+                                            partial=True)
+            if serializer.is_valid():
             
+                # save to database
+                serializer.save(updated_by=user)
+
+            else:
+            
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        serializer.errors)
+        except Exception as e:
+
             # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    serializer.errors)
+            self.send_error_message(user, msg.topic, msg.payload, e)
 
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
@@ -273,18 +278,25 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(hospital_id, equipment_name))
             return
-            
-        # update hospital equipment
-        serializer = HospitalEquipmentSerializer(hospital_equipment,
-                                                 data=data,
-                                                 partial=True)
-        if serializer.is_valid():
-            
-            # save to database
-            serializer.save(updated_by=user)
-            
-        else:
-            
+
+        try:
+        
+            # update hospital equipment
+            serializer = HospitalEquipmentSerializer(hospital_equipment,
+                                                     data=data,
+                                                     partial=True)
+            if serializer.is_valid():
+                
+                # save to database
+                serializer.save(updated_by=user)
+                
+            else:
+                
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        serializer.errors)
+
+        except Exception as e:
+                            
             # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    serializer.errors)
+            self.send_error_message(user, msg.topic, msg.payload, e)
