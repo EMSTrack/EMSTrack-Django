@@ -446,6 +446,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
         
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+        SingletonPublishClient().wait()
+        
+        time.sleep(2)
+
+    def _test(self):
+
+
         # Modify ambulance
         
         # retrive message that is there already due to creation
@@ -475,16 +485,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-        SingletonPublishClient().wait()
         
-        time.sleep(2)
 
-
-    def _test(self):
-        
         # Modify hospital
         
         # retrive message that is there already due to creation
