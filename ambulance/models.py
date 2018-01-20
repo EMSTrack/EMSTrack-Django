@@ -49,11 +49,11 @@ class Ambulance(UpdatedByModel):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient(debug=True).publish_ambulance(self)
+        SingletonPublishClient().publish_ambulance(self)
 
     def delete(self, *args, **kwargs):
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient(debug=True).remove_ambulance(self)
+        SingletonPublishClient().remove_ambulance(self)
         super().delete(*args, **kwargs) 
     
     def get_absolute_url(self):
