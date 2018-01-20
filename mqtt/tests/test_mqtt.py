@@ -509,32 +509,18 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id = self.h1.id)
         self.assertEqual(obj.comment, 'no more comments')
 
-        
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-        
-    def _test(self):
-
-        
-        
-
 
         # Modify hospital equipment
+        
+        # retrieve current equipment value
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'True')
         
         # retrive message that is there already due to creation
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
         self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        
-        # change hospital
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
-        self.assertEqual(obj.value, 'True')
 
         test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                            self.h1.id,
@@ -545,23 +531,28 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client)
+        subscribe_client.loop()
 
         # expect update once
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
-        self.is_subscribed(test_client)
         
-        # loop subscribe_client
-        subscribe_client.loop()
-
         # process messages
         self.loop(test_client)
+        subscribe_client.loop()
 
         # verify change
         obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
 
+
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        
+    def _test(self):
 
         # generate ERROR: JSON formated incorrectly
         
