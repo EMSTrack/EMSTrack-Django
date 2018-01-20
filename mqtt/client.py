@@ -56,7 +56,7 @@ class BaseClient():
                             self.broker['KEEPALIVE'])
 
     def done(self):
-        return True
+        return len(self.published) == 0 and len(self.subscribed) == 0
         
     def on_connect(self, client, userdata, flags, rc):
         
