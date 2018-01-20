@@ -561,7 +561,37 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
+        
+        # generate ERROR: JSON formated incorrectly
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        
+        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                               self.h1.id),
+                            '{ "value": ',
+                            qos=0)
 
+        # process messages
+        self.loop(test_client, subscribe_client)
+        subscribe_client.loop()
+
+        
+        # generate ERROR: JSON formated incorrectly
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                           self.h1.id,
+                                                                           self.e1.name),
+                            '{ "value": ',
+                            qos=0)
+
+        # process messages
+        self.loop(test_client, subscribe_client)
+        subscribe_client.loop()
+
+        
         # generate ERROR: wrong id
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -583,6 +613,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         
     def _test(self):
+
         # generate ERROR: invalid serializer
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -598,18 +629,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
 
-        # generate ERROR: JSON formated incorrectly
-        
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                               self.h1.id),
-                            '{ "value": ',
-                            qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
 
 
 
@@ -647,19 +666,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
 
 
-        # generate ERROR: JSON formated incorrectly
-        
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
-        
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                           self.h1.id,
-                                                                           self.e1.name),
-                            '{ "value": ',
-                            qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
         
         # generate ERROR: wrong id
         
