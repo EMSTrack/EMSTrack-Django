@@ -150,6 +150,8 @@ class SubscribeClient(BaseClient):
     # Update ambulance
     def on_ambulance(self, client, userdata, msg):
 
+        logger.debug('on_ambulance: msg = {}'.format(msg))
+        
         # parse topic
         values = self.parse_topic(msg)
         if not values:
