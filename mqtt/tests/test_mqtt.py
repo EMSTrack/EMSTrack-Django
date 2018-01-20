@@ -1,3 +1,4 @@
+import logging
 import time
 from django.test import TestCase
 
@@ -28,7 +29,9 @@ from .client import MQTTTestCase, MQTTTestClient
 
 from ..client import MQTTException
 from ..subscribe import SubscribeClient
-            
+
+logger.getLogger(__name__)
+
 class TestMQTT():
 
     def is_connected(self, client, MAX_TRIES = 10):
@@ -66,6 +69,9 @@ class TestMQTT():
             time.sleep(1)
             
         client.loop_stop()
+
+        if not client.done():
+            logging.debug('NOT DONE: expecting = {}, publishin = {}'.format(client.expecting, self.publishing))
         
         self.assertEqual(client.done(), True)
 
@@ -547,7 +553,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             qos=0)
 
         # process messages
-        self.loop(test_client, MAX_TRIES = 20)
+        self.loop(test_client)
         subscribe_client.loop()
         
         # generate error: wrong id
