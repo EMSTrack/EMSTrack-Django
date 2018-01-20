@@ -62,10 +62,10 @@ class SubscribeClient(BaseClient):
 
     def send_error_message(self, username, topic, payload, error):
 
-        # logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
-        #                                                             topic,
-        #                                                             payload,
-        #                                                             error))
+        logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
+                                                                    topic,
+                                                                    payload,
+                                                                    error))
         
         try:
                 
@@ -152,21 +152,21 @@ class SubscribeClient(BaseClient):
     # Update ambulance
     def on_ambulance(self, client, userdata, msg):
 
-        # logger.debug("on_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
+        logger.debug("on_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
         
         # parse topic
         values = self.parse_topic(msg)
         if not values:
             return 
         
-        # logger.debug("on_ambulance: values = '{}'".format(values))
+        logger.debug("on_ambulance: values = '{}'".format(values))
 
         try:
 
             # retrieve parsed values
             user, data, ambulance_id = values
             
-            # logger.debug('ambulance_id = {}'.format(ambulance_id))
+            logger.debug('ambulance_id = {}'.format(ambulance_id))
             
             # retrieve ambulance
             ambulance = Ambulance.objects.get(id=ambulance_id)
@@ -185,7 +185,7 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
         
-        # logger.debug('on_ambulance: ambulance = {}'.format(ambulance))
+        logger.debug('on_ambulance: ambulance = {}'.format(ambulance))
         
         try:
         
@@ -209,7 +209,7 @@ class SubscribeClient(BaseClient):
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload, e)
             
-        # logger.debug('on_ambulance: DONE')
+        logger.debug('on_ambulance: DONE')
 
     # Update hospital
     def on_hospital(self, client, userdata, msg):
