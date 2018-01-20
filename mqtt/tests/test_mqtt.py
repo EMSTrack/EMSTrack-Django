@@ -586,4 +586,4 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.wait()
         subscribe_client.wait()
 
-
+        time.sleep(2)
