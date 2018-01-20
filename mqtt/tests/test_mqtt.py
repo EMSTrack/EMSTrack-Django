@@ -85,8 +85,10 @@ class TestMQTT():
         if not done:
             logging.debug('NOT DONE:')
             for client in clients:
-                logging.debug('> expecting = {}, publishing = {}'.format(client.expecting,
-                                                                        client.publishing))
+                if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
+                    logging.debug(('expecting = {}, ' +
+                                   'publishing = {}').format(client.expecting,
+                                                             client.publishing))
         
         self.assertEqual(done, True)
 
