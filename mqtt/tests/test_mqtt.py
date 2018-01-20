@@ -421,7 +421,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                      check_payload = False,
                                      debug=True)
         self.is_connected(test_client)
-
         
         # Modify ambulance
         

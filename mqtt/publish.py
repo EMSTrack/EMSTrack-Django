@@ -1,3 +1,4 @@
+import logging
 import atexit, sys, os, time
 
 from rest_framework.parsers import JSONParser
@@ -13,6 +14,8 @@ from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
 from login.serializers import ExtendedProfileSerializer
+
+logger = logging.getLogger(__name__)
 
 # MessagePublishClient class
 
@@ -157,8 +160,8 @@ class SingletonPublishClient(PublishClient):
         try:
 
             # try to connect
-            print('>> Connecting to MQTT brocker...')
-        
+            logger.info('>> Connecting to MQTT brocker...')
+            
             # initialize PublishClient
             super().__init__(broker, **kwargs)
 
@@ -176,6 +179,6 @@ class SingletonPublishClient(PublishClient):
 
             self.active = False
             
-            print('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
-            print('>> Generated exception: {}'.format(e))
+            logger.info('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
+            logger.info('>> Generated exception: {}'.format(e))
         
