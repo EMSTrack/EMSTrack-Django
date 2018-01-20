@@ -66,8 +66,9 @@ class TestMQTT():
         
         # connected?
         k = 0
-        done = True
+        done = False
         while not done and k < MAX_TRIES:
+            done = True
             for client in clients:
                 done = done and client.done()
             k += 1
