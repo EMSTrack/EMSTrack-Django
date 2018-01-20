@@ -446,28 +446,15 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
         
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-        SingletonPublishClient().wait()
-        
-        time.sleep(2)
-
-    def _test(self):
-
-
         # Modify ambulance
-        
-        # retrive message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
         
         # change ambulance
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        # retrive message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
 
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
@@ -484,6 +471,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # verify change
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+        SingletonPublishClient().wait()
+        
+        time.sleep(2)
+
+    def _test(self):
+
 
         
 
