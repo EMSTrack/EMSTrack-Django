@@ -466,6 +466,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # expect update once
+        test_client.expect('hospital/{}/data'.format(self.h1.id))
+        
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+        
         # verify change
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
@@ -475,30 +482,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
         
     def _test(self):
-        
-        
-
-
-        SingletonPublishClient().wait()
-        
-        #time.sleep(2)
-
-
-
-        
 
         # Modify hospital
+        
+        # retrieve current hospital status
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'no comments')
         
         # retrive message that is there already due to creation
         test_client.expect('hospital/{}/data'.format(self.h1.id))
         self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        
-        # change hospital
-        obj = Hospital.objects.get(id=self.h1.id)
-        self.assertEqual(obj.comment, 'no comments')
 
         test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
                                                               self.h1.id),
@@ -508,6 +501,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client)
+        subscribe_client.loop()
 
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
@@ -522,6 +516,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # verify change
         obj = Hospital.objects.get(id = self.h1.id)
         self.assertEqual(obj.comment, 'no more comments')
+
+        
+        
 
 
         # Modify hospital equipment
