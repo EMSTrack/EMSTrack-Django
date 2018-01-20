@@ -413,11 +413,29 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
-from django.test import override_settings, modify_settings
+from django.db import connections
 
-@override_settings(CONN_MAX_AGE = 0)
+def close_db_connections(func, *args, **kwargs):
+    """
+    Decorator to explicitly close db connections during threaded execution
+
+    Note this is necessary to work around:
+    https://code.djangoproject.com/ticket/22420
+    """
+    def _close_db_connections(*args, **kwargs):
+        ret = None
+        try:
+            ret = func(*args, **kwargs)
+        finally:
+            for conn in connections.all():
+                conn.close()
+        return ret
+    return _close_db_connections
+
+
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
-    
+
+    @close_db_connections
     def test(self):
 
         # Start client as admin
