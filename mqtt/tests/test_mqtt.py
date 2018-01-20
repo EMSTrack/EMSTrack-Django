@@ -413,9 +413,9 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
-from django.test import modify_settings
+from django.test import override_settings, modify_settings
 
-@modify_settings(CONN_MAX_AGE = 0)
+@override_settings(CONN_MAX_AGE = 0)
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
     
     def test(self):
