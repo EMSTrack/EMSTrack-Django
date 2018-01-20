@@ -1,3 +1,4 @@
+import logging
 import subprocess, time, os, sys, re
 from pathlib import Path
 
@@ -20,6 +21,7 @@ from hospital.models import Hospital, \
 
 from login.models import AmbulancePermission, HospitalPermission
 
+logger = logging.getLogger(__name__)
 
 class MQTTTestCase(StaticLiveServerTestCase):
 
@@ -422,8 +424,8 @@ class MQTTTestClient(BaseClient):
         self.publishing -=1 
 
         if self.debug:
-            print('> Just published mid={}[publishing={}]'.format(mid,
-                                                                  self.publishing))
+            logging.debug('> Just published mid={}[publishing={}]'.format(mid,
+                                                                          self.publishing))
 
         
     # The callback for when a subscribed message is received from the server.
@@ -463,10 +465,10 @@ class MQTTTestClient(BaseClient):
                 raise Exception('Unexpected message')
 
         if self.debug:
-            print('> Just received {}[count={},expecting={}]:{}'.format(msg.topic,
-                                                                        self.expecting_topics[msg.topic],
-                                                                        self.expecting,
-                                                                        msg.payload))
+            logger.debug('> Just received {}[count={},expecting={}]:{}'.format(msg.topic,
+                                                                               self.expecting_topics[msg.topic],
+                                                                               self.expecting,
+                                                                               msg.payload))
 
     def expect(self, topic, msg = None, qos = 2, remove = False):
 
