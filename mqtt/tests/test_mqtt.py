@@ -58,23 +58,32 @@ class TestMQTT():
         
         self.assertEqual(len(client.subscribed), 0)
     
-    def loop(self, client, MAX_TRIES = 10):
+    def loop(self, *clients, MAX_TRIES = 10):
 
-        client.loop_start()
+        # starts clients
+        for client in clients:
+            client.loop_start()
         
         # connected?
         k = 0
-        while not client.done() and k < MAX_TRIES:
+        done = False
+        while not done and k < MAX_TRIES:
+            for client in clients:
+                done = done and client.done()
             k += 1
             time.sleep(1)
             
-        client.loop_stop()
+        # stop clients
+        for client in clients:
+            client.loop_stop()
 
-        if not client.done():
-            logging.debug('NOT DONE: expecting = {}, publishin = {}'.format(client.expecting,
-                                                                            client.publishing))
+        if not done:
+            logging.debug('NOT DONE:')
+            for client in clients:
+                logging.debug('> expecting = {}, publishin = {}'.format(client.expecting,
+                                                                        client.publishing))
         
-        self.assertEqual(client.done(), True)
+        self.assertEqual(done, True)
 
 class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
