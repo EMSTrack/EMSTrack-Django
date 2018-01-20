@@ -1,9 +1,12 @@
+import logging
 import time, sys
 
 import paho.mqtt.client as mqtt
 
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style
+
+logger = logging.getLogger(__name__)
 
 class MQTTException(Exception):
     
@@ -101,7 +104,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print(("> Just published '{}[mid={}]:{}'" +
+            logger.debug(("> Just published '{}[mid={}]:{}'" +
                    "(qos={},retain={})").format(topic,
                                                 result.mid,
                                                 payload,
@@ -112,7 +115,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Published mid={}".format(mid))
+            logger.debug("> Published mid={}".format(mid))
                   
         if mid in self.published:
             # TODO: check granted_qos?
@@ -134,7 +137,7 @@ class BaseClient():
 
         # debug? 
         if self.debug:
-            print("> Just subscribed to '{}'[mid={}][qos={}]".format(topic,
+            logger.debug("> Just subscribed to '{}'[mid={}][qos={}]".format(topic,
                                                                      mid,
                                                                      qos))
             
@@ -142,13 +145,13 @@ class BaseClient():
         # otherwise add to dictionary of subscribed
         self.subscribed[mid] = (topic, qos)
 
-        #print('topic = {}, mid = {}'.format(topic, mid))
+        #logger.debug('topic = {}, mid = {}'.format(topic, mid))
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
         # debug? 
         if self.debug:
-            print("> Subscribed mid={}, qos={}".format(mid, granted_qos))
+            logger.debug("> Subscribed mid={}, qos={}".format(mid, granted_qos))
         
         if mid in self.subscribed:
             # TODO: check granted_qos?
@@ -159,7 +162,7 @@ class BaseClient():
             raise MQTTException('Unknown subscribe mid', mid)
 
     def on_disconnect(self, client, userdata, rc):
-        # print('>> disconnecting reason {}'.format(rc))
+        # logger.debug('>> disconnecting reason {}'.format(rc))
         self.connected = False
         
     # disconnect
