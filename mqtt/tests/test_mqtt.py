@@ -651,7 +651,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
-
+        self.loop(test_client)
 
         # generate ERROR: invalid serializer
         
@@ -666,6 +666,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
+        self.loop(test_client)
 
         
         # wait for disconnect
