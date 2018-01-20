@@ -548,7 +548,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             qos=0)
 
         # process messages
-        self.loop(test_client)
+        self.loop(test_client, MAX_TRIES = 100)
         subscribe_client.loop()
         
         # generate error: wrong id
