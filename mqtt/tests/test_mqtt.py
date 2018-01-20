@@ -607,6 +607,38 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
 
+        # generate ERROR: wrong id
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                              1111),
+                            json.dumps({
+                                'comment': 'comment',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client, subscribe_client)
+        subscribe_client.loop()
+        
+        # generate ERROR: wrong id
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                             self.h1.id,
+                                                                             'unknown'),
+                            json.dumps({
+                                'comment': 'comment',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client, subscribe_client)
+        subscribe_client.loop()
+
+        
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
@@ -637,19 +669,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         
         
-        # generate ERROR: wrong id
-        
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
-        
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                              1111),
-                            json.dumps({
-                                'comment': 'comment',
-                            }), qos=0)
-        
-        # process messages
-        self.loop(test_client, subscribe_client)
         
         # generate ERROR: invalid serializer
         
@@ -667,20 +686,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
 
         
-        # generate ERROR: wrong id
-        
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
-        
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                             self.h1.id,
-                                                                             'unknown'),
-                            json.dumps({
-                                'comment': 'comment',
-                            }), qos=0)
-        
-        # process messages
-        self.loop(test_client, subscribe_client)
         
         # disconnect
         test_client.wait()
