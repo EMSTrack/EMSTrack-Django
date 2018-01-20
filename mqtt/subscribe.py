@@ -208,6 +208,7 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, msg.topic, msg.payload,
                                     e)
             
+        logger.debug('on_ambulance: DONE')
 
     # Update hospital
     def on_hospital(self, client, userdata, msg):
