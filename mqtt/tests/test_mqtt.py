@@ -477,11 +477,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-        
-    def _test(self):
 
         # Modify hospital
         
@@ -505,17 +500,22 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
-        self.is_subscribed(test_client)
         
-        # loop subscribe_client
-        subscribe_client.loop()
-
         # process messages
         self.loop(test_client)
+        subscribe_client.loop()
 
         # verify change
         obj = Hospital.objects.get(id = self.h1.id)
         self.assertEqual(obj.comment, 'no more comments')
+
+        
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        
+    def _test(self):
 
         
         
