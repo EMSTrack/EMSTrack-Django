@@ -465,18 +465,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-        
-        time.sleep(10)
-
-        
-    def _test(self):
-        
-        
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id = self.a1.id)
@@ -485,6 +473,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # disconnect
         test_client.wait()
         subscribe_client.wait()
+        
+    def _test(self):
+        
+        
+
 
         SingletonPublishClient().wait()
         
