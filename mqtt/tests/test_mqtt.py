@@ -456,6 +456,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
 
+    def _test(self):
+        
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
                             json.dumps({
@@ -476,12 +478,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.wait()
         subscribe_client.wait()
 
-        SingletonPublishClient().loop()
         SingletonPublishClient().wait()
         
         #time.sleep(2)
 
-    def _test(self):
 
 
         
