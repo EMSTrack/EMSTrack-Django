@@ -60,6 +60,9 @@ class TestMQTT():
     
     def loop(self, *clients, MAX_TRIES = 10):
 
+        logger.deubg('clients = {}'.format(clients))
+        logger.deubg('MAX_TRIES = {}'.format(MAX_TRIES))
+        
         # starts clients
         for client in clients:
             client.loop_start()
@@ -81,7 +84,7 @@ class TestMQTT():
         if not done:
             logging.debug('NOT DONE:')
             for client in clients:
-                logging.debug('> expecting = {}, publishin = {}'.format(client.expecting,
+                logging.debug('> expecting = {}, publishing = {}'.format(client.expecting,
                                                                         client.publishing))
         
         self.assertEqual(done, True)
