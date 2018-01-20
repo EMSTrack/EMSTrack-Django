@@ -558,10 +558,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-        
-        self.loop(test_client)
+        self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
         # disconnect
