@@ -564,7 +564,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # generate ERROR: wrong id
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
         
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                1111),
@@ -577,18 +576,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
 
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-        
-    def _test(self):
-
-        
         # generate ERROR: invalid serializer
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
         
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
@@ -598,6 +588,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client, subscribe_client)
+        subscribe_client.loop()
+
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        
+    def _test(self):
+
+        
 
 
         
