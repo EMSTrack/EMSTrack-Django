@@ -652,6 +652,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
         self.loop(test_client)
+        subscribe_client.loop()
 
         # generate ERROR: invalid serializer
         
@@ -667,6 +668,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
         self.loop(test_client)
+        subscribe_client.loop()
 
         
         # wait for disconnect
@@ -674,23 +676,3 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
         self.assertEqual(False, True)
-
-        
-    def _test(self):
-        
-        
-
-        
-
-
-        
-
-
-        
-        
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-        SingletonPublishClient().wait()
-        
-        time.sleep(2)
