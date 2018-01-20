@@ -464,22 +464,25 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
         
-        # process messages
-        self.loop(test_client)
-
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         
-        # loop subscribe_client
-        subscribe_client.loop()
-
         # process messages
-        self.loop(test_client)
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id = self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+        SingletonPublishClient().wait()
+        
+        time.sleep(2)
+
+
+    def _test(self):
         
         # Modify hospital
         
@@ -602,15 +605,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
 
 
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-        SingletonPublishClient().wait()
-        
-        time.sleep(2)
-
-
-    def _test(self):
         
         # generate ERROR: JSON formated incorrectly
         
