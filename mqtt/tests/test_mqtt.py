@@ -71,7 +71,8 @@ class TestMQTT():
         client.loop_stop()
 
         if not client.done():
-            logging.debug('NOT DONE: expecting = {}, publishin = {}'.format(client.expecting, self.publishing))
+            logging.debug('NOT DONE: expecting = {}, publishin = {}'.format(client.expecting,
+                                                                            client.publishing))
         
         self.assertEqual(client.done(), True)
 
