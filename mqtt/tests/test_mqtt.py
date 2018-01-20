@@ -464,6 +464,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(test_client, subscribe_client)
+
+        time.sleep(5)
+
         
     def _test(self):
         
