@@ -467,7 +467,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # expect update once
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
         
         # process messages
         self.loop(test_client)
