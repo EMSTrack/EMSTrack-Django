@@ -467,16 +467,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client, subscribe_client)
-        self.loop(test_client, subscribe_client)
 
         # verify change
-        #obj = Ambulance.objects.get(id = self.a1.id)
-        #self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+        obj = Ambulance.objects.get(id = self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
         # disconnect
         test_client.wait()
         subscribe_client.wait()
-        #SingletonPublishClient().wait()
+
+        SingletonPublishClient().loop()
+        SingletonPublishClient().wait()
         
         #time.sleep(2)
 
