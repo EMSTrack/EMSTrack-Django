@@ -60,8 +60,8 @@ class TestMQTT():
     
     def loop(self, *clients, MAX_TRIES = 10):
 
-        logger.deubg('clients = {}'.format(clients))
-        logger.deubg('MAX_TRIES = {}'.format(MAX_TRIES))
+        logger.debug('clients = {}'.format(clients))
+        logger.debug('MAX_TRIES = {}'.format(MAX_TRIES))
         
         # starts clients
         for client in clients:
