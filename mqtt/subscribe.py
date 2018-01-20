@@ -177,6 +177,8 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
         
+        logger.debug('ambulance = {}'.format(ambulance))
+            
         try:
         
             # update ambulance
