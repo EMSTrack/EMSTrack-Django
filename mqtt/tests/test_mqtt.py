@@ -557,6 +557,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
         
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
         # generate error: wrong id
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                1111),
@@ -565,11 +568,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
         
         # process messages
-        self.loop(test_client)
+        test_client.loop()
         subscribe_client.loop()
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
 
         self.loop(test_client)
         
