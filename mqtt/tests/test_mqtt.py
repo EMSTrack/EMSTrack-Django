@@ -61,8 +61,8 @@ class TestMQTT():
     
     def loop(self, *clients, MAX_TRIES = 10):
 
-        logger.debug('clients = {}'.format(clients))
-        logger.debug('MAX_TRIES = {}'.format(MAX_TRIES))
+        # logger.debug('clients = {}'.format(clients))
+        # logger.debug('MAX_TRIES = {}'.format(MAX_TRIES))
         
         # starts clients
         for client in clients:
@@ -83,7 +83,7 @@ class TestMQTT():
             client.loop_stop()
 
         if not done:
-            logging.debug('NOT DONE:')
+            # logging.debug('NOT DONE:')
             for client in clients:
                 if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
                     logging.debug(('expecting = {}, ' +
@@ -566,7 +566,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # generate ERROR: JSON formated incorrectly
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        self.is_subscribed(test_client)
+        # self.is_subscribed(test_client)
         
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
