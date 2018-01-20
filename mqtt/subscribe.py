@@ -220,10 +220,14 @@ class SubscribeClient(BaseClient):
     # Update hospital
     def on_hospital(self, client, userdata, msg):
 
+        logger.debug("on_hospital: msg = '{}:{}'".format(msg.topic, msg.payload))
+        
         # parse topic
         values = self.parse_topic(msg)
         if not values:
             return 
+        
+        logger.debug("on_hospital: values = '{}'".format(values))
         
         try:
 
@@ -247,6 +251,8 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
         
+        logger.debug('on_hospital: hospital = {}'.format(hospital))
+        
         try:
         
             # update hospital
@@ -255,19 +261,28 @@ class SubscribeClient(BaseClient):
                                             partial=True)
             if serializer.is_valid():
             
+                logger.debug('on_hospital: valid serializer')
+                
                 # save to database
                 serializer.save(updated_by=user)
 
             else:
             
+                logger.debug('on_hospital: INVALID serializer')
+                
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
                                         serializer.errors)
+
         except Exception as e:
 
+            logger.debug('on_hospital: serializer EXCEPTION')
+            
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload, e)
 
+        logger.debug('on_hospital: DONE')
+        
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
 
