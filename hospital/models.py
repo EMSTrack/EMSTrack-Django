@@ -29,7 +29,7 @@ class Hospital(AddressModel,
         return reverse('hospital:detail', kwargs={'pk': self.id})
         
     def __str__(self):
-        return ('> Hospital {}(id={})\n' +
+        return ('Hospital {}(id={})\n' +
                 '   Address: {} {} {}\n' +
                 '            {} {} {}\n' +
                 '            {} \n' +

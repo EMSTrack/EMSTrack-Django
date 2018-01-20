@@ -60,7 +60,7 @@ class Ambulance(UpdatedByModel):
         return reverse('ambulance:detail', kwargs={'pk': self.id})
     
     def __str__(self):
-        return ('> Ambulance {}(id={}) ({}) [{}]:\n' +
+        return ('Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
