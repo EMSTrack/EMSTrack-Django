@@ -424,8 +424,8 @@ class MQTTTestClient(BaseClient):
         self.publishing -=1 
 
         if self.debug:
-            logging.debug('> Just published mid={}[publishing={}]'.format(mid,
-                                                                          self.publishing))
+            logging.debug('Just published mid={}[publishing={}]'.format(mid,
+                                                                        self.publishing))
 
         
     # The callback for when a subscribed message is received from the server.
