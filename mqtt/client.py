@@ -55,6 +55,9 @@ class BaseClient():
                             self.broker['PORT'],
                             self.broker['KEEPALIVE'])
 
+    def done(self):
+        return True
+        
     def on_connect(self, client, userdata, flags, rc):
         
         if rc:
