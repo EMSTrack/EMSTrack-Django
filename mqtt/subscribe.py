@@ -160,9 +160,13 @@ class SubscribeClient(BaseClient):
             # retrieve parsed values
             user, data, ambulance_id = values
             
+            logger.debug('ambulance_id = {}'.format(ambulance_id))
+            
             # retrieve ambulance
             ambulance = Ambulance.objects.get(id=ambulance_id)
 
+            logger.debug('ambulance = {}'.format(ambulance))
+        
         except ObjectDoesNotExist:
 
             # send error message to user
@@ -177,8 +181,6 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
         
-        logger.debug('ambulance = {}'.format(ambulance))
-            
         try:
         
             # update ambulance
