@@ -234,6 +234,13 @@ class SubscribeClient(BaseClient):
                                     "Hospital with id '{}' does not exist".format(hospital_id))
             return
             
+        except Exception as e:
+        
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
+            return
+        
         try:
         
             # update hospital
@@ -279,6 +286,13 @@ class SubscribeClient(BaseClient):
                                     "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(hospital_id, equipment_name))
             return
 
+        except Exception as e:
+        
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
+            return
+        
         try:
         
             # update hospital equipment
