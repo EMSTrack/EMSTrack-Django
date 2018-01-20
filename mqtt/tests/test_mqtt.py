@@ -547,13 +547,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
 
-        # disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-        
-    def _test(self):
-
         # generate ERROR: JSON formated incorrectly
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -565,8 +558,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             qos=0)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
+        subscribe_client.loop()
         
+
+        # disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        
+    def _test(self):
+
         # generate ERROR: wrong id
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
