@@ -674,5 +674,3 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
-
-        self.assertEqual(False, True)
