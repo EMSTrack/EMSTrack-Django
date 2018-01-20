@@ -195,10 +195,14 @@ class SubscribeClient(BaseClient):
                                              partial=True)
             if serializer.is_valid():
                 
+                logger.debug('on_ambulance: valid serializer')
+                
                 # save to database
                 serializer.save(updated_by=user)
                 
             else:
+                
+                logger.debug('on_ambulance: INVALID serializer')
                 
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
@@ -206,6 +210,8 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
+            logger.debug('on_ambulance: serializer EXCEPTION')
+            
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload, e)
             
