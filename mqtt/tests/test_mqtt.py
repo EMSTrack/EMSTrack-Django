@@ -657,6 +657,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.wait()
         subscribe_client.wait()
 
+        self.assertEqual(False, True)
+
         
     def _test(self):
         
