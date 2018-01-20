@@ -286,11 +286,15 @@ class SubscribeClient(BaseClient):
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
 
+        logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
+        
         # parse topic
         values = self.parse_topic(msg)
         if not values:
             return 
 
+        logger.debug("on_hospital_equipment: values = '{}'".format(values))
+        
         try:
 
             # retrieve parsed values
@@ -314,6 +318,8 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
         
+        logger.debug('on_hospital_equipment: equipment = {}'.format(hospital_equipment))
+        
         try:
         
             # update hospital equipment
@@ -322,10 +328,14 @@ class SubscribeClient(BaseClient):
                                                      partial=True)
             if serializer.is_valid():
                 
+                logger.debug('on_hospital_equipment: valid serializer')
+                
                 # save to database
                 serializer.save(updated_by=user)
                 
             else:
+                
+                logger.debug('on_hospital_equipment: INVALID serializer')
                 
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
@@ -333,5 +343,10 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
                             
+            logger.debug('on_hospital_equipment: serializer EXCEPTION')
+            
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload, e)
+
+        logger.debug('on_hospital_equipment: DONE')
+            
