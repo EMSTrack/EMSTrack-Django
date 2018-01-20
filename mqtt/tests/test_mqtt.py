@@ -547,6 +547,31 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
 
+        # generate ERROR: invalid serializer
+        
+        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        self.is_subscribed(test_client)
+        
+        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                               self.a1.id),
+                            json.dumps({
+                                'status': 'Invalid',
+                            }), qos=0)
+        
+        # process messages
+        self.loop(test_client, subscribe_client)
+        subscribe_client.loop()
+
+        
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        self.assertEqual(False, True)
+
+        
+    def _test(self):
+        
         # generate ERROR: JSON formated incorrectly
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -638,29 +663,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
 
-        # generate ERROR: invalid serializer
-        
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               self.a1.id),
-                            json.dumps({
-                                'status': 'Invalid',
-                            }), qos=0)
-        
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
-        
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-        self.assertEqual(False, True)
-
-        
-    def _test(self):
         
 
         
