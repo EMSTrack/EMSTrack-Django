@@ -562,16 +562,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
-        
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
 
-        self.assertEqual(False, True)
-
-        
-    def _test(self):
-        
         # generate ERROR: JSON formated incorrectly
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -663,6 +654,15 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
 
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        self.assertEqual(False, True)
+
+        
+    def _test(self):
+        
         
 
         
