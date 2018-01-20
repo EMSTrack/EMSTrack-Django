@@ -63,9 +63,9 @@ class SubscribeClient(BaseClient):
     def send_error_message(self, username, topic, payload, error):
 
         # logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
-                                                                    topic,
-                                                                    payload,
-                                                                    error))
+        #                                                             topic,
+        #                                                             payload,
+        #                                                             error))
         
         try:
                 
