@@ -150,13 +150,15 @@ class SubscribeClient(BaseClient):
     # Update ambulance
     def on_ambulance(self, client, userdata, msg):
 
-        logger.debug('on_ambulance: msg = {}'.format(msg))
+        logger.debug("on_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
         
         # parse topic
         values = self.parse_topic(msg)
         if not values:
             return 
         
+        logger.debug("on_ambulance: values = '{}'".format(values))
+
         try:
 
             # retrieve parsed values
