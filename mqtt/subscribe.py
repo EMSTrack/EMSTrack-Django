@@ -60,10 +60,10 @@ class SubscribeClient(BaseClient):
 
     def send_error_message(self, username, topic, payload, error):
 
-        # logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
-        #                                                             topic,
-        #                                                             payload,
-        #                                                             error))
+        logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
+                                                                    topic,
+                                                                    payload,
+                                                                    error))
         
         try:
                 
@@ -169,8 +169,6 @@ class SubscribeClient(BaseClient):
             # retrieve ambulance
             ambulance = Ambulance.objects.get(id=ambulance_id)
 
-            logger.debug('ambulance = {}'.format(ambulance))
-        
         except ObjectDoesNotExist:
 
             # send error message to user
@@ -184,6 +182,8 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Exception: '{}'".format(e))
             return
+        
+        logger.debug('on_ambulance: ambulance = {}'.format(ambulance))
         
         try:
         
