@@ -638,6 +638,19 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
 
+        # WARNING: The next two tests prevent the test database from
+        # being removed at the end of the test. It is not clear why
+        # but it could be django bug related to the LiveServerThread
+        # not being thread safe:
+        #
+        # https://code.djangoproject.com/ticket/22420 Just run a
+        #
+        # limited set of tests that do not make use of
+        # LiveServerThread for deleting the test database, for
+        # example:
+        #
+        #     ./manage test ambulance.test
+        
         # generate ERROR: invalid serializer
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
