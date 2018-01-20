@@ -476,7 +476,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # disconnect
         test_client.wait()
         subscribe_client.wait()
-        SingletonPublishClient().wait()
+        #SingletonPublishClient().wait()
         
         time.sleep(2)
 
