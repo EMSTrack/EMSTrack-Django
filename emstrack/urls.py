@@ -70,7 +70,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     
     url(r'^$',
-        views.AmbulanceUpdateView.as_view(),
+        IndexView.as_view(),
         name='homepage'),
 
 ]
