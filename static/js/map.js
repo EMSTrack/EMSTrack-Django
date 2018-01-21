@@ -401,7 +401,7 @@ function addAmbulanceToMap(ambulance) {
     markersByStatus[ambulance.status].push(ambulanceMarkers[ambulance.id]);
 
     // If layer is not visible, remove marker
-    if !visibleStatus[ambulance.status] {
+    if (!visibleStatus[ambulance.status]) {
 	let elem = ambulanceMarkers[ambulance.id];
 	statusGroupLayers[ambulance.status].removeLayer(elem);
 	mymap.removeLayer(elem);
