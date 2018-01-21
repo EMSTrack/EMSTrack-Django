@@ -96,12 +96,12 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
 
-        print('>> Stoping mqttclient')
+        # print('>> Stoping mqttclient')
         
-        # stop mqttclient
-        retval = subprocess.run(["supervisorctl",
-                                 "stop",
-                                 "mqttclient"])
+        # # stop mqttclient
+        # retval = subprocess.run(["supervisorctl",
+        #                          "stop",
+        #                          "mqttclient"])
         
         # # Wait for shutdown
         # cls.run_until_fail(["service",
@@ -217,12 +217,12 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "mosquitto",
                                 "status"])
         
-        print('>> Starting mqttclient')
+        # print('>> Starting mqttclient')
         
-        # start mqttclient
-        retval = subprocess.run(["supervisorctl",
-                                 "start",
-                                 "mqttclient"])
+        # # start mqttclient
+        # retval = subprocess.run(["supervisorctl",
+        #                          "start",
+        #                          "mqttclient"])
 
         time.sleep(2)
         
