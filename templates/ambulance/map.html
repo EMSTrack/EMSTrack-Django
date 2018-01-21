@@ -10,7 +10,7 @@
       var ambulance_status = {{ ambulance_status|safe }};
       var ambulance_capability = {{ ambulance_capability|safe }};
       var username = '{{ user.get_username|safe }}';
-      var api_url = '{% url 'homepage' %}api/';
+      var APIBaseUrl = '{% url 'homepage' %}api/';
       var MQTTBroker = {
           host: '{{ broker_websockets_host|safe }}',
           port: {{ broker_websockets_port|safe }}

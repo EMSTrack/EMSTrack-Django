@@ -4,10 +4,13 @@ var ambulances = {};	// Store ambulance details
 var hospitalMarkers = {};  // Store hospital markers
 var hospitals = {};	// Store hospital details
 
-var markersByStatus = {}; // A JSON to map statuses with arrays of ambulances with that status.
+var visibleStatus = {};
+var markersByStatus = {};
 Object.keys(ambulance_status).forEach(function(status) {
     markersByStatus[status] = [];
+    visibleStatus[status] = true;
 });
+var statusGroupLayers = {};
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
@@ -26,15 +29,6 @@ var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/hospital_icon.png',
 	iconSize: [40, 40]
 });
-
-var APIBaseUrl = "http://localhost:8000/api/";
-var APIBaseUrl = api_url;
-/*
-  var MQTTBroker = {
-  host: "localhost", //"cruzroja.ucsd.edu",
-  port: 8884
-  };
-*/
 
 /**
  * Ambulance statuses 
@@ -379,7 +373,7 @@ function addAmbulanceToMap(ambulance) {
     else if(ambulance.status === STATUS_OUT_OF_SERVICE)
 	coloredIcon = ambulanceIconBlack;
     
-    // If ambulance marker doesn't exist
+    // Add marker
     ambulanceMarkers[ambulance.id] = L.marker([ambulance.location.latitude,
 					       ambulance.location.longitude],
 					      {icon: coloredIcon})
@@ -405,6 +399,13 @@ function addAmbulanceToMap(ambulance) {
     
     // Add to a map to differentiate the layers between statuses.
     markersByStatus[ambulance.status].push(ambulanceMarkers[ambulance.id]);
+
+    // If layer is not visible, remove marker
+    if !visibleStatus[ambulance.status] {
+	let elem = ambulanceMarkers[ambulance.id];
+	statusGroupLayers[ambulance.status].removeLayer(elem);
+	mymap.removeLayer(elem);
+    }
     
 };
 
@@ -467,7 +468,6 @@ function updateDetailPanel(ambulance) {
 }
 
 /* Create status filter on the top right corner of the map */
-var statusGroupLayers = {};
 function createStatusFilter(mymap) {
 
     // Add the checkbox on the top right corner for filtering.
