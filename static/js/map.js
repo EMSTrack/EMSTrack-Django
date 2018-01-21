@@ -28,6 +28,7 @@ var hospitalIcon = L.icon({
 });
 
 var APIBaseUrl = "http://localhost:8000/api/";
+var APIBaseUrl = api_url;
 /*
   var MQTTBroker = {
   host: "localhost", //"cruzroja.ucsd.edu",
