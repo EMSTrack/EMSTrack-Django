@@ -217,7 +217,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "mosquitto",
                                 "status"])
         
-        print('>> Stoping mqttclient')
+        print('>> Starting mqttclient')
         
         # start mqttclient
         retval = subprocess.run(["supervisorctl",
