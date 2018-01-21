@@ -28,10 +28,12 @@ var hospitalIcon = L.icon({
 });
 
 var APIBaseUrl = "http://localhost:8000/api/";
-var MQTTBroker = {
-    host: "localhost", //"cruzroja.ucsd.edu",
-    port: 8884
-};
+/*
+  var MQTTBroker = {
+  host: "localhost", //"cruzroja.ucsd.edu",
+  port: 8884
+  };
+*/
 
 /**
  * Ambulance statuses 

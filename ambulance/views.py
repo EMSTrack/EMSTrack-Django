@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -82,6 +83,8 @@ class AmbulanceMap(TemplateView):
                                         for m in AmbulanceStatus}
          context['ambulance_capability'] = {m.name: m.value
                                             for m in AmbulanceCapability}
+         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
+         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
          return context
     
 # NEED REVISING
