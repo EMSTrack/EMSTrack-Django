@@ -50,7 +50,7 @@ router.register(r'hospital/(?P<id>[0-9]+)/equipment',
 urlpatterns = [
 
     # Router API urls
-    url(r'^api/', include(router.urls), name='api'),
+    url(r'^api/', include(router.urls)),
     url(r'^docs/', login_required(schema_view)),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
