@@ -27,6 +27,8 @@ from ambulance.viewsets import AmbulanceViewSet
 
 from hospital.viewsets import HospitalViewSet, HospitalEquipmentViewSet
 
+from .views import IndexView
+
 schema_view = get_swagger_view(title='EMSTrack API')
 
 router = routers.DefaultRouter()
@@ -68,6 +70,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     
     url(r'^$',
-        RedirectView.as_view(url='ambulance/list/')),
-    
+        views.AmbulanceUpdateView.as_view()),
+        name='homepage'),
+
 ]

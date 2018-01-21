@@ -75,17 +75,17 @@ class AmbulanceUpdateView(LoginRequiredMixin,
         return self.object.get_absolute_url()
 
 class AmbulanceMap(TemplateView):
-     template_name = 'ambulance/map.html'
+    template_name = 'ambulance/map.html'
 
-     def get_context_data(self, **kwargs):
-         context = super().get_context_data(**kwargs)
-         context['ambulance_status'] = {m.name: m.value
-                                        for m in AmbulanceStatus}
-         context['ambulance_capability'] = {m.name: m.value
-                                            for m in AmbulanceCapability}
-         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
-         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
-         return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ambulance_status'] = {m.name: m.value
+                                       for m in AmbulanceStatus}
+        context['ambulance_capability'] = {m.name: m.value
+                                           for m in AmbulanceCapability}
+        context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
+        context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
+        return context
     
 # NEED REVISING
     
