@@ -96,6 +96,13 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                  "mosquitto",
                                  "stop"])
 
+        print('>> Stoping mqttclient')
+        
+        # stop mqttclient
+        retval = subprocess.run(["supervisorctl",
+                                 "stop",
+                                 "mqttclient"])
+        
         # # Wait for shutdown
         # cls.run_until_fail(["service",
         #                     "mosquitto",
@@ -210,12 +217,19 @@ class MQTTTestCase(StaticLiveServerTestCase):
                                 "mosquitto",
                                 "status"])
         
+        print('>> Stoping mqttclient')
+        
+        # start mqttclient
+        retval = subprocess.run(["supervisorctl",
+                                 "start",
+                                 "mqttclient"])
+
         time.sleep(2)
         
-        from django.db import connections
+        # from django.db import connections
 
-        for conn in connections.all():
-            conn.close()
+        # for conn in connections.all():
+        #     conn.close()
         
     @classmethod
     def setUpTestData(cls):
