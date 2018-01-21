@@ -85,7 +85,6 @@ class AmbulanceMap(TemplateView):
                                             for m in AmbulanceCapability}
          context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
          context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
-         context['api_url'] = reverse('api')
          return context
     
 # NEED REVISING
