@@ -402,9 +402,9 @@ function addAmbulanceToMap(ambulance) {
 
     // If layer is not visible, remove marker
     if (!visibleStatus[ambulance.status]) {
-	let elem = ambulanceMarkers[ambulance.id];
-	statusGroupLayers[ambulance.status].removeLayer(elem);
-	mymap.removeLayer(elem);
+	let marker = ambulanceMarkers[ambulance.id];
+	statusGroupLayers[ambulance.status].removeLayer(marker);
+	mymap.removeLayer(marker);
     }
     
 };
@@ -505,25 +505,27 @@ function createStatusFilter(mymap) {
     $('.chk').change(function() {
 
 	// Which layer?
-	key = this.getAttribute('data-status');
+	status = this.getAttribute('data-status');
 
 	// Clear layer
-	statusGroupLayers[key].clearLayers();
+	statusGroupLayers[status].clearLayers();
 	
 	if (this.checked) {
 
 	    // Add the ambulances in the layer if it is checked.
-	    markersByStatus[key].forEach(function(elem) {
-		statusGroupLayers[key].addLayer(elem)
+	    markersByStatus[status].forEach(function(marker) {
+		statusGroupLayers[status].addLayer(marker)
 	    });
+	    visibleStatus[status] = true;
 
 	} else {
 	    
 	    // Remove from layer if it is not checked.
-	    markersByStatus[key].forEach(function(elem) {
-		statusGroupLayers[key].removeLayer(elem);
-		mymap.removeLayer(elem);
+	    markersByStatus[status].forEach(function(marker) {
+		statusGroupLayers[status].removeLayer(marker);
+		mymap.removeLayer(marker);
 	    });
+	    visibleStatus[status] = false;
 	    
 	}
 	
@@ -534,18 +536,25 @@ function createStatusFilter(mymap) {
 
 function onGridButtonClick(ambulanceId, mymap) {
     return function(e) {
+
+	let ambulance = ambulances[ambulanceId]
+	
 	// Update detail panel
-	updateDetailPanel(ambulances[ambulanceId]);
-	
-	// Center icon on map
-	var position = ambulanceMarkers[ambulanceId].getLatLng();
-	mymap.setView(position, mymap.getZoom());
-	
-	// Open popup for 2.5 seconds.
-	ambulanceMarkers[ambulanceId].openPopup();
-	setTimeout(function(){
-	    ambulanceMarkers[ambulanceId].closePopup();
-	}, 2500);
+	updateDetailPanel(ambulance);
+
+	if (visibleStatus[ambulance.status]) {
+
+	    // Center icon on map
+	    var position = ambulanceMarkers[ambulanceId].getLatLng();
+	    mymap.setView(position, mymap.getZoom());
+	    
+	    // Open popup for 2.5 seconds.
+	    ambulanceMarkers[ambulanceId].openPopup();
+	    setTimeout(function(){
+		ambulanceMarkers[ambulanceId].closePopup();
+	    }, 2500);
+	    
+	}
 	
     }
 }
