@@ -377,8 +377,14 @@ function addAmbulanceToMap(ambulance) {
     ambulanceMarkers[ambulance.id] = L.marker([ambulance.location.latitude,
 					       ambulance.location.longitude],
 					      {icon: coloredIcon})
-	.bindPopup("<strong>" + ambulance.identifier +
-		   "</strong><br/>" + ambulance_status[ambulance.status]).addTo(mymap);
+	.bindPopup(
+	    "<strong>" + ambulance.identifier +
+		"</strong>" +
+		"<br/>" +
+		ambulance_capability[ambulance.capability] +
+		"<br/>" +
+		ambulance_status[ambulance.status]
+	).addTo(mymap);
     
     // Bind id to icons
     ambulanceMarkers[ambulance.id]._icon.id = ambulance.id;
