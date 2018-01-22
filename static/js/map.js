@@ -392,7 +392,9 @@ function addAmbulanceToMap(ambulance) {
 				    function(e){
 					this.closePopup();
 				    });
-		
+	    })
+	.on('click',
+	    function(e){
 		// update details panel
 		updateDetailPanel(ambulance);
 	    });
