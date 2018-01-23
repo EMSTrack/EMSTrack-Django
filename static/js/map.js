@@ -91,7 +91,6 @@ $(document).ready(function() {
     })
     
     // Create a client instance
-    // TODO: client id must be unique
     // TODO: password cannot be hardcoded
     client = new Paho.MQTT.Client(MQTTBroker.host,
 				  MQTTBroker.port,
