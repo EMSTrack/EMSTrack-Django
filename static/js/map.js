@@ -34,22 +34,12 @@ var hospitalIcon = L.icon({
  * Ambulance statuses 
  */
 
-var AmbulanceStatus = {
-    'UK': 'Unknown',
-    'AV': 'Available',
-    'OS': 'Out of service',
-    'PB': 'Patient bound',
-    'AP': 'At patient',
-    'HB': 'Hospital bound',
-    'AH': 'At hospital'
-}
 var STATUS_IN_SERVICE = "IS";
 var STATUS_AVAILABLE = "AV";
 var STATUS_OUT_OF_SERVICE = "OS";
 
 // global client variable for mqtt
 var client;
-
 
 /**
  * This is a handler for when the page is loaded.
@@ -105,7 +95,7 @@ $(document).ready(function() {
     // TODO: password cannot be hardcoded
     client = new Paho.MQTT.Client(MQTTBroker.host,
 				  MQTTBroker.port,
-				  "clientId");
+				  clientId);
     
     // set callback handlers
     client.onMessageArrived = onMessageArrived;

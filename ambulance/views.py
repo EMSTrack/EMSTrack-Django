@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.urls import reverse
 from django.contrib import messages
@@ -85,6 +87,7 @@ class AmbulanceMap(TemplateView):
                                            for m in AmbulanceCapability}
         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
+        context['client_id'] = 'javascript_client' + uuid.uuid4().hex
         return context
     
 # NEED REVISING

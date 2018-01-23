@@ -15,6 +15,7 @@
           host: '{{ broker_websockets_host|safe }}',
           port: {{ broker_websockets_port|safe }}
       };
+      var clientId = {{ client_id|safe }};
     </script>
     
 {% endblock %}
