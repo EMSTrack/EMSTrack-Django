@@ -214,19 +214,19 @@ class MQTTAclView(CsrfExemptMixin,
         return HttpResponseForbidden()
 
 from rest_framework.views import APIView
+import string
+import random
 
 class MQTTPassword(APIView):
     """
     Retrieve password to use with MQTT
     """
-    import string
-    import random
     
     def generate_password(size = 20,
                           chars = (string.ascii_letters +
                                    string.digits +
                                    string.punctuation)):
-	return (''.join(random.choice(chars) for _ in range(size)))
+        return (''.join(random.choice(chars) for _ in range(size)))
     
     def get(self, request, format=None):
         """
