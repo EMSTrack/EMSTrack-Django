@@ -221,7 +221,8 @@ class MQTTPassword(APIView):
     """
     Retrieve password to use with MQTT
     """
-    
+
+    @staticmethod
     def generate_password(size = 20,
                           chars = (string.ascii_letters +
                                    string.digits +
@@ -234,5 +235,5 @@ class MQTTPassword(APIView):
         hash in the database. Users in possesion of this password will
         be able to login with it only through MQTT.
         """
-        password = generate_password()
+        password = self.generate_password()
         return Response(password)
