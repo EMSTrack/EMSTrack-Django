@@ -20,8 +20,17 @@ urlpatterns = [
     url(r'^reset/done/$', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     
     # mqtt login
-    url(r'^mqtt/login/$', views.MQTTLoginView.as_view(), name='mqtt_login'),
-    url(r'^mqtt/superuser/$', views.MQTTSuperuserView.as_view(), name='mqtt_superuser'),
-    url(r'^mqtt/acl/$', views.MQTTAclView.as_view(), name='mqtt_acl'),
+    url(r'^mqtt/login/$',
+        views.MQTTLoginView.as_view(),
+        name='mqtt_login'),
+    url(r'^mqtt/superuser/$',
+        views.MQTTSuperuserView.as_view(),
+        name='mqtt_superuser'),
+    url(r'^mqtt/acl/$',
+        views.MQTTAclView.as_view(),
+        name='mqtt_acl'),
+    url(r'^mqtt/password/$',
+        views.MQTTPassword.as_view(),
+        name='mqtt_password'),
     
 ]
