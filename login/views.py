@@ -221,12 +221,12 @@ class MQTTPassword(APIView):
     """
     import string
     import random
-
+    
     def generate_password(size = 20,
                           chars = (string.ascii_letters +
                                    string.digits +
                                    string.punctuation)):
-	return ''.join(random.choice(chars) for _ in range(size))
+	return (''.join(random.choice(chars) for _ in range(size)))
     
     def get(self, request, format=None):
         """
