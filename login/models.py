@@ -44,9 +44,9 @@ class Profile(models.Model):
     hospitals = models.ManyToManyField(HospitalPermission)
 
     def __str__(self):
-        return ('> Ambulances:\n' +
+        return ('Ambulances:\n' +
                 '\n'.join('  {}'.format(k) for k in self.ambulances.all()) +
-                '\n> Hospitals:\n' +
+                '\nHospitals:\n' +
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
     
 # TemporaryPassword
@@ -59,5 +59,5 @@ class TemporaryPassword(models.Model):
     created_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return ('Password "{}" (created on: {})'.format(self.password, self.created_on))
+        return ('"{}" (created on: {})'.format(self.password, self.created_on))
 

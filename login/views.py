@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 
 from .models import TemporaryPassword
 
-from .forms import AuthenticationForm, SignupForm
+from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm
 
 
 # signup
@@ -40,9 +40,14 @@ class LogoutView(auth_views.LogoutView):
 
 class MQTTLoginView(CsrfExemptMixin,
                     FormView):
-    template_name = 'login/mqtt_login.html'
-    form_class = AuthenticationForm
+    """
+    Authenticate user without logging in. 
+    It is meant to be used for MQTT authentication only.
+    """
     
+    template_name = 'login/mqtt_login.html'
+    form_class = MQTTAuthenticationForm
+
     def form_invalid(self, form):
         return HttpResponseForbidden()
     
@@ -51,6 +56,10 @@ class MQTTLoginView(CsrfExemptMixin,
     
 class MQTTSuperuserView(CsrfExemptMixin,
                         View):
+    """
+    Verify if user is superuser.
+    """
+    
     http_method_names = ['post', 'head', 'options']
 
     def post(self, request, *args, **kwargs):
@@ -71,6 +80,10 @@ class MQTTSuperuserView(CsrfExemptMixin,
 
 class MQTTAclView(CsrfExemptMixin,
                   View):
+    """
+    Verify MQTT ACL permissions.
+    """
+    
     http_method_names = ['post', 'head', 'options']
 
     def post(self, request, *args, **kwargs):
@@ -226,7 +239,7 @@ class MQTTAclView(CsrfExemptMixin,
 
 class MQTTPassword(APIView):
     """
-    Retrieve password to use with MQTT
+    Retrieve password to use with MQTT.
     """
 
     @staticmethod
