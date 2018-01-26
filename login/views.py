@@ -258,6 +258,9 @@ class MQTTPassword(APIView):
             # Invalidate password if it is expired
             if timezone.now() > valid_until:
                 password = None
+                print('new')
+            else:
+                print('old')
 
         except ObjectDoesNotExist:
 
