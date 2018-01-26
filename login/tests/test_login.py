@@ -832,6 +832,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
         
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
@@ -874,6 +875,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
         
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
@@ -916,6 +918,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
         
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
