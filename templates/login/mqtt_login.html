@@ -27,10 +27,14 @@
 	action="{% url 'mqtt_login' %}">
     
     <div class="row input_form">
+
+      <p>
+	{{ form.username }}
+      </p>
       
-      {{ form.username }}
-      
-      {{ form.password }}
+      <p>
+	{{ form.password }}
+      </p>
       
       <button type="submit"
 	      class="btn btn btn-primary btn-success"
