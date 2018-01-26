@@ -817,9 +817,9 @@ class TestMQTTLoginTempPassword(MyTestCase):
         response = client.get('/auth/mqtt/password/',
                               follow=True)
         result = JSONParser().parse(BytesIO(response.content))
-        logger.debug('result = {}'.format(result))
-        
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.result,
+                         { 'detail': 'Authentication credentials were not provided.'})
         
         # login as admin
         username = settings.MQTT['USERNAME']
