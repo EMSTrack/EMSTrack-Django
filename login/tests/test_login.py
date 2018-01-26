@@ -811,6 +811,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         client = Client()
 
         # login as admin
+        username = settings.MQTT['USERNAME']
         client.login(username=settings.MQTT['USERNAME'],
                      password=settings.MQTT['PASSWORD'])
 
@@ -821,7 +822,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         encoded = JSONParser().parse(BytesIO(response.content))
 
         # retrieve temporary password
-        password = TemporaryPassword.objects.get(user__username = self.u1.username).password
+        password = TemporaryPassword.objects.get(user__username = username).password
         
         self.assertEqual(check_password(password, encoded), True)
 
@@ -845,79 +846,89 @@ class TestMQTTLoginTempPassword(MyTestCase):
                                       'password': encoded + 'r' },
                                     follow=True)
         self.assertEqual(response.status_code, 403)
-        
-    def _test(self):
-        
 
-        # incorrect username
+        # logout
+        response = self.client.get('/auth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        
+        # login as testuser1
+        username = 'testuser1'
+        client.login(username=username, password='top_secret')
+
+        # retrieve password hash
+        response = client.get('/auth/mqtt/password/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        encoded = JSONParser().parse(BytesIO(response.content))
+
+        # retrieve temporary password
+        password = TemporaryPassword.objects.get(user__username = username).password
+        
+        self.assertEqual(check_password(password, encoded), True)
+
+        # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser11',
-                                 'password': 'top_secret' },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
+                                    { 'username': username,
+                                      'password': encoded },
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
         
-        # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser11' },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
-
-        # incorrect password
+        # mqtt login with incorrect username
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser1',
-                                 'password': 'top_secret0' },
-                               follow=True)
+                                    { 'username': username + 'o',
+                                      'password': encoded },
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
-        # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser1' },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
-        
 
-        # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser1' },
-                               follow=True)
+        # mqtt login with incorrect encoded password
+        response = self.client.post('/auth/mqtt/login/',
+                                    { 'username': username,
+                                      'password': encoded + 'r' },
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # login user2
-        response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser2',
-                                 'password': 'very_secret' },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
 
-        # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser2' },
-                               follow=True)
+        # login as testuser2
+        username = 'testuser2'
+        client.login(username=username, password='very_secret')
+
+        # retrieve password hash
+        response = client.get('/auth/mqtt/password/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        encoded = JSONParser().parse(BytesIO(response.content))
+
+        # retrieve temporary password
+        password = TemporaryPassword.objects.get(user__username = username).password
+        
+        self.assertEqual(check_password(password, encoded), True)
+
+        # mqtt login with correct temporary password
+        response = self.client.post('/auth/mqtt/login/',
+                                    { 'username': username,
+                                      'password': encoded },
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        # mqtt login with incorrect username
+        response = self.client.post('/auth/mqtt/login/',
+                                    { 'username': username + 'o',
+                                      'password': encoded },
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
-        # username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': settings.MQTT['USERNAME'] },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-        
-        # login admin
-        response = self.client.post('/auth/mqtt/login/',
-                               { 'username': settings.MQTT['USERNAME'],
-                                 'password': settings.MQTT['PASSWORD'] },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
 
-        # username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': settings.MQTT['USERNAME'] },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-        
+        # mqtt login with incorrect encoded password
+        response = self.client.post('/auth/mqtt/login/',
+                                    { 'username': username,
+                                      'password': encoded + 'r' },
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
