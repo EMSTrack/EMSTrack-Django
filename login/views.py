@@ -216,7 +216,7 @@ class MQTTAclView(CsrfExemptMixin,
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import string, random
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class MQTTPassword(APIView):
     """
@@ -244,6 +244,6 @@ class MQTTPassword(APIView):
         # Generate new password if current does not exist or is expired
         if (not password) or datetime.now() > valid_until:
             password = self.generate_password()
-            valid_until = datetime.now() + datetime.timedelta(seconds=120)
+            valid_until = datetime.now() + timedelta(seconds=120)
             
         return Response(password)
