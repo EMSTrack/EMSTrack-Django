@@ -242,7 +242,7 @@ class MQTTPassword(APIView):
         valid_until = datetime.now()
 
         # Generate new password if current does not exist or is expired
-        if password or datetime.now() < valid_until:
+        if not password or datetime.now() < valid_until:
             password = self.generate_password()
             valid_until = datetime.now() + datetime.timedelta(seconds=120)
             
