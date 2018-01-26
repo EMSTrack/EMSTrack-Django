@@ -826,6 +826,10 @@ class TestMQTTLoginTempPassword(MyTestCase):
         
         self.assertEqual(check_password(password, encoded), True)
 
+        # logout
+        response = self.client.get('/auth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
                                     { 'username': 'admin',
@@ -847,9 +851,6 @@ class TestMQTTLoginTempPassword(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # logout
-        response = self.client.get('/auth/logout/', follow=True)
-        self.assertEqual(response.status_code, 200)
         
         
         # login as testuser1
@@ -867,6 +868,10 @@ class TestMQTTLoginTempPassword(MyTestCase):
         
         self.assertEqual(check_password(password, encoded), True)
 
+        # logout
+        response = self.client.get('/auth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
                                     { 'username': username,
@@ -888,9 +893,6 @@ class TestMQTTLoginTempPassword(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # logout
-        response = self.client.get('/auth/logout/', follow=True)
-        self.assertEqual(response.status_code, 200)
 
 
         # login as testuser2
@@ -908,6 +910,10 @@ class TestMQTTLoginTempPassword(MyTestCase):
         
         self.assertEqual(check_password(password, encoded), True)
 
+        # logout
+        response = self.client.get('/auth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
                                     { 'username': username,
@@ -929,6 +935,3 @@ class TestMQTTLoginTempPassword(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # logout
-        response = self.client.get('/auth/logout/', follow=True)
-        self.assertEqual(response.status_code, 200)
