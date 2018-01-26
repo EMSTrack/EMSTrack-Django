@@ -11,6 +11,8 @@ from braces.views import CsrfExemptMixin
 
 from .forms import AuthenticationForm, SignupForm
 
+from .models import TemporaryPassword
+
 # signup
 class SignupView(FormView):
     template_name = 'login/signup.html'
@@ -217,6 +219,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import string, random
 from datetime import datetime, timedelta
+from django.contrib.auth.hashers import make_password
+from django.core.exceptions import ObjectDoesNotExist
 
 class MQTTPassword(APIView):
     """
@@ -237,13 +241,28 @@ class MQTTPassword(APIView):
         be able to login with it only through MQTT.
         """
 
-        # Retrieve current password
-        password = None
-        valid_until = datetime.now()
+        try:
 
+            # Retrieve current password
+            obj = TemporaryPassword.objects.get(user = request.User)
+            password = obj.password
+            valid_until = obj.created_on + timedelta(seconds=120)
+
+        except ObjectDoesNotExist:
+            
+            password = None
+            
         # Generate new password if current does not exist or is expired
         if (not password) or datetime.now() > valid_until:
+
+            # Generate password
             password = self.generate_password()
-            valid_until = datetime.now() + timedelta(seconds=120)
+
+            # Save password
+            obj = TemporaryPassword(password = password)
+            obj.save()
+
+        # Return password hash
+        password_hash = make_password(password=password)
             
-        return Response(password)
+        return Response(password_hash)
