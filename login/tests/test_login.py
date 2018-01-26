@@ -818,7 +818,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
                               follow=True)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(response.status_code, 403)
-        self.assertEqual(response.result,
+        self.assertEqual(result,
                          { 'detail': 'Authentication credentials were not provided.'})
         
         # login as admin
