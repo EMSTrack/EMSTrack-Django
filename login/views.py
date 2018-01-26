@@ -244,7 +244,7 @@ class MQTTPassword(APIView):
         try:
 
             # Retrieve current password
-            obj = TemporaryPassword.objects.get(user = request.User)
+            obj = TemporaryPassword.objects.get(user = request.user)
             password = obj.password
             valid_until = obj.created_on + timedelta(seconds=120)
 
