@@ -4,6 +4,7 @@ from django.test import Client
 
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth.hashers import get_hasher, check_password
 
 from rest_framework.parsers import JSONParser
 from io import BytesIO
@@ -14,7 +15,8 @@ from ambulance.models import Ambulance, \
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from ..models import Profile, AmbulancePermission, HospitalPermission
+from ..models import Profile, AmbulancePermission, HospitalPermission, \
+    TemporaryPassword
 
 from ..serializers import ProfileSerializer, ExtendedProfileSerializer
 
@@ -800,3 +802,110 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_subscribed(client)
         
         client.wait()
+
+class TestMQTTLoginTempPassword(MyTestCase):
+
+    def test(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'],
+                     password=settings.MQTT['PASSWORD'])
+
+        # retrieve password hash
+        response = client.get('/auth/mqtt/password/',
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        encoded = JSONParser().parse(BytesIO(response.content))
+
+        # retrieve temporary password
+        password = TemporaryPassword.objects.get(user__username = self.u1.username).password
+        
+        self.assertDictEqual(check_password(password, encoded, True)
+
+    def _test(self):
+        
+        # blank login
+        response = self.client.get('/auth/mqtt/login/')
+        self.assertEqual(response.status_code, 200)
+
+        # incorrect username
+        response = self.client.post('/auth/mqtt/login/',
+                               { 'username': 'testuser11',
+                                 'password': 'top_secret' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # incorrect username superuser
+        response = self.client.post('/auth/mqtt/superuser/',
+                               { 'username': 'testuser11' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # incorrect password
+        response = self.client.post('/auth/mqtt/login/',
+                               { 'username': 'testuser1',
+                                 'password': 'top_secret0' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # incorrect username superuser
+        response = self.client.post('/auth/mqtt/superuser/',
+                               { 'username': 'testuser1' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # correct login
+        response = self.client.post('/auth/mqtt/login/',
+                               { 'username': 'testuser1',
+                                 'password': 'top_secret' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # incorrect username superuser
+        response = self.client.post('/auth/mqtt/superuser/',
+                               { 'username': 'testuser1' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # logout
+        response = self.client.get('/auth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # login user2
+        response = self.client.post('/auth/mqtt/login/',
+                               { 'username': 'testuser2',
+                                 'password': 'very_secret' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # incorrect username superuser
+        response = self.client.post('/auth/mqtt/superuser/',
+                               { 'username': 'testuser2' },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # username superuser
+        response = self.client.post('/auth/mqtt/superuser/',
+                               { 'username': settings.MQTT['USERNAME'] },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        # login admin
+        response = self.client.post('/auth/mqtt/login/',
+                               { 'username': settings.MQTT['USERNAME'],
+                                 'password': settings.MQTT['PASSWORD'] },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # username superuser
+        response = self.client.post('/auth/mqtt/superuser/',
+                               { 'username': settings.MQTT['USERNAME'] },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        
+        # logout
+        response = self.client.get('/auth/logout/', follow=True)
+        self.assertEqual(response.status_code, 200)
