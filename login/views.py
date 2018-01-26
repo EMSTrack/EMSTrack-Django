@@ -221,6 +221,7 @@ import string, random
 from datetime import datetime, timedelta
 from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 class MQTTPassword(APIView):
     """
@@ -255,7 +256,7 @@ class MQTTPassword(APIView):
             password = None
             
         # Generate new password if current does not exist or is expired
-        if (not password) or datetime.now() > valid_until:
+        if (not password) or timezone.now() > valid_until:
 
             # Generate password
             password = self.generate_password()
