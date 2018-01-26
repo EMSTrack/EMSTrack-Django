@@ -215,8 +215,7 @@ class MQTTAclView(CsrfExemptMixin,
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-import string
-import random
+import string, random, datetime
 
 class MQTTPassword(APIView):
     """
@@ -236,5 +235,14 @@ class MQTTPassword(APIView):
         hash in the database. Users in possesion of this password will
         be able to login with it only through MQTT.
         """
-        password = self.generate_password()
+
+        # Retrieve current password
+        password = None
+        valid_until = datetime.now()
+
+        # Generate new password if current does not exist or is expired
+        if password or datetime.now() < valid_until:
+            password = self.generate_password()
+            valid_until = datetime.now() + datetime.timedelta(seconds=120)
+            
         return Response(password)
