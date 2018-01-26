@@ -823,7 +823,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         # retrieve temporary password
         password = TemporaryPassword.objects.get(user__username = self.u1.username).password
         
-        self.assertDictEqual(check_password(password, encoded), True)
+        self.assertEqual(check_password(password, encoded), True)
 
     def _test(self):
         
