@@ -1,3 +1,4 @@
+import logging
 import time
 from django.test import TestCase
 from django.test import Client
@@ -25,6 +26,8 @@ from ..views import LoginView, SignupView, LogoutView, \
 
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient
 from mqtt.client import MQTTException
+
+logger = logging.getLogger(__name__)
 
 class MyTestCase(MQTTTestCase):
 
@@ -937,5 +940,9 @@ class TestMQTTLoginTempPassword(MyTestCase):
 
         
         # retrieve password hash without being logged in
-        response = client.get('/auth/mqtt/password/')
+        response = client.get('/auth/mqtt/password/',
+                              follow=True)
+        result = JSONParser().parse(BytesIO(response.content))
+        logger.debug('result = {}'.format(result))
+        
         self.assertEqual(response.status_code, 403)
