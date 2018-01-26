@@ -242,28 +242,43 @@ class MQTTPassword(APIView):
         be able to login with it only through MQTT.
         """
 
+        # retrieve user
         user = request.user
-
+        
         try:
 
             # Retrieve current password
-            obj = TemporaryPassword.objects.get(user = user.id)
-            password = obj.password
-            valid_until = obj.created_on + timedelta(seconds=120)
+            pwd = TemporaryPassword.objects.get(user = user.id)
+            password = pwd.password
+            valid_until = pwd.created_on + timedelta(seconds=120)
+
+            # Invalidate password if it is expired
+            if timezone.now() > valid_until:
+                password = None
 
         except ObjectDoesNotExist:
-            
-            password = None
-            
-        # Generate new password if current does not exist or is expired
-        if (not password) or timezone.now() > valid_until:
 
+            pwd = None
+            password = None
+
+        if password is None:
+            
             # Generate password
             password = self.generate_password()
 
-            # Save password
-            obj = TemporaryPassword(user = user, password = password)
-            obj.save()
+            if pwd is None:
+                
+                # create password
+                pwd = TemporaryPassword(user = user,
+                                        password = password)
+
+            else:
+
+                # update password
+                pwd.password = password
+
+            # save password
+            pwd.save()
 
         # Return password hash
         password_hash = make_password(password=password)
