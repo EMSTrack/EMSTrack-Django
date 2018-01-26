@@ -22,24 +22,23 @@
   {% endif %}
 {% endif %}
 
-<form method="post"
-      action="{% url 'mqtt_login' %}">
-  
-  <div class="row input_form">
+<div class="container">
+  <form method="post"
+	action="{% url 'mqtt_login' %}">
     
-    {{ form.username }}
-    
-    {{ form.password }}
-    
-    <button type="submit"
-	    class="btn btn btn-primary btn-success"
-	    value="login">Login</button>
-    <input type="hidden" name="next" value="{{ next }}" />
-    
-  </div>
-  
-  <a class="pull-right"
-     href="{% url 'password_reset' %}">Forgot Password?</a>
+    <div class="row input_form">
+      
+      {{ form.username }}
+      
+      {{ form.password }}
+      
+      <button type="submit"
+	      class="btn btn btn-primary btn-success"
+	      value="login">Login</button>
+      <input type="hidden" name="next" value="{{ next }}" />
+      
+    </div>
+</div>
   
 </form>
 
