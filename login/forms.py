@@ -1,8 +1,7 @@
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 import django.forms as forms
 import django.contrib.auth.forms as auth_forms
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import get_hasher, check_password
 
 from django.contrib.auth.models import User, Group
 
@@ -119,7 +118,7 @@ class MQTTAuthenticationForm(AuthenticationForm):
         if len(parts) >= 3 and len(password) <= 128:
             
             # most likely a hash
-            hasher = settings.PASSWORD_HASHERS[0]
+            hasher = get_hasher()
             
             if parts[0] == hasher.algorithm:
 
