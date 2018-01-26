@@ -935,3 +935,8 @@ class TestMQTTLoginTempPassword(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
+        
+        # retrieve password hash without being logged in
+        response = client.get('/auth/mqtt/password/',
+                              follow=True)
+        self.assertEqual(response.status_code, 403)
