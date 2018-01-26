@@ -54,6 +54,7 @@ class Profile(models.Model):
 class TemporaryPassword(models.Model):
 
     user = models.ForeignKey(User,
+                             unique=True,
                              on_delete=models.CASCADE)
     password = models.CharField(max_length=254)
     created_on = models.DateTimeField(auto_now=True)
