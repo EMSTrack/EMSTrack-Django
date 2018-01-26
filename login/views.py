@@ -241,10 +241,12 @@ class MQTTPassword(APIView):
         be able to login with it only through MQTT.
         """
 
+        user = request.user
+
         try:
 
             # Retrieve current password
-            obj = TemporaryPassword.objects.get(user = request.user)
+            obj = TemporaryPassword.objects.get(user)
             password = obj.password
             valid_until = obj.created_on + timedelta(seconds=120)
 
@@ -259,7 +261,7 @@ class MQTTPassword(APIView):
             password = self.generate_password()
 
             # Save password
-            obj = TemporaryPassword(password = password)
+            obj = TemporaryPassword(user = user, password = password)
             obj.save()
 
         # Return password hash
