@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
 import django.forms as forms
 import django.contrib.auth.forms as auth_forms
