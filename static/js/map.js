@@ -115,8 +115,9 @@ $(document).ready(function() {
 	
     })
 	.fail(function(jqxhr, textStatus, error) {
-	    alert('Connection to MQTT broker failed: "' +
-		  testStatus + "," error + '"\n' +
+	    
+	    alert("Connection to MQTT broker failed: \"" +
+		  testStatus + "," + error + "\"\n" +
 		  "Information will not be updated in real time.");
 	    
 	});
