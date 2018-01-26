@@ -91,7 +91,7 @@ $(document).ready(function() {
     })
     
     // retrieve temporary password for mqttClient and connect to broker
-    $.getJSON('auth/mqtt/password/', function(password) {
+    $.getJSON('/auth/mqtt/password/', function(password) {
 
 	// create mqtt broker client
 	mqttClient = new Paho.MQTT.Client(MQTTBroker.host,
