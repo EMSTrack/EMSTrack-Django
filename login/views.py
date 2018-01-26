@@ -251,6 +251,9 @@ class MQTTPassword(APIView):
             pwd = TemporaryPassword.objects.get(user = user.id)
             password = pwd.password
             valid_until = pwd.created_on + timedelta(seconds=120)
+            print('created = {}, valid_until = {}, now = {}'.format(pwd.created_on,
+                                                                    valid_until,
+                                                                    timezone.now()))
 
             # Invalidate password if it is expired
             if timezone.now() > valid_until:
