@@ -819,7 +819,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         result = JSONParser().parse(BytesIO(response.content))
         logger.debug('result = {}'.format(result))
         
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 200)
         
         # login as admin
         username = settings.MQTT['USERNAME']
