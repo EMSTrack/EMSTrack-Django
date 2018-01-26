@@ -813,6 +813,14 @@ class TestMQTTLoginTempPassword(MyTestCase):
         # instantiate client
         client = Client()
 
+        # retrieve password hash without being logged in
+        response = client.get('/auth/mqtt/password/',
+                              follow=True)
+        result = JSONParser().parse(BytesIO(response.content))
+        logger.debug('result = {}'.format(result))
+        
+        self.assertEqual(response.status_code, 403)
+        
         # login as admin
         username = settings.MQTT['USERNAME']
         client.login(username=settings.MQTT['USERNAME'],
@@ -942,10 +950,3 @@ class TestMQTTLoginTempPassword(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         
-        # retrieve password hash without being logged in
-        response = client.get('/auth/mqtt/password/',
-                              follow=True)
-        result = JSONParser().parse(BytesIO(response.content))
-        logger.debug('result = {}'.format(result))
-        
-        self.assertEqual(response.status_code, 403)
