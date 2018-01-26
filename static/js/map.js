@@ -38,8 +38,8 @@ var STATUS_IN_SERVICE = "IS";
 var STATUS_AVAILABLE = "AV";
 var STATUS_OUT_OF_SERVICE = "OS";
 
-// global client variable for mqtt
-var client;
+// global variable for mqttClient
+var mqttClient;
 
 /**
  * This is a handler for when the page is loaded.
@@ -90,30 +90,65 @@ $(document).ready(function() {
 	postDispatchCall();
     })
     
-    // Create a client instance
-    // TODO: password cannot be hardcoded
-    client = new Paho.MQTT.Client(MQTTBroker.host,
-				  MQTTBroker.port,
-				  clientId);
-    
-    // set callback handlers
-    client.onMessageArrived = onMessageArrived;
-    
-    var options = {
-	//connection attempt timeout in seconds
-	timeout: 60,
-	userName: "admin",
-	password: "cruzrojaadmin",
-	useSSL: true,
-	cleanSession: true,
-	onSuccess: onConnect,
-	onFailure: onConnectFailure,
-    };
+    // retrieve temporary password for mqttClient and connect to broker
+    $.getJSON('auth/mqtt/password/', function(password) {
 
-    // connect to MQTT broker
-    client.connect(options);
+	// create mqtt broker client
+	mqttClient = new Paho.MQTT.Client(MQTTBroker.host,
+					  MQTTBroker.port,
+					  clientId);
+	
+	// set callback handlers
+	mqttClient.onMessageArrived = onMessageArrived;
+	
+	// attempt to connect to MQTT broker
+	mqttClient.connect({
+	    //connection attempt timeout in seconds
+	    timeout: 60,
+	    userName: username,
+	    password: password,
+	    useSSL: true,
+	    cleanSession: true,
+	    onSuccess: onConnect,
+	    onFailure: onConnectFailure,
+	});
+	
+    })
+	.fail(function(jqxhr, textStatus, error) {
+	    alert('Connection to MQTT broker failed: "' +
+		  testStatus + "," error + '"\n' +
+		  "Information will not be updated in real time.");
+	    
+	});
+        
+});
+
+/* Handle connect */
+function onConnect() {
+
+    console.log("Connected to MQTT broker");
     
-    // Publish to mqtt on status change from details options dropdown
+    // retrieve ambulance data from api
+    console.log("Retrieving ambulances from API");
+    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
+	$.each(data, function(index) {
+	    let topicName = "ambulance/" + data[index].id + "/data";
+	    mqttClient.subscribe(topicName);
+	    console.log('Subscribing to topic: ' + topicName);
+	});
+    });
+
+    // retrieve hospital data from api
+    console.log("Retrieving hospitals from API");
+    $.getJSON(APIBaseUrl + 'hospital/', function(data) {
+	$.each(data, function(index) {
+	    let topicName = "hospital/" + data[index].id + "/data";
+	    mqttClient.subscribe(topicName);
+	    console.log('Subscribing to topic: ' + topicName);
+	});
+    });
+    
+    // publish to mqtt on status change from details options dropdown
     $('#ambulance-detail-status-select').change(function() {
 
 	// Get status
@@ -125,35 +160,10 @@ $(document).ready(function() {
 	let message = new Paho.MQTT.Message(status);
 	message.destinationName = topic
 	message.qos = 2;
-	client.send(message);
+	mqttClient.send(message);
 	console.log('Sent message: "' + topic + ':' + status + '"');
 	
     });
-    
-});
-
-/* Handle connect */
-function onConnect() {
-
-    console.log("Connected to MQTT broker")
-    
-    // Subscribes to ambulance/{id}/data
-    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
-	$.each(data, function(index) {
-	    let topicName = "ambulance/" + data[index].id + "/data";
-	    client.subscribe(topicName);
-	    console.log('Subscribing to topic: ' + topicName);
-	});
-    })
-
-    // Subscribes to hospital/{id}/data
-    $.getJSON(APIBaseUrl + 'hospital/', function(data) {
-	$.each(data, function(index) {
-	    let topicName = "hospital/" + data[index].id + "/data";
-	    client.subscribe(topicName);
-	    console.log('Subscribing to topic: ' + topicName);
-	});
-    })
     
 };
 
