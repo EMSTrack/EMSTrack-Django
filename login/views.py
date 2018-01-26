@@ -1,17 +1,26 @@
+import string, random
+from datetime import timedelta
+
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.hashers import make_password
+from django.utils import timezone
 from django.views.generic.base import View
 from django.views.generic.edit import FormView
 
+from braces.views import CsrfExemptMixin
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from django.contrib.auth.models import User
 
-from braces.views import CsrfExemptMixin
+from .models import TemporaryPassword
 
 from .forms import AuthenticationForm, SignupForm
 
-from .models import TemporaryPassword
 
 # signup
 class SignupView(FormView):
@@ -215,14 +224,6 @@ class MQTTAclView(CsrfExemptMixin,
         
         return HttpResponseForbidden()
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-import string, random
-from datetime import datetime, timedelta
-from django.contrib.auth.hashers import make_password
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils import timezone
-
 class MQTTPassword(APIView):
     """
     Retrieve password to use with MQTT
@@ -237,9 +238,11 @@ class MQTTPassword(APIView):
     
     def get(self, request, format=None):
         """
-        Generate password if one does not exist or is invalid and stores a
-        hash in the database. Users in possesion of this password will
-        be able to login with it only through MQTT.
+        Generate password if one does not exist or is invalid. 
+        Stores password in the database and returns a hash. Users in 
+        possesion of this hash will be able to login through MQTT. 
+        Passwords are valid for 120 seconds. 
+        A new hash is however returned every time.
         """
 
         # retrieve user
@@ -251,16 +254,10 @@ class MQTTPassword(APIView):
             pwd = TemporaryPassword.objects.get(user = user.id)
             password = pwd.password
             valid_until = pwd.created_on + timedelta(seconds=120)
-            print('created = {}, valid_until = {}, now = {}'.format(pwd.created_on,
-                                                                    valid_until,
-                                                                    timezone.now()))
 
             # Invalidate password if it is expired
             if timezone.now() > valid_until:
                 password = None
-                print('new')
-            else:
-                print('old')
 
         except ObjectDoesNotExist:
 
@@ -268,8 +265,6 @@ class MQTTPassword(APIView):
             password = None
 
         if password is None:
-            
-            print('new')
             
             # Generate password
             password = self.generate_password()
