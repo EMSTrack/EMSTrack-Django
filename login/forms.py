@@ -116,43 +116,53 @@ class MQTTAuthenticationForm(AuthenticationForm):
 
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
-        
+
         # see if password is encoded as a hash
-        # a hash is in the format: <algorithm>$<iterations>$<salt>$<hash>
-        parts = password.split('$')
-        if len(parts) >= 3 and len(password) <= 128:
-            
-            # most likely a hash
-            hasher = get_hasher()
-            
-            if parts[0] == hasher.algorithm:
+        if password: 
 
-                # it is a hash, authenticate
-                encoded = password
+            # a hash is in the format: <algorithm>$<iterations>$<hash>
+            parts = password.split('$')
+            
+            if len(parts) >= 3 and len(password) <= 128:
+            
+                # most likely a hash
+                hasher = get_hasher()
+            
+                if parts[0] == hasher.algorithm:
+
+                    # it is a hash, authenticate
+                    encoded = password
                 
-                try:
-
-                    # retrieve current password
-                    pwd = TemporaryPassword.objects.get(user__username = username)
-                    password = pwd.password
-                    valid_until = pwd.created_on + timedelta(seconds=120)
+                    try:
                     
-                    # invalidate login if password is expired
-                    if timezone.now() > valid_until:
+                        # retrieve current password
+                        pwd = TemporaryPassword.objects.get(user__username = username)
+                        password = pwd.password
+                        valid_until = pwd.created_on + timedelta(seconds=120)
+                    
+                        # invalidate login if password is expired
+                        if timezone.now() > valid_until:
+                            password = None
+                    
+                    except ObjectDoesNotExist:
+
                         password = None
+
+                    # check password
+                    if password is not None and check_password(password, encoded):
+
+                        # confirm user login allowed
+                        self.confirm_login_allowed(pwd.user)
                     
-                except ObjectDoesNotExist:
-
-                    password = None
-
-                # check password
-                if password is not None and check_password(password, encoded):
-
-                    # valid login
-                    return self.cleaned_data
+                        # valid login
+                        return self.cleaned_data
                 
-                # otherwise it is an invalid login
-                raise self.get_invalid_login_error()
-
+                    # otherwise it is an invalid login
+                    raise forms.ValidationError(
+                        self.error_messages['invalid_login'],
+                        code='invalid_login',
+                        params={'username': self.username_field.verbose_name},
+                    )
+            
         # if not a hash, call super to validate password
         return super().clean()
