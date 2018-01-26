@@ -269,6 +269,8 @@ class MQTTPassword(APIView):
 
         if password is None:
             
+            print('new')
+            
             # Generate password
             password = self.generate_password()
 
