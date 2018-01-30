@@ -131,7 +131,7 @@ function onConnect() {
     
     // retrieve profile from api
     console.log("Retrieving profile from API");
-    $.getJSON(APIBaseUrl + 'profile/', function(data) {
+    $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function(data) {
 
 	// Subscribe to ambulances
 	$.each(data['ambulances'], function(index) {
