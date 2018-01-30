@@ -41,6 +41,8 @@ var STATUS_OUT_OF_SERVICE = "OS";
 // global variable for mqttClient
 var mqttClient;
 
+// TODO: remove hardcoded mapbox access_token
+
 /**
  * This is a handler for when the page is loaded.
  */

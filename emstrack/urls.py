@@ -22,6 +22,7 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
 from login.viewsets import ProfileViewSet
+from login.views import MQTTPasswordView
 
 from ambulance.viewsets import AmbulanceViewSet
 
@@ -57,6 +58,11 @@ urlpatterns = [
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 
+    # Add mqtt_password to api
+    url(r'^api/user/(?P<username>[\w.@+-]+)/password/$',
+        MQTTPasswordView.as_view(),
+        name='mqtt_password'),
+    
     # ambulance
     url(r'^ambulance/', include('ambulance.urls')),
 

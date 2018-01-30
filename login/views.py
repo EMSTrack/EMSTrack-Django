@@ -1,3 +1,4 @@
+import logging
 import string, random
 from datetime import timedelta
 
@@ -21,6 +22,9 @@ from .models import TemporaryPassword
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm
 
+from .viewsets import IsUserOrAdminOrSuper
+
+logger = logging.getLogger(__name__)
 
 # signup
 class SignupView(FormView):
@@ -237,7 +241,7 @@ class MQTTAclView(CsrfExemptMixin,
         
         return HttpResponseForbidden()
 
-class MQTTPassword(APIView):
+class MQTTPasswordView(APIView):
     """
     Retrieve password to use with MQTT.
     """
@@ -249,7 +253,7 @@ class MQTTPassword(APIView):
                                    string.punctuation)):
         return (''.join(random.choice(chars) for _ in range(size)))
     
-    def get(self, request, format=None):
+    def get(self, request, username = None):
         """
         Generate password if one does not exist or is invalid. 
         Stores password in the database and returns a hash. Users in 
@@ -258,8 +262,10 @@ class MQTTPassword(APIView):
         A new hash is however returned every time.
         """
 
-        # retrieve user
+        # retrieve current user
         user = request.user
+
+        logger.debug('username = {}'.format(username))
         
         try:
 
