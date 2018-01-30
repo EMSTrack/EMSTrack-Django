@@ -129,25 +129,45 @@ function onConnect() {
 
     console.log("Connected to MQTT broker");
     
-    // retrieve ambulance data from api
-    console.log("Retrieving ambulances from API");
-    $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
-	$.each(data, function(index) {
+    // retrieve profile from api
+    console.log("Retrieving profile from API");
+    $.getJSON(APIBaseUrl + 'profile/', function(data) {
+
+	// Subscribe to ambulances
+	$.each(data['ambulances'], function(index) {
 	    let topicName = "ambulance/" + data[index].id + "/data";
 	    mqttClient.subscribe(topicName);
 	    console.log('Subscribing to topic: ' + topicName);
 	});
-    });
 
-    // retrieve hospital data from api
-    console.log("Retrieving hospitals from API");
-    $.getJSON(APIBaseUrl + 'hospital/', function(data) {
-	$.each(data, function(index) {
+	// Subscribe to hospitals
+	$.each(data['hospitals'], function(index) {
 	    let topicName = "hospital/" + data[index].id + "/data";
 	    mqttClient.subscribe(topicName);
 	    console.log('Subscribing to topic: ' + topicName);
 	});
+	
     });
+    
+    // // retrieve ambulance data from api
+    // console.log("Retrieving ambulances from API");
+    // $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
+    // 	$.each(data, function(index) {
+    // 	    let topicName = "ambulance/" + data[index].id + "/data";
+    // 	    mqttClient.subscribe(topicName);
+    // 	    console.log('Subscribing to topic: ' + topicName);
+    // 	});
+    // });
+
+    // // retrieve hospital data from api
+    // console.log("Retrieving hospitals from API");
+    // $.getJSON(APIBaseUrl + 'hospital/', function(data) {
+    // 	$.each(data, function(index) {
+    // 	    let topicName = "hospital/" + data[index].id + "/data";
+    // 	    mqttClient.subscribe(topicName);
+    // 	    console.log('Subscribing to topic: ' + topicName);
+    // 	});
+    // });
     
     // publish to mqtt on status change from details options dropdown
     $('#ambulance-detail-status-select').change(function() {
@@ -174,7 +194,37 @@ function onConnectFailure(message) {
     alert("Connection to MQTT broker failed: " + message.errorMessage +
 	  "Information will not be updated in real time.");
 
-    // Load data from API
+    // Load hospital data from API
+    $.ajax({
+	type: 'GET',
+	datatype: "json",
+	url: APIBaseUrl + 'hospital/',
+	
+	error: function(msg) {
+	    
+	    alert('Could not retrieve data from API:' + msg)
+	    
+	},
+	
+	success: function(data) {
+	    
+	    console.log('Got data from API')
+	    
+	    $.each(data, function(i, hospital) {
+		
+		// update hospital
+		updateHospital(hospital);
+		
+	    });
+	}
+    })
+	.done(function( data ) {
+	    if ( console && console.log ) {
+		console.log( "Done retrieving hospital data from API" );
+	    }
+	});
+    
+    // Load ambulance data from API
     $.ajax({
 	type: 'GET',
 	datatype: "json",
@@ -200,7 +250,7 @@ function onConnectFailure(message) {
     })
 	.done(function( data ) {
 	    if ( console && console.log ) {
-		console.log( "Done retrieving data from API" );
+		console.log( "Done retrieving ambulance data from API" );
 	    }
 	});
     
