@@ -135,14 +135,14 @@ function onConnect() {
 
 	// Subscribe to ambulances
 	$.each(data['ambulances'], function(index) {
-	    let topicName = "ambulance/" + data[index].id + "/data";
+	    let topicName = "ambulance/" + data[index].ambulance_id + "/data";
 	    mqttClient.subscribe(topicName);
 	    console.log('Subscribing to topic: ' + topicName);
 	});
 
 	// Subscribe to hospitals
 	$.each(data['hospitals'], function(index) {
-	    let topicName = "hospital/" + data[index].id + "/data";
+	    let topicName = "hospital/" + data[index].hospital_id + "/data";
 	    mqttClient.subscribe(topicName);
 	    console.log('Subscribing to topic: ' + topicName);
 	});
