@@ -133,6 +133,8 @@ function onConnect() {
     console.log("Retrieving profile from API");
     $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function(data) {
 
+	console.log(data);
+	
 	// Subscribe to ambulances
 	$.each(data['ambulances'], function(index) {
 	    let topicName = "ambulance/" + data[index].ambulance_id + "/data";
