@@ -133,7 +133,12 @@ function onConnect() {
     console.log("Retrieving profile from API");
     $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function(data) {
 
-	console.log(data);
+	// Subscribe to hospitals
+	$.each(data.hospitals, function(index) {
+	    let topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
+	    mqttClient.subscribe(topicName);
+	    console.log('Subscribing to topic: ' + topicName);
+	});
 	
 	// Subscribe to ambulances
 	$.each(data.ambulances, function(index) {
@@ -142,34 +147,7 @@ function onConnect() {
 	    console.log('Subscribing to topic: ' + topicName);
 	});
 
-	// Subscribe to hospitals
-	$.each(data.hospitals, function(index) {
-	    let topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
-	    mqttClient.subscribe(topicName);
-	    console.log('Subscribing to topic: ' + topicName);
-	});
-	
     });
-    
-    // // retrieve ambulance data from api
-    // console.log("Retrieving ambulances from API");
-    // $.getJSON(APIBaseUrl + 'ambulance/', function(data) {
-    // 	$.each(data, function(index) {
-    // 	    let topicName = "ambulance/" + data[index].id + "/data";
-    // 	    mqttClient.subscribe(topicName);
-    // 	    console.log('Subscribing to topic: ' + topicName);
-    // 	});
-    // });
-
-    // // retrieve hospital data from api
-    // console.log("Retrieving hospitals from API");
-    // $.getJSON(APIBaseUrl + 'hospital/', function(data) {
-    // 	$.each(data, function(index) {
-    // 	    let topicName = "hospital/" + data[index].id + "/data";
-    // 	    mqttClient.subscribe(topicName);
-    // 	    console.log('Subscribing to topic: ' + topicName);
-    // 	});
-    // });
     
     // publish to mqtt on status change from details options dropdown
     $('#ambulance-detail-status-select').change(function() {
