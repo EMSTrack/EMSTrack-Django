@@ -31,7 +31,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     Retrieve list of ambulances.
 
     retrieve:
-    Retrieva an ambulance instance.
+    Retrieve an existing ambulance instance.
 
     create:
     Create new ambulance instance.
