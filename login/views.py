@@ -255,7 +255,7 @@ class MQTTPasswordView(APIView):
     
     def get(self, request, user__username = None):
         """
-        Generate password if one does not exist or is invalid. 
+        Generate temporary password if one does not exist or is invalid.
         Stores password in the database and returns a hash. Users in 
         possesion of this hash will be able to login through MQTT. 
         Passwords are valid for 120 seconds. 

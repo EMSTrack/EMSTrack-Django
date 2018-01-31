@@ -26,7 +26,7 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
 # Profile viewset
 
 class ProfileViewSet(viewsets.GenericViewSet):
-
+   
     queryset = Profile.objects.all()
     serializer_class = ExtendedProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
@@ -35,5 +35,8 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
     @detail_route(methods=['get'])
     def profile(self, request, **kwargs):
+        """
+        Retrieve user extended profile.
+        """
         return Response(ExtendedProfileSerializer(self.get_object()).data)
     
