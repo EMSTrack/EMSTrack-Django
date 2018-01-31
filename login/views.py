@@ -265,8 +265,6 @@ class MQTTPasswordView(APIView):
         # retrieve current user
         user = request.user
 
-        logger.debug('username = {}'.format(user__username))
-
         # make sure user and username are the same
         if user.username != user__username:
             raise PermissionDenied()
