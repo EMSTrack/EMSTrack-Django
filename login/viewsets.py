@@ -36,7 +36,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
     @detail_route(methods=['get'])
     def profile(self, request, **kwargs):
         """
-        Retrieve user extended profile.
+        Retrieve user's extended profile.
         """
         return Response(ExtendedProfileSerializer(self.get_object()).data)
     
