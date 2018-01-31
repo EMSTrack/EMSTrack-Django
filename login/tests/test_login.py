@@ -815,7 +815,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
 
         # retrieve password hash without being logged in
         username = 'admin'
-        response = client.get('/user/{}/password/'.format(username),
+        response = client.get('/api/user/{}/password/'.format(username),
                               follow=True)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(response.status_code, 403)
@@ -828,7 +828,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
                      password=settings.MQTT['PASSWORD'])
 
         # retrieve password hash
-        response = client.get('/user/{}/password/'.format(username),
+        response = client.get('/api/user/{}/password/'.format(username),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         encoded = JSONParser().parse(BytesIO(response.content))
@@ -871,7 +871,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         client.login(username=username, password='top_secret')
 
         # retrieve password hash
-        response = client.get('/user/{}/password/'.format(username),
+        response = client.get('/api/user/{}/password/'.format(username),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         encoded = JSONParser().parse(BytesIO(response.content))
@@ -914,7 +914,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         client.login(username=username, password='very_secret')
 
         # retrieve password hash
-        response = client.get('/user/{}/password/'.format(username),
+        response = client.get('/api/user/{}/password/'.format(username),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         encoded = JSONParser().parse(BytesIO(response.content))
