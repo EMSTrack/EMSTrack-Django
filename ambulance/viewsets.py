@@ -24,6 +24,27 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                        BasePermissionMixin,
                        viewsets.GenericViewSet):
 
+    """
+    API endpoint for manipulating ambulances.
+
+    list:
+    Retrieve list of ambulances.
+
+    retrieve:
+    Retrieva an ambulance instance.
+
+    create:
+    Create new ambulance instance.
+    
+    update:
+    Update existing ambulance instance.
+
+    partial_update:
+    Partially update existing ambulance instance.
+
+    """
+
+    
     filter_field = 'id'
     profile_field = 'ambulances'
     profile_values = 'ambulance_id'
