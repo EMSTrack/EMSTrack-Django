@@ -29,8 +29,5 @@ urlpatterns = [
     url(r'^mqtt/acl/$',
         views.MQTTAclView.as_view(),
         name='mqtt_acl'),
-    url(r'^mqtt/password/$',
-        views.MQTTPasswordView.as_view(),
-        name='mqtt_password'),
     
 ]
