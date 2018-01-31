@@ -3,7 +3,7 @@ import string, random
 from datetime import timedelta
 
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
@@ -266,6 +266,10 @@ class MQTTPasswordView(APIView):
         user = request.user
 
         logger.debug('username = {}'.format(username))
+
+        # make sure user and username are the same
+        if user != username:
+            raise PermissionDenied()
         
         try:
 

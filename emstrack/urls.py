@@ -59,7 +59,7 @@ urlpatterns = [
                                namespace='rest_framework')),
 
     # Add mqtt_password to api
-    url(r'^api/user/(?P<username>[\w.@+-]+)/password/$',
+    url(r'^api/user/(?P<user__username>[\w.@+-]+)/password/$',
         MQTTPasswordView.as_view(),
         name='mqtt_password'),
     
