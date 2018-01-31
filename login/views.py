@@ -253,7 +253,7 @@ class MQTTPasswordView(APIView):
                                    string.punctuation)):
         return (''.join(random.choice(chars) for _ in range(size)))
     
-    def get(self, request, username = None):
+    def get(self, request, user__username = None):
         """
         Generate password if one does not exist or is invalid. 
         Stores password in the database and returns a hash. Users in 
@@ -265,10 +265,10 @@ class MQTTPasswordView(APIView):
         # retrieve current user
         user = request.user
 
-        logger.debug('username = {}'.format(username))
+        logger.debug('username = {}'.format(user__username))
 
         # make sure user and username are the same
-        if user != username:
+        if user.username != user__username:
             raise PermissionDenied()
         
         try:
