@@ -841,7 +841,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         # Start test client
         
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_mqtt_will_admin'
         broker['WILL'] = {
             'topic': 'user/{}/client/{}/status'.format(broker['USERNAME'],
                                                        broker['CLIENT_ID']),
@@ -853,5 +853,15 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
+        # reconncting with same client-id will trigger will
+        client = MQTTTestClient(broker,
+                                check_payload = False,
+                                debug=False)
+        self.is_connected(client)
+
+        client.expect('user/{}/client/{}/status'.format(broker['USERNAME'],
+                                                        broker['CLIENT_ID'])
+        self.is_subscribed(client)
+        
         # wait for disconnect
         client.wait()
