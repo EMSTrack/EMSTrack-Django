@@ -448,7 +448,7 @@ class TestMQTTPublishAsRegularUser(TestMQTT, MQTTTestCase):
         self.loop(client)
 
         # expect more hospital and equipment
-        [client.expect(t) for t in topics[1:]]
+        [client.expect(t) for t in topics]
 
         # modify data in hospital and save should trigger message
         obj = Hospital.objects.get(id = self.h1.id)
