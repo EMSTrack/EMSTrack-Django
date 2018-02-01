@@ -9,6 +9,8 @@ from .client import BaseClient, MQTTException
 from ambulance.models import Ambulance
 from ambulance.serializers import AmbulanceSerializer
 
+from login.views import SettingsView
+
 from hospital.models import Equipment, HospitalEquipment, Hospital
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
@@ -83,6 +85,12 @@ class PublishClient(BaseClient):
                          qos=qos,
                          retain=True)
 
+    def publish_settings(self, qos=2, retain=True):
+        self.publish_topic('settings',
+                          SettingsView.settings(),
+                          qos=qos,
+                          retain=retain)
+        
     def publish_profile(self, profile, qos=2, retain=True):
         self.publish_topic('user/{}/profile'.format(profile.user.username),
                           ExtendedProfileSerializer(profile),

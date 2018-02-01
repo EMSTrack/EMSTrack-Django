@@ -18,6 +18,9 @@ from rest_framework.response import Response
 
 from django.contrib.auth.models import User
 
+from ambulance.models import AmbulanceStatus, AmbulanceCapability
+from hospital.models import EquipmentType
+
 from .models import TemporaryPassword
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm
@@ -250,7 +253,7 @@ class MQTTAclView(CsrfExemptMixin,
         
         return HttpResponseForbidden()
 
-class MQTTPasswordView(APIView):
+class PasswordView(APIView):
     """
     Retrieve password to use with MQTT.
     """
@@ -317,3 +320,26 @@ class MQTTPasswordView(APIView):
         password_hash = make_password(password=password)
             
         return Response(password_hash)
+
+class SettingsView(APIView):
+    """
+    Retrieve current settings and options.
+    """
+
+    @staticmethod
+    def settings():
+        
+        ambulance_status = {m.name: m.value for m in AmbulanceStatus}
+        ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
+        equipment_type = {m.name: m.value for m in EquipmentType}
+        
+        return { 'AmbulanceStatus': ambulance_status,
+                 'AmbulanceCapability': ambulance_capability,
+                 'EquipmentType': equipment_type }
+    
+    def get(self, request, user__username = None):
+        """
+        Retrieve current settings and options.
+        """
+
+        return Response(self.settings())

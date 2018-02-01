@@ -59,6 +59,16 @@ class Client(PublishClient):
         elif self.verbosity > 0:
             self.stdout.write("   {}".format(topic))
 
+    def seed_settings(self, client):
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding settings"))
+
+        # seeding settings
+        self.publish_settings()
+            
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
+            
     def seed_profile_data(self, client):
 
         if self.verbosity > 0:
