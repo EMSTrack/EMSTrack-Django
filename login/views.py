@@ -100,6 +100,7 @@ class MQTTAclView(CsrfExemptMixin,
 
         # Check permissions
         username = data.get('username')
+        client_id = data.get('clientid')
         acc = int(data.get('acc')) # 1 == sub, 2 == pub
 
         # get topic and remove first '/'
@@ -235,6 +236,14 @@ class MQTTAclView(CsrfExemptMixin,
 
                         except ObjectDoesNotExist:
                             pass
+                        
+                    #  - user/*username*/client/*client-id*/status
+                    elif (len(topic) == 5 and
+                          topic[2] == 'client' and
+                          topic[4] == 'status' and
+                          topic[3] == client_id):
+
+                        return HttpResponse('OK')
                         
         except User.DoesNotExist:
             pass

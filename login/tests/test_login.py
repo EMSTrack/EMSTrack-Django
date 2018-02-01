@@ -638,6 +638,42 @@ class TestMQTTACLPublish(MyTestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
+        # Client data
+
+        username = 'testuser2'
+        client_id = 'test_client'
+        response = self.client.post('/auth/mqtt/acl/',
+                               { 'username': username,
+                                 'clientid': client_id,
+                                 'acc': '2',
+                                 'topic': '/user/{}/client/{}/status'.format(username, client_id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # invalid username
+        
+        username = 'testuser2'
+        client_id = 'test_client'
+        response = self.client.post('/auth/mqtt/acl/',
+                               { 'username': username,
+                                 'clientid': client_id,
+                                 'acc': '2',
+                                 'topic': '/user/{}/client/{}/status'.format(username + 'o', client_id) },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
+        # invalid client_id
+        
+        username = 'testuser2'
+        client_id = 'test_client'
+        response = self.client.post('/auth/mqtt/acl/',
+                               { 'username': username,
+                                 'clientid': client_id,
+                                 'acc': '2',
+                                 'topic': '/user/{}/client/{}/status'.format(username, client_id + 'o') },
+                               follow=True)
+        self.assertEqual(response.status_code, 403)
+        
 class TestMQTTConnect(MyTestCase):
 
     def is_connected(self, client, MAX_TRIES = 10):
