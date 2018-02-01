@@ -525,7 +525,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # modify data in hospital and save should trigger message
         obj = Hospital.objects.get(id = self.h1.id)
-        self.assertEqual(obj.comment, 'no comments')
+        self.assertEqual(obj.comment, 'yet yet no comments')
         obj.comment = 'yet no comments'
         obj.save()
         
