@@ -860,7 +860,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         self.is_connected(client)
 
         client.expect('user/{}/client/{}/status'.format(broker['USERNAME'],
-                                                        broker['CLIENT_ID'])
+                                                        broker['CLIENT_ID']))
         self.is_subscribed(client)
         
         # wait for disconnect
