@@ -30,19 +30,22 @@ class Client(PublishClient):
         self.pubset = set()
         self.can_disconnect = False
 
+        # Seed settings
+        self.seed_settings()
+        
         # Seed hospitals
-        self.seed_hospital_data(client)
-        self.seed_hospital_equipment_data(client)
-        self.seed_hospital_metadata(client)
+        self.seed_hospital_data()
+        self.seed_hospital_equipment_data()
+        self.seed_hospital_metadata()
 
         # Seed ambulances
-        self.seed_ambulance_data(client)
+        self.seed_ambulance_data()
 
         # Seed profiles
-        self.seed_profile_data(client)
+        self.seed_profile_data()
         
         # Seed calls
-        # self.seed_calls(client)
+        # self.seed_calls()
 
         # Good to disconnect
         self.can_disconnect = True
@@ -59,7 +62,7 @@ class Client(PublishClient):
         elif self.verbosity > 0:
             self.stdout.write("   {}".format(topic))
 
-    def seed_settings(self, client):
+    def seed_settings(self):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding settings"))
 
@@ -69,7 +72,7 @@ class Client(PublishClient):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
             
-    def seed_profile_data(self, client):
+    def seed_profile_data(self):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding profile data"))
@@ -81,7 +84,7 @@ class Client(PublishClient):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding profile data"))
             
-    def seed_ambulance_data(self, client):
+    def seed_ambulance_data(self):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding ambulance data"))
@@ -93,7 +96,7 @@ class Client(PublishClient):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding ambulance data"))
 
-    def seed_hospital_data(self, client):
+    def seed_hospital_data(self):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital data"))
@@ -106,7 +109,7 @@ class Client(PublishClient):
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital data"))
 
             
-    def seed_hospital_equipment_data(self, client):
+    def seed_hospital_equipment_data(self):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital equipment data"))
@@ -119,7 +122,7 @@ class Client(PublishClient):
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital equipment data"))
 
             
-    def seed_hospital_metadata(self, client):
+    def seed_hospital_metadata(self):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital metadata"))
 
