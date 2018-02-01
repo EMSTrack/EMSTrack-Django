@@ -338,7 +338,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
-    def test_mqtt_publish(self):
+    def test(self):
 
         # Start client as admin
         broker = {
@@ -413,6 +413,67 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
+class TestMQTTPublishAsRegularUser(TestMQTT, MQTTTestCase):
+
+    def test(self):
+
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+        
+        # Start test client
+        
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['USERNAME'] = 'testuser1'
+        broker['PASSWORD'] = 'top_secret'
+        
+        client = MQTTTestClient(broker,
+                                check_payload = False,
+                                debug=False)
+        self.is_connected(client)
+
+        # subscribe to ambulance/+/data
+        topics = ('hospital/{}/data'.format(self.h1.id),
+                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                         self.e1.name))
+        [client.expect(t) for t in topics]
+        self.is_subscribed(client)
+
+        # process messages
+        self.loop(client)
+
+        # expect more hospital and equipment
+        [client.expect(t) for t in topics[1:]]
+
+        # modify data in hospital and save should trigger message
+        obj = Hospital.objects.get(id = self.h1.id)
+        self.assertEqual(obj.comment, 'no comments')
+        obj.comment = 'yet no comments'
+        obj.save()
+        
+        # modify data in hospital_equipment and save should trigger message
+        obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
+                                            equipment_id = self.e1.id)
+        self.assertEqual(obj.value, 'True')
+        obj.value = 'False'
+        obj.save()
+        
+        # process messages
+        self.loop(client)
+        client.wait()
+        
+        # assert changes
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'yet no comments')
+        
+        obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
+                                            equipment_id = self.e1.id)
+        self.assertEqual(obj.value, 'False')
 
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
