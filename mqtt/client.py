@@ -33,6 +33,15 @@ class BaseClient():
                                       self.broker['CLEAN_SESSION'])
         else:
             self.client = mqtt.Client()
+
+        # handle will message
+        if 'WILL' in self.broker:
+            will = self.broker['WILL']
+            self.client.will_set(will['topic'],
+                                 payload = will.get('topic', None),
+                                 qos = will.get('topic', 2),
+                                 retain = will.get('topic', True))
+            
         self.client.on_connect = self.on_connect
 
         self.subscribed = {}
@@ -187,13 +196,6 @@ class BaseClient():
     # loop forever
     def loop_forever(self):
         self.client.loop_forever()
-
-    # loop forever
-    def loop(self):
-        self.client.loop()
-
-    def loop_start(self):
-        self.client.loop_start()
 
     # wait for disconnect
     def wait(self, MAX_TRIES = 10):
