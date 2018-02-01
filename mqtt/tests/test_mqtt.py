@@ -828,7 +828,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
 class TestMQTTWill(TestMQTT, MQTTTestCase):
 
-    def _test(self):
+    def test(self):
 
         # Start client as admin
         broker = {
@@ -853,58 +853,5 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
-        # subscribe to ambulance/+/data
-        topics = ('ambulance/{}/data'.format(self.a1.id),
-                  'hospital/{}/data'.format(self.h1.id),
-                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.name))
-        [client.expect(t) for t in topics]
-        self.is_subscribed(client)
-
-        # process messages
-        self.loop(client)
-
-        # expect more ambulance
-        client.expect(topics[0])
-
-        # modify data in ambulance and save should trigger message
-        obj = Ambulance.objects.get(id = self.a1.id)
-        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
-        obj.status = AmbulanceStatus.OS.name
-        obj.save()
-        
-        # process messages
-        self.loop(client)
-
-        # assert change
-        obj = Ambulance.objects.get(id=self.a1.id)
-        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
-
-        # expect more hospital and equipment
-        [client.expect(t) for t in topics[1:]]
-
-        # modify data in hospital and save should trigger message
-        obj = Hospital.objects.get(id = self.h1.id)
-        self.assertEqual(obj.comment, 'no comments')
-        obj.comment = 'yet no comments'
-        obj.save()
-        
-        # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
-                                            equipment_id = self.e1.id)
-        self.assertEqual(obj.value, 'True')
-        obj.value = 'False'
-        obj.save()
-        
-        # process messages
-        self.loop(client)
+        # wait for disconnect
         client.wait()
-        
-        # assert changes
-        obj = Hospital.objects.get(id=self.h1.id)
-        self.assertEqual(obj.comment, 'yet no comments')
-        
-        obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
-                                            equipment_id = self.e1.id)
-        self.assertEqual(obj.value, 'False')
-        
