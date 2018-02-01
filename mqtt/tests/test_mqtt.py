@@ -413,10 +413,6 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
-# class TestMQTTPublishAsRegularUser(TestMQTT, MQTTTestCase):
-
-#     def test(self):
-
         # Start client as testuser1
         broker = {
             'HOST': 'localhost',
@@ -452,15 +448,15 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # modify data in hospital and save should trigger message
         obj = Hospital.objects.get(id = self.h1.id)
-        self.assertEqual(obj.comment, 'no comments')
-        obj.comment = 'yet no comments'
+        self.assertEqual(obj.comment, 'yet no comments')
+        obj.comment = 'yet yet no comments'
         obj.save()
         
         # modify data in hospital_equipment and save should trigger message
         obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
                                             equipment_id = self.e1.id)
-        self.assertEqual(obj.value, 'True')
-        obj.value = 'False'
+        self.assertEqual(obj.value, 'False')
+        obj.value = 'True'
         obj.save()
         
         # process messages
@@ -469,11 +465,11 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         
         # assert changes
         obj = Hospital.objects.get(id=self.h1.id)
-        self.assertEqual(obj.comment, 'yet no comments')
+        self.assertEqual(obj.comment, 'yet yet no comments')
         
         obj = HospitalEquipment.objects.get(hospital_id = self.h1.id,
                                             equipment_id = self.e1.id)
-        self.assertEqual(obj.value, 'False')
+        self.assertEqual(obj.value, 'True')
 
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
