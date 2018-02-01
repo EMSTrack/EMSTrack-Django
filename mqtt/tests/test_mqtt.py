@@ -509,7 +509,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # modify data in ambulance and save should trigger message
         obj = Ambulance.objects.get(id = self.a3.id)
-        self.assertEqual(obj.status, AmbulanceStatus.R.name)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
         obj.status = AmbulanceStatus.OS.name
         obj.save()
         
