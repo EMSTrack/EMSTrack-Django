@@ -70,9 +70,11 @@ class PublishClient(BaseClient):
 
         if self.active:
 
-            # serialize?
+            # serializer?
             if isinstance(payload, serializers.Serializer):
                 payload = JSONRenderer().render(payload.data)
+            else:
+                payload = JSONRenderer().render(payload)
                 
             # Publish to topic
             self.publish(topic,
