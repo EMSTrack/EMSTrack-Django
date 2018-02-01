@@ -38,9 +38,9 @@ class BaseClient():
         if 'WILL' in self.broker:
             will = self.broker['WILL']
             self.client.will_set(will['topic'],
-                                 payload = will.get('topic', None),
-                                 qos = will.get('topic', 2),
-                                 retain = will.get('topic', True))
+                                 payload = will.get('payload', None),
+                                 qos = will.get('qos', 2),
+                                 retain = will.get('retain', True))
             
         self.client.on_connect = self.on_connect
 
