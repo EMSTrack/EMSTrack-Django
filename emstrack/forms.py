@@ -5,12 +5,12 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
 
     class Media:
         css = {
-            'all': ('http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css',
+            'all': ('https://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css',
                     'leaflet/css/location_form.css',
                     'leaflet/css/LeafletWidget.css')
         }
         js = (
-            'http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
+            'https://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js',
             'leaflet/js/LeafletWidget.js'
         )
 
