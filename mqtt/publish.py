@@ -3,6 +3,7 @@ import atexit, sys, os, time
 
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
+from rest_framework import serializers
 
 from .client import BaseClient, MQTTException
 
@@ -65,23 +66,27 @@ class PublishClient(BaseClient):
         # call super
         super().on_disconnect(client, userdata, rc)
     
-    def publish_topic(self, topic, serializer, qos=0, retain=False):
+    def publish_topic(self, topic, payload, qos=0, retain=False):
 
         if self.active:
 
+            # serialize?
+            if isinstance(payload, serializers.Serializer):
+                payload = JSONRenderer().render(payload.data)
+                
             # Publish to topic
             self.publish(topic,
-                         JSONRenderer().render(serializer.data),
+                         payload,
                          qos=qos,
                          retain=retain)
         
-    def remove_topic(self, topic, serializer, qos=0):
+    def remove_topic(self, topic, qos=0):
 
         if self.active:
         
             # Publish null to retained topic
             self.publish(topic,
-                         null,
+                         None,
                          qos=qos,
                          retain=True)
 
