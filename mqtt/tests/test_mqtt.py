@@ -413,11 +413,11 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                             equipment_id = self.e1.id)
         self.assertEqual(obj.value, 'False')
 
-class TestMQTTPublishAsRegularUser(TestMQTT, MQTTTestCase):
+# class TestMQTTPublishAsRegularUser(TestMQTT, MQTTTestCase):
 
-    def test(self):
+#     def test(self):
 
-        # Start client as admin
+        # Start client as testuser1
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
