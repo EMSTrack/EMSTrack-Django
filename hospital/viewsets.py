@@ -53,7 +53,10 @@ class HospitalViewSet(mixins.ListModelMixin,
 
     @detail_route()
     def metadata(self, request, pk=None, **kwargs):
-
+        """
+        Retrive hospital equipment metadata.
+        """
+        
         hospital = self.get_object()
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
@@ -66,6 +69,22 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
                                UpdateModelUpdateByMixin,
                                viewsets.GenericViewSet):
+    
+    """
+    API endpoint for manipulating hospital equipment.
+
+    list:
+    Retrieve list of hospital equipment.
+
+    retrieve:
+    Retrieve an existing hospital equipment instance.
+
+    update:
+    Update existing hospital equipment instance.
+
+    partial_update:
+    Partially update existing hospital equipment instance.
+    """
     
     queryset = HospitalEquipment.objects.all()
     
