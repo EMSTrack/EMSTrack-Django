@@ -25,6 +25,25 @@ class HospitalViewSet(mixins.ListModelMixin,
                       BasePermissionMixin,
                       viewsets.GenericViewSet):
     
+    """
+    API endpoint for manipulating hospitals.
+
+    list:
+    Retrieve list of hospitals.
+
+    retrieve:
+    Retrieve an existing hospital instance.
+
+    create:
+    Create new hospital instance.
+    
+    update:
+    Update existing hospital instance.
+
+    partial_update:
+    Partially update existing hospital instance.
+    """
+    
     filter_field = 'id'
     profile_field = 'hospitals'
     profile_values = 'hospital_id'

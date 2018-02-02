@@ -20,6 +20,7 @@ from django.contrib.auth.models import User
 
 from ambulance.models import AmbulanceStatus, AmbulanceCapability
 from hospital.models import EquipmentType
+from emstrack.models import defaults
 
 from .models import TemporaryPassword
 
@@ -335,7 +336,8 @@ class SettingsView(APIView):
         
         return { 'AmbulanceStatus': ambulance_status,
                  'AmbulanceCapability': ambulance_capability,
-                 'EquipmentType': equipment_type }
+                 'EquipmentType': equipment_type,
+                 'Defaults': defaults }
     
     def get(self, request, user__username = None):
         """

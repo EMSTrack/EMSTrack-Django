@@ -41,7 +41,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
     partial_update:
     Partially update existing ambulance instance.
-
     """
 
     filter_field = 'id'
