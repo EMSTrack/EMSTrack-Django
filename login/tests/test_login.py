@@ -336,6 +336,17 @@ class TestMQTTACLSubscribe(MyTestCase):
 
     def test_mqtt_acl_subscribe(self):
 
+        # Settings
+        
+        # can subscribe
+        response = self.client.post('/auth/mqtt/acl/',
+                               { 'username': 'testuser1',
+                                 'clientid': 'test_client',
+                                 'acc': '1',
+                                 'topic': '/settings' },
+                               follow=True)
+        self.assertEqual(response.status_code, 200)
+        
         # Profile
         
         # can subscribe
@@ -772,6 +783,10 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_connected(client)
         
         # subscribe to topics
+        client.expect('user/{}/error'.format(broker['USERNAME']))
+        client.expect('settings'.format(self.a1.id))
+        client.expect('user/{}/profile'.format(broker['USERNAME']))
+        
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
@@ -798,6 +813,10 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_connected(client)
         
         # subscribe to topics
+        client.expect('user/{}/error'.format(broker['USERNAME']))
+        client.expect('settings'.format(self.a1.id))
+        client.expect('user/{}/profile'.format(broker['USERNAME']))
+        
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
@@ -810,7 +829,8 @@ class TestMQTTSubscribe(MyTestCase):
         client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
 
-        # client doesn't know!
+        # client doesn't know it cannot subscribe to certain topics!
+        # full testing in test_mqtt
         self.is_subscribed(client)
 
         client.wait()
@@ -825,6 +845,10 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_connected(client)
         
         # subscribe to topics
+        client.expect('user/{}/error'.format(broker['USERNAME']))
+        client.expect('settings'.format(self.a1.id))
+        client.expect('user/{}/profile'.format(broker['USERNAME']))
+        
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
@@ -837,7 +861,8 @@ class TestMQTTSubscribe(MyTestCase):
         client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
 
-        # client doesn't know!
+        # client doesn't know it cannot subscribe to certain topics!
+        # full testing in test_mqtt
         self.is_subscribed(client)
         
         client.wait()
