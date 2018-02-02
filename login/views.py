@@ -342,7 +342,7 @@ class SettingsView(APIView):
                          'Defaults': defaults.copy() }
 
         # serialize defaults.location
-        all_settings['Defaults']['location'] = PointField().to_representation(defaults.location)
+        all_settings['Defaults']['location'] = PointField().to_representation(defaults['location'])
         
         return all_settings
     
