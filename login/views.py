@@ -15,6 +15,7 @@ from braces.views import CsrfExemptMixin
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from drf_extra_fields.geo_fields import PointField
 
 from django.contrib.auth.models import User
 
@@ -333,11 +334,17 @@ class SettingsView(APIView):
         ambulance_status = {m.name: m.value for m in AmbulanceStatus}
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
         equipment_type = {m.name: m.value for m in EquipmentType}
+
+        # assemble all settings
+        all_settings = { 'AmbulanceStatus': ambulance_status,
+                         'AmbulanceCapability': ambulance_capability,
+                         'EquipmentType': equipment_type,
+                         'Defaults': defaults.copy() }
+
+        # serialize defaults.location
+        all_settings['Defaults']['location'] = PointField().to_representation(defaults.location)
         
-        return { 'AmbulanceStatus': ambulance_status,
-                 'AmbulanceCapability': ambulance_capability,
-                 'EquipmentType': equipment_type,
-                 'Defaults': defaults }
+        return all_settings
     
     def get(self, request, user__username = None):
         """
