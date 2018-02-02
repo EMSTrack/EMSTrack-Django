@@ -327,7 +327,7 @@ class SettingsView(APIView):
     """
 
     @staticmethod
-    def settings():
+    def get_settings():
         
         ambulance_status = {m.name: m.value for m in AmbulanceStatus}
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
@@ -342,4 +342,4 @@ class SettingsView(APIView):
         Retrieve current settings and options.
         """
 
-        return Response(self.settings())
+        return Response(self.get_settings())

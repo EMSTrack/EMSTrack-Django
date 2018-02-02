@@ -94,7 +94,7 @@ class PublishClient(BaseClient):
 
     def publish_settings(self, qos=2, retain=True):
         self.publish_topic('settings',
-                          SettingsView.settings(),
+                          SettingsView.get_settings(),
                           qos=qos,
                           retain=retain)
         
