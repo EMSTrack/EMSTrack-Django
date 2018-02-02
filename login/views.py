@@ -133,8 +133,8 @@ class MQTTAclView(CsrfExemptMixin,
 
                     return HttpResponse('OK')
                     
-                #  - user/*username*/error
-                #  - user/*username*/profile
+                #  - user/{username}/error
+                #  - user/{username}/profile
                 elif (len(topic) == 3 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
@@ -144,9 +144,9 @@ class MQTTAclView(CsrfExemptMixin,
                         
                         return HttpResponse('OK')
 
-                #  - hospital/+/data
-                #  - hospital/+/metadata
-                #  - hospital/+/equipment/+/data
+                #  - hospital/{hospital-id}/data
+                #  - hospital/{hospital-id}/metadata
+                #  - hospital/{hospital-id}/equipment/+/data
                 elif (len(topic) >= 3 and
                       topic[0] == 'hospital'):
                     
@@ -169,7 +169,7 @@ class MQTTAclView(CsrfExemptMixin,
                     except ObjectDoesNotExist:
                         pass
 
-                #  - ambulance/+/data
+                #  - ambulance/{ambulance-id}/data
                 elif (len(topic) == 3 and
                       topic[0] == 'ambulance' and
                       topic[2] == 'data'):
@@ -197,13 +197,13 @@ class MQTTAclView(CsrfExemptMixin,
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
-                    #  - user/*username*/error
+                    #  - user/{username}/error
                     if (len(topic) == 3 and
                         topic[2] == 'error'):
                         
                         return HttpResponse('OK')
                     
-                    #  - user/*username*/ambulance/+/data
+                    #  - user/{username}/ambulance/{ambulance-id}/data
                     elif (len(topic) == 5 and
                         topic[2] == 'ambulance' and
                         topic[4] == 'data'):
@@ -223,8 +223,8 @@ class MQTTAclView(CsrfExemptMixin,
                         except ObjectDoesNotExist:
                             pass
 
-                    #  - user/*username*/hospital/+/data
-                    #  - user/*username*/hospital/+/equipment/+/data
+                    #  - user/{username}/hospital/{hospital-id}/data
+                    #  - user/{username}/hospital/{hospital-id}/equipment/+/data
                     elif ((len(topic) == 5 and
                            topic[2] == 'hospital' and
                            topic[4] == 'data') or
@@ -248,7 +248,7 @@ class MQTTAclView(CsrfExemptMixin,
                         except ObjectDoesNotExist:
                             pass
                         
-                    #  - user/*username*/client/*client-id*/status
+                    #  - user/{username}/client/{client-id}/status
                     elif (len(topic) == 5 and
                           topic[2] == 'client' and
                           topic[4] == 'status' and
