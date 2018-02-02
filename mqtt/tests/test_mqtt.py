@@ -13,6 +13,7 @@ import json
 from login.models import Profile, AmbulancePermission, HospitalPermission
 
 from login.serializers import ExtendedProfileSerializer
+from login.views import SettingsView
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
@@ -118,6 +119,11 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         self.is_connected(client)
 
         qos = 0
+
+        # Expect settings
+        client.expect('settings',
+                      JSONRenderer().render(SettingsView.get_settings()),
+                      qos)
         
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
@@ -163,6 +169,11 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         qos = 0
         
+        # Expect settings
+        client.expect('settings',
+                      JSONRenderer().render(SettingsView.get_settings()),
+                      qos)
+        
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(ambulance.id),
@@ -206,6 +217,11 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         self.is_connected(client)
 
         qos = 2
+        
+        # Expect settings
+        client.expect('settings',
+                      JSONRenderer().render(SettingsView.get_settings()),
+                      qos)
         
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
@@ -256,6 +272,11 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         client = MQTTTestClient(broker)
         self.is_connected(client)
 
+        # Expect settings
+        client.expect('settings',
+                      JSONRenderer().render(SettingsView.get_settings()),
+                      qos)
+        
         # Expect user profile
         profile = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
@@ -302,6 +323,11 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         client = MQTTTestClient(broker)
         self.is_connected(client)
 
+        # Expect settings
+        client.expect('settings',
+                      JSONRenderer().render(SettingsView.get_settings()),
+                      qos)
+        
         # Expect user profile
         profile = Profile.objects.get(user__username='testuser2')
         client.expect('user/testuser2/profile',

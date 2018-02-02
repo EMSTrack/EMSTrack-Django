@@ -127,9 +127,15 @@ class MQTTAclView(CsrfExemptMixin,
                 
                 # permission to subscribe:
 
+                #  - settings
+                if (len(topic) == 1 and
+                    topic[0] == 'settings'):
+
+                    return HttpResponse('OK')
+                    
                 #  - user/*username*/error
                 #  - user/*username*/profile
-                if (len(topic) == 3 and
+                elif (len(topic) == 3 and
                     topic[0] == 'user' and
                     topic[1] == user.username):
 
