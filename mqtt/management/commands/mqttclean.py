@@ -13,7 +13,7 @@ class Client(PublishClient):
 
         # retrieve base_topic
         self.base_topic = kwargs.pop('base_topic', '')
-        self.timeout = kwargs.pop('timeout', 30)
+        self.timeout = kwargs.pop('timeout', 10)
         self.last_activity = timezone.now()
         
         # call super
@@ -39,6 +39,9 @@ class Client(PublishClient):
 
             # timeout?
             if remaining.total_seconds() > 0:
+                if self.verbosity > 0:
+                    self.stdout.write(self.style.SUCCESS(" > Waiting for messages. Please be patient."))
+                
                 time.sleep(remaining.total_seconds())
 
         # stop loop
