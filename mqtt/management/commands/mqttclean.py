@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from mqtt.publish import PublishClient
 
-class Client(BaseClient):
+class Client(PublishClient):
 
     def __init__(self, broker, **kwargs):
 
