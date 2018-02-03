@@ -105,7 +105,7 @@ class Command(BaseCommand):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'mqttclean_' + str(os.getpid())
 
-        base_topic = options['base-topic'] 
+        base_topic = options['base_topic'] 
         timeout = options['timeout'] 
         
         client = Client(broker,
