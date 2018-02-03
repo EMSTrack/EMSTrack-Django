@@ -15,7 +15,7 @@ class HospitalCreateForm(forms.ModelForm):
     class Meta:
         model = Hospital
         fields = [ 'name',
-                   'number', 'street', 'unit', 'neighborhood',
+                   'number', 'street', 'unit', # 'neighborhood',
                    'city', 'state', 'zipcode', 'country',
                    'location', 'comment' ]
 
