@@ -107,7 +107,7 @@ class Call(AddressModel, UpdatedByModel):
     priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
 
     def __str__(self):
-        return "({}): {}, {}".format(self.priority, self.residential_unit, self.stmain_number)
+        return "{} ({})".format(self.location, self.priority)
 
 
 class Region(models.Model):

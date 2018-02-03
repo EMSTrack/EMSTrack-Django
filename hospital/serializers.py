@@ -15,7 +15,7 @@ class HospitalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Hospital
         fields = [ 'id',
-                   'number', 'street', 'unit',
+                   'number', 'street', 'unit', 'neighborhood',
                    'city', 'state', 'zipcode', 'country',
                    'location',
                    'name',
