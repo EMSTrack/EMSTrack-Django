@@ -89,8 +89,8 @@ class Command(BaseCommand):
     help = 'Remove retained topics from the mqtt broker'
 
     def add_arguments(self, parser):
-        parser.add_argument('base_topic', nargs='?', default='')
-        parser.add_argument('timeout', nargs='?', type=int, default=10)
+        parser.add_argument('--basetopic', nargs='?', default='')
+        parser.add_argument('--timeout', nargs='?', type=int, default=10)
 
     def handle(self, *args, **options):
 
@@ -105,7 +105,7 @@ class Command(BaseCommand):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'mqttclean_' + str(os.getpid())
 
-        base_topic = options['base_topic'] 
+        base_topic = options['basetopic'] 
         timeout = options['timeout'] 
         
         client = Client(broker,
