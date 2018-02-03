@@ -45,7 +45,7 @@ class Client(PublishClient):
         self.loop_stop()
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS("<< Finished cleaning MQTT topics under '{}'...".format(self.base_topic + '/#')))
+            self.stdout.write(self.style.SUCCESS("<< Finished cleaning MQTT topics '{}'.".format(self.base_topic + '/#')))
 
         
     def on_connect(self, client, userdata, flags, rc):
@@ -58,13 +58,15 @@ class Client(PublishClient):
         self.subscribe(self.base_topic + '/#')
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Listening to MQTT topics under '{}'...".format(self.base_topic + '/#')))
+            self.stdout.write(self.style.SUCCESS(">> Listening to MQTT topics '{}'...".format(self.base_topic + '/#')))
 
         # last activity
         self.last_activity = timezone.now()
         
     def on_message(self, client, userdata, msg):
 
+        self.stdout.write(" msg = '{}'".format(msg))
+        
         # retained?
         if msg.retain:
 
