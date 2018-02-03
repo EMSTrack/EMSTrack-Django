@@ -15,6 +15,10 @@ class Client(PublishClient):
         self.base_topic = kwargs.pop('base_topic', '')
         self.timeout = kwargs.pop('timeout', 10)
         self.last_activity = timezone.now()
+
+        # add / if necessary
+        if self.base_topic and self.base_topic[-1] != '/':
+            self.base_topic += '/'
         
         # call super
         super().__init__(broker, **kwargs)
