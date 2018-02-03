@@ -44,7 +44,7 @@ class Client(PublishClient):
             # timeout?
             if remaining.total_seconds() > 0:
                 if self.verbosity > 0:
-                    self.stdout.write(self.style.SUCCESS(" > Waiting for messages. Please be patient."))
+                    self.stdout.write(self.style.SUCCESS(">> Waiting for messages. Please be patient."))
                 
                 time.sleep(remaining.total_seconds())
 
@@ -88,6 +88,10 @@ class Client(PublishClient):
 class Command(BaseCommand):
     help = 'Remove retained topics from the mqtt broker'
 
+    def add_arguments(self, parser):
+        parser.add_argument('base_topic', nargs='?', default='')
+        parser.add_argument('timeout', nargs='?', type=int, default=10)
+
     def handle(self, *args, **options):
 
         import os
@@ -101,7 +105,12 @@ class Command(BaseCommand):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'mqttclean_' + str(os.getpid())
 
+        base_topic = options['base_topic'] 
+        timeout = options['timeout'] 
+        
         client = Client(broker,
+                        base_topic = base_topic,
+                        timeout = timeout,
                         stdout = self.stdout,
                         style = self.style,
                         verbosity = options['verbosity'])
