@@ -70,7 +70,7 @@ class Client(PublishClient):
         self.publish_settings()
             
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding settings"))
             
     def seed_profile_data(self):
 
