@@ -6,7 +6,7 @@ from django.contrib.gis.db import models
 from django.utils import timezone
 from django.urls import reverse
 
-from emstrack.models import AddressModel, UpdatedByModel, PatientModel, defaults
+from emstrack.models import AddressModel, UpdatedByModel, defaults
 
 # User and ambulance location models
 
@@ -126,7 +126,7 @@ class CallPriority(Enum):
     D = 'D'
     E = 'Not urgent'
     
-class Call(AddressModel, PatientModel, UpdatedByModel):
+class Call(AddressModel, UpdatedByModel):
 
     # active status 
     active = models.BooleanField(default=False)
