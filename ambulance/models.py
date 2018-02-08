@@ -75,7 +75,7 @@ class Ambulance(UpdatedByModel):
 
 # THESE NEED REVISING
 
-class AmbulanceUpdates(models.Model):
+class AmbulanceUpdate(models.Model):
 
     # ambulance id
     ambulance = models.ForeignKey(Ambulance,
