@@ -74,7 +74,6 @@ class Ambulance(UpdatedByModel):
                           'comment', 'updated_by', 'updated_on')}
         data['ambulance'] = self;
         obj = AmbulanceUpdate(**data)
-        obj.is_valid()
         obj.save()
         
     def delete(self, *args, **kwargs):
