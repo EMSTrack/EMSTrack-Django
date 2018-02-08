@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Base, AmbulanceRoute
+    Call, Base
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
