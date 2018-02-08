@@ -71,7 +71,7 @@ class Ambulance(UpdatedByModel):
         data = {k: getattr(self, k)
                 for k in ('status', 'orientation',
                           'location', 'location_timestamp',
-                          'coment', 'updated_by', 'updated_on')}
+                          'comment', 'updated_by', 'updated_on')}
         data['ambulance'] = self.id;
         obj = AmbulanceUpdate(**data)
         obj.is_valid()
