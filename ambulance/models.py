@@ -51,7 +51,7 @@ class Ambulance(UpdatedByModel):
     @classmethod
     def from_db(cls, db, field_names, values):
         # call super
-        instance = super().from_db(cls, db, field_names, values)
+        instance = super(Ambulance, cls).from_db(db, field_names, values)
         
         # store the original field values on the instance
         instance._loaded_values = dict(zip(field_names, values))
