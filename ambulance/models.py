@@ -75,12 +75,31 @@ class Ambulance(UpdatedByModel):
 
 # THESE NEED REVISING
 
-class AmbulanceRoute(UpdatedByModel):
+class AmbulanceUpdates(models.Model):
 
+    # ambulance id
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
-    active = models.BooleanField(default=False)
 
+    # ambulance status
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              default=AmbulanceStatus.UK.name)
+    
+    # location
+    orientation = models.FloatField(default = 0)
+    location = models.PointField(srid=4326, default = defaults['location'])
+    location_timestamp = models.DateTimeField(null=True, blank=True)
+
+    # updated by
+    comment = models.CharField(max_length=254, null=True, blank=True)
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField()
+    
+    
 class Call(AddressModel, UpdatedByModel):
 
     #call metadata (status not required for now)
