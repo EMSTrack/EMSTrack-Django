@@ -72,7 +72,7 @@ class Ambulance(UpdatedByModel):
                 for k in ('status', 'orientation',
                           'location', 'location_timestamp',
                           'comment', 'updated_by', 'updated_on')}
-        data['ambulance'] = self.id;
+        data['ambulance'] = self;
         obj = AmbulanceUpdate(**data)
         obj.is_valid()
         obj.save()
