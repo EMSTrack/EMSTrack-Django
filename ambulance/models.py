@@ -7,7 +7,6 @@ from django.utils import timezone
 from django.urls import reverse
 
 from emstrack.models import AddressModel, UpdatedByModel, PatientModel, defaults
-from django.contrib.gis.db import models
 
 # User and ambulance location models
 
@@ -126,7 +125,7 @@ class Call(AddressModel, PatientModel, UpdatedByModel):
     active = models.BooleanField(default=False)
 
     # ambulance assigned to Call (Foreign Key)
-    ambulance = models.models.ManyToManyField(AmbulanceCallTimes)
+    ambulance = models.ManyToManyField(AmbulanceCallTimes)
     
     # details
     details = models.CharField(max_length=500, default = "")
