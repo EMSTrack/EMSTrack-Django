@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 
-from emstrack.models import AddressModel, UpdatedByModel, defaults
+from emstrack.models import AddressModel, UpdatedByModel, PatientModel, defaults
 from django.contrib.gis.db import models
 
 # User and ambulance location models
@@ -75,8 +75,6 @@ class Ambulance(UpdatedByModel):
                                                self.updated_by,
                                                self.updated_on)
 
-# THESE NEED REVISING
-
 class AmbulanceUpdate(models.Model):
 
     # ambulance id
@@ -101,36 +99,50 @@ class AmbulanceUpdate(models.Model):
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField()
     
-    
-class Call(AddressModel, UpdatedByModel):
 
-    #call metadata (status not required for now)
+class AmbulanceCallTimes(models.Model):
+
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE, default=1)
+    
+    dispatch_time = models.DateTimeField(null=True, blank=True)
+    departure_time = models.DateTimeField(null=True, blank=True)
+    patient_time = models.DateTimeField(null=True, blank=True)
+    hospital_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    
+    
+class CallPriority(Enum):
+    A = 'Urgent'
+    B = 'Emergency'
+    C = 'C'
+    D = 'D'
+    E = 'Not urgent'
+    
+class Call(AddressModel, PatientModel, UpdatedByModel):
+
+    # active status 
     active = models.BooleanField(default=False)
-    status = models.CharField(max_length=254, default= "", blank=True)
 
     # ambulance assigned to Call (Foreign Key)
-    ambulance = models.ForeignKey(Ambulance, on_delete=models.CASCADE, default=1)
-    name = models.CharField(max_length=254, default = "")
+    ambulance = models.models.ManyToManyField(AmbulanceCallTimes)
     
-    # assignment = base name and #
-    assignment = models.CharField(max_length=254, default = "None")
-    
-    # short description of the patient's injury
-    description = models.CharField(max_length=500, default = "None")
-    
-    # response time related info
-    call_time = models.DateTimeField(default = timezone.now)
-    departure_time = models.DateTimeField(blank = True, null = True)
-    transfer_time = models.DateTimeField(blank = True, null = True)
-    hospital_time = models.DateTimeField(blank = True, null = True)
-    base_time = models.DateTimeField(blank = True, null = True)
-    PRIORITIES = [('A','A'),('B','B'),('C','C'),('D','D'),('E','E')]
-    priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
+    # details
+    details = models.CharField(max_length=500, default = "")
 
+    # call priority
+    CALL_PRIORITY_CHOICES = \
+        [(m.name, m.value) for m in CallPriority]
+    priority = models.CharField(max_length=1,
+                                choices=CALL_PRIORITY_CHOICES,
+                                default=CallPriority.E.name)
+    
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
 
-
+    
+# THOSE NEED REVIEWING
+    
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
     center = models.PointField(srid=4326, null=True)
