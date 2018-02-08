@@ -39,14 +39,3 @@ class UpdatedByModel(models.Model):
     class Meta:
         abstract = True
 
-class PatientModel(models.Model):
-    """
-    An abstract base class model that provides patient fields.
-    """
-
-    name = models.CharField(max_length=254, default = "")
-    age = models.IntegerField(null=True)
-    
-    class Meta:
-        abstract = True
-        

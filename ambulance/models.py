@@ -111,7 +111,14 @@ class AmbulanceCallTimes(models.Model):
     hospital_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     
-    
+class Patient(models.Model):
+    """
+    A model that provides patient fields.
+    """
+
+    name = models.CharField(max_length=254, default = "")
+    age = models.IntegerField(null=True)
+        
 class CallPriority(Enum):
     A = 'Urgent'
     B = 'Emergency'
@@ -124,8 +131,11 @@ class Call(AddressModel, PatientModel, UpdatedByModel):
     # active status 
     active = models.BooleanField(default=False)
 
-    # ambulance assigned to Call (Foreign Key)
-    ambulance = models.ManyToManyField(AmbulanceCallTimes)
+    # ambulances assigned to call
+    ambulances = models.ManyToManyField(AmbulanceCallTimes)
+
+    # patients
+    patients = models.ManyToManyField(Patient)
     
     # details
     details = models.CharField(max_length=500, default = "")
