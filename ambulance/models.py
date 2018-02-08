@@ -67,6 +67,16 @@ class Ambulance(UpdatedByModel):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_ambulance(self)
 
+        # save to AmbulanceUpdate
+        data = {k: getattr(self, k)
+                for k in ('status', 'orientation',
+                          'location', 'location_timestamp',
+                          'coment', 'updated_by', 'updated_on')}
+        data['ambulance'] = self.id;
+        obj = AmbulanceUpdate(**data)
+        obj.is_valid()
+        obj.save()
+        
     def delete(self, *args, **kwargs):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_ambulance(self)
