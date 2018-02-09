@@ -784,7 +784,7 @@ class TestMQTTSubscribe(MyTestCase):
         
         # subscribe to topics
         client.expect('user/{}/error'.format(broker['USERNAME']))
-        client.expect('settings'.format(self.a1.id))
+        client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
         
         client.expect('ambulance/{}/data'.format(self.a1.id))
@@ -814,7 +814,7 @@ class TestMQTTSubscribe(MyTestCase):
         
         # subscribe to topics
         client.expect('user/{}/error'.format(broker['USERNAME']))
-        client.expect('settings'.format(self.a1.id))
+        client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
         
         client.expect('ambulance/{}/data'.format(self.a1.id))
@@ -846,7 +846,7 @@ class TestMQTTSubscribe(MyTestCase):
         
         # subscribe to topics
         client.expect('user/{}/error'.format(broker['USERNAME']))
-        client.expect('settings'.format(self.a1.id))
+        client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
         
         client.expect('ambulance/{}/data'.format(self.a1.id))
