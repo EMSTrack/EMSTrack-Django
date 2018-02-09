@@ -342,13 +342,13 @@ class SettingsView(APIView):
         equipment_type = {m.name: m.value for m in EquipmentType}
 
         # assemble all settings
-        all_settings = { 'AmbulanceStatus': ambulance_status,
-                         'AmbulanceCapability': ambulance_capability,
-                         'EquipmentType': equipment_type,
-                         'Defaults': defaults.copy() }
+        all_settings = { 'ambulance_status': ambulance_status,
+                         'ambulance_capability': ambulance_capability,
+                         'equipment_type': equipment_type,
+                         'defaults': defaults.copy() }
 
         # serialize defaults.location
-        all_settings['Defaults']['location'] = PointField().to_representation(defaults['location'])
+        all_settings['defaults']['location'] = PointField().to_representation(defaults['location'])
         
         return all_settings
     
