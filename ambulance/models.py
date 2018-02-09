@@ -48,11 +48,34 @@ class Ambulance(UpdatedByModel):
     location = models.PointField(srid=4326, default = defaults['location'])
     location_timestamp = models.DateTimeField(null=True, blank=True)
 
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        # call super
+        instance = super(Ambulance, cls).from_db(db, field_names, values)
+        
+        # store the original field values on the instance
+        instance._loaded_values = dict(zip(field_names, values))
+
+        # return instance
+        return instance
+    
     def save(self, *args, **kwargs):
+        # save to Ambulance
         super().save(*args, **kwargs)
+
+        # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_ambulance(self)
 
+        # save to AmbulanceUpdate
+        data = {k: getattr(self, k)
+                for k in ('status', 'orientation',
+                          'location', 'location_timestamp',
+                          'comment', 'updated_by', 'updated_on')}
+        data['ambulance'] = self;
+        obj = AmbulanceUpdate(**data)
+        obj.save()
+        
     def delete(self, *args, **kwargs):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_ambulance(self)
