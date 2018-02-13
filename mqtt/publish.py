@@ -154,11 +154,9 @@ class PublishClient(BaseClient):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name))
 
-    # Method to publish calls, NO SERIALIZER IMPLEMENTED, uses empty string
-    # for now.
     def publish_call(self, call, qos=2, retain=True):
         self.publish_topic('call/{}/data'.format(call.id),
-                           "",  #NO SERIALIZER IMPLEMENTED
+                           CallSerializer(call),  
                            qos = qos,
                            retain=retain)
 
