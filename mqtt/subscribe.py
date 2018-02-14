@@ -68,7 +68,7 @@ class SubscribeClient(BaseClient):
                                                                     error))
         
         if self.verbosity > 0:
-            self.stdout.write(self.style.ERROR(" > Error {}, '{}:{}': {}".format(username,
+            self.stdout.write(self.style.ERROR("*> Error {}, '{}:{}': {}".format(username,
                                                                                  topic,
                                                                                  payload,
                                                                                  error)))
