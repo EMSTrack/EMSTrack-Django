@@ -407,7 +407,7 @@ class SubscribeClient(BaseClient):
                 self.send_error_message(user, msg.topic, msg.payload,
                         serializer.errors)
 
-        except Exceptiom as e:
+        except Exception as e:
 
             logger.debug('on_call: serializer EXCEPTION')
 
