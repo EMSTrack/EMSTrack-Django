@@ -1,10 +1,12 @@
 from enum import Enum
 
+from django.contrib.auth.models import User
+from django.contrib.gis.db import models
+
 from django.utils import timezone
 from django.urls import reverse
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
-from django.contrib.gis.db import models
 
 # User and ambulance location models
 
@@ -46,11 +48,34 @@ class Ambulance(UpdatedByModel):
     location = models.PointField(srid=4326, default = defaults['location'])
     location_timestamp = models.DateTimeField(null=True, blank=True)
 
+    @classmethod
+    def from_db(cls, db, field_names, values):
+        # call super
+        instance = super(Ambulance, cls).from_db(db, field_names, values)
+        
+        # store the original field values on the instance
+        instance._loaded_values = dict(zip(field_names, values))
+
+        # return instance
+        return instance
+    
     def save(self, *args, **kwargs):
+        # save to Ambulance
         super().save(*args, **kwargs)
+
+        # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_ambulance(self)
 
+        # save to AmbulanceUpdate
+        data = {k: getattr(self, k)
+                for k in ('status', 'orientation',
+                          'location', 'location_timestamp',
+                          'comment', 'updated_by', 'updated_on')}
+        data['ambulance'] = self;
+        obj = AmbulanceUpdate(**data)
+        obj.save()
+        
     def delete(self, *args, **kwargs):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_ambulance(self)
@@ -73,43 +98,84 @@ class Ambulance(UpdatedByModel):
                                                self.updated_by,
                                                self.updated_on)
 
-# THESE NEED REVISING
+class AmbulanceUpdate(models.Model):
 
-class AmbulanceRoute(UpdatedByModel):
-
+    # ambulance id
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
-    active = models.BooleanField(default=False)
 
+    # ambulance status
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              default=AmbulanceStatus.UK.name)
+    
+    # location
+    orientation = models.FloatField(default = 0)
+    location = models.PointField(srid=4326, default = defaults['location'])
+    location_timestamp = models.DateTimeField(null=True, blank=True)
+
+    # updated by
+    comment = models.CharField(max_length=254, null=True, blank=True)
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField()
+    
+
+class AmbulanceCallTimes(models.Model):
+
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE, default=1)
+    
+    dispatch_time = models.DateTimeField(null=True, blank=True)
+    departure_time = models.DateTimeField(null=True, blank=True)
+    patient_time = models.DateTimeField(null=True, blank=True)
+    hospital_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    
+class Patient(models.Model):
+    """
+    A model that provides patient fields.
+    """
+
+    name = models.CharField(max_length=254, default = "")
+    age = models.IntegerField(null=True)
+        
+class CallPriority(Enum):
+    A = 'Urgent'
+    B = 'Emergency'
+    C = 'C'
+    D = 'D'
+    E = 'Not urgent'
+    
 class Call(AddressModel, UpdatedByModel):
 
-    #call metadata (status not required for now)
+    # active status 
     active = models.BooleanField(default=False)
-    status = models.CharField(max_length=254, default= "", blank=True)
 
-    # ambulance assigned to Call (Foreign Key)
-    ambulance = models.ForeignKey(Ambulance, on_delete=models.CASCADE, default=1)
-    name = models.CharField(max_length=254, default = "")
-    
-    # assignment = base name and #
-    assignment = models.CharField(max_length=254, default = "None")
-    
-    # short description of the patient's injury
-    description = models.CharField(max_length=500, default = "None")
-    
-    # response time related info
-    call_time = models.DateTimeField(default = timezone.now)
-    departure_time = models.DateTimeField(blank = True, null = True)
-    transfer_time = models.DateTimeField(blank = True, null = True)
-    hospital_time = models.DateTimeField(blank = True, null = True)
-    base_time = models.DateTimeField(blank = True, null = True)
-    PRIORITIES = [('A','A'),('B','B'),('C','C'),('D','D'),('E','E')]
-    priority = models.CharField(max_length=254, choices=PRIORITIES, default='A')
+    # ambulances assigned to call
+    ambulances = models.ManyToManyField(AmbulanceCallTimes)
 
+    # patients
+    patients = models.ManyToManyField(Patient)
+    
+    # details
+    details = models.CharField(max_length=500, default = "")
+
+    # call priority
+    CALL_PRIORITY_CHOICES = \
+        [(m.name, m.value) for m in CallPriority]
+    priority = models.CharField(max_length=1,
+                                choices=CALL_PRIORITY_CHOICES,
+                                default=CallPriority.E.name)
+    
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
 
-
+    
+# THOSE NEED REVIEWING
+    
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
     center = models.PointField(srid=4326, null=True)

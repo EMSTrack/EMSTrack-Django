@@ -38,3 +38,4 @@ class UpdatedByModel(models.Model):
     
     class Meta:
         abstract = True
+

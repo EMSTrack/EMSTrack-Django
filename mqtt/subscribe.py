@@ -68,6 +68,12 @@ class SubscribeClient(BaseClient):
                                                                     payload,
                                                                     error))
         
+        if self.verbosity > 0:
+            self.stdout.write(self.style.ERROR("*> Error {}, '{}:{}': {}".format(username,
+                                                                                 topic,
+                                                                                 payload,
+                                                                                 error)))
+
         try:
                 
             message = JSONRenderer().render({
@@ -93,7 +99,11 @@ class SubscribeClient(BaseClient):
         if not msg.payload:
             # empty payload
             return
-        
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(" > Parsing message '{}:{}'".format(msg.topic,
+                                                                                     msg.payload)))
+
         # parse topic
         values = msg.topic.split('/')
 
