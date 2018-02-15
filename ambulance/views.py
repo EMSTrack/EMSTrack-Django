@@ -89,7 +89,10 @@ class AmbulanceUpdateView(LoginRequiredMixin,
         print('1. location_timestamp = {}'.format(form.instance.location_timestamp))
 
         # if updating location
-        if not self.object.location.equals(form.instance.location):
+        if self.object.location.equals(form.instance.location):
+            pass
+
+        else:
 
             # update timestamp as well
             form.instance.location_timestamp = timezone.now()
