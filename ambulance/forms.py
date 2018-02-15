@@ -20,25 +20,10 @@ class AmbulanceCreateForm(forms.ModelForm):
 
 class AmbulanceUpdateForm(AmbulanceCreateForm):
 
-    def clean_location(self):
+    def clean(self):
 
-        print('clean_location')
-
-        print("{}, {}".format(self.data['location'], self.cleaned_data['location']))
-        
-        # if location changed
-        if self.data['location'] != self.cleaned_data['location']:
-
-            print('modifying location_timestamp')
-
-            # update timestamp as well
-            self.cleaned_data['location_timestamp'] = timezone.now()
-
-        return self.cleaned_data['location']
-
-    def clean_location_timestamp(self):
-
-        print('clean_location_timestamp')
+        # call super
+        super().clean()
 
         # if updating location
         if 'location' in self.changed_data:
@@ -46,7 +31,7 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
             # update timestamp as well
             self.cleaned_data['location_timestamp'] = timezone.now()
 
-        return self.cleaned_data['location_timestamp']
+        return self.cleaned_data
 
 
 # front end team to choose which fields to display?
