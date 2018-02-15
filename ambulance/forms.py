@@ -20,6 +20,15 @@ class AmbulanceCreateForm(forms.ModelForm):
 
 class AmbulanceUpdateForm(AmbulanceCreateForm):
 
+    def clean_location(self):
+
+        print('clean_location')
+
+        # update timestamp as well
+        self.cleaned_data['location_timestamp'] = timezone.now()
+
+        return self.cleaned_data['location']
+
     def clean_location_timestamp(self):
 
         print('clean_location_timestamp')
