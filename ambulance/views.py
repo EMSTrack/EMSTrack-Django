@@ -1,20 +1,20 @@
 import uuid
 
 from django.conf import settings
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Base
+    Call
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
 from .serializers import AmbulanceSerializer
 
 from emstrack.mixins import BasePermissionMixin
+
 
 # Django views
 
@@ -24,6 +24,7 @@ class AmbulancePermissionMixin(BasePermissionMixin):
     profile_field = 'ambulances'
     profile_values = 'ambulance_id'
     queryset = Ambulance.objects.all()
+
 
 class AmbulanceActionMixin:
 
@@ -42,17 +43,20 @@ class AmbulanceActionMixin:
         # call super
         return super().form_valid(form)
 
+
 class AmbulanceDetailView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
                           DetailView):
 
     model = Ambulance
     
+
 class AmbulanceListView(LoginRequiredMixin,
                         AmbulancePermissionMixin,
                         ListView):
     
     model = Ambulance;
+
 
 class AmbulanceCreateView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
@@ -65,6 +69,7 @@ class AmbulanceCreateView(LoginRequiredMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
     
+
 class AmbulanceUpdateView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
                           AmbulanceActionMixin,
@@ -75,6 +80,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
 
 class AmbulanceMap(TemplateView):
     template_name = 'ambulance/map.html'
@@ -90,6 +96,7 @@ class AmbulanceMap(TemplateView):
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         return context
     
+
 # NEED REVISING
     
 # Call list page
@@ -97,6 +104,7 @@ class CallView(ListView):
     model = Call
     template_name = 'ambulance/dispatch_list.html'
     context_object_name = "ambulance_call"
+
 
 # Admin page
 class AdminView(ListView):
