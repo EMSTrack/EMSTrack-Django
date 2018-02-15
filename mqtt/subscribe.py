@@ -13,6 +13,7 @@ from .client import BaseClient, MQTTException
 from ambulance.models import Ambulance
 from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital, HospitalEquipment
 from hospital.serializers import HospitalSerializer, \
@@ -401,7 +402,7 @@ class SubscribeClient(BaseClient):
         try:
 
             #update call
-            serializer = ""
+            serializer = CallSerializer(call) #TODO: Find structure
 
             if serializer.is_valid():
                 logger.dubug('on_call: vaild serializer')

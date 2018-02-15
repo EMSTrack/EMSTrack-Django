@@ -10,6 +10,7 @@ from .client import BaseClient, MQTTException
 from ambulance.models import Ambulance
 from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import CallSerializer
 
 from login.views import SettingsView
 
