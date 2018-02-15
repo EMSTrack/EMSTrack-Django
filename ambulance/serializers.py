@@ -68,18 +68,20 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
+    ambulance_identifier = serializers.CharField(source='ambulance.identifier')
+    updated_by_username = serializers.CharField(source='updated_by.username')
 
     class Meta:
         model = AmbulanceUpdate
         fields = ['id',
-                  'ambulance__identifier',
+                  'ambulance_identifier',
                   'status', 'orientation',
                   'location', 'location_timestamp',
                   'comment',
-                  'updated_by__username', 'updated_on']
+                  'updated_by_username', 'updated_on']
         read_only_fields = ['id',
-                            'ambulance__identifier',
+                            'ambulance_identifier',
                             'status', 'orientation',
                             'location', 'location_timestamp',
                             'comment',
-                            'updated_by__username', 'updated_on']
+                            'updated_by_username', 'updated_on']
