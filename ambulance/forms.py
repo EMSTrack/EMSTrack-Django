@@ -16,6 +16,7 @@ class AmbulanceCreateForm(forms.ModelForm):
         model = Ambulance
         fields = [ 'identifier', 'capability', 'status', 'comment', 'location' ]
 
+
 class AmbulanceUpdateForm(AmbulanceCreateForm):
     
     pass
