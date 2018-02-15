@@ -9,4 +9,6 @@ $(document).ready(function() {
 	id: 'mapbox.streets',
 	accessToken: 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w'
     }).addTo(mymap);
+
+    console.log(ambulance);
 }
