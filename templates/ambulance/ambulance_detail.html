@@ -7,16 +7,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
     <script>
-        var ambulance_updates = {{ ambulance.ambulanceupdate_set|safe }}
+        var ambulance = {{ ambulance|safe }};
     </script>
 
     <h1>Ambulance</h1>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <p>
                     <strong>Identifier:</strong>
                     <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
@@ -46,7 +47,7 @@
                     {{ ambulance.updated_by }}
                 </p>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div id="live-map" style="width: 800px; height: 700px"></div>
             </div>
         </div>
