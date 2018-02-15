@@ -82,25 +82,6 @@ class AmbulanceUpdateView(LoginRequiredMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-    def form_valid(self, form):
-
-        print("location = '{}', form location = '{}'".format(repr(self.object.location),
-                                                             repr(form.instance.location)))
-        print('1. location_timestamp = {}'.format(form.instance.location_timestamp))
-
-        # if updating location
-        if self.object.location.equals(form.instance.location):
-            pass
-
-        else:
-
-            # update timestamp as well
-            form.instance.location_timestamp = timezone.now()
-            print('2. location_timestamp = {}'.format(form.instance.location_timestamp))
-
-        # call super
-        return super().form_valid(form)
-
 
 class AmbulanceMap(TemplateView):
     template_name = 'ambulance/map.html'

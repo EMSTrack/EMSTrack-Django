@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.gis.forms import PointField
+from django.utils import timezone
 
 from emstrack.forms import LeafletPointWidget
 
@@ -18,10 +19,25 @@ class AmbulanceCreateForm(forms.ModelForm):
 
 
 class AmbulanceUpdateForm(AmbulanceCreateForm):
-    
-    pass
-        
+
+    def clean(self):
+
+        # get cleaned data
+        data = super().clean()
+
+        # if updating location
+        if 'location' in self.changed_data:
+
+            # update timestamp as well
+            print('location changed')
+            data['location_timestamp'] = timezone.now()
+
+        # call super
+        return data
+
+
 # front end team to choose which fields to display?
+
 class CallCreateForm(forms.ModelForm):
     class Meta:
         model = Call
