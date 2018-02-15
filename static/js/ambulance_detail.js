@@ -18,7 +18,7 @@ function retrieveAmbulances(ambulance_id) {
 	$.ajax({
 	type: 'GET',
 	datatype: "json",
-	url: APIBaseUrl + 'ambulance/' + ambulance_id + 'updates',
+	url: APIBaseUrl + 'ambulance/' + ambulance_id + '/updates',
 	
 	error: function(msg) {
 	    
