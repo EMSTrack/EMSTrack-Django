@@ -84,15 +84,16 @@ class AmbulanceUpdateView(LoginRequiredMixin,
 
     def form_valid(self, form):
 
-        print('location = {}, form location = {}'.format(self.object.location,
-                                                         form.instance.location))
+        print("location = '{}', form location = '{}'".format(repr(self.object.location),
+                                                             repr(form.instance.location)))
+        print('1. location_timestamp = {}'.format(form.instance.location_timestamp))
 
         # if updating location
-        if self.object.location != form.instance.location:
+        if self.object.location.equals(form.instance.location):
 
             # update timestamp as well
             form.instance.location_timestamp = timezone.now()
-            print('location_timestamp = {}'.format(form.instance.location_timestamp))
+            print('2. location_timestamp = {}'.format(form.instance.location_timestamp))
 
         # call super
         return super().form_valid(form)
