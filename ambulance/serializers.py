@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
-from .models import Ambulance
+from .models import Ambulance, AmbulanceUpdate
 
 
 # Ambulance serializers
@@ -70,7 +70,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
     location = PointField(required=False)
 
     class Meta:
-        model = Ambulance
+        model = AmbulanceUpdate
         fields = ['id',
                   'ambulance__identifier',
                   'status', 'orientation',
