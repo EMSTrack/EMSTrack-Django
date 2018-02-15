@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
     <script>
         var ambulance_id = {{ ambulance.id|safe }};
+        var APIBaseUrl = '{% url 'homepage' %}api/';
     </script>
 
     <h1>Ambulance: {{ ambulance.identifier }}</h1>
