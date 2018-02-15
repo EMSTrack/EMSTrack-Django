@@ -11,14 +11,14 @@ from .models import Ambulance
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
-    
+
     class Meta:
         model = Ambulance
         fields = [ 'id', 'identifier', 
-                   'capability', 'status',
-                   'orientation', 'location',
-                   'location_timestamp',
-                   'comment', 'updated_by', 'updated_on' ]
+                'capability', 'status',
+                'orientation', 'location',
+                'location_timestamp',
+                'comment', 'updated_by', 'updated_on' ]
         read_only_fields = ('updated_by',)
 
     def validate(self, data):
@@ -28,10 +28,10 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
             if not ('location' in data and 'location_timestamp' in data):
                 raise serializers.ValidationError('location and location_timestamp must be set together')
-            
+
             if data['location'] and not data['location_timestamp']:
                 raise serializers.ValidationError('location cannot be set without location_timestamp')
-            
+
             if not data['location'] and data['location_timestamp']:
                 raise serializers.ValidationError('location_timestamp cannot be set without location')
 
@@ -46,9 +46,9 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         # only super can create
         if not user.is_superuser:
             raise PermissionDenied()
-    
+
         return super().create(validated_data)
-    
+
     def update(self, instance, validated_data):
 
         # get current user
@@ -59,7 +59,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
             # serializer.instance will always exist!
             if not user.profile.ambulances.filter(can_write=True,
-                                                  ambulance=instance.id):
+                    ambulance=instance.id):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)
@@ -73,7 +73,7 @@ class CallSerializer(serializers.ModelSerializer):
         read_only_fields = ('updated_by',)
 
     def create(self, data):
-            
+
         #get current user
         user = data['updated_by']
 
@@ -83,17 +83,17 @@ class CallSerializer(serializers.ModelSerializer):
             raise PermissionDenied()
 
         return super().create(data)
-            
+
     def update(self, instance, data):
-    
+
         #get current user
         user = data['updated_by']
-        
+
         #check credentials
         # only super can create
         if not user.is_surperuser:
             #serializer.instance will always exist!
             if not user.profile.calls.filter(can_write=True, call=instance.id):
                 raise PermissionDenied()
-    
+
         return super().update(instance, data)
