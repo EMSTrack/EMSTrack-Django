@@ -1,5 +1,3 @@
-import django.db.models as models
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 
 from rest_framework import serializers
@@ -7,18 +5,20 @@ from drf_extra_fields.geo_fields import PointField
 
 from .models import Ambulance
 
+
 # Ambulance serializers
+
 class AmbulanceSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
     
     class Meta:
         model = Ambulance
-        fields = [ 'id', 'identifier', 
-                   'capability', 'status',
-                   'orientation', 'location',
-                   'location_timestamp',
-                   'comment', 'updated_by', 'updated_on' ]
+        fields = ['id', 'identifier',
+                  'capability', 'status',
+                  'orientation', 'location',
+                  'location_timestamp',
+                  'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
     def validate(self, data):
@@ -65,3 +65,21 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+class AmbulanceUpdateSerializer(serializers.ModelSerializer):
+
+    location = PointField(required=False)
+
+    class Meta:
+        model = Ambulance
+        fields = ['id',
+                  'ambulance__identifier',
+                  'status', 'orientation',
+                  'location', 'location_timestamp',
+                  'comment',
+                  'updated_by__username', 'updated_on']
+        read_only_fields = ['id',
+                            'ambulance__identifier',
+                            'status', 'orientation',
+                            'location', 'location_timestamp',
+                            'comment',
+                            'updated_by__username', 'updated_on']

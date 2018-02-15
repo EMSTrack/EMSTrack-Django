@@ -1,11 +1,14 @@
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import detail_route
+from rest_framework.response import Response
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 
-from .models import Ambulance
+from .models import Ambulance, AmbulanceUpdate
 
-from .serializers import AmbulanceSerializer
+from .serializers import AmbulanceSerializer, \
+    AmbulanceUpdateSerializer
 
 # Django REST Framework Viewsets
 
@@ -44,3 +47,14 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     queryset = Ambulance.objects.all()
     
     serializer_class = AmbulanceSerializer
+
+    @detail_route()
+    def updates(self, request, pk=None, **kwargs):
+        """
+        Retrive ambulance updates.
+        """
+
+        ambulance = self.get_object()
+        ambulance_updates = ambulance.ambulanceupdate_set
+        serializer = AmbulanceUpdateSerializer(ambulance_updates, many=True)
+        return Response(serializer.data)
