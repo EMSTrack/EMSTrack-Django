@@ -70,33 +70,33 @@ class CallSerializer(serializers.ModelSerializer):
 	class Meta:
             model = Call
             fields = [ 'id', 'active', 'ambulances', 'patients',
-                       'details', 'priority','comment', 
-                       'updated_by', 'updated_on' ]
+                    'details', 'priority','comment', 
+                    'updated_by', 'updated_on' ]
             read_only_fields = ('updated_by',)
 
 	def create(self, data):
 		
-		#get current user
-		user = data['updated_by']
-		
-		#check credentials
-		# only super can create
-		if not user.is_surperuser:
-			raise PermissionDenied()
-		
-		return super().create(data)
+            #get current user
+            user = data['updated_by']
+
+            #check credentials
+            # only super can create
+            if not user.is_surperuser:
+                raise PermissionDenied()
+
+            return super().create(data)
 		
 	def update(self, instance, data):
 	
-		#get current user
-		user = data['updated_by']
-		
-		#check credentials
-		# only super can create
-		if not user.is_surperuser:
-		
-			#seruakuzer.instance will always exist!
-			if not user.profile.calls.filter(can_write=True, call=instance.id):
-				raise PermissionDenied()
-		
-		return super().update(instance, data)
+            #get current user
+            user = data['updated_by']
+            
+            #check credentials
+            # only super can create
+            if not user.is_surperuser:
+            
+                    #seruakuzer.instance will always exist!
+                    if not user.profile.calls.filter(can_write=True, call=instance.id):
+                            raise PermissionDenied()
+            
+            return super().update(instance, data)
