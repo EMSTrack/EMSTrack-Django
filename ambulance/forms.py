@@ -28,8 +28,10 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
         # if updating location
         if 'location' in self.changed_data:
 
+            # See https://stackoverflow.com/questions/5275476/django-alter-form-data-in-clean-method
+            # Mauricio: I think this odd behavior is because location_timestamp is not in the form
+
             # update timestamp as well
-            print('location changed')
             now = timezone.now()
             self.cleaned_data['location_timestamp'] = now
             self.instance.location_timestamp = now
