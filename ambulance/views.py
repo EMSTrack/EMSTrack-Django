@@ -91,7 +91,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
             form.instance.location_timestamp = timezone.now()
 
         # call super
-        super().form_valid(form)
+        return super().form_valid(form)
 
 
 class AmbulanceMap(TemplateView):
