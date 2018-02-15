@@ -24,8 +24,13 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
 
         print('clean_location')
 
-        # update timestamp as well
-        self.cleaned_data['location_timestamp'] = timezone.now()
+        # if location changed
+        if self.data['location'] != self.cleaned_data['location']:
+
+            print('modifying location_timestamp')
+
+            # update timestamp as well
+            self.cleaned_data['location_timestamp'] = timezone.now()
 
         return self.cleaned_data['location']
 
