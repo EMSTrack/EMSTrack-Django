@@ -10,6 +10,7 @@ from emstrack.models import AddressModel, UpdatedByModel, defaults
 
 # User and ambulance location models
 
+
 # Ambulance model
 
 class AmbulanceStatus(Enum):
@@ -21,11 +22,13 @@ class AmbulanceStatus(Enum):
     HB = 'Hospital bound'
     AH = 'At hospital'
     
+
 class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'
     R = 'Rescue'
     
+
 class Ambulance(UpdatedByModel):
 
     # ambulance properties
@@ -98,6 +101,7 @@ class Ambulance(UpdatedByModel):
                                                self.updated_by,
                                                self.updated_on)
 
+
 class AmbulanceUpdate(models.Model):
 
     # ambulance id
@@ -121,7 +125,9 @@ class AmbulanceUpdate(models.Model):
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField()
-    
+
+
+# Call related models
 
 class AmbulanceCallTimes(models.Model):
 
@@ -133,7 +139,10 @@ class AmbulanceCallTimes(models.Model):
     patient_time = models.DateTimeField(null=True, blank=True)
     hospital_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
-    
+
+
+# Patient might be expanded in the future
+
 class Patient(models.Model):
     """
     A model that provides patient fields.
@@ -142,6 +151,7 @@ class Patient(models.Model):
     name = models.CharField(max_length=254, default = "")
     age = models.IntegerField(null=True)
         
+
 class CallPriority(Enum):
     A = 'Urgent'
     B = 'Emergency'
@@ -149,6 +159,7 @@ class CallPriority(Enum):
     D = 'D'
     E = 'Not urgent'
     
+
 class Call(AddressModel, UpdatedByModel):
 
     # active status 
@@ -169,9 +180,39 @@ class Call(AddressModel, UpdatedByModel):
     priority = models.CharField(max_length=1,
                                 choices=CALL_PRIORITY_CHOICES,
                                 default=CallPriority.E.name)
-    
+
+    # created at
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
+
+
+# Location related models
+
+class LocationType(Enum):
+    B = 'Base'
+    A = 'AED'
+    O = 'Other'
+
+
+class Location(AddressModel, UpdatedByModel):
+
+    # location name
+    name = models.CharField(max_length=254, unique=True)
+
+    # location type
+    LOCATION_TYPE_CHOICES = \
+        [(m.name, m.value) for m in LocationType]
+    priority = models.CharField(max_length=1,
+                                choices=LOCATION_TYPE_CHOICES,
+                                default=LocationType.O.name)
+
+    # location
+    location = models.PointField(srid=4326, null=True)
+
+    def __str__(self):
+        return "{} @{} ({})".format(self.name, self.location, self.comment)
 
     
 # THOSE NEED REVIEWING
@@ -179,14 +220,6 @@ class Call(AddressModel, UpdatedByModel):
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
     center = models.PointField(srid=4326, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Base(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-    location = models.PointField(srid=4326, null=True)
 
     def __str__(self):
         return self.name

@@ -1,12 +1,19 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
 
 # Register your models here.
 
-from .models import Ambulance, Call, Region
+from .models import Ambulance, AmbulanceUpdate, \
+    AmbulanceCallTimes, Patient, Call, \
+    Location, \
+    Region
 
 admin.site.register(Ambulance)
+admin.site.register(AmbulanceUpdate)
+
+admin.site.register(AmbulanceCallTimes)
+admin.site.register(Patient)
+admin.site.register(Call)
+
+admin.site.register(Location)
 
 admin.site.register(Region)
-admin.site.register(Call)

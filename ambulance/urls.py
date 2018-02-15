@@ -1,6 +1,6 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
 
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 
 from . import views
 

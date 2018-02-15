@@ -1,10 +1,4 @@
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-
-from rest_framework import viewsets, mixins, generics, filters, permissions
-from rest_framework.decorators import detail_route
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework import viewsets, mixins
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
@@ -14,6 +8,7 @@ from .models import Ambulance
 from .serializers import AmbulanceSerializer
 
 # Django REST Framework Viewsets
+
 
 # Ambulance viewset
 
@@ -49,4 +44,3 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     queryset = Ambulance.objects.all()
     
     serializer_class = AmbulanceSerializer
-

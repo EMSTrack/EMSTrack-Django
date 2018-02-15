@@ -16,13 +16,15 @@ from emstrack.mixins import BasePermissionMixin
 
 # Django views
 
+
 class HospitalPermissionMixin(BasePermissionMixin):
 
     filter_field = 'id'
     profile_field = 'hospitals'
     profile_values = 'hospital_id'
     queryset = Hospital.objects.all()
-    
+
+
 class HospitalActionMixin:
 
     @property
@@ -54,13 +56,15 @@ class HospitalActionMixin:
                 obj.save()
             
         return HttpResponseRedirect(self.get_success_url())
-    
+
+
 class HospitalEquipmentInline(InlineFormSet):
 
     model = HospitalEquipment
     fields = ['equipment', 'value', 'comment']
     extra = 1
-    
+
+
 class HospitalCreateView(LoginRequiredMixin,
                          HospitalActionMixin,
                          HospitalPermissionMixin,
@@ -85,15 +89,16 @@ class HospitalUpdateView(LoginRequiredMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+
 class HospitalDetailView(LoginRequiredMixin,
                          HospitalPermissionMixin,
                          DetailView):
 
     model = Hospital
 
+
 class HospitalListView(LoginRequiredMixin,
                        HospitalPermissionMixin,
                        ListView):
 
     model = Hospital
-    
