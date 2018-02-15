@@ -49,7 +49,7 @@ class Ambulance(UpdatedByModel):
     # location
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
-    location_timestamp = models.DateTimeField(null=True, blank=True)
+    location_timestamp = models.DateTimeField(default=timezone.now)
 
     @classmethod
     def from_db(cls, db, field_names, values):
@@ -204,9 +204,9 @@ class Location(AddressModel, UpdatedByModel):
     # location type
     LOCATION_TYPE_CHOICES = \
         [(m.name, m.value) for m in LocationType]
-    priority = models.CharField(max_length=1,
-                                choices=LOCATION_TYPE_CHOICES,
-                                default=LocationType.O.name)
+    ltype = models.CharField(max_length=1,
+                             choices=LOCATION_TYPE_CHOICES,
+                             default=LocationType.O.name)
 
     # location
     location = models.PointField(srid=4326, null=True)
