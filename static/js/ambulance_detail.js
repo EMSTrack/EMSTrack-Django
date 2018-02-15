@@ -11,4 +11,4 @@ $(document).ready(function() {
     }).addTo(mymap);
 
     console.log(ambulance);
-}
+});
