@@ -3,37 +3,53 @@
 
 {% block content %}
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
+    <script>
+        var ambulance_updates = {{ ambulance.ambulanceupdate_set|safe }}
+    </script>
+
     <h1>Ambulance</h1>
 
     <div class="container">
-        <p>
-            <strong>Identifier:</strong>
-            <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
-        </p>
-        <p>
-            <strong>Capability:</strong>
-            {{ ambulance.capability }}
-        </p>
-        <p>
-            <strong>Status:</strong>
-            {{ ambulance.status }}
-        </p>
-        <p>
-            <strong>Location:</strong>
-            {{ ambulance.location }}
-        </p>
-        <p>
-            <strong>Comment:</strong>
-            {{ ambulance.comment }}
-        </p>
-        <p>
-            <strong>Updated on:</strong>
-            {{ ambulance.updated_on }}
-        </p>
-        <p>
-            <strong>By:</strong>
-            {{ ambulance.updated_by }}
-        </p>
+        <div class="row">
+            <div class="col-md-6">
+                <p>
+                    <strong>Identifier:</strong>
+                    <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
+                </p>
+                <p>
+                    <strong>Capability:</strong>
+                    {{ ambulance.capability }}
+                </p>
+                <p>
+                    <strong>Status:</strong>
+                    {{ ambulance.status }}
+                </p>
+                <p>
+                    <strong>Location:</strong>
+                    {{ ambulance.location }}
+                </p>
+                <p>
+                    <strong>Comment:</strong>
+                    {{ ambulance.comment }}
+                </p>
+                <p>
+                    <strong>Updated on:</strong>
+                    {{ ambulance.updated_on }}
+                </p>
+                <p>
+                    <strong>By:</strong>
+                    {{ ambulance.updated_by }}
+                </p>
+            </div>
+            <div class="col-md-6">
+                <div id="live-map" style="width: 800px; height: 700px"></div>
+            </div>
+        </div>
     </div>
 
     <hr>
@@ -66,5 +82,7 @@
             </tbody>
         </table>
     </div>
+
+    <script src="{% static 'js/ambulance_detail.js' %}"></script>
 
 {% endblock %}
