@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
@@ -80,6 +81,17 @@ class AmbulanceUpdateView(LoginRequiredMixin,
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+    def form_valid(self, form):
+
+        # if updating location
+        if form.object.location_timestamp != form.instance.location_timestamp:
+
+            # update timestamp as well
+            form.instance.location_timestamp = timezone.now()
+
+        # call super
+        super().form_valid(form)
 
 
 class AmbulanceMap(TemplateView):
