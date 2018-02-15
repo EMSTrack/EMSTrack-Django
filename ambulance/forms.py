@@ -24,6 +24,8 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
 
         print('clean_location')
 
+        print("{}, {}".format(self.data['location'], self.cleaned_data['location']))
+        
         # if location changed
         if self.data['location'] != self.cleaned_data['location']:
 
