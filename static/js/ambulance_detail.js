@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	// Set map view
-    mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
+    map = L.map('live-map').setView([32.5149, -117.0382], 12);
 
     // Add layer to map.
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w', {
@@ -8,7 +8,7 @@ $(document).ready(function() {
 	maxZoom: 22,
 	id: 'mapbox.streets',
 	accessToken: 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w'
-    }).addTo(mymap);
+    }).addTo(map);
 
     console.log(ambulance_id);
     retrieveAmbulances(ambulance_id)
@@ -41,5 +41,13 @@ function retrieveAmbulances(ambulance_id) {
 }
 
 function showAmbulanceRoute(data) {
-	console.log(data)
+	var latlngs = []
+	$.each(data, function(i, update) {
+		loc = update.location
+		latlngs.push([loc.latitude, loc.longitude])
+	});	
+	var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+
+	// zoom the map to the polyline
+	map.fitBounds(polyline.getBounds());
 }
