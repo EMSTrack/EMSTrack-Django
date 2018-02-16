@@ -1,7 +1,6 @@
 {% load i18n l10n static %}
 <style type="text/css">
   {% block map_css %}{% get_current_language_bidi as LANGUAGE_BIDI %}
-    // CSS block
     #{{ id }}_div_map { position: absolute; vertical-align: top; float: {{ LANGUAGE_BIDI|yesno:"right,left" }}; }
     {% if not display_raw %}#{{ id }} { display: none; }{% endif %}
   {% endblock %}
