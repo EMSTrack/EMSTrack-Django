@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.utils import timezone
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
@@ -51,6 +52,30 @@ class AmbulanceDetailView(LoginRequiredMixin,
 
     model = Ambulance
     
+    def get_context_data(self, **kwargs):
+        # add paginated updates to context
+
+        # call supper
+        context = super().get_context_data(**kwargs)
+
+        # query
+        updates_query = self.object.ambulanceupdate_set.all()
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+
+        # paginate
+        paginator = Paginator(updates_query, 10)
+        try:
+            updates = paginator.page(page)
+        except PageNotAnInteger:
+            updates = paginator.page(1)
+        except EmptyPage:
+            updates = paginator.page(paginator.num_pages)
+
+        context['updates'] = updates
+        return context
+
 
 class AmbulanceListView(LoginRequiredMixin,
                         AmbulancePermissionMixin,

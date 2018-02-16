@@ -770,6 +770,6 @@ class TestAmbulanceUpdates(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertCountEqual(result, answer3)
-        
+
         # logout
         client.logout()
