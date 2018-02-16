@@ -242,14 +242,7 @@ class TestAmbulanceUpdate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # error update location with timestamp
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'location': location,
-                                         }, partial=True)
-        self.assertEqual(serializer.is_valid(), False)
-
-        # error update timestamp without location
+        # error update timestamp without location or status
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'timestamp': timestamp,
@@ -314,14 +307,7 @@ class TestAmbulanceUpdate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # error update location with timestamp
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'location': location
-                                         }, partial=True)
-        self.assertEqual(serializer.is_valid(), False)
-
-        # error update timestamp without location
+        # error update timestamp without location or status
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'timestamp': timestamp,
@@ -437,7 +423,7 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         
-        # set status location
+        # set location
         timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
