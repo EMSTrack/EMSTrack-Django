@@ -75,7 +75,10 @@ class Ambulance(UpdatedByModel):
             # https://www.movable-type.co.uk/scripts/latlong.html
             v1 = self._loaded_values['location']
             v2 = self.location
-            self.orientation = 180 * math.atan2(math.cos(v1.y) * math.sin(v2.y) - math.sin(v1.y) * math.cos(v2.y) * math.cos(v2.x - v1.x), math.sin(v2.x - v1.x) * math.cos(v2.y)) / math.pi
+
+            # TODO: should we allow for a small radius before updating direction?
+            if v1 != v2:
+                self.orientation = 180 * math.atan2(math.cos(v1.y) * math.sin(v2.y) - math.sin(v1.y) * math.cos(v2.y) * math.cos(v2.x - v1.x), math.sin(v2.x - v1.x) * math.cos(v2.y)) / math.pi
 
         # save to Ambulance
         super().save(*args, **kwargs)
