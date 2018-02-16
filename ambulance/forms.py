@@ -25,11 +25,11 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
         # call super
         super().clean()
 
-        # if updating location
-        if 'location' in self.changed_data:
+        # if updating status or location
+        if 'status' in self.changed_data or 'location' in self.changed_data:
 
             # See https://stackoverflow.com/questions/5275476/django-alter-form-data-in-clean-method
-            # Mauricio: I think this odd behavior is because timestamp is not in the form
+            # Mauricio: I think this odd behavior is because timestamp is not present in the form
 
             # update timestamp as well
             now = timezone.now()
