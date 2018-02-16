@@ -73,6 +73,8 @@ class AmbulanceDetailView(LoginRequiredMixin,
         except EmptyPage:
             updates = paginator.page(paginator.num_pages)
 
+        # TODO: Return better page links for navigation
+
         context['updates'] = updates
         return context
 
