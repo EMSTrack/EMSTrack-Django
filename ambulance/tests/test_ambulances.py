@@ -615,7 +615,7 @@ class TestAmbulanceUpdates(TestSetup):
 
     def test(self):
         
-        # Update ambulance
+        # Update ambulance a1
         a = self.a1
         user = self.u1
 
@@ -648,7 +648,7 @@ class TestAmbulanceUpdates(TestSetup):
 
         # test AmbulanceUpdateSerializer
         queryset = AmbulanceUpdate.objects.filter(ambulance=a)
-        answer = []
+        answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
             result = {
@@ -662,7 +662,57 @@ class TestAmbulanceUpdates(TestSetup):
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
-            answer.append(serializer.data)
+            answer1.append(serializer.data)
+            self.assertDictEqual(serializer.data, result)
+
+        # Update ambulance a2
+        a = self.a3
+        user = self.u3
+
+        status = AmbulanceStatus.AH.name
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        timestamp = timezone.now()
+        location = {'latitude': -2., 'longitude': 7.}
+
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location': location,
+                                             'timestamp': timestamp
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        status = AmbulanceStatus.OS.name
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test AmbulanceUpdateSerializer
+        queryset = AmbulanceUpdate.objects.filter(ambulance=a)
+        answer3 = []
+        for u in queryset:
+            serializer = AmbulanceUpdateSerializer(u)
+            result = {
+                'id': u.id,
+                'ambulance_identifier': a.identifier,
+                'comment': u.comment,
+                'status': u.status,
+                'orientation': u.orientation,
+                'location': point2str(u.location),
+                'timestamp': date2iso(u.timestamp),
+                'updated_by_username': u.updated_by.username,
+                'updated_on': date2iso(u.updated_on)
+            }
+            answer3.append(serializer.data)
             self.assertDictEqual(serializer.data, result)
 
         # Test api
@@ -678,7 +728,14 @@ class TestAmbulanceUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result, answer)
+        self.assertCountEqual(result, answer1)
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result, answer3)
 
         # logout
         client.logout()
@@ -691,6 +748,11 @@ class TestAmbulanceUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
+        # retrieve ambulances
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
         # logout
         client.logout()
 
@@ -700,9 +762,14 @@ class TestAmbulanceUpdates(TestSetup):
         # retrieve ambulances
         response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
                               follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
+                              follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result, answer)
-
+        self.assertCountEqual(result, answer3)
+        
         # logout
         client.logout()
