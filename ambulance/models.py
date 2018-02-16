@@ -50,7 +50,9 @@ class Ambulance(UpdatedByModel):
     # location
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
-    location_timestamp = models.DateTimeField(default=timezone.now)
+
+    # timestamp
+    timestamp = models.DateTimeField(default=timezone.now)
 
     # default value for _loaded_values
     _loaded_values = None
@@ -121,7 +123,7 @@ class Ambulance(UpdatedByModel):
                                                self.comment,
                                                AmbulanceStatus[self.status].value,
                                                self.location,
-                                               self.location_timestamp,
+                                               self.timestamp,
                                                self.updated_by,
                                                self.updated_on)
 

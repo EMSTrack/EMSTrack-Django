@@ -33,7 +33,7 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
 
             # update timestamp as well
             now = timezone.now()
-            self.cleaned_data['location_timestamp'] = now
+            self.cleaned_data["timestamp"] = now
             self.instance.location_timestamp = now
 
         return self.cleaned_data
