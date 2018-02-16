@@ -623,3 +623,56 @@ class TestAmbulanceCreate(TestSetup):
         
         # logout
         client.logout()
+
+
+class TestAmbulanceUpdates(TestSetup):
+
+    def test(self):
+        
+        # Update ambulance
+        a = self.a1
+        user = self.u1
+
+        status = AmbulanceStatus.AH.name
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        location_timestamp = timezone.now()
+        location = {'latitude': -2., 'longitude': 7.}
+
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location': location,
+                                             'location_timestamp': location_timestamp
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+        
+        status = AmbulanceStatus.OS.name
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test AmbulanceUpdateSerializer
+        queryset = AmbulanceUpdate.objects.filter(ambulance=a)
+        for u in quueryset:
+            serializer = AmbulanceUpdateSerializer(u)
+            result = {
+                'id': u.id,
+                'ambulance': a.id,
+                'comment': u.comment,
+                'status': AmbulanceStatus.UK.name,
+                'orientation': u.orientation,
+                'location': point2str(u.location),
+                'location_timestamp': date2iso(u.location_timestamp),
+                'updated_by': u.updated_by.id,
+                'updated_on': date2iso(u.updated_on)
+            }
+            self.assertDictEqual(serializer.data, result)
