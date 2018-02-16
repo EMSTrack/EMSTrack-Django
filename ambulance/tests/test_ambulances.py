@@ -16,8 +16,8 @@ import json
 from login.models import AmbulancePermission, HospitalPermission
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-from ambulance.serializers import AmbulanceSerializer
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
@@ -662,7 +662,7 @@ class TestAmbulanceUpdates(TestSetup):
 
         # test AmbulanceUpdateSerializer
         queryset = AmbulanceUpdate.objects.filter(ambulance=a)
-        for u in quueryset:
+        for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
