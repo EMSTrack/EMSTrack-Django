@@ -666,13 +666,13 @@ class TestAmbulanceUpdates(TestSetup):
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
-                'ambulance': a.id,
+                'ambulance': a.identifier,
                 'comment': u.comment,
                 'status': AmbulanceStatus.UK.name,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'location_timestamp': date2iso(u.location_timestamp),
-                'updated_by': u.updated_by.id,
+                'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
             self.assertDictEqual(serializer.data, result)
