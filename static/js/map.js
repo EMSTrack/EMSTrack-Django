@@ -14,15 +14,18 @@ var statusGroupLayers = {};
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
-	iconUrl: '/static/icons/ambulance_icon.png',
+	//iconUrl: '/static/icons/ambulance_icon.png',
+	iconUrl: '/static/icons/cars/ambulance.svg',
 	iconSize: [60, 60],
 });
 var ambulanceIconBlack = L.icon({
-	iconUrl: '/static/icons/ambulance_icon_black.png',
+	// iconUrl: '/static/icons/ambulance_icon_black.png',
+	iconUrl: '/static/icons/cars/ambulance.svg',
 	iconSize: [60, 60],
 });
 var ambulanceIconBlue = L.icon({
-	iconUrl: '/static/icons/ambulance_blue.png',
+	// iconUrl: '/static/icons/ambulance_blue.png',
+	iconUrl: '/static/icons/cars/ambulance.svg',
 	iconSize: [60, 40],
 });
 var hospitalIcon = L.icon({
