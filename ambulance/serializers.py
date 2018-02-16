@@ -23,9 +23,10 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
 
-        # timestamp must be defined together with either status or location
-        if 'timestamp' in data and not ('location' in data or 'status' in data):
-            raise serializers.ValidationError('timestamp can only be set when either location or status are modified')
+        # timestamp must be defined together with either comment, status or location
+        if 'timestamp' in data and not ('comment' in data or 'location' in data or 'status' in data):
+            raise serializers.ValidationError('timestamp can only be set when either comment, location, ' +
+                                              'or status are modified')
 
         return data
 

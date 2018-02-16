@@ -96,14 +96,19 @@ class Ambulance(UpdatedByModel):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_ambulance(self)
 
-        # save to AmbulanceUpdate
-        data = {k: getattr(self, k)
-                for k in ('status', 'orientation',
-                          'location', 'timestamp',
-                          'comment', 'updated_by', 'updated_on')}
-        data['ambulance'] = self;
-        obj = AmbulanceUpdate(**data)
-        obj.save()
+        # if comment, status or location changed
+        if self._loaded_values['location'] != self.location or \
+            self._loaded_values['status'] != self.status or \
+                self._loaded_values['comment'] != self.comment:
+
+            # save to AmbulanceUpdate
+            data = {k: getattr(self, k)
+                    for k in ('status', 'orientation',
+                              'location', 'timestamp',
+                              'comment', 'updated_by', 'updated_on')}
+            data['ambulance'] = self;
+            obj = AmbulanceUpdate(**data)
+            obj.save()
         
     def delete(self, *args, **kwargs):
         from mqtt.publish import SingletonPublishClient
@@ -144,10 +149,14 @@ class AmbulanceUpdate(models.Model):
     # location
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
+
+    # timestamp
     timestamp = models.DateTimeField(null=True, blank=True)
 
-    # updated by
+    # comment
     comment = models.CharField(max_length=254, null=True, blank=True)
+
+    # updated by
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField()
