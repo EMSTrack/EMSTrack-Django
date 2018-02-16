@@ -52,6 +52,8 @@ class Ambulance(UpdatedByModel):
     location = models.PointField(srid=4326, default = defaults['location'])
     location_timestamp = models.DateTimeField(default=timezone.now)
 
+    _loaded_values = None
+
     @classmethod
     def from_db(cls, db, field_names, values):
 
