@@ -674,7 +674,7 @@ class TestAmbulanceUpdates(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulances updates
-        response = client.get('/api/ambulance/{}/updates'.format(self.a1.id),
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -687,7 +687,7 @@ class TestAmbulanceUpdates(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve ambulances
-        response = client.get('/api/ambulance/{}/updates'.format(self.a1.id),
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 404)
 
@@ -698,7 +698,7 @@ class TestAmbulanceUpdates(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         # retrieve ambulances
-        response = client.get('/api/ambulance/{}/updates'.format(self.a1.id),
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
