@@ -648,6 +648,7 @@ class TestAmbulanceUpdates(TestSetup):
 
         # test AmbulanceUpdateSerializer
         queryset = AmbulanceUpdate.objects.filter(ambulance=a)
+        answer = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
             result = {
@@ -661,4 +662,47 @@ class TestAmbulanceUpdates(TestSetup):
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
+            answer.append(serializer.data)
             self.assertDictEqual(serializer.data, result)
+
+        # Test api
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates'.format(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result, answer)
+
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+
+        # retrieve ambulances
+        response = client.get('/api/ambulance/{}/updates'.format(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        # retrieve ambulances
+        response = client.get('/api/ambulance/{}/updates'.format(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result, answer)
+
+        # logout
+        client.logout()
