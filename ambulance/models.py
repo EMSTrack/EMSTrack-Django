@@ -52,6 +52,7 @@ class Ambulance(UpdatedByModel):
     location = models.PointField(srid=4326, default = defaults['location'])
     location_timestamp = models.DateTimeField(default=timezone.now)
 
+    # default value for _loaded_values
     _loaded_values = None
 
     @classmethod
@@ -68,11 +69,8 @@ class Ambulance(UpdatedByModel):
     
     def save(self, *args, **kwargs):
 
-        # is this creation?
-        created = self.pk is None
-
         # calculate orientation
-        if not created:
+        if self._loaded_values:
 
             # https://www.movable-type.co.uk/scripts/latlong.html
             v1 = self._loaded_values['location']
