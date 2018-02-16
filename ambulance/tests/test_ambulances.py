@@ -668,7 +668,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'id': u.id,
                 'ambulance_identifier': a.identifier,
                 'comment': u.comment,
-                'status': AmbulanceStatus.UK.name,
+                'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'location_timestamp': date2iso(u.location_timestamp),
