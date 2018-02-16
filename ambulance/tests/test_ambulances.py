@@ -1,3 +1,4 @@
+import math
 from django.test import TestCase, Client
 
 from django.contrib.auth.models import User
@@ -354,13 +355,13 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         self.assertDictEqual(result, answer)
-        
+
         # retrieve new ambulance status
         response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        
+
         # set status location
         location_timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
@@ -375,6 +376,8 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
+        if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
+            answer['orientation'] = result['orientation']
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
