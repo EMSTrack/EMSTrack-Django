@@ -15,7 +15,7 @@ from .serializers import AmbulanceSerializer, \
 # Django REST Framework Viewsets
 
 class AmbulanceUpdatesPagination(LimitOffsetPagination):
-    default_limit = 10
+    default_limit = 100
     max_limit = 1000
 
 
