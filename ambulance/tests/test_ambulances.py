@@ -42,7 +42,7 @@ class TestAmbulanceGetList(TestSetup):
                 'status': AmbulanceStatus.UK.name,
                 'orientation': a.orientation,
                 'location': point2str(a.location),
-                'location_timestamp': a.location_timestamp,
+                'location_timestamp': date2iso(a.location_timestamp),
                 'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
@@ -538,7 +538,7 @@ class TestAmbulanceCreate(TestSetup):
             'status': AmbulanceStatus.UK.name,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': a.location_timestamp,
+            'location_timestamp': date2iso(a.location_timestamp),
             'updated_by': self.u1.id,
             'updated_on': date2iso(a.updated_on)
         }
