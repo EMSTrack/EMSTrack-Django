@@ -64,7 +64,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         # retrieve updates
         ambulance = self.get_object()
-        ambulance_updates = ambulance.ambulanceupdate_set
+        ambulance_updates = ambulance.ambulanceupdate_set.all()
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)
