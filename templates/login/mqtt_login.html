@@ -4,46 +4,46 @@
 {% block title %}EMSTrack Login{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/auth.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/auth.css' %}"/>
 {% endblock %}
 
 {% block content %}
 
-{% if form.errors %}
-<p>Your username and password didn't match. Please try again.</p>
-{% endif %}
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
 
-{% if next %}
-  {% if user.is_authenticated %}
-<p>
-  Your account doesn't have access to this page.
-  To proceed, please login with an account that has access.
-</p>
-  {% endif %}
-{% endif %}
+    {% if next %}
+        {% if user.is_authenticated %}
+            <p>
+                Your account doesn't have access to this page.
+                To proceed, please login with an account that has access.
+            </p>
+        {% endif %}
+    {% endif %}
 
-<div class="container">
-  <form method="post"
-	action="{% url 'mqtt_login' %}">
-    
-    <div class="row input_form">
+    <div class="container">
+        <form method="post"
+              action="{% url 'mqtt_login' %}">
 
-      <p>
-	{{ form.username }}
-      </p>
-      
-      <p>
-	{{ form.password }}
-      </p>
-      
-      <button type="submit"
-	      class="btn btn btn-primary btn-success"
-	      value="login">Login</button>
-      <input type="hidden" name="next" value="{{ next }}" />
-      
+            <div class="row input_form">
+
+                <p>
+                    {{ form.username }}
+                </p>
+
+                <p>
+                    {{ form.password }}
+                </p>
+
+                <button type="submit"
+                        class="btn btn btn-primary btn-success"
+                        value="login">Login
+                </button>
+                <input type="hidden" name="next" value="{{ next }}"/>
+
+            </div>
+        </form>
     </div>
-</div>
-  
-</form>
 
 {% endblock %}

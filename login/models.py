@@ -6,6 +6,7 @@ from ambulance.models import Ambulance
 
 from hospital.models import Hospital
 
+
 # Ambulance and Hospital Permissions
 
 class AmbulancePermission(models.Model):
@@ -16,10 +17,12 @@ class AmbulancePermission(models.Model):
     can_write = models.BooleanField(default=False)
 
     def __str__(self):
-        return  '{}(id={}): read[{}] write[{}]'.format(self.ambulance.identifier,
-                                                       self.ambulance.id,
-                                                       self.can_read,
-                                                       self.can_write)
+        return '{}(id={}): read[{}] write[{}]'.format(self.ambulance.identifier,
+                                                      self.ambulance.id,
+                                                      self.can_read,
+                                                      self.can_write)
+
+
 class HospitalPermission(models.Model):
 
     hospital = models.ForeignKey(Hospital,
@@ -28,10 +31,10 @@ class HospitalPermission(models.Model):
     can_write = models.BooleanField(default=False)
 
     def __str__(self):
-        return  '{}(id={}): read[{}] write[{}]'.format(self.hospital.name,
-                                                       self.hospital.id,
-                                                       self.can_read,
-                                                       self.can_write)
+        return '{}(id={}): read[{}] write[{}]'.format(self.hospital.name,
+                                                      self.hospital.id,
+                                                      self.can_read,
+                                                      self.can_write)
 
 
 # Profile
@@ -49,6 +52,7 @@ class Profile(models.Model):
                 '\nHospitals:\n' +
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
     
+
 # TemporaryPassword
 
 class TemporaryPassword(models.Model):
@@ -59,5 +63,4 @@ class TemporaryPassword(models.Model):
     created_on = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return ('"{}" (created on: {})'.format(self.password, self.created_on))
-
+        return '"{}" (created on: {})'.format(self.password, self.created_on)

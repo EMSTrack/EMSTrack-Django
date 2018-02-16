@@ -62,7 +62,8 @@ class HospitalViewSet(mixins.ListModelMixin,
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
         serializer = EquipmentSerializer(equipment, many=True)
         return Response(serializer.data)
-    
+
+
 # HospitalEquipment viewset
 
 class HospitalEquipmentViewSet(mixins.ListModelMixin,
