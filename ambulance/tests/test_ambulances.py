@@ -451,6 +451,8 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
+        if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
+            answer['orientation'] = result['orientation']
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
