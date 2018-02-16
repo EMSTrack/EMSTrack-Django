@@ -99,7 +99,7 @@ class Ambulance(UpdatedByModel):
         # save to AmbulanceUpdate
         data = {k: getattr(self, k)
                 for k in ('status', 'orientation',
-                          'location', 'location_timestamp',
+                          'location', 'timestamp',
                           'comment', 'updated_by', 'updated_on')}
         data['ambulance'] = self;
         obj = AmbulanceUpdate(**data)
@@ -144,7 +144,7 @@ class AmbulanceUpdate(models.Model):
     # location
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
-    location_timestamp = models.DateTimeField(null=True, blank=True)
+    timestamp = models.DateTimeField(null=True, blank=True)
 
     # updated by
     comment = models.CharField(max_length=254, null=True, blank=True)

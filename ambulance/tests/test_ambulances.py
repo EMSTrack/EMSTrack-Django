@@ -44,7 +44,7 @@ class TestAmbulanceGetList(TestSetup):
                 'status': AmbulanceStatus.UK.name,
                 'orientation': a.orientation,
                 'location': point2str(a.location),
-                'location_timestamp': date2iso(a.location_timestamp),
+                'timestamp': date2iso(a.timestamp),
                 'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
@@ -208,20 +208,20 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': date2iso(a.location_timestamp),
+            'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                             'location_timestamp': location_timestamp,
+                                             'timestamp': timestamp,
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -236,7 +236,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
-            'location_timestamp': date2iso(location_timestamp),
+            'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -252,7 +252,7 @@ class TestAmbulanceUpdate(TestSetup):
         # error update timestamp without location
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_timestamp': location_timestamp,
+                                             'timestamp': timestamp,
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
         
@@ -280,20 +280,20 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': date2iso(a.location_timestamp),
+            'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                             'location_timestamp': location_timestamp
+                                             'timestamp': timestamp
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -308,7 +308,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
-            'location_timestamp': date2iso(location_timestamp),
+            'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -324,7 +324,7 @@ class TestAmbulanceUpdate(TestSetup):
         # error update timestamp without location
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_timestamp': location_timestamp,
+                                             'timestamp': timestamp,
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
         
@@ -363,14 +363,14 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(result['status'], status)
 
         # set status location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': point2str(location),
-                                    'location_timestamp': date2iso(location_timestamp),
+                                    'timestamp': date2iso(timestamp),
                                 })
         )
         self.assertEqual(response.status_code, 200)
@@ -386,7 +386,7 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         self.assertEqual(result['location'], point2str(location))
-        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        self.assertEqual(result['timestamp'], date2iso(timestamp))
         
         # set wrong attribute
         response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
@@ -438,14 +438,14 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(result['status'], status)
         
         # set status location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': point2str(location),
-                                    'location_timestamp': date2iso(location_timestamp),
+                                    'timestamp': date2iso(timestamp),
                                 })
         )
         self.assertEqual(response.status_code, 200)
@@ -461,7 +461,7 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         self.assertEqual(result['location'], point2str(location))
-        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        self.assertEqual(result['timestamp'], date2iso(timestamp))
         
         # set status ambulance
         status = AmbulanceStatus.OS.name
@@ -546,7 +546,7 @@ class TestAmbulanceCreate(TestSetup):
             'status': AmbulanceStatus.UK.name,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': date2iso(a.location_timestamp),
+            'timestamp': date2iso(a.timestamp),
             'updated_by': self.u1.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -641,13 +641,13 @@ class TestAmbulanceUpdates(TestSetup):
         serializer.is_valid()
         serializer.save(updated_by=user)
 
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
 
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                             'location_timestamp': location_timestamp
+                                             'timestamp': timestamp
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -671,7 +671,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
-                'location_timestamp': date2iso(u.location_timestamp),
+                'timestamp': date2iso(u.timestamp),
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }

@@ -17,23 +17,23 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'location_timestamp',
+                  'timestamp',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
     def validate(self, data):
 
-        # location and location_timestamp must be defined together
-        if 'location' in data or 'location_timestamp' in data:
+        # location and timestamp must be defined together
+        if 'location' in data or 'timestamp' in data:
 
-            if not ('location' in data and 'location_timestamp' in data):
-                raise serializers.ValidationError('location and location_timestamp must be set together')
+            if not ('location' in data and 'timestamp' in data):
+                raise serializers.ValidationError('location and timestamp must be set together')
             
-            if data['location'] and not data['location_timestamp']:
-                raise serializers.ValidationError('location cannot be set without location_timestamp')
+            if data['location'] and not data['timestamp']:
+                raise serializers.ValidationError('location cannot be set without timestamp')
             
-            if not data['location'] and data['location_timestamp']:
-                raise serializers.ValidationError('location_timestamp cannot be set without location')
+            if not data['location'] and data['timestamp']:
+                raise serializers.ValidationError('timestamp cannot be set without location')
 
         return data
 
@@ -76,12 +76,12 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
         fields = ['id',
                   'ambulance_identifier',
                   'status', 'orientation',
-                  'location', 'location_timestamp',
+                  'location', 'timestamp',
                   'comment',
                   'updated_by_username', 'updated_on']
         read_only_fields = ['id',
                             'ambulance_identifier',
                             'status', 'orientation',
-                            'location', 'location_timestamp',
+                            'location', 'timestamp',
                             'comment',
                             'updated_by_username', 'updated_on']
