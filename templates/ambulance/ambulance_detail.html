@@ -54,7 +54,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for update in ambulance.ambulanceupdate_set.all %}
+            {% for update in updates %}
                 <tr>
                     <td>{{ update.status }}</td>
                     <td>{{ update.location }}</td>
