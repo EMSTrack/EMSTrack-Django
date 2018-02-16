@@ -53,9 +53,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     queryset = Ambulance.objects.all()
     
     serializer_class = AmbulanceSerializer
-    pagination_class = AmbulanceUpdatesPagination
 
-    @detail_route()
+    @detail_route(methods=['get'], pagination_class = AmbulanceUpdatesPagination)
     def updates(self, request, pk=None, **kwargs):
         """
         Retrieve and paginate ambulance updates.
