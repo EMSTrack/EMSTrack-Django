@@ -79,7 +79,7 @@ class Ambulance(UpdatedByModel):
             lon2 = math.pi * self.location.x / 180
 
             # TODO: should we allow for a small radius before updating direction?
-            if v1 != v2:
+            if self._loaded_values['location'] != self.location:
                 self.orientation = (180/math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) - \
                                                               math.sin(lat1) * math.cos(lat2) * \
                                                               math.cos(lon2 - lon1),
