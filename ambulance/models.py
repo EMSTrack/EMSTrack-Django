@@ -1,5 +1,6 @@
 from enum import Enum
 
+import math
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 
@@ -53,6 +54,7 @@ class Ambulance(UpdatedByModel):
 
     @classmethod
     def from_db(cls, db, field_names, values):
+
         # call super
         instance = super(Ambulance, cls).from_db(db, field_names, values)
         
@@ -63,6 +65,18 @@ class Ambulance(UpdatedByModel):
         return instance
     
     def save(self, *args, **kwargs):
+
+        # is this creation?
+        created = self.pk is None
+
+        # calculate orientation
+        if not created:
+
+            # https://www.movable-type.co.uk/scripts/latlong.html
+            v1 = self._loaded_values['location']
+            v2 = self.location
+            self.orientation = 180 * math.atan2(math.cos(v1.y) * math.sin(v2.y) - math.sin(v1.y) * math.cos(v2.y) * math.cos(v2.x - v1.x), math.sin(v2.x - v1.x) * math.cos(v2.y)) / math.pi
+
         # save to Ambulance
         super().save(*args, **kwargs)
 

@@ -27,6 +27,7 @@ from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
 
+
 class TestAmbulanceGetList(TestSetup):
 
     def test_ambulance_serializer(self):
@@ -176,6 +177,7 @@ class TestAmbulanceGetList(TestSetup):
         
         # logout
         client.logout()
+
 
 class TestAmbulanceUpdate(TestSetup):
     
@@ -514,6 +516,7 @@ class TestAmbulanceUpdate(TestSetup):
         
         # logout
         client.logout()
+
 
 class TestAmbulanceCreate(TestSetup):
 
