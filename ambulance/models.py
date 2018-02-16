@@ -97,8 +97,9 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().publish_ambulance(self)
 
         # if comment, status or location changed
-        if self._loaded_values['location'] != self.location or \
-            self._loaded_values['status'] != self.status or \
+        if (not self._loaded_values) or \
+                self._loaded_values['location'] != self.location or \
+                self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
 
             # save to AmbulanceUpdate
