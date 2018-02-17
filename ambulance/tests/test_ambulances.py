@@ -729,6 +729,7 @@ class TestAmbulanceUpdates(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertCountEqual(result['results'], answer1)
+        self.assertCountEqual(result['results'], 3)
 
         # retrieve ambulances updates
         response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
@@ -736,6 +737,7 @@ class TestAmbulanceUpdates(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertCountEqual(result['results'], answer3)
+        self.assertCountEqual(result['results'], 3)
 
         # logout
         client.logout()
@@ -770,6 +772,7 @@ class TestAmbulanceUpdates(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertCountEqual(result['results'], answer3)
+        self.assertCountEqual(result['results'], 3)
 
         # logout
         client.logout()
