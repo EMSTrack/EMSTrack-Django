@@ -100,6 +100,7 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().publish_ambulance(self)
 
         # if comment, status or location changed
+        logger.debug("> self._loaded_values = {}".format(self._loaded_values))
         if (self._loaded_values is None) or \
                 self._loaded_values['location'] != self.location or \
                 self._loaded_values['status'] != self.status or \
