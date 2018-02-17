@@ -106,15 +106,15 @@ class Ambulance(UpdatedByModel):
                 self._loaded_values['comment'] != self.comment:
 
             if self._loaded_values:
-                logger.debug("> old = '{}', '{}', '{}'",
+                logger.debug("> old = '{}', '{}', '{}'".format(
                              self._loaded_values['location'],
                              self._loaded_values['status'],
-                             self._loaded_values['comment'])
-                
-            logger.debug("> new = '{}', '{}', '{}'",
+                             self._loaded_values['comment']))
+
+            logger.debug("> new = '{}', '{}', '{}'".format(
                          self.location,
                          self.status,
-                         self.comment)
+                         self.comment))
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
