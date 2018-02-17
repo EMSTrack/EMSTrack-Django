@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 import math
@@ -8,6 +9,8 @@ from django.utils import timezone
 from django.urls import reverse
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
+
+logger = logging.getLogger(__name__)
 
 # User and ambulance location models
 
@@ -101,6 +104,15 @@ class Ambulance(UpdatedByModel):
                 self._loaded_values['location'] != self.location or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
+
+            logger.debug("> old = '{}', '{}', '{}'",
+                         self._loaded_values['location'],
+                         self._loaded_values['status'],
+                         self._loaded_values['comment'])
+            logger.debug("> new = '{}', '{}', '{}'",
+                         self.location,
+                         self.status,
+                         self.comment)
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
