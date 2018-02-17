@@ -100,22 +100,10 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().publish_ambulance(self)
 
         # if comment, status or location changed
-        logger.debug("> self._loaded_values = {}".format(self._loaded_values))
         if (self._loaded_values is None) or \
                 self._loaded_values['location'] != self.location or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
-
-            if self._loaded_values is not None:
-                logger.debug("> old = '{}', '{}', '{}'".format(
-                             self._loaded_values['location'],
-                             self._loaded_values['status'],
-                             self._loaded_values['comment']))
-
-            logger.debug("> new = '{}', '{}', '{}'".format(
-                         self.location,
-                         self.status,
-                         self.comment))
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
