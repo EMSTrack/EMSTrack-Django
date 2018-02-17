@@ -646,6 +646,7 @@ class TestAmbulanceUpdates(TestSetup):
         serializer.is_valid()
         serializer.save(updated_by=user)
 
+        # This update does not go to AmbulanceUpdate!
         serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
                                          data={
                                              'identifier': 'someid',
