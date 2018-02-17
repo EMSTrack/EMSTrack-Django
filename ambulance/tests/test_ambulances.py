@@ -660,7 +660,7 @@ class TestAmbulanceUpdates(TestSetup):
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
-                'ambulance_identifier': u.identifier,
+                'ambulance_identifier': u.ambulance.identifier,
                 'comment': u.comment,
                 'status': u.status,
                 'orientation': u.orientation,
