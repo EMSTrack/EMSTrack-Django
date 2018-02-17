@@ -105,10 +105,12 @@ class Ambulance(UpdatedByModel):
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
 
-            logger.debug("> old = '{}', '{}', '{}'",
-                         self._loaded_values['location'],
-                         self._loaded_values['status'],
-                         self._loaded_values['comment'])
+            if self._loaded_values:
+                logger.debug("> old = '{}', '{}', '{}'",
+                             self._loaded_values['location'],
+                             self._loaded_values['status'],
+                             self._loaded_values['comment'])
+                
             logger.debug("> new = '{}', '{}', '{}'",
                          self.location,
                          self.status,
