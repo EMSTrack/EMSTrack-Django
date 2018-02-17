@@ -620,7 +620,7 @@ class TestAmbulanceUpdates(TestSetup):
         user = self.u1
 
         status = AmbulanceStatus.AH.name
-        serializer = AmbulanceSerializer(a,
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
                                          data={
                                              'status': status,
                                          }, partial=True)
@@ -630,7 +630,7 @@ class TestAmbulanceUpdates(TestSetup):
         timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
 
-        serializer = AmbulanceSerializer(a,
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
                                          data={
                                              'location': location,
                                              'timestamp': timestamp
@@ -639,14 +639,14 @@ class TestAmbulanceUpdates(TestSetup):
         serializer.save(updated_by=user)
         
         status = AmbulanceStatus.OS.name
-        serializer = AmbulanceSerializer(a,
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
                                          data={
                                              'status': status,
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
 
-        serializer = AmbulanceSerializer(a,
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
                                          data={
                                              'identifier': 'someid',
                                          }, partial=True)
