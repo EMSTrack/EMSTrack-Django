@@ -17,7 +17,7 @@ $(document).ready(function() {
  		map_id: "map",
  		zoom: 12
  	}
- 	this.mapWidget = new LeafletWidget(options);
+ 	this.mapWidget = new LeafletPointWidget(options);
 });
 
 function retrieveAmbulances(ambulance_id) {
