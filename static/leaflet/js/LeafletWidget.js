@@ -275,7 +275,7 @@ LeafletPointWidget.prototype.setPoint = function(p) {
 
 // Polyline Widget
 
-function LeafletPolylineWidget(options) {
+var LeafletPolylineWidget = function (options) {
     // Call parent
     LeafletWidget.call(this, options);
     this.polylineIdMap = {}

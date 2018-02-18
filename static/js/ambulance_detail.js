@@ -7,6 +7,8 @@ $(document).ready(function() {
  	}
  	this.mapWidget = new LeafletPolylineWidget(options);
 
+ 	print(this.mapWidget)
+
  	// Retrieve ambulances via AJAX
  	retrieveAmbulances(ambulance_id)
 });
