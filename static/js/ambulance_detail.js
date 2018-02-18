@@ -47,5 +47,6 @@ function addAmbulanceRoute(data) {
 		loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
 	});	
+	console.log(this.mapWidget)
 	this.mapWidget.addLine(latlngs, 1, "red");
 }
