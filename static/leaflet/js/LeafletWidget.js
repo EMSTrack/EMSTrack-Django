@@ -288,11 +288,15 @@ var LeafletPolylineWidget = function (options) {
 LeafletPolylineWidget.prototype = Object.create(LeafletWidget.prototype);
 LeafletPolylineWidget.prototype.constructor = LeafletPolylineWidget;
 
-LeafletPolylineWidget.prototype.addLine = function(points, id, color) {
+LeafletPolylineWidget.prototype.addLine = function(points, id, color, fun) {
 
     var polyline = L.polyline(points, {color: color}).addTo(this.map);
     L.stamp(polyline);
     this.lines.addLayer(polyline);
+
+    if (fun) {
+		polyline.on('click', fun);
+    }
 
     if (id >= 0) {
 		this.polylineIdMap[polyline._leaflet_id] = id;

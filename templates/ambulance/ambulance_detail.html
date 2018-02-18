@@ -1,14 +1,10 @@
 {% extends "base.html" %}
+{% extends "leaflet.html" %}
 {% load static %}
 
 {% block content %}
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.css"/>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.9/leaflet.draw.js"></script>
+
     <script>
         var ambulance_id = {{ ambulance.id|safe }};
         var APIBaseUrl = '{% url 'homepage' %}api/';
