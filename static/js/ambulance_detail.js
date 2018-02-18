@@ -14,10 +14,10 @@ $(document).ready(function() {
  //    retrieveAmbulances(ambulance_id)
 
  	options = {
- 		map_id: "map"
+ 		map_id: "map",
+ 		zoom: 12
  	}
- 	LeafletWidget(options)
-
+ 	this.mapWidget = LeafletPolylineWidget(options)
 });
 
 function retrieveAmbulances(ambulance_id) {
@@ -35,8 +35,9 @@ function retrieveAmbulances(ambulance_id) {
 	success: function(data) {
 	    
 	    console.log('Got data from API')
-	    
+	  
 	    showAmbulanceRoute(data)
+	    
 	}
     })
 	.done(function( data ) {
@@ -46,14 +47,11 @@ function retrieveAmbulances(ambulance_id) {
 	});
 }
 
-function showAmbulanceRoute(data) {
+function addAmbulanceRoute(data) {
 	var latlngs = []
 	$.each(data, function(i, update) {
 		loc = update.location
 		latlngs.push([loc.latitude, loc.longitude])
 	});	
-	var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-
-	// zoom the map to the polyline
-	map.fitBounds(polyline.getBounds());
+	this.mapWidget.addLine(latlngs, 1, "red")
 }

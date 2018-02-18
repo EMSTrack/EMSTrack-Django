@@ -272,3 +272,29 @@ LeafletPointWidget.prototype.setPoint = function(p) {
 	document.getElementById(this.options.id_lng).value = p.lng;
     }
 }
+
+// Polyline Widget
+
+var LeafletPolylineWidget = function (options) {
+    // Call parent
+    LeafletWidget.call(this, options);
+    this.polylineIdMap = {}
+
+    // create layer 
+    this.lines = L.layerGroup();
+    
+}
+
+LeafletPolylineWidget.prototype = Object.create(LeafletWidget.prototype);
+LeafletPolylineWidget.prototype.constructor = LeafletPolylineWidget;
+
+LeafletPolylineWidget.prototype.addLine = function(points, id, color) {
+
+    var polyline = L.polyline(points, {color: color}).addTo(this.map);
+    L.stamp(polyline);
+    this.lines.addLayer(polyline);
+
+    if (id >= 0) {
+		this.polylineIdMap[polyline._leaflet_id] = id;
+    }
+}
