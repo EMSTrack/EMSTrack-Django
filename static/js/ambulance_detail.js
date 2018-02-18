@@ -5,7 +5,7 @@ $(document).ready(function() {
  		map_id: "map",
  		zoom: 12
  	}
- 	this.mapWidget = new LeafletPolylineWidget(options);
+ 	LeafletPolylineWidget(options);
 
  	// Retrieve ambulances via AJAX
  	retrieveAmbulances(ambulance_id)
@@ -45,5 +45,5 @@ function addAmbulanceRoute(data) {
 		loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
 	});	
-	this.mapWidget.addLine(latlngs, 1, "red");
+	LeafletPolylineWidget.addLine(latlngs, 1, "red");
 }
