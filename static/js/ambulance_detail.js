@@ -45,5 +45,5 @@ function addAmbulanceRoute(data) {
 		loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
 	});	
-	LeafletPolylineWidget.addLine(latlngs, 1, "red");
+	LeafletPolylineWidget.prototype.addLine(latlngs, 1, "red");
 }
