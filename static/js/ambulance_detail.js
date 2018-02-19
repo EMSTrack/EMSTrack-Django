@@ -53,6 +53,7 @@ function addAmbulanceRoute(data) {
 	map.addLine(latlngs, 1, "red", null);
 
 	// Zoom to bounds
+	console.log('Fitting bounds');
 	map.fitBounds();
 
 }
