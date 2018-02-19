@@ -104,6 +104,7 @@ LeafletWidget.prototype.fitBounds = function (bounds = null) {
 
     // Get bounds if not given
     if (bounds == null) bounds = this.map.getBounds();
+    console.log('bounds = ' + bounds);
 
     // Fit map to bounds
     this.map.fitBounds(bounds);
