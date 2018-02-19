@@ -42,7 +42,7 @@ function retrieveAmbulances(ambulance_id) {
 // Interact with widget to add an ambulance route
 function addAmbulanceRoute(data) {
 	var latlngs = [];
-	$.each(data, function(i, update) {
+	$.each(data.results, function(i, update) {
 		loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
 	});	
