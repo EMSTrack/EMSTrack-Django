@@ -100,6 +100,15 @@ var LeafletWidget = function (options) {
     });
 }
 
+LeafletWidget.prototype.fitBounds = function (bounds = null) {
+
+    // Get bounds if not given
+    if (bounds == null) bounds = this.map.getBounds();
+
+    // Fit map to bounds
+    this.map.fitBounds(bounds);
+}
+
 // LeafletMultiPointWidget
 
 var LeafletMultiPointWidget = function (options) {
@@ -306,4 +315,5 @@ LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun) {
     if (id >= 0) {
         this.polylineIdMap[polyline._leaflet_id] = id;
     }
+
 }

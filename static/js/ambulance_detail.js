@@ -41,10 +41,18 @@ function retrieveAmbulances(ambulance_id) {
 
 // Interact with widget to add an ambulance route
 function addAmbulanceRoute(data) {
+
+	// Store data in an array
 	var latlngs = [];
 	$.each(data.results, function(i, update) {
 		loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
-	});	
+	});
+
+	// Add line to map
 	map.addLine(latlngs, 1, "red", null);
+
+	// Zoom to bounds
+	map.fitBounds();
+
 }
