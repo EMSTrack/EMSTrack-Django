@@ -10,33 +10,37 @@ $(document).ready(function() {
 
  	// Retrieve ambulances via AJAX
  	retrieveAmbulances(ambulance_id)
+
 });
 
 function retrieveAmbulances(ambulance_id) {
-	$.ajax({
-	type: 'GET',
-	datatype: "json",
-	url: APIBaseUrl + 'ambulance/' + ambulance_id + '/updates',
-	
-	error: function(msg) {
-	    
-	    alert('Could not retrieve data from API:' + msg)
-	    
-	},
-	
-	success: function(data) {
-	    
-	    console.log('Got data from API')
-	  
-	    addAmbulanceRoute(data)
 
-	}
+    $.ajax({
+        type: 'GET',
+        datatype: "json",
+        url: APIBaseUrl + 'ambulance/' + ambulance_id + '/updates',
+
+        fail: function (msg) {
+
+            alert('Could not retrieve data from API:' + msg)
+
+        },
+
+        success: function (data) {
+
+            console.log('Got data from API')
+
+            addAmbulanceRoute(data)
+
+        }
+
     })
-	.done(function( data ) {
-	    if ( console && console.log ) {
-			console.log( "Done retrieving ambulance data from API" );
-	    }
-	});
+        .done(function (data) {
+            if (console && console.log) {
+                console.log("Done retrieving ambulance data from API");
+            }
+        });
+
 }
 
 // Interact with widget to add an ambulance route
