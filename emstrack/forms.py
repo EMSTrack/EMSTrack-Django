@@ -1,7 +1,7 @@
 from django.contrib.gis.forms import widgets
 
 class LeafletPointWidget(widgets.BaseGeometryWidget):
-    template_name = 'leaflet/point_widget.html'
+    template_name = 'point_widget.html'
 
     class Media:
         css = {
@@ -15,6 +15,7 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
         )
 
     def render(self, name, value, attrs=None):
+
         # add point
         if value:
             attrs.update({ 'point': { 'x': value.x,
