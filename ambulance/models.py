@@ -212,7 +212,7 @@ class Call(AddressModel, UpdatedByModel):
     active = models.BooleanField(default=False)
 
     # ambulances assigned to call
-    ambulances = models.ManyToManyField(AmbulanceCallTimes)
+    ambulances = models.ManyToManyField(AmbulanceCallTime)
 
     # patients
     patients = models.ManyToManyField(Patient)

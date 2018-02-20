@@ -1,19 +1,27 @@
 from django.contrib import admin
+from django.contrib.gis.db import models
 
-# Register your models here.
-
+from emstrack.forms import LeafletPointWidget
 from .models import Ambulance, AmbulanceUpdate, \
-    AmbulanceCallTimes, Patient, Call, \
+    AmbulanceCallTime, Patient, Call, \
     Location, \
     Region
 
-admin.site.register(Ambulance)
-admin.site.register(AmbulanceUpdate)
+# Override location widget in the admin
+class AmbulanceAdmin(admin.ModelAdmin):
 
-admin.site.register(AmbulanceCallTimes)
-admin.site.register(Patient)
-admin.site.register(Call)
+    formfield_overrides = {
+        models.PointField: {'widget': LeafletPointWidget(attrs={'map_width': 500,'map_height': 300})},
+    }
 
-admin.site.register(Location)
+# Register classes
+admin.site.register(Ambulance, AmbulanceAdmin)
+admin.site.register(AmbulanceUpdate, AmbulanceAdmin)
 
-admin.site.register(Region)
+admin.site.register(AmbulanceCallTime, AmbulanceAdmin)
+admin.site.register(Patient, AmbulanceAdmin)
+admin.site.register(Call, AmbulanceAdmin)
+
+admin.site.register(Location, AmbulanceAdmin)
+
+admin.site.register(Region, AmbulanceAdmin)
