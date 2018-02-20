@@ -49,8 +49,8 @@ var LeafletWidget = function (options) {
                 'leaflet-bar leaflet-control leaflet-control-custom');
 
             /* container.style.cursor = 'pointer'; */
-            container.style.width = '30px';
-            container.style.height = '30px';
+            container.style.width = '32px';
+            container.style.height = '32px';
             container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
             container.style.backgroundPosition = 'center';
             container.style.backgroundSize = '23px 23px';
