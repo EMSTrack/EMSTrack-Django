@@ -49,7 +49,7 @@ function addAmbulanceRoute(data) {
 	// Store data in an array
 	var latlngs = [];
 	var lastStatus = '';
-	$.each(data.results, function(i, update) {
+	data.forEach(data.results, function(i, update, array) {
 
 		// get location
 		var loc = update.location;
@@ -57,8 +57,7 @@ function addAmbulanceRoute(data) {
 
 		// get status
 		var status = update.status;
-		console.log('i = ' + i + ' data.length = ' + data.length);
-		if ((status != lastStatus) || (i == (data.length - 1))) {
+		if ((status != lastStatus) || (i == (array.length - 1))) {
 			// add marker
 			// TODO: color depending on status
 			map.addPoint(loc.latitude, loc.longitude, update.id, null)
