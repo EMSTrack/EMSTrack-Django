@@ -58,28 +58,19 @@ var LeafletWidget = function (options) {
             container.style.backgroundRepeat = 'no-repeat';
             container.title = 'Go to your location';
 
-            /*
-            var tooltip = L.DomUtil.create('span',
-                'leaflet-tooltiptext',
-                container);
-            tooltip.textContent = 'Show your location';
-            */
-
-            /*
-
             L.DomEvent
                 .addListener(container, 'click', L.DomEvent.stopPropagation)
                 .addListener(container, 'click', L.DomEvent.preventDefault)
-                .addListener(container, 'click', function () {
-                    map.locate({setView: true, maxZoom: 14});
+                .addListener(container, 'click', function(){
+                    map.locate({setView : true, maxZoom: 14});
                 });
 
-            */
-
+            /*
             container.onclick = function() {
                 console.log('buttonClicked');
                 map.locate({setView: true, maxZoom: 14});
             }
+            */
 
             return container;
         },
