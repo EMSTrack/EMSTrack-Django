@@ -63,7 +63,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         # retrieve updates
         ambulance = self.get_object()
-        ambulance_updates = ambulance.ambulanceupdate_set.all()
+        ambulance_updates = ambulance.ambulanceupdate_set.order_by('-timestamp')
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)

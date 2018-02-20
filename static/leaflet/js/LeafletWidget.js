@@ -48,7 +48,6 @@ var LeafletWidget = function (options) {
             var container = L.DomUtil.create('div',
                 'leaflet-bar leaflet-control leaflet-control-custom');
 
-            /* container.style.cursor = 'pointer'; */
             container.style.width = '32px';
             container.style.height = '32px';
             container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
@@ -56,6 +55,8 @@ var LeafletWidget = function (options) {
             container.style.backgroundSize = '20px 20px';
             container.style.backgroundColor = 'white';
             container.style.backgroundRepeat = 'no-repeat';
+
+            /* tooltip */
             container.title = 'Go to your location';
 
             L.DomEvent
@@ -64,13 +65,6 @@ var LeafletWidget = function (options) {
                 .addListener(container, 'click', function(){
                     map.locate({setView : true, maxZoom: 14});
                 });
-
-            /*
-            container.onclick = function() {
-                console.log('buttonClicked');
-                map.locate({setView: true, maxZoom: 14});
-            }
-            */
 
             return container;
         },

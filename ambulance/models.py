@@ -154,8 +154,8 @@ class AmbulanceUpdate(models.Model):
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
 
-    # timestamp
-    timestamp = models.DateTimeField(null=True, blank=True)
+    # timestamp, indexed
+    timestamp = models.DateTimeField(db_index=True, null=True, blank=True)
 
     # comment
     comment = models.CharField(max_length=254, null=True, blank=True)
@@ -165,6 +165,13 @@ class AmbulanceUpdate(models.Model):
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField()
 
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=['ambulance', 'timestamp'],
+                name='ambulance_timestamp_idx',
+            ),
+        ]
 
 # Call related models
 
