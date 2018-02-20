@@ -1,7 +1,7 @@
 from django.contrib.gis.forms import widgets
 
 class LeafletPointWidget(widgets.BaseGeometryWidget):
-    template_name = '/emstrack/leaflet.html'
+    template_name = 'leaflet/leaflet.html'
 
     class Media:
         css = {
