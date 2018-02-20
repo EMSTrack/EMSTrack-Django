@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.gis.db import models
 
 from emstrack.forms import LeafletPointWidget
+
 from .models import Ambulance, AmbulanceUpdate, \
     AmbulanceCallTime, Patient, Call, \
     Location, \
