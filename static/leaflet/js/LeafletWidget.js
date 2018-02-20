@@ -46,7 +46,7 @@ var LeafletWidget = function (options) {
         onAdd: function (map) {
 
             var container = L.DomUtil.create('div',
-                'leaflet-bar leaflet-control leaflet-control-custom leaflet-tooltip');
+                'leaflet-bar leaflet-control leaflet-control-custom');
 
             /* container.style.cursor = 'pointer'; */
             container.style.width = '30px';
@@ -56,11 +56,14 @@ var LeafletWidget = function (options) {
             container.style.backgroundSize = '23px 23px';
             container.style.backgroundColor = 'white';
             container.style.backgroundRepeat = 'no-repeat';
+            container.title = 'Go to your location';
 
+            /*
             var tooltip = L.DomUtil.create('span',
                 'leaflet-tooltiptext',
                 container);
             tooltip.textContent = 'Show your location';
+            */
 
             /*
 
