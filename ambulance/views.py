@@ -19,9 +19,11 @@ from emstrack.mixins import BasePermissionMixin
 
 from django.template.defaulttags import register
 
+# Ambulance status filter
+
 @register.filter
 def get_status(status):
-    return status.value
+    return AmbulanceStatus[status].value
 
 # Django views
 
