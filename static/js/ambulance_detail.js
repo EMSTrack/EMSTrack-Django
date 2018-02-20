@@ -48,9 +48,19 @@ function addAmbulanceRoute(data) {
 
 	// Store data in an array
 	var latlngs = [];
+	var lastStatus = '';
 	$.each(data.results, function(i, update) {
-		loc = update.location;
+
+		// get location
+		var loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
+
+		// get status
+		var status = update.status;
+		if (status != lastStatus) {
+			// add marker
+			map.addPoint(loc.latitude, loc.longitude, update.id, null)
+		}
 	});
 
 	// Add line to map

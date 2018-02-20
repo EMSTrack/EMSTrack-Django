@@ -287,10 +287,13 @@ var LeafletPolylineWidget = function (options) {
     // Call parent
     LeafletWidget.call(this, options);
 
-    // Initialize id map
+    // store all markers and lines id's
     this.polylineIdMap = {}
+    this.markerIdMap = {};
+    this.pointIdMap = {};
 
-    // create layer 
+    // create layers
+    this.markers = L.layerGroup();
     this.lines = L.layerGroup();
 
 }
@@ -301,18 +304,48 @@ LeafletPolylineWidget.prototype.constructor = LeafletPolylineWidget;
 LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun) {
 
 	// Create polyline
-    var polyline = L.polyline(points, {color: color}).addTo(this.map);
-    L.stamp(polyline);
-    this.lines.addLayer(polyline);
+    var polyline = L.polyline(points, {color: color})
+        .addTo(this.map);
 
     // Add click callback
     if (fun) {
         polyline.on('click', fun);
     }
 
-    // Set id
+    // Add marker
+    L.stamp(polyline);
+    this.lines.addLayer(polyline);
+
+    // Track ids
     if (id >= 0) {
         this.polylineIdMap[polyline._leaflet_id] = id;
     }
 
+    return polyline;
 }
+
+// add point
+LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun) {
+
+    // Create marker
+    var marker = L.marker([lat, lng])
+        .addTo(this.map);
+
+    // Add click callback
+    if (fun) {
+        marker.on('click', fun);
+    }
+
+    // Add marker
+    L.stamp(marker);
+    this.markers.addLayer(marker);
+
+    // Track ids
+    if (id >= 0) {
+        this.markerIdMap[marker._leaflet_id] = id;
+        this.pointIdMap[id] = marker._leaflet_id;
+    }
+
+    return marker;
+}
+
