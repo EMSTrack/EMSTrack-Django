@@ -58,9 +58,22 @@ function addAmbulanceRoute(data) {
 		// get status
 		var status = update.status;
 		if ((status != lastStatus) || (i == (array.length - 1))) {
+
 			// add marker
 			// TODO: color depending on status
-			map.addPoint(loc.latitude, loc.longitude, update.id, null)
+
+			var marker = map.addPoint(loc.latitude, loc.longitude, update.id, null)
+				.bindPopup(status)
+				.on('mouseover',
+					function(e){
+						// open popup bubble
+						this.openPopup().on('mouseout',
+							function(e){
+								this.closePopup();
+							});
+					});
+
+			// update status
 			lastStatus = status;
 			console.log('Adding marker, status = ' + status);
 		}

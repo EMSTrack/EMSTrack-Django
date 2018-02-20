@@ -98,7 +98,7 @@ var LeafletWidget = function (options) {
     });
 }
 
-LeafletWidget.prototype.fitBounds = function (bounds = null) {
+LeafletWidget.prototype.fitBounds = function (bounds) {
 
     // Get bounds if not given
     if (bounds == null) bounds = this.map.getBounds();
@@ -106,6 +106,7 @@ LeafletWidget.prototype.fitBounds = function (bounds = null) {
 
     // Fit map to bounds
     this.map.fitBounds(bounds);
+
 }
 
 // LeafletMultiPointWidget
