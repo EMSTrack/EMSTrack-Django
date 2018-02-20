@@ -97,7 +97,7 @@
             <tbody>
             {% for update in updates %}
                 <tr>
-                    <td>{{ update.status }}</td>
+                    <td>{{ update.status|get_status }}</td>
                     <td>{{ update.location }}</td>
                     <td>{{ update.comment }}</td>
                     <td>{{ update.updated_by }}</td>
