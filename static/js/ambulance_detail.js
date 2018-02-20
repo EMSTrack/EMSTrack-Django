@@ -49,7 +49,7 @@ function addAmbulanceRoute(data) {
 	// Store data in an array
 	var latlngs = [];
 	var lastStatus = '';
-	data.forEach(data.results, function(i, update, array) {
+	data.results.forEach(function(i, update, array) {
 
 		// get location
 		var loc = update.location;
