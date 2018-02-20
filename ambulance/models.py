@@ -175,7 +175,7 @@ class AmbulanceUpdate(models.Model):
 
 # Call related models
 
-class AmbulanceCallTimes(models.Model):
+class AmbulanceCallTime(models.Model):
 
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE, default=1)
