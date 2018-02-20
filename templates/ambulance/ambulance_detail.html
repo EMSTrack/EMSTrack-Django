@@ -2,6 +2,13 @@
 
 {% load static %}
 
+{% block leaflethead %}
+    <script>
+        var ambulance_status = {{ ambulance_status|safe }};
+    </script>
+{% endblock %}
+
+
 {% block content %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
@@ -25,7 +32,7 @@
                 </p>
                 <p>
                     <strong>Status:</strong>
-                    {{ ambulance.status }}
+                    {{ ambulance_status.ambulance.status }}
                 </p>
                 <p>
                     <strong>Comment:</strong>

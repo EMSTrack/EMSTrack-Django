@@ -63,7 +63,7 @@ function addAmbulanceRoute(data) {
 			// TODO: color depending on status
 
 			var marker = map.addPoint(loc.latitude, loc.longitude, update.id, null)
-				.bindPopup(status)
+				.bindPopup(status + '@' + update.timestamp)
 				.on('mouseover',
 					function(e){
 						// open popup bubble

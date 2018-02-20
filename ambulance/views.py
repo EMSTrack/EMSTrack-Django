@@ -76,6 +76,11 @@ class AmbulanceDetailView(LoginRequiredMixin,
         # TODO: Return better page links for navigation
 
         context['updates'] = updates
+
+        # add ambulance_status
+        context['ambulance_status'] = {m.name: m.value
+                                       for m in AmbulanceStatus}
+
         return context
 
 
