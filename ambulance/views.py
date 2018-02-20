@@ -66,7 +66,7 @@ class AmbulanceDetailView(LoginRequiredMixin,
         context = super().get_context_data(**kwargs)
 
         # query
-        updates_query = self.object.ambulanceupdate_set.all()
+        updates_query = self.object.ambulanceupdate_set.order_by('-timestamp')
 
         # get current page
         page = self.request.GET.get('page', 1)
