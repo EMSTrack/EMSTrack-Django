@@ -17,6 +17,11 @@ from .serializers import AmbulanceSerializer
 
 from emstrack.mixins import BasePermissionMixin
 
+from django.template.defaulttags import register
+
+@register.filter
+def get_status(status):
+    return status.value
 
 # Django views
 
