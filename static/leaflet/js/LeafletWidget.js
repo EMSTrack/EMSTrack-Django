@@ -49,13 +49,13 @@ var LeafletWidget = function (options) {
                 'leaflet-bar leaflet-control leaflet-control-custom');
 
             /* container.style.cursor = 'pointer'; */
-            container.style.width = '30px';
-            container.style.height = '30px';
+            container.style.width = '40px';
+            container.style.height = '40px';
             container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
             container.style.backgroundPosition = 'center';
-            container.style.backgroundSize = '13px 13px';
+            container.style.backgroundSize = '20px 20px';
             container.style.backgroundColor = 'white';
-            /* container.style.backgroundRepeat = 'no-repeat'; */
+            container.style.backgroundRepeat = 'no-repeat';
 
             container.onclick = function() {
                 console.log('buttonClicked');
