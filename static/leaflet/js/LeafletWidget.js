@@ -40,7 +40,7 @@ var LeafletWidget = function (options) {
     var locateControl = L.Control.extend({
 
         options: {
-            position: 'topleft'
+            position: 'left'
         },
 
         onAdd: function (map) {
