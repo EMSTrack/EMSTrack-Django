@@ -60,6 +60,8 @@ function addAmbulanceRoute(data) {
 		if (status != lastStatus) {
 			// add marker
 			map.addPoint(loc.latitude, loc.longitude, update.id, null)
+			lastStatus = status;
+			console.log('Adding marker, status = ' + status);
 		}
 	});
 
