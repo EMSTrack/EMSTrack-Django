@@ -46,27 +46,23 @@ var LeafletWidget = function (options) {
         onAdd: function (map) {
 
             var container = L.DomUtil.create('div',
-                'leaflet-bar leaflet-control leaflet-control-custom');
+                'leaflet-bar leaflet-control leaflet-control-custom leaflet-tooltip');
 
             /* container.style.cursor = 'pointer'; */
             container.style.width = '40px';
             container.style.height = '40px';
             container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
             container.style.backgroundPosition = 'center';
-            container.style.backgroundSize = '20px 20px';
+            container.style.backgroundSize = '30px 30px';
             container.style.backgroundColor = 'white';
             container.style.backgroundRepeat = 'no-repeat';
 
-            container.onclick = function() {
-                console.log('buttonClicked');
-                map.locate({setView: true, maxZoom: 14});
-            }
-
-            /*
             var tooltip = L.DomUtil.create('span',
                 'leaflet-tooltiptext',
                 container);
             tooltip.textContent = 'Show your location';
+            
+            /*
 
             L.DomEvent
                 .addListener(container, 'click', L.DomEvent.stopPropagation)
@@ -76,6 +72,11 @@ var LeafletWidget = function (options) {
                 });
 
             */
+
+            container.onclick = function() {
+                console.log('buttonClicked');
+                map.locate({setView: true, maxZoom: 14});
+            }
 
             return container;
         },
