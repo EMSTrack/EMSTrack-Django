@@ -56,6 +56,12 @@ var LeafletWidget = function (options) {
             container.style.backgroundColor = 'white';
             container.style.backgroundRepeat = 'no-repeat';
 
+            container.onclick = function() {
+                console.log('buttonClicked');
+                map.locate({setView: true, maxZoom: 14});
+            }
+
+            /*
             var tooltip = L.DomUtil.create('span',
                 'leaflet-tooltiptext',
                 container);
@@ -67,6 +73,8 @@ var LeafletWidget = function (options) {
                 .addListener(container, 'click', function () {
                     map.locate({setView: true, maxZoom: 14});
                 });
+
+            */
 
             return container;
         },
