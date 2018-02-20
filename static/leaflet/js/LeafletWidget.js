@@ -49,11 +49,11 @@ var LeafletWidget = function (options) {
                 'leaflet-bar leaflet-control leaflet-control-custom leaflet-tooltip');
 
             /* container.style.cursor = 'pointer'; */
-            container.style.width = '40px';
-            container.style.height = '40px';
+            container.style.width = '30px';
+            container.style.height = '30px';
             container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
             container.style.backgroundPosition = 'center';
-            container.style.backgroundSize = '30px 30px';
+            container.style.backgroundSize = '23px 23px';
             container.style.backgroundColor = 'white';
             container.style.backgroundRepeat = 'no-repeat';
 
@@ -61,7 +61,7 @@ var LeafletWidget = function (options) {
                 'leaflet-tooltiptext',
                 container);
             tooltip.textContent = 'Show your location';
-            
+
             /*
 
             L.DomEvent
