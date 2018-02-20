@@ -40,7 +40,7 @@ var LeafletWidget = function (options) {
     var locateControl = L.Control.extend({
 
         options: {
-            position: 'left'
+            position: 'topleft'
         },
 
         onAdd: function (map) {
@@ -51,7 +51,7 @@ var LeafletWidget = function (options) {
             /* container.style.cursor = 'pointer'; */
             container.style.backgroundColor = 'white';
             container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
-            container.style.backgroundSize = '13px 13px';
+            container.style.backgroundSize = '26px 26px';
             container.style.width = '26px';
             container.style.height = '26px';
             container.style.backgroundPosition = 'center';
