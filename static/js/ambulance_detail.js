@@ -57,7 +57,7 @@ function addAmbulanceRoute(data) {
 
 		// get status
 		var status = update.status;
-		if ((status != lastStatus) || (i == data.length - 1)) {
+		if ((status != lastStatus) || (i == (data.length - 1))) {
 			// add marker
 			// TODO: color depending on status
 			map.addPoint(loc.latitude, loc.longitude, update.id, null)
