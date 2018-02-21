@@ -7,10 +7,13 @@
         float: {{ LANGUAGE_BIDI|yesno:"right,left" }};
     }
     #{{ id }}_div_coords {
-        text-align: right;
-        margin: 1px;
         clear: {{ LANGUAGE_BIDI|yesno:"right,left" }};
     }
+    #{{ id }}_div_coords.p {
+        text-align: right;
+        margin: 1px;
+    }
+
     {% if not display_raw %}#{{ id }} { display: none; }{% endif %}
 
     {% endblock %}
