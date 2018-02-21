@@ -43,41 +43,80 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
+function addMarker(map, update) {
+
+	// add marker
+	map.addPoint([update.location.latitude, update.location.longitude, update.id, null)
+		.bindPopup('<strong>' + ambulance_status[status] + '</strong><br/>@' + update.timestamp)
+		.on('mouseover',
+			function(e){
+				// open popup bubble
+				this.openPopup().on('mouseout',
+					function(e){
+						this.closePopup();
+					});
+			});
+};
+
 // Interact with widget to add an ambulance route
 function addAmbulanceRoute(data) {
 
+	// Add status markers
+	// TODO: color depending on status
+
+	// First update
+	var lastStatus;
+	if (data.length >= 2) {
+
+		// Retrieve last update (first position)
+		update = data[data.length - 1];
+
+		// add marker
+		addMarker(map, update);
+
+		// update status
+		lastStatus = update.status;
+
+	}
+
+	// Mid updates
+	for (var i = data.length - 2; i > 0; i--) {
+
+		// Retrieve next update
+		update = data[i];
+
+		if (status != lastStatus) {
+
+            // add marker
+            addMarker(map, update);
+
+        }
+
+		// update status
+		lastStatus = update.status;
+
+	}
+
+	// Last update
+	if (data.length > 0) {
+
+		// Retrieve last update (first position)
+		update = data[0];
+
+		// add marker
+		addMarker(map, update);
+
+	}
+
 	// Store data in an array
 	var latlngs = [];
-	var lastStatus = '';
-	data.results.forEach(function(update, i, array) {
+	data.results.forEach(function(update) {
 
-		// get location
+		// push location
 		var loc = update.location;
 		latlngs.push([loc.latitude, loc.longitude]);
 
-		// get status
-		var status = update.status;
-		if ((status != lastStatus) || (i == (array.length - 1))) {
-
-			// add marker
-			// TODO: color depending on status
-
-			var marker = map.addPoint(loc.latitude, loc.longitude, update.id, null)
-				.bindPopup('<strong>' + ambulance_status[status] + '</strong><br/>@' + update.timestamp)
-				.on('mouseover',
-					function(e){
-						// open popup bubble
-						this.openPopup().on('mouseout',
-							function(e){
-								this.closePopup();
-							});
-					});
-
-			// update status
-			lastStatus = status;
-			console.log('Adding marker, status = ' + status);
-		}
-	});
+    });
 
 	// Add line to map
 	console.log('Adding line');
