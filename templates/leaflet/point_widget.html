@@ -9,7 +9,7 @@
     #{{ id }}_div_coords {
         clear: {{ LANGUAGE_BIDI|yesno:"right,left" }};
     }
-    #{{ id }}_div_coords .p {
+    .latlon {
         text-align: right;
         margin: 1px;
     }
@@ -24,11 +24,11 @@
     <div id="{{ id }}_map" style="width: 400px; height: 400px; display: block"></div>
 
     <div id="{{ id }}_div_coords">
-        <p>
+        <p class="latlon">
             <label class="{{ id }}_coords_label">Latitude:</label>
             <input type="text" id="{{ id }}_lat" name="{{ name }}_lat" disabled>
         </p>
-        <p>
+        <p class="latlon">
             <label class="{{ id }}_coords_label">Longitude:</label>
             <input type="text" id="{{ id }}_lng" name="{{ name }}_lng" disabled>
         </p>
