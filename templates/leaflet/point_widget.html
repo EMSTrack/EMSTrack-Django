@@ -15,14 +15,17 @@
 <div>
 
     <div id="{{ id }}_div_coords" style="text-align: right">
-        <label class="{{ id }}_coords_label">Latitude:</label>
-        <input type="text" id="{{ id }}_lat" name="{{ name }}_lat" disabled>
-        <br/>
-        <label class="{{ id }}_coords_label">Longitude:</label>
-        <input type="text" id="{{ id }}_lng" name="{{ name }}_lng" disabled>
-        {% if display_raw %}<p>{% trans "Debugging window (serialized value)" %}</p>{% endif %}
-        <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10"
-                  name="{{ name }}">{{ serialized }}</textarea>
+        <p>
+            <label class="{{ id }}_coords_label">Latitude:</label>
+            <input type="text" id="{{ id }}_lat" name="{{ name }}_lat" disabled>
+        </p>
+        <p>
+            <label class="{{ id }}_coords_label">Longitude:</label>
+            <input type="text" id="{{ id }}_lng" name="{{ name }}_lng" disabled>
+            {% if display_raw %}{% trans "Debugging window (serialized value)" %}{% endif %}
+            <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10"
+                      name="{{ name }}">{{ serialized }}</textarea>
+        </p>
     </div>
 
     <div id="{{ id }}_div_map">
