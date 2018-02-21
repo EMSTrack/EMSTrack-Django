@@ -85,7 +85,7 @@ function addAmbulanceRoute(data) {
 		// Retrieve next update
 		update = data[i];
 
-		if (status != lastStatus) {
+		if (update.status != lastStatus) {
 
             // add marker
             addMarker(map, update);
