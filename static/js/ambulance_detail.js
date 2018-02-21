@@ -46,7 +46,7 @@ function retrieveAmbulances(ambulance_id) {
 function addMarker(map, update) {
 
 	// add marker
-	map.addPoint([update.location.latitude, update.location.longitude, update.id, null)
+	map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
 		.bindPopup('<strong>' + ambulance_status[status] + '</strong><br/>@' + update.timestamp)
 		.on('mouseover',
 			function(e){
