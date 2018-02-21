@@ -30,7 +30,7 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
         # use TemplatesSetting as default rendering
         # Otherwise we get in trouble with finding point_widget.html
 
-        if default_rendered is not None:
+        if default_renderer is not None:
             return super().render(name, value, attrs, default_renderer)
         else:
             return super().render(name, value, attrs, renderer)
