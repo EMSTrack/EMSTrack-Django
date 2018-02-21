@@ -17,7 +17,7 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
             'leaflet/js/LeafletWidget.js'
         )
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
 
         # add point
         if value:
@@ -26,5 +26,10 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
                                       'z': value.z,
                                       'srid': value.srid }
                        })
-        return super().render(name, value, attrs)
 
+        # use TemplatesSetting as default rendering
+        # Otherwise we get in trouble with finding point_widget.html
+        if renderer is None:
+            renderer = default_renderer
+
+        return super().render(name, value, attrs, renderer)
