@@ -6,7 +6,9 @@
         vertical-align: top;
         float: {{ LANGUAGE_BIDI|yesno:"right,left" }};
     }
-
+    #{{ id }}_div_coords {
+        clear: {{ LANGUAGE_BIDI|yesno:"right,left" }};
+    }
     {% if not display_raw %}#{{ id }} { display: none; }{% endif %}
 
     {% endblock %}
@@ -14,7 +16,11 @@
 
 <div>
 
-    <div id="{{ id }}_div_coords" style="text-align: right; padding: 0px">
+    <div id="{{ id }}_div_map">
+        <div id="{{ id }}_map" style="width: 400px; height: 400px; display: block"></div>
+    </div>
+
+    <div id="{{ id }}_div_coords">
         <p>
             <label class="{{ id }}_coords_label">Latitude:</label>
             <input type="text" id="{{ id }}_lat" name="{{ name }}_lat" disabled>
@@ -22,14 +28,9 @@
         <p>
             <label class="{{ id }}_coords_label">Longitude:</label>
             <input type="text" id="{{ id }}_lng" name="{{ name }}_lng" disabled>
-            {% if display_raw %}{% trans "Debugging window (serialized value)" %}{% endif %}
-            <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10"
-                      name="{{ name }}">{{ serialized }}</textarea>
         </p>
-    </div>
-
-    <div id="{{ id }}_div_map">
-        <div id="{{ id }}_map" style="width: 400px; height: 400px; display: block"></div>
+        <textarea id="{{ id }}" class="vSerializedField required" cols="150" rows="10"
+                  name="{{ name }}">{{ serialized }}</textarea>
     </div>
 
 </div>
