@@ -3,7 +3,7 @@ from django.contrib.gis.forms import widgets
 
 
 class LeafletPointWidget(widgets.BaseGeometryWidget):
-    template_name = 'point_widget.html'
+    template_name = 'leaflet/point_widget.html'
 
     class Media:
         css = {
