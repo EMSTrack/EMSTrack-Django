@@ -4,6 +4,7 @@
     #{{ id }}_div_map {
         position: absolute;
         vertical-align: top;
+        margin: 2px 0px 2px 0px;
         float: {{ LANGUAGE_BIDI|yesno:"right,left" }};
     }
     #{{ id }}_div_coords {
@@ -11,7 +12,7 @@
     }
     .latlon {
         text-align: right;
-        margin: 1px;
+        margin: 1px 0px 1px 0px;
     }
 
     {% if not display_raw %}#{{ id }} { display: none; }{% endif %}
