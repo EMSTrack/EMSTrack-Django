@@ -1,10 +1,9 @@
-from django.contrib.gis.forms import widgets
 from django.forms.renderers import TemplatesSetting
+from django.contrib.gis.forms import widgets
 
 
 class LeafletPointWidget(widgets.BaseGeometryWidget):
     template_name = 'point_widget.html'
-    default_renderer = TemplatesSetting()
 
     class Media:
         css = {
@@ -30,7 +29,4 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
         # use TemplatesSetting as default rendering
         # Otherwise we get in trouble with finding point_widget.html
 
-        if default_renderer is not None:
-            return super().render(name, value, attrs, default_renderer)
-        else:
-            return super().render(name, value, attrs, renderer)
+        return super().render(name, value, attrs, TemplatesSetting())
