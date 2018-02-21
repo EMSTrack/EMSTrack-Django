@@ -64,47 +64,49 @@ function addAmbulanceRoute(data) {
 	// Add status markers
 	// TODO: color depending on status
 
-	// First update
+	updates = data.results;
+	
+	// First entry
 	var lastStatus;
-	if (data.length >= 2) {
+	if (updates.length >= 2) {
 
-		// Retrieve last update (first position)
-		update = data[data.length - 1];
+		// Retrieve last entry (first position)
+		entry = updates[updates.length - 1];
 
 		// add marker
-		addMarker(map, update);
+		addMarker(map, entry);
 
-		// update status
-		lastStatus = update.status;
+		// entry status
+		lastStatus = entry.status;
 
 	}
 
 	// Mid updates
-	for (var i = data.length - 2; i > 0; i--) {
+	for (var i = updates.length - 2; i > 0; i--) {
 
-		// Retrieve next update
-		update = data[i];
+		// Retrieve next entry
+		entry = updates[i];
 
-		if (update.status != lastStatus) {
+		if (entry.status != lastStatus) {
 
             // add marker
-            addMarker(map, update);
+            addMarker(map, entry);
 
         }
 
-		// update status
-		lastStatus = update.status;
+		// entry status
+		lastStatus = entry.status;
 
 	}
 
-	// Last update
-	if (data.length > 0) {
+	// Last entry
+	if (updates.length > 0) {
 
-		// Retrieve last update (first position)
-		update = data[0];
+		// Retrieve last entry (first position)
+		entry = updates[0];
 
 		// add marker
-		addMarker(map, update);
+		addMarker(map, entry);
 
 	}
 
