@@ -1,11 +1,12 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import User
-
-# Register your models here.
 
 from .models import Hospital, Equipment, HospitalEquipment
 
-admin.site.register(Hospital)
-admin.site.register(Equipment)
-admin.site.register(HospitalEquipment)
+from emstrack.admin import EMSTrackAdmin
+
+
+# Register classes
+
+admin.site.register(Hospital, EMSTrackAdmin)
+admin.site.register(Equipment, EMSTrackAdmin)
+admin.site.register(HospitalEquipment, EMSTrackAdmin)
