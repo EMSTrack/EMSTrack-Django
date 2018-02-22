@@ -142,7 +142,7 @@ class PublishClient(BaseClient):
         self.publish_topic('hospital/{}/metadata'.format(hospital.id),
                           EquipmentSerializer(equipment, many=True),
                           qos=qos,
-                          retain=retain)django app strucutredjango app strucutre
+                          retain=retain)
 
     def publish_hospital_equipment(self, equipment, qos=2, retain=True):
         self.publish_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
