@@ -66,33 +66,29 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
 # Defined call serializer
 class CallSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Call
-        fields = [ 'id', 'active', 'ambulances', 'patients', 'details', 'priority','comment', 'updated_by', 'updated_on' ]
-        read_only_fields = ('updated_by',)
+        fields = ['id', 'active', 'ambulances', 'patients', 'details',
+                'priority','comment', 'updated_by', 'updated_on']
+        read_only_fields = ('updated_by')
 
     def create(self, data):
-
-        #get current user
+        # Get current user.
         user = data['updated_by']
 
-        #check credentials
-        # only super can create
-        if not user.is_surperuser:
+        # Make sure user is Super.
+        if not user.is_superuser:
             raise PermissionDenied()
 
         return super().create(data)
 
     def update(self, instance, data):
+        # Get current user.
+        user = data['update_by']
 
-        #get current user
-        user = data['updated_by']
-
-        #check credentials
-        # only super can create
-        if not user.is_surperuser:
-            #serializer.instance will always exist!
+        # Make sure user is Super.
+        if not user.is_superuser:
+            # Serializer instance will always exist!
             if not user.profile.calls.filter(can_write=True, call=instance.id):
                 raise PermissionDenied()
 
