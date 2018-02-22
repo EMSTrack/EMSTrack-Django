@@ -6,6 +6,7 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from .models import Ambulance
+from .models import Call
 
 # Ambulance serializers
 class AmbulanceSerializer(serializers.ModelSerializer):
