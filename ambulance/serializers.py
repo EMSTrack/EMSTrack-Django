@@ -5,8 +5,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
-from .models import Ambulance
-from .models import Call
+from .models import Ambulance, AmbulanceUpdate, Call
 
 # Ambulance serializers
 
