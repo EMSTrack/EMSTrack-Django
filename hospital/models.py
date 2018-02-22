@@ -8,6 +8,7 @@ from django.contrib.gis.geos import Point
 
 from emstrack.models import AddressModel, UpdatedByModel
 
+
 # Hospital model
     
 class Hospital(AddressModel,
@@ -49,11 +50,13 @@ class Hospital(AddressModel,
                                                self.updated_by,
                                                self.updated_on)
 
+
 class EquipmentType(Enum):
     B = 'Boolean'
     I = 'Integer'
     S = 'String'
     
+
 class Equipment(models.Model):
 
     name = models.CharField(max_length=254, unique=True)
@@ -98,4 +101,3 @@ class HospitalEquipment(UpdatedByModel):
 
     def __str__(self):
         return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.value)
-

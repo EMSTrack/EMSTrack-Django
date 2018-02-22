@@ -7,7 +7,9 @@ from drf_extra_fields.geo_fields import PointField
 
 from .models import Hospital, Equipment, HospitalEquipment
 
+
 # Hospital serializers
+
 class HospitalSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
@@ -49,7 +51,9 @@ class HospitalSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
     
+
 # HospitalEquipment serializers
+
 class HospitalEquipmentSerializer(serializers.ModelSerializer):
 
     hospital_name = serializers.CharField(source='hospital.name')
@@ -74,7 +78,9 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
         # TODO: validate equipment value using equipment_etype
         return validated_data
         
+
 # EquipmentMetadata serializer
+
 class EquipmentSerializer(serializers.ModelSerializer):
 
     class Meta:

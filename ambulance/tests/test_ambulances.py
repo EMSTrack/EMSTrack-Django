@@ -1,3 +1,4 @@
+import math
 from django.test import TestCase, Client
 
 from django.contrib.auth.models import User
@@ -15,8 +16,8 @@ import json
 from login.models import AmbulancePermission, HospitalPermission
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-from ambulance.serializers import AmbulanceSerializer
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
@@ -26,6 +27,7 @@ from hospital.serializers import HospitalSerializer, \
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
+
 
 class TestAmbulanceGetList(TestSetup):
 
@@ -42,7 +44,7 @@ class TestAmbulanceGetList(TestSetup):
                 'status': AmbulanceStatus.UK.name,
                 'orientation': a.orientation,
                 'location': point2str(a.location),
-                'location_timestamp': None,
+                'timestamp': date2iso(a.timestamp),
                 'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
@@ -177,6 +179,7 @@ class TestAmbulanceGetList(TestSetup):
         # logout
         client.logout()
 
+
 class TestAmbulanceUpdate(TestSetup):
     
     def test_ambulance_update_serializer(self):
@@ -205,20 +208,20 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': date2iso(a.location_timestamp),
+            'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                             'location_timestamp': location_timestamp,
+                                             'timestamp': timestamp,
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -233,23 +236,16 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
-            'location_timestamp': date2iso(location_timestamp),
+            'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
-        # error update location with timestamp
+        # error update timestamp without location or status
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location': location,
-                                         }, partial=True)
-        self.assertEqual(serializer.is_valid(), False)
-
-        # error update timestamp without location
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'location_timestamp': location_timestamp,
+                                             'timestamp': timestamp,
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
         
@@ -277,20 +273,20 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': date2iso(a.location_timestamp),
+            'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         
         # Update ambulance location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location': location,
-                                             'location_timestamp': location_timestamp
+                                             'timestamp': timestamp
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -305,23 +301,16 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
-            'location_timestamp': date2iso(location_timestamp),
+            'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
-        # error update location with timestamp
+        # error update timestamp without location or status
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location': location
-                                         }, partial=True)
-        self.assertEqual(serializer.is_valid(), False)
-
-        # error update timestamp without location
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'location_timestamp': location_timestamp,
+                                             'timestamp': timestamp,
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
         
@@ -352,27 +341,29 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         self.assertDictEqual(result, answer)
-        
+
         # retrieve new ambulance status
         response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
-        
+
         # set status location
-        location_timestamp = timezone.now()
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': point2str(location),
-                                    'location_timestamp': date2iso(location_timestamp),
+                                    'timestamp': date2iso(timestamp),
                                 })
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
+        if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
+            answer['orientation'] = result['orientation']
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
@@ -381,7 +372,7 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         self.assertEqual(result['location'], point2str(location))
-        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        self.assertEqual(result['timestamp'], date2iso(timestamp))
         
         # set wrong attribute
         response = client.patch('/api/ambulance/{}/'.format(str(self.a1.id)),
@@ -432,20 +423,22 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         
-        # set status location
-        location_timestamp = timezone.now()
+        # set location
+        timestamp = timezone.now()
         location = {'latitude': -2., 'longitude': 7.}
         
         response = client.patch('/api/ambulance/{}/'.format(str(self.a3.id)),
                                 content_type='application/json',
                                 data = json.dumps({
                                     'location': point2str(location),
-                                    'location_timestamp': date2iso(location_timestamp),
+                                    'timestamp': date2iso(timestamp),
                                 })
         )
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
+        if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
+            answer['orientation'] = result['orientation']
         self.assertDictEqual(result, answer)
         
         # retrieve new ambulance location
@@ -454,7 +447,7 @@ class TestAmbulanceUpdate(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         self.assertEqual(result['location'], point2str(location))
-        self.assertEqual(result['location_timestamp'], date2iso(location_timestamp))
+        self.assertEqual(result['timestamp'], date2iso(timestamp))
         
         # set status ambulance
         status = AmbulanceStatus.OS.name
@@ -515,6 +508,7 @@ class TestAmbulanceUpdate(TestSetup):
         # logout
         client.logout()
 
+
 class TestAmbulanceCreate(TestSetup):
 
     def test_ambulance_create_serializer(self):
@@ -538,7 +532,7 @@ class TestAmbulanceCreate(TestSetup):
             'status': AmbulanceStatus.UK.name,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_timestamp': None,
+            'timestamp': date2iso(a.timestamp),
             'updated_by': self.u1.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -613,5 +607,180 @@ class TestAmbulanceCreate(TestSetup):
         )
         self.assertEqual(response.status_code, 403)
         
+        # logout
+        client.logout()
+
+
+class TestAmbulanceUpdates(TestSetup):
+
+    def test(self):
+        
+        # Update ambulance a1
+        a = self.a1
+        user = self.u1
+
+        status = AmbulanceStatus.AH.name
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        timestamp = timezone.now()
+        location = {'latitude': -2., 'longitude': 7.}
+
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
+                                         data={
+                                             'location': location,
+                                             'timestamp': timestamp
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+        
+        status = AmbulanceStatus.OS.name
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # This update does not go to AmbulanceUpdate!
+        serializer = AmbulanceSerializer(Ambulance.objects.get(id=a.id),
+                                         data={
+                                             'identifier': 'someid',
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test AmbulanceUpdateSerializer
+        queryset = AmbulanceUpdate.objects.filter(ambulance=a)
+        answer1 = []
+        for u in queryset:
+            serializer = AmbulanceUpdateSerializer(u)
+            result = {
+                'id': u.id,
+                'ambulance_identifier': u.ambulance.identifier,
+                'comment': u.comment,
+                'status': u.status,
+                'orientation': u.orientation,
+                'location': point2str(u.location),
+                'timestamp': date2iso(u.timestamp),
+                'updated_by_username': u.updated_by.username,
+                'updated_on': date2iso(u.updated_on)
+            }
+            answer1.append(serializer.data)
+            self.assertDictEqual(serializer.data, result)
+
+        # Update ambulance a2
+        a = self.a3
+        user = self.u3
+
+        status = AmbulanceStatus.AH.name
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        timestamp = timezone.now()
+        location = {'latitude': -2., 'longitude': 7.}
+
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location': location,
+                                             'timestamp': timestamp
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        status = AmbulanceStatus.OS.name
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': status,
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test AmbulanceUpdateSerializer
+        queryset = AmbulanceUpdate.objects.filter(ambulance=a)
+        answer3 = []
+        for u in queryset:
+            serializer = AmbulanceUpdateSerializer(u)
+            result = {
+                'id': u.id,
+                'ambulance_identifier': a.identifier,
+                'comment': u.comment,
+                'status': u.status,
+                'orientation': u.orientation,
+                'location': point2str(u.location),
+                'timestamp': date2iso(u.timestamp),
+                'updated_by_username': u.updated_by.username,
+                'updated_on': date2iso(u.updated_on)
+            }
+            answer3.append(serializer.data)
+            self.assertDictEqual(serializer.data, result)
+
+        # Test api
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result['results'], answer1)
+        self.assertEqual(len(result['results']), 4)
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result['results'], answer3)
+        self.assertEqual(len(result['results']), 4)
+
+        # logout
+        client.logout()
+
+        # login as testuser1
+        client.login(username='testuser1', password='top_secret')
+
+        # retrieve ambulances
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # retrieve ambulances
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        # retrieve ambulances
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result['results'], answer3)
+        self.assertEqual(len(result['results']), 4)
+
         # logout
         client.logout()

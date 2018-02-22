@@ -1,5 +1,7 @@
+import logging
 from enum import Enum
 
+import math
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 
@@ -8,7 +10,10 @@ from django.urls import reverse
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
 
+logger = logging.getLogger(__name__)
+
 # User and ambulance location models
+
 
 # Ambulance model
 
@@ -21,11 +26,13 @@ class AmbulanceStatus(Enum):
     HB = 'Hospital bound'
     AH = 'At hospital'
     
+
 class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'
     R = 'Rescue'
     
+
 class Ambulance(UpdatedByModel):
 
     # ambulance properties
@@ -46,10 +53,16 @@ class Ambulance(UpdatedByModel):
     # location
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
-    location_timestamp = models.DateTimeField(null=True, blank=True)
+
+    # timestamp
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    # default value for _loaded_values
+    _loaded_values = None
 
     @classmethod
     def from_db(cls, db, field_names, values):
+
         # call super
         instance = super(Ambulance, cls).from_db(db, field_names, values)
         
@@ -60,6 +73,25 @@ class Ambulance(UpdatedByModel):
         return instance
     
     def save(self, *args, **kwargs):
+
+        # calculate orientation
+        if self._loaded_values:
+
+            # https://www.movable-type.co.uk/scripts/latlong.html
+            lat1 = math.pi * self._loaded_values['location'].y / 180
+            lon1 = math.pi * self._loaded_values['location'].x / 180
+            lat2 = math.pi * self.location.y / 180
+            lon2 = math.pi * self.location.x / 180
+
+            # TODO: should we allow for a small radius before updating direction?
+            if self._loaded_values['location'] != self.location:
+                self.orientation = (180/math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) - \
+                                                              math.sin(lat1) * math.cos(lat2) * \
+                                                              math.cos(lon2 - lon1),
+                                                              math.sin(lon2 - lon1) * math.cos(lat2))
+                if self.orientation < 0:
+                    self.orientation += 360
+
         # save to Ambulance
         super().save(*args, **kwargs)
 
@@ -67,14 +99,20 @@ class Ambulance(UpdatedByModel):
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_ambulance(self)
 
-        # save to AmbulanceUpdate
-        data = {k: getattr(self, k)
-                for k in ('status', 'orientation',
-                          'location', 'location_timestamp',
-                          'comment', 'updated_by', 'updated_on')}
-        data['ambulance'] = self;
-        obj = AmbulanceUpdate(**data)
-        obj.save()
+        # if comment, status or location changed
+        if (self._loaded_values is None) or \
+                self._loaded_values['location'] != self.location or \
+                self._loaded_values['status'] != self.status or \
+                self._loaded_values['comment'] != self.comment:
+
+            # save to AmbulanceUpdate
+            data = {k: getattr(self, k)
+                    for k in ('status', 'orientation',
+                              'location', 'timestamp',
+                              'comment', 'updated_by', 'updated_on')}
+            data['ambulance'] = self;
+            obj = AmbulanceUpdate(**data)
+            obj.save()
         
     def delete(self, *args, **kwargs):
         from mqtt.publish import SingletonPublishClient
@@ -94,9 +132,10 @@ class Ambulance(UpdatedByModel):
                                                self.comment,
                                                AmbulanceStatus[self.status].value,
                                                self.location,
-                                               self.location_timestamp,
+                                               self.timestamp,
                                                self.updated_by,
                                                self.updated_on)
+
 
 class AmbulanceUpdate(models.Model):
 
@@ -114,16 +153,29 @@ class AmbulanceUpdate(models.Model):
     # location
     orientation = models.FloatField(default = 0)
     location = models.PointField(srid=4326, default = defaults['location'])
-    location_timestamp = models.DateTimeField(null=True, blank=True)
+
+    # timestamp, indexed
+    timestamp = models.DateTimeField(db_index=True, null=True, blank=True)
+
+    # comment
+    comment = models.CharField(max_length=254, null=True, blank=True)
 
     # updated by
-    comment = models.CharField(max_length=254, null=True, blank=True)
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField()
-    
 
-class AmbulanceCallTimes(models.Model):
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=['ambulance', 'timestamp'],
+                name='ambulance_timestamp_idx',
+            ),
+        ]
+
+# Call related models
+
+class AmbulanceCallTime(models.Model):
 
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE, default=1)
@@ -133,7 +185,10 @@ class AmbulanceCallTimes(models.Model):
     patient_time = models.DateTimeField(null=True, blank=True)
     hospital_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
-    
+
+
+# Patient might be expanded in the future
+
 class Patient(models.Model):
     """
     A model that provides patient fields.
@@ -142,6 +197,7 @@ class Patient(models.Model):
     name = models.CharField(max_length=254, default = "")
     age = models.IntegerField(null=True)
         
+
 class CallPriority(Enum):
     A = 'Urgent'
     B = 'Emergency'
@@ -149,13 +205,14 @@ class CallPriority(Enum):
     D = 'D'
     E = 'Not urgent'
     
+
 class Call(AddressModel, UpdatedByModel):
 
     # active status 
     active = models.BooleanField(default=False)
 
     # ambulances assigned to call
-    ambulances = models.ManyToManyField(AmbulanceCallTimes)
+    ambulances = models.ManyToManyField(AmbulanceCallTime)
 
     # patients
     patients = models.ManyToManyField(Patient)
@@ -169,9 +226,39 @@ class Call(AddressModel, UpdatedByModel):
     priority = models.CharField(max_length=1,
                                 choices=CALL_PRIORITY_CHOICES,
                                 default=CallPriority.E.name)
-    
+
+    # created at
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
+
+
+# Location related models
+
+class LocationType(Enum):
+    B = 'Base'
+    A = 'AED'
+    O = 'Other'
+
+
+class Location(AddressModel, UpdatedByModel):
+
+    # location name
+    name = models.CharField(max_length=254, unique=True)
+
+    # location type
+    LOCATION_TYPE_CHOICES = \
+        [(m.name, m.value) for m in LocationType]
+    ltype = models.CharField(max_length=1,
+                             choices=LOCATION_TYPE_CHOICES,
+                             default=LocationType.O.name)
+
+    # location
+    location = models.PointField(srid=4326, null=True)
+
+    def __str__(self):
+        return "{} @{} ({})".format(self.name, self.location, self.comment)
 
     
 # THOSE NEED REVIEWING
@@ -179,14 +266,6 @@ class Call(AddressModel, UpdatedByModel):
 class Region(models.Model):
     name = models.CharField(max_length=254, unique=True)
     center = models.PointField(srid=4326, null=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Base(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-    location = models.PointField(srid=4326, null=True)
 
     def __str__(self):
         return self.name

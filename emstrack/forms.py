@@ -1,20 +1,23 @@
+from django.forms.renderers import TemplatesSetting
 from django.contrib.gis.forms import widgets
 
+
 class LeafletPointWidget(widgets.BaseGeometryWidget):
-    template_name = 'leaflet/leaflet.html'
+    template_name = 'leaflet/point_widget.html'
 
     class Media:
         css = {
-            'all': ('https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css',
+            'all': ('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
                     'leaflet/css/location_form.css',
                     'leaflet/css/LeafletWidget.css')
         }
         js = (
-            'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js',
+            'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
             'leaflet/js/LeafletWidget.js'
         )
 
-    def render(self, name, value, attrs=None):
+    def render(self, name, value, attrs=None, renderer=None):
+
         # add point
         if value:
             attrs.update({ 'point': { 'x': value.x,
@@ -22,5 +25,8 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
                                       'z': value.z,
                                       'srid': value.srid }
                        })
-        return super().render(name, value, attrs)
 
+        # use TemplatesSetting as default rendering
+        # Otherwise we get in trouble with finding point_widget.html
+
+        return super().render(name, value, attrs, TemplatesSetting())

@@ -1,20 +1,29 @@
 import uuid
 
 from django.conf import settings
-from django.urls import reverse
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.utils import timezone
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Base
+    Call
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
 from .serializers import AmbulanceSerializer
 
 from emstrack.mixins import BasePermissionMixin
+
+from django.template.defaulttags import register
+
+# Ambulance status filter
+
+@register.filter
+def get_status(status):
+    return AmbulanceStatus[status].value
 
 # Django views
 
@@ -24,6 +33,7 @@ class AmbulancePermissionMixin(BasePermissionMixin):
     profile_field = 'ambulances'
     profile_values = 'ambulance_id'
     queryset = Ambulance.objects.all()
+
 
 class AmbulanceActionMixin:
 
@@ -42,17 +52,51 @@ class AmbulanceActionMixin:
         # call super
         return super().form_valid(form)
 
+
 class AmbulanceDetailView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
                           DetailView):
 
     model = Ambulance
     
+    def get_context_data(self, **kwargs):
+        # add paginated updates to context
+
+        # call supper
+        context = super().get_context_data(**kwargs)
+
+        # query
+        updates_query = self.object.ambulanceupdate_set.order_by('-timestamp')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+
+        # paginate
+        paginator = Paginator(updates_query, 10)
+        try:
+            updates = paginator.page(page)
+        except PageNotAnInteger:
+            updates = paginator.page(1)
+        except EmptyPage:
+            updates = paginator.page(paginator.num_pages)
+
+        # TODO: Return better page links for navigation
+
+        context['updates'] = updates
+
+        # add ambulance_status
+        context['ambulance_status'] = {m.name: m.value
+                                       for m in AmbulanceStatus}
+
+        return context
+
+
 class AmbulanceListView(LoginRequiredMixin,
                         AmbulancePermissionMixin,
                         ListView):
     
     model = Ambulance;
+
 
 class AmbulanceCreateView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
@@ -65,6 +109,7 @@ class AmbulanceCreateView(LoginRequiredMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
     
+
 class AmbulanceUpdateView(LoginRequiredMixin,
                           AmbulancePermissionMixin,
                           AmbulanceActionMixin,
@@ -75,6 +120,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
 
 class AmbulanceMap(TemplateView):
     template_name = 'ambulance/map.html'
@@ -90,6 +136,7 @@ class AmbulanceMap(TemplateView):
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         return context
     
+
 # NEED REVISING
     
 # Call list page
@@ -97,6 +144,7 @@ class CallView(ListView):
     model = Call
     template_name = 'ambulance/dispatch_list.html'
     context_object_name = "ambulance_call"
+
 
 # Admin page
 class AdminView(ListView):

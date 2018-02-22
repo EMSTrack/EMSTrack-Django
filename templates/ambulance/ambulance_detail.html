@@ -1,39 +1,139 @@
-{% extends "base.html" %}
+{% extends "leaflet/base.html" %}
+
 {% load static %}
 
+{% block leaflethead %}
+    <script>
+        var ambulance_status = {{ ambulance_status|safe }};
+    </script>
+{% endblock %}
+
+
 {% block content %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
-<h1>Ambulance</h1>
+    <script>
+        var ambulance_id = {{ ambulance.id|safe }};
+        var APIBaseUrl = '{% url 'homepage' %}api/';
+    </script>
 
-<div class="container">
-  <p>
-    <strong>Identifier:</strong>
-    <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
-  </p>
-  <p>
-    <strong>Capability:</strong>
-    {{ ambulance.capability }} 
-  </p>
-  <p>
-    <strong>Status:</strong>
-    {{ ambulance.status }} 
-  </p>
-  <p>
-    <strong>Location:</strong>
-    {{ ambulance.location }}
-  </p>
-  <p>
-    <strong>Comment:</strong>
-    {{ ambulance.comment }}
-  </p>
-  <p>
-    <strong>Updated on:</strong>
-    {{ ambulance.updated_on }}
-  </p>
-  <p>
-    <strong>By:</strong>
-    {{ ambulance.updated_by }}
-  </p>
-</div>
+    <h1>Ambulance: {{ ambulance.identifier }}</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p>
+                    <strong>Identifier:</strong>
+                    <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
+                </p>
+                <p>
+                    <strong>Capability:</strong>
+                    {{ ambulance.capability }}
+                </p>
+                <p>
+                    <strong>Status:</strong>
+                    {{ ambulance.status|get_status }}
+                </p>
+                <p>
+                    <strong>Comment:</strong>
+                    {{ ambulance.comment }}
+                </p>
+                <p>
+                    <strong>Updated on:</strong>
+                    {{ ambulance.updated_on }}
+                </p>
+                <p>
+                    <strong>By:</strong>
+                    {{ ambulance.updated_by }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>
+        Past Locations
+    </h2>
+
+    <div class="container">
+        <div id="map" style="width: 800px; height: 400px; margin-left: auto; margin-right: auto;"></div>
+    </div>
+
+    <div class="container">
+
+        {% if updates.has_other_pages %}
+        <ul class="pagination">
+            {% if updates.has_previous %}
+            <li><a href="?page={{ updates.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in updates.paginator.page_range %}
+            {% if updates.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if updates.has_next %}
+            <li><a href="?page={{ updates.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+
+        <table class="table table-striped table-condensed">
+            <thead>
+            <tr>
+                <th>Status</th>
+                <th>Location</th>
+                <th>Comment</th>
+                <th>Timestamp</th>
+                <th>Updated on</th>
+                <th>by</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for update in updates %}
+                <tr>
+                    <td>{{ update.status|get_status }}</td>
+                    <td>{{ update.location }}</td>
+                    <td>{{ update.comment }}</td>
+                    <td>{{ update.timestamp }}</td>
+                    <td>{{ update.updated_by }}</td>
+                    <td>{{ update.updated_on }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if updates.has_other_pages %}
+        <ul class="pagination">
+            {% if updates.has_previous %}
+            <li><a href="?page={{ updates.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in updates.paginator.page_range %}
+            {% if updates.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if updates.has_next %}
+            <li><a href="?page={{ updates.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
+
+    </div>
+
+    <script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
+    <script src="{% static 'js/ambulance_detail.js' %}"></script>
 
 {% endblock %}

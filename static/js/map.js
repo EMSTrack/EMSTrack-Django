@@ -14,15 +14,18 @@ var statusGroupLayers = {};
 
 // Initialize marker icons.
 var ambulanceIcon = L.icon({
-	iconUrl: '/static/icons/ambulance_icon.png',
+	//iconUrl: '/static/icons/ambulance_icon.png',
+	iconUrl: '/static/icons/cars/ambulance_red.svg',
 	iconSize: [60, 60],
 });
 var ambulanceIconBlack = L.icon({
-	iconUrl: '/static/icons/ambulance_icon_black.png',
+	// iconUrl: '/static/icons/ambulance_icon_black.png',
+	iconUrl: '/static/icons/cars/ambulance_black.svg',
 	iconSize: [60, 60],
 });
 var ambulanceIconBlue = L.icon({
-	iconUrl: '/static/icons/ambulance_blue.png',
+	// iconUrl: '/static/icons/ambulance_blue.png',
+	iconUrl: '/static/icons/cars/ambulance_blue.svg',
 	iconSize: [60, 40],
 });
 var hospitalIcon = L.icon({
@@ -294,7 +297,8 @@ function updateAmbulance(ambulance) {
 	ambulances[id].status = ambulance.status;
 	ambulances[id].location.latitude = ambulance.location.latitude;
 	ambulances[id].location.longitude = ambulance.location.longitude;
-	
+	ambulances[id].orientation = ambulance.orientation;
+
 	// Overwrite ambulance
 	ambulance = ambulances[id]
 
@@ -408,7 +412,7 @@ function addAmbulanceToMap(ambulance) {
     // Add marker
     ambulanceMarkers[ambulance.id] = L.marker([ambulance.location.latitude,
 					       ambulance.location.longitude],
-					      {icon: coloredIcon})
+					      {icon: coloredIcon, rotationAngle: 360-ambulance.orientation})
 	.bindPopup(
 	    "<strong>" + ambulance.identifier +
 		"</strong>" +

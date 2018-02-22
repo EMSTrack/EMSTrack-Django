@@ -1,6 +1,8 @@
 from rest_framework import mixins
 
 # CreateModelUpdateByMixin
+from rest_framework.exceptions import PermissionDenied
+
 
 class CreateModelUpdateByMixin(mixins.CreateModelMixin):
 
@@ -8,6 +10,7 @@ class CreateModelUpdateByMixin(mixins.CreateModelMixin):
         
         serializer.save(updated_by=self.request.user)
     
+
 # UpdateModelUpdateByMixin
 
 class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
@@ -16,6 +19,7 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
         
         serializer.save(updated_by=self.request.user)
         
+
 # BasePermissionMixin
 
 class BasePermissionMixin:
@@ -60,9 +64,7 @@ class BasePermissionMixin:
         #print('> objects = {}'.format(Object.objects.all()))
         #print('> filtered objects = {}'.format(Object.objects.filter(id__in=can_do)))
         # add filter
-        filter = {}
-        filter[self.filter_field + '__in'] = can_do
+        filter_params = {self.filter_field + '__in': can_do}
 
         # retrieve query
-        return super().get_queryset().filter(**filter)
-        
+        return super().get_queryset().filter(**filter_params)
