@@ -11,7 +11,9 @@ from io import BytesIO
 from .client import BaseClient, MQTTException
 
 from ambulance.models import Ambulance
+from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital, HospitalEquipment
 from hospital.serializers import HospitalSerializer, \
@@ -292,7 +294,9 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, msg.topic, msg.payload, e)
 
         logger.debug('on_hospital: DONE')
-        
+    
+
+
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
 
@@ -359,4 +363,71 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, msg.topic, msg.payload, e)
 
         logger.debug('on_hospital_equipment: DONE')
+
+    def on_call(self, client, userdata, msg):
+        
+        logger.debug("on_call: msg = '{}:{}'".format(msg.topic, msg.payload))
+
+        #parse topic
+        values = self.parse_topic(msg)
+        if not values
+            return
+
+        logger.debug("on_call: values = '{}'".format(values))
+
+        try:            
+            # retieve parsed values
+            user, data, call_id = values
+
+            logger.debug('call_id = {}'.format(call_id))
             
+            call = Call.objects.get(id=call_id)
+
+        except ObjectDoesNotExist:
+
+            #send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                    "Call with id '{}' does not exist".format(call_id))
+
+            return
+        
+        except Exception as e:
+            #send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                    "Exception: '{}'".format(e))
+            return
+
+        logger.debug('on_call: call = {}'.format(call))
+
+        try:
+
+            #update call
+            serializer = CallSerializer(call) #TODO: Find structure
+
+            if serializer.is_valid():
+                logger.dubug('on_call: vaild serializer')
+
+                #save to database
+                serilizer.save(updated_by=user)
+
+            else:
+
+                logger.debug('on_call: INVALID serializer')
+
+                #send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                        serializer.errors)
+
+        except Exception as e:
+
+            logger.debug('on_call: serializer EXCEPTION')
+
+            #send error message to user
+            self.send_error_message(user, msg.topic, msg.payload, e)
+
+
+        logger.debug('on_call: DONE')
+
+
+
+

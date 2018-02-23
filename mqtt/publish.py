@@ -8,7 +8,9 @@ from rest_framework import serializers
 from .client import BaseClient, MQTTException
 
 from ambulance.models import Ambulance
+from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import CallSerializer
 
 from login.views import SettingsView
 
@@ -17,6 +19,7 @@ from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
 from login.serializers import ExtendedProfileSerializer
+
 
 logger = logging.getLogger(__name__)
 
@@ -47,6 +50,16 @@ class MessagePublishClient():
         
     def remove_hospital_equipment(self, hospital, **kwargs):
         pass
+    
+    # For call
+
+    def publish_call(self, call, **kwargs):
+        pass
+
+    def remove_call(self, call, **kwargs):
+        pass
+
+
 
 class PublishClient(BaseClient):
 
@@ -141,6 +154,16 @@ class PublishClient(BaseClient):
     def remove_hospital_equipment(self, equipment):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name))
+
+    def publish_call(self, call, qos=2, retain=True):
+        self.publish_topic('call/{}/data'.format(call.id),
+                           CallSerializer(call),  
+                           qos = qos,
+                           retain=retain)
+
+    # Method to remove calls, no metadata?
+    def remove_call(self, call):
+        self.remove_topic('call/{}/data'.format(call.id))
 
 # Uses Alex Martelli's Borg for making PublishClient act like a singleton
 

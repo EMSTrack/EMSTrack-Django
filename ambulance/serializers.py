@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
-from .models import Ambulance, AmbulanceUpdate
+from .models import Ambulance, AmbulanceUpdate, Call
 
 
 # Ambulance serializers
@@ -78,3 +78,34 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
                             'location', 'timestamp',
                             'comment',
                             'updated_by_username', 'updated_on']
+
+
+# Call serializer
+class CallSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Call
+        fields = ['id', 'active', 'ambulances', 'patients', 'details',
+                'priority','comment', 'updated_by', 'updated_on']
+        read_only_fields = ('updated_by')
+
+    def create(self, data):
+        # Get current user.
+        user = data['updated_by']
+
+        # Make sure user is Super.
+        if not user.is_superuser:
+            raise PermissionDenied()
+
+        return super().create(data)
+
+    def update(self, instance, data):
+        # Get current user.
+        user = data['update_by']
+
+        # Make sure user is Super.
+        if not user.is_superuser:
+            # Serializer instance will always exist!
+            if not user.profile.calls.filter(can_write=True, call=instance.id):
+                raise PermissionDenied()
+
+        return super().update(instance, data)
