@@ -55,7 +55,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     
     serializer_class = AmbulanceSerializer
 
-    @detail_route(methods=['get,post'], pagination_class = AmbulanceUpdatesPagination)
+    @detail_route(methods=['get','post'], pagination_class = AmbulanceUpdatesPagination)
     def updates(self, request, pk=None, **kwargs):
 
         if request.method == 'GET':
