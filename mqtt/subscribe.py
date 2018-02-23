@@ -368,15 +368,15 @@ class SubscribeClient(BaseClient):
         
         logger.debug("on_call: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        #parse topic
+        # parse topic
         values = self.parse_topic(msg)
-        if not values
+        if not values:
             return
 
         logger.debug("on_call: values = '{}'".format(values))
 
         try:            
-            # retieve parsed values
+            # retrieve parsed values
             user, data, call_id = values
 
             logger.debug('call_id = {}'.format(call_id))
@@ -385,46 +385,45 @@ class SubscribeClient(BaseClient):
 
         except ObjectDoesNotExist:
 
-            #send error message to user
+            # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                    "Call with id '{}' does not exist".format(call_id))
+                                    "Call with id '{}' does not exist".format(call_id))
 
             return
         
         except Exception as e:
-            #send error message to user
+            # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                    "Exception: '{}'".format(e))
+                                    "Exception: '{}'".format(e))
             return
 
         logger.debug('on_call: call = {}'.format(call))
 
         try:
 
-            #update call
+            # update call
             serializer = CallSerializer(call) #TODO: Find structure
 
             if serializer.is_valid():
-                logger.dubug('on_call: vaild serializer')
+                logger.debug('on_call: vaild serializer')
 
-                #save to database
-                serilizer.save(updated_by=user)
+                # save to database
+                serializer.save(updated_by=user)
 
             else:
 
                 logger.debug('on_call: INVALID serializer')
 
-                #send error message to user
+                # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
-                        serializer.errors)
+                                        serializer.errors)
 
         except Exception as e:
 
             logger.debug('on_call: serializer EXCEPTION')
 
-            #send error message to user
+            # send error message to user
             self.send_error_message(user, msg.topic, msg.payload, e)
-
 
         logger.debug('on_call: DONE')
 

@@ -71,17 +71,17 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
                   'status', 'orientation',
                   'location', 'timestamp',
                   'comment',
+                  'updated_by',
                   'updated_by_username', 'updated_on']
         read_only_fields = ['id',
                             'ambulance_identifier',
-                            'status', 'orientation',
-                            'location', 'timestamp',
-                            'comment',
+                            'updated_by'
                             'updated_by_username', 'updated_on']
 
 
 # Call serializer
 class CallSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Call
         fields = ['id', 'active', 'ambulances', 'patients', 'details',
@@ -89,6 +89,7 @@ class CallSerializer(serializers.ModelSerializer):
         read_only_fields = ('updated_by')
 
     def create(self, data):
+
         # Get current user.
         user = data['updated_by']
 
@@ -99,6 +100,7 @@ class CallSerializer(serializers.ModelSerializer):
         return super().create(data)
 
     def update(self, instance, data):
+
         # Get current user.
         user = data['update_by']
 
