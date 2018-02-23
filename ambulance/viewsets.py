@@ -60,11 +60,11 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         if request.method == 'GET':
             # list updates
-            self.updates_get(request, pk, **kwargs)
+            return self.updates_get(request, pk, **kwargs)
 
         elif request.method == 'POST':
             # put updates
-            self.updates_post(request, pk, **kwargs)
+            return self.updates_post(request, pk, **kwargs)
 
     def updates_get(self, request, pk=None, **kwargs):
         """
