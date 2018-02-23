@@ -96,7 +96,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         ambulance = self.get_object()
 
         # update all serializers
-        serializer = AmbulanceUpdateSerializer(data=request.data, many=True, data = )
+        serializer = AmbulanceUpdateSerializer(data=request.data, many=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
