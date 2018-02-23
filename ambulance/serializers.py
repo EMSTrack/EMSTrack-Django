@@ -75,7 +75,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
                   'updated_by_username', 'updated_on']
         read_only_fields = ['id',
                             'ambulance_identifier',
-                            'updated_by'
+                            'updated_by',
                             'updated_by_username', 'updated_on']
 
 
