@@ -667,6 +667,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
+                'updated_by': u.updated_by,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
