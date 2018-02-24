@@ -67,16 +67,10 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
         logger.debug('validated_data = {}'.format(validated_data))
 
-        # retrieve ambulance and updated_by
-        ambulance = validated_data.pop('ambulance')
-        updated_by = validated_data.pop('updated_by')
-
         # create template data from current ambulance instance
         data = {k: getattr(ambulance, k)
                 for k in ('status', 'orientation',
                           'location', 'comment')}
-        data['ambulance'] = ambulance
-        data['updated_by'] = updated_by
 
         # loop through updates
         for item in validated_data:
