@@ -19,11 +19,15 @@ from emstrack.mixins import BasePermissionMixin
 
 from django.template.defaulttags import register
 
+from emstrack.views import get_page_links
+
+
 # Ambulance status filter
 
 @register.filter
 def get_status(status):
     return AmbulanceStatus[status].value
+
 
 # Django views
 
@@ -83,6 +87,8 @@ class AmbulanceDetailView(LoginRequiredMixin,
         # TODO: Return better page links for navigation
 
         context['updates'] = updates
+        context['page_links'] = get_page_links(self.request, page)
+
 
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
