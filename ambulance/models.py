@@ -12,6 +12,30 @@ from emstrack.models import AddressModel, UpdatedByModel, defaults
 
 logger = logging.getLogger(__name__)
 
+
+def calculate_orientation(location1, location2):
+
+    # Calculate orientation based on two locations
+    # https://www.movable-type.co.uk/scripts/latlong.html
+
+    # convert latitude and longitude to radians first
+    lat1 = math.pi * location1.y / 180
+    lon1 = math.pi * location1.x / 180
+    lat2 = math.pi * location2.y / 180
+    lon2 = math.pi * location2.x / 180
+
+    # calculate orientation and convert to degrees
+    orientation = (180 / math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) -
+                                               math.sin(lat1) * math.cos(lat2) *
+                                               math.cos(lon2 - lon1),
+                                               math.sin(lon2 - lon1) * math.cos(lat2))
+
+    if orientation < 0:
+        orientation += 360
+
+    return orientation
+
+
 # User and ambulance location models
 
 
@@ -74,23 +98,13 @@ class Ambulance(UpdatedByModel):
     
     def save(self, *args, **kwargs):
 
-        # calculate orientation only if orientation has changed
-        if self._loaded_values and self._loaded_values['orientation'] != self.orientation:
-
-            # https://www.movable-type.co.uk/scripts/latlong.html
-            lat1 = math.pi * self._loaded_values['location'].y / 180
-            lon1 = math.pi * self._loaded_values['location'].x / 180
-            lat2 = math.pi * self.location.y / 180
-            lon2 = math.pi * self.location.x / 180
+        # calculate orientation only if orientation and location has changed
+        if (self._loaded_values and
+                self._loaded_values['orientation'] != self.orientation and
+                self._loaded_values['location'] != self.location):
 
             # TODO: should we allow for a small radius before updating direction?
-            if self._loaded_values['location'] != self.location:
-                self.orientation = (180/math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) - \
-                                                              math.sin(lat1) * math.cos(lat2) * \
-                                                              math.cos(lon2 - lon1),
-                                                              math.sin(lon2 - lon1) * math.cos(lat2))
-                if self.orientation < 0:
-                    self.orientation += 360
+            self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
 
         # save to Ambulance
         super().save(*args, **kwargs)
