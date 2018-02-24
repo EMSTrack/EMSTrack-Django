@@ -75,7 +75,8 @@ urlpatterns = [
     url(r'^hospital/', include('hospital.urls')),
     
     # login
-    url(r'^auth/', include('login.urls')),
+    url(r'^auth/', include('login.urls',
+                           namespace="login")),
 
     # admin
     url(r'^admin/', admin.site.urls),
