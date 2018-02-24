@@ -839,8 +839,8 @@ class TestAmbulanceBulkUpdates(TestSetup):
         # make sure last update is reflected in ambulance
         a = Ambulance.objects.get(id=a.id)
         serializer = AmbulanceSerializer(a)
-        if math.fabs(orientation - a.orientation) < 1e-4:
-            orientation = a.orientation
+        self.asserEqual(math.fabs(orientation - a.orientation) < 1e-4, True)
+        orientation = a.orientation
         result = {
             'id': a.id,
             'identifier': a.identifier,
@@ -859,14 +859,16 @@ class TestAmbulanceBulkUpdates(TestSetup):
         a = self.a3
         user = self.u3
 
-        location = {'latitude': 3., 'longitude': 1.}
         data = [
-            {'status': AmbulanceStatus.AH.name},
+            {
+                'status': AmbulanceStatus.AH.name,
+                'location': location0
+             },
+            {'status': AmbulanceStatus.OS.name},
             {
                 'location': location,
                 'timestamp': timezone.now()
-            },
-            {'status': AmbulanceStatus.OS.name}
+            }
         ]
 
         serializer = AmbulanceUpdateSerializer(data=data, many=True, partial=True)
@@ -897,13 +899,15 @@ class TestAmbulanceBulkUpdates(TestSetup):
         # make sure last update is reflected in ambulance
         a = Ambulance.objects.get(id=a.id)
         serializer = AmbulanceSerializer(a)
+        self.asserEqual(math.fabs(orientation - a.orientation) < 1e-4, True)
+        orientation = a.orientation
         result = {
             'id': a.id,
             'identifier': a.identifier,
             'comment': a.comment,
             'capability': a.capability,
             'status': AmbulanceStatus.OS.name,
-            'orientation': a.orientation,
+            'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
             'updated_by': a.updated_by.id,
