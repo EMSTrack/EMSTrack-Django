@@ -63,12 +63,13 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         else:
             # look up group permissions
             group_permissions = GroupProfile.objects.filter(group__in=obj.user.groups.all())
-            # logger.debug('group_permissions = {}'.format(group_permissions))
+            logger.debug('group_permissions = {}'.format(group_permissions))
 
             # union with user profile ambulances
             # this works because the return type is Profile rather than GroupProfile
             all_permissions = obj.ambulances.union(*(entry.ambulances.all() for entry in group_permissions))
-            # logger.debug('all_permissions = {}'.format(all_permissions))
+            logger.debug('obj_permissions = {}'.format(obj.ambulances))
+            logger.debug('all_permissions = {}'.format(all_permissions))
 
             return AmbulancePermissionSerializer(all_permissions, many=True).data
 
@@ -81,11 +82,12 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         else:
             # look up group permissions
             group_permissions = GroupProfile.objects.filter(group__in=obj.user.groups.all())
-            # logger.debug('group_permissions = {}'.format(group_permissions))
+            logger.debug('group_permissions = {}'.format(group_permissions))
 
             # union with user profile hospitals
             # this works because the return type is Profile rather than GroupProfile
             all_permissions = obj.hospitals.union(*(entry.hospitals.all() for entry in group_permissions))
-            # logger.debug('all_permissions = {}'.format(all_permissions))
+            logger.debug('obj_permissions = {}'.format(obj.hospitals))
+            logger.debug('all_permissions = {}'.format(all_permissions))
 
             return HospitalPermissionSerializer(all_permissions, many=True).data
