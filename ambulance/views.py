@@ -87,7 +87,7 @@ class AmbulanceDetailView(LoginRequiredMixin,
         # TODO: Return better page links for navigation
 
         context['updates'] = updates
-        context['page_links'] = get_page_links(self.request, page)
+        context['page_links'] = get_page_links(self.request, updates)
 
 
         # add ambulance_status
