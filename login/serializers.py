@@ -65,7 +65,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             #
             qs = GroupProfile.objects.filter(group__in=obj.user.groups.all())
             print('qs = {}'.format(qs))
-            all_ambulances = obj.ambulances.union(*(entry.ambulances for entry in qs))
+            all_ambulances = obj.ambulances.union(*(entry.ambulances.all() for entry in qs))
             print('all_ambulances = {}'.format(all_ambulances))
 
             return AmbulancePermissionSerializer(obj.ambulances, many=True).data
