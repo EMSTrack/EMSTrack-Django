@@ -41,5 +41,5 @@ admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 
 # Register AmbulancePermission and HospitalPermission
-admin.site(AmbulancePermission)
-admin.site(HospitalPermission)
+admin.site.register(AmbulancePermission)
+admin.site.register(HospitalPermission)
