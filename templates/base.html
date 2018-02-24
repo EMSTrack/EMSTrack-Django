@@ -33,6 +33,9 @@
         <li><a href="{% url 'ambulance:list' %}">Ambulances</a></li>
         <li><a href="{% url 'hospital:list' %}">Hospitals</a></li>
         <li><a href="{% url 'ambulance:map' %}">Map</a></li>
+          {% if user.is_staff %}
+          <li><a href="{% url 'login:admin' %}">Admin</a></li>
+          {% endif %}
       </ul>
       {% endif %}
       <ul class="nav navbar-nav navbar-right">
