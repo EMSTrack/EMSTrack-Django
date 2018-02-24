@@ -33,14 +33,6 @@ class TestSetupData():
             email='test2@user.com',
             password='very_secret')
 
-        # Create groups
-        cls.g1 = Group.objects.create(name='EMTs')
-        cls.g2 = Group.objects.create(name='Drivers')
-        cls.g3 = Group.objects.create(name='Dispatcher')
-
-        cls.u1.groups.add([cls.g1, cls.g2])
-        cls.u3.groups.add([cls.g2, cls.g3])
-
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
             identifier='BC-179',
@@ -155,6 +147,14 @@ class TestSetupData():
                                                can_write=True)
         )
 
+        # Create groups
+        cls.g1 = Group.objects.create(name='EMTs')
+        cls.g2 = Group.objects.create(name='Drivers')
+        cls.g3 = Group.objects.create(name='Dispatcher')
+
+        cls.u1.groups.add([cls.g1, cls.g2])
+        cls.u3.groups.add([cls.g2, cls.g3])
+
         # add hospitals to groups
         cls.g1.groupprofile.hospitals.add(
             HospitalPermission.objects.create(hospital=cls.h1,
@@ -168,7 +168,7 @@ class TestSetupData():
                                               can_write=True)
         )
 
-        # u3 has no hospitals 
+        # g3 has no hospitals
 
         # add ambulances to groups
         cls.g1.groupprofile.ambulances.add(
@@ -176,7 +176,7 @@ class TestSetupData():
                                                can_write=True)
         )
 
-        # u2 has no ambulances
+        # g2 has no ambulances
 
         cls.g3.groupprofile.ambulances.add(
             AmbulancePermission.objects.create(ambulance=cls.a1,

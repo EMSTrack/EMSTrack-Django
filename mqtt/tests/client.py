@@ -6,7 +6,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase
 from django.conf import settings
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from django.core.management.base import OutputWrapper
 from django.core.management.color import color_style, no_style
@@ -399,6 +399,45 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 AmbulancePermission.objects.create(ambulance=cls.a3,
                                                    can_write=True)
             )
+
+            # Create groups
+            cls.g1 = Group.objects.create(name='EMTs')
+            cls.g2 = Group.objects.create(name='Drivers')
+            cls.g3 = Group.objects.create(name='Dispatcher')
+
+            cls.u1.groups.add([cls.g1, cls.g2])
+            cls.u3.groups.add([cls.g2, cls.g3])
+
+            # add hospitals to groups
+            cls.g1.groupprofile.hospitals.add(
+                HospitalPermission.objects.create(hospital=cls.h1,
+                                                  can_write=True),
+                HospitalPermission.objects.create(hospital=cls.h3)
+            )
+
+            cls.g2.groupprofile.hospitals.add(
+                HospitalPermission.objects.create(hospital=cls.h1),
+                HospitalPermission.objects.create(hospital=cls.h2,
+                                                  can_write=True)
+            )
+
+            # g3 has no hospitals
+
+            # add ambulances to groups
+            cls.g1.groupprofile.ambulances.add(
+                AmbulancePermission.objects.create(ambulance=cls.a2,
+                                                   can_write=True)
+            )
+
+            # g2 has no ambulances
+
+            cls.g3.groupprofile.ambulances.add(
+                AmbulancePermission.objects.create(ambulance=cls.a1,
+                                                   can_read=False),
+                AmbulancePermission.objects.create(ambulance=cls.a3,
+                                                   can_write=True)
+            )
+
 
 # MQTTTestClient
 class MQTTTestClient(BaseClient):
