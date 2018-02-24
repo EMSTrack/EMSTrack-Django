@@ -852,10 +852,11 @@ class TestAmbulanceBulkUpdates(TestSetup):
         a = self.a3
         user = self.u3
 
+        location = {'latitude': 3., 'longitude': 1.}
         data = [
             {'status': AmbulanceStatus.AH.name},
             {
-                'location': {'latitude': -2., 'longitude': 7.},
+                'location': location,
                 'timestamp': timezone.now()
             },
             {'status': AmbulanceStatus.OS.name}
@@ -885,6 +886,23 @@ class TestAmbulanceBulkUpdates(TestSetup):
             }
             answer3.append(serializer.data)
             self.assertDictEqual(serializer.data, result)
+
+        # make sure last update is reflected in ambulance
+        a = Ambulance.objects.get(id=a.id)
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': AmbulanceStatus.OS.name,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(a.timestamp),
+            'updated_by': a.updated_by.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
 
         # Test api
 
