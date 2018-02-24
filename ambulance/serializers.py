@@ -66,7 +66,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
     def create(self, validated_data):
 
-        def add_update(update, current):
+        def process_update(update, current):
 
             # clear timestamp
             current.pop('timestamp', None)
@@ -83,13 +83,6 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
             # update data
             current.update(**update)
-
-            # create update object
-            obj = AmbulanceUpdate(**current)
-            obj.save()
-
-            # append to objects list
-            instances.append(obj)
 
             return current
 
@@ -116,18 +109,22 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 # loop through
                 for k in range(0,n-1):
 
-                    # update items
-                    data = add_update(validated_data[k], data)
+                    # process update
+                    data = process_update(validated_data[k], data)
+
+                    # create update object
+                    obj = AmbulanceUpdate(**data)
+                    obj.save()
+
+                    # append to objects list
+                    instances.append(obj)
 
                 # on last update, update ambulance instead
 
-                # clear timestamp
-                data.pop('timestamp', None)
+                # process update
+                data = process_update(**validated_data[-1], data)
 
-                # update data
-                data.update(**validated_data[-1])
-
-                # save ambulance will automatically create update
+                # save to ambulance will automatically create update
                 for attr, value in data.items():
                     setattr(ambulance, attr, value)
                 ambulance.save()
