@@ -16,7 +16,7 @@ import json
 from login.models import AmbulancePermission, HospitalPermission
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
 from hospital.models import Hospital, \
@@ -796,9 +796,14 @@ class TestAmbulanceBulkUpdates(TestSetup):
         a = self.a1
         user = self.u1
 
+        location0 = {'latitude': -3., 'longitude': 6.}
         location = {'latitude': -2., 'longitude': 7.}
+        orientation = calculate_orientation(location0, location)
         data = [
-            {'status': AmbulanceStatus.AH.name},
+            {
+                'status': AmbulanceStatus.AH.name,
+                'location': location0,
+            },
             {
                 'location': location,
                 'timestamp': timezone.now()
@@ -840,7 +845,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'comment': a.comment,
             'capability': a.capability,
             'status': AmbulanceStatus.OS.name,
-            'orientation': a.orientation,
+            'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
             'updated_by': a.updated_by.id,
