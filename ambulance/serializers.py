@@ -1,9 +1,12 @@
+import logging
 from django.core.exceptions import PermissionDenied
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from .models import Ambulance, AmbulanceUpdate, Call
+
+logger = logging.getLogger(__name__)
 
 
 # Ambulance serializers
@@ -61,6 +64,8 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
     def create(self, validated_data):
+
+        logger.debug('validated_data = {}'.format(validated_data))
 
         # retrieve ambulance and updated_by
         ambulance = validated_data.pop('ambulance')
