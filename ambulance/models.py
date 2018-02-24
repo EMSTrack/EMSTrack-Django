@@ -98,9 +98,9 @@ class Ambulance(UpdatedByModel):
     
     def save(self, *args, **kwargs):
 
-        # calculate orientation only if orientation and location has changed
+        # calculate orientation only if orientation has not changed and location has changed
         if (self._loaded_values and
-                self._loaded_values['orientation'] != self.orientation and
+                self._loaded_values['orientation'] == self.orientation and
                 self._loaded_values['location'] != self.location):
 
             # TODO: should we allow for a small radius before updating direction?
