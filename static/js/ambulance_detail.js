@@ -1,4 +1,6 @@
 var map;
+var page;
+var page_size;
 $(document).ready(function() {
 
  	// Set up map widget
@@ -8,6 +10,13 @@ $(document).ready(function() {
  	}
  	map = new LeafletPolylineWidget(options);
 
+ 	// get page and page_size parameters
+	var searchParams = new URLSearchParams(window.location.search)
+	if (searchParams.has('page'))
+        page = searchParams.get('page');
+	if (searchParams.has('page_size'))
+        page_size = searchParams.get('page_size');
+
  	// Retrieve ambulances via AJAX
  	retrieveAmbulances(ambulance_id)
 
@@ -15,10 +24,19 @@ $(document).ready(function() {
 
 function retrieveAmbulances(ambulance_id) {
 
+	// Build url
+	var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates';
+	if (page != null) {
+        url += "?page=" + page;
+        if (page_size != null)
+            url += "&page_size=" + page_size;
+    } else if (page_size != null)
+            url += "?page_size=" + page_size;
+
     $.ajax({
         type: 'GET',
         datatype: "json",
-        url: APIBaseUrl + 'ambulance/' + ambulance_id + '/updates',
+        url: url,
 
         fail: function (msg) {
 
