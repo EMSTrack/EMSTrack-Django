@@ -74,8 +74,8 @@ class Ambulance(UpdatedByModel):
     
     def save(self, *args, **kwargs):
 
-        # calculate orientation
-        if self._loaded_values:
+        # calculate orientation only if orientation has changed
+        if self._loaded_values and self._loaded_values['orientation'] != self.orientation:
 
             # https://www.movable-type.co.uk/scripts/latlong.html
             lat1 = math.pi * self._loaded_values['location'].y / 180
