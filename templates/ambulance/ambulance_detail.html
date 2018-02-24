@@ -63,6 +63,7 @@
     <div class="container">
 
         {% if updates.has_other_pages %}
+        {% include "rest_framework/pagination/numbers.html" %}
         <ul class="pagination">
             {% if updates.has_previous %}
             <li><a href="?page={{ updates.previous_page_number }}">&laquo;</a></li>
