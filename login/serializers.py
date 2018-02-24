@@ -1,3 +1,5 @@
+import logging
+
 from rest_framework import serializers
 
 from django.contrib.auth.models import User
@@ -8,6 +10,8 @@ from ambulance.models import Ambulance
 
 from hospital.models import Hospital
 
+
+logger = logging.getLogger(__name__)
 
 # Profile serializers
 
@@ -59,7 +63,8 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         else:
             # add group permissions to profile permission
             qs = GroupProfile.objects.filter(group__in=obj.user.groups)
-            obj.ambulances.union(entry.ambulances for entry in qs)
+            all_ambulances = set(obj.ambulances, *[entry.ambulances for entry in qs])
+            logger.debug('all_ambulances = {}'.format(all_ambulances))
 
             return AmbulancePermissionSerializer(obj.ambulances, many=True).data
 
