@@ -39,3 +39,7 @@ admin.site.register(User, UserAdmin)
 # Re-register GroupAdmin
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
+
+# Register AmbulancePermission and HospitalPermission
+admin.site(AmbulancePermission)
+admin.site(HospitalPermission)
