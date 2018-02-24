@@ -67,6 +67,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
         logger.debug('validated_data = {}'.format(validated_data))
 
+        instances = []
         if validated_data:
 
             # create template data from first ambulance instance
@@ -87,6 +88,11 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 obj = AmbulanceUpdate(**data)
                 obj.save()
 
+                # append to objects list
+                instances.append(obj)
+
+        # return created instances
+        return instances
 
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
