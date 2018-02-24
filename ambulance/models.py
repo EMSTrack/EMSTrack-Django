@@ -105,6 +105,9 @@ class Ambulance(UpdatedByModel):
 
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
+            logger.debug('calculating orientation: < {} - {} = {}'.format(self._loaded_values['location'],
+                                                                          self.location,
+                                                                          self.orientation))
 
         # save to Ambulance
         super().save(*args, **kwargs)
