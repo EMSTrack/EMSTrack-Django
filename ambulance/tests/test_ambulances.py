@@ -24,7 +24,7 @@ from hospital.models import Hospital, \
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
-from emstrack.tests.util import date2iso, point2str
+from emstrack.tests.util import date2iso, point2str, dict2point
 
 from login.tests.setup_data import TestSetup
 
@@ -798,7 +798,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
 
         location0 = {'latitude': -3., 'longitude': 6.}
         location = {'latitude': -2., 'longitude': 7.}
-        orientation = calculate_orientation(location0, location)
+        orientation = calculate_orientation(dict2point(location0), dict2point(location))
         data = [
             {
                 'status': AmbulanceStatus.AH.name,
