@@ -806,7 +806,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
         ]
 
         serializer = AmbulanceUpdateSerializer(data=data, many=True)
-        serializer.is_valid()
+        self.assertEqual(True, serializer.is_valid())
         serializer.save(ambulance=Ambulance.objects.get(id=a.id),
                         updated_by=user)
 
