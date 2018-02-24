@@ -797,19 +797,16 @@ class TestAmbulanceBulkUpdates(TestSetup):
         user = self.u1
 
         data = [
-            { 'status': AmbulanceStatus.AH.name },
+            {'status': AmbulanceStatus.AH.name},
             {
                 'location': {'latitude': -2., 'longitude': 7.},
                 'timestamp': timezone.now()
             },
-            { 'status': AmbulanceStatus.OS.name }
+            {'status': AmbulanceStatus.OS.name}
         ]
 
         serializer = AmbulanceUpdateSerializer(data=data, many=True, partial=True)
-        valid = serializer.is_valid()
-        if not valid:
-            print('errors = {}'.format(serializer.errors))
-        self.assertEqual(True, valid)
+        serializer.is_valid(raise_exception=True)
         serializer.save(ambulance=Ambulance.objects.get(id=a.id),
                         updated_by=user)
 
@@ -833,38 +830,23 @@ class TestAmbulanceBulkUpdates(TestSetup):
             answer1.append(serializer.data)
             self.assertDictEqual(serializer.data, result)
 
-    def _test(self):
-
         # Bulk update ambulance a2
         a = self.a3
         user = self.u3
 
-        status = AmbulanceStatus.AH.name
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'status': status,
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
+        data = [
+            {'status': AmbulanceStatus.AH.name},
+            {
+                'location': {'latitude': -2., 'longitude': 7.},
+                'timestamp': timezone.now()
+            },
+            {'status': AmbulanceStatus.OS.name}
+        ]
 
-        timestamp = timezone.now()
-        location = {'latitude': -2., 'longitude': 7.}
-
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'location': location,
-                                             'timestamp': timestamp
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
-
-        status = AmbulanceStatus.OS.name
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'status': status,
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
+        serializer = AmbulanceUpdateSerializer(data=data, many=True, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(ambulance=Ambulance.objects.get(id=a.id),
+                        updated_by=user)
 
         # test AmbulanceUpdateSerializer
         queryset = AmbulanceUpdate.objects.filter(ambulance=a)
@@ -873,13 +855,13 @@ class TestAmbulanceBulkUpdates(TestSetup):
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
+                'ambulance_id': a.id,
                 'ambulance_identifier': a.identifier,
                 'comment': u.comment,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
-                'updated_by': u.updated_by.id,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
