@@ -122,7 +122,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 # on last update, update ambulance instead
 
                 # process update
-                data = process_update(**validated_data[-1], data)
+                data = process_update(validated_data[-1], data)
 
                 # save to ambulance will automatically create update
                 for attr, value in data.items():
