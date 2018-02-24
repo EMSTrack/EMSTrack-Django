@@ -155,7 +155,7 @@ class AmbulanceUpdate(models.Model):
     location = models.PointField(srid=4326, default = defaults['location'])
 
     # timestamp, indexed
-    timestamp = models.DateTimeField(db_index=True, null=True, blank=True)
+    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
 
     # comment
     comment = models.CharField(max_length=254, null=True, blank=True)
@@ -163,7 +163,7 @@ class AmbulanceUpdate(models.Model):
     # updated by
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
-    updated_on = models.DateTimeField()
+    updated_on = models.DateTimeField(default=timezone.now)
 
     class Meta:
         indexes = [
