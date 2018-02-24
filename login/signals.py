@@ -15,6 +15,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 # Add signal to automatically extend group profile
 @receiver(post_save, sender=Group)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_group_profile(sender, instance, created, **kwargs):
     if created:
         GroupProfile.objects.create(group=instance)
