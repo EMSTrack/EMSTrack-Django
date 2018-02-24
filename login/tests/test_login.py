@@ -29,6 +29,7 @@ from mqtt.client import MQTTException
 
 logger = logging.getLogger(__name__)
 
+
 class MyTestCase(MQTTTestCase):
 
     @classmethod
@@ -125,7 +126,8 @@ class TestProfile(MyTestCase):
             ]
         }
         self.assertDictEqual(serializer.data, result)
-            
+
+
 class TestProfileViewset(MyTestCase):
 
     def test_profile_viewset(self):
@@ -185,7 +187,8 @@ class TestProfileViewset(MyTestCase):
         
         # logout
         client.logout()
-        
+
+
 class TestLogin(MyTestCase):
             
     def test_login(self):
@@ -244,7 +247,8 @@ class TestLogin(MyTestCase):
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
-        
+
+
 class TestMQTTLogin(MyTestCase):
 
     def test_mqtt_login(self):
@@ -331,6 +335,7 @@ class TestMQTTLogin(MyTestCase):
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
+
 
 class TestMQTTACLSubscribe(MyTestCase):
 
@@ -533,6 +538,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                follow=True)
         self.assertEqual(response.status_code, 403)
 
+
 class TestMQTTACLPublish(MyTestCase):
 
     def test_mqtt_acl_publish(self):
@@ -684,7 +690,8 @@ class TestMQTTACLPublish(MyTestCase):
                                  'topic': '/user/{}/client/{}/status'.format(username, client_id + 'o') },
                                follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
+
 class TestMQTTConnect(MyTestCase):
 
     def is_connected(self, client, MAX_TRIES = 10):
@@ -738,6 +745,7 @@ class TestMQTTConnect(MyTestCase):
         with self.assertRaises(MQTTException):
 
             self.is_connected(MQTTTestClient(broker))
+
 
 class TestMQTTSubscribe(MyTestCase):
 
@@ -866,6 +874,7 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_subscribed(client)
         
         client.wait()
+
 
 class TestMQTTLoginTempPassword(MyTestCase):
 

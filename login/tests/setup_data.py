@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.conf import settings
 
 from login.models import Profile, AmbulancePermission, HospitalPermission
@@ -15,6 +15,11 @@ class TestSetupData():
 
     @classmethod
     def setUpTestData(cls):
+
+        # create groups
+        cls.g1 = Group.objects.create(name='EMTs')
+        cls.g2 = Group.objects.create(name='Drivers')
+        cls.g3 = Group.objects.create(name='Dispatcher')
 
         # Add users
         cls.u1 = User.objects.create_user(
@@ -146,6 +151,7 @@ class TestSetupData():
             AmbulancePermission.objects.create(ambulance=cls.a3,
                                                can_write=True)
         )
+
 
         #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
         #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
