@@ -55,6 +55,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals')
 
     def get_ambulances(self, obj):
+        logger.debug('user = {}'.format(obj.user))
         if obj.user.is_superuser:
             return [{'ambulance_id': p['id'],
                      'ambulance_identifier': p['identifier'],
