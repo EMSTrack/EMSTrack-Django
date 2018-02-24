@@ -77,8 +77,9 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                     update['location'] != current['location']):
 
                     current['orientation'] = calculate_orientation(current['location'], update['location'])
-                    logger.debug('calculating orientation: < {} - {} = {}',
-                                 current['location'], update['location'], current['orientation'])
+                    logger.debug('calculating orientation: < {} - {} = {}'.format(current['location'],
+                                                                                  update['location'],
+                                                                                  current['orientation']))
 
             # update data
             current.update(**update)
