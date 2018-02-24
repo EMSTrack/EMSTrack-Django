@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework import viewsets, mixins
 from rest_framework.decorators import detail_route
 from rest_framework.response import Response
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
@@ -15,7 +15,13 @@ from .serializers import AmbulanceSerializer, \
 
 # Django REST Framework Viewsets
 
-class AmbulanceUpdatesPagination(LimitOffsetPagination):
+class AmbulancePageNumberPagination(LimitOffsetPagination):
+    page_size_query_param = 'page_size'
+    page_size = 25
+    max_page_size= 1000
+
+
+class AmbulanceLimitOffsetPagination(LimitOffsetPagination):
     default_limit = 100
     max_limit = 1000
 
@@ -55,7 +61,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     
     serializer_class = AmbulanceSerializer
 
-    @detail_route(methods=['get','post'], pagination_class = AmbulanceUpdatesPagination)
+    @detail_route(methods=['get','post'], pagination_class=AmbulancePageNumberPagination)
     def updates(self, request, pk=None, **kwargs):
 
         if request.method == 'GET':
@@ -69,7 +75,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     def updates_get(self, request, pk=None, **kwargs):
         """
         Retrieve and paginate ambulance updates.
-        Use ?limit=10&offset=30 to control pagination.
+        Use ?page=10&page_size=100 to control pagination.
         """
 
         # retrieve updates

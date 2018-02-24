@@ -74,7 +74,7 @@ class AmbulanceDetailView(LoginRequiredMixin,
 
         # get current page
         page = self.request.GET.get('page', 1)
-        page_size = self.request.GET.get('page_size', 10)
+        page_size = self.request.GET.get('page_size', 25)
 
         # paginate
         paginator = Paginator(updates_query, page_size)
