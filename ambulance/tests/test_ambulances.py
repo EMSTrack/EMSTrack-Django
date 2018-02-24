@@ -839,6 +839,8 @@ class TestAmbulanceBulkUpdates(TestSetup):
         # make sure last update is reflected in ambulance
         a = Ambulance.objects.get(id=a.id)
         serializer = AmbulanceSerializer(a)
+        if math.fabs(orientation - a.orientation) < 1e-4:
+            orientation = a.orientation
         result = {
             'id': a.id,
             'identifier': a.identifier,
