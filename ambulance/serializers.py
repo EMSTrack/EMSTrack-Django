@@ -66,6 +66,21 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
     def create(self, validated_data):
 
+        def add_update(item, data):
+
+            # clear timestamp
+            data.pop('timestamp', None)
+
+            # update data
+            data.update(**item)
+
+            # create update object
+            obj = AmbulanceUpdate(**data)
+            obj.save()
+
+            # append to objects list
+            instances.append(obj)
+
         logger.debug('validated_data = {}'.format(validated_data))
 
         # process updates inside a transaction
@@ -75,26 +90,39 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
                 # loop through updates
                 instances = []
-                data = None
-                for item in validated_data:
+                n = len(validated_data)
 
-                    # create template data from current ambulance instance
-                    if data is None:
-                        data = {k: getattr(item.get('ambulance'), k)
-                        for k in ('status', 'orientation', 'location', 'comment')}
+                # short return
+                if n == 0:
+                    return
 
-                    # clear timestamp
-                    data.pop('timestamp', None)
+                # get ambulance and create template from first update
+                # all ambulances are the same in a bulk update
+                ambulance = validated_data[0].get('ambulance')
+                data = {k: getattr(ambulance, k) for k in ('status', 'orientation', 'location', 'comment')}
 
-                    # update data
-                    data.update(**item)
+                # loop through
+                for k in range(0,n-1):
 
-                    # create update object
-                    obj = AmbulanceUpdate(**data)
-                    obj.save()
+                    # update items
+                    add_update(validated_data[k], data)
 
-                    # append to objects list
-                    instances.append(obj)
+                # on last update, update ambulance instead
+                item = validated_data[-1]
+
+                # clear timestamp
+                data.pop('timestamp', None)
+
+                # update data
+                data.update(**item)
+
+                # save ambulance will automatically create update
+                for attr, value in item.items():
+                    setattr(ambulance, attr, value)
+                ambulance.save()
+
+                # append to objects list
+                instances.append(ambulance)
 
             # return created instances
             return instances
