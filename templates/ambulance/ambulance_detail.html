@@ -64,25 +64,6 @@
 
         {% if updates.has_other_pages %}
         {% include "rest_framework/pagination/numbers.html" %}
-        <ul class="pagination">
-            {% if updates.has_previous %}
-            <li><a href="?page={{ updates.previous_page_number }}">&laquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-            {% endif %}
-            {% for i in updates.paginator.page_range %}
-            {% if updates.number == i %}
-            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-            <li><a href="?page={{ i }}">{{ i }}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% if updates.has_next %}
-            <li><a href="?page={{ updates.next_page_number }}">&raquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-        </ul>
         {% endif %}
 
         <table class="table table-striped table-condensed">
@@ -111,25 +92,7 @@
         </table>
 
         {% if updates.has_other_pages %}
-        <ul class="pagination">
-            {% if updates.has_previous %}
-            <li><a href="?page={{ updates.previous_page_number }}">&laquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&laquo;</span></li>
-            {% endif %}
-            {% for i in updates.paginator.page_range %}
-            {% if updates.number == i %}
-            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-            {% else %}
-            <li><a href="?page={{ i }}">{{ i }}</a></li>
-            {% endif %}
-            {% endfor %}
-            {% if updates.has_next %}
-            <li><a href="?page={{ updates.next_page_number }}">&raquo;</a></li>
-            {% else %}
-            <li class="disabled"><span>&raquo;</span></li>
-            {% endif %}
-        </ul>
+        {% include "rest_framework/pagination/numbers.html" %}
         {% endif %}
 
     </div>
