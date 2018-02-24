@@ -74,9 +74,10 @@ class AmbulanceDetailView(LoginRequiredMixin,
 
         # get current page
         page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 10)
 
         # paginate
-        paginator = Paginator(updates_query, 10)
+        paginator = Paginator(updates_query, page_size)
         try:
             updates = paginator.page(page)
         except PageNotAnInteger:
