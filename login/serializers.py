@@ -63,6 +63,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
         else:
             # add group permissions to profile permission
             qs = GroupProfile.objects.filter(group__in=obj.user.groups.all())
+            logger.debug('qs = {}'.format(qs))
             all_ambulances = set(obj.ambulances, *[entry.ambulances for entry in qs])
             logger.debug('all_ambulances = {}'.format(all_ambulances))
 
