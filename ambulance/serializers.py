@@ -5,7 +5,7 @@ from django.db import IntegrityError, transaction
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
-from .models import Ambulance, AmbulanceUpdate, Call
+from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation
 
 logger = logging.getLogger(__name__)
 
@@ -66,20 +66,29 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
     def create(self, validated_data):
 
-        def add_update(item, data):
+        def add_update(update, current):
 
             # clear timestamp
-            data.pop('timestamp', None)
+            current.pop('timestamp', None)
+
+            # calculate orientation?
+            if ('orientation' not in update and
+                    'location' in update and
+                    update['location'] != current['location']):
+
+                    current['orientation'] = calculate_orientation(current['location'], update['location'])
 
             # update data
-            data.update(**item)
+            current.update(**update)
 
             # create update object
-            obj = AmbulanceUpdate(**data)
+            obj = AmbulanceUpdate(**current)
             obj.save()
 
             # append to objects list
             instances.append(obj)
+
+            return current
 
         logger.debug('validated_data = {}'.format(validated_data))
 
@@ -105,16 +114,15 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 for k in range(0,n-1):
 
                     # update items
-                    add_update(validated_data[k], data)
+                    data = add_update(validated_data[k], data)
 
                 # on last update, update ambulance instead
-                item = validated_data[-1]
 
                 # clear timestamp
                 data.pop('timestamp', None)
 
                 # update data
-                data.update(**item)
+                data.update(**validated_data[-1])
 
                 # save ambulance will automatically create update
                 for attr, value in data.items():
@@ -128,7 +136,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
             return instances
 
         except IntegrityError:
-            pass
+            logger.info('Integrity error in bulk ambulance update')
 
 
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
