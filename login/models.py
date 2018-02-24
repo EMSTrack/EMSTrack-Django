@@ -1,6 +1,7 @@
 from django.contrib.gis.db import models
 
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 from ambulance.models import Ambulance
 
@@ -52,6 +53,22 @@ class Profile(models.Model):
                 '\nHospitals:\n' +
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
     
+
+# GroupProfile
+
+class GroupProfile(models.Model):
+
+    group = models.OneToOneField(Group,
+                                 on_delete=models.CASCADE)
+    ambulances = models.ManyToManyField(AmbulancePermission)
+    hospitals = models.ManyToManyField(HospitalPermission)
+
+    def __str__(self):
+        return ('Ambulances:\n' +
+                '\n'.join('  {}'.format(k) for k in self.ambulances.all()) +
+                '\nHospitals:\n' +
+                '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
+
 
 # TemporaryPassword
 

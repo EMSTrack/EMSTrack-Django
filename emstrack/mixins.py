@@ -21,6 +21,7 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
         
 
 # BasePermissionMixin
+# TODO: Add group permissions
 
 class BasePermissionMixin:
 
@@ -31,8 +32,8 @@ class BasePermissionMixin:
     
     def get_queryset(self):
 
-        #print('@get_queryset {}({})'.format(self.request.user,
-        #                                    self.request.method))
+        # print('@get_queryset {}({})'.format(self.request.user,
+        #                                     self.request.method))
         
         # return all objects if superuser
         user = self.request.user
@@ -60,9 +61,9 @@ class BasePermissionMixin:
         else:
             raise PermissionDenied()
 
-        #print('> user = {}, can_do = {}'.format(user, can_do))
-        #print('> objects = {}'.format(Object.objects.all()))
-        #print('> filtered objects = {}'.format(Object.objects.filter(id__in=can_do)))
+        # print('> user = {}, can_do = {}'.format(user, can_do))
+        # print('> objects = {}'.format(Object.objects.all()))
+        # print('> filtered objects = {}'.format(Object.objects.filter(id__in=can_do)))
         # add filter
         filter_params = {self.filter_field + '__in': can_do}
 
