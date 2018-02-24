@@ -805,7 +805,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             { 'status': AmbulanceStatus.OS.name }
         ]
 
-        serializer = AmbulanceUpdateSerializer(data=data, many=True)
+        serializer = AmbulanceUpdateSerializer(data=data, many=True, partial=True)
         valid = serializer.is_valid()
         if not valid:
             print('errors = {}'.format(serializer.errors))

@@ -95,8 +95,8 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
-    ambulance_identifier = serializers.CharField(source='ambulance.identifier')
-    updated_by_username = serializers.CharField(source='updated_by.username')
+    ambulance_identifier = serializers.CharField(source='ambulance.identifier', required=False)
+    updated_by_username = serializers.CharField(source='updated_by.username', required=False)
 
 
     class Meta:
