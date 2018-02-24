@@ -1,5 +1,6 @@
 import logging
 from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError, transaction
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
@@ -67,31 +68,39 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
         logger.debug('validated_data = {}'.format(validated_data))
 
-        # loop through updates
-        instances = []
-        data = None
-        for item in validated_data:
+        # process updates inside a transaction
+        try:
 
-            # create template data from current ambulance instance
-            if data is None:
-                data = {k: getattr(item.get('ambulance'), k)
+            with transaction.atomic():
+
+                # loop through updates
+                instances = []
+                data = None
+                for item in validated_data:
+
+                    # create template data from current ambulance instance
+                    if data is None:
+                        data = {k: getattr(item.get('ambulance'), k)
                         for k in ('status', 'orientation', 'location', 'comment')}
 
-            # clear timestamp
-            data.pop('timestamp', None)
+                    # clear timestamp
+                    data.pop('timestamp', None)
 
-            # update data
-            data.update(**item)
+                    # update data
+                    data.update(**item)
 
-            # create update object
-            obj = AmbulanceUpdate(**data)
-            obj.save()
+                    # create update object
+                    obj = AmbulanceUpdate(**data)
+                    obj.save()
 
-            # append to objects list
-            instances.append(obj)
+                    # append to objects list
+                    instances.append(obj)
 
-        # return created instances
-        return instances
+            # return created instances
+            return instances
+
+        except IntegrityError:
+            pass
 
 
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
