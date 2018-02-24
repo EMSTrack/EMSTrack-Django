@@ -117,7 +117,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 data.update(**item)
 
                 # save ambulance will automatically create update
-                for attr, value in item.items():
+                for attr, value in data.items():
                     setattr(ambulance, attr, value)
                 ambulance.save()
 
