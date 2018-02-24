@@ -89,6 +89,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             # union with user profile hospitals
             # this works because the return type is Profile rather than GroupProfile
             all_permissions = obj.hospitals.union(*(entry.hospitals.all() for entry in group_permissions))
+            logger.debug('expanded group_permissions = {}'.format(entry.hospitals.all() for entry in group_permissions))
             logger.debug('obj_permissions = {}'.format(obj.hospitals))
             logger.debug('all_permissions = {}'.format(all_permissions))
 
