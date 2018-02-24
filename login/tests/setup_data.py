@@ -152,8 +152,8 @@ class TestSetupData():
         cls.g2 = Group.objects.create(name='Drivers')
         cls.g3 = Group.objects.create(name='Dispatcher')
 
-        cls.u1.groups.add([cls.g1, cls.g2])
-        cls.u3.groups.add([cls.g2, cls.g3])
+        cls.u1.groups.set([cls.g1, cls.g2])
+        cls.u3.groups.set([cls.g2, cls.g3])
 
         # add hospitals to groups
         cls.g1.groupprofile.hospitals.add(
