@@ -58,13 +58,44 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+class AmbulanceUpdateListSerializer(serializers.ListSerializer):
+
+    def create(self, validated_data):
+
+        # retrieve ambulance and updated_by
+        ambulance = validated_data.pop('ambulance')
+        updated_by = validated_data.pop('updated_by')
+
+        # create template data from current ambulance instance
+        data = {k: getattr(ambulance, k)
+                for k in ('status', 'orientation',
+                          'location', 'comment')}
+        data['ambulance'] = ambulance
+        data['updated_by'] = updated_by
+
+        # loop through updates
+        for item in validated_data:
+
+            # clear timestamp
+            data.pop('timestamp', None)
+
+            # update data
+            data.update(**item)
+
+            # create update object
+            obj = AmbulanceUpdate(**data)
+            obj.save()
+
+
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
 
     location = PointField(required=False)
     ambulance_identifier = serializers.CharField(source='ambulance.identifier')
     updated_by_username = serializers.CharField(source='updated_by.username')
 
+
     class Meta:
+        list_serializer_class = AmbulanceUpdateListSerializer
         model = AmbulanceUpdate
         fields = ['id',
                   'ambulance_identifier',

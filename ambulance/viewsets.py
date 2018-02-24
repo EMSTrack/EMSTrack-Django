@@ -64,7 +64,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         elif request.method == 'POST':
             # put updates
-            return self.updates_post(request, pk, **kwargs)
+            return self.updates_post(request, pk, updated_by=self.request.user, **kwargs)
 
     def updates_get(self, request, pk=None, **kwargs):
         """
@@ -95,10 +95,14 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # retrieve ambulance
         ambulance = self.get_object()
 
+        # retrieve user
+        updated_by = kwargs.pop('updated_by')
+
         # update all serializers
-        serializer = AmbulanceUpdateSerializer(data=request.data, many=True)
+        serializer = AmbulanceUpdateSerializer(data=request.data,
+                                               many=True)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(ambulance=ambulance, updated_by=updated_by)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
