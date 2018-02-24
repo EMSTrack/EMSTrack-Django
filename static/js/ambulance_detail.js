@@ -63,9 +63,6 @@ function retrieveAmbulances(ambulance_id) {
 
 function addMarker(map, update) {
 
-	console.log('Adding marker on map');
-	console.log(update);
-
 	// add marker
 	map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
 		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@' + update.timestamp)
@@ -77,6 +74,7 @@ function addMarker(map, update) {
 						this.closePopup();
 					});
 			});
+
 };
 
 // Interact with widget to add an ambulance route
