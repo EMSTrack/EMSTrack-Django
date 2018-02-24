@@ -846,7 +846,6 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
-        answer1.append(serializer.data)
         self.assertDictEqual(serializer.data, result)
 
         # Bulk update ambulance a2
