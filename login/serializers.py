@@ -62,15 +62,15 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                      'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')]
         else:
             # look up group permissions
-            qs = GroupProfile.objects.filter(group__in=obj.user.groups.all())
-            logger.debug('qs = {}'.format(qs))
+            group_permissions = GroupProfile.objects.filter(group__in=obj.user.groups.all())
+            # logger.debug('group_permissions = {}'.format(group_permissions))
 
             # union with user profile ambulances
             # this works because the return type is Profile rather than GroupProfile
-            all_ambulances = obj.ambulances.union(*(entry.ambulances.all() for entry in qs))
-            logger.debug('all_ambulances = {}'.format(all_ambulances))
+            all_permissions = obj.ambulances.union(*(entry.ambulances.all() for entry in group_permissions))
+            # logger.debug('all_permissions = {}'.format(all_permissions))
 
-            return AmbulancePermissionSerializer(all_ambulances, many=True).data
+            return AmbulancePermissionSerializer(all_permissions, many=True).data
 
     def get_hospitals(self, obj):
         if obj.user.is_superuser:
@@ -79,4 +79,13 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                      'can_read': True,
                      'can_write': True} for p in Hospital.objects.all().values('id', 'name')]
         else:
-            return HospitalPermissionSerializer(obj.hospitals, many=True).data
+            # look up group permissions
+            group_permissions = GroupProfile.objects.filter(group__in=obj.user.groups.all())
+            # logger.debug('group_permissions = {}'.format(group_permissions))
+
+            # union with user profile hospitals
+            # this works because the return type is Profile rather than GroupProfile
+            all_permissions = obj.hospitals.union(*(entry.hospitals.all() for entry in group_permissions))
+            # logger.debug('all_permissions = {}'.format(all_permissions))
+
+            return HospitalPermissionSerializer(all_permissions, many=True).data
