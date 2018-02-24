@@ -33,20 +33,18 @@
         <li><a href="{% url 'ambulance:list' %}">Ambulances</a></li>
         <li><a href="{% url 'hospital:list' %}">Hospitals</a></li>
         <li><a href="{% url 'ambulance:map' %}">Map</a></li>
-          {% if user.is_staff %}
-          <li><a href="{% url 'login:admin' %}">Admin</a></li>
-          {% endif %}
       </ul>
       {% endif %}
       <ul class="nav navbar-nav navbar-right">
-	{% if user.is_authenticated %}
-        <li><a href="/auth/settings/"><span class="glyphicon"></span>&nbsp;Settings</a></li>
-        <li><a href="/auth/logout/"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout {{request.user.first_name}}</a>
-        </li>
-	{% else %}
-	<li><a href="/auth/signup"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-	<li><a href="/auth/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
-	{% endif %}
+        {% if user.is_authenticated %}
+          {% if user.is_staff %}
+            <li><a href="{% url 'login:admin' %}">Admin</a></li>
+          {% endif %}
+          <li><a href="{% url 'login:logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout {{request.user.first_name}}</a></li>
+        {% else %}
+          <li><a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
+          <li><a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
+        {% endif %}
       </ul>
     </div>
   </div>
