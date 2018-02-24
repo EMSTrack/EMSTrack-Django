@@ -661,13 +661,13 @@ class TestAmbulanceUpdates(TestSetup):
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
+                'ambulance_id': u.ambulance.id,
                 'ambulance_identifier': u.ambulance.identifier,
                 'comment': u.comment,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
-                'updated_by': u.updated_by.id,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
@@ -712,13 +712,13 @@ class TestAmbulanceUpdates(TestSetup):
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
+                'ambulance_id': u.ambulance.id,
                 'ambulance_identifier': a.identifier,
                 'comment': u.comment,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
-                'updated_by': u.updated_by.id,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
@@ -820,13 +820,13 @@ class TestAmbulanceBulkUpdates(TestSetup):
             serializer = AmbulanceUpdateSerializer(u)
             result = {
                 'id': u.id,
+                'ambulance_id': u.ambulance.id,
                 'ambulance_identifier': u.ambulance.identifier,
                 'comment': u.comment,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
-                'updated_by': u.updated_by.id,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }

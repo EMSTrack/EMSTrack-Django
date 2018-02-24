@@ -67,23 +67,25 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
         logger.debug('validated_data = {}'.format(validated_data))
 
-        # create template data from current ambulance instance
-        data = {k: getattr(ambulance, k)
+        if validated_data:
+
+            # create template data from first ambulance instance
+            data = {k: getattr(validated_data[0].get('ambulance'), k)
                 for k in ('status', 'orientation',
                           'location', 'comment')}
 
-        # loop through updates
-        for item in validated_data:
+            # loop through updates
+            for item in validated_data:
 
-            # clear timestamp
-            data.pop('timestamp', None)
+                # clear timestamp
+                data.pop('timestamp', None)
 
-            # update data
-            data.update(**item)
+                # update data
+                data.update(**item)
 
-            # create update object
-            obj = AmbulanceUpdate(**data)
-            obj.save()
+                # create update object
+                obj = AmbulanceUpdate(**data)
+                obj.save()
 
 
 class AmbulanceUpdateSerializer(serializers.ModelSerializer):
@@ -97,15 +99,15 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
         list_serializer_class = AmbulanceUpdateListSerializer
         model = AmbulanceUpdate
         fields = ['id',
+                  'ambulance_id',
                   'ambulance_identifier',
                   'status', 'orientation',
                   'location', 'timestamp',
                   'comment',
-                  'updated_by',
                   'updated_by_username', 'updated_on']
         read_only_fields = ['id',
+                            'ambulance_id'
                             'ambulance_identifier',
-                            'updated_by',
                             'updated_by_username', 'updated_on']
 
 
