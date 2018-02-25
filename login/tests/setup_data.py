@@ -193,7 +193,7 @@ class TestSetupData():
         )
 
         cls.u4.groups.set([cls.g2])
-        cls.u5.groups.set([cls.g3])
+        cls.u5.groups.set([cls.g1, cls.g3])
 
         #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
         #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))

@@ -77,6 +77,31 @@ class TestProfile(MyTestCase):
         
         # test ProfileSerializer
 
+        # super will see all ambulances and hospitals
+        u = self.u1
+        serializer = ExtendedProfileSerializer(u.profile)
+        result = {
+            'ambulances': [
+                {
+                    'ambulance_id': e.pk,
+                    'ambulance_identifier': e.identifier,
+                    'can_read': True,
+                    'can_write': True
+                }
+                for e in Ambulance.objects.all()
+            ],
+            'hospitals': [
+                {
+                    'hospital_id': e.pk,
+                    'hospital_name': e.name,
+                    'can_read': True,
+                    'can_write': True
+                }
+                for e in Hospital.objects.all()
+            ]
+        }
+        self.assertDictEqual(serializer.data, result)
+
         # regular users is just like ProfileSerializer
         for u in (self.u2, self.u3):
             serializer = ExtendedProfileSerializer(u.profile)
@@ -102,27 +127,28 @@ class TestProfile(MyTestCase):
             }
             self.assertDictEqual(serializer.data, result)
 
-        # super will see all ambulances and hospitals
-        u = self.u1
+        # regular users is just like ProfileSerializer
+        u = self.u4
+        g = self.g2
         serializer = ExtendedProfileSerializer(u.profile)
         result = {
             'ambulances': [
                 {
-                    'ambulance_id': e.pk,
-                    'ambulance_identifier': e.identifier,
-                    'can_read': True,
-                    'can_write': True
+                    'ambulance_id': e.ambulance.pk,
+                    'ambulance_identifier': e.ambulance.identifier,
+                    'can_read': e.can_read,
+                    'can_write': e.can_write
                 }
-                for e in Ambulance.objects.all()
+                for e in g.groupprofile.ambulances.all()
             ],
             'hospitals': [
                 {
-                    'hospital_id': e.pk,
-                    'hospital_name': e.name,
-                    'can_read': True,
-                    'can_write': True
+                    'hospital_id': e.hospital.pk,
+                    'hospital_name': e.hospital.name,
+                    'can_read': e.can_read,
+                    'can_write': e.can_write
                 }
-                for e in Hospital.objects.all()
+                for e in g.groupprofile.hospitals.all()
             ]
         }
         self.assertDictEqual(serializer.data, result)

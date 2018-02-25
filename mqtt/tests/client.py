@@ -446,7 +446,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             )
 
             cls.u4.groups.set([cls.g2])
-            cls.u5.groups.set([cls.g3])
+            cls.u5.groups.set([cls.g1, cls.g3])
 
 
 # MQTTTestClient
