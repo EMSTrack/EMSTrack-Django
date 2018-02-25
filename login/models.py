@@ -44,8 +44,8 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
-    ambulances = models.ManyToManyField(AmbulancePermission)
-    hospitals = models.ManyToManyField(HospitalPermission)
+    ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
+    hospitals = models.ManyToManyField(HospitalPermission, blank=True)
 
     def __str__(self):
         return ('Ambulances:\n' +
@@ -60,8 +60,8 @@ class GroupProfile(models.Model):
 
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE)
-    ambulances = models.ManyToManyField(AmbulancePermission)
-    hospitals = models.ManyToManyField(HospitalPermission)
+    ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
+    hospitals = models.ManyToManyField(HospitalPermission, blank=True)
 
     def __str__(self):
         return ('Ambulances:\n' +

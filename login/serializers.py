@@ -63,18 +63,20 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                      'can_read': True,
                      'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')]
         else:
-            # look up group permissions
-            group_permissions = GroupProfile.objects.filter(group__in=obj.user.groups.all())
-            logger.debug('group_permissions = {}'.format(group_permissions))
 
-            # union with user profile ambulances
-            # this works because the return type is Profile rather than GroupProfile
-            all_permissions = obj.ambulances.union(*[entry.ambulances.all() for entry in group_permissions])
-            logger.debug('expanded group_permissions = {}'.format([entry.ambulances.all() for entry in group_permissions]))
-            logger.debug('obj_permissions = {}'.format(obj.ambulances))
-            logger.debug('all_permissions = {}'.format(all_permissions))
+            # initialize ambulances permissions
+            all_ambulances = {}
 
-            return AmbulancePermissionSerializer(all_permissions, many=True).data
+            # loop through groups
+            for group in obj.user.groups.all():
+                all_ambulances.update({e.id: e for e in group.groupprofile.ambulances.all()})
+                logger.debug('all_ambulances = {}'.format(all_ambulances))
+
+            # add user permissions
+            all_ambulances.update({e.id: e for e in user.profile.ambulances.all()})
+            logger.debug('all_ambulances = {}'.format(all_ambulances))
+
+            return AmbulancePermissionSerializer(all_ambulances.values(), many=True).data
 
     def get_hospitals(self, obj):
         if obj.user.is_superuser:

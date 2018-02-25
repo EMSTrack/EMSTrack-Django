@@ -232,7 +232,7 @@ class Call(AddressModel, UpdatedByModel):
     ambulances = models.ManyToManyField(AmbulanceCallTime)
 
     # patients
-    patients = models.ManyToManyField(Patient)
+    patients = models.ManyToManyField(Patient, blank=True)
     
     # details
     details = models.CharField(max_length=500, default = "")
