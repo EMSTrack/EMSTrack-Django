@@ -163,7 +163,9 @@ class TestSetupData():
         cls.g3 = Group.objects.create(name='Dispatcher')
 
         cls.u4.groups.set([cls.g2])
+        cls.u4.save()
         cls.u5.groups.set([cls.g3])
+        cls.u5.save()
 
         # add hospitals to groups
         cls.g1.groupprofile.hospitals.add(
@@ -198,6 +200,7 @@ class TestSetupData():
         #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
         #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
         #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
+
 
 class TestSetup(TestSetupData, TestCase):
     pass
