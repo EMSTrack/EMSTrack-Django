@@ -287,7 +287,17 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 username='testuser2',
                 email='test2@user.com',
                 password='very_secret')
-        
+
+            cls.u4 = User.objects.create_user(
+                username='testuser3',
+                email='test3@user.com',
+                password='highly_secret')
+
+            cls.u5 = User.objects.create_user(
+                username='testuser4',
+                email='test4@user.com',
+                password='extremely_secret')
+
             # Add ambulances
             cls.a1 = Ambulance.objects.create(
                 identifier='BC-179',
@@ -405,9 +415,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.g2 = Group.objects.create(name='Drivers')
             cls.g3 = Group.objects.create(name='Dispatcher')
 
-            cls.u1.groups.set([cls.g1, cls.g2])
-            cls.u3.groups.set([cls.g2, cls.g3])
-
             # add hospitals to groups
             cls.g1.groupprofile.hospitals.add(
                 HospitalPermission.objects.create(hospital=cls.h1,
@@ -437,6 +444,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 AmbulancePermission.objects.create(ambulance=cls.a3,
                                                    can_write=True)
             )
+
+            cls.u4.groups.set([cls.g2])
+            cls.u5.groups.set([cls.g3])
 
 
 # MQTTTestClient
