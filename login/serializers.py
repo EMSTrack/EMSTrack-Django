@@ -2,7 +2,7 @@ import logging
 
 from rest_framework import serializers
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from .models import Profile, AmbulancePermission, HospitalPermission, GroupProfile
 
@@ -70,10 +70,10 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             all_ambulances = {}
 
             # loop through groups
-            if obj.user.groups:
+            if obj.user.groups is not None:
                 for group in obj.user.groups.all():
                     all_ambulances.update({e.id: e for e in group.groupprofile.ambulances.all()})
-                    logger.debug('group = {} , all_ambulances = {}'.format(group.name, all_ambulances))
+                    logger.debug('group = {}, all_ambulances = {}'.format(group.name, all_ambulances))
 
             # add user permissions
             all_ambulances.update({e.id: e for e in obj.user.profile.ambulances.all()})
@@ -97,10 +97,10 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             all_hospitals = {}
 
             # loop through groups
-            if obj.user.groups:
+            if obj.user.groups is not None:
                 for group in obj.user.groups.all():
                     all_hospitals.update({e.id: e for e in group.groupprofile.hospitals.all()})
-                    logger.debug('group = {} , all_hospitals = {}'.format(group.name, all_hospitals))
+                    logger.debug('group = {}, all_hospitals = {}'.format(group.name, all_hospitals))
 
             # add user permissions
             all_hospitals.update({e.id: e for e in obj.user.profile.hospitals.all()})
