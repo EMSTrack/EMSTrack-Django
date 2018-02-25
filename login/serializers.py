@@ -73,7 +73,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                 logger.debug('all_ambulances = {}'.format(all_ambulances))
 
             # add user permissions
-            all_ambulances.update({e.id: e for e in user.profile.ambulances.all()})
+            all_ambulances.update({e.id: e for e in obj.user.profile.ambulances.all()})
             logger.debug('all_ambulances = {}'.format(all_ambulances))
 
             return AmbulancePermissionSerializer(all_ambulances.values(), many=True).data
