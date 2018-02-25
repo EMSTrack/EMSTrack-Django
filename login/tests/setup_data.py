@@ -162,11 +162,6 @@ class TestSetupData():
         cls.g2 = Group.objects.create(name='Drivers')
         cls.g3 = Group.objects.create(name='Dispatcher')
 
-        cls.u4.groups.set([cls.g2])
-        cls.u4.save()
-        cls.u5.groups.set([cls.g3])
-        cls.u5.save()
-
         # add hospitals to groups
         cls.g1.groupprofile.hospitals.add(
             HospitalPermission.objects.create(hospital=cls.h1,
@@ -196,6 +191,11 @@ class TestSetupData():
             AmbulancePermission.objects.create(ambulance=cls.a3,
                                                can_write=True)
         )
+
+        cls.u4.groups.set([cls.g2])
+        cls.u4.save()
+        cls.u5.groups.set([cls.g3])
+        cls.u5.save()
 
         #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
         #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
