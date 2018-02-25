@@ -85,15 +85,17 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
                      'can_read': True,
                      'can_write': True} for p in Hospital.objects.all().values('id', 'name')]
         else:
-            # look up group hospitals
-            group_hospitals = GroupProfile.objects.filter(group__in=obj.user.groups.all())
-            logger.debug('group_hospitals = {}'.format(group_hospitals))
 
-            # union with user profile hospitals
-            # this works because the return type is Profile rather than GroupProfile
-            all_hospitals = obj.hospitals.union(*[entry.hospitals.all() for entry in group_hospitals])
-            logger.debug('expanded group_hospitals = {}'.format([entry.hospitals.all() for entry in group_hospitals]))
-            logger.debug('obj_hospitals = {}'.format(obj.hospitals))
+            # initialize hospitals permissions
+            all_hospitals = {}
+
+            # loop through groups
+            for group in obj.user.groups.all():
+                all_hospitals.update({e.id: e for e in group.groupprofile.hospitals.all()})
+                logger.debug('all_hospitals = {}'.format(all_hospitals))
+
+            # add user permissions
+            all_hospitals.update({e.id: e for e in obj.user.profile.hospitals.all()})
             logger.debug('all_hospitals = {}'.format(all_hospitals))
 
-            return HospitalPermissionSerializer(all_hospitals, many=True).data
+            return HospitalPermissionSerializer(all_hospitals.values(), many=True).data
