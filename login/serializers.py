@@ -57,8 +57,10 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
     def get_ambulances(self, obj):
 
         logger.debug('user = {}'.format(obj.user))
-        logger.debug('groups = {}'.format(repr(obj.user.groups)))
+        logger.debug('groups = {}'.format(obj.user.groups))
         logger.debug('groups.all() = {}'.format(obj.user.groups.all()))
+        logger.debug('groups.filter() = {}'.format(Group.objects.filter(user=obj.user)))
+        logger.debug('groups.values() = {}'.format(obj.user.groups.values()))
         if obj.user.is_superuser:
             return [{'ambulance_id': p['id'],
                      'ambulance_identifier': p['identifier'],
@@ -84,8 +86,10 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
     def get_hospitals(self, obj):
 
         logger.debug('user = {}'.format(obj.user))
-        logger.debug('groups = {}'.format(repr(obj.user.groups)))
+        logger.debug('groups = {}'.format(obj.user.groups))
         logger.debug('groups.all() = {}'.format(obj.user.groups.all()))
+        logger.debug('groups.filter() = {}'.format(Group.objects.filter(user=obj.user)))
+        logger.debug('groups.values() = {}'.format(obj.user.groups.values()))
         if obj.user.is_superuser:
             return [{'hospital_id': p['id'],
                      'hospital_name': p['name'],
