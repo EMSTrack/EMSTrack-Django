@@ -70,7 +70,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             # loop through groups
             for group in obj.user.groups.all():
                 all_ambulances.update({e.id: e for e in group.groupprofile.ambulances.all()})
-                logger.debug('all_ambulances = {}'.format(all_ambulances))
+                logger.debug('group = {} , all_ambulances = {}'.format(group.name, all_ambulances))
 
             # add user permissions
             all_ambulances.update({e.id: e for e in obj.user.profile.ambulances.all()})
@@ -92,7 +92,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             # loop through groups
             for group in obj.user.groups.all():
                 all_hospitals.update({e.id: e for e in group.groupprofile.hospitals.all()})
-                logger.debug('all_hospitals = {}'.format(all_hospitals))
+                logger.debug('group = {} , all_hospitals = {}'.format(group.name, all_hospitals))
 
             # add user permissions
             all_hospitals.update({e.id: e for e in obj.user.profile.hospitals.all()})
