@@ -8,4 +8,4 @@ class TestPermissions(TestSetup):
 
         u = self.u1
         perms = Permissions(u)
-        self.assertEqual(len(perms['ambulances']), 1)
+        self.assertEqual(len(perms.ambulances), 1)
