@@ -124,13 +124,13 @@ class TestPermissions(TestSetup):
             'hospitals': {
                 self.h1.id: {
                     'id': self.h1.id,
-                    'can_read': self.h1.can_read,
-                    'can_write': self.h1.can_write
+                    'can_read': True,
+                    'can_write': False
                 },
                 self.h2.id: {
                     'id': self.h2.id,
-                    'can_read': self.h2.can_read,
-                    'can_write': self.h2.can_write
+                    'can_read': True,
+                    'can_write': True
                 },
             }
         }
@@ -179,6 +179,29 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_write_permission('hospitals',id))
             else:
                 self.assertFalse(perms.check_write_permission('hospitals',id))
+        answer = {
+            'ambulances': {
+                self.a3.id: {
+                    'id': self.a3.id,
+                    'can_read': True,
+                    'can_write': True
+                }
+            },
+            'hospitals': {
+            }
+        }
+        for id in all_ambulances:
+            if id in answer['ambulances']:
+                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('ambulances', id)
+        for id in all_hospitals:
+            if id in answer['hospitals']:
+                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('hospitals', id)
 
         # regular users with groups
 
@@ -214,6 +237,34 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_write_permission('hospitals',id))
             else:
                 self.assertFalse(perms.check_write_permission('hospitals',id))
+        answer = {
+            'ambulances': {
+            },
+            'hospitals': {
+                self.h1.id: {
+                    'id': self.h1.id,
+                    'can_read': True,
+                    'can_write': False
+                },
+                self.h2.id: {
+                    'id': self.h2.id,
+                    'can_read': True,
+                    'can_write': True
+                },
+            }
+        }
+        for id in all_ambulances:
+            if id in answer['ambulances']:
+                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('ambulances', id)
+        for id in all_hospitals:
+            if id in answer['hospitals']:
+                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('hospitals', id)
 
         u = self.u5
         perms = Permissions(u)
@@ -247,3 +298,41 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_write_permission('hospitals',id))
             else:
                 self.assertFalse(perms.check_write_permission('hospitals',id))
+        answer = {
+            'ambulances': {
+                self.a2.id: {
+                    'id': self.a2.id,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.a3.id: {
+                    'id': self.a3.id,
+                    'can_read': True,
+                    'can_write': True
+                }
+            },
+            'hospitals': {
+                self.h1.id: {
+                    'id': self.h1.id,
+                    'can_read': True,
+                    'can_write': False
+                },
+                self.h3.id: {
+                    'id': self.h3.id,
+                    'can_read': True,
+                    'can_write': True
+                }
+            }
+        }
+        for id in all_ambulances:
+            if id in answer['ambulances']:
+                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('ambulances', id)
+        for id in all_hospitals:
+            if id in answer['hospitals']:
+                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('hospitals', id)
