@@ -79,7 +79,7 @@ class TestProfile(MyTestCase):
 
         # super will see all ambulances and hospitals
         u = self.u1
-        serializer = ExtendedProfileSerializer(u.profile)
+        serializer = ExtendedProfileSerializer(u)
         result = {
             'ambulances': [
                 {
@@ -104,7 +104,7 @@ class TestProfile(MyTestCase):
 
         # regular users is just like ProfileSerializer
         for u in (self.u2, self.u3):
-            serializer = ExtendedProfileSerializer(u.profile)
+            serializer = ExtendedProfileSerializer(u)
             result = {
                 'ambulances': [
                     {
@@ -130,7 +130,7 @@ class TestProfile(MyTestCase):
         # regular users is just like ProfileSerializer with groups
         u = self.u4
         g = self.g2
-        serializer = ExtendedProfileSerializer(u.profile)
+        serializer = ExtendedProfileSerializer(u)
         result = {
             'ambulances': [
                 {
