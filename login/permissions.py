@@ -46,7 +46,7 @@ class Permissions:
                     objs = model.objects.all()
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in Hospitals.objects.all()})
                     getattr(self, field).update({
-                        getattr(e, field_id): {
+                        e.id: {
                             'id': e.id,
                             'can_read': True,
                             'can_write': True
