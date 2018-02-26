@@ -54,9 +54,9 @@ class TestPermissions(TestSetup):
         answer = []
         self.assertEqual(answer, perms.get_write_permissions('ambulances'))
         answer = [self.h1.id, self.h2.id]
-        self.assertEqual(answer, perms.get_read_permissions('hospitals'))
+        self.assertEqual(set(answer), set(perms.get_read_permissions('hospitals')))
         answer = [self.h2.id]
-        self.assertEqual(answer, perms.get_write_permissions('hospitals'))
+        self.assertEqual(set(answer), set(perms.get_write_permissions('hospitals')))
 
         u = self.u5
         perms = Permissions(u)
