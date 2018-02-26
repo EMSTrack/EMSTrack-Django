@@ -1,8 +1,17 @@
+import logging
+
 from rest_framework import mixins
 
 # CreateModelUpdateByMixin
 from rest_framework.exceptions import PermissionDenied
 
+from ambulance.models import Ambulance
+from hospital.models import Hospital
+
+
+logger = logging.getLogger(__name__)
+
+# CreateModelUpdateByMixin
 
 class CreateModelUpdateByMixin(mixins.CreateModelMixin):
 
@@ -29,7 +38,7 @@ class BasePermissionMixin:
     profile_field = 'ambulances'
     profile_values = 'ambulance_id'
     queryset = None
-    
+
     def get_queryset(self):
 
         # print('@get_queryset {}({})'.format(self.request.user,
