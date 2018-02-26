@@ -60,6 +60,17 @@ class ExtendedProfileSerializer(serializers.Serializer):
         if user is None:
             return {'ambulances': [], 'hospitals': []}
 
+        # or superuser
+        if user.is_superuser:
+            return {'ambulances': [{'ambulance_id': p['id'],
+                                    'ambulance_identifier': p['identifier'],
+                                    'can_read': True,
+                                    'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')],
+                    'hospitals': [{'hospital_id': p['id'],
+                                   'hospital_name': p['name'],
+                                   'can_read': True,
+                                   'can_write': True} for p in Hospital.objects.all().values('id', 'name')]}
+
         # initialize permissions
         permissions = {'ambulances': {}, 'hospitals': {}}
 
@@ -94,52 +105,9 @@ class ExtendedProfileSerializer(serializers.Serializer):
 
     def get_ambulances(self, user):
 
-        logger.debug('user = {}'.format(user))
-        if user.is_superuser:
-            return [{'ambulance_id': p['id'],
-                     'ambulance_identifier': p['identifier'],
-                     'can_read': True,
-                     'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')]
-        else:
-
-            return AmbulancePermissionSerializer(self._permissions['ambulances'], many=True).data
-
-            # initialize ambulances permissions
-            all_ambulances = {}
-
-            # loop through groups
-            for group in user.groups.all():
-                all_ambulances.update({e.id: e for e in group.groupprofile.ambulances.all()})
-                logger.debug('group = {}, all_ambulances = {}'.format(group.name, all_ambulances))
-
-            # add user permissions
-            all_ambulances.update({e.id: e for e in user.profile.ambulances.all()})
-            logger.debug('all_ambulances = {}'.format(all_ambulances))
-
-            return AmbulancePermissionSerializer(all_ambulances.values(), many=True).data
+        return AmbulancePermissionSerializer(self._permissions['ambulances'], many=True).data
 
     def get_hospitals(self, user):
 
-        logger.debug('user = {}'.format(user))
-        if user.is_superuser:
-            return [{'hospital_id': p['id'],
-                     'hospital_name': p['name'],
-                     'can_read': True,
-                     'can_write': True} for p in Hospital.objects.all().values('id', 'name')]
-        else:
+        return HospitalPermissionSerializer(self._permissions['hospitals'], many=True).data
 
-            return HospitalPermissionSerializer(self._permissions['hospitals'], many=True).data
-
-            # initialize hospitals permissions
-            all_hospitals = {}
-
-            # loop through groups
-            for group in user.groups.all():
-                all_hospitals.update({e.id: e for e in group.groupprofile.hospitals.all()})
-                logger.debug('group = {}, all_hospitals = {}'.format(group.name, all_hospitals))
-
-            # add user permissions
-            all_hospitals.update({e.id: e for e in user.profile.hospitals.all()})
-            logger.debug('all_hospitals = {}'.format(all_hospitals))
-
-            return HospitalPermissionSerializer(all_hospitals.values(), many=True).data
