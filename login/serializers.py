@@ -46,6 +46,28 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals')
 
 
+def get_extended_permissions(user):
+
+    # initialize permissions
+    permissions = {'ambulances': {}, 'hospitals': {}}
+
+    # loop through groups
+    for group in user.groups.all():
+        permissions['ambulances'].update({e.id: e for e in group.groupprofile.ambulances.all()})
+        permissions['hospitals'].update({e.id: e for e in group.groupprofile.hospitals.all()})
+        logger.debug('group = {}, ambulances = {}, hospitals = {}'.format(group.name,
+                                                                          permissions['ambulances'],
+                                                                          permissions['hospitals']))
+
+    # add user permissions
+    permissions['ambulances'].update({e.id: e for e in user.profile.ambulances.all()})
+    permissions['hospitals'].update({e.id: e for e in user.profile.hospitals.all()})
+    logger.debug('ambulances = {}, hospitals = {}'.format(permissions['ambulances'],
+                                                          permissions['hospitals']))
+
+    return permissions
+
+
 class ExtendedProfileSerializer(serializers.ModelSerializer):
     ambulances = serializers.SerializerMethodField()
     hospitals = serializers.SerializerMethodField()
@@ -53,6 +75,11 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ('ambulances', 'hospitals')
+
+    def __init__(self, *args, **kwargs):
+
+        # call super
+        super().__init__(*args, **kwargs)
 
     def get_ambulances(self, obj):
 
@@ -68,16 +95,15 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             all_ambulances = {}
 
             # loop through groups
-            if obj.user.groups is not None:
-                for group in obj.user.groups.all():
-                    all_ambulances.update({e.id: e for e in group.groupprofile.ambulances.all()})
-                    logger.debug('group = {}, all_ambulances = {}'.format(group.name, all_ambulances))
+            for group in obj.user.groups.all():
+                all_ambulances.update({e.id: e for e in group.groupprofile.ambulances.all()})
+                logger.debug('group = {}, all_ambulances = {}'.format(group.name, all_ambulances))
 
             # add user permissions
             all_ambulances.update({e.id: e for e in obj.user.profile.ambulances.all()})
             logger.debug('all_ambulances = {}'.format(all_ambulances))
 
-            return AmbulancePermissionSerializer(all_ambulances.values(), many=True).data
+            return AmbulancePermissionSerializer(all_ambulances, many=True).data
 
     def get_hospitals(self, obj):
 
@@ -93,13 +119,12 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             all_hospitals = {}
 
             # loop through groups
-            if obj.user.groups is not None:
-                for group in obj.user.groups.all():
-                    all_hospitals.update({e.id: e for e in group.groupprofile.hospitals.all()})
-                    logger.debug('group = {}, all_hospitals = {}'.format(group.name, all_hospitals))
+            for group in obj.user.groups.all():
+                all_hospitals.update({e.id: e for e in group.groupprofile.hospitals.all()})
+                logger.debug('group = {}, all_hospitals = {}'.format(group.name, all_hospitals))
 
             # add user permissions
             all_hospitals.update({e.id: e for e in obj.user.profile.hospitals.all()})
             logger.debug('all_hospitals = {}'.format(all_hospitals))
 
-            return HospitalPermissionSerializer(all_hospitals.values(), many=True).data
+            return HospitalPermissionSerializer(all_hospitals, many=True).data

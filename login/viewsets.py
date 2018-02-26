@@ -12,6 +12,7 @@ from .serializers import ExtendedProfileSerializer
 
 # Django REST Framework Viewsets
 
+
 class IsUserOrAdminOrSuper(permissions.BasePermission):
     """
     Only user or staff can see or modify

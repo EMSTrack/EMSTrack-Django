@@ -127,8 +127,34 @@ class TestProfile(MyTestCase):
             }
             self.assertDictEqual(serializer.data, result)
 
-        # regular users is just like ProfileSerializer
+        # regular users is just like ProfileSerializer with groups
         u = self.u4
+        g = self.g2
+        serializer = ExtendedProfileSerializer(u.profile)
+        result = {
+            'ambulances': [
+                {
+                    'ambulance_id': e.ambulance.pk,
+                    'ambulance_identifier': e.ambulance.identifier,
+                    'can_read': e.can_read,
+                    'can_write': e.can_write
+                }
+                for e in g.groupprofile.ambulances.all()
+            ],
+            'hospitals': [
+                {
+                    'hospital_id': e.hospital.pk,
+                    'hospital_name': e.hospital.name,
+                    'can_read': e.can_read,
+                    'can_write': e.can_write
+                }
+                for e in g.groupprofile.hospitals.all()
+            ]
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # regular users is just like ProfileSerializer with groups
+        u = self.u5
         g = self.g2
         serializer = ExtendedProfileSerializer(u.profile)
         result = {
