@@ -25,8 +25,8 @@ class Permissions:
             # e.g.: self.ambulances = {}
             setattr(self, field, {})
             # e.g.: self.can_read['ambulances'] = {}
-            self.can_read[field] = {}
-            self.can_write[field] = {}
+            self.can_read[field] = []
+            self.can_write[field] = []
 
         # retrieve permissions if not None
         if user is not None:
