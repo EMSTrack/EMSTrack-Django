@@ -173,7 +173,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u1.profile).data
+        answer = ExtendedProfileSerializer(self.u1).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
@@ -181,7 +181,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u2.profile).data
+        answer = ExtendedProfileSerializer(self.u2).data
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
@@ -189,7 +189,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u3.profile).data
+        answer = ExtendedProfileSerializer(self.u3).data
         self.assertDictEqual(result, answer)
         
         # logout
@@ -203,7 +203,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u2.profile).data
+        answer = ExtendedProfileSerializer(self.u2).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
