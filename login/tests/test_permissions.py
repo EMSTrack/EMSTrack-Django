@@ -325,12 +325,12 @@ class TestPermissions(TestSetup):
                 self.h1.id: {
                     'id': self.h1.id,
                     'can_read': True,
-                    'can_write': False
+                    'can_write': True
                 },
                 self.h3.id: {
                     'id': self.h3.id,
                     'can_read': True,
-                    'can_write': True
+                    'can_write': False
                 }
             }
         }
