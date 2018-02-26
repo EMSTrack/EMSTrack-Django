@@ -1,28 +1,16 @@
 import math
-from django.test import TestCase, Client
+from django.test import Client
 
-from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
-
-from django.contrib.gis.geos import Point
 from django.utils import timezone
 from django.conf import settings
 
-from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
-from login.models import AmbulancePermission, HospitalPermission
-
 from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
-
-from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
-from hospital.serializers import HospitalSerializer, \
-    HospitalEquipmentSerializer, EquipmentSerializer
 
 from emstrack.tests.util import date2iso, point2str, dict2point
 
