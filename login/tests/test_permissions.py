@@ -8,8 +8,8 @@ class TestPermissions(TestSetup):
 
         # superuser
 
-        all_ambulances = set(self.a1.id, self.a2.id, self.a3.id)
-        all_hospitals = set(self.h1.id, self.h2.id, self.h3.id)
+        all_ambulances = set([self.a1.id, self.a2.id, self.a3.id])
+        all_hospitals = set([self.h1.id, self.h2.id, self.h3.id])
 
         u = self.u1
         perms = Permissions(u)
