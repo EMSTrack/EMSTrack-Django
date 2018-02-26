@@ -46,40 +46,44 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals')
 
 
-def get_extended_permissions(user):
-
-    # initialize permissions
-    permissions = {'ambulances': {}, 'hospitals': {}}
-
-    # loop through groups
-    for group in user.groups.all():
-        permissions['ambulances'].update({e.id: e for e in group.groupprofile.ambulances.all()})
-        permissions['hospitals'].update({e.id: e for e in group.groupprofile.hospitals.all()})
-        logger.debug('group = {}, ambulances = {}, hospitals = {}'.format(group.name,
-                                                                          permissions['ambulances'],
-                                                                          permissions['hospitals']))
-
-    # add user permissions
-    permissions['ambulances'].update({e.id: e for e in user.profile.ambulances.all()})
-    permissions['hospitals'].update({e.id: e for e in user.profile.hospitals.all()})
-    logger.debug('ambulances = {}, hospitals = {}'.format(permissions['ambulances'],
-                                                          permissions['hospitals']))
-
-    return permissions
-
-
-class ExtendedProfileSerializer(serializers.ModelSerializer):
+class ExtendedProfileSerializer(serializers.BaseSerializer):
     ambulances = serializers.SerializerMethodField()
     hospitals = serializers.SerializerMethodField()
 
     class Meta:
-        model = Profile
         fields = ('ambulances', 'hospitals')
+
+    @staticmethod
+    def get_permissions(user):
+
+        # initialize permissions
+        permissions = {'ambulances': {}, 'hospitals': {}}
+
+        # loop through groups
+        for group in user.groups.all():
+            permissions['ambulances'].update({e.id: e for e in group.groupprofile.ambulances.all()})
+            permissions['hospitals'].update({e.id: e for e in group.groupprofile.hospitals.all()})
+            logger.debug('group = {}, ambulances = {}, hospitals = {}'.format(group.name,
+                                                                              permissions['ambulances'],
+                                                                              permissions['hospitals']))
+
+        # add user permissions
+        permissions['ambulances'].update({e.id: e for e in user.profile.ambulances.all()})
+        permissions['hospitals'].update({e.id: e for e in user.profile.hospitals.all()})
+        logger.debug('ambulances = {}, hospitals = {}'.format(permissions['ambulances'],
+                                                              permissions['hospitals']))
+
+        return permissions
 
     def __init__(self, *args, **kwargs):
 
         # call super
         super().__init__(*args, **kwargs)
+
+        self._permissions = None
+        if self.instance is not None:
+            self._permissions = self.get_permissions(self.instance)
+
 
     def get_ambulances(self, user):
 
