@@ -68,5 +68,5 @@ class TestPermissions(TestSetup):
         self.assertEqual(answer, perms.get_write_permissions('ambulances'))
         answer = [self.h1.id, self.h3.id]
         self.assertEqual(answer, perms.get_read_permissions('hospitals'))
-        answer = [self.h3.id]
+        answer = [self.h1.id]
         self.assertEqual(answer, perms.get_write_permissions('hospitals'))
