@@ -118,6 +118,34 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_write_permission('hospitals',id))
             else:
                 self.assertFalse(perms.check_write_permission('hospitals',id))
+        answer = {
+            'ambulances': {
+            },
+            'hospitals': {
+                self.h1.id: {
+                    'id': self.h1.id,
+                    'can_read': self.h1.can_read,
+                    'can_write': self.h1.can_write
+                },
+                self.h2.id: {
+                    'id': self.h2.id,
+                    'can_read': self.h2.can_read,
+                    'can_write': self.h2.can_write
+                },
+            }
+        }
+        for id in all_ambulances:
+            if id in answer['ambulances']:
+                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('ambulances', id)
+        for id in all_hospitals:
+            if id in answer['hospitals']:
+                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+            else:
+                with self.assertRaise(KeyError):
+                    perms.get_permissions('hospitals', id)
 
         u = self.u3
         perms = Permissions(u)
