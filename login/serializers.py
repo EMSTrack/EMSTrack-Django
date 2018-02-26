@@ -73,6 +73,10 @@ class ExtendedProfileSerializer(serializers.Serializer):
         logger.debug('ambulances = {}, hospitals = {}'.format(permissions['ambulances'],
                                                               permissions['hospitals']))
 
+        # convert to values
+        permissions['ambulances'] = permissions['ambulances'].values()
+        permissions['hospitals'] = permissions['hospitals'].values()
+
         return permissions
 
     def __init__(self, *args, **kwargs):
@@ -96,7 +100,7 @@ class ExtendedProfileSerializer(serializers.Serializer):
         else:
 
             if self._permissions is not None:
-                return self._permissions['ambulances']
+                return AmbulancePermissionSerializer(self._permissions['ambulances'], many=True).data
 
             # initialize ambulances permissions
             all_ambulances = {}
@@ -123,7 +127,7 @@ class ExtendedProfileSerializer(serializers.Serializer):
         else:
 
             if self._permissions is not None:
-                return self._permissions['hospitals']
+                return HospitalPermissionSerializer(self._permissions['hospitals'], many=True).data
 
             # initialize hospitals permissions
             all_hospitals = {}
