@@ -103,7 +103,7 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             all_ambulances.update({e.id: e for e in obj.user.profile.ambulances.all()})
             logger.debug('all_ambulances = {}'.format(all_ambulances))
 
-            return AmbulancePermissionSerializer(all_ambulances, many=True).data
+            return AmbulancePermissionSerializer(all_ambulances.values(), many=True).data
 
     def get_hospitals(self, obj):
 
@@ -127,4 +127,4 @@ class ExtendedProfileSerializer(serializers.ModelSerializer):
             all_hospitals.update({e.id: e for e in obj.user.profile.hospitals.all()})
             logger.debug('all_hospitals = {}'.format(all_hospitals))
 
-            return HospitalPermissionSerializer(all_hospitals, many=True).data
+            return HospitalPermissionSerializer(all_hospitals.values(), many=True).data
