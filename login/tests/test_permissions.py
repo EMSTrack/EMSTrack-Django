@@ -181,6 +181,11 @@ class TestPermissions(TestSetup):
                 self.assertFalse(perms.check_write_permission('hospitals',id))
         answer = {
             'ambulances': {
+                self.a1.id: {
+                    'id': self.a1.id,
+                    'can_read': False,
+                    'can_write': False
+                },
                 self.a3.id: {
                     'id': self.a3.id,
                     'can_read': True,
