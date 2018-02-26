@@ -1,5 +1,4 @@
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
 from rest_framework.decorators import detail_route
@@ -28,11 +27,11 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
 
 class ProfileViewSet(viewsets.GenericViewSet):
    
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = ExtendedProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
-    lookup_field = 'user__username'
+    lookup_field = 'username'
 
     @detail_route(methods=['get'])
     def profile(self, request, **kwargs):
@@ -40,4 +39,4 @@ class ProfileViewSet(viewsets.GenericViewSet):
         Retrieve user's extended profile.
         """
         return Response(ExtendedProfileSerializer(self.get_object()).data)
-    
+
