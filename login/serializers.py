@@ -95,6 +95,9 @@ class ExtendedProfileSerializer(serializers.Serializer):
                      'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')]
         else:
 
+            if self._permissions is not None:
+                return self._permissions['ambulances']
+
             # initialize ambulances permissions
             all_ambulances = {}
 
@@ -118,6 +121,9 @@ class ExtendedProfileSerializer(serializers.Serializer):
                      'can_read': True,
                      'can_write': True} for p in Hospital.objects.all().values('id', 'name')]
         else:
+
+            if self._permissions is not None:
+                return self._permissions['hospitals']
 
             # initialize hospitals permissions
             all_hospitals = {}
