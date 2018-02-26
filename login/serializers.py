@@ -13,6 +13,7 @@ from hospital.models import Hospital
 
 logger = logging.getLogger(__name__)
 
+
 # Profile serializers
 
 class AmbulancePermissionSerializer(serializers.ModelSerializer):
@@ -38,8 +39,6 @@ class HospitalPermissionSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     ambulances = AmbulancePermissionSerializer(read_only=True, many=True)
     hospitals = HospitalPermissionSerializer(read_only=True, many=True)
-
-    # all_ambulances = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -99,7 +98,7 @@ class ExtendedProfileSerializer(serializers.Serializer):
         # call super
         super().__init__(*args, **kwargs)
 
-        # retrieve permissions
+        # cache permissions
         self._permissions = self.get_permissions(self.instance)
 
     def get_ambulances(self, user):

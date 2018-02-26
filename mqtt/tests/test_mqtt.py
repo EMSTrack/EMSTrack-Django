@@ -150,9 +150,9 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all profiles
-        for obj in Profile.objects.all():
-            client.expect('user/{}/profile'.format(obj.user.username),
-                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+        for user in User.objects.all():
+            client.expect('user/{}/profile'.format(user.username),
+                          JSONRenderer().render(ExtendedProfileSerializer(user).data),
                           qos)
 
         # Subscribed?
@@ -199,9 +199,9 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all profiles
-        for obj in Profile.objects.all():
-            client.expect('user/{}/profile'.format(obj.user.username),
-                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+        for user in User.objects.all():
+            client.expect('user/{}/profile'.format(user.username),
+                          JSONRenderer().render(ExtendedProfileSerializer(user).data),
                           qos)
 
         # Subscribed?
@@ -248,9 +248,9 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all profiles
-        for obj in Profile.objects.all():
-            client.expect('user/{}/profile'.format(obj.user.username),
-                          JSONRenderer().render(ExtendedProfileSerializer(obj).data),
+        for user in Profile.objects.all():
+            client.expect('user/{}/profile'.format(user.username),
+                          JSONRenderer().render(ExtendedProfileSerializer(user).data),
                           qos)
 
         # Subscribed?
@@ -280,7 +280,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect user profile
         profile = Profile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
-                      JSONRenderer().render(ExtendedProfileSerializer(profile).data),
+                      JSONRenderer().render(ExtendedProfileSerializer(profile.user).data),
                       qos)
 
         # User Ambulances
@@ -331,7 +331,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect user profile
         profile = Profile.objects.get(user__username='testuser2')
         client.expect('user/testuser2/profile',
-                      JSONRenderer().render(ExtendedProfileSerializer(profile).data),
+                      JSONRenderer().render(ExtendedProfileSerializer(profile.user).data),
                       qos)
 
         # User Ambulances
