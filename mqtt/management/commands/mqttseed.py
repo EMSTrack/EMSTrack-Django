@@ -78,7 +78,7 @@ class Client(PublishClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding profile data"))
 
         # seeding profiles
-        for obj in Profile.objects.all():
+        for obj in User.objects.all():
             self.publish_profile(obj)
             
         if self.verbosity > 0:

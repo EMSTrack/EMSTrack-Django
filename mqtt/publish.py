@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class MessagePublishClient():
 
-    def publish_profile(self, profile, **kwargs):
+    def publish_profile(self, user, **kwargs):
         pass
         
     def publish_ambulance(self, ambulance, **kwargs):
@@ -111,9 +111,9 @@ class PublishClient(BaseClient):
                            qos=qos,
                            retain=retain)
         
-    def publish_profile(self, profile, qos=2, retain=True):
-        self.publish_topic('user/{}/profile'.format(profile.user.username),
-                          ExtendedProfileSerializer(profile),
+    def publish_profile(self, user, qos=2, retain=True):
+        self.publish_topic('user/{}/profile'.format(user.username),
+                          ExtendedProfileSerializer(user),
                           qos=qos,
                           retain=retain)
         
