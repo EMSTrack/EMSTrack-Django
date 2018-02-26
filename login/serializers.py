@@ -56,6 +56,10 @@ class ExtendedProfileSerializer(serializers.Serializer):
     @staticmethod
     def get_permissions(user):
 
+        # quick return if None
+        if user is None:
+            return {'ambulances': [], 'hospitals': []}
+
         # initialize permissions
         permissions = {'ambulances': {}, 'hospitals': {}}
 
@@ -84,9 +88,8 @@ class ExtendedProfileSerializer(serializers.Serializer):
         # call super
         super().__init__(*args, **kwargs)
 
-        self._permissions = None
-        if self.instance is not None:
-            self._permissions = self.get_permissions(self.instance)
+        # retrieve permissions
+        self._permissions = self.get_permissions(self.instance)
 
 
     def get_ambulances(self, user):
@@ -99,8 +102,7 @@ class ExtendedProfileSerializer(serializers.Serializer):
                      'can_write': True} for p in Ambulance.objects.all().values('id', 'identifier')]
         else:
 
-            if self._permissions is not None:
-                return AmbulancePermissionSerializer(self._permissions['ambulances'], many=True).data
+            return AmbulancePermissionSerializer(self._permissions['ambulances'], many=True).data
 
             # initialize ambulances permissions
             all_ambulances = {}
@@ -126,8 +128,7 @@ class ExtendedProfileSerializer(serializers.Serializer):
                      'can_write': True} for p in Hospital.objects.all().values('id', 'name')]
         else:
 
-            if self._permissions is not None:
-                return HospitalPermissionSerializer(self._permissions['hospitals'], many=True).data
+            return HospitalPermissionSerializer(self._permissions['hospitals'], many=True).data
 
             # initialize hospitals permissions
             all_hospitals = {}
