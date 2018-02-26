@@ -1,5 +1,7 @@
 import logging
 
+from .models import Ambulance, Hospital
+
 logger = logging.getLogger(__name__)
 
 
@@ -7,6 +9,7 @@ class Permissions:
 
     fields_id = ('ambulance_id', 'hospital_id')
     fields = ('ambulances', 'hospitals')
+    models = (Ambulance, Hospital)
 
     def __init__(self, user, **kwargs):
 
@@ -17,6 +20,10 @@ class Permissions:
         # override fields_id
         if 'fields_id' in kwargs:
             self.fields_id = kwargs.pop('fields_id')
+
+        # override models
+        if 'models' in kwargs:
+            self.models = kwargs.pop('models')
 
         # initialize permissions
         self.can_read = {}
@@ -31,34 +38,51 @@ class Permissions:
         # retrieve permissions if not None
         if user is not None:
 
-            # loop through groups
-            for group in user.groups.all():
-                # e.g.: group.groupprofile.ambulances.all()})
-                for (field, field_id) in zip(self.fields, self.fields_id):
-                    # e.g.: objs = group.groupprofile.ambulances.all()
-                    objs = getattr(group.groupprofile, field).all()
-                    # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
+            if user.is_superuser:
+
+                # superuser, add all permissions
+                for (model, field) in zip(self.models, self.fields):
+                    # e.g.: objs = group.groupprofile.hospitals.all()
+                    objs = model.objects.all()
+                    # e.g.: self.hospitals.update({e.hospital_id: {...} for e in Hospitals.objects.all()})
                     getattr(self, field).update({
-                        getattr(e,field_id): {
-                            'id': getattr(e,field_id),
+                        getattr(e, field_id): {
+                            'id': e.id,
+                            'can_read': True,
+                            'can_write': True
+                        } for e in objs})
+                    logger.debug('superuser, {} = {}'.format(field, getattr(self, field)))
+
+            else:
+
+                # regular users, loop through groups
+                for group in user.groups.all():
+                    # e.g.: group.groupprofile.ambulances.all()})
+                    for (field, field_id) in zip(self.fields, self.fields_id):
+                        # e.g.: objs = group.groupprofile.ambulances.all()
+                        objs = getattr(group.groupprofile, field).all()
+                        # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
+                        getattr(self, field).update({
+                            getattr(e,field_id): {
+                                'id': getattr(e,field_id),
+                                'can_read': e.can_read,
+                                'can_write': e.can_write
+                            } for e in objs})
+                        logger.debug('group = {}, {} = {}'.format(group.name, field, getattr(self, field)))
+
+                # add user permissions
+                for (field, field_id) in zip(self.fields, self.fields_id):
+                    # e.g.: objs = group.groupprofile.hospitals.all()
+                    objs = getattr(user.profile, field).all()
+                    # e.g.: self.hospitals.update({e.hospital_id: {...} for e in user.profile.hospitals.all()})
+                    getattr(self, field).update({
+                        getattr(e, field_id): {
+                            'id': getattr(e, field_id),
                             'can_read': e.can_read,
                             'can_write': e.can_write
                         } for e in objs})
-                    logger.debug('group = {}, {} = {}'.format(group.name, field, getattr(self, field)))
-        
-            # add user permissions
-            for (field, field_id) in zip(self.fields, self.fields_id):
-                # e.g.: objs = group.groupprofile.hospitals.all()
-                objs = getattr(user.profile, field).all()
-                # e.g.: self.hospitals.update({e.hospital_id: {...} for e in user.profile.hospitals.all()})
-                getattr(self, field).update({
-                    getattr(e, field_id): {
-                        'id': getattr(e, field_id),
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    } for e in objs})
-                logger.debug('user, {} = {}'.format(field, getattr(self, field)))
-        
+                    logger.debug('user, {} = {}'.format(field, getattr(self, field)))
+
             # build permissions
             for field in self.fields:
                 for obj in getattr(self, field).values():
