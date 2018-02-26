@@ -11,13 +11,13 @@ class TestPermissions(TestSetup):
         self.assertEqual(1, len(perms.ambulances))
         self.assertEqual(2, len(perms.hospitals))
         answer = [self.a2.id]
-        self.assertEqual(answer, perms.get_read_permissions['ambulances'])
+        self.assertEqual(answer, perms.get_read_permissions('ambulances'))
         answer = [self.a2.id]
-        self.assertEqual(answer, perms.get_write_permissions['ambulances'])
+        self.assertEqual(answer, perms.get_write_permissions('ambulances'))
         answer = [self.h1.id, self.h3.id]
-        self.assertEqual(answer, perms.get_read_permissions['hospitals'])
+        self.assertEqual(answer, perms.get_read_permissions('hospitals'))
         answer = [self.h1.id]
-        self.assertEqual(answer, perms.get_write_permissions['hospitals'])
+        self.assertEqual(answer, perms.get_write_permissions('hospitals'))
 
         u = self.u2
         perms = Permissions(u)
