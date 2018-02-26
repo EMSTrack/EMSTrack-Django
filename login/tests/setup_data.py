@@ -11,7 +11,8 @@ from ambulance.models import Ambulance, \
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-class TestSetupData():
+
+class TestSetupData:
 
     @classmethod
     def setUpTestData(cls):

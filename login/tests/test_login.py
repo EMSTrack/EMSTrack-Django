@@ -1050,4 +1050,3 @@ class TestMQTTLoginTempPassword(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        
