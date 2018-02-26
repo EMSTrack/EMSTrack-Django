@@ -88,7 +88,7 @@ class ExtendedProfileSerializer(serializers.Serializer):
         logger.debug('ambulances = {}, hospitals = {}'.format(permissions['ambulances'],
                                                               permissions['hospitals']))
 
-        # convert to values
+        # serialize
         permissions['ambulances'] = AmbulancePermissionSerializer(permissions['ambulances'].values(), many=True).data
         permissions['hospitals'] = HospitalPermissionSerializer(permissions['hospitals'].values(), many=True).data
 
@@ -101,7 +101,6 @@ class ExtendedProfileSerializer(serializers.Serializer):
 
         # retrieve permissions
         self._permissions = self.get_permissions(self.instance)
-
 
     def get_ambulances(self, user):
 
