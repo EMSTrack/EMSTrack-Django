@@ -248,7 +248,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all profiles
-        for user in Profile.objects.all():
+        for user in User.objects.all():
             client.expect('user/{}/profile'.format(user.username),
                           JSONRenderer().render(ExtendedProfileSerializer(user).data),
                           qos)
