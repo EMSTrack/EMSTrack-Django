@@ -89,8 +89,8 @@ class ExtendedProfileSerializer(serializers.Serializer):
                                                               permissions['hospitals']))
 
         # convert to values
-        permissions['ambulances'] = permissions['ambulances'].values()
-        permissions['hospitals'] = permissions['hospitals'].values()
+        permissions['ambulances'] = AmbulancePermissionSerializer(permissions['ambulances'].values(), many=True).data
+        permissions['hospitals'] = HospitalPermissionSerializer(permissions['hospitals'].values(), many=True).data
 
         return permissions
 
@@ -105,9 +105,9 @@ class ExtendedProfileSerializer(serializers.Serializer):
 
     def get_ambulances(self, user):
 
-        return AmbulancePermissionSerializer(self._permissions['ambulances'], many=True).data
+        return self._permissions['ambulances']
 
     def get_hospitals(self, user):
 
-        return HospitalPermissionSerializer(self._permissions['hospitals'], many=True).data
+        return self._permissions['hospitals']
 
