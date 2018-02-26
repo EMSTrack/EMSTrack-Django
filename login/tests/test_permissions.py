@@ -50,23 +50,23 @@ class TestPermissions(TestSetup):
         self.assertEqual(0, len(perms.ambulances))
         self.assertEqual(2, len(perms.hospitals))
         answer = []
-        self.assertItemsEqual(answer, perms.get_read_permissions('ambulances'))
+        self.assertEqual(answer, perms.get_read_permissions('ambulances'))
         answer = []
-        self.assertItemsEqual(answer, perms.get_write_permissions('ambulances'))
+        self.assertEqual(answer, perms.get_write_permissions('ambulances'))
         answer = [self.h1.id, self.h2.id]
-        self.assertItemsEqual(answer, perms.get_read_permissions('hospitals'))
+        self.assertEqual(answer, perms.get_read_permissions('hospitals'))
         answer = [self.h2.id]
-        self.assertItemsEqual(answer, perms.get_write_permissions('hospitals'))
+        self.assertEqual(answer, perms.get_write_permissions('hospitals'))
 
         u = self.u5
         perms = Permissions(u)
         self.assertEqual(3, len(perms.ambulances))
         self.assertEqual(2, len(perms.hospitals))
         answer = [self.a1.id, self.a2.id, self.a3.id]
-        self.assertItemsEqual(answer, perms.get_read_permissions('ambulances'))
+        self.assertEqual(answer, perms.get_read_permissions('ambulances'))
         answer = [self.a2.id, self.a3.id]
-        self.assertItemsEqual(answer, perms.get_write_permissions('ambulances'))
+        self.assertEqual(answer, perms.get_write_permissions('ambulances'))
         answer = [self.h1.id, self.h3.id]
-        self.assertItemsEqual(answer, perms.get_read_permissions('hospitals'))
+        self.assertEqual(answer, perms.get_read_permissions('hospitals'))
         answer = [self.h3.id]
-        self.assertItemsEqual(answer, perms.get_write_permissions('hospitals'))
+        self.assertEqual(answer, perms.get_write_permissions('hospitals'))
