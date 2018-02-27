@@ -1,8 +1,19 @@
 import logging
 
+from functools import lru_cache
+
 from .models import Ambulance, Hospital
 
 logger = logging.getLogger(__name__)
+
+PERMISSION_CACHE_SIZE = 10
+
+
+@lru_cache(maxsize=PERMISSION_CACHE_SIZE)
+def get_permissions(user):
+
+    # hit the database for permissions
+    return Permissions(user)
 
 
 class Permissions:
@@ -108,8 +119,8 @@ class Permissions:
     def get_permissions(self, field, id):
         return getattr(self, field)[id]
 
-    def get_read_permissions(self, field):
+    def get_can_read(self, field):
         return self.can_read[field]
 
-    def get_write_permissions(self, field):
+    def get_can_write(self, field):
         return self.can_write[field]

@@ -5,11 +5,10 @@ from rest_framework import mixins
 # CreateModelUpdateByMixin
 from rest_framework.exceptions import PermissionDenied
 
-from ambulance.models import Ambulance
-from hospital.models import Hospital
-
+from login.permissions import get_permissions
 
 logger = logging.getLogger(__name__)
+
 
 # CreateModelUpdateByMixin
 
@@ -53,12 +52,17 @@ class BasePermissionMixin:
         if user.is_anonymous:
             raise PermissionDenied()
 
+        # get permissions
+        permissions = get_permissions(user)
+
         # print('> METHOD = {}'.format(self.request.method))
         # otherwise only return objects that the user can read or write to
         if self.request.method == 'GET':
             # objects that the user can read
             can_do = getattr(user.profile,
                              self.profile_field).filter(can_read=True).values(self.profile_values)
+            logger.debug('GET: can_do = {}'.format(can_do))
+            logger.debug('GET: can_do = {}'.format(permissions.get_can_read(self.profile_field)))
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
@@ -66,7 +70,9 @@ class BasePermissionMixin:
             # objects that the user can write to
             can_do = getattr(user.profile,
                              self.profile_field).filter(can_write=True).values(self.profile_values)
-            
+            logger.debug('PUT: can_do = {}'.format(can_do))
+            logger.debug('PUT: can_do = {}'.format(permissions.get_can_write(self.profile_field)))
+
         else:
             raise PermissionDenied()
 
