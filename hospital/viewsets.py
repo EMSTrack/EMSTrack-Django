@@ -46,7 +46,6 @@ class HospitalViewSet(mixins.ListModelMixin,
     
     filter_field = 'id'
     profile_field = 'hospitals'
-    profile_values = 'hospital_id'
     queryset = Hospital.objects.all()
     
     serializer_class = HospitalSerializer

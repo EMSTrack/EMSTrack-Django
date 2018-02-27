@@ -35,7 +35,6 @@ class AmbulancePermissionMixin(BasePermissionMixin):
 
     filter_field = 'id'
     profile_field = 'ambulances'
-    profile_values = 'ambulance_id'
     queryset = Ambulance.objects.all()
 
 

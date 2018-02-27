@@ -21,7 +21,6 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
     filter_field = 'id'
     profile_field = 'hospitals'
-    profile_values = 'hospital_id'
     queryset = Hospital.objects.all()
 
 

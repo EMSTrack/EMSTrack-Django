@@ -56,7 +56,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
     filter_field = 'id'
     profile_field = 'ambulances'
-    profile_values = 'ambulance_id'
     queryset = Ambulance.objects.all()
     
     serializer_class = AmbulanceSerializer
