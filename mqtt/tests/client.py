@@ -546,12 +546,20 @@ class MQTTTestClient(BaseClient):
             self.expecting_patterns[topic] = re.compile(pattern)
             #print('pattern = {}'.format(pattern))
 
-        # already subscribed?
-        if not topic in self.expecting_topics:
+        # not subscribed
+        if topic not in self.expecting_topics:
+
+            # initialize
             self.expecting_topics[topic] = 0
             self.expecting_messages[topic] = []
+
+            # and subscribe
+            logger.debug("Subscribing to topic '{}'".format(topic))
             self.subscribe(topic, qos)
-        
+
+        else:
+            logger.debug("Already subscribed to topic '{}'".format(topic))
+
         self.expecting += 1
         self.expecting_messages[topic].append(msg)
         
