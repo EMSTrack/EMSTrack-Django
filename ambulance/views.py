@@ -25,8 +25,13 @@ from emstrack.views import get_page_links
 # Ambulance status filter
 
 @register.filter
-def get_status(status):
+def get_ambulance_status(status):
     return AmbulanceStatus[status].value
+
+
+@register.filter
+def get_ambulance_capability(capability):
+    return AmbulanceCapability[capability].value
 
 
 # Django views

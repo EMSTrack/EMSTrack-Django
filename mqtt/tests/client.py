@@ -529,6 +529,7 @@ class MQTTTestClient(BaseClient):
             self.expecting_messages[topic].remove(msg.payload)
 
         except ValueError:
+
             if self.check_payload:
                 raise Exception('Unexpected message')
 

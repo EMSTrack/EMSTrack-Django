@@ -28,11 +28,11 @@
                 </p>
                 <p>
                     <strong>Capability:</strong>
-                    {{ ambulance.capability }}
+                    {{ ambulance.capability|get_ambulance_capability }}
                 </p>
                 <p>
                     <strong>Status:</strong>
-                    {{ ambulance.status|get_status }}
+                    {{ ambulance.status|get_ambulance_status }}
                 </p>
                 <p>
                     <strong>Comment:</strong>
@@ -82,7 +82,7 @@
             <tbody>
             {% for update in updates %}
                 <tr>
-                    <td>{{ update.status|get_status }}</td>
+                    <td>{{ update.status|get_ambulance_status }}</td>
                     <td>{{ update.location }}</td>
                     <td>{{ update.comment }}</td>
                     <td>{{ update.timestamp }}</td>
