@@ -122,7 +122,7 @@ class Permissions:
 
     def get(self, **kwargs):
         assert len(kwargs) == 1
-        return [getattr(self, k + 's')[v] for k, v in kwargs][0]
+        return [getattr(self, k + 's')[v] for k, v in kwargs.items()][0]
 
     def get_all_permissions(self, profile_field):
         return getattr(self, profile_field)
