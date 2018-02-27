@@ -170,10 +170,10 @@ class MQTTAclView(CsrfExemptMixin,
                     # is user authorized?
                     try:
 
-                        #can_read = get_permissions(user).check_read_permission(hospital=hospital_id)
+                        can_read = get_permissions(user).check_can_read(hospital=hospital_id)
                         perm = user.profile.hospitals.get(hospital=hospital_id)
 
-                        if (perm.can_read and
+                        if (can_read and
                                 ((len(topic) == 3 and topic[2] == 'data') or
                                  (len(topic) == 3 and topic[2] == 'metadata') or
                                  (len(topic) == 5 and topic[2] == 'equipment'
@@ -194,10 +194,10 @@ class MQTTAclView(CsrfExemptMixin,
                     # is user authorized?
                     try:
 
-                        #can_read = get_permissions(user).check_read_permission(ambulance=hospital_id)
+                        can_read = get_permissions(user).check_can_read(ambulance=ambulance_id)
                         perm = user.profile.ambulances.get(ambulance=ambulance_id)
 
-                        if perm.can_read:
+                        if can_read:
                             return HttpResponse('OK')
 
                     except ObjectDoesNotExist:
@@ -228,9 +228,10 @@ class MQTTAclView(CsrfExemptMixin,
                         # is user authorized?
                         try:
 
+                            can_write = get_permissions(user).check_can_write(ambulance=ambulance_id)
                             perm = user.profile.ambulances.get(ambulance=ambulance_id)
 
-                            if perm.can_write:
+                            if can_write:
                                 return HttpResponse('OK')
 
                         except ObjectDoesNotExist:
@@ -252,9 +253,10 @@ class MQTTAclView(CsrfExemptMixin,
                         # is user authorized?
                         try:
 
+                            can_write = get_permissions(user).check_can_write(hospital=hospital_id)
                             perm = user.profile.hospitals.get(hospital=hospital_id)
 
-                            if perm.can_write:
+                            if can_write:
                                 return HttpResponse('OK')
 
                         except ObjectDoesNotExist:
