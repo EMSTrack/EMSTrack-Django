@@ -46,34 +46,34 @@ class TestPermissions(TestSetup):
         answer = {
             'ambulances': {
                 self.a1.id: {
-                    'id': self.a1.id,
+                    'ambulance': self.a1,
                     'can_read': True,
                     'can_write': True
                 },
                 self.a2.id: {
-                    'id': self.a2.id,
+                    'ambulance': self.a2,
                     'can_read': True,
                     'can_write': True
                 },
                 self.a3.id: {
-                    'id': self.a3.id,
+                    'ambulance': self.a3,
                     'can_read': True,
                     'can_write': True
                 }
             },
             'hospitals': {
                 self.h1.id: {
-                    'id': self.h1.id,
+                    'hospital': self.h1,
                     'can_read': True,
                     'can_write': True
                 },
                 self.h2.id: {
-                    'id': self.h2.id,
+                    'hospital': self.h2,
                     'can_read': True,
                     'can_write': True
                 },
                 self.h3.id: {
-                    'id': self.h3.id,
+                    'hospital': self.h3,
                     'can_read': True,
                     'can_write': True
                 }
@@ -123,12 +123,12 @@ class TestPermissions(TestSetup):
             },
             'hospitals': {
                 self.h1.id: {
-                    'id': self.h1.id,
+                    'hospital': self.h1,
                     'can_read': True,
                     'can_write': False
                 },
                 self.h2.id: {
-                    'id': self.h2.id,
+                    'hospital': self.h2,
                     'can_read': True,
                     'can_write': True
                 },
@@ -182,12 +182,12 @@ class TestPermissions(TestSetup):
         answer = {
             'ambulances': {
                 self.a1.id: {
-                    'id': self.a1.id,
+                    'ambulance': self.a1,
                     'can_read': False,
                     'can_write': False
                 },
                 self.a3.id: {
-                    'id': self.a3.id,
+                    'ambulance': self.a3,
                     'can_read': True,
                     'can_write': True
                 }
@@ -247,12 +247,12 @@ class TestPermissions(TestSetup):
             },
             'hospitals': {
                 self.h1.id: {
-                    'id': self.h1.id,
+                    'hospital': self.h1,
                     'can_read': True,
                     'can_write': False
                 },
                 self.h2.id: {
-                    'id': self.h2.id,
+                    'hospital': self.h2,
                     'can_read': True,
                     'can_write': True
                 },
@@ -306,29 +306,29 @@ class TestPermissions(TestSetup):
         answer = {
             'ambulances': {
                 self.a1.id: {
-                    'id': self.a1.id,
+                    'ambulance': self.a1,
                     'can_read': False,
                     'can_write': False
                 },
                 self.a2.id: {
-                    'id': self.a2.id,
+                    'ambulance': self.a2,
                     'can_read': True,
                     'can_write': True
                 },
                 self.a3.id: {
-                    'id': self.a3.id,
+                    'ambulance': self.a3,
                     'can_read': True,
                     'can_write': True
                 }
             },
             'hospitals': {
                 self.h1.id: {
-                    'id': self.h1.id,
+                    'hospital': self.h1,
                     'can_read': True,
                     'can_write': True
                 },
                 self.h3.id: {
-                    'id': self.h3.id,
+                    'hospital': self.h3,
                     'can_read': True,
                     'can_write': False
                 }
