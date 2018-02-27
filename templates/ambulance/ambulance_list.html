@@ -27,10 +27,10 @@
 	  <a href="{% url 'ambulance:detail' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
 	</td>
         <td>
-	  {{ ambulance.capability }}
+	  {{ ambulance.capability|get_ambulance_capability }}
 	</td>
         <td>
-	  {{ ambulance.status }}
+	  {{ ambulance.status|get_ambulance_status }}
 	</td>
         <td>
 	  {{ ambulance.comment }}
