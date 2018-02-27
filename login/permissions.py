@@ -22,19 +22,19 @@ cache_info = get_permissions.cache_info
 
 class Permissions:
 
-    fields_id = ('ambulance_id', 'hospital_id')
-    fields = ('ambulances', 'hospitals')
+    object_fields = ('ambulance', 'hospital')
+    profile_fields = ('ambulances', 'hospitals')
     models = (Ambulance, Hospital)
 
     def __init__(self, user, **kwargs):
 
         # override fields
-        if 'fields' in kwargs:
-            self.fields = kwargs.pop('fields')
+        if 'profile_fields' in kwargs:
+            self.profile_fields = kwargs.pop('profile_fields')
 
         # override fields_id
-        if 'fields_id' in kwargs:
-            self.fields_id = kwargs.pop('fields_id')
+        if 'object_fields' in kwargs:
+            self.object_fields = kwargs.pop('object_fields')
 
         # override models
         if 'models' in kwargs:
@@ -43,12 +43,12 @@ class Permissions:
         # initialize permissions
         self.can_read = {}
         self.can_write = {}
-        for field in self.fields:
+        for profile_field in self.profile_fields:
             # e.g.: self.ambulances = {}
-            setattr(self, field, {})
+            setattr(self, profile_field, {})
             # e.g.: self.can_read['ambulances'] = {}
-            self.can_read[field] = []
-            self.can_write[field] = []
+            self.can_read[profile_field] = []
+            self.can_write[profile_field] = []
 
         # retrieve permissions if not None
         if user is not None:
@@ -56,75 +56,75 @@ class Permissions:
             if user.is_superuser:
 
                 # superuser, add all permissions
-                for (model, field) in zip(self.models, self.fields):
+                for (model, profile_field, object_field) in zip(self.models, self.profile_fields, self.object_fields):
                     # e.g.: objs = group.groupprofile.hospitals.all()
                     objs = model.objects.all()
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in Hospitals.objects.all()})
-                    getattr(self, field).update({
+                    getattr(self, profile_field).update({
                         e.id: {
-                            'id': e.id,
+                            object_field: e,
                             'can_read': True,
                             'can_write': True
                         } for e in objs})
-                    logger.debug('superuser, {} = {}'.format(field, getattr(self, field)))
+                    logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
 
             else:
 
                 # regular users, loop through groups
                 for group in user.groups.all():
                     # e.g.: group.groupprofile.ambulances.all()})
-                    for (field, field_id) in zip(self.fields, self.fields_id):
+                    for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
                         # e.g.: objs = group.groupprofile.ambulances.all()
-                        objs = getattr(group.groupprofile, field).all()
+                        objs = getattr(group.groupprofile, profile_field).all()
                         # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
-                        getattr(self, field).update({
-                            getattr(e,field_id): {
-                                'id': getattr(e,field_id),
+                        getattr(self, profile_field).update({
+                            getattr(e,object_field + '_id'): {
+                                object_field: getattr(e,object_field),
                                 'can_read': e.can_read,
                                 'can_write': e.can_write
                             } for e in objs})
-                        logger.debug('group = {}, {} = {}'.format(group.name, field, getattr(self, field)))
+                        logger.debug('group = {}, {} = {}'.format(group.name, profile_field, getattr(self, profile_field)))
 
                 # add user permissions
-                for (field, field_id) in zip(self.fields, self.fields_id):
+                for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
                     # e.g.: objs = group.groupprofile.hospitals.all()
-                    objs = getattr(user.profile, field).all()
+                    objs = getattr(user.profile, profile_field).all()
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in user.profile.hospitals.all()})
-                    getattr(self, field).update({
-                        getattr(e, field_id): {
-                            'id': getattr(e, field_id),
+                    getattr(self, profile_field).update({
+                        getattr(e, object_field + '_id'): {
+                            object_field: getattr(e, object_field),
                             'can_read': e.can_read,
                             'can_write': e.can_write
                         } for e in objs})
-                    logger.debug('user, {} = {}'.format(field, getattr(self, field)))
+                    logger.debug('user, {} = {}'.format(profile_field, getattr(self, profile_field)))
 
             # build permissions
-            for field in self.fields:
-                for obj in getattr(self, field).values():
+            for profile_field in self.profile_fields:
+                for obj in getattr(self, profile_field).values():
                     if obj['can_read']:
                         # e.g.: self.can_read['ambulances'].append(obj['id'])
-                        self.can_read[field].append(obj['id'])
+                        self.can_read[profile_field].append(obj['id'])
                     if obj['can_write']:
                         # e.g.: self.can_write['ambulances'].append(obj['id'])
-                        self.can_write[field].append(obj['id'])
+                        self.can_write[profile_field].append(obj['id'])
 
-    def check_read_permission(self, field, id):
+    def check_read_permission(self, profile_field, id):
         try:
-            return id in self.can_read[field]
+            return id in self.can_read[profile_field]
         except KeyError:
             return False
 
-    def check_write_permission(self, field, id):
+    def check_write_permission(self, profile_field, id):
         try:
-            return id in self.can_write[field]
+            return id in self.can_write[profile_field]
         except KeyError:
             return False
 
-    def get_permissions(self, field, id):
-        return getattr(self, field)[id]
+    def get_permissions(self, profile_field, id):
+        return getattr(self, profile_field)[id]
 
-    def get_can_read(self, field):
-        return self.can_read[field]
+    def get_can_read(self, profile_field):
+        return self.can_read[profile_field]
 
-    def get_can_write(self, field):
-        return self.can_write[field]
+    def get_can_write(self, profile_field):
+        return self.can_write[profile_field]
