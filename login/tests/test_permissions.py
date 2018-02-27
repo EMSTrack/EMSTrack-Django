@@ -358,3 +358,13 @@ class TestPermissions(TestSetup):
         self.assertEqual(info.hits, 3)
         self.assertEqual(info.misses, 1)
         self.assertEqual(info.currsize, 1)
+
+        # retrieve permissions for user u2 and u1
+        get_permissions(self.u2)
+        get_permissions(self.u1)
+        get_permissions(self.u2)
+        get_permissions(self.u1)
+        info = cache_info()
+        self.assertEqual(info.hits, 6)
+        self.assertEqual(info.misses, 2)
+        self.assertEqual(info.currsize, 2)
