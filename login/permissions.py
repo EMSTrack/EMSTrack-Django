@@ -16,6 +16,10 @@ def get_permissions(user):
     return Permissions(user)
 
 
+cache_clear = get_permissions.cache_clear
+cache_info = get_permissions.cache_info
+
+
 class Permissions:
 
     fields_id = ('ambulance_id', 'hospital_id')

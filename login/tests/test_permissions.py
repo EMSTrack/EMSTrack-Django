@@ -1,4 +1,4 @@
-from login.permissions import Permissions
+from login.permissions import Permissions, get_permissions
 from login.tests.setup_data import TestSetup
 
 
@@ -346,3 +346,15 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get_permissions('hospitals', id)
+
+    def test_cache(self):
+
+        # retrieve permissions for user u1
+        get_permissions(self.u1)
+        get_permissions(self.u1)
+        get_permissions(self.u1)
+        get_permissions(self.u1)
+        info = cache_info()
+        self.assertEqual(info.hits, 4)
+        self.assertEqual(info.misses, 1)
+        self.assertEqual(info.currsize, 1)
