@@ -64,8 +64,8 @@ class UserProfileSerializer(serializers.Serializer):
 
     def get_ambulances(self, user):
 
-        return AmbulancePermissionSerializer(self._permissions.get_all_permissions('ambulances').values(), many=True).data
+        return AmbulancePermissionSerializer(self._permissions.get_permissions('ambulances').values(), many=True).data
 
     def get_hospitals(self, user):
 
-        return HospitalPermissionSerializer(self._permissions.get_all_permissions('hospitals').values(), many=True).data
+        return HospitalPermissionSerializer(self._permissions.get_permissions('hospitals').values(), many=True).data

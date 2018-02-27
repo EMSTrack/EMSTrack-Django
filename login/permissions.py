@@ -108,23 +108,28 @@ class Permissions:
                         # e.g.: self.can_write['ambulances'].append(obj['id'])
                         self.can_write[profile_field].append(id)
 
-    def check_read_permission(self, profile_field, id):
+    def check_can_read(self, **kwargs):
+        assert len(kwargs) == 1
+        (key,id) = kwargs.popitem()
         try:
-            return id in self.can_read[profile_field]
+            return id in self.can_read[key + 's']
         except KeyError:
             return False
 
-    def check_write_permission(self, profile_field, id):
+    def check_can_write(self, profile_field, id):
+        assert len(kwargs) == 1
+        (key,id) = kwargs.popitem()
         try:
-            return id in self.can_write[profile_field]
+            return id in self.can_write[key + 's']
         except KeyError:
             return False
 
     def get(self, **kwargs):
         assert len(kwargs) == 1
-        return [getattr(self, k + 's')[v] for k, v in kwargs.items()][0]
+        (k,v) = kwargs.popitem()
+        return getattr(self, k + 's')[v]
 
-    def get_all_permissions(self, profile_field):
+    def get_permissions(self, profile_field):
         return getattr(self, profile_field)
 
     def get_can_read(self, profile_field):
