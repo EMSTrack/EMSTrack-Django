@@ -116,7 +116,7 @@ class Permissions:
         except KeyError:
             return False
 
-    def check_can_write(self, profile_field, id):
+    def check_can_write(self, **kwargs):
         assert len(kwargs) == 1
         (key,id) = kwargs.popitem()
         try:
