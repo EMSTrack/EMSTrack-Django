@@ -62,6 +62,7 @@ class BasePermissionMixin:
             can_do = getattr(user.profile,
                              self.profile_field).filter(can_read=True).values(self.profile_values)
             logger.debug('GET: can_do = {}'.format(can_do))
+            can_do = permissions.get_can_read(self.profile_field)
             logger.debug('GET: can_do = {}'.format(permissions.get_can_read(self.profile_field)))
 
         elif (self.request.method == 'PUT' or
@@ -71,6 +72,7 @@ class BasePermissionMixin:
             can_do = getattr(user.profile,
                              self.profile_field).filter(can_write=True).values(self.profile_values)
             logger.debug('PUT: can_do = {}'.format(can_do))
+            can_do = permissions.get_can_write(self.profile_field)
             logger.debug('PUT: can_do = {}'.format(permissions.get_can_write(self.profile_field)))
 
         else:
