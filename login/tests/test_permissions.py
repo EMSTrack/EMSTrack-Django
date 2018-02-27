@@ -355,6 +355,6 @@ class TestPermissions(TestSetup):
         get_permissions(self.u1)
         get_permissions(self.u1)
         info = cache_info()
-        self.assertEqual(info.hits, 4)
+        self.assertEqual(info.hits, 3)
         self.assertEqual(info.misses, 1)
         self.assertEqual(info.currsize, 1)
