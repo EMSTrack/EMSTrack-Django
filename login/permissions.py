@@ -100,13 +100,13 @@ class Permissions:
 
             # build permissions
             for profile_field in self.profile_fields:
-                for obj in getattr(self, profile_field).values():
+                for (id, obj) in getattr(self, profile_field).items():
                     if obj['can_read']:
                         # e.g.: self.can_read['ambulances'].append(obj['id'])
-                        self.can_read[profile_field].append(obj['id'])
+                        self.can_read[profile_field].append(id)
                     if obj['can_write']:
                         # e.g.: self.can_write['ambulances'].append(obj['id'])
-                        self.can_write[profile_field].append(obj['id'])
+                        self.can_write[profile_field].append(id)
 
     def check_read_permission(self, profile_field, id):
         try:
