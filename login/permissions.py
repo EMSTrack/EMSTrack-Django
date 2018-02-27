@@ -123,6 +123,9 @@ class Permissions:
     def get_permissions(self, profile_field, id):
         return getattr(self, profile_field)[id]
 
+    def get_all_permissions(self, profile_field):
+        return getattr(self, profile_field)
+
     def get_can_read(self, profile_field):
         return self.can_read[profile_field]
 

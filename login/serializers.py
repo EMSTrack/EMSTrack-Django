@@ -6,6 +6,8 @@ from django.contrib.auth.models import User, Group
 
 from .models import Profile, AmbulancePermission, HospitalPermission, GroupProfile
 
+from .permissions import get_permissions
+
 from ambulance.models import Ambulance
 
 from hospital.models import Hospital
@@ -53,7 +55,7 @@ class UserProfileSerializer(serializers.Serializer):
         fields = ('ambulances', 'hospitals')
 
     @staticmethod
-    def get_permissions(user):
+    def _get_permissions(user):
 
         # quick return if None
         if user is None:
@@ -91,6 +93,11 @@ class UserProfileSerializer(serializers.Serializer):
         permissions['ambulances'] = AmbulancePermissionSerializer(permissions['ambulances'].values(), many=True).data
         permissions['hospitals'] = HospitalPermissionSerializer(permissions['hospitals'].values(), many=True).data
 
+        perms = get_permissions(user)
+
+        ppermissions['ambulances'] = AmbulancePermissionSerializer(perms.get_all_permissions('ambulances').values(), many=True).data
+        ppermissions['hospitals'] = HospitalPermissionSerializer(perms.get_all_permissions('hospitals').values(), many=True).data
+
         return permissions
 
     def __init__(self, *args, **kwargs):
@@ -99,7 +106,7 @@ class UserProfileSerializer(serializers.Serializer):
         super().__init__(*args, **kwargs)
 
         # cache permissions
-        self._permissions = self.get_permissions(self.instance)
+        self._permissions = self._get_permissions(self.instance)
 
     def get_ambulances(self, user):
 
