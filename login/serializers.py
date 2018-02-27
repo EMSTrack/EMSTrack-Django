@@ -95,8 +95,8 @@ class UserProfileSerializer(serializers.Serializer):
 
         perms = get_permissions(user)
 
-        ppermissions['ambulances'] = AmbulancePermissionSerializer(perms.get_all_permissions('ambulances').values(), many=True).data
-        ppermissions['hospitals'] = HospitalPermissionSerializer(perms.get_all_permissions('hospitals').values(), many=True).data
+        permissions['ambulances'] = AmbulancePermissionSerializer(perms.get_all_permissions('ambulances').values(), many=True).data
+        permissions['hospitals'] = HospitalPermissionSerializer(perms.get_all_permissions('hospitals').values(), many=True).data
 
         return permissions
 
