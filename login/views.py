@@ -134,10 +134,6 @@ class MQTTAclView(CsrfExemptMixin,
             user = User.objects.get(username=data.get('username'),
                                     is_active=True)
 
-            # print('topic = {}'.format(topic))
-            # print('user = {}'.format(user))
-            # print('user.hospitals = {}'.format(user.hospitals.all()))
-
             if acc == 1:
 
                 # permission to subscribe:
@@ -164,14 +160,14 @@ class MQTTAclView(CsrfExemptMixin,
                 elif (len(topic) >= 3 and
                       topic[0] == 'hospital'):
 
+                    # get hospital id
                     hospital_id = int(topic[1])
-                    # print('hospital_id = {}'.format(hospital_id))
 
                     # is user authorized?
                     try:
 
+                        # perm = user.profile.hospitals.get(hospital=hospital_id)
                         can_read = get_permissions(user).check_can_read(hospital=hospital_id)
-                        perm = user.profile.hospitals.get(hospital=hospital_id)
 
                         if (can_read and
                                 ((len(topic) == 3 and topic[2] == 'data') or
@@ -188,14 +184,14 @@ class MQTTAclView(CsrfExemptMixin,
                       topic[0] == 'ambulance' and
                       topic[2] == 'data'):
 
+                    # get ambulance_id
                     ambulance_id = int(topic[1])
-                    # print('ambulance_id = {}'.format(ambulance_id))
 
                     # is user authorized?
                     try:
 
+                        # perm = user.profile.ambulances.get(ambulance=ambulance_id)
                         can_read = get_permissions(user).check_can_read(ambulance=ambulance_id)
-                        perm = user.profile.ambulances.get(ambulance=ambulance_id)
 
                         if can_read:
                             return HttpResponse('OK')
@@ -222,14 +218,14 @@ class MQTTAclView(CsrfExemptMixin,
                           topic[2] == 'ambulance' and
                           topic[4] == 'data'):
 
+                        # get ambulance_id
                         ambulance_id = int(topic[3])
-                        # print('ambulance_id = {}'.format(ambulance_id))
 
                         # is user authorized?
                         try:
 
+                            # perm = user.profile.ambulances.get(ambulance=ambulance_id)
                             can_write = get_permissions(user).check_can_write(ambulance=ambulance_id)
-                            perm = user.profile.ambulances.get(ambulance=ambulance_id)
 
                             if can_write:
                                 return HttpResponse('OK')
@@ -247,14 +243,14 @@ class MQTTAclView(CsrfExemptMixin,
                            topic[4] == 'equipment' and
                            topic[6] == 'data')):
 
+                        # get hospital_id
                         hospital_id = int(topic[3])
-                        # print('hospital_id = {}'.format(hospital_id))
 
                         # is user authorized?
                         try:
 
+                            # perm = user.profile.hospitals.get(hospital=hospital_id)
                             can_write = get_permissions(user).check_can_write(hospital=hospital_id)
-                            perm = user.profile.hospitals.get(hospital=hospital_id)
 
                             if can_write:
                                 return HttpResponse('OK')
