@@ -27,7 +27,7 @@ from .models import TemporaryPassword
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm
 
-from .viewsets import IsUserOrAdminOrSuper
+from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
 
@@ -170,6 +170,7 @@ class MQTTAclView(CsrfExemptMixin,
                     # is user authorized?
                     try:
 
+                        #can_read = get_permissions(user).check_read_permission(hospital=hospital_id)
                         perm = user.profile.hospitals.get(hospital=hospital_id)
 
                         if (perm.can_read and
@@ -193,6 +194,7 @@ class MQTTAclView(CsrfExemptMixin,
                     # is user authorized?
                     try:
 
+                        #can_read = get_permissions(user).check_read_permission(ambulance=hospital_id)
                         perm = user.profile.ambulances.get(ambulance=ambulance_id)
 
                         if perm.can_read:

@@ -80,9 +80,9 @@ class TestPermissions(TestSetup):
             }
         }
         for id in all_ambulances:
-            self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+            self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
         for id in all_hospitals:
-            self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+            self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
 
         # regular users without groups
 
@@ -136,16 +136,16 @@ class TestPermissions(TestSetup):
         }
         for id in all_ambulances:
             if id in answer['ambulances']:
-                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+                self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('ambulances', id)
+                    perms.get(ambulance= id)
         for id in all_hospitals:
             if id in answer['hospitals']:
-                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+                self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('hospitals', id)
+                    perms.get(hospital=id)
 
         u = self.u3
         perms = Permissions(u)
@@ -197,16 +197,16 @@ class TestPermissions(TestSetup):
         }
         for id in all_ambulances:
             if id in answer['ambulances']:
-                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+                self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('ambulances', id)
+                    perms.get(ambulance= id)
         for id in all_hospitals:
             if id in answer['hospitals']:
-                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+                self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('hospitals', id)
+                    perms.get(hospital=id)
 
         # regular users with groups
 
@@ -260,16 +260,16 @@ class TestPermissions(TestSetup):
         }
         for id in all_ambulances:
             if id in answer['ambulances']:
-                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+                self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('ambulances', id)
+                    perms.get(ambulance= id)
         for id in all_hospitals:
             if id in answer['hospitals']:
-                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+                self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('hospitals', id)
+                    perms.get(hospital=id)
 
         u = self.u5
         perms = Permissions(u)
@@ -336,16 +336,16 @@ class TestPermissions(TestSetup):
         }
         for id in all_ambulances:
             if id in answer['ambulances']:
-                self.assertDictEqual(answer['ambulances'][id], perms.get_permissions('ambulances', id))
+                self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('ambulances', id)
+                    perms.get(ambulance=id)
         for id in all_hospitals:
             if id in answer['hospitals']:
-                self.assertDictEqual(answer['hospitals'][id], perms.get_permissions('hospitals', id))
+                self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
             else:
                 with self.assertRaises(KeyError):
-                    perms.get_permissions('hospitals', id)
+                    perms.get(hospital=id)
 
     def test_cache(self):
 

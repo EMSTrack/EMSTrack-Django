@@ -120,8 +120,9 @@ class Permissions:
         except KeyError:
             return False
 
-    def get_permissions(self, profile_field, id):
-        return getattr(self, profile_field)[id]
+    def get(self, **kwargs):
+        assert len(kwargs) == 1
+        return [getattr(self, k + 's')[v] for k, v in kwargs][0]
 
     def get_all_permissions(self, profile_field):
         return getattr(self, profile_field)
