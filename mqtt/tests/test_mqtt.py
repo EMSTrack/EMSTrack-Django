@@ -726,7 +726,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # generate ERROR: JSON formated incorrectly
         
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
-        
+        self.is_subscribed(test_client)
+
         test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
                                                                self.h1.id),
                             '{ "value": ',

@@ -1,4 +1,4 @@
-from login.permissions import Permissions, get_permissions, cache_info
+from login.permissions import Permissions, get_permissions, cache_info, cache_clear
 from login.tests.setup_data import TestSetup
 
 
@@ -348,6 +348,9 @@ class TestPermissions(TestSetup):
                     perms.get(hospital=id)
 
     def test_cache(self):
+
+        # clear cache
+        cache_clear()
 
         # retrieve permissions for user u1
         get_permissions(self.u1)
