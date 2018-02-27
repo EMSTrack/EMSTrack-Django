@@ -1,4 +1,4 @@
-from login.permissions import Permissions, get_permissions
+from login.permissions import Permissions, get_permissions, cache_info
 from login.tests.setup_data import TestSetup
 
 
