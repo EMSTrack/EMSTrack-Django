@@ -19,7 +19,7 @@ from hospital.models import Hospital, \
 from ..models import Profile, AmbulancePermission, HospitalPermission, \
     TemporaryPassword
 
-from ..serializers import ProfileSerializer, ExtendedProfileSerializer
+from ..serializers import ProfileSerializer, UserProfileSerializer
 
 from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
@@ -79,7 +79,7 @@ class TestProfile(MyTestCase):
 
         # super will see all ambulances and hospitals
         u = self.u1
-        serializer = ExtendedProfileSerializer(u)
+        serializer = UserProfileSerializer(u)
         result = {
             'ambulances': [
                 {
@@ -104,7 +104,7 @@ class TestProfile(MyTestCase):
 
         # regular users is just like ProfileSerializer
         for u in (self.u2, self.u3):
-            serializer = ExtendedProfileSerializer(u)
+            serializer = UserProfileSerializer(u)
             result = {
                 'ambulances': [
                     {
@@ -130,7 +130,7 @@ class TestProfile(MyTestCase):
         # regular users is just like ProfileSerializer with groups
         u = self.u4
         g = self.g2
-        serializer = ExtendedProfileSerializer(u)
+        serializer = UserProfileSerializer(u)
         result = {
             'ambulances': [
                 {
@@ -173,7 +173,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u1).data
+        answer = UserProfileSerializer(self.u1).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's
@@ -181,7 +181,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u2).data
+        answer = UserProfileSerializer(self.u2).data
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
@@ -189,7 +189,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u3).data
+        answer = UserProfileSerializer(self.u3).data
         self.assertDictEqual(result, answer)
         
         # logout
@@ -203,7 +203,7 @@ class TestProfileViewset(MyTestCase):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ExtendedProfileSerializer(self.u2).data
+        answer = UserProfileSerializer(self.u2).data
         self.assertDictEqual(result, answer)
         
         # retrieve someone else's

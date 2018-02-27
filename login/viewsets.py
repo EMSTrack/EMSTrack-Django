@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from .models import Profile
 
-from .serializers import ExtendedProfileSerializer
+from .serializers import UserProfileSerializer
 
 # Django REST Framework Viewsets
 
@@ -28,7 +28,7 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
 class ProfileViewSet(viewsets.GenericViewSet):
    
     queryset = User.objects.all()
-    serializer_class = ExtendedProfileSerializer
+    serializer_class = UserProfileSerializer
     permission_classes = (permissions.IsAuthenticated,
                           IsUserOrAdminOrSuper,)
     lookup_field = 'username'
@@ -38,5 +38,5 @@ class ProfileViewSet(viewsets.GenericViewSet):
         """
         Retrieve user's extended profile.
         """
-        return Response(ExtendedProfileSerializer(self.get_object()).data)
+        return Response(UserProfileSerializer(self.get_object()).data)
 

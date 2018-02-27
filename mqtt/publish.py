@@ -18,7 +18,7 @@ from hospital.models import Equipment, HospitalEquipment, Hospital
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
-from login.serializers import ExtendedProfileSerializer
+from login.serializers import UserProfileSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -113,9 +113,9 @@ class PublishClient(BaseClient):
         
     def publish_profile(self, user, qos=2, retain=True):
         self.publish_topic('user/{}/profile'.format(user.username),
-                          ExtendedProfileSerializer(user),
-                          qos=qos,
-                          retain=retain)
+                           UserProfileSerializer(user),
+                           qos=qos,
+                           retain=retain)
         
     def publish_ambulance(self, ambulance, qos=2, retain=True):
         self.publish_topic('ambulance/{}/data'.format(ambulance.id),

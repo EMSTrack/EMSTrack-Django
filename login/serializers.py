@@ -45,7 +45,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = ('ambulances', 'hospitals')
 
 
-class ExtendedProfileSerializer(serializers.Serializer):
+class UserProfileSerializer(serializers.Serializer):
     ambulances = serializers.SerializerMethodField()
     hospitals = serializers.SerializerMethodField()
 
