@@ -32,7 +32,7 @@ urlpatterns = [
 
     url(r'^location$',
         staff_member_required(views.LocationAdminListView.as_view()),
-        name = 'group'),
+        name='location'),
 
     # NEED REVISING
     
