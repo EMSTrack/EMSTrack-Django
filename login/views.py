@@ -80,12 +80,18 @@ class GroupAdminCreateView(CreateView):
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
 
-class GroupAdminCreateView(InlineFormSetView):
+
+class GroupProfileAdminInline(InlineFormSet):
+
+    model = GroupProfile
+    fields = ['ambulances', 'hospitals']
+
+
+class GroupAdminCreateView(CreateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
-    inline_model = GroupProfile
+    inlines = [GroupProfileAdminInline]
     form_class = GroupAdminCreateForm
-    formset_class = GroupProfileForm
 
 
 class GroupAdminUpdateView(UpdateView):
