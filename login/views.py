@@ -88,10 +88,22 @@ class GroupProfileAdminInline(InlineFormSet):
     form_class = GroupProfileForm
 
 
+class AmbulancePermissionAdminInline(InlineFormSet):
+
+    model = AmbulancePermission
+    fields = ['ambulance', 'can_read', 'can_write']
+
+
+class HospitalPermissionAdminInline(InlineFormSet):
+
+    model = HospitalPermission
+    fields = ['hospital', 'can_read', 'can_write']
+
+
 class GroupAdminCreateView(CreateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
-    inlines = [GroupProfileAdminInline]
+    inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
     form_class = GroupAdminCreateForm
 
 
