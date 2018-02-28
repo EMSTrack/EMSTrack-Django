@@ -81,11 +81,11 @@ class GroupAdminCreateView(CreateView):
     form_class = GroupAdminCreateForm
 
 
-class GroupProfileAdminInline(InlineFormSet):
-
-    model = GroupProfile
-    fields = ['ambulances', 'hospitals']
-    form_class = GroupProfileForm
+# class GroupProfileAdminInline(InlineFormSet):
+#
+#     model = GroupProfile
+#     fields = ['ambulances', 'hospitals']
+#     form_class = GroupProfileForm
 
 
 class AmbulancePermissionAdminInline(InlineFormSet):
