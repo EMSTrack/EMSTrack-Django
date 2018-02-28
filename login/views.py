@@ -67,6 +67,7 @@ class AdminView(TemplateView):
 
 class GroupAdminListView(ListView):
     model = Group
+    template_name = 'login/group_list.html'
 
 
 class GroupAdminDetailView(DetailView):
