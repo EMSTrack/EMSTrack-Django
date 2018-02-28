@@ -12,6 +12,7 @@ from django.contrib.auth.models import User, Group
 
 from .models import TemporaryPassword
 
+
 class SignupForm(auth_forms.UserCreationForm):
     username = auth_forms.UsernameField(
         label=_("Username"),
@@ -83,6 +84,7 @@ class SignupForm(auth_forms.UserCreationForm):
                   'email',
                   'password1', 'password2', 'position' )
 
+
 class AuthenticationForm(auth_forms.AuthenticationForm):
     username = auth_forms.UsernameField(
         label=_("Username"),
@@ -105,6 +107,7 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         ),
     )
     
+
 class MQTTAuthenticationForm(AuthenticationForm):
 
     """

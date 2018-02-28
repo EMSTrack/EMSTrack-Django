@@ -6,6 +6,7 @@ from emstrack.forms import LeafletPointWidget
 
 from .models import Ambulance, Call
 
+
 class AmbulanceCreateForm(forms.ModelForm):
     
     location = PointField(
@@ -15,7 +16,7 @@ class AmbulanceCreateForm(forms.ModelForm):
     
     class Meta:
         model = Ambulance
-        fields = [ 'identifier', 'capability', 'status', 'comment', 'location' ]
+        fields = ['identifier', 'capability', 'status', 'comment', 'location']
 
 
 class AmbulanceUpdateForm(AmbulanceCreateForm):
