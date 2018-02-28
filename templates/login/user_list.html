@@ -15,6 +15,7 @@
             <th>Username</th>
             <th>Last</th>
             <th>First</th>
+            <th>Email</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +29,9 @@
             </td>
             <td>
                 {{ user.first_name }}
+            </td>
+            <td>
+                {{ user.email}}
             </td>
         </tr>
         {% endfor %}
