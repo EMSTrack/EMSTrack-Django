@@ -173,7 +173,7 @@ class MQTTAuthenticationForm(AuthenticationForm):
 
 class UserAdminCreateForm(forms.ModelForm):
 
-    groups = forms.MultiplyChoiceField(queryset=Group.objects.all(), required=False)
+    groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
 
     class Meta:
         model = User
