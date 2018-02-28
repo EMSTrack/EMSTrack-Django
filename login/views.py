@@ -81,7 +81,7 @@ class UserAdminDetailView(DetailView):
 class UserAdminCreateView(CreateView):
     model = User
     template_name = 'login/user_form.html'
-    fields = ['username', 'firstname', 'lastname', 'email']
+    fields = ['username', 'first_name', 'last_name', 'email']
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -90,7 +90,7 @@ class UserAdminCreateView(CreateView):
 class UserAdminUpdateView(UpdateView):
     model = User
     template_name = 'login/user_form.html'
-    fields = ['firstname', 'lastname', 'email']
+    fields = ['first_name', 'last_name', 'email']
 
     def get_success_url(self):
         return self.object.get_absolute_url()

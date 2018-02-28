@@ -24,10 +24,10 @@
                 <a href="{% url 'login:user_detail' pk=user.id %}">{{ user.username }}</a>
             </td>
             <td>
-                {{ user.lastname }}
+                {{ user.last_name }}
             </td>
             <td>
-                {{ user.firstname }}
+                {{ user.first_name }}
             </td>
         </tr>
         {% endfor %}
