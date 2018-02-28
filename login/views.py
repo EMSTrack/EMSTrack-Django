@@ -85,6 +85,7 @@ class GroupProfileAdminInline(InlineFormSet):
 
     model = GroupProfile
     fields = ['ambulances', 'hospitals']
+    form_class = GroupProfileForm
 
 
 class GroupAdminCreateView(CreateWithInlinesView):
