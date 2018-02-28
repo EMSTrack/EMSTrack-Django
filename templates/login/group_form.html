@@ -6,16 +6,20 @@
 <h1>User</h1>
 
 <div class="container">
-  <form method="POST" class="post-form">
-    {% csrf_token %}
-    <table>
-      {{ form }}
-      {{ formset }}
-    </table>
-    <p>
-      <button type="submit">Save</button>
-    </p>
-  </form>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <table>
+            {{ form }}
+        </table>
+        {% for form in inlines %}
+        <table>
+            {{ form }}
+        </table>
+        {% endfor %}
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
 </div>
 
 {% endblock %}
