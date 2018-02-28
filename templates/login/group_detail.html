@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <h1>User: {{ user.username }}</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p>
+                    <strong>Identifier:</strong>
+                    <a href="{% url 'login:group_update' pk=group.id %}">{{ group.name }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+<!-- TODO: Add editor for groups and permissions -->
+
+{% endblock %}

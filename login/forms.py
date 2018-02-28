@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import get_hasher, check_password
 
 from django.contrib.auth.models import User, Group
 
-from .models import TemporaryPassword
+from .models import TemporaryPassword, AmbulancePermission, HospitalPermission
 
 
 class SignupForm(auth_forms.UserCreationForm):
@@ -179,6 +179,7 @@ class UserAdminCreateForm(forms.ModelForm):
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
 
+
 class UserAdminUpdateForm(UserAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
@@ -187,3 +188,31 @@ class UserAdminUpdateForm(UserAdminCreateForm):
 
         # disable username
         self.fields['username'].disabled = True
+
+
+class AmbulancePermissionAdminForm(forms.ModelForm):
+    class Meta:
+        model = AmbulancePermission
+        fields = ['ambulance', 'can_read', 'can_write']
+
+
+class HospitalPermissionAdminForm(forms.ModelForm):
+    class Meta:
+        model = HospitalPermission
+        fields = ['hospital', 'can_read', 'can_write']
+
+
+class GroupAdminCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ['name']
+
+class GroupAdminUpdateForm(GroupAdminCreateForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # disable groupname
+        self.fields['name'].disabled = True

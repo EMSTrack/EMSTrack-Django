@@ -14,6 +14,7 @@ from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
+from extra_views import InlineFormSet, CreateWithInlinesView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -28,7 +29,8 @@ from emstrack.models import defaults
 from .models import TemporaryPassword
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
-    UserAdminCreateForm, UserAdminUpdateForm
+    UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, HospitalPermissionAdminForm, \
+    AmbulancePermissionAdminForm, GroupAdminUpdateForm
 
 from .permissions import get_permissions
 
@@ -65,6 +67,38 @@ class AdminView(TemplateView):
 
 class GroupAdminListView(ListView):
     model = Group
+
+
+class GroupAdminDetailView(DetailView):
+    model = Group
+    template_name = 'login/group_detail.html'
+
+
+class AmbulancePermissionAdminInline(InlineFormSet):
+    form = AmbulancePermissionAdminForm
+    extra = 1
+
+
+class HospitalPermissionAdminInline(InlineFormSet):
+    form = HospitalPermissionAdminForm
+    extra = 1
+
+
+class GroupAdminCreateView(CreateWithInlinesView):
+    model = Group
+    inlines = [AmbulancePermissionAdminInline, HospitalPermissionAdminInline,]
+    success_url = 'login:group_detail'
+    template_name = 'login/group_form.html'
+    form_class = GroupAdminCreateForm
+
+
+class GroupAdminUpdateView(UpdateView):
+    model = Group
+    template_name = 'login/group_form.html'
+    form_class = GroupAdminUpdateForm
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 # Users
