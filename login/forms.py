@@ -229,17 +229,11 @@ class GroupProfileForm(forms.ModelForm):
         fields = ('ambulances', 'hospitals')
 
 
-# class GroupAdminCreateForm(forms.ModelForm):
-#
-#     formset = forms.modelformset_factory(GroupProfile, form=GroupProfileForm)
-#
-#     class Meta:
-#         model = Group
-#         fields = ['name']
+class GroupAdminCreateForm(forms.ModelForm):
 
-class GroupAdminCreateForm(InlineFormSetView):
-    model = Group
-    inline_model = GroupProfile
+     class Meta:
+         model = Group
+         fields = ['name']
 
 
 class GroupAdminUpdateForm(GroupAdminCreateForm):

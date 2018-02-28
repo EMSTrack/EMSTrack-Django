@@ -14,7 +14,7 @@ from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
-from extra_views import InlineFormSet, CreateWithInlinesView
+from extra_views import InlineFormSet, CreateWithInlinesView, InlineFormSetView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,7 +30,7 @@ from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, 
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, HospitalPermissionAdminForm, \
-    AmbulancePermissionAdminForm, GroupAdminUpdateForm
+    AmbulancePermissionAdminForm, GroupAdminUpdateForm, GroupProfileForm
 
 from .permissions import get_permissions
 
@@ -79,6 +79,13 @@ class GroupAdminCreateView(CreateView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
+
+class GroupAdminCreateView(InlineFormSetView):
+    model = Group
+    template_name = 'login/group_form.html'
+    inline_model = GroupProfile
+    form_class = GroupAdminCreateForm
+    formset_class = GroupProfileForm
 
 
 class GroupAdminUpdateView(UpdateView):
