@@ -208,6 +208,7 @@ class GroupAdminCreateForm(forms.ModelForm):
         model = Group
         fields = ['name']
 
+
 class GroupAdminUpdateForm(GroupAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
