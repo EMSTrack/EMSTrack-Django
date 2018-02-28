@@ -27,7 +27,8 @@ from emstrack.models import defaults
 
 from .models import TemporaryPassword
 
-from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm
+from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
+    UserAdminCreateForm, UserAdminUpdateForm
 
 from .permissions import get_permissions
 
@@ -81,7 +82,7 @@ class UserAdminDetailView(DetailView):
 class UserAdminCreateView(CreateView):
     model = User
     template_name = 'login/user_form.html'
-    fields = ['username', 'first_name', 'last_name', 'email']
+    form_class = UserAdminCreateForm
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -90,7 +91,7 @@ class UserAdminCreateView(CreateView):
 class UserAdminUpdateView(UpdateView):
     model = User
     template_name = 'login/user_form.html'
-    fields = ['first_name', 'last_name', 'email']
+    form_class = UserAdminUpdateForm
 
     def get_success_url(self):
         return self.object.get_absolute_url()

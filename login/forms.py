@@ -169,3 +169,21 @@ class MQTTAuthenticationForm(AuthenticationForm):
             
         # if not a hash, call super to validate password
         return super().clean()
+
+
+class UserAdminCreateForm(forms.ModelForm):
+
+    groups = forms.MultiplyChoiceField(queryset=Group.objects.all(), required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_admin']
+
+class UserAdminUpdateForm(UserAdminCreateForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # disable username
+        self.fields['username'].disabled = True
