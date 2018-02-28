@@ -21,7 +21,7 @@
         {% for user in user_list %}
         <tr>
             <td>
-                <a href="{% url 'ambulance:user_detail' pk=user.id %}">{{ user.username }}</a>
+                <a href="{% url 'login:user_detail' pk=user.id %}">{{ user.username }}</a>
             </td>
             <td>
                 {{ user.lastname }}
