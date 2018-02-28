@@ -42,13 +42,13 @@ urlpatterns = [
         name='password_reset_complete'),
 
     # admin
-    url(r'^admin$',
+    url(r'^admin/$',
         staff_member_required(views.AdminView.as_view()),
         name='admin'),
-    url(r'^group$',
+    url(r'^group/$',
         staff_member_required(views.GroupAdminListView.as_view()),
         name='group'),
-    url(r'^user$',
+    url(r'^user/$',
         staff_member_required(views.UserAdminListView.as_view()),
         name='user'),
 

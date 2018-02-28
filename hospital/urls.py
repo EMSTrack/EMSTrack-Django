@@ -26,7 +26,7 @@ urlpatterns = [
 
     # Admin
 
-    url(r'^equipment$',
+    url(r'^equipment/$',
         staff_member_required(views.HospitalEquipmentAdminListView.as_view()),
         name='equipment'),
 

@@ -30,17 +30,17 @@ urlpatterns = [
 
     # Admin
 
-    url(r'^location$',
+    url(r'^location/$',
         staff_member_required(views.LocationAdminListView.as_view()),
         name='location'),
 
     # NEED REVISING
     
-    url(r'^call_list$',
+    url(r'^call_list/$',
         login_required(views.CallView.as_view()),
         name="call_list"),
 
-    url(r'^admin$',
+    url(r'^admin/$',
         login_required(views.AdminView.as_view()),
         name="admin"),
     
