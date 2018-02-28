@@ -41,15 +41,13 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete'),
 
-    # admin
+    # Admin
+    
     url(r'^admin/$',
         staff_member_required(views.AdminView.as_view()),
         name='admin'),
-    url(r'^group/$',
-        staff_member_required(views.GroupAdminListView.as_view()),
-        name='group'),
-
-    # User
+    
+    # User Admin
     
     url(r'^user/$',
         staff_member_required(views.UserAdminListView.as_view()),
@@ -67,7 +65,26 @@ urlpatterns = [
         staff_member_required(views.UserAdminUpdateView.as_view()),
         name='user_update'),
 
+    # Group Admin
+
+    url(r'^group/$',
+        staff_member_required(views.GroupAdminListView.as_view()),
+        name='group'),
+
+    url(r'^group/create/$',
+        staff_member_required(views.GroupAdminCreateView.as_view()),
+        name='group_create'),
+
+    url(r'^group/detail/(?P<pk>[0-9]+)$',
+        staff_member_required(views.GroupAdminDetailView.as_view()),
+        name='group_detail'),
+
+    url(r'^group/update/(?P<pk>[0-9]+)$',
+        staff_member_required(views.GroupAdminUpdateView.as_view()),
+        name='group_update'),
+
     # mqtt login
+    
     url(r'^mqtt/login/$',
         views.MQTTLoginView.as_view(),
         name='mqtt_login'),
