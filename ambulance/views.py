@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call
+    Call, Location
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
@@ -106,7 +106,7 @@ class AmbulanceListView(LoginRequiredMixin,
                         AmbulancePermissionMixin,
                         ListView):
     
-    model = Ambulance;
+    model = Ambulance
 
 
 class AmbulanceCreateView(LoginRequiredMixin,
@@ -146,7 +146,13 @@ class AmbulanceMap(TemplateView):
         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         return context
-    
+
+
+# Locations
+
+class LocationAdminListView(ListView):
+    model = Location
+
 
 # NEED REVISING
     

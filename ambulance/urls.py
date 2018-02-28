@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.contrib.admin.views.decorators import staff_member_required
 
 from django.contrib.auth.decorators import login_required
 
@@ -26,7 +27,13 @@ urlpatterns = [
     url(r'^update/(?P<pk>[0-9]+)$',
         login_required(views.AmbulanceUpdateView.as_view()),
         name='update'),
-    
+
+    # Admin
+
+    url(r'^location$',
+        staff_member_required(views.LocationAdminListView.as_view()),
+        name = 'group'),
+
     # NEED REVISING
     
     url(r'^call_list$',

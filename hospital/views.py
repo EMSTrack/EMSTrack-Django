@@ -101,3 +101,12 @@ class HospitalListView(LoginRequiredMixin,
                        ListView):
 
     model = Hospital
+
+
+# HospitalEquipment
+
+class HospitalEquipmentAdminListView(LoginRequiredMixin,
+                                     ListView):
+    model = HospitalEquipment
+
+

@@ -190,6 +190,7 @@ class AmbulanceUpdate(models.Model):
             ),
         ]
 
+
 # Call related models
 
 class AmbulanceCallTime(models.Model):

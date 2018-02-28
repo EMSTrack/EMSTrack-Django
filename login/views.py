@@ -2,12 +2,14 @@ import logging
 import string, random
 from datetime import timedelta
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
+from django.views.generic import ListView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView
 
@@ -17,9 +19,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from drf_extra_fields.geo_fields import PointField
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
-from ambulance.models import AmbulanceStatus, AmbulanceCapability
+from ambulance.models import AmbulanceStatus, AmbulanceCapability, Location
 from hospital.models import EquipmentType
 from emstrack.models import defaults
 
@@ -52,10 +54,22 @@ class LogoutView(auth_views.LogoutView):
     next_page = '/'
 
 
-# admin
+# Admin
 
 class AdminView(TemplateView):
     template_name = 'login/admin.html'
+
+
+# Groups
+
+class GroupAdminListView(ListView):
+    model = Group
+
+
+# Users
+
+class UserAdminListView(ListView):
+    model = User
 
 
 # MQTT login views

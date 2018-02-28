@@ -11,16 +11,15 @@
         <p>
             In this page you can perform various administrative tasks.
 
-            This should really be a pull down menu from admin.
+            This could be a pull down menu from admin.
         </p>
 
-        <h2>Manage Groups</h2>
-
-        <h2>Manage Users</h2>
-
-        <h2>Manage Hospital Equipment</h2>
-
-        <h2>Manage Locations</h2>
+        <ul>
+            <li><a href="{% url 'login:groups' %}">Groups</a></li>
+            <li><a href="{% url 'login:users' %}">Users</a></li>
+            <li><a href="{% url 'hospital:equipment' %}">Hospital Equipment</a></li>
+            <li><a href="{% url 'ambulance:locations' %}">Locations</a></li>
+        </ul>
 
     </div>
 </div>

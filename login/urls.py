@@ -45,6 +45,12 @@ urlpatterns = [
     url(r'^admin$',
         staff_member_required(views.AdminView.as_view()),
         name='admin'),
+    url(r'^group$',
+        staff_member_required(views.GroupAdminListView.as_view()),
+        name='group'),
+    url(r'^user$',
+        staff_member_required(views.UserAdminListView.as_view()),
+        name='user'),
 
     # mqtt login
     url(r'^mqtt/login/$',
