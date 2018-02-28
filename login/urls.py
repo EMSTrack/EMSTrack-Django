@@ -51,7 +51,7 @@ urlpatterns = [
     
     url(r'^user/$',
         staff_member_required(views.UserAdminListView.as_view()),
-        name='user'),
+        name='user_list'),
 
     url(r'^user/create/$',
         staff_member_required(views.UserAdminCreateView.as_view()),
@@ -69,7 +69,7 @@ urlpatterns = [
 
     url(r'^group/$',
         staff_member_required(views.GroupAdminListView.as_view()),
-        name='group'),
+        name='group_list'),
 
     url(r'^group/create/$',
         staff_member_required(views.GroupAdminCreateView.as_view()),
