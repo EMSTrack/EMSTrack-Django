@@ -221,10 +221,16 @@ class HospitalPermissionAdminForm(forms.ModelForm):
         model = HospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
 
+class GroupProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = GroupProfile
+        fields = ('ambulances', 'hospitals')
+
 
 class GroupAdminCreateForm(forms.ModelForm):
 
-    formset = forms.modelformset_factory(GroupProfile)
+    formset = forms.modelformset_factory(GroupProfile, form=GroupProfileForm)
 
     class Meta:
         model = Group
