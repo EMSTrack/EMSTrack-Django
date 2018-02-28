@@ -48,9 +48,24 @@ urlpatterns = [
     url(r'^group/$',
         staff_member_required(views.GroupAdminListView.as_view()),
         name='group'),
+
+    # User
+    
     url(r'^user/$',
         staff_member_required(views.UserAdminListView.as_view()),
         name='user'),
+
+    url(r'^user/create/$',
+        staff_member_required(views.UserAdminCreateView.as_view()),
+        name='user_create'),
+
+    url(r'^user/detail/(?P<pk>[0-9]+)$',
+        staff_member_required(views.UserAdminDetailView.as_view()),
+        name='user_detail'),
+
+    url(r'^user/update/(?P<pk>[0-9]+)$',
+        staff_member_required(views.UserAdminUpdateView.as_view()),
+        name='user_update'),
 
     # mqtt login
     url(r'^mqtt/login/$',

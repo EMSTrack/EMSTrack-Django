@@ -9,9 +9,9 @@ from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
 
@@ -70,6 +70,24 @@ class GroupAdminListView(ListView):
 
 class UserAdminListView(ListView):
     model = User
+
+
+class UserAdminDetailView(DetailView):
+    model = User
+
+
+class UserAdminCreateView(CreateView):
+    model = User
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class UserAdminUpdateView(UpdateView):
+    model = User
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 # MQTT login views

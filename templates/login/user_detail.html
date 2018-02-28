@@ -1,0 +1,30 @@
+{% extends "leaflet/base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+    <h1>User: {{ user.username }}</h1>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <p>
+                    <strong>Identifier:</strong>
+                    <a href="{% url 'login:user_update' pk=user.id %}">{{ user.username }}</a>
+                </p>
+                <p>
+                    <strong>First:</strong>
+                    {{ user.firstname }}
+                </p>
+                <p>
+                    <strong>Last:</strong>
+                    {{ user.lastname }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+<!-- TODO: Add editor for groups and permissions -->
+
+{% endblock %}
