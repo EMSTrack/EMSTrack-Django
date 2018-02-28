@@ -9,8 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import get_hasher, check_password
 
 from django.contrib.auth.models import User, Group
+from extra_views import InlineFormSetView
 
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission
+from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
 
 
 class SignupForm(auth_forms.UserCreationForm):
@@ -190,6 +191,25 @@ class UserAdminUpdateForm(UserAdminCreateForm):
         self.fields['username'].disabled = True
 
 
+class GroupAdminCreateForm(forms.ModelForm):
+
+    permission = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+
+
+class GroupAdminUpdateForm(GroupAdminCreateForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # disable username
+        self.fields['username'].disabled = True
+
+
 class AmbulancePermissionAdminForm(forms.ModelForm):
     class Meta:
         model = AmbulancePermission
@@ -203,6 +223,8 @@ class HospitalPermissionAdminForm(forms.ModelForm):
 
 
 class GroupAdminCreateForm(forms.ModelForm):
+
+    formset = forms.modelformset_factory(GroupProfile)
 
     class Meta:
         model = Group
