@@ -2,8 +2,6 @@ import logging
 import string, random
 from datetime import timedelta
 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
@@ -14,7 +12,7 @@ from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
-from extra_views import InlineFormSet, CreateWithInlinesView, InlineFormSetView
+from extra_views import InlineFormSet, CreateWithInlinesView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -22,15 +20,15 @@ from drf_extra_fields.geo_fields import PointField
 
 from django.contrib.auth.models import User, Group
 
-from ambulance.models import AmbulanceStatus, AmbulanceCapability, Location
+from ambulance.models import AmbulanceStatus, AmbulanceCapability
 from hospital.models import EquipmentType
 from emstrack.models import defaults
 
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
+from .models import TemporaryPassword, AmbulancePermission, HospitalPermission
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
-    UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, HospitalPermissionAdminForm, \
-    AmbulancePermissionAdminForm, GroupAdminUpdateForm, GroupProfileForm
+    UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, \
+    GroupAdminUpdateForm
 
 from .permissions import get_permissions
 
