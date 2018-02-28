@@ -70,14 +70,17 @@ class GroupAdminListView(ListView):
 
 class UserAdminListView(ListView):
     model = User
+    template_name = 'login/user_list.html'
 
 
 class UserAdminDetailView(DetailView):
     model = User
+    template_name = 'login/user_detail.html'
 
 
 class UserAdminCreateView(CreateView):
     model = User
+    template_name = 'login/user_form.html'
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -85,6 +88,7 @@ class UserAdminCreateView(CreateView):
 
 class UserAdminUpdateView(UpdateView):
     model = User
+    template_name = 'login/user_form.html'
 
     def get_success_url(self):
         return self.object.get_absolute_url()
