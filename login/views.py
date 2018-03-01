@@ -98,7 +98,7 @@ class GroupAdminActionMixin:
 
         # retrieve permissions
         if self.object:
-            ambulance_list = self.object.groupprofile.all()
+            ambulance_list = self.object.groupprofile.ambulances.all()
             hospital_list = self.object.groupprofile.hospitals.all()
         else:
             ambulance_list = AmbulancePermission.objects.none()
