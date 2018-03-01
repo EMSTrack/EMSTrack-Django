@@ -78,8 +78,8 @@ class GroupAdminDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         # retrieve permissions and add to context
-        context['ambulance_list'] = self.object.groupprofile.ambulances
-        context['hospital_list'] = self.object.groupprofile.hospitals
+        context['ambulance_list'] = self.object.groupprofile.ambulances.all()
+        context['hospital_list'] = self.object.groupprofile.hospitals.all()
 
         return context
 
@@ -97,8 +97,8 @@ class GroupAdminActionMixin:
 
         # retrieve permissions
         if self.object:
-            ambulance_list = self.object.groupprofile.ambulances
-            hospital_list = self.object.groupprofile.hospitals
+            ambulance_list = self.object.groupprofile.all()
+            hospital_list = self.object.groupprofile.hospitals.all()
         else:
             ambulance_list = AmbulancePermission.objects.none()
             hospital_list = HospitalPermission.objects.none()
