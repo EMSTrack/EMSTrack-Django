@@ -91,31 +91,65 @@ class GroupAdminDetailView(DetailView):
 
 class GroupAdminActionMixin:
 
+    # formsets
+    AmbulancePermissionFormset = modelformset_factory(AmbulancePermission,
+                                                      form=AmbulancePermissionAdminForm)
+    HospitalPermissionFormset = modelformset_factory(HospitalPermission,
+                                                     form=HospitalPermissionAdminForm)
+
     def get_context_data(self, **kwargs):
 
         # call super
         context = super().get_context_data(**kwargs)
 
-        # create formsets
-        AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
-        HospitalPermissionFormset = modelformset_factory(HospitalPermission, form=HospitalPermissionAdminForm)
-
         # retrieve permissions and create profile form
-        if self.object:
-            profile_form = GroupProfileAdminForm(instance=self.object.groupprofile)
-            ambulance_list = self.object.groupprofile.ambulances.all()
-            hospital_list = self.object.groupprofile.hospitals.all()
-        else:
-            profile_form = GroupProfileAdminForm()
-            ambulance_list = AmbulancePermission.objects.none()
-            hospital_list = HospitalPermission.objects.none()
+        if self.request.POST:
 
-        # add formsets to context
-        context['profile_form'] = profile_form
-        context['ambulance_formset'] = AmbulancePermissionFormset(queryset=ambulance_list)
-        context['hospital_formset'] = HospitalPermissionFormset(queryset=hospital_list)
+            if self.object:
+
+                context['profile_form'] = GroupProfileAdminForm(self.request.POST,
+                                                                instance=self.object.groupprofile)
+
+                ambulance_list = self.object.groupprofile.ambulances.all()
+                hospital_list = self.object.groupprofile.hospitals.all()
+
+            else:
+
+                context['profile_form'] = GroupProfileAdminForm(self.request.POST)
+
+                ambulance_list = AmbulancePermission.objects.none()
+                hospital_list = HospitalPermission.objects.none()
+
+            context['ambulance_formset'] = self.AmbulancePermissionFormset(self.request.POST,
+                                                                           queryset=ambulance_list)
+            context['hospital_formset'] = self.HospitalPermissionFormset(self.request.POST,
+                                                                         queryset=hospital_list)
+
+        else:
+
+            if self.object:
+
+                context['profile_form'] = GroupProfileAdminForm(instance=self.object.groupprofile)
+
+                ambulance_list = self.object.groupprofile.ambulances.all()
+                hospital_list = self.object.groupprofile.hospitals.all()
+
+            else:
+
+                context['profile_form'] = GroupProfileAdminForm()
+
+                ambulance_list = AmbulancePermission.objects.none()
+                hospital_list = HospitalPermission.objects.none()
+
+            context['ambulance_formset'] = self.AmbulancePermissionFormset(queryset=ambulance_list)
+            context['hospital_formset'] = self.HospitalPermissionFormset(queryset=hospital_list)
 
         return context
+
+    def form_valid(self, form):
+
+        # call super
+        return super().form_valid(form)
 
 
 class GroupAdminCreateView(GroupAdminActionMixin, CreateView):
