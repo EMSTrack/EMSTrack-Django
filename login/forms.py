@@ -224,7 +224,7 @@ class GroupProfileAdminForm(forms.ModelForm):
 
     class Meta:
         model = GroupProfile
-        fields = ['description']
+        exclude = ['group']
 
 
 class GroupAdminCreateForm(forms.ModelForm):
