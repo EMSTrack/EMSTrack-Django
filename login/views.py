@@ -84,7 +84,7 @@ class GroupAdminDetailView(DetailView):
         context['hospital_list'] = self.object.groupprofile.hospitals.all()
 
         # retrieve users and add to context
-        context['user_list'] = self.object.user_set()
+        context['user_list'] = self.object.user_set.all()
 
         return context
 
