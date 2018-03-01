@@ -44,34 +44,7 @@ class MyTestCase(MQTTTestCase):
             
 class TestProfile(MyTestCase):
 
-    def test_profile_serializer(self):
-
-        # test ProfileSerializer
-        for u in (self.u1, self.u2, self.u3):
-            serializer = ProfileSerializer(u.userprofile)
-            result = {
-                'ambulances': [
-                    {
-                        'ambulance_id': e.ambulance.pk,
-                        'ambulance_identifier': e.ambulance.identifier,
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    }
-                    for e in u.userambulancepermission_set.all()
-                ],
-                'hospitals': [
-                    {
-                        'hospital_id': e.hospital.pk,
-                        'hospital_name': e.hospital.name,
-                        'can_read': e.can_read,
-                        'can_write': e.can_write
-                    }
-                    for e in u.userhospitalpermission_set.all()
-                ]
-            }
-            self.assertDictEqual(serializer.data, result)
-
-    def test_extended_profile_serializer(self):
+    def test_user_profile_serializer(self):
 
         self.maxDiff = None
         

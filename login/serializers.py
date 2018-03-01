@@ -38,15 +38,6 @@ class HospitalPermissionSerializer(serializers.ModelSerializer):
         read_only_fields = ('hospital_id', 'hospital_name', 'can_read', 'can_write')
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    ambulances = AmbulancePermissionSerializer(read_only=True, many=True)
-    hospitals = HospitalPermissionSerializer(read_only=True, many=True)
-
-    class Meta:
-        model = UserProfile
-        fields = ('ambulances', 'hospitals')
-
-
 class UserProfileSerializer(serializers.Serializer):
     ambulances = serializers.SerializerMethodField()
     hospitals = serializers.SerializerMethodField()
