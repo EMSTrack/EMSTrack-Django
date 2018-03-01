@@ -229,9 +229,11 @@ class GroupProfileAdminForm(forms.ModelForm):
 
 class GroupAdminCreateForm(forms.ModelForm):
 
+    name = forms.CharField()
+
     class Meta:
         model = GroupProfile
-        fields = ['name', 'description']
+        fields = ['description']
 
 
 class GroupAdminUpdateForm(GroupAdminCreateForm):
