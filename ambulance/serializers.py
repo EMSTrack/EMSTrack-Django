@@ -5,6 +5,7 @@ from django.db import IntegrityError, transaction
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
+from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -55,8 +56,9 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
 
             # serializer.instance will always exist!
-            if not user.profile.ambulances.filter(can_write=True,
-                                                  ambulance=instance.id):
+            #if not user.profile.ambulances.filter(can_write=True,
+            #                                      ambulance=instance.id):
+            if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)

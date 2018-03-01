@@ -1,10 +1,9 @@
-import django.db.models as models
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
+from login.permissions import get_permissions
 from .models import Hospital, Equipment, HospitalEquipment
 
 
@@ -43,10 +42,11 @@ class HospitalSerializer(serializers.ModelSerializer):
 
         # check credentials
         if not user.is_superuser:
-            
+
             # serializer.instance will always exist!
-            if not user.profile.hospitals.filter(can_write=True,
-                                                 hospital=instance.id):
+            #if not user.profile.hospitals.filter(can_write=True,
+            #                                     hospital=instance.id):
+            if not get_permissions(user).check_can_write(hospital=instance.id):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)
