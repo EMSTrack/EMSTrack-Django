@@ -72,28 +72,53 @@ class GroupAdminDetailView(DetailView):
     model = Group
     template_name = 'login/group_detail.html'
 
+    def get_context_data(self, **kwargs):
 
-class GroupAdminCreateView(CreateView):
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve permissions and add to context
+        context['ambulance_list'] = AmbulancePermission.objects.filter(group=self.object)
+        context['hospital_list'] = HospitalPermission.objects.filter(group=self.object)
+
+        return context
+
+
+class GroupAdminActionMixin:
+
+    def get_context_data(self, **kwargs):
+
+        # call super
+        context = super().get_context_data(**kwargs)
+
+        # create formsets
+        AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
+        HospitalPermissionFormset = modelformset_factory(HospitalPermission, form=HospitalPermissionAdminForm)
+
+        # retrieve permissions
+        if self.object:
+            ambulance_list = AmbulancePermission.objects.filter(group=self.object)
+            hospital_list = HospitalPermission.objects.filter(group=self.object)
+        else:
+            ambulance_list = AmbulancePermission.objects.none()
+            hospital_list = HospitalPermission.objects.none()
+
+        # add formsets to context
+        context['ambulance_formset'] = AmbulancePermissionFormset(queryset=ambulance_list)
+        context['hospital_formset'] = HospitalPermissionFormset(queryset=hospital_list)
+
+        return context
+
+
+class GroupAdminCreateView(GroupAdminActionMixin, CreateView):
     model = Group
     template_name = 'login/group_form.html'
     fields = ['name']
 
-    def get_context_data(self, **kwargs):
-        # call super
-        context = super().get_context_data(**kwargs)
-        AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
-        HospitalPermissionFormset = modelformset_factory(HospitalPermission, form=HospitalPermissionAdminForm)
-        context['ambulance_formset'] = AmbulancePermissionFormset(queryset=AmbulancePermission.objects.none())
-        context['hospital_formset'] = HospitalPermissionFormset(queryset=HospitalPermission.objects.none())
-        return context
 
-
-class GroupAdminUpdateView(UpdateView):
+class GroupAdminUpdateView(GroupAdminActionMixin, UpdateView):
     model = Group
     template_name = 'login/group_form.html'
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
 
 
 # Users
