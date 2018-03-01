@@ -1,25 +1,10 @@
-from django.test import TestCase, Client
+from django.test import Client
 
-from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
-
-from django.contrib.gis.geos import Point
-from django.utils import timezone
 from django.conf import settings
 
-from rest_framework import serializers
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
-from drf_extra_fields.geo_fields import PointField
-
-from login.models import AmbulancePermission, HospitalPermission
-
-from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-from ambulance.serializers import AmbulanceSerializer
-
-from emstrack.models import defaults
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
@@ -29,6 +14,7 @@ from hospital.serializers import HospitalSerializer, \
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
+
 
 class TestHospitalGetList(TestSetup):
 
@@ -188,6 +174,7 @@ class TestHospitalGetList(TestSetup):
         
         # logout
         client.logout()
+
 
 class TestHospitalUpdate(TestSetup):
     
@@ -910,6 +897,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         
         # logout
         client.logout()
+
 
 class TestHospitalEquipmentMetadata(TestSetup):
         
