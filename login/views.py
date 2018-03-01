@@ -90,7 +90,6 @@ class GroupAdminCreateView(CreateView):
 class GroupAdminUpdateView(UpdateView):
     model = Group
     template_name = 'login/group_form.html'
-    form_class = GroupAdminUpdateForm
 
     def get_success_url(self):
         return self.object.get_absolute_url()
