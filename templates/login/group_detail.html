@@ -3,19 +3,35 @@
 
 {% block content %}
 
-    <h1>Group: {{ group.name }}</h1>
+<h1>Group: {{ group.name }}</h1>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <strong>Name:</strong>
-                    <a href="{% url 'login:group_update' pk=group.id %}">{{ group.name }}</a>
-                </p>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <p>
+                <strong>Name:</strong>
+                <a href="{% url 'login:group_update' pk=group.id %}">{{ group.name }}</a>
+            </p>
+
+            <!-- TODO: Add editor for groups and permissions -->
+
+            <h2>Permissions:</h2>
+
+            <h3>Ambulances</h3>
+            {% for form in ambulance_list %}
+            <table>
+            </table>
+            {% endfor %}
+
+            <h3>Hospitals</h3>
+            {% for form in hospital_list %}
+            <table>
+            </table>
+            {% endfor %}
+
         </div>
     </div>
+</div>
 
-<!-- TODO: Add editor for groups and permissions -->
 
 {% endblock %}

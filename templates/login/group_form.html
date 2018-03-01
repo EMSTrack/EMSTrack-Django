@@ -13,12 +13,16 @@
             {{ form }}
         </table>
 
+        <h2>Permissions:</h2>
+
+        <h3>Ambulances</h3>
         {% for form in ambulance_formset %}
         <table>
             {{ form }}
         </table>
         {% endfor %}
 
+        <h3>Hospitals</h3>
         {% for form in hospital_formset %}
         <table>
             {{ form }}
