@@ -72,10 +72,23 @@ class Permissions:
 
                 # regular users, loop through groups
                 for group in user.groups.all():
-                    # e.g.: group.groupprofile.ambulances.all()})
                     for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
                         # e.g.: objs = group.groupprofile.ambulances.all()
                         objs = getattr(group.groupprofile, profile_field).all()
+                        # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
+                        getattr(self, profile_field).update({
+                            getattr(e,object_field + '_id'): {
+                                object_field: getattr(e,object_field),
+                                'can_read': e.can_read,
+                                'can_write': e.can_write
+                            } for e in objs})
+                        logger.debug('group = {}, {} = {}'.format(group.name, profile_field, getattr(self, profile_field)))
+
+                # regular users, loop through groups
+                for group in user.groups.all():
+                    for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
+                        # e.g.: objs = group.groupambulancepermission_set.all()
+                        objs = getattr(group, 'group' + object_field + 'permission_set').all()
                         # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
                         getattr(self, profile_field).update({
                             getattr(e,object_field + '_id'): {
