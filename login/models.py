@@ -63,7 +63,7 @@ class GroupProfile(models.Model):
     ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
     hospitals = models.ManyToManyField(HospitalPermission, blank=True)
 
-    description = models.CharField(max_length=100, black=True, null=True)
+    description = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return ('Ambulances:\n' +
