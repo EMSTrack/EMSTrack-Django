@@ -19,7 +19,7 @@ from hospital.models import Hospital, \
 from ..models import UserProfile, AmbulancePermission, HospitalPermission, \
     TemporaryPassword
 
-from ..serializers import ProfileSerializer, UserProfileSerializer
+from ..serializers import UserProfileSerializer
 
 from ..views import LoginView, SignupView, LogoutView, \
     MQTTLoginView, MQTTSuperuserView, MQTTAclView
