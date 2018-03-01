@@ -60,13 +60,11 @@ class GroupProfile(models.Model):
 
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE)
-    #ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
-    #hospitals = models.ManyToManyField(HospitalPermission, blank=True)
 
     description = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return 'description = {}'.format(self.description)
+        return '{}: description = {}'.format(self.group, self.description)
 
 
 # Group Ambulance and Hospital Permissions
