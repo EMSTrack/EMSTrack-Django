@@ -25,7 +25,7 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability
 from hospital.models import EquipmentType
 from emstrack.models import defaults
 
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission
+from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
@@ -195,7 +195,7 @@ class HospitalPermissionAdminInline(InlineFormSet):
 
 
 class GroupAdminCreateView(CreateWithInlinesView):
-    model = Group
+    model = GroupProfile
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
     inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
