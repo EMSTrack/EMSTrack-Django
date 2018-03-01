@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
+from login.permissions import get_permissions
 
 from .models import Hospital, HospitalEquipment, Equipment
 
@@ -103,30 +104,16 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
         # return nothing if anonymous
         if user.is_anonymous:
             raise PermissionDenied()
-        
-        # retrieve hospital or 404 if it does not exist
-        hospital = get_object_or_404(Hospital.objects.all(), id=id)
-        
+
+        # check permission (and also existence)
+        if ((self.request.method == 'GET' and
+             not get_permissions(user).check_can_read(hospital=id)) or
+             ((self.request.method == 'PUT' or
+               self.request.method == 'PATCH' or
+               self.request.method == 'DELETE') and
+               not get_permissions(user).check_can_write(hospital=id))):
+            raise PermissionDenied()
+
         # build queryset
         filter = { 'hospital_id': id }
-        qset = self.queryset.filter(**filter)
-
-        # return qset if superuser
-        if user.is_superuser:
-            return qset
-
-        # otherwise check permission
-        if self.request.method == 'GET':
-            # objects that the user can read
-            get_object_or_404(user.profile.hospitals,
-                              hospital_id=id, can_read=True)
-
-        elif (self.request.method == 'PUT' or
-              self.request.method == 'PATCH' or
-              self.request.method == 'DELETE'):
-            # objects that the user can write to
-            get_object_or_404(user.profile.hospitals,
-                              hospital_id=id, can_write=True)
-
-        # and return qset
-        return qset
+        return self.queryset.filter(**filter)
