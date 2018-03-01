@@ -192,7 +192,7 @@ class GroupProfileAdminInline(InlineFormSet):
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
-    fields = ['can_read', 'can_write']
+    fields = ['ambulance', 'can_read', 'can_write']
 
 
 class GroupHospitalPermissionAdminInline(InlineFormSet):
