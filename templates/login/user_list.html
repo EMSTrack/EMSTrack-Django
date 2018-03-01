@@ -13,8 +13,8 @@
         <thead>
         <tr>
             <th>Username</th>
-            <th>Last</th>
             <th>First</th>
+            <th>Last</th>
             <th>Email</th>
         </tr>
         </thead>
@@ -25,10 +25,10 @@
                 <a href="{% url 'login:user_detail' pk=user.id %}">{{ user.username }}</a>
             </td>
             <td>
-                {{ user.last_name }}
+                {{ user.first_name }}
             </td>
             <td>
-                {{ user.first_name }}
+                {{ user.last_name }}
             </td>
             <td>
                 {{ user.email}}

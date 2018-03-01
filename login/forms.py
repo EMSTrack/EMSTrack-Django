@@ -187,6 +187,7 @@ class UserAdminUpdateForm(UserAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
 
+        # call super
         super().__init__(*args, **kwargs)
 
         # disable username
@@ -221,6 +222,8 @@ class HospitalPermissionAdminForm(forms.ModelForm):
 
 class GroupAdminCreateForm(forms.ModelForm):
 
+    description = GroupProfile._meta.get_field('description').formfield()
+
     class Meta:
         model = Group
         fields = ['name']
@@ -230,6 +233,7 @@ class GroupAdminUpdateForm(GroupAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
 
+        # call super
         super().__init__(*args, **kwargs)
 
         # disable name
