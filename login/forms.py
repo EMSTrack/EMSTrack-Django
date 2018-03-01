@@ -225,7 +225,7 @@ class HospitalPermissionAdminForm(forms.ModelForm):
 class GroupAdminCreateForm(forms.ModelForm):
 
      class Meta:
-         model = Group
+         model = GroupProfile
          fields = []
 
 
