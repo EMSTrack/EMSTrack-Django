@@ -96,6 +96,9 @@ class GroupAdminActionMixin:
                                                       form=AmbulancePermissionAdminForm)
     HospitalPermissionFormset = modelformset_factory(HospitalPermission,
                                                      form=HospitalPermissionAdminForm)
+    profile_form = None
+    ambulance_formset = None
+    hospital_formset = None
 
     def get_context_data(self, **kwargs):
 
@@ -109,42 +112,46 @@ class GroupAdminActionMixin:
 
             if self.object:
 
-                context['profile_form'] = GroupProfileAdminForm(self.request.POST,
-                                                                instance=self.object.groupprofile)
+                self.profile_form = GroupProfileAdminForm(self.request.POST,
+                                                     instance=self.object.groupprofile)
 
                 ambulance_list = self.object.groupprofile.ambulances.all()
                 hospital_list = self.object.groupprofile.hospitals.all()
 
             else:
 
-                context['profile_form'] = GroupProfileAdminForm(self.request.POST)
+                self.profile_form = GroupProfileAdminForm(self.request.POST)
 
                 ambulance_list = AmbulancePermission.objects.none()
                 hospital_list = HospitalPermission.objects.none()
 
-            context['ambulance_formset'] = self.AmbulancePermissionFormset(self.request.POST,
-                                                                           queryset=ambulance_list)
-            context['hospital_formset'] = self.HospitalPermissionFormset(self.request.POST,
-                                                                         queryset=hospital_list)
+            self.ambulance_formset = self.AmbulancePermissionFormset(self.request.POST,
+                                                                     queryset=ambulance_list)
+            self.hospital_formset = self.HospitalPermissionFormset(self.request.POST,
+                                                                   queryset=hospital_list)
 
         else:
 
             if self.object:
 
-                context['profile_form'] = GroupProfileAdminForm(instance=self.object.groupprofile)
+                self.profile_form = GroupProfileAdminForm(instance=self.object.groupprofile)
 
                 ambulance_list = self.object.groupprofile.ambulances.all()
                 hospital_list = self.object.groupprofile.hospitals.all()
 
             else:
 
-                context['profile_form'] = GroupProfileAdminForm()
+                self.profile_form = GroupProfileAdminForm()
 
                 ambulance_list = AmbulancePermission.objects.none()
                 hospital_list = HospitalPermission.objects.none()
 
-            context['ambulance_formset'] = self.AmbulancePermissionFormset(queryset=ambulance_list)
-            context['hospital_formset'] = self.HospitalPermissionFormset(queryset=hospital_list)
+            self.ambulance_formset = self.AmbulancePermissionFormset(queryset=ambulance_list)
+            self.hospital_formset = self.HospitalPermissionFormset(queryset=hospital_list)
+
+        context['profile_form'] = self.profile_form
+        context['ambulance_formset'] = self.ambulance_formset
+        context['hospital_formset'] = self.hospital_formset
 
         return context
 
@@ -152,23 +159,16 @@ class GroupAdminActionMixin:
 
         print("form_valid")
 
-        context = self.get_context_data()
-
-        # retrieve profile_form and formsets
-        profile_form = context['profile_form']
-        ambulance_formset = context['ambulance_formset']
-        hospital_formset = context['hospital_formset']
-
-        if (profile_form.is_valid() and
-                ambulance_formset.is_valid() and
-                hospital_formset.is_valid()):
+        if (self.profile_form.is_valid() and
+                self.ambulance_formset.is_valid() and
+                self.hospital_formset.is_valid()):
 
             # save profile_form
-            profile_form.save()
+            self.profile_form.save()
 
             # save formsets
-            ambulance_formset.save()
-            hospital_formset.save()
+            self.ambulance_formset.save()
+            self.hospital_formset.save()
 
             # call super.form_valid
             return super().form_valid(form)
