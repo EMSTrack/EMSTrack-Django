@@ -13,7 +13,7 @@ from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
-from extra_views import InlineFormSet, CreateWithInlinesView
+from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
