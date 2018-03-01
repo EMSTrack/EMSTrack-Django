@@ -81,8 +81,8 @@ class GroupAdminDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         # retrieve permissions and add to context
-        context['ambulance_list'] = self.object.groupprofile.ambulances.all()
-        context['hospital_list'] = self.object.groupprofile.hospitals.all()
+        context['ambulance_list'] = self.object.groupambulancespermission_set.all()
+        context['hospital_list'] = self.object.grouphospitalpermission_set.all()
 
         # retrieve users and add to context
         context['user_list'] = self.object.user_set.all()
