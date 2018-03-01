@@ -105,6 +105,11 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
         if user.is_anonymous:
             raise PermissionDenied()
 
+        logger.debug('user = {}'.format(user))
+        logger.debug('hospital_id = {}'.format(id))
+        logger.debug('can_read = {}'.format(get_permissions(user).check_can_read(hospital=id)))
+        logger.debug('can_write = {}'.format(get_permissions(user).check_can_write(hospital=id)))
+
         # check permission (and also existence)
         if self.request.method == 'GET':
             if not get_permissions(user).check_can_read(hospital=id):
