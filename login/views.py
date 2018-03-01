@@ -13,6 +13,7 @@ from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
+from extra_views import InlineFormSet, CreateWithInlinesView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -179,10 +180,25 @@ class GroupAdminActionMixin:
             return super().form_invalid(form)
 
 
-class GroupAdminCreateView(GroupAdminActionMixin, CreateView):
+# class GroupAdminCreateView(GroupAdminActionMixin, CreateView):
+#     model = Group
+#     template_name = 'login/group_form.html'
+#     form_class = GroupAdminCreateForm
+
+
+class AmbulancePermissionAdminInline(InlineFormSet):
+    model = AmbulancePermission
+
+
+class HospitalPermissionAdminInline(InlineFormSet):
+    model = HospitalPermission
+
+
+class GroupAdminCreateView(CreateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
+    inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
 
 
 class GroupAdminUpdateView(GroupAdminActionMixin, UpdateView):
