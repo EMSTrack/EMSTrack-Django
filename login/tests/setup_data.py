@@ -4,7 +4,7 @@ from django.contrib.auth.models import User, Group
 from django.conf import settings
 
 from login.models import Profile, AmbulancePermission, HospitalPermission, GroupHospitalPermission, \
-    GroupAmbulancePermission
+    GroupAmbulancePermission, UserHospitalPermission, UserAmbulancePermission
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
@@ -130,34 +130,33 @@ class TestSetupData:
             updated_by=cls.u1)
         
         # add hospitals to users
-        cls.u1.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1,
-                                              can_write=True),
-            HospitalPermission.objects.create(hospital=cls.h3)
-        )
-        
-        cls.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1),
-            HospitalPermission.objects.create(hospital=cls.h2,
+        UserHospitalPermission.objects.create(user=cls.u1,
+                                              hospital=cls.h1,
                                               can_write=True)
-        )
+        UserHospitalPermission.objects.create(user=cls.u1,
+                                              hospital=cls.h3)
+
+        UserHospitalPermission.objects.create(user=cls.u2,
+                                              hospital=cls.h1)
+        UserHospitalPermission.objects.create(user=cls.u2,
+                                              hospital=cls.h2,
+                                              can_write=True)
 
         # u3 has no hospitals 
         
         # add ambulances to users
-        cls.u1.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=cls.a2,
+        UserAmbulancePermission.objects.create(user=cls.u1,
+                                               ambulance=cls.a2,
                                                can_write=True)
-        )
-        
+
         # u2 has no ambulances
         
-        cls.u3.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=cls.a1,
-                                               can_read=False),
-            AmbulancePermission.objects.create(ambulance=cls.a3,
+        UserAmbulancePermission.objects.create(user=cls.u3,
+                                               ambulance=cls.a1,
+                                               can_read=False)
+        UserAmbulancePermission.objects.create(user=cls.u3,
+                                               ambulance=cls.a3,
                                                can_write=True)
-        )
 
         # Create groups
         cls.g1 = Group.objects.create(name='EMTs')

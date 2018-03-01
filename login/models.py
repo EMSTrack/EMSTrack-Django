@@ -40,18 +40,16 @@ class HospitalPermission(models.Model):
 
 # Profile
 
-class Profile(models.Model):
+class UserProfile(models.Model):
 
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
-    ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
-    hospitals = models.ManyToManyField(HospitalPermission, blank=True)
+
+    #ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
+    #hospitals = models.ManyToManyField(HospitalPermission, blank=True)
 
     def __str__(self):
-        return ('Ambulances:\n' +
-                '\n'.join('  {}'.format(k) for k in self.ambulances.all()) +
-                '\nHospitals:\n' +
-                '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
+        return ('{}'.format(self.user))
     
 
 # GroupProfile
@@ -76,6 +74,36 @@ class Permission(models.Model):
 
     class Meta:
         abstract = True
+
+
+class UserAmbulancePermission(Permission):
+
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
+                                                         self.ambulance.identifier,
+                                                         self.ambulance.id,
+                                                         self.can_read,
+                                                         self.can_write)
+
+
+class UserHospitalPermission(Permission):
+
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
+                                                         self.hospital.name,
+                                                         self.hospital.id,
+                                                         self.can_read,
+                                                         self.can_write)
 
 
 class GroupAmbulancePermission(Permission):
