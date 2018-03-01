@@ -209,10 +209,13 @@ class GroupAdminCreateView(CreateWithInlinesView):
                GroupHospitalPermissionAdminInline]
 
 
-class GroupAdminUpdateView(GroupAdminActionMixin, UpdateView):
+class GroupAdminUpdateView(UpdateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminUpdateForm
+    inlines = [GroupProfileAdminInline,
+               GroupAmbulancePermissionAdminInline,
+               GroupHospitalPermissionAdminInline]
 
 
 # Users
