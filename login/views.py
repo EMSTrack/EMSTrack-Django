@@ -96,22 +96,22 @@ class GroupAdminActionMixin:
         # call super
         context = super().get_context_data(**kwargs)
 
-        # create profile form
-        profile_form = GroupProfileAdminForm(instance=self.object.groupprofile)
-
         # create formsets
         AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
         HospitalPermissionFormset = modelformset_factory(HospitalPermission, form=HospitalPermissionAdminForm)
 
-        # retrieve permissions
+        # retrieve permissions and create profile form
         if self.object:
+            profile_form = GroupProfileAdminForm(instance=self.object.groupprofile)
             ambulance_list = self.object.groupprofile.ambulances.all()
             hospital_list = self.object.groupprofile.hospitals.all()
         else:
+            profile_form = GroupProfileAdminForm()
             ambulance_list = AmbulancePermission.objects.none()
             hospital_list = HospitalPermission.objects.none()
 
         # add formsets to context
+        context['profile_form'] = profile_form
         context['ambulance_formset'] = AmbulancePermissionFormset(queryset=ambulance_list)
         context['hospital_formset'] = HospitalPermissionFormset(queryset=hospital_list)
 
