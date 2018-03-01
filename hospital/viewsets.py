@@ -106,13 +106,15 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
             raise PermissionDenied()
 
         # check permission (and also existence)
-        if ((self.request.method == 'GET' and
-             not get_permissions(user).check_can_read(hospital=id)) or
-             ((self.request.method == 'PUT' or
+        if self.request.method == 'GET':
+            if not get_permissions(user).check_can_read(hospital=id):
+                 raise PermissionDenied()
+
+        elif (self.request.method == 'PUT' or
                self.request.method == 'PATCH' or
-               self.request.method == 'DELETE') and
-               not get_permissions(user).check_can_write(hospital=id))):
-            raise PermissionDenied()
+               self.request.method == 'DELETE'):
+            if not get_permissions(user).check_can_write(hospital=id):
+                raise PermissionDenied()
 
         # build queryset
         filter = { 'hospital_id': id }
