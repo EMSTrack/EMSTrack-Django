@@ -193,18 +193,18 @@ class UserAdminUpdateForm(UserAdminCreateForm):
         self.fields['username'].disabled = True
 
 
-class AmbulancePermissionModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+class AmbulancePermissionModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.identifier
 
 
-class HospitalPermissionModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+class HospitalPermissionModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.name
 
 
 class AmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelMultipleChoiceField(queryset=Ambulance.objects.all())
+    ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
 
     class Meta:
         model = AmbulancePermission
@@ -212,7 +212,7 @@ class AmbulancePermissionAdminForm(forms.ModelForm):
 
 
 class HospitalPermissionAdminForm(forms.ModelForm):
-    hospital = HospitalPermissionModelMultipleChoiceField(queryset=Hospital.objects.all())
+    hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
 
     class Meta:
         model = HospitalPermission
