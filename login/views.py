@@ -28,7 +28,8 @@ from .models import TemporaryPassword, AmbulancePermission, HospitalPermission
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
-    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm
+    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm, \
+    GroupProfileAdminForm
 
 from .permissions import get_permissions
 
@@ -94,6 +95,9 @@ class GroupAdminActionMixin:
 
         # call super
         context = super().get_context_data(**kwargs)
+
+        # create profile form
+        profile_form = GroupProfileAdminForm(instance=self.object.groupprofile)
 
         # create formsets
         AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
