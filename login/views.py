@@ -152,8 +152,31 @@ class GroupAdminActionMixin:
 
         print("form_valid")
 
-        # call super
-        return super().form_valid(form)
+        context = self.get_context_data()
+
+        # retrieve profile_form and formsets
+        profile_form = context['profile_form']
+        ambulance_formset = context['ambulance_formset']
+        hospital_formset = context['hospital_formset']
+
+        if (profile_form.is_valid() and
+                ambulance_formset.is_valid() and
+                hospital_formset.is_valid()):
+
+            # save profile_form
+            profile_form.save()
+
+            # save formsets
+            ambulance_formset.save()
+            hospital_formset.save()
+
+            # call super.form_valid
+            return super().form_valid(form)
+
+        else:
+
+            # call super.form_invalid
+            return super().form_invalid(form)
 
 
 class GroupAdminCreateView(GroupAdminActionMixin, CreateView):
