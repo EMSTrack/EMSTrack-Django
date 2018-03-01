@@ -30,7 +30,8 @@ from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, 
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
-    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm
+    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm, \
+    GroupProfileAdminForm
 
 from .permissions import get_permissions
 
@@ -187,7 +188,7 @@ class GroupAdminActionMixin:
 
 class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
-    fields = ['description']
+    form_class = GroupProfileAdminForm
 
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
