@@ -108,7 +108,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
         # check permission (and also existence)
         if self.request.method == 'GET':
             if not get_permissions(user).check_can_read(hospital=id):
-                 raise PermissionDenied()
+                raise PermissionDenied()
 
         elif (self.request.method == 'PUT' or
                self.request.method == 'PATCH' or
