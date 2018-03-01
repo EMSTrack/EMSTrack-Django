@@ -187,11 +187,11 @@ class GroupAdminActionMixin:
 
 
 class AmbulancePermissionAdminInline(InlineFormSet):
-    model = GroupProfile.ambulances.though
+    model = GroupProfile.ambulances.through
 
 
 class HospitalPermissionAdminInline(InlineFormSet):
-    model = GroupProfile.hospitals.though
+    model = GroupProfile.hospitals.through
 
 
 class GroupAdminCreateView(CreateWithInlinesView):
