@@ -76,6 +76,7 @@ class GroupAdminDetailView(DetailView):
 class GroupAdminCreateView(CreateView):
     model = Group
     template_name = 'login/group_form.html'
+    fields = ['name']
 
     def get_context_data(self, **kwargs):
         # call super
