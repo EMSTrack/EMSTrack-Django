@@ -3,15 +3,12 @@ import subprocess, time, os, sys, re
 from pathlib import Path
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.test import TestCase
 from django.conf import settings
 
 from django.contrib.auth.models import User, Group
 
-from django.core.management.base import OutputWrapper
-from django.core.management.color import color_style, no_style
-
 from mqtt.client import BaseClient, MQTTException
+
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
@@ -19,7 +16,7 @@ from ambulance.models import Ambulance, \
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from login.models import AmbulancePermission, HospitalPermission, \
+from login.models import UserAmbulancePermission, UserHospitalPermission, \
     GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 
