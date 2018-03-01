@@ -99,7 +99,7 @@ class HospitalPermissionAdminInline(InlineFormSet):
 
 
 class GroupAdminCreateView(CreateWithInlinesView):
-    model = Group
+    model = GroupProfile
     template_name = 'login/group_form.html'
     inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
     form_class = GroupAdminCreateForm

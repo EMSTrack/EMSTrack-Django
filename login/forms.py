@@ -226,7 +226,7 @@ class GroupAdminCreateForm(forms.ModelForm):
 
      class Meta:
          model = Group
-         fields = ['name']
+         fields = ['__all__']
 
 
 class GroupAdminUpdateForm(GroupAdminCreateForm):
