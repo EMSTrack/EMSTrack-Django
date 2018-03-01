@@ -30,8 +30,7 @@ from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, 
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
-    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm, \
-    GroupProfileAdminForm
+    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm
 
 from .permissions import get_permissions
 
