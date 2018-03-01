@@ -185,7 +185,6 @@ class GroupAdminActionMixin:
 #     template_name = 'login/group_form.html'
 #     form_class = GroupAdminCreateForm
 
-
 class AmbulancePermissionAdminInline(InlineFormSet):
     model = GroupProfile.ambulances.through
     fields = ['ambulancepermission']
@@ -201,6 +200,7 @@ class GroupAdminCreateView(CreateWithInlinesView):
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
     inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
+    fields = ['description']
 
 
 class GroupAdminUpdateView(GroupAdminActionMixin, UpdateView):
