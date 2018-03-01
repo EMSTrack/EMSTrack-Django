@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from django.contrib.auth.models import User, Group
 
-from .models import Profile, AmbulancePermission, HospitalPermission, GroupProfile
+from .models import UserProfile, AmbulancePermission, HospitalPermission, GroupProfile
 
 from .permissions import get_permissions
 
@@ -43,7 +43,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     hospitals = HospitalPermissionSerializer(read_only=True, many=True)
 
     class Meta:
-        model = Profile
+        model = UserProfile
         fields = ('ambulances', 'hospitals')
 
 

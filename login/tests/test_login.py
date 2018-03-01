@@ -16,7 +16,7 @@ from ambulance.models import Ambulance, \
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
-from ..models import Profile, AmbulancePermission, HospitalPermission, \
+from ..models import UserProfile, AmbulancePermission, HospitalPermission, \
     TemporaryPassword
 
 from ..serializers import ProfileSerializer, UserProfileSerializer

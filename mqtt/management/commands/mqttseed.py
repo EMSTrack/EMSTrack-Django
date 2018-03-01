@@ -10,7 +10,7 @@ from mqtt.publish import PublishClient
 
 from django.contrib.auth.models import User
 
-from login.models import Profile
+from login.models import UserProfile
     
 from ambulance.models import Ambulance
 

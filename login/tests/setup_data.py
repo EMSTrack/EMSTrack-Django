@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 
-from login.models import Profile, AmbulancePermission, HospitalPermission, GroupHospitalPermission, \
+from login.models import UserProfile, AmbulancePermission, HospitalPermission, GroupHospitalPermission, \
     GroupAmbulancePermission, UserHospitalPermission, UserAmbulancePermission
 
 from ambulance.models import Ambulance, \

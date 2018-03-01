@@ -10,7 +10,7 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
-from login.models import Profile, AmbulancePermission, HospitalPermission
+from login.models import UserProfile, AmbulancePermission, HospitalPermission
 
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
@@ -278,7 +278,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                       qos)
         
         # Expect user profile
-        profile = Profile.objects.get(user__username='testuser1')
+        profile = UserProfile.objects.get(user__username='testuser1')
         client.expect('user/testuser1/profile',
                       JSONRenderer().render(UserProfileSerializer(profile.user).data),
                       qos)
@@ -329,7 +329,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                       qos)
         
         # Expect user profile
-        profile = Profile.objects.get(user__username='testuser2')
+        profile = UserProfile.objects.get(user__username='testuser2')
         client.expect('user/testuser2/profile',
                       JSONRenderer().render(UserProfileSerializer(profile.user).data),
                       qos)
