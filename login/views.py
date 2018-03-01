@@ -13,7 +13,6 @@ from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, UpdateView, CreateView
 
 from braces.views import CsrfExemptMixin
-from extra_views import InlineFormSet, CreateWithInlinesView
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -25,11 +24,11 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability
 from hospital.models import EquipmentType
 from emstrack.models import defaults
 
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
+from .models import TemporaryPassword, AmbulancePermission, HospitalPermission
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
-    UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, \
-    GroupAdminUpdateForm, AmbulancePermissionAdminForm, HospitalPermissionAdminForm
+    UserAdminCreateForm, UserAdminUpdateForm, \
+    AmbulancePermissionAdminForm, HospitalPermissionAdminForm
 
 from .permissions import get_permissions
 
