@@ -230,8 +230,8 @@ class GroupProfileAdminForm(forms.ModelForm):
 class GroupAdminCreateForm(forms.ModelForm):
 
     class Meta:
-        model = Group
-        fields = ['name']
+        model = GroupProfile
+        fields = ['name', 'description']
 
 
 class GroupAdminUpdateForm(GroupAdminCreateForm):
