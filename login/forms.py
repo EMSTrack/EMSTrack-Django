@@ -224,7 +224,7 @@ class GroupProfileAdminForm(forms.ModelForm):
 
     class Meta:
         model = GroupProfile
-        field = ['description']
+        fields = ['description']
 
 
 class GroupAdminCreateForm(forms.ModelForm):
