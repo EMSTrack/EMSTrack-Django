@@ -115,12 +115,14 @@ class GroupAdminCreateView(GroupAdminActionMixin, CreateView):
     model = Group
     template_name = 'login/group_form.html'
     fields = ['name']
+    form_class = UserAdminCreateForm
 
 
 class GroupAdminUpdateView(GroupAdminActionMixin, UpdateView):
     model = Group
     template_name = 'login/group_form.html'
     fields = ['name']
+    form_class = UserAdminUpdateForm
 
 
 # Users

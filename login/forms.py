@@ -217,3 +217,20 @@ class HospitalPermissionAdminForm(forms.ModelForm):
     class Meta:
         model = HospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
+
+
+class GroupAdminCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Group
+        fields = ['name']
+
+
+class GroupAdminUpdateForm(GroupAdminCreateForm):
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        # disable groupname
+        self.fields['name'].disabled = True
