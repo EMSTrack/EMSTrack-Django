@@ -220,20 +220,11 @@ class HospitalPermissionAdminForm(forms.ModelForm):
         fields = ['hospital', 'can_read', 'can_write']
 
 
-class GroupProfileAdminForm(forms.ModelForm):
-
-    class Meta:
-        model = GroupProfile
-        fields = ['description']
-
-
 class GroupAdminCreateForm(forms.ModelForm):
 
-    name = forms.CharField()
-
     class Meta:
-        model = GroupProfile
-        fields = ['description']
+        model = Group
+        fields = ['name']
 
 
 class GroupAdminUpdateForm(GroupAdminCreateForm):

@@ -25,7 +25,8 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability
 from hospital.models import EquipmentType
 from emstrack.models import defaults
 
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
+from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile, GroupAmbulancePermission, \
+    GroupHospitalPermission
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
@@ -185,21 +186,28 @@ class GroupAdminActionMixin:
 #     template_name = 'login/group_form.html'
 #     form_class = GroupAdminCreateForm
 
-class AmbulancePermissionAdminInline(InlineFormSet):
-    model = GroupProfile.ambulances.through
-    fields = ['ambulancepermission']
+class GroupProfileAdminInline(InlineFormSet):
+    model = GroupProfile
+    fields = ['description']
 
 
-class HospitalPermissionAdminInline(InlineFormSet):
-    model = GroupProfile.hospitals.through
-    fields = ['hospitalpermission']
+class GroupAmbulancePermissionAdminInline(InlineFormSet):
+    model = GroupAmbulancePermission
+    fields = ['ambulance', 'can_read', 'can_write']
+
+
+class GroupHospitalPermissionAdminInline(InlineFormSet):
+    model = GroupHospitalPermission
+    fields = ['hospital', 'can_read', 'can_write']
 
 
 class GroupAdminCreateView(CreateWithInlinesView):
-    model = GroupProfile
+    model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
-    inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
+    inlines = [GroupProfileAdminInline,
+               GroupAmbulancePermissionAdminInline,
+               GroupHospitalPermissionAdminInline]
 
 
 class GroupAdminUpdateView(GroupAdminActionMixin, UpdateView):

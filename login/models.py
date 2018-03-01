@@ -72,6 +72,47 @@ class GroupProfile(models.Model):
                 '\n'.join('  {}'.format(k) for k in self.hospitals.all()))
 
 
+# Group Ambulance and Hospital Permissions
+
+class Permission(models.Model):
+
+    can_read = models.BooleanField(default=True)
+    can_write = models.BooleanField(default=False)
+
+    class Meta:
+        abstract = True
+
+
+class GroupAmbulancePermission(Permission):
+
+    group = models.ForeignKey(Group,
+                              on_delete=models.CASCADE)
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
+                                                         self.ambulance.identifier,
+                                                         self.ambulance.id,
+                                                         self.can_read,
+                                                         self.can_write)
+
+
+class GroupHospitalPermission(Permission):
+
+    group = models.ForeignKey(Group,
+                              on_delete=models.CASCADE)
+    hospital = models.ForeignKey(Hospital,
+                                  on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
+                                                         self.hospital.name,
+                                                         self.hospital.id,
+                                                         self.can_read,
+                                                         self.can_write)
+
+
 # TemporaryPassword
 
 class TemporaryPassword(models.Model):
