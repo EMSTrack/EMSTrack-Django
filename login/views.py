@@ -83,8 +83,8 @@ class GroupAdminCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
         HospitalPermissionFormset = modelformset_factory(HospitalPermission, form=HospitalPermissionAdminForm)
-        context['ambulance_formset'] = AmbulancePermissionFormset()
-        context['hospital_formset'] = HospitalPermissionFormset()
+        context['ambulance_formset'] = AmbulancePermissionFormset(queryset=AmbulancePermission.objects.none())
+        context['hospital_formset'] = HospitalPermissionFormset(queryset=HospitalPermission.objects.none())
         return context
 
 

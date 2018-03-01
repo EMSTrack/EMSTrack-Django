@@ -11,6 +11,8 @@ from django.contrib.auth.hashers import get_hasher, check_password
 from django.contrib.auth.models import User, Group
 from extra_views import InlineFormSetView
 
+from ambulance.models import Ambulance
+from hospital.models import Hospital
 from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
 
 
@@ -191,13 +193,27 @@ class UserAdminUpdateForm(UserAdminCreateForm):
         self.fields['username'].disabled = True
 
 
+class AmbulancePermissionModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return obj.identifier
+
+
+class HospitalPermissionModelMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        return obj.name
+
+
 class AmbulancePermissionAdminForm(forms.ModelForm):
+    ambulance = AmbulancePermissionModelMultipleChoiceField(queryset=Ambulance.objects.all())
+
     class Meta:
         model = AmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
 
 class HospitalPermissionAdminForm(forms.ModelForm):
+    hospital = HospitalPermissionModelMultipleChoiceField(queryset=Hospital.objects.all())
+
     class Meta:
         model = HospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
