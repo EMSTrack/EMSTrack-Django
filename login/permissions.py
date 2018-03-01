@@ -100,7 +100,7 @@ class Permissions:
 
                 # add user permissions
                 for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
-                    # e.g.: objs = group.groupprofile.hospitals.all()
+                    # e.g.: objs = user.userhospitalpermission_set.all()
                     objs = getattr(user.profile, profile_field).all()
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in user.profile.hospitals.all()})
                     getattr(self, profile_field).update({

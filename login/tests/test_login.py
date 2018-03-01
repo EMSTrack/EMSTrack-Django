@@ -139,7 +139,7 @@ class TestProfile(MyTestCase):
                     'can_read': e.can_read,
                     'can_write': e.can_write
                 }
-                for e in g.groupambulancesprofile_set.all()
+                for e in g.groupambulanceprofile_set.all()
             ],
             'hospitals': [
                 {
