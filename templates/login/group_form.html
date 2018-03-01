@@ -18,13 +18,7 @@
 
         <h3>Permissions:</h3>
 
-        {% for form in ambulance_formset %}
-        <table>
-            {{ form }}
-        </table>
-        {% endfor %}
-
-        {% for form in hospital_formset %}
+        {% for form in inlines %}
         <table>
             {{ form }}
         </table>
