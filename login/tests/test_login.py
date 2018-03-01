@@ -1,28 +1,20 @@
 import logging
 import time
-from django.test import TestCase
-from django.test import Client
 
-from django.contrib.auth.models import User
+from django.test import Client
 from django.conf import settings
-from django.contrib.auth.hashers import get_hasher, check_password
+from django.contrib.auth.hashers import check_password
 
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 
-from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
+from ambulance.models import Ambulance
 
-from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
+from hospital.models import Hospital
 
-from ..models import UserProfile, AmbulancePermission, HospitalPermission, \
-    TemporaryPassword
+from ..models import TemporaryPassword
 
 from ..serializers import UserProfileSerializer
-
-from ..views import LoginView, SignupView, LogoutView, \
-    MQTTLoginView, MQTTSuperuserView, MQTTAclView
 
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient
 from mqtt.client import MQTTException

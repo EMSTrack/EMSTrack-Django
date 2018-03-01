@@ -678,7 +678,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'True')
         
-        # retrive message that is there already due to creation
+        # retrieve message that is there already due to creation
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
         self.is_subscribed(test_client)
