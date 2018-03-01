@@ -99,6 +99,8 @@ class GroupAdminActionMixin:
 
     def get_context_data(self, **kwargs):
 
+        logger.info("get_context_data")
+
         # call super
         context = super().get_context_data(**kwargs)
 
@@ -147,6 +149,8 @@ class GroupAdminActionMixin:
         return context
 
     def form_valid(self, form):
+
+        logger.info("form_valid")
 
         # call super
         return super().form_valid(form)
