@@ -188,7 +188,7 @@ class GroupAdminActionMixin:
 
 class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
-    exclude = ['group']
+    form_class = GroupProfileAdminForm
 
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
