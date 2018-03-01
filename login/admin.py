@@ -5,7 +5,9 @@ from django.contrib.auth.models import User, Group
 
 # Register your models here.
 
-from .models import UserProfile, GroupProfile, AmbulancePermission, HospitalPermission
+from .models import UserProfile, GroupProfile, \
+    UserAmbulancePermission, UserHospitalPermission, \
+    GroupAmbulancePermission, GroupHospitalPermission
 
 
 # Define an inline admin descriptor for Profile model
@@ -41,5 +43,7 @@ admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 
 # Register AmbulancePermission and HospitalPermission
-admin.site.register(AmbulancePermission)
-admin.site.register(HospitalPermission)
+admin.site.register(UserAmbulancePermission)
+admin.site.register(UserHospitalPermission)
+admin.site.register(GroupAmbulancePermission)
+admin.site.register(GroupHospitalPermission)

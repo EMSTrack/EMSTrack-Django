@@ -13,7 +13,7 @@ from extra_views import InlineFormSetView
 
 from ambulance.models import Ambulance
 from hospital.models import Hospital
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
+from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission
 
 
 class SignupForm(auth_forms.UserCreationForm):
@@ -208,7 +208,7 @@ class AmbulancePermissionAdminForm(forms.ModelForm):
     ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
 
     class Meta:
-        model = AmbulancePermission
+        model = UserAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
 
@@ -216,7 +216,7 @@ class HospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
 
     class Meta:
-        model = HospitalPermission
+        model = UserHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
 
 
