@@ -30,9 +30,9 @@
                 <tbody>
                 {% for permission in ambulance_list %}
                 <tr>
-                    <td> {% permission.ambulance.identifier %} </td>
-                    <td> {% permission.can_read %} </td>
-                    <td> {% permission.can_write %} </td>
+                    <td> {{ permission.ambulance.identifier }} </td>
+                    <td> {{ permission.can_read }} </td>
+                    <td> {{ permission.can_write }} </td>
                 </tr>
                 {% endfor %}
                 </tbody>
@@ -51,9 +51,9 @@
                 <tbody>
                 {% for permission in hospital_list %}
                 <tr>
-                    <td> {% permission.hospital.name %} </td>
-                    <td> {% permission.can_read %} </td>
-                    <td> {% permission.can_write %} </td>
+                    <td> {{ permission.hospital.name }} </td>
+                    <td> {{ permission.can_read }} </td>
+                    <td> {{ permission.can_write }} </td>
                 </tr>
                 {% endfor %}
                 </tbody>
