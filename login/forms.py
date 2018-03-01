@@ -232,5 +232,5 @@ class GroupAdminUpdateForm(GroupAdminCreateForm):
 
         super().__init__(*args, **kwargs)
 
-        # disable groupname
+        # disable name
         self.fields['name'].disabled = True
