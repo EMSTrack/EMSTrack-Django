@@ -188,7 +188,7 @@ class GroupAdminActionMixin:
 
 class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
-    formset_class = GroupProfileAdminForm
+    form_class = GroupProfileAdminForm
 
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
