@@ -8,14 +8,23 @@
 <div class="container">
     <form method="POST" class="post-form">
         {% csrf_token %}
+
         <table>
             {{ form }}
         </table>
-        {% for form in inlines %}
+
+        {% for form in ambulance_formset %}
         <table>
             {{ form }}
         </table>
         {% endfor %}
+
+        {% for form in hospital_formset %}
+        <table>
+            {{ form }}
+        </table>
+        {% endfor %}
+
         <p>
             <button type="submit">Save</button>
         </p>

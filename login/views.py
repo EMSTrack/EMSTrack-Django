@@ -3,6 +3,7 @@ import string, random
 from datetime import timedelta
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.forms import modelformset_factory
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
@@ -28,7 +29,7 @@ from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, 
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, \
-    GroupAdminUpdateForm
+    GroupAdminUpdateForm, AmbulancePermissionAdminForm, HospitalPermissionAdminForm
 
 from .permissions import get_permissions
 
@@ -78,31 +79,14 @@ class GroupAdminCreateView(CreateView):
     template_name = 'login/group_form.html'
     form_class = GroupAdminCreateForm
 
-
-# class GroupProfileAdminInline(InlineFormSet):
-#
-#     model = GroupProfile
-#     fields = ['ambulances', 'hospitals']
-#     form_class = GroupProfileForm
-
-
-class AmbulancePermissionAdminInline(InlineFormSet):
-
-    model = AmbulancePermission
-    fields = ['ambulance', 'can_read', 'can_write']
-
-
-class HospitalPermissionAdminInline(InlineFormSet):
-
-    model = HospitalPermission
-    fields = ['hospital', 'can_read', 'can_write']
-
-
-class GroupAdminCreateView(CreateWithInlinesView):
-    model = GroupProfile
-    template_name = 'login/group_form.html'
-    inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
-    form_class = GroupAdminCreateForm
+    def get_context_data(self, **kwargs):
+        # call super
+        context = super().get_context_data(**kwargs)
+        AmbulancePermissionFormset = modelformset_factory(AmbulancePermission, form=AmbulancePermissionAdminForm)
+        HospitalPermissionFormset = modelformset_factory(HospitalPermission, form=HospitalPermissionAdminForm)
+        context['ambulance_formset'] = AmbulancePermissionFormset()
+        context['hospital_formset'] = HospitalPermissionFormset()
+        return context
 
 
 class GroupAdminUpdateView(UpdateView):

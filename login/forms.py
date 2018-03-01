@@ -191,25 +191,6 @@ class UserAdminUpdateForm(UserAdminCreateForm):
         self.fields['username'].disabled = True
 
 
-class GroupAdminCreateForm(forms.ModelForm):
-
-    permission = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
-
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
-
-
-class GroupAdminUpdateForm(GroupAdminCreateForm):
-
-    def __init__(self, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
-
-        # disable username
-        self.fields['username'].disabled = True
-
-
 class AmbulancePermissionAdminForm(forms.ModelForm):
     class Meta:
         model = AmbulancePermission
@@ -220,20 +201,3 @@ class HospitalPermissionAdminForm(forms.ModelForm):
     class Meta:
         model = HospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
-
-
-class GroupAdminCreateForm(forms.ModelForm):
-
-     class Meta:
-         model = GroupProfile
-         fields = []
-
-
-class GroupAdminUpdateForm(GroupAdminCreateForm):
-
-    def __init__(self, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
-
-        # disable groupname
-        self.fields['name'].disabled = True
