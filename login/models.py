@@ -45,9 +45,6 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
 
-    #ambulances = models.ManyToManyField(AmbulancePermission, blank=True)
-    #hospitals = models.ManyToManyField(HospitalPermission, blank=True)
-
     def __str__(self):
         return ('{}'.format(self.user))
     

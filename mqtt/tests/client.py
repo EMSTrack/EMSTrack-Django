@@ -20,7 +20,8 @@ from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
 
 from login.models import AmbulancePermission, HospitalPermission, \
-    GroupAmbulancePermission, GroupHospitalPermission
+    GroupAmbulancePermission, GroupHospitalPermission, \
+    UserAmbulancePermission, UserHospitalPermission
 
 logger = logging.getLogger(__name__)
 
@@ -382,34 +383,35 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)
-            
-            # Add permissions
-            cls.u2.profile.hospitals.add(
-                HospitalPermission.objects.create(hospital=cls.h1,
-                                                  can_write=True),
-                HospitalPermission.objects.create(hospital=cls.h3)
-            )
-            
-            cls.u3.profile.hospitals.add(
-                HospitalPermission.objects.create(hospital=cls.h1),
-                HospitalPermission.objects.create(hospital=cls.h2,
+
+            # add hospitals to users
+            UserHospitalPermission.objects.create(user=cls.u2,
+                                                  hospital=cls.h1,
                                                   can_write=True)
-            )
+            UserHospitalPermission.objects.create(user=cls.u2,
+                                                  hospital=cls.h3)
+
+            UserHospitalPermission.objects.create(user=cls.u3,
+                                                  hospital=cls.h1)
+            UserHospitalPermission.objects.create(user=cls.u3,
+                                                  hospital=cls.h2,
+                                                  can_write=True)
+
+            # u3 has no hospitals
 
             # add ambulances to users
-            cls.u1.profile.ambulances.add(
-                AmbulancePermission.objects.create(ambulance=cls.a2,
+            UserAmbulancePermission.objects.create(user=cls.u1,
+                                                   ambulance=cls.a2,
                                                    can_write=True)
-            )
-            
+
             # u2 has no ambulances
-            
-            cls.u3.profile.ambulances.add(
-                AmbulancePermission.objects.create(ambulance=cls.a1,
-                                                   can_read=False),
-                AmbulancePermission.objects.create(ambulance=cls.a3,
+
+            UserAmbulancePermission.objects.create(user=cls.u3,
+                                                   ambulance=cls.a1,
+                                                   can_read=False)
+            UserAmbulancePermission.objects.create(user=cls.u3,
+                                                   ambulance=cls.a3,
                                                    can_write=True)
-            )
 
             # Create groups
             cls.g1 = Group.objects.create(name='EMTs')
