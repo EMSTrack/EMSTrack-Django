@@ -48,7 +48,7 @@ class TestProfile(MyTestCase):
 
         # test ProfileSerializer
         for u in (self.u1, self.u2, self.u3):
-            serializer = ProfileSerializer(u.profile)
+            serializer = ProfileSerializer(u.userprofile)
             result = {
                 'ambulances': [
                     {
@@ -57,7 +57,7 @@ class TestProfile(MyTestCase):
                         'can_read': e.can_read,
                         'can_write': e.can_write
                     }
-                    for e in u.profile.ambulances.all()
+                    for e in u.userambulancepermission_set.all()
                 ],
                 'hospitals': [
                     {
@@ -66,7 +66,7 @@ class TestProfile(MyTestCase):
                         'can_read': e.can_read,
                         'can_write': e.can_write
                     }
-                    for e in u.profile.hospitals.all()
+                    for e in u.userhospitalpermission_set.all()
                 ]
             }
             self.assertDictEqual(serializer.data, result)
