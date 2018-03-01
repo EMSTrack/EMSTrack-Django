@@ -188,10 +188,12 @@ class GroupAdminActionMixin:
 
 class AmbulancePermissionAdminInline(InlineFormSet):
     model = GroupProfile.ambulances.through
+    fields = ['ambulancepermission']
 
 
 class HospitalPermissionAdminInline(InlineFormSet):
     model = GroupProfile.hospitals.through
+    fields = ['hospitalpermission']
 
 
 class GroupAdminCreateView(CreateWithInlinesView):
