@@ -71,6 +71,7 @@ class GroupAdminListView(ListView):
 class GroupAdminDetailView(DetailView):
     model = Group
     template_name = 'login/group_detail.html'
+    fields = ['name']
 
     def get_context_data(self, **kwargs):
 
