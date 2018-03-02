@@ -869,7 +869,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'value': value
                                 })
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # logout
         client.logout()
@@ -884,7 +884,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'value': value
                                 })
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # set equipment value
         response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
@@ -893,7 +893,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'value': value
                                 })
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # logout
         client.logout()
