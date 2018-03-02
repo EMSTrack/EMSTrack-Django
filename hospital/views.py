@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from extra_views import InlineFormSet, CreateWithInlinesView, \
     UpdateWithInlinesView
 
-from .models import Hospital, HospitalEquipment
+from .models import Hospital, HospitalEquipment, Equipment
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
@@ -76,32 +76,32 @@ class HospitalListView(LoginRequiredMixin,
 
 # HospitalEquipment
 
-class HospitalEquipmentAdminListView(LoginRequiredMixin,
-                                     ListView):
-    model = HospitalEquipment
+class EquipmentAdminListView(LoginRequiredMixin,
+                             ListView):
+    model = Equipment
 
 
-class HospitalEquipmentAdminDetailView(DetailView):
-    model = HospitalEquipment
+class EquipmentAdminDetailView(DetailView):
+    model = Equipment
 
 
-class HospitalEquipmentAdminCreateView(SuccessMessageMixin, CreateView):
-    model = HospitalEquipment
+class EquipmentAdminCreateView(SuccessMessageMixin, CreateView):
+    model = Equipment
     fields = ['name', 'etype']
 
     def get_success_message(self, cleaned_data):
-        return "Successfully created hospital equipment '{}'".format(self.object.name)
+        return "Successfully created equipment '{}'".format(self.object.name)
 
     def get_success_url(self):
         return self.object.get_absolute_url()
 
 
-class HospitalEquipmentAdminUpdateView(SuccessMessageMixin, UpdateView):
-    model = HospitalEquipment
+class EquipmentAdminUpdateView(SuccessMessageMixin, UpdateView):
+    model = Equipment
     fields = ['name', 'etype']
 
     def get_success_message(self, cleaned_data):
-        return "Successfully updated hospital equipment '{}'".format(self.object.name)
+        return "Successfully updated equipment '{}'".format(self.object.name)
 
     def get_success_url(self):
-        return self.object.hospitalEquipmentprofile.get_absolute_url()
+        return self.object.get_absolute_url()
