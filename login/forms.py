@@ -196,21 +196,23 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
 
     class Meta:
-        model = UserAmbulancePermission
+        model = UserHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
 
 
-class AmbulancePermissionAdminForm(forms.ModelForm):
+class GroupAmbulancePermissionAdminForm(forms.ModelForm):
     ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
 
     class Meta:
+        model = GroupAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
 
-class HospitalPermissionAdminForm(forms.ModelForm):
+class GroupHospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
 
     class Meta:
+        model = GroupHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
 
 
