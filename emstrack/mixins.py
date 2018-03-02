@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import messages
+from django.http import HttpResponseRedirect
 from rest_framework import mixins
 
 # CreateModelUpdateByMixin
@@ -88,3 +89,29 @@ class SuccessMessageWithInlinesMixin:
 
         # call super
         return super().forms_valid(form, inlines)
+
+
+class UpdatedByWithInlinesMixin:
+
+    def forms_valid(self, form, inlines):
+
+        # add updated_by to form and save
+        form.instance.updated_by = self.request.user
+        self.object = form.save()
+
+        # save formsets
+        for formset in inlines:
+
+            # save but do not commit
+            instances = formset.save(commit = False)
+
+            # save form
+            for obj in instances:
+
+                # add updated_by to formset instance
+                obj.updated_by = self.request.user
+
+                # then save
+                obj.save()
+
+        return HttpResponseRedirect(self.get_success_url())
