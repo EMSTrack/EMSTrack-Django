@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
+from django.urls import reverse
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
@@ -187,7 +188,7 @@ class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
     form_class = UserAdminCreateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
-    success_url = 'login:user_list'
+    success_url = reverse('login:user_list')
 
     @property
     def success_message(self):
@@ -200,7 +201,7 @@ class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     form_class = UserAdminUpdateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
-    success_url = 'login:user_list'
+    success_url = reverse('login:user_list')
 
     @property
     def success_message(self):
