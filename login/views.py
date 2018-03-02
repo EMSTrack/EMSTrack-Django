@@ -100,6 +100,7 @@ class GroupProfileAdminInline(InlineFormSet):
     min_num = 1
     max_num = 1
     extra = 0
+    can_delete = False
 
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
