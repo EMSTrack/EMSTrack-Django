@@ -30,9 +30,9 @@ urlpatterns = [
 
     # Admin
 
-    url(r'^location/$',
+    url(r'^location/list/$',
         staff_member_required(views.LocationAdminListView.as_view()),
-        name='location'),
+        name='location_list'),
 
     # NEED REVISING
     
