@@ -78,13 +78,13 @@ class BasePermissionMixin:
 
 class SuccessMessageWithInlinesMixin:
 
-    def get_success_message(self):
+    def get_success_message(self, cleaned_data):
         return NotImplemented
 
     def forms_valid(self, form, inlines):
 
         # add message
-        messages.info(self.request, self.get_success_message())
+        messages.info(self.request, self.get_success_message(form.cleaned_data))
 
         # call super
         return super().forms_valid(form, inlines)

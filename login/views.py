@@ -120,8 +120,8 @@ class GroupAdminCreateView(SuccessMessageMixin, CreateView):
     fields = ['name']
     template_name = 'login/group_create.html'
 
-    def get_success_message(self):
-        return "Successfully created group '{}'".format(self.object.name)
+    def get_success_message(self, cleaned_data):
+        return "Successfully created group '{}'".format(cleaned_data.name)
 
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
@@ -135,7 +135,7 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView
                GroupAmbulancePermissionAdminInline,
                GroupHospitalPermissionAdminInline]
 
-    def get_success_message(self):
+    def get_success_message(self, cleaned_data):
         return "Successfully created group '{}'".format(self.object.name)
 
     def get_success_url(self):
@@ -188,7 +188,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView)
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
-    def get_success_message(self):
+    def get_success_message(self, cleaned_data):
         return "Successfully created user '{}'".format(self.object.username)
 
     def get_success_url(self):
@@ -202,7 +202,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
-    def get_success_message(self):
+    def get_success_message(self, cleaned_data):
         return "Successfully updated user '{}'".format(self.object.username)
 
     def get_success_url(self):
