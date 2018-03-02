@@ -607,27 +607,27 @@ class TestHospitalEquipmentGetList(TestSetup):
         # retrieve someone else's
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # retrieve someone else's
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # retrieve someone else's
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e2.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # retrieve someone else's
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e1.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # retrieve someone else's
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h2.id), str(self.e3.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # logout
         client.logout()

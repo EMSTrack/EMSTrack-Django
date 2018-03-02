@@ -66,7 +66,7 @@ class Permissions:
                             'can_read': True,
                             'can_write': True
                         } for e in objs})
-                    logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
+                    # logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
 
             else:
 
@@ -82,7 +82,7 @@ class Permissions:
                                 'can_read': e.can_read,
                                 'can_write': e.can_write
                             } for e in objs})
-                        logger.debug('group = {}, {} = {}'.format(group.name, profile_field, getattr(self, profile_field)))
+                        # logger.debug('group = {}, {} = {}'.format(group.name, profile_field, getattr(self, profile_field)))
 
                 # add user permissions
                 for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
@@ -95,7 +95,7 @@ class Permissions:
                             'can_read': e.can_read,
                             'can_write': e.can_write
                         } for e in objs})
-                    logger.debug('user, {} = {}'.format(profile_field, getattr(self, profile_field)))
+                    # logger.debug('user, {} = {}'.format(profile_field, getattr(self, profile_field)))
 
             # build permissions
             for profile_field in self.profile_fields:
@@ -106,13 +106,13 @@ class Permissions:
                     if obj['can_write']:
                         # e.g.: self.can_write['ambulances'].append(obj['id'])
                         self.can_write[profile_field].append(id)
-                logger.debug('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
-                logger.debug('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
+                # logger.debug('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
+                # logger.debug('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
 
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1
         (key,id) = kwargs.popitem()
-        logger.debug('key = {}, id = {}'.format(key, id))
+        # logger.debug('key = {}, id = {}'.format(key, id))
         try:
             return id in self.can_read[key + 's']
         except KeyError:
