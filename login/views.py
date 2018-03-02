@@ -2,15 +2,15 @@ import logging
 import string, random
 from datetime import timedelta
 
+from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.forms import modelformset_factory
-from django.http.response import HttpResponse, HttpResponseForbidden
+from django.http.response import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import FormView, UpdateView, CreateView
+from django.views.generic.edit import FormView
 
 from braces.views import CsrfExemptMixin
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
@@ -32,7 +32,7 @@ from .models import TemporaryPassword, \
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
-    AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm, \
+    GroupAdminCreateForm, GroupAdminUpdateForm, \
     GroupProfileAdminForm, UserProfileAdminForm
 
 from .permissions import get_permissions
@@ -128,6 +128,28 @@ class GroupAdminUpdateView(UpdateWithInlinesView):
 
 # Users
 
+
+class UserAdminActionMixin:
+
+    @property
+    def success_message(self):
+        return NotImplemented
+
+    def forms_valid(self, form, inlines):
+
+        # add message
+        messages.info(self.request, self.success_message)
+
+        # save
+        self.object = form.save()
+
+        # save formsets
+        for formset in inlines:
+            instances = formset.save()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
@@ -156,19 +178,22 @@ class UserAdminDetailView(DetailView):
 class UserProfileAdminInline(InlineFormSet):
     model = UserProfile
     form_class = UserProfileAdminForm
+    extra = 0
 
 
 class UserAmbulancePermissionAdminInline(InlineFormSet):
     model = UserAmbulancePermission
     fields = ['ambulance', 'can_read', 'can_write']
+    extra = 1
 
 
 class UserHospitalPermissionAdminInline(InlineFormSet):
     model = UserHospitalPermission
     fields = ['hospital', 'can_read', 'can_write']
+    extra = 1
 
 
-class UserAdminCreateView(CreateWithInlinesView):
+class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
@@ -177,7 +202,7 @@ class UserAdminCreateView(CreateWithInlinesView):
                UserHospitalPermissionAdminInline]
 
 
-class UserAdminUpdateView(UpdateWithInlinesView):
+class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
