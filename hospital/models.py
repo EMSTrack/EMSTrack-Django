@@ -74,6 +74,9 @@ class Equipment(models.Model):
     def __str__(self):
         return "{} ({})".format(self.name, self.etype)
 
+    def get_absolute_url(self):
+        return reverse('hospital:equipment_detail', kwargs={'pk': self.id})
+
 
 class HospitalEquipment(UpdatedByModel):
 
