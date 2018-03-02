@@ -67,6 +67,21 @@ class AdminView(TemplateView):
     template_name = 'login/admin.html'
 
 
+class AdminActionMixin:
+
+    @property
+    def success_message(self):
+        return NotImplemented
+
+    def forms_valid(self, form, inlines):
+
+        # add message
+        messages.info(self.request, self.success_message)
+
+        # call super
+        return super().forms_valid(form, inlines)
+
+
 # Groups
 
 class GroupAdminListView(ListView):
@@ -106,27 +121,29 @@ class GroupProfileAdminInline(InlineFormSet):
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
     form_class = AmbulancePermissionAdminForm
-    # fields = ['ambulance', 'can_read', 'can_write']
     extra = 1
 
 
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
     form_class = HospitalPermissionAdminForm
-    # fields = ['hospital', 'can_read', 'can_write']
     extra = 1
 
 
-class GroupAdminCreateView(CreateView):
+class GroupAdminCreateView(AdminActionMixin, CreateView):
     model = Group
     fields = ['name']
     template_name = 'login/group_create.html'
+
+    @property
+    def success_message(self):
+        return "Successfully created group '{}'".format(self.object.name)
 
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
 
 
-class GroupAdminUpdateView(UpdateWithInlinesView):
+class GroupAdminUpdateView(AdminActionMixin, UpdateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminUpdateForm
@@ -134,26 +151,15 @@ class GroupAdminUpdateView(UpdateWithInlinesView):
                GroupAmbulancePermissionAdminInline,
                GroupHospitalPermissionAdminInline]
 
+    @property
+    def success_message(self):
+        return "Successfully created group '{}'".format(self.object.name)
+
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
 
 
 # Users
-
-class UserAdminActionMixin:
-
-    @property
-    def success_message(self):
-        return NotImplemented
-
-    def forms_valid(self, form, inlines):
-
-        # add message
-        messages.info(self.request, self.success_message)
-
-        # call super
-        return super().forms_valid(form, inlines)
-
 
 class UserAdminListView(ListView):
     model = User
@@ -182,17 +188,17 @@ class UserAdminDetailView(DetailView):
 
 class UserAmbulancePermissionAdminInline(InlineFormSet):
     model = UserAmbulancePermission
-    fields = ['ambulance', 'can_read', 'can_write']
+    form_class = AmbulancePermissionAdminForm
     extra = 1
 
 
 class UserHospitalPermissionAdminInline(InlineFormSet):
     model = UserHospitalPermission
-    fields = ['hospital', 'can_read', 'can_write']
+    form_class = HospitalPermissionAdminForm
     extra = 1
 
 
-class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
+class UserAdminCreateView(AdminActionMixin, CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
@@ -201,13 +207,13 @@ class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
 
     @property
     def success_message(self):
-        return "UserAdminCreateView"
+        return "Successfully created user '{}'".format(self.object.username)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
 
 
-class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
+class UserAdminUpdateView(AdminActionMixin, UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
@@ -216,7 +222,7 @@ class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
 
     @property
     def success_message(self):
-        return "UserAdminUpdateView"
+        return "Successfully updated user '{}'".format(self.object.username)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
