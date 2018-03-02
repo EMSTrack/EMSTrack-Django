@@ -121,7 +121,7 @@ class GroupAdminCreateView(SuccessMessageMixin, CreateView):
     template_name = 'login/group_create.html'
 
     def get_success_message(self, cleaned_data):
-        return "Successfully created group '{}'".format(cleaned_data.name)
+        return "Successfully created group '{}'".format(cleaned_data['name'])
 
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
