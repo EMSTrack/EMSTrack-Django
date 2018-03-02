@@ -136,6 +136,21 @@ class UserAdminListView(ListView):
 class UserAdminDetailView(DetailView):
     model = User
     template_name = 'login/user_detail.html'
+    fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve permissions and add to context
+        context['ambulance_list'] = self.object.userambulancepermission_set.all()
+        context['hospital_list'] = self.object.userhospitalpermission_set.all()
+
+        # retrieve groups and add to context
+        context['group_list'] = self.object.group.all()
+
+        return context
 
 
 class UserProfileAdminInline(InlineFormSet):
