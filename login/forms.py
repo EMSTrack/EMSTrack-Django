@@ -188,7 +188,6 @@ class AmbulancePermissionAdminForm(forms.ModelForm):
     ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
 
     class Meta:
-        model = UserAmbulancePermission
         fields = ['ambulance', 'can_read', 'can_write']
 
 
@@ -196,7 +195,6 @@ class HospitalPermissionAdminForm(forms.ModelForm):
     hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
 
     class Meta:
-        model = UserHospitalPermission
         fields = ['hospital', 'can_read', 'can_write']
 
 

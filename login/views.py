@@ -34,7 +34,7 @@ from .models import TemporaryPassword, \
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
     GroupAdminCreateForm, GroupAdminUpdateForm, \
-    GroupProfileAdminForm, UserProfileAdminForm
+    GroupProfileAdminForm, UserProfileAdminForm, AmbulancePermissionAdminForm, HospitalPermissionAdminForm
 
 from .permissions import get_permissions
 
@@ -105,13 +105,15 @@ class GroupProfileAdminInline(InlineFormSet):
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
-    fields = ['ambulance', 'can_read', 'can_write']
+    form = AmbulancePermissionAdminForm
+    # fields = ['ambulance', 'can_read', 'can_write']
     extra = 1
 
 
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
-    fields = ['hospital', 'can_read', 'can_write']
+    form = HospitalPermissionAdminForm
+    # fields = ['hospital', 'can_read', 'can_write']
     extra = 1
 
 
