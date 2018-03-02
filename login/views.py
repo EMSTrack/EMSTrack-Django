@@ -11,7 +11,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, CreateView
 
 from braces.views import CsrfExemptMixin
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
@@ -109,13 +109,12 @@ class GroupHospitalPermissionAdminInline(InlineFormSet):
     fields = ['hospital', 'can_read', 'can_write']
 
 
-class GroupAdminCreateView(CreateWithInlinesView):
+class GroupAdminCreateView(CreateView):
     model = Group
-    template_name = 'login/group_form.html'
-    form_class = GroupAdminCreateForm
-    inlines = [GroupProfileAdminInline,
-               GroupAmbulancePermissionAdminInline,
-               GroupHospitalPermissionAdminInline]
+    fields = ['name']
+
+    def get_success_url(self):
+        return self.object.groupprofile.get_absolute_url()
 
 
 class GroupAdminUpdateView(UpdateWithInlinesView):
@@ -126,9 +125,11 @@ class GroupAdminUpdateView(UpdateWithInlinesView):
                GroupAmbulancePermissionAdminInline,
                GroupHospitalPermissionAdminInline]
 
+    def get_success_url(self):
+        return self.object.groupprofile.get_absolute_url()
+
 
 # Users
-
 
 class UserAdminActionMixin:
 
@@ -188,11 +189,13 @@ class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
     form_class = UserAdminCreateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
-    success_url = reverse_lazy('login:user_list')
 
     @property
     def success_message(self):
         return "UserAdminCreateView"
+
+    def get_success_url(self):
+        return self.object.userprofile.get_absolute_url()
 
 
 class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
@@ -201,11 +204,13 @@ class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     form_class = UserAdminUpdateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
-    success_url = reverse_lazy('login:user_list')
 
     @property
     def success_message(self):
         return "UserAdminUpdateView"
+
+    def get_success_url(self):
+        return self.object.userprofile.get_absolute_url()
 
 
 # MQTT login views
