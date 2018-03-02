@@ -97,7 +97,9 @@ class GroupAdminDetailView(DetailView):
 class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
     form_class = GroupProfileAdminForm
-    extra = 1
+    min_num = 1
+    max_num = 1
+    extra = 0
 
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
@@ -109,7 +111,7 @@ class GroupAmbulancePermissionAdminInline(InlineFormSet):
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
     fields = ['hospital', 'can_read', 'can_write']
-    extra = 2
+    extra = 1
 
 
 class GroupAdminCreateView(CreateView):
