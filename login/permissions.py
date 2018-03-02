@@ -106,6 +106,8 @@ class Permissions:
                     if obj['can_write']:
                         # e.g.: self.can_write['ambulances'].append(obj['id'])
                         self.can_write[profile_field].append(id)
+                logger.debug('can_read = {}'.format(self.can_read[profile_field])
+                logger.debug('can_write = {}'.format(self.can_write[profile_field])
 
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1
