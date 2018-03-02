@@ -169,12 +169,6 @@ class UserAdminDetailView(DetailView):
         return context
 
 
-class UserProfileAdminInline(InlineFormSet):
-    model = UserProfile
-    form_class = UserProfileAdminForm
-    extra = 0
-
-
 class UserAmbulancePermissionAdminInline(InlineFormSet):
     model = UserAmbulancePermission
     fields = ['ambulance', 'can_read', 'can_write']
@@ -191,20 +185,19 @@ class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
-    inlines = [UserProfileAdminInline,
-               UserAmbulancePermissionAdminInline,
+    inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
     @property
     def success_message(self):
         return "UserAdminCreateView"
 
+
 class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
-    inlines = [UserProfileAdminInline,
-               UserAmbulancePermissionAdminInline,
+    inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
     @property

@@ -234,11 +234,9 @@ class UserProfileAdminForm(forms.ModelForm):
 
 class UserAdminCreateForm(forms.ModelForm):
 
-    groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
-
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
 
 
 class UserAdminUpdateForm(UserAdminCreateForm):
