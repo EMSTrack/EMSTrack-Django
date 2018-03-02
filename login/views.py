@@ -140,14 +140,8 @@ class UserAdminActionMixin:
         # add message
         messages.info(self.request, self.success_message)
 
-        # save
-        self.object = form.save()
-
-        # save formsets
-        for formset in inlines:
-            instances = formset.save()
-
-        return HttpResponseRedirect(self.get_success_url())
+        # call super
+        return super().forms_valid(form, inlines)
 
 
 class UserAdminListView(ListView):
@@ -201,6 +195,9 @@ class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
                UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
+    @property
+    def success_message(self):
+        return "UserAdminCreateView"
 
 class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     model = User
@@ -209,6 +206,10 @@ class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     inlines = [UserProfileAdminInline,
                UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
+
+    @property
+    def success_message(self):
+        return "UserAdminUpdateView"
 
 
 # MQTT login views
