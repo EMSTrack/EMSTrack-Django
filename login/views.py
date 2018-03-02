@@ -187,6 +187,7 @@ class UserAdminCreateView(UserAdminActionMixin, CreateWithInlinesView):
     form_class = UserAdminCreateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
+    success_url = 'login:user_list'
 
     @property
     def success_message(self):
@@ -199,6 +200,7 @@ class UserAdminUpdateView(UserAdminActionMixin, UpdateWithInlinesView):
     form_class = UserAdminUpdateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
+    success_url = 'login:user_list'
 
     @property
     def success_message(self):
