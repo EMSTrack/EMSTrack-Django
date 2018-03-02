@@ -15,6 +15,12 @@
                 <strong>Name:</strong>
                 <a href="{% url 'login:group_update' pk=group.id %}">{{ group.name }}</a>
             </p>
+
+            <p>
+                <strong>Description:</strong>
+                {{ group.groupprofile.description }}
+            </p>
+
         </div>
     </div>
 
