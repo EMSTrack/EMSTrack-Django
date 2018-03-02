@@ -102,7 +102,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
         user = self.request.user
         
         # retrieve id
-        id = self.kwargs['id']
+        id = int(self.kwargs['id'])
 
         # return nothing if anonymous
         if user.is_anonymous:
