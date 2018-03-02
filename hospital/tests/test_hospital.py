@@ -710,7 +710,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         # retrieve all hospital equipment
         response = client.get('/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # logout
         client.logout()
@@ -721,17 +721,17 @@ class TestHospitalEquipmentGetList(TestSetup):
         # retrieve all hospital equipment
         response = client.get('/api/hospital/{}/equipment/'.format(str(self.h1.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # retrieve all hospital equipment
         response = client.get('/api/hospital/{}/equipment/'.format(str(self.h2.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # retrieve all hospital equipment
         response = client.get('/api/hospital/{}/equipment/'.format(str(self.h3.id)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # logout
         client.logout()
