@@ -13,14 +13,11 @@
 
         <table>
             {{ form }}
-            {{ inlines.0.form }}
         </table>
 
         <h3>Permissions:</h3>
 
-        {{ inlines.management_form }}
-
-        {% for form in inlines|slice:"1:" %}
+        {% for form in inlines %}
         <table>
             {{ form }}
         </table>
