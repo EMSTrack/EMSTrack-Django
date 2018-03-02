@@ -112,6 +112,7 @@ class GroupHospitalPermissionAdminInline(InlineFormSet):
 class GroupAdminCreateView(CreateView):
     model = Group
     fields = ['name']
+    template_name = 'login/group_create.html'
 
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
