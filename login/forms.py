@@ -184,6 +184,22 @@ class HospitalPermissionModelChoiceField(forms.ModelChoiceField):
         return obj.name
 
 
+class UserAmbulancePermissionAdminForm(forms.ModelForm):
+    ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
+
+    class Meta:
+        model = UserAmbulancePermission
+        fields = ['ambulance', 'can_read', 'can_write']
+
+
+class UserHospitalPermissionAdminForm(forms.ModelForm):
+    hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
+
+    class Meta:
+        model = UserAmbulancePermission
+        fields = ['hospital', 'can_read', 'can_write']
+
+
 class AmbulancePermissionAdminForm(forms.ModelForm):
     ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
 
@@ -205,14 +221,11 @@ class GroupProfileAdminForm(forms.ModelForm):
         exclude = ['group']
 
 
-class GroupAdminCreateForm(forms.ModelForm):
+class GroupAdminUpdateForm(forms.ModelForm):
 
     class Meta:
         model = Group
         fields = ['name']
-
-
-class GroupAdminUpdateForm(GroupAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
 
