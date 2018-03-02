@@ -16,6 +16,8 @@
             <th>First</th>
             <th>Last</th>
             <th>Email</th>
+            <th>Staff</th>
+            <th>Active</th>
         </tr>
         </thead>
         <tbody>
@@ -32,6 +34,12 @@
             </td>
             <td>
                 {{ user.email}}
+            </td>
+            <td>
+                {{ user.staff }}
+            </td>
+            <td>
+                {{ user.active }}
             </td>
         </tr>
         {% endfor %}
