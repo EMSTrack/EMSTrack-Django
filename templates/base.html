@@ -28,7 +28,7 @@
     </div>
     <!-- Navbar Menu -->
     <div class="collapse navbar-collapse" id="myNavbar">
-      {% if user.is_authenticated %}
+      {% if request.user.is_authenticated %}
       <ul class="nav navbar-nav">
         <li><a href="{% url 'ambulance:list' %}">Ambulances</a></li>
         <li><a href="{% url 'hospital:list' %}">Hospitals</a></li>
@@ -36,8 +36,8 @@
       </ul>
       {% endif %}
       <ul class="nav navbar-nav navbar-right">
-        {% if user.is_authenticated %}
-          {% if user.is_staff %}
+        {% if request.user.is_authenticated %}
+          {% if request.user.is_staff %}
             <li><a href="{% url 'login:admin' %}">Admin</a></li>
           {% endif %}
           <li><a href="{% url 'login:logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout {{request.user.first_name}}</a></li>
