@@ -347,8 +347,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
             
             cls.e3 = Equipment.objects.create(
                 name='MRI - Ressonance',     # name with space!
-                etype=EquipmentType.B.name,
-                toggleable=True)
+                etype=EquipmentType.B.name)
             
             # add hospital equipment
             cls.he1 = HospitalEquipment.objects.create(
