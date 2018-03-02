@@ -8,6 +8,7 @@ from rest_framework.renderers import JSONRenderer
 import json
 
 from login.models import UserProfile
+from login.permissions import get_permissions
 
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
@@ -271,20 +272,20 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                       qos)
         
         # Expect user profile
-        profile = UserProfile.objects.get(user__username='testuser1')
+        user = User.objects.get(username='testuser1')
         client.expect('user/testuser1/profile',
-                      JSONRenderer().render(UserProfileSerializer(profile.user).data),
+                      JSONRenderer().render(UserProfileSerializer(user).data),
                       qos)
 
         # User Ambulances
-        can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
+        can_read = get_permissions(user).get_can_read('ambulances')
         for ambulance in Ambulance.objects.filter(id__in=can_read):
             client.expect('ambulance/{}/data'.format(ambulance.id),
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
                           qos)
         
         # User Hospitals
-        can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
+        can_read = get_permissions(user).get_can_read('hospitals')
         for hospital in Hospital.objects.filter(id__in=can_read):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
@@ -322,20 +323,20 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                       qos)
         
         # Expect user profile
-        profile = UserProfile.objects.get(user__username='testuser2')
+        user = User.objects.get(username='testuser2')
         client.expect('user/testuser2/profile',
-                      JSONRenderer().render(UserProfileSerializer(profile.user).data),
+                      JSONRenderer().render(UserProfileSerializer(user).data),
                       qos)
 
         # User Ambulances
-        can_read = profile.ambulances.filter(can_read=True).values('ambulance_id')
+        can_read = get_permissions(user).get_can_read('ambulances')
         for ambulance in Ambulance.objects.filter(id__in=can_read):
             client.expect('ambulance/{}/data'.format(ambulance.id),
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
                           qos)
         
         # User Hospitals
-        can_read = profile.hospitals.filter(can_read=True).values('hospital_id')
+        can_read = get_permissions(user).get_can_read('hospitals')
         for hospital in Hospital.objects.filter(id__in=can_read):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
