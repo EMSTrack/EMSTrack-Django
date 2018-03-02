@@ -105,14 +105,14 @@ class GroupProfileAdminInline(InlineFormSet):
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
-    form = AmbulancePermissionAdminForm
+    form_class = AmbulancePermissionAdminForm
     # fields = ['ambulance', 'can_read', 'can_write']
     extra = 1
 
 
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
-    form = HospitalPermissionAdminForm
+    form_class = HospitalPermissionAdminForm
     # fields = ['hospital', 'can_read', 'can_write']
     extra = 1
 
