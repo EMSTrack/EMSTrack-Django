@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from extra_views import InlineFormSet, CreateWithInlinesView, \
     UpdateWithInlinesView
@@ -80,3 +81,27 @@ class HospitalEquipmentAdminListView(LoginRequiredMixin,
     model = HospitalEquipment
 
 
+class HospitalEquipmentAdminDetailView(DetailView):
+    model = HospitalEquipment
+
+
+class HospitalEquipmentAdminCreateView(SuccessMessageMixin, CreateView):
+    model = HospitalEquipment
+    fields = ['name', 'etype']
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully created hospital equipment '{}'".format(self.object.name)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class HospitalEquipmentAdminUpdateView(SuccessMessageMixin, UpdateView):
+    model = HospitalEquipment
+    fields = ['name', 'etype']
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated hospital equipment '{}'".format(self.object.name)
+
+    def get_success_url(self):
+        return self.object.hospitalEquipmentprofile.get_absolute_url()

@@ -26,8 +26,20 @@ urlpatterns = [
 
     # Admin
 
-    url(r'^equipment/$',
+    url(r'^equipment/list$',
         staff_member_required(views.HospitalEquipmentAdminListView.as_view()),
-        name='equipment'),
+        name='equipment_list'),
+
+    url(r'^equipment/create$',
+        staff_member_required(views.HospitalEquipmentAdminCreateView.as_view()),
+        name='equipment_create'),
+
+    url(r'^equipment/detail/(?P<pk>[0-9]+)$',
+        staff_member_required(views.HospitalEquipmentAdminDetailView.as_view()),
+        name='equipment_detail'),
+
+    url(r'^equipment/update/(?P<pk>[0-9]+)$',
+        staff_member_required(views.HospitalEquipmentAdminUpdateView.as_view()),
+        name='equipment_update'),
 
 ]

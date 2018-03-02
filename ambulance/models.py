@@ -1,16 +1,28 @@
 import logging
+import math
 from enum import Enum
 
-import math
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
-
 from django.utils import timezone
 from django.urls import reverse
+from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
 
 logger = logging.getLogger(__name__)
+
+
+# filters
+
+@register.filter
+def get_ambulance_status(status):
+    return AmbulanceStatus[status].value
+
+
+@register.filter
+def get_ambulance_capability(capability):
+    return AmbulanceCapability[capability].value
 
 
 def calculate_orientation(location1, location2):

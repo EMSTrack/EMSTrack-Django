@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.utils import timezone
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
@@ -13,25 +12,9 @@ from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
 
-from .serializers import AmbulanceSerializer
-
 from emstrack.mixins import BasePermissionMixin
 
-from django.template.defaulttags import register
-
 from emstrack.views import get_page_links
-
-
-# Ambulance status filter
-
-@register.filter
-def get_ambulance_status(status):
-    return AmbulanceStatus[status].value
-
-
-@register.filter
-def get_ambulance_capability(capability):
-    return AmbulanceCapability[capability].value
 
 
 # Django views

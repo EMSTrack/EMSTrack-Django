@@ -13,23 +13,22 @@
 		<thead>
 		<tr>
 			<th>Name</th>
-			<th>Address</th>
-			<th>Comments</th>
-			<th>Updated on</th>
-			<th>by</th>
+			<th>Type</th>
 		</tr>
 		</thead>
 		<tbody>
 		{% for equipment in equipment_list %}
 		<tr>
 			<td>
-				<a href="{% url 'hospital:equipment_detail' pk=equipment.id %}">{{ equipment.equipment.name }}</a>
+				<a href="{% url 'hospital:equipment_detail' pk=equipment.id %}">{{ equipment.name }}</a>
+			</td>
+			<td>
+				{{ equipment.etype|get_equipment_type }}
 			</td>
 		</tr>
 		{% endfor %}
 		</tbody>
 	</table>
 </div>
-
 
 {% endblock %}

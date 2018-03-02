@@ -1,12 +1,17 @@
 from enum import Enum
 
-from django.utils import timezone
 from django.urls import reverse
-
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel
+
+
+# filters
+
+@register.filter
+def get_equipment_type(etype):
+    return EquipmentType[etype].value
 
 
 # Hospital model
@@ -66,8 +71,6 @@ class Equipment(models.Model):
     etype = models.CharField(max_length=1,
                              choices = EQUIPMENT_ETYPE_CHOICES)
     
-    toggleable = models.BooleanField(default=False)
-
     def __str__(self):
         return "{} ({})".format(self.name, self.etype)
 
