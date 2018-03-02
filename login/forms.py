@@ -13,7 +13,8 @@ from extra_views import InlineFormSetView
 
 from ambulance.models import Ambulance
 from hospital.models import Hospital
-from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission, UserProfile
+from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission, UserProfile, \
+    GroupAmbulancePermission, GroupHospitalPermission
 
 
 class SignupForm(auth_forms.UserCreationForm):
