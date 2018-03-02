@@ -112,6 +112,7 @@ class Permissions:
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1
         (key,id) = kwargs.popitem()
+        logger.debug('key = {}, id = {}'.format(key, id))
         try:
             return id in self.can_read[key + 's']
         except KeyError:
