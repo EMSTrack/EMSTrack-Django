@@ -564,7 +564,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         # retrieve someone else's
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h3.id), str(self.e1.name)),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # retrieve own hospital equipment
         response = client.get('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name)),
@@ -676,7 +676,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         # retrieve inexistent
         response = client.get('/api/hospital/{}/equipment/'.format(1000),
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         
         # logout
         client.logout()
@@ -804,7 +804,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
                                     'comment': comment
                                 })
         )
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
 
         # set wrong equipment name
         response = client.patch('/api/hospital/{}/equipment/{}/'.format(str(self.h1.id), str(self.e1.name+'wrong')),
