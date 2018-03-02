@@ -1,9 +1,9 @@
+import logging
+
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
 from rest_framework.decorators import detail_route
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from emstrack.mixins import BasePermissionMixin, \
@@ -14,6 +14,9 @@ from .models import Hospital, HospitalEquipment, Equipment
 
 from .serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
+
+
+logger = logging.getLogger(__name__)
 
 # Django REST Framework Viewsets
     
