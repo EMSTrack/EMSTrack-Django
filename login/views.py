@@ -2,12 +2,11 @@ import logging
 import string, random
 from datetime import timedelta
 
-from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.http.response import HttpResponse, HttpResponseForbidden, HttpResponseRedirect
+from django.http.response import HttpResponse, HttpResponseForbidden
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
-from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
@@ -23,18 +22,19 @@ from drf_extra_fields.geo_fields import PointField
 from django.contrib.auth.models import User, Group
 
 from ambulance.models import AmbulanceStatus, AmbulanceCapability
+from emstrack.mixins import SuccessMessageWithInlinesMixin
 from hospital.models import EquipmentType
 from emstrack.models import defaults
 
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, UserProfile
+    GroupHospitalPermission
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
-    GroupAdminCreateForm, GroupAdminUpdateForm, \
-    GroupProfileAdminForm, UserProfileAdminForm, AmbulancePermissionAdminForm, HospitalPermissionAdminForm
+    GroupAdminUpdateForm, \
+    GroupProfileAdminForm, AmbulancePermissionAdminForm, HospitalPermissionAdminForm
 
 from .permissions import get_permissions
 
@@ -65,21 +65,6 @@ class LogoutView(auth_views.LogoutView):
 
 class AdminView(TemplateView):
     template_name = 'login/admin.html'
-
-
-class AdminActionMixin:
-
-    @property
-    def success_message(self):
-        return NotImplemented
-
-    def forms_valid(self, form, inlines):
-
-        # add message
-        messages.info(self.request, self.success_message)
-
-        # call super
-        return super().forms_valid(form, inlines)
 
 
 # Groups
@@ -130,20 +115,19 @@ class GroupHospitalPermissionAdminInline(InlineFormSet):
     extra = 1
 
 
-class GroupAdminCreateView(AdminActionMixin, CreateView):
+class GroupAdminCreateView(SuccessMessageMixin, CreateView):
     model = Group
     fields = ['name']
     template_name = 'login/group_create.html'
 
-    @property
-    def success_message(self):
+    def get_success_message(self):
         return "Successfully created group '{}'".format(self.object.name)
 
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
 
 
-class GroupAdminUpdateView(AdminActionMixin, UpdateWithInlinesView):
+class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminUpdateForm
@@ -151,8 +135,7 @@ class GroupAdminUpdateView(AdminActionMixin, UpdateWithInlinesView):
                GroupAmbulancePermissionAdminInline,
                GroupHospitalPermissionAdminInline]
 
-    @property
-    def success_message(self):
+    def get_success_message(self):
         return "Successfully created group '{}'".format(self.object.name)
 
     def get_success_url(self):
@@ -198,30 +181,28 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
     extra = 1
 
 
-class UserAdminCreateView(AdminActionMixin, CreateWithInlinesView):
+class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
-    @property
-    def success_message(self):
+    def get_success_message(self):
         return "Successfully created user '{}'".format(self.object.username)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
 
 
-class UserAdminUpdateView(AdminActionMixin, UpdateWithInlinesView):
+class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
-    @property
-    def success_message(self):
+    def get_success_message(self):
         return "Successfully updated user '{}'".format(self.object.username)
 
     def get_success_url(self):

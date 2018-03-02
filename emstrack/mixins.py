@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from rest_framework import mixins
 
 # CreateModelUpdateByMixin
@@ -73,3 +74,17 @@ class BasePermissionMixin:
 
         # retrieve query
         return super().get_queryset().filter(**filter_params)
+
+
+class SuccessMessageWithInlinesMixin:
+
+    def get_success_message(self):
+        return NotImplemented
+
+    def forms_valid(self, form, inlines):
+
+        # add message
+        messages.info(self.request, self.get_success_message())
+
+        # call super
+        return super().forms_valid(form, inlines)
