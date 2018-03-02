@@ -18,6 +18,8 @@
 
         <h3>Permissions:</h3>
 
+        {{ inlined.management_form }}
+
         {% for form in inlines|slice:"1:" %}
         <table>
             {{ form }}
