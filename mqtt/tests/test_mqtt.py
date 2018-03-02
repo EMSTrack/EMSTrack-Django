@@ -1,16 +1,13 @@
 import logging
 import time
-from django.test import TestCase
 
 from django.contrib.auth.models import User
 from django.conf import settings
 
 from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
-from io import BytesIO
 import json
 
-from login.models import UserProfile, AmbulancePermission, HospitalPermission
+from login.models import UserProfile
 
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
@@ -24,13 +21,9 @@ from hospital.models import Hospital, \
 from hospital.serializers import EquipmentSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer
 
-from django.test import Client
-
 from .client import MQTTTestCase, MQTTTestClient
 
-from ..client import MQTTException
 from ..subscribe import SubscribeClient
-from ..publish import SingletonPublishClient
 
 logger = logging.getLogger(__name__)
 
