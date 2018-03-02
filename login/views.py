@@ -28,12 +28,12 @@ from emstrack.models import defaults
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission
+    GroupHospitalPermission, UserProfile
 
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
     AmbulancePermissionAdminForm, HospitalPermissionAdminForm, GroupAdminCreateForm, GroupAdminUpdateForm, \
-    GroupProfileAdminForm
+    GroupProfileAdminForm, UserProfileAdminForm
 
 from .permissions import get_permissions
 
@@ -138,22 +138,37 @@ class UserAdminDetailView(DetailView):
     template_name = 'login/user_detail.html'
 
 
-class UserAdminCreateView(CreateView):
+class UserProfileAdminInline(InlineFormSet):
+    model = UserProfile
+    form_class = UserProfileAdminForm
+
+
+class UserAmbulancePermissionAdminInline(InlineFormSet):
+    model = UserAmbulancePermission
+    fields = ['ambulance', 'can_read', 'can_write']
+
+
+class UserHospitalPermissionAdminInline(InlineFormSet):
+    model = UserHospitalPermission
+    fields = ['hospital', 'can_read', 'can_write']
+
+
+class UserAdminCreateView(CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
+               UserHospitalPermissionAdminInline]
 
-    def get_success_url(self):
-        return self.object.get_absolute_url()
 
-
-class UserAdminUpdateView(UpdateView):
+class UserAdminUpdateView(UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
+               UserHospitalPermissionAdminInline]
 
 
 # MQTT login views

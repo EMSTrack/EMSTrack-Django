@@ -13,7 +13,7 @@ from extra_views import InlineFormSetView
 
 from ambulance.models import Ambulance
 from hospital.models import Hospital
-from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission
+from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission, UserProfile
 
 
 class SignupForm(auth_forms.UserCreationForm):
@@ -174,26 +174,6 @@ class MQTTAuthenticationForm(AuthenticationForm):
         return super().clean()
 
 
-class UserAdminCreateForm(forms.ModelForm):
-
-    groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
-
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
-
-
-class UserAdminUpdateForm(UserAdminCreateForm):
-
-    def __init__(self, *args, **kwargs):
-
-        # call super
-        super().__init__(*args, **kwargs)
-
-        # disable username
-        self.fields['username'].disabled = True
-
-
 class AmbulancePermissionModelChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
         return obj.identifier
@@ -243,3 +223,30 @@ class GroupAdminUpdateForm(GroupAdminCreateForm):
 
         # disable name
         self.fields['name'].disabled = True
+
+
+class UserProfileAdminForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        exclude = ['user']
+
+
+class UserAdminCreateForm(forms.ModelForm):
+
+    groups = forms.ModelMultipleChoiceField(queryset=Group.objects.all(), required=False)
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+
+
+class UserAdminUpdateForm(UserAdminCreateForm):
+
+    def __init__(self, *args, **kwargs):
+
+        # call super
+        super().__init__(*args, **kwargs)
+
+        # disable name
+        self.fields['username'].disabled = True
