@@ -6,27 +6,27 @@
 <h1>User</h1>
 
 <div class="container">
-  <form method="POST" class="post-form">
-    {% csrf_token %}
+    <form method="POST" class="post-form">
+        {% csrf_token %}
 
-    <h3>Details:</h3>
+        <h3>Details:</h3>
 
-    <table>
-      {{ form }}
-    </table>
+        <table>
+            {{ form }}
+        </table>
 
-    <h3>Permissions:</h3>
+        <h3>Permissions:</h3>
 
-    {% for form in inlines %}
-    <table>
-      {{ form }}
-    </table>
-    {% endfor %}
+        {% for form in inlines %}
+        <table>
+            {{ form }}
+        </table>
+        {% endfor %}
 
-    <p>
-      <button type="submit">Save</button>
-    </p>
-  </form>
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
 </div>
 
 {% endblock %}

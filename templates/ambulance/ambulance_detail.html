@@ -5,101 +5,105 @@
 {% block leaflethead %}
     <script>
         var ambulance_status = {{ ambulance_status|safe }};
-    </script>
-{% endblock %}
-
-
-{% block content %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
-    <script>
         var ambulance_id = {{ ambulance.id|safe }};
         var APIBaseUrl = '{% url 'homepage' %}api/';
     </script>
+{% endblock %}
 
-    <h1>Ambulance: {{ ambulance.identifier }}</h1>
+{% block content %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <strong>Identifier:</strong>
-                    <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
-                </p>
-                <p>
-                    <strong>Capability:</strong>
-                    {{ ambulance.capability|get_ambulance_capability }}
-                </p>
-                <p>
-                    <strong>Status:</strong>
-                    {{ ambulance.status|get_ambulance_status }}
-                </p>
-                <p>
-                    <strong>Comment:</strong>
-                    {{ ambulance.comment }}
-                </p>
-                <p>
-                    <strong>Updated on:</strong>
-                    {{ ambulance.updated_on }}
-                </p>
-                <p>
-                    <strong>By:</strong>
-                    {{ ambulance.updated_by }}
-                </p>
-            </div>
+<h1>Ambulance:</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h3>
+                Details:
+            </h3>
+
+            <p>
+                <strong>Identifier:</strong>
+                <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
+            </p>
+            <p>
+                <strong>Capability:</strong>
+                {{ ambulance.capability|get_ambulance_capability }}
+            </p>
+            <p>
+                <strong>Status:</strong>
+                {{ ambulance.status|get_ambulance_status }}
+            </p>
+            <p>
+                <strong>Comment:</strong>
+                {{ ambulance.comment }}
+            </p>
+            <p>
+                <strong>Updated on:</strong>
+                {{ ambulance.updated_on }}
+            </p>
+            <p>
+                <strong>By:</strong>
+                {{ ambulance.updated_by }}
+            </p>
         </div>
     </div>
 
-    <hr>
+    <div class="row">
+        <div class="col">
 
-    <h2>
-        Past Locations
-    </h2>
 
-    <div class="container">
-        <div id="map" style="width: 800px; height: 400px; margin-left: auto; margin-right: auto;"></div>
+            <h3>
+                Past Locations
+            </h3>
+
+            <div class="container">
+                <div id="map" style="width: 800px; height: 400px; margin-left: auto; margin-right: auto;"></div>
+            </div>
+
+            <div class="container">
+
+                <!-- TODO: add page_size control -->
+
+                {% if updates.has_other_pages %}
+                {% include "rest_framework/pagination/numbers.html" %}
+                {% endif %}
+
+                <table class="table table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Location</th>
+                        <th>Comment</th>
+                        <th>Timestamp</th>
+                        <th>Updated on</th>
+                        <th>by</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for update in updates %}
+                    <tr>
+                        <td>{{ update.status|get_ambulance_status }}</td>
+                        <td>{{ update.location }}</td>
+                        <td>{{ update.comment }}</td>
+                        <td>{{ update.timestamp }}</td>
+                        <td>{{ update.updated_by }}</td>
+                        <td>{{ update.updated_on }}</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if updates.has_other_pages %}
+                {% include "rest_framework/pagination/numbers.html" %}
+                {% endif %}
+
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="container">
-
-        <!-- TODO: add page_size control -->
-
-        {% if updates.has_other_pages %}
-        {% include "rest_framework/pagination/numbers.html" %}
-        {% endif %}
-
-        <table class="table table-striped table-condensed">
-            <thead>
-            <tr>
-                <th>Status</th>
-                <th>Location</th>
-                <th>Comment</th>
-                <th>Timestamp</th>
-                <th>Updated on</th>
-                <th>by</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for update in updates %}
-                <tr>
-                    <td>{{ update.status|get_ambulance_status }}</td>
-                    <td>{{ update.location }}</td>
-                    <td>{{ update.comment }}</td>
-                    <td>{{ update.timestamp }}</td>
-                    <td>{{ update.updated_by }}</td>
-                    <td>{{ update.updated_on }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        {% if updates.has_other_pages %}
-        {% include "rest_framework/pagination/numbers.html" %}
-        {% endif %}
-
-    </div>
-
-    <script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
-    <script src="{% static 'js/ambulance_detail.js' %}"></script>
+<script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
+<script src="{% static 'js/ambulance_detail.js' %}"></script>
 
 {% endblock %}

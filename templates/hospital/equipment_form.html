@@ -6,19 +6,19 @@
 <h1>Hospital Equipment</h1>
 
 <div class="container">
-  <form method="POST" class="post-form">
-    {% csrf_token %}
+    <form method="POST" class="post-form">
+        {% csrf_token %}
 
-    <h3>Details:</h3>
+        <h3>Details:</h3>
 
-    <table>
-      {{ form }}
-    </table>
+        <table>
+            {{ form }}
+        </table>
 
-    <p>
-      <button type="submit">Save</button>
-    </p>
-  </form>
+        <p>
+            <button type="submit">Save</button>
+        </p>
+    </form>
 </div>
 
 {% endblock %}
