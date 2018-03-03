@@ -15,11 +15,12 @@ from .models import Hospital, HospitalEquipment, Equipment
 from .serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
-
 logger = logging.getLogger(__name__)
 
+
 # Django REST Framework Viewsets
-    
+
+
 # Hospital viewset
 
 class HospitalViewSet(mixins.ListModelMixin,
@@ -28,7 +29,6 @@ class HospitalViewSet(mixins.ListModelMixin,
                       UpdateModelUpdateByMixin,
                       BasePermissionMixin,
                       viewsets.GenericViewSet):
-    
     """
     API endpoint for manipulating hospitals.
 
@@ -47,11 +47,11 @@ class HospitalViewSet(mixins.ListModelMixin,
     partial_update:
     Partially update existing hospital instance.
     """
-    
+
     filter_field = 'id'
     profile_field = 'hospitals'
     queryset = Hospital.objects.all()
-    
+
     serializer_class = HospitalSerializer
 
     @detail_route()
@@ -59,7 +59,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         """
         Retrive hospital equipment metadata.
         """
-        
+
         hospital = self.get_object()
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
@@ -73,7 +73,6 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
                                UpdateModelUpdateByMixin,
                                viewsets.GenericViewSet):
-    
     """
     API endpoint for manipulating hospital equipment.
 
@@ -89,9 +88,9 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     partial_update:
     Partially update existing hospital equipment instance.
     """
-    
+
     queryset = HospitalEquipment.objects.all()
-    
+
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
 
@@ -100,7 +99,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
         # retrieve user
         user = self.request.user
-        
+
         # retrieve id
         id = int(self.kwargs['id'])
 
@@ -119,11 +118,11 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
                 raise PermissionDenied()
 
         elif (self.request.method == 'PUT' or
-               self.request.method == 'PATCH' or
-               self.request.method == 'DELETE'):
+              self.request.method == 'PATCH' or
+              self.request.method == 'DELETE'):
             if not get_permissions(user).check_can_write(hospital=id):
                 raise PermissionDenied()
 
         # build queryset
-        filter = { 'hospital_id': id }
+        filter = {'hospital_id': id}
         return self.queryset.filter(**filter)

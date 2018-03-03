@@ -7,20 +7,18 @@ from .models import Hospital
 
 
 class HospitalCreateForm(forms.ModelForm):
-
     location = PointField(
-        widget = LeafletPointWidget(attrs={'map_width': 500,
-                                           'map_height': 300})
+        widget=LeafletPointWidget(attrs={'map_width': 500,
+                                         'map_height': 300})
     )
-    
+
     class Meta:
         model = Hospital
-        fields = [ 'name',
-                   'number', 'street', 'unit', 'neighborhood',
-                   'city', 'state', 'zipcode', 'country',
-                   'location', 'comment' ]
+        fields = ['name',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location', 'comment']
 
 
 class HospitalUpdateForm(HospitalCreateForm):
-    
     pass

@@ -17,24 +17,21 @@ logger = logging.getLogger(__name__)
 class CreateModelUpdateByMixin(mixins.CreateModelMixin):
 
     def perform_create(self, serializer):
-        
         serializer.save(updated_by=self.request.user)
-    
+
 
 # UpdateModelUpdateByMixin
 
 class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
 
     def perform_update(self, serializer):
-        
         serializer.save(updated_by=self.request.user)
-        
+
 
 # BasePermissionMixin
 # TODO: Add group permissions
 
 class BasePermissionMixin:
-
     filter_field = 'id'
     profile_field = 'ambulances'
     queryset = None
@@ -43,7 +40,7 @@ class BasePermissionMixin:
 
         # print('@get_queryset {}({})'.format(self.request.user,
         #                                     self.request.method))
-        
+
         # return all objects if superuser
         user = self.request.user
         if user.is_superuser:
@@ -83,7 +80,6 @@ class SuccessMessageWithInlinesMixin:
         return NotImplemented
 
     def forms_valid(self, form, inlines):
-
         # add message
         messages.info(self.request, self.get_success_message(form.cleaned_data))
 
@@ -103,11 +99,10 @@ class UpdatedByWithInlinesMixin:
         for formset in inlines:
 
             # save but do not commit
-            instances = formset.save(commit = False)
+            instances = formset.save(commit=False)
 
             # save form
             for obj in instances:
-
                 # add updated_by to formset instance
                 obj.updated_by = self.request.user
 
@@ -120,7 +115,6 @@ class UpdatedByWithInlinesMixin:
 class UpdatedByMixin:
 
     def form_valid(self, form):
-
         # add updated_by to form and save
         form.instance.updated_by = self.request.user
 

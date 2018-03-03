@@ -18,19 +18,18 @@ class TestSetupData:
 
     @classmethod
     def setUpTestData(cls):
-
         # Add users
         cls.u1 = User.objects.create_user(
             username=settings.MQTT['USERNAME'],
             email='admin@user.com',
             password=settings.MQTT['PASSWORD'],
             is_superuser=True)
-        
+
         cls.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
-        
+
         cls.u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
@@ -52,7 +51,7 @@ class TestSetupData:
             comment='Maintenance due',
             capability=AmbulanceCapability.B.name,
             updated_by=cls.u1)
-        
+
         cls.a2 = Ambulance.objects.create(
             identifier='BC-180',
             comment='Need painting',
@@ -64,7 +63,7 @@ class TestSetupData:
             comment='Engine overhaul',
             capability=AmbulanceCapability.R.name,
             updated_by=cls.u1)
-        
+
         # Add hospitals
         cls.h1 = Hospital.objects.create(
             name='Hospital General',
@@ -72,19 +71,19 @@ class TestSetupData:
             street="don't know",
             comment="no comments",
             updated_by=cls.u1)
-        
+
         cls.h2 = Hospital.objects.create(
             name='Hospital CruzRoja',
             number="4321",
             street='Forgot',
             updated_by=cls.u1)
-        
+
         cls.h3 = Hospital.objects.create(
             name='Hospital Nuevo',
             number="0000",
             street='Not built yet',
             updated_by=cls.u1)
-        
+
         # add equipment
         cls.e1 = Equipment.objects.create(
             name='X-ray',
@@ -93,9 +92,9 @@ class TestSetupData:
         cls.e2 = Equipment.objects.create(
             name='Beds',
             type=EquipmentType.I.name)
-        
+
         cls.e3 = Equipment.objects.create(
-            name='MRI - Ressonance',     # name with space!
+            name='MRI - Ressonance',  # name with space!
             type=EquipmentType.B.name)
 
         # add hospital equipment
@@ -104,7 +103,7 @@ class TestSetupData:
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
-        
+
         cls.he2 = HospitalEquipment.objects.create(
             hospital=cls.h1,
             equipment=cls.e2,
@@ -116,19 +115,19 @@ class TestSetupData:
             equipment=cls.e1,
             value='False',
             updated_by=cls.u1)
-        
+
         cls.he4 = HospitalEquipment.objects.create(
             hospital=cls.h2,
             equipment=cls.e3,
             value='True',
             updated_by=cls.u1)
-        
+
         cls.he5 = HospitalEquipment.objects.create(
             hospital=cls.h3,
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
-        
+
         # add hospitals to users
         UserHospitalPermission.objects.create(user=cls.u1,
                                               hospital=cls.h1,
@@ -143,14 +142,14 @@ class TestSetupData:
                                               can_write=True)
 
         # u3 has no hospitals 
-        
+
         # add ambulances to users
         UserAmbulancePermission.objects.create(user=cls.u1,
                                                ambulance=cls.a2,
                                                can_write=True)
 
         # u2 has no ambulances
-        
+
         UserAmbulancePermission.objects.create(user=cls.u3,
                                                ambulance=cls.a1,
                                                can_read=False)
@@ -173,8 +172,8 @@ class TestSetupData:
         GroupHospitalPermission.objects.create(group=cls.g2,
                                                hospital=cls.h1)
         GroupHospitalPermission.objects.create(group=cls.g2,
-                                              hospital=cls.h2,
-                                              can_write=True)
+                                               hospital=cls.h2,
+                                               can_write=True)
 
         # g3 has no hospitals
 
@@ -195,9 +194,9 @@ class TestSetupData:
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
 
-        #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
-        #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
-        #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
+        # print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
+        # print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
+        # print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
 
 
 class TestSetup(TestSetupData, TestCase):

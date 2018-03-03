@@ -26,20 +26,18 @@ class MyTestCase(MQTTTestCase):
 
     @classmethod
     def setUpClass(cls):
-
         # create server
         super().setUpClass()
 
         # instantiate client
         cls.client = Client()
 
-            
+
 class TestProfile(MyTestCase):
 
     def test_user_profile_serializer(self):
-
         self.maxDiff = None
-        
+
         # test ProfileSerializer
 
         # super will see all ambulances and hospitals
@@ -126,7 +124,6 @@ class TestProfile(MyTestCase):
 class TestProfileViewset(MyTestCase):
 
     def test_profile_viewset(self):
-
         # instantiate client
         client = Client()
 
@@ -140,7 +137,7 @@ class TestProfileViewset(MyTestCase):
         result = JSONParser().parse(BytesIO(response.content))
         answer = UserProfileSerializer(self.u1).data
         self.assertDictEqual(result, answer)
-        
+
         # retrieve someone else's
         response = client.get('/api/user/{}/profile/'.format(str(self.u2.username)),
                               follow=True)
@@ -156,13 +153,13 @@ class TestProfileViewset(MyTestCase):
         result = JSONParser().parse(BytesIO(response.content))
         answer = UserProfileSerializer(self.u3).data
         self.assertDictEqual(result, answer)
-        
+
         # logout
         client.logout()
 
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
-        
+
         # retrieve own
         response = client.get('/api/user/{}/profile/'.format(str(self.u2.username)),
                               follow=True)
@@ -170,46 +167,45 @@ class TestProfileViewset(MyTestCase):
         result = JSONParser().parse(BytesIO(response.content))
         answer = UserProfileSerializer(self.u2).data
         self.assertDictEqual(result, answer)
-        
+
         # retrieve someone else's
         response = client.get('/api/user/{}/profile/'.format(str(self.u1.username)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         response = client.get('/api/user/{}/profile/'.format(str(self.u3.username)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # logout
         client.logout()
 
 
 class TestLogin(MyTestCase):
-            
-    def test_login(self):
 
+    def test_login(self):
         # blank login
         response = self.client.get('/auth/login/')
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = self.client.post('/auth/login/', { 'username': 'testuser11',
-                                                  'password': 'top_secret' },
-                               follow=True)
+        response = self.client.post('/auth/login/', {'username': 'testuser11',
+                                                     'password': 'top_secret'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
-        
+
         # incorrect password
-        response = self.client.post('/auth/login/', { 'username': 'testuser1',
-                                                  'password': 'top_secret0' },
-                               follow=True)
+        response = self.client.post('/auth/login/', {'username': 'testuser1',
+                                                     'password': 'top_secret0'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
-        
+
         # correct login
-        response = self.client.post('/auth/login/', { 'username': 'testuser1',
-                                                  'password': 'top_secret' },
-                               follow=True)
+        response = self.client.post('/auth/login/', {'username': 'testuser1',
+                                                     'password': 'top_secret'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
         self.assertEqual(response.context['user'].username, 'testuser1')
@@ -221,18 +217,18 @@ class TestLogin(MyTestCase):
         self.assertEqual(response.context['user'].is_authenticated, False)
 
         # login user2
-        response = self.client.post('/auth/login/', { 'username': 'testuser2',
-                                                  'password': 'very_secret' },
-                               follow=True)
+        response = self.client.post('/auth/login/', {'username': 'testuser2',
+                                                     'password': 'very_secret'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
         self.assertEqual(response.context['user'].username, 'testuser2')
         self.assertEqual(response.context['user'].is_superuser, False)
 
         # login admin
-        response = self.client.post('/auth/login/', { 'username': settings.MQTT['USERNAME'],
-                                                  'password': settings.MQTT['PASSWORD'] },
-                               follow=True)
+        response = self.client.post('/auth/login/', {'username': settings.MQTT['USERNAME'],
+                                                     'password': settings.MQTT['PASSWORD']},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, True)
         self.assertEqual(response.context['user'].username, settings.MQTT['USERNAME'])
@@ -247,86 +243,85 @@ class TestLogin(MyTestCase):
 class TestMQTTLogin(MyTestCase):
 
     def test_mqtt_login(self):
-
         # blank login
         response = self.client.get('/auth/mqtt/login/')
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser11',
-                                 'password': 'top_secret' },
-                               follow=True)
+                                    {'username': 'testuser11',
+                                     'password': 'top_secret'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # incorrect username superuser
         response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser11' },
-                               follow=True)
+                                    {'username': 'testuser11'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # incorrect password
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser1',
-                                 'password': 'top_secret0' },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'password': 'top_secret0'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # incorrect username superuser
         response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser1' },
-                               follow=True)
+                                    {'username': 'testuser1'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # correct login
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser1',
-                                 'password': 'top_secret' },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'password': 'top_secret'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # incorrect username superuser
         response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser1' },
-                               follow=True)
+                                    {'username': 'testuser1'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
         # login user2
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': 'testuser2',
-                                 'password': 'very_secret' },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'password': 'very_secret'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # incorrect username superuser
         response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': 'testuser2' },
-                               follow=True)
+                                    {'username': 'testuser2'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # username superuser
         response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': settings.MQTT['USERNAME'] },
-                               follow=True)
+                                    {'username': settings.MQTT['USERNAME']},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # login admin
         response = self.client.post('/auth/mqtt/login/',
-                               { 'username': settings.MQTT['USERNAME'],
-                                 'password': settings.MQTT['PASSWORD'] },
-                               follow=True)
+                                    {'username': settings.MQTT['USERNAME'],
+                                     'password': settings.MQTT['PASSWORD']},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # username superuser
         response = self.client.post('/auth/mqtt/superuser/',
-                               { 'username': settings.MQTT['USERNAME'] },
-                               follow=True)
+                                    {'username': settings.MQTT['USERNAME']},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
@@ -335,319 +330,317 @@ class TestMQTTLogin(MyTestCase):
 class TestMQTTACLSubscribe(MyTestCase):
 
     def test_mqtt_acl_subscribe(self):
-
         # Settings
-        
+
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/settings' },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/settings'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # Profile
-        
+
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/user/testuser1/profile' },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/user/testuser1/profile'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/profile' },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/profile'},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # Hospitals
-        
+
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/metadata'.format(self.h1.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/metadata'.format(self.h1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/metadata'.format(self.h3.id) },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-
-        # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/metadata'.format(self.h2.id) },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
-
-        # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/data'.format(self.h1.id) },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-
-        # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/data'.format(self.h3.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/metadata'.format(self.h3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/data'.format(self.h2.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/metadata'.format(self.h2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/equipment/rx/data'.format(self.h1.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/data'.format(self.h1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/equipment/beds/data'.format(self.h3.id) },
-                               follow=True)
-        self.assertEqual(response.status_code, 200)
-
-        # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/equipment/rx/data'.format(self.h2.id) },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
-        
-        # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/metadata'.format(self.h1.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/data'.format(self.h3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/metadata'.format(self.h3.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/data'.format(self.h2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/hospital/{}/metadata'.format(self.h2.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/equipment/rx/data'.format(self.h1.id)},
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can subscribe
+        response = self.client.post('/auth/mqtt/acl/',
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/equipment/beds/data'.format(self.h3.id)},
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can't subscribe
+        response = self.client.post('/auth/mqtt/acl/',
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/equipment/rx/data'.format(self.h2.id)},
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can subscribe
+        response = self.client.post('/auth/mqtt/acl/',
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/metadata'.format(self.h1.id)},
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # can't subscribe
+        response = self.client.post('/auth/mqtt/acl/',
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/metadata'.format(self.h3.id)},
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can subscribe
+        response = self.client.post('/auth/mqtt/acl/',
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/hospital/{}/metadata'.format(self.h2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # Ambulances
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/ambulance/{}/data'.format(self.a1.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/ambulance/{}/data'.format(self.a1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/ambulance/{}/data'.format(self.a3.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/ambulance/{}/data'.format(self.a3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/ambulance/{}/data'.format(self.a2.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/ambulance/{}/data'.format(self.a2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/ambulance/{}/data'.format(self.a1.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/ambulance/{}/data'.format(self.a1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/ambulance/{}/data'.format(self.a3.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/ambulance/{}/data'.format(self.a3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '1',
-                                 'topic': '/ambulance/{}/data'.format(self.a2.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '1',
+                                     'topic': '/ambulance/{}/data'.format(self.a2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
 
 class TestMQTTACLPublish(MyTestCase):
 
     def test_mqtt_acl_publish(self):
-
         # Ambulance data
-        
+
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a1.id) },
-                               follow=True)
-        self.assertEqual(response.status_code, 403)
-        
-        # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a2.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/ambulance/{}/data'.format(self.a1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/ambulance/{}/data'.format(self.a3.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/ambulance/{}/data'.format(self.a2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser2/ambulance/{}/data'.format(self.a1.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/ambulance/{}/data'.format(self.a3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser2/ambulance/{}/data'.format(self.a2.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser2/ambulance/{}/data'.format(self.a1.id)},
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+
+        # can't publish
+        response = self.client.post('/auth/mqtt/acl/',
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser2/ambulance/{}/data'.format(self.a2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser2/ambulance/{}/data'.format(self.a3.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser2/ambulance/{}/data'.format(self.a3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # Hospital data
-        
+
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.h1.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/hospital/{}/data'.format(self.h1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.h2.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/hospital/{}/data'.format(self.h2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser1',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser1/hospital/{}/data'.format(self.h3.id) },
-                               follow=True)
+                                    {'username': 'testuser1',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser1/hospital/{}/data'.format(self.h3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.h1.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser2/hospital/{}/data'.format(self.h1.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.h2.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser2/hospital/{}/data'.format(self.h2.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can publish
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': 'testuser2',
-                                 'clientid': 'test_client',
-                                 'acc': '2',
-                                 'topic': '/user/testuser2/hospital/{}/data'.format(self.h3.id) },
-                               follow=True)
+                                    {'username': 'testuser2',
+                                     'clientid': 'test_client',
+                                     'acc': '2',
+                                     'topic': '/user/testuser2/hospital/{}/data'.format(self.h3.id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
         # Client data
@@ -655,42 +648,41 @@ class TestMQTTACLPublish(MyTestCase):
         username = 'testuser2'
         client_id = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': username,
-                                 'clientid': client_id,
-                                 'acc': '2',
-                                 'topic': '/user/{}/client/{}/status'.format(username, client_id) },
-                               follow=True)
+                                    {'username': username,
+                                     'clientid': client_id,
+                                     'acc': '2',
+                                     'topic': '/user/{}/client/{}/status'.format(username, client_id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
 
         # invalid username
-        
+
         username = 'testuser2'
         client_id = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': username,
-                                 'clientid': client_id,
-                                 'acc': '2',
-                                 'topic': '/user/{}/client/{}/status'.format(username + 'o', client_id) },
-                               follow=True)
+                                    {'username': username,
+                                     'clientid': client_id,
+                                     'acc': '2',
+                                     'topic': '/user/{}/client/{}/status'.format(username + 'o', client_id)},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
-        
+
         # invalid client_id
-        
+
         username = 'testuser2'
         client_id = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
-                               { 'username': username,
-                                 'clientid': client_id,
-                                 'acc': '2',
-                                 'topic': '/user/{}/client/{}/status'.format(username, client_id + 'o') },
-                               follow=True)
+                                    {'username': username,
+                                     'clientid': client_id,
+                                     'acc': '2',
+                                     'topic': '/user/{}/client/{}/status'.format(username, client_id + 'o')},
+                                    follow=True)
         self.assertEqual(response.status_code, 403)
 
 
 class TestMQTTConnect(MyTestCase):
 
-    def is_connected(self, client, MAX_TRIES = 10):
-
+    def is_connected(self, client, MAX_TRIES=10):
         # connected?
         k = 0
         while not client.connected and k < MAX_TRIES:
@@ -698,9 +690,8 @@ class TestMQTTConnect(MyTestCase):
             client.loop()
 
         self.assertEqual(client.connected, True)
-        
-    def test_connect(self):
 
+    def test_connect(self):
         # Start client as admin
         broker = {
             'HOST': 'localhost',
@@ -710,13 +701,13 @@ class TestMQTTConnect(MyTestCase):
         }
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
-        
+
         self.is_connected(MQTTTestClient(broker))
-        
+
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
-        
+
         self.is_connected(MQTTTestClient(broker))
 
         # Start client as common user
@@ -724,27 +715,25 @@ class TestMQTTConnect(MyTestCase):
         broker['PASSWORD'] = 'very_secret'
 
         self.is_connected(MQTTTestClient(broker))
-        
+
         # wrong username
         broker['USERNAME'] = 'testuser22'
         broker['PASSWORD'] = 'very_secret'
 
         with self.assertRaises(MQTTException):
-        
             self.is_connected(MQTTTestClient(broker))
-            
+
         # wrong password
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secreto'
 
         with self.assertRaises(MQTTException):
-
             self.is_connected(MQTTTestClient(broker))
 
 
 class TestMQTTSubscribe(MyTestCase):
 
-    def is_connected(self, client, MAX_TRIES = 10):
+    def is_connected(self, client, MAX_TRIES=10):
 
         # connected?
         k = 0
@@ -753,21 +742,21 @@ class TestMQTTSubscribe(MyTestCase):
             client.loop()
 
         self.assertEqual(client.connected, True)
-        
-    def is_subscribed(self, client, MAX_TRIES = 10):
+
+    def is_subscribed(self, client, MAX_TRIES=10):
 
         client.loop_start()
-        
+
         # connected?
         k = 0
         while len(client.subscribed) and k < MAX_TRIES:
             k += 1
             time.sleep(1)
-            
+
         client.loop_stop()
-        
+
         self.assertEqual(len(client.subscribed), 0)
-    
+
     def test_subscribe(self):
 
         # Start client as admin
@@ -779,17 +768,17 @@ class TestMQTTSubscribe(MyTestCase):
         }
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
-        
+
         client = MQTTTestClient(broker,
-                                check_payload = False)
+                                check_payload=False)
 
         self.is_connected(client)
-        
+
         # subscribe to topics
         client.expect('user/{}/error'.format(broker['USERNAME']))
         client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
-        
+
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
@@ -797,7 +786,7 @@ class TestMQTTSubscribe(MyTestCase):
         client.expect('hospital/{}/data'.format(self.h1.id))
         client.expect('hospital/{}/data'.format(self.h2.id))
         client.expect('hospital/{}/data'.format(self.h3.id))
-            
+
         client.expect('hospital/{}/equipment/+/data'.format(self.h1.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
@@ -805,21 +794,21 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_subscribed(client)
 
         client.wait()
-        
+
         # Start client as common user
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
 
         client = MQTTTestClient(broker,
-                                check_payload = False)
+                                check_payload=False)
 
         self.is_connected(client)
-        
+
         # subscribe to topics
         client.expect('user/{}/error'.format(broker['USERNAME']))
         client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
-        
+
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
@@ -827,7 +816,7 @@ class TestMQTTSubscribe(MyTestCase):
         client.expect('hospital/{}/data'.format(self.h1.id))
         client.expect('hospital/{}/data'.format(self.h2.id))
         client.expect('hospital/{}/data'.format(self.h3.id))
-            
+
         client.expect('hospital/{}/equipment/+/data'.format(self.h1.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
@@ -837,21 +826,21 @@ class TestMQTTSubscribe(MyTestCase):
         self.is_subscribed(client)
 
         client.wait()
-        
+
         # Start client as common user
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secret'
 
         client = MQTTTestClient(broker,
-                                check_payload = False)
+                                check_payload=False)
 
         self.is_connected(client)
-        
+
         # subscribe to topics
         client.expect('user/{}/error'.format(broker['USERNAME']))
         client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
-        
+
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
@@ -859,7 +848,7 @@ class TestMQTTSubscribe(MyTestCase):
         client.expect('hospital/{}/data'.format(self.h1.id))
         client.expect('hospital/{}/data'.format(self.h2.id))
         client.expect('hospital/{}/data'.format(self.h3.id))
-            
+
         client.expect('hospital/{}/equipment/+/data'.format(self.h1.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h2.id))
         client.expect('hospital/{}/equipment/+/data'.format(self.h3.id))
@@ -867,14 +856,13 @@ class TestMQTTSubscribe(MyTestCase):
         # client doesn't know it cannot subscribe to certain topics!
         # full testing in test_mqtt
         self.is_subscribed(client)
-        
+
         client.wait()
 
 
 class TestMQTTLoginTempPassword(MyTestCase):
 
     def test(self):
-
         # instantiate client
         client = Client()
 
@@ -885,8 +873,8 @@ class TestMQTTLoginTempPassword(MyTestCase):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(response.status_code, 403)
         self.assertEqual(result,
-                         { 'detail': 'Authentication credentials were not provided.'})
-        
+                         {'detail': 'Authentication credentials were not provided.'})
+
         # login as admin
         username = settings.MQTT['USERNAME']
         client.login(username=settings.MQTT['USERNAME'],
@@ -899,38 +887,36 @@ class TestMQTTLoginTempPassword(MyTestCase):
         encoded = JSONParser().parse(BytesIO(response.content))
 
         # retrieve temporary password
-        password = TemporaryPassword.objects.get(user__username = username).password
-        
+        password = TemporaryPassword.objects.get(user__username=username).password
+
         self.assertEqual(check_password(password, encoded), True)
 
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
-        
+
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': 'admin',
-                                      'password': encoded },
+                                    {'username': 'admin',
+                                     'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # mqtt login with incorrect username
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': 'admino',
-                                      'password': encoded },
+                                    {'username': 'admino',
+                                     'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # mqtt login with incorrect encoded password
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': 'admin',
-                                      'password': encoded + 'r' },
+                                    {'username': 'admin',
+                                     'password': encoded + 'r'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        
-        
         # login as testuser1
         username = 'testuser1'
         client.login(username=username, password='top_secret')
@@ -942,37 +928,35 @@ class TestMQTTLoginTempPassword(MyTestCase):
         encoded = JSONParser().parse(BytesIO(response.content))
 
         # retrieve temporary password
-        password = TemporaryPassword.objects.get(user__username = username).password
-        
+        password = TemporaryPassword.objects.get(user__username=username).password
+
         self.assertEqual(check_password(password, encoded), True)
 
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
-        
+
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': username,
-                                      'password': encoded },
+                                    {'username': username,
+                                     'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # mqtt login with incorrect username
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': username + 'o',
-                                      'password': encoded },
+                                    {'username': username + 'o',
+                                     'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # mqtt login with incorrect encoded password
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': username,
-                                      'password': encoded + 'r' },
+                                    {'username': username,
+                                     'password': encoded + 'r'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
-
-
 
         # login as testuser2
         username = 'testuser2'
@@ -985,33 +969,32 @@ class TestMQTTLoginTempPassword(MyTestCase):
         encoded = JSONParser().parse(BytesIO(response.content))
 
         # retrieve temporary password
-        password = TemporaryPassword.objects.get(user__username = username).password
-        
+        password = TemporaryPassword.objects.get(user__username=username).password
+
         self.assertEqual(check_password(password, encoded), True)
 
         # logout
         response = self.client.get('/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
-        
+
         # mqtt login with correct temporary password
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': username,
-                                      'password': encoded },
+                                    {'username': username,
+                                     'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
-        
+
         # mqtt login with incorrect username
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': username + 'o',
-                                      'password': encoded },
+                                    {'username': username + 'o',
+                                     'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # mqtt login with incorrect encoded password
         response = self.client.post('/auth/mqtt/login/',
-                                    { 'username': username,
-                                      'password': encoded + 'r' },
+                                    {'username': username,
+                                     'password': encoded + 'r'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
-

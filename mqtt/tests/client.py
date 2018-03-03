@@ -1,24 +1,21 @@
 import logging
-import subprocess, time, os, sys, re
+import os
+import re
+import subprocess
+import time
 from pathlib import Path
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.conf import settings
-
 from django.contrib.auth.models import User, Group
-
-from mqtt.client import BaseClient, MQTTException
-
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-
+    AmbulanceCapability
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
-
-from login.models import UserAmbulancePermission, UserHospitalPermission, \
-    GroupAmbulancePermission, GroupHospitalPermission, \
+from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
+from mqtt.client import BaseClient
 
 logger = logging.getLogger(__name__)
 

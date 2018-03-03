@@ -56,7 +56,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
 
             # serializer.instance will always exist!
-            #if not user.profile.ambulances.filter(can_write=True,
+            # if not user.profile.ambulances.filter(can_write=True,
             #                                      ambulance=instance.id):
             if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
@@ -109,7 +109,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 data = {k: getattr(ambulance, k) for k in ('status', 'orientation', 'location', 'comment')}
 
                 # loop through
-                for k in range(0,n-1):
+                for k in range(0, n-1):
 
                     # process update
                     data = process_update(validated_data[k], data)
@@ -147,7 +147,6 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
     ambulance_identifier = serializers.CharField(source='ambulance.identifier', required=False)
     updated_by_username = serializers.CharField(source='updated_by.username', required=False)
 
-
     class Meta:
         list_serializer_class = AmbulanceUpdateListSerializer
         model = AmbulanceUpdate
@@ -170,7 +169,7 @@ class CallSerializer(serializers.ModelSerializer):
     class Meta:
         model = Call
         fields = ['id', 'active', 'ambulances', 'patients', 'details',
-                  'priority','comment', 'updated_by', 'updated_on']
+                  'priority', 'comment', 'updated_by', 'updated_on']
         read_only_fields = ['updated_by']
 
     def create(self, data):

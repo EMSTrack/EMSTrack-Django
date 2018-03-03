@@ -8,12 +8,11 @@ from .models import Ambulance, Call, Location
 
 
 class AmbulanceCreateForm(forms.ModelForm):
-    
     location = PointField(
-        widget = LeafletPointWidget(attrs={'map_width': 500,
-                                           'map_height': 300})
+        widget=LeafletPointWidget(attrs={'map_width': 500,
+                                         'map_height': 300})
     )
-    
+
     class Meta:
         model = Ambulance
         fields = ['identifier', 'capability', 'status', 'comment', 'location']
@@ -22,13 +21,11 @@ class AmbulanceCreateForm(forms.ModelForm):
 class AmbulanceUpdateForm(AmbulanceCreateForm):
 
     def clean(self):
-
         # call super
         super().clean()
 
         # if updating status or location
         if 'status' in self.changed_data or 'location' in self.changed_data:
-
             # See https://stackoverflow.com/questions/5275476/django-alter-form-data-in-clean-method
             # Mauricio: I think this odd behavior is because timestamp is not present in the form
 
@@ -66,7 +63,6 @@ class CallCreateForm(forms.ModelForm):
     class Meta:
         model = Call
         fields = '__all__'
-
 
 # class AmbulanceStatusCreateForm(forms.ModelForm):
 #     class Meta:

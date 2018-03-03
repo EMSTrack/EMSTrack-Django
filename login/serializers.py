@@ -6,7 +6,6 @@ from .models import UserAmbulancePermission, UserHospitalPermission
 
 from .permissions import get_permissions
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -40,7 +39,6 @@ class UserProfileSerializer(serializers.Serializer):
         fields = ('ambulances', 'hospitals')
 
     def __init__(self, *args, **kwargs):
-
         # call super
         super().__init__(*args, **kwargs)
 
@@ -48,9 +46,7 @@ class UserProfileSerializer(serializers.Serializer):
         self._permissions = get_permissions(self.instance)
 
     def get_ambulances(self, user):
-
         return AmbulancePermissionSerializer(self._permissions.get_permissions('ambulances').values(), many=True).data
 
     def get_hospitals(self, user):
-
         return HospitalPermissionSerializer(self._permissions.get_permissions('hospitals').values(), many=True).data

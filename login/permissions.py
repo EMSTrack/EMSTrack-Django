@@ -11,7 +11,6 @@ PERMISSION_CACHE_SIZE = 10
 
 @lru_cache(maxsize=PERMISSION_CACHE_SIZE)
 def get_permissions(user):
-
     # hit the database for permissions
     return Permissions(user)
 
@@ -21,7 +20,6 @@ cache_info = get_permissions.cache_info
 
 
 class Permissions:
-
     object_fields = ('ambulance', 'hospital')
     profile_fields = ('ambulances', 'hospitals')
     models = (Ambulance, Hospital)
@@ -77,8 +75,8 @@ class Permissions:
                         objs = getattr(group, 'group' + object_field + 'permission_set').all()
                         # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
                         getattr(self, profile_field).update({
-                            getattr(e,object_field + '_id'): {
-                                object_field: getattr(e,object_field),
+                            getattr(e, object_field + '_id'): {
+                                object_field: getattr(e, object_field),
                                 'can_read': e.can_read,
                                 'can_write': e.can_write
                             } for e in objs})
@@ -111,7 +109,7 @@ class Permissions:
 
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1
-        (key,id) = kwargs.popitem()
+        (key, id) = kwargs.popitem()
         # logger.debug('key = {}, id = {}'.format(key, id))
         try:
             return id in self.can_read[key + 's']
@@ -120,7 +118,7 @@ class Permissions:
 
     def check_can_write(self, **kwargs):
         assert len(kwargs) == 1
-        (key,id) = kwargs.popitem()
+        (key, id) = kwargs.popitem()
         try:
             return id in self.can_write[key + 's']
         except KeyError:
@@ -128,7 +126,7 @@ class Permissions:
 
     def get(self, **kwargs):
         assert len(kwargs) == 1
-        (k,v) = kwargs.popitem()
+        (k, v) = kwargs.popitem()
         return getattr(self, k + 's')[v]
 
     def get_permissions(self, profile_field):

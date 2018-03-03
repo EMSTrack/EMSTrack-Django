@@ -1,42 +1,38 @@
 import logging
-import string, random
+import random
+import string
 from datetime import timedelta
 
+from braces.views import CsrfExemptMixin
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
-from django.contrib.auth import views as auth_views
-from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
 from django.views.generic.edit import FormView, CreateView
-
-from braces.views import CsrfExemptMixin
-from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from drf_extra_fields.geo_fields import PointField
-
-from django.contrib.auth.models import User, Group
+from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from ambulance.models import AmbulanceStatus, AmbulanceCapability
 from emstrack.mixins import SuccessMessageWithInlinesMixin
-from hospital.models import EquipmentType
 from emstrack.models import defaults
-
+from hospital.models import EquipmentType
+from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
+    UserAdminCreateForm, UserAdminUpdateForm, \
+    GroupAdminUpdateForm, \
+    GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
+    UserAmbulancePermissionAdminForm, \
+    UserHospitalPermissionAdminForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
     GroupHospitalPermission
-
-from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
-    UserAdminCreateForm, UserAdminUpdateForm, \
-    GroupAdminUpdateForm, \
-    GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm
-
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -434,7 +430,7 @@ class PasswordView(APIView):
                           chars=(string.ascii_letters +
                                  string.digits +
                                  string.punctuation)):
-        return (''.join(random.choice(chars) for _ in range(size)))
+        return ''.join(random.choice(chars) for _ in range(size))
 
     def get(self, request, user__username=None):
         """

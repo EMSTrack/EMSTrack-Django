@@ -12,7 +12,6 @@ from hospital.models import Hospital
 # Profile
 
 class UserProfile(models.Model):
-
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
 
@@ -21,12 +20,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return '{}'.format(self.user)
-    
+
 
 # GroupProfile
 
 class GroupProfile(models.Model):
-
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE)
 
@@ -42,7 +40,6 @@ class GroupProfile(models.Model):
 # Group Ambulance and Hospital Permissions
 
 class Permission(models.Model):
-
     can_read = models.BooleanField(default=True)
     can_write = models.BooleanField(default=False)
 
@@ -51,7 +48,6 @@ class Permission(models.Model):
 
 
 class UserAmbulancePermission(Permission):
-
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
     ambulance = models.ForeignKey(Ambulance,
@@ -66,7 +62,6 @@ class UserAmbulancePermission(Permission):
 
 
 class UserHospitalPermission(Permission):
-
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
@@ -81,7 +76,6 @@ class UserHospitalPermission(Permission):
 
 
 class GroupAmbulancePermission(Permission):
-
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE)
     ambulance = models.ForeignKey(Ambulance,
@@ -96,11 +90,10 @@ class GroupAmbulancePermission(Permission):
 
 
 class GroupHospitalPermission(Permission):
-
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
-                                  on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE)
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
@@ -113,7 +106,6 @@ class GroupHospitalPermission(Permission):
 # TemporaryPassword
 
 class TemporaryPassword(models.Model):
-
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
     password = models.CharField(max_length=254)

@@ -86,7 +86,7 @@ class SignupForm(auth_forms.UserCreationForm):
         fields = ('username',
                   'first_name', 'last_name',
                   'email',
-                  'password1', 'password2', 'position' )
+                  'password1', 'password2', 'position')
 
 
 class AuthenticationForm(auth_forms.AuthenticationForm):
@@ -110,67 +110,65 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
                    'class': 'form-control input-lg'}
         ),
     )
-    
+
 
 class MQTTAuthenticationForm(AuthenticationForm):
-
     """
     This form will allow authentication against a temporary password.
     The password must be retrieved using a valid session only.
     """
-    
+
     def clean(self):
 
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
 
         # see if password is encoded as a hash
-        if password: 
+        if password:
 
             # a hash is in the format: <algorithm>$<iterations>$<hash>
             parts = password.split('$')
-            
+
             if len(parts) >= 3 and len(password) <= 128:
-            
+
                 # most likely a hash
                 hasher = get_hasher()
-            
+
                 if parts[0] == hasher.algorithm:
 
                     # it is a hash, authenticate
                     encoded = password
-                
+
                     try:
-                    
+
                         # retrieve current password
-                        pwd = TemporaryPassword.objects.get(user__username = username)
+                        pwd = TemporaryPassword.objects.get(user__username=username)
                         password = pwd.password
                         valid_until = pwd.created_on + timedelta(seconds=120)
-                    
+
                         # invalidate login if password is expired
                         if timezone.now() > valid_until:
                             password = None
-                    
+
                     except ObjectDoesNotExist:
 
                         password = None
 
                     # check password
                     if password is not None and check_password(password, encoded):
-
                         # confirm user login allowed
                         self.confirm_login_allowed(pwd.user)
-                    
+
                         # valid login
                         return self.cleaned_data
-                
+
                     # otherwise it is an invalid login
                     raise forms.ValidationError(
                         self.error_messages['invalid_login'],
                         code='invalid_login',
                         params={'username': self.username_field.verbose_name},
                     )
-            
+
         # if not a hash, call super to validate password
         return super().clean()
 
@@ -218,20 +216,17 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
 
 
 class GroupProfileAdminForm(forms.ModelForm):
-
     class Meta:
         model = GroupProfile
         exclude = ['group']
 
 
 class GroupAdminUpdateForm(forms.ModelForm):
-
     class Meta:
         model = Group
         fields = ['name']
 
     def __init__(self, *args, **kwargs):
-
         # call super
         super().__init__(*args, **kwargs)
 
@@ -240,14 +235,12 @@ class GroupAdminUpdateForm(forms.ModelForm):
 
 
 class UserProfileAdminForm(forms.ModelForm):
-
     class Meta:
         model = UserProfile
         exclude = ['user']
 
 
 class UserAdminCreateForm(forms.ModelForm):
-
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
@@ -256,7 +249,6 @@ class UserAdminCreateForm(forms.ModelForm):
 class UserAdminUpdateForm(UserAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
-
         # call super
         super().__init__(*args, **kwargs)
 

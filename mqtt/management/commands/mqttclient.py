@@ -1,18 +1,16 @@
-# mqttclient application command
-
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from mqtt.subscribe import SubscribeClient
 
+
 class Command(BaseCommand):
-    
     help = 'Connect to the mqtt broker'
 
     def handle(self, *args, **options):
 
         import os
-        
+
         broker = {
             'USERNAME': '',
             'PASSWORD': '',
@@ -26,15 +24,15 @@ class Command(BaseCommand):
         broker['CLIENT_ID'] = broker['CLIENT_ID'] + '_' + str(os.getpid())
 
         client = SubscribeClient(broker,
-                                 stdout = self.stdout,
-                                 style = self.style,
-                                 verbosity = options['verbosity'])
-        
+                                 stdout=self.stdout,
+                                 style=self.style,
+                                 verbosity=options['verbosity'])
+
         self.stdout.write(
             self.style.SUCCESS("""* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 * * *                    M Q T T   C L I E N T                    * * *
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"""))
-        
+
         try:
             client.loop_forever()
 

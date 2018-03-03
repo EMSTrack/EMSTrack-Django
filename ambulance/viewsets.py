@@ -18,7 +18,7 @@ from .serializers import AmbulanceSerializer, \
 class AmbulancePageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     page_size = 25
-    max_page_size= 1000
+    max_page_size = 1000
 
 
 class AmbulanceLimitOffsetPagination(LimitOffsetPagination):
@@ -34,7 +34,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                        UpdateModelUpdateByMixin,
                        BasePermissionMixin,
                        viewsets.GenericViewSet):
-
     """
     API endpoint for manipulating ambulances.
 
@@ -57,10 +56,10 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     filter_field = 'id'
     profile_field = 'ambulances'
     queryset = Ambulance.objects.all()
-    
+
     serializer_class = AmbulanceSerializer
 
-    @detail_route(methods=['get','post'], pagination_class=AmbulancePageNumberPagination)
+    @detail_route(methods=['get', 'post'], pagination_class=AmbulancePageNumberPagination)
     def updates(self, request, pk=None, **kwargs):
 
         if request.method == 'GET':
