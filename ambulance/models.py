@@ -16,13 +16,18 @@ logger = logging.getLogger(__name__)
 # filters
 
 @register.filter
-def get_ambulance_status(status):
-    return AmbulanceStatus[status].value
+def get_ambulance_status(key):
+    return AmbulanceStatus[key].value
 
 
 @register.filter
-def get_ambulance_capability(capability):
-    return AmbulanceCapability[capability].value
+def get_ambulance_capability(key):
+    return AmbulanceCapability[key].value
+
+
+@register.filter
+def get_location_type(key):
+    return LocationType[key].value
 
 
 def calculate_orientation(location1, location2):
