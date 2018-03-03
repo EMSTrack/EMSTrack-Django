@@ -50,7 +50,7 @@ class LocationAdminCreateForm(forms.ModelForm):
 
     class Meta:
         model = Location
-        fields = ['name', 'type',
+        fields = ['name', 'ltype',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location', 'comment']
