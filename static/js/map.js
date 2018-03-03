@@ -619,7 +619,7 @@ function createCategoryFilter(mymap) {
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
-    filterHtml += '<div style="border-style: solid; border-radius: 5px; padding: 0px 5px 0px 5px;">';
+    filterHtml += '<div style="border-style: solid; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
     Object.keys(ambulance_status).forEach(function (status) {
 
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
@@ -634,7 +634,7 @@ function createCategoryFilter(mymap) {
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for hospital
-    filterHtml += '<div style="border-style: solid; border-radius: 5px; padding: 0px 5px 0px 5px;">';
+    filterHtml += '<div style="border-style: solid; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
     let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
@@ -645,7 +645,7 @@ function createCategoryFilter(mymap) {
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for locations
-    filterHtml += '<div style="border-style: solid; border-radius: 5px; padding: 0px 5px 0px 5px;">';
+    filterHtml += '<div style="border-style: solid; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
     Object.keys(location_type).forEach(function (type) {
 
         categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
