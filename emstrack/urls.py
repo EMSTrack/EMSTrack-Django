@@ -46,7 +46,7 @@ router.register(r'location',
                 LocationViewSet,
                 base_name='api-location')
 
-router.register(r'location/(?P<type>.+)/',
+router.register(r'location/(?P<type>.+)',
                 LocationTypeViewSet,
                 base_name='api-location-type')
 
