@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from emstrack.forms import LeafletPointWidget
 
-from .models import Ambulance, Call
+from .models import Ambulance, Call, Location
 
 
 class AmbulanceCreateForm(forms.ModelForm):
@@ -38,6 +38,26 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
             self.instance.timestamp = now
 
         return self.cleaned_data
+
+
+# Location forms
+
+class LocationAdminCreateForm(forms.ModelForm):
+    location = PointField(
+        widget=LeafletPointWidget(attrs={'map_width': 500,
+                                         'map_height': 300})
+    )
+
+    class Meta:
+        model = Location
+        fields = ['name', 'type',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location', 'comment']
+
+
+class LocationAdminUpdateForm(LocationAdminCreateForm):
+    pass
 
 
 # front end team to choose which fields to display?

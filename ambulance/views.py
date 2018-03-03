@@ -1,8 +1,8 @@
 import uuid
 
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
@@ -10,14 +10,14 @@ from django.views.generic import TemplateView, ListView, \
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location
 
-from .forms import AmbulanceCreateForm, AmbulanceUpdateForm
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
-from emstrack.mixins import BasePermissionMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
 from emstrack.views import get_page_links
 
 
-# Django views
+# Ambulance views
 
 class AmbulancePermissionMixin(BasePermissionMixin):
 
@@ -26,31 +26,16 @@ class AmbulancePermissionMixin(BasePermissionMixin):
     queryset = Ambulance.objects.all()
 
 
-class AmbulanceActionMixin:
-
-    @property
-    def success_message(self):
-        return NotImplemented
-
-    def form_valid(self, form):
-
-        # add message
-        messages.info(self.request, self.success_message)
-
-        # add updated_by to form and save
-        form.instance.updated_by = self.request.user
-
-        # call super
-        return super().form_valid(form)
-
-
 class AmbulanceDetailView(LoginRequiredMixin,
+                          SuccessMessageMixin,
+                          UpdatedByMixin,
                           AmbulancePermissionMixin,
                           DetailView):
 
     model = Ambulance
     
     def get_context_data(self, **kwargs):
+
         # add paginated updates to context
 
         # call supper
@@ -77,7 +62,6 @@ class AmbulanceDetailView(LoginRequiredMixin,
         context['updates'] = updates
         context['page_links'] = get_page_links(self.request, updates)
 
-
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
@@ -93,8 +77,9 @@ class AmbulanceListView(LoginRequiredMixin,
 
 
 class AmbulanceCreateView(LoginRequiredMixin,
+                          SuccessMessageMixin,
+                          UpdatedByMixin,
                           AmbulancePermissionMixin,
-                          AmbulanceActionMixin,
                           CreateView):
     
     model = Ambulance
@@ -105,8 +90,9 @@ class AmbulanceCreateView(LoginRequiredMixin,
     
 
 class AmbulanceUpdateView(LoginRequiredMixin,
+                          SuccessMessageMixin,
+                          UpdatedByMixin,
                           AmbulancePermissionMixin,
-                          AmbulanceActionMixin,
                           UpdateView):
     
     model = Ambulance
@@ -137,6 +123,36 @@ class LocationAdminListView(ListView):
     model = Location
 
 
+class LocationAdminDetailView(DetailView):
+    model = Location
+
+
+class LocationAdminCreateView(SuccessMessageMixin,
+                              UpdatedByMixin,
+                              CreateView):
+    model = Location
+    form_class = LocationAdminCreateForm
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully created location '{}'".format(cleaned_data['name'])
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class LocationAdminUpdateView(SuccessMessageMixin,
+                              UpdatedByMixin,
+                              UpdateView):
+    model = Location
+    form_class = LocationAdminUpdateForm
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated location '{}'".format(cleaned_data['name'])
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
 # NEED REVISING
     
 # Call list page
@@ -151,7 +167,8 @@ class AdminView(ListView):
     model = Call
     template_name = 'ambulance/dispatch_list.html'
     context_object_name = "ambulance_call"
-    
+
+
 # # AmbulanceStatus list page
 # class AmbulanceStatusCreateView(CreateView):
 #     model = AmbulanceStatus

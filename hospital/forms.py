@@ -3,7 +3,8 @@ from django.contrib.gis.forms import PointField
 
 from emstrack.forms import LeafletPointWidget
 
-from .models import HospitalEquipment, Hospital
+from .models import Hospital
+
 
 class HospitalCreateForm(forms.ModelForm):
 
@@ -18,6 +19,7 @@ class HospitalCreateForm(forms.ModelForm):
                    'number', 'street', 'unit', 'neighborhood',
                    'city', 'state', 'zipcode', 'country',
                    'location', 'comment' ]
+
 
 class HospitalUpdateForm(HospitalCreateForm):
     

@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<h1>Location</h1>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h3>Details:</h3>
+
+            <p>
+                <strong>Name:</strong>
+                <a href="{% url 'ambulance:location_update' pk=location.id %}">{{ location.name }}</a>
+            </p>
+            <p>
+                <strong>Type:</strong>
+                {{ location.ltype|get_location_type }}
+            </p>
+            <p>
+                <strong>Address:</strong>
+                {{ location.number }} {{ location.street }} {{ location.unit }},
+                {{ location.city }}, {{ location.state }} {{ location.zipcode }},
+                {{ location.country }}
+            </p>
+            <p>
+                <strong>Location:</strong>
+                {{ location.location }}
+            </p>
+            <p>
+                <strong>Comment:</strong>
+                {{ location.comment }}
+            </p>
+            <p>
+                <strong>Updated on:</strong>
+                {{ location.updated_on }}
+            </p>
+            <p>
+                <strong>By:</strong>
+                {{ location.updated_by }}
+            </p>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

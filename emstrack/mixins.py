@@ -115,3 +115,14 @@ class UpdatedByWithInlinesMixin:
                 obj.save()
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class UpdatedByMixin:
+
+    def form_valid(self, form):
+
+        # add updated_by to form and save
+        form.instance.updated_by = self.request.user
+
+        # call super
+        return super().form_valid(form)

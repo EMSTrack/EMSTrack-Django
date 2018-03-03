@@ -76,8 +76,7 @@ class HospitalListView(LoginRequiredMixin,
 
 # HospitalEquipment
 
-class EquipmentAdminListView(LoginRequiredMixin,
-                             ListView):
+class EquipmentAdminListView(ListView):
     model = Equipment
 
 
@@ -85,7 +84,8 @@ class EquipmentAdminDetailView(DetailView):
     model = Equipment
 
 
-class EquipmentAdminCreateView(SuccessMessageMixin, CreateView):
+class EquipmentAdminCreateView(SuccessMessageMixin,
+                               CreateView):
     model = Equipment
     fields = ['name', 'etype']
 
@@ -96,7 +96,8 @@ class EquipmentAdminCreateView(SuccessMessageMixin, CreateView):
         return self.object.get_absolute_url()
 
 
-class EquipmentAdminUpdateView(SuccessMessageMixin, UpdateView):
+class EquipmentAdminUpdateView(SuccessMessageMixin,
+                               UpdateView):
     model = Equipment
     fields = ['name', 'etype']
 
