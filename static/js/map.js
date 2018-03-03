@@ -516,6 +516,8 @@ function addHospitalToMap(hospital) {
 
 function addLocationToMap(location) {
 
+	// TODO: Separate icons by layers depending on type
+
     console.log('Adding location "' + location.name +
         '[id=' + location.id + ']"' +
         '[' + location.location.latitude + ' ' +
