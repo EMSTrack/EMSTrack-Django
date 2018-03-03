@@ -7,7 +7,7 @@ from rest_framework.pagination import PageNumberPagination, LimitOffsetPaginatio
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 
-from .models import Location, Ambulance
+from .models import Location, Ambulance, LocationType
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer
 
