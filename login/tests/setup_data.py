@@ -3,12 +3,12 @@ from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 
-from login.models import UserProfile, \
+from login.models import \
     GroupHospitalPermission, GroupAmbulancePermission, \
     UserHospitalPermission, UserAmbulancePermission
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, Location, LocationType
+    AmbulanceCapability, Location, LocationType
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType

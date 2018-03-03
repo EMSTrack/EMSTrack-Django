@@ -7,59 +7,58 @@ from rest_framework.pagination import PageNumberPagination, LimitOffsetPaginatio
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 
-from .models import Location
+from .models import Location, Ambulance
 
-from .serializers import LocationSerializer, \
-    LocationUpdateSerializer
+from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer
 
 
 # Django REST Framework Viewsets
 
-class LocationPageNumberPagination(PageNumberPagination):
+class AmbulancePageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     page_size = 25
     max_page_size = 1000
 
 
-class LocationLimitOffsetPagination(LimitOffsetPagination):
+class AmbulanceLimitOffsetPagination(LimitOffsetPagination):
     default_limit = 100
     max_limit = 1000
 
 
-# Location viewset
+# Ambulance viewset
 
-class LocationViewSet(mixins.ListModelMixin,
+class AmbulanceViewSet(mixins.ListModelMixin,
                        mixins.RetrieveModelMixin,
                        CreateModelUpdateByMixin,
                        UpdateModelUpdateByMixin,
                        BasePermissionMixin,
                        viewsets.GenericViewSet):
     """
-    API endpoint for manipulating locations.
+    API endpoint for manipulating ambulances.
 
     list:
-    Retrieve list of locations.
+    Retrieve list of ambulances.
 
     retrieve:
-    Retrieve an existing location instance.
+    Retrieve an existing ambulance instance.
 
     create:
-    Create new location instance.
+    Create new ambulance instance.
     
     update:
-    Update existing location instance.
+    Update existing ambulance instance.
 
     partial_update:
-    Partially update existing location instance.
+    Partially update existing ambulance instance.
     """
 
     filter_field = 'id'
-    profile_field = 'locations'
-    queryset = Location.objects.all()
+    profile_field = 'ambulances'
+    queryset = Ambulance.objects.all()
 
-    serializer_class = LocationSerializer
+    serializer_class = AmbulanceSerializer
 
-    @detail_route(methods=['get', 'post'], pagination_class=LocationPageNumberPagination)
+    @detail_route(methods=['get', 'post'], pagination_class=AmbulancePageNumberPagination)
     def updates(self, request, pk=None, **kwargs):
 
         if request.method == 'GET':
@@ -72,41 +71,41 @@ class LocationViewSet(mixins.ListModelMixin,
 
     def updates_get(self, request, pk=None, **kwargs):
         """
-        Retrieve and paginate location updates.
+        Retrieve and paginate ambulance updates.
         Use ?page=10&page_size=100 to control pagination.
         """
 
         # retrieve updates
-        location = self.get_object()
-        location_updates = location.locationupdate_set.order_by('-timestamp')
+        ambulance = self.get_object()
+        ambulance_updates = ambulance.ambulanceupdate_set.order_by('-timestamp')
 
         # paginate
-        page = self.paginate_queryset(location_updates)
+        page = self.paginate_queryset(ambulance_updates)
 
         if page is not None:
-            serializer = LocationUpdateSerializer(page, many=True)
+            serializer = AmbulanceUpdateSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
 
         # return all if not paginated
-        serializer = LocationUpdateSerializer(location_updates, many=True)
+        serializer = AmbulanceUpdateSerializer(ambulance_updates, many=True)
         return Response(serializer.data)
 
     def updates_put(self, request, pk=None, **kwargs):
         """
-        Bulk location updates.
+        Bulk ambulance updates.
         """
 
-        # retrieve location
-        location = self.get_object()
+        # retrieve ambulance
+        ambulance = self.get_object()
 
         # retrieve user
         updated_by = kwargs.pop('updated_by')
 
         # update all serializers
-        serializer = LocationUpdateSerializer(data=request.data,
+        serializer = AmbulanceUpdateSerializer(data=request.data,
                                                many=True)
         if serializer.is_valid():
-            serializer.save(location=location, updated_by=updated_by)
+            serializer.save(ambulance=ambulance, updated_by=updated_by)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
