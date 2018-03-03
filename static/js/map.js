@@ -618,6 +618,8 @@ function createCategoryFilter(mymap) {
 
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
+
+    filterHtml += '<div style="border-style: solid; border-radius: 5px">';
     Object.keys(ambulance_status).forEach(function (status) {
 
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
@@ -629,8 +631,10 @@ function createCategoryFilter(mymap) {
             + ambulance_status[status] + "</label></div>";
 
     });
+    filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for hospital
+    filterHtml += '<div style="border-style: solid; border-radius: 5px">';
     let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
@@ -638,8 +642,10 @@ function createCategoryFilter(mymap) {
         + category + '" type="checkbox" value="" '
         + (visibleCategory[category] ? 'checked' : '') + '>'
         + category + "</label></div>";
+    filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for locations
+    filterHtml += '<div style="border-style: solid; border-radius: 5px">';
     Object.keys(location_type).forEach(function (type) {
 
         categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
@@ -651,6 +657,7 @@ function createCategoryFilter(mymap) {
             + location_type[type] + "</label></div>";
 
     });
+    filterHtml += "</div>";
 
     // Append html code to container
     container.innerHTML = filterHtml;
