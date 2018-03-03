@@ -8,7 +8,7 @@ from login.models import UserProfile, \
     UserHospitalPermission, UserAmbulancePermission
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
+    AmbulanceStatus, AmbulanceCapability, Location, LocationType
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
@@ -194,9 +194,28 @@ class TestSetupData:
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
 
-        # print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
-        # print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
-        # print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
+        # Locations
+        cls.l1 = Location.objects.create(
+            name='AED 1',
+            type=LocationType.A.name,
+            number="1234",
+            street="don't know",
+            comment="no comments",
+            updated_by=cls.u1)
+
+        cls.l2 = Location.objects.create(
+            name='Base 1',
+            type=LocationType.B.name,
+            number="4321",
+            street='Forgot',
+            updated_by=cls.u1)
+
+        cls.l3 = Location.objects.create(
+            name='AED 2',
+            type=LocationType.A.name,
+            number="0000",
+            street='Not built yet',
+            updated_by=cls.u1)
 
 
 class TestSetup(TestSetupData, TestCase):

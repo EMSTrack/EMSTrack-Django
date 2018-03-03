@@ -6,7 +6,7 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation
+from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, Location
 
 logger = logging.getLogger(__name__)
 
@@ -163,7 +163,48 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
                             'updated_by_username', 'updated_on']
 
 
+# Location serializers
+
+class LocationSerializer(serializers.ModelSerializer):
+    location = PointField(required=False)
+
+    class Meta:
+        model = Location
+        fields = ['id',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location',
+                  'name', 'type',
+                  'comment', 'updated_by', 'updated_on']
+        read_only_fields = ('updated_by',)
+
+    def create(self, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        # only super can create
+        if not user.is_superuser:
+            raise PermissionDenied()
+
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        # only super can create
+        if not user.is_superuser:
+            raise PermissionDenied()
+
+        return super().update(instance, validated_data)
+
+
 # Call serializer
+
 class CallSerializer(serializers.ModelSerializer):
 
     class Meta:
