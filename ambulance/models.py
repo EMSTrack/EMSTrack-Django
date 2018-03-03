@@ -292,6 +292,9 @@ class Location(AddressModel, UpdatedByModel):
     # location
     location = models.PointField(srid=4326, null=True)
 
+    def get_absolute_url(self):
+        return reverse('ambulance:location_detail', kwargs={'pk': self.id})
+
     def __str__(self):
         return "{} @{} ({})".format(self.name, self.location, self.comment)
 
