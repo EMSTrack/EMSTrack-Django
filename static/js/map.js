@@ -114,7 +114,7 @@ $(document).ready(function () {
         });
 
     // Create status filter on the right hand top corner
-    createStatusFilter(mymap);
+    createCategoryFilter(mymap);
 
     // Submit form
     $('#dispatchForm').submit(function (e) {
@@ -600,7 +600,7 @@ function updateDetailPanel(ambulance) {
 }
 
 /* Create status filter on the top right corner of the map */
-function createStatusFilter(mymap) {
+function createCategoryFilter(mymap) {
 
     // Add the checkbox on the top right corner for filtering.
     var container = L.DomUtil.create('div', 'filter-options');
@@ -616,7 +616,15 @@ function createStatusFilter(mymap) {
 
     });
 
-    // Append html code to container 
+    filterHtml += "<hr/>";
+
+    //Generate HTML code for checkboxes for hospital
+    let category = 'hospital'
+    categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
+    categoryGroupLayers[category].addTo(mymap);
+    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + category + '" type="checkbox" value="" checked>' + category + "</label></div>";
+
+    // Append html code to container
     container.innerHTML = filterHtml;
 
     // Add the checkboxes.
