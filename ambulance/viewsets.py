@@ -114,6 +114,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 # Location viewset
 
 class LocationViewSet(mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
                       viewsets.GenericViewSet):
     """
     API endpoint for manipulating locations.
@@ -123,3 +124,4 @@ class LocationViewSet(mixins.ListModelMixin,
     """
     queryset = Location.objects.all()
     serializer_class = LocationSerializer
+    lookup_field = 'type'
