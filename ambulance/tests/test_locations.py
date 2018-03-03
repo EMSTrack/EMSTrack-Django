@@ -90,36 +90,35 @@ class TestLocationGetList(TestSetup):
         # logout
         client.logout()
 
-    def _test_location_get_viewset(self):
+    def test_location_get_viewset_by_type(self):
         # instantiate client
         client = Client()
 
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        # retrieve any location
-        response = client.get('/api/location/{}/'.format(str(self.l1.id)),
+        # retrieve locations
+        response = client.get('/api/location/AED/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = LocationSerializer(Location.objects.get(id=self.l1.id)).data
-        self.assertDictEqual(result, answer)
+        answer = [LocationSerializer(self.l1).data,
+                  LocationSerializer(self.l3).data]
+        self.assertCountEqual(result, answer)
 
-        # retrieve any location
-        response = client.get('/api/location/{}/'.format(str(self.l2.id)),
+        response = client.get('/api/location/Base/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = LocationSerializer(Location.objects.get(id=self.l2.id)).data
-        self.assertDictEqual(result, answer)
+        answer = [LocationSerializer(self.l2).data]
+        self.assertCountEqual(result, answer)
 
-        # retrieve any location
-        response = client.get('/api/location/{}/'.format(str(self.l3.id)),
+        response = client.get('/api/location/Other/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = LocationSerializer(Location.objects.get(id=self.l3.id)).data
-        self.assertDictEqual(result, answer)
+        answer = []
+        self.assertCountEqual(result, answer)
 
         # logout
         client.logout()
@@ -127,25 +126,28 @@ class TestLocationGetList(TestSetup):
         # login as testuser1
         client.login(username='testuser1', password='top_secret')
 
-        # retrieve own's
-        response = client.get('/api/location/{}/'.format(str(self.l1.id)),
+        # retrieve locations
+        response = client.get('/api/location/AED/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = LocationSerializer(Location.objects.get(id=self.l1.id)).data
-        self.assertDictEqual(result, answer)
+        answer = [LocationSerializer(self.l1).data,
+                  LocationSerializer(self.l3).data]
+        self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/{}/'.format(str(self.l2.id)),
+        response = client.get('/api/location/Base/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = LocationSerializer(Location.objects.get(id=self.l2.id)).data
-        self.assertDictEqual(result, answer)
+        answer = [LocationSerializer(self.l2).data]
+        self.assertCountEqual(result, answer)
 
-        # retrieve someone else's
-        response = client.get('/api/location/{}/'.format(str(self.l3.id)),
+        response = client.get('/api/location/Other/',
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = []
+        self.assertCountEqual(result, answer)
 
         # logout
         client.logout()
@@ -153,22 +155,28 @@ class TestLocationGetList(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
-        # retrieve someone else's
-        response = client.get('/api/location/{}/'.format(str(self.l1.id)),
+        # retrieve locations
+        response = client.get('/api/location/AED/',
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [LocationSerializer(self.l1).data,
+                  LocationSerializer(self.l3).data]
+        self.assertCountEqual(result, answer)
 
-        # retrieve someone else's
-        response = client.get('/api/location/{}/'.format(str(self.l2.id)),
+        response = client.get('/api/location/Base/',
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = [LocationSerializer(self.l2).data]
+        self.assertCountEqual(result, answer)
 
-        # retrieve someone else's
-        response = client.get('/api/location/{}/'.format(str(self.l3.id)),
+        response = client.get('/api/location/Other/',
                               follow=True)
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = []
+        self.assertCountEqual(result, answer)
 
         # logout
         client.logout()
-
-

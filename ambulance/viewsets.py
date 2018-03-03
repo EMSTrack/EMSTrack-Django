@@ -137,4 +137,4 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         type = self.kwargs['type']
-        return Location.objects.filter(type=type)
+        return Location.objects.filter(type__name=type)

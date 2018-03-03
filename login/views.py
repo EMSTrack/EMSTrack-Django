@@ -19,7 +19,7 @@ from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesV
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ambulance.models import AmbulanceStatus, AmbulanceCapability
+from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from hospital.models import EquipmentType
@@ -499,11 +499,13 @@ class SettingsView(APIView):
         ambulance_status = {m.name: m.value for m in AmbulanceStatus}
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
         equipment_type = {m.name: m.value for m in EquipmentType}
+        location_type = {m.name: m.value for m in LocationType}
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
                         'ambulance_capability': ambulance_capability,
                         'equipment_type': equipment_type,
+                        'location_type': location_type,
                         'defaults': defaults.copy()}
 
         # serialize defaults.location
