@@ -33,13 +33,13 @@
 						{{ location.ltype|get_location_type }}
 					</td>
 					<td>
-						{{ hospital.number }} {{ hospital.street }} {{ hospital.unit }},
-						{{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }},
-						{{ hospital.country }}
+						{{ location.number }} {{ location.street }} {{ location.unit }},
+						{{ location.city }}, {{ location.state }} {{ location.zipcode }},
+						{{ location.country }}
 					</td>
-					<td>{{ hospital.comment }}</td>
-					<td>{{ hospital.updated_on }}</td>
-					<td>{{ hospital.updated_by.username }}</td>
+					<td>{{ location.comment }}</td>
+					<td>{{ location.updated_on }}</td>
+					<td>{{ location.updated_by.username }}</td>
 				</tr>
 				{% endfor %}
 				</tbody>
