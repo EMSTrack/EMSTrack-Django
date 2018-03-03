@@ -37,7 +37,9 @@ var hospitalIcon = L.icon({
 });
 var locationIcon = L.icon({
 	iconUrl: '/static/icons/place_marker.png',
-	iconSize: [40, 40]
+	iconSize: [40, 40],
+	iconAnchor: [64, 0]
+
 });
 
 // TODO: different icons for different location types
