@@ -19,8 +19,9 @@ Object.keys(ambulance_status).forEach(function(status) {
 });
 
 // add hospital
-markersByCategory['hospital'] = [];
-visibleCategory['hospital'] = true;
+var category = 'Hospital';
+markersByCategory[category] = [];
+visibleCategory[category] = true;
 
 // add location_type
 Object.keys(location_type).forEach(function(type) {
@@ -527,7 +528,7 @@ function addHospitalToMap(hospital) {
             });
 
     // Add to a map to differentiate the layers between statuses.
-	let category = 'hospital'
+	let category = 'Hospital'
     markersByCategory[category].push(hospitalMarkers[hospital.id]);
 
     // If layer is not visible, remove marker
@@ -577,11 +578,11 @@ function addLocationToMap(location) {
             });
 
     // Add to a map to differentiate the layers between typees.
-    markersByCategory[location.type].push(ambulanceMarkers[location.id]);
+    markersByCategory[location.type].push(locationMarkers[location.id]);
 
     // If layer is not visible, remove marker
     if (!visibleCategory[location.type]) {
-        let marker = ambulanceMarkers[location.id];
+        let marker = locationMarkers[location.id];
         categoryGroupLayers[location.type].removeLayer(marker);
         mymap.removeLayer(marker);
     }
@@ -629,7 +630,7 @@ function createCategoryFilter(mymap) {
     });
 
     //Generate HTML code for checkboxes for hospital
-    let category = 'hospital'
+    let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
     filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
