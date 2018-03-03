@@ -576,6 +576,16 @@ function addLocationToMap(location) {
                     });
             });
 
+    // Add to a map to differentiate the layers between typees.
+    markersByCategory[location.type].push(ambulanceMarkers[location.id]);
+
+    // If layer is not visible, remove marker
+    if (!visibleCategory[location.type]) {
+        let marker = ambulanceMarkers[location.id];
+        categoryGroupLayers[location.type].removeLayer(marker);
+        mymap.removeLayer(marker);
+    }
+    
 };
 
 /*
@@ -612,17 +622,31 @@ function createCategoryFilter(mymap) {
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
         categoryGroupLayers[status].addTo(mymap);
 
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + status + '" type="checkbox" value="" checked>' + ambulance_status[status] + "</label></div>";
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
+            + status + '" type="checkbox" value="" checked>' 
+            + ambulance_status[status] + "</label></div>";
 
     });
-
-    filterHtml += "<hr/>";
 
     //Generate HTML code for checkboxes for hospital
     let category = 'hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
-    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' + category + '" type="checkbox" value="" checked>' + category + "</label></div>";
+    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
+        + category + '" type="checkbox" value="" checked>' 
+        + category + "</label></div>";
+
+    //Generate HTML code for checkboxes for locations
+    Object.keys(location_type).forEach(function (type) {
+
+        categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
+        categoryGroupLayers[type].addTo(mymap);
+
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
+            + type + '" type="checkbox" value="" checked>' 
+            + location_type[type] + "</label></div>";
+
+    });
 
     // Append html code to container
     container.innerHTML = filterHtml;
