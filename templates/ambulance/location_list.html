@@ -30,7 +30,7 @@
 						<a href="{% url 'ambulance:location_detail' pk=location.id %}">{{ location.name }}</a>
 					</td>
 					<td>
-						{{ location.ltype|get_location_type }}
+						{{ location.type|get_location_type }}
 					</td>
 					<td>
 						{{ location.number }} {{ location.street }} {{ location.unit }},

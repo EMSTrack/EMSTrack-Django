@@ -26,7 +26,7 @@
 						<a href="{% url 'hospital:equipment_detail' pk=equipment.id %}">{{ equipment.name }}</a>
 					</td>
 					<td>
-						{{ equipment.etype|get_equipment_type }}
+						{{ equipment.type|get_equipment_type }}
 					</td>
 				</tr>
 				{% endfor %}

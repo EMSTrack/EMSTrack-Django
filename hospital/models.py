@@ -10,8 +10,8 @@ from emstrack.models import AddressModel, UpdatedByModel
 # filters
 
 @register.filter
-def get_equipment_type(etype):
-    return EquipmentType[etype].value
+def get_equipment_type(type):
+    return EquipmentType[type].value
 
 
 # Hospital model
@@ -68,11 +68,11 @@ class Equipment(models.Model):
 
     EQUIPMENT_ETYPE_CHOICES = \
         [(m.name, m.value) for m in EquipmentType]
-    etype = models.CharField(max_length=1,
+    type = models.CharField(max_length=1,
                              choices = EQUIPMENT_ETYPE_CHOICES)
     
     def __str__(self):
-        return "{} ({})".format(self.name, self.etype)
+        return "{} ({})".format(self.name, self.type)
 
     def get_absolute_url(self):
         return reverse('hospital:equipment_detail', kwargs={'pk': self.id})

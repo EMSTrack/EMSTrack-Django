@@ -339,15 +339,15 @@ class MQTTTestCase(StaticLiveServerTestCase):
             # add equipment
             cls.e1 = Equipment.objects.create(
                 name='X-ray',
-                etype=EquipmentType.B.name)
+                type=EquipmentType.B.name)
             
             cls.e2 = Equipment.objects.create(
                 name='Beds',
-                etype=EquipmentType.I.name)
+                type=EquipmentType.I.name)
             
             cls.e3 = Equipment.objects.create(
                 name='MRI - Ressonance',     # name with space!
-                etype=EquipmentType.B.name)
+                type=EquipmentType.B.name)
             
             # add hospital equipment
             cls.he1 = HospitalEquipment.objects.create(

@@ -285,7 +285,7 @@ class Location(AddressModel, UpdatedByModel):
     # location type
     LOCATION_TYPE_CHOICES = \
         [(m.name, m.value) for m in LocationType]
-    ltype = models.CharField(max_length=1,
+    type = models.CharField(max_length=1,
                              choices=LOCATION_TYPE_CHOICES,
                              default=LocationType.O.name)
 

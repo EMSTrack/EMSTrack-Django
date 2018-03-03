@@ -58,7 +58,7 @@ class HospitalEquipmentSerializer(serializers.ModelSerializer):
 
     hospital_name = serializers.CharField(source='hospital.name')
     equipment_name = serializers.CharField(source='equipment.name')
-    equipment_etype = serializers.CharField(source='equipment.etype')
+    equipment_etype = serializers.CharField(source='equipment.type')
     
     class Meta:
         model = HospitalEquipment

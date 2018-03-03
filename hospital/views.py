@@ -87,7 +87,7 @@ class EquipmentAdminDetailView(DetailView):
 class EquipmentAdminCreateView(SuccessMessageMixin,
                                CreateView):
     model = Equipment
-    fields = ['name', 'etype']
+    fields = ['name', 'type']
 
     def get_success_message(self, cleaned_data):
         return "Successfully created equipment '{}'".format(self.object.name)
@@ -99,7 +99,7 @@ class EquipmentAdminCreateView(SuccessMessageMixin,
 class EquipmentAdminUpdateView(SuccessMessageMixin,
                                UpdateView):
     model = Equipment
-    fields = ['name', 'etype']
+    fields = ['name', 'type']
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated equipment '{}'".format(self.object.name)
