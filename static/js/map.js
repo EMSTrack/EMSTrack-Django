@@ -624,7 +624,8 @@ function createCategoryFilter(mymap) {
         categoryGroupLayers[status].addTo(mymap);
 
         filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-            + status + '" type="checkbox" value="" checked>' 
+            + status + '" type="checkbox" value="" '
+            + (visibleCategory[status] ? 'checked' : '') + '>'
             + ambulance_status[status] + "</label></div>";
 
     });
@@ -634,7 +635,8 @@ function createCategoryFilter(mymap) {
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
     filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-        + category + '" type="checkbox" value="" checked>' 
+        + category + '" type="checkbox" value="" '
+        + (visibleCategory[category] ? 'checked' : '') + '>'
         + category + "</label></div>";
 
     //Generate HTML code for checkboxes for locations
@@ -644,7 +646,8 @@ function createCategoryFilter(mymap) {
         categoryGroupLayers[type].addTo(mymap);
 
         filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-            + type + '" type="checkbox" value="" checked>' 
+            + type + '" type="checkbox" value="" '
+            + (visibleCategory[type] ? 'checked' : '') + '>'
             + location_type[type] + "</label></div>";
 
     });
