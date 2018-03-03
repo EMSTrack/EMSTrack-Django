@@ -4,6 +4,9 @@ var ambulances = {};	// Store ambulance details
 var hospitalMarkers = {};  // Store hospital markers
 var hospitals = {};	// Store hospital details
 
+var locationMarkers = {};  // Store location markers
+var locations = {};	// Store location details
+
 var visibleStatus = {};
 var markersByStatus = {};
 Object.keys(ambulance_status).forEach(function(status) {
@@ -32,12 +35,19 @@ var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/hospital_icon.png',
 	iconSize: [40, 40]
 });
+var locationIcon = L.icon({
+	iconUrl: '/static/icons/place_marker.png',
+	iconSize: [40, 40]
+});
+
+// TODO: different icons for different location types
+// TODO: different colors for ambulance status
+// TODO: better hospital icon
 
 /**
  * Ambulance statuses 
  */
 
-var STATUS_IN_SERVICE = "IS";
 var STATUS_AVAILABLE = "AV";
 var STATUS_OUT_OF_SERVICE = "OS";
 
@@ -133,44 +143,55 @@ $(document).ready(function() {
 function onConnect() {
 
     console.log("Connected to MQTT broker");
-    
+
     // retrieve profile from api
     console.log("Retrieving profile from API");
-    $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function(data) {
+    $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
 
-	// Subscribe to hospitals
-	$.each(data.hospitals, function(index) {
-	    let topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
-	    mqttClient.subscribe(topicName);
-	    console.log('Subscribing to topic: ' + topicName);
-	});
-	
-	// Subscribe to ambulances
-	$.each(data.ambulances, function(index) {
-	    let topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
-	    mqttClient.subscribe(topicName);
-	    console.log('Subscribing to topic: ' + topicName);
-	});
+        // Subscribe to hospitals
+        $.each(data.hospitals, function (index) {
+            let topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+        });
+
+        // Subscribe to ambulances
+        $.each(data.ambulances, function (index) {
+            let topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+        });
 
     });
-    
+
+    // retrieve locations from api
+    console.log("Retrieving locations from API");
+    $.getJSON(APIBaseUrl + 'location/', function (data) {
+
+        // add location
+        $.each(data, function (index) {
+        	addLocationToMap(data[index]);
+        });
+        
+    });
+
     // publish to mqtt on status change from details options dropdown
-    $('#ambulance-detail-status-select').change(function() {
+    $('#ambulance-detail-status-select').change(function () {
 
-	// Get status
-	status = JSON.stringify({ 'status': this.value });
+        // Get status
+        status = JSON.stringify({'status': this.value});
 
-	// Send message
-	let id = $('#ambulance-detail-id').val();
-	let topic = "user/" + username + "/ambulance/" + id + "/data";
-	let message = new Paho.MQTT.Message(status);
-	message.destinationName = topic
-	message.qos = 2;
-	mqttClient.send(message);
-	console.log('Sent message: "' + topic + ':' + status + '"');
-	
+        // Send message
+        let id = $('#ambulance-detail-id').val();
+        let topic = "user/" + username + "/ambulance/" + id + "/data";
+        let message = new Paho.MQTT.Message(status);
+        message.destinationName = topic
+        message.qos = 2;
+        mqttClient.send(message);
+        console.log('Sent message: "' + topic + ':' + status + '"');
+
     });
-    
+
 };
 
 /* Handle missconnection */
@@ -488,6 +509,43 @@ function addHospitalToMap(hospital) {
 				    });		
 	    });
     
+};
+
+function addLocationToMap(location) {
+
+    console.log('Adding location "' + location.name +
+        '[id=' + location.id + ']"' +
+        '[' + location.location.latitude + ' ' +
+        location.location.longitude + '] ' +
+        ' to map');
+
+    // store location details in an array
+    locations[location.id] = location;
+
+    // set icon by status
+    let coloredIcon = locationIcon;
+
+    // If location marker doesn't exist
+    locationMarkers[location.id] = L.marker([location.location.latitude,
+            location.location.longitude],
+        {icon: coloredIcon})
+        .bindPopup("<strong>" + location.name + "</strong>")
+        .addTo(mymap);
+
+    // Bind id to icons
+    locationMarkers[location.id]._icon.id = location.id;
+
+    // Collapse panel on icon hover.
+    locationMarkers[location.id]
+        .on('mouseover',
+            function (e) {
+                // open popup bubble
+                this.openPopup().on('mouseout',
+                    function (e) {
+                        this.closePopup();
+                    });
+            });
+
 };
 
 /*
