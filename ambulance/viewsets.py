@@ -136,5 +136,9 @@ class LocationTypeViewSet(mixins.ListModelMixin,
     serializer_class = LocationSerializer
 
     def get_queryset(self):
-        type = self.kwargs['type']
-        return Location.objects.filter(type__name=type)
+        try:
+            type = LocationType(self.kwargs['type']).name
+        except ValueError:
+            type = ''
+
+        return Location.objects.filter(type=type)
