@@ -54,7 +54,7 @@ var endDispatching = function () {
     
 }
 
-var handleDispatchDrop = function() {
+var handleDispatchDrop = function(e) {
 
     // button was dropped
     console.log('Dropped!');

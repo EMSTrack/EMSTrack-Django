@@ -124,7 +124,9 @@ $(document).ready(function () {
     });
 
     // Make ambulance-selection droppable
-    $('#ambulance-selection').on('drop', handleDispatchDrop);
+    $('#ambulance-selection').on('drop', function(e) {
+        handleDispatchDrop(e);
+    });
 
     // retrieve temporary password for mqttClient and connect to broker
     $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {
