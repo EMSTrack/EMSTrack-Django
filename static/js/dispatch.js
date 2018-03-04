@@ -89,7 +89,12 @@ var addToDispatchingList = function(ambulance) {
             })
             .on('dragend', function(e) {
                 console.log('dragend');
-                this.style.opacity = '1.0';
+                // Remove if not dropped
+                if(e.originalEvent.dataTransfer.dropEffect !== 'none'){
+                    $(this).remove();
+                } else {
+                    this.style.opacity = '1.0';
+                }
             });
     }
 }
