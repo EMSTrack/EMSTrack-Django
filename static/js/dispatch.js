@@ -85,6 +85,7 @@ var addToDispatchingList = function(ambulance) {
             .on('dragstart', function(e) {
                 console.log('dragstart');
                 this.style.opacity = '0.4';
+                e.dataTransfer.setData("ambulance_id", ambulance.id);
             })
             .on('dragend', function(e) {
                 console.log('dragend');

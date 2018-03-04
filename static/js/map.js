@@ -124,9 +124,15 @@ $(document).ready(function () {
     });
 
     // Make ambulance-selection droppable
-    $('#ambulance-selection').on('drop', function(e) {
-        handleDispatchDrop(e);
-    });
+    $('#ambulance-selection')
+        .on('dragover', function(e) {
+            e.preventDefault();
+        })
+        .on('drop', function(e) {
+            e.preventDefault();
+            var ambulance_id = e.dataTransfer.getData("ambulance_id");
+            console.log('dropped ' + ambulance_id);
+        });
 
     // retrieve temporary password for mqttClient and connect to broker
     $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {
