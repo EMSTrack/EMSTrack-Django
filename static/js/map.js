@@ -437,13 +437,10 @@ function addAmbulanceToGrid(ambulance) {
             console.log('dragend');
             // Restore opacity
             this.style.opacity = '1.0';
-        });
-
-    // Open popup on panel click.
-    // For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
-    $('#grid-button-' + ambulance.id).click(
-        onGridButtonClick(ambulance.id, mymap)
-    );
+        })
+        .click(
+            onGridButtonClick(ambulance.id, mymap)
+        );
 
 };
 
