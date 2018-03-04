@@ -17,7 +17,7 @@ var beginDispatching = function () {
     document.getElementById('dispatch_work').innerHTML 
         = '<button type="button" class="btn btn-link" onclick="endDispatching()">'
         + '<span class="glyphicon glyphicon-chevron-left"></span>'
-        + 'Go back'
+        + 'Abort dispatching'
         + '</button>';
     $('#dispatchForm').collapse('show');
     $('#ambulance_info_collapse').collapse('hide');

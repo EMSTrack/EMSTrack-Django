@@ -115,7 +115,7 @@ $(document).ready(function () {
         });
 
     // Create status filter on the right hand top corner
-    createCategoryFilter(mymap);
+    createCategoryFilter();
 
     // Submit form
     $('#dispatchForm').submit(function (e) {
@@ -439,9 +439,12 @@ function addAmbulanceToGrid(ambulance) {
             // Restore opacity
             this.style.opacity = '1.0';
         })
-        .click(
-            onGridButtonClick(ambulance.id, mymap)
-        );
+        .click( function(e) {
+            onGridButtonClick(ambulance);
+        })
+        .dblclick( function(e) {
+            addToDispatchingList(ambulance);
+        });
 
 };
 
@@ -635,7 +638,7 @@ function updateDetailPanel(ambulance) {
 }
 
 /* Create status filter on the top right corner of the map */
-function createCategoryFilter(mymap) {
+function createCategoryFilter() {
 
     // Add the checkbox on the top right corner for filtering.
     var container = L.DomUtil.create('div', 'filter-options');
@@ -733,27 +736,23 @@ function createCategoryFilter(mymap) {
 };
 
 
-function onGridButtonClick(ambulanceId, mymap) {
-    return function (e) {
+function onGridButtonClick(ambulance) {
 
-        let ambulance = ambulances[ambulanceId]
+    // Update detail panel
+    updateDetailPanel(ambulance);
 
-        // Update detail panel
-        updateDetailPanel(ambulance);
+    if (visibleCategory[ambulance.status]) {
 
-        if (visibleCategory[ambulance.status]) {
+        // Center icon on map
+        var position = ambulanceMarkers[ambulance.id].getLatLng();
+        mymap.setView(position, mymap.getZoom());
 
-            // Center icon on map
-            var position = ambulanceMarkers[ambulanceId].getLatLng();
-            mymap.setView(position, mymap.getZoom());
-
-            // Open popup for 2.5 seconds.
-            ambulanceMarkers[ambulanceId].openPopup();
-            setTimeout(function () {
-                ambulanceMarkers[ambulanceId].closePopup();
-            }, 2500);
-
-        }
+        // Open popup for 2.5 seconds.
+        ambulanceMarkers[ambulance.id].openPopup();
+        setTimeout(function () {
+            ambulanceMarkers[ambulance.id].closePopup();
+        }, 2500);
 
     }
+
 }
