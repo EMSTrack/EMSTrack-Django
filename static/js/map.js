@@ -480,15 +480,26 @@ function addAmbulanceToMap(ambulance) {
             })
         .on('click',
             function (e) {
+
                 // update details panel
                 updateDetailPanel(ambulance);
 
-                $(this._icon).data("marker",this);
-                $(this._icon).draggable({
-                    appendTo:"body",
-                    helper:"clone",
-                    zIndex:1000
-                });
+                // add to dispatching list
+                if (isDispatching) {
+
+                    if (!(ambulance.id in dispatchingAmbulances)) {
+
+                        // add ambulance to list of dispatching ambulances
+                        dispatchingAmbulances[ambulance.id] = true;
+
+                        // add button to grid
+                        $('#ambulance-selection').append(
+                            '<button type="button" class="btn btn-sm" data-color="danger">'
+                            + ambulance.identifier
+                            + '</button>';
+
+                    }
+                }
             });
 
     // Add to a map to differentiate the layers between statuses.

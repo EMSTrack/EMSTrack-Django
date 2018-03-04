@@ -6,6 +6,7 @@ var placeIcon = L.icon({
     iconUrl: '/static/icons/place_marker.png',
     iconSize: [50, 50], // size of the icon
 });
+var dispatchingAmbulances = {};
 
 var beginDispatching = function () {
    
