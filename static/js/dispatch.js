@@ -1,3 +1,83 @@
+/* Dispatch area - Should be eliminate after dispatching */
+
+var markersGroup = new L.LayerGroup();
+var isDispatching = false;
+var placeIcon = L.icon({
+    iconUrl: '/static/icons/place_marker.png',
+    iconSize: [50, 50], // size of the icon
+});
+
+var beginDispatching = function () {
+   
+    isDispatching = true;
+    console.log('Begin dispatching.');
+    
+    document.getElementById('dispatch_work').innerHTML 
+        = '<button type="button" class="btn btn-link" onclick="endDispatching()">'
+        + '<span class="glyphicon glyphicon-chevron-left"></span>'
+        + 'Go back'
+        + '</button>';
+    $('#dispatchForm').collapse('show');
+    $('#collapse1').collapse('hide');
+    $('#collapse2').collapse('hide');
+
+    mymap.on('click', function (e) {
+
+        markersGroup.clearLayers();
+        document.getElementById('curr-lat').innerHTML = e.latlng.lat;
+        document.getElementById('curr-lng').innerHTML = e.latlng.lng;
+        if (isDispatching) {
+            L.marker([e.latlng.lat, e.latlng.lng], {icon: placeIcon}).addTo(markersGroup);
+            markersGroup.addTo(mymap);
+        }
+        
+    });
+
+}
+
+var endDispatching = function () {
+    
+    isDispatching = false;
+    console.log('End dispatching.');
+    
+    markersGroup.clearLayers();
+    document.getElementById('dispatch_work').innerHTML 
+        = '<button class="btn btn-primary" style="display: block; width: 100%;"' 
+        + 'data-toggle="collapse" href="#dispatchForm" onclick="beginDispatching()">'
+        + 'Dispatch'
+        + '</button>';
+    $('#dispatchForm').collapse('hide');
+    $('#collapse1').collapse('show');
+    $('#collapse2').collapse('show');
+    
+}
+
+
+$("#street").change(function (data) {
+
+    var addressInput = document.getElementById('street').value;
+    console.log('Received address: ' + addressInput);
+
+    var geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({address: addressInput}, function (results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            var coordinate = results[0].geometry.location;
+
+            document.getElementById('curr-lat').innerHTML = coordinate.lat();
+            document.getElementById('curr-lng').innerHTML = coordinate.lng();
+
+            L.marker([coordinate.lat(), coordinate.lng()], {icon: placeIcon}).addTo(markersGroup);
+            markersGroup.addTo(mymap);
+            mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()), 17);
+        }
+        else {
+            alert("There is error from Google map server");
+        }
+    });
+
+});
+
 /*
  * postDispatchCall makes an ajax post request to post dispatched ambulance.
  * @param void.
@@ -62,13 +142,13 @@ function postDispatchCall() {
             $('.modal-body').html(successMsg).addClass('alert-success');
             $('.modal-title').append('Successfully Dispached');
             $("#dispatchModal").modal('show');
-            finishDispatching();
+            endDispatching();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(JSON.stringify(jqXHR) + ' ' + textStatus);
             $('.modal-title').append('Dispatch failed');
             $("#dispatchModal").modal('show');
-            finishDispatching();
+            endDispatching();
         }
     });
 }
@@ -102,76 +182,3 @@ function initAutocomplete() {
         {types: ['geocode']});
     //autocomplete.addListener('place_changed', fillInAddress);
 }
-
-/* Dispatch area - Should be eliminate after dispatching */
-
-var circlesGroup = new L.LayerGroup();
-var markersGroup = new L.LayerGroup();
-var is_dispatching;
-
-$("#street").change(function (data) {
-
-    var addressInput = document.getElementById('street').value;
-    //console.log(addressInput);
-    circlesGroup.clearLayers();
-
-    var geocoder = new google.maps.Geocoder();
-
-    geocoder.geocode({address: addressInput}, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var coordinate = results[0].geometry.location;
-
-            document.getElementById('curr-lat').innerHTML = coordinate.lat();
-            document.getElementById('curr-lng').innerHTML = coordinate.lng();
-
-            var placeIcon = L.icon({
-                iconUrl: '/static/icons/place_marker.png',
-                iconSize: [50, 50], // size of the icon
-            });
-
-            L.marker([coordinate.lat(), coordinate.lng()], {icon: placeIcon}).addTo(markersGroup);
-            markersGroup.addTo(mymap);
-            mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()), 17);
-        }
-        else {
-            alert("There is error from Google map server");
-        }
-    });
-});
-
-var dispatching = function () {
-    console.log('Click dispatching button');
-    is_dispatching = true;
-    document.getElementById('dispatch_work').innerHTML = '<button type="button" class="btn btn-link" onclick="finishDispatching()"><span class="glyphicon glyphicon-chevron-left"></span> Go back</button>';
-    $('#dispatchForm').collapse('show');
-    $('#collapse1').collapse('hide');
-    $('#collapse2').collapse('hide');
-
-    mymap.on('click', function (e) {
-        markersGroup.clearLayers();
-        //console.log(e.latlng.lat);
-        document.getElementById('curr-lat').innerHTML = e.latlng.lat;
-        document.getElementById('curr-lng').innerHTML = e.latlng.lng;
-        if (is_dispatching) {
-            var placeIcon = L.icon({
-                iconUrl: '/static/icons/place_marker.png',
-                iconSize: [50, 50], // size of the icon
-            });
-            L.marker([e.latlng.lat, e.latlng.lng], {icon: placeIcon}).addTo(markersGroup);
-            markersGroup.addTo(mymap);
-        }
-    });
-
-}
-
-var finishDispatching = function () {
-    is_dispatching = false;
-    markersGroup.clearLayers();
-    console.log('Click dispatching button');
-    document.getElementById('dispatch_work').innerHTML = '<button class="btn btn-primary" style="display: block; width: 100%;" data-toggle="collapse" href="#dispatchForm" onclick="dispatching()">Dispatch</button>';
-    $('#dispatchForm').collapse('hide');
-    $('#collapse1').collapse('show');
-    $('#collapse2').collapse('show');
-}
-
-
