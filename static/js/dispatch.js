@@ -69,16 +69,18 @@ var addToDispatchingList = function(ambulance) {
 
         // add button to grid
         $('#ambulance-selection').append(
-            '<button id="dispatch-button-' + ambulance.id + '" type="button" class="btn btn-sm btn-success">'
+            '<button id="dispatch-button-' + ambulance.id + '" ' +
+            'type="button" class="btn btn-sm btn-success" draggable="true">'
             + ambulance.identifier
             + '</button>'
         );
         $('dispatch-button-' + ambulance.id)
-            .attr('draggable', 'True')
             .on('dragstart', function(e) {
+                console.log('dragstart');
                 this.style.opacity = '0.4';
             })
             .on('dragend', function(e) {
+                console.log('dragend');
                 this.style.opacity = '1.0';
             });
     }
