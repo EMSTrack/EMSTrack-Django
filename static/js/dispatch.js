@@ -83,16 +83,19 @@ var addToDispatchingList = function(ambulance) {
         );
         $('#dispatch-button-' + ambulance.id)
             .on('dragstart', function(e) {
+                // on start of drag, copy information and fade button
                 console.log('dragstart');
                 this.style.opacity = '0.4';
-                e.originalEvent.dataTransfer.setData("ambulance_id", ambulance.id);
+                e.originalEvent.dataTransfer.setData("ambulance", ambulance);
             })
             .on('dragend', function(e) {
                 console.log('dragend');
-                // Remove if not dropped
                 if(e.originalEvent.dataTransfer.dropEffect == 'none'){
+                    // Remove button if not dropped
+                    delete dispatchingAmbulances[ambulance.id];
                     $(this).remove();
                 } else {
+                    // Restore opacity
                     this.style.opacity = '1.0';
                 }
             });

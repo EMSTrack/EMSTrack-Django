@@ -130,8 +130,11 @@ $(document).ready(function () {
         })
         .on('drop', function(e) {
             e.preventDefault();
-            var ambulance_id = e.originalEvent.dataTransfer.getData("ambulance_id");
-            console.log('dropped ' + ambulance_id);
+            // Dropped button, get data
+            var ambulance = e.originalEvent.dataTransfer.getData("ambulance");
+            console.log('dropped ' + ambulance);
+            // and add to dispatching list
+            addToDispatchingList(ambulance);
         });
 
     // retrieve temporary password for mqttClient and connect to broker
