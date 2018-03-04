@@ -20,7 +20,6 @@ var beginDispatching = function () {
         + 'Go back'
         + '</button>';
     $('#dispatchForm').collapse('show');
-    // $('#ambulance_collapse').collapse('hide');
     $('#ambulance_info_collapse').collapse('hide');
 
     mymap.on('click', function (e) {
@@ -50,7 +49,6 @@ var endDispatching = function () {
         + 'Dispatch'
         + '</button>';
     $('#dispatchForm').collapse('hide');
-    $('#ambulance_collapse').collapse('show');
     $('#ambulance_info_collapse').collapse('show');
     
 }
