@@ -39,6 +39,7 @@ var beginDispatching = function () {
 var endDispatching = function () {
     
     isDispatching = false;
+    dispatchingAmbulances = {};
     console.log('End dispatching.');
     
     markersGroup.clearLayers();
