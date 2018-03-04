@@ -132,7 +132,7 @@ $(document).ready(function () {
             e.preventDefault();
             // Dropped button, get data
             var ambulance = e.originalEvent.dataTransfer.getData("ambulance");
-            console.log('dropped ' + ambulance);
+            console.log('dropped ambulance ' + ambulance['identifier']);
             // and add to dispatching list
             addToDispatchingList(ambulance);
         });

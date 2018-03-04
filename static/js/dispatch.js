@@ -63,43 +63,55 @@ var handleDispatchDrop = function(e) {
 
 var addToDispatchingList = function(ambulance) {
 
-    if (isDispatching && !(ambulance.id in dispatchingAmbulances)) {
+    // quick return if null or not dispatching
+    if (ambulance == null || !isDispatching)
+        return;
 
-        // Available
-        if (ambulance.status != STATUS_AVAILABLE) {
-            alert('Can only dispatch available ambulances!');
-            return;
-        }
+    // add ambulance to dispatching list
+    console.log('Adding ambulance ' + ambulance.identifier + ' to dispatching list');
 
-        // add ambulance to list of dispatching ambulances
-        dispatchingAmbulances[ambulance.id] = true;
-
-        // add button to grid
-        $('#ambulance-selection').append(
-            '<button id="dispatch-button-' + ambulance.id + '" ' +
-            'type="button" class="btn btn-sm btn-success" draggable="true">'
-            + ambulance.identifier
-            + '</button>'
-        );
-        $('#dispatch-button-' + ambulance.id)
-            .on('dragstart', function(e) {
-                // on start of drag, copy information and fade button
-                console.log('dragstart');
-                this.style.opacity = '0.4';
-                e.originalEvent.dataTransfer.setData("ambulance", ambulance);
-            })
-            .on('dragend', function(e) {
-                console.log('dragend');
-                if(e.originalEvent.dataTransfer.dropEffect == 'none'){
-                    // Remove button if not dropped
-                    delete dispatchingAmbulances[ambulance.id];
-                    $(this).remove();
-                } else {
-                    // Restore opacity
-                    this.style.opacity = '1.0';
-                }
-            });
+    // already in?
+    if (ambulance.id in dispatchingAmbulances) {
+        console.log('Already in dispatching list, skip');
+        return;
     }
+
+    // not available?
+    if (ambulance.status != STATUS_AVAILABLE) {
+        console.log('Ambulance is not available');
+        alert('Can only dispatch available ambulances!');
+        return;
+    }
+
+    // add ambulance to list of dispatching ambulances
+    dispatchingAmbulances[ambulance.id] = true;
+
+    // add button to grid
+    $('#ambulance-selection').append(
+        '<button id="dispatch-button-' + ambulance.id + '"'
+        + ' value="' + ambulance.id + '"'
+        + ' type="button" class="btn btn-sm btn-success" draggable="true">'
+        + ambulance.identifier
+        + '</button>'
+    );
+    $('#dispatch-button-' + ambulance.id)
+        .on('dragstart', function (e) {
+            // on start of drag, copy information and fade button
+            console.log('dragstart');
+            this.style.opacity = '0.4';
+            e.originalEvent.dataTransfer.setData("ambulance", ambulance);
+        })
+        .on('dragend', function (e) {
+            console.log('dragend');
+            if (e.originalEvent.dataTransfer.dropEffect == 'none') {
+                // Remove button if not dropped back
+                delete dispatchingAmbulances[ambulance.id];
+                $(this).remove();
+            } else {
+                // Restore opacity if dropped back in
+                this.style.opacity = '1.0';
+            }
+        });
 }
 
 $("#street").change(function (data) {
