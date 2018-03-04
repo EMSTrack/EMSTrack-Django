@@ -449,9 +449,14 @@ function addAmbulanceToMap(ambulance) {
         coloredIcon = ambulanceIconBlack;
 
     // Add marker
-    ambulanceMarkers[ambulance.id] = L.marker([ambulance.location.latitude,
+    ambulanceMarkers[ambulance.id] = L.marker(
+        [ambulance.location.latitude,
             ambulance.location.longitude],
-        {icon: coloredIcon, rotationAngle: 360 - ambulance.orientation})
+        {
+            icon: coloredIcon,
+            rotationAngle: 360 - ambulance.orientation,
+            draggable: true
+        })
         .bindPopup(
             "<strong>" + ambulance.identifier +
             "</strong>" +
@@ -478,6 +483,11 @@ function addAmbulanceToMap(ambulance) {
             function (e) {
                 // update details panel
                 updateDetailPanel(ambulance);
+            })
+        .on('drag',
+            function (e){
+                // drag?
+                console.log('drag event' + e);
             });
 
     // Add to a map to differentiate the layers between statuses.
