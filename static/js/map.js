@@ -423,7 +423,8 @@ function addAmbulanceToGrid(ambulance) {
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + button_class_name + '"'
-            + 'draggable="true">'
+            + ' style="padding: 0px 2px 0px p2x;"'
+            + ' draggable="true">'
             + ambulance.identifier
             + '</button>');
     $('#grid-button-' + ambulance.id)
