@@ -131,7 +131,8 @@ $(document).ready(function () {
         .on('drop', function(e) {
             e.preventDefault();
             // Dropped button, get data
-            var ambulance = e.originalEvent.dataTransfer.getData("ambulance");
+            var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+            var ambulance = ambulances[ambulance_id];
             console.log('dropped ambulance ' + ambulance['identifier']);
             // and add to dispatching list
             addToDispatchingList(ambulance);

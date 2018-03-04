@@ -99,7 +99,7 @@ var addToDispatchingList = function(ambulance) {
             // on start of drag, copy information and fade button
             console.log('dragstart');
             this.style.opacity = '0.4';
-            e.originalEvent.dataTransfer.setData("ambulance", ambulance);
+            e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
         })
         .on('dragend', function (e) {
             console.log('dragend');
