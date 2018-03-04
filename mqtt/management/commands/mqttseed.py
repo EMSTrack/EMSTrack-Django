@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+from login.permissions import cache_clear
 from mqtt.publish import PublishClient
 
 from ambulance.models import Ambulance
@@ -81,6 +82,9 @@ class Client(PublishClient):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding profile data"))
+
+        # clear profile cache
+        cache_clear()
 
         # seeding profiles
         for obj in User.objects.all():
