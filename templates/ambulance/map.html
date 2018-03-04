@@ -108,23 +108,7 @@
                             <!-- Dispatch Panel window -->
                             <div class="panel-body">
 
-                                <span class="glyphicon glyphicon-chevron-right"></span> Location:
-                                <input id="street" type="text"
-                                       name="street" class="form-control"
-                                       placeholder="Address" required/>
-                                <br/>
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Coordinates:
-                                <div class="well well-sm" title="Click on map to update coordinates">
-                                    <strong>Latitude:</strong>
-                                    <div id="curr-lat" style="display: inline-block;"></div>
-                                    <br/>
-                                    <strong>Longitude:</strong>
-                                    <div id="curr-lng" style="display: inline-block;"></div>
-                                </div>
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Dispatch Ambulance(s)<br/>
-
+                                <span class="glyphicon glyphicon-chevron-right"></span>Ambulances:<br/>
                                 <div class="panel panel-default">
                                     <div class="panel-body" style="line-height: 1.5px;">
 
@@ -134,6 +118,19 @@
                                                    placeholder="Click on or drag ambulances here"/>
                                         </div>
                                     </div>
+                                </div>
+
+                                <span class="glyphicon glyphicon-chevron-right"></span> Location:
+                                <input id="street" type="text"
+                                       name="street" class="form-control"
+                                       placeholder="Address" required/>
+                                <br/>
+                                <div class="well well-sm" title="Click on map to update coordinates">
+                                    <strong>Latitude:</strong>
+                                    <div id="curr-lat" style="display: inline-block;"></div>
+                                    <br/>
+                                    <strong>Longitude:</strong>
+                                    <div id="curr-lng" style="display: inline-block;"></div>
                                 </div>
 
                                 <span class="glyphicon glyphicon-chevron-right"></span> Description:
@@ -166,12 +163,8 @@
                                             <span class="glyphicon giyphicon ok"></span></input>
                                         </label>
                                     </div>
-
                                 </form>
-                                <br/><br/>
 
-
-                                <br/><br/>
                                 <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
                                     Dispatch
                                 </button>
