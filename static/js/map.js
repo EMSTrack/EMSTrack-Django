@@ -130,7 +130,7 @@ $(document).ready(function () {
         })
         .on('drop', function(e) {
             e.preventDefault();
-            var ambulance_id = e.dataTransfer.getData("ambulance_id");
+            var ambulance_id = e.originalEvent.dataTransfer.getData("ambulance_id");
             console.log('dropped ' + ambulance_id);
         });
 
