@@ -485,21 +485,8 @@ function addAmbulanceToMap(ambulance) {
                 updateDetailPanel(ambulance);
 
                 // add to dispatching list
-                if (isDispatching) {
+                addToDispatchingList(ambulance);
 
-                    if (!(ambulance.id in dispatchingAmbulances)) {
-
-                        // add ambulance to list of dispatching ambulances
-                        dispatchingAmbulances[ambulance.id] = true;
-
-                        // add button to grid
-                        $('#ambulance-selection').append(
-                            '<button type="button" class="btn btn-sm" data-color="danger">'
-                            + ambulance.identifier
-                            + '</button>';
-
-                    }
-                }
             });
 
     // Add to a map to differentiate the layers between statuses.

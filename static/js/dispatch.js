@@ -53,6 +53,21 @@ var endDispatching = function () {
     
 }
 
+var addToDispatchingList(ambulance)
+{
+    if (isDispatching && !(ambulance.id in dispatchingAmbulances)) {
+
+        // add ambulance to list of dispatching ambulances
+        dispatchingAmbulances[ambulance.id] = true;
+
+        // add button to grid
+        $('#ambulance-selection').append(
+            '<button type="button" class="btn btn-sm" data-color="danger">'
+            + ambulance.identifier
+            + '</button>'
+        );
+    }
+}
 
 $("#street").change(function (data) {
 
