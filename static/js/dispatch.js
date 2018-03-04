@@ -74,7 +74,7 @@ var addToDispatchingList = function(ambulance) {
             + ambulance.identifier
             + '</button>'
         );
-        $('dispatch-button-' + ambulance.id)
+        $('#dispatch-button-' + ambulance.id)
             .on('dragstart', function(e) {
                 console.log('dragstart');
                 this.style.opacity = '0.4';
