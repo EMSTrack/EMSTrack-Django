@@ -121,7 +121,10 @@ $(document).ready(function () {
     $('#dispatchForm').submit(function (e) {
         e.preventDefault();
         postDispatchCall();
-    })
+    });
+
+    // Make ambulance-selection droppable
+    $('#ambulance-selection').on('drop', handleDispatchDrop);
 
     // retrieve temporary password for mqttClient and connect to broker
     $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {

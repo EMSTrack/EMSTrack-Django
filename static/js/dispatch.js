@@ -54,6 +54,13 @@ var endDispatching = function () {
     
 }
 
+var handleDispatchDrop = function(e) {
+
+    // button was dropped
+    console.log('Dropped!');
+
+}
+
 var addToDispatchingList = function(ambulance) {
 
     if (isDispatching && !(ambulance.id in dispatchingAmbulances)) {
