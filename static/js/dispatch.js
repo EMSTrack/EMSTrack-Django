@@ -90,7 +90,7 @@ var addToDispatchingList = function(ambulance) {
             .on('dragend', function(e) {
                 console.log('dragend');
                 // Remove if not dropped
-                if(e.originalEvent.dataTransfer.dropEffect !== 'none'){
+                if(e.originalEvent.dataTransfer.dropEffect == 'none'){
                     $(this).remove();
                 } else {
                     this.style.opacity = '1.0';
