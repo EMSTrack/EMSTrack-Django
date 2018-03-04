@@ -7,6 +7,7 @@ var placeIcon = L.icon({
     iconSize: [50, 50], // size of the icon
 });
 var dispatchingAmbulances = {};
+var numberOfDispatchingAmbulances = 0;
 
 var beginDispatching = function () {
    
@@ -54,10 +55,15 @@ var endDispatching = function () {
     
 }
 
-var handleDispatchDrop = function(e) {
+var removeFromDispatchingList = function(ambulance) {
 
-    // button was dropped
-    console.log('Dropped!');
+    // delete from dispatching list
+    delete dispatchingAmbulances[ambulance.id];
+    numberOfDispatchingAmbulances--;
+
+    // show message if last button
+    if (numberOfDispatchingAmbulances == 0)
+        $('#ambulance-selection-message').show();
 
 }
 
@@ -83,8 +89,13 @@ var addToDispatchingList = function(ambulance) {
         return;
     }
 
+    // hide message if first button
+    if (numberOfDispatchingAmbulances == 0)
+        $('#ambulance-selection-message').hide();
+
     // add ambulance to list of dispatching ambulances
     dispatchingAmbulances[ambulance.id] = true;
+    numberOfDispatchingAmbulances++;
 
     // add button to ambulance dispatch grid
     $('#ambulance-selection').append(
@@ -106,7 +117,8 @@ var addToDispatchingList = function(ambulance) {
             console.log('dragend');
             if (e.originalEvent.dataTransfer.dropEffect == 'none') {
                 // Remove button if not dropped back
-                delete dispatchingAmbulances[ambulance.id];
+                removeFromDispatchingList(ambulance);
+                // Remove button
                 $(this).remove();
             } else {
                 // Restore opacity if dropped back in
