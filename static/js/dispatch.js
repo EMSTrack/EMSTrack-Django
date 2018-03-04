@@ -100,7 +100,7 @@ var addToDispatchingList = function(ambulance) {
         '<button id="dispatch-button-' + ambulance.id + '"'
         + ' value="' + ambulance.id + '"'
         + ' type="button" class="btn btn-sm btn-success"'
-        + ' style="padding: 0px 2px 0px p2x;"'
+        + ' style="margin: 0px 2px 0px p2x;"'
         + ' draggable="true">'
         + ambulance.identifier
         + '</button>'
