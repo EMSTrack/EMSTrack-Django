@@ -57,12 +57,18 @@ var addToDispatchingList = function(ambulance) {
 
     if (isDispatching && !(ambulance.id in dispatchingAmbulances)) {
 
+        // Available
+        if (ambulance.status != STATUS_AVAILABLE) {
+            alert('Can only dispatch available ambulances!');
+            return;
+        }
+
         // add ambulance to list of dispatching ambulances
         dispatchingAmbulances[ambulance.id] = true;
 
         // add button to grid
         $('#ambulance-selection').append(
-            '<button type="button" class="btn btn-sm" data-color="danger">'
+            '<button type="button" class="btn btn-sm btn-success">'
             + ambulance.identifier
             + '</button>'
         );

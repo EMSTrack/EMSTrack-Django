@@ -397,23 +397,6 @@ function addAmbulanceToGrid(ambulance) {
         '[id=' + ambulance.id + ']"' +
         ' to grid');
 
-    let button_class_name = 'btn-danger';
-    if (ambulance.status === STATUS_AVAILABLE) {
-        button_class_name = 'btn-success';
-
-        $('#ambulance-selection')
-            .append('<label><input type="checkbox"' +
-                ' name="ambulance_assignment" value="' +
-                ambulance.id + '"> Ambulance ' +
-                ambulance.identifier + ' </label><br/>');
-
-    }
-    else if (ambulance.status === STATUS_OUT_OF_SERVICE) {
-
-        button_class_name = 'btn-default';
-
-    }
-
     // Add to grid
     $('#ambulance-grid')
         .append('<button type="button"' +
