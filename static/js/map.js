@@ -454,8 +454,7 @@ function addAmbulanceToMap(ambulance) {
             ambulance.location.longitude],
         {
             icon: coloredIcon,
-            rotationAngle: 360 - ambulance.orientation,
-            draggable: true
+            rotationAngle: 360 - ambulance.orientation
         })
         .bindPopup(
             "<strong>" + ambulance.identifier +
@@ -483,11 +482,13 @@ function addAmbulanceToMap(ambulance) {
             function (e) {
                 // update details panel
                 updateDetailPanel(ambulance);
-            })
-        .on('drag',
-            function (e){
-                // drag?
-                console.log('drag event' + e);
+
+                $(this._icon).data("marker",this);
+                $(this._icon).draggable({
+                    appendTo:"body",
+                    helper:"clone",
+                    zIndex:1000
+                });
             });
 
     // Add to a map to differentiate the layers between statuses.
