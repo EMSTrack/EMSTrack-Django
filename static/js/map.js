@@ -357,7 +357,7 @@ function updateAmbulance(ambulance) {
         ambulance = ambulances[id]
 
         // Update ambulance grid
-        var buttonId = "#grid-button" + id;
+        var buttonId = "#grid-button-" + id;
 
         // Updated button color/status
         if (ambulance.status === STATUS_AVAILABLE)
@@ -418,17 +418,30 @@ function addAmbulanceToGrid(ambulance) {
     else if (ambulance.status === STATUS_OUT_OF_SERVICE)
         button_class_name = 'btn-default';
 
-    // Add to grid
+    // Add button to ambulance grid
     $('#ambulance-grid')
-        .append('<button type="button"' +
-            ' id="' + 'grid-button' + ambulance.id + '"' +
-            ' class="btn ' + button_class_name + '"' +
-            ' style="margin: 5px 5px;">' +
-            ambulance.identifier + '</button>');
+        .append('<button type="button"'
+            + ' id="grid-button-' + ambulance.id + '"'
+            + ' class="btn btn-sm ' + button_class_name + '"'
+            + 'draggable="true">'
+            + ambulance.identifier
+            + '</button>');
+    $('#grid-button-' + ambulance.id)
+        .on('dragstart', function (e) {
+            // on start of drag, copy information and fade button
+            console.log('dragstart');
+            this.style.opacity = '0.4';
+            e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
+        })
+        .on('dragend', function (e) {
+            console.log('dragend');
+            // Restore opacity
+            this.style.opacity = '1.0';
+        });
 
     // Open popup on panel click.
     // For some reason, only works when I create a separate function as opposed to creating a function within the click(...)
-    $('#grid-button' + ambulance.id).click(
+    $('#grid-button-' + ambulance.id).click(
         onGridButtonClick(ambulance.id, mymap)
     );
 

@@ -19,8 +19,8 @@ var beginDispatching = function () {
         + 'Go back'
         + '</button>';
     $('#dispatchForm').collapse('show');
-    $('#collapse1').collapse('hide');
-    $('#collapse2').collapse('hide');
+    // $('#ambulance_collapse').collapse('hide');
+    $('#ambulance_info_collapse').collapse('hide');
 
     mymap.on('click', function (e) {
 
@@ -49,8 +49,8 @@ var endDispatching = function () {
         + 'Dispatch'
         + '</button>';
     $('#dispatchForm').collapse('hide');
-    $('#collapse1').collapse('show');
-    $('#collapse2').collapse('show');
+    $('#ambulance_collapse').collapse('show');
+    $('#ambulance_info_collapse').collapse('show');
     
 }
 
@@ -86,11 +86,12 @@ var addToDispatchingList = function(ambulance) {
     // add ambulance to list of dispatching ambulances
     dispatchingAmbulances[ambulance.id] = true;
 
-    // add button to grid
+    // add button to ambulance dispatch grid
     $('#ambulance-selection').append(
         '<button id="dispatch-button-' + ambulance.id + '"'
         + ' value="' + ambulance.id + '"'
-        + ' type="button" class="btn btn-sm btn-success" draggable="true">'
+        + ' type="button" class="btn btn-sm btn-success"'
+        + ' draggable="true">'
         + ambulance.identifier
         + '</button>'
     );
