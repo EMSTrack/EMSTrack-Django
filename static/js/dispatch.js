@@ -53,8 +53,8 @@ var endDispatching = function () {
     
 }
 
-var addToDispatchingList(ambulance)
-{
+var addToDispatchingList = function(ambulance) {
+
     if (isDispatching && !(ambulance.id in dispatchingAmbulances)) {
 
         // add ambulance to list of dispatching ambulances
