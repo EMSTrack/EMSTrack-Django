@@ -12,6 +12,33 @@ var numberOfDispatchingAmbulances = 0;
 var currentAddress;
 var currentLocation;
 
+var updateCurrentLocation(location) {
+
+    // set currentLocation
+    currentLocation = location;
+
+    // update coordinates on form
+    document.getElementById('curr-lat').innerHTML = currentLocation.lat;
+    document.getElementById('curr-lng').innerHTML = currentLocation.lng;
+
+    // remove existing marker
+    markersGroup.clearLayers();
+
+    // laydown marker
+    var marker = L.marker([location.lat, location.lng],
+        {
+            icon: placeIcon,
+            draggable: true
+        }).addTo(markersGroup);
+    markersGroup.addTo(mymap);
+
+    // events
+    marker.on('dragend', function(e) {
+        updateCurrentLocation(marker.getLatLng());
+    })
+
+}
+
 var beginDispatching = function () {
    
     isDispatching = true;
@@ -26,10 +53,9 @@ var beginDispatching = function () {
     $('#ambulance_info_collapse').collapse('hide');
 
     // Update current location
-    currentLocation = mymap.getCenter();
-    document.getElementById('curr-lat').innerHTML = currentLocation.lat;
-    document.getElementById('curr-lng').innerHTML = currentLocation.lng;
+    updateCurrentLocation(mymap.getCenter());
 
+/*
     mymap.on('click', function (e) {
 
         if (isDispatching) {
@@ -41,6 +67,7 @@ var beginDispatching = function () {
         }
         
     });
+*/
 
 }
 
