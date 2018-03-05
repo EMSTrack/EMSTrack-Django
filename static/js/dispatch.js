@@ -140,8 +140,8 @@ function geocode(query, options) {
         if (options.hasOwnProperty(option)) {
 
             // add options
-            url += prefix + options + "=" + options[option];
-            prefix = '&'
+            url += prefix + option + "=" + options[option];
+            prefix = '&';
 
         }
     }
