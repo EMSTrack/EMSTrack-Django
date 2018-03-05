@@ -54,7 +54,7 @@ Geocoder.prototype.parse_feature = function(feature) {
                 address['number'] = matches[1];
             else if (matches[3] !== undefined)
                 // number at middle of address
-                address['number'] = matches[1];
+                address['number'] = matches[3];
             if (matches[4] !== undefined)
                 // complement
                 address['complement'] = matches[4].trim();
