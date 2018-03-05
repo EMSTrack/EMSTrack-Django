@@ -148,7 +148,7 @@ function geocode(query, coordinates) {
     // query mapbox
     $.getJSON(url, function (response) {
 
-        alert('Got geocode response');
+        alert('Got geocode response\n' + response);
 
     })
         .fail(function (jqxhr, testStatus, error) {
