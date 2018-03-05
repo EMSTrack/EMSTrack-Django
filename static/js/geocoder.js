@@ -46,14 +46,17 @@ Geocoder.prototype.parse_feature = function(feature) {
         if (matches) {
             console.log(matches);
             // matches[0] is the entire matched string
-            address['street'] = matches[2].trim();
-            if (matches[1] != '')
+            if (matches[2] !== undefined)
+                // street
+                address['street'] = matches[2].trim();
+            if (matches[1] !== undefined)
                 // number at beginning of address
                 address['number'] = matches[1];
-            else if (matches[3] != '')
+            else if (matches[3] !== undefined)
                 // number at middle of address
                 address['number'] = matches[1];
-            if (matches[4] != '')
+            if (matches[4] !== undefined)
+                // complement
                 address['complement'] = matches[4].trim();
         }
 
