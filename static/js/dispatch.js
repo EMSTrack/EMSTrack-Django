@@ -126,11 +126,48 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
+function geocode(query, coordinates) {
+
+    var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+
+    // add query
+    url += encodeURIComponent(query) + ".json";
+
+    // add parameters
+    var prefix = '?';
+
+    // add coordinates
+    if (coordinates) {
+        url += prefix + "proximity=" + lat + "," + lng;
+        prefix = '&'
+    }
+
+    // add token
+    url += prefix + "access_token=" + accessToken;
+
+    // query mapbox
+    $.getJSON(url, function (response) {
+
+        alert('Got geocode response');
+
+    })
+        .fail(function (jqxhr, testStatus, error) {
+
+            alert("Could not geocode:" +
+                testStatus + "," + error + "\n");
+
+        });
+
+}
+
 $("#street").change(function (data) {
 
-    var addressInput = document.getElementById('street').value;
-    console.log('Received address: ' + addressInput);
+    var address = document.getElementById('street').value;
+    console.log('Received address: ' + address);
 
+    geocode(address);
+
+/*
     var geocoder = new google.maps.Geocoder();
 
     geocoder.geocode({address: addressInput}, function (results, status) {
@@ -148,6 +185,7 @@ $("#street").change(function (data) {
             alert("There is error from Google map server");
         }
     });
+*/
 
 });
 

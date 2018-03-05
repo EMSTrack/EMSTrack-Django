@@ -78,11 +78,10 @@ var mqttClient;
  * This is a handler for when the page is loaded.
  */
 var mymap;
-var geocoder;
+var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
 $(document).ready(function () {
 
     // token and attribution
-    var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
     var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
 
     // Set map view
@@ -172,7 +171,7 @@ $(document).ready(function () {
         });
 
     })
-        .fail(function (jqxhr, textStatus, error) {
+        .fail(function (jqxhr, testStatus, error) {
 
             alert("Connection to MQTT broker failed: \"" +
                 testStatus + "," + error + "\"\n" +
