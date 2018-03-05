@@ -1,3 +1,17 @@
+var parser_configurations = {
+
+    'US': {
+        regex: /^(\d+)(\D+)((suite|ste|#)?\s*\d+)?$/i,
+        street_components: ['number', 'street', 'complement']
+    },
+
+    'MX': {
+        regex: /^(\D+)(\d+|s\/n)?(\D+\d*)?$/i,
+        street_components: ['street', 'number', 'complement']
+    }
+
+}
+
 var Geocoder = function(options) {
 
     this.options = {
@@ -30,37 +44,14 @@ Geocoder.prototype.parse_feature = function(feature) {
             country: "",
             location: null
         };
+
+        // set location
         address['location'] = {
             'latitude': feature['center'][0],
             'longitude': feature['center'][1]
         }
 
-        // set street_address
-        var street_address = feature['place_name'];
-        address['street_address'] = street_address;
-
-        // parse street address
-        var street = street_address.split(',');
-        var regex = /^(\d+)?(\D+)(\d+|s\/n)?(\D+\d*)?$/i;
-        var matches = street[0].match(regex);
-        if (matches) {
-            console.log(matches);
-            // matches[0] is the entire matched string
-            if (matches[2] !== undefined)
-                // street
-                address['street'] = matches[2].trim();
-            if (matches[1] !== undefined)
-                // number at beginning of address
-                address['number'] = matches[1];
-            else if (matches[3] !== undefined)
-                // number at middle of address
-                address['number'] = matches[3];
-            if (matches[4] !== undefined)
-                // complement
-                address['complement'] = matches[4].trim();
-        }
-
-        // Parse context
+        // parse context
         var context = feature['context'];
         for (var i = 0; i < context.length; i++) {
             var item = context[i];
@@ -77,8 +68,32 @@ Geocoder.prototype.parse_feature = function(feature) {
                 address['country'] = item['short_code'].toUpperCase();
         }
 
+        // set street_address
+        var street_address = feature['place_name'];
+        address['street_address'] = street_address;
+
+        // parse street address
+        var street = street_address.split(',');
+
+        // load configuration based on country
+        var config = parse_configurations[address['country']];
+
+        var matches = street[0].match(config['regex']);
+        if (matches) {
+            console.log(matches);
+            var street_components = config['regex'];
+            // matches[0] is the entire matched string
+            for (var i = 1; i < matches.length; i++) {
+                if (matches[i] !== undefined)
+                    address[street_components[i-1]] = matches[i].trim();
+            }
+        }
+
         return address;
     }
+
+    // log error
+    console.log("Does not know how to parse feature of type'" + feature['place_type'] + "'");
 
 }
 
