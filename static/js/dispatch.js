@@ -9,6 +9,9 @@ var placeIcon = L.icon({
 var dispatchingAmbulances = {};
 var numberOfDispatchingAmbulances = 0;
 
+var currentAddress;
+var currentLocation;
+
 var beginDispatching = function () {
    
     isDispatching = true;
@@ -22,12 +25,17 @@ var beginDispatching = function () {
     $('#dispatchForm').collapse('show');
     $('#ambulance_info_collapse').collapse('hide');
 
+    // Update current location
+    currentLocation = mymap.getCenter();
+    document.getElementById('curr-lat').innerHTML = coordinate.lat();
+    document.getElementById('curr-lng').innerHTML = coordinate.lng();
+
     mymap.on('click', function (e) {
 
-        markersGroup.clearLayers();
-        document.getElementById('curr-lat').innerHTML = e.latlng.lat;
-        document.getElementById('curr-lng').innerHTML = e.latlng.lng;
         if (isDispatching) {
+            markersGroup.clearLayers();
+            document.getElementById('curr-lat').innerHTML = e.latlng.lat;
+            document.getElementById('curr-lng').innerHTML = e.latlng.lng;
             L.marker([e.latlng.lat, e.latlng.lng], {icon: placeIcon}).addTo(markersGroup);
             markersGroup.addTo(mymap);
         }
