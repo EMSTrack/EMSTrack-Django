@@ -153,7 +153,7 @@ function geocode(query, options) {
     // query mapbox
     $.getJSON(url, function (response) {
 
-        alert('Got geocode response\n' + response);
+        alert('url = ' + url + '\nGot geocode response\n' + response);
 
     })
         .fail(function (jqxhr, testStatus, error) {
@@ -172,7 +172,8 @@ $("#street").change(function (data) {
 
     var options = {
         types: 'address',
-        limit: 1
+        limit: 1,
+        autocomplete: 'true'
     };
     geocode(address, options);
 
