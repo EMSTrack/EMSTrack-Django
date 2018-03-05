@@ -250,7 +250,7 @@ $("#street").change(function (data) {
                 );
 
                 // set current location
-                setCurrentLocation(
+                updateCurrentLocation(
                     L.latlng(address['location']['latitude'],
                         address['location']['longitude'])
                 );

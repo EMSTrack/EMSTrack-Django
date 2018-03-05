@@ -41,12 +41,12 @@ Geocoder.prototype.parse_feature = function(feature) {
 
         // parse street address
         var street = street_address.split(',');
-        var regex = /^(\d+)?(\D+)(\d+|s\/n)?(\D+\d*)$/i;
+        var regex = /^(\d+)?(\D+)(\d+|s\/n)?(\D+\d*)?$/i;
         var matches = street[0].match(regex);
         if (matches) {
             console.log(matches);
             // matches[0] is the entire matched string
-            address['street'] = matches[2];
+            address['street'] = matches[2].trim();
             if (matches[1] != '')
                 // number at beginning of address
                 address['number'] = matches[1];
@@ -54,7 +54,7 @@ Geocoder.prototype.parse_feature = function(feature) {
                 // number at middle of address
                 address['number'] = matches[1];
             if (matches[4] != '')
-                address['complement'] = matches[4];
+                address['complement'] = matches[4].trim();
         }
 
         // Parse context
