@@ -129,6 +129,8 @@ var addToDispatchingList = function(ambulance) {
 
 var updateCurrentLocation = function(location) {
 
+    console.log('Setting current location to: ' + location.lat + ', ' + location.lng);
+
     // set currentLocation
     currentLocation = location;
 
@@ -253,10 +255,10 @@ $("#street").change(function (data) {
                 );
 
                 // set current location
-                updateCurrentLocation(
-                    L.latLng(address['location']['latitude'],
-                        address['location']['longitude'])
-                );
+                updateCurrentLocation({
+                        lat: address['location']['latitude'],
+                        lng: address['location']['longitude']
+                });
 
             });
 
