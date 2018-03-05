@@ -203,15 +203,25 @@
         </div>
     </div>
 
-    <!-- Load required libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=initAutocomplete"
-            async defer></script>
+<!-- Load required libraries -->
 
-    <!-- Load javascript code -->
-    <script src="{% static 'js/dispatch.js' %}"></script>
-    <script src="{% static 'js/map.js' %}"></script>
-    <script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
+<!-- MQTT -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
 
+<!-- MapBox Geocoder -->
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css'
+      type='text/css' />
+
+<!-- Google Geocoder -->
+<!--
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=dispatchInitAutocomplete"
+        async defer></script>
+-->
+
+<!-- Load javascript code -->
+<script src="{% static 'js/dispatch.js' %}"></script>
+<script src="{% static 'js/map.js' %}"></script>
+<script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
 
 {% endblock %}

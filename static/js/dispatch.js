@@ -249,7 +249,7 @@ function getCookie(name) {
 }
 
 /* Functions to fill autocomplete AND to click specific locations */
-function initAutocomplete() {
+function dispatchInitAutocomplete() {
     // Create the autocomplete object, restricting the search to geographical
     autocomplete = new google.maps.places.Autocomplete((document.getElementById('street')),
         {types: ['geocode']});
