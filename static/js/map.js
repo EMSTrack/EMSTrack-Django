@@ -111,7 +111,7 @@ $(document).ready(function () {
     });
     mymap.addControl(drawControl);
 
-    // Event handler for when something is drawn. Only handles 
+    // Event handler for when some1pxg is drawn. Only handles 
     // when a new drawing is made for now.
     mymap.on(L.Draw.Event.CREATED,
         function (e) {
@@ -126,12 +126,6 @@ $(document).ready(function () {
 
     // Create status filter on the right hand top corner
     createCategoryFilter();
-
-    // Submit form
-    $('#dispatchForm').submit(function (e) {
-        e.preventDefault();
-        postDispatchCall();
-    });
 
     // Make ambulance-selection droppable
     $('#ambulance-selection')
@@ -656,7 +650,7 @@ function createCategoryFilter() {
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
-    filterHtml += '<div style="border-style: solid; border-width: thin; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
+    filterHtml += '<div style="border-style: solid; border-width: 1px; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
     Object.keys(ambulance_status).forEach(function (status) {
 
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
@@ -671,7 +665,7 @@ function createCategoryFilter() {
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for hospital
-    filterHtml += '<div style="border-style: solid; border-width: thin; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
+    filterHtml += '<div style="border-style: solid; border-width: 1px; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
     let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
@@ -682,7 +676,7 @@ function createCategoryFilter() {
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for locations
-    filterHtml += '<div style="border-style: solid; border-width: thin; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
+    filterHtml += '<div style="border-style: solid; border-width: 1px; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
     Object.keys(location_type).forEach(function (type) {
 
         categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);

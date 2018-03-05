@@ -294,12 +294,25 @@ $('#update-address').change(function() {
 
 });
 
+$('#dispatchForm').submit(function (e) {
+
+    // prevent normal form submission
+    e.preventDefault();
+
+    // dispatch call
+    dispatchCall();
+
+});
+
+
+
 /*
- * postDispatchCall makes an ajax post request to post dispatched ambulance.
+ * dispatchCall makes an ajax post request to post dispatched ambulance.
  * @param void.
  * @return void.
  */
-function postDispatchCall() {
+function dispatchCall() {
+
     var formData = {};
     var assigned_ambulances = [];
 
@@ -331,7 +344,7 @@ function postDispatchCall() {
 
     formData["ambulance"] = assigned_ambulances.toString();
 
-    let postJsonUrl = 'api/calls/';
+    let postJsonUrl = 'api/call/';
     alert(JSON.stringify(formData) + '\n' + postJsonUrl);
 
     var csrftoken = getCookie('csrftoken');
@@ -350,6 +363,7 @@ function postDispatchCall() {
         dataType: 'json',
         data: formData,
         success: function (data) {
+
             // alert(JSON.stringify(data));
             var successMsg = '<strong>Success</strong><br/>' +
                 +'Ambulance: ' + data['ambulance']
@@ -358,12 +372,15 @@ function postDispatchCall() {
             $('.modal-body').html(successMsg).addClass('alert-success');
             $('.modal-title').append('Successfully Dispached');
             $("#dispatchModal").modal('show');
+
             endDispatching();
         },
         error: function (jqXHR, textStatus, errorThrown) {
+
             alert(JSON.stringify(jqXHR) + ' ' + textStatus);
             $('.modal-title').append('Dispatch failed');
             $("#dispatchModal").modal('show');
+
             endDispatching();
         }
     });
