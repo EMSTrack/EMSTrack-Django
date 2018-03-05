@@ -151,7 +151,7 @@ var updateCurrentLocation = function(location) {
     markersGroup.addTo(mymap);
 
     // pan to location
-    mymap.panTo(location;
+    mymap.panTo(location);
 
     // events
     marker.on('dragend', function(e) {
