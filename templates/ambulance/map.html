@@ -123,17 +123,21 @@
                                 <span class="glyphicon glyphicon-chevron-right"></span>
                                 Location:
                                 <div style="float: right;">
-                                    <input id="update-coordinates" type="checkbox">
+                                    <input id="update-coordinates" type="checkbox"/>
                                     update coordinates
                                 </div>
                                 <input id="street" type="text"
                                        name="street" class="form-control"
-                                       placeholder="Address" required/>
+                                       placeholder="Address" required
+                                       style="float: clear;"
+                                />
                                 <div style="float: right;">
-                                    <input id="update-address" type="checkbox">
+                                    <input id="update-address" type="checkbox"/>
                                     update address
                                 </div>
-                                <div class="panel panel-default" title="Click on map to update coordinates">
+                                <div class="panel panel-default"
+                                     title="Click on map to update coordinates"
+                                     style="float: clear;">
                                     <div class="panel-body">
                                         <strong>Latitude:</strong>
                                         <div id="curr-lat" style="display: inline-block;"></div>
