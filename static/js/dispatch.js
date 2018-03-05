@@ -139,7 +139,7 @@ $("#street").change(function (data) {
     geocoder.geocode(address, options,
         function (results, status) {
 
-        if status != "success" {
+        if (status != "success") {
             alert("Could not geocode:\nError " + status + ", " + results['error']);
             return;
         }
@@ -151,16 +151,16 @@ $("#street").change(function (data) {
         }
 
         // parse features into address
-        var res = geocoder.parse_feature(results[0]);
+        var address = geocoder.parse_feature(results[0]);
 
         alert('street: '
-            + res['street']
-            + '\nlocation: ' + res['location']['latitude'] + ',' + res['location']['longitude']
-            + '\nneighborhood: ' + res['neighborhood']
-            + '\nzipcode: ' + res['zipcode']
-            + '\ncity: ' + res['city']
-            + '\nstate: ' + res['state']
-            + '\ncountry: ' + res['country']
+            + address['street']
+            + '\nlocation: ' + address['location']['latitude'] + ',' + address['location']['longitude']
+            + '\nneighborhood: ' + address['neighborhood']
+            + '\nzipcode: ' + address['zipcode']
+            + '\ncity: ' + address['city']
+            + '\nstate: ' + address['state']
+            + '\ncountry: ' + address['country']
         );
 
     });
