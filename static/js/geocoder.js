@@ -80,7 +80,7 @@ Geocoder.prototype.reverse = function(location, options, callback) {
     }
 
     // construct query
-    url += location.lat + ',' + location.lng + ".json";
+    url += location.lng + ',' + location.lat + ".json";
 
     // add parameters
     var prefix = '?';
@@ -100,6 +100,8 @@ Geocoder.prototype.reverse = function(location, options, callback) {
 
     // query mapbox
     $.getJSON(url, function (response) {
+
+        console.log('JSON response = ' + response);
 
         // callback
         if (callback)
