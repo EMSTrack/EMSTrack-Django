@@ -81,7 +81,7 @@ Geocoder.prototype.parse_feature = function(feature) {
         var matches = street[0].match(config['regex']);
         if (matches) {
             console.log(matches);
-            var street_components = config['regex'];
+            var street_components = config['street_components'];
             // matches[0] is the entire matched string
             for (var i = 1; i < matches.length; i++) {
                 if (matches[i] !== undefined)
