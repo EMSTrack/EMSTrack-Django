@@ -126,7 +126,7 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
-function geocode(query, options) {
+function geocode(query, options, callback) {
 
     var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
@@ -153,7 +153,9 @@ function geocode(query, options) {
     // query mapbox
     $.getJSON(url, function (response) {
 
-        alert('url = ' + url + '\nGot geocode response\n' + response);
+        // callback
+        if (callback)
+            callback(response.features);
 
     })
         .fail(function (jqxhr, testStatus, error) {
@@ -175,7 +177,12 @@ $("#street").change(function (data) {
         limit: 1,
         autocomplete: 'true'
     };
-    geocode(address, options);
+    geocode(address, options, function (features) {
+
+        var feature = features[0];
+        alert('Got geocode ' + feature['place_name']);
+
+    });
 
 /*
     var geocoder = new google.maps.Geocoder();
