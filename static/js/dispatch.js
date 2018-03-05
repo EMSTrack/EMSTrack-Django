@@ -179,8 +179,18 @@ $("#street").change(function (data) {
     };
     geocode(address, options, function (features) {
 
+        // quick return if found nothing
+        if (features.length == 0) {
+            console.log('Got nothing from geocode');
+            return;
+        }
+
+        // parse features into address
         var feature = features[0];
-        alert('Got geocode ' + feature['place_name']);
+        var street = feature['place_name'];
+        var latlng= feature['center'];
+
+        alert('street = ' + street + '\nlatlng = ' + latlng);
 
     });
 
