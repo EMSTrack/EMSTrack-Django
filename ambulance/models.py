@@ -30,6 +30,11 @@ def get_location_type(key):
     return LocationType[key].value
 
 
+@register.filter
+def get_call_priority(key):
+    return CallPriority[key].value
+
+
 def calculate_orientation(location1, location2):
     # Calculate orientation based on two locations
     # https://www.movable-type.co.uk/scripts/latlong.html
@@ -205,9 +210,46 @@ class AmbulanceUpdate(models.Model):
 
 # Call related models
 
+class CallPriority(Enum):
+    A = 'Ressucitation'
+    B = 'Emergent'
+    C = 'Urgent'
+    D = 'Less urgent'
+    E = 'Not urgent'
+
+
+class Call(AddressModel, UpdatedByModel):
+
+    # active status
+    active = models.BooleanField(default=False)
+
+    # details
+    details = models.CharField(max_length=500, default="")
+
+    # call priority
+    CALL_PRIORITY_CHOICES = \
+        [(m.name, m.value) for m in CallPriority]
+    priority = models.CharField(max_length=1,
+                                choices=CALL_PRIORITY_CHOICES,
+                                default=CallPriority.E.name)
+
+    # created at
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    # ended at
+    ended_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return "{} ({})".format(self.location, self.priority)
+
+
 class AmbulanceCallTime(models.Model):
+
+    call = models.ForeignKey(Call,
+                             on_delete=models.CASCADE)
+
     ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE, default=1)
+                                  on_delete=models.CASCADE)
 
     dispatch_time = models.DateTimeField(null=True, blank=True)
     departure_time = models.DateTimeField(null=True, blank=True)
@@ -223,43 +265,11 @@ class Patient(models.Model):
     A model that provides patient fields.
     """
 
+    call = models.ForeignKey(Call,
+                             on_delete=models.CASCADE)
+
     name = models.CharField(max_length=254, default="")
     age = models.IntegerField(null=True)
-
-
-class CallPriority(Enum):
-    A = 'Urgent'
-    B = 'Emergency'
-    C = 'C'
-    D = 'D'
-    E = 'Not urgent'
-
-
-class Call(AddressModel, UpdatedByModel):
-    # active status
-    active = models.BooleanField(default=False)
-
-    # ambulances assigned to call
-    ambulances = models.ManyToManyField(AmbulanceCallTime)
-
-    # patients
-    patients = models.ManyToManyField(Patient, blank=True)
-
-    # details
-    details = models.CharField(max_length=500, default="")
-
-    # call priority
-    CALL_PRIORITY_CHOICES = \
-        [(m.name, m.value) for m in CallPriority]
-    priority = models.CharField(max_length=1,
-                                choices=CALL_PRIORITY_CHOICES,
-                                default=CallPriority.E.name)
-
-    # created at
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "{} ({})".format(self.location, self.priority)
 
 
 # Location related models
