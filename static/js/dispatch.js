@@ -27,8 +27,8 @@ var beginDispatching = function () {
 
     // Update current location
     currentLocation = mymap.getCenter();
-    document.getElementById('curr-lat').innerHTML = coordinate.lat();
-    document.getElementById('curr-lng').innerHTML = coordinate.lng();
+    document.getElementById('curr-lat').innerHTML = currentLocation.lat;
+    document.getElementById('curr-lng').innerHTML = currentLocation.lng;
 
     mymap.on('click', function (e) {
 
