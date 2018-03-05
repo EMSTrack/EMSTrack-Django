@@ -46,15 +46,25 @@ var ambulanceIconBlue = L.icon({
 	iconUrl: '/static/icons/cars/ambulance_blue.svg',
 	iconSize: [60, 40],
 });
+
 var hospitalIcon = L.icon({
-	iconUrl: '/static/icons/hospital_icon.png',
-	iconSize: [40, 40]
+	iconUrl: '/static/icons/maki/hospital-15.png',
+	iconSize: [15, 15]
 });
+var defibrilatorIcon = L.icon({
+	iconUrl: '/static/icons/maki/defibrilator-15.png',
+	iconSize: [15, 15]
+});
+var baseIcon = L.icon({
+	iconUrl: '/static/icons/maki/home-15.png',
+	iconSize: [15, 15]
+});
+
 var locationIcon = L.icon({
-	iconUrl: '/static/icons/place_marker.png',
-	iconSize: [40, 40],
-	iconAnchor: [20, 40],
-	popupAnchor: [0,-40]
+	iconUrl: '/static/icons/maki/marker-15.png',
+	iconSize: [15, 15],
+	iconAnchor: [7, 15],
+	popupAnchor: [0,-15]
 
 });
 
@@ -585,12 +595,18 @@ function addLocationToMap(location) {
     locations[location.id] = location;
 
     // set icon by status
-    let coloredIcon = locationIcon;
-
+    let icon = locationIcon;
+    if (location.type === 'A')
+        icon = defibrilatorIcon;
+    else if (location.type === 'B')
+        icon = baseIcon;
+    else
+        icon = markerIcon;
+        
     // If location marker doesn't exist
     locationMarkers[location.id] = L.marker([location.location.latitude,
             location.location.longitude],
-        {icon: coloredIcon})
+        {icon: icon})
         .bindPopup("<strong>" + location.name + "</strong>")
         .addTo(mymap);
 
