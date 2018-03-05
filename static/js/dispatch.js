@@ -155,10 +155,9 @@ var updateCurrentLocation = function(location) {
         updateCurrentLocation(marker.getLatLng());
 
         // update address?
-        if ($('update-address').attr('checked')) {
+        if ($('#update-address').attr('checked'))
             updateCurrentAddress(currentLocation);
-        }
-        
+
     })
 
 }
@@ -212,7 +211,7 @@ $("#street").change(function (data) {
     var address = document.getElementById('street').value;
 
     // update location?
-    if ($('update-coordinates').attr('checked')) {
+    if ($('#update-coordinates').attr('checked')) {
 
         var options = {
             types: 'address',
