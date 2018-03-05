@@ -148,6 +148,9 @@ var updateCurrentLocation = function(location) {
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
 
+    // pan to location
+    mymap.panTo(location);
+
     // events
     marker.on('dragend', function(e) {
 
@@ -237,16 +240,16 @@ $("#street").change(function (data) {
 
                 console.log(
                     'Setting currentLocation to:'
-                    + '\nnumber: ' + currentAddress['number']
-                    + '\nstreet: ' + currentAddress['street']
-                    + '\ncomplement: ' + currentAddress['complement']
-                    + '\nlocation: ' + currentAddress['location']['latitude']
-                    + ',' + currentAddress['location']['longitude']
-                    + '\nneighborhood: ' + currentAddress['neighborhood']
-                    + '\nzipcode: ' + currentAddress['zipcode']
-                    + '\ncity: ' + currentAddress['city']
-                    + '\nstate: ' + currentAddress['state']
-                    + '\ncountry: ' + currentAddress['country']
+                    + '\nnumber: ' + address['number']
+                    + '\nstreet: ' + address['street']
+                    + '\ncomplement: ' + address['complement']
+                    + '\nlocation: ' + address['location']['latitude']
+                    + ',' + address['location']['longitude']
+                    + '\nneighborhood: ' + address['neighborhood']
+                    + '\nzipcode: ' + address['zipcode']
+                    + '\ncity: ' + address['city']
+                    + '\nstate: ' + address['state']
+                    + '\ncountry: ' + address['country']
                 );
 
                 // set current location
