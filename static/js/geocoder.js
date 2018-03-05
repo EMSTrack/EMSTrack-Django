@@ -1,27 +1,27 @@
-var parser_configurations = {
-
-    'US': {
-        regex: /^(\d+)(\D+)((suite|ste|#)?\s*\d+)?$/i,
-        street_components: ['number', 'street', 'complement']
-    },
-
-    'MX': {
-        regex: /^(\D+)(\d+|s\/n)?(\D+\d*)?$/i,
-        street_components: ['street', 'number', 'complement']
-    }
-
-}
-
 var Geocoder = function(options) {
 
-    this.options = {
-    };
+    this.options = {};
 
-     // Altering using user-provided options
+    // Altering using user-provided options
     for (var property in options) {
         if (options.hasOwnProperty(property)) {
             this.options[property] = options[property];
         }
+    }
+
+    // initialize parser configurations
+    this.parser_configurations = {
+
+        'US': {
+            regex: /^(\d+)(\D+)((suite|ste|#)?\s*\d+)?$/i,
+            street_components: ['number', 'street', 'complement']
+        },
+
+        'MX': {
+            regex: /^(\D+)(\d+|s\/n)?(\D+\d*)?$/i,
+            street_components: ['street', 'number', 'complement']
+        }
+
     }
 
 }
@@ -76,7 +76,7 @@ Geocoder.prototype.parse_feature = function(feature) {
         var street = street_address.split(',');
 
         // load configuration based on country
-        var config = parse_configurations[address['country']];
+        var config = this.parser_configurations[address['country']];
 
         var matches = street[0].match(config['regex']);
         if (matches) {
