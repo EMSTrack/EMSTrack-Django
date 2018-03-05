@@ -3,9 +3,12 @@
 var markersGroup = new L.LayerGroup();
 var isDispatching = false;
 var placeIcon = L.icon({
-    iconUrl: '/static/icons/place_marker.png',
-    iconSize: [50, 50], // size of the icon
+	iconUrl: '/static/icons/place_marker.png',
+	iconSize: [40, 40],
+	iconAnchor: [20, 40],
+	popupAnchor: [0,-40]
 });
+
 var dispatchingAmbulances = {};
 var numberOfDispatchingAmbulances = 0;
 
