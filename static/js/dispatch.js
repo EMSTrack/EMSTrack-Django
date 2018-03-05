@@ -12,107 +12,17 @@ var numberOfDispatchingAmbulances = 0;
 var currentAddress;
 var currentLocation;
 
-var updateCurrentLocation = function(location) {
-
-    // set currentLocation
-    currentLocation = location;
-
-    // update coordinates on form
-    document.getElementById('curr-lat').innerHTML = currentLocation.lat;
-    document.getElementById('curr-lng').innerHTML = currentLocation.lng;
-
-    // remove existing marker
-    markersGroup.clearLayers();
-
-    // laydown marker
-    var marker = L.marker([location.lat, location.lng],
-        {
-            icon: placeIcon,
-            draggable: true
-        }).addTo(markersGroup);
-    markersGroup.addTo(mymap);
-
-    // events
-    marker.on('dragend', function(e) {
-        // update current location
-        updateCurrentLocation(marker.getLatLng());
-    })
-
-}
-
-var updateCurrentAddress = function(location) {
-
-    var options = {
-        types: 'address',
-        limit: 1
-    };
-    geocoder.reverse(location, options,
-        function (results, status) {
-
-        if (status != "success") {
-            alert("Could not geocode:\nError " + status + ", " + results['error']);
-            return;
-        }
-
-        // quick return if found nothing
-        if (results.length == 0) {
-            console.log('Got nothing from geocode');
-            return;
-        }
-
-        // parse features into address
-        var address = geocoder.parse_feature(results[0]);
-
-        alert('street: '
-            + address['street']
-            + '\nlocation: ' + address['location']['latitude'] + ',' + address['location']['longitude']
-            + '\nneighborhood: ' + address['neighborhood']
-            + '\nzipcode: ' + address['zipcode']
-            + '\ncity: ' + address['city']
-            + '\nstate: ' + address['state']
-            + '\ncountry: ' + address['country']
-        );
-
-    });
-
-
-
-    // set currentLocation
-    currentLocation = location;
-
-    // update coordinates on form
-    document.getElementById('curr-lat').innerHTML = currentLocation.lat;
-    document.getElementById('curr-lng').innerHTML = currentLocation.lng;
-
-    // remove existing marker
-    markersGroup.clearLayers();
-
-    // laydown marker
-    var marker = L.marker([location.lat, location.lng],
-        {
-            icon: placeIcon,
-            draggable: true
-        }).addTo(markersGroup);
-    markersGroup.addTo(mymap);
-
-    // events
-    marker.on('dragend', function(e) {
-        // update current location
-        updateCurrentLocation(marker.getLatLng());
-    })
-
-}
-
 var beginDispatching = function () {
-   
+
     isDispatching = true;
     console.log('Begin dispatching.');
-    
-    document.getElementById('dispatch_work').innerHTML 
-        = '<button type="button" class="btn btn-link" onclick="endDispatching()">'
+
+    $('#dispatch_work').html(
+        '<button type="button" class="btn btn-link" onclick="endDispatching()">'
         + '<span class="glyphicon glyphicon-chevron-left"></span>'
         + 'Abort'
-        + '</button>';
+        + '</button>'
+    );
     $('#dispatchForm').collapse('show');
     $('#ambulance_info_collapse').collapse('hide');
 
@@ -125,20 +35,21 @@ var beginDispatching = function () {
 }
 
 var endDispatching = function () {
-    
+
     isDispatching = false;
     dispatchingAmbulances = {};
     console.log('End dispatching.');
-    
+
     markersGroup.clearLayers();
-    document.getElementById('dispatch_work').innerHTML 
-        = '<button class="btn btn-primary" style="display: block; width: 100%;"' 
+    $('#dispatch_work').html(
+        '<button class="btn btn-primary" style="display: block; width: 100%;"'
         + 'data-toggle="collapse" href="#dispatchForm" onclick="beginDispatching()">'
         + 'Dispatch'
-        + '</button>';
+        + '</button>'
+    );
     $('#dispatchForm').collapse('hide');
     $('#ambulance_info_collapse').collapse('show');
-    
+
 }
 
 var removeFromDispatchingList = function(ambulance) {
@@ -214,17 +125,51 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
-$("#street").change(function (data) {
 
-    var address = document.getElementById('street').value;
-    console.log('Received address: ' + address);
+
+var updateCurrentLocation = function(location) {
+
+    // set currentLocation
+    currentLocation = location;
+
+    // update coordinates on form
+    $('#curr-lat').html(currentLocation.lat);
+    $('#curr-lng').html(currentLocation.lng);
+
+    // remove existing marker
+    markersGroup.clearLayers();
+
+    // laydown marker
+    var marker = L.marker([location.lat, location.lng],
+        {
+            icon: placeIcon,
+            draggable: true
+        })
+        .addTo(markersGroup);
+    markersGroup.addTo(mymap);
+
+    // events
+    marker.on('dragend', function(e) {
+
+        // update current location
+        updateCurrentLocation(marker.getLatLng());
+
+        // update address?
+        if ($('update-address').attr('checked')) {
+            updateCurrentAddress(currentLocation);
+        }
+        
+    })
+
+}
+
+var updateCurrentAddress = function(location) {
 
     var options = {
         types: 'address',
-        limit: 1,
-        autocomplete: 'true'
+        limit: 1
     };
-    geocoder.geocode(address, options,
+    geocoder.reverse(location, options,
         function (results, status) {
 
         if (status != "success") {
@@ -238,40 +183,82 @@ $("#street").change(function (data) {
             return;
         }
 
-        // parse features into address
-        var address = geocoder.parse_feature(results[0]);
+        // parse features into current address
+        currentAddress = geocoder.parse_feature(results[0]);
 
-        alert('street: '
-            + address['street']
-            + '\nlocation: ' + address['location']['latitude'] + ',' + address['location']['longitude']
-            + '\nneighborhood: ' + address['neighborhood']
-            + '\nzipcode: ' + address['zipcode']
-            + '\ncity: ' + address['city']
-            + '\nstate: ' + address['state']
-            + '\ncountry: ' + address['country']
+        console.log(
+            'Setting currentAddress to:'
+            + '\nnumber: ' + currentAddress['number']
+            + '\nstreet: ' + currentAddress['street']
+            + '\ncomplement: ' + currentAddress['complement']
+            + '\nlocation: ' + currentAddress['location']['latitude']
+            + ',' + currentAddress['location']['longitude']
+            + '\nneighborhood: ' + currentAddress['neighborhood']
+            + '\nzipcode: ' + currentAddress['zipcode']
+            + '\ncity: ' + currentAddress['city']
+            + '\nstate: ' + currentAddress['state']
+            + '\ncountry: ' + currentAddress['country']
         );
 
+        // set input text
+        $('#street').val(currentAddress['street_address']);
+
     });
 
-/*
-    var geocoder = new google.maps.Geocoder();
+}
 
-    geocoder.geocode({address: addressInput}, function (results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var coordinate = results[0].geometry.location;
+$("#street").change(function (data) {
 
-            document.getElementById('curr-lat').innerHTML = coordinate.lat();
-            document.getElementById('curr-lng').innerHTML = coordinate.lng();
+    var address = document.getElementById('street').value;
 
-            L.marker([coordinate.lat(), coordinate.lng()], {icon: placeIcon}).addTo(markersGroup);
-            markersGroup.addTo(mymap);
-            mymap.setView(new L.LatLng(coordinate.lat(), coordinate.lng()), 17);
-        }
-        else {
-            alert("There is error from Google map server");
-        }
-    });
-*/
+    // update location?
+    if ($('update-location').attr('checked')) {
+
+        var options = {
+            types: 'address',
+            limit: 1,
+            autocomplete: 'true'
+        };
+        geocoder.geocode(address, options,
+            function (results, status) {
+
+                if (status != "success") {
+                    alert("Could not geocode:\nError " + status + ", " + results['error']);
+                    return;
+                }
+
+                // quick return if found nothing
+                if (results.length == 0) {
+                    console.log('Got nothing from geocode');
+                    return;
+                }
+
+                // parse features into address
+                var address = geocoder.parse_feature(results[0]);
+
+                console.log(
+                    'Setting currentLocation to:'
+                    + '\nnumber: ' + currentAddress['number']
+                    + '\nstreet: ' + currentAddress['street']
+                    + '\ncomplement: ' + currentAddress['complement']
+                    + '\nlocation: ' + currentAddress['location']['latitude']
+                    + ',' + currentAddress['location']['longitude']
+                    + '\nneighborhood: ' + currentAddress['neighborhood']
+                    + '\nzipcode: ' + currentAddress['zipcode']
+                    + '\ncity: ' + currentAddress['city']
+                    + '\nstate: ' + currentAddress['state']
+                    + '\ncountry: ' + currentAddress['country']
+                );
+
+                // set current location
+                setCurrentLocation(
+                    L.latlng(address['location']['latitude'],
+                        address['location']['longitude'])
+                );
+
+            });
+
+    }
 
 });
 

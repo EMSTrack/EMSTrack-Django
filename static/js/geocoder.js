@@ -18,8 +18,10 @@ Geocoder.prototype.parse_feature = function(feature) {
     if (feature['place_type'] == 'address') {
 
         var address = {
+            street_address: "",
             number: "",
             street: "",
+            complement: "",
             unit: null,
             neighborhood: null,
             city: "",
@@ -33,9 +35,27 @@ Geocoder.prototype.parse_feature = function(feature) {
             'longitude': feature['center'][1]
         }
 
-        // Parse address
-        var street = feature['place_name'].split(',');
-        address['street'] = street[0];
+        // set street_address
+        var street_address = feature['place_name'];
+        address['street_address'] = street_address;
+
+        // parse street address
+        var street = street_address.split(',');
+        var regex = /^(\d+)?(\D+)(\d+|s\/n)?(\D+\d*)$/i;
+        var matches = street[0].match(regex);
+        if (matches) {
+            console.log(matches);
+            // matches[0] is the entire matched string
+            address['street'] = matches[2];
+            if (matches[1] != '')
+                // number at beginning of address
+                address['number'] = matches[1];
+            else if (matches[3] != '')
+                // number at middle of address
+                address['number'] = matches[1];
+            if (matches[4] != '')
+                address['complement'] = matches[4];
+        }
 
         // Parse context
         var context = feature['context'];
