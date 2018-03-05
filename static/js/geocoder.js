@@ -35,8 +35,8 @@ Geocoder.prototype.parse_feature = function(feature) {
         }
 
         // Parse address
-        var address = feature['place_name'].split(',');
-        address['street'] = address[0];
+        var street = feature['place_name'].split(',');
+        address['street'] = street[0];
 
         // Parse context
         var context = feature['context'];
