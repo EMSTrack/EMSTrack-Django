@@ -87,7 +87,7 @@ $(document).ready(function () {
     // Set map view
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
-    geocoder = L.mapbox.geocoder('mapbox.places');
+    // geocoder = L.mapbox.geocoder('mapbox.places');
 
     // Add layer to map.
     L.tileLayer(
