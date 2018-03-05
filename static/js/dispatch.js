@@ -128,8 +128,6 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
-
-
 var updateCurrentLocation = function(location) {
 
     console.log('Setting current location to: ' + location.lat + ', ' + location.lng);
@@ -214,58 +212,85 @@ var updateCurrentAddress = function(location) {
 
 }
 
-$("#street").change(function (data) {
+var updateCoordinates = function() {
 
-    var address = document.getElementById('street').value;
+    // when the user changes the street address
+    var address =$('#street').val();
 
-    // update location?
-    if ($('#update-coordinates').prop('checked')) {
+    // quick return if no address
+    if (!address)
+        return;
 
-        var options = {
-            types: 'address',
-            limit: 1,
-            autocomplete: 'true'
-        };
-        geocoder.geocode(address, options,
-            function (results, status) {
+    // otherwise geocode and update
+    var options = {
+        types: 'address',
+        limit: 1,
+        autocomplete: 'true'
+    };
+    geocoder.geocode(address, options,
+        function (results, status) {
 
-                if (status != "success") {
-                    alert("Could not geocode:\nError " + status + ", " + results['error']);
-                    return;
-                }
+            if (status != "success") {
+                alert("Could not geocode:\nError " + status + ", " + results['error']);
+                return;
+            }
 
-                // quick return if found nothing
-                if (results.length == 0) {
-                    console.log('Got nothing from geocode');
-                    return;
-                }
+            // quick return if found nothing
+            if (results.length == 0) {
+                console.log('Got nothing from geocode');
+                return;
+            }
 
-                // parse features into address
-                var address = geocoder.parse_feature(results[0]);
+            // parse features into address
+            var address = geocoder.parse_feature(results[0]);
 
-                console.log(
-                    'Setting currentLocation to:'
-                    + '\nnumber: ' + address['number']
-                    + '\nstreet: ' + address['street']
-                    + '\ncomplement: ' + address['complement']
-                    + '\nlocation: ' + address['location']['latitude']
-                    + ',' + address['location']['longitude']
-                    + '\nneighborhood: ' + address['neighborhood']
-                    + '\nzipcode: ' + address['zipcode']
-                    + '\ncity: ' + address['city']
-                    + '\nstate: ' + address['state']
-                    + '\ncountry: ' + address['country']
-                );
+            console.log(
+                'Setting currentLocation to:'
+                + '\nnumber: ' + address['number']
+                + '\nstreet: ' + address['street']
+                + '\ncomplement: ' + address['complement']
+                + '\nlocation: ' + address['location']['latitude']
+                + ',' + address['location']['longitude']
+                + '\nneighborhood: ' + address['neighborhood']
+                + '\nzipcode: ' + address['zipcode']
+                + '\ncity: ' + address['city']
+                + '\nstate: ' + address['state']
+                + '\ncountry: ' + address['country']
+            );
 
-                // set current location
-                updateCurrentLocation({
-                        lat: address['location']['latitude'],
-                        lng: address['location']['longitude']
-                });
-
+            // set current location
+            updateCurrentLocation({
+                lat: address['location']['latitude'],
+                lng: address['location']['longitude']
             });
 
-    }
+        });
+}
+
+// connect actions to inputs
+
+$("#street").change(function () {
+
+    // update coordinates?
+    if ($('#update-coordinates').prop('checked'))
+        updateCoordinates();
+
+});
+
+
+$('#update-coordinates').change(function() {
+
+    // update coordinates?
+    if ($('#update-coordinates').prop('checked'))
+        updateCoordinates();
+
+});
+
+$('#update-address').change(function() {
+
+    // update address?
+    if ($('#update-address').prop('checked'))
+        updateCurrentAddress(currentLocation);
 
 });
 
