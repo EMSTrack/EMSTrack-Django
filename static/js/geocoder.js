@@ -47,8 +47,8 @@ Geocoder.prototype.parse_feature = function(feature) {
 
         // set location
         address['location'] = {
-            'latitude': feature['center'][0],
-            'longitude': feature['center'][1]
+            'latitude': feature['center'][1],
+            'longitude': feature['center'][0]
         }
 
         // parse context

@@ -142,7 +142,7 @@ var updateCurrentLocation = function(location) {
     markersGroup.clearLayers();
 
     // laydown marker
-    var marker = L.marker([location.lat, location.lng],
+    var marker = L.marker(location,
         {
             icon: placeIcon,
             draggable: true
@@ -151,7 +151,7 @@ var updateCurrentLocation = function(location) {
     markersGroup.addTo(mymap);
 
     // pan to location
-    mymap.panTo(location);
+    mymap.panTo(location;
 
     // events
     marker.on('dragend', function(e) {
