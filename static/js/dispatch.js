@@ -126,47 +126,6 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
-function geocode(query, options, callback) {
-
-    var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
-
-    // add query
-    url += encodeURIComponent(query) + ".json";
-
-    // add parameters
-    var prefix = '?';
-
-    for (var option in options) {
-        if (options.hasOwnProperty(option)) {
-
-            // add options
-            url += prefix + encodeURIComponent(option) + "=" + encodeURIComponent(options[option]);
-            prefix = '&';
-
-        }
-    }
-
-    // add token
-    if (!options.hasOwnProperty("access_token"))
-        url += prefix + "access_token=" + accessToken;
-
-    // query mapbox
-    $.getJSON(url, function (response) {
-
-        // callback
-        if (callback)
-            callback(response.features);
-
-    })
-        .fail(function (jqxhr, testStatus, error) {
-
-            alert("Could not geocode:" +
-                testStatus + "," + error + "\n");
-
-        });
-
-}
-
 $("#street").change(function (data) {
 
     var address = document.getElementById('street').value;
@@ -177,20 +136,32 @@ $("#street").change(function (data) {
         limit: 1,
         autocomplete: 'true'
     };
-    geocode(address, options, function (features) {
+    geocoder.geocode(address, options,
+        function (results, status) {
+
+        if status != "success" {
+            alert("Could not geocode:\nError " + status + ", " + results['error']);
+            return;
+        }
 
         // quick return if found nothing
-        if (features.length == 0) {
+        if (results.length == 0) {
             console.log('Got nothing from geocode');
             return;
         }
 
         // parse features into address
-        var feature = features[0];
-        var street = feature['place_name'];
-        var latlng= feature['center'];
+        var res = geocoder.parse_feature(results[0]);
 
-        alert('street = ' + street + '\nlatlng = ' + latlng);
+        alert('street: '
+            + res['street']
+            + '\nlocation: ' + res['location']['latitude'] + ',' + res['location']['longitude']
+            + '\nneighborhood: ' + res['neighborhood']
+            + '\nzipcode: ' + res['zipcode']
+            + '\ncity: ' + res['city']
+            + '\nstate: ' + res['state']
+            + '\ncountry: ' + res['country']
+        );
 
     });
 
