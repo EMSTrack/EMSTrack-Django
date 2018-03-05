@@ -212,7 +212,7 @@ $("#street").change(function (data) {
     var address = document.getElementById('street').value;
 
     // update location?
-    if ($('update-location').attr('checked')) {
+    if ($('update-coordinates').attr('checked')) {
 
         var options = {
             types: 'address',
