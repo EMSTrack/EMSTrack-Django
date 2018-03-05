@@ -1,4 +1,4 @@
-var Geocode = function(options) {
+var Geocoder = function(options) {
 
     this.options = {
         autocomplete: 'true'
@@ -13,7 +13,7 @@ var Geocode = function(options) {
 
 }
 
-Geocode.prototype.parse_feature = function(feature) {
+Geocoder.prototype.parse_feature = function(feature) {
 
     // parse feature
     if (feature['place_type'] == 'address') {
@@ -60,7 +60,7 @@ Geocode.prototype.parse_feature = function(feature) {
 
 }
 
-Geocode.prototype.geocode = function(query, options, callback) {
+Geocoder.prototype.geocode = function(query, options, callback) {
 
     var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
