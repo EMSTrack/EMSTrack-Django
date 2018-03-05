@@ -50,9 +50,9 @@ Geocoder.prototype.parse_feature = function(feature) {
             else if (id.startsWith('place'))
                 address['city'] = item['text'];
             else if (id.startsWith('region'))
-                address['state'] = item['short-code'].toUpperCase().substr(3);
+                address['state'] = item['short_code'].toUpperCase().substr(3);
             else if (id.startsWith('country'))
-                address['country'] = item['short-code'].toUpperCase();
+                address['country'] = item['short_code'].toUpperCase();
         }
 
         return address;
