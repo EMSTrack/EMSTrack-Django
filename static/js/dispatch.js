@@ -12,7 +12,7 @@ var numberOfDispatchingAmbulances = 0;
 var currentAddress;
 var currentLocation;
 
-var updateCurrentLocation(location) {
+var updateCurrentLocation = function(location) {
 
     // set currentLocation
     currentLocation = location;
