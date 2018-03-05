@@ -34,6 +34,70 @@ var updateCurrentLocation = function(location) {
 
     // events
     marker.on('dragend', function(e) {
+        // update current location
+        updateCurrentLocation(marker.getLatLng());
+    })
+
+}
+
+var updateCurrentAddress = function(location) {
+
+    var options = {
+        types: 'address',
+        limit: 1
+    };
+    geocoder.reverse(location, options,
+        function (results, status) {
+
+        if (status != "success") {
+            alert("Could not geocode:\nError " + status + ", " + results['error']);
+            return;
+        }
+
+        // quick return if found nothing
+        if (results.length == 0) {
+            console.log('Got nothing from geocode');
+            return;
+        }
+
+        // parse features into address
+        var address = geocoder.parse_feature(results[0]);
+
+        alert('street: '
+            + address['street']
+            + '\nlocation: ' + address['location']['latitude'] + ',' + address['location']['longitude']
+            + '\nneighborhood: ' + address['neighborhood']
+            + '\nzipcode: ' + address['zipcode']
+            + '\ncity: ' + address['city']
+            + '\nstate: ' + address['state']
+            + '\ncountry: ' + address['country']
+        );
+
+    });
+
+
+
+    // set currentLocation
+    currentLocation = location;
+
+    // update coordinates on form
+    document.getElementById('curr-lat').innerHTML = currentLocation.lat;
+    document.getElementById('curr-lng').innerHTML = currentLocation.lng;
+
+    // remove existing marker
+    markersGroup.clearLayers();
+
+    // laydown marker
+    var marker = L.marker([location.lat, location.lng],
+        {
+            icon: placeIcon,
+            draggable: true
+        }).addTo(markersGroup);
+    markersGroup.addTo(mymap);
+
+    // events
+    marker.on('dragend', function(e) {
+        // update current location
         updateCurrentLocation(marker.getLatLng());
     })
 
@@ -47,7 +111,7 @@ var beginDispatching = function () {
     document.getElementById('dispatch_work').innerHTML 
         = '<button type="button" class="btn btn-link" onclick="endDispatching()">'
         + '<span class="glyphicon glyphicon-chevron-left"></span>'
-        + 'Abort dispatching'
+        + 'Abort'
         + '</button>';
     $('#dispatchForm').collapse('show');
     $('#ambulance_info_collapse').collapse('hide');
@@ -55,19 +119,8 @@ var beginDispatching = function () {
     // Update current location
     updateCurrentLocation(mymap.getCenter());
 
-/*
-    mymap.on('click', function (e) {
-
-        if (isDispatching) {
-            markersGroup.clearLayers();
-            document.getElementById('curr-lat').innerHTML = e.latlng.lat;
-            document.getElementById('curr-lng').innerHTML = e.latlng.lng;
-            L.marker([e.latlng.lat, e.latlng.lng], {icon: placeIcon}).addTo(markersGroup);
-            markersGroup.addTo(mymap);
-        }
-        
-    });
-*/
+    // Update current address
+    updateCurrentAddress(currentLocation);
 
 }
 
