@@ -344,7 +344,7 @@ function dispatchCall() {
     var ambulances = [];
     for (var id in dispatchingAmbulances)
         if (dispatchingAmbulances.hasOwnProperty(id))
-            ambulances.append(id);
+            ambulances.push(id);
     form['ambulances'] = ambulances;
 
     // TODO: patients
