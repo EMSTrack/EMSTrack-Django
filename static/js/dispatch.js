@@ -20,14 +20,7 @@ var beginDispatching = function () {
     isDispatching = true;
     console.log('Begin dispatching.');
 
-    $('#dispatch_work').html(
-        '<button type="button" class="btn btn-link" onclick="endDispatching()">'
-        + '<span class="glyphicon glyphicon-chevron-left"></span>'
-        + 'Abort'
-        + '</button>'
-    );
-    $('#dispatchForm').collapse('show');
-    $('#ambulance_info_collapse').collapse('hide');
+    $('#start_dispatch_button').hide();
 
     // Update current location
     updateCurrentLocation(mymap.getCenter());
@@ -44,14 +37,8 @@ var endDispatching = function () {
     console.log('End dispatching.');
 
     markersGroup.clearLayers();
-    $('#dispatch_work').html(
-        '<button class="btn btn-primary" style="display: block; width: 100%;"'
-        + 'data-toggle="collapse" href="#dispatchForm" onclick="beginDispatching()">'
-        + 'Dispatch'
-        + '</button>'
-    );
-    $('#dispatchForm').collapse('hide');
-    $('#ambulance_info_collapse').collapse('show');
+
+    $('#start_dispatch_button').show();
 
 }
 

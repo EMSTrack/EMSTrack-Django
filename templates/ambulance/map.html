@@ -169,7 +169,9 @@
                             <button type="button" class="btn btn-secondary px-3"
                                     data-toggle="collapse"
                                     data-target="#dispatch_form_collapse"
-                                    aria-expanded="true" aria-controls="dispatch_form_collapse">
+                                    aria-expanded="true"
+                                    aria-controls="dispatch_form_collapse"
+                                    onclick="endDispatching()">
                                 Cancel
                             </button>
                         </div>
@@ -193,7 +195,7 @@
 
 
                 <!-- Dispatch panel -->
-                <div class="form-group">
+                <div class="form-group" id="start_dispatch_button">
                     <button class="btn btn-primary btn-block"
                             data-toggle="collapse"
                             data-target="#dispatch_form_collapse"
