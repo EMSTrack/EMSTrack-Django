@@ -14,12 +14,12 @@ var Geocoder = function(options) {
 
         'US': {
             regex: /^(\d+)(\D+)((suite|ste|#)?\s*\d+)?$/i,
-            street_components: ['number', 'street', 'complement']
+            street_components: ['number', 'street', 'unit']
         },
 
         'MX': {
             regex: /^(\D+)(\d+|s\/n)?(\D+\d*)?$/i,
-            street_components: ['street', 'number', 'complement']
+            street_components: ['street', 'number', 'unit']
         }
 
     }
@@ -35,14 +35,13 @@ Geocoder.prototype.parse_feature = function(feature) {
             street_address: "",
             number: "",
             street: "",
-            complement: "",
-            unit: null,
-            neighborhood: null,
+            unit: undefined,
+            neighborhood: undefined,
             city: "",
             state: "",
-            zipcode: "",
+            zipcode: undefined,
             country: "",
-            location: null
+            location: undefined
         };
 
         // set location

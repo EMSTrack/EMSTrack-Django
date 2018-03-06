@@ -195,7 +195,7 @@ var updateCurrentAddress = function(location) {
             'Setting currentAddress to:'
             + '\nnumber: ' + currentAddress['number']
             + '\nstreet: ' + currentAddress['street']
-            + '\ncomplement: ' + currentAddress['complement']
+            + '\nunit: ' + currentAddress['unit']
             + '\nlocation: ' + currentAddress['location']['latitude']
             + ',' + currentAddress['location']['longitude']
             + '\nneighborhood: ' + currentAddress['neighborhood']
@@ -248,7 +248,7 @@ var updateCoordinates = function() {
                 'Setting currentLocation to:'
                 + '\nnumber: ' + address['number']
                 + '\nstreet: ' + address['street']
-                + '\ncomplement: ' + address['complement']
+                + '\nunit: ' + address['unit']
                 + '\nlocation: ' + address['location']['latitude']
                 + ',' + address['location']['longitude']
                 + '\nneighborhood: ' + address['neighborhood']
@@ -332,7 +332,7 @@ function dispatchCall() {
     // address information
     form['number'] = currentAddress['number'];
     form['street'] = currentAddress['street'];
-    form['unit'] = currentAddress['complement'];
+    form['unit'] = currentAddress['unit'];
     form['neighborbood'] = currentAddress['neighborhood'];
     form['city'] = currentAddress['city'];
     form['state'] = currentAddress['state'];
@@ -385,7 +385,7 @@ function dispatchCall() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
 
-            alert(JSON.stringify(jqXHR) + ' ' + textStatus);
+            alert(textStatus + ", " + errorThrown);
             $('.modal-title').append('Dispatch failed');
             $("#dispatchModal").modal('show');
 
