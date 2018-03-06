@@ -31,6 +31,20 @@
 
             <div class="col-md-3">
 
+                <!-- Dispatch panel -->
+                <div class="card" id="cardThree">
+                    <div class="card-body" id="headingThree">
+                        <h5 class="mb-0">
+                            <button class="btn btn-primary" data-toggle="collapse"
+                                    data-target="#dispatch_form_collapse"
+                                    aria-expanded="true" aria-controls="dispatch_form_collapse"
+                                    onclick="beginDispatching()">
+                                Begin Dispatching
+                            </button>
+                        </h5>
+                    </div>
+                </div>
+
                 <!-- Ambulance Grid -->
                 <div class="card" id="cardOne">
                     <div class="card-header" id="headingOne">
@@ -91,19 +105,6 @@
                 </div>
 
 
-                <!-- Dispatch panel -->
-                <div class="card" id="cardThree">
-                    <div class="card-body" id="headingThree">
-                        <h5>
-                            <button class="btn btn-primary" data-toggle="collapse"
-                                    data-target="#dispatch_form_collapse"
-                                    aria-expanded="true" aria-controls="dispatch_form_collapse"
-                                    onclick="beginDispatching()">
-                                Dispatch
-                            </button>
-                        </h5>
-                    </div>
-                </div>
 
                 <div>
                     <form id="dispatch_form_collapse" class="collapse"
