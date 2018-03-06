@@ -32,142 +32,158 @@
                       method="POST" action="">
                     {% csrf_token %}
 
-                    <div class="row">
+                    <div class="card">
 
-                        <div class="col-md-4">
-                            <div class="card">
-
-                                <div class="card-header">
-                                    <h5 class="mb-0">Details:</h5>
-                                </div>
-
-                                <div class="card-body">
-                                    <h5 class="card-title">Priority:</h5>
-                                    <form required>
-                                        <div class="btn-group" data-toggle="buttons">
-                                            <button type="button" class="btn btn-info"
-                                                    name="priority" value="A">
-                                                A
-                                            </button>
-                                            <button type="button" class="btn btn-danger"
-                                                    name="priority" value="B">
-                                                B
-                                            </button>
-                                            <button type="button" class="btn btn-warning"
-                                                    name="priority" value="C">
-                                                C
-                                            </button>
-                                            <button type="button" class="btn btn-success"
-                                                    name="priority" value="D">
-                                                D
-                                            </button>
-                                            <button type="button" class="btn btn-default"
-                                                    name="priority" value="E">
-                                                E
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <div class="card-body">
-                                    <h5 class="card-title">Ambulances:</h5>
-                                    <div id="ambulance-selection">
-                                        <input id="ambulance-selection-message"
-                                               style="border: none;"
-                                               placeholder="Click on or drag ambulances here"/>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <h5 class="card-title"> Description:</h5>
-                                    <textarea class="form-control" name="description"
-                                              rows="5" id="comment"
-                                              required></textarea>
-                                </div>
-
-                            </div>
-
+                        <div class="card-header">
+                            <h5 class="mb-0">Dispatching Ambulances</h5>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="card-body">
 
-                            <div class="card">
+                            <div class="row">
 
-                                <div class="card-header">
-                                    <h5 class="mb-0">Location:</h5>
-                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
 
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <h5>Street address:</h5>
-                                    </div>
-                                    <div class="text-right"
-                                       title="Click to automatically search for coordinates after changing the address">
-                                        update coordinates
-                                        <input id="update-coordinates" type="checkbox">
-                                    </div>
-                                    <input id="street" type="text"
-                                           name="street" class="form-control"
-                                           placeholder="Address" required>
-                                </div>
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Details:</h5>
+                                        </div>
 
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <h5>Coordinates:</h5>
-                                    </div>
-                                    <div class="text-right"
-                                         title="Click to automatically search for address after changing the coordinates">
-                                        update address
-                                        <input id="update-address" type="checkbox" checked/>
-                                    </div>
-                                    <div class="card"
-                                         title="Click on map to update coordinates">
                                         <div class="card-body">
-                                            <strong>Latitude:</strong>
-                                            <div id="curr-lat" style="display: inline-block;"></div>
-                                            <br/>
-                                            <strong>Longitude:</strong>
-                                            <div id="curr-lng" style="display: inline-block;"></div>
+                                            <h5 class="card-title">Priority:</h5>
+                                            <form required>
+                                                <div class="btn-group" data-toggle="buttons">
+                                                    <button type="button" class="btn btn-info"
+                                                            name="priority" value="A">
+                                                        A
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger"
+                                                            name="priority" value="B">
+                                                        B
+                                                    </button>
+                                                    <button type="button" class="btn btn-warning"
+                                                            name="priority" value="C">
+                                                        C
+                                                    </button>
+                                                    <button type="button" class="btn btn-success"
+                                                            name="priority" value="D">
+                                                        D
+                                                    </button>
+                                                    <button type="button" class="btn btn-default"
+                                                            name="priority" value="E">
+                                                        E
+                                                    </button>
+                                                </div>
+                                            </form>
                                         </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title">Ambulances:</h5>
+                                            <div id="ambulance-selection">
+                                                <input id="ambulance-selection-message"
+                                                       style="border: none;"
+                                                       placeholder="Click on or drag ambulances here"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h5 class="card-title"> Description:</h5>
+                                            <textarea class="form-control" name="description"
+                                                      rows="5" id="comment"
+                                                      required></textarea>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="card">
+
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Location:</h5>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <h5>Street address:</h5>
+                                            </div>
+                                            <div class="text-right"
+                                               title="Click to automatically search for coordinates after changing the address">
+                                                update coordinates
+                                                <input id="update-coordinates" type="checkbox">
+                                            </div>
+                                            <input id="street" type="text"
+                                                   name="street" class="form-control"
+                                                   placeholder="Address" required>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <div class="card-title">
+                                                <h5>Coordinates:</h5>
+                                            </div>
+                                            <div class="text-right"
+                                                 title="Click to automatically search for address after changing the coordinates">
+                                                update address
+                                                <input id="update-address" type="checkbox" checked/>
+                                            </div>
+                                            <div class="card"
+                                                 title="Click on map to update coordinates">
+                                                <div class="card-body">
+                                                    <strong>Latitude:</strong>
+                                                    <div id="curr-lat" style="display: inline-block;"></div>
+                                                    <br/>
+                                                    <strong>Longitude:</strong>
+                                                    <div id="curr-lng" style="display: inline-block;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
 
-                            </div>
-                        </div>
+                                <div class="col-md-4">
 
-                        <div class="col-md-4">
+                                    <div class="card">
 
-                            <div class="card">
-
-                                <div class="card-header">
-                                    <h5 class="mb-0">Patients:</h5>
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-default" type="button">
-                                                <span class="fas fa-minus"></span>
-                                            </button>
+                                        <div class="card-header">
+                                            <h5 class="mb-0">Patients:</h5>
                                         </div>
-                                        <input id="patient-name" type="text" class="form-control"
-                                               placeholder="Name">
-                                        <input id="patient-age" type="text" class="form-control" placeholder="Age"/>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-default" type="button">
-                                                <span class="fas fa-plus"></span>
-                                            </button>
+
+                                        <div class="card-body">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <button class="btn btn-default" type="button">
+                                                        <span class="fas fa-minus"></span>
+                                                    </button>
+                                                </div>
+                                                <input id="patient-name" type="text" class="form-control"
+                                                       placeholder="Name">
+                                                <input id="patient-age" type="text" class="form-control" placeholder="Age"/>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-default" type="button">
+                                                        <span class="fas fa-plus"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
+
                             </div>
 
                         </div>
 
-                        <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
-                            Dispatch
-                        </button>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
+                                Dispatch
+                            </button>
+                        </div>
+
                     </div>
+
                 </form>
 
             </div>
