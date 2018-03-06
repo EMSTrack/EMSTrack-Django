@@ -48,20 +48,20 @@ var ambulanceIconBlue = L.icon({
 });
 
 var hospitalIcon = L.icon({
-	iconUrl: '/static/icons/maki/hospital-15.png',
+	iconUrl: '/static/icons/maki/hospital-15.svg',
 	iconSize: [15, 15]
 });
 var defibrilatorIcon = L.icon({
-	iconUrl: '/static/icons/maki/defibrilator-15.png',
+	iconUrl: '/static/icons/maki/defibrilator-15.svg',
 	iconSize: [15, 15]
 });
 var baseIcon = L.icon({
-	iconUrl: '/static/icons/maki/home-15.png',
+	iconUrl: '/static/icons/maki/home-15.svg',
 	iconSize: [15, 15]
 });
 
 var locationIcon = L.icon({
-	iconUrl: '/static/icons/maki/marker-15.png',
+	iconUrl: '/static/icons/maki/marker-15.svg',
 	iconSize: [15, 15],
 	iconAnchor: [7, 15],
 	popupAnchor: [0,-15]
