@@ -93,7 +93,7 @@
 
                 <!-- Dispatch panel -->
                 <div class="card" id="cardThree">
-                    <div class="card-header" id="headingThree">
+                    <div class="card-body" id="headingThree">
                         <h5>
                             <button class="btn btn-primary" data-toggle="collapse"
                                     data-target="#dispatch_form_collapse"
@@ -103,8 +103,11 @@
                             </button>
                         </h5>
                     </div>
+                </div>
+
+                <div>
                     <form id="dispatch_form_collapse" class="collapse"
-                          aria-labelledby="headingTwo" data-parent="#cardThree"
+                          aria-labelledby="headingThree" data-parent="#cardThree"
                           method="POST" action="">
                         {% csrf_token %}
                         <div class="card-body" id="ambulance-dispatch">
