@@ -379,8 +379,8 @@ function dispatchCall() {
                 + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
 
             // Show modal
-            $('.modal-title').append('Dispatch suceeded').addClass('alert-success');
-            $('.modal-body').html(successMsg);
+            $('.modal-title').html('Success');
+            $('.modal-body').html(successMsg).addClass('alert-success');
             $("#dispatchModal").modal('show');
 
             endDispatching();
@@ -388,8 +388,8 @@ function dispatchCall() {
         error: function (jqXHR, textStatus, errorThrown) {
 
             // Show modal
-            $('.modal-title').append('Dispatch failed').addClass('alert-danger');
-            $('.modal-body').html(textStatus + ": " + errorThrown);
+            $('.modal-title').html('Failure');
+            $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
             $("#dispatchModal").modal('show');
 
             endDispatching();
