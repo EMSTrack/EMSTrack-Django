@@ -31,78 +31,82 @@
 
             <div class="col-md-3">
 
-                <!-- Dispatch panel -->
-                <div class="mx-auto">
-                    <h5 class="mb-0">
-                        <button class="btn btn-primary" data-toggle="collapse"
-                                data-target="#dispatch_form_collapse"
-                                aria-expanded="true" aria-controls="dispatch_form_collapse"
-                                onclick="beginDispatching()">
-                            Begin Dispatching
-                        </button>
-                    </h5>
-                </div>
-
-                <!-- Ambulance Grid -->
-                <div class="card" id="cardOne">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse"
-                                    data-target="#ambulance_collapse"
-                                    aria-expanded="true" aria-controls="ambulance_collapse">
-                                Ambulances
+                <div class="row">
+                    <div class="col">
+                        <!-- Dispatch panel -->
+                        <div class="mx-auto">
+                            <button class="btn btn-primary" data-toggle="collapse"
+                                    data-target="#dispatch_form_collapse"
+                                    aria-expanded="true" aria-controls="dispatch_form_collapse"
+                                    onclick="beginDispatching()">
+                                Begin <Dispatchin></Dispatchin><g></g>
                             </button>
-                        </h5>
-                    </div>
-                    <div id="ambulance_collapse" class="collapse show"
-                         aria-labelledby="headingOne" data-parent="#cardOne">
-                        <div class="card-body" id="ambulance-grid"></div>
-                    </div>
-                </div>
-
-                <!-- Ambulance Info -->
-                <div class="card" id="cardTwo">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse"
-                                    data-target="#ambulance_info_collapse"
-                                    aria-expanded="true" aria-controls="ambulance_info_collapse">
-                                Ambulance Information
-                            </button>
-                        </h5>
-                    </div>
-                    <div id="ambulance_info_collapse" class="collapse show"
-                         aria-labelledby="headingTwo" data-parent="#cardTwo">
-                        <div class="card-body" id="ambulance-detail">
-                            <input type="hidden"
-                                   name="change-status-ambulance-id"
-                                   id="ambulance-detail-id">
-                            <p>
-                                <strong>Ambulance:</strong>
-                                <span id="ambulance-detail-name"/>
-                            </p>
-                            <p>
-                                <strong>Capability:</strong>
-                                <span id="ambulance-detail-capability"/>
-                            </p>
-                            <p>
-                                <strong>Updated on:</strong>
-                                <span id="ambulance-detail-updated-on"/>
-                            </p>
-                            <p>
-                                <strong>Status:</strong>
-                                <select id="ambulance-detail-status-select"
-                                        style="margin: auto;">
-                                    {% for k, v in ambulance_status.items %}
-                                    <option value="{{ k }}">{{ v }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
                         </div>
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col">
+                        <!-- Ambulance Grid -->
+                        <div class="card" id="cardOne">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                            data-target="#ambulance_collapse"
+                                            aria-expanded="true" aria-controls="ambulance_collapse">
+                                        Ambulances
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="ambulance_collapse" class="collapse show"
+                                 aria-labelledby="headingOne" data-parent="#cardOne">
+                                <div class="card-body" id="ambulance-grid"></div>
+                            </div>
+                        </div>
 
+                        <!-- Ambulance Info -->
+                        <div class="card" id="cardTwo">
+                            <div class="card-header" id="headingTwo">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" data-toggle="collapse"
+                                            data-target="#ambulance_info_collapse"
+                                            aria-expanded="true" aria-controls="ambulance_info_collapse">
+                                        Ambulance Information
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="ambulance_info_collapse" class="collapse show"
+                                 aria-labelledby="headingTwo" data-parent="#cardTwo">
+                                <div class="card-body" id="ambulance-detail">
+                                    <input type="hidden"
+                                           name="change-status-ambulance-id"
+                                           id="ambulance-detail-id">
+                                    <p>
+                                        <strong>Ambulance:</strong>
+                                        <span id="ambulance-detail-name"/>
+                                    </p>
+                                    <p>
+                                        <strong>Capability:</strong>
+                                        <span id="ambulance-detail-capability"/>
+                                    </p>
+                                    <p>
+                                        <strong>Updated on:</strong>
+                                        <span id="ambulance-detail-updated-on"/>
+                                    </p>
+                                    <p>
+                                        <strong>Status:</strong>
+                                        <select id="ambulance-detail-status-select"
+                                                style="margin: auto;">
+                                            {% for k, v in ambulance_status.items %}
+                                            <option value="{{ k }}">{{ v }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div>
                     <form id="dispatch_form_collapse" class="collapse"
