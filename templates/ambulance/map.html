@@ -126,24 +126,30 @@
                                         <div class="card-title">
                                             <h5>Patients:</h5>
                                         </div>
-                                        <div class="input-group">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-default" type="button">
-                                                    <span class="fas fa-minus"></span>
-                                                </button>
+                                        <form class="form-inline">
+                                            <div class="form-group">
+                                                <div class="col-md-1">
+                                                    <button class="btn btn-default" type="button">
+                                                        <span class="fas fa-minus"></span>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <input id="patient-name" type="text"
+                                                           class="form-control"
+                                                           placeholder="Name">
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <input id="patient-age" type="text"
+                                                           class="form-control"
+                                                           placeholder="Age"/>
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <button class="btn btn-default" type="button">
+                                                        <span class="fas fa-plus"></span>
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <input id="patient-name" type="text"
-                                                   class="form-control w-75"
-                                                   placeholder="Name">
-                                            <input id="patient-age" type="text"
-                                                   class="form-control w-25"
-                                                   placeholder="Age"/>
-                                            <div class="input-group-append">
-                                                <button class="btn btn-default" type="button">
-                                                    <span class="fas fa-plus"></span>
-                                                </button>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </div>
 
                                     <div class="card-body">
