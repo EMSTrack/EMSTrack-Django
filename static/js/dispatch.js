@@ -353,13 +353,13 @@ function dispatchCall() {
     let postJsonUrl = 'api/call/';
     console.log("Will post '" + JSON.stringify(form) + "'");
 
-    var csrfToken = getCookie('csrftoken');
+    var CSRFToken = getCookie('csrftoken');
 
     // retrieve csrf token
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
             if (!CSRFSafeMethod(settings.type)) {
-                xhr.setRequestHeader("X-CSRFToken", csrfToken);
+                xhr.setRequestHeader("X-CSRFToken", CSRFToken);
             }
         }
     })
@@ -369,7 +369,7 @@ function dispatchCall() {
         url: postJsonUrl,
         type: 'POST',
         dataType: 'json',
-        data: formData,
+        data: form,
         success: function (data) {
 
             // alert(JSON.stringify(data));
