@@ -31,9 +31,9 @@
 
             <div class="col-md-3">
 
-                <!-- Start of Ambulance Grid -->
-                <!--<div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >-->
                 <div id="accordion">
+
+                    <!-- Ambulance Grid -->
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h5 class="mb-0">
@@ -49,21 +49,21 @@
                             <div class="card-body" id="ambulance-grid"></div>
                         </div>
                     </div>
-                </div>
 
-                <!-- End of Ambulance Grid Row -->
-
-                <!--        Ambulance info panel      -->
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <b><a data-toggle="collapse" href="#ambulance_info_collapse">Ambulance Info</a></b>
-                            </h4>
+                    <!-- Ambulance Info -->
+                    <div class="card">
+                        <div class="card-header" id="headingTwo">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#ambulance_info_collapse"
+                                        aria-expanded="true" aria-controls="ambulance_info_collapse">
+                                    Ambulance Information
+                                </button>
+                            </h5>
                         </div>
-                        <div id="ambulance_info_collapse" class="collapse in">
-                            <div class="panel-body"
-                                 id="ambulance-detail">
+                        <div id="ambulance_info_collapse" class="collapse show"
+                             aria-labelledby="headingTwo" data-parent="#accordion">
+                            <div class="card-body" id="ambulance-detail">
                                 <input type="hidden"
                                        name="change-status-ambulance-id"
                                        id="ambulance-detail-id">
@@ -91,29 +91,24 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <!--        end of Ambulance info panel      -->
 
-                <!--        Dispatch panel      -->
-                <div class="row">
-
-                    <div id="dispatch_work">
-                        <button class="btn btn-primary" style="display: block; width: 100%;" onclick="beginDispatching()">
-                            Dispatch
-                        </button>
-                    </div>
-
-                    <form id="dispatchForm" method="POST" action="" class="collapse">
-                        {% csrf_token %}
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <b>Dispatch</b>
-                                </h4>
-                            </div>
-                            <!-- Dispatch Panel window -->
-                            <div class="panel-body">
-
+                    <!-- Dispatch panel -->
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#dispatch_form_collapse"
+                                        aria-expanded="true" aria-controls="dispatch_form_collapse"
+                                        onclick="beginDispatching()">
+                                    Dispatch
+                                </button>
+                            </h5>
+                        </div>
+                        <form id="dispatch_form_collapse" class="collapse"
+                              aria-labelledby="headingTwo" data-parent="#accordion"
+                              method="POST" action="">
+                            {% csrf_token %}
+                            <div class="card-body" id="ambulance-dispatch">
                                 <span class="glyphicon glyphicon-chevron-right"></span> Priority:
                                 <br/>
                                 <form required>
@@ -214,14 +209,13 @@
                                     Dispatch
                                 </button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
 
-                </div><!--        end of row Dispatch panel      -->
-
-            </div><!--end col-md-3-->
-        </div><!--end row -->
-    </div><!--end container-->
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- This is modals for ambulance dispatcher's panel -->
     <!-- Modal -->
