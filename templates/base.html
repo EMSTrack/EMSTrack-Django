@@ -2,13 +2,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html lang="en">
 <head>
-    <title>{% block title %}EMSTrack - Ambulance Tracker{% endblock %}</title>
     <meta charset="utf-8"/>
     <meta name="viewpoint" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <!-- Project CSS -->
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+
+    <title>{% block title %}EMSTrack - Ambulance Tracker{% endblock %}</title>
     {% block head %}
     {% endblock %}
 </head>
@@ -16,64 +19,72 @@
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <!-- Navbar toggle -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="{% url 'ambulance:map' %}">EMSTrack</a>
+    <div class="container-fluid">
+        <!-- Navbar toggle -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'ambulance:map' %}">EMSTrack</a>
+        </div>
+        <!-- Navbar Menu -->
+        <div class="collapse navbar-collapse" id="myNavbar">
+            {% if request.user.is_authenticated %}
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'ambulance:list' %}">Ambulances</a></li>
+                <li><a href="{% url 'hospital:list' %}">Hospitals</a></li>
+                <li><a href="{% url 'ambulance:map' %}">Map</a></li>
+            </ul>
+            {% endif %}
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.is_authenticated %}
+                {% if request.user.is_staff %}
+                <li><a href="{% url 'login:admin' %}">Admin</a></li>
+                {% endif %}
+                <li><a href="{% url 'login:logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout
+                    {{request.user.first_name}}</a></li>
+                {% else %}
+                <li><a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a>
+                </li>
+                <li><a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
-    <!-- Navbar Menu -->
-    <div class="collapse navbar-collapse" id="myNavbar">
-      {% if request.user.is_authenticated %}
-      <ul class="nav navbar-nav">
-        <li><a href="{% url 'ambulance:list' %}">Ambulances</a></li>
-        <li><a href="{% url 'hospital:list' %}">Hospitals</a></li>
-        <li><a href="{% url 'ambulance:map' %}">Map</a></li>
-      </ul>
-      {% endif %}
-      <ul class="nav navbar-nav navbar-right">
-        {% if request.user.is_authenticated %}
-          {% if request.user.is_staff %}
-            <li><a href="{% url 'login:admin' %}">Admin</a></li>
-          {% endif %}
-          <li><a href="{% url 'login:logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout {{request.user.first_name}}</a></li>
-        {% else %}
-          <li><a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a></li>
-          <li><a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a></li>
-        {% endif %}
-      </ul>
-    </div>
-  </div>
 </nav>
 
 <script>
-  // make current page active
-  var pname = $(location).attr('pathname').split('/', 3).join('/');
-  $('.menuitem a[href^="' + pname + '"]').addClass('menuitem active');
+    // make current page active
+    var pname = $(location).attr('pathname').split('/', 3).join('/');
+    $('.menuitem a[href^="' + pname + '"]').addClass('menuitem active');
 </script>
 
 <div class="content">
-  <!-- Messages -->
-  {% include 'messages.html' %}
-  <!-- Content block -->
-  {% block content %}
-  {% endblock %}
+    <!-- Messages -->
+    {% include 'messages.html' %}
+    <!-- Content block -->
+    {% block content %}
+    {% endblock %}
 </div>
 
 <footer class="site-footer">
-  {% block footer %}
-  {% endblock %}
-  <div class="container">
-    <ul>
-      <li><a href="/about">About</a></li>
-      <li><a href="/contact">Contact</a></li>
-      <li><a href="http://www.emstrack.org">EMSTrack</a></li>
-    </ul>
-  </div>
+    {% block footer %}
+    {% endblock %}
+    <div class="container">
+        <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="http://www.emstrack.org">EMSTrack</a></li>
+        </ul>
+    </div>
 </footer>
+
+<!-- JQuery and Bootstrap js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+
 </body>
 </html>
