@@ -33,42 +33,55 @@
 
 <body>
 <!-- Navigation Bar -->
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <!-- Navbar toggle -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url 'ambulance:map' %}">EMSTrack</a>
-        </div>
-        <!-- Navbar Menu -->
-        <div class="collapse navbar-collapse" id="myNavbar">
+<nav class="navbar fixed-top navbar-dark bg-dark">
+
+    <!-- Navbar brand -->
+    <a class="navbar-brand" href="{% url 'ambulance:map' %}">EMSTrack</a>
+
+    <!-- Navbar toggle -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Menu -->
+    <div class="collapse navbar-collapse" id="myNavbar">
+        {% if request.user.is_authenticated %}
+        <ul class="navbar-nav">
+            <li>
+                <a href="{% url 'ambulance:list' %}">Ambulances</a>
+            </li>
+            <li>
+                <a href="{% url 'hospital:list' %}">Hospitals</a>
+            </li>
+            <li>
+                <a href="{% url 'ambulance:map' %}">Map</a>
+            </li>
+        </ul>
+        {% endif %}
+        <ul class="navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'ambulance:list' %}">Ambulances</a></li>
-                <li><a href="{% url 'hospital:list' %}">Hospitals</a></li>
-                <li><a href="{% url 'ambulance:map' %}">Map</a></li>
-            </ul>
+            {% if request.user.is_staff %}
+            <li>
+                <a href="{% url 'login:admin' %}">Admin</a>
+            </li>
             {% endif %}
-            <ul class="nav navbar-nav navbar-right">
-                {% if request.user.is_authenticated %}
-                {% if request.user.is_staff %}
-                <li><a href="{% url 'login:admin' %}">Admin</a></li>
-                {% endif %}
-                <li><a href="{% url 'login:logout' %}"><span class="glyphicon glyphicon-log-out"></span>&nbsp;Logout
-                    {{request.user.first_name}}</a></li>
-                {% else %}
-                <li><a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a>
-                </li>
-                <li><a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
+            <li>
+                <a href="{% url 'login:logout' %}">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                    &nbsp;Logout {{request.user.first_name}}
+                </a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a>
+            </li>
+            <li>
+                <a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
+            </li>
+            {% endif %}
+        </ul>
     </div>
+
 </nav>
 
 <script>
