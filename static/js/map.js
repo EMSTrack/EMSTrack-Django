@@ -52,7 +52,7 @@ var hospitalIcon = L.icon({
 	iconSize: [15, 15]
 });
 var defibrilatorIcon = L.icon({
-	iconUrl: '/static/icons/maki/defibrilator-15.svg',
+	iconUrl: '/static/icons/maki/defibrillator-15.svg',
 	iconSize: [15, 15]
 });
 var baseIcon = L.icon({
