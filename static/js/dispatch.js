@@ -377,16 +377,19 @@ function dispatchCall() {
                 +'Ambulance: ' + data['ambulance']
                 + ' dispatched to <br/>' + data['residential_unit']
                 + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
+
+            // Show modal
+            $('.modal-title').append('Dispatch suceeded');
             $('.modal-body').html(successMsg).addClass('alert-success');
-            $('.modal-title').append('Successfully Dispached');
             $("#dispatchModal").modal('show');
 
             endDispatching();
         },
         error: function (jqXHR, textStatus, errorThrown) {
 
-            alert(textStatus + ", " + errorThrown);
+            // Show modal
             $('.modal-title').append('Dispatch failed');
+            $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
             $("#dispatchModal").modal('show');
 
             endDispatching();
