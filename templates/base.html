@@ -47,13 +47,13 @@
     <div class="collapse navbar-collapse" id="myNavbar">
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav mr-auto">
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'ambulance:list' %}">Ambulances</a>
             </li>
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'hospital:list' %}">Hospitals</a>
             </li>
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'ambulance:map' %}">Map</a>
             </li>
         </ul>
@@ -61,21 +61,21 @@
         <ul class="navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request.user.is_staff %}
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'login:admin' %}">Admin</a>
             </li>
             {% endif %}
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'login:logout' %}">
                     <span class="glyphicon glyphicon-log-out"></span>
                     &nbsp;Logout {{request.user.first_name}}
                 </a>
             </li>
             {% else %}
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a>
             </li>
-            <li>
+            <li class="nav-item">
                 <a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
             </li>
             {% endif %}
