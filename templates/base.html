@@ -46,7 +46,7 @@
     <!-- Navbar Menu -->
     <div class="collapse navbar-collapse" id="myNavbar">
         {% if request.user.is_authenticated %}
-        <ul class="navbar-nav">
+        <ul class="navbar-nav mr-auto">
             <li>
                 <a href="{% url 'ambulance:list' %}">Ambulances</a>
             </li>
