@@ -294,7 +294,7 @@ $('#update-address').change(function() {
 
 });
 
-$('#dispatchForm').submit(function (e) {
+$('#dispatch_form_collapse').submit(function (e) {
 
     // prevent normal form submission
     e.preventDefault();
