@@ -37,6 +37,10 @@
                         <div class="col-md-4">
                             <div class="card">
 
+                                <div class="card-header">
+                                    <h5>Details:</h5>
+                                </div>
+
                                 <div class="card-body">
                                     <h5 class="card-title">Priority:</h5>
                                     <form required>
@@ -128,33 +132,32 @@
 
                         <div class="col-md-4">
 
-                        </div>
-                    </div>
+                            <div class="card">
 
-                        <span class="glyphicon glyphicon-chevron-right"></span> Patients:
-                        <div class="input-group">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <span class="glyphicon glyphicon-minus"></span>
-                                </button>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <input id="patient-name" type="text" class="form-control"
-                                           placeholder="Name"/>
+                                <div class="card-header">
+                                    <h5>Patients:</h5>
                                 </div>
-                                <div class="col-md-4" style="float: left;">
-                                    <input id="patient-age" type="text" class="form-control" placeholder="Age"/>
-                                </div>
-                            </div>
-                            <div class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <span class="glyphicon glyphicon-plus"></span>
-                                </button>
-                            </div>
-                        </div>
 
-                        <br/><br/>
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <button class="btn btn-default" type="button">
+                                                <span class="glyphicon glyphicon-minus"></span>
+                                            </button>
+                                        </div>
+                                        <input id="patient-name" type="text" class="form-control"
+                                               placeholder="Name">
+                                        <input id="patient-age" type="text" class="form-control" placeholder="Age"/>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-default" type="button">
+                                                <span class="glyphicon glyphicon-plus"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
 
                         <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
                             Dispatch
