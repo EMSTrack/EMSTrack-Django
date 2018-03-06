@@ -257,6 +257,9 @@ class AmbulanceCallTime(models.Model):
     hospital_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
 
+    class Meta:
+        unique_together = ('call', 'ambulance')
+
 
 # Patient might be expanded in the future
 
