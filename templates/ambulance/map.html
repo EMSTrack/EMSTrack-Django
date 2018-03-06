@@ -24,6 +24,118 @@
 
         <div class="row">
 
+            <!-- Dispatch -->
+
+            <div class="col-md-12">
+
+                <form id="dispatch_form_collapse" class="collapse"
+                      method="POST" action="">
+                    {% csrf_token %}
+                    <div class="card-body" id="ambulance-dispatch">
+                        <span class="glyphicon glyphicon-chevron-right"></span> Priority:
+                        <br/>
+                        <form required>
+                            <div class="btn-group" data-toggle="buttons">
+                                <label class="btn btn-info">
+                                    <input type="radio" name="priority" value="A">A</input>
+                                </label>
+                                <label class="btn btn-danger">
+                                    <input type="radio" name="priority" value="B">B</input>
+                                </label>
+                                <label class="btn btn-warning">
+                                    <input type="radio" name="priority" value="C">C</input>
+                                </label>
+                                <label class="btn btn-success">
+                                    <input type="radio" name="priority" value="D">D</input>
+                                </label>
+                                <label class="btn btn-default">
+                                    <input type="radio" name="priority" value="E">E</input>
+                                </label>
+                            </div>
+                        </form>
+
+                        <br/><br/>
+
+                        <span class="glyphicon glyphicon-chevron-right"></span>Ambulances:<br/>
+                        <div class="panel panel-default">
+                            <div class="panel-body" style="line-height: 1.5px;">
+                                <div id="ambulance-selection">
+                                    <input id="ambulance-selection-message"
+                                           style="border: none;"
+                                           placeholder="Click on or drag ambulances here"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        Location:
+                        <div style="float: right;"
+                             title="Click to automatically search for coordinates after changing the address">
+                            update coordinates
+                            <input id="update-coordinates" type="checkbox"/>
+                        </div>
+                        <input id="street" type="text"
+                               name="street" class="form-control"
+                               placeholder="Address" required
+                               style="float: clear;"
+                        />
+                        <div style="float: right;"
+                             title="Click to automatically search for address after changing the coordinates">
+                            update address
+                            <input id="update-address" type="checkbox" checked/>
+                        </div>
+                        <br/>
+                        <div class="panel panel-default"
+                             title="Click on map to update coordinates"
+                             style="float: clear;">
+                            <div class="panel-body">
+                                <strong>Latitude:</strong>
+                                <div id="curr-lat" style="display: inline-block;"></div>
+                                <br/>
+                                <strong>Longitude:</strong>
+                                <div id="curr-lng" style="display: inline-block;"></div>
+                            </div>
+                        </div>
+
+                        <span class="glyphicon glyphicon-chevron-right"></span> Description:
+                        <div class="form-group">
+                            <textarea class="form-control" name="description" rows="5" id="comment"
+                                      required></textarea>
+                        </div>
+
+                        <span class="glyphicon glyphicon-chevron-right"></span> Patients:
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-minus"></span>
+                                </button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input id="patient-name" type="text" class="form-control"
+                                           placeholder="Name"/>
+                                </div>
+                                <div class="col-md-4" style="float: left;">
+                                    <input id="patient-age" type="text" class="form-control" placeholder="Age"/>
+                                </div>
+                            </div>
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <br/><br/>
+
+                        <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
+                            Dispatch
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+
             <!-- Map -->
             <div class="col-md-9">
                 <div id="live-map" style="width: 800px; height: 700px"></div>
@@ -39,7 +151,7 @@
                                     data-target="#dispatch_form_collapse"
                                     aria-expanded="true" aria-controls="dispatch_form_collapse"
                                     onclick="beginDispatching()">
-                                Begin Dispatching
+                                Dispatch
                             </button>
                         </div>
                     </div>
@@ -106,115 +218,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div>
-                    <form id="dispatch_form_collapse" class="collapse"
-                          aria-labelledby="headingThree" data-parent="#cardThree"
-                          method="POST" action="">
-                        {% csrf_token %}
-                        <div class="card-body" id="ambulance-dispatch">
-                            <span class="glyphicon glyphicon-chevron-right"></span> Priority:
-                            <br/>
-                            <form required>
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-info">
-                                        <input type="radio" name="priority" value="A">A</input>
-                                    </label>
-                                    <label class="btn btn-danger">
-                                        <input type="radio" name="priority" value="B">B</input>
-                                    </label>
-                                    <label class="btn btn-warning">
-                                        <input type="radio" name="priority" value="C">C</input>
-                                    </label>
-                                    <label class="btn btn-success">
-                                        <input type="radio" name="priority" value="D">D</input>
-                                    </label>
-                                    <label class="btn btn-default">
-                                        <input type="radio" name="priority" value="E">E</input>
-                                    </label>
-                                </div>
-                            </form>
-
-                            <br/><br/>
-
-                            <span class="glyphicon glyphicon-chevron-right"></span>Ambulances:<br/>
-                            <div class="panel panel-default">
-                                <div class="panel-body" style="line-height: 1.5px;">
-                                    <div id="ambulance-selection">
-                                        <input id="ambulance-selection-message"
-                                               style="border: none;"
-                                               placeholder="Click on or drag ambulances here"/>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <span class="glyphicon glyphicon-chevron-right"></span>
-                            Location:
-                            <div style="float: right;"
-                                 title="Click to automatically search for coordinates after changing the address">
-                                update coordinates
-                                <input id="update-coordinates" type="checkbox"/>
-                            </div>
-                            <input id="street" type="text"
-                                   name="street" class="form-control"
-                                   placeholder="Address" required
-                                   style="float: clear;"
-                            />
-                            <div style="float: right;"
-                                 title="Click to automatically search for address after changing the coordinates">
-                                update address
-                                <input id="update-address" type="checkbox" checked/>
-                            </div>
-                            <br/>
-                            <div class="panel panel-default"
-                                 title="Click on map to update coordinates"
-                                 style="float: clear;">
-                                <div class="panel-body">
-                                    <strong>Latitude:</strong>
-                                    <div id="curr-lat" style="display: inline-block;"></div>
-                                    <br/>
-                                    <strong>Longitude:</strong>
-                                    <div id="curr-lng" style="display: inline-block;"></div>
-                                </div>
-                            </div>
-
-                            <span class="glyphicon glyphicon-chevron-right"></span> Description:
-                            <div class="form-group">
-                                <textarea class="form-control" name="description" rows="5" id="comment"
-                                          required></textarea>
-                            </div>
-
-                            <span class="glyphicon glyphicon-chevron-right"></span> Patients:
-                            <div class="input-group">
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <span class="glyphicon glyphicon-minus"></span>
-                                    </button>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <input id="patient-name" type="text" class="form-control"
-                                               placeholder="Name"/>
-                                    </div>
-                                    <div class="col-md-4" style="float: left;">
-                                        <input id="patient-age" type="text" class="form-control" placeholder="Age"/>
-                                    </div>
-                                </div>
-                                <div class="input-group-btn">
-                                    <button class="btn btn-default" type="button">
-                                        <span class="glyphicon glyphicon-plus"></span>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <br/><br/>
-
-                            <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
-                                Dispatch
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
             </div>
