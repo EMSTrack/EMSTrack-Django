@@ -39,7 +39,9 @@
     <a class="navbar-brand" href="{% url 'ambulance:map' %}">EMSTrack</a>
 
     <!-- Navbar toggle -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#myNavbar" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -61,8 +63,20 @@
         <ul class="navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
             {% if request.user.is_staff %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'login:admin' %}">Admin</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle"
+                   id="navbarDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false"
+                   href="{% url 'login:admin' %}">
+                    Admin
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Users</a>
+                    <a class="dropdown-item" href="#">Groups</a>
+                    <a class="dropdown-item" href="#">Equipment</a>
+                    <a class="dropdown-item" href="#">Locations</a>
+                </div>
             </li>
             {% endif %}
             <li class="nav-item">
