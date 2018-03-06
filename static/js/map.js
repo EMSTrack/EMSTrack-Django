@@ -34,17 +34,17 @@ Object.keys(location_type).forEach(function(type) {
 var ambulanceIcon = L.icon({
 	//iconUrl: '/static/icons/ambulance_icon.png',
 	iconUrl: '/static/icons/cars/ambulance_red.svg',
-	iconSize: [60, 60],
+	iconSize: [20, 20],
 });
 var ambulanceIconBlack = L.icon({
 	// iconUrl: '/static/icons/ambulance_icon_black.png',
 	iconUrl: '/static/icons/cars/ambulance_black.svg',
-	iconSize: [60, 60],
+	iconSize: [20, 20],
 });
 var ambulanceIconBlue = L.icon({
 	// iconUrl: '/static/icons/ambulance_blue.png',
 	iconUrl: '/static/icons/cars/ambulance_blue.svg',
-	iconSize: [60, 40],
+	iconSize: [20, 20],
 });
 
 var hospitalIcon = L.icon({
