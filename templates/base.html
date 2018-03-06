@@ -48,13 +48,13 @@
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a href="{% url 'ambulance:list' %}">Ambulances</a>
+                <a class="nav-link" href="{% url 'ambulance:list' %}">Ambulances</a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'hospital:list' %}">Hospitals</a>
+                <a class="nav-link" href="{% url 'hospital:list' %}">Hospitals</a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'ambulance:map' %}">Map</a>
+                <a class="nav-link" href="{% url 'ambulance:map' %}">Map</a>
             </li>
         </ul>
         {% endif %}
@@ -62,21 +62,21 @@
             {% if request.user.is_authenticated %}
             {% if request.user.is_staff %}
             <li class="nav-item">
-                <a href="{% url 'login:admin' %}">Admin</a>
+                <a class="nav-link" href="{% url 'login:admin' %}">Admin</a>
             </li>
             {% endif %}
             <li class="nav-item">
-                <a href="{% url 'login:logout' %}">
+                <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="glyphicon glyphicon-log-out"></span>
                     &nbsp;Logout {{request.user.first_name}}
                 </a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a>
+                <a class="nav-link" href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign Up</a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
+                <a class="nav-link" href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
             </li>
             {% endif %}
         </ul>
@@ -87,7 +87,7 @@
 <script>
     // make current page active
     var pname = $(location).attr('pathname').split('/', 3).join('/');
-    $('.menuitem a[href^="' + pname + '"]').addClass('menuitem active');
+    $('.nav-item a[href^="' + pname + '"]').addClass('nav-item active');
 </script>
 
 <div class="content">
