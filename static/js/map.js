@@ -51,13 +51,19 @@ var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/maki/hospital-15.svg',
 	iconSize: [15, 15]
 });
-var defibrilatorIcon = L.icon({
+var defibrillatorIcon = L.icon({
 	iconUrl: '/static/icons/maki/defibrillator-15.svg',
 	iconSize: [15, 15]
 });
 var baseIcon = L.icon({
 	iconUrl: '/static/icons/maki/home-15.svg',
 	iconSize: [15, 15]
+});
+var otherIcon = L.icon({
+	iconUrl: '/static/icons/maki/marker-15.svg',
+	iconSize: [15, 15],
+	iconAnchor: [7, 15],
+	popupAnchor: [0,-15]
 });
 
 var locationIcon = L.icon({
@@ -586,7 +592,7 @@ function addLocationToMap(location) {
     // TODO: Separate icons by layers depending on type
 
     console.log('Adding location "' + location.name +
-        '[id=' + location.id + ']"' +
+        '[id=' + location.id + ', type=' + location.type + ']"' +
         '[' + location.location.latitude + ' ' +
         location.location.longitude + '] ' +
         ' to map');
@@ -597,11 +603,11 @@ function addLocationToMap(location) {
     // set icon by status
     let icon = locationIcon;
     if (location.type === 'A')
-        icon = defibrilatorIcon;
+        icon = defibrillatorIcon;
     else if (location.type === 'B')
         icon = baseIcon;
     else
-        icon = markerIcon;
+        icon = otherIcon;
         
     // If location marker doesn't exist
     locationMarkers[location.id] = L.marker([location.location.latitude,
