@@ -36,6 +36,7 @@
 
                         <div class="col-md-4">
                             <div class="card">
+
                                 <div class="card-body">
                                     <h5 class="card-title">Priority:</h5>
                                     <form required>
@@ -81,44 +82,54 @@
 
                         <div class="col-md-4">
 
+                            <div class="card">
+
+                                <div class="card-title">
+                                    <h5>Location:</h5>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h5>Street address:</h5>
+                                        <div style="float: right;"
+                                             title="Click to automatically search for coordinates after changing the address">
+                                            update coordinates
+                                            <input id="update-coordinates" type="checkbox">
+                                        </div>
+                                    </div>
+                                    <input id="street" type="text"
+                                           name="street" class="form-control"
+                                           placeholder="Address" required>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="card-title">
+                                        <h5>Coordinates:</h5>
+                                        <div style="float: right;"
+                                             title="Click to automatically search for address after changing the coordinates">
+                                            update address
+                                            <input id="update-address" type="checkbox" checked/>
+                                        </div>
+                                    </div>
+                                    <div class="card"
+                                         title="Click on map to update coordinates">
+                                        <div class="card-body">
+                                            <strong>Latitude:</strong>
+                                            <div id="curr-lat" style="display: inline-block;"></div>
+                                            <br/>
+                                            <strong>Longitude:</strong>
+                                            <div id="curr-lng" style="display: inline-block;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
 
                         <div class="col-md-4">
 
                         </div>
                     </div>
-
-
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                        Location:
-                        <div style="float: right;"
-                             title="Click to automatically search for coordinates after changing the address">
-                            update coordinates
-                            <input id="update-coordinates" type="checkbox"/>
-                        </div>
-                        <input id="street" type="text"
-                               name="street" class="form-control"
-                               placeholder="Address" required
-                               style="float: clear;"
-                        />
-                        <div style="float: right;"
-                             title="Click to automatically search for address after changing the coordinates">
-                            update address
-                            <input id="update-address" type="checkbox" checked/>
-                        </div>
-                        <br/>
-                        <div class="panel panel-default"
-                             title="Click on map to update coordinates"
-                             style="float: clear;">
-                            <div class="panel-body">
-                                <strong>Latitude:</strong>
-                                <div id="curr-lat" style="display: inline-block;"></div>
-                                <br/>
-                                <strong>Longitude:</strong>
-                                <div id="curr-lng" style="display: inline-block;"></div>
-                            </div>
-                        </div>
-
 
                         <span class="glyphicon glyphicon-chevron-right"></span> Patients:
                         <div class="input-group">
