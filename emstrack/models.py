@@ -21,7 +21,7 @@ class AddressModel(models.Model):
     unit = models.CharField(max_length=30, null=True, blank=True)
     neighborhood = models.CharField(max_length=100, null=True, blank=True)
     city = models.CharField(max_length=100, default=defaults['city'])
-    state = models.CharField(max_length=2, default=defaults['state'])
+    state = models.CharField(max_length=3, default=defaults['state'])
     zipcode = models.CharField(max_length=12, default="")
     country = models.CharField(max_length=2, default=defaults['country'])
 

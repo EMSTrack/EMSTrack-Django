@@ -94,7 +94,7 @@ var addToDispatchingList = function(ambulance) {
         $('#ambulance-selection-message').hide();
 
     // add ambulance to list of dispatching ambulances
-    dispatchingAmbulances[ambulance.id] = true;
+    dispatchingAmbulances[ambulance.id] = ambulance;
     numberOfDispatchingAmbulances++;
 
     // add button to ambulance dispatch grid
@@ -313,50 +313,58 @@ $('#dispatchForm').submit(function (e) {
  */
 function dispatchCall() {
 
-    var formData = {};
-    var assigned_ambulances = [];
+    var form = {};
 
-    // Extract form value to JSON
-    formData["stmain_number"] = $('#street').val();
-    formData["residential_unit"] = $('#address').val();
-    formData["latitude"] = document.getElementById('curr-lat').innerHTML;
-    formData["longitude"] = document.getElementById('curr-lng').innerHTML;
-    formData["active"] = true
-    formData["name"] = "Make Dynamic for Future"
-    console.log(formData["active"])
+    // call information
+    form['details'] = $('#comment').val();
+    form['priority'] = $('input:radio[name=priority]:checked').val();
 
-    console.log(formData["latitude"]);
-    formData["description"] = $('#comment').val();
-    formData["priority"] = $('input:radio[name=priority]:checked').val();
-    $('input:checkbox[name="ambulance_assignment"]:checked').each(function (i) {
-        assigned_ambulances[i] = $(this).val();
-    });
-
-    if (formData["priority"] == undefined) {
+    // checks
+    if (form["priority"] === undefined) {
         alert("Please click one of priorities");
         return;
     }
-
-    if (assigned_ambulances.length == 0) {
+    if (numberOfDispatchingAmbulances == 0) {
         alert("Please dispatch at least one ambulance");
         return;
     }
 
-    formData["ambulance"] = assigned_ambulances.toString();
+    // address information
+    form['number'] = currentAddress['number'];
+    form['street'] = currentAddress['street'];
+    form['unit'] = currentAddress['complement'];
+    form['neighborbood'] = currentAddress['neighborhood'];
+    form['city'] = currentAddress['city'];
+    form['state'] = currentAddress['state'];
+    form['country'] = currentAddress['country'];
+    form['zipcode'] = currentAddress['zipcode'];
+    form['location'] = currentAddress['location'];
 
+    // ambulances
+    var ambulances = [];
+    for (var id in dispatchingAmbulances)
+        if (dispatchingAmbulances.hasOwnProperty(id))
+            ambulances.append(id);
+    form['ambulances'] = ambulances;
+
+    // TODO: patients
+
+    // make json call
     let postJsonUrl = 'api/call/';
-    alert(JSON.stringify(formData) + '\n' + postJsonUrl);
+    console.log("Will post '" + JSON.stringify(form) + "'");
 
-    var csrftoken = getCookie('csrftoken');
+    var csrfToken = getCookie('csrftoken');
 
+    // retrieve csrf token
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            if (!CSRFSafeMethod(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", csrfToken);
             }
         }
     })
 
+    // make ajax call
     $.ajax({
         url: postJsonUrl,
         type: 'POST',
@@ -386,7 +394,7 @@ function dispatchCall() {
     });
 }
 
-function csrfSafeMethod(method) {
+function CSRFSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
@@ -406,12 +414,4 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-}
-
-/* Functions to fill autocomplete AND to click specific locations */
-function dispatchInitAutocomplete() {
-    // Create the autocomplete object, restricting the search to geographical
-    autocomplete = new google.maps.places.Autocomplete((document.getElementById('street')),
-        {types: ['geocode']});
-    //autocomplete.addListener('place_changed', fillInAddress);
 }
