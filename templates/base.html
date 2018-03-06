@@ -72,11 +72,11 @@
                     Admin
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Users</a>
-                    <a class="dropdown-item" href="#">Groups</a>
-                    <a class="dropdown-item" href="#">Equipment</a>
-                    <a class="dropdown-item" href="#">Locations</a>
-                </div>
+                    <a class="dropdown-item" href="{% url 'login:user_list' %}">Users</a>
+                    <a class="dropdown-item" href="{% url 'login:group_list' %}">Groups</a>
+                    <a class="dropdown-item" href="{% url 'hospital:equipment_list' %}">Equipment</a>
+                    <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">Locations</a>
+              </div>
             </li>
             {% endif %}
             <li class="nav-item">
