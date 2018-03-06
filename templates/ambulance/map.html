@@ -24,23 +24,29 @@
 
         <div class="row">
 
+            <!-- Map -->
             <div class="col-md-9">
                 <div id="live-map" style="width: 800px; height: 700px"></div>
-            </div><!--end col-md-9-->
+            </div>
 
             <div class="col-md-3">
 
                 <!-- Start of Ambulance Grid -->
                 <!--<div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >-->
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <b><a data-toggle="collapse" href="#ambulance_collapse">Ambulances</a></b>
-                            </h4>
+                <div id="accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" data-toggle="collapse"
+                                        data-target="#ambulance_collapse"
+                                        aria-expanded="true" aria-controls="ambulance_collapse">
+                                    Ambulances
+                                </button>
+                            </h5>
                         </div>
-                        <div id="ambulance_collapse" class="collapse in panel-body">
-                            <div id="ambulance-grid"></div>
+                        <div id="ambulance_collapse" class="collapse show"
+                             aria-labelledby="headingOne" data-parent="#accordion">
+                            <div class="card-body" id="ambulance-grid"></div>
                         </div>
                     </div>
                 </div>
