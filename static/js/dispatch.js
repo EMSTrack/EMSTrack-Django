@@ -296,7 +296,7 @@ $('#update-address').change(function() {
 
 $('#dispatch_form_collapse').submit(function (e) {
 
-    // prevent normal form submission
+   // prevent normal form submission
     e.preventDefault();
 
     // dispatch call
