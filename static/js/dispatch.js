@@ -271,7 +271,7 @@ function dispatchCall() {
     var form = {};
 
     // call information
-    form['street_address'] = $('#street').val().trim();
+    var street_address = $('#street').val().trim();
     form['details'] = $('#comment').val().trim();
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
@@ -294,14 +294,10 @@ function dispatchCall() {
     form['location'] = currentAddress['location'];
 
     // Has the user modified the street address?
-    if (form['street_address'] != currentAddress['street_address']) {
-
-        console.log('currentAddress[street_address]' + currentAddress['street_address']);
-        console.log('form[street_address]' + form['street_address']);
+    if (street_address != currentAddress['street_address']) {
 
         // parse street address
-        var address = geocoder.parse_street_address(form['street_address'],
-            form['country']);
+        var address = geocoder.parse_street_address(street_address, form['country']);
 
         form['number'] = address['number'];
         form['street'] = address['street'];
