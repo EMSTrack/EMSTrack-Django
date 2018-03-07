@@ -14,7 +14,7 @@ var numberOfDispatchingAmbulances = 0;
 
 var currentAddress;
 var currentLocation;
-var patients;
+var currentPatients;
 var newPatientIndex;
 
 var beginDispatching = function () {
@@ -30,12 +30,12 @@ var beginDispatching = function () {
     // Update current address
     updateCurrentAddress(currentLocation);
 
-    // Clear current patients
-    patients = {};
+    // Clear current currentPatients
+    currentPatients = {};
     newPatientIndex = 0;
 
     // Initialize patient form
-    $('#patients').empty();
+    $('#currentPatients').empty();
 
     // add new patient form entry
     addPatientForm(newPatientIndex);
@@ -266,11 +266,6 @@ var updateCoordinates = function() {
         });
 }
 
-/*
- * dispatchCall makes an ajax post request to post dispatched ambulance.
- * @param void.
- * @return void.
- */
 function dispatchCall() {
 
     var form = {};
@@ -307,7 +302,15 @@ function dispatchCall() {
             ambulances.push(id);
     form['ambulances'] = ambulances;
 
-    // TODO: patients
+    // currentPatients
+    var patients= [];
+    for (var id in currentPatients)
+        if (currentPatients.hasOwnProperty(id))
+            patients.push({
+                name: currentPatients[0],
+                age: currentPatients[1]
+            });
+    form['patients'] = patients;
 
     // make json call
     let postJsonUrl = 'api/call/';
@@ -374,7 +377,7 @@ var addPatient = function(index) {
     }
 
     // add name
-    patients[index] = [name, age];
+    currentPatients[index] = [name, age];
     newPatientIndex++;
 
     // change button symbol
@@ -383,7 +386,7 @@ var addPatient = function(index) {
     symbol.addClass('fa-minus');
 
     // change button action from add to remove
-    $('#patients').find('#patient-' + index + '-button')
+    $('#currentPatients').find('#patient-' + index + '-button')
         .off()
         .on('click', function(e) { removePatient(index); });
 
@@ -397,10 +400,10 @@ var removePatient = function(index) {
     console.log('Removing patient index ' + index);
 
     // remove from storage
-    delete patients[index];
+    delete currentPatients[index];
 
     // remove from form
-    $('#patients')
+    $('#currentPatients')
         .find('#patient-' + index + '-form')
         .remove();
 
@@ -409,10 +412,10 @@ var removePatient = function(index) {
 var addPatientForm = function(index) {
 
     // add new patient form entry
-    $('#patients').append(newPatientForm(index, 'fa-plus'));
+    $('#currentPatients').append(newPatientForm(index, 'fa-plus'));
 
     // bind addPatient to click
-    $('#patients')
+    $('#currentPatients')
         .on('click',
             '#patient-' + index + '-button',
             function(e) { addPatient(index); });
@@ -428,7 +431,8 @@ var newPatientForm = function(index, symbol) {
         '               placeholder="Name">' +
         '    </div>' +
         '    <div class="col-sm-2 p-0">' +
-        '        <input id="patient-' + index + '-age" type="text"' +
+        '        <input id="patient-' + index + '-age" ' +
+        '               type="number" min="0"' +
         '               class="form-control"' +
         '               placeholder="Age"/>' +
         '    </div>' +

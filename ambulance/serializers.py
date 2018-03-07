@@ -209,7 +209,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Call
-        fields = ['id', 'active', 'ambulances', 'patients', 'details',
+        fields = ['id', 'active', 'ambulances', 'currentPatients', 'details',
                   'priority', 'comment', 'updated_by', 'updated_on']
         read_only_fields = ['updated_by']
 
