@@ -15,6 +15,7 @@
             <div class="modal-body">
 
                 <form class="form-signin"
+                      id="signInForm"
                       method="post"
                       action="{% url 'login:login' %}">
                     {% csrf_token %}
@@ -44,7 +45,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" id="submitButton">Submit</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -62,5 +63,13 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#submitButton").on('click', function() {
+            $("#signInForm").submit();
+        });
+    });
+</script>
 
 {% endblock %}
