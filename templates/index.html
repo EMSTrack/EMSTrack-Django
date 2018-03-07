@@ -66,10 +66,25 @@
 
 <script>
     $(document).ready(function () {
+
         $("#submitButton").on('click', function() {
             $("#signInForm").submit();
         });
+
+        // Should start up modal?
+        var pathname = window.location.pathname;
+        console.log('pathname = ' + pathname);
+        if (pathname == '/auth/login') {
+            $('#loginModal').modal({
+                keyboard: false
+            })
+        }
+        // else user should hit login button
+
     });
+
+</script>
+
 </script>
 
 {% endblock %}
