@@ -27,18 +27,19 @@
 
                 <div class="row">
                     {{ form}}
+
+                    <a class="pull-right"
+                       href="{% url 'login:password_reset' %}">Forgot Password?</a>
+
                 </div>
 
                 <div class="row">
                     <button type="submit"
-                            class="btn btn btn-primary btn-success"
+                            class="btn btn btn-primary btn-success btn-block"
                             value="login">Login</button>
                 </div>
 
                 <input type="hidden" name="next" value="{{ next }}" />
-
-                <a class="pull-right"
-                   href="{% url 'login:password_reset' %}">Forgot Password?</a>
 
             </form>
 
