@@ -3,37 +3,37 @@
 
 {% block content %}
 
-<h1>Hospital Equipment</h1>
-
 <div class="container">
-	<div class="row">
-		<div class="col">
+    <div class="row">
+        <div class="col">
 
-			<p>
-				<a href="{% url 'hospital:equipment_create' %}">new</a>
-			</p>
-			<table class="table table-striped table-sm">
-				<thead>
-				<tr>
-					<th>Name</th>
-					<th>Type</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% for equipment in equipment_list %}
-				<tr>
-					<td>
-						<a href="{% url 'hospital:equipment_detail' pk=equipment.id %}">{{ equipment.name }}</a>
-					</td>
-					<td>
-						{{ equipment.type|get_equipment_type }}
-					</td>
-				</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		</div>
-	</div>
+            <h1>Hospital Equipment</h1>
+
+            <p>
+                <a href="{% url 'hospital:equipment_create' %}">new</a>
+            </p>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for equipment in equipment_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'hospital:equipment_detail' pk=equipment.id %}">{{ equipment.name }}</a>
+                    </td>
+                    <td>
+                        {{ equipment.type|get_equipment_type }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

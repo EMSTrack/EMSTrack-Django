@@ -9,21 +9,26 @@
 {% block content %}
 
 <div class="container">
-    <form method="POST" class="post-form">
-        {% csrf_token %}
+    <div class="row">
+        <div class="col">
 
-        <h1>Location</h1>
+            <form method="POST" class="post-form">
+                {% csrf_token %}
 
-        <h3>Details:</h3>
+                <h1>Location</h1>
 
-        <table>
-            {{ form }}
-        </table>
+                <h3>Details:</h3>
 
-        <p>
-            <button type="submit">Save</button>
-        </p>
-    </form>
+                <table>
+                    {{ form }}
+                </table>
+
+                <p>
+                    <button type="submit">Save</button>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

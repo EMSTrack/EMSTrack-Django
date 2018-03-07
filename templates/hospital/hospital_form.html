@@ -8,30 +8,35 @@
 
 {% block content %}
 
-<h1>Hospital</h1>
-
 <div class="container">
-    <form method="POST" class="post-form">
-        {% csrf_token %}
+    <div class="row">
+        <div class="col">
 
-        <h3>Details:</h3>
+            <h1>Hospital</h1>
 
-        <table>
-            {{ form }}
-        </table>
+            <form method="POST" class="post-form">
+                {% csrf_token %}
 
-        <h3>Equipment:</h3>
+                <h3>Details:</h3>
 
-        {% for form in inlines %}
-        <table>
-            {{ form }}
-        </table>
-        {% endfor %}
+                <table>
+                    {{ form }}
+                </table>
 
-        <p>
-            <button type="submit">Save</button>
-        </p>
-    </form>
+                <h3>Equipment:</h3>
+
+                {% for form in inlines %}
+                <table>
+                    {{ form }}
+                </table>
+                {% endfor %}
+
+                <p>
+                    <button type="submit">Save</button>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
