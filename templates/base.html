@@ -89,17 +89,22 @@
             {% endif %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
-                    <span class="glyphicon glyphicon-log-out"></span>
+                    <span class="fas fa-sign-out-alt"></span>
                     &nbsp;Logout {{request.user.first_name}}
                 </a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'login:signup' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;Sign
-                    Up</a>
+                <a class="nav-link" href="{% url 'login:signup' %}">
+                    <span class="fas fa-user-plus"></span>&nbsp;
+                    Sign Up
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'login:login' %}"><span class="glyphicon glyphicon-log-in"></span>&nbsp;Login</a>
+                <a class="nav-link" href="{% url 'login:login' %}">
+                    <span class="fas fa-sign-in-alt"></span>&nbsp;
+                    Login
+                </a>
             </li>
             {% endif %}
         </ul>
