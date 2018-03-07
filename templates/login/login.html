@@ -25,19 +25,17 @@
                   action="{% url 'login:login' %}">
                 {% csrf_token %}
 
+                {% for field in form %}
                 <div class="row">
-
-                    {% for field in form %}
-                    <p>
-                        {{ field }}
-                    </p>
-                    {% endfor %}
-
+                    {{ field }}
                 </div>
+                {% endfor %}
 
-                <button type="submit"
-                        class="btn btn btn-primary btn-success"
-                        value="login">Login</button>
+                <div class="row">
+                    <button type="submit"
+                            class="btn btn btn-primary btn-success"
+                            value="login">Login</button>
+                </div>
 
                 <input type="hidden" name="next" value="{{ next }}" />
 
