@@ -38,7 +38,10 @@ var beginDispatching = function () {
     $('#patients').empty();
 
     // add new patient form entry
-    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus', 'addPatient(' + newPatientIndex + ')'));
+    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus'));
+
+    // bind click
+    $('#patient-' + index + '-button').on('click', function(e) { addPatient(newPatientIndex); });
 
 }
 
@@ -66,8 +69,8 @@ var addPatient = function(index) {
 
     // change button action
     var button = $('#patient-' + index + '-button');
-    button.off();
-    button.click(function(e) { removePatient(index); });
+    button.off('click');
+    button.on('click', function(e) { removePatient(index); });
 
     // add new form
     $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus',
@@ -87,7 +90,7 @@ var removePatient = function(index) {
 
 }
 
-var newPatientForm = function(index, symbol, action) {
+var newPatientForm = function(index, symbol) {
 
     return '<div class="form-row" id="patient-' + index + '-form">' +
         '    <div class="col-sm-8 p-0">' +
@@ -103,8 +106,7 @@ var newPatientForm = function(index, symbol, action) {
         '    <div class="col-sm-2 p-0">' +
         '        <button class="btn btn-default new-patient"' +
         '                type="button"' +
-        '                id="patient-' + index + '-button"' +
-        '                onclick="' + action + '">' +
+        '                id="patient-' + index + '-button">' +
         '            <span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
         '        </button>' +
         '    </div>' +
