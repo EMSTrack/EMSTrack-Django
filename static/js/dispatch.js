@@ -42,11 +42,6 @@ var beginDispatching = function () {
     // add new patient form entry
     $('#patients').html(newPatientForm(newPatientIndex, 'plus'));
 
-    // associate button
-    $('#patient-' + newPatientIndex + ' -button').click(function(e) {
-        addPatient(newPatientIndex);
-    });
-
 }
 
 var newPatientForm = function(index, symbol) {
@@ -65,7 +60,8 @@ var newPatientForm = function(index, symbol) {
         '    <div class="col-sm-2 p-0">' +
         '        <button class="btn btn-default new-patient"' +
         '                type="button"' +
-        '                id="patient-' + index + '-button">' +
+        '                id="patient-' + index + '-button"' +
+        '                onclick="addPatient(0)">' +
         '            <span class="fas fa-' + symbol + '"></span>' +
         '        </button>' +
         '    </div>' +
