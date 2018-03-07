@@ -139,9 +139,12 @@
 
 <script>
     // make current page active
-    // var pathname = window.location.pathname.split('/', 3).join('/');
     var pathname = window.location.pathname;
-    $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
+
+    // exclude home page
+    if (pathname != '/')
+        $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
+
 </script>
 
 </body>

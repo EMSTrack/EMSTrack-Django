@@ -467,7 +467,7 @@ var newPatientForm = function(index, symbol) {
             '</div>' +
         '</div>';
 
-    console.log('html = "' + html + '"');
+    // console.log('html = "' + html + '"');
 
     return html;
 
