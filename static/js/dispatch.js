@@ -271,6 +271,7 @@ function dispatchCall() {
     var form = {};
 
     // call information
+    form['street_address'] = $('street').val();
     form['details'] = $('#comment').val();
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
@@ -285,15 +286,31 @@ function dispatchCall() {
     }
 
     // address information
-    form['number'] = currentAddress['number'];
-    form['street'] = currentAddress['street'];
-    form['unit'] = currentAddress['unit'];
-    form['neighborbood'] = currentAddress['neighborhood'];
+    form['neighborhood'] = currentAddress['neighborhood'];
     form['city'] = currentAddress['city'];
     form['state'] = currentAddress['state'];
     form['country'] = currentAddress['country'];
     form['zipcode'] = currentAddress['zipcode'];
     form['location'] = currentAddress['location'];
+
+    // Has the user modified the street address?
+    if (form['street_address'] != currentAddress['street_address']) {
+
+        // parse street address
+        var address = geocoder.parse_street_address(form['street_address'],
+            currentAddress['country']);
+
+        form['number'] = address['number'];
+        form['street'] = address['street'];
+        form['unit'] = address['unit'];
+
+    } else {
+
+        form['number'] = currentAddress['number'];
+        form['street'] = currentAddress['street'];
+        form['unit'] = currentAddress['unit'];
+
+    }
 
     // ambulances
     var ambulances = [];

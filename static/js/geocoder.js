@@ -26,6 +26,31 @@ var Geocoder = function(options) {
 
 }
 
+Geocoder.prototype.parse_street_address = function(street_address, country, address) {
+
+    // initialize parameteres
+    address = address || {};
+
+    // parse street address
+    var street = street_address.split(',');
+
+    // load configuration based on country
+    var config = this.parser_configurations[country];
+
+    var matches = street[0].match(config['regex']);
+    if (matches) {
+        console.log(matches);
+        var street_components = config['street_components'];
+        // matches[0] is the entire matched string
+        for (var i = 1; i < matches.length; i++) {
+            if (matches[i] !== undefined)
+                address[street_components[i-1]] = matches[i].trim();
+        }
+    }
+
+    return address;
+}
+
 Geocoder.prototype.parse_feature = function(feature) {
 
     // parse feature
@@ -72,6 +97,10 @@ Geocoder.prototype.parse_feature = function(feature) {
         address['street_address'] = street_address;
 
         // parse street address
+        return this.parse_street_address(street_address,
+            address['country'],
+            address);
+/*
         var street = street_address.split(',');
 
         // load configuration based on country
@@ -87,6 +116,7 @@ Geocoder.prototype.parse_feature = function(feature) {
                     address[street_components[i-1]] = matches[i].trim();
             }
         }
+*/
 
         return address;
     }
