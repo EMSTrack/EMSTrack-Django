@@ -685,7 +685,7 @@ function createCategoryFilter() {
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
-    filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
+    filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
     Object.keys(ambulance_status).forEach(function (status) {
 
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
@@ -711,7 +711,7 @@ function createCategoryFilter() {
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for locations
-    filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
+    filterHtml += '<div class="border border-dark rounded-bottom px-1 pt-1 pb-0">';
     Object.keys(location_type).forEach(function (type) {
 
         categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
