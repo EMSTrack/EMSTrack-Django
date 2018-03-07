@@ -6,12 +6,12 @@
 {% endif %}
 
 {% if next %}
-  {% if user.is_authenticated %}
+{% if user.is_authenticated %}
 <p>
-  Your account doesn't have access to this page.
-  To proceed, please login with an account that has access.
+    Your account doesn't have access to this page.
+    To proceed, please login with an account that has access.
 </p>
-  {% endif %}
+{% endif %}
 {% endif %}
 
 <div class="container">
@@ -24,7 +24,7 @@
                   method="post"
                   action="{% url 'login:login' %}">
                 {% csrf_token %}
-	
+
                 <div class="row">
 
                     {% for field in form %}
@@ -45,6 +45,7 @@
                    href="{% url 'login:password_reset' %}">Forgot Password?</a>
 
             </form>
+
         </div>
     </div>
 </div>
