@@ -433,9 +433,9 @@ var newPatientForm = function(index, symbol) {
         '    </div>' +
         '    <div class="col-sm-2 p-0">' +
         '        <input id="patient-' + index + '-age"' +
-        '               type="number"' +
+        '               type="text"' +
         '               class="form-control"' +
-        '               placeholder="Age"/>' +
+        '               placeholder="Age">' +
         '    </div>' +
         '    <div class="col-sm-2 p-0">' +
         '        <button class="btn btn-default new-patient"' +
