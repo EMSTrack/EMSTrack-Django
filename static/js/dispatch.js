@@ -14,6 +14,9 @@ var numberOfDispatchingAmbulances = 0;
 
 var currentAddress;
 var currentLocation;
+var patients;
+var paientsIndices;
+var newPatientIndex;
 
 var beginDispatching = function () {
 
@@ -27,6 +30,46 @@ var beginDispatching = function () {
 
     // Update current address
     updateCurrentAddress(currentLocation);
+
+    // Clear current patients
+    patients = [];
+    patientsIndicies = [];
+    newPatientIndex = 0;
+
+    // Initialize patient form
+    $('#patients').empty();
+
+    // add new patient form entry
+    $('#patients').html(newPatientForm(newPatientIndex, 'plus'));
+
+    // associated button
+    $('#patient-' + newPatientIndex + ' -button').click(function(e) {
+        addPatient(newPatientIndex);
+    });
+
+}
+
+var newPatientForm = function(index, symbol) {
+
+    return '<div class="form-row" id="patient-' + index + '">' +
+        '    <div class="col-sm-8 p-0">' +
+        '        <input id="patient-' + index + '-name" type="text"' +
+        '               class="form-control"' +
+        '               placeholder="Name">' +
+        '    </div>' +
+        '    <div class="col-sm-2 p-0">' +
+        '        <input id="patient-' + index + '-age" type="text"' +
+        '               class="form-control"' +
+        '               placeholder="Age"/>' +
+        '    </div>' +
+        '    <div class="col-sm-2 p-0">' +
+        '        <button class="btn btn-default new-patient"' +
+        '                type="button"' +
+        '                id="patient-' + index + '-button">' +
+        '            <span class="fas fa-' + symbol + '"></span>' +
+        '        </button>' +
+        '    </div>' +
+        '</div>';
 
 }
 
@@ -254,6 +297,11 @@ var updateCoordinates = function() {
         });
 }
 
+var addPatient = function() {
+
+}
+
+
 // connect actions to inputs
 
 $("#street").change(function () {
@@ -290,8 +338,6 @@ $('#dispatch_form_collapse').submit(function (e) {
     dispatchCall();
 
 });
-
-
 
 /*
  * dispatchCall makes an ajax post request to post dispatched ambulance.
