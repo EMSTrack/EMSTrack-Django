@@ -22,8 +22,8 @@ class TestCall(TestSetup):
 			'active': c1.active,
 			'details': c1.details,
 			'priority': c1.priority,
-			'created_at': c1.created_at,
-			'ended_at': c1.ended_at,
+			'created_at': data2iso(c1.created_at),
+			'ended_at': data2iso(c1.ended_at),
 			'comment': c1.comment,
 			'updated_by': c1.updated_by.id,
 			'updated_on': date2iso(c1.updated_on)
