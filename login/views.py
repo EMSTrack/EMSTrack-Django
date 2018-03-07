@@ -48,7 +48,10 @@ class SignupView(FormView):
         # TODO: Automatic signup could send an email to prospective user
         # then notify administrator of new user
         # form.send_email()
-        return super().form_valid(form)
+        # return super().form_valid(form)
+        # for now abort and alert user
+        form.add_error(None, 'EMSTrack is not accepting new users at this point.');
+        return super().form_invalid(form);
 
 
 # login
