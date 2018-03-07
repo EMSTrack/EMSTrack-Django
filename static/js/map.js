@@ -192,6 +192,11 @@ $(document).ready(function () {
 
 });
 
+// alert using bootstrap modal
+var bsalert(message) {
+
+}
+
 /* Handle connect */
 function onConnect() {
 
