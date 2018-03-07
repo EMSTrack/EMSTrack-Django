@@ -38,11 +38,20 @@ var beginDispatching = function () {
     $('#patients').empty();
 
     // add new patient form entry
-    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus'));
+    addPatientForm(newPatientIndex);
 
-    // bind click
-    $('#patients').on('click', '#patient-' + newPatientIndex + '-button', function(e) { addPatient(newPatientIndex); });
-    //$('#patient-' + index + '-button').on('click', function(e) { addPatient(newPatientIndex); });
+}
+
+var addPatientForm = function(index) {
+
+    // add new patient form entry
+    $('#patients').append(newPatientForm(index, 'fa-plus'));
+
+    // bind addPatient to click
+    $('#patients')
+        .on('click',
+            '#patient-' + index + '-button',
+            function(e) { addPatient(index); });
 
 }
 
@@ -68,15 +77,13 @@ var addPatient = function(index) {
     symbol.removeClass('fa-plus');
     symbol.addClass('fa-minus');
 
-    // change button action
-    $('#patients').off('click', '#patient-' + index + '-button');
-    $('#patients').on('click', '#patient-' + index + '-button', function(e) { removePatient(index); });
+    // change button action from add to remove
+    $('#patients').find('#patient-' + index + '-button')
+        .off()
+        .on('click', function(e) { removePatient(index); });
 
     // add new form
-    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus'));
-
-    // bind click
-    $('#patients').on('click', '#patient-' + newPatientIndex + '-button', function(e) { addPatient(newPatientIndex); });
+    addPatientForm(newPatientIndex);
 
 }
 
@@ -88,9 +95,9 @@ var removePatient = function(index) {
     delete patients[index];
 
     // remove from form
-    $('#patients').find('#patient-' + index + '-form').remove();
-
-    console.log('Done removing patient index ' + index);
+    $('#patients')
+        .find('#patient-' + index + '-form')
+        .remove();
 
 }
 
