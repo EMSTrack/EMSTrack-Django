@@ -73,15 +73,21 @@ var addPatient = function(index) {
 
 }
 
-var removingPatient = function(index) {
-
+var removePatient = function(index) {
+    
     console.log('Removing patient index ' + index);
+
+    // remove from storage
+    delete patients[index];
+
+    // remove from form
+    $('#patient-' + index + '-form').remove();
 
 }
 
 var newPatientForm = function(index, symbol, action) {
 
-    return '<div class="form-row" id="patient-' + index + '">' +
+    return '<div class="form-row" id="patient-' + index + '-form">' +
         '    <div class="col-sm-8 p-0">' +
         '        <input id="patient-' + index + '-name" type="text"' +
         '               class="form-control"' +
