@@ -25,11 +25,9 @@
                   action="{% url 'login:login' %}">
                 {% csrf_token %}
 
-                {% for field in form %}
                 <div class="row">
-                    {{ field }}
+                    {{ form}}
                 </div>
-                {% endfor %}
 
                 <div class="row">
                     <button type="submit"
