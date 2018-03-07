@@ -127,7 +127,7 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView
                GroupHospitalPermissionAdminInline]
 
     def get_success_message(self, cleaned_data):
-        return "Successfully created group '{}'".format(self.object.name)
+        return "Successfully updated group '{}'".format(self.object.name)
 
     def get_success_url(self):
         return self.object.groupprofile.get_absolute_url()
