@@ -395,7 +395,7 @@ function updateAmbulance(ambulance) {
         // Updated button color/status
         if (ambulance.status === STATUS_AVAILABLE)
             $(buttonId).attr("class", "btn btn-sm btn-success");
-        else if (ambulance.tatus === STATUS_OUT_OF_SERVICE)
+        else if (ambulance.status === STATUS_OUT_OF_SERVICE)
             $(buttonId).attr("class", "btn btn-sm btn-default");
         else
             $(buttonId).attr("class", "btn btn-sm btn-danger");
@@ -685,7 +685,7 @@ function createCategoryFilter() {
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
-    filterHtml += '<div style="border-style: groove; border-width: 1px; border-radius: 5px; padding: 0px 5px 0px 5px; margin: 0px 0px 0px 0px">';
+    filterHtml += '<div class="border">';
     Object.keys(ambulance_status).forEach(function (status) {
 
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
