@@ -57,8 +57,6 @@ class AmbulanceDetailView(LoginRequiredMixin,
         except EmptyPage:
             updates = paginator.page(paginator.num_pages)
 
-        # TODO: Return better page links for navigation
-
         context['updates'] = updates
         context['page_links'] = get_page_links(self.request, updates)
 

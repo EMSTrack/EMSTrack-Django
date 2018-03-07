@@ -133,7 +133,6 @@ class BaseClient:
             logger.debug("Published mid={}".format(mid))
 
         if mid in self.published:
-            # TODO: check granted_qos?
             # remove from list of subscribed
             del self.published[mid]
 
@@ -168,7 +167,6 @@ class BaseClient:
             logger.debug("Subscribed mid={}, qos={}".format(mid, granted_qos))
 
         if mid in self.subscribed:
-            # TODO: check granted_qos?
             # remove from list of subscribed
             del self.subscribed[mid]
 
