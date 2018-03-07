@@ -42,89 +42,6 @@ var beginDispatching = function () {
 
 }
 
-var addPatientForm = function(index) {
-
-    // add new patient form entry
-    $('#patients').append(newPatientForm(index, 'fa-plus'));
-
-    // bind addPatient to click
-    $('#patients')
-        .on('click',
-            '#patient-' + index + '-button',
-            function(e) { addPatient(index); });
-
-}
-
-var addPatient = function(index) {
-
-    console.log('Adding patient index ' + index);
-
-    var name = $('#patient-' + index + '-name').val().trim();
-    var age = $('#patient-' + index + '-age').val().trim();
-
-    // is name empty?
-    if (!name) {
-        alert('Empty name');
-        return;
-    }
-
-    // add name
-    patients[index] = [name, age];
-    newPatientIndex++;
-
-    // change button symbol
-    var symbol = $('#patient-' + index + '-symbol');
-    symbol.removeClass('fa-plus');
-    symbol.addClass('fa-minus');
-
-    // change button action from add to remove
-    $('#patients').find('#patient-' + index + '-button')
-        .off()
-        .on('click', function(e) { removePatient(index); });
-
-    // add new form
-    addPatientForm(newPatientIndex);
-
-}
-
-var removePatient = function(index) {
-    
-    console.log('Removing patient index ' + index);
-
-    // remove from storage
-    delete patients[index];
-
-    // remove from form
-    $('#patients')
-        .find('#patient-' + index + '-form')
-        .remove();
-
-}
-
-var newPatientForm = function(index, symbol) {
-
-    return '<div class="form-row" id="patient-' + index + '-form">' +
-        '    <div class="col-sm-8 p-0">' +
-        '        <input id="patient-' + index + '-name" type="text"' +
-        '               class="form-control"' +
-        '               placeholder="Name">' +
-        '    </div>' +
-        '    <div class="col-sm-2 p-0">' +
-        '        <input id="patient-' + index + '-age" type="text"' +
-        '               class="form-control"' +
-        '               placeholder="Age"/>' +
-        '    </div>' +
-        '    <div class="col-sm-2 p-0">' +
-        '        <button class="btn btn-default new-patient"' +
-        '                type="button"' +
-        '                id="patient-' + index + '-button">' +
-        '            <span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
-        '        </button>' +
-        '    </div>' +
-        '</div>';
-
-}
-
 var endDispatching = function () {
 
     isDispatching = false;
@@ -349,44 +266,6 @@ var updateCoordinates = function() {
         });
 }
 
-
-// connect actions to inputs
-
-$("#street").change(function () {
-
-    // update coordinates?
-    if ($('#update-coordinates').prop('checked'))
-        updateCoordinates();
-
-});
-
-
-$('#update-coordinates').change(function() {
-
-    // update coordinates?
-    if ($('#update-coordinates').prop('checked'))
-        updateCoordinates();
-
-});
-
-$('#update-address').change(function() {
-
-    // update address?
-    if ($('#update-address').prop('checked'))
-        updateCurrentAddress(currentLocation);
-
-});
-
-$('#dispatch_form_collapse').submit(function (e) {
-
-   // prevent normal form submission
-    e.preventDefault();
-
-    // dispatch call
-    dispatchCall();
-
-});
-
 /*
  * dispatchCall makes an ajax post request to post dispatched ambulance.
  * @param void.
@@ -477,6 +356,133 @@ function dispatchCall() {
         }
     });
 }
+
+
+// patient functions
+
+var addPatient = function(index) {
+
+    console.log('Adding patient index ' + index);
+
+    var name = $('#patient-' + index + '-name').val().trim();
+    var age = $('#patient-' + index + '-age').val().trim();
+
+    // is name empty?
+    if (!name) {
+        alert('Empty name');
+        return;
+    }
+
+    // add name
+    patients[index] = [name, age];
+    newPatientIndex++;
+
+    // change button symbol
+    var symbol = $('#patient-' + index + '-symbol');
+    symbol.removeClass('fa-plus');
+    symbol.addClass('fa-minus');
+
+    // change button action from add to remove
+    $('#patients').find('#patient-' + index + '-button')
+        .off()
+        .on('click', function(e) { removePatient(index); });
+
+    // add new form
+    addPatientForm(newPatientIndex);
+
+}
+
+var removePatient = function(index) {
+
+    console.log('Removing patient index ' + index);
+
+    // remove from storage
+    delete patients[index];
+
+    // remove from form
+    $('#patients')
+        .find('#patient-' + index + '-form')
+        .remove();
+
+}
+
+var addPatientForm = function(index) {
+
+    // add new patient form entry
+    $('#patients').append(newPatientForm(index, 'fa-plus'));
+
+    // bind addPatient to click
+    $('#patients')
+        .on('click',
+            '#patient-' + index + '-button',
+            function(e) { addPatient(index); });
+
+}
+
+var newPatientForm = function(index, symbol) {
+
+    return '<div class="form-row" id="patient-' + index + '-form">' +
+        '    <div class="col-sm-8 p-0">' +
+        '        <input id="patient-' + index + '-name" type="text"' +
+        '               class="form-control"' +
+        '               placeholder="Name">' +
+        '    </div>' +
+        '    <div class="col-sm-2 p-0">' +
+        '        <input id="patient-' + index + '-age" type="text"' +
+        '               class="form-control"' +
+        '               placeholder="Age"/>' +
+        '    </div>' +
+        '    <div class="col-sm-2 p-0">' +
+        '        <button class="btn btn-default new-patient"' +
+        '                type="button"' +
+        '                id="patient-' + index + '-button">' +
+        '            <span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
+        '        </button>' +
+        '    </div>' +
+        '</div>';
+
+}
+
+
+// connect actions to inputs
+
+$("#street").change(function () {
+
+    // update coordinates?
+    if ($('#update-coordinates').prop('checked'))
+        updateCoordinates();
+
+});
+
+
+$('#update-coordinates').change(function() {
+
+    // update coordinates?
+    if ($('#update-coordinates').prop('checked'))
+        updateCoordinates();
+
+});
+
+$('#update-address').change(function() {
+
+    // update address?
+    if ($('#update-address').prop('checked'))
+        updateCurrentAddress(currentLocation);
+
+});
+
+$('#dispatch_form_collapse').submit(function (e) {
+
+   // prevent normal form submission
+    e.preventDefault();
+
+    // dispatch call
+    dispatchCall();
+
+});
+
+
+// CSRF functions
 
 function CSRFSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
