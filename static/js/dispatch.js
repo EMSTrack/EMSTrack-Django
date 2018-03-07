@@ -57,13 +57,18 @@ var addPatient = function(index) {
 
     // add name
     patients[index] = [name, age];
+    newPatientIndex++;
 
     // change button symbol
-    $('#patient-' + index + '-symbol').removeClass('fa-plus');
-    $('#patient-' + index + '-symbol').addClass('fa-minus');
+    var symbol = $('#patient-' + index + '-symbol');
+    symbol.removeClass('fa-plus');
+    symbol.addClass('fa-minus');
 
     // change button action
-    $('#patient-' + index + '-symbol').click(function(e) { removePatient(index); });
+    $('#patient-' + index + '-button').click(function(e) { removePatient(index); });
+
+    // add new form
+    $('#patients').html(newPatientForm(newPatientIndex, 'fa-plus', 'addPatient(' + newPatientIndex + ')'));
 
 }
 
@@ -91,7 +96,7 @@ var newPatientForm = function(index, symbol, action) {
         '                type="button"' +
         '                id="patient-' + index + '-button"' +
         '                onclick="' + action + '">' +
-        '            <span class="fas ' + symbol + '"></span>' +
+        '            <span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
         '        </button>' +
         '    </div>' +
         '</div>';
