@@ -424,7 +424,7 @@ var addPatientForm = function(index) {
 
 var newPatientForm = function(index, symbol) {
 
-    return '<div class="form-row" id="patient-' + index + '-form">' +
+    var html = '<div class="form-row" id="patient-' + index + '-form">' +
         '    <div class="col-sm-8 p-0">' +
         '        <input id="patient-' + index + '-name"' +
         '               type="text"' +
@@ -445,6 +445,10 @@ var newPatientForm = function(index, symbol) {
         '        </button>' +
         '    </div>' +
         '</div>';
+
+    console.log('html = "' + html + '"');
+
+    return html;
 
 }
 
