@@ -344,7 +344,7 @@ function dispatchCall() {
                 + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
 
             // Show modal
-            bsalert(sucessMsg, 'alert-success, 'Success');
+            bsalert(sucessMsg, 'alert-success', 'Success');
             // $('.modal-title').html('Success');
             // $('.modal-body').html(successMsg).addClass('alert-success');
             // $("#dispatchModal").modal('show');
