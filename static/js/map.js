@@ -394,11 +394,11 @@ function updateAmbulance(ambulance) {
 
         // Updated button color/status
         if (ambulance.status === STATUS_AVAILABLE)
-            $(buttonId).attr("class", "btn btn-success");
+            $(buttonId).attr("class", "btn btn-sm btn-success");
         else if (ambulance.tatus === STATUS_OUT_OF_SERVICE)
-            $(buttonId).attr("class", "btn btn-default");
+            $(buttonId).attr("class", "btn btn-sm btn-default");
         else
-            $(buttonId).attr("class", "btn btn-danger");
+            $(buttonId).attr("class", "btn btn-sm btn-danger");
 
     } else {
 
