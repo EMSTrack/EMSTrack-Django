@@ -84,7 +84,7 @@ var addToDispatchingList = function(ambulance) {
     // not available?
     if (ambulance.status != STATUS_AVAILABLE) {
         console.log('Ambulance is not available');
-        alert('Can only dispatch available ambulances!');
+        bsalert('Can only dispatch available ambulances!');
         return;
     }
 
@@ -177,7 +177,7 @@ var updateCurrentAddress = function(location) {
         function (results, status) {
 
         if (status != "success") {
-            alert("Could not geocode:\nError " + status + ", " + results['error']);
+            bsalert("Could not geocode:\nError " + status + ", " + results['error']);
             return;
         }
 
@@ -230,7 +230,7 @@ var updateCoordinates = function() {
         function (results, status) {
 
             if (status != "success") {
-                alert("Could not geocode:\nError " + status + ", " + results['error']);
+                bsalert("Could not geocode:\nError " + status + ", " + results['error']);
                 return;
             }
 
@@ -276,11 +276,11 @@ function dispatchCall() {
 
     // checks
     if (form["priority"] === undefined) {
-        alert("Please click one of priorities");
+        bsalert("Please click one of priorities");
         return;
     }
     if (numberOfDispatchingAmbulances == 0) {
-        alert("Please dispatch at least one ambulance");
+        bsalert("Please dispatch at least one ambulance");
         return;
     }
 
@@ -338,25 +338,26 @@ function dispatchCall() {
         data: form,
         success: function (data) {
 
-            // alert(JSON.stringify(data));
             var successMsg = '<strong>Success</strong><br/>' +
                 +'Ambulance: ' + data['ambulance']
                 + ' dispatched to <br/>' + data['residential_unit']
                 + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
 
             // Show modal
-            $('.modal-title').html('Success');
-            $('.modal-body').html(successMsg).addClass('alert-success');
-            $("#dispatchModal").modal('show');
+            bsalert(sucessMsg, 'alert-success, 'Success');
+            // $('.modal-title').html('Success');
+            // $('.modal-body').html(successMsg).addClass('alert-success');
+            // $("#dispatchModal").modal('show');
 
             endDispatching();
         },
         error: function (jqXHR, textStatus, errorThrown) {
 
             // Show modal
-            $('.modal-title').html('Failure');
-            $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
-            $("#dispatchModal").modal('show');
+            // $('.modal-title').html('Failure');
+            // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
+            // $("#dispatchModal").modal('show');
+            bsalert(textStatus + ": " + errorThrown);
 
             endDispatching();
         }
@@ -375,7 +376,7 @@ var addPatient = function(index) {
 
     // is name empty?
     if (!name) {
-        alert('Empty name');
+        bsalert('Empty name');
         return;
     }
 

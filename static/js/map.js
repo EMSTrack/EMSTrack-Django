@@ -184,7 +184,7 @@ $(document).ready(function () {
     })
         .fail(function (jqxhr, testStatus, error) {
 
-            alert("Connection to MQTT broker failed: \"" +
+            bsalert("Connection to MQTT broker failed: \"" +
                 testStatus + "," + error + "\"\n" +
                 "Information will not be updated in real time.");
 
@@ -193,7 +193,15 @@ $(document).ready(function () {
 });
 
 // alert using bootstrap modal
-var bsalert(message) {
+var bsalert = function(message, alertClass, title) {
+
+    // Show modal
+    alertClass = alertClass | 'alert-danger;';
+    title = title | 'Failure';
+
+    $('.modal-title').html(title);
+    $('.modal-body').html(message).addClass(alertClass);
+    $("#dispatchModal").modal('show');
 
 }
 
@@ -255,7 +263,7 @@ function onConnect() {
 /* Handle missconnection */
 function onConnectFailure(message) {
 
-    alert("Connection to MQTT broker failed: " + message.errorMessage +
+    bsalert("Connection to MQTT broker failed: " + message.errorMessage +
         "Information will not be updated in real time.");
 
     // Load hospital data from API
@@ -266,7 +274,7 @@ function onConnectFailure(message) {
 
         error: function (msg) {
 
-            alert('Could not retrieve data from API:' + msg)
+            bsalert('Could not retrieve data from API:' + msg)
 
         },
 
@@ -296,7 +304,7 @@ function onConnectFailure(message) {
 
         error: function (msg) {
 
-            alert('Could not retrieve data from API:' + msg)
+            bsalert('Could not retrieve data from API:' + msg)
 
         },
 
@@ -348,7 +356,7 @@ function onMessageArrived(message) {
         }
 
     } catch (e) {
-        alert('Error processing message "' +
+        bsalert('Error processing message "' +
             message.destinationName + ':' + message.payloadString +
             '"' + '<br/>' + 'error = "' + e + '"');
     }
