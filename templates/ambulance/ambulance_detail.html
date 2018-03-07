@@ -12,11 +12,11 @@
 
 {% block content %}
 
-<h1>Ambulance</h1>
-
 <div class="container">
     <div class="row">
         <div class="col">
+
+            <h1>Ambulance</h1>
 
             <h3>
                 Details:
@@ -52,7 +52,6 @@
     <div class="row">
         <div class="col">
 
-
             <h3>
                 Past Locations:
             </h3>
@@ -61,44 +60,47 @@
                 <div id="map" style="width: 800px; height: 400px; margin-left: auto; margin-right: auto;"></div>
             </div>
 
-            <div class="container">
+        </div>
+    </div>
 
-                <!-- TODO: add page_size control -->
+    <div class="row">
+        <div class="col">
 
-                {% if updates.has_other_pages %}
-                {% include "rest_framework/pagination/numbers.html" %}
-                {% endif %}
+            <!-- TODO: add page_size control -->
 
-                <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                        <th>Status</th>
-                        <th>Location</th>
-                        <th>Comment</th>
-                        <th>Timestamp</th>
-                        <th>Updated on</th>
-                        <th>by</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for update in updates %}
-                    <tr>
-                        <td>{{ update.status|get_ambulance_status }}</td>
-                        <td>{{ update.location }}</td>
-                        <td>{{ update.comment }}</td>
-                        <td>{{ update.timestamp }}</td>
-                        <td>{{ update.updated_by }}</td>
-                        <td>{{ update.updated_on }}</td>
-                    </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            {% if updates.has_other_pages %}
+            {% include "rest_framework/pagination/numbers.html" %}
+            {% endif %}
 
-                {% if updates.has_other_pages %}
-                {% include "rest_framework/pagination/numbers.html" %}
-                {% endif %}
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Location</th>
+                    <th>Comment</th>
+                    <th>Timestamp</th>
+                    <th>Updated on</th>
+                    <th>by</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for update in updates %}
+                <tr>
+                    <td>{{ update.status|get_ambulance_status }}</td>
+                    <td>{{ update.location }}</td>
+                    <td>{{ update.comment }}</td>
+                    <td>{{ update.timestamp }}</td>
+                    <td>{{ update.updated_by }}</td>
+                    <td>{{ update.updated_on }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-            </div>
+            {% if updates.has_other_pages %}
+            {% include "rest_framework/pagination/numbers.html" %}
+            {% endif %}
+
         </div>
     </div>
 </div>
