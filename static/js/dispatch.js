@@ -15,7 +15,6 @@ var numberOfDispatchingAmbulances = 0;
 var currentAddress;
 var currentLocation;
 var patients;
-var paientsIndices;
 var newPatientIndex;
 
 var beginDispatching = function () {
@@ -32,19 +31,49 @@ var beginDispatching = function () {
     updateCurrentAddress(currentLocation);
 
     // Clear current patients
-    patients = [];
-    patientsIndicies = [];
+    patients = {};
     newPatientIndex = 0;
 
     // Initialize patient form
     $('#patients').empty();
 
     // add new patient form entry
-    $('#patients').html(newPatientForm(newPatientIndex, 'plus'));
+    $('#patients').html(newPatientForm(newPatientIndex, 'fa-plus', 'addPatient(' + newPatientIndex + ')'));
 
 }
 
-var newPatientForm = function(index, symbol) {
+var addPatient = function(index) {
+
+    console.log('Adding patient index ' + index);
+
+    var name = $('#patient-' + index + '-name').val().trim();
+    var age = $('#patient-' + index + '-age').val().trim();
+
+    // is name empty?
+    if (!name) {
+        alert('Empty name');
+        return;
+    }
+
+    // add name
+    patients[index] = [name, age];
+
+    // change button symbol
+    $('#patient-' + index + '-symbol').removeClass('fa-plus');
+    $('#patient-' + index + '-symbol').addClass('fa-minus');
+
+    // change button action
+    $('#patient-' + index + '-symbol').click(function(e) { removePatient(index); });
+
+}
+
+var removingPatient = function(index) {
+
+    console.log('Removing patient index ' + index);
+
+}
+
+var newPatientForm = function(index, symbol, action) {
 
     return '<div class="form-row" id="patient-' + index + '">' +
         '    <div class="col-sm-8 p-0">' +
@@ -61,8 +90,8 @@ var newPatientForm = function(index, symbol) {
         '        <button class="btn btn-default new-patient"' +
         '                type="button"' +
         '                id="patient-' + index + '-button"' +
-        '                onclick="addPatient(0)">' +
-        '            <span class="fas fa-' + symbol + '"></span>' +
+        '                onclick="' + action + '">' +
+        '            <span class="fas ' + symbol + '"></span>' +
         '        </button>' +
         '    </div>' +
         '</div>';
@@ -291,12 +320,6 @@ var updateCoordinates = function() {
             });
 
         });
-}
-
-var addPatient = function(index) {
-
-    console.log('Adding patient index ' + index);
-
 }
 
 
