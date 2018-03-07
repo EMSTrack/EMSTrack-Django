@@ -302,14 +302,17 @@ function dispatchCall() {
             ambulances.push(id);
     form['ambulances'] = ambulances;
 
-    // currentPatients
-    var patients= [];
-    for (var id in currentPatients)
-        if (currentPatients.hasOwnProperty(id))
-            patients.push({
-                name: currentPatients[0],
-                age: currentPatients[1]
-            });
+    // patients
+    var patients = [];
+    for (var index in currentPatients)
+        if (currentPatients.hasOwnProperty(index)) {
+            var patient = currentPatients[index];
+            var obj = { name: patient[0] };
+            if (patient[1])
+                // add age
+                obj['age'] = patient[1];
+            patients.push(obj);
+        }
     form['patients'] = patients;
 
     // make json call
