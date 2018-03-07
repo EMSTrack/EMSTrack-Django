@@ -700,7 +700,7 @@ function createCategoryFilter() {
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for hospital
-    filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
+    filterHtml += '<div class="border border-dark rounded-0 px-1 pt-1 pb-0">';
     let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
