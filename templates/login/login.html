@@ -2,12 +2,16 @@
 {% block content %}
 
 {% if form.errors %}
+{% for field in form %}
+{% for error in field.errors %}
 <div class="alert alert-danger alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
     </button>
-    <p>Your username and password didn't match. Please try again.</p>
+    {{ error|escape }}
 </div>
+{% endfor %}
+{% endfor %}
 {% endif %}
 
 {% if next %}
