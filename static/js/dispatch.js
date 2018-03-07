@@ -424,26 +424,27 @@ var addPatientForm = function(index) {
 
 var newPatientForm = function(index, symbol) {
 
-    var html = '<div class="form-row" id="patient-' + index + '-form">' +
-        '    <div class="col-sm-7 p-0">' +
-        '        <input id="patient-' + index + '-name"' +
-        '               type="text"' +
-        '               class="form-control"' +
-        '               placeholder="Name">' +
-        '    </div>' +
-        '    <div class="col-sm-3 p-0">' +
-        '        <input id="patient-' + index + '-age"' +
-        '               type="number" min="0"' +
-        '               class="form-control"' +
-        '               placeholder="Age">' +
-        '    </div>' +
-        '    <div class="col-sm-2 p-0">' +
-        '        <button class="btn btn-default new-patient"' +
-        '                type="button"' +
-        '                id="patient-' + index + '-button">' +
-        '            <span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
-        '        </button>' +
-        '    </div>' +
+    var html =
+        '<div class="form-row" id="patient-' + index + '-form">' +
+            '<div class="col-sm-7 p-0">' +
+                '<input id="patient-' + index + '-name" ' +
+                       'type="text" ' +
+                       'class="form-control" ' +
+                       'placeholder="Name">' +
+            '</div>' +
+            '<div class="col-sm-3 p-0">' +
+                '<input id="patient-' + index + '-age" ' +
+                       'type="number" min="0" ' +
+                       'class="form-control" ' +
+                       'placeholder="Age">' +
+            '</div>' +
+            '<div class="col-sm-2 p-0">' +
+                '<button class="btn btn-default new-patient" ' +
+                       ' type="button" ' +
+                       ' id="patient-' + index + '-button">' +
+                    '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
+                '</button>' +
+            '</div>' +
         '</div>';
 
     console.log('html = "' + html + '"');
