@@ -53,6 +53,9 @@ class UserAmbulancePermission(Permission):
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('user', 'ambulance')
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
                                                          self.ambulance.identifier,
@@ -66,6 +69,9 @@ class UserHospitalPermission(Permission):
                              on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'hospital')
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
@@ -81,6 +87,9 @@ class GroupAmbulancePermission(Permission):
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = ('group', 'ambulance')
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.ambulance.identifier,
@@ -94,6 +103,9 @@ class GroupHospitalPermission(Permission):
                               on_delete=models.CASCADE)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('group', 'hospital')
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
