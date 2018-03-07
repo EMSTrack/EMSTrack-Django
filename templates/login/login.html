@@ -53,36 +53,24 @@
                   action="{% url 'login:login' %}">
                 {% csrf_token %}
 
-                <div class="row form-group">
-                    <table>
-                        <tr>
-                            <th>
-                                <label for="id_username">
-                                    Username:
-                                </label>
-                            </th>
-                            <td>
-                                <input type="text" name="username" autofocus placeholder="Username"
-                                       class="form-control input-lg"
-                                       maxlength="150" required id="id_username" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                <label for="id_password">
-                                    Password:
-                                </label>
-                            </th>
-                            <td>
-                                <input type="password" name="password" placeholder="Password"
-                                       class="form-control input-lg"
-                                       required id="id_password" />
-                            </td>
-                        </tr>
-                    </table>
+                <div class="form-group">
+                    <label for="id_username">
+                        Username:
+                    </label>
+                    <input type="text" name="username" autofocus placeholder="Username"
+                           class="form-control input-lg"
+                           maxlength="150" required id="id_username" />
+                </div>
+                <div class="form-group">
+                    <label for="id_password">
+                        Password:
+                    </label>
+                    <input type="password" name="password" placeholder="Password"
+                           class="form-control input-lg"
+                           required id="id_password">
                 </div>
 
-                <div class="row text-right">
+                <div class="form-group">
                     <a href="{% url 'login:password_reset' %}">Forgot Password?</a>
                 </div>
 
