@@ -44,6 +44,12 @@ class SignupView(FormView):
     template_name = 'login/signup.html'
     form_class = SignupForm
 
+    def form_valid(self, form):
+        # TODO: Automatic signup could send an email to prospective user
+        # then notify administrator of new user
+        # form.send_email()
+        return super().form_valid(form)
+
 
 # login
 
