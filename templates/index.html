@@ -94,7 +94,7 @@
         } else if (pathname == '/auth/signup/') {
 
             // adjust modal
-            $('#signInForm').attr('action', {% url 'login:signup' %});
+            $('#signInForm').attr('action', '{% url 'login:signup' %}');
             $('#passwordReset').hide();
             $('#submitButton').html('Signup');
 
