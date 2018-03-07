@@ -123,12 +123,6 @@
 
 </nav>
 
-<script>
-    // make current page active
-    var pname = $(location).attr('pathname').split('/', 3).join('/');
-    $('.nav-item a[href^="' + pname + '"]').addClass('nav-item active');
-</script>
-
 <div class="conteiner">
     <!-- Messages -->
     {% include 'messages.html' %}
@@ -141,6 +135,13 @@
     {% block footer %}
     {% endblock %}
 </footer>
+
+<script>
+    // make current page active
+    // var pathname = window.location.pathname.split('/', 3).join('/');
+    var pathname = window.location.pathname;
+    $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
+</script>
 
 </body>
 </html>
