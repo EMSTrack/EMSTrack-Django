@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from mqtt.publish import PublishClient
 
+
 class Client(PublishClient):
 
     def __init__(self, broker, **kwargs):
@@ -19,7 +20,7 @@ class Client(PublishClient):
         # add / if necessary
         if self.base_topic and self.base_topic[-1] != '/':
             self.base_topic += '/'
-        
+
         # call super
         super().__init__(broker, **kwargs)
 
@@ -32,7 +33,7 @@ class Client(PublishClient):
 
         # start loop
         self.loop_start()
-        
+
         # are we done yet?
         while not self.done():
 
@@ -45,16 +46,16 @@ class Client(PublishClient):
             if remaining.total_seconds() > 0:
                 if self.verbosity > 0:
                     self.stdout.write(self.style.SUCCESS(">> Waiting for messages. Please be patient."))
-                
+
                 time.sleep(remaining.total_seconds())
 
         # stop loop
         self.loop_stop()
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS("<< Finished cleaning MQTT topics '{}'.".format(self.base_topic + '#')))
+            self.stdout.write(
+                self.style.SUCCESS("<< Finished cleaning MQTT topics '{}'.".format(self.base_topic + '#')))
 
-        
     def on_connect(self, client, userdata, flags, rc):
 
         # is connected?
@@ -69,7 +70,7 @@ class Client(PublishClient):
 
         # last activity
         self.last_activity = timezone.now()
-        
+
     def on_message(self, client, userdata, msg):
 
         # retained?
@@ -77,14 +78,14 @@ class Client(PublishClient):
 
             # delete topic
             self.remove_topic(msg.topic)
-            
+
             # last activity
             self.last_activity = timezone.now()
-                
+
             if self.verbosity > 0:
                 self.stdout.write(self.style.SUCCESS(" > Removing topic '{}'".format(msg.topic)))
-                
-            
+
+
 class Command(BaseCommand):
     help = 'Remove retained topics from the mqtt broker'
 
@@ -105,15 +106,15 @@ class Command(BaseCommand):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'mqttclean_' + str(os.getpid())
 
-        base_topic = options['base_topic'] 
-        timeout = options['timeout'] 
-        
+        base_topic = options['base_topic']
+        timeout = options['timeout']
+
         client = Client(broker,
-                        base_topic = base_topic,
-                        timeout = timeout,
-                        stdout = self.stdout,
-                        style = self.style,
-                        verbosity = options['verbosity'])
+                        base_topic=base_topic,
+                        timeout=timeout,
+                        stdout=self.stdout,
+                        style=self.style,
+                        verbosity=options['verbosity'])
 
         try:
             client.loop()

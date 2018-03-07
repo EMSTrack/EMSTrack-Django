@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>Group</h1>
+
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+
+                <h3>Details:</h3>
+
+                <table>
+                    {{ form }}
+                </table>
+
+                <p>
+                    Edit the group after creation to provide more details.
+                </p>
+
+                <p>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

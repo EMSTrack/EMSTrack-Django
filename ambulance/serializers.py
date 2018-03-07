@@ -5,7 +5,8 @@ from django.db import IntegrityError, transaction
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
-from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation
+from login.permissions import get_permissions
+from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, Location
 
 logger = logging.getLogger(__name__)
 
@@ -55,8 +56,9 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
 
             # serializer.instance will always exist!
-            if not user.profile.ambulances.filter(can_write=True,
-                                                  ambulance=instance.id):
+            # if not user.profile.ambulances.filter(can_write=True,
+            #                                      ambulance=instance.id):
+            if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
 
         return super().update(instance, validated_data)
@@ -107,7 +109,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 data = {k: getattr(ambulance, k) for k in ('status', 'orientation', 'location', 'comment')}
 
                 # loop through
-                for k in range(0,n-1):
+                for k in range(0, n-1):
 
                     # process update
                     data = process_update(validated_data[k], data)
@@ -145,7 +147,6 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
     ambulance_identifier = serializers.CharField(source='ambulance.identifier', required=False)
     updated_by_username = serializers.CharField(source='updated_by.username', required=False)
 
-
     class Meta:
         list_serializer_class = AmbulanceUpdateListSerializer
         model = AmbulanceUpdate
@@ -162,13 +163,54 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
                             'updated_by_username', 'updated_on']
 
 
+# Location serializers
+
+class LocationSerializer(serializers.ModelSerializer):
+    location = PointField(required=False)
+
+    class Meta:
+        model = Location
+        fields = ['id',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location',
+                  'name', 'type',
+                  'comment', 'updated_by', 'updated_on']
+        read_only_fields = ('updated_by',)
+
+    def create(self, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        # only super can create
+        if not user.is_superuser:
+            raise PermissionDenied()
+
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # check credentials
+        # only super can create
+        if not user.is_superuser:
+            raise PermissionDenied()
+
+        return super().update(instance, validated_data)
+
+
 # Call serializer
+
 class CallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Call
-        fields = ['id', 'active', 'ambulances', 'patients', 'details',
-                  'priority','comment', 'updated_by', 'updated_on']
+        fields = ['id', 'active', 'ambulances', 'currentPatients', 'details',
+                  'priority', 'comment', 'updated_by', 'updated_on']
         read_only_fields = ['updated_by']
 
     def create(self, data):

@@ -2,38 +2,38 @@
 
 {% block content %}
 
-  <div class="container" id="wrap">
-    <div class="row"> 
-      <div class="col-md-6 col-md-offset-3"> 
-        <form method="post"
-	      action="{% url 'signup' %}">
-	  {% csrf_token %} 
-          
-          <!-- Registration header --> 
-          <div class="upper-box">
-            <h3>EMSTrack Registration</h3>
-          </div>
+<div class="container" id="wrap">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form method="post"
+                  action="{% url 'login:signup' %}">
+                {% csrf_token %}
 
-          <!-- First and Last name --> 
-          <div class="row input_form">
+                <!-- Registration header -->
+                <div class="upper-box">
+                    <h3>EMSTrack Registration</h3>
+                </div>
 
-	    <p>{{ form.username }}</p>
-	    <p>{{ form.first_name }}</p>
-	    <p>{{ form.last_name }}</p>
-	    <p>{{ form.email }}</p>
-	    <p>{{ form.password1 }}</p>
-	    <p>{{ form.password2 }}</p>
+                <!-- First and Last name -->
+                <div class="row input_form">
 
-	    <label for="{{ form.position.id_for_label }}">{{ form.position.label }}:</label>
-	    <p>{{ form.position }}</p>
-      
-          </div>
+                    <p>{{ form.username }}</p>
+                    <p>{{ form.first_name }}</p>
+                    <p>{{ form.last_name }}</p>
+                    <p>{{ form.email }}</p>
+                    <p>{{ form.password1 }}</p>
+                    <p>{{ form.password2 }}</p>
 
-          <button type="submit" class="btn btn-lg btn-primary btn-success" value="signup">Signup</button>
-        
-        </form>
-      </div>
+                    <label for="{{ form.position.id_for_label }}">{{ form.position.label }}:</label>
+                    <p>{{ form.position }}</p>
+
+                </div>
+
+                <button type="submit" class="btn btn-lg btn-primary btn-success" value="signup">Signup</button>
+
+            </form>
+        </div>
     </div>
-  </div>
+</div>
   
 {% endblock %}

@@ -5,6 +5,7 @@ from django.conf import settings
 
 from django.db import DEFAULT_DB_ALIAS
 
+
 class Command(BaseCommand):
 
     help = 'Create admin user'

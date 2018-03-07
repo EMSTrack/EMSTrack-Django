@@ -1,56 +1,50 @@
+import atexit
 import logging
-import atexit, sys, os, time
+import os
 
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
 from rest_framework import serializers
+from rest_framework.renderers import JSONRenderer
 
-from .client import BaseClient, MQTTException
-
-from ambulance.models import Ambulance
-from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
-
-from login.views import SettingsView
-
-from hospital.models import Equipment, HospitalEquipment, Hospital
+from hospital.models import Equipment
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
-
 from login.serializers import UserProfileSerializer
-
+from login.views import SettingsView
+from .client import BaseClient, MQTTException
 
 logger = logging.getLogger(__name__)
 
+
 # MessagePublishClient class
 
-class MessagePublishClient():
+class MessagePublishClient:
 
     def publish_profile(self, user, **kwargs):
         pass
-        
+
     def publish_ambulance(self, ambulance, **kwargs):
         pass
 
     def remove_ambulance(self, ambulance, **kwargs):
         pass
-        
+
     def publish_hospital(self, hospital, **kwargs):
         pass
 
     def remove_hospital(self, hospital, **kwargs):
         pass
-        
+
     def publish_hospital_metadata(self, hospital, **kwargs):
         pass
 
     def publish_hospital_equipment(self, hospital, **kwargs):
         pass
-        
+
     def remove_hospital_equipment(self, hospital, **kwargs):
         pass
-    
+
     # For call
 
     def publish_call(self, call, **kwargs):
@@ -58,7 +52,6 @@ class MessagePublishClient():
 
     def remove_call(self, call, **kwargs):
         pass
-
 
 
 class PublishClient(BaseClient):
@@ -70,7 +63,7 @@ class PublishClient(BaseClient):
 
         # set as active
         self.active = True
-    
+
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
@@ -78,7 +71,7 @@ class PublishClient(BaseClient):
                                 rc)
         # call super
         super().on_disconnect(client, userdata, rc)
-    
+
     def publish_topic(self, topic, payload, qos=0, retain=False):
 
         if self.active:
@@ -88,17 +81,16 @@ class PublishClient(BaseClient):
                 payload = JSONRenderer().render(payload.data)
             else:
                 payload = JSONRenderer().render(payload)
-                
+
             # Publish to topic
             self.publish(topic,
                          payload,
                          qos=qos,
                          retain=retain)
-        
+
     def remove_topic(self, topic, qos=0):
 
         if self.active:
-        
             # Publish null to retained topic
             self.publish(topic,
                          None,
@@ -110,65 +102,65 @@ class PublishClient(BaseClient):
                            SettingsView.get_settings(),
                            qos=qos,
                            retain=retain)
-        
+
     def publish_profile(self, user, qos=2, retain=True):
         self.publish_topic('user/{}/profile'.format(user.username),
                            UserProfileSerializer(user),
                            qos=qos,
                            retain=retain)
-        
+
     def publish_ambulance(self, ambulance, qos=2, retain=True):
         self.publish_topic('ambulance/{}/data'.format(ambulance.id),
-                          AmbulanceSerializer(ambulance),
-                          qos=qos,
-                          retain=retain)
+                           AmbulanceSerializer(ambulance),
+                           qos=qos,
+                           retain=retain)
 
     def remove_ambulance(self, ambulance):
         self.remove_topic('ambulance/{}/data'.format(ambulance.id))
-        
+
     def publish_hospital(self, hospital, qos=2, retain=True):
         self.publish_topic('hospital/{}/data'.format(hospital.id),
-                          HospitalSerializer(hospital),
-                          qos=qos,
-                          retain=retain)
+                           HospitalSerializer(hospital),
+                           qos=qos,
+                           retain=retain)
 
     def remove_hospital(self, hospital):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
         self.remove_topic('hospital/{}/metadata'.format(hospital.id))
-        
+
     def publish_hospital_metadata(self, hospital, qos=2, retain=True):
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
         self.publish_topic('hospital/{}/metadata'.format(hospital.id),
-                          EquipmentSerializer(equipment, many=True),
-                          qos=qos,
-                          retain=retain)
+                           EquipmentSerializer(equipment, many=True),
+                           qos=qos,
+                           retain=retain)
 
     def publish_hospital_equipment(self, equipment, qos=2, retain=True):
         self.publish_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                 equipment.equipment.name),
-                          HospitalEquipmentSerializer(equipment),
-                          qos=qos,
-                          retain=retain)
-        
+                                                                  equipment.equipment.name),
+                           HospitalEquipmentSerializer(equipment),
+                           qos=qos,
+                           retain=retain)
+
     def remove_hospital_equipment(self, equipment):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
                                                                  equipment.equipment.name))
 
     def publish_call(self, call, qos=2, retain=True):
         self.publish_topic('call/{}/data'.format(call.id),
-                           CallSerializer(call),  
-                           qos = qos,
+                           CallSerializer(call),
+                           qos=qos,
                            retain=retain)
 
     # Method to remove calls, no metadata?
     def remove_call(self, call):
         self.remove_topic('call/{}/data'.format(call.id))
 
+
 # Uses Alex Martelli's Borg for making PublishClient act like a singleton
 
 class SingletonPublishClient(PublishClient):
-
     _shared_state = {}
 
     def __init__(self, **kwargs):
@@ -183,7 +175,7 @@ class SingletonPublishClient(PublishClient):
 
         # initialization
         from django.conf import settings
-        
+
         broker = {
             'HOST': 'localhost',
             'PORT': 1883,
@@ -191,15 +183,15 @@ class SingletonPublishClient(PublishClient):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        
+
         # override client_id
         broker['CLIENT_ID'] = 'mqtt_publish_' + str(os.getpid())
-        
+
         try:
 
             # try to connect
             logger.info('>> Connecting to MQTT brocker...')
-            
+
             # initialize PublishClient
             super().__init__(broker, **kwargs)
 
@@ -216,7 +208,6 @@ class SingletonPublishClient(PublishClient):
         except MQTTException as e:
 
             self.active = False
-            
+
             logger.info('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
             logger.info('>> Generated exception: {}'.format(e))
-        

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+	<div class="row">
+		<div class="col">
+
+			<h1>Locations</h1>
+
+			<p>
+				<a href="{% url 'ambulance:location_create' %}">new</a>
+			</p>
+			<table class="table table-striped table-sm">
+				<thead>
+				<tr>
+					<th>Name</th>
+					<th>Type</th>
+					<th>Address</th>
+					<th>Comments</th>
+					<th>Updated on</th>
+					<th>by</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for location in location_list %}
+				<tr>
+					<td>
+						<a href="{% url 'ambulance:location_detail' pk=location.id %}">{{ location.name }}</a>
+					</td>
+					<td>
+						{{ location.type|get_location_type }}
+					</td>
+					<td>
+						{{ location.number }} {{ location.street }} {{ location.unit }},
+						{{ location.city }}, {{ location.state }} {{ location.zipcode }},
+						{{ location.country }}
+					</td>
+					<td>{{ location.comment }}</td>
+					<td>{{ location.updated_on }}</td>
+					<td>{{ location.updated_by.username }}</td>
+				</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

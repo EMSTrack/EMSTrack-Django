@@ -1,35 +1,38 @@
 import logging
-import string, random
+import random
+import string
 from datetime import timedelta
 
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.http.response import HttpResponse, HttpResponseForbidden
+from braces.views import CsrfExemptMixin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import User, Group
+from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.http.response import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View, TemplateView
-from django.views.generic.edit import FormView, UpdateView, CreateView
-
-from braces.views import CsrfExemptMixin
-from extra_views import InlineFormSet, CreateWithInlinesView
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
+from django.views.generic.edit import FormView, CreateView
 from drf_extra_fields.geo_fields import PointField
+from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from django.contrib.auth.models import User, Group
-
-from ambulance.models import AmbulanceStatus, AmbulanceCapability
-from hospital.models import EquipmentType
+from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType
+from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
-
-from .models import TemporaryPassword, AmbulancePermission, HospitalPermission, GroupProfile
-
+from hospital.models import EquipmentType
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
-    UserAdminCreateForm, UserAdminUpdateForm, GroupAdminCreateForm, \
-    GroupAdminUpdateForm
-
+    UserAdminCreateForm, UserAdminUpdateForm, \
+    GroupAdminUpdateForm, \
+    GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
+    UserAmbulancePermissionAdminForm, \
+    UserHospitalPermissionAdminForm
+from .models import TemporaryPassword, \
+    UserAmbulancePermission, UserHospitalPermission, \
+    GroupProfile, GroupAmbulancePermission, \
+    GroupHospitalPermission
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -38,14 +41,23 @@ logger = logging.getLogger(__name__)
 # signup
 
 class SignupView(FormView):
-    template_name = 'login/signup.html'
+    template_name = 'index.html'
     form_class = SignupForm
+
+    def form_valid(self, form):
+        # TODO: Automatic signup could send an email to prospective user
+        # then notify administrator of new user
+        # form.send_email()
+        # return super().form_valid(form)
+        # for now abort and alert user
+        form.add_error(None, 'We are sorry but EMSTrack is not accepting new users at this point.');
+        return super().form_invalid(form);
 
 
 # login
 
 class LoginView(auth_views.LoginView):
-    template_name = 'login/login.html'
+    template_name = 'index.html'
     authentication_form = AuthenticationForm
 
 
@@ -53,12 +65,6 @@ class LoginView(auth_views.LoginView):
 
 class LogoutView(auth_views.LogoutView):
     next_page = '/'
-
-
-# Admin
-
-class AdminView(TemplateView):
-    template_name = 'login/admin.html'
 
 
 # Groups
@@ -71,47 +77,69 @@ class GroupAdminListView(ListView):
 class GroupAdminDetailView(DetailView):
     model = Group
     template_name = 'login/group_detail.html'
+    fields = ['name']
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve permissions and add to context
+        context['ambulance_list'] = self.object.groupambulancepermission_set.all()
+        context['hospital_list'] = self.object.grouphospitalpermission_set.all()
+
+        # retrieve users and add to context
+        context['user_list'] = self.object.user_set.all()
+
+        return context
 
 
-class GroupAdminCreateView(CreateView):
-    model = Group
-    template_name = 'login/group_form.html'
-    form_class = GroupAdminCreateForm
-
-
-# class GroupProfileAdminInline(InlineFormSet):
-#
-#     model = GroupProfile
-#     fields = ['ambulances', 'hospitals']
-#     form_class = GroupProfileForm
-
-
-class AmbulancePermissionAdminInline(InlineFormSet):
-
-    model = AmbulancePermission
-    fields = ['ambulance', 'can_read', 'can_write']
-
-
-class HospitalPermissionAdminInline(InlineFormSet):
-
-    model = HospitalPermission
-    fields = ['hospital', 'can_read', 'can_write']
-
-
-class GroupAdminCreateView(CreateWithInlinesView):
+class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
-    template_name = 'login/group_form.html'
-    inlines = [AmbulancePermissionAdminInline,HospitalPermissionAdminInline]
-    form_class = GroupAdminCreateForm
+    form_class = GroupProfileAdminForm
+    min_num = 1
+    max_num = 1
+    extra = 0
+    can_delete = False
 
 
-class GroupAdminUpdateView(UpdateView):
+class GroupAmbulancePermissionAdminInline(InlineFormSet):
+    model = GroupAmbulancePermission
+    form_class = GroupAmbulancePermissionAdminForm
+    extra = 1
+
+
+class GroupHospitalPermissionAdminInline(InlineFormSet):
+    model = GroupHospitalPermission
+    form_class = GroupHospitalPermissionAdminForm
+    extra = 1
+
+
+class GroupAdminCreateView(SuccessMessageMixin, CreateView):
+    model = Group
+    fields = ['name']
+    template_name = 'login/group_create.html'
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully created group '{}'".format(cleaned_data['id_name'])
+
+    def get_success_url(self):
+        return self.object.groupprofile.get_absolute_url()
+
+
+class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminUpdateForm
+    inlines = [GroupProfileAdminInline,
+               GroupAmbulancePermissionAdminInline,
+               GroupHospitalPermissionAdminInline]
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated group '{}'".format(self.object.name)
 
     def get_success_url(self):
-        return self.object.get_absolute_url()
+        return self.object.groupprofile.get_absolute_url()
 
 
 # Users
@@ -124,24 +152,61 @@ class UserAdminListView(ListView):
 class UserAdminDetailView(DetailView):
     model = User
     template_name = 'login/user_detail.html'
+    fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve permissions and add to context
+        context['ambulance_list'] = self.object.userambulancepermission_set.all()
+        context['hospital_list'] = self.object.userhospitalpermission_set.all()
+
+        # retrieve groups and add to context
+        context['group_list'] = self.object.groups.all()
+
+        return context
 
 
-class UserAdminCreateView(CreateView):
+class UserAmbulancePermissionAdminInline(InlineFormSet):
+    model = UserAmbulancePermission
+    form_class = UserAmbulancePermissionAdminForm
+    extra = 1
+
+
+class UserHospitalPermissionAdminInline(InlineFormSet):
+    model = UserHospitalPermission
+    form_class = UserHospitalPermissionAdminForm
+    extra = 1
+
+
+class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
+    inlines = [UserAmbulancePermissionAdminInline,
+               UserHospitalPermissionAdminInline]
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully created user '{}'".format(self.object.username)
 
     def get_success_url(self):
-        return self.object.get_absolute_url()
+        return self.object.userprofile.get_absolute_url()
 
 
-class UserAdminUpdateView(UpdateView):
+class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
+    inlines = [UserAmbulancePermissionAdminInline,
+               UserHospitalPermissionAdminInline]
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated user '{}'".format(self.object.username)
 
     def get_success_url(self):
-        return self.object.get_absolute_url()
+        return self.object.userprofile.get_absolute_url()
 
 
 # MQTT login views
@@ -368,7 +433,7 @@ class PasswordView(APIView):
                           chars=(string.ascii_letters +
                                  string.digits +
                                  string.punctuation)):
-        return (''.join(random.choice(chars) for _ in range(size)))
+        return ''.join(random.choice(chars) for _ in range(size))
 
     def get(self, request, user__username=None):
         """
@@ -437,11 +502,13 @@ class SettingsView(APIView):
         ambulance_status = {m.name: m.value for m in AmbulanceStatus}
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
         equipment_type = {m.name: m.value for m in EquipmentType}
+        location_type = {m.name: m.value for m in LocationType}
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
                         'ambulance_capability': ambulance_capability,
                         'equipment_type': equipment_type,
+                        'location_type': location_type,
                         'defaults': defaults.copy()}
 
         # serialize defaults.location

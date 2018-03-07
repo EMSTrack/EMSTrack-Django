@@ -7,8 +7,9 @@
     <script>
         var ambulance_status = {{ ambulance_status|safe }};
         var ambulance_capability = {{ ambulance_capability|safe }};
+        var location_type= {{ location_type|safe }};
         var username = '{{ user.get_username|safe }}';
-        var APIBaseUrl = '{% url 'homepage' %}api/';
+        var APIBaseUrl = '{% url 'index' %}api/';
         var MQTTBroker = {
             host: '{{ broker_websockets_host|safe }}',
             port: {{ broker_websockets_port|safe }}
@@ -23,198 +24,306 @@
 
         <div class="row">
 
+            <!-- Dispatch -->
+
+            <div class="col-md-12">
+
+                <form id="dispatch_form_collapse"
+                      method="POST" class="collapse" action="">
+                    {% csrf_token %}
+
+                    <div class="card form-group">
+
+                        <div class="card-header">
+                            <div class="float-right">
+                                <button type="submit" class="btn btn-primary px-3">
+                                    Dispatch
+                                </button>
+                                <button type="button" class="btn btn-secondary px-3"
+                                        data-toggle="collapse"
+                                        data-target="#dispatch_form_collapse"
+                                        aria-expanded="true"
+                                        aria-controls="dispatch_form_collapse"
+                                        onclick="endDispatching()">
+                                    Cancel
+                                </button>
+                            </div>
+                            <h5 class="mb-0">Dispatch Ambulances</h5>
+                        </div>
+
+                        <div class="card-body m-0 p-0">
+
+                            <div class="card-group">
+
+                                <div class="card border-0">
+
+                                    <div class="card-body">
+                                        <h5 class="card-title">Priority:</h5>
+                                        <form required>
+                                            <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
+                                                <label class="btn btn-info">
+                                                    <input type="radio" name="priority" autocomplete="off" value="A">
+                                                    A
+                                                </label>
+                                                <label class="btn btn-danger">
+                                                    <input type="radio" name="priority" autocomplete="off" value="B">
+                                                    B
+                                                </label>
+                                                <label class="btn btn-warning">
+                                                    <input type="radio" name="priority" autocomplete="off" value="C">
+                                                    C
+                                                </label>
+                                                <label class="btn btn-success">
+                                                    <input type="radio" name="priority" autocomplete="off" value="D">
+                                                    D
+                                                </label>
+                                                <label class="btn btn-default">
+                                                    <input type="radio" name="priority" autocomplete="off" value="E">
+                                                    E
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h5 class="card-title"> Description:</h5>
+                                        <textarea class="form-control" name="description"
+                                                  rows="3" id="comment"
+                                                  placeholder="Describe the incident"
+                                                  required></textarea>
+                                    </div>
+
+                                </div>
+
+                                <div class="card border-0">
+
+                                    <div class="card-body">
+                                        <div class="float-right"
+                                             title="Click to automatically search for coordinates after changing the address">
+                                            update coordinates
+                                            <input id="update-coordinates" type="checkbox">
+                                        </div>
+                                        <div class="card-title">
+                                            <h5>Street address:</h5>
+                                        </div>
+                                        <input id="street" type="text"
+                                               name="street" class="form-control"
+                                               placeholder="Address" required>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="float-right"
+                                             title="Click to automatically search for address after changing the coordinates">
+                                            update address
+                                            <input id="update-address" type="checkbox" checked/>
+                                        </div>
+                                        <div class="card-title">
+                                            <h5>Coordinates:</h5>
+                                        </div>
+                                        <div class="card"
+                                             title="Click on map to update coordinates">
+                                            <div class="card-body">
+                                                <strong>Latitude:</strong>
+                                                <div id="curr-lat" style="display: inline-block;"></div>
+                                                <br/>
+                                                <strong>Longitude:</strong>
+                                                <div id="curr-lng" style="display: inline-block;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="card border-0">
+
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h5>Patients:</h5>
+                                        </div>
+                                        <div id="patients">
+                                            <!--
+                                            <div class="form-row" id="patient-0">
+                                                <div class="col-sm-8 p-0">
+                                                    <input id="patient-0-name" type="text"
+                                                           class="form-control"
+                                                           placeholder="Name">
+                                                </div>
+                                                <div class="col-sm-2 p-0">
+                                                    <input id="patient-0-age" type="text"
+                                                           class="form-control"
+                                                           placeholder="Age"/>
+                                                </div>
+                                                <div class="col-sm-2 p-0">
+                                                    <button class="btn btn-default new-patient"
+                                                            type="button"
+                                                            id="patient-0-button">
+                                                        <span class="fas fa-plus"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            -->
+                                        </div>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h5 class="mb-0">Ambulances:</h5>
+                                        </div>
+                                        <div id="ambulance-selection">
+                                            <input id="ambulance-selection-message"
+                                                   class="border-0 w-100"
+                                                   placeholder="Click on or drag ambulances here"/>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!--
+                        <div class="card-footer text-right">
+                            <button type="submit" class="btn btn-primary px-3">
+                                Dispatch
+                            </button>
+                            <button type="button" class="btn btn-secondary px-3"
+                                    data-toggle="collapse"
+                                    data-target="#dispatch_form_collapse"
+                                    aria-expanded="true"
+                                    aria-controls="dispatch_form_collapse"
+                                    onclick="endDispatching()">
+                                Cancel
+                            </button>
+                        </div>
+                        -->
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <!-- Map -->
             <div class="col-md-9">
                 <div id="live-map" style="width: 800px; height: 700px"></div>
-            </div><!--end col-md-9-->
+            </div>
 
             <div class="col-md-3">
 
-                <!-- Start of Ambulance Grid -->
-                <!--<div class="row text-center" style="border: 1px solid #CECECE; border-radius: 5px;" >-->
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <b><a data-toggle="collapse" href="#collapse1">Ambulances</a></b>
-                            </h4>
-                        </div>
-                        <div id="collapse1" class="collapse in panel-body">
-                            <div id="ambulance-grid"></div>
+
+                <!-- Dispatch panel -->
+                <div class="form-group" id="start_dispatch_button">
+                    <button class="btn btn-primary btn-block"
+                            data-toggle="collapse"
+                            data-target="#dispatch_form_collapse"
+                            aria-expanded="true" aria-controls="dispatch_form_collapse"
+                            onclick="beginDispatching()">
+                        Dispatch Ambulances
+                    </button>
+                </div>
+
+                <!-- Ambulance Grid -->
+                <div class="card form-group" id="cardOne">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0" style="cursor: pointer;"
+                            data-toggle="collapse"
+                            data-target="#ambulance_collapse"
+                            aria-expanded="true" aria-controls="ambulance_collapse">
+                            <span role="button">Ambulances</span>
+                        </h5>
+                    </div>
+                    <div id="ambulance_collapse" class="collapse show"
+                         aria-labelledby="headingOne" data-parent="#cardOne">
+                        <div class="card-body" id="ambulance-grid"></div>
+                    </div>
+                </div>
+
+                <!-- Ambulance Info -->
+                <div class="card form-group" id="cardTwo">
+                    <div class="card-header" id="headingTwo">
+                        <h5 class="mb-0" style="cursor: pointer;"
+                            data-toggle="collapse"
+                            data-target="#ambulance_info_collapse"
+                            aria-expanded="true" aria-controls="ambulance_info_collapse">
+                            <span role="button">Details</span>
+                        </h5>
+                    </div>
+                    <div id="ambulance_info_collapse" class="collapse show"
+                         aria-labelledby="headingTwo" data-parent="#cardTwo">
+                        <div class="card-body" id="ambulance-detail">
+                            <input type="hidden"
+                                   name="change-status-ambulance-id"
+                                   id="ambulance-detail-id">
+                            <p>
+                                <strong>Ambulance:</strong>
+                                <span id="ambulance-detail-name"/>
+                            </p>
+                            <p>
+                                <strong>Capability:</strong>
+                                <span id="ambulance-detail-capability"/>
+                            </p>
+                            <p>
+                                <strong>Updated on:</strong>
+                                <span id="ambulance-detail-updated-on"/>
+                            </p>
+                            <p>
+                                <strong>Status:</strong>
+                                <select id="ambulance-detail-status-select"
+                                        style="margin: auto;">
+                                    {% for k, v in ambulance_status.items %}
+                                    <option value="{{ k }}">{{ v }}</option>
+                                    {% endfor %}
+                                </select>
+                            </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- End of Ambulance Grid Row -->
-
-                <!--        Ambulance info panel      -->
-                <div class="row">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <b><a data-toggle="collapse" href="#collapse2">Ambulance Info</a></b>
-                            </h4>
-                        </div>
-                        <div id="collapse2" class="collapse in">
-                            <div class="panel-body"
-                                 id="ambulance-detail">
-                                <input type="hidden"
-                                       name="change-status-ambulance-id"
-                                       id="ambulance-detail-id">
-                                <p>
-                                    <strong>Ambulance:</strong>
-                                    <span id="ambulance-detail-name"/>
-                                </p>
-                                <p>
-                                    <strong>Capability:</strong>
-                                    <span id="ambulance-detail-capability"/>
-                                </p>
-                                <p>
-                                    <strong>Updated on:</strong>
-                                    <span id="ambulance-detail-updated-on"/>
-                                </p>
-                                <p>
-                                    <strong>Status:</strong>
-                                    <select id="ambulance-detail-status-select"
-                                            style="margin: auto;">
-                                        {% for k, v in ambulance_status.items %}
-                                            <option value="{{ k }}">{{ v }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!--        end of Ambulance info panel      -->
-
-                <!--        Dispatch panel      -->
-                <div class="row">
-
-                    <div id="dispatch_work">
-                        <button class="btn btn-primary" style="display: block; width: 100%;" onclick="dispatching()">
-                            Dispatch
-                        </button>
-                    </div>
-
-                    <form id="dispatchForm" method="POST" action="" class="collapse">
-                        {% csrf_token %}
-                        <div class="panel panel-info">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <b>Dispatch Ambulance(s)</b>
-                                </h4>
-                            </div>
-                            <!-- Dispatch Panel window -->
-                            <div class="panel-body">
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Location:
-                                <input id="street" type="text" name="street" class="form-control" placeholder="Address"
-                                       required/>
-                                <!--<input id="address" type="text" name="address" class="form-control" placeholder="Address"/>-->
-                                <br/>
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Coordinates:
-                                <div class="well well-sm">
-                                    <strong>Latitude:</strong>
-                                    <div id="curr-lat" style="display: inline-block;"></div>
-                                    <br/>
-                                    <strong>Longitude:</strong>
-                                    <div id="curr-lng" style="display: inline-block;"></div>
-                                </div>
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Dispatch Ambulance(s)<br/>
-
-                                <div class="panel panel-default">
-                                    <div class="panel-body" style="line-height: 1.5px;">
-
-                                        <div id="ambulance-selection"></div>
-                                        <!-- Fancy button here, but not works for map.js
-                                             <span class="button-checkbox">
-                                               <button type="button" class="btn btn-sm" data-color="danger">Amb 1</button>
-                                               <input type="checkbox" class="hidden" checked />
-                                             </span>
-                                             -->
-                                    </div>
-                                </div>
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Description:
-                                <div class="form-group">
-                                    <textarea class="form-control" name="description" rows="5" id="comment"
-                                              required></textarea>
-                                </div>
-
-                                <span class="glyphicon glyphicon-chevron-right"></span> Priority:
-                                <form required>
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-default">
-                                            <input type="radio" name="priority" value="A">A
-                                            <span class="glyphicon giyphicon ok"></span></input>
-                                        </label>
-                                        <label class="btn btn-default">
-                                            <input type="radio" name="priority" value="B">B
-                                            <span class="glyphicon giyphicon ok"></span></input>
-                                        </label>
-                                        <label class="btn btn-default">
-                                            <input type="radio" name="priority" value="C">C
-                                            <span class="glyphicon giyphicon ok"></span></input>
-                                        </label>
-                                        <label class="btn btn-default">
-                                            <input type="radio" name="priority" value="D">D
-                                            <span class="glyphicon giyphicon ok"></span></input>
-                                        </label>
-                                        <label class="btn btn-default">
-                                            <input type="radio" name="priority" value="E">E
-                                            <span class="glyphicon giyphicon ok"></span></input>
-                                        </label>
-                                    </div>
-
-                                </form>
-                                <br/><br/>
-
-
-                                <br/><br/>
-                                <button type="submit" class="btn btn-danger" style="display: block; width: 100%;">
-                                    Dispatch
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                </div><!--        end of row Dispatch panel      -->
-
-            </div><!--end col-md-3-->
-        </div><!--end row -->
-    </div><!--end container-->
+            </div>
+        </div>
+    </div>
 
     <!-- This is modals for ambulance dispatcher's panel -->
     <!-- Modal -->
     <div id="dispatchModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
-
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 class="modal-title"></h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body">
-
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
-
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=initAutocomplete"
-            async defer></script>
+<!-- Load required libraries -->
 
-    <script src="{% static 'js/map.js' %}"></script>
-    <script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
+<!-- MQTT -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
 
+<!-- Google Geocoder -->
+<!--
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=dispatchInitAutocomplete"
+        async defer></script>
+-->
+
+<!-- Load javascript code -->
+<script src="{% static 'js/geocoder.js' %}"></script>
+<script src="{% static 'js/dispatch.js' %}"></script>
+<script src="{% static 'js/map.js' %}"></script>
+<script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
 
 {% endblock %}

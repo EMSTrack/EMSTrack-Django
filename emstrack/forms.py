@@ -17,14 +17,13 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
         )
 
     def render(self, name, value, attrs=None, renderer=None):
-
         # add point
         if value:
-            attrs.update({ 'point': { 'x': value.x,
-                                      'y': value.y,
-                                      'z': value.z,
-                                      'srid': value.srid }
-                       })
+            attrs.update({'point': {'x': value.x,
+                                    'y': value.y,
+                                    'z': value.z,
+                                    'srid': value.srid}
+                          })
 
         # use TemplatesSetting as default rendering
         # Otherwise we get in trouble with finding point_widget.html

@@ -2,24 +2,27 @@
 {% load static %}
 
 {% block head %}
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 {{ form.media }}
 {% endblock %}
 
 {% block content %}
 
-<h1>Ambulance</h1>
-
 <div class="container">
-  <form method="POST" class="post-form">
-    {% csrf_token %}
-    <table>
-      {{ form }}
-    </table>
-    <p>
-      <button type="submit">Save</button>
-    </p>
-  </form>
+    <div class="row">
+        <div class="col">
+            <h1>Ambulance</h1>
+
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+                <table>
+                    {{ form }}
+                </table>
+                <p>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

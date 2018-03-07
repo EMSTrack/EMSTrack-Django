@@ -41,12 +41,6 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(),
         name='password_reset_complete'),
 
-    # Admin
-    
-    url(r'^admin/$',
-        staff_member_required(views.AdminView.as_view()),
-        name='admin'),
-    
     # User Admin
     
     url(r'^user/$',

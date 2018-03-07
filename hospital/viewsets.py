@@ -1,21 +1,26 @@
+import logging
+
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
 from rest_framework.decorators import detail_route
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
+from login.permissions import get_permissions
 
 from .models import Hospital, HospitalEquipment, Equipment
 
 from .serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
+logger = logging.getLogger(__name__)
+
+
 # Django REST Framework Viewsets
-    
+
+
 # Hospital viewset
 
 class HospitalViewSet(mixins.ListModelMixin,
@@ -24,7 +29,6 @@ class HospitalViewSet(mixins.ListModelMixin,
                       UpdateModelUpdateByMixin,
                       BasePermissionMixin,
                       viewsets.GenericViewSet):
-    
     """
     API endpoint for manipulating hospitals.
 
@@ -43,11 +47,11 @@ class HospitalViewSet(mixins.ListModelMixin,
     partial_update:
     Partially update existing hospital instance.
     """
-    
+
     filter_field = 'id'
     profile_field = 'hospitals'
     queryset = Hospital.objects.all()
-    
+
     serializer_class = HospitalSerializer
 
     @detail_route()
@@ -55,7 +59,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         """
         Retrive hospital equipment metadata.
         """
-        
+
         hospital = self.get_object()
         hospital_equipment = hospital.hospitalequipment_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
@@ -69,7 +73,6 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
                                UpdateModelUpdateByMixin,
                                viewsets.GenericViewSet):
-    
     """
     API endpoint for manipulating hospital equipment.
 
@@ -85,9 +88,9 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     partial_update:
     Partially update existing hospital equipment instance.
     """
-    
+
     queryset = HospitalEquipment.objects.all()
-    
+
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment__name'
 
@@ -96,37 +99,30 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
         # retrieve user
         user = self.request.user
-        
+
         # retrieve id
-        id = self.kwargs['id']
+        id = int(self.kwargs['id'])
 
         # return nothing if anonymous
         if user.is_anonymous:
             raise PermissionDenied()
-        
-        # retrieve hospital or 404 if it does not exist
-        hospital = get_object_or_404(Hospital.objects.all(), id=id)
-        
-        # build queryset
-        filter = { 'hospital_id': id }
-        qset = self.queryset.filter(**filter)
 
-        # return qset if superuser
-        if user.is_superuser:
-            return qset
+        # logger.debug('user = {}'.format(user))
+        # logger.debug('hospital_id = {}'.format(id))
+        # logger.debug('can_read = {}'.format(get_permissions(user).check_can_read(hospital=id)))
+        # logger.debug('can_write = {}'.format(get_permissions(user).check_can_write(hospital=id)))
 
-        # otherwise check permission
+        # check permission (and also existence)
         if self.request.method == 'GET':
-            # objects that the user can read
-            get_object_or_404(user.profile.hospitals,
-                              hospital_id=id, can_read=True)
+            if not get_permissions(user).check_can_read(hospital=id):
+                raise PermissionDenied()
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
               self.request.method == 'DELETE'):
-            # objects that the user can write to
-            get_object_or_404(user.profile.hospitals,
-                              hospital_id=id, can_write=True)
+            if not get_permissions(user).check_can_write(hospital=id):
+                raise PermissionDenied()
 
-        # and return qset
-        return qset
+        # build queryset
+        filter = {'hospital_id': id}
+        return self.queryset.filter(**filter)

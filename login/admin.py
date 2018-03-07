@@ -5,13 +5,15 @@ from django.contrib.auth.models import User, Group
 
 # Register your models here.
 
-from .models import Profile, GroupProfile, AmbulancePermission, HospitalPermission
+from .models import UserProfile, GroupProfile, \
+    UserAmbulancePermission, UserHospitalPermission, \
+    GroupAmbulancePermission, GroupHospitalPermission
 
 
 # Define an inline admin descriptor for Profile model
 # which acts a bit like a singleton
 class ProfileInline(admin.StackedInline):
-    model = Profile
+    model = UserProfile
     can_delete = False
     verbose_name_plural = 'profile'
 
@@ -41,5 +43,7 @@ admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 
 # Register AmbulancePermission and HospitalPermission
-admin.site.register(AmbulancePermission)
-admin.site.register(HospitalPermission)
+admin.site.register(UserAmbulancePermission)
+admin.site.register(UserHospitalPermission)
+admin.site.register(GroupAmbulancePermission)
+admin.site.register(GroupHospitalPermission)

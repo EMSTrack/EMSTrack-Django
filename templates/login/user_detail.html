@@ -3,27 +3,113 @@
 
 {% block content %}
 
-    <h1>User: {{ user.username }}</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <p>
-                    <strong>Identifier:</strong>
-                    <a href="{% url 'login:user_update' pk=user.id %}">{{ user.username }}</a>
-                </p>
-                <p>
-                    <strong>First:</strong>
-                    {{ user.first_name }}
-                </p>
-                <p>
-                    <strong>Last:</strong>
-                    {{ user.last_name }}
-                </p>
-            </div>
+            <h1>User</h1>
+
+            <h3>Details:</h3>
+
+            <p>
+                <strong>Username:</strong>
+                <a href="{% url 'login:user_update' pk=user.id %}">{{ user.username }}</a>
+            </p>
+            <p>
+                <strong>First:</strong>
+                {{ user.first_name }}
+            </p>
+            <p>
+                <strong>Last:</strong>
+                {{ user.last_name }}
+            </p>
+            <p>
+                <strong>Email:</strong>
+                {{ user.email}}
+            </p>
+            <p>
+                <strong>Staff:</strong>
+                {{ user.is_staff }}
+            </p>
+            <p>
+                <strong>Active:</strong>
+                {{ user.is_active }}
+            </p>
         </div>
     </div>
 
-<!-- TODO: Add editor for groups and permissions -->
+    <div class="row">
+        <div class="col">
+
+            <h3>Groups:</h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for group in group_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'login:user_detail' pk=user.id %}">{{ group.name }}</a>
+                    </td>
+                    <td>
+                        {{ group.groupprofile.description }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>Permissions:</h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Ambulance</th>
+                    <th>Read</th>
+                    <th>Write</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for permission in ambulance_list %}
+                <tr>
+                    <td> {{ permission.ambulance.identifier }}</td>
+                    <td> {{ permission.can_read }}</td>
+                    <td> {{ permission.can_write }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Hospital</th>
+                    <th>Read</th>
+                    <th>Write</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for permission in hospital_list %}
+                <tr>
+                    <td> {{ permission.hospital.name }}</td>
+                    <td> {{ permission.can_read }}</td>
+                    <td> {{ permission.can_write }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

@@ -1,0 +1,11 @@
+<!-- Django messages using bootstrap
+  -- From: https://simpleisbetterthancomplex.com/tips/2016/09/06/django-tip-14-messages-framework.html
+  -->
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+</div>
+{% endfor %}

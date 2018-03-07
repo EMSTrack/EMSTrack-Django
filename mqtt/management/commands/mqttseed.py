@@ -1,22 +1,28 @@
-# mqttseed application command
 from django.core.management.base import BaseCommand
 from django.conf import settings
-from django.utils.six import BytesIO
+from django.contrib.auth.models import User
 
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 
+from login.permissions import cache_clear
 from mqtt.publish import PublishClient
 
-from django.contrib.auth.models import User
-
-from login.models import Profile
-    
 from ambulance.models import Ambulance
 
 from hospital.models import Hospital, HospitalEquipment
 
+
 class Client(PublishClient):
+
+    def __init__(self, *args, **kwargs):
+
+        # call super
+        super().__init__(*args, **kwargs)
+
+        # initialize
+        self.pubset = set()
+        self.can_disconnect = False
 
     # The callback for when the client receives a CONNACK
     # response from the server.
@@ -32,7 +38,7 @@ class Client(PublishClient):
 
         # Seed settings
         self.seed_settings()
-        
+
         # Seed hospitals
         self.seed_hospital_data()
         self.seed_hospital_equipment_data()
@@ -43,13 +49,13 @@ class Client(PublishClient):
 
         # Seed profiles
         self.seed_profile_data()
-        
+
         # Seed calls
         # self.seed_calls()
 
         # Good to disconnect
         self.can_disconnect = True
-        
+
     def publish(self, topic, message, *vargs, **kwargs):
 
         # increment pubcount then publish
@@ -68,22 +74,25 @@ class Client(PublishClient):
 
         # seeding settings
         self.publish_settings()
-            
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding settings"))
-            
+
     def seed_profile_data(self):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding profile data"))
 
+        # clear profile cache
+        cache_clear()
+
         # seeding profiles
         for obj in User.objects.all():
             self.publish_profile(obj)
-            
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding profile data"))
-            
+
     def seed_ambulance_data(self):
 
         if self.verbosity > 0:
@@ -92,7 +101,7 @@ class Client(PublishClient):
         # seeding ambulances
         for obj in Ambulance.objects.all():
             self.publish_ambulance(obj)
-            
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding ambulance data"))
 
@@ -104,11 +113,10 @@ class Client(PublishClient):
         # seeding hospital 
         for obj in Hospital.objects.all():
             self.publish_hospital(obj)
-            
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital data"))
 
-            
     def seed_hospital_equipment_data(self):
 
         if self.verbosity > 0:
@@ -117,11 +125,10 @@ class Client(PublishClient):
         # seeding hospital 
         for obj in HospitalEquipment.objects.all():
             self.publish_hospital_equipment(obj)
-            
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital equipment data"))
 
-            
     def seed_hospital_metadata(self):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital metadata"))
@@ -129,10 +136,9 @@ class Client(PublishClient):
         # seeding hospital metadata
         for hospital in Hospital.objects.all():
             self.publish_hospital_metadata(hospital)
-            
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
-
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):
@@ -141,6 +147,7 @@ class Client(PublishClient):
         self.pubset.remove(mid)
         if len(self.pubset) == 0 and self.can_disconnect:
             self.disconnect()
+
 
 class Command(BaseCommand):
     help = 'Seed the mqtt broker'
@@ -162,9 +169,9 @@ class Command(BaseCommand):
         broker['CLIENT_ID'] = 'mqttseed_' + str(os.getpid())
 
         client = Client(broker,
-                        stdout = self.stdout,
-                        style = self.style,
-                        verbosity = options['verbosity'])
+                        stdout=self.stdout,
+                        style=self.style,
+                        verbosity=options['verbosity'])
 
         try:
             client.loop_forever()

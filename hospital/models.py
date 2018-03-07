@@ -1,23 +1,27 @@
 from enum import Enum
 
-from django.utils import timezone
 from django.urls import reverse
-
 from django.contrib.gis.db import models
-from django.contrib.gis.geos import Point
+from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel
 
 
+# filters
+
+@register.filter
+def get_equipment_type(type):
+    return EquipmentType[type].value
+
+
 # Hospital model
-    
+
 class Hospital(AddressModel,
                UpdatedByModel):
-    
     name = models.CharField(max_length=254, unique=True)
-    
+
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_hospital(self)
 
@@ -28,7 +32,7 @@ class Hospital(AddressModel,
 
     def get_absolute_url(self):
         return reverse('hospital:detail', kwargs={'pk': self.id})
-        
+
     def __str__(self):
         return ('Hospital {}(id={})\n' +
                 '   Address: {} {} {}\n' +
@@ -55,34 +59,33 @@ class EquipmentType(Enum):
     B = 'Boolean'
     I = 'Integer'
     S = 'String'
-    
+
 
 class Equipment(models.Model):
-
     name = models.CharField(max_length=254, unique=True)
 
     EQUIPMENT_ETYPE_CHOICES = \
         [(m.name, m.value) for m in EquipmentType]
-    etype = models.CharField(max_length=1,
-                             choices = EQUIPMENT_ETYPE_CHOICES)
-    
-    toggleable = models.BooleanField(default=False)
+    type = models.CharField(max_length=1,
+                            choices=EQUIPMENT_ETYPE_CHOICES)
 
     def __str__(self):
-        return "{} ({})".format(self.name, self.etype)
+        return "{} ({})".format(self.name, self.type)
+
+    def get_absolute_url(self):
+        return reverse('hospital:equipment_detail', kwargs={'pk': self.id})
 
 
 class HospitalEquipment(UpdatedByModel):
-
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment,
                                   on_delete=models.CASCADE)
     value = models.CharField(max_length=254)
-    
+
     def save(self, *args, **kwargs):
         created = self.pk is None
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)
         from mqtt.publish import SingletonPublishClient
         client = SingletonPublishClient()
         client.publish_hospital_equipment(self)
@@ -95,7 +98,7 @@ class HospitalEquipment(UpdatedByModel):
         client.remove_hospital_equipment(self)
         client.publish_hospital_metadata(self.hospital)
         super().delete(*args, **kwargs)
-        
+
     class Meta:
         unique_together = ('hospital', 'equipment',)
 

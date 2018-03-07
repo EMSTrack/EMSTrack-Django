@@ -1,25 +1,21 @@
 import logging
-import subprocess, time, os, sys, re
+import os
+import re
+import subprocess
+import time
 from pathlib import Path
 
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from django.test import TestCase
 from django.conf import settings
-
 from django.contrib.auth.models import User, Group
-
-from django.core.management.base import OutputWrapper
-from django.core.management.color import color_style, no_style
-
-from mqtt.client import BaseClient, MQTTException
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-
+    AmbulanceCapability
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
-
-from login.models import AmbulancePermission, HospitalPermission
+from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
+    UserAmbulancePermission, UserHospitalPermission
+from mqtt.client import BaseClient
 
 logger = logging.getLogger(__name__)
 
@@ -340,16 +336,15 @@ class MQTTTestCase(StaticLiveServerTestCase):
             # add equipment
             cls.e1 = Equipment.objects.create(
                 name='X-ray',
-                etype=EquipmentType.B.name)
+                type=EquipmentType.B.name)
             
             cls.e2 = Equipment.objects.create(
                 name='Beds',
-                etype=EquipmentType.I.name)
+                type=EquipmentType.I.name)
             
             cls.e3 = Equipment.objects.create(
                 name='MRI - Ressonance',     # name with space!
-                etype=EquipmentType.B.name,
-                toggleable=True)
+                type=EquipmentType.B.name)
             
             # add hospital equipment
             cls.he1 = HospitalEquipment.objects.create(
@@ -381,34 +376,35 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)
-            
-            # Add permissions
-            cls.u2.profile.hospitals.add(
-                HospitalPermission.objects.create(hospital=cls.h1,
-                                                  can_write=True),
-                HospitalPermission.objects.create(hospital=cls.h3)
-            )
-            
-            cls.u3.profile.hospitals.add(
-                HospitalPermission.objects.create(hospital=cls.h1),
-                HospitalPermission.objects.create(hospital=cls.h2,
+
+            # add hospitals to users
+            UserHospitalPermission.objects.create(user=cls.u2,
+                                                  hospital=cls.h1,
                                                   can_write=True)
-            )
+            UserHospitalPermission.objects.create(user=cls.u2,
+                                                  hospital=cls.h3)
+
+            UserHospitalPermission.objects.create(user=cls.u3,
+                                                  hospital=cls.h1)
+            UserHospitalPermission.objects.create(user=cls.u3,
+                                                  hospital=cls.h2,
+                                                  can_write=True)
+
+            # u3 has no hospitals
 
             # add ambulances to users
-            cls.u1.profile.ambulances.add(
-                AmbulancePermission.objects.create(ambulance=cls.a2,
+            UserAmbulancePermission.objects.create(user=cls.u1,
+                                                   ambulance=cls.a2,
                                                    can_write=True)
-            )
-            
+
             # u2 has no ambulances
-            
-            cls.u3.profile.ambulances.add(
-                AmbulancePermission.objects.create(ambulance=cls.a1,
-                                                   can_read=False),
-                AmbulancePermission.objects.create(ambulance=cls.a3,
+
+            UserAmbulancePermission.objects.create(user=cls.u3,
+                                                   ambulance=cls.a1,
+                                                   can_read=False)
+            UserAmbulancePermission.objects.create(user=cls.u3,
+                                                   ambulance=cls.a3,
                                                    can_write=True)
-            )
 
             # Create groups
             cls.g1 = Group.objects.create(name='EMTs')
@@ -416,34 +412,33 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.g3 = Group.objects.create(name='Dispatcher')
 
             # add hospitals to groups
-            cls.g1.groupprofile.hospitals.add(
-                HospitalPermission.objects.create(hospital=cls.h1,
-                                                  can_write=True),
-                HospitalPermission.objects.create(hospital=cls.h3)
-            )
+            GroupHospitalPermission.objects.create(group=cls.g1,
+                                                   hospital=cls.h1,
+                                                   can_write=True)
+            GroupHospitalPermission.objects.create(group=cls.g1,
+                                                   hospital=cls.h3)
 
-            cls.g2.groupprofile.hospitals.add(
-                HospitalPermission.objects.create(hospital=cls.h1),
-                HospitalPermission.objects.create(hospital=cls.h2,
-                                                  can_write=True)
-            )
+            GroupHospitalPermission.objects.create(group=cls.g2,
+                                                   hospital=cls.h1)
+            GroupHospitalPermission.objects.create(group=cls.g2,
+                                                   hospital=cls.h2,
+                                                   can_write=True)
 
             # g3 has no hospitals
 
             # add ambulances to groups
-            cls.g1.groupprofile.ambulances.add(
-                AmbulancePermission.objects.create(ambulance=cls.a2,
-                                                   can_write=True)
-            )
+            GroupAmbulancePermission.objects.create(group=cls.g1,
+                                                    ambulance=cls.a2,
+                                                    can_write=True)
 
             # g2 has no ambulances
 
-            cls.g3.groupprofile.ambulances.add(
-                AmbulancePermission.objects.create(ambulance=cls.a1,
-                                                   can_read=False),
-                AmbulancePermission.objects.create(ambulance=cls.a3,
-                                                   can_write=True)
-            )
+            GroupAmbulancePermission.objects.create(group=cls.g3,
+                                                    ambulance=cls.a1,
+                                                    can_read=False)
+            GroupAmbulancePermission.objects.create(group=cls.g3,
+                                                    ambulance=cls.a3,
+                                                    can_write=True)
 
             cls.u4.groups.set([cls.g2])
             cls.u5.groups.set([cls.g1, cls.g3])

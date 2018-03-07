@@ -3,10 +3,12 @@ from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 
-from login.models import Profile, AmbulancePermission, HospitalPermission
+from login.models import \
+    GroupHospitalPermission, GroupAmbulancePermission, \
+    UserHospitalPermission, UserAmbulancePermission
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
+    AmbulanceCapability, Location, LocationType
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
@@ -16,19 +18,18 @@ class TestSetupData:
 
     @classmethod
     def setUpTestData(cls):
-
         # Add users
         cls.u1 = User.objects.create_user(
             username=settings.MQTT['USERNAME'],
             email='admin@user.com',
             password=settings.MQTT['PASSWORD'],
             is_superuser=True)
-        
+
         cls.u2 = User.objects.create_user(
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
-        
+
         cls.u3 = User.objects.create_user(
             username='testuser2',
             email='test2@user.com',
@@ -50,7 +51,7 @@ class TestSetupData:
             comment='Maintenance due',
             capability=AmbulanceCapability.B.name,
             updated_by=cls.u1)
-        
+
         cls.a2 = Ambulance.objects.create(
             identifier='BC-180',
             comment='Need painting',
@@ -62,7 +63,7 @@ class TestSetupData:
             comment='Engine overhaul',
             capability=AmbulanceCapability.R.name,
             updated_by=cls.u1)
-        
+
         # Add hospitals
         cls.h1 = Hospital.objects.create(
             name='Hospital General',
@@ -70,32 +71,31 @@ class TestSetupData:
             street="don't know",
             comment="no comments",
             updated_by=cls.u1)
-        
+
         cls.h2 = Hospital.objects.create(
             name='Hospital CruzRoja',
             number="4321",
             street='Forgot',
             updated_by=cls.u1)
-        
+
         cls.h3 = Hospital.objects.create(
             name='Hospital Nuevo',
             number="0000",
             street='Not built yet',
             updated_by=cls.u1)
-        
+
         # add equipment
         cls.e1 = Equipment.objects.create(
             name='X-ray',
-            etype=EquipmentType.B.name)
+            type=EquipmentType.B.name)
 
         cls.e2 = Equipment.objects.create(
             name='Beds',
-            etype=EquipmentType.I.name)
-        
+            type=EquipmentType.I.name)
+
         cls.e3 = Equipment.objects.create(
-            name='MRI - Ressonance',     # name with space!
-            etype=EquipmentType.B.name,
-            toggleable=True)
+            name='MRI - Ressonance',  # name with space!
+            type=EquipmentType.B.name)
 
         # add hospital equipment
         cls.he1 = HospitalEquipment.objects.create(
@@ -103,7 +103,7 @@ class TestSetupData:
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
-        
+
         cls.he2 = HospitalEquipment.objects.create(
             hospital=cls.h1,
             equipment=cls.e2,
@@ -115,48 +115,47 @@ class TestSetupData:
             equipment=cls.e1,
             value='False',
             updated_by=cls.u1)
-        
+
         cls.he4 = HospitalEquipment.objects.create(
             hospital=cls.h2,
             equipment=cls.e3,
             value='True',
             updated_by=cls.u1)
-        
+
         cls.he5 = HospitalEquipment.objects.create(
             hospital=cls.h3,
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
-        
+
         # add hospitals to users
-        cls.u1.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1,
-                                              can_write=True),
-            HospitalPermission.objects.create(hospital=cls.h3)
-        )
-        
-        cls.u2.profile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1),
-            HospitalPermission.objects.create(hospital=cls.h2,
+        UserHospitalPermission.objects.create(user=cls.u1,
+                                              hospital=cls.h1,
                                               can_write=True)
-        )
+        UserHospitalPermission.objects.create(user=cls.u1,
+                                              hospital=cls.h3)
+
+        UserHospitalPermission.objects.create(user=cls.u2,
+                                              hospital=cls.h1)
+        UserHospitalPermission.objects.create(user=cls.u2,
+                                              hospital=cls.h2,
+                                              can_write=True)
 
         # u3 has no hospitals 
-        
+
         # add ambulances to users
-        cls.u1.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=cls.a2,
+        UserAmbulancePermission.objects.create(user=cls.u1,
+                                               ambulance=cls.a2,
                                                can_write=True)
-        )
-        
+
         # u2 has no ambulances
-        
-        cls.u3.profile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=cls.a1,
-                                               can_read=False),
-            AmbulancePermission.objects.create(ambulance=cls.a3,
+
+        UserAmbulancePermission.objects.create(user=cls.u3,
+                                               ambulance=cls.a1,
+                                               can_read=False)
+        UserAmbulancePermission.objects.create(user=cls.u3,
+                                               ambulance=cls.a3,
                                                can_write=True)
-        )
 
         # Create groups
         cls.g1 = Group.objects.create(name='EMTs')
@@ -164,41 +163,59 @@ class TestSetupData:
         cls.g3 = Group.objects.create(name='Dispatcher')
 
         # add hospitals to groups
-        cls.g1.groupprofile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1,
-                                              can_write=True),
-            HospitalPermission.objects.create(hospital=cls.h3)
-        )
+        GroupHospitalPermission.objects.create(group=cls.g1,
+                                               hospital=cls.h1,
+                                               can_write=True)
+        GroupHospitalPermission.objects.create(group=cls.g1,
+                                               hospital=cls.h3)
 
-        cls.g2.groupprofile.hospitals.add(
-            HospitalPermission.objects.create(hospital=cls.h1),
-            HospitalPermission.objects.create(hospital=cls.h2,
-                                              can_write=True)
-        )
+        GroupHospitalPermission.objects.create(group=cls.g2,
+                                               hospital=cls.h1)
+        GroupHospitalPermission.objects.create(group=cls.g2,
+                                               hospital=cls.h2,
+                                               can_write=True)
 
         # g3 has no hospitals
 
         # add ambulances to groups
-        cls.g1.groupprofile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=cls.a2,
-                                               can_write=True)
-        )
+        GroupAmbulancePermission.objects.create(group=cls.g1,
+                                                ambulance=cls.a2,
+                                                can_write=True)
 
         # g2 has no ambulances
 
-        cls.g3.groupprofile.ambulances.add(
-            AmbulancePermission.objects.create(ambulance=cls.a1,
-                                               can_read=False),
-            AmbulancePermission.objects.create(ambulance=cls.a3,
-                                               can_write=True)
-        )
+        GroupAmbulancePermission.objects.create(group=cls.g3,
+                                                ambulance=cls.a1,
+                                                can_read=False)
+        GroupAmbulancePermission.objects.create(group=cls.g3,
+                                                ambulance=cls.a3,
+                                                can_write=True)
 
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
 
-        #print('u1: {}\n{}'.format(cls.u1, cls.u1.profile))
-        #print('u2: {}\n{}'.format(cls.u2, cls.u2.profile))
-        #print('u3: {}\n{}'.format(cls.u3, cls.u3.profile))
+        # Locations
+        cls.l1 = Location.objects.create(
+            name='AED 1',
+            type=LocationType.A.name,
+            number="1234",
+            street="don't know",
+            comment="no comments",
+            updated_by=cls.u1)
+
+        cls.l2 = Location.objects.create(
+            name='Base 1',
+            type=LocationType.B.name,
+            number="4321",
+            street='Forgot',
+            updated_by=cls.u1)
+
+        cls.l3 = Location.objects.create(
+            name='AED 2',
+            type=LocationType.A.name,
+            number="0000",
+            street='Not built yet',
+            updated_by=cls.u1)
 
 
 class TestSetup(TestSetupData, TestCase):
