@@ -90,6 +90,6 @@ urlpatterns = [
     
     url(r'^$',
         IndexView.as_view(),
-        name='homepage'),
+        name='index'),
 
 ]
