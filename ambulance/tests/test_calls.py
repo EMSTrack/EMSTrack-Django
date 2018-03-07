@@ -11,12 +11,12 @@ import json
 from login.tests.setup_data import TestSetup
 
 class TestCall(TestSetup):
-
     def test_call_serializer(self):
+
         c1 = Call.objects.create(
-        number="123",
-        street="dunno",
-        updated_by=self.u1)
+            number="123",
+            street="dunno",
+            updated_by=self.u1)
 
         serializer = CallSerializer(c1)
         result = {
@@ -30,6 +30,6 @@ class TestCall(TestSetup):
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
-            'updated_on': date2iso(c1.updated_on),
+            'updated_on': date2iso(c1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
