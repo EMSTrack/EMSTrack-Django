@@ -74,8 +74,7 @@ var addPatient = function(index) {
     button.on('click', function(e) { removePatient(index); });
 
     // add new form
-    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus',
-        'addPatient(' + newPatientIndex + ')'));
+    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus'));
 
 }
 
@@ -88,6 +87,8 @@ var removePatient = function(index) {
 
     // remove from form
     $('#patients').remove('#patient-' + index + '-form');
+
+    console.log('Done removing patient index ' + index);
 
 }
 
