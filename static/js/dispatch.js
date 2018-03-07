@@ -41,7 +41,8 @@ var beginDispatching = function () {
     $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus'));
 
     // bind click
-    $('#patient-' + index + '-button').on('click', function(e) { addPatient(newPatientIndex); });
+    $('#patients').on('click', 'button', function(e) { addPatient(newPatientIndex); });
+    //$('#patient-' + index + '-button').on('click', function(e) { addPatient(newPatientIndex); });
 
 }
 
