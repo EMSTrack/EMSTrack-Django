@@ -12,13 +12,11 @@ from login.tests.setup_data import TestSetup
 
 class TestCall(TestSetup):
 
-        def test_call_serializer(self):
+    def test_call_serializer(self):
         c1 = Call.objects.create(
-                number="123", 
-                street="dunno",
-                updated_by=self.u1, 
-                created_at="", 
-                ended_at="" )
+        number="123",
+        street="dunno",
+        updated_by=self.u1)
 
         serializer = CallSerializer(c1)
         result = {
