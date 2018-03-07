@@ -37,20 +37,62 @@
 {% endif %}
 {% endif %}
 
-<div class="modal" tabindex="-1" role="dialog" id="myModal">
+<div class="modal" tabindex="-1" role="dialog" id="loginModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title">EMSTrack Login</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>Modal body text goes here.</p>
+
+            <form class="form-signin"
+                  method="post"
+                  action="{% url 'login:login' %}">
+                {% csrf_token %}
+
+                <div class="row form-group">
+                    <table>
+                        <tr>
+                            <th>
+                                <label for="id_username">
+                                    Username:
+                                </label>
+                            </th>
+                            <td>
+                                <input type="text" name="username" autofocus placeholder="Username"
+                                       class="form-control input-lg"
+                                       maxlength="150" required id="id_username" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label for="id_password">
+                                    Password:
+                                </label>
+                            </th>
+                            <td>
+                                <input type="password" name="password" placeholder="Password"
+                                       class="form-control input-lg"
+                                       required id="id_password" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row text-right">
+                    <a href="{% url 'login:password_reset' %}">Forgot Password?</a>
+                </div>
+
+                <input type="hidden" name="next" value="{{ next }}" />
+
+            </form>
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-primary">Submit</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -58,7 +100,7 @@
 </div>
 
 <script>
-    $('#myModal').modal({
+    $('#loginModal').modal({
         keyboard: false
     })
 </script>
