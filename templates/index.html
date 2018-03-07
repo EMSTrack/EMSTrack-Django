@@ -19,7 +19,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">EMSTrack Login</h5>
+                <h5 id="loginTitle" class="modal-title">EMSTrack Login</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,6 +96,7 @@
         } else if (pathname == '/auth/signup/') {
 
             // adjust modal
+            $('#loginTitle').html('EMSTrack Signup');
             $('#signInForm').attr('action', '{% url 'login:signup' %}');
             $('#passwordReset').hide();
             $('#submitButton').html('Signup');
