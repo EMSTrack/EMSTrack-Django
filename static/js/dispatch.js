@@ -87,7 +87,8 @@ var removePatient = function(index) {
 
 var newPatientForm = function(index, symbol, action) {
 
-    return '<div class="form-row" id="patient-' + index + '-form">' +
+    return
+        '<div class="form-row" id="patient-' + index + '-form">' +
         '    <div class="col-sm-8 p-0">' +
         '        <input id="patient-' + index + '-name" type="text"' +
         '               class="form-control"' +
