@@ -297,7 +297,9 @@ var updateCoordinates = function() {
         });
 }
 
-var addPatient = function() {
+var addPatient = function(index) {
+
+    console.log('Adding patient index ' + index);
 
 }
 
