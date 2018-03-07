@@ -88,8 +88,7 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         widget=forms.TextInput(
             attrs={'autofocus': True,
                    'placeholder': 'Username',
-                   'class': 'form-control input-lg',
-                   'style': 'margin-bottom: 30px;'}
+                   'class': 'form-control input-lg'}
         ),
     )
     password = forms.CharField(
