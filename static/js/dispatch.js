@@ -88,7 +88,7 @@ var removePatient = function(index) {
     delete patients[index];
 
     // remove from form
-    $('#patients').remove('#patient-' + index + '-form');
+    $('#patients').find('#patient-' + index + '-form').remove();
 
     console.log('Done removing patient index ' + index);
 
