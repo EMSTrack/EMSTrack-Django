@@ -38,7 +38,7 @@ var beginDispatching = function () {
     $('#patients').empty();
 
     // add new patient form entry
-    $('#patients').html(newPatientForm(newPatientIndex, 'fa-plus', 'addPatient(' + newPatientIndex + ')'));
+    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus', 'addPatient(' + newPatientIndex + ')'));
 
 }
 
@@ -68,7 +68,8 @@ var addPatient = function(index) {
     $('#patient-' + index + '-button').click(function(e) { removePatient(index); });
 
     // add new form
-    $('#patients').html(newPatientForm(newPatientIndex, 'fa-plus', 'addPatient(' + newPatientIndex + ')'));
+    $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus',
+        'addPatient(' + newPatientIndex + ')'));
 
 }
 
