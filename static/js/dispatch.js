@@ -65,7 +65,9 @@ var addPatient = function(index) {
     symbol.addClass('fa-minus');
 
     // change button action
-    $('#patient-' + index + '-button').off().on('click', function(e) { removePatient(index); });
+    var button = $('#patient-' + index + '-button');
+    button.off();
+    button.click(function(e) { removePatient(index); });
 
     // add new form
     $('#patients').append(newPatientForm(newPatientIndex, 'fa-plus',
