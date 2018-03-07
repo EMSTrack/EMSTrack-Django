@@ -196,8 +196,8 @@ $(document).ready(function () {
 var bsalert = function(message, alertClass, title) {
 
     // Show modal
-    alertClass = alertClass | 'alert-danger;';
-    title = title | 'Failure';
+    alertClass = alertClass || 'alert-danger';
+    title = title || 'Failure';
 
     $('.modal-title').html(title);
     $('.modal-body').html(message).addClass(alertClass);

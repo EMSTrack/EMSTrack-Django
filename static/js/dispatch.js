@@ -276,11 +276,11 @@ function dispatchCall() {
 
     // checks
     if (form["priority"] === undefined) {
-        bsalert("Please click one of priorities");
+        bsalert("Please select the priority level.");
         return;
     }
     if (numberOfDispatchingAmbulances == 0) {
-        bsalert("Please dispatch at least one ambulance");
+        bsalert("Please dispatch at least one ambulance.");
         return;
     }
 
