@@ -11,21 +11,21 @@ import json
 from login.tests.setup_data import TestSetup
 
 class TestCall(TestSetup):
-    def test_call_serializer(self):
-	c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+	def test_call_serializer(self):
+		c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
 
-	serializer = CallSerializer(c1)
-	result = {
-		'id': c1.id,
-		'numebr': c1.number,
-		'street': c1.street,
-		'active': c1.active,
-		'details': c1.details,
-		'priority': c1.priority,
-		'created_at': c1.created_at,
-		'ended_at': c1.ended_at,
-		'comment': c1.comment,
-		'updated_by': c1.updated_by.id,
-		'updated_on': c1.date2iso(c1.updated_on)
-	}
-	self.assertDictEqual(serializer.data, result)
+		serializer = CallSerializer(c1)
+		result = {
+			'id': c1.id,
+			'numebr': c1.number,
+			'street': c1.street,
+			'active': c1.active,
+			'details': c1.details,
+			'priority': c1.priority,
+			'created_at': c1.created_at,
+			'ended_at': c1.ended_at,
+			'comment': c1.comment,
+			'updated_by': c1.updated_by.id,
+			'updated_on': c1.date2iso(c1.updated_on)
+		}
+		self.assertDictEqual(serializer.data, result)
