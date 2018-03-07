@@ -685,7 +685,7 @@ function createCategoryFilter() {
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
-    filterHtml += '<div class="border">';
+    filterHtml += '<div class="border border-dark px-3">';
     Object.keys(ambulance_status).forEach(function (status) {
 
         categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
