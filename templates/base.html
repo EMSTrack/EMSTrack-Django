@@ -58,13 +58,22 @@
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'ambulance:list' %}">Ambulances</a>
+                <a class="nav-link" href="{% url 'ambulance:list' %}">
+                    <span class="fas fa-ambulance"></span>
+                    Ambulances
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'hospital:list' %}">Hospitals</a>
+                <a class="nav-link" href="{% url 'hospital:list' %}">
+                    <span class="fas fa-hospital"></span>
+                    Hospitals
+                </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'ambulance:map' %}">Map</a>
+                <a class="nav-link" href="{% url 'ambulance:map' %}">
+                    <span class="fas fa-globe"></span>
+                    Map
+                </a>
             </li>
         </ul>
         {% endif %}
