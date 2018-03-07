@@ -48,7 +48,6 @@ class SignupView(FormView):
 # login
 
 class LoginView(auth_views.LoginView):
-    # template_name = 'login/login.html'
     template_name = 'index.html'
     authentication_form = AuthenticationForm
 
