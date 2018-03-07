@@ -12,31 +12,26 @@ from login.tests.setup_data import TestSetup
 
 class TestCall(TestSetup):
 
-    
-
-    def test_call_serializer(self):
-        p1 = Patient.objects.create(name="Will", age=20)
-        p2 = Patient.objects.create(name="Den", age=23)
-        p3 = Patient.objects.create(name="Queenie", age=21)
-        c1 = Call.objects.create(number="123", street="dunno",
-                updated_by=self.u1)
-        c1.ambulances.add(self.a1)
-        c1.ambulances.add(self.a2)
-        c1.ambulances.add(self.a3)
-        c1.patients.add(p1)
-        c1.patients.add(p2)
-        c1.patients.add(p3)
+        def test_call_serializer(self):
+        c1 = Call.objects.create(
+                number="123", 
+                street="dunno",
+                updated_by=self.u1, 
+                created_at="", 
+                ended_at="" )
 
         serializer = CallSerializer(c1)
         result = {
-            'id': self.c1.id,
-            'acitve': self.c1.active,
-            'ambulances': self.c1.ambulances,
-            'patients': self.c1.patients,
-            'details': self.c1.details,
-            'priority': self.c1.priority,
-            'comment': self.c1.comment,
-            'updated_by': self.c1.updated_by.id,
-            'updated_on': date2iso(self.c1.updated_on),
+            'id': c1.id,
+            'number': c1.number,
+            'street': c1.street,
+            'acitve': c1.active,
+            'details': c1.details,
+            'priority': c1.priority,
+            'created_at': date2iso(c1.created_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
         }
         self.assertDictEqual(serializer.data, result)
