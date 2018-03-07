@@ -206,11 +206,12 @@ class LocationSerializer(serializers.ModelSerializer):
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
+	call_ambulances = AmbulanceSerializer(read_only=True, many=True)
 
     class Meta:
         model = Call
-        fields = ['id', 'active', 'ambulances', 'currentPatients', 'details',
-                  'priority', 'comment', 'updated_by', 'updated_on']
+        fields = ['id', 'active', 'details', 'priority', 'comment', 
+                  'updated_by', 'updated_on']
         read_only_fields = ['updated_by']
 
     def create(self, data):
