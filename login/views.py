@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 # signup
 
 class SignupView(FormView):
-    template_name = 'login/signup.html'
+    template_name = 'index.html'
     form_class = SignupForm
 
     def form_valid(self, form):

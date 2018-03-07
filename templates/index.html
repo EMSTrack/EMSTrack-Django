@@ -3,6 +3,18 @@
 
 {% block content %}
 
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>EMSTrack</h1>
+
+            <p>Welcome to EMSTrack.</p>
+
+        </div>
+    </div>
+</div>
+
 <div class="modal" tabindex="-1" role="dialog" id="loginModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -47,7 +59,7 @@
                     </div>
                     {% endfor %}
 
-                    <a href="{% url 'login:password_reset' %}">Forgot Password?</a>
+                    <a id="passwordReset" href="{% url 'login:password_reset' %}">Forgot Password?</a>
 
                     <input type="hidden" name="next" value="{{ next }}"/>
 
@@ -55,21 +67,9 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary" id="submitButton">Login</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
-        </div>
-    </div>
-</div>
-
-<div class="container">
-    <div class="row">
-        <div class="col">
-
-            <h1>EMSTrack</h1>
-
-            <p>Welcome to EMSTrack.</p>
-
         </div>
     </div>
 </div>
@@ -85,11 +85,25 @@
         var pathname = window.location.pathname;
         console.log('pathname = ' + pathname);
         if (pathname == '/auth/login/') {
+
+            // bring up modal
             $('#loginModal').modal({
                 keyboard: false
-            })
+            });
+
+        } else if (pathname == '/auth/signup/') {
+
+            // adjust modal
+            $('#signInForm').attr('action', {% url 'login:signup' %});
+            $('#passwordReset').hide();
+            $('#submitButton').html('Signup');
+
+            // bring up modal
+            $('#loginModal').modal({
+                keyboard: false
+            });
+
         }
-        // else user should hit login button
 
     });
 
