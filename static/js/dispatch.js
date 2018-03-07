@@ -42,7 +42,7 @@ var beginDispatching = function () {
     // add new patient form entry
     $('#patients').html(newPatientForm(newPatientIndex, 'plus'));
 
-    // associated button
+    // associate button
     $('#patient-' + newPatientIndex + ' -button').click(function(e) {
         addPatient(newPatientIndex);
     });
