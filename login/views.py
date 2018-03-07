@@ -58,12 +58,6 @@ class LogoutView(auth_views.LogoutView):
     next_page = '/'
 
 
-# Admin
-
-class AdminView(TemplateView):
-    template_name = 'login/admin.html'
-
-
 # Groups
 
 class GroupAdminListView(ListView):
