@@ -79,6 +79,8 @@ class AmbulanceCapability(Enum):
 
 
 class Ambulance(UpdatedByModel):
+    call = models.ForeignKey(Call, on_delete = models.CASCADE)
+    
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
 
