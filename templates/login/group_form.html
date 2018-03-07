@@ -3,33 +3,39 @@
 
 {% block content %}
 
-<h1>Group</h1>
 
 <div class="container">
-    <form method="POST" class="post-form">
-        {% csrf_token %}
+    <div class="row">
+        <div class="col">
 
-        <h3>Details:</h3>
+            <h1>Group</h1>
 
-        <table>
-            {{ form }}
-            {% for form in inlines|slice:":1" %}
-            {{ form }}
-            {% endfor %}
-        </table>
+            <form method="POST" class="post-form">
+                {% csrf_token %}
 
-        <h3>Permissions:</h3>
+                <h3>Details:</h3>
 
-        {% for form in inlines|slice:"1:" %}
-        <table>
-            {{ form }}
-        </table>
-        {% endfor %}
+                <table>
+                    {{ form }}
+                    {% for form in inlines|slice:":1" %}
+                    {{ form }}
+                    {% endfor %}
+                </table>
 
-        <p>
-            <button type="submit">Save</button>
-        </p>
-    </form>
+                <h3>Permissions:</h3>
+
+                {% for form in inlines|slice:"1:" %}
+                <table>
+                    {{ form }}
+                </table>
+                {% endfor %}
+
+                <p>
+                    <button type="submit">Save</button>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

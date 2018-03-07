@@ -14,39 +14,37 @@
   {% endif %}
 {% endif %}
 
-<div class="container" id="wrap">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">     
-      <form class="form-signin"
-	    method="post"
-	    action="{% url 'login:login' %}">
-          {% csrf_token %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+
+            <form class="form-signin"
+                  method="post"
+                  action="{% url 'login:login' %}">
+                {% csrf_token %}
 	
-        <div class="upper-box">
-          <h3>EMSTrack Login</h3>
+                <div class="upper-box">
+                    <h3>EMSTrack Login</h3>
+                </div>
+	
+                <div class="row input_form">
+
+                    {% form %}
+
+                    <button type="submit"
+                            class="btn btn btn-primary btn-success"
+                            value="login">Login</button>
+                    <input type="hidden" name="next" value="{{ next }}" />
+
+                </div>
+	
+                <a class="pull-right"
+                   href="{% url 'login:password_reset' %}">Forgot Password?</a>
+
+            </form>
+
         </div>
-	
-        <div class="row input_form">
-	  
-	  {% for field in form %}
-	  <p>
-            {{ field }}
-	  </p>
-	  {% endfor %}
-	  
-          <button type="submit"
-		  class="btn btn btn-primary btn-success"
-		  value="login">Login</button>
-	  <input type="hidden" name="next" value="{{ next }}" />
-	  
-        </div>
-	
-        <a class="pull-right"
-	   href="{% url 'login:password_reset' %}">Forgot Password?</a>
-	
-      </form>
     </div>
-  </div>
 </div>
 
 {% endblock %}

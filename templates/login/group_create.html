@@ -3,26 +3,31 @@
 
 {% block content %}
 
-<h1>Group</h1>
-
 <div class="container">
-    <form method="POST" class="post-form">
-        {% csrf_token %}
+    <div class="row">
+        <div class="col">
 
-        <h3>Details:</h3>
+            <h1>Group</h1>
 
-        <table>
-            {{ form }}
-        </table>
+            <form method="POST" class="post-form">
+                {% csrf_token %}
 
-        <p>
-            Edit the group after creation to provide more details.
-        </p>
+                <h3>Details:</h3>
 
-        <p>
-            <button type="submit">Save</button>
-        </p>
-    </form>
+                <table>
+                    {{ form }}
+                </table>
+
+                <p>
+                    Edit the group after creation to provide more details.
+                </p>
+
+                <p>
+                    <button type="submit">Save</button>
+                </p>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
