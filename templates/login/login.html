@@ -48,43 +48,6 @@
             </div>
             <div class="modal-body">
 
-                <!-- Error messages -->
-                {% for field in form %}
-                {% if field.errors %}
-                {% for error in field.errors %}
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{ error|escape }}
-                </div>
-                {% endfor %}
-                {% endif %}
-                {% endfor %}
-
-                {% if form.non_field_errors %}
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    {{ form.non_field_errors }}
-                </div>
-                {% endif %}
-
-                {% if next %}
-                {% if user.is_authenticated %}
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <p>
-                        Your account doesn't have access to this page.
-                        To proceed, please login with an account that has access.
-                    </p>
-                </div>
-                {% endif %}
-                {% endif %}
-
                 <form class="form-signin"
                       method="post"
                       action="{% url 'login:login' %}">
