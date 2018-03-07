@@ -123,13 +123,14 @@
 
 </nav>
 
-<div class="conteiner">
+<div class="container">
     <!-- Messages -->
     {% include 'messages.html' %}
-    <!-- Content block -->
-    {% block content %}
-    {% endblock %}
 </div>
+
+<!-- Content block -->
+{% block content %}
+{% endblock %}
 
 <footer class="footer">
     {% block footer %}
