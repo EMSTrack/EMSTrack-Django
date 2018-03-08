@@ -41,8 +41,8 @@ class GroupProfile(models.Model):
     def __str__(self):
         return '{}: description = {}'.format(self.group, self.description)
 
-    # class Meta:
-    #     ordering = ['level']
+    class Meta:
+        ordering = ['level']
 
 
 # Group Ambulance and Hospital Permissions
