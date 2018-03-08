@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+from django.core.validators import MinValueValidator
 from django.urls import reverse
 
 from ambulance.models import Ambulance
@@ -30,6 +31,7 @@ class GroupProfile(models.Model):
                                  on_delete=models.CASCADE)
 
     description = models.CharField(max_length=100, blank=True, null=True)
+    level = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
     def get_absolute_url(self):
         return reverse('login:group_detail', kwargs={'pk': self.group.id})
