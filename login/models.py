@@ -42,7 +42,7 @@ class GroupProfile(models.Model):
         return '{}: description = {}'.format(self.group, self.description)
 
     class Meta:
-        order_with_respect_to = 'level'
+        ordering = ['level']
 
 
 # Group Ambulance and Hospital Permissions
