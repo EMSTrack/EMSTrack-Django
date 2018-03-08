@@ -210,9 +210,9 @@ class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceCallTime
-	fields = ['id', 'call_id', 'ambulance_id', 'dispatch_time', 
-	          'departure_time', 'patient_time', 'hospital_time', 
-	          'end_time']
+        ifields = ['id', 'call_id', 'ambulance_id', 'dispatch_time', 
+                  'departure_time', 'patient_time', 'hospital_time', 
+                  'end_time']
 
 
 # Patient Serializer
@@ -220,17 +220,19 @@ class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
 class PatientSerializer(serializers.ModelSerializer):
     
     class Meta:
-	model = Patient
-	fields = ['id', 'name', 'age']
+        model = Patient
+        fields = ['id', 'name', 'age']
 
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
+    
     ambulances = AmbulanceCallTimeSerializer(many=True)
+    
     class Meta:
         model = Call
         fields = ['id', 'active', 'details', 'priority',
-        	  'number', 'street', 'unit', 'neighborhood',
+                  'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location', 'created_at', 'ended_at', 
                   'comment', 'updated_by', 'updated_on']
