@@ -27,8 +27,8 @@ class TestCall(TestSetup):
             'city': c1.city,
             'state': c1.state,
             'zipcode': c1.zipcode,
-            'country': c1.country
-            'location': c1.location
+            'country': c1.country,
+            'location': c1.location,
             'created_at': data2iso(c1.created_at),
             'ended_at': data2iso(c1.ended_at),
             'comment': c1.comment,
