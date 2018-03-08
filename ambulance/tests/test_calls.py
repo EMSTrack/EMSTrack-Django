@@ -11,21 +11,40 @@ import json
 from login.tests.setup_data import TestSetup
 
 class TestCall(TestSetup):
-	def test_call_serializer(self):
-		c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+    def test_call_serializer(self):
+        c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
 
-		serializer = CallSerializer(c1)
-		result = {
-			'id': c1.id,
-			'numebr': c1.number,
-			'street': c1.street,
-			'active': c1.active,
-			'details': c1.details,
-			'priority': c1.priority,
-			'created_at': data2iso(serializer.call_ambulances.),
-			'ended_at': data2iso(serializer.call_ambulances.),
-			'comment': c1.comment,
-			'updated_by': c1.updated_by.id,
-			'updated_on': date2iso(c1.updated_on)
-		}
-		self.assertDictEqual(serializer.data, result)
+        serializer = CallSerializer(c1)
+	result = {
+	    'id': c1.id,
+	    'active': c1.active,
+	    'details': c1.details,
+	    'priority': c1.priority,
+	    'numebr': c1.number,
+	    'street': c1.street,
+	    'unit': c1.unit,
+	    'neighborhood': c1.neighborhood,
+	    'city': c1.city,
+	    'state': c1.state,
+	    'zipcode': c1.zipcode,
+	    'country': c1.country
+	    'location': c1.location
+	    'created_at': data2iso(c1.created_at),
+	    'ended_at': data2iso(c1.ended_at),
+	    'comment': c1.comment,
+	    'updated_by': c1.updated_by.id,
+	    'updated_on': date2iso(c1.updated_on)
+	}
+	self.assertDictEqual(serializer.data, result)
+
+class TestPatient(TestSetup):
+    def test_parient_serializer(self):
+	p1 = Patient.objects.create(age="14")
+
+	serializer = PatientSerializer(p1)
+	result = {
+	    'id': p1.id,
+            'name': p1.name,
+	    'age': p1.age
+	}
+	self.assertDictEqual(serializer.data, result)
