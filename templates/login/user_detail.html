@@ -54,7 +54,7 @@
                 {% for group in group_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'login:user_detail' pk=user.id %}">{{ group.name }}</a>
+                        <a href="{% url 'login:group_detail' pk=user.id %}">{{ group.name }}</a>
                     </td>
                     <td>
                         {{ group.groupprofile.description }}
