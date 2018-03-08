@@ -203,10 +203,25 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+# AmbulanceCallTime 
+
+class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
+
+	call_id = serializers.CharField(source='call.id', required=False)
+	ambulance_identifier = serializers.CharField(source='ambulance.identifier', required=False)
+
+	class Meta:
+		model = AmbulanceCallTime
+		fields = ['id', 
+				  'call_id', 'ambulance_id', 'ambulance_identifier',
+				  'dispatch_time', 'departure_time', 'patient_time',
+				  'hospital_time', 'end_time']
+
+
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
-    call_ambulances = AmbulanceSerializer(read_only=True, many=True)
+    call_ambulances = AmbulanceCallTimeSerializer(many=True)
     class Meta:
         model = Call
         fields = ['id', 'active', 'details', 'priority', 'comment', 
