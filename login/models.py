@@ -33,7 +33,11 @@ class GroupProfile(models.Model):
                                  on_delete=models.CASCADE)
 
     description = models.CharField(max_length=100, blank=True, null=True)
+<<<<<<< HEAD
     level = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=10)
+=======
+    level = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+>>>>>>> Added level field to group permissions
 
     def get_absolute_url(self):
         return reverse('login:group_detail', kwargs={'pk': self.group.id})
