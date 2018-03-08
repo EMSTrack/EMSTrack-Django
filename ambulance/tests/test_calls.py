@@ -33,7 +33,7 @@ class TestCall(TestSetup):
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
-            'updated_on': date2iso(c1.updated_on)
+            'updated_on': date2iso(c1.updated_on),
             'ambulances': c1.ambulances
         }
         self.assertDictEqual(serializer.data, result)
