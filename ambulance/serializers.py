@@ -6,7 +6,8 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, Location
+from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, \
+    Location, AmbulanceCallTime, Patient
 
 logger = logging.getLogger(__name__)
 
@@ -203,29 +204,36 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-# AmbulanceCallTime 
+# AmbulanceCallTime Serializer 
 
 class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
 
-    call_id = serializers.CharField(source='call.id', required=False)
-    ambulance_identifier = serializers.CharField(source='ambulance.identifier', required=False)
-
     class Meta:
         model = AmbulanceCallTime
-	fields = ['id', 
-		  'call_id', 'ambulance_id', 'ambulance_identifier',
-		  'dispatch_time', 'departure_time', 'patient_time',
-		  'hospital_time', 'end_time']
+	fields = ['id', 'call_id', 'ambulance_id', 'dispatch_time', 
+	          'departure_time', 'patient_time', 'hospital_time', 
+	          'end_time']
 
+
+# Patient Serializer
+
+class PatientSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+	model = Patient
+	fields = ['id', 'name', 'age']
 
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
-    call_ambulances = AmbulanceCallTimeSerializer(many=True)
+    ambulances = AmbulanceCallTimeSerializer(many=True)
     class Meta:
         model = Call
-        fields = ['id', 'active', 'details', 'priority', 'comment', 
-                  'updated_by', 'updated_on']
+        fields = ['id', 'active', 'details', 'priority',
+        		  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location', 'created_at', 'ended_at', 
+                  'comment', 'updated_by', 'updated_on']
         read_only_fields = ['updated_by']
 
     def create(self, data):
