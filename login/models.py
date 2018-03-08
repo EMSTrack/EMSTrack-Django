@@ -33,7 +33,7 @@ class GroupProfile(models.Model):
                                  on_delete=models.CASCADE)
 
     description = models.CharField(max_length=100, blank=True, null=True)
-    level = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    level = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=10)
 
     def get_absolute_url(self):
         return reverse('login:group_detail', kwargs={'pk': self.group.id})
