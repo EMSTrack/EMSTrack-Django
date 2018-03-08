@@ -206,7 +206,7 @@ class LocationSerializer(serializers.ModelSerializer):
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
-	call_ambulances = AmbulanceSerializer(read_only=True, many=True)
+    call_ambulances = AmbulanceSerializer(read_only=True, many=True)
     class Meta:
         model = Call
         fields = ['id', 'active', 'details', 'priority', 'comment', 
