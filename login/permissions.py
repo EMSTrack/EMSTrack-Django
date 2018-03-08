@@ -75,8 +75,7 @@ class Permissions:
                         # e.g.: objs = group.groupambulancepermission_set.all()
                         objs = getattr(group, 'group' + object_field + 'permission_set').all()
 
-                        for e in objs:
-                            print(e)
+                        print(objs)
 
                         # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
                         getattr(self, profile_field).update({
