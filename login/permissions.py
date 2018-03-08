@@ -69,8 +69,6 @@ class Permissions:
 
             else:
 
-                print(user.groups.all())
-
                 # regular users, loop through groups
                 for group in user.groups.all():
                     for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
