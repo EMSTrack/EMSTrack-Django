@@ -53,6 +53,7 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'city', 'state', 'zipcode', 'country',
                   'location',
                   'name',
+                  'equipment',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
