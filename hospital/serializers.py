@@ -41,6 +41,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
 
 
 # Hospital serializer
+# TODO: Handle equipment in create and update
 
 class HospitalSerializer(serializers.ModelSerializer):
     equipment = HospitalEquipmentSerializer(many=True, read_only=True)
