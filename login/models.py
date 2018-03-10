@@ -24,7 +24,6 @@ class UserProfile(models.Model):
 
 
 # GroupProfile
-# TODO: Add priority for sorting groups
 
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group,

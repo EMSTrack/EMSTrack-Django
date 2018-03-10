@@ -6,7 +6,7 @@ from .models import Ambulance, Hospital
 
 logger = logging.getLogger(__name__)
 
-PERMISSION_CACHE_SIZE = 10
+PERMISSION_CACHE_SIZE = 1
 
 
 @lru_cache(maxsize=PERMISSION_CACHE_SIZE)
@@ -70,6 +70,7 @@ class Permissions:
 
                 # regular users, loop through groups
                 for group in user.groups.all():
+                    print(group)
                     for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
 
                         # e.g.: objs = group.groupambulancepermission_set.all()
