@@ -44,7 +44,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
 # TODO: Handle equipment in create and update
 
 class HospitalSerializer(serializers.ModelSerializer):
-    equipment = HospitalEquipmentSerializer(many=True, read_only=True)
+    hospitalequipments = HospitalEquipmentSerializer(many=True, read_only=True)
     location = PointField(required=False)
 
     class Meta:
@@ -55,7 +55,7 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'location',
                   'name',
                   'comment', 'updated_by', 'updated_on',
-                  'equipment']
+                  'hospitalequipments']
         read_only_fields = ('updated_by',)
 
     def create(self, validated_data):
