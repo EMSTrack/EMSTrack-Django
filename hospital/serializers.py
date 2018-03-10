@@ -43,7 +43,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
 # Hospital serializer
 
 class HospitalSerializer(serializers.ModelSerializer):
-    equipment = HospitalEquipmentSerializer(many = True)
+    hospitalequipments = HospitalEquipmentSerializer(many = True)
     location = PointField(required=False)
 
     class Meta:
@@ -55,7 +55,7 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'name',
                   'equipment',
                   'comment', 'updated_by', 'updated_on']
-        read_only_fields = ('equipment', 'updated_by',)
+        read_only_fields = ('hospitalequipments', 'updated_by',)
 
     def create(self, validated_data):
 
