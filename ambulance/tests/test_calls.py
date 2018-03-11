@@ -1,5 +1,5 @@
 from ambulance.models import Call, Patient
-from ambulance.serializers import CallSerializer
+from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer
 from emstrack.tests.util import date2iso, point2str, dict2point
 from django.test import Client
 from django.utils import timezone
@@ -15,6 +15,7 @@ class TestCall(TestSetup):
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         
         serializer = CallSerializer(c1)
+        aus = AmbulanceUpdateSerializer(data=data, many=True, partial=True)
         result = {
             'id': c1.id,
             'active': c1.active,
@@ -34,6 +35,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'ambulances': aus
         }
         self.assertDictEqual(serializer.data, result)
 
