@@ -1,4 +1,4 @@
-from ambulance.models import Call, Patient
+from ambulance.models import Call, Patient, AmbulanceCallTime, Ambulance
 from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer
 from emstrack.tests.util import date2iso, point2str, dict2point
 from django.test import Client
