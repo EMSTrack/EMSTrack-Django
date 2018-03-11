@@ -72,7 +72,7 @@ class LogoutView(auth_views.LogoutView):
 class GroupAdminListView(ListView):
     model = Group
     template_name = 'login/group_list.html'
-    order_by = 'groupprofile__priority'
+    ordering = ['groupprofile__priority']
 
 
 class GroupAdminDetailView(DetailView):
