@@ -13,8 +13,9 @@ from login.tests.setup_data import TestSetup
 class TestCall(TestSetup):
     def test_call_serializer(self):
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
-        
+       
         serializer = CallSerializer(c1)
+        ambulancecalltimeserializer = AmbulanceCallTimeSerializer(many=Ture)
         result = {
             'id': c1.id,
             'active': c1.active,
@@ -34,7 +35,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulance_set': c1
+            'ambulancecalltime_set': ambulancecalltimeserializer
         }
         self.assertDictEqual(serializer.data, result)
 
