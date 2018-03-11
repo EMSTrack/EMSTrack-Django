@@ -21,7 +21,7 @@ class TestCall(TestSetup):
             'active': c1.active,
             'details': c1.details,
             'priority': c1.priority,
-            'numebr': c1.number,
+            'number': c1.number,
             'street': c1.street,
             'unit': c1.unit,
             'neighborhood': c1.neighborhood,
