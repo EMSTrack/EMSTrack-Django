@@ -29,7 +29,7 @@ class TestCall(TestSetup):
             'state': c1.state,
             'zipcode': c1.zipcode,
             'country': c1.country,
-            'location': c1.location,
+            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
