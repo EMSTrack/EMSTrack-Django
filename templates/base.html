@@ -80,7 +80,7 @@
         <ul class="navbar-nav ml-auto">
             {% if request.user.is_authenticated %}
             {% if request.user.is_staff %}
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown" id="navitemDropdown">
                 <a class="nav-link dropdown-toggle"
                    id="navbarDropdown"
                    role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -139,9 +139,25 @@
 
 <script>
     // make current page active
-    // var pathname = window.location.pathname.split('/', 3).join('/');
     var pathname = window.location.pathname;
-    $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
+
+    // exclude home page
+    if (pathname != '/') {
+        // Make current page active
+        $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
+
+        if ((pathname == "{% url 'login:user_list' %}") ||
+            (pathname == "{% url 'login:group_list' %}") ||
+            (pathname == "{% url 'hospital:equipment_list' %}") ||
+            (pathname == "{% url 'ambulance:location_list' %}")) {
+
+            // Make admin menu active
+            $('#navitemDropdown').addClass('nav-item active');
+
+        }
+
+    }
+
 </script>
 
 </body>

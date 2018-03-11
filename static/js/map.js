@@ -76,7 +76,6 @@ var locationIcon = L.icon({
 
 // TODO: different icons for different location types
 // TODO: different colors for ambulance status
-// TODO: better hospital icon
 
 /**
  * Ambulance statuses 
@@ -601,8 +600,6 @@ function addHospitalToMap(hospital) {
 };
 
 function addLocationToMap(location) {
-
-    // TODO: Separate icons by layers depending on type
 
     console.log('Adding location "' + location.name +
         '[id=' + location.id + ', type=' + location.type + ']"' +

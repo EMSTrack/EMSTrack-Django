@@ -29,7 +29,6 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
 
 
 # BasePermissionMixin
-# TODO: Add group permissions
 
 class BasePermissionMixin:
     filter_field = 'id'
