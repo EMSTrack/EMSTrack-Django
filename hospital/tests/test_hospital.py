@@ -39,6 +39,8 @@ class TestHospitalGetList(TestSetup):
                 'updated_on': date2iso(h.updated_on),
                 'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),many=True)
             }
+            logger.debug('answer= {}'.format(serializer.data))
+            logger.debug('result = {}'.format(result))
             self.assertDictEqual(serializer.data, result)
 
     def test_hospital_get_viewset(self):
