@@ -70,6 +70,7 @@ class Permissions:
 
                 # regular users, loop through groups
                 for group in user.groups.all().order_by('groupprofile__priority'):
+                    print(group)
                     for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
 
                         # e.g.: objs = group.groupambulancepermission_set.all()
