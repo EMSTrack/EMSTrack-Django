@@ -41,7 +41,7 @@ class TestHospitalGetList(TestSetup):
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on),
-                'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),many=True)
+                'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),many=True).data
             }
             logger.debug('answer= {}'.format(serializer.data))
             logger.debug('result = {}'.format(result))
