@@ -6,7 +6,8 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, Location
+from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, \
+    Location, AmbulanceCallTime, Patient
 
 logger = logging.getLogger(__name__)
 
@@ -203,14 +204,39 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+# AmbulanceCallTime Serializer 
+
+class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AmbulanceCallTime
+        fields = ['id', 'call', 'ambulance', 'dispatch_time', 
+                  'departure_time', 'patient_time', 'hospital_time', 
+                  'end_time']
+
+
+# Patient Serializer
+
+class PatientSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Patient
+        fields = ['id', 'call_id', 'name', 'age']
+
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
-
+    
+    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True)
+    location = PointField(required=False)
+    
     class Meta:
         model = Call
-        fields = ['id', 'active', 'ambulances', 'currentPatients', 'details',
-                  'priority', 'comment', 'updated_by', 'updated_on']
+        fields = ['id', 'active', 'details', 'priority',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location', 'created_at', 'ended_at', 
+                  'comment', 'updated_by', 'updated_on', 'ambulancecalltime_set']
         read_only_fields = ['updated_by']
 
     def create(self, data):
