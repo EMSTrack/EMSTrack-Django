@@ -37,6 +37,7 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'ambulancecalltime_set': ambulancecalltimeserializer
         }
+        self.maxDiff = None
         self.assertDictEqual(serializer.data, result)
 
 class TestPatient(TestSetup):
