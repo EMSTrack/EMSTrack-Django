@@ -503,7 +503,7 @@ class TestHospitalEquipmentGetList(TestSetup):
                 # 'hospital_name': he.hospital.name,
                 'equipment_id': he.equipment.id,
                 'equipment_name': he.equipment.name,
-                'equipment_etype': he.equipment.type,
+                'equipment_type': he.equipment.type,
                 'value': he.value,
                 'comment': he.comment,
                 'updated_by': he.updated_by.id,
