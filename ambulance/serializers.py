@@ -210,7 +210,7 @@ class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceCallTime
-        ifields = ['id', 'call', 'ambulance', 'dispatch_time', 
+        fields = ['id', 'call', 'ambulance', 'dispatch_time', 
                   'departure_time', 'patient_time', 'hospital_time', 
                   'end_time']
 
