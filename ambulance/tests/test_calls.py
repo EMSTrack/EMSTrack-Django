@@ -15,7 +15,7 @@ class TestCall(TestSetup):
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         
         serializer = CallSerializer(c1)
-        acts = AmbulanceCallTimeSerializer(data=data, many=True, partial=True)
+        acts = AmbulanceCallTimeSerializer(many=True)
         result = {
             'id': c1.id,
             'active': c1.active,
