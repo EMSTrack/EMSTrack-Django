@@ -1,3 +1,5 @@
+import logging
+
 from django.test import Client
 
 from django.conf import settings
@@ -15,6 +17,8 @@ from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
 
+
+logger = logging.getLogger(__name__)
 
 class TestHospitalGetList(TestSetup):
 
