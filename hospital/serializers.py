@@ -57,6 +57,7 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'comment', 'updated_by', 'updated_on',
                   'hospitalequipments']
         read_only_fields = ('updated_by',)
+        depth = 1
 
     def create(self, validated_data):
 
