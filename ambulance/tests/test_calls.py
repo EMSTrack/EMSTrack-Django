@@ -15,7 +15,7 @@ class TestCall(TestSetup):
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         
         serializer = CallSerializer(c1)
-        acts = AmbulanceCallTimeSerializer(self.a1)
+        #acts = AmbulanceCallTimeSerializer(self.a1)
         result = {
             'id': c1.id,
             'active': c1.active,
@@ -34,8 +34,8 @@ class TestCall(TestSetup):
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
-            'updated_on': date2iso(c1.updated_on),
-            'ambulances': acts
+            'updated_on': date2iso(c1.updated_on)
+            #'ambulances': acts
         }
         self.assertDictEqual(serializer.data, result)
 
