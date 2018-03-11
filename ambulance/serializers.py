@@ -218,10 +218,12 @@ class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
 # Patient Serializer
 
 class PatientSerializer(serializers.ModelSerializer):
+
+    call_id = serializer.CharField(source = 'call.id', required=False)
     
     class Meta:
         model = Patient
-        fields = ['id', 'name', 'age']
+        fields = ['id', 'call_id', 'name', 'age']
 
 # Call serializer
 
