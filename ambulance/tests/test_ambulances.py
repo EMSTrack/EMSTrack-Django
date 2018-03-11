@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
-from ambulance.models import Ambulance, Call, \
+from ambulance.models import Ambulance, Call, AmbulanceCallTime, \
     AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
