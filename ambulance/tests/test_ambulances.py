@@ -10,7 +10,7 @@ import json
 
 from ambulance.models import Ambulance, Call, AmbulanceCallTime, \
     AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, calculate_orientation
-from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer, AmbulanceCallTimeSerializer
 
 from emstrack.tests.util import date2iso, point2str, dict2point
 
