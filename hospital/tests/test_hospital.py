@@ -36,7 +36,8 @@ class TestHospitalGetList(TestSetup):
                 'location': point2str(h.location),
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
-                'updated_on': date2iso(h.updated_on)
+                'updated_on': date2iso(h.updated_on),
+                'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),many=True)
             }
             self.assertDictEqual(serializer.data, result)
 
@@ -485,7 +486,7 @@ class TestHospitalEquipmentGetList(TestSetup):
             serializer = HospitalEquipmentSerializer(he)
             result = {
                 'hospital_id': he.hospital.id,
-                'hospital_name': he.hospital.name,
+                # 'hospital_name': he.hospital.name,
                 'equipment_id': he.equipment.id,
                 'equipment_name': he.equipment.name,
                 'equipment_etype': he.equipment.type,

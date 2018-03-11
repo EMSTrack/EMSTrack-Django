@@ -10,17 +10,17 @@ from .models import Hospital, Equipment, HospitalEquipment
 # HospitalEquipment serializers
 
 class HospitalEquipmentSerializer(serializers.ModelSerializer):
-    hospital_name = serializers.CharField(source='hospital.name')
+    # hospital_name = serializers.CharField(source='hospital.name')
     equipment_name = serializers.CharField(source='equipment.name')
     equipment_etype = serializers.CharField(source='equipment.type')
 
     class Meta:
         model = HospitalEquipment
-        fields = ('hospital_id', 'hospital_name',
+        fields = ('hospital_id', # 'hospital_name',
                   'equipment_id', 'equipment_name', 'equipment_etype',
                   'value', 'comment',
                   'updated_by', 'updated_on')
-        read_only_fields = ('hospital_id', 'hospital_name',
+        read_only_fields = ('hospital_id', # 'hospital_name',
                             'equipment_id', 'equipment_name', 'equipment_etype',
                             'updated_by',)
 
