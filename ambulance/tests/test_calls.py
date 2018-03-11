@@ -39,17 +39,17 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-#class TestPatient(TestSetup):
- #   def test_parient_serializer(self):
-#
- #       c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
-  #      p1 = Patient.objects.filter(call=c1)
+class TestPatient(TestSetup):
+    def test_parient_serializer(self):
 
-   #     serializer = PatientSerializer(p1)
-    #    result = {
-     #       'id': p1.id,
-          #  'call_id': p1.call.id,
-         #   'name': p1.name,
-        #    'age': p1.age
-       # }
-      #  self.assertDictEqual(serializer.data, result)
+        c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+        p1 = Patient.objects.filter(call=c1)
+
+        serializer = PatientSerializer(p1)
+        result = {
+            'id': p1.id,
+            'call_id': p1.call.id,
+            'name': p1.name,
+            'age': p1.age
+        }
+        self.assertDictEqual(serializer.data, result)
