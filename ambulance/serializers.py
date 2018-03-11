@@ -227,7 +227,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
     
-    ambulance_set = AmbulanceCallTimeSerializer(many=True)
+    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True)
     
     class Meta:
         model = Call
@@ -235,7 +235,7 @@ class CallSerializer(serializers.ModelSerializer):
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location', 'created_at', 'ended_at', 
-                  'comment', 'updated_by', 'updated_on', 'ambulance_set']
+                  'comment', 'updated_by', 'updated_on', 'ambulancecalltime_set']
         read_only_fields = ['updated_by']
 
     def create(self, data):
