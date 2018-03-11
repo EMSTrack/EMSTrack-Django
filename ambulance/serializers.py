@@ -227,7 +227,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
     
-    ambulances = AmbulanceCallTimeSerializer(many=True)
+    #ambulances = AmbulanceCallTimeSerializer(many=True)
     
     class Meta:
         model = Call
