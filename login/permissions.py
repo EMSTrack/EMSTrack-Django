@@ -7,7 +7,7 @@ from hospital.models import Hospital
 
 logger = logging.getLogger(__name__)
 
-PERMISSION_CACHE_SIZE = 1
+PERMISSION_CACHE_SIZE = 10
 
 
 @lru_cache(maxsize=PERMISSION_CACHE_SIZE)
