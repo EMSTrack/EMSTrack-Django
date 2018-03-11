@@ -64,10 +64,10 @@ class EquipmentType(Enum):
 class Equipment(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
-    EQUIPMENT_type_CHOICES = \
+    EQUIPMENT_TYPE_CHOICES = \
         [(m.name, m.value) for m in EquipmentType]
     type = models.CharField(max_length=1,
-                            choices=EQUIPMENT_type_CHOICES)
+                            choices=EQUIPMENT_TYPE_CHOICES)
 
     def __str__(self):
         return "{} ({})".format(self.name, self.type)
