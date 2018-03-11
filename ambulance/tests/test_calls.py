@@ -41,7 +41,7 @@ class TestCall(TestSetup):
 
 class TestPatient(TestSetup):
     def test_parient_serializer(self):
-        p1 = Patient.objects.create(age="14")
+        p1 = Patient.objects.create()
 
         serializer = PatientSerializer(p1)
         result = {
