@@ -41,7 +41,7 @@ class GroupProfile(models.Model):
         return '{}: description = {}'.format(self.group, self.description)
 
     class Meta:
-        indexes = []
+        indexes = [models.Index(fields=['priority'])]
         ordering = ['priority']
 
 
