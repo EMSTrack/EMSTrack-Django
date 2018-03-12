@@ -30,7 +30,7 @@
                       action="{{ request.path }}">
                     {% csrf_token %}
 
-                    {{ foreword }}
+                    {{ foreword|safe }}
 
                     {% for field in form %}
                     <div class="form-group">
@@ -52,7 +52,7 @@
                     </div>
                     {% endfor %}
 
-                    {{ afterword }}
+                    {{ afterword|safe }}
 
                     <input type="hidden" name="next" value="{{ next }}"/>
 
