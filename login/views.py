@@ -28,7 +28,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm
+    UserHospitalPermissionAdminForm, RestartForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
@@ -207,6 +207,24 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
+
+
+# Restart
+
+class Restart(FormView):
+    form_class = RestartForm
+    template_name = 'modal.html'
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve permissions and add to context
+        context['foreword'] = '<p>This command will invalidate the permission cache and reinitialize all settings</p>'
+        context['afterword'] = '<p>Click OK if you would like to proceed or Cancel otherwise</p>'
+
+        return context
 
 
 # MQTT login views

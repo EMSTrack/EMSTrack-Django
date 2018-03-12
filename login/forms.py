@@ -244,3 +244,8 @@ class UserAdminUpdateForm(UserAdminCreateForm):
 
         # disable name
         self.fields['username'].disabled = True
+
+
+class RestartForm(forms.Form):
+
+    pass

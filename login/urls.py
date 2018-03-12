@@ -77,6 +77,11 @@ urlpatterns = [
         staff_member_required(views.GroupAdminUpdateView.as_view()),
         name='group_update'),
 
+    # restart
+    url(r'^restart/$',
+        views.RestartView.as_view(),
+        name='restart'),
+
     # mqtt login
     
     url(r'^mqtt/login/$',
