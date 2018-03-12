@@ -211,7 +211,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 
 # Restart
 
-class Restart(FormView):
+class RestartView(FormView):
     form_class = RestartForm
     template_name = 'modal.html'
 
