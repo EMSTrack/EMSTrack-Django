@@ -223,6 +223,7 @@ class PatientSerializer(serializers.ModelSerializer):
         model = Patient
         fields = ['id', 'call_id', 'name', 'age']
 
+
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
