@@ -75,6 +75,11 @@
             $("#modalForm").submit();
         });
 
+        // wire cancel button
+        $("#submitButton").on('click', function() {
+            console.log("will redirect to '{{ next}}'");
+        });
+
         // bring up modal
         $('#dialogModal').modal({
             keyboard: false
