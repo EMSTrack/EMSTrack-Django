@@ -27,7 +27,7 @@
                 <form class="form-modal"
                       id="modalForm"
                       method="post"
-                      action="{% url 'login:dialog' %}">
+                      action="{{ request.path }}">
                     {% csrf_token %}
 
                     {{ foreword }}
