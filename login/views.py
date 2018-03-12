@@ -224,6 +224,7 @@ class RestartView(FormView):
         context['title'] = 'EMSTrack restart'
         context['foreword'] = '<p>This command will invalidate the permission cache and reinitialize all settings</p>'
         context['afterword'] = '<p>Click OK if you would like to proceed or Cancel otherwise</p>'
+        context['next'] = self.request.GET.get('next', '/')
 
         return context
 
