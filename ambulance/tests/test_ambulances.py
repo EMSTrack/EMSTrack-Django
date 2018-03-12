@@ -4,12 +4,15 @@ from django.test import Client
 from django.utils import timezone
 from django.conf import settings
 
+from django.contrib.gis.db import models
+
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, calculate_orientation
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, \
+    calculate_orientation , AmbulanceCallTime, Call
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
 from emstrack.tests.util import date2iso, point2str, dict2point
@@ -959,3 +962,23 @@ class TestAmbulanceBulkUpdates(TestSetup):
 
         # logout
         client.logout()
+
+class TestAmbulanceCallTime(TestSetup):
+    def test_ambulance_call_time_serializer(self):
+        c1 = Call.objects.create(number="123", street="dunno", updated_by =
+                self.u1)
+        ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance =
+                self.a1)
+        serializer = AmbulanceCallTimeSerializer(ambCallTime)
+        result = {
+            'id': ambCallTime.id,
+            'call_id': ambCallTime.call.id,
+            'ambulance_id': ambCallTime.ambulance.id,
+            'dispatch_time': date2iso(ambCallTime.dispatch_time),
+            'departure_time': date2iso(ambCallTime.departure_time),
+            'patient_time': date2iso(ambCallTime.patient_time),
+            'hospital_time': date2iso(ambCallTime.hospital_time),
+            'end_time': date2iso(ambCallTime.end_time)
+        }
+        self.assertDictEqual(serializer.data, result)
+
