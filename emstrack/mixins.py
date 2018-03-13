@@ -79,6 +79,7 @@ class SuccessMessageWithInlinesMixin:
         return NotImplemented
 
     def forms_valid(self, form, inlines):
+
         # add message
         messages.info(self.request, self.get_success_message(form.cleaned_data))
 

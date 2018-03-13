@@ -4,6 +4,7 @@ import string
 from datetime import timedelta
 
 from braces.views import CsrfExemptMixin
+from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User, Group
@@ -246,6 +247,9 @@ class RestartView(FormView):
 
             # reseed mqtt
             management.call_command('mqttseed', verbosity=0)
+
+            # add message
+            messages.info(self.request, 'Successfully reinitialized system.')
 
             # call super form_valid
             return super().form_valid(form)
