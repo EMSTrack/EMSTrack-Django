@@ -67,6 +67,10 @@ class UserAmbulancePermission(Permission):
         # invalidate permissions cache
         cache_clear()
 
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_profile(self.user)
+
     def delete(self, *args, **kwargs):
 
         # delete from UserAmbulancePermission
@@ -74,6 +78,12 @@ class UserAmbulancePermission(Permission):
 
         # invalidate permissions cache
         cache_clear()
+
+        # publish to mqtt
+        # does not remove because user still exists!
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_profile(self.user)
+
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
@@ -100,6 +110,10 @@ class UserHospitalPermission(Permission):
         # invalidate permissions cache
         cache_clear()
 
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_profile(self.user)
+
     def delete(self, *args, **kwargs):
 
         # delete from UserHospitalPermission
@@ -107,7 +121,12 @@ class UserHospitalPermission(Permission):
 
         # invalidate permissions cache
         cache_clear()
-        
+
+        # publish to mqtt
+        # does not remove because user still exists!
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_profile(self.user)
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
                                                          self.hospital.name,
