@@ -27,7 +27,7 @@
                 <form class="form-modal"
                       id="modalForm"
                       method="post"
-                      action="{{ request.path }}">
+                      action="{{ request.get_full_path }}">
                     {% csrf_token %}
 
                     {{ foreword|safe }}
