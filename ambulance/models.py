@@ -9,7 +9,6 @@ from django.urls import reverse
 from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
-import login.permissions as permissions
 
 
 logger = logging.getLogger(__name__)
@@ -157,7 +156,8 @@ class Ambulance(UpdatedByModel):
         # just created?
         if created:
             # invalidate permissions cache
-            permissions.cache_clear()
+            from login.permissions import cache_clear
+            cache_clear()
 
     def delete(self, *args, **kwargs):
 
@@ -166,7 +166,8 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().remove_ambulance(self)
 
         # invalidate permissions cache
-        permissions.cache_clear()
+        from login.permissions import cache_clear
+        cache_clear()
 
         # delete from Ambulance
         super().delete(*args, **kwargs)

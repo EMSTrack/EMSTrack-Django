@@ -6,8 +6,6 @@ from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel
 
-import login.permissions as permissions
-
 
 # filters
 
@@ -37,7 +35,8 @@ class Hospital(AddressModel,
         # just created?
         if created:
             # invalidate permissions cache
-            permissions.cache_clear()
+            from login.permissions import cache_clear
+            cache_clear()
 
     def delete(self, *args, **kwargs):
 
@@ -46,7 +45,8 @@ class Hospital(AddressModel,
         SingletonPublishClient().remove_hospital(self)
 
         # invalidate permissions cache
-        permissions.cache_clear()
+        from login.permissions import cache_clear
+        cache_clear()
 
         # delete from Hospital
         super().delete(*args, **kwargs)
