@@ -473,44 +473,46 @@ var newPatientForm = function(index, symbol) {
 
 }
 
+$(document).ready(function() {
 
-// connect actions to inputs
+    // connect actions to inputs
 
-$("#street").change(function () {
+    $("#street").change(function () {
 
-    // update coordinates?
-    if ($('#update-coordinates').prop('checked'))
-        updateCoordinates();
+        // update coordinates?
+        if ($('#update-coordinates').prop('checked'))
+            updateCoordinates();
+
+    });
+
+
+    $('#update-coordinates').change(function () {
+
+        // update coordinates?
+        if ($('#update-coordinates').prop('checked'))
+            updateCoordinates();
+
+    });
+
+    $('#update-address').change(function () {
+
+        // update address?
+        if ($('#update-address').prop('checked'))
+            updateCurrentAddress(currentLocation);
+
+    });
+
+    $('#dispatch_form_collapse').submit(function (e) {
+
+        // prevent normal form submission
+        e.preventDefault();
+
+        // dispatch call
+        dispatchCall();
+
+    });
 
 });
-
-
-$('#update-coordinates').change(function() {
-
-    // update coordinates?
-    if ($('#update-coordinates').prop('checked'))
-        updateCoordinates();
-
-});
-
-$('#update-address').change(function() {
-
-    // update address?
-    if ($('#update-address').prop('checked'))
-        updateCurrentAddress(currentLocation);
-
-});
-
-$('#dispatch_form_collapse').submit(function (e) {
-
-   // prevent normal form submission
-    e.preventDefault();
-
-    // dispatch call
-    dispatchCall();
-
-});
-
 
 // CSRF functions
 
