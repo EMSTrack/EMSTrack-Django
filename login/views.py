@@ -226,12 +226,13 @@ class RestartView(FormView):
         context = super().get_context_data(**kwargs)
 
         # customize modal form
-        context['title'] = 'EMSTrack restart'
+        context['title'] = 'EMSTrack Reinitialization'
         context['foreword'] = '<p>This command will invalidate the permission cache and reinitialize ' + \
                               'all settings.</p>' + \
-                              '<p>This is not usually necessary but can helpful when modifying users, ' + \
+                              '<p>This is not usually necessary but can be helpful when modifying users, ' + \
                               'groups and permissions.</p>'
-        context['afterword'] = '<p>Click OK if you would like to proceed or Cancel otherwise.</p>'
+        context['afterword'] = '<p>Click <strong>OK</strong> if you would like to proceed or ' + \
+                               '<strong>Cancel</strong> otherwise.</p>'
         context['next'] = self.get_success_url()
 
         return context
