@@ -960,22 +960,3 @@ class TestAmbulanceBulkUpdates(TestSetup):
         # logout
         client.logout()
 
-
-
-
-class TestAmbulanceCallTime(TestSetup):
-    def test_ambulance_call_time_serializer(self):
-        c1 = Call.objects.create(number="123", street="dunno", updated_by = self.u1)
-        ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
-        serializer = AmbulanceCallTimeSerializer(ambCallTime)
-        result = {
-            'id': ambCallTime.id,
-            'call_id': ambCallTime.call.id,
-            'ambulance_id': ambCallTime.ambulance.id,
-            'dispatch_time': date2iso(ambCallTime.dispatch_time),
-            'departure_time': date2iso(ambCallTime.departure_time),
-            'patient_time': date2iso(ambCallTime.patient_time),
-            'hospital_time': date2iso(ambCallTime.hospital_time),
-            'end_time': date2iso(ambCallTime.end_time)
-        }
-        self.assertDictEqual(serializer.data, result)
