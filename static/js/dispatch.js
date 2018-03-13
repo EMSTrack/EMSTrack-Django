@@ -315,7 +315,7 @@ function dispatchCall() {
     var ambulances = [];
     for (var id in dispatchingAmbulances)
         if (dispatchingAmbulances.hasOwnProperty(id))
-            ambulances.push(id);
+            ambulances.push({ 'ambulance_id': id });
     form['ambulances'] = ambulances;
 
     // patients
@@ -323,7 +323,7 @@ function dispatchCall() {
     for (var index in currentPatients)
         if (currentPatients.hasOwnProperty(index)) {
             var patient = currentPatients[index];
-            var obj = { name: patient[0] };
+            var obj = { 'name': patient[0] };
             if (patient[1])
                 // add age
                 obj['age'] = patient[1];
