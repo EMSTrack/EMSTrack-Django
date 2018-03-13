@@ -8,6 +8,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core import management
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
@@ -23,6 +24,7 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from hospital.models import EquipmentType
+from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
     GroupAdminUpdateForm, \
@@ -227,6 +229,27 @@ class RestartView(FormView):
         context['next'] = self.request.GET.get('next', '/')
 
         return context
+
+    def form_valid(self, form):
+
+        try:
+
+            # invalidate permission cache
+            permissions.cache_clear()
+
+            # reseed mqtt
+            management.call_command('mqttseed', verbosity=0, interactive=False)
+
+            # call super form_valid
+            return super().form_valid(form)
+
+        except Exception as error:
+
+            # add error to form
+            form.add_error(None, error)
+
+            # call super form_invalid
+            return super().form_invalid(form);
 
 
 # MQTT login views

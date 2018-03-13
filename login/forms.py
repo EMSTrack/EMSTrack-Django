@@ -247,5 +247,4 @@ class UserAdminUpdateForm(UserAdminCreateForm):
 
 
 class RestartForm(forms.Form):
-
     pass
