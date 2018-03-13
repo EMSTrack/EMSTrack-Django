@@ -12,21 +12,19 @@ from .models import UserProfile, GroupProfile, \
 
 # Define an inline admin descriptor for Profile model
 # which acts a bit like a singleton
-class ProfileInline(admin.StackedInline):
+class UserProfileInline(admin.StackedInline):
     model = UserProfile
     can_delete = False
-    verbose_name_plural = 'profile'
 
 
 class GroupProfileInline(admin.StackedInline):
     model = GroupProfile
     can_delete = False
-    verbose_name_plural = 'profile'
 
 
 # Define a new User admin
 class UserAdmin(BaseUserAdmin):
-    inlines = (ProfileInline,)
+    inlines = (UserProfileInline,)
 
 
 # Define a new Group admin

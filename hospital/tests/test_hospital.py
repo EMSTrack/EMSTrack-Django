@@ -1,3 +1,5 @@
+import logging
+
 from django.test import Client
 
 from django.conf import settings
@@ -15,6 +17,8 @@ from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
 
+
+logger = logging.getLogger(__name__)
 
 class TestHospitalGetList(TestSetup):
 
@@ -36,8 +40,11 @@ class TestHospitalGetList(TestSetup):
                 'location': point2str(h.location),
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
-                'updated_on': date2iso(h.updated_on)
+                'updated_on': date2iso(h.updated_on),
+                'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),many=True).data
             }
+            logger.debug('answer= {}'.format(serializer.data))
+            logger.debug('result = {}'.format(result))
             self.assertDictEqual(serializer.data, result)
 
     def test_hospital_get_viewset(self):
@@ -206,7 +213,9 @@ class TestHospitalUpdate(TestSetup):
             'comment': h.comment,
             'location': point2str(h.location),
             'updated_by': user.id,
-            'updated_on': date2iso(h.updated_on)
+            'updated_on': date2iso(h.updated_on),
+            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+                                                                 many=True).data
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -236,7 +245,9 @@ class TestHospitalUpdate(TestSetup):
             'comment': h.comment,
             'location': point2str(location),
             'updated_by': user.id,
-            'updated_on': date2iso(h.updated_on)
+            'updated_on': date2iso(h.updated_on),
+            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+                                                                 many=True).data
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -270,7 +281,9 @@ class TestHospitalUpdate(TestSetup):
             'comment': h.comment,
             'location': point2str(h.location),
             'updated_by': user.id,
-            'updated_on': date2iso(h.updated_on)
+            'updated_on': date2iso(h.updated_on),
+            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+                                                                 many=True).data
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -300,7 +313,9 @@ class TestHospitalUpdate(TestSetup):
             'comment': h.comment,
             'location': point2str(location),
             'updated_by': user.id,
-            'updated_on': date2iso(h.updated_on)
+            'updated_on': date2iso(h.updated_on),
+            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+                                                                 many=True).data
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -485,10 +500,10 @@ class TestHospitalEquipmentGetList(TestSetup):
             serializer = HospitalEquipmentSerializer(he)
             result = {
                 'hospital_id': he.hospital.id,
-                'hospital_name': he.hospital.name,
+                # 'hospital_name': he.hospital.name,
                 'equipment_id': he.equipment.id,
                 'equipment_name': he.equipment.name,
-                'equipment_etype': he.equipment.type,
+                'equipment_type': he.equipment.type,
                 'value': he.value,
                 'comment': he.comment,
                 'updated_by': he.updated_by.id,

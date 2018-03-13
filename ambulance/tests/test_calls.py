@@ -1,14 +1,11 @@
-from ambulance.models import Call, Patient, AmbulanceCallTime, Ambulance
-from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer, PatientSerializer
-from emstrack.tests.util import date2iso, point2str, dict2point
-from django.test import Client
-from django.utils import timezone
-from django.conf import settings
 from rest_framework.parsers import JSONParser
-from io import BytesIO
-import json
+
+from ambulance.models import Call, Patient, AmbulanceCallTime
+from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer, PatientSerializer
+from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
+
 
 class TestCall(TestSetup):
 
@@ -40,9 +37,8 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-class TestPatient(TestSetup):
-
     def test_patient_serializer(self):
+
         # test PatientSerializer
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         p1 = Patient.objects.create(call=c1)
@@ -52,5 +48,24 @@ class TestPatient(TestSetup):
             'call_id': p1.call.id,
             'name': p1.name,
             'age': p1.age
+        }
+        self.assertDictEqual(serializer.data, result)
+
+    def test_ambulance_call_time_serializer(self):
+
+        c1 = Call.objects.create(number="123", street="dunno", updated_by =
+                self.u1)
+        ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance =
+                self.a1)
+        serializer = AmbulanceCallTimeSerializer(ambCallTime)
+        result = {
+            'id': ambCallTime.id,
+            'call_id': ambCallTime.call.id,
+            'ambulance_id': ambCallTime.ambulance.id,
+            'dispatch_time': date2iso(ambCallTime.dispatch_time),
+            'departure_time': date2iso(ambCallTime.departure_time),
+            'patient_time': date2iso(ambCallTime.patient_time),
+            'hospital_time': date2iso(ambCallTime.hospital_time),
+            'end_time': date2iso(ambCallTime.end_time)
         }
         self.assertDictEqual(serializer.data, result)

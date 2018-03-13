@@ -8,9 +8,16 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
+<<<<<<< HEAD
 from ambulance.models import Ambulance, Call, AmbulanceCallTime, \
     AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer, AmbulanceCallTimeSerializer
+=======
+from ambulance.models import Ambulance, \
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, \
+    calculate_orientation
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
+>>>>>>> ce70febea6c9c9d069e75782764aebdd8792367a
 
 from emstrack.tests.util import date2iso, point2str, dict2point
 

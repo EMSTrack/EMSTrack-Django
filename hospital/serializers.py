@@ -7,9 +7,44 @@ from login.permissions import get_permissions
 from .models import Hospital, Equipment, HospitalEquipment
 
 
-# Hospital serializers
+# HospitalEquipment serializers
+
+class HospitalEquipmentSerializer(serializers.ModelSerializer):
+    # hospital_name = serializers.CharField(source='hospital.name')
+    equipment_name = serializers.CharField(source='equipment.name')
+    equipment_type = serializers.CharField(source='equipment.type')
+
+    class Meta:
+        model = HospitalEquipment
+        fields = ('hospital_id', # 'hospital_name',
+                  'equipment_id', 'equipment_name', 'equipment_type',
+                  'value', 'comment',
+                  'updated_by', 'updated_on')
+        read_only_fields = ('hospital_id', # 'hospital_name',
+                            'equipment_id', 'equipment_name', 'equipment_type',
+                            'updated_by',)
+
+    def validate(self, data):
+        # call super
+        validated_data = super().validate(data)
+
+        # TODO: validate equipment value using equipment_type
+        return validated_data
+
+
+# EquipmentMetadata serializer
+
+class EquipmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Equipment
+        fields = '__all__'
+
+
+# Hospital serializer
+# TODO: Handle equipment in create and update
 
 class HospitalSerializer(serializers.ModelSerializer):
+    hospitalequipment_set = HospitalEquipmentSerializer(many=True, read_only=True)
     location = PointField(required=False)
 
     class Meta:
@@ -19,7 +54,8 @@ class HospitalSerializer(serializers.ModelSerializer):
                   'city', 'state', 'zipcode', 'country',
                   'location',
                   'name',
-                  'comment', 'updated_by', 'updated_on']
+                  'comment', 'updated_by', 'updated_on',
+                  'hospitalequipment_set']
         read_only_fields = ('updated_by',)
 
     def create(self, validated_data):
@@ -50,35 +86,3 @@ class HospitalSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-
-# HospitalEquipment serializers
-
-class HospitalEquipmentSerializer(serializers.ModelSerializer):
-    hospital_name = serializers.CharField(source='hospital.name')
-    equipment_name = serializers.CharField(source='equipment.name')
-    equipment_etype = serializers.CharField(source='equipment.type')
-
-    class Meta:
-        model = HospitalEquipment
-        fields = ('hospital_id', 'hospital_name',
-                  'equipment_id', 'equipment_name', 'equipment_etype',
-                  'value', 'comment',
-                  'updated_by', 'updated_on')
-        read_only_fields = ('hospital_id', 'hospital_name',
-                            'equipment_id', 'equipment_name', 'equipment_etype',
-                            'updated_by',)
-
-    def validate(self, data):
-        # call super
-        validated_data = super().validate(data)
-
-        # TODO: validate equipment value using equipment_etype
-        return validated_data
-
-
-# EquipmentMetadata serializer
-
-class EquipmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Equipment
-        fields = '__all__'
