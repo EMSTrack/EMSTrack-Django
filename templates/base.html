@@ -94,7 +94,7 @@
                     <a class="dropdown-item" href="{% url 'login:group_list' %}">Groups</a>
                     <a class="dropdown-item" href="{% url 'hospital:equipment_list' %}">Equipment</a>
                     <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">Locations</a>
-                    <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">Restart</a>
+                    <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">Reinitialize</a>
                 </div>
             </li>
             {% endif %}
