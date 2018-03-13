@@ -10,6 +10,8 @@ from hospital.models import Hospital
 
 
 # Profile
+from login.permissions import cache_clear
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User,
@@ -57,6 +59,22 @@ class UserAmbulancePermission(Permission):
     class Meta:
         unique_together = ('user', 'ambulance')
 
+    def save(self, *args, **kwargs):
+
+        # save to UserAmbulancePermission
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+    def delete(self, *args, **kwargs):
+
+        # delete from UserAmbulancePermission
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
                                                          self.ambulance.identifier,
@@ -74,6 +92,22 @@ class UserHospitalPermission(Permission):
     class Meta:
         unique_together = ('user', 'hospital')
 
+    def save(self, *args, **kwargs):
+
+        # save to UserHospitalPermission
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+    def delete(self, *args, **kwargs):
+
+        # delete from UserHospitalPermission
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+        
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
                                                          self.hospital.name,
@@ -91,6 +125,22 @@ class GroupAmbulancePermission(Permission):
     class Meta:
         unique_together = ('group', 'ambulance')
 
+    def save(self, *args, **kwargs):
+
+        # save to GroupAmbulancePermission
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+    def delete(self, *args, **kwargs):
+
+        # delete from GroupAmbulancePermission
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+        
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.ambulance.identifier,
@@ -108,6 +158,22 @@ class GroupHospitalPermission(Permission):
     class Meta:
         unique_together = ('group', 'hospital')
 
+    def save(self, *args, **kwargs):
+
+        # save to GroupHospitalPermission
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+    def delete(self, *args, **kwargs):
+
+        # delete from GroupHospitalPermission
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+        
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.hospital.name,
