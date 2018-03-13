@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
+from login import permissions
 
 logger = logging.getLogger(__name__)
 
@@ -118,6 +119,9 @@ class Ambulance(UpdatedByModel):
 
     def save(self, *args, **kwargs):
 
+        # creation?
+        created = self.pk is None
+
         # calculate orientation only if orientation has not changed and location has changed
         if (self._loaded_values and
                 self._loaded_values['orientation'] == self.orientation and
@@ -149,9 +153,21 @@ class Ambulance(UpdatedByModel):
             obj = AmbulanceUpdate(**data)
             obj.save()
 
+        # just created?
+        if created:
+            # invalidate permissions cache
+            permissions.cache_clear()
+
     def delete(self, *args, **kwargs):
+
+        # remove from mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_ambulance(self)
+
+        # invalidate permissions cache
+        permissions.cache_clear()
+
+        # delete from Ambulance
         super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -211,7 +227,7 @@ class AmbulanceUpdate(models.Model):
 # Call related models
 
 class CallPriority(Enum):
-    A = 'Ressucitation'
+    A = 'Resucitation'
     B = 'Emergent'
     C = 'Urgent'
     D = 'Less urgent'

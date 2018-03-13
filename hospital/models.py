@@ -8,6 +8,8 @@ from emstrack.models import AddressModel, UpdatedByModel
 
 
 # filters
+from login import permissions
+
 
 @register.filter
 def get_equipment_type(type):
@@ -21,13 +23,32 @@ class Hospital(AddressModel,
     name = models.CharField(max_length=254, unique=True)
 
     def save(self, *args, **kwargs):
+
+        # creation?
+        created = self.pk is None
+
+        # save to Hospital
         super().save(*args, **kwargs)
+
+        # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_hospital(self)
 
+        # just created?
+        if created:
+            # invalidate permissions cache
+            permissions.cache_clear()
+
     def delete(self, *args, **kwargs):
+
+        # remove from mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_hospital(self)
+
+        # invalidate permissions cache
+        permissions.cache_clear()
+
+        # delete from Hospital
         super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -84,19 +105,29 @@ class HospitalEquipment(UpdatedByModel):
     value = models.CharField(max_length=254)
 
     def save(self, *args, **kwargs):
+
+        # creation?
         created = self.pk is None
+
+        # save to HospitalEquipment
         super().save(*args, **kwargs)
         from mqtt.publish import SingletonPublishClient
+
+        # publish to mqtt
         client = SingletonPublishClient()
         client.publish_hospital_equipment(self)
         if created:
             client.publish_hospital_metadata(self.hospital)
 
     def delete(self, *args, **kwargs):
+
+        # remove from mqtt
         from mqtt.publish import SingletonPublishClient
         client = SingletonPublishClient()
         client.remove_hospital_equipment(self)
         client.publish_hospital_metadata(self.hospital)
+
+        # delete from HospitalEquipment
         super().delete(*args, **kwargs)
 
     class Meta:
