@@ -473,7 +473,8 @@ var newPatientForm = function(index, symbol) {
 
 }
 
-$(document).ready(function() {
+// Ready function
+$(function() {
 
     // connect actions to inputs
 

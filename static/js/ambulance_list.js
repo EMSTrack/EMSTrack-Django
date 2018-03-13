@@ -1,5 +1,5 @@
 
 var mylist;
-$(document).ready(function() {
+$(function() {
 
 });

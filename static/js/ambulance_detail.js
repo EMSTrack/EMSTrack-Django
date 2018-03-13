@@ -1,7 +1,7 @@
 var map;
 var page;
 var page_size;
-$(document).ready(function() {
+$(function() {
 
  	// Set up map widget
  	options = {

@@ -95,7 +95,9 @@ var mqttClient;
 var mymap;
 var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
 var geocoder = new Geocoder({ access_token: accessToken });
-$(document).ready(function () {
+
+// Ready function
+$(function () {
 
     // token and attribution
     var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
