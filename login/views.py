@@ -238,7 +238,7 @@ class RestartView(FormView):
             permissions.cache_clear()
 
             # reseed mqtt
-            management.call_command('mqttseed', verbosity=0, interactive=False)
+            management.call_command('mqttseed', verbosity=0)
 
             # call super form_valid
             return super().form_valid(form)
