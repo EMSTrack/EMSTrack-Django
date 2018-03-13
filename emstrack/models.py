@@ -5,7 +5,7 @@ from django.contrib.gis.geos import Point
 
 defaults = {
     'location': Point(-117.0382, 32.5149, srid=4326),
-    'state': 'BC',
+    'state': 'BCN',
     'city': 'Tijuana',
     'country': 'MX',
 }
