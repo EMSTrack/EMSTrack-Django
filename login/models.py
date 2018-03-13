@@ -152,6 +152,12 @@ class GroupAmbulancePermission(Permission):
         # invalidate permissions cache
         cache_clear()
 
+        # update all profiles for users in the group
+        for user in self.group.user_set.all():
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_profile(user)
+
     def delete(self, *args, **kwargs):
 
         # delete from GroupAmbulancePermission
@@ -159,7 +165,13 @@ class GroupAmbulancePermission(Permission):
 
         # invalidate permissions cache
         cache_clear()
-        
+
+        # update all profiles for users in the group
+        for user in self.group.user_set.all():
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_profile(user)
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.ambulance.identifier,
@@ -185,6 +197,12 @@ class GroupHospitalPermission(Permission):
         # invalidate permissions cache
         cache_clear()
 
+        # update all profiles for users in the group
+        for user in self.group.user_set.all():
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_profile(user)
+
     def delete(self, *args, **kwargs):
 
         # delete from GroupHospitalPermission
@@ -192,7 +210,13 @@ class GroupHospitalPermission(Permission):
 
         # invalidate permissions cache
         cache_clear()
-        
+
+        # update all profiles for users in the group
+        for user in self.group.user_set.all():
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_profile(user)
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.hospital.name,
