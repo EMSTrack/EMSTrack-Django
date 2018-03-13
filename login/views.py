@@ -217,7 +217,7 @@ class RestartView(FormView):
     form_class = RestartForm
     template_name = 'modal.html'
 
-    def success_url(self):
+    def get_success_url(self):
         return self.request.GET.get('next', '/')
 
     def get_context_data(self, **kwargs):
@@ -229,7 +229,7 @@ class RestartView(FormView):
         context['title'] = 'EMSTrack restart'
         context['foreword'] = '<p>This command will invalidate the permission cache and reinitialize all settings</p>'
         context['afterword'] = '<p>Click OK if you would like to proceed or Cancel otherwise</p>'
-        context['next'] = self.success_url()
+        context['next'] = self.get_success_url()
 
         return context
 
