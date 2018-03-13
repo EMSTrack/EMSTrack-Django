@@ -6,10 +6,10 @@ from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel
 
+import login.permissions as permissions
+
 
 # filters
-from login import permissions
-
 
 @register.filter
 def get_equipment_type(type):

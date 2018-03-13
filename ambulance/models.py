@@ -9,7 +9,8 @@ from django.urls import reverse
 from django.template.defaulttags import register
 
 from emstrack.models import AddressModel, UpdatedByModel, defaults
-from login import permissions
+import login.permissions as permissions
+
 
 logger = logging.getLogger(__name__)
 
