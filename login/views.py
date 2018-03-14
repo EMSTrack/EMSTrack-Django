@@ -199,6 +199,8 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView)
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
 
+    # TODO: Choose between provided password and email generated password
+
 
 class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = User
