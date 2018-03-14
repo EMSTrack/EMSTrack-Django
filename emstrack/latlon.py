@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 earth_radius = 6371e3
 
 # Stationary radius in meters
-stationary_radius = 0
+stationary_radius = 10
 
 
 def calculate_orientation(location1, location2):

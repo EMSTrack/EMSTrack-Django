@@ -71,18 +71,18 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
         def process_update(update, current):
 
-            # clear timestamp
-            current.pop('timestamp', None)
-
             # calculate orientation?
             if ('orientation' not in update and
                     'location' in update and
                     update['location'] != current['location']):
 
                     current['orientation'] = calculate_orientation(current['location'], update['location'])
-                    logger.debug('calculating orientation: < {} - {} = {}'.format(current['location'],
-                                                                                  update['location'],
-                                                                                  current['orientation']))
+                    logger.debug('< {} - {} = {}'.format(current['location'],
+                                                         update['location'],
+                                                         current['orientation']))
+
+            # clear timestamp
+            current.pop('timestamp', None)
 
             # update data
             current.update(**update)
@@ -113,14 +113,16 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 for k in range(0, n-1):
 
                     # process update
-                    data = process_update(validated_data[k], data)
+                    retdata = process_update(validated_data[k], data)
 
-                    # create update object
-                    obj = AmbulanceUpdate(**data)
-                    obj.save()
+                    if retdata is not None:
 
-                    # append to objects list
-                    instances.append(obj)
+                        # create update object
+                        obj = AmbulanceUpdate(**data)
+                        obj.save()
+
+                        # append to objects list
+                        instances.append(obj)
 
                 # on last update, update ambulance instead
 

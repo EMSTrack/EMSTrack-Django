@@ -135,19 +135,18 @@ class Ambulance(UpdatedByModel):
             # model changed
             model_changed = True
 
-        # if identifier, capability or comment changed
+        # if identifier or capability changed
         elif (self._loaded_values['identifier'] != self.identifier or
-              self._loaded_values['capability'] != self.capability or
-              self._loaded_values['comment'] != self.comment):
+              self._loaded_values['capability'] != self.capability):
             # NOTE: self._loaded_values is NEVER None
 
-            # save to Ambulance
+            # save only to Ambulance
             super().save(*args, **kwargs)
 
             # model changed
             model_changed = True
 
-        # Did the model changed?
+        # Did the model change?
         if model_changed:
 
             # publish to mqtt
