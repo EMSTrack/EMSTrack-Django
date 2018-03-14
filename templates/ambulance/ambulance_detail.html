@@ -61,15 +61,19 @@
         </div>
     </div>
 
+    {% if updates.has_other_pages %}
     <div class="row">
         <div class="col">
-
-            <!-- TODO: add page_size control -->
-
-            {% if updates.has_other_pages %}
             {% include "pagination/numbers.html" %}
-            {% endif %}
+        </div>
+        <div class="col float-right">
+            {% include "pagination/sizes.html" %}
+        </div>
+    </div>
+    {% endif %}
 
+    <div class="row">
+        <div class="col">
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
@@ -94,13 +98,20 @@
                 {% endfor %}
                 </tbody>
             </table>
-
-            {% if updates.has_other_pages %}
-            {% include "pagination/numbers.html" %}
-            {% endif %}
-
         </div>
     </div>
+
+    {% if updates.has_other_pages %}
+    <div class="row">
+        <div class="col">
+            {% include "pagination/numbers.html" %}
+        </div>
+        <div class="col float-right">
+            {% include "pagination/sizes.html" %}
+        </div>
+    </div>
+    {% endif %}
+
 </div>
 
 <script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
