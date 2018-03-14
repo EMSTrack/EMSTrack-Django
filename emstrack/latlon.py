@@ -1,4 +1,8 @@
+import logging
 import math
+
+
+logger = logging.getLogger(__name__)
 
 # Calculate orientation and distances based on two locations
 # https://www.movable-type.co.uk/scripts/latlong.html
@@ -39,6 +43,8 @@ def calculate_distance_haversine(location1, location2):
 
     a = math.sin(d_phi/2) ** 2 + math.cos(lat1) * math.cos(lat2) * math.sin(d_lambda/2) ** 2
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+
+    logger.debug('distance = {}'.format(earth_radius * c))
 
     return earth_radius * c
 
