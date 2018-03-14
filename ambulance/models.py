@@ -114,13 +114,6 @@ class Ambulance(UpdatedByModel):
                                                  self.location,
                                                  self.orientation))
 
-        # # save to Ambulance
-        # super().save(*args, **kwargs)
-        #
-        # # publish to mqtt
-        # from mqtt.publish import SingletonPublishClient
-        # SingletonPublishClient().publish_ambulance(self)
-
         # if comment, status or location changed
         model_changed = False
         if has_moved or \
@@ -142,6 +135,7 @@ class Ambulance(UpdatedByModel):
             # model changed
             model_changed = True
 
+        # if identifier, capability or comment changed
         elif (self._loaded_values['identifier'] != self.identifier or
               self._loaded_values['capability'] != self.capability or
               self._loaded_values['comment'] != self.comment):
