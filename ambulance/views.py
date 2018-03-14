@@ -74,6 +74,7 @@ class AmbulanceListView(LoginRequiredMixin,
                         ListView):
     
     model = Ambulance
+    ordering = ['name']
 
 
 class AmbulanceCreateView(LoginRequiredMixin,
