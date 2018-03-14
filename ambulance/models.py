@@ -127,6 +127,9 @@ class Ambulance(UpdatedByModel):
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
 
+            # save to Ambulance
+            super().save(*args, **kwargs)
+
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
                     for k in ('status', 'orientation',
@@ -144,14 +147,14 @@ class Ambulance(UpdatedByModel):
               self._loaded_values['comment'] != self.comment):
             # NOTE: self._loaded_values is NEVER None
 
+            # save to Ambulance
+            super().save(*args, **kwargs)
+
             # model changed
             model_changed = True
 
         # Did the model changed?
         if model_changed:
-
-            # save to Ambulance
-            super().save(*args, **kwargs)
 
             # publish to mqtt
             from mqtt.publish import SingletonPublishClient
