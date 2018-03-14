@@ -6,8 +6,8 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, \
-    Location, AmbulanceCallTime, Patient
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient
+from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
 

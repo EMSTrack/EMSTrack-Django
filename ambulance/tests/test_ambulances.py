@@ -9,8 +9,8 @@ from io import BytesIO
 import json
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, \
-    calculate_orientation
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate
+from emstrack.latlon import calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
 from emstrack.tests.util import date2iso, point2str, dict2point

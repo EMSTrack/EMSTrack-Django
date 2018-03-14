@@ -1,5 +1,4 @@
 import logging
-import math
 from enum import Enum
 
 from django.contrib.auth.models import User
@@ -8,6 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.template.defaulttags import register
 
+from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
 from emstrack.models import AddressModel, UpdatedByModel, defaults
 
 
@@ -36,29 +36,7 @@ def get_call_priority(key):
     return CallPriority[key].value
 
 
-def calculate_orientation(location1, location2):
-    # Calculate orientation based on two locations
-    # https://www.movable-type.co.uk/scripts/latlong.html
-
-    # convert latitude and longitude to radians first
-    lat1 = math.pi * location1.y / 180
-    lon1 = math.pi * location1.x / 180
-    lat2 = math.pi * location2.y / 180
-    lon2 = math.pi * location2.x / 180
-
-    # calculate orientation and convert to degrees
-    orientation = (180 / math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) -
-                                               math.sin(lat1) * math.cos(lat2) *
-                                               math.cos(lon2 - lon1),
-                                               math.sin(lon2 - lon1) * math.cos(lat2))
-
-    if orientation < 0:
-        orientation += 360
-
-    return orientation
-
-
-# User and ambulance location models
+# Ambulance location models
 
 
 # Ambulance model
@@ -122,10 +100,14 @@ class Ambulance(UpdatedByModel):
         # creation?
         created = self.pk is None
 
-        # calculate orientation only if orientation has not changed and location has changed
-        if (self._loaded_values and
-                self._loaded_values['orientation'] == self.orientation and
-                self._loaded_values['location'] != self.location):
+        # has location changed?
+        has_moved = False
+        if (self._loaded_values is None) or \
+                calculate_distance(self._loaded_values['location'], self.location) >= stationary_radius:
+            has_moved = True
+
+        # calculate orientation only if location has changed and orientation has not changed
+        if has_moved and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
             logger.debug('calculating orientation: < {} - {} = {}'.format(self._loaded_values['location'],
@@ -140,10 +122,10 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().publish_ambulance(self)
 
         # if comment, status or location changed
-        if (self._loaded_values is None) or \
-                self._loaded_values['location'] != self.location or \
+        if has_moved or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
+
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
                     for k in ('status', 'orientation',
