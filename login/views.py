@@ -75,6 +75,7 @@ class LogoutView(auth_views.LogoutView):
 class GroupAdminListView(ListView):
     model = Group
     template_name = 'login/group_list.html'
+    ordering = ['name']
 
 
 class GroupAdminDetailView(DetailView):
@@ -150,6 +151,7 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
+    ordering = ['username']
 
 
 class UserAdminDetailView(DetailView):
