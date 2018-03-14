@@ -107,7 +107,7 @@ class Ambulance(UpdatedByModel):
             has_moved = True
 
         # calculate orientation only if location has changed and orientation has not changed
-        if has_moved and self._loaded_values['orientation'] == self.orientation:
+        if has_moved and (self._loaded_values is not None) and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
             logger.debug('calculating orientation: < {} - {} = {}'.format(self._loaded_values['location'],
