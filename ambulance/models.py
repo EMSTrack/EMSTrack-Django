@@ -110,18 +110,19 @@ class Ambulance(UpdatedByModel):
         if has_moved and (self._loaded_values is not None) and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
-            logger.debug('calculating orientation: < {} - {} = {}'.format(self._loaded_values['location'],
-                                                                          self.location,
-                                                                          self.orientation))
+            logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
+                                                 self.location,
+                                                 self.orientation))
 
-        # save to Ambulance
-        super().save(*args, **kwargs)
-
-        # publish to mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_ambulance(self)
+        # # save to Ambulance
+        # super().save(*args, **kwargs)
+        #
+        # # publish to mqtt
+        # from mqtt.publish import SingletonPublishClient
+        # SingletonPublishClient().publish_ambulance(self)
 
         # if comment, status or location changed
+        model_changed = False
         if has_moved or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
@@ -134,6 +135,27 @@ class Ambulance(UpdatedByModel):
             data['ambulance'] = self
             obj = AmbulanceUpdate(**data)
             obj.save()
+
+            # model changed
+            model_changed = True
+
+        elif (self._loaded_values['identifier'] != self.identifier or
+              self._loaded_values['capability'] != self.capability or
+              self._loaded_values['comment'] != self.comment):
+            # NOTE: self._loaded_values is NEVER None
+
+            # model changed
+            model_changed = True
+
+        # Did the model changed?
+        if model_changed:
+
+            # save to Ambulance
+            super().save(*args, **kwargs)
+
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_ambulance(self)
 
         # just created?
         if created:
