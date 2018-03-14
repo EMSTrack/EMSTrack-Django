@@ -33,7 +33,7 @@ def get_page_size_links(request, page, page_sizes, page_query_param='page', page
 
         # process page number
         if page_number > 1:
-            url = replace_query_param(base_url, page_query_param, page_number)
+            url = replace_query_param(url, page_query_param, page_number)
 
         # process page size
         return replace_query_param(url, page_size_query_param, page_size)
