@@ -103,7 +103,7 @@ class Ambulance(UpdatedByModel):
         # has location changed?
         has_moved = False
         if (self._loaded_values is None) or \
-                calculate_distance(self._loaded_values['location'], self.location) >= stationary_radius:
+                calculate_distance(self._loaded_values['location'], self.location) > stationary_radius:
             has_moved = True
 
         # calculate orientation only if location has changed and orientation has not changed
