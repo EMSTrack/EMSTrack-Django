@@ -123,10 +123,10 @@
 
 <!-- Content block -->
 {% load tz %}
-{% localtime on %}
+{% timezone "America/Tijuana" %}
 {% block content %}
 {% endblock %}
-{% endlocaltime %}
+{% endtimezone %}
 
 <footer class="footer">
     {% block footer %}
