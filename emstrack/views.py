@@ -39,10 +39,8 @@ def get_page_size_links(request, page, page_sizes, page_query_param='page', page
         return replace_query_param(url, page_size_query_param, page_size)
 
     start_index = page.start_index()
-
     return [{'url': page_size_to_url(page_size, page_number), 'size': page_size}
-            for page_size, page_number in
-            zip(*[(size, math.floor(start_index / size)) for size in page_sizes])]
+            for page_size, page_number in [(size, math.floor(start_index / size)) for size in page_sizes]]
 
 
 class IndexView(TemplateView):
