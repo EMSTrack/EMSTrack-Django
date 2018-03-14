@@ -233,10 +233,14 @@ class UserProfileAdminForm(forms.ModelForm):
 class UserAdminCreateForm(forms.ModelForm):
     class Meta:
         model = User
+        fields = ['username', 'password1', 'password2', 'first_name', 'last_name',
+                  'email', 'is_staff', 'is_active', 'groups']
+
+
+class UserAdminUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
-
-
-class UserAdminUpdateForm(UserAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
         # call super
