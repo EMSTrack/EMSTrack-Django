@@ -230,7 +230,7 @@ class UserProfileAdminForm(forms.ModelForm):
         exclude = ['user']
 
 
-class UserAdminCreateForm(forms.ModelForm):
+class UserAdminCreateForm(auth_forms.UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2', 'first_name', 'last_name',
