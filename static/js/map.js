@@ -501,12 +501,14 @@ function addAmbulanceToMap(ambulance) {
         coloredIcon = ambulanceIconBlack;
 
     // Add marker
+    console.log('orientation = ' + ambulance.orientation);
     ambulanceMarkers[ambulance.id] = L.marker(
         [ambulance.location.latitude,
             ambulance.location.longitude],
         {
             icon: coloredIcon,
-            rotationAngle: 360 - ambulance.orientation
+            rotationAngle: (360 + 90 - ambulance.orientation) % 360,
+            rotationOrigin: 'center center'
         })
         .bindPopup(
             "<strong>" + ambulance.identifier +
