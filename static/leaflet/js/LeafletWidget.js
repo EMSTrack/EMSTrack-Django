@@ -346,7 +346,7 @@ LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun, laye
 
 	// Create polyline
     var polyline = L.polyline(points, {color: color});
-        //.addTo(this.map);
+        .addTo(this.map);
 
     // Add click callback
     if (fun) {
@@ -373,7 +373,7 @@ LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun, layer) {
 
     // Create marker
     var marker = L.marker([lat, lng]);
-        //.addTo(this.map);
+        .addTo(this.map);
 
     // Add click callback
     if (fun) {
