@@ -201,14 +201,14 @@ function addSegment(updates) {
 	console.log('Adding segment');
 	map.addLine(latlngs, 1, "red", null);
 
-	// Zoom to bounds
-	console.log('Fitting bounds');
-	map.fitBounds();
-
 }
 
 // Interact with widget to add an ambulance route
 function addAmbulanceRoute(data) {
+
+    // short return
+    if (data.results.length == 0)
+        return;
 
     // break segments
     var segments = breakSegments(data.results);
@@ -219,5 +219,106 @@ function addAmbulanceRoute(data) {
         addSegment(segments[i]);
     }
 
+    console.log('Centering and fitting bounds');
+    var position = data.results[0].location;
+    mymap.setView(position, mymap.getZoom());
+    map.fitBounds();
+
 }
 
+function createRouteFilter() {
+
+    // Add the checkbox on the top right corner for filtering.
+    var container = L.DomUtil.create('div', 'filter-options');
+
+    //Generate HTML code for checkboxes for each of the statuses.
+    var filterHtml = "";
+
+    filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
+    Object.keys(ambulance_status).forEach(function (status) {
+
+        categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
+        categoryGroupLayers[status].addTo(mymap);
+
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+            + status + '" type="checkbox" value="" '
+            + (visibleCategory[status] ? 'checked' : '') + '>'
+            + ambulance_status[status] + "</label></div>";
+
+    });
+    filterHtml += "</div>";
+
+    //Generate HTML code for checkboxes for hospital
+    filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
+    let category = 'Hospital'
+    categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
+    categoryGroupLayers[category].addTo(mymap);
+    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+        + category + '" type="checkbox" value="" '
+        + (visibleCategory[category] ? 'checked' : '') + '>'
+        + category + "</label></div>";
+    filterHtml += "</div>";
+
+    //Generate HTML code for checkboxes for locations
+    filterHtml += '<div class="border border-dark rounded-bottom px-1 pt-1 pb-0">';
+    Object.keys(location_type).forEach(function (type) {
+
+        categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
+        categoryGroupLayers[type].addTo(mymap);
+
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+            + type + '" type="checkbox" value="" '
+            + (visibleCategory[type] ? 'checked' : '') + '>'
+            + location_type[type] + "</label></div>";
+
+    });
+    filterHtml += "</div>";
+
+    // Append html code to container
+    container.innerHTML = filterHtml;
+
+    // Add the checkboxes.
+    var customControl = L.Control.extend({
+
+        options: {
+            position: 'topright'
+        },
+
+        onAdd: function (map) {
+            return container;
+        }
+
+    });
+    mymap.addControl(new customControl());
+
+    // Add listener to remove status layer when filter checkbox is clicked
+    $('.chk').change(function () {
+
+        // Which layer?
+        status = this.getAttribute('data-status');
+
+        // Clear layer
+        categoryGroupLayers[status].clearLayers();
+
+        if (this.checked) {
+
+            // Add the ambulances in the layer if it is checked.
+            markersByCategory[status].forEach(function (marker) {
+                categoryGroupLayers[status].addLayer(marker)
+            });
+            visibleCategory[status] = true;
+
+        } else {
+
+            // Remove from layer if it is not checked.
+            markersByCategory[status].forEach(function (marker) {
+                categoryGroupLayers[status].removeLayer(marker);
+                mymap.removeLayer(marker);
+            });
+            visibleCategory[status] = false;
+
+        }
+
+    });
+
+};
