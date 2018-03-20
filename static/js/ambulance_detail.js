@@ -98,7 +98,7 @@ function calculateDistanceHaversine(location1, location2, radius) {
 function breakSegments(data, separationRadius, smallInterval) {
 
 	separationRadius = separationRadius || 100;
-	smallInterval = smallInterval || 1 * 60 * 1000; // 1 minute
+	smallInterval = smallInterval || 2 * 60 * 1000; // 2 minutes
 
 	var segments = [];
 
