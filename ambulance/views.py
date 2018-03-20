@@ -61,7 +61,7 @@ class AmbulanceDetailView(LoginRequiredMixin,
         context['updates'] = updates
         context['page_links'] = get_page_links(self.request, updates)
         context['page_size_links'] = get_page_size_links(self.request, updates, page_sizes)
-        context['page_size'] = page_size
+        context['page_size'] = int(page_size)
 
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
