@@ -101,7 +101,7 @@ var LeafletWidget = function (options) {
 LeafletWidget.prototype.fitBounds = function (bounds) {
 
     // Get bounds if not given
-    if (bounds == null) bounds = this.map.getBounds();
+    bounds = bounds || this.map.getBounds();
     console.log('bounds = ' + bounds);
 
     // Fit map to bounds
@@ -111,10 +111,14 @@ LeafletWidget.prototype.fitBounds = function (bounds) {
 
 LeafletWidget.prototype.center = function (position, zoom) {
 
+    // Get zoom from map if not given
     zoom = zoom || this.map.getZoom();
 
     // center map
     this.map.setView([position.latitude, position.longitude], zoom);
+
+    // fit bounds
+    this.fitBounds();
 
 }
 
