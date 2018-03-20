@@ -117,9 +117,6 @@ LeafletWidget.prototype.center = function (position, zoom) {
     // center map
     this.map.setView([position.latitude, position.longitude], zoom);
 
-    // fit bounds
-    this.fitBounds();
-
 }
 
 // LeafletMultiPointWidget

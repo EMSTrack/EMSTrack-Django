@@ -20,6 +20,9 @@ $(function() {
  	// Retrieve ambulances via AJAX
  	retrieveAmbulances(ambulance_id)
 
+    // fitbounds
+    map.fitBounds();
+
 });
 
 function retrieveAmbulances(ambulance_id) {
