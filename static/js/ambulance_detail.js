@@ -219,12 +219,12 @@ function addAmbulanceRoute(data) {
         addSegment(segments[i]);
     }
 
-    console.log('Centering and fitting bounds');
+    console.log('Centering map');
     map.center(data.results[0].location);
 
 }
 
-function createRouteFilter() {
+function createRouteFilter(segments) {
 
     // Add the checkbox on the top right corner for filtering.
     var container = L.DomUtil.create('div', 'filter-options');
@@ -233,41 +233,15 @@ function createRouteFilter() {
     var filterHtml = "";
 
     filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
-    Object.keys(ambulance_status).forEach(function (status) {
+    segments.forEach(function (segment, index) {
 
-        categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
-        categoryGroupLayers[status].addTo(mymap);
-
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-            + status + '" type="checkbox" value="" '
-            + (visibleCategory[status] ? 'checked' : '') + '>'
-            + ambulance_status[status] + "</label></div>";
-
-    });
-    filterHtml += "</div>";
-
-    //Generate HTML code for checkboxes for hospital
-    filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
-    let category = 'Hospital'
-    categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
-    categoryGroupLayers[category].addTo(mymap);
-    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-        + category + '" type="checkbox" value="" '
-        + (visibleCategory[category] ? 'checked' : '') + '>'
-        + category + "</label></div>";
-    filterHtml += "</div>";
-
-    //Generate HTML code for checkboxes for locations
-    filterHtml += '<div class="border border-dark rounded-bottom px-1 pt-1 pb-0">';
-    Object.keys(location_type).forEach(function (type) {
-
-        categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
-        categoryGroupLayers[type].addTo(mymap);
+        categoryGroupLayers[index] = L.layerGroup(markersByCategory[index]);
+        categoryGroupLayers[index].addTo(map.map);
 
         filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-            + type + '" type="checkbox" value="" '
-            + (visibleCategory[type] ? 'checked' : '') + '>'
-            + location_type[type] + "</label></div>";
+            + index + '" type="checkbox" value="" '
+            + (visibleCategory[index] ? 'checked' : '') + '>'
+            + index + "</label></div>";
 
     });
     filterHtml += "</div>";
@@ -287,16 +261,16 @@ function createRouteFilter() {
         }
 
     });
-    mymap.addControl(new customControl());
+    map.map.addControl(new customControl());
 
     // Add listener to remove status layer when filter checkbox is clicked
     $('.chk').change(function () {
 
         // Which layer?
-        status = this.getAttribute('data-status');
+        index = this.getAttribute('data-status');
 
         // Clear layer
-        categoryGroupLayers[status].clearLayers();
+        categoryGroupLayers[index].clearLayers();
 
         if (this.checked) {
 
