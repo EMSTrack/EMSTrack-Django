@@ -305,7 +305,7 @@ var LeafletPolylineWidget = function (options) {
 
     // create layers
     this.layers = {};
-    map.createPane('defaultLeafletPolylineWidgetPane');
+    this.map.createPane('defaultLeafletPolylineWidgetPane');
     this.layers['default'] = {
         'markers': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'}),
         'lines': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'})
