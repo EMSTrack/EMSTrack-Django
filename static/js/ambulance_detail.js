@@ -77,14 +77,70 @@ function addMarker(map, update) {
 
 };
 
-// Interact with widget to add an ambulance route
-function addAmbulanceRoute(data) {
+function calculateDistanceHaversine(location1, location2, radius) {
+
+	radius = radius || 6371e3;
+
+	// convert latitude and longitude to radians first
+    var lat1 = Math.pi * location1.latitude / 180;
+    var lat2 = Math.pi * location2.latitude / 180;
+    var d_phi = lat2 - lat1;
+    var d_lambda = Math.PI * (location2.longitude - location1.longitude) / 180;
+
+    var a = Math.sin(d_phi / 2) * Math.sin(d_phi / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(d_lambda / 2) * Math.sin(d_lambda / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    // console.log('|| {} - {} ||= {}'.format(location2, location1, earth_radius * c))
+
+    return radius * c;
+}
+
+calculateDistance = calculateDistanceHaversine;
+
+function breakSegments(data, separationRadius) {
+
+	separationRadius = separationRadius || 100;
+
+	var segments = [];
+
+	var currentSegment = [];
+	var lastPosition = null;
+	var n = data.length;
+	for (i = 0; i <= n; i++) {
+
+		// current position
+		var currentPosition = data[i];
+
+		// distance?
+		if (lastPosition != null &&
+			calculateDistance(lastPosition.position, current.position) > separationRadius) {
+			// terminate current segment
+			segments.push(currentSegment);
+			currentSegment = [];
+		}
+
+		// add position to segment
+		currentSegment.push(currentPosition);
+
+		// update lastPosition
+		lastPosition = position;
+	}
+
+	// anything left?
+	if (currentSegment.length > 0) {
+        // terminate last segment
+        segments.push(currentSegment);
+    }
+
+	return segments;
+
+}
+
+function addSegment(updates) {
 
 	// Add status markers
 	// TODO: color depending on status
 
-	updates = data.results;
-	
 	// First entry
 	var lastStatus;
 	if (updates.length >= 2) {
@@ -140,7 +196,7 @@ function addAmbulanceRoute(data) {
     });
 
 	// Add line to map
-	console.log('Adding line');
+	console.log('Adding segment');
 	map.addLine(latlngs, 1, "red", null);
 
 	// Zoom to bounds
@@ -148,3 +204,18 @@ function addAmbulanceRoute(data) {
 	map.fitBounds();
 
 }
+
+// Interact with widget to add an ambulance route
+function addAmbulanceRoute(data) {
+
+    // break segments
+    var segments = breakSegments(data.results);
+
+    // loop on segments
+    for (var i = 0; i < segments.length; i++) {
+        // add segment to map
+        addSegment(segments[i]);
+    }
+
+}
+

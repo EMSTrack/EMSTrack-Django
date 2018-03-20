@@ -501,7 +501,7 @@ function addAmbulanceToMap(ambulance) {
         coloredIcon = ambulanceIconBlack;
 
     // Add marker
-    console.log('orientation = ' + ambulance.orientation);
+    // console.log('orientation = ' + ambulance.orientation);
     ambulanceMarkers[ambulance.id] = L.marker(
         [ambulance.location.latitude,
             ambulance.location.longitude],
