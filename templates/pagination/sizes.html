@@ -1,7 +1,11 @@
 <ul class="list-unstyled">
     {% for page_size_link in page_size_links %}
     <li class="float-right align-middle ml-1">
+        {% if page_size == page_size_link.size %}
+        <span>{{ page_size_link.size }}</span>
+        {% else %}
         <a href="{{ page_size_link.url }}">{{ page_size_link.size }}</a>
+        {% endif %}
     </li>
     {% endfor %}
 </ul>
