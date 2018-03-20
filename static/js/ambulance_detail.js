@@ -95,8 +95,6 @@ function calculateDistanceHaversine(location1, location2, radius) {
     return radius * c;
 }
 
-calculateDistance = calculateDistanceHaversine;
-
 function breakSegments(data, separationRadius) {
 
 	separationRadius = separationRadius || 100;
@@ -113,7 +111,7 @@ function breakSegments(data, separationRadius) {
 
 		// distance?
 		if (lastPosition != null &&
-			calculateDistance(lastPosition.position, currentPosition.position) > separationRadius) {
+			calculateDistanceHaversine(lastPosition.position, currentPosition.position) > separationRadius) {
 			// terminate current segment
 			segments.push(currentSegment);
 			currentSegment = [];
