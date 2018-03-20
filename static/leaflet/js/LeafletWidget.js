@@ -341,6 +341,7 @@ LeafletPolylineWidget.prototype.getLayerPane = function (layer) {
 
 LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun, layer) {
 
+    fun = fun || null;
     layer = layer || 'default';
 
 	// Create polyline
@@ -367,6 +368,7 @@ LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun, laye
 // add point
 LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun, layer) {
 
+    fun = fun || null;
     layer = layer || 'default';
 
     // Create marker

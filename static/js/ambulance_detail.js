@@ -61,10 +61,10 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
-function addMarker(map, update) {
+function addMarker(map, update, layer) {
 
 	// add marker
-	map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
+	map.addPoint(update.location.latitude, update.location.longitude, update.id, null, layer)
 		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@' + update.timestamp)
 		.on('mouseover',
 			function(e){
@@ -138,10 +138,13 @@ function breakSegments(data, separationRadius, smallInterval) {
 
 }
 
-function addSegment(updates) {
+function addSegment(updates, layer) {
 
 	// Add status markers
 	// TODO: color depending on status
+
+    // Create layer
+    this.map.createLayer(layer);
 
 	// First entry
 	var lastStatus;
@@ -151,7 +154,7 @@ function addSegment(updates) {
 		entry = updates[updates.length - 1];
 
 		// add marker
-		addMarker(map, entry);
+		addMarker(map, entry, layer);
 
 		// entry status
 		lastStatus = entry.status;
@@ -167,7 +170,7 @@ function addSegment(updates) {
 		if (entry.status != lastStatus) {
 
             // add marker
-            addMarker(map, entry);
+            addMarker(map, entry, layer);
 
         }
 
@@ -183,7 +186,7 @@ function addSegment(updates) {
 		entry = updates[0];
 
 		// add marker
-		addMarker(map, entry);
+		addMarker(map, entry, layer);
 
 	}
 
@@ -199,7 +202,7 @@ function addSegment(updates) {
 
 	// Add line to map
 	console.log('Adding segment');
-	map.addLine(latlngs, 1, "red", null);
+	map.addLine(latlngs, 1, "red", null, layer);
 
 }
 
@@ -214,10 +217,10 @@ function addAmbulanceRoute(data) {
     var segments = breakSegments(data.results);
 
     // loop on segments
-    segments.forEach( function(segment) {
+    segments.forEach( function(segment, index) {
 
         // add segment to map
-        addSegment(segment);
+        addSegment(segment, 'layer_' + index);
 
     });
 
@@ -244,7 +247,7 @@ function createRouteFilter(segments) {
         // categoryGroupLayers[index].addTo(map.map);
 
         filterHtml += '<div class="checkbox">'
-            + '<label><input class="chk" data-status="' + index + '" type="checkbox" value="" checked >'
+            + '<label><input class="chk" data-status="layer_' + index + '" type="checkbox" value="" checked >'
             + index
             + '</label>'
             + '</div>';
@@ -273,28 +276,12 @@ function createRouteFilter(segments) {
     $('.chk').change(function () {
 
         // Which layer?
-        index = this.getAttribute('data-status');
-
-        // Clear layer
-        categoryGroupLayers[index].clearLayers();
+        var layer = this.map.getLayerPane(this.getAttribute('data-status'));
 
         if (this.checked) {
-
-            // Add the ambulances in the layer if it is checked.
-            markersByCategory[status].forEach(function (marker) {
-                categoryGroupLayers[status].addLayer(marker)
-            });
-            visibleCategory[status] = true;
-
+            layer.style.show();
         } else {
-
-            // Remove from layer if it is not checked.
-            markersByCategory[status].forEach(function (marker) {
-                categoryGroupLayers[status].removeLayer(marker);
-                mymap.removeLayer(marker);
-            });
-            visibleCategory[status] = false;
-
+            layer.style.hide();
         }
 
     });
