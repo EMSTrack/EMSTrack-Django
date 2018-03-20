@@ -114,7 +114,7 @@ LeafletWidget.prototype.center = function (position, zoom) {
     zoom = zoom || this.map.getZoom();
 
     // center map
-    this.map.setView([position.latitude position.longitude], zoom);
+    this.map.setView([position.latitude, position.longitude], zoom);
 
 }
 
