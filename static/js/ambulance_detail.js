@@ -97,7 +97,7 @@ function calculateDistanceHaversine(location1, location2, radius) {
 
 function breakSegments(data, separationRadius) {
 
-	separationRadius = separationRadius || 100;
+	separationRadius = separationRadius || 500;
 
 	var segments = [];
 
