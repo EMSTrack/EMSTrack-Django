@@ -243,9 +243,10 @@ function createRouteFilter(segments) {
     filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
     segments.forEach(function (segment, index) {
 
+        var date = new Date(Date.parse(segment[0].timestamp));
         filterHtml += '<div class="checkbox">'
             + '<label><input class="chk" data-status="layer_' + index + '" type="checkbox" value="" checked >'
-            + segment[0].timestamp
+            + date.toLocaleTimeString()
             + '</label>'
             + '</div>';
 
