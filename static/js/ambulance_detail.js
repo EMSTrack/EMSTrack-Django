@@ -75,7 +75,7 @@ function addMarker(map, update) {
 					});
 			});
 
-};
+}
 
 function calculateDistanceHaversine(location1, location2, radius) {
 
@@ -111,7 +111,7 @@ function breakSegments(data, separationRadius) {
 
 		// distance?
 		if (lastPosition != null &&
-			calculateDistanceHaversine(lastPosition.position, currentPosition.position) > separationRadius) {
+			calculateDistanceHaversine(lastPosition.location, currentPosition.location) > separationRadius) {
 			// terminate current segment
 			segments.push(currentSegment);
 			currentSegment = [];
