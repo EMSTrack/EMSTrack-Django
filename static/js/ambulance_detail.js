@@ -113,7 +113,7 @@ function breakSegments(data, separationRadius) {
 
 		// distance?
 		if (lastPosition != null &&
-			calculateDistance(lastPosition.position, current.position) > separationRadius) {
+			calculateDistance(lastPosition.position, currentPosition.position) > separationRadius) {
 			// terminate current segment
 			segments.push(currentSegment);
 			currentSegment = [];
@@ -123,7 +123,7 @@ function breakSegments(data, separationRadius) {
 		currentSegment.push(currentPosition);
 
 		// update lastPosition
-		lastPosition = position;
+		lastPosition = currentPosition;
 	}
 
 	// anything left?
