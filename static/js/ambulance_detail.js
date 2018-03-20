@@ -221,7 +221,7 @@ function addAmbulanceRoute(data) {
 
     console.log('Centering and fitting bounds');
     var position = data.results[0].location;
-    mymap.setView(position, mymap.getZoom());
+    map.setView(position, map.getZoom());
     map.fitBounds();
 
 }
