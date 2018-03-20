@@ -373,8 +373,10 @@ LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun, layer) {
     layer = layer || 'default';
 
     // Create marker
+    var icon = new L.Icon.Default();
+    icon.options.shadowSize = [0,0];
     var layerName = layer + 'LeafletPolylineWidgetPane';
-    var marker = L.marker([lat, lng], {pane: layerName})
+    var marker = L.marker([lat, lng], {icon: icon, pane: layerName})
         .addTo(this.map);
 
     // Add click callback
