@@ -220,9 +220,7 @@ function addAmbulanceRoute(data) {
     }
 
     console.log('Centering and fitting bounds');
-    var position = data.results[0].location;
-    map.setView(position, map.getZoom());
-    map.fitBounds();
+    map.center(data.results[0].location);
 
 }
 
