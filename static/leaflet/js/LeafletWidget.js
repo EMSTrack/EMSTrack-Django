@@ -305,16 +305,39 @@ var LeafletPolylineWidget = function (options) {
 
     // create layers
     this.layers = {};
-    this.map.createPane('defaultLeafletPolylineWidgetPane');
-    this.layers['default'] = {
-        'markers': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'}),
-        'lines': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'})
-    };
+
+    // create default layer
+    this.createLayer('default');
+
+    //this.map.createPane('defaultLeafletPolylineWidgetPane');
+    //this.layers['default'] = {
+//        'markers': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'}),
+//        'lines': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'})
+//    };
 
 }
 
 LeafletPolylineWidget.prototype = Object.create(LeafletWidget.prototype);
 LeafletPolylineWidget.prototype.constructor = LeafletPolylineWidget;
+
+LeafletPolylineWidget.prototype.createLayer = function (layer) {
+
+    var layerName = layer + 'LeafletPolylineWidgetPane';
+    this.map.createPane(layerName);
+    this.layers['default'] = {
+        'markers': L.layerGroup({'pane': layerName}),
+        'lines': L.layerGroup({'pane': layerName})
+    };
+
+}
+
+LeafletPolylineWidget.prototype.getLayerPane = function (layer) {
+
+    var layerName = layer + 'LeafletPolylineWidgetPane';
+    return this.map.getPane(layerName);
+
+}
+
 
 LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun, layer) {
 
