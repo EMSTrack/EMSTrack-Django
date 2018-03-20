@@ -214,10 +214,15 @@ function addAmbulanceRoute(data) {
     var segments = breakSegments(data.results);
 
     // loop on segments
-    for (var i = 0; i < segments.length; i++) {
+    segments.forEach( function(segment) {
+
         // add segment to map
-        addSegment(segments[i]);
-    }
+        addSegment(segment);
+
+    });
+
+    // create route filter
+    createRouteFilter(segments);
 
     console.log('Centering map');
     map.center(data.results[0].location);
