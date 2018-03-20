@@ -113,7 +113,7 @@ function breakSegments(data, separationRadius, smallInterval) {
 		// distance?
 		if (lastPosition != null) {
 			var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
-			var interval = Math.abs(lastPosition.timestamp.getTime() - currentPosition.timestamp.getTime());
+			var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
 			if (interval > smallInterval && distance > separationRadius) {
                 // terminate current segment
                 segments.push(currentSegment);
