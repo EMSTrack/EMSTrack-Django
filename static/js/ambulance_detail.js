@@ -237,7 +237,7 @@ function createRouteFilter(segments) {
     //Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
-    filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
+    filterHtml += '<div class="border border-dark rounded">';
     segments.forEach(function (segment, index) {
 
         // categoryGroupLayers[index] = L.layerGroup(markersByCategory[index]);
