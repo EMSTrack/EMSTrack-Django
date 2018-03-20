@@ -95,10 +95,10 @@ function calculateDistanceHaversine(location1, location2, radius) {
     return radius * c;
 }
 
-function breakSegments(data, separationRadius, smallInterval) {
+function breakSegments(data, separationRadius, timeInterval) {
 
-	separationRadius = separationRadius || 100;
-	smallInterval = smallInterval || 2 * 60 * 1000; // 2 minutes
+	separationRadius = separationRadius || [100, 1000]; // 10m, 1km
+	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
 
 	var segments = [];
 
@@ -114,7 +114,8 @@ function breakSegments(data, separationRadius, smallInterval) {
 		if (lastPosition != null) {
 			var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
 			var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
-			if (interval > smallInterval && distance > separationRadius) {
+			if (distance > separationRadius[1] || interval > timeInterval[1] ||
+                (interval > timeInterval[0] && distance > separationRadius[0])) {
                 // terminate current segment
                 segments.push(currentSegment);
                 currentSegment = [];
