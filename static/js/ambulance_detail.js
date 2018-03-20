@@ -82,8 +82,8 @@ function calculateDistanceHaversine(location1, location2, radius) {
 	radius = radius || 6371e3;
 
 	// convert latitude and longitude to radians first
-    var lat1 = Math.pi * location1.latitude / 180;
-    var lat2 = Math.pi * location2.latitude / 180;
+    var lat1 = Math.PI * location1.latitude / 180;
+    var lat2 = Math.PI * location2.latitude / 180;
     var d_phi = lat2 - lat1;
     var d_lambda = Math.PI * (location2.longitude - location1.longitude) / 180;
 
