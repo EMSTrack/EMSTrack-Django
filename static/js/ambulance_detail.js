@@ -144,7 +144,7 @@ function addSegment(updates, layer) {
 	// TODO: color depending on status
 
     // Create layer
-    this.map.createLayer(layer);
+    map.createLayer(layer);
 
 	// First entry
 	var lastStatus;
@@ -243,9 +243,6 @@ function createRouteFilter(segments) {
     filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
     segments.forEach(function (segment, index) {
 
-        // categoryGroupLayers[index] = L.layerGroup(markersByCategory[index]);
-        // categoryGroupLayers[index].addTo(map.map);
-
         filterHtml += '<div class="checkbox">'
             + '<label><input class="chk" data-status="layer_' + index + '" type="checkbox" value="" checked >'
             + index
@@ -276,7 +273,7 @@ function createRouteFilter(segments) {
     $('.chk').change(function () {
 
         // Which layer?
-        var layer = this.map.getLayerPane(this.getAttribute('data-status'));
+        var layer = map.getLayerPane(this.getAttribute('data-status'));
 
         if (this.checked) {
             layer.style.show();
