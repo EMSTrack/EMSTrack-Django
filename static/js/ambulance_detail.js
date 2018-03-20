@@ -185,7 +185,7 @@ function addSegment(updates) {
 
 	// Store data in an array
 	var latlngs = [];
-	data.results.forEach(function(update) {
+	updates.forEach(function(update) {
 
 		// push location
 		var loc = update.location;
