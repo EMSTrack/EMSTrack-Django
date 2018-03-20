@@ -507,7 +507,7 @@ function addAmbulanceToMap(ambulance) {
             ambulance.location.longitude],
         {
             icon: coloredIcon,
-            rotationAngle: (360 + 90 - ambulance.orientation) % 360,
+            rotationAngle: (360 - 90 - ambulance.orientation) % 360,
             rotationOrigin: 'center center'
         })
         .bindPopup(
