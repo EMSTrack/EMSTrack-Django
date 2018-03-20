@@ -276,9 +276,9 @@ function createRouteFilter(segments) {
         var layer = map.getLayerPane(this.getAttribute('data-status'));
 
         if (this.checked) {
-            layer.style.show();
+            layer.style.display = 'show';
         } else {
-            layer.style.hide();
+            layer.style.display = 'hide';
         }
 
     });
