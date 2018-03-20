@@ -372,7 +372,7 @@ LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun, layer) {
     fun = fun || null;
     layer = layer || 'default';
 
-    // Create marker
+    // Create marker without a shaddow
     var icon = new L.Icon.Default();
     icon.options.shadowSize = [0,0];
     var layerName = layer + 'LeafletPolylineWidgetPane';

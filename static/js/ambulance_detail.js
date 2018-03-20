@@ -245,7 +245,7 @@ function createRouteFilter(segments) {
 
         filterHtml += '<div class="checkbox">'
             + '<label><input class="chk" data-status="layer_' + index + '" type="checkbox" value="" checked >'
-            + index
+            + segment[0].timestamp
             + '</label>'
             + '</div>';
 
