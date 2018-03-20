@@ -240,13 +240,14 @@ function createRouteFilter(segments) {
     filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
     segments.forEach(function (segment, index) {
 
-        categoryGroupLayers[index] = L.layerGroup(markersByCategory[index]);
-        categoryGroupLayers[index].addTo(map.map);
+        // categoryGroupLayers[index] = L.layerGroup(markersByCategory[index]);
+        // categoryGroupLayers[index].addTo(map.map);
 
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-            + index + '" type="checkbox" value="" '
-            + (visibleCategory[index] ? 'checked' : '') + '>'
-            + index + "</label></div>";
+        filterHtml += '<div class="checkbox">'
+            + '<label><input class="chk" data-status="' + index + '" type="checkbox" value="" checked >'
+            + index
+            + '</label>'
+            + '</div>';
 
     });
     filterHtml += "</div>";
