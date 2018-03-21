@@ -3,6 +3,7 @@ import time
 
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
 
 from rest_framework.renderers import JSONRenderer
 import json
@@ -708,7 +709,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client)
 
         location = {'latitude': -2., 'longitude': 7.}
-        timestamp = time.timezone.now()
+        timestamp = timezone.now()
         data = [
             {
                 'status': AmbulanceStatus.OS.name,
