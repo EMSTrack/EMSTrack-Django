@@ -721,7 +721,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
-                            json.dumps(), qos=0)
+                            json.dumps(data), qos=0)
 
         # process messages
         self.loop(test_client)
