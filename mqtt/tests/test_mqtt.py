@@ -701,7 +701,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
-        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
         # retrieve message that is there already due to creation
         test_client.expect('ambulance/{}/data'.format(self.a2.id))
