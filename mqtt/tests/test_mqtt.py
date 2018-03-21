@@ -688,7 +688,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # expect update once
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
-
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -697,6 +696,47 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
+
+        # test bulk ambulance update
+
+        # retrieve current ambulance status
+        obj = Ambulance.objects.get(id=self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        # retrive message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
+
+        data = [
+            {
+                'status': AmbulanceStatus.OS.name,
+            },
+            {
+                'status': AmbulanceStatus.AV.name,
+            }
+            {
+                'status': AmbulanceStatus.UK.name,
+            }
+        ]
+
+        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                               self.a1.id),
+                            json.dumps(), qos=0)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # verify change
+        obj = Ambulance.objects.get(id=self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
         # generate ERROR: JSON formated incorrectly
 
