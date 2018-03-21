@@ -101,11 +101,21 @@ var LeafletWidget = function (options) {
 LeafletWidget.prototype.fitBounds = function (bounds) {
 
     // Get bounds if not given
-    if (bounds == null) bounds = this.map.getBounds();
+    bounds = bounds || this.map.getBounds();
     console.log('bounds = ' + bounds);
 
     // Fit map to bounds
     this.map.fitBounds(bounds);
+
+}
+
+LeafletWidget.prototype.center = function (position, zoom) {
+
+    // Get zoom from map if not given
+    zoom = zoom || this.map.getZoom();
+
+    // center map
+    this.map.setView([position.latitude, position.longitude], zoom);
 
 }
 
@@ -294,18 +304,49 @@ var LeafletPolylineWidget = function (options) {
     this.pointIdMap = {};
 
     // create layers
-    this.markers = L.layerGroup();
-    this.lines = L.layerGroup();
+    this.layers = {};
+
+    // create default layer
+    this.createLayer('default');
+
+    //this.map.createPane('defaultLeafletPolylineWidgetPane');
+    //this.layers['default'] = {
+//        'markers': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'}),
+//        'lines': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'})
+//    };
 
 }
 
 LeafletPolylineWidget.prototype = Object.create(LeafletWidget.prototype);
 LeafletPolylineWidget.prototype.constructor = LeafletPolylineWidget;
 
-LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun) {
+LeafletPolylineWidget.prototype.createLayer = function (layer) {
+
+    var layerName = layer + 'LeafletPolylineWidgetPane';
+    this.map.createPane(layerName);
+    this.layers[layer] = {
+        'markers': L.layerGroup({'pane': layerName}),
+        'lines': L.layerGroup({'pane': layerName})
+    };
+
+}
+
+LeafletPolylineWidget.prototype.getLayerPane = function (layer) {
+
+    var layerName = layer + 'LeafletPolylineWidgetPane';
+    return this.map.getPane(layerName);
+
+}
+
+
+LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun, layer) {
+
+    fun = fun || null;
+    layer = layer || 'default';
 
 	// Create polyline
-    var polyline = L.polyline(points, {color: color})
+    var layerName = layer + 'LeafletPolylineWidgetPane';
+    var polyline = L.polyline(points, {color: color, pane: layerName})
         .addTo(this.map);
 
     // Add click callback
@@ -315,7 +356,7 @@ LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun) {
 
     // Add marker
     L.stamp(polyline);
-    this.lines.addLayer(polyline);
+    this.layers[layer]['lines'].addLayer(polyline);
 
     // Track ids
     if (id >= 0) {
@@ -326,10 +367,16 @@ LeafletPolylineWidget.prototype.addLine = function (points, id, color, fun) {
 }
 
 // add point
-LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun) {
+LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun, layer) {
 
-    // Create marker
-    var marker = L.marker([lat, lng])
+    fun = fun || null;
+    layer = layer || 'default';
+
+    // Create marker without a shaddow
+    var icon = new L.Icon.Default();
+    icon.options.shadowSize = [0,0];
+    var layerName = layer + 'LeafletPolylineWidgetPane';
+    var marker = L.marker([lat, lng], {icon: icon, pane: layerName})
         .addTo(this.map);
 
     // Add click callback
@@ -339,7 +386,7 @@ LeafletPolylineWidget.prototype.addPoint = function (lat, lng, id, fun) {
 
     // Add marker
     L.stamp(marker);
-    this.markers.addLayer(marker);
+    this.layers[layer]['markers'].addLayer(marker);
 
     // Track ids
     if (id >= 0) {

@@ -61,11 +61,12 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
-function addMarker(map, update) {
+function addMarker(map, update, layer) {
 
 	// add marker
-	map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
-		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@' + update.timestamp)
+	map.addPoint(update.location.latitude, update.location.longitude, update.id, null, layer)
+		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@'
+            + (new Date(Date.parse(update.timestamp))).toLocaleString())
 		.on('mouseover',
 			function(e){
 				// open popup bubble
@@ -95,10 +96,10 @@ function calculateDistanceHaversine(location1, location2, radius) {
     return radius * c;
 }
 
-function breakSegments(data, separationRadius, smallInterval) {
+function breakSegments(data, separationRadius, timeInterval) {
 
-	separationRadius = separationRadius || 100;
-	smallInterval = smallInterval || 2 * 60 * 1000; // 2 minutes
+	separationRadius = separationRadius || [100, 10000]; // 10m, 10km
+	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
 
 	var segments = [];
 
@@ -114,7 +115,8 @@ function breakSegments(data, separationRadius, smallInterval) {
 		if (lastPosition != null) {
 			var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
 			var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
-			if (interval > smallInterval && distance > separationRadius) {
+			if (distance > separationRadius[1] || interval > timeInterval[1] ||
+                (interval > timeInterval[0] && distance > separationRadius[0])) {
                 // terminate current segment
                 segments.push(currentSegment);
                 currentSegment = [];
@@ -138,10 +140,13 @@ function breakSegments(data, separationRadius, smallInterval) {
 
 }
 
-function addSegment(updates) {
+function addSegment(updates, layer) {
 
 	// Add status markers
 	// TODO: color depending on status
+
+    // Create layer
+    map.createLayer(layer);
 
 	// First entry
 	var lastStatus;
@@ -151,7 +156,7 @@ function addSegment(updates) {
 		entry = updates[updates.length - 1];
 
 		// add marker
-		addMarker(map, entry);
+		addMarker(map, entry, layer);
 
 		// entry status
 		lastStatus = entry.status;
@@ -167,7 +172,7 @@ function addSegment(updates) {
 		if (entry.status != lastStatus) {
 
             // add marker
-            addMarker(map, entry);
+            addMarker(map, entry, layer);
 
         }
 
@@ -183,7 +188,7 @@ function addSegment(updates) {
 		entry = updates[0];
 
 		// add marker
-		addMarker(map, entry);
+		addMarker(map, entry, layer);
 
 	}
 
@@ -199,25 +204,86 @@ function addSegment(updates) {
 
 	// Add line to map
 	console.log('Adding segment');
-	map.addLine(latlngs, 1, "red", null);
-
-	// Zoom to bounds
-	console.log('Fitting bounds');
-	map.fitBounds();
+	map.addLine(latlngs, 1, "red", null, layer);
 
 }
 
 // Interact with widget to add an ambulance route
 function addAmbulanceRoute(data) {
 
+    // short return
+    if (data.results.length == 0)
+        return;
+
     // break segments
     var segments = breakSegments(data.results);
 
     // loop on segments
-    for (var i = 0; i < segments.length; i++) {
+    segments.forEach( function(segment, index) {
+
         // add segment to map
-        addSegment(segments[i]);
-    }
+        addSegment(segment, 'layer_' + index);
+
+    });
+
+    // create route filter
+    createRouteFilter(segments);
+
+    console.log('Centering map');
+    map.center(data.results[0].location);
 
 }
 
+function createRouteFilter(segments) {
+
+    // Add the checkbox on the top right corner for filtering.
+    var container = L.DomUtil.create('div', 'filter-options');
+
+    //Generate HTML code for checkboxes for each of the statuses.
+    var filterHtml = "";
+
+    filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
+    segments.forEach(function (segment, index) {
+
+        var date = new Date(Date.parse(segment[0].timestamp));
+        filterHtml += '<div class="checkbox">'
+            + '<label><input class="chk" data-status="layer_' + index + '" type="checkbox" value="" checked >'
+            + date.toLocaleString()
+            + '</label>'
+            + '</div>';
+
+    });
+    filterHtml += "</div>";
+
+    // Append html code to container
+    container.innerHTML = filterHtml;
+
+    // Add the checkboxes.
+    var customControl = L.Control.extend({
+
+        options: {
+            position: 'topright'
+        },
+
+        onAdd: function (map) {
+            return container;
+        }
+
+    });
+    map.map.addControl(new customControl());
+
+    // Add listener to remove status layer when filter checkbox is clicked
+    $('.chk').change(function () {
+
+        // Which layer?
+        var layer = map.getLayerPane(this.getAttribute('data-status'));
+
+        if (this.checked) {
+            layer.style.display = 'block';
+        } else {
+            layer.style.display = 'none';
+        }
+
+    });
+
+};
