@@ -707,15 +707,19 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/data'.format(self.a2.id))
         self.is_subscribed(test_client)
 
+        location = {'latitude': -2., 'longitude': 7.}
+        timestamp = time.timezone.now()
         data = [
             {
                 'status': AmbulanceStatus.OS.name,
             },
             {
                 'status': AmbulanceStatus.AV.name,
+                'location': location,
+                'timestamp': timestamp
             },
             {
-                'status': AmbulanceStatus.UK.name,
+                'status': AmbulanceStatus.PB.name,
             }
         ]
 
@@ -736,7 +740,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # verify change
         obj = Ambulance.objects.get(id=self.a2.id)
-        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+        self.assertEqual(obj.status, AmbulanceStatus.PB.name)
+        self.assertEqual(obj.timestamp, timestamp)
+        self.assertEqual(obj.location, location)
 
         # generate ERROR: JSON formated incorrectly
 
