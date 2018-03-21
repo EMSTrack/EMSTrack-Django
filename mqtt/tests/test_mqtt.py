@@ -744,7 +744,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.PB.name)
         self.assertEqual(obj.timestamp, timestamp)
-        self.assertEqual(point2str(obj.location), location)
+        self.assertEqual(point2str(obj.location), point2str(location))
 
         # generate ERROR: JSON formated incorrectly
 
