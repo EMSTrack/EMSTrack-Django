@@ -713,7 +713,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             },
             {
                 'status': AmbulanceStatus.AV.name,
-            }
+            },
             {
                 'status': AmbulanceStatus.UK.name,
             }
