@@ -606,7 +606,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # retrive message that is there already due to creation
+        # retrieve message that is there already due to creation
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
 
@@ -637,7 +637,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
 
-        # retrive message that is there already due to creation
+        # retrieve message that is there already due to creation
         test_client.expect('hospital/{}/data'.format(self.h1.id))
         self.is_subscribed(test_client)
 
@@ -700,11 +700,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # test bulk ambulance update
 
         # retrieve current ambulance status
-        obj = Ambulance.objects.get(id=self.a1.id)
+        obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
-        # retrive message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        # retrieve message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
         self.is_subscribed(test_client)
 
         data = [
@@ -720,7 +720,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         ]
 
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               self.a1.id),
+                                                               self.a2.id),
                             json.dumps(data), qos=0)
 
         # process messages
@@ -728,14 +728,14 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # verify change
-        obj = Ambulance.objects.get(id=self.a1.id)
+        obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
         # generate ERROR: JSON formated incorrectly
