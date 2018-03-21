@@ -717,7 +717,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             {
                 'status': AmbulanceStatus.AV.name,
                 'location': location,
-                'timestamp': timestamp
+                'timestamp': str(timestamp)
             },
             {
                 'status': AmbulanceStatus.PB.name,
