@@ -12,7 +12,7 @@ from .client import BaseClient, MQTTException
 
 from ambulance.models import Ambulance
 from ambulance.models import Call
-from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital, HospitalEquipment
@@ -203,18 +203,34 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            # update ambulance
-            serializer = AmbulanceSerializer(ambulance,
-                                             data=data,
-                                             partial=True)
-            if serializer.is_valid():
+            is_valid = False
+            if isinstance(data, (list, tuple)):
 
-                logger.debug('on_ambulance: valid serializer')
+                # update ambulances in bulk
+                serializer = AmbulanceUpdateSerializer(data=data,
+                                                       many=True,
+                                                       partial=True)
 
-                # save to database
-                serializer.save(updated_by=user)
+                if serializer.is_valid():
+
+                    # save to database
+                    serializer.save(ambulance=ambulance, updated_by=user)
+                    is_valid = True
 
             else:
+
+                # update ambulance
+                serializer = AmbulanceSerializer(ambulance,
+                                                 data=data,
+                                                 partial=True)
+
+                if serializer.is_valid():
+
+                    # save to database
+                    serializer.save(updated_by=user)
+                    is_valid = True
+
+            if not is_valid:
 
                 logger.debug('on_ambulance: INVALID serializer')
 
