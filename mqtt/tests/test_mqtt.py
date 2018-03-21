@@ -8,6 +8,7 @@ from django.utils import timezone
 from rest_framework.renderers import JSONRenderer
 import json
 
+from emstrack.tests.util import point2str
 from login.models import UserProfile
 from login.permissions import get_permissions
 
@@ -743,7 +744,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.PB.name)
         self.assertEqual(obj.timestamp, timestamp)
-        self.assertEqual(obj.location, location)
+        self.assertEqual(point2str(obj.location), location)
 
         # generate ERROR: JSON formated incorrectly
 
