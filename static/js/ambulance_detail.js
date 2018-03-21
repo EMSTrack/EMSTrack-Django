@@ -65,7 +65,8 @@ function addMarker(map, update, layer) {
 
 	// add marker
 	map.addPoint(update.location.latitude, update.location.longitude, update.id, null, layer)
-		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@' + update.timestamp)
+		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@'
+            + (new Date(Date.parse(update.timestamp))).toLocaleString())
 		.on('mouseover',
 			function(e){
 				// open popup bubble
@@ -97,7 +98,7 @@ function calculateDistanceHaversine(location1, location2, radius) {
 
 function breakSegments(data, separationRadius, timeInterval) {
 
-	separationRadius = separationRadius || [100, 1000]; // 10m, 1km
+	separationRadius = separationRadius || [100, 10000]; // 10m, 10km
 	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
 
 	var segments = [];

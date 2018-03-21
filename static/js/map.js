@@ -668,7 +668,7 @@ function updateDetailPanel(ambulance) {
     $('#ambulance-detail-capability')
         .html(ambulance_capability[ambulance.capability]);
     $('#ambulance-detail-updated-on')
-        .html(ambulance.updated_on);
+        .html((new Date(Date.parse(ambulance.updated_on))).toLocaleString());
 
     $('#ambulance-detail-status-select')
         .val(ambulance.status);
