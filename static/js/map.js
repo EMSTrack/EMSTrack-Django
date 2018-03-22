@@ -29,22 +29,58 @@ Object.keys(location_type).forEach(function(type) {
     visibleCategory[type] = false;
 });
 
+// Initialize ambulance icons
+var ambulance_settings = [
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_blue.svg',
+            iconSize: [15, 30],
+        }), 'btn-primary'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_grey.svg',
+            iconSize: [15, 30],
+        }), 'btn-secondary'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_green.svg',
+            iconSize: [15, 30],
+        }), 'btn-success'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_red.svg',
+            iconSize: [15, 30],
+        }), 'btn-danger'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_yellow.svg',
+            iconSize: [15, 30],
+        }), 'btn-warning'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_purple.svg',
+            iconSize: [15, 30],
+        }), 'btn-info'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_orange.svg',
+            iconSize: [15, 30],
+        }), 'btn-dark'
+    ],
+];
 
-// Initialize marker icons.
-var ambulanceIcon = L.icon({
-	//iconUrl: '/static/icons/ambulance_icon.png',
-	iconUrl: '/static/icons/cars/ambulance_red.svg',
-	iconSize: [40, 40],
-});
-var ambulanceIconBlack = L.icon({
-	// iconUrl: '/static/icons/ambulance_icon_black.png',
-	iconUrl: '/static/icons/cars/ambulance_black.svg',
-	iconSize: [40, 40],
-});
-var ambulanceIconBlue = L.icon({
-	// iconUrl: '/static/icons/ambulance_blue.png',
-	iconUrl: '/static/icons/cars/ambulance_blue.svg',
-	iconSize: [40, 40],
+var ambulance_icons = {};
+var ambulance_buttons = {};
+Object.keys(ambulance_status).forEach(function(type, index) {
+    var settings = ambulance_settings[index];
+    ambulance_icons[type] = settings[0];
+    ambulance_buttons[type] = settings[1];
 });
 
 var hospitalIcon = L.icon({
@@ -394,12 +430,7 @@ function updateAmbulance(ambulance) {
         var buttonId = "#grid-button-" + id;
 
         // Updated button color/status
-        if (ambulance.status === STATUS_AVAILABLE)
-            $(buttonId).attr("class", "btn btn-sm btn-success");
-        else if (ambulance.status === STATUS_OUT_OF_SERVICE)
-            $(buttonId).attr("class", "btn btn-sm btn-default");
-        else
-            $(buttonId).attr("class", "btn btn-sm btn-danger");
+        $(buttonId).attr("class", "btn btn-sm " + ambulance_buttons[ambulance.status]);
 
     } else {
 
@@ -446,17 +477,11 @@ function addAmbulanceToGrid(ambulance) {
         '[id=' + ambulance.id + ']"' +
         ' to grid');
 
-    let button_class_name = 'btn-danger';
-    if (ambulance.status === STATUS_AVAILABLE)
-        button_class_name = 'btn-success';
-    else if (ambulance.status === STATUS_OUT_OF_SERVICE)
-        button_class_name = 'btn-default';
-
     // Add button to ambulance grid
     $('#ambulance-grid')
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
-            + ' class="btn btn-sm ' + button_class_name + '"'
+            + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
             + ' style="margin: 2px 2px;"'
             + ' draggable="true">'
             + ambulance.identifier
@@ -493,21 +518,14 @@ function addAmbulanceToMap(ambulance) {
     // store ambulance details in an array
     ambulances[ambulance.id] = ambulance;
 
-    // set icon by status
-    let coloredIcon = ambulanceIcon;
-    if (ambulance.status === STATUS_AVAILABLE)
-        coloredIcon = ambulanceIconBlue;
-    else if (ambulance.status === STATUS_OUT_OF_SERVICE)
-        coloredIcon = ambulanceIconBlack;
-
     // Add marker
     // console.log('orientation = ' + ambulance.orientation);
     ambulanceMarkers[ambulance.id] = L.marker(
         [ambulance.location.latitude,
             ambulance.location.longitude],
         {
-            icon: coloredIcon,
-            rotationAngle: (360 - 90 - ambulance.orientation) % 360,
+            icon: ambulance_icons[ambulance.status],
+            rotationAngle: ambulance.orientation % 360,
             rotationOrigin: 'center center'
         })
         .bindPopup(
