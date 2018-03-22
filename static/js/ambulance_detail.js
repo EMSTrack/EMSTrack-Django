@@ -1,6 +1,5 @@
 var map;
 var page;
-var page_size;
 $(function() {
 
  	// Set up map widget
