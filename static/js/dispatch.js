@@ -100,7 +100,7 @@ var addToDispatchingList = function(ambulance) {
     $('#ambulance-selection').append(
         '<button id="dispatch-button-' + ambulance.id + '"'
         + ' value="' + ambulance.id + '"'
-        + ' type="button" class="btn btn-sm btn-success"'
+        + ' type="button" class="btn btn-sm '+ ambulance_buttons['AV'] + '"'
         + ' style="margin: 2px 2px;"'
         + ' draggable="true">'
         + ambulance.identifier
