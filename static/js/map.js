@@ -39,15 +39,15 @@ var ambulance_settings = [
     ],
     [
         L.icon({
-            iconUrl: '/static/icons/cars/ambulance_gray.svg',
-            iconSize: [15, 30],
-        }), 'btn-secondary'
-    ],
-    [
-        L.icon({
             iconUrl: '/static/icons/cars/ambulance_green.svg',
             iconSize: [15, 30],
         }), 'btn-success'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_gray.svg',
+            iconSize: [15, 30],
+        }), 'btn-secondary'
     ],
     [
         L.icon({
