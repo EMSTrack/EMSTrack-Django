@@ -22,10 +22,10 @@ def calculate_orientation(location1, location2):
     d_lambda = math.pi * (location2.x - location1.x) / 180
 
     # calculate orientation and convert to degrees
-    orientation = (180 / math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) -
+    orientation = (180 / math.pi) * math.atan2(math.sin(d_lambda) * math.cos(lat2),
+                                               math.cos(lat1) * math.sin(lat2) -
                                                math.sin(lat1) * math.cos(lat2) *
-                                               math.cos(d_lambda),
-                                               math.sin(d_lambda) * math.cos(lat2))
+                                               math.cos(d_lambda))
 
     if orientation < 0:
         orientation += 360
