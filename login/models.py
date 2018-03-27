@@ -2,6 +2,7 @@ from django.contrib.gis.db import models
 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+from django.core.validators import MinValueValidator
 from django.urls import reverse
 
 from ambulance.models import Ambulance
@@ -25,19 +26,22 @@ class UserProfile(models.Model):
 
 
 # GroupProfile
-# TODO: Add priority for sorting groups
 
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE)
 
     description = models.CharField(max_length=100, blank=True, null=True)
+    priority = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=10)
 
     def get_absolute_url(self):
         return reverse('login:group_detail', kwargs={'pk': self.group.id})
 
     def __str__(self):
         return '{}: description = {}'.format(self.group, self.description)
+
+    class Meta:
+        indexes = [models.Index(fields=['priority'])]
 
 
 # Group Ambulance and Hospital Permissions

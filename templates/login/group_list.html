@@ -18,6 +18,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Priority</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,9 @@
                     </td>
                     <td>
                         {{ group.groupprofile.description }}
+                    </td>
+                    <td>
+                        {{ group.groupprofile.priority }}
                     </td>
                 </tr>
                 {% endfor %}

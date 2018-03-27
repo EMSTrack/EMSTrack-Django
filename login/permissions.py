@@ -70,10 +70,12 @@ class Permissions:
             else:
 
                 # regular users, loop through groups
-                for group in user.groups.all():
+                for group in user.groups.all().order_by('-groupprofile__priority'):
                     for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
+
                         # e.g.: objs = group.groupambulancepermission_set.all()
                         objs = getattr(group, 'group' + object_field + 'permission_set').all()
+
                         # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
                         getattr(self, profile_field).update({
                             getattr(e, object_field + '_id'): {
