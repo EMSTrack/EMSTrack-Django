@@ -42,7 +42,6 @@ class GroupProfile(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['priority'])]
-        ordering = ['priority']
 
 
 # Group Ambulance and Hospital Permissions
