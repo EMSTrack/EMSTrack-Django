@@ -12,12 +12,15 @@ var visibleCategory = {};
 var markersByCategory = {};
 var categoryGroupLayers = {};
 
-// add ambulance_status
+// add ambulance_status and ambulance_capability
 Object.keys(ambulance_status).forEach(function(status) {
     Object.keys(ambulance_capability).forEach(function(capability) {
         markersByCategory[status+"|"+capability] = [];
-        visibleCategory[status+"|"+capability] = true;
     });
+    visibleCategory[status] = true;
+});
+Object.keys(ambulance_capability).forEach(function(capability) {
+    visibleCategory[capability] = true;
 });
 
 // add hospital
@@ -705,7 +708,7 @@ function createCategoryFilter() {
     // Add the checkbox on the top right corner for filtering.
     var container = L.DomUtil.create('div', 'filter-options');
 
-    //Generate HTML code for checkboxes for each of the statuses.
+    // Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
     filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
@@ -726,8 +729,8 @@ function createCategoryFilter() {
     });
     filterHtml += "</div>";
 
-    //Generate HTML code for checkboxes for each of the categories.
-    filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
+    // Generate HTML code for checkboxes for each of the capabilities.
+    filterHtml += '<div class="border border-top-0 border-bottom-1 border-dark px-1 pt-1 pb-0">';
     Object.keys(ambulance_capability).forEach(function (capability) {
 
         // no need to create group layers here
@@ -741,7 +744,7 @@ function createCategoryFilter() {
     });
     filterHtml += "</div>";
     
-    //Generate HTML code for checkboxes for hospital
+    // Generate HTML code for checkboxes for hospital
     filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
     let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
