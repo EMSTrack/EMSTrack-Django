@@ -421,11 +421,11 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // Update ambulance grid
-        var buttonId = "#grid-button-" + id;
-
-        // Updated button color/status
-        $(buttonId).attr("class", "btn btn-sm " + ambulance_buttons[ambulance.status]);
+        // Updated button classes
+        $("#grid-button-" + id).attr("class",
+            "btn btn-sm " + ambulance_buttons[ambulance.status] +
+            + ' status-' + ambulance.status
+            + ' capability-' + ambulance.capability + '"');
 
     } else {
 
