@@ -476,7 +476,9 @@ function addAmbulanceToGrid(ambulance) {
     $('#ambulance-grid')
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
-            + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
+            + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
+            + ' status-' + ambulance.status
+            + ' capability-' + ambulance.capability + '"'
             + ' style="margin: 2px 2px;"'
             + ' draggable="true">'
             + ambulance.identifier
@@ -768,14 +770,11 @@ function createCategoryFilter() {
             visibleCategory[layer] = false;
         }
 
-        // Update ambulance grid
-        var buttonId = "#grid-button-" + id;
-
-        // Updated button color/status
-        $(buttonId).css("display", display);
-
         // Modify pane
         if (this.value == 'status') {
+            // Update ambulance grid buttons
+            $('button.status-' + layer).css('display', display);
+
             // Add to all visible capability panes
             Object.keys(ambulance_capability).forEach(function (capability) {
                 if (visibleCategory[capability]) {
@@ -783,6 +782,9 @@ function createCategoryFilter() {
                 }
             });
         } else if (this.value == 'capability') {
+            // Update ambulance grid buttons
+            $('button.capability-' + layer).css('display', display);
+
             // Add to all visible status layers
             Object.keys(ambulance_status).forEach(function (status) {
                 if (visibleCategory[status]) {
@@ -792,6 +794,8 @@ function createCategoryFilter() {
         } else {
             mymap.getPane(layer).style.display = display;
         }
+
+
 
     });
 
