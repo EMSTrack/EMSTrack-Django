@@ -299,9 +299,9 @@ class Patient(models.Model):
 
 # noinspection PyPep8
 class LocationType(Enum):
-    B = 'Base'
-    A = 'AED'
-    O = 'Other'
+    b = 'Base'
+    a = 'AED'
+    o = 'Other'
 
 
 class Location(AddressModel, UpdatedByModel):
@@ -313,7 +313,7 @@ class Location(AddressModel, UpdatedByModel):
         [(m.name, m.value) for m in LocationType]
     type = models.CharField(max_length=1,
                             choices=LOCATION_TYPE_CHOICES,
-                            default=LocationType.O.name)
+                            default=LocationType.o.name)
 
     # location
     location = models.PointField(srid=4326, null=True)

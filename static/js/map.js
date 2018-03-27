@@ -641,9 +641,9 @@ function addLocationToMap(location) {
 
     // set icon by status
     let icon = locationIcon;
-    if (location.type === 'A')
+    if (location.type === 'a')
         icon = defibrillatorIcon;
-    else if (location.type === 'B')
+    else if (location.type === 'b')
         icon = baseIcon;
     else
         icon = otherIcon;
