@@ -572,7 +572,7 @@ function addAmbulanceToMap(ambulance) {
     markersByCategory[ambulance.status+"|"+ambulance.capability].push(ambulanceMarkers[ambulance.id]);
 
     // If layer is not visible, remove marker
-    if (!visibleCategory[ambulance.status+"|"+ambulance.capability]) {
+    if (!(visibleCategory[ambulance.status] && visibleCategory[ambulance.capability])) {
         let marker = ambulanceMarkers[ambulance.id];
         categoryGroupLayers[ambulance.status+"|"+ambulance.capability].removeLayer(marker);
         mymap.removeLayer(marker);
