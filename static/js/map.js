@@ -736,8 +736,8 @@ function createCategoryFilter() {
         // no need to create group layers here
 
         // add div
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-category="'
-            + capability + '" type="checkbox" value="category" '
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+            + capability + '" type="checkbox" value="capability" '
             + (visibleCategory[capability] ? 'checked' : '') + '>'
             + ambulance_capability[capability] + "</label></div>";
 
@@ -796,7 +796,7 @@ function createCategoryFilter() {
         // Which layer?
         var layer = this.getAttribute('data-status');
         var categoryOrStatus = this.value == 'status' || this.value == 'category'; 
-        
+
         if (categoryOrStatus) {
             if (this.value == 'status') {
                 // Clear all capability layers
