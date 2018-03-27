@@ -10,7 +10,6 @@ var locations = {};	// Store location details
 // Initialize category layers
 var visibleCategory = {};
 var markersByCategory = {};
-var categoryGroupLayers = {};
 
 // add ambulance_status and ambulance_capability
 Object.keys(ambulance_status).forEach(function(status) {
@@ -533,7 +532,8 @@ function addAmbulanceToMap(ambulance) {
         {
             icon: ambulance_icons[ambulance.status],
             rotationAngle: ambulance.orientation % 360,
-            rotationOrigin: 'center center'
+            rotationOrigin: 'center center',
+            pane: ambulance.status+"|"+ambulance.capability
         })
         .bindPopup(
             "<strong>" + ambulance.identifier +
@@ -571,13 +571,6 @@ function addAmbulanceToMap(ambulance) {
     // Add to a map to differentiate the layers between statuses.
     markersByCategory[ambulance.status+"|"+ambulance.capability].push(ambulanceMarkers[ambulance.id]);
 
-    // If layer is not visible, remove marker
-    if (!(visibleCategory[ambulance.status] && visibleCategory[ambulance.capability])) {
-        let marker = ambulanceMarkers[ambulance.id];
-        categoryGroupLayers[ambulance.status+"|"+ambulance.capability].removeLayer(marker);
-        mymap.removeLayer(marker);
-    }
-
 };
 
 function addHospitalToMap(hospital) {
@@ -597,7 +590,10 @@ function addHospitalToMap(hospital) {
     // If hospital marker doesn't exist
     hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,
             hospital.location.longitude],
-        {icon: coloredIcon})
+        {
+            icon: coloredIcon,
+            pane: 'hospital'
+        })
         .bindPopup("<strong>" + hospital.name + "</strong>")
         .addTo(mymap);
 
@@ -618,13 +614,6 @@ function addHospitalToMap(hospital) {
     // Add to a map to differentiate the layers between statuses.
 	let category = 'Hospital'
     markersByCategory[category].push(hospitalMarkers[hospital.id]);
-
-    // If layer is not visible, remove marker
-    if (!visibleCategory[category]) {
-        let marker = hospitalMarkers[hospital.id];
-        categoryGroupLayers[category].removeLayer(marker);
-        mymap.removeLayer(marker);
-    }
 
 };
 
@@ -651,7 +640,10 @@ function addLocationToMap(location) {
     // If location marker doesn't exist
     locationMarkers[location.id] = L.marker([location.location.latitude,
             location.location.longitude],
-        {icon: icon})
+        {
+            icon: icon,
+            pane: location.type
+        })
         .bindPopup("<strong>" + location.name + "</strong>")
         .addTo(mymap);
 
@@ -672,13 +664,6 @@ function addLocationToMap(location) {
     // Add to a map to differentiate the layers between typees.
     markersByCategory[location.type].push(locationMarkers[location.id]);
 
-    // If layer is not visible, remove marker
-    if (!visibleCategory[location.type]) {
-        let marker = locationMarkers[location.id];
-        categoryGroupLayers[location.type].removeLayer(marker);
-        mymap.removeLayer(marker);
-    }
-    
 };
 
 /*
@@ -705,6 +690,17 @@ function updateDetailPanel(ambulance) {
 /* Create status filter on the top right corner of the map */
 function createCategoryFilter() {
 
+    // Create category panes
+    Object.keys(ambulance_status).forEach(function (status) {
+        Object.keys(ambulance_capability).forEach(function (capability) {
+            map.createPane(status+"|"+capability);
+        });
+    });
+    map.createPane('hospital');
+    Object.keys(location_type).forEach(function (type) {
+        map.createPane(type);
+    });
+
     // Add the checkbox on the top right corner for filtering.
     var container = L.DomUtil.create('div', 'filter-options bg-light');
 
@@ -713,12 +709,6 @@ function createCategoryFilter() {
 
     filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
     Object.keys(ambulance_status).forEach(function (status) {
-
-        // create disjoint group layers
-        Object.keys(ambulance_capability).forEach(function (capability) {
-            categoryGroupLayers[status+"|"+capability] = L.layerGroup(markersByCategory[status+"|"+capability]);
-            categoryGroupLayers[status+"|"+capability].addTo(mymap);
-        });
 
         // add div
         filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
@@ -733,8 +723,6 @@ function createCategoryFilter() {
     filterHtml += '<div class="border border-top-0 border-bottom-1 border-dark px-1 pt-1 pb-0">';
     Object.keys(ambulance_capability).forEach(function (capability) {
 
-        // no need to create group layers here
-
         // add div
         filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
             + capability + '" type="checkbox" value="capability" '
@@ -746,21 +734,16 @@ function createCategoryFilter() {
     
     // Generate HTML code for checkboxes for hospital
     filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
-    let category = 'Hospital'
-    categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
-    categoryGroupLayers[category].addTo(mymap);
-    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
+    let category = 'hospital'
+    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
         + category + '" type="checkbox" value="hospital" '
         + (visibleCategory[category] ? 'checked' : '') + '>'
-        + category + "</label></div>";
+        + 'Hospital' + "</label></div>";
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for locations
     filterHtml += '<div class="border border-dark rounded-bottom px-1 pt-1 pb-0">';
     Object.keys(location_type).forEach(function (type) {
-
-        categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
-        categoryGroupLayers[type].addTo(mymap);
 
         // add div
         filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
@@ -797,50 +780,26 @@ function createCategoryFilter() {
         var layer = this.getAttribute('data-status');
         var categoryOrStatus = this.value == 'status' || this.value == 'capability';
 
-        if (categoryOrStatus) {
-            if (this.value == 'status') {
-                // Clear all capability layers
-                Object.keys(ambulance_capability).forEach(function (capability) {
-                    categoryGroupLayers[layer+"|"+capability].clearLayers();
-                });
-            } else {
-                // Clear all status layers
-                Object.keys(ambulance_status).forEach(function (status) {
-                    categoryGroupLayers[status+"|"+layer].clearLayers();
-                });
-            }
-        } else {
-            // Clear layer
-            categoryGroupLayers[layer].clearLayers();
-        }
-
         if (this.checked) {
 
-            // Add the ambulances in the layer if it is checked.
             if (categoryOrStatus) {
                 if (this.value == 'status') {
-                    // Add to all visible capability layers
+                    // Add to all visible capability panes
                     Object.keys(ambulance_capability).forEach(function (capability) {
                         if (visibleCategory[capability]) {
-                            markersByCategory[layer + "|" + capability].forEach(function (marker) {
-                                categoryGroupLayers[layer + "|" + capability].addLayer(marker)
-                            });
+                            mymap.getPane(layer+"|"+capability).style.display = 'block';
                         }
                     });
                 } else {
                     // Add to all visible status layers
                     Object.keys(ambulance_status).forEach(function (status) {
                         if (visibleCategory[status]) {
-                            markersByCategory[status + "|" + layer].forEach(function (marker) {
-                                categoryGroupLayers[status + "|" + layer].addLayer(marker)
-                            });
+                            mymap.getPane(status+"|"+layer).style.display = 'block';
                         }
                     });
                 }
             } else {
-                markersByCategory[layer].forEach(function (marker) {
-                    categoryGroupLayers[layer].addLayer(marker)
-                });
+                mymap.getPane(layer).style.display = 'block';
             }
             visibleCategory[layer] = true;
 
@@ -852,26 +811,19 @@ function createCategoryFilter() {
                     // Remove from all visible capability layers
                     Object.keys(ambulance_capability).forEach(function (capability) {
                         if (visibleCategory[capability]) {
-                            markersByCategory[layer + "|" + capability].forEach(function (marker) {
-                                categoryGroupLayers[layer + "|" + capability].removeLayer(marker)
-                            });
+                            mymap.getPane(layer+"|"+capability).style.display = 'none';
                         }
                     });
                 } else {
                     // Remove from all visible status layers
                     Object.keys(ambulance_status).forEach(function (status) {
                         if (visibleCategory[status]) {
-                            markersByCategory[status + "|" + layer].forEach(function (marker) {
-                                categoryGroupLayers[status + "|" + layer].removeLayer(marker)
-                            });
+                            mymap.getPane(status+"|"+layer).style.display = 'none';
                         }
                     });
                 }
             } else {
-                markersByCategory[layer].forEach(function (marker) {
-                    categoryGroupLayers[layer].removeLayer(marker);
-                    mymap.removeLayer(marker);
-                });
+                mymap.getPane(layer).style.display = 'none';
             }
             visibleCategory[layer] = false;
 
