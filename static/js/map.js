@@ -819,18 +819,22 @@ function createCategoryFilter() {
             // Add the ambulances in the layer if it is checked.
             if (categoryOrStatus) {
                 if (this.value == 'status') {
-                    // Add all capability layers
+                    // Add to all visible capability layers
                     Object.keys(ambulance_capability).forEach(function (capability) {
-                        markersByCategory[layer+"|"+capability].forEach(function (marker) {
-                            categoryGroupLayers[layer+"|"+capability].addLayer(marker)
-                        });
+                        if (visibleCategory[capability]) {
+                            markersByCategory[layer + "|" + capability].forEach(function (marker) {
+                                categoryGroupLayers[layer + "|" + capability].addLayer(marker)
+                            });
+                        }
                     });
                 } else {
-                    // Add all status layers
+                    // Add to all visible status layers
                     Object.keys(ambulance_status).forEach(function (status) {
-                        markersByCategory[status+"|"+layer].forEach(function (marker) {
-                            categoryGroupLayers[status+"|"+layer].addLayer(marker)
-                        });
+                        if (visibleCategory[status]) {
+                            markersByCategory[status + "|" + layer].forEach(function (marker) {
+                                categoryGroupLayers[status + "|" + layer].addLayer(marker)
+                            });
+                        }
                     });
                 }
             } else {
@@ -845,18 +849,22 @@ function createCategoryFilter() {
             // Remove from layer if it is not checked.
             if (categoryOrStatus) {
                 if (this.value == 'status') {
-                    // Add all capability layers
+                    // Remove from all visible capability layers
                     Object.keys(ambulance_capability).forEach(function (capability) {
-                        markersByCategory[layer+"|"+capability].forEach(function (marker) {
-                            categoryGroupLayers[layer+"|"+capability].removeLayer(marker)
-                        });
+                        if (visibleCategory[capability]) {
+                            markersByCategory[layer + "|" + capability].forEach(function (marker) {
+                                categoryGroupLayers[layer + "|" + capability].removeLayer(marker)
+                            });
+                        }
                     });
                 } else {
-                    // Add all status layers
+                    // Remove from all visible status layers
                     Object.keys(ambulance_status).forEach(function (status) {
-                        markersByCategory[status+"|"+layer].forEach(function (marker) {
-                            categoryGroupLayers[status+"|"+layer].removeLayer(marker)
-                        });
+                        if (visibleCategory[status]) {
+                            markersByCategory[status + "|" + layer].forEach(function (marker) {
+                                categoryGroupLayers[status + "|" + layer].removeLayer(marker)
+                            });
+                        }
                     });
                 }
             } else {
