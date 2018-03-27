@@ -706,7 +706,7 @@ function updateDetailPanel(ambulance) {
 function createCategoryFilter() {
 
     // Add the checkbox on the top right corner for filtering.
-    var container = L.DomUtil.create('div', 'filter-options');
+    var container = L.DomUtil.create('div', 'filter-options bg-light');
 
     // Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
