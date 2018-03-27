@@ -17,7 +17,7 @@ Object.keys(ambulance_status).forEach(function(status) {
     Object.keys(ambulance_capability).forEach(function(capability) {
         markersByCategory[status+"|"+capability] = [];
         visibleCategory[status+"|"+capability] = true;
-    }
+    });
 });
 
 // add hospital
