@@ -768,6 +768,12 @@ function createCategoryFilter() {
             visibleCategory[layer] = false;
         }
 
+        // Update ambulance grid
+        var buttonId = "#grid-button-" + id;
+
+        // Updated button color/status
+        $(buttonId).css("display", display);
+
         // Modify pane
         if (this.value == 'status') {
             // Add to all visible capability panes
