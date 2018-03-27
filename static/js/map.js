@@ -14,8 +14,10 @@ var categoryGroupLayers = {};
 
 // add ambulance_status
 Object.keys(ambulance_status).forEach(function(status) {
-    markersByCategory[status] = [];
-    visibleCategory[status] = true;
+    Object.keys(ambulance_capability).forEach(function(capability) {
+        markersByCategory[status+"|"+capability] = [];
+        visibleCategory[status+"|"+capability] = true;
+    }
 });
 
 // add hospital
@@ -177,7 +179,7 @@ $(function () {
             mymap.addLayer(layer);
         });
 
-    // Create status filter on the right hand top corner
+    // Create category filter on the right hand top corner
     createCategoryFilter();
 
     // Make ambulance-selection droppable
@@ -411,14 +413,16 @@ function updateAmbulance(ambulance) {
         // Remove existing marker
         let marker = ambulanceMarkers[id];
         let status = ambulances[id].status;
-        let index = markersByCategory[status].indexOf(marker);
+        let capability = ambulances[id].capability;
+        let index = markersByCategory[status+"|"+capability].indexOf(marker);
         if (index >= 0) {
-            markersByCategory[status].splice(index, 1);
+            markersByCategory[status+"|"+capability].splice(index, 1);
         }
         mymap.removeLayer(marker);
 
         // update ambulance
         ambulances[id].status = ambulance.status;
+        ambulances[id].capability = ambulance.capability;
         ambulances[id].location.latitude = ambulance.location.latitude;
         ambulances[id].location.longitude = ambulance.location.longitude;
         ambulances[id].orientation = ambulance.orientation;
@@ -562,12 +566,12 @@ function addAmbulanceToMap(ambulance) {
             });
 
     // Add to a map to differentiate the layers between statuses.
-    markersByCategory[ambulance.status].push(ambulanceMarkers[ambulance.id]);
+    markersByCategory[ambulance.status+"|"+ambulance.capability].push(ambulanceMarkers[ambulance.id]);
 
     // If layer is not visible, remove marker
-    if (!visibleCategory[ambulance.status]) {
+    if (!visibleCategory[ambulance.status+"|"+ambulance.capability]) {
         let marker = ambulanceMarkers[ambulance.id];
-        categoryGroupLayers[ambulance.status].removeLayer(marker);
+        categoryGroupLayers[ambulance.status+"|"+ambulance.capability].removeLayer(marker);
         mymap.removeLayer(marker);
     }
 
@@ -707,24 +711,43 @@ function createCategoryFilter() {
     filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
     Object.keys(ambulance_status).forEach(function (status) {
 
-        categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
-        categoryGroupLayers[status].addTo(mymap);
+        // create disjoint group layers
+        Object.keys(ambulance_capability).forEach(function (capability) {
+            categoryGroupLayers[status+"|"+capability] = L.layerGroup(markersByCategory[status+"|"+capability]);
+            categoryGroupLayers[status+"|"+capability].addTo(mymap);
+        });
 
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-            + status + '" type="checkbox" value="" '
+        // add div
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+            + status + '" type="checkbox" value="status" '
             + (visibleCategory[status] ? 'checked' : '') + '>'
             + ambulance_status[status] + "</label></div>";
 
     });
     filterHtml += "</div>";
 
+    //Generate HTML code for checkboxes for each of the categories.
+    filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
+    Object.keys(ambulance_capability).forEach(function (capability) {
+
+        // no need to create group layers here
+
+        // add div
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-category="'
+            + capability + '" type="checkbox" value="category" '
+            + (visibleCategory[capability] ? 'checked' : '') + '>'
+            + ambulance_capability[capability] + "</label></div>";
+
+    });
+    filterHtml += "</div>";
+    
     //Generate HTML code for checkboxes for hospital
     filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
     let category = 'Hospital'
     categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
     categoryGroupLayers[category].addTo(mymap);
     filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-        + category + '" type="checkbox" value="" '
+        + category + '" type="checkbox" value="hospital" '
         + (visibleCategory[category] ? 'checked' : '') + '>'
         + category + "</label></div>";
     filterHtml += "</div>";
@@ -736,8 +759,9 @@ function createCategoryFilter() {
         categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
         categoryGroupLayers[type].addTo(mymap);
 
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-            + type + '" type="checkbox" value="" '
+        // add div
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+            + type + '" type="checkbox" value="location" '
             + (visibleCategory[type] ? 'checked' : '') + '>'
             + location_type[type] + "</label></div>";
 
@@ -761,31 +785,84 @@ function createCategoryFilter() {
     });
     mymap.addControl(new customControl());
 
-    // Add listener to remove status layer when filter checkbox is clicked
+    // Add listener to remove or add layer when filter checkbox is clicked
     $('.chk').change(function () {
 
-        // Which layer?
-        status = this.getAttribute('data-status');
+        // TODO: add/remove buttons from grid as well
 
-        // Clear layer
-        categoryGroupLayers[status].clearLayers();
+        // Which layer?
+        var layer = this.getAttribute('data-status');
+        var categoryOrStatus = this.value == 'status' || this.value == 'category'; 
+        
+        if (categoryOrStatus) {
+            if (this.value == 'status') {
+                // Clear all capability layers
+                Object.keys(ambulance_capability).forEach(function (capability) {
+                    categoryGroupLayers[layer+"|"+capability].clearLayers();
+                });
+            } else {
+                // Clear all status layers
+                Object.keys(ambulance_status).forEach(function (status) {
+                    categoryGroupLayers[status+"|"+layer].clearLayers();
+                });
+            }
+        } else {
+            // Clear layer
+            categoryGroupLayers[layer].clearLayers();
+        }
 
         if (this.checked) {
 
             // Add the ambulances in the layer if it is checked.
-            markersByCategory[status].forEach(function (marker) {
-                categoryGroupLayers[status].addLayer(marker)
-            });
-            visibleCategory[status] = true;
+            if (categoryOrStatus) {
+                if (this.value == 'status') {
+                    // Add all capability layers
+                    Object.keys(ambulance_capability).forEach(function (capability) {
+                        markersByCategory[layer+"|"+capability].forEach(function (marker) {
+                            categoryGroupLayers[layer+"|"+capability].addLayer(marker)
+                        });
+                    });
+                } else {
+                    // Add all status layers
+                    Object.keys(ambulance_status).forEach(function (status) {
+                        markersByCategory[status+"|"+layer].forEach(function (marker) {
+                            categoryGroupLayers[status+"|"+layer].addLayer(marker)
+                        });
+                    });
+                }
+            } else {
+                markersByCategory[layer].forEach(function (marker) {
+                    categoryGroupLayers[layer].addLayer(marker)
+                });
+            }
+            visibleCategory[layer] = true;
 
         } else {
 
             // Remove from layer if it is not checked.
-            markersByCategory[status].forEach(function (marker) {
-                categoryGroupLayers[status].removeLayer(marker);
-                mymap.removeLayer(marker);
-            });
-            visibleCategory[status] = false;
+            if (categoryOrStatus) {
+                if (this.value == 'status') {
+                    // Add all capability layers
+                    Object.keys(ambulance_capability).forEach(function (capability) {
+                        markersByCategory[layer+"|"+capability].forEach(function (marker) {
+                            categoryGroupLayers[layer+"|"+capability].removeLayer(marker)
+                        });
+                    });
+                } else {
+                    // Add all status layers
+                    Object.keys(ambulance_status).forEach(function (status) {
+                        markersByCategory[status+"|"+layer].forEach(function (marker) {
+                            categoryGroupLayers[status+"|"+layer].removeLayer(marker)
+                        });
+                    });
+                }
+            } else {
+                markersByCategory[layer].forEach(function (marker) {
+                    categoryGroupLayers[layer].removeLayer(marker);
+                    mymap.removeLayer(marker);
+                });
+            }
+            visibleCategory[layer] = false;
 
         }
 

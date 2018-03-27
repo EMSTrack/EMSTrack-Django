@@ -61,6 +61,8 @@ class Ambulance(UpdatedByModel):
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
 
+    # TODO: Should we add an active flag?
+
     AMBULANCE_CAPABILITY_CHOICES = \
         [(m.name, m.value) for m in AmbulanceCapability]
     capability = models.CharField(max_length=1,
