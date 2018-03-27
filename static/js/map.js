@@ -7,29 +7,25 @@ var hospitals = {};	// Store hospital details
 var locationMarkers = {};  // Store location markers
 var locations = {};	// Store location details
 
-// Initialize category layers
+// Initialize category panes
 var visibleCategory = {};
-var markersByCategory = {};
 
-// add ambulance_status and ambulance_capability
+// add status
 Object.keys(ambulance_status).forEach(function(status) {
-    Object.keys(ambulance_capability).forEach(function(capability) {
-        markersByCategory[status+"|"+capability] = [];
-    });
     visibleCategory[status] = true;
 });
+
+// add capability
 Object.keys(ambulance_capability).forEach(function(capability) {
     visibleCategory[capability] = true;
 });
 
 // add hospital
-var category = 'Hospital';
-markersByCategory[category] = [];
+var category = 'hospital';
 visibleCategory[category] = true;
 
 // add location_type
 Object.keys(location_type).forEach(function(type) {
-    markersByCategory[type] = [];
     visibleCategory[type] = false;
 });
 
@@ -413,14 +409,7 @@ function updateAmbulance(ambulance) {
     if (id in ambulances) {
 
         // Remove existing marker
-        let marker = ambulanceMarkers[id];
-        let status = ambulances[id].status;
-        let capability = ambulances[id].capability;
-        let index = markersByCategory[status+"|"+capability].indexOf(marker);
-        if (index >= 0) {
-            markersByCategory[status+"|"+capability].splice(index, 1);
-        }
-        mymap.removeLayer(marker);
+        mymap.removeLayer(ambulanceMarkers[id]);
 
         // update ambulance
         ambulances[id].status = ambulance.status;
@@ -568,9 +557,6 @@ function addAmbulanceToMap(ambulance) {
 
             });
 
-    // Add to a map to differentiate the layers between statuses.
-    markersByCategory[ambulance.status+"|"+ambulance.capability].push(ambulanceMarkers[ambulance.id]);
-
 };
 
 function addHospitalToMap(hospital) {
@@ -610,10 +596,6 @@ function addHospitalToMap(hospital) {
                         this.closePopup();
                     });
             });
-
-    // Add to a map to differentiate the layers between statuses.
-	let category = 'Hospital'
-    markersByCategory[category].push(hospitalMarkers[hospital.id]);
 
 };
 
@@ -660,9 +642,6 @@ function addLocationToMap(location) {
                         this.closePopup();
                     });
             });
-
-    // Add to a map to differentiate the layers between typees.
-    markersByCategory[location.type].push(locationMarkers[location.id]);
 
 };
 
@@ -778,55 +757,34 @@ function createCategoryFilter() {
 
         // Which layer?
         var layer = this.getAttribute('data-status');
-        var categoryOrStatus = this.value == 'status' || this.value == 'capability';
 
+        // Display or hide?
+        var display;
         if (this.checked) {
-
-            if (categoryOrStatus) {
-                if (this.value == 'status') {
-                    // Add to all visible capability panes
-                    Object.keys(ambulance_capability).forEach(function (capability) {
-                        if (visibleCategory[capability]) {
-                            mymap.getPane(layer+"|"+capability).style.display = 'block';
-                        }
-                    });
-                } else {
-                    // Add to all visible status layers
-                    Object.keys(ambulance_status).forEach(function (status) {
-                        if (visibleCategory[status]) {
-                            mymap.getPane(status+"|"+layer).style.display = 'block';
-                        }
-                    });
-                }
-            } else {
-                mymap.getPane(layer).style.display = 'block';
-            }
+            display = 'block';
             visibleCategory[layer] = true;
-
         } else {
-
-            // Remove from layer if it is not checked.
-            if (categoryOrStatus) {
-                if (this.value == 'status') {
-                    // Remove from all visible capability layers
-                    Object.keys(ambulance_capability).forEach(function (capability) {
-                        if (visibleCategory[capability]) {
-                            mymap.getPane(layer+"|"+capability).style.display = 'none';
-                        }
-                    });
-                } else {
-                    // Remove from all visible status layers
-                    Object.keys(ambulance_status).forEach(function (status) {
-                        if (visibleCategory[status]) {
-                            mymap.getPane(status+"|"+layer).style.display = 'none';
-                        }
-                    });
-                }
-            } else {
-                mymap.getPane(layer).style.display = 'none';
-            }
+            display = 'none';
             visibleCategory[layer] = false;
+        }
 
+        // Modify pane
+        if (this.value == 'status') {
+            // Add to all visible capability panes
+            Object.keys(ambulance_capability).forEach(function (capability) {
+                if (visibleCategory[capability]) {
+                    mymap.getPane(layer+"|"+capability).style.display = display;
+                }
+            });
+        } else if (this.value == 'capability') {
+            // Add to all visible status layers
+            Object.keys(ambulance_status).forEach(function (status) {
+                if (visibleCategory[status]) {
+                    mymap.getPane(status+"|"+layer).style.display = display;
+                }
+            });
+        } else {
+            mymap.getPane(layer).style.display = display;
         }
 
     });
