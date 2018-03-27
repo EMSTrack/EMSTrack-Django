@@ -795,7 +795,7 @@ function createCategoryFilter() {
 
         // Which layer?
         var layer = this.getAttribute('data-status');
-        var categoryOrStatus = this.value == 'status' || this.value == 'category'; 
+        var categoryOrStatus = this.value == 'status' || this.value == 'capability';
 
         if (categoryOrStatus) {
             if (this.value == 'status') {
