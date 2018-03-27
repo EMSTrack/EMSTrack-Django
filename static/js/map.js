@@ -770,25 +770,21 @@ function createCategoryFilter() {
             visibleCategory[layer] = false;
         }
 
-        // Modify pane
+        // Modify pane and button
         if (this.value == 'status') {
-            // Update ambulance grid buttons
-            $('button.status-' + layer).css('display', display);
-
             // Add to all visible capability panes
             Object.keys(ambulance_capability).forEach(function (capability) {
                 if (visibleCategory[capability]) {
                     mymap.getPane(layer+"|"+capability).style.display = display;
+                    $('button.status-' + layer + '.capability-' + capability).css('display', display);
                 }
             });
         } else if (this.value == 'capability') {
-            // Update ambulance grid buttons
-            $('button.capability-' + layer).css('display', display);
-
             // Add to all visible status layers
             Object.keys(ambulance_status).forEach(function (status) {
                 if (visibleCategory[status]) {
                     mymap.getPane(status+"|"+layer).style.display = display;
+                    $('button.status-' + status + '.capability-' + layer).css('display', display);
                 }
             });
         } else {
