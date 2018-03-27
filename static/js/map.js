@@ -693,12 +693,12 @@ function createCategoryFilter() {
     // Create category panes
     Object.keys(ambulance_status).forEach(function (status) {
         Object.keys(ambulance_capability).forEach(function (capability) {
-            map.createPane(status+"|"+capability);
+            mymap.createPane(status+"|"+capability);
         });
     });
-    map.createPane('hospital');
+    mymap.createPane('hospital');
     Object.keys(location_type).forEach(function (type) {
-        map.createPane(type);
+        mymap.createPane(type);
     });
 
     // Add the checkbox on the top right corner for filtering.
