@@ -197,7 +197,7 @@ class TestSetupData:
         # Locations
         cls.l1 = Location.objects.create(
             name='AED 1',
-            type=LocationType.A.name,
+            type=LocationType.a.name,
             number="1234",
             street="don't know",
             comment="no comments",
@@ -205,14 +205,14 @@ class TestSetupData:
 
         cls.l2 = Location.objects.create(
             name='Base 1',
-            type=LocationType.B.name,
+            type=LocationType.b.name,
             number="4321",
             street='Forgot',
             updated_by=cls.u1)
 
         cls.l3 = Location.objects.create(
             name='AED 2',
-            type=LocationType.A.name,
+            type=LocationType.a.name,
             number="0000",
             street='Not built yet',
             updated_by=cls.u1)
