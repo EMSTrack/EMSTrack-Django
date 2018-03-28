@@ -21,8 +21,7 @@ Object.keys(ambulance_capability).forEach(function(capability) {
 });
 
 // add hospital
-var category = 'hospital';
-visibleCategory[category] = true;
+visibleCategory['hospital'] = true;
 
 // add location_type
 Object.keys(location_type).forEach(function(type) {
@@ -705,8 +704,8 @@ function createCategoryFilter() {
     Object.keys(ambulance_capability).forEach(function (capability) {
 
         // add div
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-            + capability + '" type="checkbox" value="capability" '
+        filterHtml += '<div class="checkbox"><label><input class="chk" '
+            + 'data-status="' + capability + '" type="checkbox" value="capability" '
             + (visibleCategory[capability] ? 'checked' : '') + '>'
             + ambulance_capability[capability] + "</label></div>";
 
@@ -715,10 +714,9 @@ function createCategoryFilter() {
     
     // Generate HTML code for checkboxes for hospital
     filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
-    let category = 'hospital'
-    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-        + category + '" type="checkbox" value="hospital" '
-        + (visibleCategory[category] ? 'checked' : '') + '>'
+    filterHtml += '<div class="checkbox"><label><input class="chk" '
+        + 'data-status="hospital" type="checkbox" value="hospital" '
+        + (visibleCategory['hospital'] ? 'checked' : '') + '>'
         + 'Hospital' + "</label></div>";
     filterHtml += "</div>";
 
@@ -727,8 +725,8 @@ function createCategoryFilter() {
     Object.keys(location_type).forEach(function (type) {
 
         // add div
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-            + type + '" type="checkbox" value="location" '
+        filterHtml += '<div class="checkbox"><label><input class="chk" '
+            + 'data-status="' + type + '" type="checkbox" value="location" '
             + (visibleCategory[type] ? 'checked' : '') + '>'
             + location_type[type] + "</label></div>";
 
@@ -754,8 +752,6 @@ function createCategoryFilter() {
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('.chk').change(function () {
-
-        // TODO: add/remove buttons from grid as well
 
         // Which layer?
         var layer = this.getAttribute('data-status');
