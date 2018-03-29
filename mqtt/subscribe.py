@@ -431,7 +431,7 @@ class SubscribeClient(BaseClient):
             client.save()
 
             # log operation
-            log = ClientLog(client=client, action=status.name)
+            log = ClientLog(client=client, status=status.name)
             log.save()
 
         # offline or disconnected
@@ -460,7 +460,7 @@ class SubscribeClient(BaseClient):
                 client.save()
 
                 # log operation
-                log = ClientLog(client=client, action=status.name)
+                log = ClientLog(client=client, status=status.name)
                 log.save()
 
                 # clean up mqtt topic
