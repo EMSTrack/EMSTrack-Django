@@ -595,12 +595,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
 
         test_client = MQTTTestClient(broker,
                                      check_payload=False,
                                      debug=True)
         self.is_connected(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # Modify ambulance
 
