@@ -8,6 +8,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from io import BytesIO
 
+from login.models import Client, ClientLog, ClientStatus
 from .client import BaseClient, MQTTException
 
 from ambulance.models import Ambulance
@@ -54,10 +55,15 @@ class SubscribeClient(BaseClient):
         # self.client.message_callback_add('ambulance/+/call',
         #                                 self.on_call)
 
+        # client status handler
+        self.client.message_callback_add('user/+/client/+/status',
+                                         self.on_client_status)
+
         # subscribe
         self.subscribe('user/+/ambulance/+/data', 2)
         self.subscribe('user/+/hospital/+/data', 2)
         self.subscribe('user/+/hospital/+/equipment/+/data', 2)
+        self.subscribe('user/+/client/+/status', 2)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
@@ -314,7 +320,6 @@ class SubscribeClient(BaseClient):
         logger.debug('on_hospital: DONE')
 
     # Update hospital equipment
-
     def on_hospital_equipment(self, client, userdata, msg):
 
         logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
@@ -382,6 +387,72 @@ class SubscribeClient(BaseClient):
 
         logger.debug('on_hospital_equipment: DONE')
 
+    # update client information
+    def on_client_status(self, clnt, userdata, msg):
+
+        logger.debug("on_client_status: msg = '{}:{}'".format(msg.topic, msg.payload))
+
+        # parse topic
+        values = self.parse_topic(msg)
+        if not values:
+            return
+
+        logger.debug("on_client_status: values = '{}'".format(values))
+
+        # retrieve parsed values
+        user, status, client_id = values
+
+        # handle status
+        if status == 'online':
+
+            # user just logged in, create record
+            client = Client(client_id=client_id, user=user, status=status)
+            client.save()
+
+            # log operation
+            log = ClientLog(client=client, action=status)
+            log.save()
+
+        elif status == 'offline' or status == 'disconnected':
+
+            # user client offline or disconnected
+            try:
+
+                # retrieve client record first
+                client = Client.objects.get(client_id=client_id)
+
+                # is online?
+                if client.status != ClientStatus.O.name:
+
+                    # client is not online
+                    logger.debug('on_client_status: not online')
+
+                    # send error message to user
+                    self.send_error_message(user, msg.topic, msg.payload,
+                                            "client '{}' is not online".format(client_id))
+
+                    return
+
+                # update status
+                client.status = status
+                client.save()
+
+                # log operation
+                log = ClientLog(client=client, action=status)
+                log.save()
+
+                # clean up mqtt topic
+                self.remove_topic('/user/{}/client/{}/status'.format(user.username, client_id))
+
+            except Client.DoesNotExist:
+
+                logger.debug('on_client_status: INVALID client')
+
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "client '{}' is not valid".format(client_id))
+
+    # update calls
     def on_call(self, client, userdata, msg):
 
         logger.debug("on_call: msg = '{}:{}'".format(msg.topic, msg.payload))

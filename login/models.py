@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.contrib.gis.db import models
 
 from django.contrib.auth.models import User
@@ -239,3 +241,36 @@ class TemporaryPassword(models.Model):
 
     def __str__(self):
         return '"{}" (created on: {})'.format(self.password, self.created_on)
+
+
+# Client status
+class ClientStatus(Enum):
+    O = 'online'
+    F = 'offline'
+    D = 'disconnected'
+
+
+# Client information
+class Client(models.Model):
+
+    # mqtt clients can be up to 65536 bytes!
+    client_id = models.CharField(max_length=254, unique=True, blank=False)
+
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE)
+
+    CLIENT_STATUS_CHOICES = \
+        [(m.name, m.value) for m in ClientStatus]
+    status = models.CharField(max_length=1,
+                              choices=CLIENT_STATUS_CHOICES)
+    updated_on = models.DateTimeField(auto_now=True)
+
+
+# Client log
+class ClientLog(models.Model):
+
+    client = models.ForeignKey(Client,
+                               on_delete=models.CASCADE)
+    status = models.CharField(max_length=1,
+                              choices=Client.CLIENT_STATUS_CHOICES)
+    updated_on = models.DateTimeField(auto_now=True)

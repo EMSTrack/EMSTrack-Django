@@ -887,6 +887,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 class TestMQTTWill(TestMQTT, MQTTTestCase):
 
     def test(self):
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',
@@ -920,13 +921,13 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         client.publish('user/{}/client/{}/status'.format(broker['USERNAME'],
                                                          broker['CLIENT_ID']),
                        'online',
-                       qos=2,
+                       qos=1,
                        retain=True)
 
         # process messages
         self.loop(client)
 
-        # reconncting with same client-id will trigger will
+        # reconnecting with same client-id will trigger will
         client = MQTTTestClient(broker,
                                 check_payload=False,
                                 debug=False)
