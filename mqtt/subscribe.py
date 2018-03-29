@@ -427,11 +427,11 @@ class SubscribeClient(BaseClient):
         if status == ClientStatus.O:
 
             # user just logged in, create record
-            client = Client(client_id=client_id, user=user, status=status)
+            client = Client(client_id=client_id, user=user, status=status.name)
             client.save()
 
             # log operation
-            log = ClientLog(client=client, action=status)
+            log = ClientLog(client=client, action=status.name)
             log.save()
 
         # offline or disconnected
@@ -456,11 +456,11 @@ class SubscribeClient(BaseClient):
                     return
 
                 # update status
-                client.status = status
+                client.status = status.name
                 client.save()
 
                 # log operation
-                log = ClientLog(client=client, action=status)
+                log = ClientLog(client=client, action=status.name)
                 log.save()
 
                 # clean up mqtt topic
