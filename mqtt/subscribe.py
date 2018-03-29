@@ -408,7 +408,10 @@ class SubscribeClient(BaseClient):
         user, status, client_id = values
 
         # handle status
-        if status == 'online':
+        status = ClientStatus[status]
+
+        # online
+        if status == ClientStatus.O:
 
             # user just logged in, create record
             client = Client(client_id=client_id, user=user, status=status)
@@ -418,7 +421,8 @@ class SubscribeClient(BaseClient):
             log = ClientLog(client=client, action=status)
             log.save()
 
-        elif status == 'offline' or status == 'disconnected':
+        # offline or disconnected
+        elif status == ClientStatus.D or status == ClientStatus.F:
 
             # user client offline or disconnected
             try:
