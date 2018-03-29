@@ -103,7 +103,7 @@ class SubscribeClient(BaseClient):
                                                      error,
                                                      e))
 
-    def parse_topic(self, msg):
+    def parse_topic(self, msg, json=True):
 
         if not msg.payload:
             # empty payload
@@ -138,18 +138,23 @@ class SubscribeClient(BaseClient):
                                                      e))
             return
 
-        # parse data
-        try:
+        if json:
 
-            # Parse data into json dict
-            data = JSONParser().parse(BytesIO(msg.payload))
+            # parse data
+            try:
 
-        except Exception as e:
+                # Parse data into json dict
+                data = JSONParser().parse(BytesIO(msg.payload))
 
-            # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    "JSON formatted incorrectly")
-            return
+            except Exception as e:
+
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "JSON formatted incorrectly")
+                return
+        else:
+
+            data = msg.payload.decode()
 
         if len(values) == 5:
 
@@ -393,7 +398,7 @@ class SubscribeClient(BaseClient):
         logger.debug("on_client_status: msg = '{}:{}'".format(msg.topic, msg.payload))
 
         # parse topic
-        values = self.parse_topic(msg)
+        values = self.parse_topic(msg, json=False)
         if not values:
             return
 
