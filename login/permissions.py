@@ -2,8 +2,8 @@ import logging
 
 from functools import lru_cache
 
-import ambulance
-import hospital
+import ambulance.models
+import hospital.models
 
 logger = logging.getLogger(__name__)
 
