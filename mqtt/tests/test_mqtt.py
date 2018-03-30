@@ -824,11 +824,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-    def _test(self):
         # generate ERROR: wrong id
 
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -842,6 +837,12 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+    def _test(self):
 
         # generate ERROR: wrong id
 
