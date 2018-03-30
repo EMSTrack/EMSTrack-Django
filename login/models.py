@@ -8,11 +8,7 @@ from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 
-import ambulance.models
-
-import hospital.models
-
-import login.permissions
+from login.permissions import cache_clear
 
 
 # filters
@@ -70,7 +66,7 @@ class Permission(models.Model):
 class UserAmbulancePermission(Permission):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    ambulance = models.ForeignKey(ambulance.models.Ambulance,
+    ambulance = models.ForeignKey('ambulance.Ambulance',
                                   on_delete=models.CASCADE)
 
     class Meta:
@@ -82,7 +78,7 @@ class UserAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -94,7 +90,7 @@ class UserAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -112,7 +108,7 @@ class UserAmbulancePermission(Permission):
 class UserHospitalPermission(Permission):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    hospital = models.ForeignKey(hospital.models.Hospital,
+    hospital = models.ForeignKey('hospital.Hospital',
                                  on_delete=models.CASCADE)
 
     class Meta:
@@ -124,7 +120,7 @@ class UserHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -136,7 +132,7 @@ class UserHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -154,7 +150,7 @@ class UserHospitalPermission(Permission):
 class GroupAmbulancePermission(Permission):
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE)
-    ambulance = models.ForeignKey(ambulance.models.Ambulance,
+    ambulance = models.ForeignKey('ambulance.Ambulance',
                                   on_delete=models.CASCADE)
 
     class Meta:
@@ -166,7 +162,7 @@ class GroupAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -180,7 +176,7 @@ class GroupAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -199,7 +195,7 @@ class GroupAmbulancePermission(Permission):
 class GroupHospitalPermission(Permission):
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE)
-    hospital = models.ForeignKey(hospital.models.Hospital,
+    hospital = models.ForeignKey('hospital.Hospital',
                                  on_delete=models.CASCADE)
 
     class Meta:
@@ -211,7 +207,7 @@ class GroupHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -225,7 +221,7 @@ class GroupHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        login.permissions.cache_clear()
+        cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -274,11 +270,11 @@ class Client(models.Model):
     status = models.CharField(max_length=1,
                               choices=CLIENT_STATUS_CHOICES)
 
-    ambulance = models.ForeignKey(ambulance.models.Ambulance,
+    ambulance = models.ForeignKey('ambulance.Ambulance',
                                   on_delete=models.CASCADE,
                                   blank=True, null=True)
 
-    hospital = models.ForeignKey(hospital.models.Hospital,
+    hospital = models.ForeignKey('hospital.Hospital',
                                  on_delete=models.CASCADE,
                                  blank=True, null=True)
 
