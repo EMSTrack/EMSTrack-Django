@@ -346,7 +346,7 @@ class MQTTAclView(CsrfExemptMixin,
         try:
 
             # get user
-            user = User.objects.get(username=data.get('username'),
+            user = User.objects.get(username=username,
                                     is_active=True)
 
             if acc == 1:
@@ -474,10 +474,16 @@ class MQTTAclView(CsrfExemptMixin,
                             pass
 
                     #  - user/{username}/client/{client-id}/status
-                    elif (len(topic) == 5 and
-                          topic[2] == 'client' and
-                          topic[4] == 'status' and
-                          topic[3] == client_id):
+                    #  - user/{username}/client/{client-id}/ambulance/{id}/status
+                    elif ((len(topic) == 5 and
+                           topic[2] == 'client' and
+                           topic[4] == 'status' and
+                           topic[3] == client_id) or
+                          (len(topic) == 7 and
+                           topic[2] == 'client' and
+                           topic[4] == 'ambulance' and
+                           topic[6] == 'status' and
+                           topic[3] == client_id)):
 
                         return HttpResponse('OK')
 

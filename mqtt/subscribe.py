@@ -17,8 +17,7 @@ from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital, HospitalEquipment
-from hospital.serializers import HospitalSerializer, \
-    HospitalEquipmentSerializer
+from hospital.serializers import HospitalSerializer, HospitalEquipmentSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -59,11 +58,16 @@ class SubscribeClient(BaseClient):
         self.client.message_callback_add('user/+/client/+/status',
                                          self.on_client_status)
 
+        # client ambulance status handler
+        self.client.message_callback_add('user/+/client/+/ambulance/+/status',
+                                         self.on_client_ambulance_status)
+
         # subscribe
         self.subscribe('user/+/ambulance/+/data', 2)
         self.subscribe('user/+/hospital/+/data', 2)
         self.subscribe('user/+/hospital/+/equipment/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)
+        self.subscribe('user/+/client/+/ambulance/+/status', 2)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
@@ -417,7 +421,7 @@ class SubscribeClient(BaseClient):
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                                    "status'{}' is not valid".format(data))
+                                    "status '{}' is not valid".format(data))
 
             return
 
@@ -484,6 +488,88 @@ class SubscribeClient(BaseClient):
 
         # client is not online
         logger.debug('on_client_status: done')
+
+    # update client information
+    def on_client_ambulance_status(self, clnt, userdata, msg):
+
+        logger.debug("on_client_ambulance_status: msg = '{}:{}'".format(msg.topic, msg.payload))
+
+        # parse topic
+        values = self.parse_topic(msg, json=False)
+        if not values:
+            return
+
+        logger.debug("on_client_ambulance_status: values = '{}'".format(values))
+
+        # retrieve parsed values
+        user, data, client_id, ambulance_id = values
+
+        try:
+
+            # handle activity
+            activity = ClientActivity(data)
+
+        except ValueError:
+
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "activity '{}' is not valid".format(data))
+
+            return
+
+        logger.debug('on_client_ambulance_status: activity = ' + activity.name)
+
+        # retrieve client
+        try:
+
+            # retrieve client
+            client = Client.objects.get(client_id=client_id)
+
+        except Client.DoesNotExist:
+
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Invalid client".format(client_id))
+
+            return
+
+        # retrieve ambulance
+        try:
+
+            ambulance = Ambulance.objects.get(id=ambulance_id)
+
+        except Ambulance.DoesNotExist:
+
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Ambulance '{}' does not exist".format(ambulance_id))
+
+            return
+
+        # is client online?
+        if client.status != ClientStatus.O.name:
+
+            # client is not online
+            logger.debug('Client "" is not online'.format(client.client_id))
+
+            # send warning message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Warning: client '{}' is not online".format(client_id))
+
+        # ambulance login?
+        if activity == ClientActivity.AI:
+
+            client.ambulance = ambulance
+            client.save()
+
+        elif activity == ClientActivity.AO:
+
+            client.ambulance = None
+            client.save()
+
+        # log activity
+        log = ClientLog(client=client, status=client.status, activity=activity.name, details=ambulance.identifier)
+        log.save()
 
     # update calls
     def on_call(self, client, userdata, msg):

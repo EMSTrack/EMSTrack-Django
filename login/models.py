@@ -305,4 +305,6 @@ class ClientLog(models.Model):
     activity = models.CharField(max_length=2,
                                 choices=CLIENT_ACTIVITIES_CHOICES)
 
+    details = models.CharField(max_length=100, blank=True, null=True)
+
     updated_on = models.DateTimeField(auto_now=True)
