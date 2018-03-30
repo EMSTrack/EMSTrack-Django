@@ -9,7 +9,7 @@ from rest_framework.renderers import JSONRenderer
 import json
 
 from emstrack.tests.util import point2str
-from login.models import UserProfile, Client, ClientStatus, ClientLog
+from login.models import UserProfile, Client, ClientStatus, ClientLog, ClientActivity
 from login.permissions import get_permissions
 
 from login.serializers import UserProfileSerializer
@@ -1023,10 +1023,50 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
 
         # check record log
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.HS.name)
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # Ambulance handshake: ambulance logout
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance logout')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AO.name)
+        self.assertEqual(obj.details, self.a1.identifier)
 
         # Client handshake: offline
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
@@ -1045,9 +1085,15 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 2)
+        self.assertEqual(len(obj), 4)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
-        self.assertEqual(obj[1].status, ClientStatus.F.name)
+        self.assertEqual(obj[0].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].activity, ClientActivity.AI.name)
+        self.assertEqual(obj[2].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].activity, ClientActivity.AO.name)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
+        self.assertEqual(obj[3].activity, ClientActivity.HS.name)
 
 
 class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
