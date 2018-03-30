@@ -600,6 +600,63 @@ class SubscribeClient(BaseClient):
             client.ambulance = None
             client.save()
 
+        else:
+
+            if client.ambulance is None or client.ambulance != ambulance:
+
+                # ambulance does not match request
+                # send warning message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "Client not logged in ambulance '{}'".format(ambulance_id))
+                return
+
+            if activity == ClientActivity.AR:
+
+                if ambulance.location_client is None:
+
+                    # location_client is available
+                    status = 'start'
+
+                    # assign new location client
+                    ambulance.location_client = client
+                    ambulance.save()
+
+                else:
+
+                    # location_client is already taken
+                    status = 'denied'
+
+                # TODO: timeout start condition if client does not respond
+
+            elif activity == ClientActivity.AS or activity == ClientActivity.AT:
+
+                if ambulance.location_client is None or ambulance.location_client != client:
+
+                    # ambulance does not match request
+                    # send warning message to user
+                    self.send_error_message(user, msg.topic, msg.payload,
+                                            "Client '{}' not authorized to stream ambulance '{}' location ".format(
+                                                client_id, ambulance_id))
+                    return
+
+                if activity == ClientActivity.AS:
+
+                    # All good, go ahead
+                    status = 'ok'
+
+                else:  # activity == ClientActivity.AT
+
+                    # vacate location client
+                    ambulance.location_client = None
+                    ambulance.save()
+
+                    # remove status
+                    status = None
+
+            # publish status to 'ambulance/{}/location_client/{}/status'
+            self.publish('ambulance/{}/location_client/{}/status'.format(ambulance_id, client_id),
+                         status, retain=True)
+
         # log activity
         log = ClientLog(client=client, status=client.status, activity=activity.name, details=ambulance.identifier)
         log.save()
