@@ -266,11 +266,11 @@ class Client(models.Model):
 
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE,
-                                  null=True)
+                                  blank=True, null=True)
 
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
-                                 null=True)
+                                 bliank=True, null=True)
 
     updated_on = models.DateTimeField(auto_now=True)
 
