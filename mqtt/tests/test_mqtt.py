@@ -767,6 +767,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.F.name)
+
     def _test(self):
 
         # generate ERROR: JSON formated incorrectly
