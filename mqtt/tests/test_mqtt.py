@@ -606,7 +606,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
         self.loop(test_client)
+        subscribe_client.loop()
 
         # Modify ambulance
 
