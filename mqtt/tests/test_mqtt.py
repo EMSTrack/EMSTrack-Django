@@ -781,6 +781,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.F.name)
 
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+
     def _test(self):
 
         # generate ERROR: JSON formated incorrectly
@@ -1037,6 +1042,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
@@ -1115,6 +1124,10 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.D.name)
@@ -1125,7 +1138,5 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.D.name)
 
-        # wait for disconnect
-        test_client.wait()
 
 

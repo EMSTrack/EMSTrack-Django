@@ -464,8 +464,6 @@ class SubscribeClient(BaseClient):
                     self.send_error_message(user, msg.topic, msg.payload,
                                             "client '{}' is not online".format(client_id))
 
-                    return
-
                 # update status
                 client.status = status.name
                 client.save()
