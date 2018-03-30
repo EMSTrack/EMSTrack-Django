@@ -1110,7 +1110,6 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
 
         # wait for disconnect
         subscribe_client.wait()
-        test_client.wait()
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
