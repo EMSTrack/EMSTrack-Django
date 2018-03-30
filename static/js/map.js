@@ -287,7 +287,9 @@ function onConnect() {
 
         // add location
         $.each(data, function (index) {
-        	addLocationToMap(data[index]);
+            var location = data[index];
+            console.log('Adding location: ' + location);
+        	addLocationToMap(location);
         });
         
     });
