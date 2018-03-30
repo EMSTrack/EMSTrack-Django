@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>Client</h1>
+
+            <h3>Details:</h3>
+
+            <p>
+                <strong>Name:</strong>
+                {{ client.client_id }}
+            </p>
+
+            <p>
+                <strong>User:</strong>
+                {{ client.user.username }}
+            </p>
+
+            <p>
+                <strong>Status</strong>
+                {{ client.status|get_client_status }}
+            </p>
+
+            <p>
+                <strong>Ambulance</strong>
+                {{ client.ambulance }}
+            </p>
+
+            <p>
+                <strong>Hospital</strong>
+                {{ client.hospital }}
+            </p>
+
+            <p>
+                <strong>Updated on</strong>
+                {{ client.updated_on }}
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>Log:</h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Status</th>
+                    <th>Activity</th>
+                    <th>Details</th>
+                    <th>Updated On</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for clientlog in clientlog_list %}
+                <tr>
+                    <td>
+                        {{ clientlog.status|get_client_status }}
+                    </td>
+                    <td>
+                        {{ clientlog.activity|get_client_activity }}
+                    </td>
+                    <td>
+                        {{ clientlog.details }}
+                    </td>
+                    <td>
+                        {{ clientlog.updated_on }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

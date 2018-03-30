@@ -22,6 +22,10 @@ from login.permissions import cache_clear
 def get_client_status(key):
     return ClientStatus[key].value
 
+@register.filter
+def get_client_activity(key):
+    return ClientActivity[key].value
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User,

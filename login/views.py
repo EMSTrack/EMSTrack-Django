@@ -217,9 +217,24 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 
 
 # Clients
+
 class ClientListView(ListView):
     model = Client
     ordering = ['-status', '-updated_on']
+
+
+class ClientDetailView(DetailView):
+    model = Client
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve log
+        context['clientlog_list'] = self.object.clientlog_set.all()
+
+        return context
 
 
 # Restart
