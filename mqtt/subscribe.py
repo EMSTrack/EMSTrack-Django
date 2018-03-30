@@ -70,7 +70,7 @@ class SubscribeClient(BaseClient):
 
         return True
 
-    def send_error_message(self, username, topic, payload, error):
+    def send_error_message(self, username, topic, payload, error, qos=2):
 
         logger.debug("send_error_message: {}, '{}:{}': '{}'".format(username,
                                                                     topic,
@@ -90,7 +90,7 @@ class SubscribeClient(BaseClient):
                 'payload': payload,
                 'error': error
             })
-            self.publish('user/{}/error'.format(username), message)
+            self.publish('user/{}/error'.format(username), message, qos=qos)
 
         except Exception as e:
 
