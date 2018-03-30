@@ -214,25 +214,22 @@ class BaseClient:
 
     def publish_topic(self, topic, payload, qos=0, retain=False):
 
-        if self.active:
+        # serializer?
+        if isinstance(payload, serializers.BaseSerializer):
+            payload = JSONRenderer().render(payload.data)
+        else:
+            payload = JSONRenderer().render(payload)
 
-            # serializer?
-            if isinstance(payload, serializers.BaseSerializer):
-                payload = JSONRenderer().render(payload.data)
-            else:
-                payload = JSONRenderer().render(payload)
-
-            # Publish to topic
-            self.publish(topic,
-                         payload,
-                         qos=qos,
-                         retain=retain)
+        # Publish to topic
+        self.publish(topic,
+                     payload,
+                     qos=qos,
+                     retain=retain)
 
     def remove_topic(self, topic, qos=0):
 
-        if self.active:
-            # Publish null to retained topic
-            self.publish(topic,
-                         None,
-                         qos=qos,
-                         retain=True)
+        # Publish null to retained topic
+        self.publish(topic,
+                     None,
+                     qos=qos,
+                     retain=True)

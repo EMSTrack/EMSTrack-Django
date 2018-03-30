@@ -69,6 +69,14 @@ class PublishClient(BaseClient):
         # call super
         super().on_disconnect(client, userdata, rc)
 
+    def publish_topic(self, topic, payload, qos=0, retain=False):
+        if self.active:
+            super().publish_topic(topic, payload, qos, retain)
+
+    def remove_topic(self, topic, qos=0):
+        if self.active:
+            super().remove_topic(topic, qos)
+
     def publish_settings(self, qos=2, retain=True):
         self.publish_topic('settings',
                            SettingsView.get_settings(),
