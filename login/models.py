@@ -5,6 +5,7 @@ from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from django.core.validators import MinValueValidator
+from django.template.defaulttags import register
 from django.urls import reverse
 
 from ambulance.models import Ambulance
@@ -14,6 +15,12 @@ from hospital.models import Hospital
 
 # Profile
 from login.permissions import cache_clear
+
+# filters
+
+@register.filter
+def get_client_status(key):
+    return ClientStatus[key].value
 
 
 class UserProfile(models.Model):
