@@ -1109,6 +1109,9 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
         subscribe_client.loop()
 
+        # sleep
+        time.sleep(1)
+
         # wait for disconnect
         subscribe_client.wait()
 
