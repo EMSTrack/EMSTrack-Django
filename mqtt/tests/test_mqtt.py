@@ -756,6 +756,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.timestamp, timestamp)
         self.assertEqual(point2str(obj.location), point2str(location))
 
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+    def _test(self):
+
         # generate ERROR: JSON formated incorrectly
 
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
@@ -769,8 +774,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
-
-    def _test(self):
 
         # generate ERROR: JSON formated incorrectly
 
