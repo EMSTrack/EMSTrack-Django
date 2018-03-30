@@ -258,7 +258,7 @@ function onConnect() {
     onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
     onlineMessage.qos = 2;
     onlineMessage.retained = true;
-    mqttClient.send(message);
+    mqttClient.send(onlineMessage);
     console.log('Sent online message');
 
     // retrieve profile from api
@@ -299,9 +299,9 @@ function onConnect() {
         status = JSON.stringify({'status': this.value});
 
         // Send message
-        let id = $('#ambulance-detail-id').val();
-        let topic = "user/" + username + "/ambulance/" + id + "/data";
-        let message = new Paho.MQTT.Message(status);
+        var id = $('#ambulance-detail-id').val();
+        var topic = "user/" + username + "/ambulance/" + id + "/data";
+        var message = new Paho.MQTT.Message(status);
         message.destinationName = topic
         message.qos = 2;
         mqttClient.send(message);
