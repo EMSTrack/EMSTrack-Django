@@ -1226,5 +1226,5 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
         self.assertEqual(len(obj), 3)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
-        self.assertEqual(obj[0].status, ClientStatus.O.name)
-        self.assertEqual(obj[1].status, ClientStatus.F.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].status, ClientStatus.F.name)
