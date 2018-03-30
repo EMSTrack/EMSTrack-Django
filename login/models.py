@@ -270,7 +270,7 @@ class Client(models.Model):
 
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
-                                 bliank=True, null=True)
+                                 blank=True, null=True)
 
     updated_on = models.DateTimeField(auto_now=True)
 
