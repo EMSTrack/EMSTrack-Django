@@ -423,6 +423,9 @@ class SubscribeClient(BaseClient):
 
             return
 
+        # client is not online
+        logger.debug('on_client_status: status = ' + status)
+
         # online
         if status == ClientStatus.O:
 
@@ -473,6 +476,9 @@ class SubscribeClient(BaseClient):
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
                                         "client '{}' is not valid".format(client_id))
+
+        # client is not online
+        logger.debug('on_client_status: done')
 
     # update calls
     def on_call(self, client, userdata, msg):

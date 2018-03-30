@@ -606,16 +606,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
-
-        # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
+        self.loop(test_client)
 
         # Modify ambulance
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        # retrieve message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
 
         # publish change
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
