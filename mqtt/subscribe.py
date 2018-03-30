@@ -405,32 +405,22 @@ class SubscribeClient(BaseClient):
         logger.debug("on_client_status: values = '{}'".format(values))
 
         # retrieve parsed values
-        user, status, client_id = values
+        user, data, client_id = values
 
         try:
 
-            # client is not online
-            logger.debug('on_client_status: status = ' + repr(status))
-
             # handle status
-            status = ClientStatus(status)
+            status = ClientStatus(data)
 
-            # client is not online
-            logger.debug('on_client_status: status = ' + status)
-
-        except Exception as e:
-
-            # client is not online
-            logger.debug('on_client_status: invalid status, ' + str(e))
+        except ValueError:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                                    "status'{}' is not valid".format(status))
+                                    "status'{}' is not valid".format(data))
 
             return
 
-        # client is not online
-        logger.debug('on_client_status: status = ' + status)
+        logger.debug('on_client_status: status = ' + status.name)
 
         # online
         if status == ClientStatus.O:
