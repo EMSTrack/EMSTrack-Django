@@ -1102,15 +1102,12 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Client handshake: force disconnected
+        # Client handshake: force disconnected to trigger will
         test_client.client._sock.close()
 
         # process messages
         subscribe_client.loop()
         subscribe_client.loop()
-
-        # sleep
-        time.sleep(1)
 
         # wait for disconnect
         subscribe_client.wait()
