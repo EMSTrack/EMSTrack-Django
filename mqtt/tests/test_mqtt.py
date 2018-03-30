@@ -767,6 +767,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
