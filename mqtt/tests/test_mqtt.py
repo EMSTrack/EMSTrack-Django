@@ -1107,6 +1107,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
 
         # process messages
         subscribe_client.loop()
+        subscribe_client.loop()
 
         # sleep
         time.sleep(1)
