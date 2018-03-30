@@ -421,7 +421,7 @@ class SubscribeClient(BaseClient):
         except Exception as e:
 
             # client is not online
-            logger.debug('on_client_status: invalid status, ' + e)
+            logger.debug('on_client_status: invalid status, ' + str(e))
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
