@@ -253,7 +253,7 @@ class ClientStatus(Enum):
 # Client information
 class Client(models.Model):
 
-    # mqtt clients can be up to 65536 bytes!
+    # WARNING: mqtt client_id's can be up to 65536 bytes!
     client_id = models.CharField(max_length=254, unique=True, blank=False)
 
     user = models.ForeignKey(User,
@@ -263,7 +263,25 @@ class Client(models.Model):
         [(m.name, m.value) for m in ClientStatus]
     status = models.CharField(max_length=1,
                               choices=CLIENT_STATUS_CHOICES)
+
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE,
+                                  null=True)
+
+    hospital = models.ForeignKey(Hospital,
+                                 on_delete=models.CASCADE,
+                                 null=True)
+
     updated_on = models.DateTimeField(auto_now=True)
+
+
+# Client activity
+class ClientActivity(Enum):
+    HS = 'handshake'
+    AI = 'ambulance login'
+    AO = 'ambulance logout'
+    HI = 'hospital login'
+    HO = 'hospital logout'
 
 
 # Client log
@@ -271,6 +289,13 @@ class ClientLog(models.Model):
 
     client = models.ForeignKey(Client,
                                on_delete=models.CASCADE)
+
     status = models.CharField(max_length=1,
                               choices=Client.CLIENT_STATUS_CHOICES)
+
+    CLIENT_ACTIVITIES_CHOICES = \
+        [(m.name, m.value) for m in ClientActivity]
+    activity = models.CharField(max_length=1,
+                                choices=CLIENT_ACTIVITIES_CHOICES)
+
     updated_on = models.DateTimeField(auto_now=True)

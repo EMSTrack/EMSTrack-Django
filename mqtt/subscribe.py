@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from io import BytesIO
 
-from login.models import Client, ClientLog, ClientStatus
+from login.models import Client, ClientLog, ClientStatus, ClientActivity
 from .client import BaseClient
 
 from ambulance.models import Ambulance
@@ -118,23 +118,24 @@ class SubscribeClient(BaseClient):
 
         # print('values = {}'.format(values))
 
+        username = '__unknown__'
         try:
 
             # retrieve user
+            username = values[1]
+
             # print(User.objects.all())
             user = User.objects.get(username=values[1])
 
-        except ObjectDoesNotExist as e:
+        except User.DoesNotExist as e:
 
             # does not know username
             # cannot send error message to user
             logger.warning(('mqtt.SubscribeClient: {}, ' +
                             "topic = '{}:{}', " +
-                            "error = '{}', " +
                             "exception = {}").format(username,
-                                                     topic,
-                                                     payload,
-                                                     error,
+                                                     msg.topic,
+                                                     msg.payload,
                                                      e))
             return
 
@@ -441,7 +442,7 @@ class SubscribeClient(BaseClient):
             client.save()
 
             # log operation
-            log = ClientLog(client=client, status=status.name)
+            log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
             log.save()
 
         # offline or disconnected
@@ -468,7 +469,7 @@ class SubscribeClient(BaseClient):
                 client.save()
 
                 # log operation
-                log = ClientLog(client=client, status=status.name)
+                log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
                 log.save()
 
                 # clean up mqtt topic
