@@ -24,7 +24,7 @@
                 {% for client in client_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'login:client_detail' pk=client.id %}">{{ client.client_id }}</a>
+                        <a href="{% url 'login:client_list' pk=client.id %}">{{ client.client_id }}</a>
                     </td>
                     <td>
                         {{ client.user.username }}
