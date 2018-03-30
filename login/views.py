@@ -35,7 +35,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission
+    GroupHospitalPermission, Client
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -214,6 +214,12 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
+
+
+# Clients
+class ClientListView(ListView):
+    model = Client
+    ordering = ['updated_on']
 
 
 # Restart

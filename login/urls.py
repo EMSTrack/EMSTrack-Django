@@ -77,7 +77,13 @@ urlpatterns = [
         staff_member_required(views.GroupAdminUpdateView.as_view()),
         name='group_update'),
 
+    # client admin
+    url(r'^client/$',
+        staff_member_required(views.ClientListView.as_view()),
+        name='client_list'),
+
     # restart
+
     url(r'^restart/$',
         views.RestartView.as_view(),
         name='restart'),
