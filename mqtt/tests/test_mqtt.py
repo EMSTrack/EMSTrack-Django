@@ -764,7 +764,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
                             '{ "value": ',
-                            qos=0)
+                            qos=2)
 
         # process messages
         self.loop(test_client, subscribe_client)
