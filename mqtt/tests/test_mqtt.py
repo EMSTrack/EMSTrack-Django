@@ -1103,6 +1103,8 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Client handshake: disconnected
+        test_client.client.close()
+
         # reconnecting with same client-id will trigger will
         test_client = MQTTTestClient(broker,
                                      check_payload=False,
