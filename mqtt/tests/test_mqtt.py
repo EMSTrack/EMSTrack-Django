@@ -1185,10 +1185,10 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # reconnecting with same client-id
-        client = MQTTTestClient(broker,
+        test_client = MQTTTestClient(broker,
                                 check_payload=False,
                                 debug=False)
-        self.is_connected(client)
+        self.is_connected(test_client)
 
         # Client handshake: online
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
