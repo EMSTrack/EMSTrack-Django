@@ -1108,6 +1108,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # process messages
+        test_client.loop()
         subscribe_client.loop()
 
         # check record
