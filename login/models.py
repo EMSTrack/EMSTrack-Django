@@ -8,9 +8,9 @@ from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 
-from ambulance.models import Ambulance
+import ambulance.models
 
-from hospital.models import Hospital
+import hospital.models
 
 
 # Profile
@@ -72,7 +72,7 @@ class Permission(models.Model):
 class UserAmbulancePermission(Permission):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    ambulance = models.ForeignKey(Ambulance,
+    ambulance = models.ForeignKey(ambulance.models.Ambulance,
                                   on_delete=models.CASCADE)
 
     class Meta:
@@ -114,7 +114,7 @@ class UserAmbulancePermission(Permission):
 class UserHospitalPermission(Permission):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)
-    hospital = models.ForeignKey(Hospital,
+    hospital = models.ForeignKey(hospital.models.Hospital,
                                  on_delete=models.CASCADE)
 
     class Meta:
@@ -156,7 +156,7 @@ class UserHospitalPermission(Permission):
 class GroupAmbulancePermission(Permission):
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE)
-    ambulance = models.ForeignKey(Ambulance,
+    ambulance = models.ForeignKey(ambulance.models.Ambulance,
                                   on_delete=models.CASCADE)
 
     class Meta:
@@ -201,7 +201,7 @@ class GroupAmbulancePermission(Permission):
 class GroupHospitalPermission(Permission):
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE)
-    hospital = models.ForeignKey(Hospital,
+    hospital = models.ForeignKey(hospital.models.Hospital,
                                  on_delete=models.CASCADE)
 
     class Meta:
@@ -276,11 +276,11 @@ class Client(models.Model):
     status = models.CharField(max_length=1,
                               choices=CLIENT_STATUS_CHOICES)
 
-    ambulance = models.ForeignKey(Ambulance,
+    ambulance = models.ForeignKey(ambulance.models.Ambulance,
                                   on_delete=models.CASCADE,
                                   blank=True, null=True)
 
-    hospital = models.ForeignKey(Hospital,
+    hospital = models.ForeignKey(hospital.models.Hospital,
                                  on_delete=models.CASCADE,
                                  blank=True, null=True)
 
