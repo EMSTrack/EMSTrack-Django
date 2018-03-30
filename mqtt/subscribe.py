@@ -426,6 +426,8 @@ class SubscribeClient(BaseClient):
         if status == ClientStatus.O:
 
             # user just logged in, create record
+            # TODO: Do clients that reconnect run this again?
+            #       If so cannot create because client_id should be unique
             client = Client(client_id=client_id, user=user, status=status.name)
             client.save()
 

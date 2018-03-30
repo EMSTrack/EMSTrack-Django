@@ -981,3 +981,151 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         # wait for disconnect
         client.wait()
 
+
+class TestMQTTHandshake(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Client handshake: offline
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.F.name)
+
+
+class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+        broker['WILL'] = {
+            'topic': 'user/{}/client/{}/status'.format(username, client_id),
+            'payload': 'disconnected'
+        }
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Client handshake: disconnected
+        # reconnecting with same client-id will trigger will
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=False)
+        self.is_connected(test_client)
+
+        test_client.expect('user/{}/client/{}/status'.format(username, client_id),
+                           'disconnected')
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.D.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.D.name)
+
+        # wait for disconnect
+        test_client.wait()
+
+
