@@ -824,58 +824,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
-        # generate ERROR: wrong id
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               1111),
-                            json.dumps({
-                                'status': AmbulanceStatus.OS.name,
-                            }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-    def _test(self):
-
-        # generate ERROR: wrong id
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                              1111),
-                            json.dumps({
-                                'comment': 'comment',
-                            }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
-        # generate ERROR: wrong id
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                           self.h1.id,
-                                                                           'unknown'),
-                            json.dumps({
-                                'comment': 'comment',
-                            }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
         test_invalid_serializer = False
         if test_invalid_serializer:
-            # WARNING: The next two tests prevent the test database from
+            # WARNING: The next tests prevent the test database from
             # being removed at the end of the test. It is not clear why
             # but it could be django bug related to the LiveServerThread
             # not being thread safe:
@@ -887,6 +838,49 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             # example:
             #
             #     ./manage test ambulance.test
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+            test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                                   1111),
+                                json.dumps({
+                                    'status': AmbulanceStatus.OS.name,
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+            test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                                  1111),
+                                json.dumps({
+                                    'comment': 'comment',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+            test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                               self.h1.id,
+                                                                               'unknown'),
+                                json.dumps({
+                                    'comment': 'comment',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
 
             # generate ERROR: invalid serializer
 
