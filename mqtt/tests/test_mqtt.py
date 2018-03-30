@@ -1109,12 +1109,8 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
                                      debug=False)
         self.is_connected(test_client)
 
-        test_client.expect('user/{}/client/{}/status'.format(username, client_id),
-                           'disconnected')
-        self.is_subscribed(test_client)
-
         # process messages
-        self.loop(test_client)
+        test_client.loop()
         subscribe_client.loop()
 
         # wait for disconnect
