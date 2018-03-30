@@ -409,8 +409,14 @@ class SubscribeClient(BaseClient):
 
         try:
 
+            # client is not online
+            logger.debug('on_client_status: status = ' + status)
+
             # handle status
             status = ClientStatus(status)
+
+            # client is not online
+            logger.debug('on_client_status: status = ' + status)
 
         except ValueError:
 
