@@ -410,7 +410,7 @@ class SubscribeClient(BaseClient):
         try:
 
             # client is not online
-            logger.debug('on_client_status: status = ' + status)
+            logger.debug('on_client_status: status = ' + repr(status))
 
             # handle status
             status = ClientStatus(status)
