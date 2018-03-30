@@ -533,7 +533,7 @@ class MQTTTestClient(BaseClient):
                                                                              self.expecting,
                                                                              msg.payload))
 
-    def expect(self, topic, msg = None, qos = 2, remove = False):
+    def expect(self, topic, msg=None, qos=2, remove=False):
 
         # pattern topic?
         if '+' in topic or '#' in topic:
@@ -553,8 +553,9 @@ class MQTTTestClient(BaseClient):
             self.subscribe(topic, qos)
 
         else:
+
             logger.debug("Already subscribed to topic '{}'".format(topic))
 
         self.expecting += 1
         self.expecting_messages[topic].append(msg)
-        
+
