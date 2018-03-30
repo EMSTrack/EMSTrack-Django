@@ -2,8 +2,8 @@ import logging
 
 from functools import lru_cache
 
-from ambulance.models import Ambulance
-from hospital.models import Hospital
+import ambulance.models
+import hospital.models
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ cache_info = get_permissions.cache_info
 class Permissions:
     object_fields = ('ambulance', 'hospital')
     profile_fields = ('ambulances', 'hospitals')
-    models = (Ambulance, Hospital)
+    models = (ambulance.models.Ambulance, hospital.models.Hospital)
 
     def __init__(self, user, **kwargs):
 
