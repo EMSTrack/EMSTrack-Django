@@ -1096,6 +1096,105 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[3].activity, ClientActivity.HS.name)
 
 
+class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.HS.name)
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # Client handshake: offline
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 4)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[0].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].activity, ClientActivity.AI.name)
+        self.assertEqual(obj[2].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].details, self.a1.identifier)
+        self.assertEqual(obj[2].activity, ClientActivity.AO.name)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
+        self.assertEqual(obj[3].activity, ClientActivity.HS.name)
+
+
 class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
 
     def test(self):
