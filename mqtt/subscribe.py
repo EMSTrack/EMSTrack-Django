@@ -2,7 +2,6 @@ import logging
 
 from django.contrib.auth.models import User
 
-from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 
 from rest_framework.parsers import JSONParser
@@ -10,7 +9,7 @@ from rest_framework.renderers import JSONRenderer
 from io import BytesIO
 
 from login.models import Client, ClientLog, ClientStatus
-from .client import BaseClient, MQTTException
+from .client import BaseClient
 
 from ambulance.models import Ambulance
 from ambulance.models import Call
@@ -197,7 +196,7 @@ class SubscribeClient(BaseClient):
             # retrieve ambulance
             ambulance = Ambulance.objects.get(id=ambulance_id)
 
-        except ObjectDoesNotExist:
+        except Ambulance.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
@@ -279,7 +278,7 @@ class SubscribeClient(BaseClient):
             # retrieve hospital
             hospital = Hospital.objects.get(id=hospital_id)
 
-        except ObjectDoesNotExist:
+        except Hospital.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
@@ -346,7 +345,7 @@ class SubscribeClient(BaseClient):
             hospital_equipment = HospitalEquipment.objects.get(hospital=hospital_id,
                                                                equipment__name=equipment_name)
 
-        except ObjectDoesNotExist:
+        except HospitalEquipment.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
@@ -507,7 +506,7 @@ class SubscribeClient(BaseClient):
 
             call = Call.objects.get(id=call_id)
 
-        except ObjectDoesNotExist:
+        except Call.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
