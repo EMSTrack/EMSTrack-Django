@@ -219,7 +219,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 # Clients
 class ClientListView(ListView):
     model = Client
-    ordering = ['updated_on']
+    ordering = ['-status', '-updated_on']
 
 
 # Restart

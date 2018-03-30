@@ -288,7 +288,6 @@ function onConnect() {
         // add location
         $.each(data, function (index) {
             var location = data[index];
-            console.log('Adding location: ' + location);
         	addLocationToMap(location);
         });
         
@@ -629,7 +628,7 @@ function addLocationToMap(location) {
     locations[location.id] = location;
 
     // set icon by status
-    let icon = locationIcon;
+    var icon = locationIcon;
     if (location.type === 'a')
         icon = defibrillatorIcon;
     else if (location.type === 'b')
