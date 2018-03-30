@@ -474,9 +474,6 @@ class SubscribeClient(BaseClient):
                 ambulance_id = None
                 if client.ambulance is not None:
 
-                    # logout ambulance
-                    client.ambulance = None
-
                     # log activity
                     log = ClientLog(client=client, status=status.name,
                                     activity=ClientActivity.AO.name, details=client.ambulance.identifier)
@@ -486,11 +483,11 @@ class SubscribeClient(BaseClient):
                     self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username, 
                                                                                       client_id, client.ambulance.id))
 
+                    # logout ambulance
+                    client.ambulance = None
+
                 # has hospital?
                 if client.hospital is not None:
-
-                    # logout hospital
-                    client.hospital = None
 
                     # log activity
                     log = ClientLog(client=client, status=status.name,
@@ -500,6 +497,9 @@ class SubscribeClient(BaseClient):
                     # clean up mqtt topic
                     self.remove_topic('/user/{}/client/{}/hospital/{}/status'.format(user.username,
                                                                                      client_id, client.hospital.id))
+
+                    # logout hospital
+                    client.hospital = None
 
                 # save client
                 client.save()
