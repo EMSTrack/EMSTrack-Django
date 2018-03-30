@@ -295,7 +295,7 @@ class ClientLog(models.Model):
 
     CLIENT_ACTIVITIES_CHOICES = \
         [(m.name, m.value) for m in ClientActivity]
-    activity = models.CharField(max_length=1,
+    activity = models.CharField(max_length=2,
                                 choices=CLIENT_ACTIVITIES_CHOICES)
 
     updated_on = models.DateTimeField(auto_now=True)
