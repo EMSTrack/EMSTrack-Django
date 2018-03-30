@@ -12,9 +12,7 @@ import ambulance.models
 
 import hospital.models
 
-
-# Profile
-from login.permissions import cache_clear
+import login.permissions
 
 
 # filters
@@ -84,7 +82,7 @@ class UserAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -96,7 +94,7 @@ class UserAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -126,7 +124,7 @@ class UserHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -138,7 +136,7 @@ class UserHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -168,7 +166,7 @@ class GroupAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -182,7 +180,7 @@ class GroupAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -213,7 +211,7 @@ class GroupHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -227,7 +225,7 @@ class GroupHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        login.permissions.cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
