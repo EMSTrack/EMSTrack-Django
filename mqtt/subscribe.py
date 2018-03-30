@@ -469,15 +469,48 @@ class SubscribeClient(BaseClient):
 
                 # update status
                 client.status = status.name
+
+                # has ambulance?
+                ambulance_id = None
+                if client.ambulance is not None:
+
+                    # logout ambulance
+                    client.ambulance = None
+
+                    # log activity
+                    log = ClientLog(client=client, status=status.name,
+                                    activity=ClientActivity.AO.name, details=client.ambulance.identifier)
+                    log.save()
+
+                    # clean up mqtt topic
+                    self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username, 
+                                                                                      client_id, client.ambulance.id))
+
+                # has hospital?
+                if client.hospital is not None:
+
+                    # logout hospital
+                    client.hospital = None
+
+                    # log activity
+                    log = ClientLog(client=client, status=status.name,
+                                    activity=ClientActivity.HO.name, details=client.hospital.name)
+                    log.save()
+
+                    # clean up mqtt topic
+                    self.remove_topic('/user/{}/client/{}/hospital/{}/status'.format(user.username,
+                                                                                     client_id, client.hospital.id))
+
+                # save client
                 client.save()
 
                 # log operation
                 log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
                 log.save()
 
-                # clean up mqtt topic
+                # clean up mqtt topics
                 self.remove_topic('/user/{}/client/{}/status'.format(user.username, client_id))
-
+                
             except Client.DoesNotExist:
 
                 logger.debug('on_client_status: INVALID client')
