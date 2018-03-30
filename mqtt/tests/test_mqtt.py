@@ -1060,7 +1060,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, self.a1.id)
+        self.assertEqual(clnt.ambulance, None)
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
