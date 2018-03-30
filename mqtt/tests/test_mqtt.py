@@ -9,7 +9,7 @@ from rest_framework.renderers import JSONRenderer
 import json
 
 from emstrack.tests.util import point2str
-from login.models import UserProfile
+from login.models import UserProfile, Client, ClientStatus, ClientLog
 from login.permissions import get_permissions
 
 from login.serializers import UserProfileSerializer
@@ -611,6 +611,14 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # check record
+        obj = Client.objects.get(client_id=client_id)
+        self.assertEqual(obj.status, ClientStatus.O)
+
+        # check record log
+        obj = ClientLog.objects.get(client_id=client_id)
+        self.assertEqual(obj.status, ClientStatus.O)
+
         # Modify ambulance
 
         # retrieve current ambulance status
@@ -958,3 +966,4 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
 
         # wait for disconnect
         client.wait()
+
