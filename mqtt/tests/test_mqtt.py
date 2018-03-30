@@ -612,11 +612,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        obj = Client.objects.get(client_id=client_id)
-        self.assertEqual(obj.status, ClientStatus.O.name)
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
-        obj = ClientLog.objects.get(client_id=client_id)
+        obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Modify ambulance
