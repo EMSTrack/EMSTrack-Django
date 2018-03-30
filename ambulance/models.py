@@ -85,7 +85,8 @@ class Ambulance(UpdatedByModel):
     # location client
     location_client = models.ForeignKey('login.Client',
                                         on_delete=models.CASCADE,
-                                        blank=True, null=True)
+                                        blank=True, null=True,
+                                        related_name='client_set')
 
     # default value for _loaded_values
     _loaded_values = None
