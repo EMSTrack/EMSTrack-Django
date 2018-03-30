@@ -16,11 +16,13 @@ from hospital.models import Hospital
 # Profile
 from login.permissions import cache_clear
 
+
 # filters
 
 @register.filter
 def get_client_status(key):
     return ClientStatus[key].value
+
 
 @register.filter
 def get_client_activity(key):
@@ -100,7 +102,6 @@ class UserAmbulancePermission(Permission):
         # does not remove because user still exists!
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_profile(self.user)
-
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,

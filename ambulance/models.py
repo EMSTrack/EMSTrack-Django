@@ -10,6 +10,9 @@ from django.template.defaulttags import register
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
 from emstrack.models import AddressModel, UpdatedByModel, defaults
 
+# Beware of circular imports! See:
+# https://stackoverflow.com/questions/7336802/how-to-avoid-circular-imports-in-python
+import login.models
 
 logger = logging.getLogger(__name__)
 
@@ -81,6 +84,11 @@ class Ambulance(UpdatedByModel):
 
     # timestamp
     timestamp = models.DateTimeField(default=timezone.now)
+
+    # location client
+    location_client = models.ForeignKey(login.models.Client,
+                                        on_delete=models.CASCADE,
+                                        blank=True, null=True)
 
     # default value for _loaded_values
     _loaded_values = None
