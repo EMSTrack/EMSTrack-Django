@@ -1067,18 +1067,11 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        self.loop(second_test_client)
+        self.loop(test_client, second_test_client)
         subscribe_client.loop()
 
         # process messages
-        self.loop(test_client)
-        self.loop(second_test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        self.loop(second_test_client)
+        self.loop(test_client, second_test_client)
         subscribe_client.loop()
 
         # wait for disconnect
