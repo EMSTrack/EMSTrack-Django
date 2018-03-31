@@ -71,9 +71,8 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
             client_id = validated_data.pop('location_client')['client_id']
 
-            if client_id is None:
-                location_client = None
-            else:
+            location_client = None
+            if client_id:
                 location_client = Client.objects.get(client_id=client_id)
 
             if instance.location_client is None or location_client is None:
