@@ -5,6 +5,7 @@ from django.db import IntegrityError, transaction
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
+from login.models import Client
 from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient
 from emstrack.latlon import calculate_orientation
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    location_client = serializers.PrimaryKeyRelatedField(required=False)
+    location_client = serializers.PrimaryKeyRelatedField(queryset=Client.objects.all(), required=False)
     location = PointField(required=False)
     
     class Meta:
