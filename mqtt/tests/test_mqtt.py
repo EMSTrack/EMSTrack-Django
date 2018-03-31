@@ -1205,6 +1205,13 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # Client handshake: offline
+        subscribe_client.publish('user/{}/client/{}/status'.format(username, subscribe_client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
@@ -1227,6 +1234,23 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[3].status, ClientStatus.F.name)
         self.assertEqual(obj[3].activity, ClientActivity.HS.name)
 
+        # check record
+        clnt = Client.objects.get(client_id=subscribe_client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 4)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[0].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].activity, ClientActivity.AI.name)
+        self.assertEqual(obj[1].details, self.a1.identifier)
+        self.assertEqual(obj[2].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].activity, ClientActivity.AO.name)
+        self.assertEqual(obj[2].details, self.a1.identifier)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
+        self.assertEqual(obj[3].activity, ClientActivity.HS.name)
 
 class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
 
