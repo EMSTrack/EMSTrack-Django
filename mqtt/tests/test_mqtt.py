@@ -1019,7 +1019,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         second_client_id = 'test_mqtt_subscribe_admin_second'
         username = broker['USERNAME']
-        broker['CLIENT_ID'] = client_id
+        broker['CLIENT_ID'] = second_client_id
 
         second_test_client = MQTTTestClient(broker,
                                             check_payload=False,
