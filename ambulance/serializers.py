@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    location_client_id = serializers.CharField(source='location_client.client_id', default=None)
+    location_client_id = serializers.CharField(source='location_client.client_id', default=None, required=False)
     location = PointField(required=False)
     
     class Meta:
