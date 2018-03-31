@@ -1088,6 +1088,9 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertFalse(ambulance.location_client is None)
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
+        test_client.expect('user/{}/error'.format(username))
+        self.is_subscribed(test_client)
+
         # Try to change location client without reset to an invalid client_id
         test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
                             '{"location_client_id":"' + client_id + '_other"}', qos=2)
