@@ -1089,7 +1089,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # reset location_client
         test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
-                            '{"location_client_id":"null"}', qos=2)
+                            '{"location_client_id":""}', qos=2)
 
         # process messages
         self.loop(test_client)
