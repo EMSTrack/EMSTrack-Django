@@ -134,6 +134,8 @@ class Ambulance(UpdatedByModel):
         if loaded_values and self.location_client != self._loaded_values.get('location_client', self.location_client):
             location_client_changed = True
 
+        logger.debug('location_client_changed: {}'.format(location_client_changed))
+
         # if comment, status or location changed
         model_changed = False
         if has_moved or \
@@ -143,6 +145,8 @@ class Ambulance(UpdatedByModel):
             # save to Ambulance
             super().save(*args, **kwargs)
 
+            logger.debug('SAVED')
+
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
                     for k in ('status', 'orientation',
@@ -151,6 +155,8 @@ class Ambulance(UpdatedByModel):
             data['ambulance'] = self
             obj = AmbulanceUpdate(**data)
             obj.save()
+
+            logger.debug('UPDATE SAVED')
 
             # model changed
             model_changed = True
@@ -164,6 +170,8 @@ class Ambulance(UpdatedByModel):
             # save only to Ambulance
             super().save(*args, **kwargs)
 
+            logger.debug('SAVED')
+
             # model changed
             model_changed = True
 
@@ -173,6 +181,8 @@ class Ambulance(UpdatedByModel):
             # publish to mqtt
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().publish_ambulance(self)
+
+            logger.debug('PUBLISHED ON MQTT')
 
         # just created?
         if created:
