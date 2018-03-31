@@ -122,6 +122,8 @@ class Ambulance(UpdatedByModel):
                                                  self.location,
                                                  self.orientation))
 
+        logger.debug('self._loaded_values = {}'.format(self._loaded_values))
+
         # if location_client changed
         if (self._loaded_values is not None) and self._loaded_values['location_client'] == self.location_client:
             model_changed = False
