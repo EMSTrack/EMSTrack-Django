@@ -312,7 +312,10 @@ class TestAmbulanceUpdate(TestSetup):
 
         # update location_client
         client1 = loginClient('client_id_1')
+        client1.save()
+
         client2 = loginClient('client_id_2')
+        client2.save()
 
         serializer = AmbulanceSerializer(a,
                                          data={
