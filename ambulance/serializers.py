@@ -23,7 +23,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'timestamp',
+                  'timestamp', 'location_client'
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
@@ -61,6 +61,21 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             #                                      ambulance=instance.id):
             if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
+
+        # can become location_client only if instance.location_client is None
+        # pass None first to clear
+        if instance.location_client != validated_data.get('location_client', instance.location_client):
+
+            if (instance.location_client is None or
+                    ('location_client' in validated_data and validated_data.get('location_client') is None)):
+
+                # fine, clear or update location client
+                pass
+
+            else:
+
+                # override, cannot change current location_client
+                validated_data['location_client'] = instance.location_client
 
         return super().update(instance, validated_data)
 

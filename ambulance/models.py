@@ -122,8 +122,13 @@ class Ambulance(UpdatedByModel):
                                                  self.location,
                                                  self.orientation))
 
+        # if location_client changed
+        if self._loaded_values['location_client'] == self.location_client:
+            model_changed = False
+        else:
+            model_changed = True
+
         # if comment, status or location changed
-        model_changed = False
         if has_moved or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
