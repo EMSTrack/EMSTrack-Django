@@ -540,7 +540,7 @@ class SubscribeClient(BaseClient):
         try:
 
             # parse topic
-            user, data, client_id, ambulance_id = self.parse_topic(msg, 3, json=False)
+            user, data, client_id, ambulance_id = self.parse_topic(msg, 4, json=False)
 
         except ParseException as e:
 
