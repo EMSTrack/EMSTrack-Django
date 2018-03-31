@@ -1014,6 +1014,18 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
 
+        # Start second test client
+
+        broker.update(settings.MQTT)
+        second_client_id = 'test_mqtt_subscribe_admin_second'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+
+        second_test_client = MQTTTestClient(broker,
+                                            check_payload=False,
+                                            debug=True)
+        self.is_connected(second_test_client)
+
         # Client handshake: online
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
@@ -1030,18 +1042,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
         self.assertEqual(obj.activity, ClientActivity.HS.name)
-
-        # Start second test client
-
-        broker.update(settings.MQTT)
-        second_client_id = 'test_mqtt_subscribe_admin_second'
-        username = broker['USERNAME']
-        broker['CLIENT_ID'] = client_id
-
-        second_test_client = MQTTTestClient(broker,
-                                            check_payload=False,
-                                            debug=True)
-        self.is_connected(second_test_client)
 
         # Client handshake: online
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'online')
