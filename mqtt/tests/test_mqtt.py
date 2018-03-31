@@ -1071,7 +1071,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertFalse(ambulance.location_client is None)
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
-        # Try to change location client without reset
+        # Try to change location client without reset to a valid client_id
         test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
                             '{"location_client_id":"' + subscribe_client_id + '"}', qos=2)
 
