@@ -30,6 +30,12 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
+    def validate_location_client_id(self, value):
+
+        logger.debug('validate_location_client_id = {}'.format(value))
+
+        return value
+
     def validate(self, data):
 
         # timestamp must be defined together with either comment, status or location
