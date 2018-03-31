@@ -467,6 +467,15 @@ class TestAmbulanceUpdate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
+        # invalid client id
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': AmbulanceStatus.PB.name,
+                                             'location_client_id': '__invalid__'
+                                         }, partial=True)
+
+        self.assertFalse(serializer.is_valid())
+
     def test_ambulance_patch_viewset(self):
 
         # instantiate client
