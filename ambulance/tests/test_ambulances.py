@@ -33,6 +33,7 @@ class TestAmbulanceGetList(TestSetup):
                 'orientation': a.orientation,
                 'location': point2str(a.location),
                 'timestamp': date2iso(a.timestamp),
+                'location_client': None,
                 'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
@@ -195,6 +196,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(a.location),
             'timestamp': date2iso(a.timestamp),
+            'location_client': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -223,6 +225,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
+            'location_client': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -260,6 +263,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(a.location),
             'timestamp': date2iso(a.timestamp),
+            'location_client': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -288,6 +292,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
+            'location_client': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -518,6 +523,7 @@ class TestAmbulanceCreate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(a.location),
             'timestamp': date2iso(a.timestamp),
+            'location_client': None,
             'updated_by': self.u1.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -652,6 +658,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
+                'location_client': None,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
@@ -703,6 +710,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
+                'location_client': None,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
@@ -814,6 +822,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
+                'location_client': None,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
@@ -834,6 +843,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
+            'location_client': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -874,6 +884,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
                 'orientation': u.orientation,
                 'location': point2str(u.location),
                 'timestamp': date2iso(u.timestamp),
+                'location_client': None,
                 'updated_by_username': u.updated_by.username,
                 'updated_on': date2iso(u.updated_on)
             }
@@ -894,6 +905,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
+            'location_client': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }

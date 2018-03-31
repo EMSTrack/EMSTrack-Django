@@ -123,7 +123,7 @@ class Ambulance(UpdatedByModel):
                                                  self.orientation))
 
         # if location_client changed
-        if self._loaded_values['location_client'] == self.location_client:
+        if (self._loaded_values is not None) and self._loaded_values['location_client'] == self.location_client:
             model_changed = False
         else:
             model_changed = True
