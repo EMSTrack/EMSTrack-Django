@@ -1031,6 +1031,23 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, ClientStatus.O.name)
         self.assertEqual(obj.activity, ClientActivity.HS.name)
 
+        # Client handshake: online
+        subscribe_client.publish('user/{}/client/{}/status'.format(username, subscribe_client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=subscribe_client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.HS.name)
+
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
                             'ambulance login')
