@@ -1053,12 +1053,11 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         ambulance = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(ambulance.location_client, None)
 
+        # Start streaming data
+        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                            '{"location_client_id":"' + client_id + '"}', qos=2)
+
         if False:
-
-
-            # Start streaming data
-            test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
-                                '{"location_client_id":"'+client_id+'"}', qos=2)
 
             # process messages
             self.loop(test_client)
