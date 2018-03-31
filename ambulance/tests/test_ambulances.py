@@ -322,8 +322,6 @@ class TestAmbulanceUpdate(TestSetup):
                                              'location_client': client1.client_id
                                          }, partial=True)
         serializer.is_valid()
-        logger.debug('id = "{}"'.format(client1.client_id))
-        logger.debug(serializer.errors)
         serializer.save(updated_by=user)
 
         # test
@@ -368,7 +366,7 @@ class TestAmbulanceUpdate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # will not change
+        # will reset
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'location_client': None
@@ -388,6 +386,31 @@ class TestAmbulanceUpdate(TestSetup):
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
             'location_client': None,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # will change
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client': client2.client_id
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client': client2.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
