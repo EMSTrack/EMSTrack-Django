@@ -194,9 +194,9 @@ class SubscribeClient(BaseClient):
 
     def on_ambulance(self, client, userdata, msg):
 
-        logger.debug("on_ambulance: msg = '{}'".format(msg.topic, msg.payload))
-
         try:
+
+            logger.debug("on_ambulance: msg = '{}'".format(msg.topic, msg.payload))
 
             # parse topic
             user, data, ambulance_id = self.parse_topic(msg, 3)
@@ -226,9 +226,9 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
 
-        logger.debug('on_ambulance: ambulance = {}'.format(ambulance))
-
         try:
+
+            logger.debug('on_ambulance: ambulance = {}'.format(ambulance))
 
             is_valid = False
             if isinstance(data, (list, tuple)):
@@ -277,9 +277,9 @@ class SubscribeClient(BaseClient):
     # Update hospital
     def on_hospital(self, client, userdata, msg):
 
-        logger.debug("on_hospital: msg = '{}:{}'".format(msg.topic, msg.payload))
-
         try:
+
+            logger.debug("on_hospital: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
             user, data, hospital_id = self.parse_topic(msg, 3)
@@ -308,9 +308,9 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
 
-        logger.debug('on_hospital: hospital = {}'.format(hospital))
-
         try:
+
+            logger.debug('on_hospital: hospital = {}'.format(hospital))
 
             # update hospital
             serializer = HospitalSerializer(hospital,
@@ -343,9 +343,9 @@ class SubscribeClient(BaseClient):
     # Update hospital equipment
     def on_hospital_equipment(self, client, userdata, msg):
 
-        logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
-
         try:
+
+            logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
             user, data, hospital_id, equipment_name = self.parse_topic(msg, 4)
@@ -376,9 +376,9 @@ class SubscribeClient(BaseClient):
                                     "Exception: '{}'".format(e))
             return
 
-        logger.debug('on_hospital_equipment: equipment = {}'.format(hospital_equipment))
-
         try:
+
+            logger.debug('on_hospital_equipment: equipment = {}'.format(hospital_equipment))
 
             # update hospital equipment
             serializer = HospitalEquipmentSerializer(hospital_equipment,
@@ -411,9 +411,9 @@ class SubscribeClient(BaseClient):
     # update client information
     def on_client_status(self, clnt, userdata, msg):
 
-        logger.debug("on_client_status: msg = '{}:{}'".format(msg.topic, msg.payload))
-
         try:
+
+            logger.debug("on_client_status: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
             user, data, client_id = self.parse_topic(msg, 3, json=False)
@@ -425,109 +425,116 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            # handle status
-            status = ClientStatus(data)
-
-        except ValueError:
-
-            # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    "status '{}' is not valid".format(data))
-
-            return
-
-        logger.debug('on_client_status: status = ' + status.name)
-
-        # online
-        if status == ClientStatus.O:
-
-            # user just logged in
             try:
 
-                # create record
-                client = Client(client_id=client_id, user=user, status=status.name)
-                client.save()
+                # handle status
+                status = ClientStatus(data)
 
-            except IntegrityError:
+            except ValueError as e:
 
-                # retrieve and modify record
-                client = Client.objects.get(client_id=client_id)
-                client.status = status.name
-                client.save()
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "status '{}' is not valid".format(data))
+                return
 
-            # log operation
-            log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
-            log.save()
+            logger.debug('on_client_status: status = ' + status.name)
 
-        # offline or disconnected
-        elif status == ClientStatus.D or status == ClientStatus.F:
+            # online
+            if status == ClientStatus.O:
 
-            # user client offline or disconnected
-            try:
+                # user just logged in
+                try:
 
-                # retrieve client record first
-                client = Client.objects.get(client_id=client_id)
+                    # create record
+                    client = Client(client_id=client_id, user=user, status=status.name)
+                    client.save()
 
-                # is online?
-                if client.status != ClientStatus.O.name:
+                except IntegrityError:
 
-                    # client is not online
-                    logger.debug('on_client_status: not online')
-
-                    # send error message to user
-                    self.send_error_message(user, msg.topic, msg.payload,
-                                            "client '{}' is not online".format(client_id))
-
-                # update status
-                client.status = status.name
-
-                # has ambulance?
-                if client.ambulance is not None:
-
-                    # log activity
-                    log = ClientLog(client=client, status=status.name,
-                                    activity=ClientActivity.AO.name, details=client.ambulance.identifier)
-                    log.save()
-
-                    # clean up mqtt topic
-                    self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username, 
-                                                                                      client_id, client.ambulance.id))
-
-                    # logout ambulance
-                    client.ambulance = None
-
-                # has hospital?
-                if client.hospital is not None:
-
-                    # log activity
-                    log = ClientLog(client=client, status=status.name,
-                                    activity=ClientActivity.HO.name, details=client.hospital.name)
-                    log.save()
-
-                    # clean up mqtt topic
-                    self.remove_topic('/user/{}/client/{}/hospital/{}/status'.format(user.username,
-                                                                                     client_id, client.hospital.id))
-
-                    # logout hospital
-                    client.hospital = None
-
-                # save client
-                client.save()
+                    # retrieve and modify record
+                    client = Client.objects.get(client_id=client_id)
+                    client.status = status.name
+                    client.save()
 
                 # log operation
                 log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
                 log.save()
 
-                # clean up mqtt topics
-                self.remove_topic('/user/{}/client/{}/status'.format(user.username, client_id))
-                
-            except Client.DoesNotExist:
+            # offline or disconnected
+            elif status == ClientStatus.D or status == ClientStatus.F:
 
-                logger.debug('on_client_status: INVALID client')
+                # user client offline or disconnected
+                try:
 
-                # send error message to user
-                self.send_error_message(user, msg.topic, msg.payload,
-                                        "client '{}' is not valid".format(client_id))
+                    # retrieve client record first
+                    client = Client.objects.get(client_id=client_id)
+
+                    # is online?
+                    if client.status != ClientStatus.O.name:
+
+                        # client is not online
+                        logger.debug('on_client_status: not online')
+
+                        # send error message to user
+                        self.send_error_message(user, msg.topic, msg.payload,
+                                                "client '{}' is not online".format(client_id))
+
+                    # update status
+                    client.status = status.name
+
+                    # has ambulance?
+                    if client.ambulance is not None:
+
+                        # log activity
+                        log = ClientLog(client=client, status=status.name,
+                                        activity=ClientActivity.AO.name, details=client.ambulance.identifier)
+                        log.save()
+
+                        # clean up mqtt topic
+                        self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username,
+                                                                                          client_id, client.ambulance.id))
+
+                        # logout ambulance
+                        client.ambulance = None
+
+                    # has hospital?
+                    if client.hospital is not None:
+
+                        # log activity
+                        log = ClientLog(client=client, status=status.name,
+                                        activity=ClientActivity.HO.name, details=client.hospital.name)
+                        log.save()
+
+                        # clean up mqtt topic
+                        self.remove_topic('/user/{}/client/{}/hospital/{}/status'.format(user.username,
+                                                                                         client_id, client.hospital.id))
+
+                        # logout hospital
+                        client.hospital = None
+
+                    # save client
+                    client.save()
+
+                    # log operation
+                    log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
+                    log.save()
+
+                    # clean up mqtt topics
+                    self.remove_topic('/user/{}/client/{}/status'.format(user.username, client_id))
+
+                except Client.DoesNotExist:
+
+                    logger.debug('on_client_status: INVALID client')
+
+                    # send error message to user
+                    self.send_error_message(user, msg.topic, msg.payload,
+                                            "client '{}' is not valid".format(client_id))
+
+        except Exception as e:
+
+            # send error message to user
+            self.send_error_message(user, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         # client is not online
         logger.debug('on_client_status: done')
@@ -549,68 +556,79 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            # handle activity
-            activity = ClientActivity(data)
+            try:
 
-        except ValueError:
+                # handle activity
+                activity = ClientActivity(data)
 
-            # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    "activity '{}' is not valid".format(data))
+            except ValueError:
 
-            return
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "activity '{}' is not valid".format(data))
 
-        logger.debug('on_client_ambulance_status: activity = ' + activity.name)
+                return
 
-        # retrieve client
-        try:
+            logger.debug('on_client_ambulance_status: activity = ' + activity.name)
 
             # retrieve client
-            client = Client.objects.get(client_id=client_id)
+            try:
 
-        except Client.DoesNotExist:
+                # retrieve client
+                client = Client.objects.get(client_id=client_id)
+
+            except Client.DoesNotExist:
+
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "Invalid client".format(client_id))
+                return
+
+            # retrieve ambulance
+            try:
+
+                ambulance = Ambulance.objects.get(id=ambulance_id)
+
+            except Ambulance.DoesNotExist:
+
+                # send error message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "Ambulance '{}' does not exist".format(ambulance_id))
+                return
+
+            # is client online?
+            if client.status != ClientStatus.O.name:
+
+                # client is not online
+                logger.debug('Client "" is not online'.format(client.client_id))
+
+                # send warning message to user
+                self.send_error_message(user, msg.topic, msg.payload,
+                                        "Warning: client '{}' is not online".format(client_id))
+
+            # ambulance login?
+            if activity == ClientActivity.AI:
+
+                client.ambulance = ambulance
+                client.save()
+
+            elif activity == ClientActivity.AO:
+
+                client.ambulance = None
+                client.save()
+
+            # log activity
+            log = ClientLog(client=client, status=client.status, activity=activity.name, details=ambulance.identifier)
+            log.save()
+
+        except Exception as e:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                                    "Invalid client".format(client_id))
-            return
+                                    "Exception '{}'".format(e))
 
-        # retrieve ambulance
-        try:
-
-            ambulance = Ambulance.objects.get(id=ambulance_id)
-
-        except Ambulance.DoesNotExist:
-
-            # send error message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    "Ambulance '{}' does not exist".format(ambulance_id))
-            return
-
-        # is client online?
-        if client.status != ClientStatus.O.name:
-
-            # client is not online
-            logger.debug('Client "" is not online'.format(client.client_id))
-
-            # send warning message to user
-            self.send_error_message(user, msg.topic, msg.payload,
-                                    "Warning: client '{}' is not online".format(client_id))
-
-        # ambulance login?
-        if activity == ClientActivity.AI:
-
-            client.ambulance = ambulance
-            client.save()
-
-        elif activity == ClientActivity.AO:
-
-            client.ambulance = None
-            client.save()
-
-        # log activity
-        log = ClientLog(client=client, status=client.status, activity=activity.name, details=ambulance.identifier)
-        log.save()
+        # client is not online
+        logger.debug('on_client_ambulance_status: done')
 
     # update calls
     def on_call(self, client, userdata, msg):
