@@ -1,3 +1,4 @@
+import logging
 import math
 from django.test import Client
 
@@ -18,6 +19,8 @@ from login.models import Client as loginClient
 from emstrack.tests.util import date2iso, point2str, dict2point
 
 from login.tests.setup_data import TestSetup
+
+logger = logging.getLogger(__name__)
 
 
 class TestAmbulanceGetList(TestSetup):
@@ -308,13 +311,16 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(serializer.is_valid(), False)
 
         # update location_client
-        client = loginClient('client_id')
+        client1 = loginClient('client_id_1')
+        client2 = loginClient('client_id_2')
 
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client': client
+                                             'location_client': client1
                                          }, partial=True)
         serializer.is_valid()
+        logger.debug(serializer.errors)
+
         serializer.save(updated_by=user)
 
         # test
@@ -328,11 +334,18 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client': client,
+            'location_client': client1,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
+
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client': client2
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
 
     def test_ambulance_patch_viewset(self):
 
