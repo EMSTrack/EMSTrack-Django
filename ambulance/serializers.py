@@ -69,7 +69,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         if 'location_client' in validated_data:
 
             client_id = validated_data.pop('location_client')['client_id']
-            logger.debug('vd1 = {}'.format(client_id))
 
             if client_id is None:
                 location_client = None
@@ -81,7 +80,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 # fine, clear or update location client
                 validated_data['location_client'] = location_client
 
-        logger.debug('vd3 = {}'.format(validated_data))
+        logger.debug('validated_data = {}'.format(validated_data))
 
         return super().update(instance, validated_data)
 
