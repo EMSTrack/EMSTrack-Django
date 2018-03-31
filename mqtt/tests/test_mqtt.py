@@ -1098,8 +1098,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.activity, ClientActivity.AI.name)
         self.assertEqual(obj.details, self.a1.identifier)
 
-        #############################################################################################
-
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(ambulance.location_client, None)
@@ -1123,7 +1121,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Try to change location client without reset to a valid client_id
         second_test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
-                            '{"location_client_id":"' + second_client_id + '"}', qos=2)
+                                   '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
         self.loop(second_test_client)
@@ -1139,37 +1137,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         #############################################################################################
-
-        # Client handshake: offline
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # Client handshake: offline
-        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
-
-        # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        second_test_client.wait()
-        subscribe_client.wait()
-
-        # check record
-        clnt = Client.objects.get(client_id=client_id)
-        self.assertEqual(clnt.status, ClientStatus.F.name)
-
-        # check record
-        clnt = Client.objects.get(client_id=second_client_id)
-        self.assertEqual(clnt.status, ClientStatus.F.name)
-
-    def _test(self):
-
-
 
         test_client.expect('user/{}/error'.format(username))
         self.is_subscribed(test_client)
@@ -1206,6 +1173,40 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
         self.assertTrue(ambulance.location_client is None)
+
+        #############################################################################################
+
+        # Client handshake: offline
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Client handshake: offline
+        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        second_test_client.wait()
+        subscribe_client.wait()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record
+        clnt = Client.objects.get(client_id=second_client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+    def _test(self):
+
+
+
 
         # Ambulance handshake: ambulance logout
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
