@@ -1061,6 +1061,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # sleep a bit
         time.sleep(5)
 
