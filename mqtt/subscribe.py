@@ -184,6 +184,8 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
 
+        return
+
         # parse topic
         values = self.parse_topic(msg)
         if not values:
