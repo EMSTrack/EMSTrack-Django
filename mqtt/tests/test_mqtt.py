@@ -1035,6 +1035,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
                             'ambulance login')
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, subscribe_client_id, self.a1.id),
                             'ambulance login')
