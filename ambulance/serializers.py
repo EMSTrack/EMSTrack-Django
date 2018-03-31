@@ -34,6 +34,11 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
         logger.debug('validate_location_client_id = {}'.format(value))
 
+        try:
+            Client.objects.get(client_id=value)
+        except Client.DoesNotExist:
+            raise serializers.ValidationError("Client '{}' does not exist".format(value))
+
         return value
 
     def validate(self, data):
