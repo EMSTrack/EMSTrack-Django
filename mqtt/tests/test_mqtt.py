@@ -1062,8 +1062,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        #self.loop(test_client)
+        #subscribe_client.loop()
+
+        time.sleep(1)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
