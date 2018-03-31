@@ -1198,8 +1198,8 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.details, self.a1.identifier)
 
         # Ambulance handshake: ambulance logout
-        second_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a1.id),
-                              'ambulance logout')
+        second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a1.id),
+                                   'ambulance logout')
 
         # process messages
         self.loop(test_client)
