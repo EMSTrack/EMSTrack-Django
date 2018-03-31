@@ -350,7 +350,7 @@ class MQTTAclView(CsrfExemptMixin,
 
         # Check permissions
         username = data.get('username')
-        client_id = data.get('clientid')
+        clientid = data.get('clientid')
         acc = int(data.get('acc'))  # 1 == sub, 2 == pub
 
         # get topic and remove first '/'
@@ -493,12 +493,12 @@ class MQTTAclView(CsrfExemptMixin,
                     elif ((len(topic) == 5 and
                            topic[2] == 'client' and
                            topic[4] == 'status' and
-                           topic[3] == client_id) or
+                           topic[3] == clientid) or
                           (len(topic) == 7 and
                            topic[2] == 'client' and
                            topic[4] == 'ambulance' and
                            topic[6] == 'status' and
-                           topic[3] == client_id)):
+                           topic[3] == clientid)):
 
                         return HttpResponse('OK')
 

@@ -311,18 +311,18 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(serializer.is_valid(), False)
 
         # update location_client
-        client1 = loginClient(clientid='client_id_1', user_id=self.u1.id)
+        client1 = loginClient(client_id='client_id_1', user_id=self.u1.id)
         client1.save()
 
-        client2 = loginClient(clientid='client_id_2', user_id=self.u2.id)
+        client2 = loginClient(client_id='client_id_2', user_id=self.u2.id)
         client2.save()
 
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client': client1.clientid
+                                             'location_client': client1.client_id
                                          }, partial=True)
         serializer.is_valid()
-        logger.debug('id = "{}"'.format(client1.clientid))
+        logger.debug('id = "{}"'.format(client1.client_id))
         logger.debug(serializer.errors)
         serializer.save(updated_by=user)
 
@@ -337,7 +337,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client': client1.clientid,
+            'location_client': client1.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -346,7 +346,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will not change
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client': client2.clientid
+                                             'location_client': client2.client_id
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -362,7 +362,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client': client1.clientid,
+            'location_client': client1.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }

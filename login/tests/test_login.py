@@ -646,36 +646,36 @@ class TestMQTTACLPublish(MyTestCase):
         # Client data
 
         username = 'testuser2'
-        client_id = 'test_client'
+        clientid = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': username,
-                                     'clientid': client_id,
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/{}/client/{}/status'.format(username, client_id)},
+                                     'topic': '/user/{}/client/{}/status'.format(username, clientid)},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # invalid username
 
         username = 'testuser2'
-        client_id = 'test_client'
+        clientid = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': username,
-                                     'clientid': client_id,
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/{}/client/{}/status'.format(username + 'o', client_id)},
+                                     'topic': '/user/{}/client/{}/status'.format(username + 'o', clientid)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # invalid client_id
+        # invalid clientid
 
         username = 'testuser2'
-        client_id = 'test_client'
+        clientid = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': username,
-                                     'clientid': client_id,
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/{}/client/{}/status'.format(username, client_id + 'o')},
+                                     'topic': '/user/{}/client/{}/status'.format(username, clientid + 'o')},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
