@@ -1070,6 +1070,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.loop(test_client, second_test_client)
         subscribe_client.loop()
 
+        # process messages
+        self.loop(test_client, second_test_client)
+        subscribe_client.loop()
+
         # wait for disconnect
         test_client.wait()
         second_test_client.wait()
