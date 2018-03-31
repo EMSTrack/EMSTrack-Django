@@ -129,9 +129,13 @@ class Ambulance(UpdatedByModel):
         logger.debug('_loaded_values: {}'.format(self._loaded_values))
         logger.debug('self.location_client: {}'.format(self.location_client))
 
-        # if location_client changed
+        # location_client changed?
+        if self.location_client is None:
+            location_client_id = None
+        else:
+            location_client_id = self.location_client.id
         location_client_changed = False
-        if loaded_values and self.location_client != self._loaded_values.get('location_client', self.location_client):
+        if loaded_values and location_client_id != self._loaded_values['location_client_id']:
             location_client_changed = True
 
         logger.debug('location_client_changed: {}'.format(location_client_changed))
