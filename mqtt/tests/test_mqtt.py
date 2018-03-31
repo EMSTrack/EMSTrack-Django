@@ -1062,7 +1062,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # sleep a bit
-        time.sleep(1)
+        time.sleep(5)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
