@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    location_client_id = serializers.CharField(source='location_client.client_id', required=False, allow_null=True)
+    location_clientid = serializers.CharField(source='location_client.client_id', required=False, allow_null=True)
     location = PointField(required=False)
     
     class Meta:
@@ -25,7 +25,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'timestamp', 'location_client_id',
+                  'timestamp', 'location_clientid',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
@@ -65,15 +65,15 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 raise PermissionDenied()
 
         # update location_client
-        if 'location_client_id' in validated_data:
+        if 'location_clientid' in validated_data:
 
-            location_client_id = validated_data.pop('location_client_id')
-            logger.debug('vd1 = {}'.format(location_client_id))
+            location_clientid = validated_data.pop('location_clientid')
+            logger.debug('vd1 = {}'.format(location_clientid))
 
-            if location_client_id is None:
+            if location_clientid is None:
                 location_client = None
             else:
-                location_client = Client.objects.get(client_id=location_client_id)
+                location_client = Client.objects.get(client_id=location_clientid)
 
             logger.debug('vd2 = {}'.format(location_client))
 
@@ -82,7 +82,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 # fine, clear or update location client
                 validated_data['location_client'] = location_client.id
 
-        logger.debug('vd4 = {}'.format(instance))
         logger.debug('vd3 = {}'.format(validated_data))
 
         return super().update(instance, validated_data)
