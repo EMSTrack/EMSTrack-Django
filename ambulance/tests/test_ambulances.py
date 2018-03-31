@@ -311,10 +311,10 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(serializer.is_valid(), False)
 
         # update location_client
-        client1 = loginClient(clientid='client_id_1',user_id=self.u1)
+        client1 = loginClient(clientid='client_id_1', user_id=self.u1.id)
         client1.save()
 
-        client2 = loginClient(clientid='client_id_2',user_id=self.u2)
+        client2 = loginClient(clientid='client_id_2', user_id=self.u2.id)
         client2.save()
 
         serializer = AmbulanceSerializer(a,
