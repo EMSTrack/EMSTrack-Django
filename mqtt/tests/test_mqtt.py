@@ -994,7 +994,8 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        subscribe_client_id = 'test_mqttclient'
+        broker['CLIENT_ID'] = subscribe_client_id
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -1071,6 +1072,23 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         # Try to change location client without reset
+        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                            '{"location_client_id":"' + subscribe_client_id + '"}', qos=2)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, client_id)
+
+        # Try to change location client without reset to an invalid client_id
         test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
                             '{"location_client_id":"' + client_id + '_other"}', qos=2)
 
