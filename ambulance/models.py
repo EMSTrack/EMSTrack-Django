@@ -108,28 +108,30 @@ class Ambulance(UpdatedByModel):
         # creation?
         created = self.pk is None
 
+        # loaded_values?
+        loaded_values = self._loaded_values is not None
+
         # has location changed?
         has_moved = False
-        if (self._loaded_values is None) or \
+        if (not loaded_values) or \
                 calculate_distance(self._loaded_values['location'], self.location) > stationary_radius:
             has_moved = True
 
         # calculate orientation only if location has changed and orientation has not changed
-        if has_moved and (self._loaded_values is not None) and self._loaded_values['orientation'] == self.orientation:
+        if has_moved and loaded_values and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
             logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
                                                  self.location,
                                                  self.orientation))
 
+        logger.debug('loaded_values: {}'.format(loaded_values))
         logger.debug('_loaded_values: {}'.format(self._loaded_values))
         logger.debug('self.location_client: {}'.format(self.location_client))
 
         # if location_client changed
         location_client_changed = False
-        if self._loaded_values is None or self.location_client is None:
-            location_client_changed = True
-        elif self.location_client != self._loaded_values.get('location_client', self.location_client):
+        if loaded_values and self.location_client != self._loaded_values.get('location_client', self.location_client):
             location_client_changed = True
 
         # if comment, status or location changed
