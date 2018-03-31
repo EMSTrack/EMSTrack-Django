@@ -23,7 +23,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'timestamp', 'location_client'
+                  'timestamp', 'location_client',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
