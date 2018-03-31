@@ -369,7 +369,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will reset
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             # 'location_client_id': None
+                                             'location_client_id': None
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
