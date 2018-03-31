@@ -65,6 +65,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 raise PermissionDenied()
 
         # update location_client
+        # stored in validated_data as {'location_client': {'client_id': client_id}}
         if 'location_client' in validated_data:
 
             client_id = validated_data.pop('location_client')['client_id']
