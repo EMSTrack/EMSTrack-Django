@@ -13,6 +13,8 @@ from ambulance.models import Ambulance, \
 from emstrack.latlon import calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 
+from login.models import Client as loginClient
+
 from emstrack.tests.util import date2iso, point2str, dict2point
 
 from login.tests.setup_data import TestSetup
@@ -304,6 +306,33 @@ class TestAmbulanceUpdate(TestSetup):
                                              'timestamp': timestamp,
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
+
+        # update location_client
+        client = loginClient('client_id')
+
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client': client
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client': client,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
 
     def test_ambulance_patch_viewset(self):
 
