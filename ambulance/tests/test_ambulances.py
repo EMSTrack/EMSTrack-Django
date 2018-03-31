@@ -416,6 +416,31 @@ class TestAmbulanceUpdate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
+        # will not change in partial update
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': AmbulanceStatus.OS.name
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': AmbulanceStatus.OS.name,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client': client2.client_id,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
     def test_ambulance_patch_viewset(self):
 
         # instantiate client
