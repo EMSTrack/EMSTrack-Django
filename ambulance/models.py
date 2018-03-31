@@ -214,6 +214,7 @@ class Ambulance(UpdatedByModel):
         return ('Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
+                ' LocClient: {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
                                                self.id,
                                                AmbulanceCapability[self.capability].value,
@@ -221,6 +222,7 @@ class Ambulance(UpdatedByModel):
                                                AmbulanceStatus[self.status].value,
                                                self.location,
                                                self.timestamp,
+                                               self.location_client,
                                                self.updated_by,
                                                self.updated_on)
 
