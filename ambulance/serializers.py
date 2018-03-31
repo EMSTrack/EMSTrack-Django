@@ -32,8 +32,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     def validate_location_client_id(self, value):
 
-        logger.debug('validate_location_client_id = {}'.format(value))
-
         if value:
             try:
                 Client.objects.get(client_id=value)
