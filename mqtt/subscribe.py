@@ -410,7 +410,7 @@ class SubscribeClient(BaseClient):
         logger.debug("on_client_status: values = '{}'".format(values))
 
         # retrieve parsed values
-        user, data, client_id = values
+        user, data, clientid = values
 
         try:
 
@@ -434,13 +434,13 @@ class SubscribeClient(BaseClient):
             try:
 
                 # create record
-                client = Client(client_id=client_id, user=user, status=status.name)
+                client = Client(clientid=clientid, user=user, status=status.name)
                 client.save()
 
             except IntegrityError:
 
                 # retrieve and modify record
-                client = Client.objects.get(client_id=client_id)
+                client = Client.objects.get(clientid=clientid)
                 client.status = status.name
                 client.save()
 
@@ -455,7 +455,7 @@ class SubscribeClient(BaseClient):
             try:
 
                 # retrieve client record first
-                client = Client.objects.get(client_id=client_id)
+                client = Client.objects.get(clientid=clientid)
 
                 # is online?
                 if client.status != ClientStatus.O.name:
@@ -465,7 +465,7 @@ class SubscribeClient(BaseClient):
 
                     # send error message to user
                     self.send_error_message(user, msg.topic, msg.payload,
-                                            "client '{}' is not online".format(client_id))
+                                            "client '{}' is not online".format(clientid))
 
                 # update status
                 client.status = status.name
@@ -481,7 +481,7 @@ class SubscribeClient(BaseClient):
 
                     # clean up mqtt topic
                     self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username, 
-                                                                                      client_id, client.ambulance.id))
+                                                                                      clientid, client.ambulance.id))
 
                     # logout ambulance
                     client.ambulance = None
@@ -496,7 +496,7 @@ class SubscribeClient(BaseClient):
 
                     # clean up mqtt topic
                     self.remove_topic('/user/{}/client/{}/hospital/{}/status'.format(user.username,
-                                                                                     client_id, client.hospital.id))
+                                                                                     clientid, client.hospital.id))
 
                     # logout hospital
                     client.hospital = None
@@ -509,7 +509,7 @@ class SubscribeClient(BaseClient):
                 log.save()
 
                 # clean up mqtt topics
-                self.remove_topic('/user/{}/client/{}/status'.format(user.username, client_id))
+                self.remove_topic('/user/{}/client/{}/status'.format(user.username, clientid))
                 
             except Client.DoesNotExist:
 
@@ -517,7 +517,7 @@ class SubscribeClient(BaseClient):
 
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
-                                        "client '{}' is not valid".format(client_id))
+                                        "client '{}' is not valid".format(clientid))
 
         # client is not online
         logger.debug('on_client_status: done')
@@ -535,7 +535,7 @@ class SubscribeClient(BaseClient):
         logger.debug("on_client_ambulance_status: values = '{}'".format(values))
 
         # retrieve parsed values
-        user, data, client_id, ambulance_id = values
+        user, data, clientid, ambulance_id = values
 
         try:
 
@@ -556,13 +556,13 @@ class SubscribeClient(BaseClient):
         try:
 
             # retrieve client
-            client = Client.objects.get(client_id=client_id)
+            client = Client.objects.get(clientid=clientid)
 
         except Client.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                                    "Invalid client".format(client_id))
+                                    "Invalid client".format(clientid))
 
             return
 
@@ -583,11 +583,11 @@ class SubscribeClient(BaseClient):
         if client.status != ClientStatus.O.name:
 
             # client is not online
-            logger.debug('Client "" is not online'.format(client.client_id))
+            logger.debug('Client "" is not online'.format(client.clientid))
 
             # send warning message to user
             self.send_error_message(user, msg.topic, msg.payload,
-                                    "Warning: client '{}' is not online".format(client_id))
+                                    "Warning: client '{}' is not online".format(clientid))
 
         # ambulance login?
         if activity == ClientActivity.AI:

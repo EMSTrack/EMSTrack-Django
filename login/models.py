@@ -260,7 +260,7 @@ class ClientStatus(Enum):
 class Client(models.Model):
 
     # WARNING: mqtt client_id's can be up to 65536 bytes!
-    client_id = models.CharField(max_length=254, unique=True, blank=False)
+    clientid = models.CharField(max_length=254, unique=True, blank=False)
 
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE)

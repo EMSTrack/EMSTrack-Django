@@ -612,7 +612,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
@@ -772,7 +772,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
         # check record log
@@ -1021,7 +1021,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance, None)
 
@@ -1039,7 +1039,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, self.a1.id)
 
@@ -1058,7 +1058,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance, None)
 
@@ -1080,7 +1080,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
         # check record log
@@ -1139,7 +1139,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance, None)
 
@@ -1157,7 +1157,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, self.a1.id)
 
@@ -1179,7 +1179,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
         self.assertEqual(clnt.ambulance, None)
 
@@ -1243,7 +1243,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
@@ -1270,7 +1270,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.D.name)
 
         # check record log
@@ -1325,7 +1325,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
@@ -1346,7 +1346,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
@@ -1367,7 +1367,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
         # check record
-        clnt = Client.objects.get(client_id=client_id)
+        clnt = Client.objects.get(clientid=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
         # check record log
