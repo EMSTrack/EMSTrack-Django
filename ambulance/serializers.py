@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    location_clientid = serializers.CharField(source='location_client.client_id', required=False, allow_null=True)
+    location_client_id = serializers.CharField(source='location_client.client_id', required=False, allow_null=True)
     location = PointField(required=False)
     
     class Meta:
@@ -25,7 +25,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'timestamp', 'location_clientid',
+                  'timestamp', 'location_client_id',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 
@@ -65,17 +65,15 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 raise PermissionDenied()
 
         # update location_client
-        if 'location_clientid' in validated_data:
+        if 'location_client' in validated_data:
 
-            location_clientid = validated_data.pop('location_clientid')
-            logger.debug('vd1 = {}'.format(location_clientid))
+            client_id = validated_data.pop('location_client')['client_id']
+            logger.debug('vd1 = {}'.format(client_id))
 
-            if location_clientid is None:
+            if client_id is None:
                 location_client = None
             else:
-                location_client = Client.objects.get(client_id=location_clientid)
-
-            logger.debug('vd2 = {}'.format(location_client))
+                location_client = Client.objects.get(client_id=client_id)
 
             if instance.location_client is None or location_client is None:
 
