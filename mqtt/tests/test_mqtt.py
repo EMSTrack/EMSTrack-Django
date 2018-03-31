@@ -1102,7 +1102,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
-        self.assertTrue(ambulance.location_client is None)
+        self.assertFalse(ambulance.location_client is None)
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         # reset location_client
