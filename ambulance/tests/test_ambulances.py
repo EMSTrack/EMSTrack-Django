@@ -319,6 +319,7 @@ class TestAmbulanceUpdate(TestSetup):
                                              'location_client': client1.pk
                                          }, partial=True)
         serializer.is_valid()
+        logger.debug('id = "{}"'.format(client1.id))
         logger.debug(serializer.errors)
         serializer.save(updated_by=user)
 
