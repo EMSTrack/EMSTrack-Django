@@ -56,10 +56,6 @@ class SubscribeClient(BaseClient):
         self.client.message_callback_add('user/+/hospital/+/equipment/+/data',
                                          self.on_hospital_equipment)
 
-        # call handler
-        # self.client.message_callback_add('ambulance/+/call',
-        #                                 self.on_call)
-
         # client status handler
         self.client.message_callback_add('user/+/client/+/status',
                                          self.on_client_status)
@@ -67,6 +63,10 @@ class SubscribeClient(BaseClient):
         # client ambulance status handler
         self.client.message_callback_add('user/+/client/+/ambulance/+/status',
                                          self.on_client_ambulance_status)
+
+        # call handler
+        # self.client.message_callback_add('ambulance/+/call',
+        #                                 self.on_call)
 
         # subscribe
         self.subscribe('user/+/ambulance/+/data', 2)
@@ -194,16 +194,14 @@ class SubscribeClient(BaseClient):
 
     def on_ambulance(self, client, userdata, msg):
 
-        logger.debug("on_ambulance: msg = '{}'".format(msg))
-
-        return
+        logger.debug("on_ambulance: msg = '{}'".format(msg.topic, msg.payload))
 
         try:
 
             # parse topic
             user, data, ambulance_id = self.parse_topic(msg, 3)
 
-        except ParseException as e:
+        except Exception as e:
 
             logger.debug("on_ambulance: ParseException '{}'".format(e))
             return
@@ -286,7 +284,7 @@ class SubscribeClient(BaseClient):
             # parse topic
             user, data, hospital_id = self.parse_topic(msg, 3)
 
-        except ParseException as e:
+        except Exception as e:
 
             logger.debug("on_hospital: ParseException '{}'".format(e))
             return
@@ -352,7 +350,7 @@ class SubscribeClient(BaseClient):
             # parse topic
             user, data, hospital_id, equipment_name = self.parse_topic(msg, 4)
 
-        except ParseException as e:
+        except Exception as e:
 
             logger.debug("on_hospital_equipment: ParseException '{}'".format(e))
             return
@@ -420,7 +418,7 @@ class SubscribeClient(BaseClient):
             # parse topic
             user, data, client_id = self.parse_topic(msg, 3, json=False)
 
-        except ParseException as e:
+        except Exception as e:
 
             logger.debug("on_client_status: ParseException '{}'".format(e))
             return
@@ -544,7 +542,7 @@ class SubscribeClient(BaseClient):
             # parse topic
             user, data, client_id, ambulance_id = self.parse_topic(msg, 4, json=False)
 
-        except ParseException as e:
+        except Exception as e:
 
             logger.debug("on_client_ambulance_status: ParseException '{}'".format(e))
             return
@@ -624,7 +622,7 @@ class SubscribeClient(BaseClient):
             # parse topic
             user, data, call_id = self.parse_topic(msg, 3)
 
-        except ParseException as e:
+        except Exception as e:
 
             logger.debug("on_call: ParseException '{}'".format(e))
             return
