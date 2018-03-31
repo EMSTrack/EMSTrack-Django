@@ -1096,7 +1096,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             '{"location_client_id":"' + client_id + '_other"}', qos=2)
 
         # process messages
-        self.loop(test_client)
+        self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
         # process messages
