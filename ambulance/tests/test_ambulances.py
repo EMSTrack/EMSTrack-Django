@@ -323,7 +323,6 @@ class TestAmbulanceUpdate(TestSetup):
                                          }, partial=True)
         serializer.is_valid()
         logger.debug(serializer.errors)
-        logger.debug(serializer.errors)
         serializer.save(updated_by=user)
 
         # test
