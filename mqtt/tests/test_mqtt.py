@@ -1063,14 +1063,16 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # Client handshake: offline
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
         # Client handshake: offline
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
 
         # process messages
+        self.loop(test_client)
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
         self.loop(second_test_client)
         subscribe_client.loop()
 
