@@ -22,6 +22,12 @@ from hospital.serializers import HospitalSerializer, HospitalEquipmentSerializer
 logger = logging.getLogger(__name__)
 
 
+# Parse exception
+
+class ParseException(Exception):
+    pass
+
+
 # SubscribeClient
 
 class SubscribeClient(BaseClient):
@@ -107,20 +113,25 @@ class SubscribeClient(BaseClient):
                                                      error,
                                                      e))
 
-    def parse_topic(self, msg, json=True):
+    def parse_topic(self, msg, expect, json=True):
 
+        # empty payload ?
         if not msg.payload:
-            # empty payload
-            return
+            raise ParseException('Empty payload')
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(" > Parsing message '{}:{}'".format(msg.topic,
                                                                                      msg.payload)))
+        # empty topic?
+        if not msg.topic:
+            raise ParseException('Empty topic')
 
         # parse topic
         values = msg.topic.split('/')
 
-        # print('values = {}'.format(values))
+        # not enough topics?
+        if len(values) < 5:
+            raise ParseException('Topic with less than size 5')
 
         username = '__unknown__'
         try:
@@ -141,7 +152,7 @@ class SubscribeClient(BaseClient):
                                                      msg.topic,
                                                      msg.payload,
                                                      e))
-            return
+            raise ParseException('User does not exist')
 
         if json:
 
@@ -156,16 +167,17 @@ class SubscribeClient(BaseClient):
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
                                         "JSON formatted incorrectly")
-                return
+                raise ParseException('JSON formatted incorrectly: {}'.format(e))
+
         else:
 
             data = msg.payload.decode()
 
-        if len(values) == 5:
+        if expect == 3 and len(values) == 5:
 
             return user, data, values[3]
 
-        elif len(values) == 7:
+        elif expect == 4 and len(values) == 7:
 
             return user, data, values[3], values[5]
 
@@ -176,7 +188,7 @@ class SubscribeClient(BaseClient):
             # topics with different sizes
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Invalid topic")
-            return
+            raise ParseException('Invalid topic {}'.format(msg.topic))
 
     # Update ambulance
 
@@ -184,23 +196,20 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        return
+        try:
 
-        # parse topic
-        values = self.parse_topic(msg)
-        if not values:
+            # parse topic
+            user, data, ambulance_id = self.parse_topic(msg, 3)
+
+        except ParseException as e:
+
+            logger.debug("on_ambulance: ParseException '{}'".format(e))
             return
-
-        logger.debug("on_ambulance: values = '{}'".format(values))
-
-        # retrieve parsed values
-        user, data, ambulance_id = values
 
         try:
 
-            logger.debug('ambulance_id = {}'.format(ambulance_id))
-
             # retrieve ambulance
+            logger.debug('ambulance_id = {}'.format(ambulance_id))
             ambulance = Ambulance.objects.get(id=ambulance_id)
 
         except Ambulance.DoesNotExist:
@@ -270,15 +279,15 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_hospital: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        # parse topic
-        values = self.parse_topic(msg)
-        if not values:
+        try:
+
+            # parse topic
+            user, data, hospital_id = self.parse_topic(msg, 3)
+
+        except ParseException as e:
+
+            logger.debug("on_hospital: ParseException '{}'".format(e))
             return
-
-        logger.debug("on_hospital: values = '{}'".format(values))
-
-        # retrieve parsed values
-        user, data, hospital_id = values
 
         try:
 
@@ -336,15 +345,15 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        # parse topic
-        values = self.parse_topic(msg)
-        if not values:
+        try:
+
+            # parse topic
+            user, data, hospital_id, equipment_name = self.parse_topic(msg, 4)
+
+        except ParseException as e:
+
+            logger.debug("on_hospital_equipment: ParseException '{}'".format(e))
             return
-
-        logger.debug("on_hospital_equipment: values = '{}'".format(values))
-
-        # retrieve parsed values
-        user, data, hospital_id, equipment_name = values
 
         try:
 
@@ -404,15 +413,15 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_client_status: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        # parse topic
-        values = self.parse_topic(msg, json=False)
-        if not values:
+        try:
+
+            # parse topic
+            user, data, client_id = self.parse_topic(msg, 3, json=False)
+
+        except ParseException as e:
+
+            logger.debug("on_client_status: ParseException '{}'".format(e))
             return
-
-        logger.debug("on_client_status: values = '{}'".format(values))
-
-        # retrieve parsed values
-        user, data, client_id = values
 
         try:
 
@@ -473,7 +482,6 @@ class SubscribeClient(BaseClient):
                 client.status = status.name
 
                 # has ambulance?
-                ambulance_id = None
                 if client.ambulance is not None:
 
                     # log activity
@@ -529,15 +537,15 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_client_ambulance_status: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        # parse topic
-        values = self.parse_topic(msg, json=False)
-        if not values:
+        try:
+
+            # parse topic
+            user, data, client_id, ambulance_id = self.parse_topic(msg, 3, json=False)
+
+        except ParseException as e:
+
+            logger.debug("on_client_ambulance_status: ParseException '{}'".format(e))
             return
-
-        logger.debug("on_client_ambulance_status: values = '{}'".format(values))
-
-        # retrieve parsed values
-        user, data, client_id, ambulance_id = values
 
         try:
 
@@ -565,7 +573,6 @@ class SubscribeClient(BaseClient):
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Invalid client".format(client_id))
-
             return
 
         # retrieve ambulance
@@ -578,7 +585,6 @@ class SubscribeClient(BaseClient):
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Ambulance '{}' does not exist".format(ambulance_id))
-
             return
 
         # is client online?
@@ -611,19 +617,17 @@ class SubscribeClient(BaseClient):
 
         logger.debug("on_call: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-        # parse topic
-        values = self.parse_topic(msg)
-        if not values:
-            return
-
-        logger.debug("on_call: values = '{}'".format(values))
-
-        # retrieve parsed values
-        user, data, call_id = values
-
         try:
 
-            logger.debug('call_id = {}'.format(call_id))
+            # parse topic
+            user, data, call_id = self.parse_topic(msg, 3)
+
+        except ParseException as e:
+
+            logger.debug("on_call: ParseException '{}'".format(e))
+            return
+
+        try:
 
             call = Call.objects.get(id=call_id)
 
@@ -632,7 +636,6 @@ class SubscribeClient(BaseClient):
             # send error message to user
             self.send_error_message(user, msg.topic, msg.payload,
                                     "Call with id '{}' does not exist".format(call_id))
-
             return
 
         except Exception as e:
