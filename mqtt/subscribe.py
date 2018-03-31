@@ -194,7 +194,7 @@ class SubscribeClient(BaseClient):
 
     def on_ambulance(self, client, userdata, msg):
 
-        logger.debug("on_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
+        logger.debug("on_ambulance: msg = '{}'".format(msg))
 
         return
 
