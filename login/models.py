@@ -285,9 +285,6 @@ class Client(models.Model):
 class ClientActivity(Enum):
     HS = 'handshake'
     AI = 'ambulance login'
-    AR = 'ambulance location request'
-    AS = 'ambulance location started'
-    AT = 'ambulance location stopped'
     AO = 'ambulance logout'
     HI = 'hospital login'
     HO = 'hospital logout'
