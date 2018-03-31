@@ -126,13 +126,14 @@ class Ambulance(UpdatedByModel):
         logger.debug('self.location_client: {}'.format(self.location_client))
 
         # if location_client changed
-        model_changed = False
+        location_client_changed = False
         if self._loaded_values is None or self.location_client is None:
-            model_changed = True
+            location_client_changed = True
         elif self.location_client != self._loaded_values.get('location_client', self.location_client):
-            model_changed = True
+            location_client_changed = True
 
         # if comment, status or location changed
+        model_changed = False
         if has_moved or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
@@ -153,9 +154,10 @@ class Ambulance(UpdatedByModel):
             model_changed = True
 
         # if identifier or capability changed
-        elif (self._loaded_values['identifier'] != self.identifier or
+        # NOTE: self._loaded_values is NEVER None because has_moved is True
+        elif (location_client_changed or
+              self._loaded_values['identifier'] != self.identifier or
               self._loaded_values['capability'] != self.capability):
-            # NOTE: self._loaded_values is NEVER None
 
             # save only to Ambulance
             super().save(*args, **kwargs)
@@ -165,8 +167,6 @@ class Ambulance(UpdatedByModel):
 
         # Did the model change?
         if model_changed:
-
-            logger.debug('WILL PUBLISH TO MQTT')
 
             # publish to mqtt
             from mqtt.publish import SingletonPublishClient
