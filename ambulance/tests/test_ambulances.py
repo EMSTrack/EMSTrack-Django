@@ -353,6 +353,19 @@ class TestAmbulanceUpdate(TestSetup):
 
         # test
         serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client': client1.clientid,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
         self.assertDictEqual(serializer.data, result)
 
     def test_ambulance_patch_viewset(self):
