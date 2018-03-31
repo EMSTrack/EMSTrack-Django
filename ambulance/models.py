@@ -166,6 +166,8 @@ class Ambulance(UpdatedByModel):
         # Did the model change?
         if model_changed:
 
+            logger.debug('WILL PUBLISH TO MQTT')
+
             # publish to mqtt
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().publish_ambulance(self)
