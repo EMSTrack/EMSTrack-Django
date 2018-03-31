@@ -125,10 +125,11 @@ class Ambulance(UpdatedByModel):
         logger.debug(self._loaded_values)
 
         # if location_client changed
-        if (self._loaded_values is not None) and self._loaded_values['location_client'] == self.location_client:
-            model_changed = False
-        else:
+        model_changed = False
+        if self._loaded_values is None:
             model_changed = True
+        elif self._loaded_values['location_client'] != self.location_client:
+            model_changed = False
 
         # if comment, status or location changed
         if has_moved or \
