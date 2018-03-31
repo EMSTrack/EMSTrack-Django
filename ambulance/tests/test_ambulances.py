@@ -352,7 +352,6 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a)
         self.assertDictEqual(serializer.data, result)
 
-
     def test_ambulance_patch_viewset(self):
 
         # instantiate client
