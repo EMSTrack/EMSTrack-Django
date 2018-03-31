@@ -82,6 +82,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 # fine, clear or update location client
                 validated_data['location_client'] = location_client.id
 
+        logger.debug('vd4 = {}'.format(instance))
         logger.debug('vd3 = {}'.format(validated_data))
 
         return super().update(instance, validated_data)
