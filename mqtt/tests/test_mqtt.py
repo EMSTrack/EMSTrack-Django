@@ -1035,12 +1035,27 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
                             'ambulance login')
 
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, subscribe_client_id, self.a1.id),
+                            'ambulance login')
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # check record
+        clnt = Client.objects.get(client_id=subscribe_client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, self.a1.id)
 
