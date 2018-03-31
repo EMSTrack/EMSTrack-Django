@@ -1062,15 +1062,28 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # process messages
-        #self.loop(test_client)
-        #subscribe_client.loop()
-
-        time.sleep(1)
+        self.loop(test_client)
+        subscribe_client.loop()
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
-        logger.debug(ambulance)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, client_id)
 
+        # Try to change location client without reset
+        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                            '{"location_client_id":"' + client_id + '_other"}', qos=2)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
         self.assertFalse(ambulance.location_client is None)
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
