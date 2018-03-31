@@ -316,7 +316,7 @@ class TestAmbulanceUpdate(TestSetup):
 
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client': client1.id
+                                             'location_client': client1.pk
                                          }, partial=True)
         serializer.is_valid()
         logger.debug(serializer.errors)
