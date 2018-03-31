@@ -542,9 +542,9 @@ class SubscribeClient(BaseClient):
     # update client information
     def on_client_ambulance_status(self, clnt, userdata, msg):
 
-        logger.debug("on_client_ambulance_status: msg = '{}:{}'".format(msg.topic, msg.payload))
-
         try:
+
+            logger.debug("on_client_ambulance_status: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
             user, data, client_id, ambulance_id = self.parse_topic(msg, 4, json=False)
