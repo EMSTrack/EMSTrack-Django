@@ -1060,6 +1060,46 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, ClientStatus.O.name)
         self.assertEqual(obj.activity, ClientActivity.HS.name)
 
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # Ambulance handshake: ambulance login
+        second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a1.id),
+                                 'ambulance login')
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=second_client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+
         # Client handshake: offline
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
@@ -1089,43 +1129,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
     def _test(self):
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance login')
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # Ambulance handshake: ambulance login
-        subscribe_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, subscribe_client_id, self.a1.id),
-                                 'ambulance login')
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # check record
-        clnt = Client.objects.get(client_id=client_id)
-        self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, self.a1.id)
-
-        # check record log
-        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
-        self.assertEqual(obj.status, ClientStatus.O.name)
-        self.assertEqual(obj.activity, ClientActivity.AI.name)
-        self.assertEqual(obj.details, self.a1.identifier)
-
-        # check record
-        clnt = Client.objects.get(client_id=subscribe_client_id)
-        self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, self.a1.id)
-
-        # check record log
-        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
-        self.assertEqual(obj.status, ClientStatus.O.name)
-        self.assertEqual(obj.activity, ClientActivity.AI.name)
-        self.assertEqual(obj.details, self.a1.identifier)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
