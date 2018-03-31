@@ -1055,7 +1055,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Start streaming data
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
-                            '{"location_client":{}}'.format(client_id))
+                            '{"location_client":'+client_id+'}')
 
         # process messages
         self.loop(test_client)
