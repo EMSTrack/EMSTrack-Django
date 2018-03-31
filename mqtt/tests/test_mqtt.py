@@ -1136,8 +1136,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertFalse(ambulance.location_client is None)
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
-        #############################################################################################
-
         # reset location_client
         test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
                             '{"location_client_id":""}', qos=2)
@@ -1153,6 +1151,8 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
         self.assertTrue(ambulance.location_client is None)
+
+        #############################################################################################
 
         if False:
 
@@ -1175,6 +1175,8 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
             ambulance = Ambulance.objects.get(id=self.a1.id)
             self.assertFalse(ambulance.location_client is None)
             self.assertEqual(ambulance.location_client.client_id, client_id)
+
+        #############################################################################################
 
         # Ambulance handshake: ambulance logout
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
@@ -1214,8 +1216,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.activity, ClientActivity.AO.name)
         self.assertEqual(obj.details, self.a1.identifier)
 
-        #############################################################################################
-
         # Client handshake: offline
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
@@ -1239,19 +1239,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
-        # check record
-        clnt = Client.objects.get(client_id=second_client_id)
-        self.assertEqual(clnt.status, ClientStatus.F.name)
-
-    def _test(self):
-
-
-
-
-
-
-
-
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
         self.assertEqual(len(obj), 4)
@@ -1267,7 +1254,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[3].activity, ClientActivity.HS.name)
 
         # check record
-        clnt = Client.objects.get(client_id=subscribe_client_id)
+        clnt = Client.objects.get(client_id=second_client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
         # check record log
