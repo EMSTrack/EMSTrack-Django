@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
+    location_client_id = serializers.CharField(source='location_client.client_id', required=False)
     location = PointField(required=False)
     
     class Meta:
@@ -25,6 +26,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                   'capability', 'status',
                   'orientation', 'location',
                   'timestamp', 'location_client',
+                  'location_client_id',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
 

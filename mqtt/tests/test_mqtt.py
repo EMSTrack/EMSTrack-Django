@@ -1049,6 +1049,11 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.activity, ClientActivity.AI.name)
         self.assertEqual(obj.details, self.a1.identifier)
 
+        # Start streaming data
+        #test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+        #                    '{"location_client":1}')
+
+
         # Ambulance handshake: ambulance logout
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
                             'ambulance logout')
