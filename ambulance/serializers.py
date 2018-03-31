@@ -76,7 +76,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if instance.location_client is None or location_client is None:
 
                 # fine, clear or update location client
-                validated_data['location_client'] = location_client
+                validated_data['location_client'] = location_client.id
 
         logger.debug('vd = {}'.format(validated_data))
 
