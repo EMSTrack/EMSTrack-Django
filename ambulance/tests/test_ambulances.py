@@ -316,10 +316,10 @@ class TestAmbulanceUpdate(TestSetup):
 
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client': client1.id
+                                             'location_client': client1.clientid
                                          }, partial=True)
         serializer.is_valid()
-        logger.debug('id = "{}"'.format(client1.id))
+        logger.debug('id = "{}"'.format(client1.clientid))
         logger.debug(serializer.errors)
         serializer.save(updated_by=user)
 
@@ -334,7 +334,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client': client1.id,
+            'location_client': client1.clientid,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -343,7 +343,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will not change
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client': client2.id
+                                             'location_client': client2.clientid
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
