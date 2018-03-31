@@ -1063,6 +1063,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is None)
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         # Ambulance handshake: ambulance logout
@@ -1070,7 +1071,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             'ambulance logout')
 
         # process messages
-        self.loop(test_client)
+        self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
         # check record
