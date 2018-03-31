@@ -1001,6 +1001,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'status': AmbulanceStatus.OS.name,
             'orientation': orientation,
             'location': point2str(location),
+            'location_client': None,
             'timestamp': date2iso(a.timestamp),
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
