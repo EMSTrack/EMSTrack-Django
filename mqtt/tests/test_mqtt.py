@@ -1057,11 +1057,11 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
                             '{"location_client_id":"' + client_id + '"}', qos=2)
 
-        if False:
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
 
-            # process messages
-            self.loop(test_client)
-            subscribe_client.loop()
+        if False:
 
             # check record
             ambulance = Ambulance.objects.get(id=self.a1.id)
@@ -1092,8 +1092,6 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-
-        time.sleep(1)
 
         # wait for disconnect
         test_client.wait()
