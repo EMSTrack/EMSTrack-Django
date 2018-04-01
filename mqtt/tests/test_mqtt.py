@@ -1279,6 +1279,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[3].status, ClientStatus.F.name)
         self.assertEqual(obj[3].activity, ClientActivity.HS.name)
 
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is True)
+
         # check record
         clnt = Client.objects.get(client_id=second_client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
@@ -1290,16 +1294,12 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[0].activity, ClientActivity.HS.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
         self.assertEqual(obj[1].activity, ClientActivity.AI.name)
-        self.assertEqual(obj[1].details, self.a1.identifier)
+        self.assertEqual(obj[1].details, self.a2.identifier)
         self.assertEqual(obj[2].status, ClientStatus.O.name)
         self.assertEqual(obj[2].activity, ClientActivity.AO.name)
-        self.assertEqual(obj[2].details, self.a1.identifier)
+        self.assertEqual(obj[2].details, self.a2.identifier)
         self.assertEqual(obj[3].status, ClientStatus.F.name)
         self.assertEqual(obj[3].activity, ClientActivity.HS.name)
-
-        # check ambulance record
-        ambulance = Ambulance.objects.get(id=self.a1.id)
-        self.assertFalse(ambulance.location_client is True)
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a2.id)
