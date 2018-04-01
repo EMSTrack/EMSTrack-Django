@@ -494,6 +494,14 @@ class SubscribeClient(BaseClient):
                         self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username,
                                                                                           client_id, client.ambulance.id))
 
+                        # is client streaming location?
+                        if client.ambulance.location_client == client.client_id:
+
+                            # stop streaming
+                            ambulance = client.ambulance
+                            ambulance.location_client = None
+                            ambulance.save()
+
                         # logout ambulance
                         client.ambulance = None
 
@@ -581,7 +589,7 @@ class SubscribeClient(BaseClient):
 
                 # send error message to user
                 self.send_error_message(user, msg.topic, msg.payload,
-                                        "Invalid client".format(client_id))
+                                        "Invalid client {}".format(client_id))
                 return
 
             # retrieve ambulance
@@ -613,6 +621,13 @@ class SubscribeClient(BaseClient):
                 client.save()
 
             elif activity == ClientActivity.AO:
+
+                # is client streaming location?
+                if ambulance.location_client == client.client_id:
+
+                    # stop streaming
+                    ambulance.location_client = None
+                    ambulance.save()
 
                 client.ambulance = None
                 client.save()
