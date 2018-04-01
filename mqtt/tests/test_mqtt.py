@@ -1118,7 +1118,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
         self.assertEqual(obj.status, ClientStatus.O.name)
         self.assertEqual(obj.activity, ClientActivity.SL.name)
-        self.assertEqual(obj.details, None)
+        self.assertEqual(obj.details, self.a1.identifier)
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a1.id)
@@ -1158,7 +1158,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
         self.assertEqual(obj.status, ClientStatus.O.name)
         self.assertEqual(obj.activity, ClientActivity.TL.name)
-        self.assertEqual(obj.details, None)
+        self.assertEqual(obj.details, self.a1.identifier)
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a1.id)
