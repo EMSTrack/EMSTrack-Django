@@ -533,10 +533,11 @@ class SubscribeClient(BaseClient):
                             ambulance.location_client = None
                             ambulance.save()
 
-                            log = ClientLog(client=old_location_client,
-                                            status=old_location_client.status,
+                            # log activity
+                            log = ClientLog(client=client,
+                                            status=client.status,
                                             activity=ClientActivity.TL.name,
-                                            details=old_location_client.ambulance.identifier)
+                                            details=client.ambulance.identifier)
                             log.save()
 
                         # logout ambulance
