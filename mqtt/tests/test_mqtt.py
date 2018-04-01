@@ -1227,12 +1227,12 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.loop(second_test_client)
         subscribe_client.loop()
 
-        # check record
+        # check client record
         clnt = Client.objects.get(client_id=second_client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance, None)
 
-        # check record log
+        # check client record log
         obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
         self.assertEqual(obj.status, ClientStatus.O.name)
         self.assertEqual(obj.activity, ClientActivity.AO.name)
