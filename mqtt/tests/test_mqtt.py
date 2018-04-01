@@ -1214,6 +1214,11 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.activity, ClientActivity.AO.name)
         self.assertEqual(obj.details, self.a1.identifier)
 
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a2.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, second_client_id)
+
         # Ambulance handshake: ambulance logout
         second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a2.id),
                                    'ambulance logout')
@@ -1235,8 +1240,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a2.id)
-        self.assertFalse(ambulance.location_client is None)
-        self.assertEqual(ambulance.location_client.client_id, second_client_id)
+        self.assertTrue(ambulance.location_client is None)
 
         # Client handshake: offline
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
@@ -1292,6 +1296,10 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[2].details, self.a1.identifier)
         self.assertEqual(obj[3].status, ClientStatus.F.name)
         self.assertEqual(obj[3].activity, ClientActivity.HS.name)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is True)
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a2.id)
