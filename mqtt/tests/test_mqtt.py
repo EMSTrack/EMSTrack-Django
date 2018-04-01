@@ -1180,7 +1180,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Second client start streaming data
         second_test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a2.id),
-                                   '{"location_client_id":"' + client_id + '"}', qos=2)
+                                   '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
         self.loop(second_test_client)
