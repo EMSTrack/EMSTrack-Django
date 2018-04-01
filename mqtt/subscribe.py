@@ -277,7 +277,7 @@ class SubscribeClient(BaseClient):
                             log = ClientLog(client=old_location_client,
                                             status=old_location_client.status,
                                             activity=ClientActivity.TL.name,
-                                            details="new client: {}".format(new_client))
+                                            details="new client: {}".format(new_location_client))
                             log.save()
 
                         # log in new client
@@ -285,7 +285,7 @@ class SubscribeClient(BaseClient):
                             log = ClientLog(client=new_location_client,
                                             status=new_location_client.status,
                                             activity=ClientActivity.SL.name,
-                                            details="old client: {}".format(old_client))
+                                            details="old client: {}".format(old_location_client))
                             log.save()
 
             if not is_valid:
