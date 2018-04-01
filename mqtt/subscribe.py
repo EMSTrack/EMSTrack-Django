@@ -658,11 +658,6 @@ class SubscribeClient(BaseClient):
                 # Is client already logged in?
                 if client.ambulance is not None and client.ambulance != ambulance:
 
-                    # log activity
-                    log = ClientLog(client=client, status=client.status, activity=ClientActivity.AO,
-                                    details=client.ambulance.identifier)
-                    log.save()
-
                     # is client streaming location?
                     if client.ambulance.location_client == client:
 
@@ -670,6 +665,18 @@ class SubscribeClient(BaseClient):
                         current_ambulance = client.ambulance
                         current_ambulance.location_client = None
                         current_ambulance.save()
+
+                        # log activity
+                        log = ClientLog(client=client,
+                                        status=client.status,
+                                        activity=ClientActivity.TL.name,
+                                        details=client.ambulance.identifier)
+                        log.save()
+
+                    # log activity
+                    log = ClientLog(client=client, status=client.status, activity=ClientActivity.AO,
+                                    details=client.ambulance.identifier)
+                    log.save()
 
                 client.ambulance = ambulance
                 client.save()
@@ -682,6 +689,13 @@ class SubscribeClient(BaseClient):
                     # stop streaming
                     ambulance.location_client = None
                     ambulance.save()
+
+                    # log activity
+                    log = ClientLog(client=client,
+                                    status=client.status,
+                                    activity=ClientActivity.TL.name,
+                                    details=client.ambulance.identifier)
+                    log.save()
 
                 client.ambulance = None
                 client.save()
