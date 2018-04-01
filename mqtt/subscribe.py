@@ -495,7 +495,7 @@ class SubscribeClient(BaseClient):
                                                                                           client_id, client.ambulance.id))
 
                         # is client streaming location?
-                        if client.ambulance.location_client == client.client_id:
+                        if client.ambulance.location_client == client:
 
                             # stop streaming
                             ambulance = client.ambulance
@@ -623,7 +623,7 @@ class SubscribeClient(BaseClient):
             elif activity == ClientActivity.AO:
 
                 # is client streaming location?
-                if ambulance.location_client == client.client_id:
+                if ambulance.location_client == client:
 
                     # stop streaming
                     ambulance.location_client = None
