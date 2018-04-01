@@ -1441,7 +1441,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[2].status, ClientStatus.O.name)
         self.assertEqual(obj[2].activity, ClientActivity.SL.name)
         self.assertEqual(obj[2].details, self.a1.identifier)
-        self.assertEqual(obj[3].status, ClientStatus.O.name)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
         self.assertEqual(obj[3].activity, ClientActivity.TL.name)
         self.assertEqual(obj[3].details, self.a1.identifier)
         self.assertEqual(obj[4].status, ClientStatus.F.name)
