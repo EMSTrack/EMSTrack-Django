@@ -1279,7 +1279,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 4)
+        self.assertEqual(len(obj), 6)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[0].activity, ClientActivity.HS.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
@@ -1288,8 +1288,12 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[2].status, ClientStatus.O.name)
         self.assertEqual(obj[2].activity, ClientActivity.AO.name)
         self.assertEqual(obj[2].details, self.a1.identifier)
-        self.assertEqual(obj[3].status, ClientStatus.F.name)
-        self.assertEqual(obj[3].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[3].activity, ClientActivity.SL.name)
+        self.assertEqual(obj[3].details, self.a1.identifier)
+        self.assertEqual(obj[4].activity, ClientActivity.TL.name)
+        self.assertEqual(obj[4].details, self.a1.identifier)
+        self.assertEqual(obj[5].status, ClientStatus.F.name)
+        self.assertEqual(obj[5].activity, ClientActivity.HS.name)
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a1.id)
@@ -1301,7 +1305,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 4)
+        self.assertEqual(len(obj), 6)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[0].activity, ClientActivity.HS.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
@@ -1310,8 +1314,12 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[2].status, ClientStatus.O.name)
         self.assertEqual(obj[2].activity, ClientActivity.AO.name)
         self.assertEqual(obj[2].details, self.a2.identifier)
-        self.assertEqual(obj[3].status, ClientStatus.F.name)
-        self.assertEqual(obj[3].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[3].activity, ClientActivity.SL.name)
+        self.assertEqual(obj[3].details, self.a2.identifier)
+        self.assertEqual(obj[4].activity, ClientActivity.TL.name)
+        self.assertEqual(obj[4].details, self.a2.identifier)
+        self.assertEqual(obj[5].status, ClientStatus.F.name)
+        self.assertEqual(obj[5].activity, ClientActivity.HS.name)
 
         # check ambulance record
         ambulance = Ambulance.objects.get(id=self.a2.id)

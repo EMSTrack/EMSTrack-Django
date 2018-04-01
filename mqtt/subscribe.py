@@ -276,14 +276,16 @@ class SubscribeClient(BaseClient):
                         if old_location_client:
                             log = ClientLog(client=old_location_client,
                                             status=old_location_client.status,
-                                            activity=ClientActivity.TL.name)
+                                            activity=ClientActivity.TL.name,
+                                            details=old_location_client.ambulance.identifier)
                             log.save()
 
                         # log in new client
                         if new_location_client:
                             log = ClientLog(client=new_location_client,
                                             status=new_location_client.status,
-                                            activity=ClientActivity.SL.name)
+                                            activity=ClientActivity.SL.name,
+                                            details=new_location_client.ambulance.identifier)
                             log.save()
 
             if not is_valid:
