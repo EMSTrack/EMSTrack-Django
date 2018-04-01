@@ -253,9 +253,32 @@ class SubscribeClient(BaseClient):
 
                 if serializer.is_valid():
 
+                    # current location client
+                    old_location_client = ambulance.location_client
+
                     # save to database
                     serializer.save(updated_by=user)
                     is_valid = True
+
+                    # retrieve location client
+                    new_location_client = Ambulance.objects.get(id=ambulance_id).location_client
+
+                    # change in location client?
+                    if old_location_client != new_location_client:
+
+                        # log in old client
+                        if old_location_client:
+                            log = ClientLog(client=old_location_client,
+                                            status=old_location_client.status.name,
+                                            activity=ClientActivity.TL.name)
+                            log.save()
+
+                        # log in new client
+                        if new_location_client:
+                            log = ClientLog(client=new_location_client,
+                                            status=new_location_client.status.name,
+                                            activity=ClientActivity.SL.name)
+                            log.save()
 
             if not is_valid:
 

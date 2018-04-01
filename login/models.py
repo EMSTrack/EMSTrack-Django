@@ -289,6 +289,8 @@ class ClientActivity(Enum):
     HS = 'handshake'
     AI = 'ambulance login'
     AO = 'ambulance logout'
+    TL = 'ambulance stop location'
+    SL = 'ambulance start location'
     HI = 'hospital login'
     HO = 'hospital logout'
 
