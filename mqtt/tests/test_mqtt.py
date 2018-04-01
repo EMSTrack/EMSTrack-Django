@@ -1224,7 +1224,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    'ambulance logout')
 
         # process messages
-        self.loop(test_client)
+        self.loop(second_test_client)
         subscribe_client.loop()
 
         # check record
