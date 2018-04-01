@@ -139,6 +139,7 @@ class Ambulance(UpdatedByModel):
             location_client_changed = True
 
         logger.debug('location_client_changed: {}'.format(location_client_changed))
+        # TODO: Check if client is logged with ambulance if setting location_client
 
         # if comment, status or location changed
         model_changed = False
