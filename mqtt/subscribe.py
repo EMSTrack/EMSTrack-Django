@@ -263,14 +263,14 @@ class SubscribeClient(BaseClient):
                     # retrieve location client
                     new_location_client = Ambulance.objects.get(id=ambulance_id).location_client
 
-                    logger.debug("old_location_client: {}".format(old_location_client))
-                    logger.debug("new_location_client: {}".format(new_location_client))
+                    # logger.debug("old_location_client: {}".format(old_location_client))
+                    # logger.debug("new_location_client: {}".format(new_location_client))
 
                     # change in location client?
                     if old_location_client != new_location_client:
 
-                        logger.debug("location_client changed from '{}' to {}".format(old_location_client,
-                                                                                      new_location_client))
+                        # logger.debug("location_client changed from '{}' to {}".format(old_location_client,
+                        #                                                               new_location_client))
 
                         # log in old client
                         if old_location_client:
@@ -532,6 +532,12 @@ class SubscribeClient(BaseClient):
                             ambulance = client.ambulance
                             ambulance.location_client = None
                             ambulance.save()
+
+                            log = ClientLog(client=old_location_client,
+                                            status=old_location_client.status,
+                                            activity=ClientActivity.TL.name,
+                                            details=old_location_client.ambulance.identifier)
+                            log.save()
 
                         # logout ambulance
                         client.ambulance = None
