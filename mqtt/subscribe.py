@@ -617,6 +617,22 @@ class SubscribeClient(BaseClient):
             # ambulance login?
             if activity == ClientActivity.AI:
 
+                # Is client already logged in?
+                if client.ambulance is not None and client.ambulance != ambulance:
+
+                    # log activity
+                    log = ClientLog(client=client, status=client.status, activity=ClientActivity.AO,
+                                    details=client.ambulance.identifier)
+                    log.save()
+
+                    # is client streaming location?
+                    if client.ambulance.location_client == client:
+
+                        # stop streaming
+                        current_ambulance = client.ambulance
+                        current_ambulance.location_client = None
+                        current_ambulance.save()
+
                 client.ambulance = ambulance
                 client.save()
 
