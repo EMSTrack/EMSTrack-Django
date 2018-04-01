@@ -525,7 +525,7 @@ class MQTTTestClient(BaseClient):
         except ValueError:
 
             if self.check_payload:
-                raise Exception('Unexpected message "' + msg.topic + ':' + msg.payload + '"')
+                raise Exception('Unexpected message "{}:{}"'.format(msg.topic, msg.payload))
 
         if self.debug:
             logger.debug('Just received {}[count={},expecting={}]:{}'.format(msg.topic,
