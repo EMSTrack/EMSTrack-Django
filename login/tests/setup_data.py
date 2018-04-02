@@ -45,6 +45,16 @@ class TestSetupData:
             email='test4@user.com',
             password='extremely_secret')
 
+        cls.u6 = User.objects.create_user(
+            username='highprioritytestuser',
+            email='test6@user.com',
+            password='exceptionally_secret')
+
+        cls.u7 = User.objects.create_user(
+            username='lowprioritytestuser',
+            email='test7@user.com',
+            password='exceedingly_secret')
+
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
             identifier='BC-179',
@@ -206,6 +216,8 @@ class TestSetupData:
 
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
+        cls.u6.groups.set([cls.g1, cls.g4])
+        cls.u7.groups.set([cls.g1, cls.g5])
 
         # Locations
         cls.l1 = Location.objects.create(

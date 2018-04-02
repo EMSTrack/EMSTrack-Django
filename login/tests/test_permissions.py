@@ -347,6 +347,13 @@ class TestPermissions(TestSetup):
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
 
+
+        # priority group testing
+        u = self.u6
+        perms = Permissions(u)
+        self.assertEqual(0, len(perms.ambulances))
+        self.assertEqual(0, len(perms.hospitals))
+
     def test_cache(self):
 
         # clear cache
