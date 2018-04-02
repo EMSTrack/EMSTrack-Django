@@ -113,6 +113,8 @@ class Permissions:
             if user.username == 'highprioritytestuser':
                 print('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
                 print('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
+                print(self.ambulances)
+                print(self.hospitals)
 
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1
