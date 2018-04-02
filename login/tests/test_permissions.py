@@ -350,11 +350,35 @@ class TestPermissions(TestSetup):
 
         # priority group testing
         u = self.u6
-        for group in u.groups.all().order_by('-groupprofile__priority', 'name'):
-            print(group)
         perms = Permissions(u)
-        self.assertEqual(0, len(perms.ambulances))
+        self.assertEqual(1, len(perms.ambulances))
         self.assertEqual(0, len(perms.hospitals))
+        answer = []
+        self.assertCountEqual(answer, perms.get_can_read('ambulances'))
+        answer = {
+            'ambulances': {
+                self.a1.id: {
+                    'ambulance': self.a1,
+                    'can_read': False,
+                    'can_write': False
+                },
+            },
+            'hospitals': {}
+        }
+        for id in all_ambulances:
+            if id in answer['ambulances']:
+                self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(ambulance=id)
+        for id in all_hospitals:
+            if id in answer['hospitals']:
+                self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(hospital=id)
+
+
 
     def test_cache(self):
 
