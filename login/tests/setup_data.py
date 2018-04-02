@@ -161,6 +161,8 @@ class TestSetupData:
         cls.g1 = Group.objects.create(name='EMTs')
         cls.g2 = Group.objects.create(name='Drivers')
         cls.g3 = Group.objects.create(name='Dispatcher')
+        cls.g4 = Group.objects.create(name='NoAccessUser')
+        print(cls.g4.)
 
         # add hospitals to groups
         GroupHospitalPermission.objects.create(group=cls.g1,
@@ -177,6 +179,8 @@ class TestSetupData:
 
         # g3 has no hospitals
 
+        # g4 has no hospitals
+
         # add ambulances to groups
         GroupAmbulancePermission.objects.create(group=cls.g1,
                                                 ambulance=cls.a2,
@@ -190,6 +194,8 @@ class TestSetupData:
         GroupAmbulancePermission.objects.create(group=cls.g3,
                                                 ambulance=cls.a3,
                                                 can_write=True)
+
+        # g4 has no ambulances
 
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
