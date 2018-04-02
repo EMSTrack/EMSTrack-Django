@@ -26,15 +26,19 @@
                 {{ client.status|get_client_status }}
             </p>
 
+            {% if client.ambulance %}
             <p>
                 <strong>Ambulance:</strong>
                 {{ client.ambulance.identifier }}
             </p>
+            {% endif %}
 
+            {% if client.hospital %}
             <p>
                 <strong>Hospital:</strong>
-                {{ client.hospital }}
+                {{ client.hospital.name }}
             </p>
+            {% endif %}
 
             <p>
                 <strong>Updated on:</strong>
