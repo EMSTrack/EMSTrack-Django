@@ -110,9 +110,9 @@ class Permissions:
                 # logger.debug('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
                 # logger.debug('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
 
-                if user.username == 'highprioritytestuser':
-                    print('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
-                    print('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
+            if user.username == 'highprioritytestuser':
+                print('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
+                print('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
 
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1
