@@ -347,8 +347,7 @@ class TestPermissions(TestSetup):
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
 
-
-        # priority group testing
+        # Group priority testing
         u = self.u6
         perms = Permissions(u)
         self.assertEqual(1, len(perms.ambulances))
