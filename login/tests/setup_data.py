@@ -166,8 +166,8 @@ class TestSetupData:
 
         cls.g4.groupprofile.priority = 20
         cls.g5.groupprofile.priority = 1
-        cls.g4.save()
-        cls.g5.save()
+        cls.g4.groupprofile.save()
+        cls.g5.groupprofile.save()
 
         for obj in Group.objects.all():
             print(obj.name)
