@@ -45,6 +45,7 @@ class SubscribeClient(BaseClient):
         # client.subscribe('#', 2)
 
         # ambulance handler
+        # TODO: add client_id to user/+/ambulance/+/data to validate client
         self.client.message_callback_add('user/+/ambulance/+/data',
                                          self.on_ambulance)
 
