@@ -211,12 +211,15 @@ class TestSetupData:
 
         GroupAmbulancePermission.objects.create(group=cls.g4,
                                                 ambulance=cls.a1,
+                                                can_read=True,
                                                 can_write=True)
         GroupAmbulancePermission.objects.create(group=cls.g5,
                                                 ambulance=cls.a1,
+                                                can_read=False,
                                                 can_write=False)
         GroupAmbulancePermission.objects.create(group=cls.g6,
                                                 ambulance=cls.a1,
+                                                can_read=False,
                                                 can_write=False)
 
         cls.u4.groups.set([cls.g2])
