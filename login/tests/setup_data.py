@@ -161,9 +161,11 @@ class TestSetupData:
         cls.g1 = Group.objects.create(name='EMTs')
         cls.g2 = Group.objects.create(name='Drivers')
         cls.g3 = Group.objects.create(name='Dispatcher')
-        cls.g4 = Group.objects.create(name='NoAccessUser')
-        # cls.g4 = Group.objects.create(name='HighPriorityNoAccess')
-        # cls.g5 = Group.objects.create(name='LowPriorityNoAccess')
+        cls.g4 = Group.objects.create(name='HighPriorityNoAccess')
+        cls.g5 = Group.objects.create(name='LowPriorityNoAccess')
+        cls.g4.groupprofile.priority = 20
+        cls.g5.groupprofile.priority = 1
+
         print(cls.g4.groupprofile.priority)
 
         # add hospitals to groups
@@ -179,9 +181,7 @@ class TestSetupData:
                                                hospital=cls.h2,
                                                can_write=True)
 
-        # g3 has no hospitals
-
-        # g4 has no hospitals
+        # g3, g4, and g5 have no hospitals
 
         # add ambulances to groups
         GroupAmbulancePermission.objects.create(group=cls.g1,
@@ -197,7 +197,7 @@ class TestSetupData:
                                                 ambulance=cls.a3,
                                                 can_write=True)
 
-        # g4 has no ambulances
+        # g4 and g5 have no ambulances
 
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
