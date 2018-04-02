@@ -350,6 +350,8 @@ class TestPermissions(TestSetup):
 
         # priority group testing
         u = self.u6
+        for group in u.groups.all().order_by('-groupprofile__priority', 'name'):
+            print(group)
         perms = Permissions(u)
         self.assertEqual(0, len(perms.ambulances))
         self.assertEqual(0, len(perms.hospitals))
