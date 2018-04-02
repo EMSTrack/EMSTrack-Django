@@ -171,17 +171,14 @@ class TestSetupData:
         cls.g1 = Group.objects.create(name='EMTs')
         cls.g2 = Group.objects.create(name='Drivers')
         cls.g3 = Group.objects.create(name='Dispatcher')
-        cls.g4 = Group.objects.create(name='HighPriorityNoAccess')
-        cls.g5 = Group.objects.create(name='LowPriorityNoAccess')
 
-        cls.g4.groupprofile.priority = 20
-        cls.g5.groupprofile.priority = 1
-        cls.g4.groupprofile.save()
+        cls.g4 = Group.objects.create(name='MediumPriorityAccess') # Default priority = 10
+        cls.g5 = Group.objects.create(name='HighPriorityNoAccess')
+        cls.g6 = Group.objects.create(name='LowPriorityNoAccess')
+        cls.g5.groupprofile.priority = 20
+        cls.g6.groupprofile.priority = 1
         cls.g5.groupprofile.save()
-
-        for obj in Group.objects.all():
-            print(obj.name)
-            print(obj.groupprofile.priority)
+        cls.g6.groupprofile.save()
 
         # add hospitals to groups
         GroupHospitalPermission.objects.create(group=cls.g1,
@@ -212,12 +209,20 @@ class TestSetupData:
                                                 ambulance=cls.a3,
                                                 can_write=True)
 
-        # g4 and g5 have no ambulances
+        GroupAmbulancePermission.objects.create(group=cls.g4,
+                                                ambulance=cls.a1,
+                                                can_write=True)
+        GroupAmbulancePermission.objects.create(group=cls.g5,
+                                                ambulance=cls.a1,
+                                                can_write=False)
+        GroupAmbulancePermission.objects.create(group=cls.g6,
+                                                ambulance=cls.a1,
+                                                can_write=False)
 
         cls.u4.groups.set([cls.g2])
         cls.u5.groups.set([cls.g1, cls.g3])
-        cls.u6.groups.set([cls.g1, cls.g4])
-        cls.u7.groups.set([cls.g1, cls.g5])
+        cls.u6.groups.set([cls.g4, cls.g5])
+        cls.u7.groups.set([cls.g4, cls.g6])
 
         # Locations
         cls.l1 = Location.objects.create(
