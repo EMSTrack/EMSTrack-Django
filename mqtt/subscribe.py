@@ -518,7 +518,8 @@ class SubscribeClient(BaseClient):
 
                         # clean up mqtt topic
                         self.remove_topic('/user/{}/client/{}/ambulance/{}/status'.format(user.username,
-                                                                                          client_id, client.ambulance.id))
+                                                                                          client_id,
+                                                                                          client.ambulance.id))
 
                         # is client streaming location?
                         if client.ambulance.location_client == client:
@@ -553,7 +554,8 @@ class SubscribeClient(BaseClient):
 
                         # clean up mqtt topic
                         self.remove_topic('/user/{}/client/{}/hospital/{}/status'.format(user.username,
-                                                                                         client_id, client.hospital.id))
+                                                                                         client_id,
+                                                                                         client.hospital.id))
 
                         # logout hospital
                         client.hospital = None
@@ -701,7 +703,8 @@ class SubscribeClient(BaseClient):
                 client.save()
 
             # log activity
-            log = ClientLog(client=client, status=client.status, activity=activity.name, details=ambulance.identifier)
+            log = ClientLog(client=client, status=client.status,
+                            activity=activity.name, details=ambulance.identifier)
             log.save()
 
         except Exception as e:
