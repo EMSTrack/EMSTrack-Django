@@ -214,7 +214,7 @@ class TestSetupData:
                                                 can_write=True)
         GroupAmbulancePermission.objects.create(group=cls.g5,
                                                 ambulance=cls.a1,
-                                                can_write=False)
+                                                can_write=True)
         GroupAmbulancePermission.objects.create(group=cls.g6,
                                                 ambulance=cls.a1,
                                                 can_write=False)
