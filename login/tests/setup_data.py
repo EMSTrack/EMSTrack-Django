@@ -163,10 +163,15 @@ class TestSetupData:
         cls.g3 = Group.objects.create(name='Dispatcher')
         cls.g4 = Group.objects.create(name='HighPriorityNoAccess')
         cls.g5 = Group.objects.create(name='LowPriorityNoAccess')
+
         cls.g4.groupprofile.priority = 20
         cls.g5.groupprofile.priority = 1
+        cls.g4.save()
+        cls.g5.save()
 
-        print(cls.g4.groupprofile.priority)
+        for obj in Group.objects.all():
+            print(obj.name)
+            print(obj.groupprofile.priority)
 
         # add hospitals to groups
         GroupHospitalPermission.objects.create(group=cls.g1,
