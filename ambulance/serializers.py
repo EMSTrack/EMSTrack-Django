@@ -260,6 +260,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
     
+    patient_set = PatientSerializer(many = True)
     ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True)
     location = PointField(required=False)
     
@@ -269,7 +270,8 @@ class CallSerializer(serializers.ModelSerializer):
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location', 'created_at', 'ended_at', 
-                  'comment', 'updated_by', 'updated_on', 'ambulancecalltime_set']
+                  'comment', 'updated_by', 'updated_on', 
+                  'ambulancecalltime_set', 'patient_set']
         read_only_fields = ['updated_by']
 
     def create(self, data):
