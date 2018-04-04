@@ -14,7 +14,7 @@ from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreate
 
 from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
-from emstrack.views import get_page_links
+from emstrack.views import get_page_links, get_page_size_links
 
 
 # Ambulance views
@@ -46,7 +46,8 @@ class AmbulanceDetailView(LoginRequiredMixin,
 
         # get current page
         page = self.request.GET.get('page', 1)
-        page_size = self.request.GET.get('page_size', 25)
+        page_size = self.request.GET.get('page_size', 250)
+        page_sizes = [250, 500, 1000]
 
         # paginate
         paginator = Paginator(updates_query, page_size)
@@ -59,6 +60,8 @@ class AmbulanceDetailView(LoginRequiredMixin,
 
         context['updates'] = updates
         context['page_links'] = get_page_links(self.request, updates)
+        context['page_size_links'] = get_page_size_links(self.request, updates, page_sizes)
+        context['page_size'] = int(page_size)
 
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
@@ -72,6 +75,7 @@ class AmbulanceListView(LoginRequiredMixin,
                         ListView):
     
     model = Ambulance
+    ordering = ['identifier']
 
 
 class AmbulanceCreateView(LoginRequiredMixin,

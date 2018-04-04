@@ -1,5 +1,4 @@
 import logging
-import math
 from enum import Enum
 
 from django.contrib.auth.models import User
@@ -8,6 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 from django.template.defaulttags import register
 
+from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
 from emstrack.models import AddressModel, UpdatedByModel, defaults
 
 logger = logging.getLogger(__name__)
@@ -35,29 +35,7 @@ def get_call_priority(key):
     return CallPriority[key].value
 
 
-def calculate_orientation(location1, location2):
-    # Calculate orientation based on two locations
-    # https://www.movable-type.co.uk/scripts/latlong.html
-
-    # convert latitude and longitude to radians first
-    lat1 = math.pi * location1.y / 180
-    lon1 = math.pi * location1.x / 180
-    lat2 = math.pi * location2.y / 180
-    lon2 = math.pi * location2.x / 180
-
-    # calculate orientation and convert to degrees
-    orientation = (180 / math.pi) * math.atan2(math.cos(lat1) * math.sin(lat2) -
-                                               math.sin(lat1) * math.cos(lat2) *
-                                               math.cos(lon2 - lon1),
-                                               math.sin(lon2 - lon1) * math.cos(lat2))
-
-    if orientation < 0:
-        orientation += 360
-
-    return orientation
-
-
-# User and ambulance location models
+# Ambulance location models
 
 
 # Ambulance model
@@ -79,8 +57,11 @@ class AmbulanceCapability(Enum):
 
 
 class Ambulance(UpdatedByModel):
+
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
+
+    # TODO: Should we add an active flag?
 
     AMBULANCE_CAPABILITY_CHOICES = \
         [(m.name, m.value) for m in AmbulanceCapability]
@@ -101,6 +82,12 @@ class Ambulance(UpdatedByModel):
     # timestamp
     timestamp = models.DateTimeField(default=timezone.now)
 
+    # location client
+    location_client = models.ForeignKey('login.Client',
+                                        on_delete=models.CASCADE,
+                                        blank=True, null=True,
+                                        related_name='location_client_set')
+
     # default value for _loaded_values
     _loaded_values = None
 
@@ -118,28 +105,53 @@ class Ambulance(UpdatedByModel):
 
     def save(self, *args, **kwargs):
 
-        # calculate orientation only if orientation has not changed and location has changed
-        if (self._loaded_values and
-                self._loaded_values['orientation'] == self.orientation and
-                self._loaded_values['location'] != self.location):
+        # creation?
+        created = self.pk is None
+
+        # loaded_values?
+        loaded_values = self._loaded_values is not None
+
+        # has location changed?
+        has_moved = False
+        if (not loaded_values) or \
+                calculate_distance(self._loaded_values['location'], self.location) > stationary_radius:
+            has_moved = True
+
+        # calculate orientation only if location has changed and orientation has not changed
+        if has_moved and loaded_values and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
-            logger.debug('calculating orientation: < {} - {} = {}'.format(self._loaded_values['location'],
-                                                                          self.location,
-                                                                          self.orientation))
+            logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
+                                                 self.location,
+                                                 self.orientation))
 
-        # save to Ambulance
-        super().save(*args, **kwargs)
+        logger.debug('loaded_values: {}'.format(loaded_values))
+        logger.debug('_loaded_values: {}'.format(self._loaded_values))
+        logger.debug('self.location_client: {}'.format(self.location_client))
 
-        # publish to mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_ambulance(self)
+        # location_client changed?
+        if self.location_client is None:
+            location_client_id = None
+        else:
+            location_client_id = self.location_client.id
+        location_client_changed = False
+        if loaded_values and location_client_id != self._loaded_values['location_client_id']:
+            location_client_changed = True
+
+        logger.debug('location_client_changed: {}'.format(location_client_changed))
+        # TODO: Check if client is logged with ambulance if setting location_client
 
         # if comment, status or location changed
-        if (self._loaded_values is None) or \
-                self._loaded_values['location'] != self.location or \
+        model_changed = False
+        if has_moved or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['comment'] != self.comment:
+
+            # save to Ambulance
+            super().save(*args, **kwargs)
+
+            logger.debug('SAVED')
+
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
                     for k in ('status', 'orientation',
@@ -149,9 +161,51 @@ class Ambulance(UpdatedByModel):
             obj = AmbulanceUpdate(**data)
             obj.save()
 
+            logger.debug('UPDATE SAVED')
+
+            # model changed
+            model_changed = True
+
+        # if identifier or capability changed
+        # NOTE: self._loaded_values is NEVER None because has_moved is True
+        elif (location_client_changed or
+              self._loaded_values['identifier'] != self.identifier or
+              self._loaded_values['capability'] != self.capability):
+
+            # save only to Ambulance
+            super().save(*args, **kwargs)
+
+            logger.debug('SAVED')
+
+            # model changed
+            model_changed = True
+
+        # Did the model change?
+        if model_changed:
+
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_ambulance(self)
+
+            logger.debug('PUBLISHED ON MQTT')
+
+        # just created?
+        if created:
+            # invalidate permissions cache
+            from login.permissions import cache_clear
+            cache_clear()
+
     def delete(self, *args, **kwargs):
+
+        # remove from mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().remove_ambulance(self)
+
+        # invalidate permissions cache
+        from login.permissions import cache_clear
+        cache_clear()
+
+        # delete from Ambulance
         super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
@@ -161,6 +215,7 @@ class Ambulance(UpdatedByModel):
         return ('Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
+                ' LocClient: {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
                                                self.id,
                                                AmbulanceCapability[self.capability].value,
@@ -168,6 +223,7 @@ class Ambulance(UpdatedByModel):
                                                AmbulanceStatus[self.status].value,
                                                self.location,
                                                self.timestamp,
+                                               self.location_client,
                                                self.updated_by,
                                                self.updated_on)
 
@@ -211,7 +267,7 @@ class AmbulanceUpdate(models.Model):
 # Call related models
 
 class CallPriority(Enum):
-    A = 'Ressucitation'
+    A = 'Resucitation'
     B = 'Emergent'
     C = 'Urgent'
     D = 'Less urgent'
@@ -279,9 +335,9 @@ class Patient(models.Model):
 
 # noinspection PyPep8
 class LocationType(Enum):
-    B = 'Base'
-    A = 'AED'
-    O = 'Other'
+    b = 'Base'
+    a = 'AED'
+    o = 'Other'
 
 
 class Location(AddressModel, UpdatedByModel):
@@ -293,7 +349,7 @@ class Location(AddressModel, UpdatedByModel):
         [(m.name, m.value) for m in LocationType]
     type = models.CharField(max_length=1,
                             choices=LOCATION_TYPE_CHOICES,
-                            default=LocationType.O.name)
+                            default=LocationType.o.name)
 
     # location
     location = models.PointField(srid=4326, null=True)

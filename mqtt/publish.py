@@ -2,9 +2,6 @@ import atexit
 import logging
 import os
 
-from rest_framework import serializers
-from rest_framework.renderers import JSONRenderer
-
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
 from hospital.models import Equipment
@@ -73,29 +70,12 @@ class PublishClient(BaseClient):
         super().on_disconnect(client, userdata, rc)
 
     def publish_topic(self, topic, payload, qos=0, retain=False):
-
         if self.active:
-
-            # serializer?
-            if isinstance(payload, serializers.BaseSerializer):
-                payload = JSONRenderer().render(payload.data)
-            else:
-                payload = JSONRenderer().render(payload)
-
-            # Publish to topic
-            self.publish(topic,
-                         payload,
-                         qos=qos,
-                         retain=retain)
+            super().publish_topic(topic, payload, qos, retain)
 
     def remove_topic(self, topic, qos=0):
-
         if self.active:
-            # Publish null to retained topic
-            self.publish(topic,
-                         None,
-                         qos=qos,
-                         retain=True)
+            super().remove_topic(topic, qos)
 
     def publish_settings(self, qos=2, retain=True):
         self.publish_topic('settings',

@@ -1,3 +1,4 @@
+import logging
 import math
 from django.test import Client
 
@@ -14,14 +15,18 @@ from ambulance.models import Ambulance, Call, AmbulanceCallTime, \
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer, AmbulanceCallTimeSerializer
 =======
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate, \
-    calculate_orientation
+    AmbulanceStatus, AmbulanceCapability, AmbulanceUpdate
+from emstrack.latlon import calculate_orientation
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 >>>>>>> ce70febea6c9c9d069e75782764aebdd8792367a
+
+from login.models import Client as loginClient
 
 from emstrack.tests.util import date2iso, point2str, dict2point
 
 from login.tests.setup_data import TestSetup
+
+logger = logging.getLogger(__name__)
 
 
 class TestAmbulanceGetList(TestSetup):
@@ -305,6 +310,171 @@ class TestAmbulanceUpdate(TestSetup):
                                              'timestamp': timestamp,
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
+
+        # update location_client
+        client1 = loginClient(client_id='client_id_1', user_id=self.u1.id)
+        client1.save()
+
+        client2 = loginClient(client_id='client_id_2', user_id=self.u2.id)
+        client2.save()
+
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client_id': client1.client_id
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client_id': client1.client_id,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # will not change
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client_id': client2.client_id
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client_id': client1.client_id,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # will reset
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client_id': None
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # will change
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'location_client_id': client2.client_id
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': a.status,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client_id': client2.client_id,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # will not change in partial update
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': AmbulanceStatus.OS.name
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': AmbulanceStatus.OS.name,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client_id': client2.client_id,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # will not change in partial update
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': AmbulanceStatus.PB.name,
+                                             'location_client_id': client1.client_id
+                                         }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = AmbulanceSerializer(a)
+        result = {
+            'id': a.id,
+            'identifier': a.identifier,
+            'comment': a.comment,
+            'capability': a.capability,
+            'status': AmbulanceStatus.PB.name,
+            'orientation': a.orientation,
+            'location': point2str(location),
+            'timestamp': date2iso(timestamp),
+            'location_client_id': client2.client_id,
+            'updated_by': user.id,
+            'updated_on': date2iso(a.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # invalid client id
+        serializer = AmbulanceSerializer(a,
+                                         data={
+                                             'status': AmbulanceStatus.PB.name,
+                                             'location_client_id': '__invalid__'
+                                         }, partial=True)
+
+        self.assertFalse(serializer.is_valid())
 
     def test_ambulance_patch_viewset(self):
 

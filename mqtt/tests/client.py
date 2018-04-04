@@ -489,7 +489,6 @@ class MQTTTestClient(BaseClient):
         if self.debug:
             logging.debug('Just published mid={}[publishing={}]'.format(mid,
                                                                         self.publishing))
-
         
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -526,7 +525,7 @@ class MQTTTestClient(BaseClient):
         except ValueError:
 
             if self.check_payload:
-                raise Exception('Unexpected message')
+                raise Exception('Unexpected message "{}:{}"'.format(msg.topic, msg.payload))
 
         if self.debug:
             logger.debug('Just received {}[count={},expecting={}]:{}'.format(msg.topic,
@@ -534,7 +533,7 @@ class MQTTTestClient(BaseClient):
                                                                              self.expecting,
                                                                              msg.payload))
 
-    def expect(self, topic, msg = None, qos = 2, remove = False):
+    def expect(self, topic, msg=None, qos=2, remove=False):
 
         # pattern topic?
         if '+' in topic or '#' in topic:
@@ -554,8 +553,9 @@ class MQTTTestClient(BaseClient):
             self.subscribe(topic, qos)
 
         else:
+
             logger.debug("Already subscribed to topic '{}'".format(topic))
 
         self.expecting += 1
         self.expecting_messages[topic].append(msg)
-        
+

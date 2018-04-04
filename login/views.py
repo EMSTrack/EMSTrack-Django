@@ -4,10 +4,12 @@ import string
 from datetime import timedelta
 
 from braces.views import CsrfExemptMixin
+from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core import management
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
@@ -23,16 +25,17 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from hospital.models import EquipmentType
+from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm
+    UserHospitalPermissionAdminForm, RestartForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission
+    GroupHospitalPermission, Client
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -72,6 +75,7 @@ class LogoutView(auth_views.LogoutView):
 class GroupAdminListView(ListView):
     model = Group
     template_name = 'login/group_list.html'
+    ordering = ['-groupprofile__priority', 'name']
 
 
 class GroupAdminDetailView(DetailView):
@@ -147,6 +151,7 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
+    ordering = ['username']
 
 
 class UserAdminDetailView(DetailView):
@@ -194,6 +199,8 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView)
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
 
+    # TODO: Choose between provided password and email generated password
+
 
 class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
     model = User
@@ -207,6 +214,78 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
+
+
+# Clients
+
+class ClientListView(ListView):
+    model = Client
+    ordering = ['-status', '-updated_on']
+
+
+class ClientDetailView(DetailView):
+    model = Client
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # retrieve log
+        context['clientlog_list'] = self.object.clientlog_set.all()
+
+        return context
+
+
+# Restart
+
+class RestartView(FormView):
+    form_class = RestartForm
+    template_name = 'modal.html'
+
+    def get_success_url(self):
+        return self.request.GET.get('next', '/')
+
+    def get_context_data(self, **kwargs):
+
+        # call super to retrieve object
+        context = super().get_context_data(**kwargs)
+
+        # customize modal form
+        context['title'] = 'EMSTrack Reinitialization'
+        context['foreword'] = '<p>This command will invalidate the permission cache and reinitialize ' + \
+                              'all settings.</p>' + \
+                              '<p>This is not usually necessary but can be helpful when modifying users, ' + \
+                              'groups and permissions.</p>'
+        context['afterword'] = '<p>Click <strong>OK</strong> if you would like to proceed or ' + \
+                               '<strong>Cancel</strong> otherwise.</p>'
+        context['next'] = self.get_success_url()
+
+        return context
+
+    def form_valid(self, form):
+
+        try:
+
+            # invalidate permission cache
+            permissions.cache_clear()
+
+            # reseed mqtt
+            management.call_command('mqttseed', verbosity=0)
+
+            # add message
+            messages.info(self.request, 'Successfully reinitialized system.')
+
+            # call super form_valid
+            return super().form_valid(form)
+
+        except Exception as error:
+
+            # add error to form
+            form.add_error(None, error)
+
+            # call super form_invalid
+            return super().form_invalid(form);
 
 
 # MQTT login views
@@ -271,7 +350,7 @@ class MQTTAclView(CsrfExemptMixin,
 
         # Check permissions
         username = data.get('username')
-        client_id = data.get('clientid')
+        clientid = data.get('clientid')
         acc = int(data.get('acc'))  # 1 == sub, 2 == pub
 
         # get topic and remove first '/'
@@ -282,7 +361,7 @@ class MQTTAclView(CsrfExemptMixin,
         try:
 
             # get user
-            user = User.objects.get(username=data.get('username'),
+            user = User.objects.get(username=username,
                                     is_active=True)
 
             if acc == 1:
@@ -410,10 +489,16 @@ class MQTTAclView(CsrfExemptMixin,
                             pass
 
                     #  - user/{username}/client/{client-id}/status
-                    elif (len(topic) == 5 and
-                          topic[2] == 'client' and
-                          topic[4] == 'status' and
-                          topic[3] == client_id):
+                    #  - user/{username}/client/{client-id}/ambulance/{id}/status
+                    elif ((len(topic) == 5 and
+                           topic[2] == 'client' and
+                           topic[4] == 'status' and
+                           topic[3] == clientid) or
+                          (len(topic) == 7 and
+                           topic[2] == 'client' and
+                           topic[4] == 'ambulance' and
+                           topic[6] == 'status' and
+                           topic[3] == clientid)):
 
                         return HttpResponse('OK')
 

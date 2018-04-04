@@ -72,12 +72,14 @@ class HospitalListView(LoginRequiredMixin,
                        ListView):
 
     model = Hospital
+    ordering = ['name']
 
 
 # HospitalEquipment
 
 class EquipmentAdminListView(ListView):
     model = Equipment
+    ordering = ['name']
 
 
 class EquipmentAdminDetailView(DetailView):

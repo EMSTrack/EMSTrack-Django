@@ -5,9 +5,10 @@ from django.db import IntegrityError, transaction
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
+from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, calculate_orientation, \
-    Location, AmbulanceCallTime, Patient
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient
+from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,8 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
+    location_client_id = serializers.CharField(source='location_client.client_id',
+                                               required=False, allow_blank=True, allow_null=True)
     location = PointField(required=False)
     
     class Meta:
@@ -23,9 +26,19 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'timestamp',
+                  'timestamp', 'location_client_id',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('updated_by',)
+
+    def validate_location_client_id(self, value):
+
+        if value:
+            try:
+                Client.objects.get(client_id=value)
+            except Client.DoesNotExist:
+                raise serializers.ValidationError("Client '{}' does not exist".format(value))
+
+        return value
 
     def validate(self, data):
 
@@ -62,6 +75,23 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
 
+        # update location_client
+        # stored in validated_data as {'location_client': {'client_id': client_id}}
+        if 'location_client' in validated_data:
+
+            client_id = validated_data.pop('location_client')['client_id']
+
+            location_client = None
+            if client_id:
+                location_client = Client.objects.get(client_id=client_id)
+
+            if instance.location_client is None or location_client is None:
+
+                # fine, clear or update location client
+                validated_data['location_client'] = location_client
+
+        logger.debug('validated_data = {}'.format(validated_data))
+
         return super().update(instance, validated_data)
 
 
@@ -71,18 +101,18 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
 
         def process_update(update, current):
 
-            # clear timestamp
-            current.pop('timestamp', None)
-
             # calculate orientation?
             if ('orientation' not in update and
                     'location' in update and
                     update['location'] != current['location']):
 
                     current['orientation'] = calculate_orientation(current['location'], update['location'])
-                    logger.debug('calculating orientation: < {} - {} = {}'.format(current['location'],
-                                                                                  update['location'],
-                                                                                  current['orientation']))
+                    logger.debug('< {} - {} = {}'.format(current['location'],
+                                                         update['location'],
+                                                         current['orientation']))
+
+            # clear timestamp
+            current.pop('timestamp', None)
 
             # update data
             current.update(**update)
@@ -113,14 +143,16 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 for k in range(0, n-1):
 
                     # process update
-                    data = process_update(validated_data[k], data)
+                    retdata = process_update(validated_data[k], data)
 
-                    # create update object
-                    obj = AmbulanceUpdate(**data)
-                    obj.save()
+                    if retdata is not None:
 
-                    # append to objects list
-                    instances.append(obj)
+                        # create update object
+                        obj = AmbulanceUpdate(**data)
+                        obj.save()
+
+                        # append to objects list
+                        instances.append(obj)
 
                 # on last update, update ambulance instead
 
@@ -222,6 +254,7 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = ['id', 'call_id', 'name', 'age']
+
 
 # Call serializer
 

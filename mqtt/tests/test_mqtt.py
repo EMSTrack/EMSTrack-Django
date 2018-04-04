@@ -3,11 +3,13 @@ import time
 
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
 
 from rest_framework.renderers import JSONRenderer
 import json
 
-from login.models import UserProfile
+from emstrack.tests.util import point2str
+from login.models import UserProfile, Client, ClientStatus, ClientLog, ClientActivity
 from login.permissions import get_permissions
 
 from login.serializers import UserProfileSerializer
@@ -593,12 +595,29 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
 
         test_client = MQTTTestClient(broker,
                                      check_payload=False,
                                      debug=True)
         self.is_connected(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Modify ambulance
 
@@ -606,10 +625,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # retrive message that is there already due to creation
+        # retrieve message that is there already due to creation
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
 
+        # publish change
         test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
                                                                self.a1.id),
                             json.dumps({
@@ -637,7 +657,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
 
-        # retrive message that is there already due to creation
+        # retrieve message that is there already due to creation
         test_client.expect('hospital/{}/data'.format(self.h1.id))
         self.is_subscribed(test_client)
 
@@ -688,7 +708,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # expect update once
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.name))
-
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -697,6 +716,70 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
+
+        # test bulk ambulance update
+
+        # retrieve current ambulance status
+        obj = Ambulance.objects.get(id=self.a2.id)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        # retrieve message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
+        self.is_subscribed(test_client)
+
+        location = {'latitude': -2., 'longitude': 7.}
+        timestamp = timezone.now()
+        data = [
+            {
+                'status': AmbulanceStatus.OS.name,
+            },
+            {
+                'status': AmbulanceStatus.AV.name,
+                'location': location,
+            },
+            {
+                'status': AmbulanceStatus.PB.name,
+                'timestamp': str(timestamp)
+            }
+        ]
+
+        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                               self.a2.id),
+                            json.dumps(data), qos=0)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # verify change
+        obj = Ambulance.objects.get(id=self.a2.id)
+        self.assertEqual(obj.status, AmbulanceStatus.PB.name)
+        self.assertEqual(obj.timestamp, timestamp)
+        self.assertEqual(point2str(obj.location), point2str(location))
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.F.name)
 
         # generate ERROR: JSON formated incorrectly
 
@@ -741,52 +824,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client, subscribe_client)
         subscribe_client.loop()
 
-        # generate ERROR: wrong id
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               1111),
-                            json.dumps({
-                                'status': AmbulanceStatus.OS.name,
-                            }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
-        # generate ERROR: wrong id
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                              1111),
-                            json.dumps({
-                                'comment': 'comment',
-                            }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
-        # generate ERROR: wrong id
-
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
-
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                           self.h1.id,
-                                                                           'unknown'),
-                            json.dumps({
-                                'comment': 'comment',
-                            }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-        subscribe_client.loop()
-
         test_invalid_serializer = False
         if test_invalid_serializer:
-            # WARNING: The next two tests prevent the test database from
+            # WARNING: The next tests prevent the test database from
             # being removed at the end of the test. It is not clear why
             # but it could be django bug related to the LiveServerThread
             # not being thread safe:
@@ -798,6 +838,49 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             # example:
             #
             #     ./manage test ambulance.test
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+            test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
+                                                                   1111),
+                                json.dumps({
+                                    'status': AmbulanceStatus.OS.name,
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+            test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
+                                                                  1111),
+                                json.dumps({
+                                    'comment': 'comment',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+
+            test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                               self.h1.id,
+                                                                               'unknown'),
+                                json.dumps({
+                                    'comment': 'comment',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
 
             # generate ERROR: invalid serializer
 
@@ -839,6 +922,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 class TestMQTTWill(TestMQTT, MQTTTestCase):
 
     def test(self):
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',
@@ -872,13 +956,13 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         client.publish('user/{}/client/{}/status'.format(broker['USERNAME'],
                                                          broker['CLIENT_ID']),
                        'online',
-                       qos=2,
+                       qos=1,
                        retain=True)
 
         # process messages
         self.loop(client)
 
-        # reconncting with same client-id will trigger will
+        # reconnecting with same client-id will trigger will
         client = MQTTTestClient(broker,
                                 check_payload=False,
                                 debug=False)
@@ -894,3 +978,658 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
 
         # wait for disconnect
         client.wait()
+
+
+class TestMQTTHandshake(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        subscribe_client_id = 'test_mqttclient'
+        broker['CLIENT_ID'] = subscribe_client_id
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Start second test client
+
+        broker.update(settings.MQTT)
+        second_client_id = 'test_mqtt_subscribe_admin_second'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = second_client_id
+
+        second_test_client = MQTTTestClient(broker,
+                                            check_payload=False,
+                                            debug=True)
+        self.is_connected(second_test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.HS.name)
+
+        # Client handshake: online
+        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'online')
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=second_client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.HS.name)
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # Ambulance handshake: ambulance login
+        second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a2.id),
+                                   'ambulance login')
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=second_client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a2.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a2.identifier)
+
+        # check record
+        ambulance = Ambulance.objects.get(id=self.a2.id)
+        self.assertEqual(ambulance.location_client, None)
+
+        # Start streaming data
+        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                            '{"location_client_id":"' + client_id + '"}', qos=2)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record log
+        obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.SL.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, client_id)
+
+        # Try to change location client without reset to a valid client_id
+        second_test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                                   '{"location_client_id":"' + second_client_id + '"}', qos=2)
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, client_id)
+
+        # reset location_client
+        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                            '{"location_client_id":""}', qos=2)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record log
+        obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.TL.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertTrue(ambulance.location_client is None)
+
+        #############################################################################################
+
+        if False:
+
+            # Try to change location client without reset to an invalid client_id
+            test_client.expect('user/{}/error'.format(username))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                                '{"location_client_id":"' + client_id + '_other"}', qos=2)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
+
+            # check record
+            ambulance = Ambulance.objects.get(id=self.a1.id)
+            self.assertFalse(ambulance.location_client is None)
+            self.assertEqual(ambulance.location_client.client_id, client_id)
+
+        #############################################################################################
+
+        # Second client start streaming data
+        second_test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a2.id),
+                                   '{"location_client_id":"' + second_client_id + '"}', qos=2)
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # check record
+        ambulance = Ambulance.objects.get(id=self.a2.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, second_client_id)
+
+        # Ambulance handshake: ambulance logout
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance logout')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AO.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a2.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, second_client_id)
+
+        # Ambulance handshake: ambulance logout
+        second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a2.id),
+                                   'ambulance logout')
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # check client record
+        clnt = Client.objects.get(client_id=second_client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check client record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AO.name)
+        self.assertEqual(obj.details, self.a2.identifier)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a2.id)
+        self.assertTrue(ambulance.location_client is None)
+
+        # Client handshake: offline
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Client handshake: offline
+        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
+
+        # process messages
+        self.loop(second_test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        second_test_client.wait()
+        subscribe_client.wait()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 6)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[0].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].activity, ClientActivity.AI.name)
+        self.assertEqual(obj[1].details, self.a1.identifier)
+        self.assertEqual(obj[2].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].activity, ClientActivity.SL.name)
+        self.assertEqual(obj[2].details, self.a1.identifier)
+        self.assertEqual(obj[3].status, ClientStatus.O.name)
+        self.assertEqual(obj[3].activity, ClientActivity.TL.name)
+        self.assertEqual(obj[3].details, self.a1.identifier)
+        self.assertEqual(obj[4].activity, ClientActivity.AO.name)
+        self.assertEqual(obj[4].details, self.a1.identifier)
+        self.assertEqual(obj[5].status, ClientStatus.F.name)
+        self.assertEqual(obj[5].activity, ClientActivity.HS.name)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is True)
+
+        # check record
+        clnt = Client.objects.get(client_id=second_client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 6)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[0].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].activity, ClientActivity.AI.name)
+        self.assertEqual(obj[1].details, self.a2.identifier)
+        self.assertEqual(obj[2].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].activity, ClientActivity.SL.name)
+        self.assertEqual(obj[2].details, self.a2.identifier)
+        self.assertEqual(obj[3].status, ClientStatus.O.name)
+        self.assertEqual(obj[3].activity, ClientActivity.TL.name)
+        self.assertEqual(obj[3].details, self.a2.identifier)
+        self.assertEqual(obj[4].activity, ClientActivity.AO.name)
+        self.assertEqual(obj[4].details, self.a2.identifier)
+        self.assertEqual(obj[5].status, ClientStatus.F.name)
+        self.assertEqual(obj[5].activity, ClientActivity.HS.name)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a2.id)
+        self.assertFalse(ambulance.location_client is True)
+
+
+class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.HS.name)
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')[0]
+        self.assertEqual(obj.status, ClientStatus.O.name)
+        self.assertEqual(obj.activity, ClientActivity.AI.name)
+        self.assertEqual(obj.details, self.a1.identifier)
+
+        # Start streaming data
+        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+                            '{"location_client_id":"' + client_id + '"}', qos=2)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertFalse(ambulance.location_client is None)
+        self.assertEqual(ambulance.location_client.client_id, client_id)
+
+        # Client handshake: offline
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+        self.assertEqual(clnt.ambulance, None)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 6)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[0].activity, ClientActivity.HS.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].activity, ClientActivity.AI.name)
+        self.assertEqual(obj[1].details, self.a1.identifier)
+        self.assertEqual(obj[2].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].activity, ClientActivity.SL.name)
+        self.assertEqual(obj[2].details, self.a1.identifier)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
+        self.assertEqual(obj[3].activity, ClientActivity.TL.name)
+        self.assertEqual(obj[3].details, self.a1.identifier)
+        self.assertEqual(obj[4].status, ClientStatus.F.name)
+        self.assertEqual(obj[4].activity, ClientActivity.AO.name)
+        self.assertEqual(obj[4].details, self.a1.identifier)
+        self.assertEqual(obj[5].status, ClientStatus.F.name)
+        self.assertEqual(obj[5].activity, ClientActivity.HS.name)
+
+        # check ambulance record
+        ambulance = Ambulance.objects.get(id=self.a1.id)
+        self.assertTrue(ambulance.location_client is None)
+
+
+class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+        broker['WILL'] = {
+            'topic': 'user/{}/client/{}/status'.format(username, client_id),
+            'payload': 'disconnected'
+        }
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Client handshake: force disconnected to trigger will
+        test_client.client._sock.close()
+
+        # process messages
+        subscribe_client.loop()
+        subscribe_client.loop()
+        time.sleep(1)
+
+        # process messages
+        subscribe_client.loop()
+        time.sleep(1)
+
+        # process messages
+        subscribe_client.loop()
+        time.sleep(1)
+
+        # wait for disconnect
+        subscribe_client.wait()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.D.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.D.name)
+
+
+class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
+
+    def test(self):
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+        broker['WILL'] = {
+            'topic': 'user/{}/client/{}/status'.format(username, client_id),
+            'payload': 'disconnected'
+        }
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # reconnecting with same client-id
+        test_client = MQTTTestClient(broker,
+                                check_payload=False,
+                                debug=False)
+        self.is_connected(test_client)
+
+        # Client handshake: online
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+
+        # Client handshake: offline
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 3)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
+        self.assertEqual(obj[2].status, ClientStatus.F.name)

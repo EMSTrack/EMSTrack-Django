@@ -5,7 +5,7 @@ from django.contrib.gis.geos import Point
 
 defaults = {
     'location': Point(-117.0382, 32.5149, srid=4326),
-    'state': 'BC',
+    'state': 'BCN',
     'city': 'Tijuana',
     'country': 'MX',
 }
@@ -32,6 +32,10 @@ class AddressModel(models.Model):
 
 
 class UpdatedByModel(models.Model):
+    """
+    An abstract base class model that provides comments and update fields.
+    """
+
     comment = models.CharField(max_length=254, null=True, blank=True)
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)

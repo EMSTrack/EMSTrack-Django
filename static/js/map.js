@@ -7,44 +7,79 @@ var hospitals = {};	// Store hospital details
 var locationMarkers = {};  // Store location markers
 var locations = {};	// Store location details
 
-// Initialize category layers
+// Initialize category panes
 var visibleCategory = {};
-var markersByCategory = {};
-var categoryGroupLayers = {};
 
-// add ambulance_status
+// add status
 Object.keys(ambulance_status).forEach(function(status) {
-    markersByCategory[status] = [];
     visibleCategory[status] = true;
 });
 
+// add capability
+Object.keys(ambulance_capability).forEach(function(capability) {
+    visibleCategory[capability] = true;
+});
+
 // add hospital
-var category = 'Hospital';
-markersByCategory[category] = [];
-visibleCategory[category] = true;
+visibleCategory['hospital'] = true;
 
 // add location_type
 Object.keys(location_type).forEach(function(type) {
-    markersByCategory[type] = [];
     visibleCategory[type] = false;
 });
 
+// Initialize ambulance icons
+var ambulance_settings = [
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_blue.svg',
+            iconSize: [15, 30],
+        }), 'btn-primary'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_green.svg',
+            iconSize: [15, 30],
+        }), 'btn-success'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_gray.svg',
+            iconSize: [15, 30],
+        }), 'btn-secondary'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_red.svg',
+            iconSize: [15, 30],
+        }), 'btn-danger'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_yellow.svg',
+            iconSize: [15, 30],
+        }), 'btn-warning'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_purple.svg',
+            iconSize: [15, 30],
+        }), 'btn-info'
+    ],
+    [
+        L.icon({
+            iconUrl: '/static/icons/cars/ambulance_orange.svg',
+            iconSize: [15, 30],
+        }), 'btn-dark'
+    ],
+];
 
-// Initialize marker icons.
-var ambulanceIcon = L.icon({
-	//iconUrl: '/static/icons/ambulance_icon.png',
-	iconUrl: '/static/icons/cars/ambulance_red.svg',
-	iconSize: [40, 40],
-});
-var ambulanceIconBlack = L.icon({
-	// iconUrl: '/static/icons/ambulance_icon_black.png',
-	iconUrl: '/static/icons/cars/ambulance_black.svg',
-	iconSize: [40, 40],
-});
-var ambulanceIconBlue = L.icon({
-	// iconUrl: '/static/icons/ambulance_blue.png',
-	iconUrl: '/static/icons/cars/ambulance_blue.svg',
-	iconSize: [40, 40],
+var ambulance_icons = {};
+var ambulance_buttons = {};
+Object.keys(ambulance_status).forEach(function(type, index) {
+    var settings = ambulance_settings[index];
+    ambulance_icons[type] = settings[0];
+    ambulance_buttons[type] = settings[1];
 });
 
 var hospitalIcon = L.icon({
@@ -95,7 +130,9 @@ var mqttClient;
 var mymap;
 var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
 var geocoder = new Geocoder({ access_token: accessToken });
-$(document).ready(function () {
+
+// Ready function
+$(function () {
 
     // token and attribution
     var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
@@ -139,7 +176,7 @@ $(document).ready(function () {
             mymap.addLayer(layer);
         });
 
-    // Create status filter on the right hand top corner
+    // Create category filter on the right hand top corner
     createCategoryFilter();
 
     // Make ambulance-selection droppable
@@ -168,6 +205,12 @@ $(document).ready(function () {
         // set callback handlers
         mqttClient.onMessageArrived = onMessageArrived;
 
+        // set will message
+        var willMessage = new Paho.MQTT.Message('disconnected');
+        willMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
+        willMessage.qos = 2;
+        willMessage.retained = true;
+
         // attempt to connect to MQTT broker
         mqttClient.connect({
             //connection attempt timeout in seconds
@@ -178,6 +221,7 @@ $(document).ready(function () {
             cleanSession: true,
             onSuccess: onConnect,
             onFailure: onConnectFailure,
+            willMessage: willMessage,
         });
 
     })
@@ -209,6 +253,14 @@ function onConnect() {
 
     console.log("Connected to MQTT broker");
 
+    // handshake online
+    var onlineMessage = new Paho.MQTT.Message('online');
+    onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
+    onlineMessage.qos = 2;
+    onlineMessage.retained = true;
+    mqttClient.send(onlineMessage);
+    console.log('Sent online message');
+
     // retrieve profile from api
     console.log("Retrieving profile from API");
     $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
@@ -235,7 +287,8 @@ function onConnect() {
 
         // add location
         $.each(data, function (index) {
-        	addLocationToMap(data[index]);
+            var location = data[index];
+        	addLocationToMap(location);
         });
         
     });
@@ -247,9 +300,9 @@ function onConnect() {
         status = JSON.stringify({'status': this.value});
 
         // Send message
-        let id = $('#ambulance-detail-id').val();
-        let topic = "user/" + username + "/ambulance/" + id + "/data";
-        let message = new Paho.MQTT.Message(status);
+        var id = $('#ambulance-detail-id').val();
+        var topic = "user/" + username + "/ambulance/" + id + "/data";
+        var message = new Paho.MQTT.Message(status);
         message.destinationName = topic
         message.qos = 2;
         mqttClient.send(message);
@@ -371,16 +424,11 @@ function updateAmbulance(ambulance) {
     if (id in ambulances) {
 
         // Remove existing marker
-        let marker = ambulanceMarkers[id];
-        let status = ambulances[id].status;
-        let index = markersByCategory[status].indexOf(marker);
-        if (index >= 0) {
-            markersByCategory[status].splice(index, 1);
-        }
-        mymap.removeLayer(marker);
+        mymap.removeLayer(ambulanceMarkers[id]);
 
         // update ambulance
         ambulances[id].status = ambulance.status;
+        ambulances[id].capability = ambulance.capability;
         ambulances[id].location.latitude = ambulance.location.latitude;
         ambulances[id].location.longitude = ambulance.location.longitude;
         ambulances[id].orientation = ambulance.orientation;
@@ -388,16 +436,11 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // Update ambulance grid
-        var buttonId = "#grid-button-" + id;
-
-        // Updated button color/status
-        if (ambulance.status === STATUS_AVAILABLE)
-            $(buttonId).attr("class", "btn btn-sm btn-success");
-        else if (ambulance.status === STATUS_OUT_OF_SERVICE)
-            $(buttonId).attr("class", "btn btn-sm btn-default");
-        else
-            $(buttonId).attr("class", "btn btn-sm btn-danger");
+        // Updated button classes
+        $("#grid-button-" + id).attr("class",
+            "btn btn-sm " + ambulance_buttons[ambulance.status] +
+            + ' status-' + ambulance.status
+            + ' capability-' + ambulance.capability + '"');
 
     } else {
 
@@ -444,17 +487,13 @@ function addAmbulanceToGrid(ambulance) {
         '[id=' + ambulance.id + ']"' +
         ' to grid');
 
-    let button_class_name = 'btn-danger';
-    if (ambulance.status === STATUS_AVAILABLE)
-        button_class_name = 'btn-success';
-    else if (ambulance.status === STATUS_OUT_OF_SERVICE)
-        button_class_name = 'btn-default';
-
     // Add button to ambulance grid
     $('#ambulance-grid')
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
-            + ' class="btn btn-sm ' + button_class_name + '"'
+            + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
+            + ' status-' + ambulance.status
+            + ' capability-' + ambulance.capability + '"'
             + ' style="margin: 2px 2px;"'
             + ' draggable="true">'
             + ambulance.identifier
@@ -491,20 +530,16 @@ function addAmbulanceToMap(ambulance) {
     // store ambulance details in an array
     ambulances[ambulance.id] = ambulance;
 
-    // set icon by status
-    let coloredIcon = ambulanceIcon;
-    if (ambulance.status === STATUS_AVAILABLE)
-        coloredIcon = ambulanceIconBlue;
-    else if (ambulance.status === STATUS_OUT_OF_SERVICE)
-        coloredIcon = ambulanceIconBlack;
-
     // Add marker
+    // console.log('orientation = ' + ambulance.orientation);
     ambulanceMarkers[ambulance.id] = L.marker(
         [ambulance.location.latitude,
             ambulance.location.longitude],
         {
-            icon: coloredIcon,
-            rotationAngle: 360 - ambulance.orientation
+            icon: ambulance_icons[ambulance.status],
+            rotationAngle: ambulance.orientation % 360,
+            rotationOrigin: 'center center',
+            pane: ambulance.status+"|"+ambulance.capability
         })
         .bindPopup(
             "<strong>" + ambulance.identifier +
@@ -539,16 +574,6 @@ function addAmbulanceToMap(ambulance) {
 
             });
 
-    // Add to a map to differentiate the layers between statuses.
-    markersByCategory[ambulance.status].push(ambulanceMarkers[ambulance.id]);
-
-    // If layer is not visible, remove marker
-    if (!visibleCategory[ambulance.status]) {
-        let marker = ambulanceMarkers[ambulance.id];
-        categoryGroupLayers[ambulance.status].removeLayer(marker);
-        mymap.removeLayer(marker);
-    }
-
 };
 
 function addHospitalToMap(hospital) {
@@ -568,7 +593,10 @@ function addHospitalToMap(hospital) {
     // If hospital marker doesn't exist
     hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,
             hospital.location.longitude],
-        {icon: coloredIcon})
+        {
+            icon: coloredIcon,
+            pane: 'hospital'
+        })
         .bindPopup("<strong>" + hospital.name + "</strong>")
         .addTo(mymap);
 
@@ -586,17 +614,6 @@ function addHospitalToMap(hospital) {
                     });
             });
 
-    // Add to a map to differentiate the layers between statuses.
-	let category = 'Hospital'
-    markersByCategory[category].push(hospitalMarkers[hospital.id]);
-
-    // If layer is not visible, remove marker
-    if (!visibleCategory[category]) {
-        let marker = hospitalMarkers[hospital.id];
-        categoryGroupLayers[category].removeLayer(marker);
-        mymap.removeLayer(marker);
-    }
-
 };
 
 function addLocationToMap(location) {
@@ -611,10 +628,10 @@ function addLocationToMap(location) {
     locations[location.id] = location;
 
     // set icon by status
-    let icon = locationIcon;
-    if (location.type === 'A')
+    var icon = locationIcon;
+    if (location.type === 'a')
         icon = defibrillatorIcon;
-    else if (location.type === 'B')
+    else if (location.type === 'b')
         icon = baseIcon;
     else
         icon = otherIcon;
@@ -622,7 +639,10 @@ function addLocationToMap(location) {
     // If location marker doesn't exist
     locationMarkers[location.id] = L.marker([location.location.latitude,
             location.location.longitude],
-        {icon: icon})
+        {
+            icon: icon,
+            pane: location.type
+        })
         .bindPopup("<strong>" + location.name + "</strong>")
         .addTo(mymap);
 
@@ -640,16 +660,6 @@ function addLocationToMap(location) {
                     });
             });
 
-    // Add to a map to differentiate the layers between typees.
-    markersByCategory[location.type].push(locationMarkers[location.id]);
-
-    // If layer is not visible, remove marker
-    if (!visibleCategory[location.type]) {
-        let marker = locationMarkers[location.id];
-        categoryGroupLayers[location.type].removeLayer(marker);
-        mymap.removeLayer(marker);
-    }
-    
 };
 
 /*
@@ -664,7 +674,7 @@ function updateDetailPanel(ambulance) {
     $('#ambulance-detail-capability')
         .html(ambulance_capability[ambulance.capability]);
     $('#ambulance-detail-updated-on')
-        .html(ambulance.updated_on);
+        .html((new Date(Date.parse(ambulance.updated_on))).toLocaleString());
 
     $('#ambulance-detail-status-select')
         .val(ambulance.status);
@@ -676,46 +686,63 @@ function updateDetailPanel(ambulance) {
 /* Create status filter on the top right corner of the map */
 function createCategoryFilter() {
 
-    // Add the checkbox on the top right corner for filtering.
-    var container = L.DomUtil.create('div', 'filter-options');
+    // Create category panes
+    Object.keys(ambulance_status).forEach(function (status) {
+        Object.keys(ambulance_capability).forEach(function (capability) {
+            mymap.createPane(status+"|"+capability);
+        });
+    });
+    mymap.createPane('hospital');
+    Object.keys(location_type).forEach(function (type) {
+        mymap.createPane(type);
+    });
 
-    //Generate HTML code for checkboxes for each of the statuses.
+    // Add the checkbox on the top right corner for filtering.
+    var container = L.DomUtil.create('div', 'filter-options bg-light');
+
+    // Generate HTML code for checkboxes for each of the statuses.
     var filterHtml = "";
 
     filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
     Object.keys(ambulance_status).forEach(function (status) {
 
-        categoryGroupLayers[status] = L.layerGroup(markersByCategory[status]);
-        categoryGroupLayers[status].addTo(mymap);
-
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-            + status + '" type="checkbox" value="" '
+        // add div
+        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
+            + status + '" type="checkbox" value="status" '
             + (visibleCategory[status] ? 'checked' : '') + '>'
             + ambulance_status[status] + "</label></div>";
 
     });
     filterHtml += "</div>";
 
-    //Generate HTML code for checkboxes for hospital
+    // Generate HTML code for checkboxes for each of the capabilities.
+    filterHtml += '<div class="border border-top-0 border-bottom-1 border-dark px-1 pt-1 pb-0">';
+    Object.keys(ambulance_capability).forEach(function (capability) {
+
+        // add div
+        filterHtml += '<div class="checkbox"><label><input class="chk" '
+            + 'data-status="' + capability + '" type="checkbox" value="capability" '
+            + (visibleCategory[capability] ? 'checked' : '') + '>'
+            + ambulance_capability[capability] + "</label></div>";
+
+    });
+    filterHtml += "</div>";
+    
+    // Generate HTML code for checkboxes for hospital
     filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
-    let category = 'Hospital'
-    categoryGroupLayers[category] = L.layerGroup(markersByCategory[category]);
-    categoryGroupLayers[category].addTo(mymap);
-    filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-        + category + '" type="checkbox" value="" '
-        + (visibleCategory[category] ? 'checked' : '') + '>'
-        + category + "</label></div>";
+    filterHtml += '<div class="checkbox"><label><input class="chk" '
+        + 'data-status="hospital" type="checkbox" value="hospital" '
+        + (visibleCategory['hospital'] ? 'checked' : '') + '>'
+        + 'Hospital' + "</label></div>";
     filterHtml += "</div>";
 
     //Generate HTML code for checkboxes for locations
     filterHtml += '<div class="border border-dark rounded-bottom px-1 pt-1 pb-0">';
     Object.keys(location_type).forEach(function (type) {
 
-        categoryGroupLayers[type] = L.layerGroup(markersByCategory[type]);
-        categoryGroupLayers[type].addTo(mymap);
-
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="' 
-            + type + '" type="checkbox" value="" '
+        // add div
+        filterHtml += '<div class="checkbox"><label><input class="chk" '
+            + 'data-status="' + type + '" type="checkbox" value="location" '
             + (visibleCategory[type] ? 'checked' : '') + '>'
             + location_type[type] + "</label></div>";
 
@@ -739,33 +766,44 @@ function createCategoryFilter() {
     });
     mymap.addControl(new customControl());
 
-    // Add listener to remove status layer when filter checkbox is clicked
+    // Add listener to remove or add layer when filter checkbox is clicked
     $('.chk').change(function () {
 
         // Which layer?
-        status = this.getAttribute('data-status');
+        var layer = this.getAttribute('data-status');
 
-        // Clear layer
-        categoryGroupLayers[status].clearLayers();
-
+        // Display or hide?
+        var display;
         if (this.checked) {
-
-            // Add the ambulances in the layer if it is checked.
-            markersByCategory[status].forEach(function (marker) {
-                categoryGroupLayers[status].addLayer(marker)
-            });
-            visibleCategory[status] = true;
-
+            display = 'block';
+            visibleCategory[layer] = true;
         } else {
-
-            // Remove from layer if it is not checked.
-            markersByCategory[status].forEach(function (marker) {
-                categoryGroupLayers[status].removeLayer(marker);
-                mymap.removeLayer(marker);
-            });
-            visibleCategory[status] = false;
-
+            display = 'none';
+            visibleCategory[layer] = false;
         }
+
+        // Modify pane and button
+        if (this.value == 'status') {
+            // Add to all visible capability panes
+            Object.keys(ambulance_capability).forEach(function (capability) {
+                if (visibleCategory[capability]) {
+                    mymap.getPane(layer+"|"+capability).style.display = display;
+                    $('button.status-' + layer + '.capability-' + capability).css('display', display);
+                }
+            });
+        } else if (this.value == 'capability') {
+            // Add to all visible status layers
+            Object.keys(ambulance_status).forEach(function (status) {
+                if (visibleCategory[status]) {
+                    mymap.getPane(status+"|"+layer).style.display = display;
+                    $('button.status-' + status + '.capability-' + layer).css('display', display);
+                }
+            });
+        } else {
+            mymap.getPane(layer).style.display = display;
+        }
+
+
 
     });
 

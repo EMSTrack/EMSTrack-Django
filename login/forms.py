@@ -230,13 +230,17 @@ class UserProfileAdminForm(forms.ModelForm):
         exclude = ['user']
 
 
-class UserAdminCreateForm(forms.ModelForm):
+class UserAdminCreateForm(auth_forms.UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2', 'first_name', 'last_name',
+                  'email', 'is_staff', 'is_active', 'groups']
+
+
+class UserAdminUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
-
-
-class UserAdminUpdateForm(UserAdminCreateForm):
 
     def __init__(self, *args, **kwargs):
         # call super
@@ -244,3 +248,7 @@ class UserAdminUpdateForm(UserAdminCreateForm):
 
         # disable name
         self.fields['username'].disabled = True
+
+
+class RestartForm(forms.Form):
+    pass

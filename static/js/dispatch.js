@@ -100,7 +100,7 @@ var addToDispatchingList = function(ambulance) {
     $('#ambulance-selection').append(
         '<button id="dispatch-button-' + ambulance.id + '"'
         + ' value="' + ambulance.id + '"'
-        + ' type="button" class="btn btn-sm btn-success"'
+        + ' type="button" class="btn btn-sm '+ ambulance_buttons['AV'] + '"'
         + ' style="margin: 2px 2px;"'
         + ' draggable="true">'
         + ambulance.identifier
@@ -315,7 +315,7 @@ function dispatchCall() {
     var ambulances = [];
     for (var id in dispatchingAmbulances)
         if (dispatchingAmbulances.hasOwnProperty(id))
-            ambulances.push(id);
+            ambulances.push({ 'ambulance_id': id });
     form['ambulances'] = ambulances;
 
     // patients
@@ -323,7 +323,7 @@ function dispatchCall() {
     for (var index in currentPatients)
         if (currentPatients.hasOwnProperty(index)) {
             var patient = currentPatients[index];
-            var obj = { name: patient[0] };
+            var obj = { 'name': patient[0] };
             if (patient[1])
                 // add age
                 obj['age'] = patient[1];
@@ -473,44 +473,47 @@ var newPatientForm = function(index, symbol) {
 
 }
 
+// Ready function
+$(function() {
 
-// connect actions to inputs
+    // connect actions to inputs
 
-$("#street").change(function () {
+    $("#street").change(function () {
 
-    // update coordinates?
-    if ($('#update-coordinates').prop('checked'))
-        updateCoordinates();
+        // update coordinates?
+        if ($('#update-coordinates').prop('checked'))
+            updateCoordinates();
+
+    });
+
+
+    $('#update-coordinates').change(function () {
+
+        // update coordinates?
+        if ($('#update-coordinates').prop('checked'))
+            updateCoordinates();
+
+    });
+
+    $('#update-address').change(function () {
+
+        // update address?
+        if ($('#update-address').prop('checked'))
+            updateCurrentAddress(currentLocation);
+
+    });
+
+    $('#dispatch_form_collapse').submit(function (e) {
+
+        // prevent normal form submission
+        e.preventDefault();
+
+        // dispatch call
+        dispatchCall();
+
+    });
 
 });
-
-
-$('#update-coordinates').change(function() {
-
-    // update coordinates?
-    if ($('#update-coordinates').prop('checked'))
-        updateCoordinates();
-
-});
-
-$('#update-address').change(function() {
-
-    // update address?
-    if ($('#update-address').prop('checked'))
-        updateCurrentAddress(currentLocation);
-
-});
-
-$('#dispatch_form_collapse').submit(function (e) {
-
-   // prevent normal form submission
-    e.preventDefault();
-
-    // dispatch call
-    dispatchCall();
-
-});
-
 
 // CSRF functions
 

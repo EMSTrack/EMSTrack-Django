@@ -1,17 +1,14 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block content %}
 
-{% include 'homepage.html' %}
+<!-- Modal window -->
 
-<!-- Modal for signup and login -->
-
-<div class="modal" tabindex="-1" role="dialog" id="loginModal">
+<div class="modal" tabindex="-1" role="dialog" id="dialogModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="loginTitle" class="modal-title">EMSTrack Login</h5>
+                <h5 id="dialogTitle" class="modal-title">{{ title }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -27,11 +24,13 @@
                 </div>
                 {% endif %}
 
-                <form class="form-signin"
-                      id="signInForm"
+                <form class="form-modal"
+                      id="modalForm"
                       method="post"
-                      action="{% url 'login:login' %}">
+                      action="{{ request.get_full_path }}">
                     {% csrf_token %}
+
+                    {{ foreword|safe }}
 
                     {% for field in form %}
                     <div class="form-group">
@@ -53,7 +52,7 @@
                     </div>
                     {% endfor %}
 
-                    <a id="passwordReset" href="{% url 'login:password_reset' %}">Forgot Password?</a>
+                    {{ afterword|safe }}
 
                     <input type="hidden" name="next" value="{{ next }}"/>
 
@@ -61,8 +60,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="submitButton">Login</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitButton">OK</button>
+                <button type="button" class="btn btn-secondary" id="cancelButton" data-dismiss="modal">Cancel</button>
             </div>
         </div>
     </div>
@@ -73,37 +72,23 @@
     // Ready function
     $(function () {
 
+        // wire submit button
         $("#submitButton").on('click', function() {
-            $("#signInForm").submit();
+            $("#modalForm").submit();
         });
 
-        // Should start up modal?
-        var pathname = window.location.pathname;
-        console.log('pathname = ' + pathname);
-        if (pathname == '/auth/login/') {
+        // wire cancel button
+        $("#cancelButton").on('click', function() {
+            window.location.href = "{{ next }}";
+        });
 
-            // bring up modal
-            $('#loginModal').modal({
-                keyboard: false
-            });
-
-        } else if (pathname == '/auth/signup/') {
-
-            // adjust modal
-            $('#loginTitle').html('EMSTrack Signup');
-            $('#signInForm').attr('action', '{% url 'login:signup' %}');
-            $('#passwordReset').hide();
-            $('#submitButton').html('Signup');
-
-            // bring up modal
-            $('#loginModal').modal({
-                keyboard: false
-            });
-
-        }
+        // bring up modal
+        $('#dialogModal').modal({
+            keyboard: false
+        });
 
     });
 
 </script>
-
+  
 {% endblock %}
