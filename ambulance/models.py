@@ -284,7 +284,7 @@ class Call(AddressModel, UpdatedByModel):
     CALL_STATUS_CHOICES = \
         [(m.name, m.value) for m in CallStatus]
     status = models.CharField(max_length=1,
-                              choices=CALL_STATUS_CHOICES
+                              choices=CALL_STATUS_CHOICES,
                               default=CallStatus.P.name)
 
     # details
