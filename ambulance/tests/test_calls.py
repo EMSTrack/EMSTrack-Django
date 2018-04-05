@@ -1,6 +1,6 @@
 from rest_framework.parsers import JSONParser
 
-from ambulance.models import Call, Patient, AmbulanceCallTime
+from ambulance.models import Call, Patient, AmbulanceCallTime, CallStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer, PatientSerializer
 from emstrack.tests.util import date2iso, point2str
 
