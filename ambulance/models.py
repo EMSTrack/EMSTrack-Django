@@ -276,7 +276,7 @@ class CallPriority(Enum):
 class CallStatus(Enum):
     O = 'Ongoing'
     P = 'Pending'
-    C = 'Completed'
+    F = 'Finished'
 
 class Call(AddressModel, UpdatedByModel):
 
