@@ -266,7 +266,7 @@ class CallSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Call
-        fields = ['id', 'active', 'details', 'priority',
+        fields = ['id', 'status', 'details', 'priority',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location', 'created_at', 'ended_at', 

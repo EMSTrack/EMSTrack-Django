@@ -18,7 +18,7 @@ class TestCall(TestSetup):
         patientserializer = PatientSerializer(many=True)
         result = {
             'id': c1.id,
-            'active': c1.active,
+            'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
             'number': c1.number,
