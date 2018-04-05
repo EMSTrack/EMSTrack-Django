@@ -10,7 +10,6 @@ from login.tests.setup_data import TestSetup
 class TestCall(TestSetup):
 
     def test_call_serializer(self):
-
         # test CallSerializer
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         serializer = CallSerializer(c1)
@@ -39,6 +38,123 @@ class TestCall(TestSetup):
             'patient_set': patientserializer.data
         }
         self.assertDictEqual(serializer.data, result)
+
+    def test_call_update_serializer(self):
+        
+        # superuser first
+
+        # Update call status
+        c = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+        user = self.u1
+        status = CallStatus.O.name
+
+        serializer = CallSerializer(c, 
+                                    data={
+                                        'status': status,
+                                    }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+        
+        # test
+        serializer = CallSerializer(c)
+        result = {
+            'id': c.id,
+            'status': status,
+            'details': c.details,
+            'priority': c.priority,
+            'number': c.number,
+            'street': c.street,
+            'unit': c.unit,
+            'neighborhood': c.neighborhood,
+            'city': c.city,
+            'state': c.state,
+            'zipcode': c.zipcode,
+            'country': c.country,
+            'location': point2str(c.location),
+            'created_at': date2iso(c.created_at),
+            'ended_at': date2iso(c.ended_at),
+            'comment': c.comment,
+            'updated_by': c.updated_by.id,
+            'updated_on': date2iso(c.updated_on),
+            'ambulancecalltime_set': AmbulanceCallTimeSerializer(many=True).data,
+            'patient_set': PatientSerializer(many=True).data
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # Update call street
+        street = 'new street'
+
+        serializer = CallSerializer(c, 
+                                    data={
+                                        'street': street,
+                                    }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+         
+        # test
+        serializer = CallSerializer(c)
+        result = {
+            'id': c.id,
+            'status': c.status,
+            'details': c.details,
+            'priority': c.priority,
+            'number': c.number,
+            'street': street,
+            'unit': c.unit,
+            'neighborhood': c.neighborhood,
+            'city': c.city,
+            'state': c.state,
+            'zipcode': c.zipcode,
+            'country': c.country,
+            'location': point2str(c.location),
+            'created_at': date2iso(c.created_at),
+            'ended_at': date2iso(c.ended_at),
+            'comment': c.comment,    
+            'updated_by': c.updated_by.id,
+            'updated_on': date2iso(c.updated_on),
+            'ambulancecalltime_set': AmbulanceCallTimeSerializer(many=True).data,
+            'patient_set': PatientSerializer(many=True).data
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # Update call location
+        location = {'latitude': -2., 'longitude': 7.}
+
+        serializer = CallSerializer(c, 
+                                    data={
+                                        'location': location,
+                                    }, partial=True)
+        serializer.is_valid()
+        serializer.save(updated_by=user)
+
+        # test
+        serializer = CallSerializer(c)
+        result = {
+            'id': c.id,
+            'status': c.status,
+            'details': c.details,
+            'priority': c.priority,
+            'number': c.number,
+            'street': c.street,
+            'unit': c.unit,
+            'neighborhood': c.neighborhood,
+            'city': c.city,
+            'state': c.state,
+            'zipcode': c.zipcode,
+            'country': c.country,
+            'location': point2str(location),
+            'created_at': date2iso(c.created_at),
+            'ended_at': date2iso(c.ended_at),
+            'comment': c.comment,
+            'updated_by': c.updated_by.id,
+            'updated_on': date2iso(c.updated_on),
+            'ambulancecalltime_set': AmbulanceCallTimeSerializer(many=True).data,
+            'patient_set': PatientSerializer(many=True).data
+        }
+        self.assertDictEqual(serializer.data, result)
+	
+        # Need more tests for updates by regular authorized user
+
 
     def test_patient_serializer(self):
 
