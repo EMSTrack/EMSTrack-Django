@@ -288,7 +288,7 @@ class CallSerializer(serializers.ModelSerializer):
     def update(self, instance, data):
 
         # Get current user.
-        user = data['update_by']
+        user = data['updated_by']
 
         # Make sure user is Super.
         if not user.is_superuser:
