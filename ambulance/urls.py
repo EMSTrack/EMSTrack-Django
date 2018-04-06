@@ -48,7 +48,7 @@ urlpatterns = [
 
     # NEED REVISING
     
-    url(r'^call_list/$',
+    url(r'^call/list/$',
         login_required(views.CallView.as_view()),
         name="call_list"),
 
