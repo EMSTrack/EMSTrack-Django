@@ -159,7 +159,6 @@ class LocationAdminUpdateView(SuccessMessageMixin,
 # Call ListView
 class CallListView(ListView):
     model = Call
-    template_name = 'ambulance/call_list.html'
 
 
 # Admin page
