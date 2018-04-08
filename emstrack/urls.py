@@ -24,7 +24,8 @@ from rest_framework_swagger.views import get_swagger_view
 from login.viewsets import ProfileViewSet
 from login.views import PasswordView, SettingsView
 
-from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet
+from ambulance.viewsets import AmbulanceViewSet, LocationViewSet,
+LocationTypeViewSet, CallViewSet
 
 from hospital.viewsets import HospitalViewSet, HospitalEquipmentViewSet
 
@@ -57,6 +58,10 @@ router.register(r'hospital',
 router.register(r'hospital/(?P<id>[0-9]+)/equipment',
                 HospitalEquipmentViewSet,
                 base_name='api-hospital-equipment')
+
+router.register(r'call',
+                CallViewSet,
+                base_name='api-call')
 
 urlpatterns = [
 
