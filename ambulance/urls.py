@@ -52,7 +52,7 @@ urlpatterns = [
         login_required(views.CallListView.as_view()),
         name="call_list"),
 
-    url(r'call/detail/(?<pk>\d+)$', 
+    url(r'call/detail/(?P<pk>\d+)$', 
         login_required(views.CallDetailView.as_view()),
         name='call_detail'),
 
