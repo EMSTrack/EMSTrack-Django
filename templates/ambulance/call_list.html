@@ -14,7 +14,7 @@
                 <thead>
                     <tr>
                         <th>Identifier</th>
-                        <th>Active</th>
+                        <th>Status</th>
                         <th>Deatils</th>
                         <th>Priority</th>
                         <th>Created At</th>
@@ -25,7 +25,7 @@
                     {% for call in call_list %}
                     <tr>
                         <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.id }}</a></td>
-                        <td>{{ call.active }}</td>
+                        <td>{{ call.status }}</td>
                         <td>{{ call.details }}</td>
                         <td>{{ call.created_at }}</td>
                         <td>{{ call.ended_at }}</td>
