@@ -9,7 +9,7 @@ from emstrack.mixins import BasePermissionMixin, \
 
 from .models import Location, Ambulance, LocationType, Call
 
-from .serializers import LocationSerializer, AmbulanceSerializer,
+from .serializers import LocationSerializer, AmbulanceSerializer, \
 AmbulanceUpdateSerializer, CallSerializer
 
 
