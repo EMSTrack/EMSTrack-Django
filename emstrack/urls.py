@@ -24,7 +24,7 @@ from rest_framework_swagger.views import get_swagger_view
 from login.viewsets import ProfileViewSet
 from login.views import PasswordView, SettingsView
 
-from ambulance.viewsets import AmbulanceViewSet, LocationViewSet,
+from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, \\
 LocationTypeViewSet, CallViewSet
 
 from hospital.viewsets import HospitalViewSet, HospitalEquipmentViewSet
