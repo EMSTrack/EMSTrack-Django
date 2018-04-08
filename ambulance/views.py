@@ -156,14 +156,9 @@ class LocationAdminUpdateView(SuccessMessageMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
-
-# NEED REVISING
-    
-# Call list page
-class CallView(ListView):
+# Call ListView
+class CallListView(ListView):
     model = Call
-    template_name = 'ambulance/dispatch_list.html'
-    context_object_name = "ambulance_call"
 
 
 # Admin page
