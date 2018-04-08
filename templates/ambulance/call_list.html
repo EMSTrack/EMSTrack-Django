@@ -24,7 +24,7 @@
                 <tbody>
                     {% for call in call_list %}
                     <tr>
-                        <td>{{ call.id }}</td>
+                        <td><a href="{% url 'ambulance:call:detail' pk=call.id %}">{{ call.id }}</a></td>
                         <td>{{ call.active }}</td>
                         <td>{{ call.details }}</td>
                         <td>{{ call.created_at }}</td>
