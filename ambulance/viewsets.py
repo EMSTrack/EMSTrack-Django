@@ -7,9 +7,10 @@ from rest_framework.pagination import PageNumberPagination, LimitOffsetPaginatio
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 
-from .models import Location, Ambulance, LocationType
+from .models import Location, Ambulance, LocationType, Call
 
-from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer
+from .serializers import LocationSerializer, AmbulanceSerializer, \
+AmbulanceUpdateSerializer, CallSerializer
 
 
 # Django REST Framework Viewsets
@@ -142,3 +143,17 @@ class LocationTypeViewSet(mixins.ListModelMixin,
             type = ''
 
         return Location.objects.filter(type=type)
+
+#Call ViewSet
+
+class CallViewSet(mixins.ListModelMixin,
+                  viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating Calls.
+
+    list:
+    Retrive list of calls.
+    """
+
+    queryset = Call.objects.all()
+    serializer_class = CallSerializer

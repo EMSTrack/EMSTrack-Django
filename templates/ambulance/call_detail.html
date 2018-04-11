@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>Call</h1>
+
+            <h3>Details:</h3>
+
+            <p>
+                <strong>Identifier:</strong>
+                {{ call.id }}
+            </p>
+            <p>
+                <strong>Status:</strong>
+                {{ call.status }}
+            </p>
+            <p>
+                <strong>Details:</strong>
+                {{ call.details }}
+            </p>
+            <p>
+                <strong>Priority:</strong>
+                {{ call.priority }}
+            </p>
+            <p>
+                <strong>Created at:</strong>
+                {{ call.created_at }}
+            </p>
+            <p>
+                <strong>Ended at:</strong>
+                {{ call.ended_at }}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

@@ -160,6 +160,10 @@ class LocationAdminUpdateView(SuccessMessageMixin,
 class CallListView(ListView):
     model = Call
 
+# Call DetailView
+class CallDetailView(DetailView):
+    model = Call
+
 
 # Admin page
 class AdminView(ListView):
