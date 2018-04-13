@@ -437,19 +437,23 @@ class MQTTAclView(CsrfExemptMixin,
                         topic[0] == 'user' and
                         topic[1] == user.username):
 
-                    #  - user/{username}/error
-                    if (len(topic) == 3 and
-                            topic[2] == 'error'):
+                    #  - user/{username}/client/{client-id}/error
+                    if (len(topic) == 5 and
+                            topic[2] == clientid and
+                            topic[4] == 'error'):
 
                         return HttpResponse('OK')
 
-                    #  - user/{username}/ambulance/{ambulance-id}/data
-                    elif (len(topic) == 5 and
-                          topic[2] == 'ambulance' and
-                          topic[4] == 'data'):
+                    #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/status
+                    #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
+                    elif ((len(topic) == 7 and
+                           topic[2] == clientid and
+                           topic[4] == 'ambulance') and
+                          (topic[6] == 'data' or
+                           topic[6] == 'status')):
 
                         # get ambulance_id
-                        ambulance_id = int(topic[3])
+                        ambulance_id = int(topic[5])
 
                         # is user authorized?
                         try:
@@ -463,18 +467,20 @@ class MQTTAclView(CsrfExemptMixin,
                         except ObjectDoesNotExist:
                             pass
 
-                    #  - user/{username}/hospital/{hospital-id}/data
-                    #  - user/{username}/hospital/{hospital-id}/equipment/+/data
-                    elif ((len(topic) == 5 and
-                           topic[2] == 'hospital' and
-                           topic[4] == 'data') or
-                          (len(topic) == 7 and
-                           topic[2] == 'hospital' and
-                           topic[4] == 'equipment' and
-                           topic[6] == 'data')):
+                    #  - user/{username}/client/{client-id}/hospital/{hospital-id}/data
+                    #  - user/{username}/client/{client-id}/hospital/{hospital-id}/equipment/+/data
+                    elif ((len(topic) == 7 and
+                           topic[2] == clientid and
+                           topic[4] == 'hospital') and
+                          (topic[6] == 'data') or
+                          (len(topic) == 9 and
+                           topic[2] == clientid and
+                           topic[4] == 'hospital' and
+                           topic[6] == 'equipment' and
+                           topic[8] == 'data')):
 
                         # get hospital_id
-                        hospital_id = int(topic[3])
+                        hospital_id = int(topic[5])
 
                         # is user authorized?
                         try:
@@ -489,16 +495,10 @@ class MQTTAclView(CsrfExemptMixin,
                             pass
 
                     #  - user/{username}/client/{client-id}/status
-                    #  - user/{username}/client/{client-id}/ambulance/{id}/status
-                    elif ((len(topic) == 5 and
-                           topic[2] == 'client' and
-                           topic[4] == 'status' and
-                           topic[3] == clientid) or
-                          (len(topic) == 7 and
-                           topic[2] == 'client' and
-                           topic[4] == 'ambulance' and
-                           topic[6] == 'status' and
-                           topic[3] == clientid)):
+                    elif (len(topic) == 5 and
+                          topic[2] == 'client' and
+                          topic[4] == 'status' and
+                          topic[3] == clientid):
 
                         return HttpResponse('OK')
 
