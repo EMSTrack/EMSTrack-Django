@@ -630,8 +630,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client)
 
         # publish change
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                         client_id, 
+                                                                         self.a1.id),
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
@@ -661,8 +662,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('hospital/{}/data'.format(self.h1.id))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                              self.h1.id),
+        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username, 
+                                                                        client_id,
+                                                                        self.h1.id),
                             json.dumps({
                                 'comment': 'no more comments',
                             }), qos=0)
@@ -694,9 +696,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                                                   self.e1.name))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                           self.h1.id,
-                                                                           self.e1.name),
+        test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                     client_id,
+                                                                                     self.h1.id,
+                                                                                     self.e1.name),
                             json.dumps({
                                 'value': 'False',
                             }), qos=0)
@@ -743,8 +746,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             }
         ]
 
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               self.a2.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                         client_id,
+                                                                         self.a2.id),
                             json.dumps(data), qos=0)
 
         # process messages
@@ -786,8 +790,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                               self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                         client_id,
+                                                                         self.a1.id),
                             '{ "value": ',
                             qos=0)
 
@@ -800,8 +805,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                              self.h1.id),
+        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                        client_id,
+                                                                        self.h1.id),
                             '{ "value": ',
                             qos=0)
 
@@ -814,9 +820,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('user/{}/error'.format(broker['USERNAME']))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                           self.h1.id,
-                                                                           self.e1.name),
+        test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                     client_id,
+                                                                                     self.h1.id,
+                                                                                     self.e1.name),
                             '{ "value": ',
                             qos=0)
 
@@ -843,8 +850,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             test_client.expect('user/{}/error'.format(broker['USERNAME']))
 
-            test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                                   1111),
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                             client_id,
+                                                                             1111),
                                 json.dumps({
                                     'status': AmbulanceStatus.OS.name,
                                 }), qos=0)
@@ -857,8 +865,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             test_client.expect('user/{}/error'.format(broker['USERNAME']))
 
-            test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                                  1111),
+            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                            client_id,
+                                                                            1111),
                                 json.dumps({
                                     'comment': 'comment',
                                 }), qos=0)
@@ -871,9 +880,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             test_client.expect('user/{}/error'.format(broker['USERNAME']))
 
-            test_client.publish('user/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                               self.h1.id,
-                                                                               'unknown'),
+            test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                         client_id,
+                                                                                         self.h1.id,
+                                                                                         'unknown'),
                                 json.dumps({
                                     'comment': 'comment',
                                 }), qos=0)
@@ -886,8 +896,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             test_client.expect('user/{}/error'.format(broker['USERNAME']))
 
-            test_client.publish('user/{}/ambulance/{}/data'.format(self.u1.username,
-                                                                   self.a1.id),
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                             client_id,
+                                                                             self.a1.id),
                                 json.dumps({
                                     'status': 'Invalid',
                                 }), qos=0)
@@ -902,8 +913,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             test_client.expect('user/{}/error'.format(broker['USERNAME']))
 
-            test_client.publish('user/{}/hospital/{}/data'.format(self.u1.username,
-                                                                  self.h1.id),
+            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                            client_id,
+                                                                            self.h1.id),
                                 json.dumps({
                                     'location': 'PPOINT()',
                                 }), qos=0)
@@ -1103,7 +1115,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulance.location_client, None)
 
         # Start streaming data
-        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             '{"location_client_id":"' + client_id + '"}', qos=2)
 
         # process messages
@@ -1126,7 +1138,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         # Try to change location client without reset to a valid client_id
-        second_test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+        second_test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                                    '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
@@ -1143,7 +1155,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         # reset location_client
-        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             '{"location_client_id":""}', qos=2)
 
         # process messages
@@ -1172,7 +1184,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
             test_client.expect('user/{}/error'.format(username))
             self.is_subscribed(test_client)
 
-            test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                                 '{"location_client_id":"' + client_id + '_other"}', qos=2)
 
             # process messages
@@ -1191,7 +1203,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         #############################################################################################
 
         # Second client start streaming data
-        second_test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a2.id),
+        second_test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a2.id),
                                    '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
@@ -1398,7 +1410,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.details, self.a1.identifier)
 
         # Start streaming data
-        test_client.publish('user/{}/ambulance/{}/data'.format(username, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             '{"location_client_id":"' + client_id + '"}', qos=2)
 
         # process messages
