@@ -787,7 +787,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # generate ERROR: JSON formated incorrectly
 
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
         self.is_subscribed(test_client)
 
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
@@ -802,7 +802,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # generate ERROR: JSON formated incorrectly
 
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
         self.is_subscribed(test_client)
 
         test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
@@ -817,7 +817,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # generate ERROR: JSON formated incorrectly
 
-        test_client.expect('user/{}/error'.format(broker['USERNAME']))
+        test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
         self.is_subscribed(test_client)
 
         test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
@@ -848,7 +848,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             # generate ERROR: wrong id
 
-            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
 
             test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                              client_id,
@@ -863,7 +863,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             # generate ERROR: wrong id
 
-            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
 
             test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
                                                                             client_id,
@@ -878,7 +878,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             # generate ERROR: wrong id
 
-            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
 
             test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                                          client_id,
@@ -894,7 +894,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             # generate ERROR: invalid serializer
 
-            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
 
             test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                              client_id,
@@ -911,7 +911,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             # generate ERROR: invalid serializer
 
-            test_client.expect('user/{}/error'.format(broker['USERNAME']))
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
 
             test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
                                                                             client_id,
@@ -1181,7 +1181,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         if False:
 
             # Try to change location client without reset to an invalid client_id
-            test_client.expect('user/{}/error'.format(username))
+            test_client.expect('user/{}/client/{}/error'.format(username, client_id))
             self.is_subscribed(test_client)
 
             test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
