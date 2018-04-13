@@ -534,56 +534,57 @@ class TestMQTTACLPublish(MyTestCase):
         # Ambulance data
 
         # can't publish
+        clientid = 'test_client'
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser1',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser1/ambulance/{}/data'.format(self.a1.id)},
+                                     'topic': '/user/testuser1/client/{}/ambulance/{}/data'.format(clientid, self.a1.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser1',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser1/ambulance/{}/data'.format(self.a2.id)},
+                                     'topic': '/user/testuser1/client/{}/ambulance/{}/data'.format(clientid, self.a2.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser1',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser1/ambulance/{}/data'.format(self.a3.id)},
+                                     'topic': '/user/testuser1/client/{}/ambulance/{}/data'.format(clientid, self.a3.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser2',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser2/ambulance/{}/data'.format(self.a1.id)},
+                                     'topic': '/user/testuser2/client/{}/ambulance/{}/data'.format(clientid, self.a1.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser2',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser2/ambulance/{}/data'.format(self.a2.id)},
+                                     'topic': '/user/testuser2/client/{}/ambulance/{}/data'.format(clientid, self.a2.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser2',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser2/ambulance/{}/data'.format(self.a3.id)},
+                                     'topic': '/user/testuser2/client/{}/ambulance/{}/data'.format(clientid, self.a3.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -592,54 +593,54 @@ class TestMQTTACLPublish(MyTestCase):
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser1',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser1/hospital/{}/data'.format(self.h1.id)},
+                                     'topic': '/user/testuser1/client/{}/hospital/{}/data'.format(clientid, self.h1.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser1',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser1/hospital/{}/data'.format(self.h2.id)},
+                                     'topic': '/user/testuser1/client/{}/hospital/{}/data'.format(clientid, self.h2.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser1',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser1/hospital/{}/data'.format(self.h3.id)},
+                                     'topic': '/user/testuser1/client/{}/hospital/{}/data'.format(clientid, self.h3.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser2',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser2/hospital/{}/data'.format(self.h1.id)},
+                                     'topic': '/user/testuser2/client/{}/hospital/{}/data'.format(clientid, self.h1.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # can't publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser2',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser2/hospital/{}/data'.format(self.h2.id)},
+                                     'topic': '/user/testuser2/client/{}/hospital/{}/data'.format(clientid, self.h2.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # can publish
         response = self.client.post('/auth/mqtt/acl/',
                                     {'username': 'testuser2',
-                                     'clientid': 'test_client',
+                                     'clientid': clientid,
                                      'acc': '2',
-                                     'topic': '/user/testuser2/hospital/{}/data'.format(self.h3.id)},
+                                     'topic': '/user/testuser2/client/{}/hospital/{}/data'.format(clientid, self.h3.id)},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
