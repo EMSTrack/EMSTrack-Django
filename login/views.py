@@ -433,24 +433,24 @@ class MQTTAclView(CsrfExemptMixin,
 
                 # permission to publish:
 
-                if (len(topic) >= 3 and
+                #  - user/{username}/client/{client-id}/#
+                if (len(topic) >= 5 and
                         topic[0] == 'user' and
-                        topic[1] == user.username):
+                        topic[1] == user.username and
+                        topic[2] == 'client' and
+                        topic[3] == clientid):
 
                     #  - user/{username}/client/{client-id}/error
+                    #  - user/{username}/client/{client-id}/status
                     if (len(topic) == 5 and
-                            topic[2] == clientid and
-                            topic[4] == 'error'):
+                            (topic[4] == 'error' or topic[4] == 'status')):
 
                         return HttpResponse('OK')
 
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/status
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
-                    elif ((len(topic) == 7 and
-                           topic[2] == clientid and
-                           topic[4] == 'ambulance') and
-                          (topic[6] == 'data' or
-                           topic[6] == 'status')):
+                    elif ((len(topic) == 7 and topic[4] == 'ambulance') and
+                          (topic[6] == 'data' or topic[6] == 'status')):
 
                         # get ambulance_id
                         ambulance_id = int(topic[5])
@@ -469,15 +469,9 @@ class MQTTAclView(CsrfExemptMixin,
 
                     #  - user/{username}/client/{client-id}/hospital/{hospital-id}/data
                     #  - user/{username}/client/{client-id}/hospital/{hospital-id}/equipment/+/data
-                    elif ((len(topic) == 7 and
-                           topic[2] == clientid and
-                           topic[4] == 'hospital') and
-                          (topic[6] == 'data') or
-                          (len(topic) == 9 and
-                           topic[2] == clientid and
-                           topic[4] == 'hospital' and
-                           topic[6] == 'equipment' and
-                           topic[8] == 'data')):
+                    elif (topic[4] == 'hospital' and
+                          (len(topic) == 7 and topic[6] == 'data') or
+                          (len(topic) == 9 and topic[6] == 'equipment' and topic[8] == 'data')):
 
                         # get hospital_id
                         hospital_id = int(topic[5])
@@ -493,14 +487,6 @@ class MQTTAclView(CsrfExemptMixin,
 
                         except ObjectDoesNotExist:
                             pass
-
-                    #  - user/{username}/client/{client-id}/status
-                    elif (len(topic) == 5 and
-                          topic[2] == 'client' and
-                          topic[4] == 'status' and
-                          topic[3] == clientid):
-
-                        return HttpResponse('OK')
 
         except User.DoesNotExist:
             pass
