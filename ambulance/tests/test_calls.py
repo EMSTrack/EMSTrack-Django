@@ -193,9 +193,6 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        with self.assertRaises(IntegrityError) as context:
-            AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
-
         ambCallTime2 = AmbulanceCallTime.objects.create(call=c1, ambulance =
                 self.a3)
 
@@ -240,3 +237,6 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertDictEqual(serializer.data, result)
+
+        with self.assertRaises(IntegrityError) as context:
+            AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
