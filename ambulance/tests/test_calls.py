@@ -1,6 +1,7 @@
 import logging
 
 from django.db import IntegrityError
+from django.utils import timezone
 from rest_framework.parsers import JSONParser
 
 from ambulance.models import Call, Patient, AmbulanceCallTime, CallStatus, CallPriority
@@ -87,14 +88,13 @@ class TestCall(TestSetup):
     def test_call_serializer_create(self):
 
         call = {
-            'status': CallStatus.O.name,
+            'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        logger.debug('errors = {}'.format(serializer.errors))
         serializer.save(updated_by=self.u1)
 
         # test CallSerializer
@@ -124,6 +124,83 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertDictEqual(serializer.data, result)
+
+    # TODO: Make sure these tests work
+    def _test(self):
+
+        # TODO: HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
+        call = {
+            'status': CallStatus.O.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+        }
+        serializer = CallSerializer(data=call)
+        self.assertFalse(serializer.is_valid())
+
+        # TODO: WILL HAVE TO CREATE AMBULANCECALLTIMES
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecalltime_set': [{'ambulance_id': self.a1}, {'ambulance_id': self.a2}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        serializer.save(updated_by=self.u1)
+
+        # test CallSerializer
+        c1 = Call.objects.get(number='123',street='asdasdasd asd asd asdas')
+        serializer = CallSerializer(c1)
+
+        result = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'number': c1.number,
+            'street': c1.street,
+            'unit': c1.unit,
+            'neighborhood': c1.neighborhood,
+            'city': c1.city,
+            'state': c1.state,
+            'zipcode': c1.zipcode,
+            'country': c1.country,
+            'location': point2str(c1.location),
+            'created_at': date2iso(c1.created_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecalltime_set': [], # TODO
+            'patient_set': []
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # TODO: FAIL INTEGRITY: LET DATABASE FAIL FOR YOU
+        call = {
+            'status': CallStatus.O.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecalltime_set': [{'ambulance_id': self.a1}, {'ambulance_id': self.a1}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        serializer.save(updated_by=self.u1)
+
+        # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
+        call = {
+            'status': CallStatus.O.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecalltime_set': [{'ambulance_id': self.a1, 'departure_time': timezone.now()}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        serializer.save(updated_by=self.u1)
 
 
     def test_call_update_serializer(self):
