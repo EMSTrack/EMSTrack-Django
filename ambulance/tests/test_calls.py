@@ -214,7 +214,7 @@ class TestCall(TestSetup):
         ambCallTimeSerializer1 = AmbulanceCallTimeSerializer(ambCallTime1)
         ambCallTimeSerializer2 = AmbulanceCallTimeSerializer(ambCallTime2)
 
-        result = {
+        expected = {
             'id': c1.id,
             'status': c1.status,
             'details': c1.details,
@@ -238,8 +238,9 @@ class TestCall(TestSetup):
         }
         self.assertCountEqual(serializer.data['ambulancecalltime_set'],
                               [ambCallTimeSerializer1.data, ambCallTimeSerializer2.data])
-        serializer.data['ambulancecalltime_set'] = []
-        self.assertDictEqual(serializer.data, result)
+        result = serializer.data
+        result['ambulancecalltime_set'] = []
+        self.assertDictEqual(result, expected)
 
         with self.assertRaises(IntegrityError) as context:
             AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
