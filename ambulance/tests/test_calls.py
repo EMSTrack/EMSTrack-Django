@@ -233,7 +233,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': [ambCallTimeSerializer2.data,ambCallTimeSerializer1.data],
+            'ambulancecalltime_set': set([ambCallTimeSerializer1.data, ambCallTimeSerializer2.data]),
             'patient_set': []
         }
         self.assertDictEqual(serializer.data, result)
