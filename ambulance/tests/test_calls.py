@@ -94,7 +94,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        logger.d('errors = {}'.format(serializer.errors))
+        logger.debug('errors = {}'.format(serializer.errors))
         serializer.save(updated_by=self.u1)
 
         # test CallSerializer
