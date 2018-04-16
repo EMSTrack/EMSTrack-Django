@@ -176,9 +176,10 @@ class TestCall(TestSetup):
         c1 = Call.objects.create(number="123", street="dunno", updated_by =
                 self.u1)
 
-        ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance =
+        ambCallTime1 = AmbulanceCallTime.objects.create(call=c1, ambulance =
                 self.a1)
 
+        ambCallTime = ambCallTime1
         serializer = AmbulanceCallTimeSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
@@ -194,3 +195,48 @@ class TestCall(TestSetup):
 
         with self.assertRaises(IntegrityError) as context:
             AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
+
+        ambCallTime2 = AmbulanceCallTime.objects.create(call=c1, ambulance =
+                self.a3)
+
+        ambCallTime = ambCallTime2
+        serializer = AmbulanceCallTimeSerializer(ambCallTime)
+        result = {
+            'id': ambCallTime.id,
+            'call_id': ambCallTime.call.id,
+            'ambulance_id': ambCallTime.ambulance.id,
+            'dispatch_time': date2iso(ambCallTime.dispatch_time),
+            'departure_time': date2iso(ambCallTime.departure_time),
+            'patient_time': date2iso(ambCallTime.patient_time),
+            'hospital_time': date2iso(ambCallTime.hospital_time),
+            'end_time': date2iso(ambCallTime.end_time)
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        serializer = CallSerializer(c1)
+        ambCallTimeSerializer1 = AmbulanceCallTimeSerializer(ambCallTime1)
+        ambCallTimeSerializer2 = AmbulanceCallTimeSerializer(ambCallTime2)
+
+        result = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'number': c1.number,
+            'street': c1.street,
+            'unit': c1.unit,
+            'neighborhood': c1.neighborhood,
+            'city': c1.city,
+            'state': c1.state,
+            'zipcode': c1.zipcode,
+            'country': c1.country,
+            'location': point2str(c1.location),
+            'created_at': date2iso(c1.created_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecalltime_set': [ambCallTimeSerializer1.data,ambCallTimeSerializer2.data],
+            'patient_set': []
+        }
+        self.assertDictEqual(serializer.data, result)
