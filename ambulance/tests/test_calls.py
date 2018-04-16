@@ -233,9 +233,12 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': set([ambCallTimeSerializer1.data, ambCallTimeSerializer2.data]),
+            'ambulancecalltime_set': [],
             'patient_set': []
         }
+        self.assertCountEqual(serializer.data['ambulancecalltime_set'],
+                              [ambCallTimeSerializer1.data, ambCallTimeSerializer2.data])
+        serializer.data['ambulancecalltime_set'] = []
         self.assertDictEqual(serializer.data, result)
 
         with self.assertRaises(IntegrityError) as context:
