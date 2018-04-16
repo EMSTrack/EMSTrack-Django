@@ -1,3 +1,5 @@
+import logging
+
 from django.db import IntegrityError
 from rest_framework.parsers import JSONParser
 
@@ -7,6 +9,7 @@ from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
 
+logger = logging.getLogger(__name__)
 
 class TestCall(TestSetup):
 
@@ -91,6 +94,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
+        logger.d('errors = {}'.format(serializer.errors))
         serializer.save(updated_by=self.u1)
 
         # test CallSerializer
