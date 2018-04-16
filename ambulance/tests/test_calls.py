@@ -174,8 +174,10 @@ class TestCall(TestSetup):
 
         c1 = Call.objects.create(number="123", street="dunno", updated_by =
                 self.u1)
+
         ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance =
                 self.a1)
+
         serializer = AmbulanceCallTimeSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
@@ -188,3 +190,6 @@ class TestCall(TestSetup):
             'end_time': date2iso(ambCallTime.end_time)
         }
         self.assertDictEqual(serializer.data, result)
+
+        ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance =
+                self.a1)
