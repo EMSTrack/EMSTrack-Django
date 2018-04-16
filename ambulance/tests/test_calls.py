@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework.parsers import JSONParser
 
 from ambulance.models import Call, Patient, AmbulanceCallTime, CallStatus
@@ -191,5 +192,5 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        ambCallTime = AmbulanceCallTime.objects.create(call=c1, ambulance =
-                self.a1)
+        with self.assertRaises(IntegrityError) as context:
+            AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
