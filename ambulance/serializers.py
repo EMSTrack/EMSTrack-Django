@@ -260,8 +260,8 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
     
-    patient_set = PatientSerializer(many = True)
-    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True)
+    patient_set = PatientSerializer(many = True, required=False)
+    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
     location = PointField(required=False)
     
     class Meta:

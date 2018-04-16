@@ -87,8 +87,8 @@ class TestCall(TestSetup):
     def test_call_serializer_create(self):
 
         call = {
-            'status': CallStatus.O,
-            'priority': CallPriority.B,
+            'status': CallStatus.O.name,
+            'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
         }
