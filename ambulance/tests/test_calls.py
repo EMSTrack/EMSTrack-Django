@@ -237,7 +237,7 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecalltime_set'],
-                              [ambCallTimeSerializer1.data, ambCallTimeSerializer2.data])
+                              [ambCallTimeSerializer2.data, ambCallTimeSerializer1.data])
         result = serializer.data
         result['ambulancecalltime_set'] = []
         self.assertDictEqual(result, expected)
