@@ -372,17 +372,17 @@ class TestCall(TestSetup):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        Call.objects.create(details="Test1", updated_by=self.u1)
+        c1 = Call.objects.create(details="Test1", updated_by=self.u1)
 
-        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': 1}))
+        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'ambulance/call_detail.html')
 
     def test_call_detail_view_entry(self):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
-        Call.objects.create(details="Test1", updated_by=self.u1)
+        c1 = Call.objects.create(details="Test1", updated_by=self.u1)
 
-        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': 1}))
+        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
         self.assertContains(response, 'Test1')
 
