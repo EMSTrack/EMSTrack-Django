@@ -371,7 +371,7 @@ class TestCall(TestSetup):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        Call.objects.create(status='nani', status="Test1", updated_by=self.u1)
+        Call.objects.create(status="Test1", updated_by=self.u1)
 
         response = client.get(reverse('call_detail'), kwargs={'pk': 1})
         self.assertEquals(response.status_code, 200)
@@ -380,7 +380,7 @@ class TestCall(TestSetup):
     def test_call_detail_view_entry(self):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
-        Call.objects.create(status='nani', status="Test1", updated_by=self.u1)
+        Call.objects.create(status="Test1", updated_by=self.u1)
 
         response = client.get(reverse('call_detail'), kwargs={'pk': 1})
         self.assertContains(response, 'Test1')
