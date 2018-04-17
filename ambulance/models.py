@@ -302,6 +302,16 @@ class Call(AddressModel, UpdatedByModel):
 
     # ended at
     ended_at = models.DateTimeField(null=True, blank=True)
+    
+    @classmethod
+    #def save(self, *args, **kwargs):
+
+        # creation?
+        # created = self.pk is None
+
+        # loaded_values?
+        # loaded_values = self._loaded_values is not None
+         
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)

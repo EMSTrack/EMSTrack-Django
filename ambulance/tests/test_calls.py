@@ -126,7 +126,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
     # TODO: Make sure these tests work
-    def _test(self):
+    #def _test(self):
 
         # TODO: HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
         call = {
