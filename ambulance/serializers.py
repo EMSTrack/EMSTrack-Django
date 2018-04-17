@@ -7,7 +7,7 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient, CallStatus
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
