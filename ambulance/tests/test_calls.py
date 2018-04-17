@@ -344,17 +344,16 @@ class TestCall(TestSetup):
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'call_list.html')
+        self.assertTemplateUsed(response, 'ambulance/call_list.html')
 
     def test_call_list_view_one_entry(self):
         # instatiate client
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
         
-        Call.objects.create(number='99', street='nani', updated_by=self.u1)
+        Call.objects.create(status='nani', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
-        self.assertContains(response, '99')
         self.assertContains(response, 'nani')
 
     def test_call_list_view_two_entries(self):
@@ -377,7 +376,7 @@ class TestCall(TestSetup):
 
         response = client.get(reverse('ambulance:call_detail'), kwargs={'pk': 1})
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'call_detail.html')
+        self.assertTemplateUsed(response, 'ambulance/call_detail.html')
 
     def test_call_detail_view_entry(self):
         client = Client()
