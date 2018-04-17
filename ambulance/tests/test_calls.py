@@ -1,6 +1,7 @@
 import logging
 
 from django.test import Client
+from django.conf import settings
 
 from django.db import IntegrityError
 from django.utils import timezone
