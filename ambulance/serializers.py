@@ -297,3 +297,9 @@ class CallSerializer(serializers.ModelSerializer):
                 raise PermissionDenied()
 
         return super().update(instance, data)
+
+    def validate(self, data):
+        if data['status'] != CallStatus.P.name and data['ambulancecalltime_set'] == []:
+            raise serializers.ValidationError('Ongoing call and finished call must have ' +
+                                              'ambulancecalltime_set')
+        return data
