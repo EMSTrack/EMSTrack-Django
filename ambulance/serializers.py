@@ -299,7 +299,7 @@ class CallSerializer(serializers.ModelSerializer):
         return super().update(instance, data)
 
     def validate(self, data):
-        if data['status'] != CallStatus.P.name and data['ambulancecalltime_set'] == []:
+        if data['status'] != CallStatus.P.name and not ('ambulancecalltime_set' in data):
             raise serializers.ValidationError('Ongoing call and finished call must have ' +
                                               'ambulancecalltime_set')
         return data
