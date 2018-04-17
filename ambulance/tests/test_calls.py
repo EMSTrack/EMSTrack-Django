@@ -1,5 +1,7 @@
 import logging
 
+from django.test import Client
+
 from django.db import IntegrityError
 from django.utils import timezone
 from rest_framework.parsers import JSONParser
@@ -333,4 +335,53 @@ class TestCall(TestSetup):
             'age': p1.age
         }
         self.assertDictEqual(serializer.data, result)
+
+    def test_call_list_view_loads(self):
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        response = client.get(reverse('call_list'))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'call_list.html')
+
+    def test_call_list_view_one_entry(self):
+        # instatiate client
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+        
+        Call.objects.create(number='99', street='nani', updated_by=self.u1)
+
+        response = client.get(reverse('call_list'))
+        self.assertContains(response, '99')
+        self.assertContains(response, 'nani')
+
+    def test_call_list_view_two_entries(self):
+        # instatiate client
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        Call.objects.create(status='nani', updated_by=self.u1)
+        Call.objects.create(status='suhmuh', updated_by=self.u1)
+
+        response = client.get(reverse('call_list'))
+        self.assertContains(response, 'nani')
+        self.assertContains(response, 'suhmuh')
+
+    def test_call_detail_view_loads(self):
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        Call.objects.create(status='nani', status="Test1", updated_by=self.u1)
+
+        response = client.get(reverse('call_detail'), kwargs={'pk': 1})
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'call_detail.html')
+
+    def test_call_detail_view_entry(self):
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+        Call.objects.create(status='nani', status="Test1", updated_by=self.u1)
+
+        response = client.get(reverse('call_detail'), kwargs={'pk': 1})
+        self.assertContains(response, 'Test1')
 
