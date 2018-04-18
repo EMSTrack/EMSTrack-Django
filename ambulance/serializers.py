@@ -294,7 +294,7 @@ class CallSerializer(serializers.ModelSerializer):
                     ambulance=ambulancecalltime_data,
                     **ambulancecalltime_data)
 
-        return super().create(data)
+        return call
 
     def update(self, instance, data):
 
