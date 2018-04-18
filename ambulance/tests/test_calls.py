@@ -87,7 +87,15 @@ class TestCall(TestSetup):
 
     def test_call_serializer_create(self):
 
-
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        serializer.save(updated_by=self.u1)
 
         # test CallSerializer
         c1 = Call.objects.get(number='123',street='asdasdasd asd asd asdas')
