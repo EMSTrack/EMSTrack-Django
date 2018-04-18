@@ -87,43 +87,7 @@ class TestCall(TestSetup):
 
     def test_call_serializer_create(self):
 
-        call = {
-            'status': CallStatus.P.name,
-            'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
-        }
-        serializer = CallSerializer(data=call)
-        serializer.is_valid()
-        serializer.save(updated_by=self.u1)
 
-        # test CallSerializer
-        c1 = Call.objects.get(number='123',street='asdasdasd asd asd asdas')
-        serializer = CallSerializer(c1)
-
-        result = {
-            'id': c1.id,
-            'status': c1.status,
-            'details': c1.details,
-            'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
-            'created_at': date2iso(c1.created_at),
-            'ended_at': date2iso(c1.ended_at),
-            'comment': c1.comment,
-            'updated_by': c1.updated_by.id,
-            'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': [],
-            'patient_set': []
-        }
-        self.assertDictEqual(serializer.data, result)
 
     # TODO: Make sure these tests work
     #def _test(self):
