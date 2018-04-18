@@ -282,6 +282,9 @@ class CallSerializer(serializers.ModelSerializer):
         # Make sure user is Super.
         if not user.is_superuser:
             raise PermissionDenied()
+        
+        ambulancecalltime_set_data = data.pop('ambulancecalltime_set')
+        AmbulanceCallTime.objects.create(user=user, **ambulancecalltime_set_data)
 
         return super().create(data)
 
