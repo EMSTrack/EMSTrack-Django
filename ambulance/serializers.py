@@ -283,7 +283,7 @@ class CallSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
             raise PermissionDenied()
         
-        if data['status'] != CallStatus.P.name
+        if data['status'] != CallStatus.P.name :
             ambulancecalltime_set_data = data.pop('ambulancecalltime_set')
             AmbulanceCallTime.objects.create(user=user, **ambulancecalltime_set_data)
 
