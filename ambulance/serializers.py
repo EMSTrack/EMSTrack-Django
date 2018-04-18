@@ -285,7 +285,8 @@ class CallSerializer(serializers.ModelSerializer):
         
         if 'ambulancecalltime_set' in data:
             ambulancecalltime_set_data = data.pop('ambulancecalltime_set')
-            AmbulanceCallTime.objects.create(user=user, **ambulancecalltime_set_data)
+            for ambulancecalltime_data in ambulancecalltime_set_data:
+                AmbulanceCallTime.objects.create(call=self, user=user, **ambulancecalltime_data)
 
         return super().create(data)
 
