@@ -286,6 +286,7 @@ class CallSerializer(serializers.ModelSerializer):
         if 'ambulancecalltime_set' in data:
             ambulancecalltime_set_data = data.pop('ambulancecalltime_set')
             for ambulancecalltime_data in ambulancecalltime_set_data:
+                print(ambulancecalltime_data)
                 AmbulanceCallTime.objects.create(
                     call=Call.objects.get(number=data['number'],street=data['street']),
                     ambulance=ambulancecalltime_data['ambulance'],
