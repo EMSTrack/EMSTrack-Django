@@ -287,8 +287,8 @@ class CallSerializer(serializers.ModelSerializer):
             ambulancecalltime_set_data = data.pop('ambulancecalltime_set')
             for ambulancecalltime_data in ambulancecalltime_set_data:
                 AmbulanceCallTime.objects.create(
-                    call=Call.objects.get(number=data['number'],street=data['street']), 
-                    **ambulancecalltime_data)
+                    call=Call.objects.get(number=data['number'],street=data['street']),
+                    ambulance=ambulancecalltime_data)
 
         return super().create(data)
 
