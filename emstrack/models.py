@@ -2,6 +2,31 @@ from django.contrib.auth.models import User
 
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
+from django.template.defaulttags import register
+
+# filters
+
+@register.filter
+def get_check(key):
+    if key:
+        return '<span class="fas fa-check"></span>'
+    else:
+        return ''
+
+@register.filter
+def get_times(key):
+    if key:
+        return ''
+    else:
+        return '<span class="fas fa-times"></span>'
+
+@register.filter
+def get_check_or_times(key):
+    if key:
+        return '<span class="fas fa-check"></span>'
+    else:
+        return '<span class="fas fa-times"></span>'
+
 
 defaults = {
     'location': Point(-117.0382, 32.5149, srid=4326),
