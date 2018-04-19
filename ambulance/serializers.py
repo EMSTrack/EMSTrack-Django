@@ -282,11 +282,11 @@ class CallSerializer(serializers.ModelSerializer):
         # Make sure user is Super.
         if not user.is_superuser:
             raise PermissionDenied()
-        logger.debug(self.validated_data)
-        logger.debug(self.data)
+
         ambulancecalltime_set_data = data.pop('ambulancecalltime_set', [])
         logger.debug(ambulancecalltime_set_data)
-
+        logger.debug(self.validated_data)
+        logger.debug(self.data)
 
         call = super().create(data)
 
