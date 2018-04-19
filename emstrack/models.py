@@ -4,23 +4,26 @@ from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.template.defaulttags import register
 
+
 # filters
 
-@register.filter
+@register.filter(is_safe=True)
 def get_check(key):
     if key:
         return '<span class="fas fa-check"></span>'
     else:
         return ''
 
-@register.filter
+
+@register.filter(is_safe=True)
 def get_times(key):
     if key:
         return ''
     else:
         return '<span class="fas fa-times"></span>'
 
-@register.filter
+
+@register.filter(is_safe=True)
 def get_check_or_times(key):
     if key:
         return '<span class="fas fa-check"></span>'
