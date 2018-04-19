@@ -285,7 +285,6 @@ class CallSerializer(serializers.ModelSerializer):
 
         ambulancecalltime_set_data = data.pop('ambulancecalltime_set', [])
         logger.debug(ambulancecalltime_set_data)
-        logger.debug(data)
         logger.debug(self.validated_data)
         logger.debug(self.data)
 
