@@ -126,9 +126,9 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
     # TODO: Make sure these tests work
-    #def _test(self):
 
-        # TODO: HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
+        # Ongoing Call without AmbulanceCallTime_Set
+        # HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
         call = {
             'status': CallStatus.O.name,
             'priority': CallPriority.B.name,
@@ -138,7 +138,8 @@ class TestCall(TestSetup):
         serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
 
-        # TODO: WILL HAVE TO CREATE AMBULANCECALLTIMES
+        # Pending Call with AmbulanceCallTime_Set
+        #  WILL HAVE TO CREATE AMBULANCECALLTIMES
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
@@ -148,13 +149,13 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        serializer.save(updated_by=self.u1)
+        call = serializer.save(updated_by=self.u1)
 
         # test CallSerializer
-        c1 = Call.objects.get(number='123',street='asdasdasd asd asd asdas')
+        c1 = Call.objects.get(id=call.id)
         serializer = CallSerializer(c1)
 
-        result = {
+        expected = {
             'id': c1.id,
             'status': c1.status,
             'details': c1.details,
@@ -176,7 +177,12 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [], # TODO
             'patient_set': []
         }
-        self.assertDictEqual(serializer.data, result)
+
+        self.assertCountEqual(serializer.data['ambulancecalltime_set'],
+                              [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}])
+        result = serializer.data
+        result['ambulancecalltime_set'] = []
+        self.assertDictEqual(result, expected)
 
         # TODO: FAIL INTEGRITY: LET DATABASE FAIL FOR YOU
         call = {
@@ -214,7 +220,7 @@ class TestCall(TestSetup):
 
         serializer = CallSerializer(c, 
                                     data={
-                                        'status': status,
+                                        'status': status
                                     }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
