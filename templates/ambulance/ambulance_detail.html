@@ -25,7 +25,11 @@
 
             <p>
                 <strong>Identifier:</strong>
+                {% if user.is_staff %}
                 <a href="{% url 'ambulance:update' pk=ambulance.id %}">{{ ambulance.identifier }}</a>
+                {% else %}
+                {{ ambulance.identifier }}
+                {% endif %}
             </p>
             <p>
                 <strong>Capability:</strong>
