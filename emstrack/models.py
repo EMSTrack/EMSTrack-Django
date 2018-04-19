@@ -6,11 +6,13 @@ from django.template.defaulttags import register
 
 
 # filters
+from django.utils.safestring import mark_safe
+
 
 @register.filter(is_safe=True)
 def get_check(key):
     if key:
-        return '<span class="fas fa-check"></span>'
+        return mark_safe('<span class="fas fa-check"></span>')
     else:
         return ''
 
@@ -20,15 +22,15 @@ def get_times(key):
     if key:
         return ''
     else:
-        return '<span class="fas fa-times"></span>'
+        return mark_safe('<span class="fas fa-times"></span>')
 
 
 @register.filter(is_safe=True)
 def get_check_or_times(key):
     if key:
-        return '<span class="fas fa-check"></span>'
+        return mark_safe('<span class="fas fa-check"></span>')
     else:
-        return '<span class="fas fa-times"></span>'
+        return mark_safe('<span class="fas fa-times"></span>')
 
 
 defaults = {
