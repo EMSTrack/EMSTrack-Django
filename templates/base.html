@@ -97,6 +97,19 @@
                 </div>
             </li>
             {% endif %}
+            <li class="nav-item dropdown" id="navitemAccountDropdown">
+                <a class="nav-link dropdown-toggle"
+                   id="navbarAccountDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false"
+                   href="#">
+                    <span class="fas fa-user"></span>
+                    Account
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
+                    <a class="dropdown-item" href="{% url 'login:password_change' %}">Change password</a>
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="fas fa-sign-out-alt"></span>
