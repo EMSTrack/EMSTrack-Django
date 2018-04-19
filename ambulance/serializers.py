@@ -284,6 +284,7 @@ class CallSerializer(serializers.ModelSerializer):
             raise PermissionDenied()
 
         ambulancecalltime_set_data = data.pop('ambulancecalltime_set', [])
+        logger.debug(ambulancecalltime_set_data)
 
         call = super().create(data)
 
