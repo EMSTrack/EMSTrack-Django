@@ -3,7 +3,7 @@
 .btn-yellow {
   color: #000000;
   background-color: #F5E234;
-  border-color: #130269;
+  border-color: #F5E234;
 }
 
 .btn-yellow:hover,
@@ -13,7 +13,7 @@
 .open .dropdown-toggle.btn-yellow {
   color: #000000;
   background-color: #CFBF2D;
-  border-color: #130269;
+  border-color: #F5E234;
 }
 
 .btn-yellow:active,
@@ -38,7 +38,7 @@ fieldset[disabled] .btn-yellow:active,
 .btn-yellow[disabled].active,
 fieldset[disabled] .btn-yellow.active {
   background-color: #F5E234;
-  border-color: #130269;
+  border-color: #F5E234;
 }
 
 .btn-yellow .badge {
