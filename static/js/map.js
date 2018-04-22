@@ -442,9 +442,9 @@ function updateAmbulance(ambulance) {
 
         // Updated button classes
         $("#grid-button-" + id).attr("class",
-            "btn btn-sm " + ambulance_buttons[ambulance.status] +
+            'btn btn-sm ' + ambulance_buttons[ambulance.status] +
             + ' status-' + ambulance.status
-            + ' capability-' + ambulance.capability + '"');
+            + ' capability-' + ambulance.capability);
 
     } else {
 
