@@ -76,11 +76,25 @@ var ambulance_settings = [
 
 var ambulance_icons = {};
 var ambulance_buttons = {};
+for (var key in ambulance_css) {
+    // skip loop if the property is from prototype
+    if (!ambulance_css.hasOwnProperty(key))
+        continue;
+
+    var settings = ambulance_css[key];
+    ambulance_icons[key] = L.icon(settings['icon']);
+    ambulance_buttons[key] = settings['class'];
+}
+
+/*
+var ambulance_icons = {};
+var ambulance_buttons = {};
 Object.keys(ambulance_status).forEach(function(type, index) {
     var settings = ambulance_settings[index];
     ambulance_icons[type] = settings[0];
     ambulance_buttons[type] = settings[1];
 });
+*/
 
 var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/maki/hospital-15.svg',
