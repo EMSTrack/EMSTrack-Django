@@ -488,7 +488,7 @@ function updateHospital(hospital) {
 function addAmbulanceToGrid(ambulance) {
 
     console.log('Adding ambulance "' + ambulance.identifier +
-        '[id=' + ambulance.id + ']"' +
+        '[id=' + ambulance.id + ', status=' + ambulance.status + ', btn=' + ambulance_buttons[ambulance.status] + ']"' +
         ' to grid');
 
     // Add button to ambulance grid
