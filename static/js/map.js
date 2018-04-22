@@ -86,16 +86,6 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = settings['class'];
 }
 
-/*
-var ambulance_icons = {};
-var ambulance_buttons = {};
-Object.keys(ambulance_status).forEach(function(type, index) {
-    var settings = ambulance_settings[index];
-    ambulance_icons[type] = settings[0];
-    ambulance_buttons[type] = settings[1];
-});
-*/
-
 var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/maki/hospital-15.svg',
 	iconSize: [15, 15]
@@ -315,7 +305,7 @@ function onConnect() {
 
         // Send message
         var id = $('#ambulance-detail-id').val();
-        var topic = "user/" + username + "/ambulance/" + id + "/data";
+        var topic = "user/" + username + "/client/" + clientId + "/ambulance/" + id + "/data";
         var message = new Paho.MQTT.Message(status);
         message.destinationName = topic
         message.qos = 2;
