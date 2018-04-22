@@ -272,11 +272,14 @@ class CallPriority(Enum):
     C = 'Urgent'
     D = 'Less urgent'
     E = 'Not urgent'
+    O = 'Omega'
+
 
 class CallStatus(Enum):
     O = 'Ongoing'
     P = 'Pending'
     F = 'Finished'
+
 
 class Call(AddressModel, UpdatedByModel):
 
