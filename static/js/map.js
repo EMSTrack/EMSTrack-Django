@@ -441,7 +441,7 @@ function updateAmbulance(ambulance) {
         ambulance = ambulances[id]
 
         // Updated grid button class
-        var btnClass = 'btn btn-sm ' + ambulance_buttons[ambulance.status] +
+        var btnClass = 'btn btn-sm ' + ambulance_buttons[ambulance.status]
             + ' status-' + ambulance.status
             + ' capability-' + ambulance.capability;
 
