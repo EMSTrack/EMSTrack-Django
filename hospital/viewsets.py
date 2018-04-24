@@ -101,7 +101,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
         user = self.request.user
 
         # retrieve id
-        id = int(self.kwargs['id'])
+        hospital_id = int(self.kwargs['hospital_id'])
 
         # return nothing if anonymous
         if user.is_anonymous:
@@ -114,15 +114,15 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
         # check permission (and also existence)
         if self.request.method == 'GET':
-            if not get_permissions(user).check_can_read(hospital=id):
+            if not get_permissions(user).check_can_read(hospital=hospital_id):
                 raise PermissionDenied()
 
         elif (self.request.method == 'PUT' or
               self.request.method == 'PATCH' or
               self.request.method == 'DELETE'):
-            if not get_permissions(user).check_can_write(hospital=id):
+            if not get_permissions(user).check_can_write(hospital=hospital_id):
                 raise PermissionDenied()
 
         # build queryset
-        filter = {'hospital_id': id}
+        filter = {'hospital_id': hospital_id}
         return self.queryset.filter(**filter)
