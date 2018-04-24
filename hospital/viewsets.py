@@ -103,6 +103,8 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
         # retrieve id
         hospital_id = int(self.kwargs['hospital_id'])
 
+        logger.debug('kwargs = {}'.format(self.kwargs))
+
         # return nothing if anonymous
         if user.is_anonymous:
             raise PermissionDenied()
