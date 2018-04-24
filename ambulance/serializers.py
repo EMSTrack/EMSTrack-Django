@@ -292,7 +292,7 @@ class CallSerializer(serializers.ModelSerializer):
         call = super().create(data)
 
         for calltime in ambulancecalltime_set_data:
-            print(calltime.items()) 
+            print(calltime.items()[0])
             AmbulanceCallTime.objects.create(
                 call=call,
                 ambulance=Ambulance.objects.get(id=list(calltime.values())[0]))
