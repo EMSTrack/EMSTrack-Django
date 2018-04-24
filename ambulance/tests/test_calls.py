@@ -145,10 +145,10 @@ class TestCall(TestSetup):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
-            'ambulancecalltime_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
+            'ambulancecalltime_set': [{'ambulance': self.a1}, {'ambulance': self.a2}]
         }
         print(self.a1.id)
-        serializer = CallSerializer(data=deepcopy(call))
+        serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
 
