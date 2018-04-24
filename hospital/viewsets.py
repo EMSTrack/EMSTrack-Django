@@ -92,7 +92,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     queryset = HospitalEquipment.objects.all()
 
     serializer_class = HospitalEquipmentSerializer
-    lookup_field = 'equipment__name'
+    # lookup_field = 'equipment__name'
 
     # make sure both fields are looked up
     def get_queryset(self):
