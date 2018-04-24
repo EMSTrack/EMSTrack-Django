@@ -148,7 +148,7 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
         }
         print(self.a1.id)
-        serializer = CallSerializer(data=call)
+        serializer = CallSerializer(data=deepcopy(call))
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
 
