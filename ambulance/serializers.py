@@ -1,7 +1,7 @@
 import logging
 from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError, transaction
-from indexed import IndexedOrderedDict
+import collections
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
@@ -292,10 +292,10 @@ class CallSerializer(serializers.ModelSerializer):
         call = super().create(data)
 
         for calltime in ambulancecalltime_set_data:
-            print(calltime.values()[0])
+            print(list(calltime.values())[0])
             AmbulanceCallTime.objects.create(
                 call=call,
-                ambulance=Ambulance.objects.get(id=calltime.values()[0]))
+                ambulance=Ambulance.objects.get(id=list(calltime.values())[0]))
 
         return call
 
