@@ -204,7 +204,6 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [{'ambulance_id': self.a1}, {'ambulance_id': self.a1}]
         }
         serializer = CallSerializer(data=call)
-        logger.debug(serializer.is_valid())
         self.assertFalse(serializer.is_valid())
 
         # Ongoing call with invalid ambulancecalltime_set data
@@ -220,7 +219,9 @@ class TestCall(TestSetup):
         self.assertFalse(serializer.is_valid())
         serializer.is_valid()
         serializer.save(updated_by=self.u1)
-
+        
+        with self.assertRaises(IntegrityError) as context:
+            AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
 
     def test_call_update_serializer(self):
         
