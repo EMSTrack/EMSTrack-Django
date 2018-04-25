@@ -11,6 +11,7 @@
     -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/btn-yellow.css' %}">
 
     <!-- JQuery and Bootstrap js -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -97,6 +98,19 @@
                 </div>
             </li>
             {% endif %}
+            <li class="nav-item dropdown" id="navitemAccountDropdown">
+                <a class="nav-link dropdown-toggle"
+                   id="navbarAccountDropdown"
+                   role="button" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false"
+                   href="#">
+                    <span class="fas fa-user"></span>
+                    Account
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
+                    <a class="dropdown-item" href="{% url 'password_change' %}">Change password</a>
+                </div>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="fas fa-sign-out-alt"></span>

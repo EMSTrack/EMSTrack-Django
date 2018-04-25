@@ -2,6 +2,36 @@ from django.contrib.auth.models import User
 
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
+from django.template.defaulttags import register
+
+
+# filters
+from django.utils.safestring import mark_safe
+
+
+@register.filter(is_safe=True)
+def get_check(key):
+    if key:
+        return mark_safe('<span class="fas fa-check"></span>')
+    else:
+        return ''
+
+
+@register.filter(is_safe=True)
+def get_times(key):
+    if key:
+        return ''
+    else:
+        return mark_safe('<span class="fas fa-times"></span>')
+
+
+@register.filter(is_safe=True)
+def get_check_or_times(key):
+    if key:
+        return mark_safe('<span class="fas fa-check"></span>')
+    else:
+        return mark_safe('<span class="fas fa-times"></span>')
+
 
 defaults = {
     'location': Point(-117.0382, 32.5149, srid=4326),

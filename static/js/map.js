@@ -76,11 +76,15 @@ var ambulance_settings = [
 
 var ambulance_icons = {};
 var ambulance_buttons = {};
-Object.keys(ambulance_status).forEach(function(type, index) {
-    var settings = ambulance_settings[index];
-    ambulance_icons[type] = settings[0];
-    ambulance_buttons[type] = settings[1];
-});
+for (var key in ambulance_css) {
+    // skip loop if the property is from prototype
+    if (!ambulance_css.hasOwnProperty(key))
+        continue;
+
+    var settings = ambulance_css[key];
+    ambulance_icons[key] = L.icon(settings['icon']);
+    ambulance_buttons[key] = settings['class'];
+}
 
 var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/maki/hospital-15.svg',
@@ -301,7 +305,7 @@ function onConnect() {
 
         // Send message
         var id = $('#ambulance-detail-id').val();
-        var topic = "user/" + username + "/ambulance/" + id + "/data";
+        var topic = "user/" + username + "/client/" + clientId + "/ambulance/" + id + "/data";
         var message = new Paho.MQTT.Message(status);
         message.destinationName = topic
         message.qos = 2;
@@ -436,11 +440,17 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // Updated button classes
-        $("#grid-button-" + id).attr("class",
-            "btn btn-sm " + ambulance_buttons[ambulance.status] +
+        // Updated grid button class
+        var btnClass = 'btn btn-sm ' + ambulance_buttons[ambulance.status]
             + ' status-' + ambulance.status
-            + ' capability-' + ambulance.capability + '"');
+            + ' capability-' + ambulance.capability;
+
+        console.log('Updating ambulance "' + ambulance.identifier +
+        '[id=' + ambulance.id + ', status=' + ambulance.status + ', class=' + btnClass + ']"' +
+        ' on grid');
+
+        // Updated button classes
+        $("#grid-button-" + id).attr("class", btnClass);
 
     } else {
 
@@ -484,7 +494,7 @@ function updateHospital(hospital) {
 function addAmbulanceToGrid(ambulance) {
 
     console.log('Adding ambulance "' + ambulance.identifier +
-        '[id=' + ambulance.id + ']"' +
+        '[id=' + ambulance.id + ', status=' + ambulance.status + ', btn=' + ambulance_buttons[ambulance.status] + ']"' +
         ' to grid');
 
     // Add button to ambulance grid

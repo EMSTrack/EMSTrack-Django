@@ -143,7 +143,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.name),
+                                                                 e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           qos)
 
@@ -192,7 +192,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.name),
+                                                                 e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           qos)
 
@@ -241,7 +241,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect all hospital equipments
         for e in HospitalEquipment.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.name),
+                                                                 e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           qos)
 
@@ -298,7 +298,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect all user hospital equipments
         for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.name),
+                                                                 e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           qos)
 
@@ -349,7 +349,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         # Expect all user hospital equipments
         for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.name),
+                                                                 e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
                           qos)
 
@@ -386,7 +386,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.name))
+                                                         self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -460,7 +460,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # subscribe to ambulance/+/data
         topics = ('hospital/{}/data'.format(self.h1.id),
                   'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.name))
+                                                         self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -519,7 +519,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         topics = ('ambulance/{}/data'.format(self.a3.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.name))
+                                                         self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -693,13 +693,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # retrieve message that is there already due to creation
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.name))
+                                                                  self.e1.id))
         self.is_subscribed(test_client)
 
         test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                                      client_id,
                                                                                      self.h1.id,
-                                                                                     self.e1.name),
+                                                                                     self.e1.id),
                             json.dumps({
                                 'value': 'False',
                             }), qos=0)
@@ -710,7 +710,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # expect update once
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.name))
+                                                                  self.e1.id))
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -823,7 +823,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                                      client_id,
                                                                                      self.h1.id,
-                                                                                     self.e1.name),
+                                                                                     self.e1.id),
                             '{ "value": ',
                             qos=0)
 
@@ -883,7 +883,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                                          client_id,
                                                                                          self.h1.id,
-                                                                                         'unknown'),
+                                                                                         -1),
                                 json.dumps({
                                     'comment': 'comment',
                                 }), qos=0)

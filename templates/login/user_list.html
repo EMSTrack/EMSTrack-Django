@@ -39,10 +39,10 @@
                         {{ user.email}}
                     </td>
                     <td>
-                        {{ user.staff }}
+                        {{ user.is_staff|get_check }}
                     </td>
                     <td>
-                        {{ user.active }}
+                        {{ user.is_active|get_check_or_times }}
                     </td>
                 </tr>
                 {% endfor %}

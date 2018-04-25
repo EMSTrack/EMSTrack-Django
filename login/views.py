@@ -322,8 +322,9 @@ class MQTTSuperuserView(CsrfExemptMixin,
         elif hasattr(request, 'DATA'):
             data = request.DATA
         try:
-            if User.objects.get(username=data.get('username'),
-                                is_active=True).is_superuser:
+            user = User.objects.get(username=data.get('username'),
+                                    is_active=True)
+            if user.is_superuser or user.is_staff:
                 return HttpResponse('OK')
 
         except User.DoesNotExist:

@@ -15,7 +15,11 @@
 
             <p>
                 <strong>Name:</strong>
+                {% if user.is_staff %}
                 <a href="{% url 'hospital:update' pk=hospital.id %}">{{ hospital.name }}</a>
+                {% else %}
+                {{ hospital.name }}
+                {% endif %}
             </p>
             <p>
                 <strong>Address:</strong>
