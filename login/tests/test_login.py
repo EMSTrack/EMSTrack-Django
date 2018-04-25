@@ -21,6 +21,8 @@ from mqtt.client import MQTTException
 
 logger = logging.getLogger(__name__)
 
+# TODO: Test admin permissions for staff that is not superuser
+
 
 class MyTestCase(MQTTTestCase):
 

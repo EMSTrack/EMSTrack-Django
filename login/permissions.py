@@ -52,7 +52,7 @@ class Permissions:
         # retrieve permissions if not None
         if user is not None:
 
-            if user.is_superuser:
+            if user.is_superuser or user.is_staff:
 
                 # superuser, add all permissions
                 for (model, profile_field, object_field) in zip(self.models, self.profile_fields, self.object_fields):

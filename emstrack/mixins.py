@@ -42,7 +42,7 @@ class BasePermissionMixin:
 
         # return all objects if superuser
         user = self.request.user
-        if user.is_superuser:
+        if user.is_superuser or user.is_staff:
             return super().get_queryset()
 
         # return nothing if anonymous

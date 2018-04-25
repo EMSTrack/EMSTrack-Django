@@ -10,26 +10,25 @@ from .models import Hospital, Equipment, HospitalEquipment
 # HospitalEquipment serializers
 
 class HospitalEquipmentSerializer(serializers.ModelSerializer):
-    # hospital_name = serializers.CharField(source='hospital.name')
     equipment_name = serializers.CharField(source='equipment.name')
     equipment_type = serializers.CharField(source='equipment.type')
 
     class Meta:
         model = HospitalEquipment
-        fields = ('hospital_id', # 'hospital_name',
+        fields = ('hospital_id',
                   'equipment_id', 'equipment_name', 'equipment_type',
                   'value', 'comment',
                   'updated_by', 'updated_on')
-        read_only_fields = ('hospital_id', # 'hospital_name',
+        read_only_fields = ('hospital_id',
                             'equipment_id', 'equipment_name', 'equipment_type',
                             'updated_by',)
 
-    def validate(self, data):
-        # call super
-        validated_data = super().validate(data)
-
-        # TODO: validate equipment value using equipment_type
-        return validated_data
+    # def validate(self, data):
+    #     # call super
+    #     validated_data = super().validate(data)
+    #
+    #     # TODO: validate equipment value using equipment_type
+    #     return validated_data
 
 
 # EquipmentMetadata serializer

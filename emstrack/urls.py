@@ -1,22 +1,7 @@
-"""emstrack URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/1.10/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  url(r'^$', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  url(r'^$', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.conf.urls import url, include
-    2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
-"""
 from django.conf.urls import url, include
 from django.contrib import admin
-from django.views.generic import RedirectView
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
@@ -55,7 +40,7 @@ router.register(r'hospital',
                 HospitalViewSet,
                 base_name='api-hospital')
 
-router.register(r'hospital/(?P<id>[0-9]+)/equipment',
+router.register(r'hospital/(?P<hospital_id>[0-9]+)/equipment',
                 HospitalEquipmentViewSet,
                 base_name='api-hospital-equipment')
 
@@ -93,6 +78,28 @@ urlpatterns = [
     # admin
     url(r'^admin/', admin.site.urls),
     
+    # password change
+    url(r'^password_change/$',
+        auth_views.PasswordChangeView.as_view(),
+        name='password_change'),
+    url(r'^password_change/done/$',
+        auth_views.PasswordChangeDoneView.as_view(),
+        name='password_change_done'),
+
+    # password reset
+    url(r'^password_reset/$',
+        auth_views.PasswordResetView.as_view(),
+        name='password_reset'),
+    url(r'^password_reset/done/$',
+        auth_views.PasswordResetDoneView.as_view(),
+        name='password_reset_done'),
+    url(r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        auth_views.PasswordResetConfirmView.as_view(),
+        name='password_reset_confirm'),
+    url(r'^reset/done/$',
+        auth_views.PasswordResetCompleteView.as_view(),
+        name='password_reset_complete'),
+
     url(r'^$',
         IndexView.as_view(),
         name='index'),
