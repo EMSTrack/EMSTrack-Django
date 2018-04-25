@@ -274,20 +274,21 @@ class CallSerializer(serializers.ModelSerializer):
                   'ambulancecalltime_set', 'patient_set']
         read_only_fields = ['updated_by']
 
-    def create(self, data):
+    def create(self, validated_data):
 
         # Get current user.
-        user = data['updated_by']
+        user = validated_data['updated_by']
 
         # Make sure user is Super.
         if not user.is_superuser:
             raise PermissionDenied()
         
-        logger.debug(data)
-        ambulancecalltime_set_data = data.pop('ambulancecalltime_set', [])
+        logger.debug(self.data)
+        logger.debug(validated_data)
+        ambulancecalltime_set_data = validated_data.pop('ambulancecalltime_set', [])
         logger.debug(ambulancecalltime_set_data)
 
-        call = super().create(data)
+        call = super().create(validated_data)
 
         for calltime in ambulancecalltime_set_data:
             AmbulanceCallTime.objects.create(
