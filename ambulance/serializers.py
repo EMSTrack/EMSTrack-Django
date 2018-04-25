@@ -4,6 +4,7 @@ from django.db import IntegrityError, transaction
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
+from drf_writable_nested import WritableNestedModelSerializer
 
 from login.models import Client
 from login.permissions import get_permissions
@@ -258,7 +259,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 # Call serializer
 
-class CallSerializer(serializers.ModelSerializer):
+class CallSerializer(WritableNestedModelSerializer):
     
     patient_set = PatientSerializer(many = True, required=False)
     ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
@@ -283,19 +284,19 @@ class CallSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
             raise PermissionDenied()
         
-        logger.debug(self.data)
-        logger.debug(validated_data)
-        ambulancecalltime_set_data = validated_data.pop('ambulancecalltime_set', [])
-        logger.debug(ambulancecalltime_set_data)
+        #logger.debug(self.data)
+        #logger.debug(validated_data)
+        #ambulancecalltime_set_data = validated_data.pop('ambulancecalltime_set', [])
+        #logger.debug(ambulancecalltime_set_data)
 
-        call = super().create(validated_data)
+        return super().create(validated_data)
 
-        for calltime in ambulancecalltime_set_data:
-            AmbulanceCallTime.objects.create(
-                call=call,
-                ambulance=Ambulance.objects.get(id=calltime['ambulance_id']))
+        #for calltime in ambulancecalltime_set_data:
+            #AmbulanceCallTime.objects.create(
+                #call=call,
+                #ambulance=Ambulance.objects.get(id=calltime['ambulance_id']))
 
-        return call
+        #return call
 
     def update(self, instance, data):
 
