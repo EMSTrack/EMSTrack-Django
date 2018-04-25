@@ -240,12 +240,12 @@ class LocationSerializer(serializers.ModelSerializer):
 # AmbulanceCallTime Serializer 
 
 class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
-    call_id = serializers.PrimaryKeyRelatedField(queryset=Call.objects.all(), read_only=False)
+    # call_id = serializers.PrimaryKeyRelatedField(queryset=Call.objects.all(), read_only=False)
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
 
     class Meta:
         model = AmbulanceCallTime
-        fields = ['id', 'call_id', 'ambulance_id', 'dispatch_time', 
+        fields = ['id', 'ambulance_id', 'dispatch_time',
                   'departure_time', 'patient_time', 'hospital_time', 
                   'end_time']
 
