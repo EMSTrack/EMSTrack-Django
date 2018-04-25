@@ -249,11 +249,11 @@ class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
 
 
 class AmbulanceCallTimeWriteSerializer(serializers.ModelSerializer):
-    ambulance = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
+    ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
 
     class Meta:
         model = AmbulanceCallTime
-        fields = ['id', 'ambulance', 'dispatch_time',
+        fields = ['id', 'ambulance_id', 'dispatch_time',
                   'departure_time', 'patient_time', 'hospital_time',
                   'end_time']
 
@@ -319,7 +319,9 @@ class CallWriteSerializer(serializers.ModelSerializer):
         call = super().create(validated_data)
 
         for calltime in ambulancecalltime_set:
+            ambulance = calltime.pop('ambulance_id')
             AmbulanceCallTime.objects.create(call=call,
+                                             ambulance=ambulance,
                                              **calltime)
 
         return call
