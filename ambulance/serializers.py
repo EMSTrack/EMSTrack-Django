@@ -241,7 +241,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
     # call_id = serializers.PrimaryKeyRelatedField(queryset=Call.objects.all(), read_only=False)
-    # ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
+    ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
 
     class Meta:
         model = AmbulanceCallTime
@@ -261,7 +261,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 # Call serializer
 
-class CallSerializer(WritableNestedModelSerializer):
+class CallSerializer(serializers.ModelSerializer):
     
     patient_set = PatientSerializer(many = True, required=False)
     ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
@@ -286,19 +286,20 @@ class CallSerializer(WritableNestedModelSerializer):
         if not user.is_superuser:
             raise PermissionDenied()
         
-        #logger.debug(self.data)
-        #logger.debug(validated_data)
-        #ambulancecalltime_set_data = validated_data.pop('ambulancecalltime_set', [])
-        #logger.debug(ambulancecalltime_set_data)
+        logger.debug(self.data)
+        logger.debug(validated_data)
 
-        return super().create(validated_data)
+        ambulancecalltime_set = validated_data.pop('ambulancecalltime_set', [])
+        logger.debug(ambulancecalltime_set)
 
-        #for calltime in ambulancecalltime_set_data:
-            #AmbulanceCallTime.objects.create(
-                #call=call,
-                #ambulance=Ambulance.objects.get(id=calltime['ambulance_id']))
+        call = super().create(validated_data)
 
-        #return call
+        for calltime in ambulancecalltime_set:
+            AmbulanceCallTime.objects.create(
+                call=call,
+                ambulance=Ambulance.objects.get(id=calltime['ambulance_id']))
+
+        return call
 
     def update(self, instance, data):
 
