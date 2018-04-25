@@ -28,7 +28,6 @@ class TestCall(TestSetup):
         serializer = AmbulanceCallTimeSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
-            'call_id': ambCallTime.call.id,
             'ambulance_id': ambCallTime.ambulance.id,
             'dispatch_time': date2iso(ambCallTime.dispatch_time),
             'departure_time': date2iso(ambCallTime.departure_time),
@@ -44,7 +43,6 @@ class TestCall(TestSetup):
         serializer = AmbulanceCallTimeSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
-            'call_id': ambCallTime.call.id,
             'ambulance_id': ambCallTime.ambulance.id,
             'dispatch_time': date2iso(ambCallTime.dispatch_time),
             'departure_time': date2iso(ambCallTime.departure_time),
