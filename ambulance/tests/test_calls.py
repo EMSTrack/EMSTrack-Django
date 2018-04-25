@@ -190,8 +190,6 @@ class TestCall(TestSetup):
         }
 
         result = serializer.data
-        logger.debug(result['ambulancecalltime_set'])
-        logger.debug(expected['ambulancecalltime_set'])
         self.assertCountEqual(result['ambulancecalltime_set'],
                               expected['ambulancecalltime_set'])
         expected['ambulancecalltime_set'] = []
@@ -208,7 +206,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        serializer.save(updated_by=self.u1)
+        self.assertFalse(serializer.save(updated_by=self.u1))
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
@@ -219,6 +217,7 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [{'ambulance_id': self.a1, 'departure_time': timezone.now()}]
         }
         serializer = CallSerializer(data=call)
+        self.assertFalse(serializer.is_valid())
         serializer.is_valid()
         serializer.save(updated_by=self.u1)
 
