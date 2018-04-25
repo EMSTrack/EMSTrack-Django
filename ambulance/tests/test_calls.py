@@ -84,8 +84,8 @@ class TestCall(TestSetup):
         result['ambulancecalltime_set'] = []
         self.assertDictEqual(result, expected)
 
-        #with self.assertRaises(IntegrityError) as context:
-            #AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
+        with self.assertRaises(IntegrityError) as context:
+            AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
 
     def test_call_serializer_create(self):
 
@@ -126,8 +126,6 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertDictEqual(serializer.data, result)
-
-    # TODO: Make sure these tests work
 
         # Ongoing Call without AmbulanceCallTime_Set
         # HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
@@ -196,7 +194,8 @@ class TestCall(TestSetup):
         result['ambulancecalltime_set'] = []
         self.assertDictEqual(result, expected)
 
-        # TODO: FAIL INTEGRITY: LET DATABASE FAIL FOR YOU
+        # Ongoing call with two same ambulances
+        # HAS TO FAIL. FAIL INTEGRITY: LET DATABASE FAIL FOR YOU
         call = {
             'status': CallStatus.O.name,
             'priority': CallPriority.B.name,
@@ -207,8 +206,8 @@ class TestCall(TestSetup):
         serializer = CallSerializer(data=call)
         logger.debug(serializer.is_valid())
         self.assertFalse(serializer.is_valid())
-        serializer.save(updated_by=self.u1)
 
+        # Ongoing call with invalid ambulancecalltime_set data
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
             'status': CallStatus.O.name,
