@@ -240,15 +240,22 @@ class LocationSerializer(serializers.ModelSerializer):
 # AmbulanceCallTime Serializer 
 
 class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
-    # call_id = serializers.PrimaryKeyRelatedField(queryset=Call.objects.all(), read_only=False)
-    ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
 
     class Meta:
         model = AmbulanceCallTime
         fields = ['id', 'ambulance_id', 'dispatch_time',
-                  'departure_time', 'patient_time', 'hospital_time', 
+                  'departure_time', 'patient_time', 'hospital_time',
                   'end_time']
 
+
+class AmbulanceCallTimeWriteSerializer(serializers.ModelSerializer):
+    ambulance = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
+
+    class Meta:
+        model = AmbulanceCallTime
+        fields = ['id', 'ambulance', 'dispatch_time',
+                  'departure_time', 'patient_time', 'hospital_time',
+                  'end_time']
 
 # Patient Serializer
 
@@ -256,7 +263,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ['id', 'call_id', 'name', 'age']
+        fields = ['id', 'name', 'age']
 
 
 # Call serializer
@@ -274,6 +281,23 @@ class CallSerializer(serializers.ModelSerializer):
                   'city', 'state', 'zipcode', 'country',
                   'location', 'created_at', 'ended_at', 
                   'comment', 'updated_by', 'updated_on', 
+                  'ambulancecalltime_set', 'patient_set']
+        read_only_fields = ['updated_by']
+
+
+class CallWriteSerializer(serializers.ModelSerializer):
+
+    patient_set = PatientSerializer(many=True, required=False)
+    ambulancecalltime_set = AmbulanceCallTimeWriteSerializer(many=True, required=False)
+    location = PointField(required=False)
+
+    class Meta:
+        model = Call
+        fields = ['id', 'status', 'details', 'priority',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location', 'created_at', 'ended_at',
+                  'comment', 'updated_by', 'updated_on',
                   'ambulancecalltime_set', 'patient_set']
         read_only_fields = ['updated_by']
 
@@ -295,9 +319,7 @@ class CallSerializer(serializers.ModelSerializer):
         call = super().create(validated_data)
 
         for calltime in ambulancecalltime_set:
-            ambulance = calltime.pop('ambulance_id')
             AmbulanceCallTime.objects.create(call=call,
-                                             ambulance=ambulance,
                                              **calltime)
 
         return call
