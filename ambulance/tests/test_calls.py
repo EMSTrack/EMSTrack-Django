@@ -162,10 +162,10 @@ class TestCall(TestSetup):
         expected_ambulancecalltime_set = [
             AmbulanceCallTimeSerializer(
                 AmbulanceCallTime.objects.get(call_id=c1.id,
-                                              ambulance_id=self.a1.id)),
+                                              ambulance_id=self.a1.id)).data,
             AmbulanceCallTimeSerializer(
                 AmbulanceCallTime.objects.get(call_id=c1.id,
-                                              ambulance_id=self.a2.id))
+                                              ambulance_id=self.a2.id)).data
             ]
 
         expected = {
