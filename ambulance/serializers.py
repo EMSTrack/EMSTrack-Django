@@ -4,7 +4,6 @@ from django.db import IntegrityError, transaction
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
-from drf_writable_nested import WritableNestedModelSerializer
 
 from login.models import Client
 from login.permissions import get_permissions
