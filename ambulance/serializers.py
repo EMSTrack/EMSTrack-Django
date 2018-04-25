@@ -240,15 +240,6 @@ class LocationSerializer(serializers.ModelSerializer):
 # AmbulanceCallTime Serializer 
 
 class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AmbulanceCallTime
-        fields = ['id', 'ambulance_id', 'dispatch_time',
-                  'departure_time', 'patient_time', 'hospital_time',
-                  'end_time']
-
-
-class AmbulanceCallTimeWriteSerializer(serializers.ModelSerializer):
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
 
     class Meta:
@@ -256,6 +247,7 @@ class AmbulanceCallTimeWriteSerializer(serializers.ModelSerializer):
         fields = ['id', 'ambulance_id', 'dispatch_time',
                   'departure_time', 'patient_time', 'hospital_time',
                   'end_time']
+
 
 # Patient Serializer
 
@@ -269,26 +261,9 @@ class PatientSerializer(serializers.ModelSerializer):
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
-    
-    patient_set = PatientSerializer(many = True, required=False)
-    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
-    location = PointField(required=False)
-    
-    class Meta:
-        model = Call
-        fields = ['id', 'status', 'details', 'priority',
-                  'number', 'street', 'unit', 'neighborhood',
-                  'city', 'state', 'zipcode', 'country',
-                  'location', 'created_at', 'ended_at', 
-                  'comment', 'updated_by', 'updated_on', 
-                  'ambulancecalltime_set', 'patient_set']
-        read_only_fields = ['updated_by']
-
-
-class CallWriteSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
-    ambulancecalltime_set = AmbulanceCallTimeWriteSerializer(many=True, required=False)
+    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
     location = PointField(required=False)
 
     class Meta:

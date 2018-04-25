@@ -9,8 +9,7 @@ from django.utils import timezone
 from rest_framework.parsers import JSONParser
 
 from ambulance.models import Call, Patient, AmbulanceCallTime, CallStatus, CallPriority
-from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer, PatientSerializer, CallWriteSerializer, \
-    AmbulanceCallTimeWriteSerializer
+from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer, PatientSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -98,13 +97,13 @@ class TestCall(TestSetup):
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
         }
-        serializer = CallWriteSerializer(data=call)
+        serializer = CallSerializer(data=call)
         serializer.is_valid()
         serializer.save(updated_by=self.u1)
 
         # test CallSerializer
         c1 = Call.objects.get(number='123',street='asdasdasd asd asd asdas')
-        serializer = CallWriteSerializer(c1)
+        serializer = CallSerializer(c1)
 
         result = {
             'id': c1.id,
@@ -140,7 +139,7 @@ class TestCall(TestSetup):
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
         }
-        serializer = CallWriteSerializer(data=call)
+        serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
 
         # Pending Call with AmbulanceCallTime_Set
@@ -152,7 +151,7 @@ class TestCall(TestSetup):
             'street': 'asdasdasd asd asd asdas',
             'ambulancecalltime_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
         }
-        serializer = CallWriteSerializer(data=call)
+        serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
 
@@ -161,7 +160,7 @@ class TestCall(TestSetup):
         serializer = CallSerializer(c1)
 
         expected_ambulancecalltime_set = [
-            AmbulanceCallTimeWriteSerializer(
+            AmbulanceCallTimeSerializer(
                 AmbulanceCallTime.objects.get(call_id=c1.id,
                                               ambulance_id=self.a1.id)).data,
             AmbulanceCallTimeSerializer(
@@ -209,7 +208,7 @@ class TestCall(TestSetup):
             'street': 'asdasdasd asd asd asdas',
             'ambulancecalltime_set': [{'ambulance_id': self.a1}, {'ambulance_id': self.a1}]
         }
-        serializer = CallWriteSerializer(data=call)
+        serializer = CallSerializer(data=call)
         serializer.is_valid()
         serializer.save(updated_by=self.u1)
 
@@ -221,7 +220,7 @@ class TestCall(TestSetup):
             'street': 'asdasdasd asd asd asdas',
             'ambulancecalltime_set': [{'ambulance_id': self.a1, 'departure_time': timezone.now()}]
         }
-        serializer = CallWriteSerializer(data=call)
+        serializer = CallSerializer(data=call)
         serializer.is_valid()
         serializer.save(updated_by=self.u1)
 
