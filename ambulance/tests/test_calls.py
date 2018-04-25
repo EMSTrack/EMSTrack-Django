@@ -159,6 +159,13 @@ class TestCall(TestSetup):
         c1 = Call.objects.get(id=call.id)
         serializer = CallSerializer(c1)
 
+        expected_ambulancecalltime_set = [
+            AmbulanceCallTimeSerializer(AmbulanceCallTime.get(call_id=c1.id,
+                                                              ambulance_id=self.a1.id)),
+            AmbulanceCallTimeSerializer(AmbulanceCallTime.get(call_id=c1.id,
+                                                              ambulance_id=self.a2.id))
+            ]
+
         expected = {
             'id': c1.id,
             'status': c1.status,
@@ -178,13 +185,14 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': [], # TODO
+            'ambulancecalltime_set': expected_ambulancecalltime_set,
             'patient_set': []
         }
 
-        self.assertCountEqual(serializer.data['ambulancecalltime_set'],
-                              [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}])
         result = serializer.data
+        self.assertCountEqual(result['ambulancecalltime_set'],
+                              expected['ambulancecalltime_set'])
+        expected['ambulancecalltime_set'] = []
         result['ambulancecalltime_set'] = []
         self.assertDictEqual(result, expected)
 
