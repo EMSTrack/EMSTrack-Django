@@ -192,6 +192,8 @@ class TestCall(TestSetup):
         }
 
         result = serializer.data
+        logger.debug(result['ambulancecalltime_set'])
+        logger.debug(expected['ambulancecalltime_set'])
         self.assertCountEqual(result['ambulancecalltime_set'],
                               expected['ambulancecalltime_set'])
         expected['ambulancecalltime_set'] = []
