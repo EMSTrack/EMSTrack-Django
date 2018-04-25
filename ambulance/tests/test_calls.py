@@ -205,7 +205,7 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [{'ambulance_id': self.a1}, {'ambulance_id': self.a1}]
         }
         serializer = CallSerializer(data=call)
-        serializer.is_valid()
+        self.assertFalse(serializer.is_valid())
         self.assertFalse(serializer.save(updated_by=self.u1))
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
