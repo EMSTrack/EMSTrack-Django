@@ -263,7 +263,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
-    location = PointField(required=True)
+    location = PointField(required=False)
 
     class Meta:
         model = Call
