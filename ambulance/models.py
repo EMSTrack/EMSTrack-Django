@@ -309,34 +309,12 @@ class Call(AddressModel, UpdatedByModel):
     @classmethod
     def save(self, *args, **kwargs):
 
-        # creation?
-        created = self.pk is None
+        # save to Call
+        super().save(*args, **kwargs)
 
-        # loaded_values?
-        loaded_values = self._loaded_values is not None
-
-        # if details, status, or priority changed
-        model_changed = False
-        if self.loaded_values['status'] != self.status or \
-           self.loaded_values['details'] != self.details or \
-           self.loaded_values['priority'] != self.priority:
-
-               # save the changes to the Call
-               super().save(*args, **kwargs)
-
-               logger.debug('SAVED')
-
-               model_changed = True
-
-        # Did the model change?
-        if model_changed:
-
-            # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().publish_call(self)
-
-            logger.debug('PUBLISHED ON MQTT')
-         
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_hospital(self)
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
