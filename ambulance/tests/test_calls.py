@@ -354,12 +354,10 @@ class TestCall(TestSetup):
     def test_patient_serializer(self):
 
         # test PatientSerializer
-        c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         p1 = Patient.objects.create(call=c1)
         serializer = PatientSerializer(p1)
         result = {
             'id': p1.id,
-            'call_id': p1.call.id,
             'name': p1.name,
             'age': p1.age
         }
