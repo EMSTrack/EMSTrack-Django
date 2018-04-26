@@ -20,7 +20,7 @@ class TestCall(TestSetup):
 
     def test_call_serializer(self):
 
-        c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+        c1 = Call.objects.create(status=CallStatus.P.name, number="123", street="dunno", updated_by=self.u1)
 
         ambCallTime1 = AmbulanceCallTime.objects.create(call=c1, ambulance=self.a1)
 
