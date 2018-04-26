@@ -307,9 +307,6 @@ class CallSerializer(serializers.ModelSerializer):
             if not user.profile.calls.filter(can_write=True, call=instance.id):
                 raise PermissionDenied()
 
-        #if 'status' in validated_data:
-
-
         return super().update(instance, validated_data)
 
     def validate(self, data):

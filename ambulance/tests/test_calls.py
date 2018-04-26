@@ -205,7 +205,8 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [{'ambulance_id': self.a1}, {'ambulance_id': self.a1}]
         }
         serializer = CallSerializer(data=call)
-        self.assertFalse(serializer.is_valid())
+        serializer.is_valid()
+        serializer.save(updated_by=self.u1)
 
         # Ongoing call with invalid ambulancecalltime_set data
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
@@ -217,7 +218,8 @@ class TestCall(TestSetup):
             'ambulancecalltime_set': [{'ambulance_id': self.a1, 'departure_time': timezone.now()}]
         }
         serializer = CallSerializer(data=call)
-        self.assertFalse(serializer.is_valid())
+        serializer.is_valid()
+        serializer.save(updated_by=self.u1)
         
         with self.assertRaises(IntegrityError) as context:
             AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
