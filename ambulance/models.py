@@ -314,7 +314,7 @@ class Call(AddressModel, UpdatedByModel):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_hospital(self)
+        SingletonPublishClient().publish_call(self)
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
