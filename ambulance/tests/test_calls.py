@@ -87,6 +87,7 @@ class TestCall(TestSetup):
         with self.assertRaises(IntegrityError) as context:
             AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
 
+
     def test_call_serializer_create(self):
 
         call = {
@@ -217,17 +218,17 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
-        serializer.is_valid()
-        serializer.save(updated_by=self.u1)
         
         with self.assertRaises(IntegrityError) as context:
             AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
+
 
     def test_call_update_serializer(self):
         
         # superuser first
 
         # Update call status
+        # Fail when changing call status from Pending to Ongoing without assigning ambulanceCallTime
         c = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         user = self.u1
         status = CallStatus.O.name
@@ -235,6 +236,16 @@ class TestCall(TestSetup):
         serializer = CallSerializer(c, 
                                     data={
                                         'status': status
+                                    }, partial=True)
+        self.assertFalse(serializer.is_valid())
+
+        # Change call status from Pending to Ongoing with assigning ambulanceCallTime
+        ambulancecalltime_set= [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
+
+        serializer = CallSerializer(c, 
+                                    data={
+                                        'status': status,
+                                        'ambulancecalltime_set': ambulancecalltime_set
                                     }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
