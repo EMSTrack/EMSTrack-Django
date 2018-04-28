@@ -290,25 +290,19 @@ class CallSerializer(serializers.ModelSerializer):
         ambulancecalltime_set = validated_data.pop('ambulancecalltime_set', [])
         logger.debug(ambulancecalltime_set)
 
-        try:
+        # Makes sure database rolls back in case on an integrity error
+        with transaction.atomic():
 
-            # Makes sure database rolls back in case on an integrity error
-            with transaction.atomic():
+            # creates call first
+            call = super().create(validated_data)
 
-                # creates call first
-                call = super().create(validated_data)
-
-                # then add calltimes corresponding to ambulances
-                # this step may fail, in which case call has to be rolled back
-                for calltime in ambulancecalltime_set:
-                    ambulance = calltime.pop('ambulance_id')
-                    AmbulanceCallTime.objects.create(call=call,
-                                                     ambulance=ambulance,
-                                                     **calltime)
-                    logger.debug('call = {}, ambulance = {}'.format(call.id, ambulance.id))
-
-        except IntegrityError as e:
-            raise e
+            # then add calltimes corresponding to ambulances
+            # this step may fail, in which case call has to be rolled back
+            for calltime in ambulancecalltime_set:
+                ambulance = calltime.pop('ambulance_id')
+                AmbulanceCallTime.objects.create(call=call,
+                                                 ambulance=ambulance,
+                                                 **calltime)
 
         return call
 

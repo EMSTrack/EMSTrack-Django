@@ -198,7 +198,7 @@ class TestCall(TestSetup):
         result['ambulancecalltime_set'] = []
         self.assertDictEqual(result, expected)
 
-        # TODO: FAIL INTEGRITY: LET DATABASE FAIL FOR YOU
+        # Should fail because ambulance id's are repeated
         call = {
             'status': CallStatus.O.name,
             'priority': CallPriority.B.name,
@@ -208,7 +208,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        serializer.save(updated_by=self.u1)
+        self.assertRaises(IntegrityError, serializer.save(updated_by=self.u1))
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
