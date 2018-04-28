@@ -5,6 +5,7 @@ from django.conf import settings
 from django.urls import reverse
 
 from django.db import IntegrityError
+from django.db.utils import IntegrityError as utilsIntegrityError
 from django.utils import timezone
 from rest_framework.parsers import JSONParser
 
@@ -208,7 +209,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        self.assertRaises(django.db.utils.IntegrityError, serializer.save(updated_by=self.u1))
+        self.assertRaises(utilsIntegrityError, serializer.save(updated_by=self.u1))
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
