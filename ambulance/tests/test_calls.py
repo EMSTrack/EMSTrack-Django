@@ -87,7 +87,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         with self.assertRaises(IntegrityError) as context:
-            AmbulanceCallTime.objects.create(call=c1, ambulance = self.a1)
+            AmbulanceCallTime.objects.create(call=c1, ambulance=self.a1)
 
     def test_call_serializer_create(self):
 
@@ -208,7 +208,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        self.assertRaises(IntegrityError, serializer.save(updated_by=self.u1))
+        self.assertRaises(django.db.utils.IntegrityError, serializer.save(updated_by=self.u1))
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
