@@ -210,7 +210,7 @@ class TestCall(TestSetup):
         self.assertRaises(utilsIntegrityError, serializer.save, updated_by=self.u1)
 
         # make sure no call was created
-        Call.objects.get(street='will fail')
+        self.assertRaises(Call.DoesNotExist, Call.objects.get, street='will fail')
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
