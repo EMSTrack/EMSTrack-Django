@@ -307,14 +307,14 @@ class Call(AddressModel, UpdatedByModel):
     ended_at = models.DateTimeField(null=True, blank=True)
     
     @classmethod
-    #def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
 
-        # creation?
-        # created = self.pk is None
+        # save to Call
+        super().save(*args, **kwargs)
 
-        # loaded_values?
-        # loaded_values = self._loaded_values is not None
-         
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self)
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
