@@ -209,7 +209,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        self.assertRaises(utilsIntegrityError, serializer.save(updated_by=self.u1))
+        self.assertRaises(utilsIntegrityError, serializer.save, updated_by=self.u1)
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
