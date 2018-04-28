@@ -695,7 +695,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
                                                                   self.e1.id))
         self.is_subscribed(test_client)
-        self.loop(test_client)
 
         test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
                                                                                      client_id,
