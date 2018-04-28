@@ -29,7 +29,6 @@ class TestCall(TestSetup):
         serializer = AmbulanceCallTimeSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
-            'call_id': ambCallTime.call.id,
             'ambulance_id': ambCallTime.ambulance.id,
             'dispatch_time': date2iso(ambCallTime.dispatch_time),
             'departure_time': date2iso(ambCallTime.departure_time),
@@ -339,7 +338,6 @@ class TestCall(TestSetup):
 	
         # Need more tests for updates by regular authorized user
 
-
     def test_patient_serializer(self):
 
         # test PatientSerializer
@@ -348,7 +346,6 @@ class TestCall(TestSetup):
         serializer = PatientSerializer(p1)
         result = {
             'id': p1.id,
-            'call_id': p1.call.id,
             'name': p1.name,
             'age': p1.age
         }
