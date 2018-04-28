@@ -118,14 +118,14 @@ class PublishClient(BaseClient):
 
     def publish_hospital_equipment(self, equipment, qos=2, retain=True):
         self.publish_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                  equipment.equipment.name),
+                                                                  equipment.equipment.id),
                            HospitalEquipmentSerializer(equipment),
                            qos=qos,
                            retain=retain)
 
     def remove_hospital_equipment(self, equipment):
         self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                 equipment.equipment.name))
+                                                                 equipment.equipment.id))
 
     def publish_call(self, call, qos=2, retain=True):
         self.publish_topic('call/{}/data'.format(call.id),
