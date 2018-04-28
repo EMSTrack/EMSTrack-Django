@@ -129,8 +129,6 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-    # TODO: Make sure these tests work
-
         # Ongoing Call without AmbulanceCallTime_Set
         # HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
         call = {
