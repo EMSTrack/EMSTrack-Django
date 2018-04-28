@@ -208,6 +208,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
+        logger.debug(serializer.errors)
         serializer.save(updated_by=self.u1)
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
