@@ -407,7 +407,7 @@ class SubscribeClient(BaseClient):
             logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
-            user, client, data, hospital_id, equipment_name = self.parse_topic(msg, 5)
+            user, client, data, hospital_id, equipment_id = self.parse_topic(msg, 5)
 
         except Exception as e:
 
@@ -418,14 +418,14 @@ class SubscribeClient(BaseClient):
 
             # retrieve hospital equipment
             hospital_equipment = HospitalEquipment.objects.get(hospital=hospital_id,
-                                                               equipment__name=equipment_name)
+                                                               equipment_id=equipment_id)
 
         except HospitalEquipment.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload,
                                     "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(
-                                        hospital_id, equipment_name))
+                                        hospital_id, equipment_id))
             return
 
         except Exception as e:
