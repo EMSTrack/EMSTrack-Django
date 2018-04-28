@@ -306,7 +306,6 @@ class Call(AddressModel, UpdatedByModel):
     # ended at
     ended_at = models.DateTimeField(null=True, blank=True)
     
-    @classmethod
     def save(self, *args, **kwargs):
 
         # save to Call
