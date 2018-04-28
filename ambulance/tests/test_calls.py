@@ -101,7 +101,7 @@ class TestCall(TestSetup):
         serializer.save(updated_by=self.u1)
 
         # test CallSerializer
-        c1 = Call.objects.get(number='123',street='asdasdasd asd asd asdas')
+        c1 = Call.objects.get(number='123', street='asdasdasd asd asd asdas')
         serializer = CallSerializer(c1)
 
         result = {
@@ -202,12 +202,15 @@ class TestCall(TestSetup):
             'status': CallStatus.O.name,
             'priority': CallPriority.B.name,
             'number': '123',
-            'street': 'asdasdasd asd asd asdas',
+            'street': 'will fail',
             'ambulancecalltime_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a1.id}]
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
         self.assertRaises(utilsIntegrityError, serializer.save, updated_by=self.u1)
+
+        # make sure no call was created
+        Call.objects.get(street='will fail')
 
         # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
         call = {
