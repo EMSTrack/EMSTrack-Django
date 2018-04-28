@@ -305,6 +305,8 @@ class CallSerializer(serializers.ModelSerializer):
                     AmbulanceCallTime.objects.create(call=call,
                                                      ambulance=ambulance,
                                                      **calltime)
+                    logger.debug('call = {}, ambulance = {}'.format(call.id, ambulance.id))
+
         except IntegrityError as e:
             raise e
 
