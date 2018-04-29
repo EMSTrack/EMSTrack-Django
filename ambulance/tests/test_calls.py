@@ -8,7 +8,8 @@ from django.db import IntegrityError
 
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, AmbulanceCallEvent, \
     AmbulanceUpdate, AmbulanceStatus
-from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer
+from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
+    AmbulanceCallEventSerializer, AmbulanceUpdateSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -174,8 +175,18 @@ class TestCall(TestSetup):
         ambulance_call_event_3 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
                                                                    ambulance_update=ambulance_update_3)
 
-        serializer = CallSerializer(c1)
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
+        ambulance_call_event_serializer_1 = AmbulanceCallEventSerializer(ambulance_call_event_1)
+        ambulance_call_event_serializer_2 = AmbulanceCallEventSerializer(ambulance_call_event_2)
+        ambulance_call_event_serializer_3 = AmbulanceCallEventSerializer(ambulance_call_event_3)
+
+        expected = {
+            'id': ambulance_call_event_1.id,
+            'ambulance_update': AmbulanceUpdateSerializer(ambulance_update_1).data
+        }
+        self.assertDictEqual(ambulance_call_event_serializer_1.data, expected)
+
+        serializer = CallSerializer(c1)
 
         expected = {
             'id': c1.id,
