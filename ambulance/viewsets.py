@@ -9,8 +9,7 @@ from emstrack.mixins import BasePermissionMixin, \
 
 from .models import Location, Ambulance, LocationType, Call
 
-from .serializers import LocationSerializer, AmbulanceSerializer, \
-AmbulanceUpdateSerializer, CallSerializer
+from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
 
 
 # Django REST Framework Viewsets
@@ -144,7 +143,8 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 
         return Location.objects.filter(type=type)
 
-#Call ViewSet
+
+# Call ViewSet
 
 class CallViewSet(mixins.ListModelMixin,
                   viewsets.GenericViewSet):
@@ -152,8 +152,11 @@ class CallViewSet(mixins.ListModelMixin,
     API endpoint for manipulating Calls.
 
     list:
-    Retrive list of calls.
+    Retrieve list of calls.
     """
 
+    filter_field = 'ambulancecall_set__ambulance_id'
+    profile_field = 'ambulances'
     queryset = Call.objects.all()
+
     serializer_class = CallSerializer
