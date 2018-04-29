@@ -472,7 +472,9 @@ class TestCall(TestSetup):
 
         # Need more tests for updates by regular authorized user
 
-    def test_call_list_view_loads(self):
+    def test_call_list_viewset(self):
+
+        # instantiate client
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
@@ -480,29 +482,34 @@ class TestCall(TestSetup):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'ambulance/call_list.html')
 
-    def test_call_list_view_one_entry(self):
+    def test_call_list_view(self):
+
         # instantiate client
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
-        
+
+        response = client.get(reverse('ambulance:call_list'))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'ambulance/call_list.html')
+
+        # test_call_list_view_one_entry
+
         Call.objects.create(details='nani', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertContains(response, 'nani')
 
-    def test_call_list_view_two_entries(self):
-        # instantiate client
-        client = Client()
-        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+        # test_call_list_view_two_entries:
 
-        Call.objects.create(details='nani', updated_by=self.u1)
         Call.objects.create(details='suhmuh', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertContains(response, 'nani')
         self.assertContains(response, 'suhmuh')
 
-    def test_call_detail_view_loads(self):
+    def test_call_detail_view(self):
+
+        # instantiate client
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
@@ -512,9 +519,8 @@ class TestCall(TestSetup):
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'ambulance/call_detail.html')
 
-    def test_call_detail_view_entry(self):
-        client = Client()
-        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+        # test_call_detail_view_entry
+
         c1 = Call.objects.create(details="Test1", updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
