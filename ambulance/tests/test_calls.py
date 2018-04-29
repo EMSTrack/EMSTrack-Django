@@ -156,17 +156,17 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         # create ambulance update to use in event
-        ambulance_update_1 = AmbulanceUpdate.create(ambulance=self.a1, status=AmbulanceStatus.PB.name)
-        ambulance_update_2 = AmbulanceUpdate.create(ambulance=self.a1, status=AmbulanceStatus.AP.name)
-        ambulance_update_3 = AmbulanceUpdate.create(ambulance=self.a1, status=AmbulanceStatus.HB.name)
+        ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1, status=AmbulanceStatus.PB.name)
+        ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1, status=AmbulanceStatus.AP.name)
+        ambulance_update_3 = AmbulanceUpdate.objects.create(ambulance=self.a1, status=AmbulanceStatus.HB.name)
 
         # create ambulance call events
-        ambulance_call_event_1 = AmbulanceCallEvent.create(ambulance_call=ambulance_call_2,
-                                                           ambulance_update=ambulance_update_1)
-        ambulance_call_event_2 = AmbulanceCallEvent.create(ambulance_call=ambulance_call_2,
-                                                           ambulance_update=ambulance_update_2)
-        ambulance_call_event_3 = AmbulanceCallEvent.create(ambulance_call=ambulance_call_2,
-                                                           ambulance_update=ambulance_update_3)
+        ambulance_call_event_1 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
+                                                                   ambulance_update=ambulance_update_1)
+        ambulance_call_event_2 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
+                                                                   ambulance_update=ambulance_update_2)
+        ambulance_call_event_3 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
+                                                                   ambulance_update=ambulance_update_3)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
