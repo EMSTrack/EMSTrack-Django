@@ -170,9 +170,24 @@ class TestCall(TestSetup):
                                                             status=AmbulanceStatus.HB.name,
                                                             updated_by=self.u1)
 
-        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
+        ambulance_call = ambulance_call_2
+        serializer = AmbulanceCallSerializer(ambulance_call)
+        expected = {
+            'id': ambulance_call.id,
+            'ambulance_id': ambulance_call.ambulance.id,
+            'created_at': date2iso(ambulance_call.created_at),
+            'ambulanceupdate_set': []
+        }
+        self.assertCountEqual(serializer.data['ambulanceupdate_set'],
+                              [AmbulanceUpdateSerializer(ambulance_update_1).data,
+                               AmbulanceUpdateSerializer(ambulance_update_2).data,
+                               AmbulanceUpdateSerializer(ambulance_update_3).data])
+        result = serializer.data
+        result['ambulanceupdate_set'] = []
+        self.assertDictEqual(result, expected)
 
         serializer = CallSerializer(c1)
+        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
 
         expected = {
             'id': c1.id,
