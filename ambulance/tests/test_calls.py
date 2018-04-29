@@ -511,6 +511,19 @@ class TestCall(TestSetup):
         answer = CallSerializer(Call.objects.all(), many=True).data
         self.assertCountEqual(result, answer)
 
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        response = client.get('/api/call/', follow=True)
+        self.assertEquals(response.status_code, 200)
+
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = CallSerializer([], many=True).data
+        self.assertCountEqual(result, answer)
+
     def test_call_list_view(self):
 
         # instantiate client
