@@ -524,8 +524,9 @@ class TestCall(TestSetup):
         answer = CallSerializer([], many=True).data
         self.assertCountEqual(result, answer)
 
-        # add ambulance to call
+        # add ambulances to calls, can only read a3
         AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
+        AmbulanceCall.objects.create(call=c2, ambulance=self.a2)
 
         response = client.get('/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
