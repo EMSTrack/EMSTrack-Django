@@ -319,7 +319,7 @@ class Call(AddressModel, UpdatedByModel):
         return "{} ({})".format(self.location, self.priority)
 
 
-class AmbulanceCallTime(models.Model):
+class AmbulanceCall(models.Model):
 
     call = models.ForeignKey(Call,
                              on_delete=models.CASCADE)

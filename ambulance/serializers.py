@@ -7,7 +7,7 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient, CallStatus
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -236,13 +236,13 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-# AmbulanceCallTime Serializer 
+# Ambulancecall Serializer
 
-class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
+class AmbulanceCallSerializer(serializers.ModelSerializer):
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
 
     class Meta:
-        model = AmbulanceCallTime
+        model = AmbulanceCall
         fields = ['id', 'ambulance_id', 'dispatch_time',
                   'departure_time', 'patient_time', 'hospital_time',
                   'end_time']
@@ -262,7 +262,7 @@ class PatientSerializer(serializers.ModelSerializer):
 class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
-    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
+    ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
     location = PointField(required=False)
 
     class Meta:
@@ -272,7 +272,7 @@ class CallSerializer(serializers.ModelSerializer):
                   'city', 'state', 'zipcode', 'country',
                   'location', 'created_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
-                  'ambulancecalltime_set', 'patient_set']
+                  'ambulancecall_set', 'patient_set']
         read_only_fields = ['updated_by']
 
     def create(self, validated_data):
@@ -287,8 +287,8 @@ class CallSerializer(serializers.ModelSerializer):
         # logger.debug(self.data)
         logger.debug(validated_data)
 
-        ambulancecalltime_set = validated_data.pop('ambulancecalltime_set', [])
-        logger.debug(ambulancecalltime_set)
+        ambulancecall_set = validated_data.pop('ambulancecall_set', [])
+        logger.debug(ambulancecall_set)
 
         # Makes sure database rolls back in case on an integrity error
         with transaction.atomic():
@@ -298,11 +298,11 @@ class CallSerializer(serializers.ModelSerializer):
 
             # then add calltimes corresponding to ambulances
             # this step may fail, in which case call has to be rolled back
-            for calltime in ambulancecalltime_set:
+            for calltime in ambulancecall_set:
                 ambulance = calltime.pop('ambulance_id')
-                AmbulanceCallTime.objects.create(call=call,
-                                                 ambulance=ambulance,
-                                                 **calltime)
+                AmbulanceCall.objects.create(call=call,
+                                             ambulance=ambulance,
+                                             **calltime)
 
         return call
 
@@ -320,7 +320,7 @@ class CallSerializer(serializers.ModelSerializer):
         return super().update(instance, data)
 
     def validate(self, data):
-        if data['status'] != CallStatus.P.name and not ('ambulancecalltime_set' in data):
+        if data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
             raise serializers.ValidationError('Ongoing call and finished call must have ' +
-                                              'ambulancecalltime_set')
+                                              'ambulancecall_set')
         return data

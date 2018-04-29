@@ -9,8 +9,8 @@ from django.db.utils import IntegrityError as utilsIntegrityError
 from django.utils import timezone
 from rest_framework.parsers import JSONParser
 
-from ambulance.models import Call, Patient, AmbulanceCallTime, CallStatus, CallPriority
-from ambulance.serializers import CallSerializer, AmbulanceCallTimeSerializer, PatientSerializer
+from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority
+from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -23,10 +23,10 @@ class TestCall(TestSetup):
 
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
 
-        ambCallTime1 = AmbulanceCallTime.objects.create(call=c1, ambulance=self.a1)
+        ambCallTime1 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
 
         ambCallTime = ambCallTime1
-        serializer = AmbulanceCallTimeSerializer(ambCallTime)
+        serializer = AmbulanceCallSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
             'ambulance_id': ambCallTime.ambulance.id,
@@ -38,10 +38,10 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        ambCallTime2 = AmbulanceCallTime.objects.create(call=c1, ambulance=self.a3)
+        ambCallTime2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
 
         ambCallTime = ambCallTime2
-        serializer = AmbulanceCallTimeSerializer(ambCallTime)
+        serializer = AmbulanceCallSerializer(ambCallTime)
         result = {
             'id': ambCallTime.id,
             'ambulance_id': ambCallTime.ambulance.id,
@@ -54,8 +54,8 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
         serializer = CallSerializer(c1)
-        ambCallTimeSerializer1 = AmbulanceCallTimeSerializer(ambCallTime1)
-        ambCallTimeSerializer2 = AmbulanceCallTimeSerializer(ambCallTime2)
+        ambCallTimeSerializer1 = AmbulanceCallSerializer(ambCallTime1)
+        ambCallTimeSerializer2 = AmbulanceCallSerializer(ambCallTime2)
 
         expected = {
             'id': c1.id,
@@ -76,17 +76,17 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': [],
+            'ambulancecall_set': [],
             'patient_set': []
         }
-        self.assertCountEqual(serializer.data['ambulancecalltime_set'],
+        self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambCallTimeSerializer2.data, ambCallTimeSerializer1.data])
         result = serializer.data
-        result['ambulancecalltime_set'] = []
+        result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
         with self.assertRaises(IntegrityError) as context:
-            AmbulanceCallTime.objects.create(call=c1, ambulance=self.a1)
+            AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
 
     def test_call_serializer_create(self):
 
@@ -123,13 +123,13 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': [],
+            'ambulancecall_set': [],
             'patient_set': []
         }
         self.assertDictEqual(serializer.data, result)
 
-        # Ongoing Call without AmbulanceCallTime_Set
-        # HAS TO FAIL BECAUSE AMBULANCECALLTIME_SET IS EMPTY
+        # Ongoing Call without Ambulancecall_Set
+        # HAS TO FAIL BECAUSE AMBULANCECALL_SET IS EMPTY
         call = {
             'status': CallStatus.O.name,
             'priority': CallPriority.B.name,
@@ -139,14 +139,14 @@ class TestCall(TestSetup):
         serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
 
-        # Pending Call with AmbulanceCallTime_Set
-        #  WILL HAVE TO CREATE AMBULANCECALLTIMES
+        # Pending Call with Ambulancecall_Set
+        #  WILL HAVE TO CREATE AMBULANCECALLS
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
-            'ambulancecalltime_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
@@ -156,13 +156,13 @@ class TestCall(TestSetup):
         c1 = Call.objects.get(id=call.id)
         serializer = CallSerializer(c1)
 
-        expected_ambulancecalltime_set = [
-            AmbulanceCallTimeSerializer(
-                AmbulanceCallTime.objects.get(call_id=c1.id,
-                                              ambulance_id=self.a1.id)).data,
-            AmbulanceCallTimeSerializer(
-                AmbulanceCallTime.objects.get(call_id=c1.id,
-                                              ambulance_id=self.a2.id)).data
+        expected_ambulancecall_set = [
+            AmbulanceCallSerializer(
+                AmbulanceCall.objects.get(call_id=c1.id,
+                                          ambulance_id=self.a1.id)).data,
+            AmbulanceCallSerializer(
+                AmbulanceCall.objects.get(call_id=c1.id,
+                                          ambulance_id=self.a2.id)).data
             ]
 
         expected = {
@@ -184,17 +184,17 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'ambulancecalltime_set': expected_ambulancecalltime_set,
+            'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': []
         }
 
         result = serializer.data
-        logger.debug(result['ambulancecalltime_set'])
-        logger.debug(expected['ambulancecalltime_set'])
-        self.assertCountEqual(result['ambulancecalltime_set'],
-                              expected['ambulancecalltime_set'])
-        expected['ambulancecalltime_set'] = []
-        result['ambulancecalltime_set'] = []
+        logger.debug(result['ambulancecall_set'])
+        logger.debug(expected['ambulancecall_set'])
+        self.assertCountEqual(result['ambulancecall_set'],
+                              expected['ambulancecall_set'])
+        expected['ambulancecall_set'] = []
+        result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
         # Should fail because ambulance id's are repeated
@@ -203,7 +203,7 @@ class TestCall(TestSetup):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'will fail',
-            'ambulancecalltime_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a1.id}]
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a1.id}]
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
@@ -218,7 +218,7 @@ class TestCall(TestSetup):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
-            'ambulancecalltime_set': [{'ambulance_id': self.a1.id, 'departure_time': timezone.now()}]
+            'ambulancecall_set': [{'ambulance_id': self.a1.id, 'departure_time': timezone.now()}]
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
@@ -262,7 +262,7 @@ class TestCall(TestSetup):
             'comment': c.comment,
             'updated_by': c.updated_by.id,
             'updated_on': date2iso(c.updated_on),
-            'ambulancecalltime_set': AmbulanceCallTimeSerializer(many=True).data,
+            'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
             'patient_set': PatientSerializer(many=True).data
         }
         self.assertDictEqual(serializer.data, result)
@@ -298,7 +298,7 @@ class TestCall(TestSetup):
             'comment': c.comment,    
             'updated_by': c.updated_by.id,
             'updated_on': date2iso(c.updated_on),
-            'ambulancecalltime_set': AmbulanceCallTimeSerializer(many=True).data,
+            'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
             'patient_set': PatientSerializer(many=True).data
         }
         self.assertDictEqual(serializer.data, result)
@@ -334,7 +334,7 @@ class TestCall(TestSetup):
             'comment': c.comment,
             'updated_by': c.updated_by.id,
             'updated_on': date2iso(c.updated_on),
-            'ambulancecalltime_set': AmbulanceCallTimeSerializer(many=True).data,
+            'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
             'patient_set': PatientSerializer(many=True).data
         }
         self.assertDictEqual(serializer.data, result)
