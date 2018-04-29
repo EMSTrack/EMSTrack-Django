@@ -156,7 +156,7 @@ class CallViewSet(mixins.ListModelMixin,
     Retrieve list of calls.
     """
 
-    filter_field = 'ambulancecall_set__ambulance_id'
+    filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
     queryset = Call.objects.all()
 
