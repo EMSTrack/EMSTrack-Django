@@ -229,6 +229,7 @@ class Ambulance(UpdatedByModel):
 
 
 class AmbulanceUpdate(models.Model):
+
     # ambulance id
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
@@ -321,20 +322,27 @@ class Call(AddressModel, UpdatedByModel):
 
 class AmbulanceCall(models.Model):
 
+    # call
     call = models.ForeignKey(Call,
                              on_delete=models.CASCADE)
 
+    # ambulance
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
 
-    dispatch_time = models.DateTimeField(null=True, blank=True)
-    departure_time = models.DateTimeField(null=True, blank=True)
-    patient_time = models.DateTimeField(null=True, blank=True)
-    hospital_time = models.DateTimeField(null=True, blank=True)
-    end_time = models.DateTimeField(null=True, blank=True)
-
     class Meta:
         unique_together = ('call', 'ambulance')
+
+
+class AmbulanceCallEvent(models.Model):
+
+    # ambulance call
+    ambulance_call = models.ForeignKey(AmbulanceCall,
+                                       on_delete=models.CASCADE)
+
+    # ambulance update
+    ambulance_update = models.ForeignKey(AmbulanceUpdate,
+                                         on_delete=models.CASCADE)
 
 
 # Patient might be expanded in the future

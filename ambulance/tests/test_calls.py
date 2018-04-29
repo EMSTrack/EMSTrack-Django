@@ -17,45 +17,36 @@ from login.tests.setup_data import TestSetup
 
 logger = logging.getLogger(__name__)
 
+
 class TestCall(TestSetup):
 
     def test_call_serializer(self):
 
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
 
-        ambCallTime1 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
+        ambulance_call_1 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
 
-        ambCallTime = ambCallTime1
-        serializer = AmbulanceCallSerializer(ambCallTime)
+        ambulance_call = ambulance_call_1
+        serializer = AmbulanceCallSerializer(ambulance_call)
         result = {
-            'id': ambCallTime.id,
-            'ambulance_id': ambCallTime.ambulance.id,
-            'dispatch_time': date2iso(ambCallTime.dispatch_time),
-            'departure_time': date2iso(ambCallTime.departure_time),
-            'patient_time': date2iso(ambCallTime.patient_time),
-            'hospital_time': date2iso(ambCallTime.hospital_time),
-            'end_time': date2iso(ambCallTime.end_time)
+            'id': ambulance_call.id,
+            'ambulance_id': ambulance_call.ambulance.id
         }
         self.assertDictEqual(serializer.data, result)
 
-        ambCallTime2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
+        ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
 
-        ambCallTime = ambCallTime2
-        serializer = AmbulanceCallSerializer(ambCallTime)
+        ambulance_call = ambulance_call_2
+        serializer = AmbulanceCallSerializer(ambulance_call)
         result = {
-            'id': ambCallTime.id,
-            'ambulance_id': ambCallTime.ambulance.id,
-            'dispatch_time': date2iso(ambCallTime.dispatch_time),
-            'departure_time': date2iso(ambCallTime.departure_time),
-            'patient_time': date2iso(ambCallTime.patient_time),
-            'hospital_time': date2iso(ambCallTime.hospital_time),
-            'end_time': date2iso(ambCallTime.end_time)
+            'id': ambulance_call.id,
+            'ambulance_id': ambulance_call.ambulance.id
         }
         self.assertDictEqual(serializer.data, result)
 
         serializer = CallSerializer(c1)
-        ambCallTimeSerializer1 = AmbulanceCallSerializer(ambCallTime1)
-        ambCallTimeSerializer2 = AmbulanceCallSerializer(ambCallTime2)
+        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
+        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
 
         expected = {
             'id': c1.id,
@@ -80,7 +71,7 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
-                              [ambCallTimeSerializer2.data, ambCallTimeSerializer1.data])
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         result = serializer.data
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
@@ -212,18 +203,6 @@ class TestCall(TestSetup):
         # make sure no call was created
         self.assertRaises(Call.DoesNotExist, Call.objects.get, street='will fail')
 
-        # TODO: FAIL BECAUSE CREATION REQUIRES NOTHING BUT ambulance_id
-        call = {
-            'status': CallStatus.O.name,
-            'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': self.a1.id, 'departure_time': timezone.now()}]
-        }
-        serializer = CallSerializer(data=call)
-        serializer.is_valid()
-        serializer.save(updated_by=self.u1)
-
     # THESE ARE FAILING!
     def _test_call_update_serializer(self):
         
@@ -338,7 +317,7 @@ class TestCall(TestSetup):
             'patient_set': PatientSerializer(many=True).data
         }
         self.assertDictEqual(serializer.data, result)
-	
+
         # Need more tests for updates by regular authorized user
 
     def test_patient_serializer(self):
@@ -363,7 +342,7 @@ class TestCall(TestSetup):
         self.assertTemplateUsed(response, 'ambulance/call_list.html')
 
     def test_call_list_view_one_entry(self):
-        # instatiate client
+        # instantiate client
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
         
@@ -373,7 +352,7 @@ class TestCall(TestSetup):
         self.assertContains(response, 'nani')
 
     def test_call_list_view_two_entries(self):
-        # instatiate client
+        # instantiate client
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
