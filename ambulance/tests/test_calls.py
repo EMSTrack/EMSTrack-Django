@@ -487,7 +487,7 @@ class TestCall(TestSetup):
 
         result = JSONParser().parse(BytesIO(response.content))
         answer = CallSerializer(Call.objects.all(), many=True).data
-        self.assertDictEqual(result, answer)
+        self.assertCountEqual(result, answer)
 
     def test_call_list_view(self):
 
