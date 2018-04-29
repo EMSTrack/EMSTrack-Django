@@ -230,43 +230,6 @@ class Ambulance(UpdatedByModel):
                                                self.updated_on)
 
 
-class AmbulanceUpdate(models.Model):
-
-    # ambulance id
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
-
-    # ambulance status
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
-                              default=AmbulanceStatus.UK.name)
-
-    # location
-    orientation = models.FloatField(default=0)
-    location = models.PointField(srid=4326, default=defaults['location'])
-
-    # timestamp, indexed
-    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
-
-    # comment
-    comment = models.CharField(max_length=254, null=True, blank=True)
-
-    # updated by
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        indexes = [
-            models.Index(
-                fields=['ambulance', 'timestamp'],
-                name='ambulance_timestamp_idx',
-            ),
-        ]
-
-
 # Call related models
 
 class CallPriority(Enum):
@@ -341,15 +304,45 @@ class AmbulanceCall(models.Model):
         unique_together = ('call', 'ambulance')
 
 
-class AmbulanceCallEvent(models.Model):
+class AmbulanceUpdate(models.Model):
+    # ambulance
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
 
     # ambulance call
     ambulance_call = models.ForeignKey(AmbulanceCall,
-                                       on_delete=models.CASCADE)
+                                       on_delete=models.CASCADE,
+                                       null=True)
 
-    # ambulance update
-    ambulance_update = models.ForeignKey(AmbulanceUpdate,
-                                         on_delete=models.CASCADE)
+    # ambulance status
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              default=AmbulanceStatus.UK.name)
+
+    # location
+    orientation = models.FloatField(default=0)
+    location = models.PointField(srid=4326, default=defaults['location'])
+
+    # timestamp, indexed
+    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
+
+    # comment
+    comment = models.CharField(max_length=254, null=True, blank=True)
+
+    # updated by
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=['ambulance', 'timestamp'],
+                name='ambulance_timestamp_idx',
+            ),
+        ]
 
 
 # Patient might be expanded in the future

@@ -158,32 +158,19 @@ class TestCall(TestSetup):
 
         # create ambulance update to use in event
         ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+                                                            ambulance_call=ambulance_call_2,
                                                             status=AmbulanceStatus.PB.name,
                                                             updated_by=self.u1)
         ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+                                                            ambulance_call=ambulance_call_2,
                                                             status=AmbulanceStatus.AP.name,
                                                             updated_by=self.u1)
         ambulance_update_3 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+                                                            ambulance_call=ambulance_call_2,
                                                             status=AmbulanceStatus.HB.name,
                                                             updated_by=self.u1)
 
-        # create ambulance call events
-        ambulance_call_event_1 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
-                                                                   ambulance_update=ambulance_update_1)
-        ambulance_call_event_2 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
-                                                                   ambulance_update=ambulance_update_2)
-        ambulance_call_event_3 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
-                                                                   ambulance_update=ambulance_update_3)
-
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
-        ambulance_call_event_serializer_1 = AmbulanceCallEventSerializer(ambulance_call_event_1)
-        ambulance_call_event_serializer_2 = AmbulanceCallEventSerializer(ambulance_call_event_2)
-        ambulance_call_event_serializer_3 = AmbulanceCallEventSerializer(ambulance_call_event_3)
-
-        expected = {
-            'ambulance_update': AmbulanceUpdateSerializer(ambulance_update_1).data
-        }
-        self.assertDictEqual(ambulance_call_event_serializer_1.data, expected)
 
         serializer = CallSerializer(c1)
 
