@@ -7,7 +7,7 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, AmbulanceCallEvent
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -236,14 +236,28 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-# Ambulancecall Serializer
+# AmbulanceCallEvent Serializer
+
+class AmbulanceCallEventSerializer(serializers.ModelSerializer):
+
+    ambulance_update = AmbulanceUpdateSerializer()
+
+    class Meta:
+        model = AmbulanceCallEvent
+        fields = ['ambulance_update']
+
+
+# AmbulanceCall Serializer
 
 class AmbulanceCallSerializer(serializers.ModelSerializer):
+
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
+    ambulancecallevent_set = AmbulanceCallEventSerializer(many=True, required=False)
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id']
+        fields = ['id', 'ambulance_id',
+                  'ambulancecallevent_set']
 
 
 # Patient Serializer
