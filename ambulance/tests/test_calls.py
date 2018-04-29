@@ -599,3 +599,4 @@ class TestCall(TestSetup):
         response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
         self.assertContains(response, 'Test1')
 
+        # TODO: Tests for unprivileged user
