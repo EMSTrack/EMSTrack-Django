@@ -693,7 +693,7 @@ class TestAmbulanceCreate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-    def test_ambulance_post_view(self):
+    def test_ambulance_post_viewset(self):
         # instantiate client
         client = Client()
 
