@@ -243,9 +243,7 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id', 'dispatch_time',
-                  'departure_time', 'patient_time', 'hospital_time',
-                  'end_time']
+        fields = ['id', 'ambulance_id']
 
 
 # Patient Serializer
