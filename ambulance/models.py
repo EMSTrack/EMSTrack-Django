@@ -277,9 +277,9 @@ class CallPriority(Enum):
 
 
 class CallStatus(Enum):
-    O = 'Ongoing'
+    S = 'Started'
     P = 'Pending'
-    F = 'Finished'
+    E = 'Ended'
 
 
 class Call(AddressModel, UpdatedByModel):
@@ -301,12 +301,14 @@ class Call(AddressModel, UpdatedByModel):
                                 choices=CALL_PRIORITY_CHOICES,
                                 default=CallPriority.E.name)
 
+    # timestamps
+    pending_at = models.DateTimeField(null=True, blank=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # ended at
-    ended_at = models.DateTimeField(null=True, blank=True)
-    
     def save(self, *args, **kwargs):
 
         # save to Call
@@ -329,6 +331,9 @@ class AmbulanceCall(models.Model):
     # ambulance
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
+
+    # created at
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('call', 'ambulance')

@@ -31,6 +31,7 @@ class TestCall(TestSetup):
         result = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
+            'created_at': date2iso(ambulance_call.created_at),
             'ambulancecallevent_set': []
         }
         self.assertDictEqual(serializer.data, result)
@@ -42,6 +43,7 @@ class TestCall(TestSetup):
         result = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
+            'created_at': date2iso(ambulance_call.created_at),
             'ambulancecallevent_set': []
         }
         self.assertDictEqual(serializer.data, result)
@@ -65,6 +67,8 @@ class TestCall(TestSetup):
             'country': c1.country,
             'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
@@ -112,6 +116,8 @@ class TestCall(TestSetup):
             'country': c1.country,
             'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
@@ -121,10 +127,9 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # Ongoing Call without Ambulancecall_Set
-        # HAS TO FAIL BECAUSE AMBULANCECALL_SET IS EMPTY
+        # Ongoing Call without Ambulancecall_Set fails
         call = {
-            'status': CallStatus.O.name,
+            'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
@@ -173,6 +178,8 @@ class TestCall(TestSetup):
             'country': c1.country,
             'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
             'ended_at': date2iso(c1.ended_at),
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
@@ -192,7 +199,7 @@ class TestCall(TestSetup):
 
         # Should fail because ambulance id's are repeated
         call = {
-            'status': CallStatus.O.name,
+            'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'will fail',
@@ -213,7 +220,7 @@ class TestCall(TestSetup):
         # Update call status
         c = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
         user = self.u1
-        status = CallStatus.O.name
+        status = CallStatus.S.name
 
         serializer = CallSerializer(c, 
                                     data={
@@ -239,6 +246,8 @@ class TestCall(TestSetup):
             'country': c.country,
             'location': point2str(c.location),
             'created_at': date2iso(c.created_at),
+            'pending_at': date2iso(c.pending_at),
+            'started_at': date2iso(c.started_at),
             'ended_at': date2iso(c.ended_at),
             'comment': c.comment,
             'updated_by': c.updated_by.id,
@@ -275,6 +284,8 @@ class TestCall(TestSetup):
             'country': c.country,
             'location': point2str(c.location),
             'created_at': date2iso(c.created_at),
+            'pending_at': date2iso(c.pending_at),
+            'started_at': date2iso(c.started_at),
             'ended_at': date2iso(c.ended_at),
             'comment': c.comment,    
             'updated_by': c.updated_by.id,
@@ -311,6 +322,8 @@ class TestCall(TestSetup):
             'country': c.country,
             'location': point2str(location),
             'created_at': date2iso(c.created_at),
+            'pending_at': date2iso(c.pending_at),
+            'started_at': date2iso(c.started_at),
             'ended_at': date2iso(c.ended_at),
             'comment': c.comment,
             'updated_by': c.updated_by.id,

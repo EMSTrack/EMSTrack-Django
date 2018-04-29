@@ -256,8 +256,9 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id',
+        fields = ['id', 'ambulance_id', 'created_at'
                   'ambulancecallevent_set']
+        read_only_fields = ['created_at']
 
 
 # Patient Serializer
@@ -282,10 +283,12 @@ class CallSerializer(serializers.ModelSerializer):
         fields = ['id', 'status', 'details', 'priority',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
-                  'location', 'created_at', 'ended_at',
+                  'location',
+                  'created_at',
+                  'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
                   'ambulancecall_set', 'patient_set']
-        read_only_fields = ['updated_by']
+        read_only_fields = ['created_at', 'updated_by']
 
     def create(self, validated_data):
 
@@ -333,6 +336,6 @@ class CallSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
-            raise serializers.ValidationError('Ongoing call and finished call must have ' +
+            raise serializers.ValidationError('Started call and ended call must have ' +
                                               'ambulancecall_set')
         return data
