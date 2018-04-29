@@ -221,14 +221,14 @@ class CallPermissionMixin(BasePermissionMixin):
 
 
 # Call ListView
-class CallListView(ListView,
-                   CallPermissionMixin):
+class CallListView(CallPermissionMixin,
+                   ListView):
     model = Call
 
 
 # Call DetailView
-class CallDetailView(DetailView,
-                     CallPermissionMixin):
+class CallDetailView(CallPermissionMixin,
+                     DetailView):
     model = Call
 
 
