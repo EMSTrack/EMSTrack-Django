@@ -560,6 +560,16 @@ class TestCall(TestSetup):
         self.assertContains(response, 'nani')
         self.assertContains(response, 'suhmuh')
 
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        response = client.get(reverse('ambulance:call_list'))
+        self.assertContains(response, '[]')
+
+
     def test_call_detail_view(self):
 
         # instantiate client
