@@ -576,7 +576,7 @@ class TestCall(TestSetup):
         AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
         AmbulanceCall.objects.create(call=c2, ambulance=self.a2)
 
-        response = client.get('/api/call/', follow=True)
+        response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
 
         logger.debug('response = {}'.format(response))
