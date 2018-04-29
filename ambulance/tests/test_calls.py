@@ -491,7 +491,7 @@ class TestCall(TestSetup):
 
         # test_call_list_viewset_one_entry
 
-        Call.objects.create(details='nani', updated_by=self.u1)
+        c1 = Call.objects.create(details='nani', updated_by=self.u1)
 
         response = client.get('/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
@@ -502,7 +502,7 @@ class TestCall(TestSetup):
 
         # test_call_list_viewset_two_entries:
 
-        Call.objects.create(details='suhmuh', updated_by=self.u1)
+        c2 = Call.objects.create(details='suhmuh', updated_by=self.u1)
 
         response = client.get('/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
@@ -522,8 +522,16 @@ class TestCall(TestSetup):
 
         result = JSONParser().parse(BytesIO(response.content))
         answer = CallSerializer([], many=True).data
-        logger.debug(result)
-        logger.debug(answer)
+        self.assertCountEqual(result, answer)
+
+        # add ambulance to call
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
+
+        response = client.get('/api/call/', follow=True)
+        self.assertEquals(response.status_code, 200)
+
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = CallSerializer([c1], many=True).data
         self.assertCountEqual(result, answer)
 
     def test_call_list_view(self):
