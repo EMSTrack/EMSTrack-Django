@@ -58,6 +58,8 @@ class AmbulanceCapability(Enum):
 
 class Ambulance(UpdatedByModel):
 
+    # TODO: Should we consider denormalizing Ambulance to avoid duplication with AmbulanceUpdate?
+
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
 
