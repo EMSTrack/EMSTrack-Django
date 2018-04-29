@@ -567,8 +567,7 @@ class TestCall(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         response = client.get(reverse('ambulance:call_list'))
-        self.assertContains(response, '[]')
-
+        self.assertEquals(response, '[]')
 
     def test_call_detail_view(self):
 
