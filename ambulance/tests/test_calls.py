@@ -181,7 +181,6 @@ class TestCall(TestSetup):
         ambulance_call_event_serializer_3 = AmbulanceCallEventSerializer(ambulance_call_event_3)
 
         expected = {
-            'id': ambulance_call_event_1.id,
             'ambulance_update': AmbulanceUpdateSerializer(ambulance_update_1).data
         }
         self.assertDictEqual(ambulance_call_event_serializer_1.data, expected)
