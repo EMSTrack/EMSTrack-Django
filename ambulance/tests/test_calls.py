@@ -571,7 +571,7 @@ class TestCall(TestSetup):
         self.assertEquals(response.status_code, 200)
 
         # TODO: complete tests
-        logger.debug('response = {}'.format(response.body))
+        logger.debug('response = {}'.format(response))
 
         # add ambulances to calls, can only read a3
         AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
@@ -580,7 +580,7 @@ class TestCall(TestSetup):
         response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
 
-        logger.debug('response = {}'.format(response.body))
+        logger.debug('response = {}'.format(response))
 
         answer = CallSerializer([c1], many=True).data
         self.assertContains(result, 'nani')
