@@ -550,15 +550,15 @@ class TestCall(TestSetup):
         c1 = Call.objects.create(details='nani', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
-        self.assertContains(response.content, 'nani')
+        self.assertContains(response, 'nani')
 
         # test_call_list_view_two_entries:
 
         c2 = Call.objects.create(details='suhmuh', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
-        self.assertContains(response.content, 'nani')
-        self.assertContains(response.content, 'suhmuh')
+        self.assertContains(response, 'nani')
+        self.assertContains(response, 'suhmuh')
 
         # logout
         client.logout()
