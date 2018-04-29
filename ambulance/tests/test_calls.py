@@ -579,6 +579,8 @@ class TestCall(TestSetup):
         response = client.get('/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
 
+        logger.debug('response = {}'.format(response))
+
         result = JSONParser().parse(BytesIO(response.content))
         answer = CallSerializer([c1], many=True).data
         self.assertContains(result, 'nani')
