@@ -547,14 +547,14 @@ class TestCall(TestSetup):
 
         # test_call_list_view_one_entry
 
-        Call.objects.create(details='nani', updated_by=self.u1)
+        c1 = Call.objects.create(details='nani', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertContains(response, 'nani')
 
         # test_call_list_view_two_entries:
 
-        Call.objects.create(details='suhmuh', updated_by=self.u1)
+        c2 = Call.objects.create(details='suhmuh', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertContains(response, 'nani')
@@ -567,9 +567,21 @@ class TestCall(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         response = client.get(reverse('ambulance:call_list'))
-        logger.debug('response = {}'.format(response))
+        self.assertEquals(response.status_code, 200)
 
         # TODO: complete tests
+        logger.debug('response = {}'.format(response))
+
+        # add ambulances to calls, can only read a3
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
+        AmbulanceCall.objects.create(call=c2, ambulance=self.a2)
+
+        response = client.get('/api/call/', follow=True)
+        self.assertEquals(response.status_code, 200)
+
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = CallSerializer([c1], many=True).data
+        self.assertContains(result, 'nani')
 
     def test_call_detail_view(self):
 
