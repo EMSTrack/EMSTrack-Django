@@ -566,6 +566,9 @@ class TestCall(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
+        response = client.get(reverse('ambulance:call_list'))
+        logger.debug('response = {}'.format(response))
+
         # TODO: complete tests
 
     def test_call_detail_view(self):
