@@ -6,6 +6,10 @@ from django.urls import reverse
 
 from django.db import IntegrityError
 
+from rest_framework.parsers import JSONParser
+from io import BytesIO
+import json
+
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
     AmbulanceUpdate, AmbulanceStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
@@ -478,9 +482,12 @@ class TestCall(TestSetup):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        response = client.get(reverse('ambulance:call_list'))
+        response = client.get('api/call', follow=True)
         self.assertEquals(response.status_code, 200)
-        self.assertTemplateUsed(response, 'ambulance/call_list.html')
+
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = CallSerializer(Call.objects.all(), many=True).data
+        self.assertDictEqual(result, answer)
 
     def test_call_list_view(self):
 
