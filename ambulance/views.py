@@ -233,7 +233,7 @@ class CallDetailView(CallPermissionMixin,
 
 
 # Admin page
-#class AdminView(ListView):
+# class AdminView(ListView):
 #    model = Call
 #   template_name = 'ambulance/dispatch_list.html'
 #    context_object_name = "ambulance_call"
