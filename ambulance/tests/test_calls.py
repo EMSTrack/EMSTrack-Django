@@ -568,9 +568,8 @@ class TestCall(TestSetup):
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
-
-        # TODO: complete tests
-        logger.debug('response = {}'.format(response.content))
+        self.assertNotContains(response, 'nani')
+        self.assertNotContains(response, 'suhmuh')
 
         # add ambulances to calls, can only read a3
         AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
@@ -578,10 +577,8 @@ class TestCall(TestSetup):
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
-
-        logger.debug('response = {}'.format(response.content))
-
-        self.assertContains(response.content, 'nani')
+        self.assertContains(response, 'nani')
+        self.assertNotContains(response, 'suhmuh')
 
     def test_call_detail_view(self):
 
