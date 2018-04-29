@@ -6,7 +6,8 @@ from django.urls import reverse
 
 from django.db import IntegrityError
 
-from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority
+from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, AmbulanceCallEvent, \
+    AmbulanceUpdate, AmbulanceStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer
 from emstrack.tests.util import date2iso, point2str
 
@@ -120,6 +121,52 @@ class TestCall(TestSetup):
             'ambulancecallevent_set': []
         }
         self.assertDictEqual(serializer.data, expected)
+
+        serializer = CallSerializer(c1)
+        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
+
+        expected = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'number': c1.number,
+            'street': c1.street,
+            'unit': c1.unit,
+            'neighborhood': c1.neighborhood,
+            'city': c1.city,
+            'state': c1.state,
+            'zipcode': c1.zipcode,
+            'country': c1.country,
+            'location': point2str(c1.location),
+            'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecall_set': [],
+            'patient_set': []
+        }
+        self.assertCountEqual(serializer.data['ambulancecall_set'],
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        result = serializer.data
+        result['ambulancecall_set'] = []
+        self.assertDictEqual(result, expected)
+
+        # create ambulance update to use in event
+        ambulance_update_1 = AmbulanceUpdate.create(ambulance=self.a1, status=AmbulanceStatus.PB.name)
+        ambulance_update_2 = AmbulanceUpdate.create(ambulance=self.a1, status=AmbulanceStatus.AP.name)
+        ambulance_update_3 = AmbulanceUpdate.create(ambulance=self.a1, status=AmbulanceStatus.HB.name)
+
+        # create ambulance call events
+        ambulance_call_event_1 = AmbulanceCallEvent.create(ambulance_call=ambulance_call_2,
+                                                           ambulance_update=ambulance_update_1)
+        ambulance_call_event_2 = AmbulanceCallEvent.create(ambulance_call=ambulance_call_2,
+                                                           ambulance_update=ambulance_update_2)
+        ambulance_call_event_3 = AmbulanceCallEvent.create(ambulance_call=ambulance_call_2,
+                                                           ambulance_update=ambulance_update_3)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
