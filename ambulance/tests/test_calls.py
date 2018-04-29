@@ -104,9 +104,9 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_1.data])
-        expected = serializer.data
-        expected['ambulancecall_set'] = []
-        self.assertDictEqual(expected, expected)
+        result = serializer.data
+        result['ambulancecall_set'] = []
+        self.assertDictEqual(result, expected)
 
         # create second ambulance call
         ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
@@ -150,9 +150,9 @@ class TestCall(TestSetup):
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
-        expected = serializer.data
-        expected['ambulancecall_set'] = []
-        self.assertDictEqual(expected, expected)
+        result = serializer.data
+        result['ambulancecall_set'] = []
+        self.assertDictEqual(result, expected)
 
         # cannot have duplicate
         self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
