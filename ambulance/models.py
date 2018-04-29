@@ -305,13 +305,15 @@ class AmbulanceCall(models.Model):
 
 
 class AmbulanceUpdate(models.Model):
+
     # ambulance
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
 
     # ambulance call
+    # TODO: Is it possible to enforce that ambulance_call.ambulance == ambulance?
     ambulance_call = models.ForeignKey(AmbulanceCall,
-                                       on_delete=models.CASCADE,
+                                       on_delete=models.SET_NULL,
                                        null=True)
 
     # ambulance status
