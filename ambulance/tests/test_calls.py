@@ -156,9 +156,15 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         # create ambulance update to use in event
-        ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1, status=AmbulanceStatus.PB.name)
-        ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1, status=AmbulanceStatus.AP.name)
-        ambulance_update_3 = AmbulanceUpdate.objects.create(ambulance=self.a1, status=AmbulanceStatus.HB.name)
+        ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+                                                            status=AmbulanceStatus.PB.name,
+                                                            updated_by=self.u1)
+        ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+                                                            status=AmbulanceStatus.AP.name,
+                                                            updated_by=self.u1)
+        ambulance_update_3 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+                                                            status=AmbulanceStatus.HB.name,
+                                                            updated_by=self.u1)
 
         # create ambulance call events
         ambulance_call_event_1 = AmbulanceCallEvent.objects.create(ambulance_call=ambulance_call_2,
