@@ -30,7 +30,8 @@ class TestCall(TestSetup):
         serializer = AmbulanceCallSerializer(ambulance_call)
         result = {
             'id': ambulance_call.id,
-            'ambulance_id': ambulance_call.ambulance.id
+            'ambulance_id': ambulance_call.ambulance.id,
+            'ambulancecallevent_set': []
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -40,7 +41,8 @@ class TestCall(TestSetup):
         serializer = AmbulanceCallSerializer(ambulance_call)
         result = {
             'id': ambulance_call.id,
-            'ambulance_id': ambulance_call.ambulance.id
+            'ambulance_id': ambulance_call.ambulance.id,
+            'ambulancecallevent_set': []
         }
         self.assertDictEqual(serializer.data, result)
 
