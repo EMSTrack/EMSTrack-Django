@@ -6,10 +6,10 @@ from django.urls import reverse
 
 from django.db import IntegrityError
 
-from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, AmbulanceCallEvent, \
+from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
     AmbulanceUpdate, AmbulanceStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
-    AmbulanceCallEventSerializer, AmbulanceUpdateSerializer
+    AmbulanceUpdateSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -74,7 +74,7 @@ class TestCall(TestSetup):
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
             'created_at': date2iso(ambulance_call.created_at),
-            'ambulancecallevent_set': []
+            'ambulanceupdate_set': []
         }
         self.assertDictEqual(serializer.data, expected)
 
@@ -119,7 +119,7 @@ class TestCall(TestSetup):
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
             'created_at': date2iso(ambulance_call.created_at),
-            'ambulancecallevent_set': []
+            'ambulanceupdate_set': []
         }
         self.assertDictEqual(serializer.data, expected)
 
