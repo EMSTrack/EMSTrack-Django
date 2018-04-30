@@ -228,6 +228,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
+            'location_client_id': None,
             'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -265,6 +266,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
+            'location_client_id': None,
             'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -293,6 +295,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
+            'location_client_id': None,
             'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
