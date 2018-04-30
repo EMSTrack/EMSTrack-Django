@@ -785,38 +785,38 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.F.name)
 
-        # generate ERROR: JSON formated incorrectly
-
-        test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-        self.is_subscribed(test_client)
-
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
-                                                                         client_id,
-                                                                         self.a1.id),
-                            '{ "value": ',
-                            qos=0)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # generate ERROR: JSON formated incorrectly
-
-        test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-        self.is_subscribed(test_client)
-
-        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
-                                                                        client_id,
-                                                                        self.h1.id),
-                            '{ "value": ',
-                            qos=0)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
         test_invalid_serializer = False
         if test_invalid_serializer:
+
+            # generate ERROR: JSON formated incorrectly
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username,
+                                                                             client_id,
+                                                                             self.a1.id),
+                                '{ "value": ',
+                                qos=0)
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
+
+            # generate ERROR: JSON formated incorrectly
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                            client_id,
+                                                                            self.h1.id),
+                                '{ "value": ',
+                                qos=0)
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
 
             # generate ERROR: JSON formated incorrectly
 
