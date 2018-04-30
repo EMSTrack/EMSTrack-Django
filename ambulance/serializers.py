@@ -307,8 +307,8 @@ class CallSerializer(serializers.ModelSerializer):
 
             # then patients
             for patient in patient_set:
-                AmbulanceCall.objects.create(call=call,
-                                             **patient)
+                Patient.objects.create(call=call,
+                                       **patient)
 
         return call
 
