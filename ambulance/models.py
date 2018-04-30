@@ -58,6 +58,8 @@ class AmbulanceCapability(Enum):
 
 class Ambulance(UpdatedByModel):
 
+    # TODO: Should we consider denormalizing Ambulance to avoid duplication with AmbulanceUpdate?
+
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
 
@@ -76,7 +78,7 @@ class Ambulance(UpdatedByModel):
                               default=AmbulanceStatus.UK.name)
 
     # location
-    orientation = models.FloatField(default=0)
+    orientation = models.FloatField(default=0.0)
     location = models.PointField(srid=4326, default=defaults['location'])
 
     # timestamp
@@ -228,42 +230,6 @@ class Ambulance(UpdatedByModel):
                                                self.updated_on)
 
 
-class AmbulanceUpdate(models.Model):
-    # ambulance id
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
-
-    # ambulance status
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
-                              default=AmbulanceStatus.UK.name)
-
-    # location
-    orientation = models.FloatField(default=0)
-    location = models.PointField(srid=4326, default=defaults['location'])
-
-    # timestamp, indexed
-    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
-
-    # comment
-    comment = models.CharField(max_length=254, null=True, blank=True)
-
-    # updated by
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        indexes = [
-            models.Index(
-                fields=['ambulance', 'timestamp'],
-                name='ambulance_timestamp_idx',
-            ),
-        ]
-
-
 # Call related models
 
 class CallPriority(Enum):
@@ -276,9 +242,9 @@ class CallPriority(Enum):
 
 
 class CallStatus(Enum):
-    O = 'Ongoing'
+    S = 'Started'
     P = 'Pending'
-    F = 'Finished'
+    E = 'Ended'
 
 
 class Call(AddressModel, UpdatedByModel):
@@ -299,42 +265,85 @@ class Call(AddressModel, UpdatedByModel):
                                 choices=CALL_PRIORITY_CHOICES,
                                 default=CallPriority.E.name)
 
+    # timestamps
+    pending_at = models.DateTimeField(null=True, blank=True)
+    started_at = models.DateTimeField(null=True, blank=True)
+    ended_at = models.DateTimeField(null=True, blank=True)
+
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
 
-    # ended at
-    ended_at = models.DateTimeField(null=True, blank=True)
-    
-    @classmethod
-    #def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs):
 
-        # creation?
-        # created = self.pk is None
+        # save to Call
+        super().save(*args, **kwargs)
 
-        # loaded_values?
-        # loaded_values = self._loaded_values is not None
-         
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self)
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
 
 
-class AmbulanceCallTime(models.Model):
+class AmbulanceCall(models.Model):
 
+    # call
     call = models.ForeignKey(Call,
                              on_delete=models.CASCADE)
 
+    # ambulance
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
 
-    dispatch_time = models.DateTimeField(null=True, blank=True)
-    departure_time = models.DateTimeField(null=True, blank=True)
-    patient_time = models.DateTimeField(null=True, blank=True)
-    hospital_time = models.DateTimeField(null=True, blank=True)
-    end_time = models.DateTimeField(null=True, blank=True)
+    # created at
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         unique_together = ('call', 'ambulance')
+
+
+class AmbulanceUpdate(models.Model):
+
+    # ambulance
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    # ambulance call
+    # TODO: Is it possible to enforce that ambulance_call.ambulance == ambulance?
+    ambulance_call = models.ForeignKey(AmbulanceCall,
+                                       on_delete=models.SET_NULL,
+                                       null=True)
+
+    # ambulance status
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              default=AmbulanceStatus.UK.name)
+
+    # location
+    orientation = models.FloatField(default=0.0)
+    location = models.PointField(srid=4326, default=defaults['location'])
+
+    # timestamp, indexed
+    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
+
+    # comment
+    comment = models.CharField(max_length=254, null=True, blank=True)
+
+    # updated by
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=['ambulance', 'timestamp'],
+                name='ambulance_timestamp_idx',
+            ),
+        ]
 
 
 # Patient might be expanded in the future

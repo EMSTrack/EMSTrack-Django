@@ -7,7 +7,7 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCallTime, Patient, CallStatus
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -236,16 +236,19 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-# AmbulanceCallTime Serializer 
+# AmbulanceCall Serializer
 
-class AmbulanceCallTimeSerializer(serializers.ModelSerializer):
+class AmbulanceCallSerializer(serializers.ModelSerializer):
+
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
+    ambulanceupdate_set = AmbulanceUpdateSerializer(many=True, required=False)
 
     class Meta:
-        model = AmbulanceCallTime
-        fields = ['id', 'ambulance_id', 'dispatch_time',
-                  'departure_time', 'patient_time', 'hospital_time',
-                  'end_time']
+        model = AmbulanceCall
+        fields = ['id', 'ambulance_id',
+                  'created_at',
+                  'ambulanceupdate_set']
+        read_only_fields = ['created_at']
 
 
 # Patient Serializer
@@ -262,7 +265,7 @@ class PatientSerializer(serializers.ModelSerializer):
 class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
-    ambulancecalltime_set = AmbulanceCallTimeSerializer(many=True, required=False)
+    ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
     location = PointField(required=False)
 
     class Meta:
@@ -270,10 +273,12 @@ class CallSerializer(serializers.ModelSerializer):
         fields = ['id', 'status', 'details', 'priority',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
-                  'location', 'created_at', 'ended_at',
+                  'location',
+                  'created_at',
+                  'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
-                  'ambulancecalltime_set', 'patient_set']
-        read_only_fields = ['updated_by']
+                  'ambulancecall_set', 'patient_set']
+        read_only_fields = ['created_at', 'updated_by']
 
     def create(self, validated_data):
 
@@ -284,15 +289,26 @@ class CallSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
             raise PermissionDenied()
         
-        ambulancecalltime_set = validated_data.pop('ambulancecalltime_set', [])
+        ambulancecall_set = validated_data.pop('ambulancecall_set', [])
+        patient_set = validated_data.pop('patient_set', [])
 
-        call = super().create(validated_data)
+        # Makes sure database rolls back in case on an integrity or other errors
+        with transaction.atomic():
 
-        for calltime in ambulancecalltime_set:
-            ambulance = calltime.pop('ambulance_id')
-            AmbulanceCallTime.objects.create(call=call,
+            # creates call first
+            call = super().create(validated_data)
+
+            # then add ambulances
+            for ambulancecall in ambulancecall_set:
+                ambulance = ambulancecall.pop('ambulance_id')
+                AmbulanceCall.objects.create(call=call,
                                              ambulance=ambulance,
-                                             **calltime)
+                                             **ambulancecall)
+
+            # then patients
+            for patient in patient_set:
+                Patient.objects.create(call=call,
+                                       **patient)
 
         return call
 
@@ -310,7 +326,7 @@ class CallSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def validate(self, data):
-        if data['status'] != CallStatus.P.name and not ('ambulancecalltime_set' in data):
-            raise serializers.ValidationError('Ongoing call and finished call must have ' +
-                                              'ambulancecalltime_set')
+        if data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
+            raise serializers.ValidationError('Started call and ended call must have ' +
+                                              'ambulancecall_set')
         return data

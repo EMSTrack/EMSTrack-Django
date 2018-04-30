@@ -56,8 +56,8 @@ urlpatterns = [
         login_required(views.CallDetailView.as_view()),
         name='call_detail'),
 
-    url(r'^admin/$',
-        login_required(views.AdminView.as_view()),
-        name="admin"),
+    # url(r'^admin/$',
+    #    login_required(views.AdminView.as_view()),
+    #    name="admin"),
     
 ]

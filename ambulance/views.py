@@ -211,20 +211,32 @@ class LocationAdminUpdateView(SuccessMessageMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+
+# Call permissions
+class CallPermissionMixin(BasePermissionMixin):
+
+    filter_field = 'ambulancecall__ambulance_id'
+    profile_field = 'ambulances'
+    queryset = Call.objects.all()
+
+
 # Call ListView
-class CallListView(ListView):
+class CallListView(CallPermissionMixin,
+                   ListView):
     model = Call
 
+
 # Call DetailView
-class CallDetailView(DetailView):
+class CallDetailView(CallPermissionMixin,
+                     DetailView):
     model = Call
 
 
 # Admin page
-class AdminView(ListView):
-    model = Call
-    template_name = 'ambulance/dispatch_list.html'
-    context_object_name = "ambulance_call"
+# class AdminView(ListView):
+#    model = Call
+#   template_name = 'ambulance/dispatch_list.html'
+#    context_object_name = "ambulance_call"
 
 
 # # AmbulanceStatus list page

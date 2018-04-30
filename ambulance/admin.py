@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.gis.db import models
 
 from .models import Ambulance, AmbulanceUpdate, \
-    AmbulanceCallTime, Patient, Call, \
+    AmbulanceCall, Patient, Call, \
     Location, \
     Region
 
@@ -12,7 +12,7 @@ from emstrack.admin import EMSTrackAdmin
 admin.site.register(Ambulance, EMSTrackAdmin)
 admin.site.register(AmbulanceUpdate, EMSTrackAdmin)
 
-admin.site.register(AmbulanceCallTime, EMSTrackAdmin)
+admin.site.register(AmbulanceCall, EMSTrackAdmin)
 admin.site.register(Patient, EMSTrackAdmin)
 admin.site.register(Call, EMSTrackAdmin)
 

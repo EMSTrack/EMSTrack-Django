@@ -38,6 +38,7 @@ class TestAmbulanceGetList(TestSetup):
                 'orientation': a.orientation,
                 'location': point2str(a.location),
                 'timestamp': date2iso(a.timestamp),
+                'location_client_id': None,
                 'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
@@ -199,6 +200,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
+            'location_client_id': None,
             'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -227,6 +229,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
+            'location_client_id': None,
             'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -264,6 +267,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
+            'location_client_id': None,
             'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -292,6 +296,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
+            'location_client_id': None,
             'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -380,6 +385,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
+            'location_client_id': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -688,12 +694,13 @@ class TestAmbulanceCreate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(a.location),
             'timestamp': date2iso(a.timestamp),
+            'location_client_id': None,
             'updated_by': self.u1.id,
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
-    def test_ambulance_post_view(self):
+    def test_ambulance_post_viewset(self):
         # instantiate client
         client = Client()
 
@@ -1004,6 +1011,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
+            'location_client_id': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -1064,6 +1072,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
+            'location_client_id': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
