@@ -229,7 +229,6 @@ class TestCall(TestSetup):
 
         patient_serializer_1 = PatientSerializer(p1)
         patient_serializer_2 = PatientSerializer(p2)
-        self.assertDictEqual(serializer.data, result)
 
         serializer = CallSerializer(c1)
 
