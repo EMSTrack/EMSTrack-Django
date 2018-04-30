@@ -1011,6 +1011,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
+            'location_client_id': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -1071,6 +1072,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
+            'location_client_id': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
