@@ -223,6 +223,49 @@ class TestCall(TestSetup):
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
+        # add patients
+        p1 = Patient.objects.create(call=c1, name='Jose', age=3)
+        p2 = Patient.objects.create(call=c1, name='Maria', age=4)
+
+        patient_serializer_1 = PatientSerializer(p1)
+        patient_serializer_2 = PatientSerializer(p2)
+        self.assertDictEqual(serializer.data, result)
+
+        serializer = CallSerializer(c1)
+
+        expected = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'number': c1.number,
+            'street': c1.street,
+            'unit': c1.unit,
+            'neighborhood': c1.neighborhood,
+            'city': c1.city,
+            'state': c1.state,
+            'zipcode': c1.zipcode,
+            'country': c1.country,
+            'location': point2str(c1.location),
+            'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecall_set': [],
+            'patient_set': []
+        }
+        self.assertCountEqual(serializer.data['ambulancecall_set'],
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['patient_set'],
+                              [patient_serializer_2.data, patient_serializer_1.data])
+        result = serializer.data
+        result['ambulancecall_set'] = []
+        result['patient_set'] = []
+        self.assertDictEqual(result, expected)
+
         # cannot have duplicate
         self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
 

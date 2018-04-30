@@ -289,25 +289,26 @@ class CallSerializer(serializers.ModelSerializer):
         if not user.is_superuser:
             raise PermissionDenied()
         
-        # logger.debug(self.data)
-        logger.debug(validated_data)
-
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
-        logger.debug(ambulancecall_set)
+        patient_set = validated_data.pop('patient_set', [])
 
-        # Makes sure database rolls back in case on an integrity error
+        # Makes sure database rolls back in case on an integrity or other errors
         with transaction.atomic():
 
             # creates call first
             call = super().create(validated_data)
 
-            # then add calltimes corresponding to ambulances
-            # this step may fail, in which case call has to be rolled back
-            for calltime in ambulancecall_set:
-                ambulance = calltime.pop('ambulance_id')
+            # then add ambulances
+            for ambulancecall in ambulancecall_set:
+                ambulance = ambulancecall.pop('ambulance_id')
                 AmbulanceCall.objects.create(call=call,
                                              ambulance=ambulance,
-                                             **calltime)
+                                             **ambulancecall)
+
+            # then patients
+            for patient in patient_set:
+                AmbulanceCall.objects.create(call=call,
+                                             **patient)
 
         return call
 
