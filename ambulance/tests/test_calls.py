@@ -394,16 +394,10 @@ class TestCall(TestSetup):
 
         # test CallSerializer
         c1 = Call.objects.get(id=call.id)
+
         serializer = CallSerializer(c1)
 
-        expected_patient_set = [
-            PatientSerializer(
-                AmbulanceCall.objects.get(call_id=c1.id,
-                                          ambulance_id=self.a1.id)).data,
-            PatientSerializer(
-                AmbulanceCall.objects.get(call_id=c1.id,
-                                          ambulance_id=self.a2.id)).data
-            ]
+        expected_patient_set = PatientSerializer(Patient.objects.filter(call_id=c1.id), many=True).data
 
         expected = {
             'id': c1.id,
@@ -427,16 +421,18 @@ class TestCall(TestSetup):
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
             'ambulancecall_set': expected_ambulancecall_set,
-            'patient_set': []
+            'patient_set': expected_patient_set
         }
 
         result = serializer.data
-        logger.debug(result['ambulancecall_set'])
-        logger.debug(expected['ambulancecall_set'])
         self.assertCountEqual(result['ambulancecall_set'],
                               expected['ambulancecall_set'])
+        self.assertCountEqual(result['patient_set'],
+                              expected['patient_set'])
         expected['ambulancecall_set'] = []
         result['ambulancecall_set'] = []
+        expected['patient_set'] = []
+        result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
         # Should fail because ambulance id's are repeated
