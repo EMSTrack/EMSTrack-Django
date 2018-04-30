@@ -22,8 +22,10 @@ def point2str(point):
     if isinstance(point, GEOSGeometry):
         return PointField().to_representation(point)
     elif isinstance(point, dict):
-        return {'latitude': str(point['latitude']),
-                'longitude': str(point['longitude'])}
+        # return {'latitude': str(point['latitude']),
+        #         'longitude': str(point['longitude'])}
+        return {'latitude': point['latitude'],
+                'longitude': point['longitude']}
     else:
         raise Exception("Unknown point type")
 
