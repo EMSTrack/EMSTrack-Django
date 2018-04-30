@@ -321,8 +321,7 @@ class TestCall(TestSetup):
         serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
 
-        # Pending Call with Ambulancecall_Set
-        #  WILL HAVE TO CREATE AMBULANCECALLS
+        # Pending Call with Ambulancecall_Set will create ambulancecalls
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
@@ -343,6 +342,66 @@ class TestCall(TestSetup):
                 AmbulanceCall.objects.get(call_id=c1.id,
                                           ambulance_id=self.a1.id)).data,
             AmbulanceCallSerializer(
+                AmbulanceCall.objects.get(call_id=c1.id,
+                                          ambulance_id=self.a2.id)).data
+            ]
+
+        expected = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'number': c1.number,
+            'street': c1.street,
+            'unit': c1.unit,
+            'neighborhood': c1.neighborhood,
+            'city': c1.city,
+            'state': c1.state,
+            'zipcode': c1.zipcode,
+            'country': c1.country,
+            'location': point2str(c1.location),
+            'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecall_set': expected_ambulancecall_set,
+            'patient_set': []
+        }
+
+        result = serializer.data
+        logger.debug(result['ambulancecall_set'])
+        logger.debug(expected['ambulancecall_set'])
+        self.assertCountEqual(result['ambulancecall_set'],
+                              expected['ambulancecall_set'])
+        expected['ambulancecall_set'] = []
+        result['ambulancecall_set'] = []
+        self.assertDictEqual(result, expected)
+
+        # Pending Call with ambulancecall_set and patient_set
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+
+        # test CallSerializer
+        c1 = Call.objects.get(id=call.id)
+        serializer = CallSerializer(c1)
+
+        expected_patient_set = [
+            PatientSerializer(
+                AmbulanceCall.objects.get(call_id=c1.id,
+                                          ambulance_id=self.a1.id)).data,
+            PatientSerializer(
                 AmbulanceCall.objects.get(call_id=c1.id,
                                           ambulance_id=self.a2.id)).data
             ]

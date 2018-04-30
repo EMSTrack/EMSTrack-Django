@@ -78,7 +78,7 @@ class Ambulance(UpdatedByModel):
                               default=AmbulanceStatus.UK.name)
 
     # location
-    orientation = models.FloatField(default=0)
+    orientation = models.FloatField(default=0.0)
     location = models.PointField(srid=4326, default=defaults['location'])
 
     # timestamp
@@ -324,7 +324,7 @@ class AmbulanceUpdate(models.Model):
                               default=AmbulanceStatus.UK.name)
 
     # location
-    orientation = models.FloatField(default=0)
+    orientation = models.FloatField(default=0.0)
     location = models.PointField(srid=4326, default=defaults['location'])
 
     # timestamp, indexed
