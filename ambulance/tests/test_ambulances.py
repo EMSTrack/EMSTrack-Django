@@ -384,6 +384,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
+            'location_client_id': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
