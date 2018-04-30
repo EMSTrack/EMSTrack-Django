@@ -815,24 +815,25 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # generate ERROR: JSON formated incorrectly
-
-        test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-        self.is_subscribed(test_client)
-
-        test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                                     client_id,
-                                                                                     self.h1.id,
-                                                                                     self.e1.id),
-                            '{ "value": ',
-                            qos=0)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
         test_invalid_serializer = False
         if test_invalid_serializer:
+
+            # generate ERROR: JSON formated incorrectly
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                         client_id,
+                                                                                         self.h1.id,
+                                                                                         self.e1.id),
+                                '{ "value": ',
+                                qos=0)
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
+
             # WARNING: The next tests prevent the test database from
             # being removed at the end of the test. It is not clear why
             # but it could be django bug related to the LiveServerThread
