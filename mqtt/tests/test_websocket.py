@@ -17,7 +17,7 @@ class TestMQTTSubscribe(MQTTTestCase):
         # Start client as admin
         broker = {
             'HOST': 'localhost',
-            'PORT': 1883,
+            'PORT': 8884,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
         }
