@@ -353,7 +353,8 @@ function dispatchCall() {
         url: postJsonUrl,
         type: 'POST',
         dataType: 'json',
-        data: form,
+        contentType: 'application/json',
+        data: JSON.stringify(form),
         success: function (data) {
 
             var successMsg = '<strong>Success</strong><br/>' +
@@ -369,7 +370,7 @@ function dispatchCall() {
 
             endDispatching();
         },
-        fail: function (jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
 
             // Show modal
             // $('.modal-title').html('Failure');
