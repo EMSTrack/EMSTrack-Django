@@ -29,6 +29,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         client = MQTTTestClient(broker,
                                 transport='websockets',
+                                tls_set={'ca_certs': '/etc/certificates/ca.crt'},
                                 check_payload=False,
                                 debug=False)
         self.is_connected(client)

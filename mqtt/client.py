@@ -28,6 +28,7 @@ class BaseClient:
         # initialize client
         self.broker = broker
         self.transport = kwargs.pop('transport', 'tcp')
+        self.tls_set = kwargs.pop('tls_set', {})
         self.stdout = kwargs.pop('stdout', OutputWrapper(sys.stdout))
         self.style = kwargs.pop('style', color_style())
         self.verbosity = kwargs.pop('verbosity', 1)
@@ -40,6 +41,10 @@ class BaseClient:
                                       transport=self.transport)
         else:
             self.client = mqtt.Client()
+
+        # tls_set?
+        if self.tls_set:
+            self.client.tls_set(**self.tls_set)
 
         # handle will message
         if 'WILL' in self.broker:
