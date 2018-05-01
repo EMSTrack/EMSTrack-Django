@@ -3,6 +3,7 @@ import ssl
 from django.conf import settings
 
 from ambulance.models import Ambulance, AmbulanceStatus
+from hospital.models import Hospital, HospitalEquipment
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
 
 
@@ -63,6 +64,34 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # assert change
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+
+        # expect more hospital and equipment
+        [client.expect(t) for t in topics[1:]]
+
+        # modify data in hospital and save should trigger message
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'no comments')
+        obj.comment = 'yet no comments'
+        obj.save()
+
+        # modify data in hospital_equipment and save should trigger message
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'True')
+        obj.value = 'False'
+        obj.save()
+
+        # process messages
+        self.loop(client)
+        client.wait()
+
+        # assert changes
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'yet no comments')
+
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'False')
 
         # Done?
         self.loop(client)
