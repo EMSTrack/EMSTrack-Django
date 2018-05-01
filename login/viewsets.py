@@ -29,7 +29,10 @@ class IsCreateByAdminOrSuper(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return view.action == 'create' and (request.user.is_staff or request.user.is_superuser)
+        if view.action == 'create':
+            return request.user.is_staff or request.user.is_superuser
+        else:
+            return True
 
 
 # Profile viewset
