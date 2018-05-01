@@ -295,9 +295,6 @@ class CallSerializer(serializers.ModelSerializer):
         # Makes sure database rolls back in case on an integrity or other errors
         with transaction.atomic():
 
-            # append publish = False to validated data
-            validated_data['publish'] = False
-
             # creates call first
             call = super().create(validated_data)
 
