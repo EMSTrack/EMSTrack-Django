@@ -320,7 +320,7 @@ class AmbulanceCall(CallPublishMixin,
         [(m.name, m.value) for m in AmbulanceCallStatus]
     status = models.CharField(max_length=1,
                               choices=AMBULANCE_CALL_STATUS_CHOICES,
-                              default=CallStatus.R.name)
+                              default=AmbulanceCallStatus.R.name)
 
     # call
     call = models.ForeignKey(Call,
