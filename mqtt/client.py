@@ -29,6 +29,7 @@ class BaseClient:
         self.broker = broker
         self.transport = kwargs.pop('transport', 'tcp')
         self.tls_set = kwargs.pop('tls_set', {})
+        self.tls_insecure = kwargs.pop('tls_insecure', False)
         self.stdout = kwargs.pop('stdout', OutputWrapper(sys.stdout))
         self.style = kwargs.pop('style', color_style())
         self.verbosity = kwargs.pop('verbosity', 1)
@@ -45,6 +46,9 @@ class BaseClient:
         # tls_set?
         if self.tls_set:
             self.client.tls_set(**self.tls_set)
+
+        # tls_insecure?
+        if self.tls_insecure:
             self.client.tls_insecure_set(True)
 
         # handle will message
