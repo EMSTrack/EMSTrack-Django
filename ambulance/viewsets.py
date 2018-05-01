@@ -147,6 +147,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 # Call ViewSet
 
 class CallViewSet(mixins.ListModelMixin,
+                  CreateModelUpdateByMixin,
                   BasePermissionMixin,
                   viewsets.GenericViewSet):
     """

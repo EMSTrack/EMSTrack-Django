@@ -23,6 +23,15 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
                 obj == request.user)
 
 
+class IsCreateByAdminOrSuper(permissions.BasePermission):
+    """
+    Only user or staff can create
+    """
+
+    def has_permission(self, request, view):
+        return view.action == 'create' and (request.user.is_staff or request.user.is_superuser)
+
+
 # Profile viewset
 
 class ProfileViewSet(viewsets.GenericViewSet):
