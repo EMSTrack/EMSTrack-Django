@@ -24,71 +24,11 @@ from hospital.models import Hospital, \
 from hospital.serializers import EquipmentSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer
 
-from .client import MQTTTestCase, MQTTTestClient
+from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 
 from ..subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
-
-
-class TestMQTT:
-
-    def is_connected(self, client, MAX_TRIES=10):
-
-        # connected?
-        k = 0
-        while not client.connected and k < MAX_TRIES:
-            k += 1
-            client.loop()
-
-        self.assertEqual(client.connected, True)
-
-    def is_subscribed(self, client, MAX_TRIES=10):
-
-        client.loop_start()
-
-        # connected?
-        k = 0
-        while len(client.subscribed) and k < MAX_TRIES:
-            k += 1
-            time.sleep(1)
-
-        client.loop_stop()
-
-        self.assertEqual(len(client.subscribed), 0)
-
-    def loop(self, *clients, MAX_TRIES=10):
-
-        # logger.debug('clients = {}'.format(clients))
-        # logger.debug('MAX_TRIES = {}'.format(MAX_TRIES))
-
-        # starts clients
-        for client in clients:
-            client.loop_start()
-
-        # connected?
-        k = 0
-        done = False
-        while not done and k < MAX_TRIES:
-            done = True
-            for client in clients:
-                done = done and client.done()
-            k += 1
-            time.sleep(1)
-
-        # stop clients
-        for client in clients:
-            client.loop_stop()
-
-        if not done:
-            # logging.debug('NOT DONE:')
-            for client in clients:
-                if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
-                    logging.debug(('expecting = {}, ' +
-                                   'publishing = {}').format(client.expecting,
-                                                             client.publishing))
-
-        self.assertEqual(done, True)
 
 
 class TestMQTTSeed(TestMQTT, MQTTTestCase):

@@ -27,6 +27,7 @@ class BaseClient:
 
         # initialize client
         self.broker = broker
+        self.transport = kwargs.pop('transport', 'tcp')
         self.stdout = kwargs.pop('stdout', OutputWrapper(sys.stdout))
         self.style = kwargs.pop('style', color_style())
         self.verbosity = kwargs.pop('verbosity', 1)
@@ -34,8 +35,9 @@ class BaseClient:
         self.forgive_mid = False
 
         if self.broker['CLIENT_ID']:
-            self.client = mqtt.Client(self.broker['CLIENT_ID'],
-                                      self.broker['CLEAN_SESSION'])
+            self.client = mqtt.Client(client_id=self.broker['CLIENT_ID'],
+                                      clean_session=self.broker['CLEAN_SESSION'],
+                                      transport=self.transport)
         else:
             self.client = mqtt.Client()
 
