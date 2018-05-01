@@ -34,10 +34,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start test client over websockets
         broker.update(settings.MQTT)
-        broker.update({'PORT': 8884})
         client_id = 'test_mqtt_subscribe_admin'
         username = broker['USERNAME']
+
         broker['CLIENT_ID'] = client_id
+        broker['PORT']=8884
 
         test_client = MQTTTestClient(broker,
                                      transport='websockets',
