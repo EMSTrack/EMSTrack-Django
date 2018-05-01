@@ -295,22 +295,23 @@ class CallSerializer(serializers.ModelSerializer):
         # Makes sure database rolls back in case on an integrity or other errors
         with transaction.atomic():
 
-            # creates call first
-            call = super().create(validated_data)
+            # creates call first, do not publish
+            call = Call(**validated_data)
+            call.save(publish=False)
 
-            # then add ambulances
+            # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
-                AmbulanceCall.objects.create(call=call,
-                                             ambulance=ambulance,
-                                             publish=False,
-                                             **ambulancecall)
+                obj = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
+                obj.save(publish=False)
 
-            # then patients
+            # then patients, do not publish
             for patient in patient_set:
-                Patient.objects.create(call=call,
-                                       publish=False,
-                                       **patient)
+                obj = Patient(call=call, **patient)
+                obj.save(publish=False)
+
+            # publish to mqtt
+            call.publish()
 
         return call
 
