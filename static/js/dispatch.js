@@ -337,7 +337,7 @@ function dispatchCall() {
 
     // var CSRFToken = getCookie('csrftoken');
     var CSRFToken = Cookies.get('csrftoken');
-    console.log('csrftoken = ' + csrftoken);
+    console.log('csrftoken = ' + CSRFToken);
 
     // retrieve csrf token
     $.ajaxSetup({
