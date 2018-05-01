@@ -10,7 +10,7 @@ from mqtt.subscribe import SubscribeClient
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
 
 
-class TestMQTTSubscribe(MQTTTestCase):
+class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
     def test(self):
 
