@@ -32,8 +32,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
 
-        # Start test client
-
+        # Start test client over websockets
         broker.update(settings.MQTT)
         broker.update({'PORT': 8884})
         client_id = 'test_mqtt_subscribe_admin'
@@ -163,6 +162,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
                                             equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
 
         # wait for disconnect
         test_client.wait()
