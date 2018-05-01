@@ -332,7 +332,7 @@ function dispatchCall() {
     form['patient_set'] = patients;
 
     // make json call
-    let postJsonUrl = '/api/call/';
+    var postJsonUrl = APIBaseUrl + 'call/';
     console.log("Will post '" + JSON.stringify(form) + "'");
 
     var CSRFToken = getCookie('csrftoken');
