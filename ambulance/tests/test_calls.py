@@ -639,6 +639,17 @@ class TestCall(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
+        response = client.post('/api/call/',
+                               {
+                                   'status': CallStatus.P.name,
+                                   'priority': CallPriority.B.name,
+                                   'number': '123',
+                                   'street': 'asdasdasd asd asd asdas',
+                                   'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+                                   'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+                               })
+        self.assertEqual(response.status_code, 403)
+
         # logout
         client.logout()
 
