@@ -362,23 +362,22 @@ function dispatchCall() {
                 + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
 
             // Show modal
-            bsalert(sucessMsg, 'alert-success', 'Success');
+            bsalert(successMsg, 'alert-success', 'Success');
             // $('.modal-title').html('Success');
             // $('.modal-body').html(successMsg).addClass('alert-success');
             // $("#dispatchModal").modal('show');
 
             endDispatching();
         },
-        failure: function (data) {
+        fail: function (jqXHR, textStatus, errorThrown) {
 
             // Show modal
             // $('.modal-title').html('Failure');
             // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
             // $("#dispatchModal").modal('show');
-            bsalert(data, 'alert-danger', 'Failure');
+            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
 
-            console.log('Post failed:');
-            console.log(data)
+            console.log(jqXHR.responseText);
 
             endDispatching();
         }
