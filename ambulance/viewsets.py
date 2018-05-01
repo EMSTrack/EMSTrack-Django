@@ -155,6 +155,9 @@ class CallViewSet(mixins.ListModelMixin,
 
     list:
     Retrieve list of calls.
+
+    create:
+    Create new call instance.P
     """
 
     filter_field = 'ambulancecall__ambulance_id'

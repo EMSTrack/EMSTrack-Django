@@ -14,7 +14,7 @@ from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
-from django.views.generic.base import View, TemplateView
+from django.views.generic.base import View
 from django.views.generic.edit import FormView, CreateView
 from drf_extra_fields.geo_fields import PointField
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
@@ -110,13 +110,13 @@ class GroupProfileAdminInline(InlineFormSet):
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
     form_class = GroupAmbulancePermissionAdminForm
-    extra = 1
+    factory_formset = {'extra': 1}
 
 
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
     form_class = GroupHospitalPermissionAdminForm
-    extra = 1
+    factory_formset = {'extra': 1}
 
 
 class GroupAdminCreateView(SuccessMessageMixin, CreateView):
