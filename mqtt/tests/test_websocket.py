@@ -17,7 +17,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start client as admin
         broker = {
             'HOST': 'localhost',
-            'PORT': 8884,
+            'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
         }
@@ -35,6 +35,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
+        broker.update({'PORT': 8884})
         client_id = 'test_mqtt_subscribe_admin'
         username = broker['USERNAME']
         broker['CLIENT_ID'] = client_id
