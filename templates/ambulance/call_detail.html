@@ -12,12 +12,8 @@
             <h3>Details:</h3>
 
             <p>
-                <strong>Identifier:</strong>
-                {{ call.id }}
-            </p>
-            <p>
                 <strong>Status:</strong>
-                {{ call.status }}
+                {{ call.status|get_call_status }}
             </p>
             <p>
                 <strong>Details:</strong>

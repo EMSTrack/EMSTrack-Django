@@ -31,6 +31,11 @@ def get_location_type(key):
 
 
 @register.filter
+def get_call_status(key):
+    return CallStatus[key].value
+
+
+@register.filter
 def get_call_priority(key):
     return CallPriority[key].value
 
