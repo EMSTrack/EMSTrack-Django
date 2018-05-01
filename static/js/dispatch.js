@@ -316,7 +316,7 @@ function dispatchCall() {
     for (var id in dispatchingAmbulances)
         if (dispatchingAmbulances.hasOwnProperty(id))
             ambulances.push({ 'ambulance_id': id });
-    form['ambulances'] = ambulances;
+    form['ambulancecall_set'] = ambulances;
 
     // patients
     var patients = [];
@@ -329,7 +329,7 @@ function dispatchCall() {
                 obj['age'] = patient[1];
             patients.push(obj);
         }
-    form['patients'] = patients;
+    form['patient_set'] = patients;
 
     // make json call
     let postJsonUrl = 'api/call/';

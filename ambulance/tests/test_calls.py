@@ -27,12 +27,49 @@ class TestCall(TestSetup):
 
         # test PatientSerializer
         c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+
+        # serialization
         p1 = Patient.objects.create(call=c1)
         serializer = PatientSerializer(p1)
         result = {
             'id': p1.id,
             'name': p1.name,
             'age': p1.age
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # deserialization
+        data = {
+            'name': 'Jose',
+            'age': 3
+        }
+        serializer = PatientSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+        serializer.save()
+
+        p1 = Patient.objects.get(name='Jose')
+        serializer = PatientSerializer(p1)
+        result = {
+            'id': p1.id,
+            'name': 'Jose',
+            'age': 3
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # deserialization
+        data = {
+            'name': 'Jose',
+        }
+        serializer = PatientSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+        serializer.save()
+
+        p1 = Patient.objects.get(name='Jose')
+        serializer = PatientSerializer(p1)
+        result = {
+            'id': p1.id,
+            'name': 'Jose',
+            'age': None
         }
         self.assertDictEqual(serializer.data, result)
 
