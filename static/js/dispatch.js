@@ -337,7 +337,7 @@ function dispatchCall() {
 
     // var CSRFToken = getCookie('csrftoken');
     var CSRFToken = Cookies.get('csrftoken');
-    console.log('csrftoken = ' + "csrftoken = ");
+    console.log('csrftoken = ' + csrftoken);
 
     // retrieve csrf token
     $.ajaxSetup({
@@ -375,7 +375,7 @@ function dispatchCall() {
             // $('.modal-title').html('Failure');
             // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
             // $("#dispatchModal").modal('show');
-            bsalert(data, 'alert-failure', 'Failure');
+            bsalert(data, 'alert-danger', 'Failure');
 
             console.log('Post failed:');
             console.log(data)
