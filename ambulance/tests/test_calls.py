@@ -64,7 +64,7 @@ class TestCall(TestSetup):
         self.assertTrue(serializer.is_valid())
         serializer.save(call_id=c1.id)
 
-        p1 = Patient.objects.get(name='Jose')
+        p1 = Patient.objects.get(name='Maria')
         serializer = PatientSerializer(p1)
         result = {
             'id': p1.id,
