@@ -574,6 +574,74 @@ class TestCall(TestSetup):
 
         # Need more tests for updates by regular authorized user
 
+    def test_call_create_viewset(self):
+
+        # instantiate client
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        response = client.post('/api/call/',
+                               {
+                                   'status': CallStatus.P.name,
+                                   'priority': CallPriority.B.name,
+                                   'number': '123',
+                                   'street': 'asdasdasd asd asd asdas',
+                                   'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+                                   'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+                               })
+        self.assertEqual(response.status_code, 201)
+        c1 = Call.objects.get(number='123')
+
+        serializer = CallSerializer(c1)
+
+        expected_patient_set = PatientSerializer(Patient.objects.filter(call_id=c1.id), many=True).data
+        expected_ambulancecall_set = AmbulanceCallSerializer(AmbulanceCall.objects.filter(call_id=c1.id), many=True).data
+
+        expected = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'number': c1.number,
+            'street': c1.street,
+            'unit': c1.unit,
+            'neighborhood': c1.neighborhood,
+            'city': c1.city,
+            'state': c1.state,
+            'zipcode': c1.zipcode,
+            'country': c1.country,
+            'location': point2str(c1.location),
+            'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecall_set': expected_ambulancecall_set,
+            'patient_set': expected_patient_set
+        }
+
+        result = serializer.data
+        self.assertCountEqual(result['ambulancecall_set'],
+                              expected['ambulancecall_set'])
+        self.assertCountEqual(result['patient_set'],
+                              expected['patient_set'])
+        expected['ambulancecall_set'] = []
+        result['ambulancecall_set'] = []
+        expected['patient_set'] = []
+        result['patient_set'] = []
+        self.assertDictEqual(result, expected)
+
+        # logout
+        client.logout()
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        # logout
+        client.logout()
+
     def test_call_list_viewset(self):
 
         # instantiate client
@@ -633,6 +701,9 @@ class TestCall(TestSetup):
         answer = CallSerializer([c1], many=True).data
         self.assertCountEqual(result, answer)
 
+        # logout
+        client.logout()
+
     def test_call_list_view(self):
 
         # instantiate client
@@ -678,6 +749,9 @@ class TestCall(TestSetup):
         self.assertContains(response, 'nani')
         self.assertNotContains(response, 'suhmuh')
 
+        # logout
+        client.logout()
+
     def test_call_detail_view(self):
 
         # instantiate client
@@ -698,3 +772,6 @@ class TestCall(TestSetup):
         self.assertContains(response, 'Test1')
 
         # TODO: Tests for unprivileged user
+
+        # logout
+        client.logout()
