@@ -33,13 +33,14 @@ class TestCall(TestSetup):
         serializer = PatientSerializer(p1)
         result = {
             'id': p1.id,
-            'name': p1.name,
-            'age': p1.age
+            'name': '',
+            'age': None
         }
         self.assertDictEqual(serializer.data, result)
 
         # deserialization
         data = {
+            'call_id': c1.id,
             'name': 'Jose',
             'age': 3
         }
@@ -58,7 +59,8 @@ class TestCall(TestSetup):
 
         # deserialization
         data = {
-            'name': 'Jose',
+            'call_id': c1.id,
+            'name': 'Maria',
         }
         serializer = PatientSerializer(data=data)
         self.assertTrue(serializer.is_valid())
@@ -68,7 +70,7 @@ class TestCall(TestSetup):
         serializer = PatientSerializer(p1)
         result = {
             'id': p1.id,
-            'name': 'Jose',
+            'name': 'Maria',
             'age': None
         }
         self.assertDictEqual(serializer.data, result)
