@@ -45,6 +45,7 @@ class BaseClient:
         # tls_set?
         if self.tls_set:
             self.client.tls_set(**self.tls_set)
+            self.client.tls_insecure_set(True)
 
         # handle will message
         if 'WILL' in self.broker:
