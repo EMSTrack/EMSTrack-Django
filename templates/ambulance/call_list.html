@@ -24,8 +24,8 @@
                 <tbody>
                     {% for call in call_list %}
                     <tr>
-                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.status|get_call_status }}</a></td>
-                        <td>{{ call.details }}</td>
+                        <td>{{ call.status|get_call_status }}</a></td>
+                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
                         <td>{{ call.priority }}</td>
                         <td>
                         {% for ambulancecall in call.ambulancecall_set.all %}
