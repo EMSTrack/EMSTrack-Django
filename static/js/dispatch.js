@@ -333,9 +333,11 @@ function dispatchCall() {
 
     // make json call
     var postJsonUrl = APIBaseUrl + 'call/';
-    console.log("Will post '" + JSON.stringify(form) + "'");
+    console.log("Form:");
+    console.log(form);
+    console.log("Will post:");
+    console.log(JSON.stringify(form));
 
-    // var CSRFToken = getCookie('csrftoken');
     var CSRFToken = Cookies.get('csrftoken');
     console.log('csrftoken = ' + CSRFToken);
 
