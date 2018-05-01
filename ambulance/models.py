@@ -247,8 +247,8 @@ class CallPriority(Enum):
 
 
 class CallStatus(Enum):
-    S = 'Started'
     P = 'Pending'
+    S = 'Started'
     E = 'Ended'
 
 
@@ -305,8 +305,22 @@ class Call(CallPublishMixin,
         return "{} ({})".format(self.location, self.priority)
 
 
+class AmbulanceCallStatus(Enum):
+    R = 'Requested'
+    A = 'Accepted'
+    I = 'Interrupted'
+    F = 'Finalized'
+
+
 class AmbulanceCall(CallPublishMixin,
                     models.Model):
+
+    # status
+    AMBULANCE_CALL_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCallStatus]
+    status = models.CharField(max_length=1,
+                              choices=AMBULANCE_CALL_STATUS_CHOICES,
+                              default=CallStatus.R.name)
 
     # call
     call = models.ForeignKey(Call,
@@ -323,7 +337,8 @@ class AmbulanceCall(CallPublishMixin,
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call(self.call)
+        SingletonPublishClient().publish_call_status(self)
+
 
     class Meta:
         unique_together = ('call', 'ambulance')

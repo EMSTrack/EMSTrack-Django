@@ -292,12 +292,17 @@ class CallSerializer(serializers.ModelSerializer):
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
         patient_set = validated_data.pop('patient_set', [])
 
-        # Makes sure database rolls back in case on an integrity or other errors
+        # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
 
             # creates call first, do not publish
             call = Call(**validated_data)
             call.save(publish=False)
+
+            # then patients, do not publish
+            for patient in patient_set:
+                obj = Patient(call=call, **patient)
+                obj.save(publish=False)
 
             # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
@@ -305,13 +310,12 @@ class CallSerializer(serializers.ModelSerializer):
                 obj = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
                 obj.save(publish=False)
 
-            # then patients, do not publish
-            for patient in patient_set:
-                obj = Patient(call=call, **patient)
-                obj.save(publish=False)
-
-            # publish to mqtt
+            # publish call to mqtt only after all includes have succeeded
             call.publish()
+
+            # then publish ambulances
+            for ambulancecall in call.ambulancecall_set.all():
+                ambulancecall.publish()
 
         return call
 
