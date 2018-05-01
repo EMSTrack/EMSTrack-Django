@@ -101,22 +101,28 @@ class GroupAdminDetailView(DetailView):
 class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
     form_class = GroupProfileAdminForm
-    min_num = 1
-    max_num = 1
-    extra = 0
-    can_delete = False
+    factory_formset = {
+        'min_num': 1,
+        'max_num': 1,
+        'extra': 0,
+        'can_delete': False
+    }
 
 
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
     form_class = GroupAmbulancePermissionAdminForm
-    factory_formset = {'extra': 1}
+    factory_formset = {
+        'extra': 1
+    }
 
 
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
     form_class = GroupHospitalPermissionAdminForm
-    factory_formset = {'extra': 1}
+    factory_formset = {
+        'extra': 1
+    }
 
 
 class GroupAdminCreateView(SuccessMessageMixin, CreateView):
@@ -177,13 +183,17 @@ class UserAdminDetailView(DetailView):
 class UserAmbulancePermissionAdminInline(InlineFormSet):
     model = UserAmbulancePermission
     form_class = UserAmbulancePermissionAdminForm
-    extra = 1
+    factory_formset = {
+        'extra': 1
+    }
 
 
 class UserHospitalPermissionAdminInline(InlineFormSet):
     model = UserHospitalPermission
     form_class = UserHospitalPermissionAdminForm
-    extra = 1
+    factory_formset = {
+        'extra': 1
+    }
 
 
 class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView):
