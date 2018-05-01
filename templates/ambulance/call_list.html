@@ -16,6 +16,7 @@
                         <th>Status</th>
                         <th>Deatils</th>
                         <th>Priority</th>
+                        <th>Ambulances</th>
                         <th>Created At</th>
                         <th>Ended At</th>
                     </tr>
@@ -26,6 +27,11 @@
                         <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.status|get_call_status }}</a></td>
                         <td>{{ call.details }}</td>
                         <td>{{ call.priority }}</td>
+                        <td>
+                        {% for ambulancecall in call.ambulancecall_set %}
+                        {{ ambulancecall.ambulance.identifier }}
+                        {% endfor %}
+                        </td>
                         <td>{{ call.created_at }}</td>
                         <td>{{ call.ended_at }}</td>
                     </tr>
