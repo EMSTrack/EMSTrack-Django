@@ -101,7 +101,7 @@ class GroupAdminDetailView(DetailView):
 class GroupProfileAdminInline(InlineFormSet):
     model = GroupProfile
     form_class = GroupProfileAdminForm
-    factory_formset = {
+    factory_kwargs = {
         'min_num': 1,
         'max_num': 1,
         'extra': 0,
@@ -112,7 +112,7 @@ class GroupProfileAdminInline(InlineFormSet):
 class GroupAmbulancePermissionAdminInline(InlineFormSet):
     model = GroupAmbulancePermission
     form_class = GroupAmbulancePermissionAdminForm
-    factory_formset = {
+    factory_kwargs = {
         'extra': 1
     }
 
@@ -120,7 +120,7 @@ class GroupAmbulancePermissionAdminInline(InlineFormSet):
 class GroupHospitalPermissionAdminInline(InlineFormSet):
     model = GroupHospitalPermission
     form_class = GroupHospitalPermissionAdminForm
-    factory_formset = {
+    factory_kwargs = {
         'extra': 1
     }
 
@@ -183,7 +183,7 @@ class UserAdminDetailView(DetailView):
 class UserAmbulancePermissionAdminInline(InlineFormSet):
     model = UserAmbulancePermission
     form_class = UserAmbulancePermissionAdminForm
-    factory_formset = {
+    factory_kwargs = {
         'extra': 1
     }
 
@@ -191,7 +191,7 @@ class UserAmbulancePermissionAdminInline(InlineFormSet):
 class UserHospitalPermissionAdminInline(InlineFormSet):
     model = UserHospitalPermission
     form_class = UserHospitalPermissionAdminForm
-    factory_formset = {
+    factory_kwargs = {
         'extra': 1
     }
 
