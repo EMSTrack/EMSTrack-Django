@@ -335,16 +335,18 @@ function dispatchCall() {
     var postJsonUrl = APIBaseUrl + 'call/';
     console.log("Will post '" + JSON.stringify(form) + "'");
 
-    var CSRFToken = getCookie('csrftoken');
+    // var CSRFToken = getCookie('csrftoken');
+    var CSRFToken = Cookies.get('csrftoken');
+    console.log('csrftoken = ' + "csrftoken = ");
 
     // retrieve csrf token
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
-            if (!CSRFSafeMethod(settings.type)) {
+            if (!CSRFSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", CSRFToken);
             }
         }
-    })
+    });
 
     // make ajax call
     $.ajax({
@@ -367,13 +369,16 @@ function dispatchCall() {
 
             endDispatching();
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        failure: function (data) {
 
             // Show modal
             // $('.modal-title').html('Failure');
             // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
             // $("#dispatchModal").modal('show');
-            bsalert(textStatus + ": " + errorThrown);
+            bsalert(data, 'alert-failure', 'Failure');
+
+            console.log('Post failed:');
+            console.log(data)
 
             endDispatching();
         }
@@ -519,22 +524,4 @@ $(function() {
 
 function CSRFSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-/*
- * getCookie extracts the csrf token for form submit
- */
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = $.trim(cookies[i]);
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }
