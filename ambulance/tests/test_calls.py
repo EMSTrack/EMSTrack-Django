@@ -32,7 +32,7 @@ class TestCall(TestSetup):
         p1 = Patient.objects.create(call=c1)
         serializer = PatientSerializer(p1)
         result = {
-            'id': c1.id,
+            'id': p1.id,
             'name': '',
             'age': None
         }
@@ -50,7 +50,7 @@ class TestCall(TestSetup):
         p1 = Patient.objects.get(name='Jose')
         serializer = PatientSerializer(p1)
         result = {
-            'id': c1.id,
+            'id': p1.id,
             'name': 'Jose',
             'age': 3
         }
@@ -58,7 +58,6 @@ class TestCall(TestSetup):
 
         # deserialization
         data = {
-            'call_id': c1.id,
             'name': 'Maria',
         }
         serializer = PatientSerializer(data=data)
@@ -68,7 +67,7 @@ class TestCall(TestSetup):
         p1 = Patient.objects.get(name='Jose')
         serializer = PatientSerializer(p1)
         result = {
-            'id': c1.id,
+            'id': p1.id,
             'name': 'Maria',
             'age': None
         }
