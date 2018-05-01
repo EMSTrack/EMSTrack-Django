@@ -9,7 +9,7 @@ from rest_framework.renderers import JSONRenderer
 import json
 
 from emstrack.tests.util import point2str
-from login.models import UserProfile, Client, ClientStatus, ClientLog, ClientActivity
+from login.models import Client, ClientStatus, ClientLog, ClientActivity
 from login.permissions import get_permissions
 
 from login.serializers import UserProfileSerializer
