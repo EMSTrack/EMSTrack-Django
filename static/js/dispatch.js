@@ -311,6 +311,11 @@ function dispatchCall() {
 
     }
 
+    // Make sure blanks are undefined
+    if (form['number'] == "") {
+        form['number'] = undefined;
+    }
+
     // ambulances
     var ambulances = [];
     for (var id in dispatchingAmbulances)
