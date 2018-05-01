@@ -252,7 +252,23 @@ class CallStatus(Enum):
     E = 'Ended'
 
 
-class Call(AddressModel, UpdatedByModel):
+class CallPublishMixin:
+
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', True)
+
+        # save to Call
+        super().save(*args, **kwargs)
+
+        if publish:
+            self.publish()
+
+
+class Call(CallPublishMixin,
+           AddressModel,
+           UpdatedByModel):
 
     # status
     CALL_STATUS_CHOICES = \
@@ -279,10 +295,7 @@ class Call(AddressModel, UpdatedByModel):
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-
-        # save to Call
-        super().save(*args, **kwargs)
+    def publish(self):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -292,7 +305,8 @@ class Call(AddressModel, UpdatedByModel):
         return "{} ({})".format(self.location, self.priority)
 
 
-class AmbulanceCall(models.Model):
+class AmbulanceCall(CallPublishMixin,
+                    models.Model):
 
     # call
     call = models.ForeignKey(Call,
@@ -304,6 +318,12 @@ class AmbulanceCall(models.Model):
 
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def publish(self):
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self.call)
 
     class Meta:
         unique_together = ('call', 'ambulance')
@@ -354,7 +374,8 @@ class AmbulanceUpdate(models.Model):
 
 # Patient might be expanded in the future
 
-class Patient(models.Model):
+class Patient(CallPublishMixin,
+              models.Model):
     """
     A model that provides patient fields.
     """
@@ -364,6 +385,12 @@ class Patient(models.Model):
 
     name = models.CharField(max_length=254, default="")
     age = models.IntegerField(null=True)
+
+    def publish(self):
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self.call)
 
 
 # Location related models

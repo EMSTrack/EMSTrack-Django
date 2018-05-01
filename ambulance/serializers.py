@@ -295,6 +295,9 @@ class CallSerializer(serializers.ModelSerializer):
         # Makes sure database rolls back in case on an integrity or other errors
         with transaction.atomic():
 
+            # append publish = False to validated data
+            validated_data['publish'] = False
+
             # creates call first
             call = super().create(validated_data)
 
@@ -303,11 +306,13 @@ class CallSerializer(serializers.ModelSerializer):
                 ambulance = ambulancecall.pop('ambulance_id')
                 AmbulanceCall.objects.create(call=call,
                                              ambulance=ambulance,
+                                             publish=False,
                                              **ambulancecall)
 
             # then patients
             for patient in patient_set:
                 Patient.objects.create(call=call,
+                                       publish=False,
                                        **patient)
 
         return call
