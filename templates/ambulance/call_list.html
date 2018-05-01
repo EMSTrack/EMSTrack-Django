@@ -28,7 +28,7 @@
                         <td>{{ call.details }}</td>
                         <td>{{ call.priority }}</td>
                         <td>
-                        {% for ambulancecall in call.ambulancecall_set %}
+                        {% for ambulancecall in call.ambulancecall_set.all %}
                         {{ ambulancecall.ambulance.identifier }}
                         {% endfor %}
                         </td>
