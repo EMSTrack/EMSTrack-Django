@@ -12,8 +12,7 @@
             <h3>Details:</h3>
 
             <p>
-                <strong>Status:</strong>
-                {{ call.status|get_call_status }}
+                <strong>Status:</strong><a href="{% url 'ambulance:call_update' pk=call.id %}">{{ call.status|get_call_status }}</a>
             </p>
             <p>
                 <strong>Details:</strong>

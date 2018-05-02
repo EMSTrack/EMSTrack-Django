@@ -502,7 +502,7 @@ class TestCall(TestSetup):
                                     data={
                                         'status': status
                                     }, partial=True)
-        self.assertFalse(serializer.is_valid())
+        serializer.is_valid()
         serializer.save(updated_by=user)
         
         # test
@@ -823,3 +823,4 @@ class TestCall(TestSetup):
 
         # logout
         client.logout()
+        
