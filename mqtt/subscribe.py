@@ -11,7 +11,7 @@ from io import BytesIO
 from login.models import Client, ClientLog, ClientStatus, ClientActivity
 from .client import BaseClient
 
-from ambulance.models import Ambulance
+from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall
 from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
@@ -65,8 +65,8 @@ class SubscribeClient(BaseClient):
                                          self.on_client_status)
 
         # call handler
-        # self.client.message_callback_add('ambulance/+/call',
-        #                                 self.on_call)
+        self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/status',
+                                         self.on_call_ambulance)
 
         # subscribe
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
@@ -74,6 +74,7 @@ class SubscribeClient(BaseClient):
         self.subscribe('user/+/client/+/hospital/+/data', 2)
         self.subscribe('user/+/client/+/hospital/+/equipment/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)
+        self.subscribe('user/+/client/+/ambulance/+/call/+/status', 2)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
@@ -720,64 +721,91 @@ class SubscribeClient(BaseClient):
         # client is not online
         logger.debug('on_client_ambulance_status: done')
 
-    # update calls
-    def on_call(self, clnt, userdata, msg):
-
-        logger.debug("on_call: msg = '{}:{}'".format(msg.topic, msg.payload))
+    # handle calls
+    def on_call_ambulance(self, clnt, userdata, msg):
 
         try:
 
-            # parse topic
-            user, client, data, call_id = self.parse_topic(msg, 4)
+            logger.debug("on_call_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
+
+            #parse topic
+            user, client, status, ambulance_id, call_id = self.parse_topic(msg, 5, json=False)
 
         except Exception as e:
 
-            logger.debug("on_call: ParseException '{}'".format(e))
+            logger.debug("on_call_ambulance: ParseException '{}".format(e))
             return
 
         try:
 
+            ambulance = Ambulance.objects.get(id=ambulance_id)
             call = Call.objects.get(id=call_id)
+
+        except Ambulance.DoesNotExist:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
+            return
 
         except Call.DoesNotExist:
 
-            # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload,
                                     "Call with id '{}' does not exist".format(call_id))
             return
 
         except Exception as e:
-            # send error message to user
+
             self.send_error_message(user, client, msg.topic, msg.payload,
                                     "Exception: '{}'".format(e))
             return
 
-        logger.debug('on_call: call = {}'.format(call))
-
         try:
 
-            # update call
-            serializer = CallSerializer(call)  # TODO: Find structure
+            # Is call ended?
+            if call.status == CallStatus.E.name:
 
-            if serializer.is_valid():
-                logger.debug('on_call: vaild serializer')
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Call with id '{}' already ended".format(call_id))
+                return
 
-                # save to database
-                serializer.save(updated_by=user)
+            try:
+
+                # Is ambulance part of this call?
+                ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance.id)
+
+            except AmbulanceCall.DoesNotExist:
+
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
+                return
+
+            if status == "Accepted":
+
+                if call.status == CallStatus.P.name:
+
+                    # change call status to started
+                    call.status = CallStatus.S.name
+                    call.save()
+
+                # change ambulancecall status to ongoing
+                ambulancecall.status = AmbulanceCallStatus.O.name
+                ambulancecall.save()
+
+            elif status == "Finished":
+
+                pass
 
             else:
 
-                logger.debug('on_call: INVALID serializer')
-
-                # send error message to user
                 self.send_error_message(user, client, msg.topic, msg.payload,
-                                        serializer.errors)
+                                        "Invalid status '{}'".format(status))
+                return
 
         except Exception as e:
 
-            logger.debug('on_call: serializer EXCEPTION')
+            logger.debug('on_call_ambulance: ambulance EXCEPTION')
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload, e)
 
-        logger.debug('on_call: DONE')
+        logger.debug('on_call_ambulance: DONE')
