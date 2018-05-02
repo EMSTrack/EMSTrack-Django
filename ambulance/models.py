@@ -307,9 +307,9 @@ class Call(CallPublishMixin,
 
 class AmbulanceCallStatus(Enum):
     R = 'Requested'
-    A = 'Accepted'
+    O = 'Ongoing'
     I = 'Interrupted'
-    F = 'Finalized'
+    C = 'Completed'
 
 
 class AmbulanceCall(CallPublishMixin,

@@ -148,7 +148,7 @@ class PublishClient(BaseClient):
     def publish_call_status(self, ambulancecall, qos=2, retain=True):
         self.publish_topic('ambulance/{}/call/{}/status'.format(ambulancecall.ambulance_id,
                                                                 ambulancecall.call_id),
-                           ambulancecall.status,
+                           AmbulanceCallStatus[ambulancecall.status].value,
                            qos=qos,
                            retain=retain)
 

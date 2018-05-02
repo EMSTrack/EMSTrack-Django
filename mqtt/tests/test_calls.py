@@ -1,31 +1,17 @@
+import json
 import logging
-import time
 
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 
-from rest_framework.renderers import JSONRenderer
-import json
-
-from emstrack.tests.util import point2str
-from login.models import Client, ClientStatus, ClientLog, ClientActivity
-from login.permissions import get_permissions
-
-from login.serializers import UserProfileSerializer
-from login.views import SettingsView
-
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability, CallStatus, CallPriority
-from ambulance.serializers import AmbulanceSerializer, CallSerializer
-
+    AmbulanceStatus, CallStatus, CallPriority
+from ambulance.serializers import CallSerializer
+from emstrack.tests.util import point2str
 from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
-from hospital.serializers import EquipmentSerializer, \
-    HospitalSerializer, HospitalEquipmentSerializer
-
+    HospitalEquipment
+from login.models import Client, ClientStatus, ClientLog
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
-
 from ..subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
@@ -102,6 +88,13 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         test_client.expect('ambulance/{}/call/{}/status'.format(self.a2.id, call.id))
         self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
         self.loop(test_client)
