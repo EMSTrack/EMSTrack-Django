@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, CallStatus, CallPriority
+    AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus
 from ambulance.serializers import CallSerializer
 from emstrack.tests.util import point2str
 from hospital.models import Hospital, \
@@ -107,6 +107,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
+
+        # Check if call status changed to Started
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.S.name)
+
+        # Check if ambulancecall status changed to Ongoing
+        ambulancecall = call.ambulancecall.get(ambulance_id=self.a1.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
 
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')

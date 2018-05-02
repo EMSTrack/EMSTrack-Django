@@ -11,7 +11,7 @@ from io import BytesIO
 from login.models import Client, ClientLog, ClientStatus, ClientActivity
 from .client import BaseClient
 
-from ambulance.models import Ambulance
+from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus
 from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
@@ -761,6 +761,13 @@ class SubscribeClient(BaseClient):
 
         try:
 
+            # Is call ended?
+            if call.status == CallStatus.E.name:
+
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Call with id '{}' already ended".format(call_id))
+                return
+
             # Is ambulance part of this call?
             if not call.ambulancecall_set.filter(ambulance_id=ambulance.id):
 
@@ -769,9 +776,18 @@ class SubscribeClient(BaseClient):
                 return
 
             if status == "Accepted":
-                pass
+
+                if call.status == CallStatus.P.name:
+
+                    # change call status to started
+                    call.status = CallStatus.S.name
+
+                # change ambulancecall status to ongoing
+                call.ambulancecall.status = AmbulanceCallStatus.O.name
+                call.save()
 
             elif status == "Finished":
+
                 pass
 
             else:
