@@ -97,10 +97,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
-        test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a1.id))
+        test_client.expect('ambulance/{}/call/{}/status'.format(self.a1.id, call.id))
         self.is_subscribed(test_client)
 
-        test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a2.id))
+        test_client.expect('ambulance/{}/call/{}/status'.format(self.a2.id, call.id))
         self.is_subscribed(test_client)
 
         # process messages
