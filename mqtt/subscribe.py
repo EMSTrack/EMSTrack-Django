@@ -729,7 +729,7 @@ class SubscribeClient(BaseClient):
             logger.debug("on_call_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             #parse topic
-            user, client, status, ambulance_id, call_id = self.parse_topic(msg, 5)
+            user, client, status, ambulance_id, call_id = self.parse_topic(msg, 5, json=False)
 
         except Exception as e:
 
