@@ -16,8 +16,8 @@ from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-from ambulance.serializers import AmbulanceSerializer
+    AmbulanceStatus, AmbulanceCapability, CallStatus, CallPriority
+from ambulance.serializers import AmbulanceSerializer, CallSerializer
 
 from hospital.models import Hospital, \
     Equipment, HospitalEquipment, EquipmentType
@@ -79,6 +79,25 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # check record log
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # create call using serializer
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+
+        # subscribe to call and ambulance call status
+        test_client.expect('call/{}/data'.format(call.id))
+        test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a1.id))
+        test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a2.id))
+        self.is_subscribed(test_client)
 
         # wait for disconnect
         test_client.wait()
