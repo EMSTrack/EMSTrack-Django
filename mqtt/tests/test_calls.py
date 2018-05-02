@@ -98,7 +98,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.P.name)
 
         # Check if ambulancecall status is Requested
-        ambulancecall = call.ambulancecall_set.filter(ambulance_id=self.a1.id)[0]
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
         # test_client publishes client_id to location_client
@@ -121,7 +121,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.S.name)
 
         # Check if ambulancecall status changed to Ongoing
-        ambulancecall = call.ambulancecall_set.filter(ambulance_id=self.a1.id)[0]
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
 
         # Client handshake

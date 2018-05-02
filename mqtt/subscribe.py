@@ -11,7 +11,7 @@ from io import BytesIO
 from login.models import Client, ClientLog, ClientStatus, ClientActivity
 from .client import BaseClient
 
-from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus
+from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall
 from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
@@ -768,16 +768,16 @@ class SubscribeClient(BaseClient):
                                         "Call with id '{}' already ended".format(call_id))
                 return
 
-            # Is ambulance part of this call?
-            ambulancecall = call.ambulancecall_set.filter(ambulance_id=ambulance.id)
-            if not ambulancecall:
+            try:
+
+                # Is ambulance part of this call?
+                ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance.id)
+
+            except AmbulanceCall.DoesNotExist:
 
                 self.send_error_message(user, client, msg.topic, msg.payload,
                                         "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
-
-            # get first
-            ambulancecall = ambulancecall[0]
 
             if status == "Accepted":
 
