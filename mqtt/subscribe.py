@@ -776,6 +776,9 @@ class SubscribeClient(BaseClient):
                                         "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
 
+            # get first
+            ambulancecall = ambulancecall[0]
+
             if status == "Accepted":
 
                 if call.status == CallStatus.P.name:
