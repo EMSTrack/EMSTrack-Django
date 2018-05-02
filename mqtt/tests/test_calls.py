@@ -1,0 +1,401 @@
+import logging
+import time
+
+from django.contrib.auth.models import User
+from django.conf import settings
+from django.utils import timezone
+
+from rest_framework.renderers import JSONRenderer
+import json
+
+from emstrack.tests.util import point2str
+from login.models import Client, ClientStatus, ClientLog, ClientActivity
+from login.permissions import get_permissions
+
+from login.serializers import UserProfileSerializer
+from login.views import SettingsView
+
+from ambulance.models import Ambulance, \
+    AmbulanceStatus, AmbulanceCapability
+from ambulance.serializers import AmbulanceSerializer
+
+from hospital.models import Hospital, \
+    Equipment, HospitalEquipment, EquipmentType
+from hospital.serializers import EquipmentSerializer, \
+    HospitalSerializer, HospitalEquipmentSerializer
+
+from .client import MQTTTestCase, MQTTTestClient, TestMQTT
+
+from ..subscribe import SubscribeClient
+
+logger = logging.getLogger(__name__)
+
+
+class TestMQTTCalls(TestMQTT, MQTTTestCase):
+
+    def _test(self):
+
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        username = broker['USERNAME']
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+
+    def _test(self):
+
+        # Modify ambulance
+
+        # retrieve current ambulance status
+        obj = Ambulance.objects.get(id=self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        # retrieve message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
+
+        # publish change
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                         client_id, 
+                                                                         self.a1.id),
+                            json.dumps({
+                                'status': AmbulanceStatus.OS.name,
+                            }), qos=0)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # verify change
+        obj = Ambulance.objects.get(id=self.a1.id)
+        self.assertEqual(obj.status, AmbulanceStatus.OS.name)
+
+        # Modify hospital
+
+        # retrieve current hospital status
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'no comments')
+
+        # retrieve message that is there already due to creation
+        test_client.expect('hospital/{}/data'.format(self.h1.id))
+        self.is_subscribed(test_client)
+
+        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username, 
+                                                                        client_id,
+                                                                        self.h1.id),
+                            json.dumps({
+                                'comment': 'no more comments',
+                            }), qos=0)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect update once
+        test_client.expect('hospital/{}/data'.format(self.h1.id))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # verify change
+        obj = Hospital.objects.get(id=self.h1.id)
+        self.assertEqual(obj.comment, 'no more comments')
+
+        # Modify hospital equipment
+
+        # retrieve current equipment value
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'True')
+
+        # retrieve message that is there already due to creation
+        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                                  self.e1.id))
+        self.is_subscribed(test_client)
+
+        test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                     client_id,
+                                                                                     self.h1.id,
+                                                                                     self.e1.id),
+                            json.dumps({
+                                'value': 'False',
+                            }), qos=0)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect update once
+        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
+                                                                  self.e1.id))
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # verify change
+        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
+                                            equipment_id=self.e1.id)
+        self.assertEqual(obj.value, 'False')
+
+        # test bulk ambulance update
+
+        # retrieve current ambulance status
+        obj = Ambulance.objects.get(id=self.a2.id)
+        self.assertEqual(obj.status, AmbulanceStatus.UK.name)
+
+        # retrieve message that is there already due to creation
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
+        self.is_subscribed(test_client)
+
+        location = {'latitude': -2., 'longitude': 7.}
+        timestamp = timezone.now()
+        data = [
+            {
+                'status': AmbulanceStatus.OS.name,
+            },
+            {
+                'status': AmbulanceStatus.AV.name,
+                'location': location,
+            },
+            {
+                'status': AmbulanceStatus.PB.name,
+                'timestamp': str(timestamp)
+            }
+        ]
+
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                         client_id,
+                                                                         self.a2.id),
+                            json.dumps(data), qos=0)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # verify change
+        obj = Ambulance.objects.get(id=self.a2.id)
+        self.assertEqual(obj.status, AmbulanceStatus.PB.name)
+        self.assertEqual(obj.timestamp, timestamp)
+        self.assertEqual(point2str(obj.location), point2str(location))
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.F.name)
+
+        # check record log
+        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
+        self.assertEqual(len(obj), 2)
+        self.assertEqual(obj[0].status, ClientStatus.O.name)
+        self.assertEqual(obj[1].status, ClientStatus.F.name)
+
+        test_invalid_serializer = False
+        if test_invalid_serializer:
+
+            # generate ERROR: JSON formated incorrectly
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username,
+                                                                             client_id,
+                                                                             self.a1.id),
+                                '{ "value": ',
+                                qos=0)
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
+
+            # generate ERROR: JSON formated incorrectly
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                            client_id,
+                                                                            self.h1.id),
+                                '{ "value": ',
+                                qos=0)
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
+
+            # generate ERROR: JSON formated incorrectly
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+            self.is_subscribed(test_client)
+
+            test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                         client_id,
+                                                                                         self.h1.id,
+                                                                                         self.e1.id),
+                                '{ "value": ',
+                                qos=0)
+
+            # process messages
+            self.loop(test_client)
+            subscribe_client.loop()
+
+            # WARNING: The next tests prevent the test database from
+            # being removed at the end of the test. It is not clear why
+            # but it could be django bug related to the LiveServerThread
+            # not being thread safe:
+            #
+            # https://code.djangoproject.com/ticket/22420 Just run a
+            #
+            # limited set of tests that do not make use of
+            # LiveServerThread for deleting the test database, for
+            # example:
+            #
+            #     ./manage test ambulance.test
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                             client_id,
+                                                                             1111),
+                                json.dumps({
+                                    'status': AmbulanceStatus.OS.name,
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+
+            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                            client_id,
+                                                                            1111),
+                                json.dumps({
+                                    'comment': 'comment',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: wrong id
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+
+            test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
+                                                                                         client_id,
+                                                                                         self.h1.id,
+                                                                                         -1),
+                                json.dumps({
+                                    'comment': 'comment',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+
+            # generate ERROR: invalid serializer
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+
+            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
+                                                                             client_id,
+                                                                             self.a1.id),
+                                json.dumps({
+                                    'status': 'Invalid',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+            self.loop(test_client)
+            subscribe_client.loop()
+
+            # generate ERROR: invalid serializer
+
+            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
+
+            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
+                                                                            client_id,
+                                                                            self.h1.id),
+                                json.dumps({
+                                    'location': 'PPOINT()',
+                                }), qos=0)
+
+            # process messages
+            self.loop(test_client, subscribe_client)
+            subscribe_client.loop()
+            self.loop(test_client)
+            subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
