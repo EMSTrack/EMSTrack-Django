@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
-    def _test(self):
+    def test(self):
 
         # Start client as admin
         broker = {
