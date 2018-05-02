@@ -311,12 +311,17 @@ function dispatchCall() {
 
     }
 
+    // Make sure blanks are undefined
+    if (form['number'] == "") {
+        form['number'] = undefined;
+    }
+
     // ambulances
     var ambulances = [];
     for (var id in dispatchingAmbulances)
         if (dispatchingAmbulances.hasOwnProperty(id))
             ambulances.push({ 'ambulance_id': id });
-    form['ambulances'] = ambulances;
+    form['ambulancecall_set'] = ambulances;
 
     // patients
     var patients = [];
@@ -329,29 +334,34 @@ function dispatchCall() {
                 obj['age'] = patient[1];
             patients.push(obj);
         }
-    form['patients'] = patients;
+    form['patient_set'] = patients;
 
     // make json call
-    let postJsonUrl = 'api/call/';
-    console.log("Will post '" + JSON.stringify(form) + "'");
+    var postJsonUrl = APIBaseUrl + 'call/';
+    console.log("Form:");
+    console.log(form);
+    console.log("Will post:");
+    console.log(JSON.stringify(form));
 
-    var CSRFToken = getCookie('csrftoken');
+    var CSRFToken = Cookies.get('csrftoken');
+    console.log('csrftoken = ' + CSRFToken);
 
     // retrieve csrf token
     $.ajaxSetup({
         beforeSend: function (xhr, settings) {
-            if (!CSRFSafeMethod(settings.type)) {
+            if (!CSRFSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", CSRFToken);
             }
         }
-    })
+    });
 
     // make ajax call
     $.ajax({
         url: postJsonUrl,
         type: 'POST',
         dataType: 'json',
-        data: form,
+        contentType: 'application/json',
+        data: JSON.stringify(form),
         success: function (data) {
 
             var successMsg = '<strong>Success</strong><br/>' +
@@ -360,7 +370,7 @@ function dispatchCall() {
                 + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
 
             // Show modal
-            bsalert(sucessMsg, 'alert-success', 'Success');
+            bsalert(successMsg, 'alert-success', 'Success');
             // $('.modal-title').html('Success');
             // $('.modal-body').html(successMsg).addClass('alert-success');
             // $("#dispatchModal").modal('show');
@@ -373,7 +383,9 @@ function dispatchCall() {
             // $('.modal-title').html('Failure');
             // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
             // $("#dispatchModal").modal('show');
-            bsalert(textStatus + ": " + errorThrown);
+            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
+
+            console.log(jqXHR.responseText);
 
             endDispatching();
         }
@@ -519,22 +531,4 @@ $(function() {
 
 function CSRFSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-
-/*
- * getCookie extracts the csrf token for form submit
- */
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = $.trim(cookies[i]);
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
 }

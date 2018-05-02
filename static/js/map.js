@@ -271,14 +271,14 @@ function onConnect() {
 
         // Subscribe to hospitals
         $.each(data.hospitals, function (index) {
-            let topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
+            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
         });
 
         // Subscribe to ambulances
         $.each(data.ambulances, function (index) {
-            let topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
+            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
         });
@@ -392,12 +392,12 @@ function onMessageArrived(message) {
         '" arrived');
 
     // split topic
-    let topic = message.destinationName.split("/");
+    var topic = message.destinationName.split("/");
 
     try {
 
         // parse message
-        let data = JSON.parse(message.payloadString);
+        var data = JSON.parse(message.payloadString);
 
         // Look for ambulance/{id}/data
         if (topic[0] === 'ambulance' &&
@@ -422,7 +422,7 @@ function onMessageArrived(message) {
 function updateAmbulance(ambulance) {
 
     // retrieve id
-    let id = ambulance.id;
+    var id = ambulance.id;
 
     // already exists?
     if (id in ambulances) {
@@ -469,7 +469,7 @@ function updateAmbulance(ambulance) {
 function updateHospital(hospital) {
 
     // retrieve id
-    let id = hospital.id;
+    var id = hospital.id;
 
     // already exists?
     if (id in hospitals) {
@@ -598,7 +598,7 @@ function addHospitalToMap(hospital) {
     hospitals[hospital.id] = hospital;
 
     // set icon by status
-    let coloredIcon = hospitalIcon;
+    var coloredIcon = hospitalIcon;
 
     // If hospital marker doesn't exist
     hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,

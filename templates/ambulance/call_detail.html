@@ -12,12 +12,8 @@
             <h3>Details:</h3>
 
             <p>
-                <strong>Identifier:</strong>
-                {{ call.id }}
-            </p>
-            <p>
                 <strong>Status:</strong>
-                {{ call.status }}
+                {{ call.status|get_call_status }}
             </p>
             <p>
                 <strong>Details:</strong>
@@ -30,6 +26,14 @@
             <p>
                 <strong>Created at:</strong>
                 {{ call.created_at }}
+            </p>
+            <p>
+                <strong>Pending at:</strong>
+                {{ call.pending_at }}
+            </p>
+            <p>
+                <strong>Started at:</strong>
+                {{ call.started_at }}
             </p>
             <p>
                 <strong>Ended at:</strong>

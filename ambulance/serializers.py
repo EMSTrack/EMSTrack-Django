@@ -292,23 +292,30 @@ class CallSerializer(serializers.ModelSerializer):
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
         patient_set = validated_data.pop('patient_set', [])
 
-        # Makes sure database rolls back in case on an integrity or other errors
+        # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
 
-            # creates call first
-            call = super().create(validated_data)
+            # creates call first, do not publish
+            call = Call(**validated_data)
+            call.save(publish=False)
 
-            # then add ambulances
+            # then patients, do not publish
+            for patient in patient_set:
+                obj = Patient(call=call, **patient)
+                obj.save(publish=False)
+
+            # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
-                AmbulanceCall.objects.create(call=call,
-                                             ambulance=ambulance,
-                                             **ambulancecall)
+                obj = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
+                obj.save(publish=False)
 
-            # then patients
-            for patient in patient_set:
-                Patient.objects.create(call=call,
-                                       **patient)
+            # publish call to mqtt only after all includes have succeeded
+            call.publish()
+
+            # then publish ambulances
+            for ambulancecall in call.ambulancecall_set.all():
+                ambulancecall.publish()
 
         return call
 
@@ -326,7 +333,6 @@ class CallSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
     def validate(self, data):
-        if data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
-            raise serializers.ValidationError('Started call and ended call must have ' +
-                                              'ambulancecall_set')
+        if 'status' in data and data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
+            raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
         return data

@@ -2,6 +2,7 @@ import atexit
 import logging
 import os
 
+from ambulance.models import CallStatus, AmbulanceCallStatus
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
 from hospital.models import Equipment
@@ -128,14 +129,32 @@ class PublishClient(BaseClient):
                                                                  equipment.equipment.id))
 
     def publish_call(self, call, qos=2, retain=True):
-        self.publish_topic('call/{}/data'.format(call.id),
-                           CallSerializer(call),
+        if call.status == CallStatus.E:
+
+            # call ended, remove topic
+            self.remove_call(call)
+
+        else:
+
+            # otherwise, publish call data
+            self.publish_topic('call/{}/data'.format(call.id),
+                               CallSerializer(call),
+                               qos=qos,
+                               retain=retain)
+
+    def remove_call(self, call):
+        self.remove_topic('call/{}/data'.format(call.id))
+
+    def publish_call_status(self, ambulancecall, qos=2, retain=True):
+        self.publish_topic('ambulance/{}/call/{}/status'.format(ambulancecall.ambulance_id,
+                                                                ambulancecall.call_id),
+                           AmbulanceCallStatus[ambulancecall.status].value,
                            qos=qos,
                            retain=retain)
 
-    # Method to remove calls, no metadata?
-    def remove_call(self, call):
-        self.remove_topic('call/{}/data'.format(call.id))
+    def remove_call_status(self, ambulancecall):
+        self.remove_topic('ambulance/{}/call/{}/status'.format(ambulancecall.ambulance_id,
+                                                               ambulancecall.call_id))
 
 
 # Uses Alex Martelli's Borg for making PublishClient act like a singleton

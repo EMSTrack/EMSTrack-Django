@@ -1,8 +1,8 @@
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
-from rest_framework.decorators import detail_route
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
 
 from .models import UserProfile
@@ -23,13 +23,25 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
                 obj == request.user)
 
 
+class IsCreateByAdminOrSuper(permissions.BasePermission):
+    """
+    Only user or staff can create
+    """
+
+    def has_permission(self, request, view):
+        if view.action == 'create':
+            return request.user.is_staff or request.user.is_superuser
+        else:
+            return True
+
+
 # Profile viewset
 
 class ProfileViewSet(viewsets.GenericViewSet):
    
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
-    permission_classes = (permissions.IsAuthenticated,
+    permission_classes = (IsAuthenticated,
                           IsUserOrAdminOrSuper,)
     lookup_field = 'username'
 

@@ -13,10 +13,10 @@
             <table class="table table-striped table-sm">
                 <thead>
                     <tr>
-                        <th>Identifier</th>
                         <th>Status</th>
-                        <th>Deatils</th>
+                        <th>Details</th>
                         <th>Priority</th>
+                        <th>Ambulances</th>
                         <th>Created At</th>
                         <th>Ended At</th>
                     </tr>
@@ -24,10 +24,14 @@
                 <tbody>
                     {% for call in call_list %}
                     <tr>
-                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.id }}</a></td>
-                        <td>{{ call.status }}</td>
-                        <td>{{ call.details }}</td>
+                        <td>{{ call.status|get_call_status }}</a></td>
+                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
                         <td>{{ call.priority }}</td>
+                        <td>
+                        {% for ambulancecall in call.ambulancecall_set.all %}
+                        {{ ambulancecall.ambulance.identifier }}
+                        {% endfor %}
+                        </td>
                         <td>{{ call.created_at }}</td>
                         <td>{{ call.ended_at }}</td>
                     </tr>
