@@ -93,6 +93,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # Check if call status is Pending
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.P.name)
+
+        # Check if ambulancecall status is Requested
+        ambulancecall = call.ambulancecall.get(ambulance_id=self.a1.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
         # test_client publishes client_id to location_client
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), client_id)
 

@@ -769,7 +769,8 @@ class SubscribeClient(BaseClient):
                 return
 
             # Is ambulance part of this call?
-            if not call.ambulancecall_set.filter(ambulance_id=ambulance.id):
+            ambulancecall = call.ambulancecall_set.filter(ambulance_id=ambulance.id)
+            if not ambulancecall:
 
                 self.send_error_message(user, client, msg.topic, msg.payload,
                                         "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
@@ -781,10 +782,11 @@ class SubscribeClient(BaseClient):
 
                     # change call status to started
                     call.status = CallStatus.S.name
+                    call.save()
 
                 # change ambulancecall status to ongoing
-                call.ambulancecall.status = AmbulanceCallStatus.O.name
-                call.save()
+                ambulancecall.status = AmbulanceCallStatus.O.name
+                ambulancecall.save()
 
             elif status == "Finished":
 
