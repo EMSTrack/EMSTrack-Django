@@ -95,7 +95,11 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a1.id))
+        self.is_subscribed(test_client)
+
         test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a2.id))
         self.is_subscribed(test_client)
 
