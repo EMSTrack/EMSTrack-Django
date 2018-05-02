@@ -99,6 +99,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/{}/status'.format(call.id, self.a2.id))
         self.is_subscribed(test_client)
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
