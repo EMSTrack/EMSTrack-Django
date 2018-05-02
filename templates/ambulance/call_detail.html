@@ -41,6 +41,58 @@
             </p>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>Patients:</h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for patient in call.patient_list.all %}
+                <tr>
+                    <td>
+                        {{ patient.name }}
+                    </td>
+                    <td>
+                        {{ patient.age }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>Ambulances:</h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>ambulance_id</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ambulance in call.ambulancecall_set.all %}
+                <tr>
+                    <td>
+                        {{ ambulance.ambulance_id }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
