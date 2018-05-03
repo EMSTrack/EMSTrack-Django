@@ -777,7 +777,7 @@ class SubscribeClient(BaseClient):
 
               self.send_error_message(user, client, msg.topic, msg.payload,
                                       "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
-                return
+              return
 
             if status == "Accepted":
 
