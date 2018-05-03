@@ -770,13 +770,13 @@ class SubscribeClient(BaseClient):
 
             try:
 
-                # Is ambulance part of this call?
-                ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance.id)
+              # Is ambulance part of this call?
+              ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance.id)
 
             except AmbulanceCall.DoesNotExist:
 
-                self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
+              self.send_error_message(user, client, msg.topic, msg.payload,
+                                      "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
 
             if status == "Accepted":
@@ -791,9 +791,18 @@ class SubscribeClient(BaseClient):
                 ambulancecall.status = AmbulanceCallStatus.O.name
                 ambulancecall.save()
 
+
             elif status == "Finished":
 
-                pass
+                if call.status == CallStatus.S.name:
+
+                  # change call status to finished
+                  call.status = CallStatus.E.name
+                  call.save()
+
+                # change ambulance status to complemted
+                ambulancecall.status = AmbulanceCallStatus.C.name
+                ambulancecall.save()
 
             else:
 

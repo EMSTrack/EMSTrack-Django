@@ -124,6 +124,76 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
 
+        # adding new testing 
+        # subscribe to call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "patient bound" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "patient bound")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "at patient" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "at patient")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+        
+        # test_client publishes "hospital bound" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "hospital bound")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+        
+        # test_client publishes "at hospital" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "at hospital")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+        
+        # test_client publishes "Finished" to call status
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+                                                                                   self.a1.id, call.id), "Finished")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Check if call status is Started
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.S.name)
+
+        # Check if ambulancecall status is Ongoing
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+        
+        # Check if call status changed to Finished
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.E.name)
+
+        # Check if ambulancecall a1 status changed to Completed
+        ambulancecall =  call.ambulancecall_set.get(ambulance_id=self.a1.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # Check if ambulancecall a2 status changed to Completed
+        ambulancecall =  call.ambulancecall_set.get(ambulance_id=self.a2.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # ending new testing
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
