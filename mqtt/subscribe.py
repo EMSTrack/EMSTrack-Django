@@ -228,7 +228,7 @@ class SubscribeClient(BaseClient):
             logger.debug("on_ambulance: msg = '{}'".format(msg.topic, msg.payload))
 
             # parse topic
-            user, client, data, ambulance_id = self.parse_topic(msg, 4)
+            user, client, data, ambulance_id = self.parse_topic(msg, 4, json=False)
 
         except Exception as e:
 
