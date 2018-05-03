@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 
 <div class="container">
     <div class="row">
@@ -41,7 +38,22 @@
             </p>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>
+                Call Progress:
+            </h3>
+
+            <div id="map" class="my-2" style="height: 600px"></div>
+
+        </div>
+    </div>
+
 </div>
 
-{% endblock %}
+<script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
+<script src="{% static 'js/call_detail.js' %}"></script>
 
+{% endblock %}
