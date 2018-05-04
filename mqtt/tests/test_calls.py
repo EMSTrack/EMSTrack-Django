@@ -202,6 +202,9 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
 
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -211,10 +214,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
     def _test(self):
-
-        # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
-
 
 
         # process messages
