@@ -118,10 +118,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # subscribe to call and ambulance call status
-        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
-        self.is_subscribed(test_client)
-
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    self.a1.id, call.id), "Accepted")
@@ -129,6 +125,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
+        self.is_subscribed(test_client)
 
         # Check if call status changed to Started
         call = Call.objects.get(id=call.id)
