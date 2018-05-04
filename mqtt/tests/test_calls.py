@@ -79,16 +79,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, self.a1.id)
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-    def _test(self):
-
         # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
         self.is_subscribed(test_client)
@@ -117,6 +107,16 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+    def _test(self):
 
         # test_client publishes client_id to location_client
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
