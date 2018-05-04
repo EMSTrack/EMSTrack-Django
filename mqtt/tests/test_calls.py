@@ -101,6 +101,16 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                                 'location_client_id': client_id,
                             }))
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+    def _test(self):
+
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    self.a1.id, call.id), "Accepted")
@@ -124,15 +134,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-    def _test(self):
 
         # test_client publishes "patient bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
