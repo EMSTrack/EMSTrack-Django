@@ -99,7 +99,7 @@ class SubscribeClient(BaseClient):
             message = JSONRenderer().render({
                 'topic': topic,
                 'payload': payload,
-                'error': error
+                'error': str(error)
             })
             self.publish('user/{}/client/{}/error'.format(username, client.client_id), message, qos=qos)
 
@@ -301,7 +301,7 @@ class SubscribeClient(BaseClient):
                         # logger.debug("location_client changed from '{}' to {}".format(old_location_client,
                         #                                                               new_location_client))
 
-                        # log in old client
+                        # log out old client
                         if old_location_client:
                             log = ClientLog(client=old_location_client,
                                             status=old_location_client.status,
