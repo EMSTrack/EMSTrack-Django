@@ -424,12 +424,14 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
-        # Check if call status is Ongoing
+        # Check if call status is Started
         call = Call.objects.get(id=call.id)
-        self.assertEqual(call.status, CallStatus.O.name)
+        self.assertEqual(call.status, CallStatus.S.name)
 
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # TODO: Create another client to handle ambulance_id2
 
         # process messages
         self.loop(test_client)
