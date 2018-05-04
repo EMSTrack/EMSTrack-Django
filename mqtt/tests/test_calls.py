@@ -119,28 +119,40 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client)
 
         # test_client publishes "patient bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"PB"}')
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'status': AmbulanceStatus.PB.name,
+                            }))
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # test_client publishes "at patient" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"AP"}')
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'status': AmbulanceStatus.AP.name,
+                            }))
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
         
         # test_client publishes "hospital bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"HB"}')
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'status': AmbulanceStatus.HB.name,
+                            }))
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
         
         # test_client publishes "at hospital" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"AH"}')
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'status': AmbulanceStatus.AH.name,
+                            }))
 
         # process messages
         self.loop(test_client)
