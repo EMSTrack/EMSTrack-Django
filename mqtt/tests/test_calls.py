@@ -70,22 +70,18 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
         self.is_subscribed(test_client)
 
-        # create call using serializer
+        # create call using serializer, one ambulance first
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
-
-        # subscribe to call and ambulance call status
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
@@ -96,19 +92,11 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.P.name)
 
         # Check if ambulancecall status is Requested
-        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a2.id)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
-        # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
         # test_client publishes client_id to location_client
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), client_id)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
@@ -122,15 +110,11 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
-        # Check if ambulancecall status is still Requested
-        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a2.id)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
         # Check if ambulancecall status changed to Ongoing
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
 
-        # subscribe to call
+        # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
@@ -169,6 +153,8 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
+
+    def _test(self):
 
         # Check if call status is Started
         call = Call.objects.get(id=call.id)
