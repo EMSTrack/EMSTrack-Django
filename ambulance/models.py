@@ -295,6 +295,16 @@ class Call(CallPublishMixin,
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+
+        # call super
+        super(CallPublishMixin, self).save(*args, **kwargs)
+
+        if self.status == CallStatus.E.name:
+            # remove topic from mqtt server
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().remove_call(self)
+
     def publish(self):
 
         # publish to mqtt
