@@ -96,7 +96,8 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
         # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), client_id)
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            '{"location_client_id":"' + client_id + '"}')
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
