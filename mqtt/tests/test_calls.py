@@ -206,6 +206,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
 
+        # expect blank call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
@@ -441,3 +449,4 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         test_client.wait()
         subscribe_client.wait()
 
+# TODO: Create another test where 2 clients to handle two ambulances simultaneously
