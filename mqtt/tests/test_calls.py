@@ -119,28 +119,28 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client)
 
         # test_client publishes "patient bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "patient bound")
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"PB"}')
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # test_client publishes "at patient" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "at patient")
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"AP"}')
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
         
         # test_client publishes "hospital bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "hospital bound")
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"HB"}')
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
         
         # test_client publishes "at hospital" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), "at hospital")
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id), '{"status":"AH"}')
 
         # process messages
         self.loop(test_client)
