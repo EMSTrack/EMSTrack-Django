@@ -257,7 +257,7 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            logger.debug('on_ambulance: ambulance = {}'.format(ambulance))
+            logger.debug("on_ambulance: ambulance = '{}', data = '{}'".format(ambulance, data))
 
             is_valid = False
             if isinstance(data, (list, tuple)):
