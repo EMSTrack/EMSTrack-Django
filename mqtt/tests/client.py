@@ -529,7 +529,7 @@ class MQTTTestClient(BaseClient):
 
         if self.debug:
             logger.debug('Just received {}[count={},expecting={}]:{}'.format(msg.topic,
-                                                                             self.expecting_topics[msg.topic],
+                                                                             self.expecting_topics[topic],
                                                                              self.expecting,
                                                                              msg.payload))
 
