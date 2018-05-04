@@ -19,7 +19,13 @@ logger = logging.getLogger(__name__)
 
 class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
-    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD']):
+    def test_regular_user(self):
+        test('testuser2', 'very_secret', self.a3.id)
+
+    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
+
+        if not ambulance_id:
+            ambulance_id = self.a1.id
 
         # Start client as admin
         broker = {
@@ -68,7 +74,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
                             'ambulance login')
 
         # process messages
@@ -78,10 +84,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, self.a1.id)
+        self.assertEqual(clnt.ambulance.id, ambulance_id)
 
         # subscribe to call and ambulance call status
-        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # create call using serializer, one ambulance first
@@ -90,7 +96,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': self.a1.id}],
+            'ambulancecall_set': [{'ambulance_id': ambulance_id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
@@ -106,11 +112,11 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.P.name)
 
         # Check if ambulancecall status is Requested
-        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
         # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
                             json.dumps({
                                 'location_client_id': client_id,
                             }))
@@ -121,14 +127,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   self.a1.id, call.id), "Accepted")
+                                                                                   ambulance_id, call.id), "Accepted")
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # subscribe to call and ambulance call status
-        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # process messages
@@ -140,7 +146,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.S.name)
 
         # Check if ambulancecall status changed to Ongoing
-        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
 
         # subscribe to call and ambulance call status
@@ -148,7 +154,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client)
 
         # test_client publishes "patient bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
                             json.dumps({
                                 'status': AmbulanceStatus.PB.name,
                             }))
@@ -158,7 +164,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # test_client publishes "at patient" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
                             json.dumps({
                                 'status': AmbulanceStatus.AP.name,
                             }))
@@ -168,7 +174,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # test_client publishes "hospital bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
                             json.dumps({
                                 'status': AmbulanceStatus.HB.name,
                             }))
@@ -178,7 +184,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # test_client publishes "at hospital" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
                             json.dumps({
                                 'status': AmbulanceStatus.AH.name,
                             }))
@@ -189,14 +195,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   self.a1.id, call.id), "Finished")
+                                                                                   ambulance_id, call.id), "Finished")
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # Check if ambulancecall status is Completed
-        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
         # Check if call status is Ended
@@ -227,7 +233,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Check if ambulancecall a1 status changed to Completed
-        ambulancecall =  call.ambulancecall_set.get(ambulance_id=self.a1.id)
+        ambulancecall =  call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
         # Check if ambulancecall a2 status changed to Completed
@@ -241,17 +247,17 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Modify ambulance
 
         # retrieve current ambulance status
-        obj = Ambulance.objects.get(id=self.a1.id)
+        obj = Ambulance.objects.get(id=ambulance_id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
         # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        test_client.expect('ambulance/{}/data'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # publish change
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                          client_id, 
-                                                                         self.a1.id),
+                                                                         ambulance_id),
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
@@ -261,14 +267,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        test_client.expect('ambulance/{}/data'.format(ambulance_id))
 
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # verify change
-        obj = Ambulance.objects.get(id=self.a1.id)
+        obj = Ambulance.objects.get(id=ambulance_id)
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
         # Modify hospital
@@ -414,7 +420,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
             test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username,
                                                                              client_id,
-                                                                             self.a1.id),
+                                                                             ambulance_id),
                                 '{ "value": ',
                                 qos=0)
 
@@ -518,7 +524,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
             test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                              client_id,
-                                                                             self.a1.id),
+                                                                             ambulance_id),
                                 json.dumps({
                                     'status': 'Invalid',
                                 }), qos=0)
