@@ -142,21 +142,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-    def _test(self):
-
-        # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
-
-
-
         # test_client publishes "patient bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             json.dumps({
@@ -176,7 +161,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-        
+
         # test_client publishes "hospital bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             json.dumps({
@@ -186,7 +171,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-        
+
         # test_client publishes "at hospital" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             json.dumps({
@@ -196,7 +181,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-        
+
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    self.a1.id, call.id), "Finished")
@@ -205,14 +190,28 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-
-        # Check if call status is Started
-        call = Call.objects.get(id=call.id)
-        self.assertEqual(call.status, CallStatus.S.name)
-
-        # Check if ambulancecall status is Ongoing
+        # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # Check if call status is Ended
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.E.name)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+    def _test(self):
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+
 
         # process messages
         self.loop(test_client)
