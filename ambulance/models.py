@@ -356,7 +356,7 @@ class AmbulanceCall(CallPublishMixin,
         publish = kwargs.pop('publish', True)
 
         # changed to ongoing?
-        if self.status == CallStatus.O.name:
+        if self.status == AmbulanceCallStatus.O.name:
 
             # retrieve call
             call = self.call
