@@ -113,16 +113,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
-    def _test(self):
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
         # Check if call status changed to Started
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
@@ -138,6 +128,16 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+    def _test(self):
 
         # test_client publishes "patient bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
