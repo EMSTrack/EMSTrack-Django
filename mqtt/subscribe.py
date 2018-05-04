@@ -791,28 +791,15 @@ class SubscribeClient(BaseClient):
 
             if status == "Accepted":
 
-                if call.status == CallStatus.P.name:
-
-                    # change call status to started
-                    call.status = CallStatus.S.name
-                    call.save()
-
                 # change ambulancecall status to ongoing
                 ambulancecall.status = AmbulanceCallStatus.O.name
                 ambulancecall.save()
-
 
             elif status == "Finished":
 
                 # change ambulance status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name
                 ambulancecall.save()
-
-                if call.status == CallStatus.S.name:
-
-                    # change call status to finished
-                    call.status = CallStatus.E.name
-                    call.save()
 
             else:
 

@@ -350,6 +350,46 @@ class AmbulanceCall(CallPublishMixin,
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', True)
+
+        # changed to ongoing?
+        if self.status == CallStatus.O.name:
+
+            # retrieve call
+            call = self.call
+
+            if call.status != CallStatus.S.name:
+
+                # change call status to started
+                call.status = CallStatus.S.name
+                call.save()
+
+        # changed to complete?
+        elif self.status == AmbulanceCallStatus.C.name:
+
+            # retrieve call
+            call = self.call
+
+            # retrieve all ongoing ambulances
+            ongoing_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+
+            set_size = len(ongoing_ambulancecalls)
+            if (set_size == 0 or
+                (set_size == 1 and ongoing_ambulancecalls[0].ambulance is not self)):
+
+                # change call status to finished
+                call.status = CallStatus.E.name
+                call.save()
+
+                # prevent publication
+                publish = False
+
+        # call super
+        super().save(*args, **kwargs, publish=publish)
+
     def publish(self):
 
         # publish to mqtt
