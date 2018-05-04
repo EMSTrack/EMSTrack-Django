@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
-    def test(self):
+    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD']):
 
         # Start client as admin
         broker = {
@@ -43,7 +43,8 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         broker.update(settings.MQTT)
         client_id = 'test_mqtt_subscribe_admin'
-        username = broker['USERNAME']
+        broker['USERNAME'] = username
+        broker['PASSWORD'] = password
         broker['CLIENT_ID'] = client_id
 
         test_client = MQTTTestClient(broker,
@@ -212,6 +213,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
+
 
     def _test(self):
 
