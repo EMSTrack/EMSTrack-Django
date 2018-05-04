@@ -108,6 +108,12 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -117,12 +123,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
     def _test(self):
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
 
         # process messages
         self.loop(test_client)
