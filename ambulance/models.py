@@ -298,7 +298,7 @@ class Call(CallPublishMixin,
     def save(self, *args, **kwargs):
 
         # call super
-        super(CallPublishMixin, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         if self.status == CallStatus.E.name:
             # remove topic from mqtt server
