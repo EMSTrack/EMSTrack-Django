@@ -533,16 +533,16 @@ class MQTTTestClient(BaseClient):
                                                                              self.expecting,
                                                                              msg.payload))
 
-    def expect(self, topic, msg=None, qos=2, remove=False):
-
-        # pattern topic?
-        if '+' in topic or '#' in topic:
-            pattern = topic.replace('+', '[^/]+').replace('#', '[a-zA-Z0-9_/ ]+')
-            self.expecting_patterns[topic] = re.compile(pattern)
-            #print('pattern = {}'.format(pattern))
+    def expect(self, topic, msg=None, qos=2):
 
         # not subscribed
         if topic not in self.expecting_topics:
+
+            # pattern topic?
+            if '+' in topic or '#' in topic:
+                pattern = topic.replace('+', '[^/]+').replace('#', '[a-zA-Z0-9_/ ]+')
+                self.expecting_patterns[topic] = re.compile(pattern)
+                # print('pattern = {}'.format(pattern))
 
             # initialize
             self.expecting_topics[topic] = 0

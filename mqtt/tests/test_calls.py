@@ -66,6 +66,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
+        self.is_subscribed(test_client)
+
         # create call using serializer
         call = {
             'status': CallStatus.P.name,
@@ -83,12 +87,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
-        test_client.expect('ambulance/{}/call/{}/status'.format(self.a1.id, call.id))
-        self.is_subscribed(test_client)
-
-        test_client.expect('ambulance/{}/call/{}/status'.format(self.a2.id, call.id))
-        self.is_subscribed(test_client)
-
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -96,6 +94,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.P.name)
+
+        # Check if ambulancecall status is Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a2.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
@@ -120,11 +122,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
+        # Check if ambulancecall status is still Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a2.id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
         # Check if ambulancecall status changed to Ongoing
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
 
-        # adding new testing 
         # subscribe to call
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
