@@ -292,8 +292,8 @@ class SubscribeClient(BaseClient):
                     # retrieve location client
                     new_location_client = Ambulance.objects.get(id=ambulance_id).location_client
 
-                    logger.debug("old_location_client: {}".format(old_location_client))
-                    logger.debug("new_location_client: {}".format(new_location_client))
+                    #logger.debug("old_location_client: {}".format(old_location_client))
+                    #logger.debug("new_location_client: {}".format(new_location_client))
 
                     # change in location client?
                     if old_location_client != new_location_client:

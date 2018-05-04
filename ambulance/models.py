@@ -297,13 +297,20 @@ class Call(CallPublishMixin,
 
     def save(self, *args, **kwargs):
 
-        # call super
-        super().save(*args, **kwargs)
+        # publish?
+        publish = kwargs.pop('publish', True)
 
         if self.status == CallStatus.E.name:
             # remove topic from mqtt server
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().remove_call(self)
+
+            # prevent publication
+            publish = False
+
+        # call super
+        super().save(*args, **kwargs, publish=publish)
+
 
     def publish(self):
 

@@ -194,14 +194,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # subscribe to call and ambulance call status
-        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
         # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=self.a1.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
