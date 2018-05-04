@@ -303,18 +303,28 @@ class SubscribeClient(BaseClient):
 
                         # log out old client
                         if old_location_client:
+                            client_ambulance = old_location_client.ambulance
+                            if client_ambulance:
+                                details = client_ambulance.identifier
+                            else:
+                                details = 'None'
                             log = ClientLog(client=old_location_client,
                                             status=old_location_client.status,
                                             activity=ClientActivity.TL.name,
-                                            details=old_location_client.ambulance.identifier)
+                                            details=details)
                             log.save()
 
                         # log in new client
                         if new_location_client:
+                            client_ambulance = new_location_client.ambulance
+                            if client_ambulance:
+                                details = client_ambulance.identifier
+                            else:
+                                details = 'None'
                             log = ClientLog(client=new_location_client,
                                             status=new_location_client.status,
                                             activity=ClientActivity.SL.name,
-                                            details=new_location_client.ambulance.identifier)
+                                            details=details)
                             log.save()
 
             if not is_valid:
