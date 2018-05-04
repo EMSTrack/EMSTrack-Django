@@ -804,15 +804,15 @@ class SubscribeClient(BaseClient):
 
             elif status == "Finished":
 
+                # change ambulance status to completed
+                ambulancecall.status = AmbulanceCallStatus.C.name
+                ambulancecall.save()
+
                 if call.status == CallStatus.S.name:
 
                     # change call status to finished
                     call.status = CallStatus.E.name
                     call.save()
-
-                # change ambulance status to completed
-                ambulancecall.status = AmbulanceCallStatus.C.name
-                ambulancecall.save()
 
             else:
 

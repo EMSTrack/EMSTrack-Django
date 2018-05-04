@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
     def test_regular_user(self):
-        test('testuser2', 'very_secret', self.a3.id)
+        self.test('testuser2', 'very_secret', self.a3.id)
 
     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
 
