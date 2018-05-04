@@ -118,6 +118,19 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+    def _test(self):
+
         # test_client publishes "patient bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             json.dumps({
@@ -166,7 +179,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-    def _test(self):
 
         # Check if call status is Started
         call = Call.objects.get(id=call.id)
@@ -192,17 +204,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         ambulancecall =  call.ambulancecall_set.get(ambulance_id=self.a2.id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
-        # ending new testing
-        # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
 
 
     def _test(self):
