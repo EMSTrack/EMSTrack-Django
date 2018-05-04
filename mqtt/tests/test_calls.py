@@ -130,6 +130,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
         self.is_subscribed(test_client)
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # Check if call status changed to Started
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
@@ -185,6 +189,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    self.a1.id, call.id), "Finished")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(self.a1.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
