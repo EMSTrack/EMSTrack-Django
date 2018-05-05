@@ -231,6 +231,7 @@ class TestMQTTCallsRegularUser(TestMQTTCalls):
     def test(self):
         super().test('testuser2', 'very_secret', self.a3.id)
 
+
 class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'],
@@ -415,6 +416,10 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
+
+        # expect 'Completed' ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
 
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
