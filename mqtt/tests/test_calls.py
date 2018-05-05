@@ -124,7 +124,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "Accepted")
+                                                                                   ambulance_id, call.id), "accepted")
 
         # process messages
         self.loop(test_client)
@@ -192,7 +192,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "Finished")
+                                                                                   ambulance_id, call.id), "finished")
 
         # process messages
         self.loop(test_client)
@@ -347,7 +347,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id1, call.id), "Accepted")
+                                                                                   ambulance_id1, call.id), "accepted")
 
         # process messages
         self.loop(test_client)
@@ -419,7 +419,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id1, call.id), "Finished")
+                                                                                   ambulance_id1, call.id), "finished")
 
         # process messages
         self.loop(test_client)
