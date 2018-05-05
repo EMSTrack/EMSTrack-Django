@@ -392,6 +392,7 @@ class AmbulanceCall(CallPublishMixin,
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
+                logger.debug(ongoing_ambulancecalls)
 
         # call super
         super().save(*args, **kwargs, publish=publish)
