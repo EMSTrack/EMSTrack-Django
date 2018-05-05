@@ -85,6 +85,7 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if client_id:
                 location_client = Client.objects.get(client_id=client_id)
 
+            # reset location_client if either is None or ignore
             if instance.location_client is None or location_client is None:
 
                 # fine, clear or update location client

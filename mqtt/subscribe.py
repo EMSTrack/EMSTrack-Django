@@ -262,6 +262,14 @@ class SubscribeClient(BaseClient):
             is_valid = False
             if isinstance(data, (list, tuple)):
 
+                # bulk updates must match location_client
+                if ambulance.client is None or ambulance.client.client_id != client.client_id:
+
+                    # send error message to user
+                    self.send_error_message(user, client, msg.topic, msg.payload,
+                                            "Client '{}' is not currently authorized to update ambulance '{}'".format(client.client_id, ambulance.identifier))
+                    return
+
                 # update ambulances in bulk
                 serializer = AmbulanceUpdateSerializer(data=data,
                                                        many=True,
