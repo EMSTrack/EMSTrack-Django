@@ -269,7 +269,7 @@ class SubscribeClient(BaseClient):
             if isinstance(data, (list, tuple)):
 
                 # bulk updates must match location_client
-                if ambulance.client is None or ambulance.client.client_id != client.client_id:
+                if ambulance.location_client is None or ambulance.location_client.client_id != client.client_id:
 
                     # send error message to user
                     self.send_error_message(user, client, msg.topic, msg.payload,
@@ -347,7 +347,7 @@ class SubscribeClient(BaseClient):
                                     log.save()
 
                             # otherwise must match location_client
-                            elif ambulance.client is None or ambulance.client.client_id != client.client_id:
+                            elif ambulance.location_client is None or ambulance.location_client.client_id != client.client_id:
 
                                 # raise error to rollback transaction
                                 raise ClientException()
