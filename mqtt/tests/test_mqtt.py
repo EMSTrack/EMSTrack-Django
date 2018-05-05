@@ -572,6 +572,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, self.a1.id)
 
+        # TODO: Test unauthorized client update
         # test_client publishes client_id to location_client
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
                             json.dumps({
@@ -684,6 +685,32 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
         # test bulk ambulance update
+
+        # Ambulance handshake: ambulance logout
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance logout')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a2.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a2.id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
