@@ -417,13 +417,17 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # expect 'Completed' ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
-        self.is_subscribed(test_client)
-
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id1, call.id), "Finished")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect 'Completed' ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
