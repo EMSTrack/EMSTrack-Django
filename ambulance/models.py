@@ -378,7 +378,9 @@ class AmbulanceCall(CallPublishMixin,
 
             set_size = len(ongoing_ambulancecalls)
             if (set_size == 0 or
-                (set_size == 1 and ongoing_ambulancecalls[0].ambulance is not self)):
+                    (set_size == 1 and ongoing_ambulancecalls[0].ambulance is not self)):
+
+                logger.debug('This is the last ambulance; will end call.')
 
                 # change call status to finished
                 call.status = CallStatus.E.name
@@ -386,6 +388,10 @@ class AmbulanceCall(CallPublishMixin,
 
                 # prevent publication
                 publish = False
+
+            else:
+
+                logger.debug('There are still {} ambulances in this call.'.format(set_size))
 
         # call super
         super().save(*args, **kwargs, publish=publish)
