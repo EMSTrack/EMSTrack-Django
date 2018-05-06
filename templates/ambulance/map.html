@@ -22,7 +22,9 @@
 {% block content %}
 
     <nav class="navbar navbar-light">
-        <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse"
+                data-target="#filtersDiv" aria-controls="filterDiv"
+                aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -33,9 +35,14 @@
 
     <div class="row mx-1">
 
+        <!-- Filter -->
+        <div class="col-md-1 collapse" id="filtersDiv">
+            <p>Filters</p>
+        </div>
+
         <!-- Map -->
         <div class="col">
-            <div id="live-map" style="height: 700px"></div>
+            <div id="live-map" style="height: 600px"></div>
         </div>
 
     </div>
