@@ -125,7 +125,7 @@
                 <h5>Coordinates:</h5>
                 <div class="card"
                      title="Click on map to update coordinates">
-                    <div class="card-body">
+                    <div class="card-body px-0 py-0">
                         <strong>Latitude:</strong>
                         <div id="curr-lat" style="display: inline-block;"></div>
                         <br/>
@@ -136,9 +136,11 @@
 
                 <h5>Ambulances:</h5>
                 <div class="card" id="ambulance-selection">
-                    <input id="ambulance-selection-message"
-                           class="border-0 w-100"
-                           placeholder="Click on or drag ambulances here"/>
+                    <div class="card-body">
+                        <input id="ambulance-selection-message"
+                               class="border-0 w-100"
+                               placeholder="Click on or drag ambulances here"/>
+                    </div>
                 </div>
 
                 <h5>Patients:</h5>
