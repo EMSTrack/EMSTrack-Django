@@ -28,12 +28,26 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <button class="btn btn-primary" data-toggle="collapse"
+        <button class="btn btn-primary px-3" data-toggle="collapse"
                 data-target="#dispatchDiv" aria-controls="dispatchDiv"
                 aria-expanded="false" aria-label="Toggle dispatching"
                 onclick="beginDispatching()">
             Dispatch Ambulances
         </button>
+
+        <button type="button" class="btn btn-primary px-3">
+            Dispatch
+        </button>
+
+        <button type="button" class="btn btn-secondary px-3"
+                data-toggle="collapse"
+                data-target="#dispatchDiv"
+                aria-expanded="true"
+                aria-controls="dispatchDiv"
+                onclick="endDispatching()">
+            Cancel
+        </button>
+
     </nav>
 
     <div class="row mx-1">
@@ -56,19 +70,6 @@
             <form id="dispatch_form_collapse"
                   method="POST" action="">
                 {% csrf_token %}
-
-                <button type="submit" class="btn btn-primary px-3">
-                    Dispatch
-                </button>
-
-                <button type="button" class="btn btn-secondary px-3"
-                        data-toggle="collapse"
-                        data-target="#dispatchDiv"
-                        aria-expanded="true"
-                        aria-controls="dispatchDiv"
-                        onclick="endDispatching()">
-                    Cancel
-                </button>
 
                 <h5>Priority:</h5>
                 <form required>
@@ -135,6 +136,7 @@
 
                 <h5>Patients:</h5>
                 <div id="patients">
+                    <!--
                     <div class="form-row" id="patient-0">
                         <div class="col-sm-8 p-0">
                             <input id="patient-0-name" type="text"
@@ -154,6 +156,7 @@
                             </button>
                         </div>
                     </div>
+                    -->
                 </div>
 
                 <h5>Ambulances:</h5>
