@@ -47,7 +47,7 @@
             <div id="live-map" style="height: 600px"></div>
         </div>
 
-        <!-- Filter -->
+        <!-- Dispatching -->
         <div class="col-md-3 collapse" id="dispatchDiv">
 
             <!-- Dispatch -->
@@ -56,112 +56,85 @@
                   method="POST" action="">
                 {% csrf_token %}
 
-                <div class="card form-group">
+                <button type="submit" class="btn btn-primary px-3">
+                    Dispatch
+                </button>
 
-                    <div class="card-header">
-                        <div class="float-right">
-                            <button type="submit" class="btn btn-primary px-3">
-                                Dispatch
-                            </button>
-                            <button type="button" class="btn btn-secondary px-3"
-                                    data-toggle="collapse"
-                                    data-target="#dispatch_form_collapse"
-                                    aria-expanded="true"
-                                    aria-controls="dispatch_form_collapse"
-                                    onclick="endDispatching()">
-                                Cancel
-                            </button>
-                        </div>
-                        <h5 class="mb-0">Dispatch Ambulances</h5>
+                <button type="button" class="btn btn-secondary px-3"
+                        data-toggle="collapse"
+                        data-target="#dispatchDiv"
+                        aria-expanded="true"
+                        aria-controls="dispatchDiv"
+                        onclick="endDispatching()">
+                    Cancel
+                </button>
+
+                <h5>Priority:</h5>
+                <form required>
+                    <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
+                        <label class="btn btn-success">
+                            <input type="radio" name="priority" autocomplete="off" value="A">
+                            A
+                        </label>
+                        <label class="btn btn-yellow">
+                            <input type="radio" name="priority" autocomplete="off" value="B">
+                            B
+                        </label>
+                        <label class="btn btn-warning">
+                            <input type="radio" name="priority" autocomplete="off" value="C">
+                            C
+                        </label>
+                        <label class="btn btn-danger">
+                            <input type="radio" name="priority" autocomplete="off" value="D">
+                            D
+                        </label>
+                        <label class="btn btn-info">
+                            <input type="radio" name="priority" autocomplete="off" value="E">
+                            E
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="priority" autocomplete="off" value="O">
+                            &Omega;
+                        </label>
                     </div>
+                </form>
 
-                    <div class="card-body m-0 p-0">
+                <h5> Description:</h5>
+                <textarea class="form-control" name="description"
+                          rows="3" id="comment"
+                          placeholder="Describe the incident"
+                          required></textarea>
 
-                        <div class="card-group">
+                <div class="float-right"
+                     title="Click to automatically search for coordinates after changing the address">
+                    update coordinates
+                    <input id="update-coordinates" type="checkbox">
+                </div>
+                <h5>Street address:</h5>
+                <input id="street" type="text"
+                       name="street" class="form-control"
+                       placeholder="Address" required autocomplete="street-address">
 
-                            <div class="card border-0">
+                <div class="float-right"
+                     title="Click to automatically search for address after changing the coordinates">
+                    update address
+                    <input id="update-address" type="checkbox" checked/>
+                </div>
+                <h5>Coordinates:</h5>
+                <div class="card"
+                     title="Click on map to update coordinates">
+                    <div class="card-body">
+                        <strong>Latitude:</strong>
+                        <div id="curr-lat" style="display: inline-block;"></div>
+                        <br/>
+                        <strong>Longitude:</strong>
+                        <div id="curr-lng" style="display: inline-block;"></div>
+                    </div>
+                </div>
 
-                                <div class="card-body">
-                                    <h5 class="card-title">Priority:</h5>
-                                    <form required>
-                                        <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
-                                            <label class="btn btn-success">
-                                                <input type="radio" name="priority" autocomplete="off" value="A">
-                                                A
-                                            </label>
-                                            <label class="btn btn-yellow">
-                                                <input type="radio" name="priority" autocomplete="off" value="B">
-                                                B
-                                            </label>
-                                            <label class="btn btn-warning">
-                                                <input type="radio" name="priority" autocomplete="off" value="C">
-                                                C
-                                            </label>
-                                            <label class="btn btn-danger">
-                                                <input type="radio" name="priority" autocomplete="off" value="D">
-                                                D
-                                            </label>
-                                            <label class="btn btn-info">
-                                                <input type="radio" name="priority" autocomplete="off" value="E">
-                                                E
-                                            </label>
-                                            <label class="btn btn-secondary">
-                                                <input type="radio" name="priority" autocomplete="off" value="O">
-                                                &Omega;
-                                            </label>
-                                        </div>
-                                    </form>
-                                </div>
-
-                                <div class="card-body">
-                                    <h5 class="card-title"> Description:</h5>
-                                    <textarea class="form-control" name="description"
-                                              rows="3" id="comment"
-                                              placeholder="Describe the incident"
-                                              required></textarea>
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="float-right"
-                                         title="Click to automatically search for coordinates after changing the address">
-                                        update coordinates
-                                        <input id="update-coordinates" type="checkbox">
-                                    </div>
-                                    <div class="card-title">
-                                        <h5>Street address:</h5>
-                                    </div>
-                                    <input id="street" type="text"
-                                           name="street" class="form-control"
-                                           placeholder="Address" required autocomplete="street-address">
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="float-right"
-                                         title="Click to automatically search for address after changing the coordinates">
-                                        update address
-                                        <input id="update-address" type="checkbox" checked/>
-                                    </div>
-                                    <div class="card-title">
-                                        <h5>Coordinates:</h5>
-                                    </div>
-                                    <div class="card"
-                                         title="Click on map to update coordinates">
-                                        <div class="card-body">
-                                            <strong>Latitude:</strong>
-                                            <div id="curr-lat" style="display: inline-block;"></div>
-                                            <br/>
-                                            <strong>Longitude:</strong>
-                                            <div id="curr-lng" style="display: inline-block;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <h5>Patients:</h5>
-                                    </div>
-                                    <div id="patients">
-                                        <!--
+                <h5>Patients:</h5>
+                <div id="patients">
+                    <!--
                                         <div class="form-row" id="patient-0">
                                             <div class="col-sm-8 p-0">
                                                 <input id="patient-0-name" type="text"
@@ -182,27 +155,16 @@
                                             </div>
                                         </div>
                                         -->
-                                    </div>
-                                </div>
+                </div>
 
-                                <div class="card-body">
-                                    <div class="card-title">
-                                        <h5 class="mb-0">Ambulances:</h5>
-                                    </div>
-                                    <div id="ambulance-selection">
-                                        <input id="ambulance-selection-message"
-                                               class="border-0 w-100"
-                                               placeholder="Click on or drag ambulances here"/>
-                                    </div>
-                                </div>
+                <h5>Ambulances:</h5>
+                <div id="ambulance-selection">
+                    <input id="ambulance-selection-message"
+                           class="border-0 w-100"
+                           placeholder="Click on or drag ambulances here"/>
+                </div>
 
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <!--
+                <!--
                     <div class="card-footer text-right">
                         <button type="submit" class="btn btn-primary px-3">
                             Dispatch
@@ -217,8 +179,6 @@
                         </button>
                     </div>
                     -->
-
-                </div>
 
             </form>
 
