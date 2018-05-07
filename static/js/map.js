@@ -734,7 +734,10 @@ function createCategoryFilters() {
     });
 
     // Add listener to remove or add layer when filter checkbox is clicked
-    $('.filter-checkbox').change(function () {
+    $('.filter-checkbox').change(function (event) {
+
+        // Stop propagation
+        event.stopPropagation();
 
         // Which layer?
         var layer = this.getAttribute('data-status');
@@ -749,13 +752,13 @@ function createCategoryFilters() {
             visibleCategory[layer] = false;
         }
 
-        // Modify pane and button
+        // Modify panes
         if (this.value == 'status') {
             // Add to all visible capability panes
             Object.keys(ambulance_capability).forEach(function (capability) {
                 if (visibleCategory[capability]) {
                     mymap.getPane(layer+"|"+capability).style.display = display;
-                    $('button.status-' + layer + '.capability-' + capability).css('display', display);
+                    // $('button.status-' + layer + '.capability-' + capability).css('display', display);
                 }
             });
         } else if (this.value == 'capability') {
@@ -763,7 +766,7 @@ function createCategoryFilters() {
             Object.keys(ambulance_status).forEach(function (status) {
                 if (visibleCategory[status]) {
                     mymap.getPane(status+"|"+layer).style.display = display;
-                    $('button.status-' + status + '.capability-' + layer).css('display', display);
+                    // $('button.status-' + status + '.capability-' + layer).css('display', display);
                 }
             });
         } else {
