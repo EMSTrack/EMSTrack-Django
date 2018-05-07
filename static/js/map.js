@@ -737,7 +737,7 @@ function createCategoryFilters() {
     $('.filter-checkbox').change(function (event) {
 
         // Stop propagation
-        event.stopPropagation();
+        event.stopImmediatePropagation();
 
         // Which layer?
         var layer = this.getAttribute('data-status');
