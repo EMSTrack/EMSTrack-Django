@@ -666,7 +666,7 @@ function createCategoryFilters() {
             '             data-target="#ambulance_' + status + '"\n' +
             '             aria-expanded="true" aria-controls="ambulance_' + status + '">\n' +
             '             <input type="checkbox" id="ambulance_checkbox_' + status + '">\n' +
-            '             <span role="button">' + status + '</span>\n' +
+            '             <span role="button">' + ambulance_status[status] + '</span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse show"\n' +
