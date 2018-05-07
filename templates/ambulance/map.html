@@ -64,6 +64,10 @@
         <!-- Filter -->
         <div class="col-md-2 border-top border-secondary collapse" id="filtersDiv">
 
+            <h4>
+                Filters
+            </h4>
+
             <!-- Ambulance Grid -->
             <h5 style="cursor: pointer;"
                 data-toggle="collapse"
@@ -151,7 +155,7 @@
                   method="POST" action="">
                 {% csrf_token %}
 
-                <h5>Priority:</h5>
+                <h5>Priority</h5>
                 <form required>
                     <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
                         <label class="btn btn-success">
@@ -181,7 +185,7 @@
                     </div>
                 </form>
 
-                <h5> Description:</h5>
+                <h5> Description</h5>
                 <textarea class="form-control" name="description"
                           rows="3" id="comment"
                           placeholder="Describe the incident"
@@ -192,7 +196,7 @@
                     update coordinates
                     <input id="update-coordinates" type="checkbox">
                 </div>
-                <h5>Street address:</h5>
+                <h5>Street address</h5>
                 <input id="street" type="text"
                        name="street" class="form-control"
                        placeholder="Address" required autocomplete="street-address">
@@ -202,7 +206,7 @@
                     update address
                     <input id="update-address" type="checkbox" checked/>
                 </div>
-                <h5>Coordinates:</h5>
+                <h5>Coordinates</h5>
                 <div class="card"
                      title="Click on map to update coordinates">
                     <div class="card-body px-1 py-1">
@@ -214,7 +218,7 @@
                     </div>
                 </div>
 
-                <h5>Ambulances:</h5>
+                <h5>Ambulances</h5>
                 <div class="card px-0 py-0"
                      id="ambulance-selection">
                     <div class="card-body px-1 py-1">
@@ -224,7 +228,7 @@
                     </div>
                 </div>
 
-                <h5>Patients:</h5>
+                <h5>Patients</h5>
                 <div id="patients">
                     <!--
                     <div class="form-row" id="patient-0">
