@@ -64,6 +64,29 @@
         <!-- Filter -->
         <div class="col-md-2 border-top border-secondary collapse" id="filtersDiv">
 
+            <!-- Calls Filter -->
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#current_calls"
+                aria-expanded="true" aria-controls="current_calls">
+                <span class="fas fa-phone"></span>
+                Calls
+            </h5>
+            <div class="collapse ml-1"
+                 id="current_calls"
+                 data-parent="#filtersDiv">
+                <!--
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="capability-basic">
+                    <label class="form-check-label" for="capability-basic">Basic</label>
+                </div>
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="capability-advanced">
+                    <label class="form-check-label" for="capability-advanced">Advances</label>
+                </div>
+                -->
+            </div>
+
             <!-- Ambulance Filter -->
             <h5 class="mt-2"
                 style="cursor: pointer;"
@@ -96,29 +119,6 @@
                              id="ambulance-grid-available">
                         </div>
                     </div>
-                </div>
-                -->
-            </div>
-
-            <!-- Capability Filter -->
-            <h5 style="cursor: pointer;"
-                data-toggle="collapse"
-                data-target="#current_calls"
-                aria-expanded="true" aria-controls="current_calls">
-                <span class="fas fa-phone"></span>
-                Current Calls
-            </h5>
-            <div class="collapse ml-1"
-                 id="current_calls"
-                 data-parent="#filtersDiv">
-                <!--
-                <div class="form-group form-check mt-0 mb-1">
-                    <input type="checkbox" class="form-check-input" id="capability-basic">
-                    <label class="form-check-label" for="capability-basic">Basic</label>
-                </div>
-                <div class="form-group form-check mt-0 mb-1">
-                    <input type="checkbox" class="form-check-input" id="capability-advanced">
-                    <label class="form-check-label" for="capability-advanced">Advances</label>
                 </div>
                 -->
             </div>

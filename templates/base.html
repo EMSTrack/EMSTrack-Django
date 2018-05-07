@@ -51,18 +51,6 @@
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'ambulance:list' %}">
-                    <span class="fas fa-ambulance"></span>
-                    Ambulances
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hospital:list' %}">
-                    <span class="fas fa-hospital"></span>
-                    Hospitals
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:map' %}">
                     <span class="fas fa-globe"></span>
                     Map
@@ -72,6 +60,18 @@
                 <a class="nav-link" href="{% url 'ambulance:call_list' %}">
                     <span class="fas fa-phone"></span>
                     Calls
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ambulance:list' %}">
+                    <span class="fas fa-ambulance"></span>
+                    Ambulances
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hospital:list' %}">
+                    <span class="fas fa-hospital"></span>
+                    Hospitals
                 </a>
             </li>
         </ul>
