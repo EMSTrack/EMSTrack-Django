@@ -240,11 +240,14 @@ function onConnect() {
     console.log("Retrieving calls from API");
     $.getJSON(APIBaseUrl + 'call/', function (data) {
 
+        console.log('calls = ' + calls);
+
         // add call
         $.each(data, function (index) {
 
             // Subscribe to current calls
             $.each(data, function (index) {
+                console.log('data[index] = ' + data[index]);
                 var topicName = "call/" + data[index].call_id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
