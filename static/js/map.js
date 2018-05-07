@@ -248,7 +248,7 @@ function onConnect() {
             // Subscribe to current calls
             $.each(data, function (index) {
                 console.log('data[index] = ' + data[index]);
-                var topicName = "call/" + data[index].call_id + "/data";
+                var topicName = "call/" + data[index].id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
             });
