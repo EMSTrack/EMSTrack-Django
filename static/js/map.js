@@ -658,25 +658,26 @@ function createCategoryFilters() {
     Object.keys(ambulance_status).forEach(function (status) {
 
         $("#ambulanceCard").append(
-            "<div class=\"card form-group\" id=\"ambulance_card_" + status + "\">" +
-            "  <div class=\"card-header px-1 py-0\"" +
-            "     id=\"ambulance_heading_" + status + "\">" +
-            "    <h6 style=\"cursor: pointer;\"" +
-            "        data-toggle=\"collapse\"" +
-            "        data-target=\"#ambulance_" + status + "\"" +
-            "        aria-expanded=\"true\" aria-controls=\"ambulance_" + status + "\">" +
-            "        <input type=\"checkbox\" id=\"ambulance_checkbox_" + status + "\">" +
-            "        <span role=\"button\">" + status + "</span>" +
-            "    </h6>" +
-            "  </div>" +
-            "  <div class=\"collapse show\"" +
-            "     id=\"ambulance_" + status + "\"" +
-            "     aria-labelledby=\"ambulance_heading_" + status + "\" data-parent=\"#ambulance_card_" + status + "\">" +
-            "     <div class=\"card-body p-0\"" +
-            "          id=\"ambulance-grid-" + status + "\">" +
-            "     </div>" +
-            "  </div>" +
-            "</div>");
+            '<div class="card form-group" id="ambulance_card_' + status + '">\n' +
+            '    <div class="card-header px-1 py-0"\n' +
+            '         id="ambulance_heading_' + status + '">\n' +
+            '         <h6 style="cursor: pointer;"\n' +
+            '             data-toggle="collapse"\n' +
+            '             data-target="#ambulance_' + status + '"\n' +
+            '             aria-expanded="true" aria-controls="ambulance_' + status + '">\n' +
+            '             <input type="checkbox" id="ambulance_checkbox_' + status + '">\n' +
+            '             <span role="button">' + status + '</span>\n' +
+            '          </h6>\n' +
+            '    </div>\n' +
+            '    <div class="collapse show"\n' +
+            '         id="ambulance_' + status + '"\n' +
+            '         aria-labelledby="ambulance_heading_' + status + '"\n' +
+            '         data-parent="#ambulance_card_' + status + '">\n' +
+            '         <div class="card-body p-0"\n' +
+            '              id="ambulance-grid-' + status + '">\n' +
+            '         </div>\n' +
+            '    </div>\n' +
+            '</div>');
     });
 
 };
