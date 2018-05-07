@@ -2,6 +2,7 @@
 
 var markersGroup = new L.LayerGroup();
 var isDispatching = false;
+var isFilterOpen = false;
 var placeIcon = L.icon({
 	iconUrl: '/static/icons/place_marker.png',
 	iconSize: [40, 40],
@@ -27,6 +28,7 @@ var submitDispatching = function () {
 var beginDispatching = function () {
 
     isDispatching = true;
+    isFilterOpen = $('#filtersDiv').hasClass('show');
     console.log('Begin dispatching.');
 
     $('#dispatchBeginButton').hide();
@@ -67,6 +69,11 @@ var endDispatching = function () {
     $('#dispatchBeginButton').show();
     $('#dispatchSubmitButton').hide();
     $('#dispatchCancelButton').hide();
+
+    if (!isFilterOpen) {
+        // close filter
+        $('#filtersDiv').removeClass('show');
+    }
 
 }
 
