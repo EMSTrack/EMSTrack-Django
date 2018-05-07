@@ -734,10 +734,14 @@ function createCategoryFilters() {
     });
 
     // Add listener to remove or add layer when filter checkbox is clicked
-    $('.filter-checkbox').change(function (event) {
+    $('.filter-checkbox').click(function (event) {
 
         // Stop propagation
-        event.stopImmediatePropagation();
+        event.stopPropagation();
+
+    }
+
+    $('.filter-checkbox').change(function (event) {
 
         // Which layer?
         var layer = this.getAttribute('data-status');
