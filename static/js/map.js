@@ -422,7 +422,7 @@ function updateAmbulance(ambulance) {
     addAmbulanceToMap(ambulance);
 
     // update detail panel
-    updateDetailPanel(ambulance);
+    // updateDetailPanel(ambulance);
 
 };
 
@@ -545,7 +545,7 @@ function addAmbulanceToMap(ambulance) {
             function (e) {
 
                 // update details panel
-                updateDetailPanel(ambulance);
+                // updateDetailPanel(ambulance);
 
                 // add to dispatching list
                 addToDispatchingList(ambulance);
@@ -905,7 +905,7 @@ function createCategoryFilter() {
 function onGridButtonClick(ambulance) {
 
     // Update detail panel
-    updateDetailPanel(ambulance);
+    // updateDetailPanel(ambulance);
 
     if (visibleCategory[ambulance.status]) {
 

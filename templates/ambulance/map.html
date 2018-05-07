@@ -268,57 +268,6 @@
 
     </div>
 
-    <div class="container">
-
-        <div class="row">
-
-            <div class="col-md-3 float-right">
-
-                <!-- Ambulance Info -->
-                <div class="card form-group" id="cardTwo">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0" style="cursor: pointer;"
-                            data-toggle="collapse"
-                            data-target="#ambulance_info_collapse"
-                            aria-expanded="true" aria-controls="ambulance_info_collapse">
-                            <span role="button">Details</span>
-                        </h5>
-                    </div>
-                    <div id="ambulance_info_collapse" class="collapse show"
-                         aria-labelledby="headingTwo" data-parent="#cardTwo">
-                        <div class="card-body" id="ambulance-detail">
-                            <input type="hidden"
-                                   name="change-status-ambulance-id"
-                                   id="ambulance-detail-id">
-                            <p>
-                                <strong>Ambulance:</strong>
-                                <span id="ambulance-detail-name"/>
-                            </p>
-                            <p>
-                                <strong>Capability:</strong>
-                                <span id="ambulance-detail-capability"/>
-                            </p>
-                            <p>
-                                <strong>Updated on:</strong>
-                                <span id="ambulance-detail-updated-on"/>
-                            </p>
-                            <p>
-                                <strong>Status:</strong>
-                                <select id="ambulance-detail-status-select"
-                                        style="margin: auto;">
-                                    {% for k, v in ambulance_status.items %}
-                                    <option value="{{ k }}">{{ v }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <!-- This is modals for ambulance dispatcher's panel -->
     <!-- Modal -->
     <div id="dispatchModal" class="modal fade" role="dialog">
