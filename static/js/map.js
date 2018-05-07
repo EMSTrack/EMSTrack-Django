@@ -752,7 +752,7 @@ function createCategoryPanesAndFilters() {
             '         id="call-' + status + '"\n' +
             '         aria-labelledby="call-heading-' + status + '"\n' +
             '         data-parent="#call-status">\n' +
-            '         <div class="card-body py-1 px-0"\n' +
+            '         <div class="card-body py-1 px-1"\n' +
             '              id="call-grid-' + status + '">\n' +
             '         </div>\n' +
             '    </div>\n' +
