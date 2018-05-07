@@ -22,7 +22,7 @@ var beginDispatching = function () {
     isDispatching = true;
     console.log('Begin dispatching.');
 
-    $('#dispatchStartButton').hide();
+    $('#dispatchBeginButton').hide();
     $('#dispatchSubmitButton').show();
     $('#dispatchCancelButton').show();
 
@@ -52,7 +52,7 @@ var endDispatching = function () {
 
     markersGroup.clearLayers();
 
-    $('#dispatchStartButton').show();
+    $('#dispatchBeginButton').show();
     $('#dispatchSubmitButton').hide();
     $('#dispatchCancelButton').hide();
 
