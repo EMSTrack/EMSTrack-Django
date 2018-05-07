@@ -7,6 +7,8 @@
         var ambulance_status = {{ ambulance_status|safe }};
         var ambulance_capability = {{ ambulance_capability|safe }};
         var location_type= {{ location_type|safe }};
+        var call_status = {{ call_status|safe }};
+        var ambulancecall_status = {{ ambulancecall_status|safe }};
         var username = '{{ user.get_username|safe }}';
         var APIBaseUrl = '{% url 'index' %}api/';
         var MQTTBroker = {

@@ -8,7 +8,7 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Location, LocationType
+    Call, Location, LocationType, CallStatus, AmbulanceCallStatus
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -169,6 +169,10 @@ class AmbulanceMap(TemplateView):
                                            for m in AmbulanceCapability}
         context['location_type'] = {m.name: m.value
                                     for m in LocationType}
+        context['call_status'] = {m.name: m.value
+                                  for m in CallStatus}
+        context['ambulancecall_status'] = {m.name: m.value
+                                           for m in AmbulanceCallStatus}
         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex

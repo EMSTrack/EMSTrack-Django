@@ -508,13 +508,16 @@ function addCallToGrid(call) {
     // Add call to calls
     calls[call.id] = call;
 
+    // Format date
+    var date = (new Date(Date.parse(call.updated_on))).toLocaleString()
+
     // Add item to current-call grid
     $('#current-calls')
         .append(
             '<div class="form-group form-check mt-0 mb-1" id="current-call-item-' + call.id + '">\n' +
             '     <input type="checkbox" class="form-check-input" id="current-call-' + call.id + '">\n' +
             '     <label class="form-check-label" for="current-call-' + call.id + '">\n' +
-            '       ' + call.id + '[' + call.status + '] @ ' + call.updated_on + '\n' +
+            '       ' + call.id + '. [' + call_status[call.status] + '] @ ' + date + '\n' +
             '     </label>\n' +
             '</div>\n');
 
