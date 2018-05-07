@@ -29,51 +29,6 @@ Object.keys(location_type).forEach(function(type) {
 });
 
 // Initialize ambulance icons
-var ambulance_settings = [
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_blue.svg',
-            iconSize: [15, 30],
-        }), 'btn-primary'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_green.svg',
-            iconSize: [15, 30],
-        }), 'btn-success'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_gray.svg',
-            iconSize: [15, 30],
-        }), 'btn-secondary'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_red.svg',
-            iconSize: [15, 30],
-        }), 'btn-danger'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_yellow.svg',
-            iconSize: [15, 30],
-        }), 'btn-warning'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_purple.svg',
-            iconSize: [15, 30],
-        }), 'btn-info'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_orange.svg',
-            iconSize: [15, 30],
-        }), 'btn-dark'
-    ],
-];
-
 var ambulance_icons = {};
 var ambulance_buttons = {};
 for (var key in ambulance_css) {
@@ -179,6 +134,9 @@ $(function () {
             // Do whatever else you need to. (save to db; add to map etc)
             mymap.addLayer(layer);
         });
+
+    // Create category filters
+    createCategoryFilters();
 
     // Create category filter on the right hand top corner
     createCategoryFilter();
@@ -498,7 +456,7 @@ function addAmbulanceToGrid(ambulance) {
         ' to grid');
 
     // Add button to ambulance grid
-    $('#ambulance-grid')
+    $('#ambulance-grid-available')
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
@@ -692,6 +650,34 @@ function updateDetailPanel(ambulance) {
         .val(ambulance.id);
 
 }
+
+/* Create category filter */
+function createCategoryFilters() {
+
+    // Create status grids
+    Object.keys(ambulance_status).forEach(function (status) {
+
+        $("#ambulanceCard").append(
+            "<div class=\"card-header px-1 py-0\"" +
+            "     id=\"ambulance_heading_" + status + "\">" +
+            "    <h6 style=\"cursor: pointer;\"" +
+            "        data-toggle=\"collapse\"" +
+            "        data-target=\"#ambulance_" + status + "\"" +
+            "        aria-expanded=\"true\" aria-controls=\"ambulance_" + status + "\">" +
+            "        <input type=\"checkbox\" id=\"ambulance_checkbox_" + status + "\">" +
+            "        <span role=\"button\">" + status + "</span>" +
+            "    </h6>" +
+            "</div>" +
+            "<div class=\"collapse show\"" +
+            "     id=\"ambulance_" + status + "\"" +
+            "     aria-labelledby=\"ambulance_heading_" + status + "\" data-parent=\"#cardOne\">" +
+            "     <div class=\"card-body p-0\"" +
+            "          id=\"ambulance-grid-" + status + "\">" +
+            "     </div>" +
+            "</div>");
+    });
+
+};
 
 /* Create status filter on the top right corner of the map */
 function createCategoryFilter() {

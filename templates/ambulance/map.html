@@ -65,22 +65,22 @@
             <h5>Ambulances:</h5>
             <!-- Add capability filter -->
             <h6>Capability:</h6>
-            <h6>Availability:</h6>
-            <div class="card form-group" id="cardOne">
-                <div class="card-header px-1 pb-0" id="headingOne">
+            <div class="card form-group" id="ambulanceCard">
+                <div class="card-header px-1 py-0"
+                     id="ambulance_heading_available">
                     <h6 style="cursor: pointer;"
                         data-toggle="collapse"
                         data-target="#ambulance_available"
                         aria-expanded="true" aria-controls="ambulance_available">
-                        <input type="checkbox" id="ambulance_available_checkbox">
+                        <input type="checkbox" id="ambulance_checkbox_available">
                         <span role="button">Available</span>
                     </h6>
                 </div>
                 <div class="collapse show"
                      id="ambulance_available"
-                     aria-labelledby="headingOne" data-parent="#cardOne">
+                     aria-labelledby="ambulance_heading_available" data-parent="#cardOne">
                     <div class="card-body p-0"
-                         id="ambulance-grid">
+                         id="ambulance-grid-available">
                     </div>
                 </div>
             </div>
