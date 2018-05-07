@@ -455,6 +455,9 @@ function addAmbulanceToGrid(ambulance) {
         '[id=' + ambulance.id + ', status=' + ambulance.status + ', btn=' + ambulance_buttons[ambulance.status] + ']"' +
         ' to grid');
 
+    // make grid visible
+    $('#ambulance_' + ambulance.status).addClass('show');
+
     // Add button to ambulance grid
     $('#ambulance-grid-' + ambulance.status)
         .append('<button type="button"'
@@ -466,6 +469,8 @@ function addAmbulanceToGrid(ambulance) {
             + ' draggable="true">'
             + ambulance.identifier
             + '</button>');
+
+    // Make button draggable
     $('#grid-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
@@ -669,7 +674,7 @@ function createCategoryFilters() {
             '             <span role="button">' + ambulance_status[status] + '</span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
-            '    <div class="collapse show"\n' +
+            '    <div class="collapse"\n' +
             '         id="ambulance_' + status + '"\n' +
             '         aria-labelledby="ambulance_heading_' + status + '"\n' +
             '         data-parent="#ambulance_card_' + status + '">\n' +
