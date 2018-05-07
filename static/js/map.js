@@ -1,11 +1,13 @@
 var ambulanceMarkers = {};  // Store ambulance markers
-var ambulances = {};	// Store ambulance details
+var ambulances = {};        // Store ambulance details
 
-var hospitalMarkers = {};  // Store hospital markers
-var hospitals = {};	// Store hospital details
+var hospitalMarkers = {};   // Store hospital markers
+var hospitals = {};	        // Store hospital details
 
-var locationMarkers = {};  // Store location markers
-var locations = {};	// Store location details
+var locationMarkers = {};   // Store location markers
+var locations = {};	        // Store location details
+
+var calls = {};             // Store call details
 
 // Initialize category panes
 var visibleCategory = {};
@@ -117,8 +119,8 @@ $(function () {
             mymap.addLayer(layer);
         });
 
-    // Create category filters
-    createCategoryFilters();
+    // Create category panes and filters
+    createCategoryPanesAndFilters();
 
     // Make ambulance-selection droppable
     $('#ambulance-selection')
@@ -206,16 +208,16 @@ function onConnect() {
     console.log("Retrieving profile from API");
     $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
 
-        // Subscribe to hospitals
-        $.each(data.hospitals, function (index) {
-            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
+        // Subscribe to ambulances
+        $.each(data.ambulances, function (index) {
+            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
         });
 
-        // Subscribe to ambulances
-        $.each(data.ambulances, function (index) {
-            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
+        // Subscribe to hospitals
+        $.each(data.hospitals, function (index) {
+            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
         });
@@ -234,24 +236,23 @@ function onConnect() {
         
     });
 
-    // publish to mqtt on status change from details options dropdown
-    /*
-    $('#ambulance-detail-status-select').change(function () {
+    // retrieve calls from api
+    console.log("Retrieving calls from API");
+    $.getJSON(APIBaseUrl + 'call/', function (data) {
 
-        // Get status
-        status = JSON.stringify({'status': this.value});
+        // add call
+        $.each(data, function (index) {
 
-        // Send message
-        var id = $('#ambulance-detail-id').val();
-        var topic = "user/" + username + "/client/" + clientId + "/ambulance/" + id + "/data";
-        var message = new Paho.MQTT.Message(status);
-        message.destinationName = topic
-        message.qos = 2;
-        mqttClient.send(message);
-        console.log('Sent message: "' + topic + ':' + status + '"');
-
+            // Subscribe to current calls
+            $.each(data, function (index) {
+                var topicName = "call/" + data[index].call_id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+            });
+        	
+        });
+        
     });
-    */
 
 };
 
@@ -344,12 +345,19 @@ function onMessageArrived(message) {
             updateAmbulance(data);
         }
 
-        // Look for ambulance/{id}/data
+        // Look for hospital/{id}/data
         else if (topic[0] === 'hospital' &&
             topic[2] == 'data') {
             updateHospital(data);
         }
 
+        // Look for call/{id}/data
+        else if (topic[0] === 'call' &&
+            topic[2] == 'data') {
+            updateCall(data);
+        }
+
+        
     } catch (e) {
         bsalert('Error processing message "' +
             message.destinationName + ':' + message.payloadString +
@@ -429,6 +437,31 @@ function updateHospital(hospital) {
     addHospitalToMap(hospital);
 
 };
+
+function updateCall(call) {
+    
+    // retrieve id
+    var id = call.id;
+
+    // already exists?
+    if (id in calls) {
+
+        // update call
+        // calls[id].location.latitude = call.location.latitude;
+        // calls[id].location.longitude = call.location.longitude;
+
+        // Remove existing marker
+        // mymap.removeLayer(callMarkers[id]);
+
+        // Overwrite call
+        // call = calls[id]
+
+    }
+
+    // add call to map
+    // addcallToMap(call);
+    
+}
 
 function addAmbulanceToGrid(ambulance) {
 
@@ -641,7 +674,7 @@ function updateDetailPanel(ambulance) {
 }
 
 /* Create category filter */
-function createCategoryFilters() {
+function createCategoryPanesAndFilters() {
 
     // Initialize visibleCategories
 
