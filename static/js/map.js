@@ -517,7 +517,7 @@ function addCallToGrid(call) {
             '<div class="form-group form-check mt-0 mb-1" id="current-call-item-' + call.id + '">\n' +
             '     <input type="checkbox" class="form-check-input" id="current-call-' + call.id + '">\n' +
             '     <label class="form-check-label" for="current-call-' + call.id + '">\n' +
-            '       <strong>' + call.id + '</strong> ' + date + '\n' +
+            '       <strong>' + call.id + '</strong>: ' + date + '\n' +
             '     </label>\n' +
             '</div>\n');
 
