@@ -456,7 +456,7 @@ function addAmbulanceToGrid(ambulance) {
         ' to grid');
 
     // Add button to ambulance grid
-    $('#ambulance-grid-available')
+    $('#ambulance-grid-' + ambulance.status)
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
