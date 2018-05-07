@@ -62,8 +62,15 @@
         <div class="col-md-2 collapse" id="filtersDiv">
 
             <!-- Ambulance Grid -->
-            <h5>Ambulances</h5>
-            <div id="ambulance_status">
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#ambulance_status"
+                aria-expanded="true" aria-controls="ambulance_status">
+                Ambulances
+            </h5>
+            <div class="collapse show"
+                 id="ambulance_status"
+                 data-parent="#filtersDiv">
                 <!--
                 <div class="card form-group" id="ambulance_card_available">
                     <div class="card-header px-1 py-0"
@@ -90,10 +97,12 @@
             <h5 style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#ambulance_capability"
-                aria-expanded="true" aria-controls="ambulance_available">Capability</h5>
+                aria-expanded="true" aria-controls="ambulance_capability">
+                Capability
+            </h5>
             <div class="collapse ml-1"
                  id="ambulance_capability"
-                 data-parent="#ambulance_capability" >
+                 data-parent="#filtersDiv">
                 <!--
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="capability-basic">
@@ -106,8 +115,15 @@
                 -->
             </div>
 
-            <h5>Locations</h5>
-            <div class="ml-1" id="location_type">
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#location_type"
+                aria-expanded="true" aria-controls="location_type">
+                Locations
+            </h5>
+            <div class="collapse ml-1"
+                 id="location_type"
+                 data-parent="#filtersDiv">
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="location-hospital">
                     <label class="form-check-label" for="location-hospital">Hospital</label>
