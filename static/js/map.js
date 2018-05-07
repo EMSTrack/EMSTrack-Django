@@ -139,7 +139,7 @@ $(function () {
     createCategoryFilters();
 
     // Create category filter on the right hand top corner
-    createCategoryFilter();
+    // createCategoryFilter();
 
     // Make ambulance-selection droppable
     $('#ambulance-selection')
@@ -736,7 +736,7 @@ function createCategoryFilters() {
     // Add listener to remove or add layer when filter checkbox is clicked
     $('.filter-checkbox').click(function (event) {
 
-        // Stop propagation
+        // Stop propagation to avoid collapse
         event.stopPropagation();
 
     });
