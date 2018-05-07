@@ -28,8 +28,8 @@ var submitDispatching = function () {
 var beginDispatching = function () {
 
     isDispatching = true;
-    var filterDiv = $('#filtersDiv');
-    isFilterOpen = filterDiv.hasClass('show');
+    var filtersDiv = $('#filtersDiv');
+    isFilterOpen = filtersDiv.hasClass('show');
     console.log('Begin dispatching.');
 
     $('#dispatchBeginButton').hide();
