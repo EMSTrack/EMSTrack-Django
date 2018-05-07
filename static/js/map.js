@@ -658,7 +658,8 @@ function createCategoryFilters() {
     Object.keys(ambulance_status).forEach(function (status) {
 
         $("#ambulanceCard").append(
-            "<div class=\"card-header px-1 py-0\"" +
+            "<div class=\"card form-group\" id=\"ambulance_card_" + status + "\">" +
+            "  <div class=\"card-header px-1 py-0\"" +
             "     id=\"ambulance_heading_" + status + "\">" +
             "    <h6 style=\"cursor: pointer;\"" +
             "        data-toggle=\"collapse\"" +
@@ -667,13 +668,14 @@ function createCategoryFilters() {
             "        <input type=\"checkbox\" id=\"ambulance_checkbox_" + status + "\">" +
             "        <span role=\"button\">" + status + "</span>" +
             "    </h6>" +
-            "</div>" +
-            "<div class=\"collapse show\"" +
+            "  </div>" +
+            "  <div class=\"collapse show\"" +
             "     id=\"ambulance_" + status + "\"" +
-            "     aria-labelledby=\"ambulance_heading_" + status + "\" data-parent=\"#cardOne\">" +
+            "     aria-labelledby=\"ambulance_heading_" + status + "\" data-parent=\"#ambulance_card_" + status + "\">" +
             "     <div class=\"card-body p-0\"" +
             "          id=\"ambulance-grid-" + status + "\">" +
             "     </div>" +
+            "  </div>" +
             "</div>");
     });
 
