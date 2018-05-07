@@ -697,7 +697,7 @@ function createCategoryFilters() {
     });
 
     // Create location options
-    Object.keys(location_type.forEach(function (type) {
+    Object.keys(location_type).forEach(function (type) {
 
         $("#location_type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
