@@ -242,19 +242,14 @@ function onConnect() {
 
         console.log('calls = ' + calls);
 
-        // add call
+        // Subscribe to current calls
         $.each(data, function (index) {
-
-            // Subscribe to current calls
-            $.each(data, function (index) {
-                console.log('data[index] = ' + data[index]);
-                var topicName = "call/" + data[index].id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-            });
-        	
+            console.log('data[index] = ' + data[index]);
+            var topicName = "call/" + data[index].id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
         });
-        
+
     });
 
 };
