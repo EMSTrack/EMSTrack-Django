@@ -660,6 +660,17 @@ function updateDetailPanel(ambulance) {
 /* Create category filter */
 function createCategoryFilters() {
 
+    // Create category panes
+    Object.keys(ambulance_status).forEach(function (status) {
+        Object.keys(ambulance_capability).forEach(function (capability) {
+            mymap.createPane(status+"|"+capability);
+        });
+    });
+    mymap.createPane('hospital');
+    Object.keys(location_type).forEach(function (type) {
+        mymap.createPane(type);
+    });
+
     // Create status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
@@ -671,7 +682,8 @@ function createCategoryFilters() {
             '             data-toggle="collapse"\n' +
             '             data-target="#ambulance_' + status + '"\n' +
             '             aria-expanded="true" aria-controls="ambulance_' + status + '">\n' +
-            '             <input type="checkbox" id="ambulance_checkbox_' + status + '">\n' +
+            '             <input class="form-check-input filter-checkbox" value="status" data-status="' + status + '"\n' +
+            '                    type="checkbox" id="ambulance_checkbox_' + status + '">\n' +
             '             <span role="button">' + ambulance_status[status] + '</span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
@@ -691,38 +703,76 @@ function createCategoryFilters() {
 
         $("#ambulance_capability").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
-            '     <input type="checkbox" class="form-check-input" id="capability-' + capability + '">\n' +
+            '     <input class="form-check-input filter-checkbox" value="capability" data-status="' + capability + '"\n' +
+            '            type="checkbox" id="capability-' + capability + '">\n' +
             '     <label class="form-check-label"\n' +
             '            for="capability-' + capability + '">' + ambulance_capability[capability] + '</label>\n' +
             '</div>');
     });
 
     // Create location options
+    $("#location_type").append(
+        '<div class="form-group form-check mt-0 mb-1">\n' +
+        '     <input class="form-check-input filter-checkbox" value="location" data-status="hospital"\n' +
+        '            type="checkbox" id="location-hospital">\n' +
+        '     <label class="form-check-label"\n' +
+        '            for="location-hospital">Hospital</label>\n' +
+        '</div>');
     Object.keys(location_type).forEach(function (type) {
 
         $("#location_type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
-            '     <input type="checkbox" class="form-check-input" id="location-' + type + '">\n' +
+            '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
+            '            type="checkbox" id="location-' + type + '">\n' +
             '     <label class="form-check-label"\n' +
             '            for="location-' + type + '">' + location_type[type] + '</label>\n' +
             '</div>');
     });
 
+    // Add listener to remove or add layer when filter checkbox is clicked
+    $('.filter-checkbox').change(function () {
+
+        // Which layer?
+        var layer = this.getAttribute('data-status');
+
+        // Display or hide?
+        var display;
+        if (this.checked) {
+            display = 'block';
+            visibleCategory[layer] = true;
+        } else {
+            display = 'none';
+            visibleCategory[layer] = false;
+        }
+
+        // Modify pane and button
+        if (this.value == 'status') {
+            // Add to all visible capability panes
+            Object.keys(ambulance_capability).forEach(function (capability) {
+                if (visibleCategory[capability]) {
+                    mymap.getPane(layer+"|"+capability).style.display = display;
+                    $('button.status-' + layer + '.capability-' + capability).css('display', display);
+                }
+            });
+        } else if (this.value == 'capability') {
+            // Add to all visible status layers
+            Object.keys(ambulance_status).forEach(function (status) {
+                if (visibleCategory[status]) {
+                    mymap.getPane(status+"|"+layer).style.display = display;
+                    $('button.status-' + status + '.capability-' + layer).css('display', display);
+                }
+            });
+        } else {
+            mymap.getPane(layer).style.display = display;
+        }
+
+    });
+
+
 };
 
 /* Create status filter on the top right corner of the map */
 function createCategoryFilter() {
-
-    // Create category panes
-    Object.keys(ambulance_status).forEach(function (status) {
-        Object.keys(ambulance_capability).forEach(function (capability) {
-            mymap.createPane(status+"|"+capability);
-        });
-    });
-    mymap.createPane('hospital');
-    Object.keys(location_type).forEach(function (type) {
-        mymap.createPane(type);
-    });
 
     // Add the checkbox on the top right corner for filtering.
     var container = L.DomUtil.create('div', 'filter-options bg-light');
