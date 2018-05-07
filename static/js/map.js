@@ -739,7 +739,7 @@ function createCategoryFilters() {
         // Stop propagation
         event.stopPropagation();
 
-    }
+    });
 
     $('.filter-checkbox').change(function (event) {
 
