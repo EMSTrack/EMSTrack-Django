@@ -256,6 +256,7 @@ function onConnect() {
     });
 
     // publish to mqtt on status change from details options dropdown
+    /*
     $('#ambulance-detail-status-select').change(function () {
 
         // Get status
@@ -271,6 +272,7 @@ function onConnect() {
         console.log('Sent message: "' + topic + ':' + status + '"');
 
     });
+    */
 
 };
 
@@ -519,9 +521,11 @@ function addAmbulanceToMap(ambulance) {
             "<strong>" + ambulance.identifier +
             "</strong>" +
             "<br/>" +
+            ambulance_status[ambulance.status] +
+            "<br/>" +
             ambulance_capability[ambulance.capability] +
             "<br/>" +
-            ambulance_status[ambulance.status]
+            (new Date(Date.parse(ambulance.updated_on))).toLocaleString()
         ).addTo(mymap);
 
     // Bind id to icons
