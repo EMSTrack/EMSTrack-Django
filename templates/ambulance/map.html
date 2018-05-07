@@ -67,17 +67,20 @@
             <h6>Capability:</h6>
             <h6>Availability:</h6>
             <div class="card form-group" id="cardOne">
-                <div class="card-header py-0 px-0" id="headingOne">
+                <div class="card-header py-0" id="headingOne">
                     <h6 style="cursor: pointer;"
                         data-toggle="collapse"
-                        data-target="#ambulance_grid"
-                        aria-expanded="true" aria-controls="ambulance_grid">
+                        data-target="#ambulance_available"
+                        aria-expanded="true" aria-controls="ambulance_available">
                         <span role="button">Ambulances</span>
                     </h6>
                 </div>
-                <div class="card-body collapse show py-0 px-0"
-                     id="ambulance-grid"
+                <div class="collapse show"
+                     id="ambulance_available"
                      aria-labelledby="headingOne" data-parent="#cardOne">
+                    <div class="card-body p-0"
+                         id="ambulance-grid">
+                    </div>
                 </div>
             </div>
 
