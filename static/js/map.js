@@ -673,7 +673,7 @@ function createCategoryFilters() {
             '         id="ambulance_' + status + '"\n' +
             '         aria-labelledby="ambulance_heading_' + status + '"\n' +
             '         data-parent="#ambulance_card_' + status + '">\n' +
-            '         <div class="card-body p-0"\n' +
+            '         <div class="card-body px-0"\n' +
             '              id="ambulance-grid-' + status + '">\n' +
             '         </div>\n' +
             '    </div>\n' +
