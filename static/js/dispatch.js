@@ -21,7 +21,7 @@ var newPatientIndex;
 var submitDispatching = function () {
 
     // submit form
-    $('#dispatch_form_collapse').submit();
+    $('#dispatch-form-collapse').submit();
 
 };
 
@@ -540,7 +540,7 @@ $(function() {
 
     });
 
-    $('#dispatch_form_collapse').submit(function (e) {
+    $('#dispatch-form-collapse').submit(function (e) {
 
         // prevent normal form submission
         e.preventDefault();

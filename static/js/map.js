@@ -465,7 +465,7 @@ function addAmbulanceToGrid(ambulance) {
 
     // make grid visible
     if (ambulance.status == 'AV')
-        $('#ambulance_' + ambulance.status).addClass('show');
+        $('#ambulance-' + ambulance.status).addClass('show');
 
     // Add button to ambulance grid
     $('#ambulance-grid-' + ambulance.status)
@@ -762,24 +762,24 @@ function createCategoryPanesAndFilters() {
     // Create ambulance status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
-        $("#ambulance_status").append(
-            '<div class="card form-group mb-1 mt-0" id="ambulance_card_' + status + '">\n' +
+        $("#ambulance-status").append(
+            '<div class="card form-group mb-1 mt-0" id="ambulance-card-' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
-            '         id="ambulance_heading_' + status + '">\n' +
+            '         id="ambulance-heading-' + status + '">\n' +
             '         <h6 style="cursor: pointer;"\n' +
             '             data-toggle="collapse"\n' +
-            '             data-target="#ambulance_' + status + '"\n' +
-            '             aria-expanded="true" aria-controls="ambulance_' + status + '">\n' +
+            '             data-target="#ambulance-' + status + '"\n' +
+            '             aria-expanded="true" aria-controls="ambulance-' + status + '">\n' +
             '             <input class="filter-checkbox" value="status" data-status="' + status + '"\n' +
-            '                    type="checkbox" id="ambulance_checkbox_' + status + '" ' +
+            '                    type="checkbox" id="ambulance-checkbox-' + status + '" ' +
             (visibleCategory[status] ? 'checked' : '') + '>\n' +
             '             <span role="button">' + ambulance_status[status] + '</span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse"\n' +
-            '         id="ambulance_' + status + '"\n' +
-            '         aria-labelledby="ambulance_heading_' + status + '"\n' +
-            '         data-parent="#ambulance_status">\n' +
+            '         id="ambulance-' + status + '"\n' +
+            '         aria-labelledby="ambulance-heading-' + status + '"\n' +
+            '         data-parent="#ambulance-status">\n' +
             '         <div class="card-body py-1 px-0"\n' +
             '              id="ambulance-grid-' + status + '">\n' +
             '         </div>\n' +
@@ -790,7 +790,7 @@ function createCategoryPanesAndFilters() {
     // Create capability options
     Object.keys(ambulance_capability).forEach(function (capability) {
 
-        $("#ambulance_capability").append(
+        $("#ambulance-capability").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="capability" data-status="' + capability + '"\n' +
             '            type="checkbox" id="capability-' + capability + '" ' +
@@ -801,7 +801,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create location options
-    $("#location_type").append(
+    $("#location-type").append(
         '<div class="form-group form-check mt-0 mb-1">\n' +
         '     <input class="form-check-input filter-checkbox" value="location" data-status="hospital"\n' +
         '            type="checkbox" id="location-hospital" ' +
@@ -811,7 +811,7 @@ function createCategoryPanesAndFilters() {
         '</div>');
     Object.keys(location_type).forEach(function (type) {
 
-        $("#location_type").append(
+        $("#location-type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
             '            type="checkbox" id="location-' + type + '" ' +

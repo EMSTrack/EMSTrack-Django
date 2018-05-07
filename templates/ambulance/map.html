@@ -89,30 +89,30 @@
             <!-- Ambulance Filter -->
             <h5 style="cursor: pointer;"
                 data-toggle="collapse"
-                data-target="#ambulance_status"
+                data-target="#ambulance-status"
                 aria-expanded="true"
-                aria-controls="ambulance_status">
+                aria-controls="ambulance-status">
                 <span class="fas fa-ambulance"></span>
                 Ambulances
             </h5>
             <div class="collapse show"
-                 id="ambulance_status"
+                 id="ambulance-status"
                  data-parent="#filtersDiv">
                 <!--
-                <div class="card form-group" id="ambulance_card_available">
+                <div class="card form-group" id="ambulance-card-available">
                     <div class="card-header px-1 py-0"
-                         id="ambulance_heading_available">
+                         id="ambulance-heading-available">
                         <h6 style="cursor: pointer;"
                             data-toggle="collapse"
-                            data-target="#ambulance_available"
-                            aria-expanded="true" aria-controls="ambulance_available">
-                            <input type="checkbox" id="ambulance_checkbox_available">
+                            data-target="#ambulance-available"
+                            aria-expanded="true" aria-controls="ambulance-available">
+                            <input type="checkbox" id="ambulance-checkbox-available">
                             <span role="button">Available</span>
                         </h6>
                     </div>
                     <div class="collapse show"
-                         id="ambulance_available"
-                         aria-labelledby="ambulance_heading_available" data-parent="#cardOne">
+                         id="ambulance-available"
+                         aria-labelledby="ambulance-heading-available" data-parent="#cardOne">
                         <div class="card-body p-0"
                              id="ambulance-grid-available">
                         </div>
@@ -124,13 +124,13 @@
             <!-- Capability Filter -->
             <h5 style="cursor: pointer;"
                 data-toggle="collapse"
-                data-target="#ambulance_capability"
-                aria-expanded="true" aria-controls="ambulance_capability">
+                data-target="#ambulance-capability"
+                aria-expanded="true" aria-controls="ambulance-capability">
                 <span class="fas fa-bed"></span>
                 Capability
             </h5>
             <div class="collapse ml-1"
-                 id="ambulance_capability"
+                 id="ambulance-capability"
                  data-parent="#filtersDiv">
                 <!--
                 <div class="form-group form-check mt-0 mb-1">
@@ -147,13 +147,13 @@
             <!-- Location Filter -->
             <h5 style="cursor: pointer;"
                 data-toggle="collapse"
-                data-target="#location_type"
-                aria-expanded="true" aria-controls="location_type">
+                data-target="#location-type"
+                aria-expanded="true" aria-controls="location-type">
                 <span class="fas fa-map-marker"></span>
                 Locations
             </h5>
             <div class="collapse ml-1"
-                 id="location_type"
+                 id="location-type"
                  data-parent="#filtersDiv">
                 <!--
                 <div class="form-group form-check mt-0 mb-1">
@@ -175,7 +175,7 @@
 
             <!-- Dispatch -->
 
-            <form id="dispatch_form_collapse"
+            <form id="dispatch-form-collapse"
                   method="POST" action="">
                 {% csrf_token %}
 
@@ -284,9 +284,9 @@
                         </button>
                         <button type="button" class="btn btn-secondary px-3"
                                 data-toggle="collapse"
-                                data-target="#dispatch_form_collapse"
+                                data-target="#dispatch-form-collapse"
                                 aria-expanded="true"
-                                aria-controls="dispatch_form_collapse"
+                                aria-controls="dispatch-form-collapse"
                                 onclick="endDispatching()">
                             Cancel
                         </button>
