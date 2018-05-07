@@ -456,7 +456,8 @@ function addAmbulanceToGrid(ambulance) {
         ' to grid');
 
     // make grid visible
-    $('#ambulance_' + ambulance.status).addClass('show');
+    if (ambulance.status == 'AV')
+        $('#ambulance_' + ambulance.status).addClass('show');
 
     // Add button to ambulance grid
     $('#ambulance-grid-' + ambulance.status)
@@ -677,7 +678,7 @@ function createCategoryFilters() {
             '    <div class="collapse"\n' +
             '         id="ambulance_' + status + '"\n' +
             '         aria-labelledby="ambulance_heading_' + status + '"\n' +
-            '         data-parent="#ambulance_card_' + status + '">\n' +
+            '         data-parent="#ambulance_status">\n' +
             '         <div class="card-body py-1 px-0"\n' +
             '              id="ambulance-grid-' + status + '">\n' +
             '         </div>\n' +
