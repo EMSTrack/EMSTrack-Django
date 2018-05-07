@@ -684,7 +684,7 @@ function createCategoryFilters() {
             '             aria-expanded="true" aria-controls="ambulance_' + status + '">\n' +
             '             <input class="filter-checkbox" value="status" data-status="' + status + '"\n' +
             '                    type="checkbox" id="ambulance_checkbox_' + status + '" ' +
-            + (visibleCategory[status] ? 'checked' : '') + '>\n' +
+            (visibleCategory[status] ? 'checked' : '') + '>\n' +
             '             <span role="button">' + ambulance_status[status] + '</span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
@@ -706,7 +706,7 @@ function createCategoryFilters() {
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="capability" data-status="' + capability + '"\n' +
             '            type="checkbox" id="capability-' + capability + '" ' +
-            + (visibleCategory[capability] ? 'checked' : '') + '>\n' +
+            (visibleCategory[capability] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
             '            for="capability-' + capability + '">' + ambulance_capability[capability] + '</label>\n' +
             '</div>');
@@ -717,7 +717,7 @@ function createCategoryFilters() {
         '<div class="form-group form-check mt-0 mb-1">\n' +
         '     <input class="form-check-input filter-checkbox" value="location" data-status="hospital"\n' +
         '            type="checkbox" id="location-hospital" ' +
-        + (visibleCategory['hospital'] ? 'checked' : '') + '>\n' +
+        (visibleCategory['hospital'] ? 'checked' : '') + '>\n' +
         '     <label class="form-check-label"\n' +
         '            for="location-hospital">Hospital</label>\n' +
         '</div>');
@@ -727,7 +727,7 @@ function createCategoryFilters() {
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
             '            type="checkbox" id="location-' + type + '" ' +
-            + (visibleCategory[type] ? 'checked' : '') + '>\n' +
+            (visibleCategory[type] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
             '            for="location-' + type + '">' + location_type[type] + '</label>\n' +
             '</div>');
