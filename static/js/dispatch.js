@@ -358,7 +358,7 @@ function dispatchCall() {
             var obj = { 'name': patient[0] };
             if (patient[1])
                 // add age
-                obj['age'] = patient[1];
+                obj['age'] = parseInt(patient[1]);
             patients.push(obj);
         }
     form['patient_set'] = patients;
@@ -391,30 +391,25 @@ function dispatchCall() {
         data: JSON.stringify(form),
         success: function (data) {
 
-            var successMsg = '<strong>Success</strong><br/>' +
-                +'Ambulance: ' + data['ambulance']
-                + ' dispatched to <br/>' + data['residential_unit']
-                + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
+            // Log success
+            console.log("Succesfully posted new call.");
 
-            // Show modal
-            bsalert(successMsg, 'alert-success', 'Success');
-            // $('.modal-title').html('Success');
-            // $('.modal-body').html(successMsg).addClass('alert-success');
-            // $("#dispatchModal").modal('show');
-
+            // End dispatching
             endDispatching();
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
 
-            // Show modal
-            // $('.modal-title').html('Failure');
-            // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
-            // $("#dispatchModal").modal('show');
-            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
-
+            // Log failure
+            console.log("Failed to post new call.");
             console.log(jqXHR.responseText);
 
+            // Show modal
+            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
+
+            // End dispatching
             endDispatching();
+
         }
     });
 }
