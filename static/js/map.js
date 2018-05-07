@@ -658,7 +658,7 @@ function createCategoryFilters() {
     Object.keys(ambulance_status).forEach(function (status) {
 
         $("#ambulance_availability").append(
-            '<div class="card form-group py-0" id="ambulance_card_' + status + '">\n' +
+            '<div class="card form-group my-0" id="ambulance_card_' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
             '         id="ambulance_heading_' + status + '">\n' +
             '         <h6 style="cursor: pointer;"\n' +
