@@ -74,8 +74,11 @@ var endDispatching = function () {
     $('#dispatchSubmitButton').hide();
     $('#dispatchCancelButton').hide();
 
+    // close dispatch panel
+    $('#dispatchDiv').removeClass('show');
+
     if (!isFilterOpen) {
-        // close filter
+        // close filter panel
         $('#filtersDiv').removeClass('show');
     }
 
