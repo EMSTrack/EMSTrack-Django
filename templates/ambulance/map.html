@@ -62,7 +62,7 @@
         <div class="col-md-2 collapse" id="filtersDiv">
 
             <!-- Ambulance Grid -->
-            <h5>Ambulances:</h5>
+            <h5>Ambulances</h5>
             <div id="ambulance_status">
                 <!--
                 <div class="card form-group" id="ambulance_card_available">
@@ -87,9 +87,14 @@
                 -->
             </div>
 
-            <h5>Capability:</h5>
-
-            <div class="ml-1" id="ambulance_capability">
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#ambulance_capability"
+                aria-expanded="true" aria-controls="ambulance_available">Capability</h5>
+            <div class="collapse ml-1"
+                 id="ambulance_capability"
+                 data-parent="#ambulance_capability" >
+                <!--
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="capability-basic">
                     <label class="form-check-label" for="capability-basic">Basic</label>
@@ -98,9 +103,10 @@
                     <input type="checkbox" class="form-check-input" id="capability-advanced">
                     <label class="form-check-label" for="capability-advanced">Advances</label>
                 </div>
+                -->
             </div>
 
-            <h5>Locations:</h5>
+            <h5>Locations</h5>
             <div class="ml-1" id="location_type">
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="location-hospital">
