@@ -735,7 +735,7 @@ function createCategoryPanesAndFilters() {
     // Create call status grids
     Object.keys(call_status).forEach(function (status) {
 
-        $("#call_status").append(
+        $("#call-status").append(
             '<div class="card form-group mb-1 mt-0" id="call_card_' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
             '         id="call_heading_' + status + '">\n' +
