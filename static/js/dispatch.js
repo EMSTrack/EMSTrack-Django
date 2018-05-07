@@ -28,7 +28,8 @@ var submitDispatching = function () {
 var beginDispatching = function () {
 
     isDispatching = true;
-    isFilterOpen = $('#filtersDiv').hasClass('show');
+    var filterDiv = $('#filtersDiv');
+    isFilterOpen = filterDiv.hasClass('show');
     console.log('Begin dispatching.');
 
     $('#dispatchBeginButton').hide();
@@ -36,7 +37,7 @@ var beginDispatching = function () {
     $('#dispatchCancelButton').show();
 
     // open filter and available ambulances
-    $('#filtersDiv').addClass('show');
+    filtersDiv.addClass('show');
     $('#ambulance_status').addClass('show');
     $('#ambulance_AV').addClass('show');
 
