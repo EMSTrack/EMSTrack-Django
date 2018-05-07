@@ -17,6 +17,13 @@ var currentLocation;
 var currentPatients;
 var newPatientIndex;
 
+var submitDispatching = function () {
+
+    // submit form
+    $('#dispatch_form_collapse').submit();
+
+};
+
 var beginDispatching = function () {
 
     isDispatching = true;
@@ -519,10 +526,10 @@ $(function() {
 
     });
 
-    $('#dispatchSubmitButton').click(function (e) {
+    $('#dispatch_form_collapse').submit(function (e) {
 
         // prevent normal form submission
-        // e.preventDefault();
+        e.preventDefault();
 
         // dispatch call
         dispatchCall();
