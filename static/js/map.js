@@ -659,7 +659,7 @@ function createCategoryFilters() {
 
         $("#ambulance_availability").append(
             '<div class="card form-group" id="ambulance_card_' + status + '">\n' +
-            '    <div class="card-header px-1 py-0"\n' +
+            '    <div class="card-header px-1 pb-0"\n' +
             '         id="ambulance_heading_' + status + '">\n' +
             '         <h6 style="cursor: pointer;"\n' +
             '             data-toggle="collapse"\n' +
@@ -673,7 +673,7 @@ function createCategoryFilters() {
             '         id="ambulance_' + status + '"\n' +
             '         aria-labelledby="ambulance_heading_' + status + '"\n' +
             '         data-parent="#ambulance_card_' + status + '">\n' +
-            '         <div class="card-body px-0"\n' +
+            '         <div class="card-body py-1 px-0"\n' +
             '              id="ambulance-grid-' + status + '">\n' +
             '         </div>\n' +
             '    </div>\n' +
