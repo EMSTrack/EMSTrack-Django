@@ -33,6 +33,11 @@ var beginDispatching = function () {
     $('#dispatchSubmitButton').show();
     $('#dispatchCancelButton').show();
 
+    // open filter and available ambulances
+    $('#filtersDiv').addClass('show');
+    $('#ambulance_status').addClass('show');
+    $('#ambulance_AV').addClass('show');
+
     // Update current location
     updateCurrentLocation(mymap.getCenter());
 
