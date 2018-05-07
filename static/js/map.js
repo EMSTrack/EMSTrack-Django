@@ -662,7 +662,7 @@ function createCategoryFilters() {
     // Create status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
-        $("#ambulance_availability").append(
+        $("#ambulance_status").append(
             '<div class="card form-group mb-1 mt-0" id="ambulance_card_' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
             '         id="ambulance_heading_' + status + '">\n' +
@@ -682,6 +682,28 @@ function createCategoryFilters() {
             '              id="ambulance-grid-' + status + '">\n' +
             '         </div>\n' +
             '    </div>\n' +
+            '</div>');
+    });
+
+    // Create capability options
+    Object.keys(ambulance_capability).forEach(function (capability) {
+
+        $("#ambulance_capability").append(
+            '<div class="form-group form-check mt-0 mb-1">\n' +
+            '     <input type="checkbox" class="form-check-input" id="capability-' + capability + '">\n' +
+            '     <label class="form-check-label"\n' +
+            '            for="capability-' + capability + '">' + ambulance_capability[capability] + '</label>\n' +
+            '</div>');
+    });
+
+    // Create location options
+    Object.keys(location_type.forEach(function (type) {
+
+        $("#location_type").append(
+            '<div class="form-group form-check mt-0 mb-1">\n' +
+            '     <input type="checkbox" class="form-check-input" id="location-' + type + '">\n' +
+            '     <label class="form-check-label"\n' +
+            '            for="location-' + type + '">' + location_type[type] + '</label>\n' +
             '</div>');
     });
 

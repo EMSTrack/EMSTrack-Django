@@ -63,7 +63,7 @@
 
             <!-- Ambulance Grid -->
             <h5>Ambulances:</h5>
-            <div id="ambulance_availability">
+            <div id="ambulance_status">
                 <!--
                 <div class="card form-group" id="ambulance_card_available">
                     <div class="card-header px-1 py-0"
@@ -89,7 +89,7 @@
 
             <h5>Capability:</h5>
 
-            <div class="ml-1">
+            <div class="ml-1" id="ambulance_capability">
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="capability-basic">
                     <label class="form-check-label" for="capability-basic">Basic</label>
@@ -101,12 +101,12 @@
             </div>
 
             <h5>Locations:</h5>
-            <ul>
-                <li>Hospitals</li>
-                <li>Bases</li>
-                <li>AEDs</li>
-                <li>Others</li>
-            </ul>
+            <div class="ml-1" id="location_type">
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="location-hospital">
+                    <label class="form-check-label" for="location-hospital">Hospital</label>
+                </div>
+            </div>
 
         </div>
 
