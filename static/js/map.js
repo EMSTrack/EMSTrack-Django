@@ -657,7 +657,7 @@ function createCategoryFilters() {
     // Create status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
-        $("#ambulanceCard").append(
+        $("#ambulance_availability").append(
             '<div class="card form-group" id="ambulance_card_' + status + '">\n' +
             '    <div class="card-header px-1 py-0"\n' +
             '         id="ambulance_heading_' + status + '">\n' +
