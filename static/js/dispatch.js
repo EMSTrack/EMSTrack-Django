@@ -519,10 +519,10 @@ $(function() {
 
     });
 
-    $('#dispatch_form_collapse').submit(function (e) {
+    $('#dispatchSubmitButton').click(function (e) {
 
         // prevent normal form submission
-        e.preventDefault();
+        // e.preventDefault();
 
         // dispatch call
         dispatchCall();
