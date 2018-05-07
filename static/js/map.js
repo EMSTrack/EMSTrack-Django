@@ -512,12 +512,12 @@ function addCallToGrid(call) {
     var date = (new Date(Date.parse(call.updated_on))).toLocaleString()
 
     // Add item to current-call grid
-    $('#current-calls')
+    $('#call-grid-' + call.status)
         .append(
             '<div class="form-group form-check mt-0 mb-1" id="current-call-item-' + call.id + '">\n' +
             '     <input type="checkbox" class="form-check-input" id="current-call-' + call.id + '">\n' +
             '     <label class="form-check-label" for="current-call-' + call.id + '">\n' +
-            '       ' + call.id + '. [' + call_status[call.status] + '] @ ' + date + '\n' +
+            '       <strong>' + call.id + '</strong> @ ' + date + '\n' +
             '     </label>\n' +
             '</div>\n');
 
@@ -732,7 +732,34 @@ function createCategoryPanesAndFilters() {
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
     });
 
-    // Create status grids
+    // Create call status grids
+    Object.keys(call_status).forEach(function (status) {
+
+        $("#call_status").append(
+            '<div class="card form-group mb-1 mt-0" id="call_card_' + status + '">\n' +
+            '    <div class="card-header px-1 pb-0 pt-1"\n' +
+            '         id="call_heading_' + status + '">\n' +
+            '         <h6 style="cursor: pointer;"\n' +
+            '             data-toggle="collapse"\n' +
+            '             data-target="#call_' + status + '"\n' +
+            '             aria-expanded="true" aria-controls="call_' + status + '">\n' +
+            '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
+            '                    type="checkbox" id="call_checkbox_' + status + '">\n' +
+            '             <span role="button">' + call_status[status] + '</span>\n' +
+            '          </h6>\n' +
+            '    </div>\n' +
+            '    <div class="collapse"\n' +
+            '         id="call_' + status + '"\n' +
+            '         aria-labelledby="call_heading_' + status + '"\n' +
+            '         data-parent="#call_status">\n' +
+            '         <div class="card-body py-1 px-0"\n' +
+            '              id="call-grid-' + status + '">\n' +
+            '         </div>\n' +
+            '    </div>\n' +
+            '</div>');
+    });
+
+    // Create ambulance status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
         $("#ambulance_status").append(
