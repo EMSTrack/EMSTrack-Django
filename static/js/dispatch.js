@@ -139,8 +139,8 @@ var updateCurrentLocation = function(location) {
     currentLocation = location;
 
     // update coordinates on form
-    $('#curr-lat').html(currentLocation.lat.toPrecision(6));
-    $('#curr-lng').html(currentLocation.lng.toPrecision(6));
+    $('#curr-lat').html(currentLocation.lat.toFixed(6));
+    $('#curr-lng').html(currentLocation.lng.toFixed(6));
 
     // remove existing marker
     markersGroup.clearLayers();
