@@ -22,7 +22,9 @@ var beginDispatching = function () {
     isDispatching = true;
     console.log('Begin dispatching.');
 
-    $('#start_dispatch_button').hide();
+    $('#dispatchStartButton').hide();
+    $('#dispatchSubmitButton').show();
+    $('#dispatchCancelButton').show();
 
     // Update current location
     updateCurrentLocation(mymap.getCenter());
@@ -50,7 +52,9 @@ var endDispatching = function () {
 
     markersGroup.clearLayers();
 
-    $('#start_dispatch_button').show();
+    $('#dispatchStartButton').show();
+    $('#dispatchSubmitButton').hide();
+    $('#dispatchCancelButton').hide();
 
 }
 

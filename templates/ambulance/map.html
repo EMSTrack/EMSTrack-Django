@@ -28,18 +28,24 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <button class="btn btn-primary px-3" data-toggle="collapse"
+        <button class="btn btn-primary px-3"
+                id="dispatchBeginButton"
+                data-toggle="collapse"
                 data-target="#dispatchDiv" aria-controls="dispatchDiv"
                 aria-expanded="false" aria-label="Toggle dispatching"
                 onclick="beginDispatching()">
             Dispatch Ambulances
         </button>
 
-        <button type="button" class="btn btn-primary px-3">
+        <button type="button"
+                id="dispatchSubmitButton"
+                class="btn btn-primary px-3">
             Dispatch
         </button>
 
-        <button type="button" class="btn btn-secondary px-3"
+        <button type="button"
+                id="dispatchCancelButton"
+                class="btn btn-secondary px-3"
                 data-toggle="collapse"
                 data-target="#dispatchDiv"
                 aria-expanded="true"
