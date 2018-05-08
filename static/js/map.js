@@ -74,6 +74,12 @@ var mymap;
 var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
 var geocoder = new Geocoder({ access_token: accessToken });
 
+// resize map
+var resizeMap = function() {
+    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 5);
+    mymap.invalidateSize();
+};
+
 // Ready function
 $(function () {
 
@@ -83,15 +89,11 @@ $(function () {
     // Set map view
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
-    // Resize to fill the view
-    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 15);
-    mymap.invalidateSize();
+    // Map to fill the view
+    resizeMap();
 
     // Take care of resizing
-    $(window).on("resize", function () {
-        $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 15);
-        mymap.invalidateSize();
-    }).trigger("resize");
+    $(window).on("resize", function () { resizeMap(); }).trigger("resize");
 
     // geocoder = L.mapbox.geocoder('mapbox.places');
 
