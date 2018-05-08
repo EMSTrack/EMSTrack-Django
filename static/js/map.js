@@ -83,6 +83,14 @@ $(function () {
     // Set map view
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
+    // Resize to fill the view
+    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight();
+
+    // Take care of resizing
+    $(window).on("resize", function () {
+        $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight()); map.invalidateSize();
+    }).trigger("resize");
+
     // geocoder = L.mapbox.geocoder('mapbox.places');
 
     // Add layer to map.
