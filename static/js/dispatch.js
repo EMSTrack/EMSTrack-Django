@@ -489,7 +489,7 @@ var newPatientForm = function(index, symbol) {
 
     var html =
         '<div class="form-row" id="patient-' + index + '-form">' +
-            '<div class="col-md-8">' +
+            '<div class="col-md-7">' +
                 '<input id="patient-' + index + '-name" ' +
                        'type="text" ' +
                        'class="form-control" ' +
@@ -501,7 +501,7 @@ var newPatientForm = function(index, symbol) {
                        'class="form-control" ' +
                        'placeholder="Age">' +
             '</div>' +
-            '<div class="col-md-1">' +
+            '<div class="col-md-2">' +
                 '<button class="btn btn-default btn-block new-patient" ' +
                        ' type="button" ' +
                        ' id="patient-' + index + '-button">' +
