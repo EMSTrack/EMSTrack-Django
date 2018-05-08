@@ -132,7 +132,7 @@ $(function () {
     mymap.on(L.Draw.Event.CREATED,
         function (e) {
             var type = e.layerType;
-            layer = e.layer;
+            var layer = e.layer;
             if (type === 'marker') {
                 // Do marker specific actions
             }
