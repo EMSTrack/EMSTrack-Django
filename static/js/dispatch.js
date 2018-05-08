@@ -62,10 +62,7 @@ var beginDispatching = function () {
 
 }
 
-var endDispatching = function (event) {
-
-    // Stop propagation to avoid collapse
-    event.stopPropagation();
+var endDispatching = function () {
 
     isDispatching = false;
     dispatchingAmbulances = {};

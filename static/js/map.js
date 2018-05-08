@@ -115,7 +115,18 @@ $(function () {
     });
     mymap.addControl(drawControl);
 
-    // Event handler for when some1pxg is drawn. Only handles 
+    // Handle cancel dispatching button
+    $('#dispatchCancelButton').click(function(event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+        // call end dispatching
+        endDispatching();
+
+    });
+
+    // Event handler for when some1pxg is drawn. Only handles
     // when a new drawing is made for now.
     mymap.on(L.Draw.Event.CREATED,
         function (e) {
