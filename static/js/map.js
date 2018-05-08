@@ -85,10 +85,11 @@ $(function () {
 
     // Resize to fill the view
     $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight());
+    mymap.invalidateSize();
 
     // Take care of resizing
     $(window).on("resize", function () {
-        $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight()); map.invalidateSize();
+        $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight()); mymap.invalidateSize();
     }).trigger("resize");
 
     // geocoder = L.mapbox.geocoder('mapbox.places');
