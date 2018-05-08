@@ -489,7 +489,7 @@ var newPatientForm = function(index, symbol) {
 
     var html =
         '<div class="form-row" id="patient-' + index + '-form">' +
-            '<div class="col-md-9">' +
+            '<div class="col-md-8">' +
                 '<input id="patient-' + index + '-name" ' +
                        'type="text" ' +
                        'class="form-control" ' +
