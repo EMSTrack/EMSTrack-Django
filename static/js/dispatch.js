@@ -57,8 +57,8 @@ var beginDispatching = function () {
     // add new patient form entry
     addPatientForm(newPatientIndex);
 
-    // invalidate map size
-    mymap.invalidateSize();
+    // resize size
+    resizeMap();
 
     // center map
     mymap.setView(currentLocation, mymap.getZoom());
