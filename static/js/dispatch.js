@@ -57,6 +57,9 @@ var beginDispatching = function () {
     // add new patient form entry
     addPatientForm(newPatientIndex);
 
+    // invalidate map size
+    mymap.invalidateSize();
+
     // center map
     mymap.setView(currentLocation, mymap.getZoom());
 
@@ -81,6 +84,9 @@ var endDispatching = function () {
         // close filter panel
         $('#filtersDiv').removeClass('show');
     }
+
+    // invalidate map size
+    mymap.invalidateSize();
 
 }
 

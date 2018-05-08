@@ -89,7 +89,8 @@ $(function () {
 
     // Take care of resizing
     $(window).on("resize", function () {
-        $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 15); mymap.invalidateSize();
+        $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 15);
+        mymap.invalidateSize();
     }).trigger("resize");
 
     // geocoder = L.mapbox.geocoder('mapbox.places');
