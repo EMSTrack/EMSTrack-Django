@@ -84,7 +84,7 @@ $(function () {
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
 
     // Resize to fill the view
-    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight();
+    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight());
 
     // Take care of resizing
     $(window).on("resize", function () {
