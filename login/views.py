@@ -21,7 +21,7 @@ from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesV
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType
+from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from hospital.models import EquipmentType
@@ -379,6 +379,10 @@ class MQTTAclView(CsrfExemptMixin,
 
                 # permission to subscribe:
 
+                # is user admin?
+                if user.is_staff:
+                    return HttpResponse('OK')
+
                 #  - settings
                 if (len(topic) == 1 and
                         topic[0] == 'settings'):
@@ -437,6 +441,30 @@ class MQTTAclView(CsrfExemptMixin,
                                 ((len(topic) == 3 and topic[2] == 'data') or
                                  (len(topic) == 5 and topic[2] == 'call' and topic[4] == 'status'))):
                             return HttpResponse('OK')
+
+                    except ObjectDoesNotExist:
+                        pass
+
+                #  - call/{call-id}/data
+                elif (len(topic) == 3 and
+                      topic[0] == 'call' and
+                      topic[2] == 'data'):
+
+                    # get ambulance_id
+                    call_id = int(topic[1])
+
+                    # is user authorized?
+                    try:
+
+                        # retrieve call
+                        call = Call.objects.get(id=call_id)
+
+                        # can read ambulance in call?
+                        for ambulancecall in call.ambulancecall_set.all():
+
+                            can_read = get_permissions(user).check_can_read(ambulance=ambulancecall.ambulance_id)
+                            if (can_read):
+                                return HttpResponse('OK')
 
                     except ObjectDoesNotExist:
                         pass
@@ -588,12 +616,16 @@ class SettingsView(APIView):
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
         equipment_type = {m.name: m.value for m in EquipmentType}
         location_type = {m.name: m.value for m in LocationType}
+        call_status = {m.name: m.value for m in CallStatus}
+        ambulancecall_status = {m.name: m.value for m in AmbulanceCallStatus}
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
                         'ambulance_capability': ambulance_capability,
                         'equipment_type': equipment_type,
                         'location_type': location_type,
+                        'call_status': call_status,
+                        'ambulancecall_status': ambulancecall_status,
                         'defaults': defaults.copy()}
 
         # serialize defaults.location

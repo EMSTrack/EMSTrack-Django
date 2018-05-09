@@ -63,6 +63,29 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # Modify ambulance
 
         # retrieve current ambulance status

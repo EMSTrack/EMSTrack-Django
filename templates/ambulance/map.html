@@ -7,6 +7,8 @@
         var ambulance_status = {{ ambulance_status|safe }};
         var ambulance_capability = {{ ambulance_capability|safe }};
         var location_type= {{ location_type|safe }};
+        var call_status = {{ call_status|safe }};
+        var ambulancecall_status = {{ ambulancecall_status|safe }};
         var username = '{{ user.get_username|safe }}';
         var APIBaseUrl = '{% url 'index' %}api/';
         var MQTTBroker = {
@@ -20,276 +22,283 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
 
-        <div class="row">
+    <nav class="navbar navbar-light"
+         id="map-navbar">
+        <button class="navbar-toggler mr-auto" type="button" data-toggle="collapse"
+                data-target="#filtersDiv" aria-controls="filterDiv"
+                aria-expanded="false" aria-label="Toggle filters">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <button class="btn btn-primary px-3 mx-1"
+                id="dispatchBeginButton"
+                data-toggle="collapse"
+                data-target="#dispatchDiv" aria-controls="dispatchDiv"
+                aria-expanded="false" aria-label="Toggle dispatching"
+                onclick="beginDispatching()">
+            Dispatch Ambulances
+        </button>
+
+        <button type="button"
+                id="dispatchSubmitButton"
+                class="btn btn-primary px-3 mx-1"
+                onclick="submitDispatching()"
+                style="display: none;">
+            Dispatch
+        </button>
+
+        <button type="button"
+                id="dispatchCancelButton"
+                class="btn btn-secondary px-3 mx-1"
+                data-toggle="collapse"
+                data-target="#dispatchDiv"
+                aria-expanded="true"
+                aria-controls="dispatchDiv"
+                style="display: none;">
+            Cancel
+        </button>
+
+    </nav>
+
+    <div class="row mx-1">
+
+        <!-- Filter -->
+        <div class="col-md-3 border-top border-secondary collapse bg-light"
+             id="filtersDiv">
+
+            <!-- Calls Filter -->
+            <h5 class="mt-2"
+                style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#call-status"
+                aria-expanded="true" aria-controls="call-status">
+                <span class="fas fa-phone"></span>
+                Calls
+            </h5>
+            <div class="collapse ml-1"
+                 id="call-status"
+                 data-parent="#filtersDiv">
+                <!--
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="current-call-1">
+                    <label class="form-check-label" for="current-call-1">id</label>
+                </div>
+                -->
+            </div>
+
+            <!-- Ambulance Filter -->
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#ambulance-status"
+                aria-expanded="true"
+                aria-controls="ambulance-status">
+                <span class="fas fa-ambulance"></span>
+                Ambulances
+            </h5>
+            <div class="collapse show"
+                 id="ambulance-status"
+                 data-parent="#filtersDiv">
+                <!--
+                <div class="card form-group" id="ambulance-card-available">
+                    <div class="card-header px-1 py-0"
+                         id="ambulance-heading-available">
+                        <h6 style="cursor: pointer;"
+                            data-toggle="collapse"
+                            data-target="#ambulance-available"
+                            aria-expanded="true" aria-controls="ambulance-available">
+                            <input type="checkbox" id="ambulance-checkbox-available">
+                            <span role="button">Available</span>
+                        </h6>
+                    </div>
+                    <div class="collapse show"
+                         id="ambulance-available"
+                         aria-labelledby="ambulance-heading-available" data-parent="#cardOne">
+                        <div class="card-body p-0"
+                             id="ambulance-grid-available">
+                        </div>
+                    </div>
+                </div>
+                -->
+            </div>
+
+            <!-- Capability Filter -->
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#ambulance-capability"
+                aria-expanded="true" aria-controls="ambulance-capability">
+                <span class="fas fa-bed"></span>
+                Capability
+            </h5>
+            <div class="collapse ml-1"
+                 id="ambulance-capability"
+                 data-parent="#filtersDiv">
+                <!--
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="capability-basic">
+                    <label class="form-check-label" for="capability-basic">Basic</label>
+                </div>
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="capability-advanced">
+                    <label class="form-check-label" for="capability-advanced">Advances</label>
+                </div>
+                -->
+            </div>
+
+            <!-- Location Filter -->
+            <h5 style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#location-type"
+                aria-expanded="true" aria-controls="location-type">
+                <span class="fas fa-map-marker"></span>
+                Locations
+            </h5>
+            <div class="collapse ml-1"
+                 id="location-type"
+                 data-parent="#filtersDiv">
+                <!--
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="location-hospital">
+                    <label class="form-check-label" for="location-hospital">Hospital</label>
+                </div>
+                -->
+            </div>
+
+        </div>
+
+        <!-- Map -->
+        <div class="col border-top border-secondary px-0">
+            <div id="live-map" style="height: 650px"></div>
+        </div>
+
+        <!-- Dispatching -->
+        <div class="col-md-3 border-top border-secondary collapse bg-light"
+             id="dispatchDiv">
 
             <!-- Dispatch -->
 
-            <div class="col-md-12">
+            <form id="dispatch-form-collapse"
+                  method="POST" action="">
+                {% csrf_token %}
 
-                <form id="dispatch_form_collapse"
-                      method="POST" class="collapse" action="">
-                    {% csrf_token %}
-
-                    <div class="card form-group">
-
-                        <div class="card-header">
-                            <div class="float-right">
-                                <button type="submit" class="btn btn-primary px-3">
-                                    Dispatch
-                                </button>
-                                <button type="button" class="btn btn-secondary px-3"
-                                        data-toggle="collapse"
-                                        data-target="#dispatch_form_collapse"
-                                        aria-expanded="true"
-                                        aria-controls="dispatch_form_collapse"
-                                        onclick="endDispatching()">
-                                    Cancel
-                                </button>
-                            </div>
-                            <h5 class="mb-0">Dispatch Ambulances</h5>
-                        </div>
-
-                        <div class="card-body m-0 p-0">
-
-                            <div class="card-group">
-
-                                <div class="card border-0">
-
-                                    <div class="card-body">
-                                        <h5 class="card-title">Priority:</h5>
-                                        <form required>
-                                            <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
-                                                <label class="btn btn-success">
-                                                    <input type="radio" name="priority" autocomplete="off" value="A">
-                                                    A
-                                                </label>
-                                                <label class="btn btn-yellow">
-                                                    <input type="radio" name="priority" autocomplete="off" value="B">
-                                                    B
-                                                </label>
-                                                <label class="btn btn-warning">
-                                                    <input type="radio" name="priority" autocomplete="off" value="C">
-                                                    C
-                                                </label>
-                                                <label class="btn btn-danger">
-                                                    <input type="radio" name="priority" autocomplete="off" value="D">
-                                                    D
-                                                </label>
-                                                <label class="btn btn-info">
-                                                    <input type="radio" name="priority" autocomplete="off" value="E">
-                                                    E
-                                                </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" name="priority" autocomplete="off" value="O">
-                                                    &Omega;
-                                                </label>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <h5 class="card-title"> Description:</h5>
-                                        <textarea class="form-control" name="description"
-                                                  rows="3" id="comment"
-                                                  placeholder="Describe the incident"
-                                                  required></textarea>
-                                    </div>
-
-                                </div>
-
-                                <div class="card border-0">
-
-                                    <div class="card-body">
-                                        <div class="float-right"
-                                             title="Click to automatically search for coordinates after changing the address">
-                                            update coordinates
-                                            <input id="update-coordinates" type="checkbox">
-                                        </div>
-                                        <div class="card-title">
-                                            <h5>Street address:</h5>
-                                        </div>
-                                        <input id="street" type="text"
-                                               name="street" class="form-control"
-                                               placeholder="Address" required autocomplete="street-address">
-                                    </div>
-
-                                    <div class="card-body">
-                                        <div class="float-right"
-                                             title="Click to automatically search for address after changing the coordinates">
-                                            update address
-                                            <input id="update-address" type="checkbox" checked/>
-                                        </div>
-                                        <div class="card-title">
-                                            <h5>Coordinates:</h5>
-                                        </div>
-                                        <div class="card"
-                                             title="Click on map to update coordinates">
-                                            <div class="card-body">
-                                                <strong>Latitude:</strong>
-                                                <div id="curr-lat" style="display: inline-block;"></div>
-                                                <br/>
-                                                <strong>Longitude:</strong>
-                                                <div id="curr-lng" style="display: inline-block;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <div class="card border-0">
-
-                                    <div class="card-body">
-                                        <div class="card-title">
-                                            <h5>Patients:</h5>
-                                        </div>
-                                        <div id="patients">
-                                            <!--
-                                            <div class="form-row" id="patient-0">
-                                                <div class="col-sm-8 p-0">
-                                                    <input id="patient-0-name" type="text"
-                                                           class="form-control"
-                                                           placeholder="Name">
-                                                </div>
-                                                <div class="col-sm-2 p-0">
-                                                    <input id="patient-0-age" type="text"
-                                                           class="form-control"
-                                                           placeholder="Age"/>
-                                                </div>
-                                                <div class="col-sm-2 p-0">
-                                                    <button class="btn btn-default new-patient"
-                                                            type="button"
-                                                            id="patient-0-button">
-                                                        <span class="fas fa-plus"></span>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            -->
-                                        </div>
-                                    </div>
-
-                                    <div class="card-body">
-                                        <div class="card-title">
-                                            <h5 class="mb-0">Ambulances:</h5>
-                                        </div>
-                                        <div id="ambulance-selection">
-                                            <input id="ambulance-selection-message"
-                                                   class="border-0 w-100"
-                                                   placeholder="Click on or drag ambulances here"/>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                        <!--
-                        <div class="card-footer text-right">
-                            <button type="submit" class="btn btn-primary px-3">
-                                Dispatch
-                            </button>
-                            <button type="button" class="btn btn-secondary px-3"
-                                    data-toggle="collapse"
-                                    data-target="#dispatch_form_collapse"
-                                    aria-expanded="true"
-                                    aria-controls="dispatch_form_collapse"
-                                    onclick="endDispatching()">
-                                Cancel
-                            </button>
-                        </div>
-                        -->
-
+                <h5>Priority</h5>
+                <form required>
+                    <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
+                        <label class="btn btn-success">
+                            <input type="radio" name="priority" autocomplete="off" value="A">
+                            A
+                        </label>
+                        <label class="btn btn-yellow">
+                            <input type="radio" name="priority" autocomplete="off" value="B">
+                            B
+                        </label>
+                        <label class="btn btn-warning">
+                            <input type="radio" name="priority" autocomplete="off" value="C">
+                            C
+                        </label>
+                        <label class="btn btn-danger">
+                            <input type="radio" name="priority" autocomplete="off" value="D">
+                            D
+                        </label>
+                        <label class="btn btn-info">
+                            <input type="radio" name="priority" autocomplete="off" value="E">
+                            E
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="priority" autocomplete="off" value="O">
+                            &Omega;
+                        </label>
                     </div>
-
                 </form>
 
-            </div>
+                <h5> Description</h5>
+                <textarea class="form-control" name="description"
+                          rows="3" id="comment"
+                          placeholder="Describe the incident"
+                          required></textarea>
 
-        </div>
-
-        <div class="row">
-
-            <!-- Map -->
-            <div class="col-md-9">
-                <div id="live-map" style="height: 700px"></div>
-            </div>
-
-            <div class="col-md-3">
-
-
-                <!-- Dispatch panel -->
-                <div class="form-group" id="start_dispatch_button">
-                    <button class="btn btn-primary btn-block"
-                            data-toggle="collapse"
-                            data-target="#dispatch_form_collapse"
-                            aria-expanded="true" aria-controls="dispatch_form_collapse"
-                            onclick="beginDispatching()">
-                        Dispatch Ambulances
-                    </button>
+                <div class="float-right"
+                     title="Click to automatically search for coordinates after changing the address">
+                    update coordinates
+                    <input id="update-coordinates" type="checkbox">
                 </div>
+                <h5>Street address</h5>
+                <input id="street" type="text"
+                       name="street" class="form-control"
+                       placeholder="Address" required autocomplete="street-address">
 
-                <!-- Ambulance Grid -->
-                <div class="card form-group" id="cardOne">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0" style="cursor: pointer;"
-                            data-toggle="collapse"
-                            data-target="#ambulance_collapse"
-                            aria-expanded="true" aria-controls="ambulance_collapse">
-                            <span role="button">Ambulances</span>
-                        </h5>
-                    </div>
-                    <div id="ambulance_collapse" class="collapse show"
-                         aria-labelledby="headingOne" data-parent="#cardOne">
-                        <div class="card-body" id="ambulance-grid"></div>
+                <div class="float-right"
+                     title="Click to automatically search for address after changing the coordinates">
+                    update address
+                    <input id="update-address" type="checkbox" checked/>
+                </div>
+                <h5>Coordinates</h5>
+                <div class="card"
+                     title="Click on map to update coordinates">
+                    <div class="card-body py-1 px-3">
+                        <strong>Lat:</strong>
+                        <div id="curr-lat" style="display: inline-block;"></div>
+                        , &nbsp;
+                        <strong>Lon:</strong>
+                        <div id="curr-lng" style="display: inline-block;"></div>
                     </div>
                 </div>
 
-                <!-- Ambulance Info -->
-                <div class="card form-group" id="cardTwo">
-                    <div class="card-header" id="headingTwo">
-                        <h5 class="mb-0" style="cursor: pointer;"
-                            data-toggle="collapse"
-                            data-target="#ambulance_info_collapse"
-                            aria-expanded="true" aria-controls="ambulance_info_collapse">
-                            <span role="button">Details</span>
-                        </h5>
+                <h5>Ambulances</h5>
+                <div class="card px-0 py-0">
+                    <div class="card-body py-1 px-2"
+                         id="ambulance-selection">
+                        <input id="ambulance-selection-message"
+                               class="border-0 w-100"
+                               placeholder="Click on or drag ambulances here"/>
                     </div>
-                    <div id="ambulance_info_collapse" class="collapse show"
-                         aria-labelledby="headingTwo" data-parent="#cardTwo">
-                        <div class="card-body" id="ambulance-detail">
-                            <input type="hidden"
-                                   name="change-status-ambulance-id"
-                                   id="ambulance-detail-id">
-                            <p>
-                                <strong>Ambulance:</strong>
-                                <span id="ambulance-detail-name"/>
-                            </p>
-                            <p>
-                                <strong>Capability:</strong>
-                                <span id="ambulance-detail-capability"/>
-                            </p>
-                            <p>
-                                <strong>Updated on:</strong>
-                                <span id="ambulance-detail-updated-on"/>
-                            </p>
-                            <p>
-                                <strong>Status:</strong>
-                                <select id="ambulance-detail-status-select"
-                                        style="margin: auto;">
-                                    {% for k, v in ambulance_status.items %}
-                                    <option value="{{ k }}">{{ v }}</option>
-                                    {% endfor %}
-                                </select>
-                            </p>
+                </div>
+
+                <h5>Patients</h5>
+                <div id="patients">
+                    <!--
+                    <div class="form-row" id="patient-0">
+                        <div class="col-sm-8 p-0">
+                            <input id="patient-0-name" type="text"
+                                   class="form-control"
+                                   placeholder="Name">
+                        </div>
+                        <div class="col-sm-2 p-0">
+                            <input id="patient-0-age" type="text"
+                                   class="form-control"
+                                   placeholder="Age"/>
+                        </div>
+                        <div class="col-sm-2 p-0">
+                            <button class="btn btn-default new-patient"
+                                    type="button"
+                                    id="patient-0-button">
+                                <span class="fas fa-plus"></span>
+                            </button>
                         </div>
                     </div>
+                    -->
                 </div>
 
-            </div>
+                <!--
+                    <div class="card-footer text-right">
+                        <button type="submit" class="btn btn-primary px-3">
+                            Dispatch
+                        </button>
+                        <button type="button" class="btn btn-secondary px-3"
+                                data-toggle="collapse"
+                                data-target="#dispatch-form-collapse"
+                                aria-expanded="true"
+                                aria-controls="dispatch-form-collapse"
+                                onclick="endDispatching()">
+                            Cancel
+                        </button>
+                    </div>
+                    -->
+
+            </form>
+
         </div>
+
     </div>
 
     <!-- This is modals for ambulance dispatcher's panel -->

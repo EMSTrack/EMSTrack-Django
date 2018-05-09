@@ -1,79 +1,18 @@
 var ambulanceMarkers = {};  // Store ambulance markers
-var ambulances = {};	// Store ambulance details
+var ambulances = {};        // Store ambulance details
 
-var hospitalMarkers = {};  // Store hospital markers
-var hospitals = {};	// Store hospital details
+var hospitalMarkers = {};   // Store hospital markers
+var hospitals = {};	        // Store hospital details
 
-var locationMarkers = {};  // Store location markers
-var locations = {};	// Store location details
+var locationMarkers = {};   // Store location markers
+var locations = {};	        // Store location details
+
+var calls = {};             // Store call details
 
 // Initialize category panes
 var visibleCategory = {};
 
-// add status
-Object.keys(ambulance_status).forEach(function(status) {
-    visibleCategory[status] = true;
-});
-
-// add capability
-Object.keys(ambulance_capability).forEach(function(capability) {
-    visibleCategory[capability] = true;
-});
-
-// add hospital
-visibleCategory['hospital'] = true;
-
-// add location_type
-Object.keys(location_type).forEach(function(type) {
-    visibleCategory[type] = false;
-});
-
 // Initialize ambulance icons
-var ambulance_settings = [
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_blue.svg',
-            iconSize: [15, 30],
-        }), 'btn-primary'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_green.svg',
-            iconSize: [15, 30],
-        }), 'btn-success'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_gray.svg',
-            iconSize: [15, 30],
-        }), 'btn-secondary'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_red.svg',
-            iconSize: [15, 30],
-        }), 'btn-danger'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_yellow.svg',
-            iconSize: [15, 30],
-        }), 'btn-warning'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_purple.svg',
-            iconSize: [15, 30],
-        }), 'btn-info'
-    ],
-    [
-        L.icon({
-            iconUrl: '/static/icons/cars/ambulance_orange.svg',
-            iconSize: [15, 30],
-        }), 'btn-dark'
-    ],
-];
-
 var ambulance_icons = {};
 var ambulance_buttons = {};
 for (var key in ambulance_css) {
@@ -135,6 +74,12 @@ var mymap;
 var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
 var geocoder = new Geocoder({ access_token: accessToken });
 
+// resize map
+var resizeMap = function() {
+    $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 5);
+    mymap.invalidateSize();
+};
+
 // Ready function
 $(function () {
 
@@ -143,6 +88,12 @@ $(function () {
 
     // Set map view
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
+
+    // Map to fill the view
+    resizeMap();
+
+    // Take care of resizing
+    $(window).on("resize", function () { resizeMap(); }).trigger("resize");
 
     // geocoder = L.mapbox.geocoder('mapbox.places');
 
@@ -167,12 +118,23 @@ $(function () {
     });
     mymap.addControl(drawControl);
 
-    // Event handler for when some1pxg is drawn. Only handles 
+    // Handle cancel dispatching button
+    $('#dispatchCancelButton').click(function(event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+        // call end dispatching
+        endDispatching();
+
+    });
+
+    // Event handler for when some1pxg is drawn. Only handles
     // when a new drawing is made for now.
     mymap.on(L.Draw.Event.CREATED,
         function (e) {
             var type = e.layerType;
-            layer = e.layer;
+            var layer = e.layer;
             if (type === 'marker') {
                 // Do marker specific actions
             }
@@ -180,8 +142,8 @@ $(function () {
             mymap.addLayer(layer);
         });
 
-    // Create category filter on the right hand top corner
-    createCategoryFilter();
+    // Create category panes and filters
+    createCategoryPanesAndFilters();
 
     // Make ambulance-selection droppable
     $('#ambulance-selection')
@@ -269,16 +231,16 @@ function onConnect() {
     console.log("Retrieving profile from API");
     $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
 
-        // Subscribe to hospitals
-        $.each(data.hospitals, function (index) {
-            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
+        // Subscribe to ambulances
+        $.each(data.ambulances, function (index) {
+            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
         });
 
-        // Subscribe to ambulances
-        $.each(data.ambulances, function (index) {
-            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
+        // Subscribe to hospitals
+        $.each(data.hospitals, function (index) {
+            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
         });
@@ -297,20 +259,19 @@ function onConnect() {
         
     });
 
-    // publish to mqtt on status change from details options dropdown
-    $('#ambulance-detail-status-select').change(function () {
+    // retrieve calls from api
+    console.log("Retrieving calls from API");
+    $.getJSON(APIBaseUrl + 'call/', function (data) {
 
-        // Get status
-        status = JSON.stringify({'status': this.value});
+        console.log('calls = ' + calls);
 
-        // Send message
-        var id = $('#ambulance-detail-id').val();
-        var topic = "user/" + username + "/client/" + clientId + "/ambulance/" + id + "/data";
-        var message = new Paho.MQTT.Message(status);
-        message.destinationName = topic
-        message.qos = 2;
-        mqttClient.send(message);
-        console.log('Sent message: "' + topic + ':' + status + '"');
+        // Subscribe to current calls
+        $.each(data, function (index) {
+            console.log('data[index] = ' + data[index]);
+            var topicName = "call/" + data[index].id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+        });
 
     });
 
@@ -405,12 +366,19 @@ function onMessageArrived(message) {
             updateAmbulance(data);
         }
 
-        // Look for ambulance/{id}/data
+        // Look for hospital/{id}/data
         else if (topic[0] === 'hospital' &&
             topic[2] == 'data') {
             updateHospital(data);
         }
 
+        // Look for call/{id}/data
+        else if (topic[0] === 'call' &&
+            topic[2] == 'data') {
+            updateCall(data);
+        }
+
+        
     } catch (e) {
         bsalert('Error processing message "' +
             message.destinationName + ':' + message.payloadString +
@@ -462,7 +430,7 @@ function updateAmbulance(ambulance) {
     addAmbulanceToMap(ambulance);
 
     // update detail panel
-    updateDetailPanel(ambulance);
+    // updateDetailPanel(ambulance);
 
 };
 
@@ -491,14 +459,39 @@ function updateHospital(hospital) {
 
 };
 
+function updateCall(call) {
+    
+    // retrieve id
+    var id = call.id;
+
+    // already exists?
+    if (id in calls) {
+
+        // Remove from calls
+        delete calls[call.id];
+
+        // Remove existing call
+        $('#current-call-item-' + call.id).remove();
+
+    }
+
+    // add call to grid
+    addCallToGrid(call);
+    
+}
+
 function addAmbulanceToGrid(ambulance) {
 
     console.log('Adding ambulance "' + ambulance.identifier +
         '[id=' + ambulance.id + ', status=' + ambulance.status + ', btn=' + ambulance_buttons[ambulance.status] + ']"' +
         ' to grid');
 
+    // make grid visible
+    if (ambulance.status == 'AV')
+        $('#ambulance-' + ambulance.status).addClass('show');
+
     // Add button to ambulance grid
-    $('#ambulance-grid')
+    $('#ambulance-grid-' + ambulance.status)
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
@@ -508,6 +501,8 @@ function addAmbulanceToGrid(ambulance) {
             + ' draggable="true">'
             + ambulance.identifier
             + '</button>');
+
+    // Make button draggable
     $('#grid-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
@@ -526,6 +521,28 @@ function addAmbulanceToGrid(ambulance) {
         .dblclick( function(e) {
             addToDispatchingList(ambulance);
         });
+
+};
+
+function addCallToGrid(call) {
+
+    console.log('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
+
+    // Add call to calls
+    calls[call.id] = call;
+
+    // Format date
+    var date = (new Date(Date.parse(call.updated_on))).toLocaleString()
+
+    // Add item to current-call grid
+    $('#call-grid-' + call.status)
+        .append(
+            '<div class="form-group form-check mt-0 mb-1" id="current-call-item-' + call.id + '">\n' +
+            '     <input type="checkbox" class="form-check-input" id="current-call-' + call.id + '">\n' +
+            '     <label class="form-check-label" for="current-call-' + call.id + '">\n' +
+            '       <strong>' + call.id + '</strong>: ' + date + '\n' +
+            '     </label>\n' +
+            '</div>\n');
 
 };
 
@@ -555,9 +572,11 @@ function addAmbulanceToMap(ambulance) {
             "<strong>" + ambulance.identifier +
             "</strong>" +
             "<br/>" +
+            ambulance_status[ambulance.status] +
+            "<br/>" +
             ambulance_capability[ambulance.capability] +
             "<br/>" +
-            ambulance_status[ambulance.status]
+            (new Date(Date.parse(ambulance.updated_on))).toLocaleString()
         ).addTo(mymap);
 
     // Bind id to icons
@@ -577,7 +596,7 @@ function addAmbulanceToMap(ambulance) {
             function (e) {
 
                 // update details panel
-                updateDetailPanel(ambulance);
+                // updateDetailPanel(ambulance);
 
                 // add to dispatching list
                 addToDispatchingList(ambulance);
@@ -693,91 +712,147 @@ function updateDetailPanel(ambulance) {
 
 }
 
-/* Create status filter on the top right corner of the map */
-function createCategoryFilter() {
+/* Create category filter */
+function createCategoryPanesAndFilters() {
 
-    // Create category panes
+    // Initialize visibleCategories
+
+    // add status
+    Object.keys(ambulance_status).forEach(function(status) {
+        visibleCategory[status] = true;
+    });
+
+    // add capability
+    Object.keys(ambulance_capability).forEach(function(capability) {
+        visibleCategory[capability] = true;
+    });
+
+    // add hospital
+    visibleCategory['hospital'] = true;
+
+    // add location_type
+    Object.keys(location_type).forEach(function(type) {
+        visibleCategory[type] = false;
+    });
+
+    // Initialize panes
+
+    // Create ambulance status category panes
     Object.keys(ambulance_status).forEach(function (status) {
         Object.keys(ambulance_capability).forEach(function (capability) {
-            mymap.createPane(status+"|"+capability);
+            var pane = mymap.createPane(status+"|"+capability);
+            pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
         });
     });
-    mymap.createPane('hospital');
+
+    // Create hospital category pane
+    var pane = mymap.createPane('hospital');
+    pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
+
+    // Create location category panes
     Object.keys(location_type).forEach(function (type) {
-        mymap.createPane(type);
+        var pane = mymap.createPane(type);
+        pane.style.display = (visibleCategory[type] ? 'block' : 'none');
     });
 
-    // Add the checkbox on the top right corner for filtering.
-    var container = L.DomUtil.create('div', 'filter-options bg-light');
+    // Create call status grids
+    Object.keys(call_status).forEach(function (status) {
 
-    // Generate HTML code for checkboxes for each of the statuses.
-    var filterHtml = "";
+        $("#call-status").append(
+            '<div class="card form-group mb-1 mt-0" id="call-card-' + status + '">\n' +
+            '    <div class="card-header px-1 pb-0 pt-1"\n' +
+            '         id="call-heading-' + status + '">\n' +
+            '         <h6 style="cursor: pointer;"\n' +
+            '             data-toggle="collapse"\n' +
+            '             data-target="#call-' + status + '"\n' +
+            '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
+            '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
+            '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
+            '             <span role="button">' + call_status[status] + '</span>\n' +
+            '          </h6>\n' +
+            '    </div>\n' +
+            '    <div class="collapse"\n' +
+            '         id="call-' + status + '"\n' +
+            '         aria-labelledby="call-heading-' + status + '"\n' +
+            '         data-parent="#call-status">\n' +
+            '         <div class="card-body py-1 px-1"\n' +
+            '              id="call-grid-' + status + '">\n' +
+            '         </div>\n' +
+            '    </div>\n' +
+            '</div>');
+    });
 
-    filterHtml += '<div class="border border-dark rounded-top px-1 pt-1 pb-0">';
+    // Create ambulance status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
-        // add div
-        filterHtml += '<div class="checkbox"><label><input class="chk" data-status="'
-            + status + '" type="checkbox" value="status" '
-            + (visibleCategory[status] ? 'checked' : '') + '>'
-            + ambulance_status[status] + "</label></div>";
-
+        $("#ambulance-status").append(
+            '<div class="card form-group mb-1 mt-0" id="ambulance-card-' + status + '">\n' +
+            '    <div class="card-header px-1 pb-0 pt-1"\n' +
+            '         id="ambulance-heading-' + status + '">\n' +
+            '         <h6 style="cursor: pointer;"\n' +
+            '             data-toggle="collapse"\n' +
+            '             data-target="#ambulance-' + status + '"\n' +
+            '             aria-expanded="true" aria-controls="ambulance-' + status + '">\n' +
+            '             <input class="filter-checkbox" value="status" data-status="' + status + '"\n' +
+            '                    type="checkbox" id="ambulance-checkbox-' + status + '" ' +
+            (visibleCategory[status] ? 'checked' : '') + '>\n' +
+            '             <span role="button">' + ambulance_status[status] + '</span>\n' +
+            '          </h6>\n' +
+            '    </div>\n' +
+            '    <div class="collapse"\n' +
+            '         id="ambulance-' + status + '"\n' +
+            '         aria-labelledby="ambulance-heading-' + status + '"\n' +
+            '         data-parent="#ambulance-status">\n' +
+            '         <div class="card-body py-1 px-0"\n' +
+            '              id="ambulance-grid-' + status + '">\n' +
+            '         </div>\n' +
+            '    </div>\n' +
+            '</div>');
     });
-    filterHtml += "</div>";
 
-    // Generate HTML code for checkboxes for each of the capabilities.
-    filterHtml += '<div class="border border-top-0 border-bottom-1 border-dark px-1 pt-1 pb-0">';
+    // Create capability options
     Object.keys(ambulance_capability).forEach(function (capability) {
 
-        // add div
-        filterHtml += '<div class="checkbox"><label><input class="chk" '
-            + 'data-status="' + capability + '" type="checkbox" value="capability" '
-            + (visibleCategory[capability] ? 'checked' : '') + '>'
-            + ambulance_capability[capability] + "</label></div>";
-
+        $("#ambulance-capability").append(
+            '<div class="form-group form-check mt-0 mb-1">\n' +
+            '     <input class="form-check-input filter-checkbox" value="capability" data-status="' + capability + '"\n' +
+            '            type="checkbox" id="capability-' + capability + '" ' +
+            (visibleCategory[capability] ? 'checked' : '') + '>\n' +
+            '     <label class="form-check-label"\n' +
+            '            for="capability-' + capability + '">' + ambulance_capability[capability] + '</label>\n' +
+            '</div>');
     });
-    filterHtml += "</div>";
-    
-    // Generate HTML code for checkboxes for hospital
-    filterHtml += '<div class="border border-top-0 border-bottom-0 border-dark px-1 pt-1 pb-0">';
-    filterHtml += '<div class="checkbox"><label><input class="chk" '
-        + 'data-status="hospital" type="checkbox" value="hospital" '
-        + (visibleCategory['hospital'] ? 'checked' : '') + '>'
-        + 'Hospital' + "</label></div>";
-    filterHtml += "</div>";
 
-    //Generate HTML code for checkboxes for locations
-    filterHtml += '<div class="border border-dark rounded-bottom px-1 pt-1 pb-0">';
+    // Create location options
+    $("#location-type").append(
+        '<div class="form-group form-check mt-0 mb-1">\n' +
+        '     <input class="form-check-input filter-checkbox" value="location" data-status="hospital"\n' +
+        '            type="checkbox" id="location-hospital" ' +
+        (visibleCategory['hospital'] ? 'checked' : '') + '>\n' +
+        '     <label class="form-check-label"\n' +
+        '            for="location-hospital">Hospital</label>\n' +
+        '</div>');
     Object.keys(location_type).forEach(function (type) {
 
-        // add div
-        filterHtml += '<div class="checkbox"><label><input class="chk" '
-            + 'data-status="' + type + '" type="checkbox" value="location" '
-            + (visibleCategory[type] ? 'checked' : '') + '>'
-            + location_type[type] + "</label></div>";
-
+        $("#location-type").append(
+            '<div class="form-group form-check mt-0 mb-1">\n' +
+            '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
+            '            type="checkbox" id="location-' + type + '" ' +
+            (visibleCategory[type] ? 'checked' : '') + '>\n' +
+            '     <label class="form-check-label"\n' +
+            '            for="location-' + type + '">' + location_type[type] + '</label>\n' +
+            '</div>');
     });
-    filterHtml += "</div>";
-
-    // Append html code to container
-    container.innerHTML = filterHtml;
-
-    // Add the checkboxes.
-    var customControl = L.Control.extend({
-
-        options: {
-            position: 'topright'
-        },
-
-        onAdd: function (map) {
-            return container;
-        }
-
-    });
-    mymap.addControl(new customControl());
 
     // Add listener to remove or add layer when filter checkbox is clicked
-    $('.chk').change(function () {
+    $('.filter-checkbox').click(function (event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+    });
+
+    $('.filter-checkbox').change(function (event) {
 
         // Which layer?
         var layer = this.getAttribute('data-status');
@@ -792,13 +867,12 @@ function createCategoryFilter() {
             visibleCategory[layer] = false;
         }
 
-        // Modify pane and button
+        // Modify panes
         if (this.value == 'status') {
             // Add to all visible capability panes
             Object.keys(ambulance_capability).forEach(function (capability) {
                 if (visibleCategory[capability]) {
                     mymap.getPane(layer+"|"+capability).style.display = display;
-                    $('button.status-' + layer + '.capability-' + capability).css('display', display);
                 }
             });
         } else if (this.value == 'capability') {
@@ -806,24 +880,21 @@ function createCategoryFilter() {
             Object.keys(ambulance_status).forEach(function (status) {
                 if (visibleCategory[status]) {
                     mymap.getPane(status+"|"+layer).style.display = display;
-                    $('button.status-' + status + '.capability-' + layer).css('display', display);
                 }
             });
         } else {
             mymap.getPane(layer).style.display = display;
         }
 
-
-
     });
 
-};
 
+};
 
 function onGridButtonClick(ambulance) {
 
     // Update detail panel
-    updateDetailPanel(ambulance);
+    // updateDetailPanel(ambulance);
 
     if (visibleCategory[ambulance.status]) {
 

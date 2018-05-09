@@ -295,6 +295,23 @@ class Call(CallPublishMixin,
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', True)
+
+        if self.status == CallStatus.E.name:
+            # remove topic from mqtt server
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().remove_call(self)
+
+            # prevent publication
+            publish = False
+
+        # call super
+        super().save(*args, **kwargs, publish=publish)
+
+
     def publish(self):
 
         # publish to mqtt
@@ -332,6 +349,53 @@ class AmbulanceCall(CallPublishMixin,
 
     # created at
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', True)
+
+        # changed to ongoing?
+        if self.status == AmbulanceCallStatus.O.name:
+
+            # retrieve call
+            call = self.call
+
+            if call.status != CallStatus.S.name:
+
+                # change call status to started
+                call.status = CallStatus.S.name
+                call.save()
+
+        # changed to complete?
+        elif self.status == AmbulanceCallStatus.C.name:
+
+            # retrieve call
+            call = self.call
+
+            # retrieve all ongoing ambulances
+            ongoing_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+
+            set_size = len(ongoing_ambulancecalls)
+            if (set_size == 0 or
+                    (set_size == 1 and ongoing_ambulancecalls[0].ambulance is not self)):
+
+                logger.debug('This is the last ambulance; will end call.')
+
+                # change call status to finished
+                call.status = CallStatus.E.name
+                call.save()
+
+                # prevent publication
+                publish = False
+
+            else:
+
+                logger.debug('There are still {} ambulances in this call.'.format(set_size))
+                logger.debug(ongoing_ambulancecalls)
+
+        # call super
+        super().save(*args, **kwargs, publish=publish)
 
     def publish(self):
 

@@ -129,26 +129,23 @@ class PublishClient(BaseClient):
                                                                  equipment.equipment.id))
 
     def publish_call(self, call, qos=2, retain=True):
-        if call.status == CallStatus.E:
-
-            # call ended, remove topic
-            self.remove_call(call)
-
-        else:
-
-            # otherwise, publish call data
-            self.publish_topic('call/{}/data'.format(call.id),
-                               CallSerializer(call),
-                               qos=qos,
-                               retain=retain)
+        # otherwise, publish call data
+        self.publish_topic('call/{}/data'.format(call.id),
+                           CallSerializer(call),
+                           qos=qos,
+                           retain=retain)
 
     def remove_call(self, call):
+        # remove ambulancecall status
+        for ambulancecall in call.ambulancecall_set.all():
+            self.remove_call_status(ambulancecall)
+
         self.remove_topic('call/{}/data'.format(call.id))
 
     def publish_call_status(self, ambulancecall, qos=2, retain=True):
         self.publish_topic('ambulance/{}/call/{}/status'.format(ambulancecall.ambulance_id,
                                                                 ambulancecall.call_id),
-                           AmbulanceCallStatus[ambulancecall.status].value,
+                           AmbulanceCallStatus[ambulancecall.status].value.casefold(),
                            qos=qos,
                            retain=retain)
 

@@ -23,7 +23,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
             integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
             crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
 
     <!-- title -->
     <title>{% block title %}EMSTrack - Ambulance Tracker{% endblock %}</title>
@@ -34,7 +34,8 @@
 <body>
 
 <!-- Navigation Bar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark"
+     id="base-navbar">
 
     <!-- Navbar brand -->
     <a class="navbar-brand" href="{% url 'index' %}">EMSTrack</a>
@@ -51,18 +52,6 @@
         {% if request.user.is_authenticated %}
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'ambulance:list' %}">
-                    <span class="fas fa-ambulance"></span>
-                    Ambulances
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'hospital:list' %}">
-                    <span class="fas fa-hospital"></span>
-                    Hospitals
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:map' %}">
                     <span class="fas fa-globe"></span>
                     Map
@@ -72,6 +61,18 @@
                 <a class="nav-link" href="{% url 'ambulance:call_list' %}">
                     <span class="fas fa-phone"></span>
                     Calls
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'ambulance:list' %}">
+                    <span class="fas fa-ambulance"></span>
+                    Ambulances
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'hospital:list' %}">
+                    <span class="fas fa-hospital"></span>
+                    Hospitals
                 </a>
             </li>
         </ul>

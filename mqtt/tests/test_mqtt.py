@@ -559,6 +559,30 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, self.a1.id)
+
+        # TODO: Test unauthorized client update
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # Modify ambulance
 
         # retrieve current ambulance status
@@ -662,6 +686,39 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # test bulk ambulance update
 
+        # Ambulance handshake: ambulance logout
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
+                            'ambulance logout')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a2.id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a2.id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
@@ -718,12 +775,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
-
-        # check record log
-        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 2)
-        self.assertEqual(obj[0].status, ClientStatus.O.name)
-        self.assertEqual(obj[1].status, ClientStatus.F.name)
 
         test_invalid_serializer = False
         if test_invalid_serializer:

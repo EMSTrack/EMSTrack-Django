@@ -2,6 +2,7 @@
 
 var markersGroup = new L.LayerGroup();
 var isDispatching = false;
+var isFilterOpen = false;
 var placeIcon = L.icon({
 	iconUrl: '/static/icons/place_marker.png',
 	iconSize: [40, 40],
@@ -17,12 +18,28 @@ var currentLocation;
 var currentPatients;
 var newPatientIndex;
 
+var submitDispatching = function () {
+
+    // submit form
+    $('#dispatch-form-collapse').submit();
+
+};
+
 var beginDispatching = function () {
 
     isDispatching = true;
+    var filtersDiv = $('#filtersDiv');
+    isFilterOpen = filtersDiv.hasClass('show');
     console.log('Begin dispatching.');
 
-    $('#start_dispatch_button').hide();
+    $('#dispatchBeginButton').hide();
+    $('#dispatchSubmitButton').show();
+    $('#dispatchCancelButton').show();
+
+    // open filter and available ambulances
+    filtersDiv.addClass('show');
+    $('#ambulance_status').addClass('show');
+    $('#ambulance_AV').addClass('show');
 
     // Update current location
     updateCurrentLocation(mymap.getCenter());
@@ -40,6 +57,12 @@ var beginDispatching = function () {
     // add new patient form entry
     addPatientForm(newPatientIndex);
 
+    // resize size
+    resizeMap();
+
+    // center map
+    mymap.setView(currentLocation, mymap.getZoom());
+
 }
 
 var endDispatching = function () {
@@ -50,7 +73,20 @@ var endDispatching = function () {
 
     markersGroup.clearLayers();
 
-    $('#start_dispatch_button').show();
+    $('#dispatchBeginButton').show();
+    $('#dispatchSubmitButton').hide();
+    $('#dispatchCancelButton').hide();
+
+    // close dispatch panel
+    $('#dispatchDiv').removeClass('show');
+
+    if (!isFilterOpen) {
+        // close filter panel
+        $('#filtersDiv').removeClass('show');
+    }
+
+    // invalidate map size
+    mymap.invalidateSize();
 
 }
 
@@ -135,8 +171,8 @@ var updateCurrentLocation = function(location) {
     currentLocation = location;
 
     // update coordinates on form
-    $('#curr-lat').html(currentLocation.lat);
-    $('#curr-lng').html(currentLocation.lng);
+    $('#curr-lat').html(currentLocation.lat.toFixed(6));
+    $('#curr-lng').html(currentLocation.lng.toFixed(6));
 
     // remove existing marker
     markersGroup.clearLayers();
@@ -331,7 +367,7 @@ function dispatchCall() {
             var obj = { 'name': patient[0] };
             if (patient[1])
                 // add age
-                obj['age'] = patient[1];
+                obj['age'] = parseInt(patient[1]);
             patients.push(obj);
         }
     form['patient_set'] = patients;
@@ -364,30 +400,25 @@ function dispatchCall() {
         data: JSON.stringify(form),
         success: function (data) {
 
-            var successMsg = '<strong>Success</strong><br/>' +
-                +'Ambulance: ' + data['ambulance']
-                + ' dispatched to <br/>' + data['residential_unit']
-                + ', ' + data['stmain_number'] + ', ' + data['latitude'] + ', ' + data['longitude'];
+            // Log success
+            console.log("Succesfully posted new call.");
 
-            // Show modal
-            bsalert(successMsg, 'alert-success', 'Success');
-            // $('.modal-title').html('Success');
-            // $('.modal-body').html(successMsg).addClass('alert-success');
-            // $("#dispatchModal").modal('show');
-
+            // End dispatching
             endDispatching();
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
 
-            // Show modal
-            // $('.modal-title').html('Failure');
-            // $('.modal-body').html(textStatus + ": " + errorThrown).addClass('alert-danger');
-            // $("#dispatchModal").modal('show');
-            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
-
+            // Log failure
+            console.log("Failed to post new call.");
             console.log(jqXHR.responseText);
 
+            // Show modal
+            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
+
+            // End dispatching
             endDispatching();
+
         }
     });
 }
@@ -458,20 +489,20 @@ var newPatientForm = function(index, symbol) {
 
     var html =
         '<div class="form-row" id="patient-' + index + '-form">' +
-            '<div class="col-sm-7 p-0">' +
+            '<div class="col-md-7 pr-0">' +
                 '<input id="patient-' + index + '-name" ' +
                        'type="text" ' +
                        'class="form-control" ' +
                        'placeholder="Name">' +
             '</div>' +
-            '<div class="col-sm-3 p-0">' +
+            '<div class="col-md-3 px-0">' +
                 '<input id="patient-' + index + '-age" ' +
                        'type="number" min="0" ' +
                        'class="form-control" ' +
                        'placeholder="Age">' +
             '</div>' +
-            '<div class="col-sm-2 p-0">' +
-                '<button class="btn btn-default new-patient" ' +
+            '<div class="col-md-2 pl-0">' +
+                '<button class="btn btn-default btn-block new-patient" ' +
                        ' type="button" ' +
                        ' id="patient-' + index + '-button">' +
                     '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
@@ -515,7 +546,7 @@ $(function() {
 
     });
 
-    $('#dispatch_form_collapse').submit(function (e) {
+    $('#dispatch-form-collapse').submit(function (e) {
 
         // prevent normal form submission
         e.preventDefault();
