@@ -20,7 +20,7 @@ $(function () {
     // retrieveAmbulances(ambulance_id)
     console.log("hi");
     console.log(call);
-    addMarker(map, call);
+    // addMarker(map, call);
 });
 
 function retrieveAmbulances(ambulance_id) {
