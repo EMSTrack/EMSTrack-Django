@@ -17,7 +17,7 @@ $(function() {
         page_size = searchParams.get('page_size');
 
  	// Retrieve ambulances via AJAX
- 	retrieveAmbulances(ambulance_id)
+ 	// retrieveAmbulances(ambulance_id)
 
 });
 
