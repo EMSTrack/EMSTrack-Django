@@ -4,7 +4,6 @@
 
 {% block leaflethead %}
     <script>
-        var call = {{ call|safe }};
         var call_id = {{ call.id|safe }};
         var APIBaseUrl = '{% url 'index' %}api/';
     </script>
