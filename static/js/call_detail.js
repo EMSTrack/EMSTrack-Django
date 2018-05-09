@@ -1,36 +1,36 @@
 var map;
 var page;
-$(function() {
+$(function () {
 
- 	// Set up map widget
- 	options = {
- 		map_id: "map",
- 		zoom: 12
- 	}
- 	map = new LeafletPolylineWidget(options);
+    // Set up map widget
+    options = {
+        map_id: "map",
+        zoom: 12
+    }
+    map = new LeafletPolylineWidget(options);
 
- 	// get page and page_size parameters
-	var searchParams = new URLSearchParams(window.location.search)
-	if (searchParams.has('page'))
-        page = searchParams.get('page');
-	if (searchParams.has('page_size'))
-        page_size = searchParams.get('page_size');
+    // get page and page_size parameters
+    // var searchParams = new URLSearchParams(window.location.search)
+    // if (searchParams.has('page'))
+    //     page = searchParams.get('page');
+    // if (searchParams.has('page_size'))
+    //     page_size = searchParams.get('page_size');
 
- 	// Retrieve ambulances via AJAX
- 	// retrieveAmbulances(ambulance_id)
-
+    // Retrieve ambulances via AJAX
+    // retrieveAmbulances(ambulance_id)
+    addMarker(map, call);
 });
 
 function retrieveAmbulances(ambulance_id) {
 
-	// Build url
-	var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates';
-	if (page != null) {
+    // Build url
+    var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates';
+    if (page != null) {
         url += "?page=" + page;
         if (page_size != null)
             url += "&page_size=" + page_size;
     } else if (page_size != null)
-            url += "?page_size=" + page_size;
+        url += "?page_size=" + page_size;
 
     $.ajax({
         type: 'GET',
@@ -60,28 +60,27 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
-function addMarker(map, update, layer) {
-
-	// add marker
-	map.addPoint(update.location.latitude, update.location.longitude, update.id, null, layer)
-		.bindPopup('<strong>' + ambulance_status[update.status] + '</strong><br/>@'
+function addMarker(map, update) {        
+    // add marker
+    map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
+        .bindPopup('<strong>hi</strong><br/>@'
             + (new Date(Date.parse(update.timestamp))).toLocaleString())
-		.on('mouseover',
-			function(e){
-				// open popup bubble
-				this.openPopup().on('mouseout',
-					function(e){
-						this.closePopup();
-					});
-			});
+        .on('mouseover',
+            function (e) {
+                // open popup bubble
+                this.openPopup().on('mouseout',
+                    function (e) {
+                        this.closePopup();
+                    });
+            });
 
 }
 
 function calculateDistanceHaversine(location1, location2, radius) {
 
-	radius = radius || 6371e3;
+    radius = radius || 6371e3;
 
-	// convert latitude and longitude to radians first
+    // convert latitude and longitude to radians first
     var lat1 = Math.PI * location1.latitude / 180;
     var lat2 = Math.PI * location2.latitude / 180;
     var d_phi = lat2 - lat1;
@@ -97,113 +96,113 @@ function calculateDistanceHaversine(location1, location2, radius) {
 
 function breakSegments(data, separationRadius, timeInterval) {
 
-	separationRadius = separationRadius || [100, 10000]; // 10m, 10km
-	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
+    separationRadius = separationRadius || [100, 10000]; // 10m, 10km
+    timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
 
-	var segments = [];
+    var segments = [];
 
-	var currentSegment = [];
-	var lastPosition = null;
-	var n = data.length;
-	for (var i = 0; i < n; i++) {
+    var currentSegment = [];
+    var lastPosition = null;
+    var n = data.length;
+    for (var i = 0; i < n; i++) {
 
-		// current position
-		var currentPosition = data[i];
+        // current position
+        var currentPosition = data[i];
 
-		// distance?
-		if (lastPosition != null) {
-			var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
-			var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
-			if (distance > separationRadius[1] || interval > timeInterval[1] ||
+        // distance?
+        if (lastPosition != null) {
+            var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
+            var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
+            if (distance > separationRadius[1] || interval > timeInterval[1] ||
                 (interval > timeInterval[0] && distance > separationRadius[0])) {
                 // terminate current segment
                 segments.push(currentSegment);
                 currentSegment = [];
             }
-		}
+        }
 
-		// add position to segment
-		currentSegment.push(currentPosition);
+        // add position to segment
+        currentSegment.push(currentPosition);
 
-		// update lastPosition
-		lastPosition = currentPosition;
-	}
+        // update lastPosition
+        lastPosition = currentPosition;
+    }
 
-	// anything left?
-	if (currentSegment.length > 0) {
+    // anything left?
+    if (currentSegment.length > 0) {
         // terminate last segment
         segments.push(currentSegment);
     }
 
-	return segments;
+    return segments;
 
 }
 
 function addSegment(updates, layer) {
 
-	// Add status markers
-	// TODO: color depending on status
+    // Add status markers
+    // TODO: color depending on status
 
     // Create layer
     map.createLayer(layer);
 
-	// First entry
-	var lastStatus;
-	if (updates.length >= 2) {
+    // First entry
+    var lastStatus;
+    if (updates.length >= 2) {
 
-		// Retrieve last entry (first position)
-		entry = updates[updates.length - 1];
+        // Retrieve last entry (first position)
+        entry = updates[updates.length - 1];
 
-		// add marker
-		addMarker(map, entry, layer);
+        // add marker
+        addMarker(map, entry, layer);
 
-		// entry status
-		lastStatus = entry.status;
+        // entry status
+        lastStatus = entry.status;
 
-	}
+    }
 
-	// Mid updates
-	for (var i = updates.length - 2; i > 0; i--) {
+    // Mid updates
+    for (var i = updates.length - 2; i > 0; i--) {
 
-		// Retrieve next entry
-		entry = updates[i];
+        // Retrieve next entry
+        entry = updates[i];
 
-		if (entry.status != lastStatus) {
+        if (entry.status != lastStatus) {
 
             // add marker
             addMarker(map, entry, layer);
 
         }
 
-		// entry status
-		lastStatus = entry.status;
+        // entry status
+        lastStatus = entry.status;
 
-	}
+    }
 
-	// Last entry
-	if (updates.length > 0) {
+    // Last entry
+    if (updates.length > 0) {
 
-		// Retrieve last entry (first position)
-		entry = updates[0];
+        // Retrieve last entry (first position)
+        entry = updates[0];
 
-		// add marker
-		addMarker(map, entry, layer);
+        // add marker
+        addMarker(map, entry, layer);
 
-	}
+    }
 
-	// Store data in an array
-	var latlngs = [];
-	updates.forEach(function(update) {
+    // Store data in an array
+    var latlngs = [];
+    updates.forEach(function (update) {
 
-		// push location
-		var loc = update.location;
-		latlngs.push([loc.latitude, loc.longitude]);
+        // push location
+        var loc = update.location;
+        latlngs.push([loc.latitude, loc.longitude]);
 
     });
 
-	// Add line to map
-	console.log('Adding segment');
-	map.addLine(latlngs, 1, "red", null, layer);
+    // Add line to map
+    console.log('Adding segment');
+    map.addLine(latlngs, 1, "red", null, layer);
 
 }
 
@@ -218,7 +217,7 @@ function addAmbulanceRoute(data) {
     var segments = breakSegments(data.results);
 
     // loop on segments
-    segments.forEach( function(segment, index) {
+    segments.forEach(function (segment, index) {
 
         // add segment to map
         addSegment(segment, 'layer_' + index);
