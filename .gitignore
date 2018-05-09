@@ -106,3 +106,4 @@ nohup.out
 # IntelliJ
 .idea/
 
+.vscode/
