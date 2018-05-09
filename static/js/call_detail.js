@@ -19,7 +19,7 @@ $(function () {
     // Retrieve ambulances via AJAX
     // retrieveAmbulances(ambulance_id)
     console.log("hi");
-    console.log(call);
+    console.log(call_location);
     // addMarker(map, call);
 });
 
