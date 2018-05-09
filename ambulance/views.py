@@ -221,15 +221,37 @@ class CallPermissionMixin(BasePermissionMixin):
 
 
 # Call ListView
-class CallListView(CallPermissionMixin,
+class CallListView(LoginRequiredMixin,
+                   CallPermissionMixin,
                    ListView):
     model = Call
 
 
 # Call DetailView
-class CallDetailView(CallPermissionMixin,
+class CallDetailView(LoginRequiredMixin,
+                     CallPermissionMixin,
+                     SuccessMessageMixin,
+                     UpdatedByMixin,
                      DetailView):
     model = Call
+    #form_class = CallDetailForm
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+# Call UpdateView
+class CallUpdateView(LoginRequiredMixin,
+                     CallPermissionMixin,
+                     SuccessMessageMixin,
+                     UpdatedByMixin,
+                     UpdateView):
+    model = Call
+    #form_class = CallDetailForm
+
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 # Admin page
