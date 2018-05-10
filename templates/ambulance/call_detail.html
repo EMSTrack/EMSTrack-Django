@@ -78,7 +78,8 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>ambulance_id</th>
+                    <th>Ambulance ID</th>
+                    <th>status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -86,6 +87,9 @@
                 <tr>
                     <td>
                         {{ ambulance.ambulance_id }}
+                    </td>
+                    <td>
+                        {{ ambulance.status }}
                     </td>
                 </tr>
                 {% endfor %}

@@ -10,7 +10,8 @@ from django.views.generic import TemplateView, ListView, \
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus
 
-from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, \
+    LocationAdminUpdateForm, CallUpdateForm
 
 from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
@@ -215,6 +216,7 @@ class LocationAdminUpdateView(SuccessMessageMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+# Calls
 
 # Call permissions
 class CallPermissionMixin(BasePermissionMixin):
@@ -223,6 +225,19 @@ class CallPermissionMixin(BasePermissionMixin):
     profile_field = 'ambulances'
     queryset = Call.objects.all()
 
+class CallPatientsInline(InlineFormSet):
+    model = Patient
+    #form_class = GroupAmbulancePermissionAdminForm
+    factory_kwargs = {
+        'extra': 1
+    }
+
+class CallAmbulancesInline(InlineFormSet):
+    model = Ambulance
+    #form_class = GroupAmbulancePermissionAdminForm
+    factory_kwargs = {
+        'extra': 1
+    }
 
 # Call ListView
 class CallListView(LoginRequiredMixin,
@@ -251,8 +266,13 @@ class CallUpdateView(LoginRequiredMixin,
                      UpdatedByMixin,
                      UpdateView):
     model = Call
-    #form_class = CallDetailForm
+    template_name = 'ambulance/call_form.html'
+    form_class = CallUpdateForm
+    inlines = [CallPatientsInline,
+               CallAmbulancesInline]
 
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated group '{}'".format(self.object.name)
 
     def get_success_url(self):
         return self.object.get_absolute_url()
