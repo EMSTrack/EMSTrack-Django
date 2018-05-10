@@ -63,6 +63,22 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
+
+function addMarkerCall(map, x, y) {        
+    // add marker
+    map.addPoint(x, y, call_id, null)
+        .bindPopup('<strong>hi</strong><br/>@')
+        .on('mouseover',
+            function (e) {
+                // open popup bubble
+                this.openPopup().on('mouseout',
+                    function (e) {
+                        this.closePopup();
+                    });
+            });
+
+}
+
 function addMarker(map, update) {        
     // add marker
     map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
