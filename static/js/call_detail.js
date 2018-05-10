@@ -18,7 +18,9 @@ $(function () {
 
     // Retrieve ambulances via AJAX
     // retrieveAmbulances(ambulance_id)
-    addMarkerCall(map, call_location_x, call_location_y);
+    console.log(call_location_x);
+    console.log(call_location_y);
+    addMarkerCall(map, call_location_y, call_location_x);
 });
 
 function retrieveAmbulances(ambulance_id) {
