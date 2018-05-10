@@ -4,7 +4,7 @@
 
 {% block leaflethead %}
     <script>
-        var call_location_lat = {{ call.location.latitude|safe }};
+        var call_location_lat = {{ call.location|safe }};
         var call_location_long = {{ call.location.longitude|safe }};
         var call_id = {{ call.id|safe }};
         var APIBaseUrl = '{% url 'index' %}api/';
