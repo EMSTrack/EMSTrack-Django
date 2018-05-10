@@ -9,7 +9,7 @@ from django.views.generic import TemplateView, ListView, \
 from extra_views import InlineFormSet
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Location, LocationType, CallStatus, AmbulanceCallStatus
+    Call, Location, LocationType, CallStatus, AmbulanceCallStatus, Patient
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, \
     LocationAdminUpdateForm, CallUpdateForm
