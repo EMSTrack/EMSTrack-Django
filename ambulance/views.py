@@ -12,7 +12,7 @@ from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, Patient
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, \
-    LocationAdminUpdateForm, CallUpdateForm
+    LocationAdminUpdateForm, CallUpdateForm, CallAmbulanceForm, CallPatientForm
 
 from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
@@ -228,14 +228,14 @@ class CallPermissionMixin(BasePermissionMixin):
 
 class CallPatientsInline(InlineFormSet):
     model = Patient
-    #form_class = GroupAmbulancePermissionAdminForm
+    form_class = CallPatientForm
     factory_kwargs = {
         'extra': 1
     }
 
 class CallAmbulancesInline(InlineFormSet):
     model = Ambulance
-    #form_class = GroupAmbulancePermissionAdminForm
+    form_class = CallAmbulanceForm
     factory_kwargs = {
         'extra': 1
     }

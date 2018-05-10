@@ -70,6 +70,16 @@ class CallUpdateForm(forms.ModelForm):
         model = Call
         fields = '__all__'
 
+class CallPatientForm(forms.ModelForm):
+    class Meta:
+        model = Patient
+        fields = '__all__'
+
+class CallAmbulanceForm(forms.ModelForm):
+    class Meta:
+        model = Ambulance
+        fields = '__all__'
+
 # class AmbulanceStatusCreateForm(forms.ModelForm):
 #     class Meta:
 #         model = AmbulanceStatus
