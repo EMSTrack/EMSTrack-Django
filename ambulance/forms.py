@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from emstrack.forms import LeafletPointWidget
 
-from .models import Ambulance, Call, Location
+from .models import Ambulance, Call, Location, Patient 
 
 
 class AmbulanceCreateForm(forms.ModelForm):
