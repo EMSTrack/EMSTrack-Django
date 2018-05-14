@@ -9,17 +9,7 @@ $(function () {
     }
     map = new LeafletPolylineWidget(options);
 
-    // get page and page_size parameters
-    // var searchParams = new URLSearchParams(window.location.search)
-    // if (searchParams.has('page'))
-    //     page = searchParams.get('page');
-    // if (searchParams.has('page_size'))
-    //     page_size = searchParams.get('page_size');
-
-    // Retrieve ambulances via AJAX
-    // retrieveAmbulances(ambulance_id)
-    console.log(call_location_x);
-    console.log(call_location_y);
+    console.log(call_status);
     addMarkerCall(map, call_location_y, call_location_x);
 });
 
