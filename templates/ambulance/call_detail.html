@@ -8,6 +8,7 @@
         var call_location_y = {{ call.location.y|safe }};
         var call_id = {{ call.id|safe }};
         var call_status = '{{ call.status|get_call_status|safe }}';
+        var ambulances = call.ambulancecall_set|safe;
         var APIBaseUrl = '{% url 'index' %}api/';
     </script>
 {% endblock %}
