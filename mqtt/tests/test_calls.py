@@ -448,14 +448,53 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
-        # TODO: Create another client to handle ambulance_id2
-
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # wait for disconnect
         test_client.wait()
+
+        # Start second test client
+
+        username2 = 'testuser2'
+        password2 = 'very_secret'
+
+        broker.update(settings.MQTT)
+        client_id2 = 'test_mqtt_subscribe2'
+        broker['USERNAME'] = username2
+        broker['PASSWORD'] = password2
+        broker['CLIENT_ID'] = client_id2
+
+        test_client2 = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client2)
+
+        # Client handshake
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'online')
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id2)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client2.wait()
         subscribe_client.wait()
 
 # TODO: Create another test where 2 clients to handle two ambulances simultaneously
