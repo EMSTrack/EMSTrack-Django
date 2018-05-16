@@ -241,7 +241,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
             ambulance_id1 = self.a1.id
 
         if not ambulance_id2:
-            ambulance_id2 = self.a2.id
+            ambulance_id2 = self.a3.id
 
         # Start client as admin
         broker = {
@@ -486,7 +486,20 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Client handshake
+        # Ambulance handshake: ambulance login
+        test_client2.publish('user/{}/client/{}/ambulance/{}/status'.format(username2, client_id2, ambulance_id2),
+                             'ambulance login')
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id2)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id2)
+
+       # Client handshake
         test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
 
         # process messages
