@@ -515,6 +515,45 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
+        # test_client publishes client_id to location_client
+        test_client2.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
+                             json.dumps({
+                                 'location_client_id': client_id2,
+                              }))
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # test_client publishes "Accepted" to call status
+        test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
+                                                                                    ambulance_id2, call.id),
+                             "accepted")
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # Check if call status is Started
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.S.name)
+
+        # Check if ambulancecall1 status is Completed
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # Check if ambulancecall2 status is Ongoing
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+
         # Client handshake
         test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
 
