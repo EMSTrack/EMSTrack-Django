@@ -9,8 +9,16 @@ $(function () {
     }
     map = new LeafletPolylineWidget(options);
 
+    if(call_status == "Pending") {
+        addMarkerCall(map, call_location_y, call_location_x);
+    } else if(call_status == "Started") {
+
+    } else if(call_status == "Ended") {
+        
+    } else {
+        console.error("Call status " + call_status + " not handled");
+    }
     console.log(ambulances);
-    addMarkerCall(map, call_location_y, call_location_x);
 });
 
 function retrieveAmbulances(ambulance_id) {
