@@ -619,11 +619,11 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # Check if ambulancecall status is Completed
+        # Check if ambulancecall1 status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
-        # Check if ambulancecall status is Completed
+        # Check if ambulancecall2 status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
