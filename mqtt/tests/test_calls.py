@@ -459,9 +459,9 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
         username2 = 'testuser2'
         password2 = 'very_secret'
+        client_id2 = 'test_mqtt_subscribe2'
 
         broker.update(settings.MQTT)
-        client_id2 = 'test_mqtt_subscribe2'
         broker['USERNAME'] = username2
         broker['PASSWORD'] = password2
         broker['CLIENT_ID'] = client_id2
@@ -487,7 +487,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
 
         # process messages
         self.loop(test_client2)
