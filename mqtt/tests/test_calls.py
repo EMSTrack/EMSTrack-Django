@@ -499,7 +499,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, ambulance_id2)
 
-        # subscribe to call and ambulance call status
+        # subscribe ambulance call status
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
@@ -534,7 +534,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # subscribe to call and ambulance call status
+        # subscribe ambulance call status
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
@@ -553,6 +553,14 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # Check if ambulancecall2 status is Ongoing
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+
+        # subscribe to call
+        test_client2.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client2)
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
 
         # Client handshake
         test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
