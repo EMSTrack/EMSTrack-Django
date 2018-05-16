@@ -499,7 +499,23 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, ambulance_id2)
 
-       # Client handshake
+        # subscribe to call and ambulance call status
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+
+        # Check if call status is Starting
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.S.name)
+
+        # Check if ambulancecall1 status is Completed
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # Check if ambulancecall2 status is Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
+        # Client handshake
         test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
 
         # process messages
