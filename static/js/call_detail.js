@@ -9,7 +9,7 @@ $(function () {
     }
     map = new LeafletPolylineWidget(options);
 
-    console.log(call_status);
+    console.log(ambulances);
     addMarkerCall(map, call_location_y, call_location_x);
 });
 
