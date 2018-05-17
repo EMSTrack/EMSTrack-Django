@@ -11,9 +11,9 @@
         var ambulances = [];
         var APIBaseUrl = '{% url 'index' %}api/';
         
-        for (let ambulancecall of {{ call.ambulancecall_set.all|safe }}) {
-            ambulances.push(ambulancecall.ambulance.identifier);
-        }
+        {% for ambulancecall in call.ambulancecall_set.all %}
+            ambulances.push({{ ambulancecall.ambulance.identifier }});
+        {% endfor %}
 
     </script>
 {% endblock %}
