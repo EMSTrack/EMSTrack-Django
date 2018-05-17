@@ -12,7 +12,7 @@
         var APIBaseUrl = '{% url 'index' %}api/';
         
         {% for ambulancecall in call.ambulancecall_set.all %}
-            ambulances.push({{ ambulancecall.ambulance.identifier }});
+            ambulances.push({{ ambulancecall.ambulance.ambulance_id }});
         {% endfor %}
 
     </script>
