@@ -983,7 +983,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # expect 'Completed' ambulancecall
+        # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client)
 
