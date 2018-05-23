@@ -886,6 +886,61 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client2)
         subscribe_client.loop()
+        # test_client publishes "patient bound" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+                            json.dumps({
+                                'status': AmbulanceStatus.PB.name,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "at patient" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+                            json.dumps({
+                                'status': AmbulanceStatus.AP.name,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "hospital bound" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+                            json.dumps({
+                                'status': AmbulanceStatus.HB.name,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "at hospital" to status
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+                            json.dumps({
+                                'status': AmbulanceStatus.AH.name,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "Finished" to call status
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+                                                                                   ambulance_id1, call.id), "finished")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # expect 'Completed' ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
 
 
         # Client handshake
