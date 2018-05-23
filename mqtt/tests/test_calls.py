@@ -722,6 +722,28 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client)
 
+        # Start second test client
+        username2 = 'testuser2'
+        password2 = 'very_secret'
+        client_id2 = 'test_mqtt_subscribe2'
+
+        broker.update(settings.MQTT)
+        broker['USERNAME'] = username2
+        broker['PASSWORD'] = password2
+        broker['CLIENT_ID'] = client_id2
+
+        test_client2 = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client2)
+
+        # Client handshake
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'online')
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
         # create call using serializer, one ambulance first
         call = {
             'status': CallStatus.P.name,
@@ -802,4 +824,14 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
 
         # wait for disconnect
         test_client.wait()
+
+                # Client handshake
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client2.wait()
         subscribe_client.wait()
