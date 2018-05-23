@@ -768,7 +768,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # subscribe ambulance call status
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
-        
+
         # create call using serializer, one ambulance first
         call = {
             'status': CallStatus.P.name,
@@ -839,6 +839,33 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
+
+        # test_client publishes client_id to location_client
+        test_client2.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
+                             json.dumps({
+                                 'location_client_id': client_id2,
+                              }))
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # test_client publishes "Accepted" to call status
+        test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
+                                                                                    ambulance_id2, call.id),
+                             "accepted")
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # subscribe ambulance call status
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
 
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
