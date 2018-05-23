@@ -760,7 +760,39 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-        
+
+               # test_client publishes "Accepted" to call status
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+                                                                                   ambulance_id1, call.id), "accepted")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Check if call status changed to Started
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.S.name)
+
+        # Check if ambulancecall status changed to Ongoing
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+
+        # Check if ambulancecall status is Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
+        # subscribe to call and ambulance call status
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
