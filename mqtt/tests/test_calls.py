@@ -898,7 +898,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # test_client2 publishes "patient bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
+        test_client2.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
                             json.dumps({
                                 'status': AmbulanceStatus.PB.name,
                             }))
