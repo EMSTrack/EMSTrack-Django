@@ -744,6 +744,31 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
+        # check record
+        clnt = Client.objects.get(client_id=client_id2)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Ambulance handshake: ambulance login
+        test_client2.publish('user/{}/client/{}/ambulance/{}/status'.format(username2, client_id2, ambulance_id2),
+                             'ambulance login')
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id2)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id2)
+
+        # subscribe ambulance call status
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+        
         # create call using serializer, one ambulance first
         call = {
             'status': CallStatus.P.name,
@@ -783,7 +808,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-               # test_client publishes "Accepted" to call status
+        # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id1, call.id), "accepted")
 
@@ -825,7 +850,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # wait for disconnect
         test_client.wait()
 
-                # Client handshake
+        # Client handshake
         test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
 
         # process messages
