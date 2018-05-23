@@ -16,6 +16,8 @@ $(function () {
         ambulances.forEach(id => {
             retrieveAmbulances(id);
         });
+        addMarkerCall(map, call_location_y, call_location_x);
+        
     } else if(call_status == "Ended") {
         
     } else {
