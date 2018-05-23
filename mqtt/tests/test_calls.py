@@ -648,3 +648,62 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         subscribe_client.wait()
 
 # TODO: Create another test where 2 clients to handle two ambulances simultaneously
+class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
+
+    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'],
+             ambulance_id1=None, ambulance_id2=None):
+
+        if not ambulance_id1:
+            ambulance_id1 = self.a1.id
+
+        if not ambulance_id2:
+            ambulance_id2 = self.a3.id
+
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        broker['USERNAME'] = username
+        broker['PASSWORD'] = password
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+         # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
