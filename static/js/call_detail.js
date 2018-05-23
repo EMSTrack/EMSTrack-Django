@@ -65,6 +65,7 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
+//icon: ambulance_icons[ambulance.status],
 
 function addMarkerCall(map, x, y) {        
     // add marker
@@ -83,17 +84,23 @@ function addMarkerCall(map, x, y) {
 
 function addMarker(map, update) {        
     // add marker
-    map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
-        .bindPopup('<strong>hi</strong><br/>@'
-            + (new Date(Date.parse(update.timestamp))).toLocaleString())
-        .on('mouseover',
-            function (e) {
-                // open popup bubble
-                this.openPopup().on('mouseout',
-                    function (e) {
-                        this.closePopup();
-                    });
-            });
+    var myIcon = L.icon({
+        iconUrl: '/static/icons/cars/ambulance_blue.svg',
+        iconSize: [15, 30],
+    });
+    L.marker([update.location.latitude, update.location.longitude], {icon: myIcon}).addTo(map);
+
+    // map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
+    //     .bindPopup('<strong>hi</strong><br/>@'
+    //         + (new Date(Date.parse(update.timestamp))).toLocaleString())
+    //     .on('mouseover',
+    //         function (e) {
+    //             // open popup bubble
+    //             this.openPopup().on('mouseout',
+    //                 function (e) {
+    //                     this.closePopup();
+    //                 });
+    //         });
 
 }
 
