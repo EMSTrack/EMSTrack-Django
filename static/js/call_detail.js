@@ -28,12 +28,12 @@ function retrieveAmbulances(ambulance_id) {
 
     // Build url
     var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates';
-    if (page != null) {
-        url += "?page=" + page;
-        if (page_size != null)
-            url += "&page_size=" + page_size;
-    } else if (page_size != null)
-        url += "?page_size=" + page_size;
+    // if (page != null) {
+    //     url += "?page=" + page;
+    //     if (page_size != null)
+    //         url += "&page_size=" + page_size;
+    // } else if (page_size != null)
+    //     url += "?page_size=" + page_size;
 
     $.ajax({
         type: 'GET',
