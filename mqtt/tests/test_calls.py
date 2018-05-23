@@ -998,7 +998,15 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
-        
+
+        # expect blank call
+        test_client2.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client2)
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
+
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
