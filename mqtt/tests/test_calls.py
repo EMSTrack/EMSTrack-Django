@@ -957,16 +957,6 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # test_client publishes "at hospital" to status
-        test_client2.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
-                            json.dumps({
-                                'status': AmbulanceStatus.AH.name,
-                            }))
-
-        # process messages
-        self.loop(test_client2)
-        subscribe_client.loop()
-
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id1, call.id), "finished")
@@ -994,6 +984,16 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # Check if call status is Started
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
+
+        # test_client publishes "at hospital" to status
+        test_client2.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
+                            json.dumps({
+                                'status': AmbulanceStatus.AH.name,
+                            }))
+
+        # process messages
+        self.loop(test_client2)
+        subscribe_client.loop()
 
         # test_client publishes "Finished" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
