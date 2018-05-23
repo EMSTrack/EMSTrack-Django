@@ -1006,9 +1006,6 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         
         # process messages
         self.loop(test_client)
-        subscribe_client.loop()
-        
-        # process messages
         self.loop(test_client2)
         subscribe_client.loop()
 
