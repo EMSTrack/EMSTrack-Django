@@ -1001,6 +1001,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
 
         # expect blank call
         test_client2.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
         self.is_subscribed(test_client2)
         
         # process messages
