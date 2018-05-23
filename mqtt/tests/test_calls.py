@@ -996,7 +996,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client2)
 
         # process messages
-        self.loop(test_client)
+        self.loop(test_client2)
         subscribe_client.loop()
 
         # expect blank call
