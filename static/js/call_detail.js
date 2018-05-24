@@ -88,7 +88,7 @@ function addMarker(map, update) {
         iconUrl: '/static/icons/cars/ambulance_blue.svg',
         iconSize: [15, 30],
     });
-    L.marker([update.location.latitude, update.location.longitude], {icon: myIcon}).addTo(map);
+    L.marker([update.location.latitude, update.location.longitude], {icon: myIcon}).addTo(map.map);
 
     // map.addPoint(update.location.latitude, update.location.longitude, update.id, null)
     //     .bindPopup('<strong>hi</strong><br/>@'
