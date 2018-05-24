@@ -1043,9 +1043,6 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # wait for disconnect
-        test_client.wait()
-
         # Client handshake
         test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
 
@@ -1054,5 +1051,6 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # wait for disconnect
+        test_client.wait()
         test_client2.wait()
         subscribe_client.wait()
