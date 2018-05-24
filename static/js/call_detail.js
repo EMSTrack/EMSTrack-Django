@@ -65,20 +65,18 @@ function retrieveAmbulances(ambulance_id) {
 
 }
 
-//icon: ambulance_icons[ambulance.status],
-
 function addMarkerCall(map, x, y) {        
     // add marker
-    // map.addPoint(x, y, call_id, null)
-    //     .bindPopup('<strong>hi</strong><br/>@')
-    //     .on('mouseover',
-    //         function (e) {
-    //             // open popup bubble
-    //             this.openPopup().on('mouseout',
-    //                 function (e) {
-    //                     this.closePopup();
-    //                 });
-    //         });
+    map.addPoint(x, y, call_id, null)
+        .bindPopup('<strong>hi</strong><br/>@')
+        .on('mouseover',
+            function (e) {
+                // open popup bubble
+                this.openPopup().on('mouseout',
+                    function (e) {
+                        this.closePopup();
+                    });
+            });
 
 }
 
