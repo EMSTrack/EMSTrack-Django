@@ -83,13 +83,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for ambulance in call.ambulancecall_set.all %}
+                {% for ambulancecall in call.ambulancecall_set.all %}
                 <tr>
                     <td>
-                        {{ ambulance.ambulance_id }}
+                        {{ ambulancecall.ambulance.identifier }}
                     </td>
                     <td>
-                        {{ ambulance.status }}
+                        {{ ambulancecall.status }}
                     </td>
                 </tr>
                 {% endfor %}

@@ -56,10 +56,6 @@ urlpatterns = [
         login_required(views.CallDetailView.as_view()),
         name='call_detail'),
 
-    url(r'call/update/(?P<pk>\d+)$', 
-        login_required(views.CallUpdateView.as_view()),
-        name='call_update'),
-
     # url(r'^admin/$',
     #    login_required(views.AdminView.as_view()),
     #    name="admin"),

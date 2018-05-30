@@ -226,19 +226,19 @@ class CallPermissionMixin(BasePermissionMixin):
     profile_field = 'ambulances'
     queryset = Call.objects.all()
 
-class CallPatientsInline(InlineFormSet):
-    model = Patient
-    form_class = CallPatientForm
-    factory_kwargs = {
-        'extra': 1
-    }
+# class CallPatientsInline(InlineFormSet):
+#     model = Patient
+#     form_class = CallPatientForm
+#     factory_kwargs = {
+#         'extra': 1
+#     }
 
-class CallAmbulancesInline(InlineFormSet):
-    model = Ambulance
-    form_class = CallAmbulanceForm
-    factory_kwargs = {
-        'extra': 1
-    }
+# class CallAmbulancesInline(InlineFormSet):
+#     model = Ambulance
+#     form_class = CallAmbulanceForm
+#     factory_kwargs = {
+#         'extra': 1
+#     }
 
 # Call ListView
 class CallListView(LoginRequiredMixin,
@@ -261,22 +261,22 @@ class CallDetailView(LoginRequiredMixin,
 
 
 # Call UpdateView
-class CallUpdateView(LoginRequiredMixin,
-                     CallPermissionMixin,
-                     SuccessMessageMixin,
-                     UpdatedByMixin,
-                     UpdateView):
-    model = Call
-    template_name = 'ambulance/call_form.html'
-    form_class = CallUpdateForm
-    inlines = [CallPatientsInline,
-               CallAmbulancesInline]
+# class CallUpdateView(LoginRequiredMixin,
+#                      CallPermissionMixin,
+#                      SuccessMessageMixin,
+#                      UpdatedByMixin,
+#                      UpdateView):
+#     model = Call
+#     template_name = 'ambulance/call_form.html'
+#     form_class = CallUpdateForm
+#     inlines = [CallPatientsInline,
+#                CallAmbulancesInline]
 
-    def get_success_message(self, cleaned_data):
-        return "Successfully updated group '{}'".format(self.object.name)
+#     def get_success_message(self, cleaned_data):
+#         return "Successfully updated group '{}'".format(self.object.name)
 
-    def get_success_url(self):
-        return self.object.get_absolute_url()
+#     def get_success_url(self):
+#         return self.object.get_absolute_url()
 
 
 # Admin page
