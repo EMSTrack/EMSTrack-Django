@@ -78,7 +78,7 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Ambulance ID</th>
+                    <th>Identifier</th>
                     <th>status</th>
                 </tr>
                 </thead>
@@ -89,7 +89,7 @@
                         {{ ambulancecall.ambulance.identifier }}
                     </td>
                     <td>
-                        {{ ambulancecall.status }}
+                        {{ ambulancecall.status| get_ambulance_status }}
                     </td>
                 </tr>
                 {% endfor %}
@@ -97,6 +97,7 @@
             </table>
         </div>
     </div>
+    <button type="button" class="btn btn-primary" id="endCallButton">END</button>
 </div>
 
 {% endblock %}
