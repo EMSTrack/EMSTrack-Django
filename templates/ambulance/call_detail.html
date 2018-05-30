@@ -89,13 +89,16 @@
                         {{ ambulancecall.ambulance.identifier }}
                     </td>
                     <td>
-                        {{ ambulancecall.ambulance.status}}
+                        {{ ambulancecall.ambulance.status| get_ambulance_status}}
                     </td>
                 </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
+    </div>
+    <div>
+        <button type="button" class="btn btn-primary" id="endCallButton">END</button>
     </div>
 </div>
 
