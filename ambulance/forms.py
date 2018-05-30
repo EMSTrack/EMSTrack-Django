@@ -57,40 +57,13 @@ class LocationAdminUpdateForm(LocationAdminCreateForm):
     pass
 
 
-# class CallPatientModelChoiceField(forms.ModelChoiceField):
-#     def label_from_instance(self, obj):
-#         return obj.name
-
-
-# class CallAmbulanceModelChoiceField(forms.ModelChoiceField):
-#     def label_from_instance(self, obj):
-#         return obj.identifier
-
-
 # front end team to choose which fields to display?
 
 class CallCreateForm(forms.ModelForm):
     class Meta:
         model = Call
         fields = '__all__'
-
-
-# class CallUpdateForm(forms.ModelForm):
-#     class Meta:
-#         model = Call
-#         fields = ['number','status','unit','neighborhood','city', 'state', 'zipcode', 'country']
-
-# class CallPatientForm(forms.ModelForm):
-#     patient = CallPatientModelChoiceField(queryset=Ambulance.objects.all())
-#     class Meta:
-#         model = Patient
-#         fields = '__all__'
-
-# class CallAmbulanceForm(forms.ModelForm):
-#     ambulance = CallAmbulanceModelChoiceField(queryset=Ambulance.objects.all())
-#     class Meta:
-#         model = Ambulance
-#         fields = '__all__'
+        
 
 # class AmbulanceStatusCreateForm(forms.ModelForm):
 #     class Meta:
