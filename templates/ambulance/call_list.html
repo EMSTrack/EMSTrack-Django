@@ -23,53 +23,53 @@
                 </thead>
                 <tbody>
                     {% for call in call_list %}
-                    {% if call.status == CallStatus.P.name %}
-                    <tr>
+                        {% if call.status == CallStatus.P.name %}
+                            <tr>
 
-                        <td>{{ call.status|get_call_status }}</a></td>
-                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
-                        <td>{{ call.priority }}</td>
-                        <td>
-                        {% for ambulancecall in call.ambulancecall_set.all %}
-                        {{ ambulancecall.ambulance.identifier }}
-                        {% endfor %}
-                        </td>
-                        <td>{{ call.created_at }}</td>
-                        <td>{{ call.ended_at }}</td>
-                    </tr>
-                    {% endif %}
+                                <td>{{ call.status|get_call_status }}</a></td>
+                                <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
+                                <td>{{ call.priority }}</td>
+                                <td>
+                                {% for ambulancecall in call.ambulancecall_set.all %}
+                                {{ ambulancecall.ambulance.identifier }}
+                                {% endfor %}
+                                </td>
+                                <td>{{ call.created_at }}</td>
+                                <td>{{ call.ended_at }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     {% for call in call_list %}
-                    {% if call.status == CallStatus.S.name %}
-                    <tr>
-                        <td>{{ call.status|get_call_status }}</a></td>
-                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
-                        <td>{{ call.priority }}</td>
-                        <td>
-                        {% for ambulancecall in call.ambulancecall_set.all %}
-                        {{ ambulancecall.ambulance.identifier }}
-                        {% endfor %}
-                        </td>
-                        <td>{{ call.created_at }}</td>
-                        <td>{{ call.ended_at }}</td>
-                    </tr>
-                    {% endif %}
+                        {% if call.status == CallStatus.S.name %}
+                            <tr>
+                                <td>{{ call.status|get_call_status }}</a></td>
+                                <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
+                                <td>{{ call.priority }}</td>
+                                <td>
+                                {% for ambulancecall in call.ambulancecall_set.all %}
+                                {{ ambulancecall.ambulance.identifier }}
+                                {% endfor %}
+                                </td>
+                                <td>{{ call.created_at }}</td>
+                                <td>{{ call.ended_at }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     {% for call in call_list %}
-                    {% if call.status == CallStatus.E.name %}
-                    <tr>
-                        <td>{{ call.status|get_call_status }}</a></td>
-                        <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
-                        <td>{{ call.priority }}</td>
-                        <td>
-                        {% for ambulancecall in call.ambulancecall_set.all %}
-                        {{ ambulancecall.ambulance.identifier }}
-                        {% endfor %}
-                        </td>
-                        <td>{{ call.created_at }}</td>
-                        <td>{{ call.ended_at }}</td>
-                    </tr>
-                    {% endif %}
+                        {% if call.status == CallStatus.E.name %}
+                            <tr>
+                                <td>{{ call.status|get_call_status }}</a></td>
+                                <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
+                                <td>{{ call.priority }}</td>
+                                <td>
+                                {% for ambulancecall in call.ambulancecall_set.all %}
+                                {{ ambulancecall.ambulance.identifier }}
+                                {% endfor %}
+                                </td>
+                                <td>{{ call.created_at }}</td>
+                                <td>{{ call.ended_at }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
