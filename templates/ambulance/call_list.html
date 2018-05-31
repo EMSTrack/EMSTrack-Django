@@ -23,9 +23,8 @@
                 </thead>
                 <tbody>
                     {% for call in call_list %}
-                        {% if call.status == CallStatus.P.name %}
+                        {% if call.status == CallStatus.P %}
                             <tr>
-
                                 <td>{{ call.status|get_call_status }}</a></td>
                                 <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
                                 <td>{{ call.priority }}</td>
