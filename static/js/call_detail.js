@@ -11,14 +11,13 @@ $(function () {
 
     if(call_status == "Pending") {
         addMarkerCall(map, call_location_y, call_location_x);
-    } else if(call_status == "Started") {
-
+    } else if(call_status == "Started" || call_status == "Ended") {
+        
+        // Gotta separate these. Started => live updates
         ambulances.forEach(id => {
             retrieveAmbulances(id);
         });
         addMarkerCall(map, call_location_y, call_location_x);
-        
-    } else if(call_status == "Ended") {
         
     } else {
         console.error("Call status " + call_status + " not handled");
