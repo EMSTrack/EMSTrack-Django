@@ -23,7 +23,7 @@
                 </thead>
                 <tbody>
                     {% for call in call_list %}
-                        {% if call.status == CallStatus.P %}
+                        {% if call.status == 'Pending' %}
                             <tr>
                                 <td>{{ call.status|get_call_status }}</a></td>
                                 <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
@@ -39,7 +39,7 @@
                         {% endif %}
                     {% endfor %}
                     {% for call in call_list %}
-                        {% if call.status == CallStatus.S %}
+                        {% if call.status == 'Started' %}
                             <tr>
                                 <td>{{ call.status|get_call_status }}</a></td>
                                 <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
@@ -55,7 +55,7 @@
                         {% endif %}
                     {% endfor %}
                     {% for call in call_list %}
-                        {% if call.status == CallStatus.E %}
+                        {% if call.status == 'Ended' %}
                             <tr>
                                 <td>{{ call.status|get_call_status }}</a></td>
                                 <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.details }}</a></td>
