@@ -4,8 +4,10 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
+from django.views.generic.detail import BaseDetailView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus
@@ -215,6 +217,7 @@ class LocationAdminUpdateView(SuccessMessageMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+
 # Calls
 
 # Call permissions
@@ -239,10 +242,30 @@ class CallDetailView(LoginRequiredMixin,
                      UpdatedByMixin,
                      DetailView):
     model = Call
-    #form_class = CallDetailForm
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
+
+# Call abort view
+class CallAbortView(LoginRequiredMixin,
+                    CallPermissionMixin,
+                    SuccessMessageMixin,
+                    BaseDetailView):
+    model = Call
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+    def get(self, request, *args, **kwargs):
+
+        # get call object
+        self.object = self.get_object()
+
+        # abort call
+        self.object.abort()
+
+        return redirect('call_list')
 
 # Admin page
 # class AdminView(ListView):

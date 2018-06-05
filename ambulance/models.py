@@ -312,12 +312,25 @@ class Call(CallPublishMixin,
         # call super
         super().save(*args, **kwargs, publish=publish)
 
-
     def publish(self):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call(self)
+
+    def abort(self):
+
+        # simply return if already ended
+        if self.status == CallStatus.E.name:
+            return
+
+        # retrieve all ongoing ambulances
+        ongoing_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+        for ambulancecall in ongoing_ambulancecalls:
+
+            # change call status to finished
+            ambulancecall.status = AmbulanceCallStatus.C.name
+            ambulancecall.save()
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)

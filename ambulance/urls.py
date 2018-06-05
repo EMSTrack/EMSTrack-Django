@@ -56,6 +56,10 @@ urlpatterns = [
         login_required(views.CallDetailView.as_view()),
         name='call_detail'),
 
+    url(r'call/abort/(?P<pk>\d+)$',
+        login_required(views.CallAbortView.as_view()),
+        name='call_abort'),
+
     # url(r'^admin/$',
     #    login_required(views.AdminView.as_view()),
     #    name="admin"),
