@@ -301,6 +301,7 @@ class Call(CallPublishMixin,
         publish = kwargs.pop('publish', True)
 
         if self.status == CallStatus.E.name:
+
             # remove topic from mqtt server
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().remove_call(self)
