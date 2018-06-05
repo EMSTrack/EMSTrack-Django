@@ -339,11 +339,22 @@ class Call(CallPublishMixin,
 
         # retrieve all ongoing ambulances
         ongoing_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
-        for ambulancecall in ongoing_ambulancecalls:
+
+        if ongoing_ambulancecalls:
+            # if  ambulancecalls, set ambulancecall to complete until all done
+
+            for ambulancecall in ongoing_ambulancecalls:
+
+                # change call status to finished
+                ambulancecall.status = AmbulanceCallStatus.C.name
+                ambulancecall.save()
+
+        else:
+            # if no ambulancecalls, force abort
 
             # change call status to finished
-            ambulancecall.status = AmbulanceCallStatus.C.name
-            ambulancecall.save()
+            self.status = CallStatus.E.name
+            self.save()
 
     def __str__(self):
         return "{} ({})".format(self.location, self.priority)
