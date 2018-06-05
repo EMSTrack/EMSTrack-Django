@@ -1,5 +1,22 @@
-{% extends "base.html" %}
+{% extends "leaflet/base.html" %}
+
 {% load static %}
+
+{% block leaflethead %}
+    <script>
+        var call_location_x = {{ call.location.x|safe }};
+        var call_location_y = {{ call.location.y|safe }};
+        var call_id = {{ call.id|safe }};
+        var call_status = '{{ call.status|get_call_status|safe }}';
+        var ambulances = [];
+        var APIBaseUrl = '{% url 'index' %}api/';
+        
+        {% for ambulancecall in call.ambulancecall_set.all %}
+            ambulances.push({{ ambulancecall.ambulance_id }});
+        {% endfor %}
+
+    </script>
+{% endblock %}
 
 {% block content %}
 
@@ -41,7 +58,22 @@
             </p>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>
+                Call Progress:
+            </h3>
+
+            <div id="map" class="my-2" style="height: 600px"></div>
+
+        </div>
+    </div>
+
 </div>
 
-{% endblock %}
+<script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
+<script src="{% static 'js/call_detail.js' %}"></script>
 
+{% endblock %}
