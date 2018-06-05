@@ -823,4 +823,3 @@ class TestCall(TestSetup):
 
         # logout
         client.logout()
-        

@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from emstrack.forms import LeafletPointWidget
 
-from .models import Ambulance, Call, Location, Patient 
+from .models import Ambulance, Call, Location
 
 
 class AmbulanceCreateForm(forms.ModelForm):
@@ -63,7 +63,6 @@ class CallCreateForm(forms.ModelForm):
     class Meta:
         model = Call
         fields = '__all__'
-        
 
 # class AmbulanceStatusCreateForm(forms.ModelForm):
 #     class Meta:

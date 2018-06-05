@@ -320,10 +320,10 @@ class CallSerializer(serializers.ModelSerializer):
 
         return call
 
-    def update(self, instance, validated_data):
+    def update(self, instance, data):
 
         # Get current user.
-        user = validated_data['updated_by']
+        user = data['updated_by']
 
         # Make sure user is Super.
         if not user.is_superuser:
@@ -331,7 +331,7 @@ class CallSerializer(serializers.ModelSerializer):
             if not user.profile.calls.filter(can_write=True, call=instance.id):
                 raise PermissionDenied()
 
-        return super().update(instance, validated_data)
+        return super().update(instance, data)
 
     def validate(self, data):
         if 'status' in data and data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):

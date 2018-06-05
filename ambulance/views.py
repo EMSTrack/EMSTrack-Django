@@ -6,13 +6,11 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
-from extra_views import InlineFormSet
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Location, LocationType, CallStatus, AmbulanceCallStatus, Patient
+    Call, Location, LocationType, CallStatus, AmbulanceCallStatus
 
-from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, \
-    LocationAdminUpdateForm
+from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
 from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
@@ -245,9 +243,6 @@ class CallDetailView(LoginRequiredMixin,
 
     def get_success_url(self):
         return self.object.get_absolute_url()
-
-
-
 
 # Admin page
 # class AdminView(ListView):
