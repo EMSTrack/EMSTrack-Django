@@ -302,12 +302,25 @@ class Call(CallPublishMixin,
 
         if self.status == CallStatus.E.name:
 
+            # timestamp
+            self.ended_at = timezone.now()
+
             # remove topic from mqtt server
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().remove_call(self)
 
             # prevent publication
             publish = False
+
+        elif self.status == CallStatus.S.name:
+
+            # timestamp
+            self.started_at = timezone.now()
+
+        elif self.status == CallStatus.P.name:
+
+            # timestamp
+            self.pending_at = timezone.now()
 
         # call super
         super().save(*args, **kwargs, publish=publish)
