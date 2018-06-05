@@ -25,7 +25,7 @@
         <div class="col">
 
             <div class="float-right mt-1">
-                <form action="'{% url 'ambulance:call_abort' pk=call.id %}'" method="get">
+                <form action="{% url 'ambulance:call_abort' pk=call.id %}" method="get">
                     <input type="submit" class="btn btn-danger" value="ABORT CALL">
                 </form>
             </div>
