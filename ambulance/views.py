@@ -234,6 +234,13 @@ class CallListView(LoginRequiredMixin,
                    ListView):
     model = Call
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pending'] = self.queryset.filter(status=CallStatus.P.name)
+        context['started'] = self.queryset.filter(status=CallStatus.S.name)
+        context['ended'] = self.queryset.filter(status=CallStatus.E.name)
+        return context
+
 
 # Call DetailView
 class CallDetailView(LoginRequiredMixin,
