@@ -265,7 +265,7 @@ class CallAbortView(LoginRequiredMixin,
         # abort call
         self.object.abort()
 
-        return redirect('call_list')
+        return redirect('ambulance:call_list')
 
 # Admin page
 # class AdminView(ListView):

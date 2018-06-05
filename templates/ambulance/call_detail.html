@@ -25,7 +25,9 @@
         <div class="col">
 
             <div class="float-right mt-1">
-                <button type="button" class="btn btn-danger" id="endCallButton">ABORT CALL</button>
+                <form action="'{% url 'ambulance:call_abort' pk=call.id %}'" method="get">
+                    <input type="submit" class="btn btn-danger">ABORT CALL</input>
+                </form>
             </div>
 
             <h1>Call</h1>
@@ -134,13 +136,5 @@
 
 <script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
 <script src="{% static 'js/call_detail.js' %}"></script>
-<script>
-    $(function() {
-        // wire end call button
-        $("#endCallButton").on('click', function() {
-            
-        })
-    });
-</script>
 
 {% endblock %}
