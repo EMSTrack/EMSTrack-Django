@@ -8,7 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from login.permissions import cache_clear
 from mqtt.publish import PublishClient
 
-from ambulance.models import Ambulance
+from ambulance.models import Ambulance, Call
 
 from hospital.models import Hospital, HospitalEquipment
 
@@ -51,7 +51,7 @@ class Client(PublishClient):
         self.seed_profile_data()
 
         # Seed calls
-        # self.seed_calls()
+        self.seed_call_data()
 
         # Good to disconnect
         self.can_disconnect = True
@@ -139,6 +139,21 @@ class Client(PublishClient):
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
+
+    def seed_call_data(self):
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS(">> Seeding call data"))
+
+        # seeding ambulances
+        for obj in Call.objects.all():
+            self.publish_call(obj)
+
+            for ambulancecall in obj.ambulancecall_set.all():
+                self.publish_call_status(ambulancecall)
+
+        if self.verbosity > 0:
+            self.stdout.write(self.style.SUCCESS("<< Done seeding call data"))
 
     # Message publish callback
     def on_publish(self, client, userdata, mid):

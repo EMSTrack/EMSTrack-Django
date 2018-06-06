@@ -17,6 +17,9 @@ from ..subscribe import SubscribeClient
 logger = logging.getLogger(__name__)
 
 
+# TODO: test that started_at, pending_at and ended_at get actually set in calls
+# TODO: test that Call.abort() terminates a call properly in every stage of the call
+
 class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
