@@ -354,9 +354,10 @@ function dispatchCall() {
 
     // ambulances
     var ambulances = [];
-    for (var id in dispatchingAmbulances)
+    for (var id in dispatchingAmbulances) {
         if (dispatchingAmbulances.hasOwnProperty(id))
             ambulances.push({ 'ambulance_id': id });
+		}
     form['ambulancecall_set'] = ambulances;
 
     // patients
