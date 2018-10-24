@@ -1,6 +1,9 @@
 /* Dispatch area - Should be eliminate after dispatching */
 
 var markersGroup = new L.LayerGroup();
+console.log("\n\n\n\n");
+console.log("printining markersGroup");
+console.log(markersGroup); 
 var isDispatching = false;
 var isFilterOpen = false;
 var placeIcon = L.icon({
