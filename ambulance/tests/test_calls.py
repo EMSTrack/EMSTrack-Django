@@ -785,7 +785,7 @@ class TestCall(TestSetup):
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
-        self.assertNotContains(response, 'nani')
+        self.assertContains(response, 'nani')
         self.assertNotContains(response, 'suhmuh')
 
         # add ambulances to calls, can only read a3
