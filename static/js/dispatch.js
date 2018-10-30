@@ -206,6 +206,7 @@ var updateCurrentLocation = function(location) {
 
 		mymap.on('contextmenu', function(e) {
 			console.log("right click at:");
+			console.log(e);
 		})
 
 		// commented out by kaung to test double click
