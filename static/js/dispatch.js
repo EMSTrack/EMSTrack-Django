@@ -205,7 +205,7 @@ var updateCurrentLocation = function(location) {
     })
 
 		mymap.on('contextmenu', function(e) {
-			console.log("right click at:", e.lngLat.lng, e.lngLat.lat)});
+			console.log("right click at:", e.lngLat.lng, e.lngLat.lat);
 		});
 
 		// commented out by kaung to test double click
