@@ -193,9 +193,9 @@ var updateCurrentLocation = function(location) {
     mymap.panTo(location);
 
     // events
-    mymap.on('dblclick', function(e) {
+    marker.on('dragend', function(e) {
 
-			console.log("clicked in dblclick"); 
+			console.log("clicked in dblclick");
         updateCurrentLocation(marker.getLatLng());
 
         // update address?
@@ -203,6 +203,10 @@ var updateCurrentLocation = function(location) {
             updateCurrentAddress(currentLocation);
 
     })
+
+		mymap.on('contextmenu', function(e) {
+			console.log("right click at:", e.lngLat.lng, e.lngLat.lat)});
+		});
 
 		// commented out by kaung to test double click
     // marker.on('dragend', function(e) {
