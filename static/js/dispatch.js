@@ -3,7 +3,7 @@
 var markersGroup = new L.LayerGroup();
 console.log("\n\n\n\n");
 console.log("printining markersGroup");
-console.log(markersGroup); 
+console.log(markersGroup);
 var isDispatching = false;
 var isFilterOpen = false;
 var placeIcon = L.icon({
@@ -193,9 +193,9 @@ var updateCurrentLocation = function(location) {
     mymap.panTo(location);
 
     // events
-    marker.on('dragend', function(e) {
+    mymap.on('dblclick', function(e) {
 
-        // update current location
+			console.log("clicked in dblclick"); 
         updateCurrentLocation(marker.getLatLng());
 
         // update address?
@@ -203,6 +203,18 @@ var updateCurrentLocation = function(location) {
             updateCurrentAddress(currentLocation);
 
     })
+
+		// commented out by kaung to test double click
+    // marker.on('dragend', function(e) {
+		//
+    //     // update current location
+    //     updateCurrentLocation(marker.getLatLng());
+		//
+    //     // update address?
+    //     if ($('#update-address').prop('checked'))
+    //         updateCurrentAddress(currentLocation);
+		//
+    // })
 
 }
 
