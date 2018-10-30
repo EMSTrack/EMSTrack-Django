@@ -21,6 +21,8 @@ var currentLocation;
 var currentPatients;
 var newPatientIndex;
 
+var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
+
 var submitDispatching = function () {
 
     // submit form
@@ -206,6 +208,10 @@ var updateCurrentLocation = function(location) {
 
 		mymap.on('contextmenu', function(e) {
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
+			console.log(e);
+			popOpt.openOn(mymap);
+
+
 		})
 
 		// commented out by kaung to test double click
