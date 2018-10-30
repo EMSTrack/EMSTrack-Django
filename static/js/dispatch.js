@@ -209,8 +209,8 @@ var updateCurrentLocation = function(location) {
 		mymap.on('contextmenu', function(e) {
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
-			var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
-			popOpt.openOn(mymap);
+			// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
+			// popOpt.openOn(mymap);
 
 
 		})
