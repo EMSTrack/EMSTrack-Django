@@ -191,6 +191,16 @@ var updateCurrentLocation = function(location) {
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
 
+		mymap.on('contextmenu', function(e) {
+			console.log("right click at:", e.latlng.lat, e.latlng.lng);
+			console.log(e);
+			updateCurrentLocation(e.latlng);
+			// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
+			// popOpt.openOn(mymap);
+			if ($('#update-address').prop('checked'))
+					updateCurrentAddress(currentLocation);
+		})
+
     // pan to location
     mymap.panTo(location);
 
@@ -206,6 +216,7 @@ var updateCurrentLocation = function(location) {
 
     })
 
+
 		// commented out by kaung to test double click
     // marker.on('dragend', function(e) {
 		//
@@ -219,15 +230,7 @@ var updateCurrentLocation = function(location) {
     // })
 
 }
-mymap.on('contextmenu', function(e) {
-	console.log("right click at:", e.latlng.lat, e.latlng.lng);
-	console.log(e);
-	updateCurrentLocation(e.latlng);
-	// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
-	// popOpt.openOn(mymap);
-	if ($('#update-address').prop('checked'))
-			updateCurrentAddress(currentLocation);
-})
+
 
 var updateCurrentAddress = function(location) {
 
