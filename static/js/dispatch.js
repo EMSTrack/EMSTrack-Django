@@ -54,13 +54,13 @@ var beginDispatching = function () {
 				var debug = false;
 				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);}
 
-				updateCurrentLocation(e.latlng, function () {
-					console.log("printing before prevent")
-					if ($('#update-address').prop('checked')) {
-	            updateCurrentAddress(e.latlng);
-					}
-					e.preventDefault();
-				});
+				updateCurrentLocation(e.latlng);
+
+				console.log("printing before prevent")
+				if ($('#update-address').prop('checked')) {
+            updateCurrentAddress(e.latlng);
+				}
+				e.preventDefault();
 
 			}
 			catch(err) {
