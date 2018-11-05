@@ -204,8 +204,8 @@ var updateCurrentLocation = function(location) {
 			if(e) {
 				console.log("***********");
 				console.log(e);
-				e.preventDefault();
-			} 
+				e.stopPropagation();
+			}
 		})
 
     // pan to location
