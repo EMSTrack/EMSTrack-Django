@@ -55,7 +55,7 @@ var beginDispatching = function () {
 				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);}
 
 				updateCurrentLocation(e.latlng, function(ev){
-					if(debug) {console.log("This is the ev"); console.log(ev);}
+					if(1) {console.log("This is the ev"); console.log(ev);}
 					e.preventDefault();
 					if ($('#update-address').prop('checked'), function() {
 						updateCurrentAddress(currentLocation);
@@ -218,7 +218,6 @@ var updateCurrentLocation = function(location) {
     // marker can be dragged on the dispatch map
     marker.on('dragend', function(e) {
 
-			console.log("clicked in dblclick");
         updateCurrentLocation(marker.getLatLng());
 
         // update address?
