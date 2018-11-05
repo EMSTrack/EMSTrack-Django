@@ -203,7 +203,7 @@ var updateCurrentLocation = function(location) {
 					updateCurrentAddress(currentLocation);
 				});
 
-				e.stopImmediatePropagation();
+				preventDefault(); 
 
 			}
 			catch(err) {
