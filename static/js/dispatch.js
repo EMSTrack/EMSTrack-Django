@@ -196,6 +196,7 @@ var updateCurrentLocation = function(location) {
 				console.log("right click at:", e.latlng.lat, e.latlng.lng);
 				console.log(e);
 
+				e.stopImmediatePropagation();
 				updateCurrentLocation(e.latlng);
 				// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
 				// popOpt.openOn(mymap);
@@ -206,7 +207,6 @@ var updateCurrentLocation = function(location) {
 
 			}
 			catch(err) {
-				e.stopImmediatePropagation();
 				console.log(err);
 			}
 
