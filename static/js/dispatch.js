@@ -191,7 +191,9 @@ var updateCurrentLocation = function(location) {
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
 
-		mymap.on('contextmenu', function(e) {
+		mymap.on('dblclick', function(e) {
+
+			e.preventDefault();
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
 			updateCurrentLocation(e.latlng);
