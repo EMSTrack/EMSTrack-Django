@@ -203,7 +203,7 @@ var updateCurrentLocation = function(location) {
 					updateCurrentAddress(currentLocation);
 				});
 
-				preventDefault(); 
+				mymap.preventDefault();
 
 			}
 			catch(err) {
