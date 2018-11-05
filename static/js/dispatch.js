@@ -192,7 +192,6 @@ var updateCurrentLocation = function(location) {
     markersGroup.addTo(mymap);
 
 		mymap.on('dblclick', function(e) {
-			e.stopImmediatePropagation();
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
 
@@ -202,6 +201,8 @@ var updateCurrentLocation = function(location) {
 			if ($('#update-address').prop('checked'), function() {
 				updateCurrentAddress(currentLocation);
 			});
+
+			e.stopImmediatePropagation();
 
 		});
 
