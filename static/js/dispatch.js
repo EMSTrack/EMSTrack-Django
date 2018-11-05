@@ -192,24 +192,21 @@ var updateCurrentLocation = function(location) {
     markersGroup.addTo(mymap);
 
 		mymap.on('dblclick', function(e) {
+			e.stopImmediatePropagation();
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
 
 			updateCurrentLocation(e.latlng);
 			// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
 			// popOpt.openOn(mymap);
-			if ($('#update-address').prop('checked'))
-					updateCurrentAddress(currentLocation);
+			if ($('#update-address').prop('checked'), function() {
+				updateCurrentAddress(currentLocation);
+			});
 
-			if(e) {
-				console.log("***********");
-				console.log(e);
-				e.stopImmediatePropagation();
-			}
-		})
+		});
 
     // pan to location
-    mymap.panTo(location);
+    mymap.flyTo(location);
 
     // events
     marker.on('dragend', function(e) {
