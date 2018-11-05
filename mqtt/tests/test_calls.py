@@ -236,7 +236,7 @@ class TestMQTTCallsRegularUser(TestMQTTCalls):
 
 # -------------------------------------------------------------------------------------------
 # New Testing 
-# Test the call is aborting
+# Test aborting the call once the call is created.
 class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
 
     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
@@ -334,10 +334,6 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
 
         # Abort the call
         call.abort()
-
-        # Check if ambulancecall status is Completed
-        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
         # Check if call status is Ended
         call = Call.objects.get(id=call.id)
