@@ -198,15 +198,13 @@ var updateCurrentLocation = function(location) {
 
 
 				updateCurrentLocation(e.latlng, function(ev){
-					e.stopImmediatePropagation();
+					e.preventDefault();
+					if ($('#update-address').prop('checked'), function() {
+						updateCurrentAddress(currentLocation);
+					});
 				});
 				// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
 				// popOpt.openOn(mymap);
-				if ($('#update-address').prop('checked'), function() {
-					updateCurrentAddress(currentLocation);
-				});
-
-
 			}
 			catch(err) {
 				console.log(err);
