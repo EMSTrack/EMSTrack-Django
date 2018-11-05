@@ -234,6 +234,151 @@ class TestMQTTCallsRegularUser(TestMQTTCalls):
     def test(self):
         super().test('testuser2', 'very_secret', self.a3.id)
 
+# -------------------------------------------------------------------------------------------
+# New Testing 
+# Test the call is aborting
+class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
+
+    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
+
+        if not ambulance_id:
+            ambulance_id = self.a1.id
+
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        broker['USERNAME'] = username
+        broker['PASSWORD'] = password
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id)
+
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # create call using serializer, one ambulance first
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecall_set': [{'ambulance_id': ambulance_id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Check if call status is Pending
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.P.name)
+
+        # Check if ambulancecall status is Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
+        # Abort the call
+        call.abort()
+
+        # Check if ambulancecall status is Completed
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # Check if call status is Ended
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.E.name)
+
+        # expect blank call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
@@ -1058,77 +1203,3 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client2.wait()
         subscribe_client.wait()
 
-
-# # TODO: Create another test where 1 clients log out in the process 
-# class TestMQTTCallsAmbulancesInterrupt(TestMQTT, MQTTTestCase):
-#     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'],
-#              ambulance_id1=None, ambulance_id2=None):
-
-#         if not ambulance_id1:
-#             ambulance_id1 = self.a1.id
-
-#         if not ambulance_id2:
-#             ambulance_id2 = self.a3.id
-
-#         # Start client as admin
-#         broker = {
-#             'HOST': 'localhost',
-#             'PORT': 1883,
-#             'KEEPALIVE': 60,
-#             'CLEAN_SESSION': True
-#         }
-
-#         # Start subscribe client
-
-#         broker.update(settings.MQTT)
-#         broker['CLIENT_ID'] = 'test_mqttclient'
-
-#         subscribe_client = SubscribeClient(broker,
-#                                            debug=True)
-#         self.is_connected(subscribe_client)
-#         self.is_subscribed(subscribe_client)
-
-#         # Start test client
-
-#         broker.update(settings.MQTT)
-#         client_id = 'test_mqtt_subscribe_admin'
-#         broker['USERNAME'] = username
-#         broker['PASSWORD'] = password
-#         broker['CLIENT_ID'] = client_id
-
-#         test_client = MQTTTestClient(broker,
-#                                      check_payload=False,
-#                                      debug=True)
-#         self.is_connected(test_client)
-
-#          # Client handshake
-#         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
-
-#         # process messages
-#         self.loop(test_client)
-#         subscribe_client.loop()
-
-#         # check record
-#         clnt = Client.objects.get(client_id=client_id)
-#         self.assertEqual(clnt.status, ClientStatus.O.name)
-
-#         # check record log
-#         obj = ClientLog.objects.get(client=clnt)
-#         self.assertEqual(obj.status, ClientStatus.O.name)
-
-#         # Ambulance handshake: ambulance login
-#         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id1),
-#                             'ambulance login')
-
-#         # process messages
-#         self.loop(test_client)
-#         subscribe_client.loop()
-
-#         # check record
-#         clnt = Client.objects.get(client_id=client_id)
-#         self.assertEqual(clnt.status, ClientStatus.O.name)
-#         self.assertEqual(clnt.ambulance.id, ambulance_id1)
-
-#         # subscribe to call and ambulance call status
-#         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
-#         self.is_subscribed(test_client)
