@@ -60,10 +60,9 @@ var beginDispatching = function () {
 				if ($('#update-address').prop('checked')) {
             updateCurrentAddress(e.latlng);
 				}
-				e.preventDefault();
-
 			}
 			catch(err) {
+				e.preventDefault();
 				console.log(err);
 			}
 		});
