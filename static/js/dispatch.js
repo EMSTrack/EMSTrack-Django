@@ -60,7 +60,7 @@ var beginDispatching = function () {
 				}
 			}
 			catch(err) {
-				e.preventDefault();
+				e.stopPropagation();
 				console.log(err);
 			}
 		});
