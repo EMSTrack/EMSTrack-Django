@@ -46,28 +46,30 @@ var beginDispatching = function () {
 
 
 		// defined by kaung -- modeled after : https://www.mapbox.com/mapbox-gl-js/example/drag-a-point/
+		/*
+			the following listener on mymap listens to double click
+			and moves the marker to the double clicked place.
+		*/
 		mymap.on('dblclick', function(e) {
 			try {
-				console.log("right click at:", e.latlng.lat, e.latlng.lng);
-				console.log(e);
-
+				var debug = false;
+				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);
+				}
 
 				updateCurrentLocation(e.latlng, function(ev){
-					console.log("This is the ev");
-					console.log(ev);
+					if(debug) {console.log("This is the ev"); console.log(ev);}
 					e.preventDefault();
 					if ($('#update-address').prop('checked'), function() {
 						updateCurrentAddress(currentLocation);
 					});
 				});
-				// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
-				// popOpt.openOn(mymap);
+
 			}
 			catch(err) {
 				console.log(err);
 			}
 		});
-		
+
     // Update current location
     updateCurrentLocation(mymap.getCenter());
 
