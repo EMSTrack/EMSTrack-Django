@@ -192,8 +192,6 @@ var updateCurrentLocation = function(location) {
     markersGroup.addTo(mymap);
 
 		mymap.on('dblclick', function(e) {
-
-			e.preventDefault();
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
 
@@ -202,6 +200,8 @@ var updateCurrentLocation = function(location) {
 			// popOpt.openOn(mymap);
 			if ($('#update-address').prop('checked'))
 					updateCurrentAddress(currentLocation);
+
+			e.preventDefault(); 
 		})
 
     // pan to location
