@@ -201,7 +201,7 @@ var updateCurrentLocation = function(location) {
 			if ($('#update-address').prop('checked'))
 					updateCurrentAddress(currentLocation);
 
-			e.preventDefault(); 
+			if(e) {e.preventDefault();} 
 		})
 
     // pan to location
