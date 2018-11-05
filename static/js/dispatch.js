@@ -1,9 +1,6 @@
 /* Dispatch area - Should be eliminate after dispatching */
 
 var markersGroup = new L.LayerGroup();
-console.log("\n\n\n\n");
-console.log("printining markersGroup");
-console.log(markersGroup);
 var isDispatching = false;
 var isFilterOpen = false;
 var placeIcon = L.icon({
@@ -44,24 +41,13 @@ var beginDispatching = function () {
     $('#ambulance_status').addClass('show');
     $('#ambulance_AV').addClass('show');
 
-		/*
-		// defined by kaung -- modeled after : https://www.mapbox.com/mapbox-gl-js/example/drag-a-point/
-			the following listener on mymap listens to double click
-			and moves the marker to the double clicked place.
-		*/
-		mymap.on('dblclick', function(e) {
-			try {
-				updateCurrentLocation(e.latlng);
-				if ($('#update-address').prop('checked')) {
-            updateCurrentAddress(e.latlng);
-				}
-			}
-			catch(err) {
-				e.stopPropagation();
-				console.log(err);
-			}
-		});
-
+    // Handle double click
+    mymap.doubleClickZoom.disable();
+    mymap.on('dblclick', function(e) {
+	// update marker location
+	updateCurrentMarker(e.latlng);	
+    });
+    
     // Update current location
     updateCurrentLocation(mymap.getCenter());
 
@@ -106,6 +92,10 @@ var endDispatching = function () {
         $('#filtersDiv').removeClass('show');
     }
 
+    // remove dblclick handler
+    mymap.off('dblclick');
+    mymap.doubleClickZoom.enable();
+    
     // invalidate map size
     mymap.invalidateSize();
 
@@ -184,6 +174,17 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
+var updateCurrentMarker = function(latlng) {
+
+    // update current location
+    updateCurrentLocation(latlng);
+    
+    // update address?
+    if ($('#update-address').prop('checked'))
+        updateCurrentAddress(latlng);
+    
+}
+
 var updateCurrentLocation = function(location) {
 
     console.log('Setting current location to: ' + location.lat + ', ' + location.lng);
@@ -206,21 +207,18 @@ var updateCurrentLocation = function(location) {
         })
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
-    // pan to location
-    mymap.panTo(location);
+
+    // pan to location: kaung and mauricio though it made more sense to not pan
+    // mymap.panTo(location);
 
     // marker can be dragged on the dispatch map
     marker.on('dragend', function(e) {
 
-        updateCurrentLocation(marker.getLatLng());
-
-        // update address?
-        if ($('#update-address').prop('checked'))
-            updateCurrentAddress(currentLocation);
-
+	// update current marker
+	updateCurrentMarker(marker.getLatLng());
+	
     });
 }
-
 
 var updateCurrentAddress = function(location) {
 
