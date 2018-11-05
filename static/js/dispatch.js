@@ -51,9 +51,6 @@ var beginDispatching = function () {
 		*/
 		mymap.on('dblclick', function(e) {
 			try {
-				var debug = false;
-				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);}
-
 				updateCurrentLocation(e.latlng);
 				if ($('#update-address').prop('checked')) {
             updateCurrentAddress(e.latlng);
