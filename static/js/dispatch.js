@@ -55,8 +55,6 @@ var beginDispatching = function () {
 				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);}
 
 				updateCurrentLocation(e.latlng);
-
-				console.log("printing before prevent")
 				if ($('#update-address').prop('checked')) {
             updateCurrentAddress(e.latlng);
 				}
