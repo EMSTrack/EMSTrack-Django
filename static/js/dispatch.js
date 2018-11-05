@@ -198,6 +198,8 @@ var updateCurrentLocation = function(location) {
 
 
 				updateCurrentLocation(e.latlng, function(ev){
+					console.log("This is the ev"); 
+					console.log(ev);
 					e.preventDefault();
 					if ($('#update-address').prop('checked'), function() {
 						updateCurrentAddress(currentLocation);
