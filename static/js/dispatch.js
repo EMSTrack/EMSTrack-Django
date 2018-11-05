@@ -22,6 +22,34 @@ var currentPatients;
 var newPatientIndex;
 
 
+mymap.on('load', function() {
+
+	// defined by kaung -- modeled after : https://www.mapbox.com/mapbox-gl-js/example/drag-a-point/
+
+	mymap.on('dblclick', function(e) {
+		try {
+			console.log("right click at:", e.latlng.lat, e.latlng.lng);
+			console.log(e);
+
+
+			updateCurrentLocation(e.latlng, function(ev){
+				console.log("This is the ev");
+				console.log(ev);
+				e.preventDefault();
+				if ($('#update-address').prop('checked'), function() {
+					updateCurrentAddress(currentLocation);
+				});
+			});
+			// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
+			// popOpt.openOn(mymap);
+		}
+		catch(err) {
+			console.log(err);
+		}
+	});
+
+});
+
 
 var submitDispatching = function () {
 
@@ -191,29 +219,29 @@ var updateCurrentLocation = function(location) {
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
 
-		mymap.on('dblclick', function(e) {
-			try {
-				console.log("right click at:", e.latlng.lat, e.latlng.lng);
-				console.log(e);
-
-
-				updateCurrentLocation(e.latlng, function(ev){
-					console.log("This is the ev"); 
-					console.log(ev);
-					e.preventDefault();
-					if ($('#update-address').prop('checked'), function() {
-						updateCurrentAddress(currentLocation);
-					});
-				});
-				// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
-				// popOpt.openOn(mymap);
-			}
-			catch(err) {
-				console.log(err);
-			}
-
-
-		});
+		// mymap.on('dblclick', function(e) {
+		// 	try {
+		// 		console.log("right click at:", e.latlng.lat, e.latlng.lng);
+		// 		console.log(e);
+		//
+		//
+		// 		updateCurrentLocation(e.latlng, function(ev){
+		// 			console.log("This is the ev");
+		// 			console.log(ev);
+		// 			e.preventDefault();
+		// 			if ($('#update-address').prop('checked'), function() {
+		// 				updateCurrentAddress(currentLocation);
+		// 			});
+		// 		});
+		// 		// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
+		// 		// popOpt.openOn(mymap);
+		// 	}
+		// 	catch(err) {
+		// 		console.log(err);
+		// 	}
+		//
+		//
+		// });
 
     // pan to location
     mymap.panTo(location);
