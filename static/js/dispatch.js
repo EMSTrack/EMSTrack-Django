@@ -1,6 +1,9 @@
 /* Dispatch area - Should be eliminate after dispatching */
 
 var markersGroup = new L.LayerGroup();
+console.log("\n\n\n\n");
+console.log("printining markersGroup");
+console.log(markersGroup);
 var isDispatching = false;
 var isFilterOpen = false;
 var placeIcon = L.icon({
@@ -40,6 +43,24 @@ var beginDispatching = function () {
     filtersDiv.addClass('show');
     $('#ambulance_status').addClass('show');
     $('#ambulance_AV').addClass('show');
+
+		/*
+		// defined by kaung -- modeled after : https://www.mapbox.com/mapbox-gl-js/example/drag-a-point/
+			the following listener on mymap listens to double click
+			and moves the marker to the double clicked place.
+		*/
+		mymap.on('dblclick', function(e) {
+			try {
+				updateCurrentLocation(e.latlng);
+				if ($('#update-address').prop('checked')) {
+            updateCurrentAddress(e.latlng);
+				}
+			}
+			catch(err) {
+				e.stopPropagation();
+				console.log(err);
+			}
+		});
 
     // Update current location
     updateCurrentLocation(mymap.getCenter());
@@ -185,23 +206,21 @@ var updateCurrentLocation = function(location) {
         })
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
-
     // pan to location
     mymap.panTo(location);
 
-    // events
+    // marker can be dragged on the dispatch map
     marker.on('dragend', function(e) {
 
-        // update current location
         updateCurrentLocation(marker.getLatLng());
 
         // update address?
         if ($('#update-address').prop('checked'))
             updateCurrentAddress(currentLocation);
 
-    })
-
+    });
 }
+
 
 var updateCurrentAddress = function(location) {
 
@@ -354,9 +373,10 @@ function dispatchCall() {
 
     // ambulances
     var ambulances = [];
-    for (var id in dispatchingAmbulances)
+    for (var id in dispatchingAmbulances) {
         if (dispatchingAmbulances.hasOwnProperty(id))
             ambulances.push({ 'ambulance_id': id });
+		}
     form['ambulancecall_set'] = ambulances;
 
     // patients
@@ -559,7 +579,6 @@ $(function() {
 });
 
 // CSRF functions
-
 function CSRFSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }

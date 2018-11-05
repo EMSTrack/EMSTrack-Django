@@ -197,6 +197,8 @@ Geocoder.prototype.geocode = function(query, options, callback) {
     // Start with class options
     for (var property in this.options) {
         if (this.options.hasOwnProperty(property)) {
+            console.log("This is the property");
+            console.log(property);
             parameters[property] = this.options[property];
         }
     }
