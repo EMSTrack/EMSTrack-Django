@@ -193,7 +193,6 @@ var updateCurrentLocation = function(location) {
 
 		mymap.on('dblclick', function(e) {
 
-			e.preventDefault();
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
 			updateCurrentLocation(e.latlng);
