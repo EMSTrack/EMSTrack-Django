@@ -204,7 +204,7 @@ var updateCurrentLocation = function(location) {
 			if(e) {
 				console.log("***********");
 				console.log(e);
-				e.stopPropagation();
+				e.stopImmediatePropagation();
 			}
 		})
 
