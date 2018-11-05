@@ -195,8 +195,9 @@ var updateCurrentLocation = function(location) {
 
 			console.log("right click at:", e.latlng.lat, e.latlng.lng);
 			console.log(e);
-			e.preventDefault(); 
+
 			updateCurrentLocation(e.latlng);
+			e.preventDefault(); 
 			// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
 			// popOpt.openOn(mymap);
 			if ($('#update-address').prop('checked'))
