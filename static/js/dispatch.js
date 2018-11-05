@@ -44,17 +44,15 @@ var beginDispatching = function () {
     $('#ambulance_status').addClass('show');
     $('#ambulance_AV').addClass('show');
 
-
-		// defined by kaung -- modeled after : https://www.mapbox.com/mapbox-gl-js/example/drag-a-point/
 		/*
+		// defined by kaung -- modeled after : https://www.mapbox.com/mapbox-gl-js/example/drag-a-point/
 			the following listener on mymap listens to double click
 			and moves the marker to the double clicked place.
 		*/
 		mymap.on('dblclick', function(e) {
 			try {
 				var debug = false;
-				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);
-				}
+				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);}
 
 				updateCurrentLocation(e.latlng, function(ev){
 					if(debug) {console.log("This is the ev"); console.log(ev);}
@@ -91,10 +89,6 @@ var beginDispatching = function () {
 
     // center map
     mymap.setView(currentLocation, mymap.getZoom());
-
-
-
-
 
 }
 
@@ -218,35 +212,10 @@ var updateCurrentLocation = function(location) {
         })
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
-
-		// mymap.on('dblclick', function(e) {
-		// 	try {
-		// 		console.log("right click at:", e.latlng.lat, e.latlng.lng);
-		// 		console.log(e);
-		//
-		//
-		// 		updateCurrentLocation(e.latlng, function(ev){
-		// 			console.log("This is the ev");
-		// 			console.log(ev);
-		// 			e.preventDefault();
-		// 			if ($('#update-address').prop('checked'), function() {
-		// 				updateCurrentAddress(currentLocation);
-		// 			});
-		// 		});
-		// 		// var popOpt = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>');
-		// 		// popOpt.openOn(mymap);
-		// 	}
-		// 	catch(err) {
-		// 		console.log(err);
-		// 	}
-		//
-		//
-		// });
-
     // pan to location
     mymap.panTo(location);
 
-    // events
+    // marker can be dragged on the dispatch map
     marker.on('dragend', function(e) {
 
 			console.log("clicked in dblclick");
@@ -256,21 +225,7 @@ var updateCurrentLocation = function(location) {
         if ($('#update-address').prop('checked'))
             updateCurrentAddress(currentLocation);
 
-    })
-
-
-		// commented out by kaung to test double click
-    // marker.on('dragend', function(e) {
-		//
-    //     // update current location
-    //     updateCurrentLocation(marker.getLatLng());
-		//
-    //     // update address?
-    //     if ($('#update-address').prop('checked'))
-    //         updateCurrentAddress(currentLocation);
-		//
-    // })
-
+    });
 }
 
 
