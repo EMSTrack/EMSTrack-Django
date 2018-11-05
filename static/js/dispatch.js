@@ -54,14 +54,12 @@ var beginDispatching = function () {
 				var debug = false;
 				if(debug) { console.log("right click at:", e.latlng.lat, e.latlng.lng); console.log(e);}
 
-				updateCurrentLocation(e.latlng, function(ev){
-					if(1) {console.log("This is the ev"); console.log(ev);}
-					e.preventDefault();
-					if ($('#update-address').prop('checked'), function() {
-						updateCurrentAddress(currentLocation);
-					});
-				});
-
+				updateCurrentLocation(e.latlng);
+				console.log("printing before prevent")
+				if ($('#update-address').prop('checked')) {
+            updateCurrentAddress(e.latlng);
+				}
+				e.preventDefault();
 			}
 			catch(err) {
 				console.log(err);
