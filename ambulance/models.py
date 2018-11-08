@@ -364,7 +364,7 @@ class AmbulanceCallStatus(Enum):
     R = 'Requested'
     O = 'Ongoing'
     D = 'Declined'
-    I = 'Interrupted'
+    S = 'Suspended'
     C = 'Completed'
 
 
@@ -436,12 +436,12 @@ class AmbulanceCall(CallPublishMixin,
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
 
-            logger.debug('Ambulance declined.')
+            logger.debug('Ambulance call declined.')
 
-        # changed to interrupted?
-        elif self.status == AmbulanceCallStatus.I.name:
+        # changed to suspended?
+        elif self.status == AmbulanceCallStatus.S.name:
 
-            logger.debug('Ambulance interrupted.')
+            logger.debug('Ambulance call suspended.')
 
         # call super
         super().save(*args, **kwargs, publish=publish)
