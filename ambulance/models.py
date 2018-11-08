@@ -438,9 +438,6 @@ class AmbulanceCall(CallPublishMixin,
 
             logger.debug('Ambulance declined.')
 
-            # prevent publication
-            publish = False
-
         # changed to interrupted?
         elif self.status == AmbulanceCallStatus.I.name:
 
