@@ -80,6 +80,7 @@ var endDispatching = function () {
     markersGroup.clearLayers();
 
     // unselect priority
+    console.log($('input:radio[name=priority]'));
     $('input:radio[name=priority]').prop('checked', false);
 
     // clear description
