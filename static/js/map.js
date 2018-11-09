@@ -397,13 +397,12 @@ function updateAmbulance(ambulance) {
         var btnClass = 'btn btn-sm ' + ambulance_buttons[ambulance.status]
             + ' status-' + ambulance.status
             + ' capability-' + ambulance.capability;
-
-        console.log('Updating ambulance "' + ambulance.identifier +
-        '[id=' + ambulance.id + ', status=' + ambulance.status + ', class=' + btnClass + ']"' +
-        ' on grid');
-
-        // Updated button classes
         $("#grid-button-" + id).attr("class", btnClass);
+
+        // Move and update button
+        $("#grid-button-" + id).detach()
+            .appendTo($('#ambulance-' + ambulance.status))
+            .attr("class", btnClass);
 
     } else {
 
