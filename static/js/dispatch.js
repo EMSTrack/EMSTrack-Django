@@ -90,7 +90,7 @@ var endDispatching = function () {
     $('#ambulance-selection-message').show();
 
     // clear patients
-    $('#patients :button').off();
+    $('#patients').find('.btn-new-patient').off();
     $('#patients').empty();
 
     // show buttons
@@ -533,7 +533,7 @@ var newPatientForm = function(index, symbol) {
                        'placeholder="Age">' +
             '</div>' +
             '<div class="col-md-2 pl-0">' +
-                '<button class="btn btn-default btn-block new-patient" ' +
+                '<button class="btn btn-default btn-block btn-new-patient" ' +
                        ' type="button" ' +
                        ' id="patient-' + index + '-button">' +
                     '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
