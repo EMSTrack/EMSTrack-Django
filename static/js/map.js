@@ -954,7 +954,7 @@ function updateAmbulanceStatus(ambulance, status) {
             console.log("Succesfully posted ambulance status update.");
 
             // show target card
-            $('#ambulance-card-' + status).collapse('show');
+            $('#ambulance-' + status).collapse('show');
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
