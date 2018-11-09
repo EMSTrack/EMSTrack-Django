@@ -90,7 +90,6 @@ var endDispatching = function () {
     $('#ambulance-selection-message').show();
 
     // clear patients
-    console.log($('#patients').find('.btn-new-patient'));
     $('#patients').find('.btn-new-patient').off('click');
     $('#patients').empty();
 
@@ -512,10 +511,8 @@ var addPatientForm = function(index) {
     $('#patients').append(newPatientForm(index, 'fa-plus'));
 
     // bind addPatient to click
-    $('#patients')
-        .on('click',
-            '#patient-' + index + '-button',
-            function(e) { addPatient(index); });
+    $('#patients').find('#patient-' + index + '-button')
+        .on('click', function(e) { addPatient(index); });
 
 }
 
