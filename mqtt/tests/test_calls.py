@@ -340,6 +340,30 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # test_client publishes "Declined" to call status
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+                                                                                   ambulance_id, call.id), "declined")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Check if call status is Pending
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.P.name)
+
+        # Check if ambulancecall status is Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.D.name)
+
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), "accepted")
@@ -367,46 +391,6 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
-
-        # test_client publishes "patient bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'status': AmbulanceStatus.PB.name,
-                            }))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # test_client publishes "at patient" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'status': AmbulanceStatus.AP.name,
-                            }))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # test_client publishes "hospital bound" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'status': AmbulanceStatus.HB.name,
-                            }))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # test_client publishes "at hospital" to status
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'status': AmbulanceStatus.AH.name,
-                            }))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
 
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
