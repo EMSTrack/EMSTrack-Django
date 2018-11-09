@@ -90,7 +90,8 @@ var endDispatching = function () {
     $('#ambulance-selection-message').show();
 
     // clear patients
-    $('#patients').find('.btn-new-patient').off();
+    console.log($('#patients').find('.btn-new-patient'));
+    $('#patients').find('.btn-new-patient').off('click');
     $('#patients').empty();
 
     // show buttons
@@ -481,7 +482,7 @@ var addPatient = function(index) {
 
     // change button action from add to remove
     $('#patients').find('#patient-' + index + '-button')
-        .off()
+        .off('click')
         .on('click', function(e) { removePatient(index); });
 
     // add new form
