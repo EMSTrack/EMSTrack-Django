@@ -490,12 +490,10 @@ function addAmbulanceToGrid(ambulance) {
     $('#grid-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
-            console.log('dragstart');
             this.style.opacity = '0.4';
             e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
         })
         .on('dragend', function (e) {
-            console.log('dragend');
             // Restore opacity
             this.style.opacity = '1.0';
         })
@@ -505,6 +503,10 @@ function addAmbulanceToGrid(ambulance) {
         .dblclick( function(e) {
             addToDispatchingList(ambulance);
         });
+
+    // Update label
+    $('#ambulance-' + status + '-header').html(ambulance_status[ambulance.status] +
+        ' (' + $('#ambulance-' + ambulance.status).length + ')');
 
 };
 
@@ -781,7 +783,9 @@ function createCategoryPanesAndFilters() {
             '             <input class="filter-checkbox" value="status" data-status="' + status + '"\n' +
             '                    type="checkbox" id="ambulance-checkbox-' + status + '" ' +
             (visibleCategory[status] ? 'checked' : '') + '>\n' +
-            '             <span role="button">' + ambulance_status[status] + '</span>\n' +
+            '             <span id="ambulance-' + status + '-header" role="button">' +
+            '                    ' + ambulance_status[status] + '\n' +
+            '             </span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse"\n' +
@@ -919,18 +923,15 @@ function updateAmbulanceStatus(ambulance, status) {
     if (ambulance.status == status)
         return;
 
+    // TODO: Dialog to confirm change of status
+
     // form
     var form = { status: status };
 
     // make json call
     var postJsonUrl = APIBaseUrl + 'ambulance/' + ambulance.id + '/';
-    console.log("Form:");
-    console.log(form);
-    console.log("Will post:");
-    console.log(JSON.stringify(form));
 
     var CSRFToken = Cookies.get('csrftoken');
-    console.log('csrftoken = ' + CSRFToken);
 
     // retrieve csrf token
     $.ajaxSetup({

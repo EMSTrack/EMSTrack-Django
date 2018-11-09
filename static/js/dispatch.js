@@ -171,12 +171,10 @@ var addToDispatchingList = function(ambulance) {
     $('#dispatch-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
-            console.log('dragstart');
             this.style.opacity = '0.4';
             e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
         })
         .on('dragend', function (e) {
-            console.log('dragend');
             if (e.originalEvent.dataTransfer.dropEffect == 'none') {
                 // Remove button if not dropped back
                 removeFromDispatchingList(ambulance);
