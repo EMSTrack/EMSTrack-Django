@@ -363,7 +363,8 @@ class Call(CallPublishMixin,
 class AmbulanceCallStatus(Enum):
     R = 'Requested'
     O = 'Ongoing'
-    I = 'Interrupted'
+    D = 'Declined'
+    S = 'Suspended'
     C = 'Completed'
 
 
@@ -432,6 +433,16 @@ class AmbulanceCall(CallPublishMixin,
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(ongoing_ambulancecalls)
 
+        # changed to declined?
+        elif self.status == AmbulanceCallStatus.D.name:
+
+            logger.debug('Ambulance call declined.')
+
+        # changed to suspended?
+        elif self.status == AmbulanceCallStatus.S.name:
+
+            logger.debug('Ambulance call suspended.')
+
         # call super
         super().save(*args, **kwargs, publish=publish)
 
@@ -440,7 +451,6 @@ class AmbulanceCall(CallPublishMixin,
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call_status(self)
-
 
     class Meta:
         unique_together = ('call', 'ambulance')

@@ -63,10 +63,15 @@ class Client(PublishClient):
         self.pubset.add(result.mid)
 
         # echo if verbosity > 0
-        if self.verbosity > 1:
-            self.stdout.write("   {}: {}".format(topic, message))
-        elif self.verbosity > 0:
-            self.stdout.write("   {}".format(topic))
+        if self.verbosity > 0:
+            if message is None:
+                op = '-'
+            else:
+                op = '+'
+            if self.verbosity > 1:
+                self.stdout.write("   {}{}: {}".format(op, topic, message))
+            elif self.verbosity > 0:
+                self.stdout.write("   {}{}".format(op, topic))
 
     def seed_settings(self):
         if self.verbosity > 0:

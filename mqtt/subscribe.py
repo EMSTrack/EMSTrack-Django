@@ -826,6 +826,19 @@ class SubscribeClient(BaseClient):
                 ambulancecall.status = AmbulanceCallStatus.O.name
                 ambulancecall.save()
 
+            elif status.casefold() == "declined":
+
+                # change ambulancecall status to declined
+
+                ambulancecall.status = AmbulanceCallStatus.D.name
+                ambulancecall.save()
+
+            elif status.casefold() == "suspended":
+
+                # change ambulancecall status to suspended
+                ambulancecall.status = AmbulanceCallStatus.S.name
+                ambulancecall.save()
+
             elif status.casefold() == "finished":
 
                 # change ambulance status to completed

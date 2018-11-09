@@ -16,7 +16,6 @@ var numberOfDispatchingAmbulances = 0;
 var currentAddress;
 var currentLocation;
 var currentPatients;
-var newPatientIndex;
 
 var submitDispatching = function () {
 
@@ -41,6 +40,13 @@ var beginDispatching = function () {
     $('#ambulance_status').addClass('show');
     $('#ambulance_AV').addClass('show');
 
+    // Handle double click
+    mymap.doubleClickZoom.disable();
+    mymap.on('dblclick', function(e) {
+	// update marker location
+	updateCurrentMarker(e.latlng);	
+    });
+    
     // Update current location
     updateCurrentLocation(mymap.getCenter());
 
@@ -49,13 +55,12 @@ var beginDispatching = function () {
 
     // Clear current currentPatients
     currentPatients = {};
-    newPatientIndex = 0;
 
     // Initialize patient form
     $('#patients').empty();
 
     // add new patient form entry
-    addPatientForm(newPatientIndex);
+    addPatientForm(0);
 
     // resize size
     resizeMap();
@@ -71,8 +76,25 @@ var endDispatching = function () {
     dispatchingAmbulances = {};
     console.log('End dispatching.');
 
+    // remove marker
     markersGroup.clearLayers();
 
+    // unselect priority
+    $('#priority-buttons label.btn').removeClass('active');
+    $('input:radio[name=priority]').prop('checked', false);
+
+    // clear description
+    $('#comment').val('');
+
+    // clear ambulances buttons
+    $('#ambulance-selection :button').remove();
+    $('#ambulance-selection-message').show();
+
+    // clear patients
+    $('#patients').find('.btn-new-patient').off('click');
+    $('#patients').empty();
+
+    // show buttons
     $('#dispatchBeginButton').show();
     $('#dispatchSubmitButton').hide();
     $('#dispatchCancelButton').hide();
@@ -85,6 +107,10 @@ var endDispatching = function () {
         $('#filtersDiv').removeClass('show');
     }
 
+    // remove dblclick handler
+    mymap.off('dblclick');
+    mymap.doubleClickZoom.enable();
+    
     // invalidate map size
     mymap.invalidateSize();
 
@@ -145,12 +171,10 @@ var addToDispatchingList = function(ambulance) {
     $('#dispatch-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
-            console.log('dragstart');
             this.style.opacity = '0.4';
             e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
         })
         .on('dragend', function (e) {
-            console.log('dragend');
             if (e.originalEvent.dataTransfer.dropEffect == 'none') {
                 // Remove button if not dropped back
                 removeFromDispatchingList(ambulance);
@@ -161,6 +185,17 @@ var addToDispatchingList = function(ambulance) {
                 this.style.opacity = '1.0';
             }
         });
+}
+
+var updateCurrentMarker = function(latlng) {
+
+    // update current location
+    updateCurrentLocation(latlng);
+    
+    // update address?
+    if ($('#update-address').prop('checked'))
+        updateCurrentAddress(latlng);
+    
 }
 
 var updateCurrentLocation = function(location) {
@@ -186,21 +221,16 @@ var updateCurrentLocation = function(location) {
         .addTo(markersGroup);
     markersGroup.addTo(mymap);
 
-    // pan to location
-    mymap.panTo(location);
+    // pan to location: kaung and mauricio though it made more sense to not pan
+    // mymap.panTo(location);
 
-    // events
+    // marker can be dragged on the dispatch map
     marker.on('dragend', function(e) {
 
-        // update current location
-        updateCurrentLocation(marker.getLatLng());
-
-        // update address?
-        if ($('#update-address').prop('checked'))
-            updateCurrentAddress(currentLocation);
-
-    })
-
+        // update current marker
+        updateCurrentMarker(marker.getLatLng());
+	
+    });
 }
 
 var updateCurrentAddress = function(location) {
@@ -354,9 +384,10 @@ function dispatchCall() {
 
     // ambulances
     var ambulances = [];
-    for (var id in dispatchingAmbulances)
+    for (var id in dispatchingAmbulances) {
         if (dispatchingAmbulances.hasOwnProperty(id))
             ambulances.push({ 'ambulance_id': id });
+		}
     form['ambulancecall_set'] = ambulances;
 
     // patients
@@ -370,6 +401,20 @@ function dispatchCall() {
                 obj['age'] = parseInt(patient[1]);
             patients.push(obj);
         }
+
+    // retrieve last patient
+    var lastPatientForm = $('#patients div.form-row:last');
+    var lastPatientName = lastPatientForm.find('input[type="text"]').val().trim();
+    if (lastPatientName) {
+        var obj = { 'name':  lastPatientName };
+        var lastPatientAge = lastPatientForm.find('input[type="number"]').val().trim();
+        if (lastPatientAge)
+            // add age
+            obj['age'] = parseInt(lastPatientAge);
+        patients.push(obj);
+    }
+
+    // add to patient set
     form['patient_set'] = patients;
 
     // make json call
@@ -416,8 +461,8 @@ function dispatchCall() {
             // Show modal
             bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
 
-            // End dispatching
-            endDispatching();
+            // Do not end dispatching to give user chance to make changes
+            // endDispatching();
 
         }
     });
@@ -441,7 +486,6 @@ var addPatient = function(index) {
 
     // add name
     currentPatients[index] = [name, age];
-    newPatientIndex++;
 
     // change button symbol
     var symbol = $('#patient-' + index + '-symbol');
@@ -450,11 +494,11 @@ var addPatient = function(index) {
 
     // change button action from add to remove
     $('#patients').find('#patient-' + index + '-button')
-        .off()
+        .off('click')
         .on('click', function(e) { removePatient(index); });
 
     // add new form
-    addPatientForm(newPatientIndex);
+    addPatientForm(index + 1);
 
 }
 
@@ -474,14 +518,14 @@ var removePatient = function(index) {
 
 var addPatientForm = function(index) {
 
+    console.log('Adding patient form ' + index);
+
     // add new patient form entry
     $('#patients').append(newPatientForm(index, 'fa-plus'));
 
     // bind addPatient to click
-    $('#patients')
-        .on('click',
-            '#patient-' + index + '-button',
-            function(e) { addPatient(index); });
+    $('#patients').find('#patient-' + index + '-button')
+        .on('click', function(e) { addPatient(index); });
 
 }
 
@@ -502,7 +546,7 @@ var newPatientForm = function(index, symbol) {
                        'placeholder="Age">' +
             '</div>' +
             '<div class="col-md-2 pl-0">' +
-                '<button class="btn btn-default btn-block new-patient" ' +
+                '<button class="btn btn-default btn-block btn-new-patient" ' +
                        ' type="button" ' +
                        ' id="patient-' + index + '-button">' +
                     '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
@@ -519,8 +563,22 @@ var newPatientForm = function(index, symbol) {
 // Ready function
 $(function() {
 
-    // connect actions to inputs
+    // Make ambulance-selection droppable
+    $('#ambulance-selection')
+        .on('dragover', function(e) {
+            e.preventDefault();
+        })
+        .on('drop', function(e) {
+            e.preventDefault();
+            // Dropped button, get data
+            var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+            var ambulance = ambulances[ambulance_id];
+            console.log('dropped ambulance ' + ambulance['identifier']);
+            // and add to dispatching list
+            addToDispatchingList(ambulance);
+        });
 
+    // connect actions to inputs
     $("#street").change(function () {
 
         // update coordinates?
@@ -559,7 +617,6 @@ $(function() {
 });
 
 // CSRF functions
-
 function CSRFSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }

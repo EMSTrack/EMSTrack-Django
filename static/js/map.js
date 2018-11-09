@@ -145,21 +145,6 @@ $(function () {
     // Create category panes and filters
     createCategoryPanesAndFilters();
 
-    // Make ambulance-selection droppable
-    $('#ambulance-selection')
-        .on('dragover', function(e) {
-            e.preventDefault();
-        })
-        .on('drop', function(e) {
-            e.preventDefault();
-            // Dropped button, get data
-            var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
-            var ambulance = ambulances[ambulance_id];
-            console.log('dropped ambulance ' + ambulance['identifier']);
-            // and add to dispatching list
-            addToDispatchingList(ambulance);
-        });
-
     // retrieve temporary password for mqttClient and connect to broker
     $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {
 
@@ -412,13 +397,12 @@ function updateAmbulance(ambulance) {
         var btnClass = 'btn btn-sm ' + ambulance_buttons[ambulance.status]
             + ' status-' + ambulance.status
             + ' capability-' + ambulance.capability;
-
-        console.log('Updating ambulance "' + ambulance.identifier +
-        '[id=' + ambulance.id + ', status=' + ambulance.status + ', class=' + btnClass + ']"' +
-        ' on grid');
-
-        // Updated button classes
         $("#grid-button-" + id).attr("class", btnClass);
+
+        // Move and update button
+        $("#grid-button-" + id).detach()
+            .appendTo($('#ambulance-' + ambulance.status))
+            .attr("class", btnClass);
 
     } else {
 
@@ -506,12 +490,10 @@ function addAmbulanceToGrid(ambulance) {
     $('#grid-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
-            console.log('dragstart');
             this.style.opacity = '0.4';
             e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
         })
         .on('dragend', function (e) {
-            console.log('dragend');
             // Restore opacity
             this.style.opacity = '1.0';
         })
@@ -521,6 +503,11 @@ function addAmbulanceToGrid(ambulance) {
         .dblclick( function(e) {
             addToDispatchingList(ambulance);
         });
+
+    // Update label
+    var status = ambulance.status;
+    $('#ambulance-' + status + '-header').html(ambulance_status[status] +
+        ' (' + $('#ambulance-' + status).length + ')');
 
 };
 
@@ -785,6 +772,7 @@ function createCategoryPanesAndFilters() {
     // Create ambulance status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
+        // Create grid
         $("#ambulance-status").append(
             '<div class="card form-group mb-1 mt-0" id="ambulance-card-' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
@@ -796,7 +784,9 @@ function createCategoryPanesAndFilters() {
             '             <input class="filter-checkbox" value="status" data-status="' + status + '"\n' +
             '                    type="checkbox" id="ambulance-checkbox-' + status + '" ' +
             (visibleCategory[status] ? 'checked' : '') + '>\n' +
-            '             <span role="button">' + ambulance_status[status] + '</span>\n' +
+            '             <span id="ambulance-' + status + '-header" role="button">' +
+            '                    ' + ambulance_status[status] + '\n' +
+            '             </span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse"\n' +
@@ -808,6 +798,22 @@ function createCategoryPanesAndFilters() {
             '         </div>\n' +
             '    </div>\n' +
             '</div>');
+
+        // Make them dropable
+        $('#ambulance-card-' + status)
+            .on('dragover', function(e) {
+                e.preventDefault();
+            })
+            .on('drop', function(e) {
+                e.preventDefault();
+                // Dropped button, get data
+                var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+                var ambulance = ambulances[ambulance_id];
+                console.log('dropped ambulance ' + ambulance['identifier']);
+                // change status
+                updateAmbulanceStatus(ambulance, status);
+            });
+
     });
 
     // Create capability options
@@ -909,5 +915,57 @@ function onGridButtonClick(ambulance) {
         }, 2500);
 
     }
+
+}
+
+function updateAmbulanceStatus(ambulance, status) {
+
+    // return in case of no change
+    if (ambulance.status == status)
+        return;
+
+    // TODO: Dialog to confirm change of status
+
+    // form
+    var form = { status: status };
+
+    // make json call
+    var postJsonUrl = APIBaseUrl + 'ambulance/' + ambulance.id + '/';
+
+    var CSRFToken = Cookies.get('csrftoken');
+
+    // retrieve csrf token
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!CSRFSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", CSRFToken);
+            }
+        }
+    });
+
+    // make ajax call
+    $.ajax({
+        url: postJsonUrl,
+        type: 'PATCH',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(form),
+        success: function (data) {
+
+            // Log success
+            console.log("Succesfully posted ambulance status update.");
+
+            // show target card
+            $('#ambulance-' + status).collapse('show');
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+
+            // Log failure
+            console.log("Failed to post ambulance status update.");
+            console.log(jqXHR.responseText);
+
+        }
+    });
 
 }
