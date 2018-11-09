@@ -406,17 +406,13 @@ function dispatchCall() {
 
     // retrieve last patient
     var lastPatientForm = $('#patients div.form-row:last');
-    console.log('last patient form');
-    console.log(lastPatientForm);
     var lastPatientName = lastPatientForm.find('input[type="text"]').val().trim();
-    var lastPatientAge = lastPatientForm.find('input[type="number"]').val().trim();
-    console.log('last patient');
-    console.log(lastPatientName, lastPatientAge);
     if (lastPatientName) {
-        var obj = {
-            'name':  lastPatientName,
-            'age': lastPatientAge
-        };
+        var obj = { 'name':  lastPatientName };
+        var lastPatientAge = lastPatientForm.find('input[type="number"]').val().trim();
+        if (lastPatientAge)
+            // add age
+            obj['age'] = parseInt(lastPatientAge);
         patients.push(obj);
     }
 
