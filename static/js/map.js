@@ -505,8 +505,9 @@ function addAmbulanceToGrid(ambulance) {
         });
 
     // Update label
-    $('#ambulance-' + status + '-header').html(ambulance_status[ambulance.status] +
-        ' (' + $('#ambulance-' + ambulance.status).length + ')');
+    var status = ambulance.status;
+    $('#ambulance-' + status + '-header').html(ambulance_status[status] +
+        ' (' + $('#ambulance-' + status).length + ')');
 
 };
 
