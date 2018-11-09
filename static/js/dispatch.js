@@ -506,6 +506,8 @@ var removePatient = function(index) {
 
 var addPatientForm = function(index) {
 
+    console.log('Adding patient form ' + index);
+
     // add new patient form entry
     $('#patients').append(newPatientForm(index, 'fa-plus'));
 
