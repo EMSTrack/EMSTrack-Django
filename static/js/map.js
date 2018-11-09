@@ -950,7 +950,8 @@ function updateAmbulanceStatus(ambulance, status) {
             // Update status
             doUpdateAmbulanceStatus(ambulance, status);
 
-        });
+        })
+        .modal('show');
 
 }
 
