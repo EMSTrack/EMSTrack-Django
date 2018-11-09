@@ -78,8 +78,23 @@ var endDispatching = function () {
     dispatchingAmbulances = {};
     console.log('End dispatching.');
 
+    // remove marker
     markersGroup.clearLayers();
 
+    // unselect priority
+    $('input:radio[name=priority]:checked').prop('checked', false);
+
+    // clear description
+    $('#comment').val('');
+
+    // clear ambulances buttons
+    $('#ambulance-selection :button').remove();
+    $('#ambulance-selection-message').show();
+
+    // clear patients
+    $('#patients').empty();
+
+    // show buttons
     $('#dispatchBeginButton').show();
     $('#dispatchSubmitButton').hide();
     $('#dispatchCancelButton').hide();
@@ -434,8 +449,8 @@ function dispatchCall() {
             // Show modal
             bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
 
-            // End dispatching
-            endDispatching();
+            // Do not end dispatching to give user chance to make changes
+            // endDispatching();
 
         }
     });
