@@ -195,7 +195,23 @@ var bsalert = function(message, alertClass, title) {
 
     $('.modal-title').html(title);
     $('.modal-body').html(message).addClass(alertClass);
+    $('#modal-button-ok').hide();
+    $('#modal-button-cancel').hide();
+    $('#modal-button-close').show();
     $("#dispatchModal").modal('show');
+
+}
+
+// alert using bootstrap modal
+var bsdialog = function(message, alertClass, title) {
+
+    // Show modal
+    alertClass = alertClass || 'alert-danger';
+    title = title || 'Attention';
+
+    $('.modal-title').html(title);
+    $('.modal-body').html(message).addClass(alertClass);
+    return $("#dispatchModal");
 
 }
 
@@ -924,7 +940,21 @@ function updateAmbulanceStatus(ambulance, status) {
     if (ambulance.status == status)
         return;
 
-    // TODO: Dialog to confirm change of status
+    // Show modal
+    $('#modal-button-ok').show();
+    $('#modal-button-cancel').show();
+    $('#modal-button-close').hide();
+    bsdialog('Are you sure you want to modify ambulance <b>' + ambulance.name + '</b> status?', 'alert-danger', 'Attention')
+        .on('hide.bs.modal', function () {
+
+            // Update status
+            doUpdateAmbulanceStatus(ambulance, status);
+
+        });
+
+}
+
+function doUpdateAmbulanceStatus(ambulance, status) {
 
     // form
     var form = { status: status };
