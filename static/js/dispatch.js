@@ -16,7 +16,6 @@ var numberOfDispatchingAmbulances = 0;
 var currentAddress;
 var currentLocation;
 var currentPatients;
-var newPatientIndex;
 
 var submitDispatching = function () {
 
@@ -56,13 +55,12 @@ var beginDispatching = function () {
 
     // Clear current currentPatients
     currentPatients = {};
-    newPatientIndex = 0;
 
     // Initialize patient form
     $('#patients').empty();
 
     // add new patient form entry
-    addPatientForm(newPatientIndex);
+    addPatientForm(0);
 
     // resize size
     resizeMap();
@@ -474,7 +472,6 @@ var addPatient = function(index) {
 
     // add name
     currentPatients[index] = [name, age];
-    newPatientIndex++;
 
     // change button symbol
     var symbol = $('#patient-' + index + '-symbol');
@@ -487,7 +484,7 @@ var addPatient = function(index) {
         .on('click', function(e) { removePatient(index); });
 
     // add new form
-    addPatientForm(newPatientIndex);
+    addPatientForm(index + 1);
 
 }
 
