@@ -90,6 +90,7 @@ var endDispatching = function () {
     $('#ambulance-selection-message').show();
 
     // clear patients
+    $('#patients :button').off();
     $('#patients').empty();
 
     // show buttons
