@@ -945,7 +945,7 @@ function updateAmbulanceStatus(ambulance, status) {
     // make ajax call
     $.ajax({
         url: postJsonUrl,
-        type: 'POST',
+        type: 'PATCH',
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(form),
