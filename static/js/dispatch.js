@@ -403,6 +403,11 @@ function dispatchCall() {
                 obj['age'] = parseInt(patient[1]);
             patients.push(obj);
         }
+    // retrieve last patient
+    var lastPatient = $('#patients div:last-child');
+    console.log('last patient');
+    console.log(lastPatient);
+
     form['patient_set'] = patients;
 
     // make json call
