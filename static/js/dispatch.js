@@ -229,8 +229,8 @@ var updateCurrentLocation = function(location) {
     // marker can be dragged on the dispatch map
     marker.on('dragend', function(e) {
 
-	// update current marker
-	updateCurrentMarker(marker.getLatLng());
+        // update current marker
+        updateCurrentMarker(marker.getLatLng());
 	
     });
 }
@@ -565,8 +565,22 @@ var newPatientForm = function(index, symbol) {
 // Ready function
 $(function() {
 
-    // connect actions to inputs
+    // Make ambulance-selection droppable
+    $('#ambulance-selection')
+        .on('dragover', function(e) {
+            e.preventDefault();
+        })
+        .on('drop', function(e) {
+            e.preventDefault();
+            // Dropped button, get data
+            var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+            var ambulance = ambulances[ambulance_id];
+            console.log('dropped ambulance ' + ambulance['identifier']);
+            // and add to dispatching list
+            addToDispatchingList(ambulance);
+        });
 
+    // connect actions to inputs
     $("#street").change(function () {
 
         // update coordinates?

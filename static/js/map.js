@@ -145,21 +145,6 @@ $(function () {
     // Create category panes and filters
     createCategoryPanesAndFilters();
 
-    // Make ambulance-selection droppable
-    $('#ambulance-selection')
-        .on('dragover', function(e) {
-            e.preventDefault();
-        })
-        .on('drop', function(e) {
-            e.preventDefault();
-            // Dropped button, get data
-            var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
-            var ambulance = ambulances[ambulance_id];
-            console.log('dropped ambulance ' + ambulance['identifier']);
-            // and add to dispatching list
-            addToDispatchingList(ambulance);
-        });
-
     // retrieve temporary password for mqttClient and connect to broker
     $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {
 
@@ -785,6 +770,7 @@ function createCategoryPanesAndFilters() {
     // Create ambulance status grids
     Object.keys(ambulance_status).forEach(function (status) {
 
+        // Create grid
         $("#ambulance-status").append(
             '<div class="card form-group mb-1 mt-0" id="ambulance-card-' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
@@ -808,6 +794,22 @@ function createCategoryPanesAndFilters() {
             '         </div>\n' +
             '    </div>\n' +
             '</div>');
+
+        // Make them dropable
+        $('#ambulance-card-' + status)
+            .on('dragover', function(e) {
+                e.preventDefault();
+            })
+            .on('drop', function(e) {
+                e.preventDefault();
+                // Dropped button, get data
+                var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+                var ambulance = ambulances[ambulance_id];
+                console.log('dropped ambulance ' + ambulance['identifier']);
+                // change status
+                updateAmbulanceStatus(ambulance, status);
+            });
+
     });
 
     // Create capability options
@@ -909,5 +911,57 @@ function onGridButtonClick(ambulance) {
         }, 2500);
 
     }
+
+}
+
+function updateAmbulanceStatus(ambulance, status) {
+
+    // return in case of no change
+    if (ambulance.status == status)
+        return;
+
+    // form
+    var form = { status: status };
+
+    // make json call
+    var postJsonUrl = APIBaseUrl + 'ambulance/' + ambulance.id + '/';
+    console.log("Form:");
+    console.log(form);
+    console.log("Will post:");
+    console.log(JSON.stringify(form));
+
+    var CSRFToken = Cookies.get('csrftoken');
+    console.log('csrftoken = ' + CSRFToken);
+
+    // retrieve csrf token
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!CSRFSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", CSRFToken);
+            }
+        }
+    });
+
+    // make ajax call
+    $.ajax({
+        url: postJsonUrl,
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: JSON.stringify(form),
+        success: function (data) {
+
+            // Log success
+            console.log("Succesfully posted ambulance status update.");
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+
+            // Log failure
+            console.log("Failed to post ambulance status update.");
+            console.log(jqXHR.responseText);
+
+        }
+    });
 
 }
