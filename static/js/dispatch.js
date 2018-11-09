@@ -405,7 +405,7 @@ function dispatchCall() {
         }
 
     // retrieve last patient
-    var lastPatientForm = $('#patients div:last');
+    var lastPatientForm = $('#patients div.form-row:last');
     console.log('last patient');
     console.log(lastPatientForm);
     var lastPatientName = lastPatientForm.find('input:text').val().trim();
