@@ -944,7 +944,9 @@ function updateAmbulanceStatus(ambulance, status) {
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
     $('#modal-button-close').hide();
-    bsdialog('Are you sure you want to modify ambulance <b>' + ambulance.name + '</b> status?', 'alert-danger', 'Attention')
+    bsdialog('Are you sure you want to modify ambulance <b>'
+        + ambulance.identifier
+        + '</b> status?', 'alert-danger', 'Attention')
         .on('hide.bs.modal', function () {
 
             // Update status
