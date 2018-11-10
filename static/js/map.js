@@ -420,8 +420,8 @@ function updateAmbulance(ambulance) {
             + ' status-' + status
             + ' capability-' + ambulance.capability;
         var button = $("#grid-button-" + id).attr("class", btnClass).detach();
-        console.log(button);
-        $('#ambulance-grid' + status).append(button);
+        console.log(button[0]);
+        $('#ambulance-grid' + status).append(button[0]);
 
         // update labels
         $('#ambulance-' + status + '-header').html(ambulance_status[status] + ' (' + new_grid_length + ')');
@@ -435,6 +435,7 @@ function updateAmbulance(ambulance) {
 
         // Add ambulance to grid
         addAmbulanceToGrid(ambulance);
+
     }
 
     // add ambulance to map
