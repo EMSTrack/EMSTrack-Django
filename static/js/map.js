@@ -423,7 +423,7 @@ function updateAmbulance(ambulance) {
 
         // Move and update button
         $("#grid-button-" + id).detach()
-            .appendTo($('#ambulance-' + status))
+            .appendTo($('#ambulance-grid' + status))
             .attr("class", btnClass);
 
         // update labels
