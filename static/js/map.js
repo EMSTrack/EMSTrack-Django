@@ -415,19 +415,13 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // make old grid visible
-        $('#ambulance-' + old_status).collapse('show');
-
         // Move and update grid button
         var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
             + ' status-' + status
             + ' capability-' + ambulance.capability;
-        var button = $("#grid-button-" + id).attr("class", btnClass).detach();
-
-        // make new grid visible and attach
-        $('#ambulance-' + status).collapse('show');
-        console.log($('#ambulance-grid' + status));
-        button.appendTo($('#ambulance-grid' + status));
+        $("#grid-button-" + id).attr("class", btnClass)
+            .detach()
+            .appendTo($('#ambulance-grid-' + status));
 
         // update labels
         $('#ambulance-' + status + '-header').html(ambulance_status[status] + ' (' + new_grid_length + ')');
@@ -1017,7 +1011,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
             console.log("Succesfully posted ambulance status update.");
 
             // show target card
-            // $('#ambulance-' + status).collapse('show');
+            $('#ambulance-' + status).collapse('show');
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
