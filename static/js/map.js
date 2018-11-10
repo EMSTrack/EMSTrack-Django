@@ -947,18 +947,24 @@ function updateAmbulanceStatus(ambulance, status) {
     bsdialog('Are you sure you want to modify ambulance "<b>'
         + ambulance.identifier
         + '</b>" status?', 'alert-danger', 'Attention')
-        .on('hide.bs.modal', function (event) {
+        .on('hide.bs.modal show.bs.modal', function(event) {
+            var $activeElement = $(document.activeElement);
 
-            // Button that triggered the modal;
-            var button = $(document.activeElement);
-            console.log(button);
-            if (button.attr('id') == 'modal-button-ok') {
+            if ($activeElement.is('[data-toggle], [data-dismiss]')) {
+                if (event.type === 'hide') {
+                    // Do something with the button that closed the modal
+                    console.log('The button that closed the modal is: ', $activeElement);
 
-                // Update status
-                doUpdateAmbulanceStatus(ambulance, status);
+                    // Update status
+                    doUpdateAmbulanceStatus(ambulance, status);
 
+                }
+
+                if (event.type === 'show') {
+                    // Do something with the button that opened the modal
+                    console.log('The button that opened the modal is: ', $activeElement);
+                }
             }
-
         })
         .modal('show');
 
