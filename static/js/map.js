@@ -949,8 +949,14 @@ function updateAmbulanceStatus(ambulance, status) {
         + '</b> status?', 'alert-danger', 'Attention')
         .on('hide.bs.modal', function () {
 
-            // Update status
-            doUpdateAmbulanceStatus(ambulance, status);
+            // Button that triggered the modal;
+            var button = $(event.relatedTarget);
+            if (button.attr('id') == '#modal-button-ok') {
+
+                // Update status
+                doUpdateAmbulanceStatus(ambulance, status);
+
+            }
 
         })
         .modal('show');
