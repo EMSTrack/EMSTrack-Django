@@ -318,7 +318,7 @@ class Call(CallPublishMixin,
             remove = True
 
             # prevent publication
-            publish = False
+            # publish = False
 
         elif self.status == CallStatus.S.name:
 
