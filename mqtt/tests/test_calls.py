@@ -209,6 +209,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
 
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # expect blank call
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
@@ -407,6 +411,10 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # Check if call status is Ended
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
+
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
 
         # expect blank call
         test_client.expect('call/{}/data'.format(call.id))
@@ -817,6 +825,10 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # expect blank call
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
@@ -1209,12 +1221,20 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # expect blank call
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
 
         # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
         # expect blank call
