@@ -420,7 +420,7 @@ function updateAmbulance(ambulance) {
             + ' status-' + status
             + ' capability-' + ambulance.capability;
         var button = $("#grid-button-" + id).attr("class", btnClass).detach();
-        button.appendTo('#ambulance-grid' + status);
+        button.appendTo($('#ambulance-grid' + status));
         button = null;
 
         // update labels
