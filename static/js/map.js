@@ -419,9 +419,9 @@ function updateAmbulance(ambulance) {
         var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
             + ' status-' + status
             + ' capability-' + ambulance.capability;
-        $("#grid-button-" + id).detach()
-            .appendTo('#ambulance-grid' + status)
-            .attr("class", btnClass);
+        var button = $("#grid-button-" + id).attr("class", btnClass).detach();
+        console.log(button);
+        $('#ambulance-grid' + status).append(button);
 
         // update labels
         $('#ambulance-' + status + '-header').html(ambulance_status[status] + ' (' + new_grid_length + ')');
