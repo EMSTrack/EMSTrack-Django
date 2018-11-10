@@ -948,10 +948,10 @@ function updateAmbulanceStatus(ambulance, status) {
         + ambulance.identifier
         + '</b>" status?', 'alert-danger', 'Attention')
         .on('hide.bs.modal show.bs.modal', function(event) {
-            var $activeElement = $(document.activeElement);
 
+            var $activeElement = $(document.activeElement);
             if ($activeElement.is('[data-toggle], [data-dismiss]')) {
-                if (event.type === 'hide') {
+                if (event.type === 'hide' && $activeElement.attr('id') == 'modal-button-ok') {
                     // Do something with the button that closed the modal
                     console.log('The button that closed the modal is: ', $activeElement);
 
@@ -965,6 +965,7 @@ function updateAmbulanceStatus(ambulance, status) {
                     console.log('The button that opened the modal is: ', $activeElement);
                 }
             }
+
         })
         .modal('show');
 
