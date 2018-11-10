@@ -415,22 +415,19 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // Updated grid button class
+        // Move and update grid button
         var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
             + ' status-' + status
             + ' capability-' + ambulance.capability;
-        $("#grid-button-" + id).attr("class", btnClass);
-
-        // Move and update button
         $("#grid-button-" + id).detach()
-            .appendTo($('#ambulance-grid' + status))
+            .appendTo('#ambulance-grid' + status)
             .attr("class", btnClass);
 
         // update labels
         $('#ambulance-' + status + '-header').html(ambulance_status[status] + ' (' + new_grid_length + ')');
         if (old_grid_length)
             $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status] +
-                ' (' + old_status_length + ')');
+                ' (' + old_grid_length + ')');
         else
             $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status]);
 
