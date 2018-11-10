@@ -1008,7 +1008,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         success: function (data) {
 
             // Log success
-            console.log("Succesfully posted ambulance status update.");
+            console.log("Succesfully posted ambulance status update: status = " + status);
 
             // show target card
             $('#ambulance-' + status).collapse('show');
