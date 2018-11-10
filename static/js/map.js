@@ -947,13 +947,13 @@ function updateAmbulanceStatus(ambulance, status) {
     bsdialog('Are you sure you want to modify ambulance "<b>'
         + ambulance.identifier
         + '</b>" status?', 'alert-danger', 'Attention')
-        .on('show.bs.modal', function (event) {
+        .('show.bs.modal', function (event) {
 
             // Button that triggered the modal;
             console.log('show!');
 
         })
-        .on('hide.bs.modal', function (event) {
+        .on('hidden.bs.modal', function (event) {
 
             // Button that triggered the modal;
             var button = $(event.relatedTarget);
