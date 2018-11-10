@@ -426,6 +426,7 @@ function updateAmbulance(ambulance) {
 
         // make new grid visible and attach
         $('#ambulance-' + status).collapse('show');
+        console.log($('#ambulance-grid' + status));
         button.appendTo($('#ambulance-grid' + status));
 
         // update labels
