@@ -356,7 +356,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # subscribe to call and ambulance call status
+        # Expect ambulance call status to go declined
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -368,7 +368,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.P.name)
 
-        # Check if ambulancecall status is Requested
+        # Check if ambulancecall status is Declined
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.D.name)
 
@@ -424,6 +424,10 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
+        # expect status completed ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
         # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
@@ -439,6 +443,8 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         test_client.wait()
         subscribe_client.wait()
 
+        # TODO: A case in which the call end in a declined state
+        
 
 class TestMQTTCallsDeclineRegularUser(TestMQTTCallsDecline):
 
