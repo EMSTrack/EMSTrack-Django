@@ -440,20 +440,23 @@ class AmbulanceCall(CallPublishMixin,
 
                 logger.debug('This is the last ambulance; will end call.')
 
-                # change call status to finished
+                # publish first
+                self.publish()
+
+                # then change call status to finished
                 call.status = CallStatus.E.name
                 call.save()
+
+                # prevent publication, already published
+                publish = False
 
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(ongoing_ambulancecalls)
 
-            # prevent publication
-            publish = False
-
-            # remove from mqtt
-            # remove = True
+                # publish and remove from mqtt
+                remove = True
 
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
