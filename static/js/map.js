@@ -951,6 +951,7 @@ function updateAmbulanceStatus(ambulance, status) {
 
             // Button that triggered the modal;
             var button = $(event.relatedTarget);
+            console.log(button);
             if (button.attr('id') == 'modal-button-ok') {
 
                 // Update status
