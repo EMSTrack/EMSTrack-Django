@@ -191,7 +191,7 @@ var bsalert = function(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
-    title = title || 'Failure';
+    title = title || 'Alert';
 
     $('.modal-title').html(title);
     $('.modal-body').html(message).addClass(alertClass);
@@ -246,6 +246,13 @@ function onConnect() {
             console.log('Subscribing to topic: ' + topicName);
         });
 
+        // Subscribe to calls
+        $.each(data.ambulances, function (index) {
+            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/call/+/status";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+        });
+
     });
 
     // retrieve locations from api
@@ -260,21 +267,23 @@ function onConnect() {
         
     });
 
-    // retrieve calls from api
-    console.log("Retrieving calls from API");
-    $.getJSON(APIBaseUrl + 'call/', function (data) {
+    /*
+        // retrieve calls from api
+        console.log("Retrieving calls from API");
+        $.getJSON(APIBaseUrl + 'call/', function (data) {
 
-        console.log('calls = ' + calls);
+            console.log('calls = ' + calls);
 
-        // Subscribe to current calls
-        $.each(data, function (index) {
-            console.log('data[index] = ' + data[index]);
-            var topicName = "call/" + data[index].id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
+            // Subscribe to current calls
+            $.each(data, function (index) {
+                console.log('data[index] = ' + data[index]);
+                var topicName = "call/" + data[index].id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+            });
+
         });
-
-    });
+    */
 
 };
 
@@ -379,7 +388,18 @@ function onMessageArrived(message) {
             updateCall(data);
         }
 
-        
+        // look for ambulance call information
+        else if (topic[0] === 'ambulance' &&
+            topic[2] == 'call' &&
+            topic[4] == 'status') {
+            var ambulance_id = topic[1];
+            var call_id = topic[3];
+            updateAmbulanceCall(ambulance_id, call_id, data);
+        }
+
+        else
+            console.log('Unknown topic ' + topic);
+
     } catch (e) {
         bsalert('Error processing message "' +
             message.destinationName + ':' + message.payloadString +
@@ -490,6 +510,23 @@ function updateCall(call) {
     // add call to grid
     addCallToGrid(call);
     
+}
+
+function updateAmbulanceCall(ambulance_id, call_id, status) {
+
+    // subscribe if not already subscribed
+    if (!(call_id in calls)) {
+
+        // subscribe to call
+        var topicName = "call/" + call_id + "/data";
+        mqttClient.subscribe(topicName);
+        console.log('Subscribing to topic: ' + topicName);
+
+    }
+
+    // add call to grid
+    addCallToGrid(ambulance_id, call_id, status);
+
 }
 
 function addAmbulanceToGrid(ambulance) {
