@@ -810,6 +810,10 @@ function createCategoryPanesAndFilters() {
     // Create call status grids
     Object.keys(call_status).forEach(function (status) {
 
+        // ignore ended calls
+        if (status == 'E')
+            continue;
+
         $("#call-status").append(
             '<div class="card form-group mb-1 mt-0" id="call-card-' + status + '">\n' +
             '    <div class="card-header px-1 pb-0 pt-1"\n' +
