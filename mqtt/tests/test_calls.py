@@ -606,6 +606,10 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
