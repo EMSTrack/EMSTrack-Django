@@ -811,31 +811,29 @@ function createCategoryPanesAndFilters() {
     Object.keys(call_status).forEach(function (status) {
 
         // ignore ended calls
-        if (status == 'E')
-            continue;
-
-        $("#call-status").append(
-            '<div class="card form-group mb-1 mt-0" id="call-card-' + status + '">\n' +
-            '    <div class="card-header px-1 pb-0 pt-1"\n' +
-            '         id="call-heading-' + status + '">\n' +
-            '         <h6 style="cursor: pointer;"\n' +
-            '             data-toggle="collapse"\n' +
-            '             data-target="#call-' + status + '"\n' +
-            '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
-            '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
-            '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
-            '             <span role="button">' + call_status[status] + '</span>\n' +
-            '          </h6>\n' +
-            '    </div>\n' +
-            '    <div class="collapse"\n' +
-            '         id="call-' + status + '"\n' +
-            '         aria-labelledby="call-heading-' + status + '"\n' +
-            '         data-parent="#call-status">\n' +
-            '         <div class="card-body py-1 px-1"\n' +
-            '              id="call-grid-' + status + '">\n' +
-            '         </div>\n' +
-            '    </div>\n' +
-            '</div>');
+        if (status != 'E')
+            $("#call-status").append(
+                '<div class="card form-group mb-1 mt-0" id="call-card-' + status + '">\n' +
+                '    <div class="card-header px-1 pb-0 pt-1"\n' +
+                '         id="call-heading-' + status + '">\n' +
+                '         <h6 style="cursor: pointer;"\n' +
+                '             data-toggle="collapse"\n' +
+                '             data-target="#call-' + status + '"\n' +
+                '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
+                '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
+                '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
+                '             <span role="button">' + call_status[status] + '</span>\n' +
+                '          </h6>\n' +
+                '    </div>\n' +
+                '    <div class="collapse"\n' +
+                '         id="call-' + status + '"\n' +
+                '         aria-labelledby="call-heading-' + status + '"\n' +
+                '         data-parent="#call-status">\n' +
+                '         <div class="card-body py-1 px-1"\n' +
+                '              id="call-grid-' + status + '">\n' +
+                '         </div>\n' +
+                '    </div>\n' +
+                '</div>');
     });
 
     // Create ambulance status grids
