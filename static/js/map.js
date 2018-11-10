@@ -396,11 +396,15 @@ function updateAmbulance(ambulance) {
     // already exists?
     if (id in ambulances) {
 
+        // get ambulance's old status
+        var old_status = ambulances[id].status;
+        var status = ambulance.status;
+
         // Remove existing marker
         mymap.removeLayer(ambulanceMarkers[id]);
 
         // update ambulance
-        ambulances[id].status = ambulance.status;
+        ambulances[id].status = status;
         ambulances[id].capability = ambulance.capability;
         ambulances[id].location.latitude = ambulance.location.latitude;
         ambulances[id].location.longitude = ambulance.location.longitude;
@@ -410,15 +414,26 @@ function updateAmbulance(ambulance) {
         ambulance = ambulances[id]
 
         // Updated grid button class
-        var btnClass = 'btn btn-sm ' + ambulance_buttons[ambulance.status]
-            + ' status-' + ambulance.status
+        var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
+            + ' status-' + status
             + ' capability-' + ambulance.capability;
         $("#grid-button-" + id).attr("class", btnClass);
 
         // Move and update button
         $("#grid-button-" + id).detach()
-            .appendTo($('#ambulance-' + ambulance.status))
+            .appendTo($('#ambulance-' + status))
             .attr("class", btnClass);
+
+        // update labels
+        $('#ambulance-' + status + '-header').html(ambulance_status[status] +
+            ' (' + $('#ambulance-grid-' + status).children().length + ')');
+
+        var old_status_length = $('#ambulance-grid-' + old_status).children().length;
+        if (old_status_length)
+            $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status] +
+                ' (' + old_status_length + ')');
+        else
+            $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status]);
 
     } else {
 
@@ -986,8 +1001,6 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         }
     });
 
-    var old_status = ambulance.status;
-
     // make ajax call
     $.ajax({
         url: postJsonUrl,
@@ -1002,17 +1015,6 @@ function doUpdateAmbulanceStatus(ambulance, status) {
 
             // show target card
             $('#ambulance-' + status).collapse('show');
-
-            // update labels
-            $('#ambulance-' + status + '-header').html(ambulance_status[status] +
-                ' (' + $('#ambulance-grid-' + status).children().length + ')');
-
-            var old_status_length = $('#ambulance-grid-' + old_status).children().length;
-            if (old_status_length)
-                $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status] +
-                    ' (' + old_status_length + ')');
-            else
-                $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status]);
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
