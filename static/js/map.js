@@ -986,6 +986,8 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         }
     });
 
+    var old_status = ambulance.status;
+
     // make ajax call
     $.ajax({
         url: postJsonUrl,
@@ -1000,6 +1002,17 @@ function doUpdateAmbulanceStatus(ambulance, status) {
 
             // show target card
             $('#ambulance-' + status).collapse('show');
+
+            // update labels
+            $('#ambulance-' + status + '-header').html(ambulance_status[status] +
+                ' (' + $('#ambulance-' + status).length + ')');
+
+            var old_status_length = $('#ambulance-' + old_status).length;
+            if (old_status_length)
+                $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status] +
+                    ' (' + old_status_length + ')');
+            else
+                $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status]);
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
