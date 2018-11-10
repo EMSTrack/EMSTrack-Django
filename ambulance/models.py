@@ -259,11 +259,17 @@ class CallPublishMixin:
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('remove', False)
+
         # save to Call
         super().save(*args, **kwargs)
 
         if publish:
             self.publish()
+
+        if remove:
+            self.remove()
 
 
 class Call(CallPublishMixin,
@@ -300,14 +306,16 @@ class Call(CallPublishMixin,
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('remove', False)
+
         if self.status == CallStatus.E.name:
 
             # timestamp
             self.ended_at = timezone.now()
 
             # remove topic from mqtt server
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().remove_call(self)
+            remove = True
 
             # prevent publication
             publish = False
@@ -323,13 +331,21 @@ class Call(CallPublishMixin,
             self.pending_at = timezone.now()
 
         # call super
-        super().save(*args, **kwargs, publish=publish)
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
 
     def publish(self):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call(self)
+
+    def remove(self):
+
+        # remove topic from mqtt server
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_call(self)
 
     def abort(self):
 
@@ -394,6 +410,9 @@ class AmbulanceCall(CallPublishMixin,
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('publish', False)
+
         # changed to ongoing?
         if self.status == AmbulanceCallStatus.O.name:
 
@@ -425,13 +444,16 @@ class AmbulanceCall(CallPublishMixin,
                 call.status = CallStatus.E.name
                 call.save()
 
-                # prevent publication
-                publish = False
-
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(ongoing_ambulancecalls)
+
+            # prevent publication
+            publish = False
+
+            # remove from mqtt
+            # remove = True
 
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
@@ -444,13 +466,21 @@ class AmbulanceCall(CallPublishMixin,
             logger.debug('Ambulance call suspended.')
 
         # call super
-        super().save(*args, **kwargs, publish=publish)
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
 
     def publish(self):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call_status(self)
+
+    def remove(self):
+
+        # remove from mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_call_status(self)
 
     class Meta:
         unique_together = ('call', 'ambulance')
