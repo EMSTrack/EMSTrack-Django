@@ -399,6 +399,8 @@ function updateAmbulance(ambulance) {
         // get ambulance's old status
         var old_status = ambulances[id].status;
         var status = ambulance.status;
+        var old_grid_length = $('#ambulance-grid-' + old_status).children().length - 1;
+        var new_grid_length = $('#ambulance-grid-' + status).children().length + 1;
 
         // Remove existing marker
         mymap.removeLayer(ambulanceMarkers[id]);
@@ -425,11 +427,8 @@ function updateAmbulance(ambulance) {
             .attr("class", btnClass);
 
         // update labels
-        $('#ambulance-' + status + '-header').html(ambulance_status[status] +
-            ' (' + $('#ambulance-grid-' + status).children().length + ')');
-
-        var old_status_length = $('#ambulance-grid-' + old_status).children().length;
-        if (old_status_length)
+        $('#ambulance-' + status + '-header').html(ambulance_status[status] + ' (' + new_grid_length + ')');
+        if (old_grid_length)
             $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status] +
                 ' (' + old_status_length + ')');
         else
