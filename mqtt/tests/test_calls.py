@@ -1430,9 +1430,9 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
 
-        # expect 'Completed' ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
-        self.is_subscribed(test_client)
+        # expect 'Completed' ambulancecall -> does not receive since it was already made not retain
+        # test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        # self.is_subscribed(test_client)
 
         # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
