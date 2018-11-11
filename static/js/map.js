@@ -869,6 +869,11 @@ function createCategoryPanesAndFilters() {
                 '         </div>\n' +
                 '    </div>\n' +
                 '</div>');
+
+        // make grid visible
+        if (status == 'P')
+            $('#call-card-' + status).addClass('show');
+
     });
 
     // Create ambulance status grids
