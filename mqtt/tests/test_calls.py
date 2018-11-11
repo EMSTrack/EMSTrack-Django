@@ -1020,7 +1020,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client2)
 
         # expect status ended call
-        test_client.expect('call/{}/data'.format(call.id))
+        test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
         # expect blank call
