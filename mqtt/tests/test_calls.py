@@ -1098,7 +1098,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
 
-         # Client handshake
+        # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
@@ -1377,6 +1377,10 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client)
 
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -1411,17 +1415,25 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
+        # expect 'Completed' ambulancecall
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+
         # expect blank ambulancecall
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
         # expect status ended call
-        test_client.expect('call/{}/data'.format(call.id))
+        test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
         # expect blank call
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
+
+        # expect 'Completed' ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
 
         # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
