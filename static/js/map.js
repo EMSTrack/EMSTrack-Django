@@ -540,7 +540,7 @@ function updateCall(call) {
     // retrieve id
     var id = call.id;
 
-    if (call.status = 'E') {
+    if (call.status == 'E') {
 
         // Completed call, unsubscribe
         var topicName = "call/" + id + "/data";
@@ -574,7 +574,7 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
-    if (status = 'C') {
+    if (status == 'C') {
 
         // Completed ambulance call, unsubscribe
         var topicName = "ambulance/" + ambulance_id + "/call/+/status";
