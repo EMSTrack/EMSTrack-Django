@@ -872,7 +872,7 @@ function createCategoryPanesAndFilters() {
 
         // make grid visible
         if (status == 'P')
-            $('#call-card-' + status).addClass('show');
+            $('#call-heading-' + status).addClass('show');
 
     });
 
