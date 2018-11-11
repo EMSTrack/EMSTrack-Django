@@ -622,7 +622,7 @@ function addCallToGrid(call) {
             '     </div>' +
             '</div>\n');
 
-    var array = call[ambulancecall_set];
+    var array = call.ambulancecall_set;
     console.log(array);
     console.log(array.length);
     var len = 0;//array.length;
