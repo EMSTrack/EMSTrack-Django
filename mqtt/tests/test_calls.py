@@ -825,6 +825,10 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client)
 
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
