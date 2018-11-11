@@ -461,9 +461,6 @@ function updateAmbulance(ambulance) {
     // add ambulance to map
     addAmbulanceToMap(ambulance);
 
-    // update detail panel
-    // updateDetailPanel(ambulance);
-
 };
 
 function updateHospital(hospital) {
@@ -490,44 +487,6 @@ function updateHospital(hospital) {
     addHospitalToMap(hospital);
 
 };
-
-function updateCall(call) {
-    
-    // retrieve id
-    var id = call.id;
-
-    // already exists?
-    if (id in calls) {
-
-        // Remove from calls
-        delete calls[call.id];
-
-        // Remove existing call
-        $('#current-call-item-' + call.id).remove();
-
-    }
-
-    // add call to grid
-    addCallToGrid(call);
-    
-}
-
-function updateAmbulanceCall(ambulance_id, call_id, status) {
-
-    // subscribe if not already subscribed
-    if (!(call_id in calls)) {
-
-        // subscribe to call
-        var topicName = "call/" + call_id + "/data";
-        mqttClient.subscribe(topicName);
-        console.log('Subscribing to topic: ' + topicName);
-
-    }
-
-    // add call to grid
-    addCallToGrid(ambulance_id, call_id, status);
-
-}
 
 function addAmbulanceToGrid(ambulance) {
 
@@ -576,6 +535,70 @@ function addAmbulanceToGrid(ambulance) {
 
 };
 
+function updateCall(call) {
+
+    // retrieve id
+    var id = call.id;
+
+    if (call.status = 'E') {
+
+        // Completed call, unsubscribe
+        var topicName = "call/" + id + "/data";
+        mqttClient.unsubscribe(topicName);
+        console.log('Unsubscribing to topic: ' + topicName);
+
+        // remove from grid
+        $('#call-item-' + call.id).remove();
+
+    } else {
+
+        // already exists?
+        if (id in calls) {
+
+            // TODO: update instead
+
+            // Remove from calls
+            delete calls[call.id];
+
+            // Remove existing call
+            $('#call-item-' + call.id).remove();
+
+        }
+
+        // add call to grid
+        addCallToGrid(call);
+
+    }
+
+}
+
+function updateAmbulanceCall(ambulance_id, call_id, status) {
+
+    if (status = 'C') {
+
+        // Completed ambulance call, unsubscribe
+        var topicName = "ambulance/" + ambulance_id + "/call/+/status";
+        mqttClient.unsubscribe(topicName);
+        console.log('Unsubscribing to topic: ' + topicName);
+
+    } else {
+
+        // subscribe if not already subscribed
+        if (!(call_id in calls)) {
+
+            // subscribe to call
+            var topicName = "call/" + call_id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+
+        }
+
+        // add call to grid
+        addCallToGrid(ambulance_id, call_id, status);
+
+    }
+}
+
 function addCallToGrid(call) {
 
     console.log('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
@@ -594,6 +617,8 @@ function addCallToGrid(call) {
             '     <label class="form-check-label" for="call-' + call.id + '">\n' +
             '       <strong>' + call.id + '</strong>: ' + date + '\n' +
             '     </label>\n' +
+            '     <div id="call-item-grid-' + call.id + '">' +
+            '     </div>' +
             '</div>\n');
 
 };
@@ -646,9 +671,6 @@ function addAmbulanceToMap(ambulance) {
             })
         .on('click',
             function (e) {
-
-                // update details panel
-                // updateDetailPanel(ambulance);
 
                 // add to dispatching list
                 addToDispatchingList(ambulance);
@@ -742,27 +764,6 @@ function addLocationToMap(location) {
             });
 
 };
-
-/*
- * updateDetailPanel updates the detail panel with the ambulance's details.
- * @param ambulanceId is the unique id used in the ajax call url.
- * @return void.
- */
-function updateDetailPanel(ambulance) {
-
-    $('#ambulance-detail-name')
-        .html(ambulance.identifier);
-    $('#ambulance-detail-capability')
-        .html(ambulance_capability[ambulance.capability]);
-    $('#ambulance-detail-updated-on')
-        .html((new Date(Date.parse(ambulance.updated_on))).toLocaleString());
-
-    $('#ambulance-detail-status-select')
-        .val(ambulance.status);
-    $('#ambulance-detail-id')
-        .val(ambulance.id);
-
-}
 
 /* Create category filter */
 function createCategoryPanesAndFilters() {
@@ -965,9 +966,6 @@ function createCategoryPanesAndFilters() {
 };
 
 function onGridButtonClick(ambulance) {
-
-    // Update detail panel
-    // updateDetailPanel(ambulance);
 
     if (visibleCategory[ambulance.status]) {
 
