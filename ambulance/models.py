@@ -370,6 +370,8 @@ class Call(CallPublishMixin,
                 ambulancecall.status = AmbulanceCallStatus.C.name
                 ambulancecall.save()
 
+            # At the last ambulance call will be closed
+
         else:
             # if no ambulancecalls, force abort
 
