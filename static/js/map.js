@@ -624,7 +624,7 @@ function addCallToGrid(call) {
     call.ambulancecall_set.forEach( function(ambulancecall) {
 
         // get ambulance
-        var ambulance = ambulances.get(ambulancecall.ambulance_id);
+        var ambulance = ambulances[ambulancecall.ambulance_id];
 
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
