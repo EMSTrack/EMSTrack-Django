@@ -632,9 +632,19 @@ function addCallToGrid(call) {
     // Add call to calls
     calls[call.id] = call;
 
-    // Format date
-    var date = (new Date(Date.parse(call.updated_on))).toLocaleTimeString();
+    // Get status
     var status = call.status;
+
+    // Get relevant date
+    var date = call.updated_on;
+    if (status == 'P')
+        date = call.pending_at;
+    else if (status == 'S')
+        date = call.started_at;
+
+    // Format date
+    date = (new Date(Date.parse(date))).toLocaleTimeString();
+
     var grid_length = $('#call-grid-' + status).children().length + 1;
 
     // Add item to call grid
