@@ -728,6 +728,19 @@ function addCallToMap(call) {
            patients += ", " + patient.name;
     });
 
+    // Get status
+    var status = call.status;
+
+    // Get relevant date
+    var date = call.updated_on;
+    if (status == 'P')
+        date = call.pending_at;
+    else if (status == 'S')
+        date = call.started_at;
+
+    // Format date
+    date = (new Date(Date.parse(date))).toLocaleTimeString();
+
     // If patient marker doesn't exist
     patientMarkers[call.id] = L.marker([call.location.latitude,
             call.location.longitude],
@@ -735,7 +748,10 @@ function addCallToMap(call) {
             icon: coloredIcon,
             pane: 'patient'
         })
-        .bindPopup("<strong>" + patients + "</strong>")
+        .bindPopup(
+            '<strong>' + date + '</strong>' +
+            '<p>' + patients + '</p>'
+        )
         .addTo(mymap);
 
     // Bind id to icons
