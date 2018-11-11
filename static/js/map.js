@@ -750,7 +750,8 @@ function addCallToMap(call) {
         })
         .bindPopup(
             '<strong>' + date + '</strong>' +
-            '<p>' + patients + '</p>'
+            '<br/>' +
+            patients
         )
         .addTo(mymap);
 
@@ -793,8 +794,7 @@ function addAmbulanceToMap(ambulance) {
             pane: ambulance.status+"|"+ambulance.capability
         })
         .bindPopup(
-            "<strong>" + ambulance.identifier +
-            "</strong>" +
+            "<strong>" + ambulance.identifier + "</strong>" +
             "<br/>" +
             ambulance_status[ambulance.status] +
             "<br/>" +
