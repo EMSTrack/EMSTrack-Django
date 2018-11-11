@@ -601,13 +601,12 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 function addCallToGrid(call) {
 
     console.log('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
-    console.log(call);
 
     // Add call to calls
     calls[call.id] = call;
 
     // Format date
-    var date = (new Date(Date.parse(call.updated_on))).toLocaleString()
+    var date = (new Date(Date.parse(call.updated_on))).toLocaleTimeString()
 
     // Add item to call grid
     $('#call-grid-' + call.status)
@@ -615,7 +614,7 @@ function addCallToGrid(call) {
             '<div class="form-group form-check mt-0 mb-1" id="call-item-' + call.id + '">\n' +
             '     <input type="checkbox" class="form-check-input" id="call-' + call.id + '">\n' +
             '     <label class="form-check-label" for="call-' + call.id + '">\n' +
-            '       <strong>' + call.id + '</strong>: ' + date + '\n' +
+            '       <strong>' + date + '</strong>\n' +
             '     </label>\n' +
             '     <div id="call-item-grid-' + call.id + '">' +
             '     </div>' +
