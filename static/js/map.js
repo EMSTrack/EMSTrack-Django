@@ -724,8 +724,8 @@ function addCallToMap(call) {
             icon: coloredIcon,
             pane: 'patient'
         })
-        .bindPopup("<strong>PATIENTS NAMES</strong>")
         .addTo(mymap);
+        //.bindPopup("<strong>PATIENTS NAMES</strong>")
 
     // TODO: ADD PATIENTS NAMES
 
