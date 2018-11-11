@@ -732,7 +732,7 @@ function addCallToMap(call) {
     // TODO: ADD PATIENTS NAMES
 
     // Bind id to icons
-    patientMarkers[call.id]. icon.id = call.id;
+    patientMarkers[call.id]._icon.id = call.id;
 
     // Collapse panel on icon hover.
     patientMarkers[call.id]
@@ -781,7 +781,7 @@ function addAmbulanceToMap(ambulance) {
         ).addTo(mymap);
 
     // Bind id to icons
-    ambulanceMarkers[ambulance.id]. icon.id = ambulance.id;
+    ambulanceMarkers[ambulance.id]._icon.id = ambulance.id;
 
     // Collapse panel on icon hover.
     ambulanceMarkers[ambulance.id]
@@ -828,7 +828,7 @@ function addHospitalToMap(hospital) {
         .addTo(mymap);
 
     // Bind id to icons
-    hospitalMarkers[hospital.id]. icon.id = hospital.id;
+    hospitalMarkers[hospital.id]._icon.id = hospital.id;
 
     // Collapse panel on icon hover.
     hospitalMarkers[hospital.id]
@@ -874,7 +874,7 @@ function addLocationToMap(location) {
         .addTo(mymap);
 
     // Bind id to icons
-    locationMarkers[location.id]. icon.id = location.id;
+    locationMarkers[location.id]._icon.id = location.id;
 
     // Collapse panel on icon hover.
     locationMarkers[location.id]
