@@ -1053,21 +1053,30 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create location options
+    
+    // add hospital
     $("#location-type").append(
         '<div class="form-group form-check mt-0 mb-1">\n' +
         '     <input class="form-check-input filter-checkbox" value="location" data-status="hospital"\n' +
-        '            type="checkbox" id="location-hospital" ' +
-        (visibleCategory['hospital'] ? 'checked' : '') + '>\n' +
+        '            type="checkbox" id="location-hospital" ' + (visibleCategory['hospital'] ? 'checked' : '') + '>\n' +
         '     <label class="form-check-label"\n' +
         '            for="location-hospital">Hospital</label>\n' +
         '</div>');
-    Object.keys(location_type).forEach(function (type) {
 
+    // add patient
+    $("#location-type").append(
+        '<div class="form-group form-check mt-0 mb-1">\n' +
+        '     <input class="form-check-input filter-checkbox" value="location" data-status="patient"\n' +
+        '            type="checkbox" id="location-patient" ' + (visibleCategory['patient'] ? 'checked' : '') + '>\n' +
+        '     <label class="form-check-label"\n' +
+        '            for="location-patient">Patient</label>\n' +
+        '</div>');
+
+    Object.keys(location_type).forEach(function (type) {
         $("#location-type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
-            '            type="checkbox" id="location-' + type + '" ' +
-            (visibleCategory[type] ? 'checked' : '') + '>\n' +
+            '            type="checkbox" id="location-' + type + '" ' + (visibleCategory[type] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
             '            for="location-' + type + '">' + location_type[type] + '</label>\n' +
             '</div>');
