@@ -539,31 +539,58 @@ function updateCall(call) {
 
     // retrieve id
     var id = call.id;
+    var status = call.status;
 
-    if (call.status == 'E') {
+    // already exists?
+    if (id in calls) {
 
-        // Completed call, unsubscribe
-        var topicName = "call/" + id + "/data";
-        mqttClient.unsubscribe(topicName);
-        console.log('Unsubscribing from topic: ' + topicName);
+        // retrieve old status
+        var status_re = /status-(\w)/;
+        var matches = status_re.match($('#call-item-' + id).attr('class'));
+        var old_status = null;
+        if (matches.length > 0) {
 
-        // remove from grid
-        $('#call-item-' + call.id).remove();
+            old_status = matches[0];
+            if (status != old_status) {
+
+                // Update old label
+                var old_grid_length = $('#call-grid-' + old_status).children().length - 1;
+                if (old_grid_length > 0)
+                    $('#call-' + old_status + '-header').html(call_status[old_status] + ' (' + old_grid_length + ')');
+                else
+                    $('#call-' + old_status + '-header').html(call_status[old_status]);
+
+                if (status != 'E') {
+
+                    // update new label
+                    $('#call-' + status + '-header').html(call_status[status] + ' ('
+                        + $('#call-grid-' + status).children().length + 1 + ')');
+
+                    // move to new category
+                    $('#call-item-' + id)
+                        .detach()
+                        .appendTo($('#call-grid-' + status));
+
+                } else { // status == 'E'
+
+                    // Completed call, unsubscribe
+                    var topicName = "call/" + id + "/data";
+                    mqttClient.unsubscribe(topicName);
+                    console.log('Unsubscribing from topic: ' + topicName);
+
+                    // remove from grid
+                    $('#call-item-' + id).remove();
+
+                    // Remove from calls
+                    delete calls[id];
+                }
+            }
+            // No changes needed if status does not change
+
+        } else
+            console.log('Could not match current call status');
 
     } else {
-
-        // already exists?
-        if (id in calls) {
-
-            // TODO: update instead
-
-            // Remove from calls
-            delete calls[call.id];
-
-            // Remove existing call
-            $('#call-item-' + call.id).remove();
-
-        }
 
         // add call to grid
         addCallToGrid(call);
@@ -583,7 +610,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
     } else {
 
-        // subscribe if not already subscribed
+        // subscribe to call if not already subscribed
         if (!(call_id in calls)) {
 
             // subscribe to call
@@ -613,7 +640,7 @@ function addCallToGrid(call) {
     // Add item to call grid
     $('#call-grid-' + status)
         .append(
-            '<div class="form-group form-check mt-0 mb-1" id="call-item-' + call.id + '">\n' +
+            '<div class="form-group form-check mt-0 mb-1 status-' + status + '" id="call-item-' + call.id + '">\n' +
             '     <input type="checkbox" class="form-check-input" id="call-' + call.id + '">\n' +
             '     <label class="form-check-label" for="call-' + call.id + '">\n' +
             '       <strong>' + date + '</strong>\n' +
