@@ -510,7 +510,7 @@ function addAmbulanceToGrid(ambulance) {
             + ambulance.identifier
             + '</button>');
 
-    // Make button draggable
+    // Make button clickable and draggable
     $('#grid-button-' + ambulance.id)
         .on('dragstart', function (e) {
             // on start of drag, copy information and fade button
@@ -545,7 +545,7 @@ function updateCall(call) {
         // Completed call, unsubscribe
         var topicName = "call/" + id + "/data";
         mqttClient.unsubscribe(topicName);
-        console.log('Unsubscribing to topic: ' + topicName);
+        console.log('Unsubscribing from topic: ' + topicName);
 
         // remove from grid
         $('#call-item-' + call.id).remove();
@@ -579,7 +579,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
         // Completed ambulance call, unsubscribe
         var topicName = "ambulance/" + ambulance_id + "/call/+/status";
         mqttClient.unsubscribe(topicName);
-        console.log('Unsubscribing to topic: ' + topicName);
+        console.log('Unsubscribing from topic: ' + topicName);
 
     } else {
 
@@ -620,6 +620,41 @@ function addCallToGrid(call) {
             '     <div id="call-item-grid-' + call.id + '">' +
             '     </div>' +
             '</div>\n');
+
+    call.ambulancecall_set.forEach( function(ambulancecall) {
+
+        // get ambulance
+        var ambulance = ambulances.get(ambulancecall.ambulance_id);
+
+        // Add ambulance button to call item grid
+        $('#call-item-grid-' + call.id)
+            .append('<button type="button"'
+            + ' id="call-grid-button-' + ambulance.id + '"'
+            + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
+            + ' style="margin: 2px 2px;"'
+            + ' draggable="true">'
+            + ambulance.identifier
+            + '</button>');
+
+        // Make button clickable and draggable
+        $('#call-grid-button-' + ambulance.id)
+            // .on('dragstart', function (e) {
+            //     // on start of drag, copy information and fade button
+            //     this.style.opacity = '0.4';
+            //     e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
+            // })
+            // .on('dragend', function (e) {
+            //     // Restore opacity
+            //     this.style.opacity = '1.0';
+            // })
+            // .dblclick( function(e) {
+            //     addToDispatchingList(ambulance);
+            // })
+            .click( function(e) {
+                onGridButtonClick(ambulance);
+            });
+
+    });
 
 };
 
