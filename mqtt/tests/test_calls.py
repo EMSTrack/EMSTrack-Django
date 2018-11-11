@@ -581,6 +581,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
 
         # Abort call
         call.abort()
+        subscribe_client.loop()
 
         # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
