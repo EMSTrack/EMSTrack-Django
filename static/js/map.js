@@ -620,6 +620,10 @@ function addCallToGrid(call) {
             '     </div>' +
             '</div>\n');
 
+    // update labels
+    $('#call-' + status + '-header').html(call_status[status] + ' ('
+        + $('#call-grid-' + status).children().length + ')');
+
     call.ambulancecall_set.forEach( function(ambulance_call) {
 
         // get ambulance
@@ -857,7 +861,7 @@ function createCategoryPanesAndFilters() {
                 '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
                 '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
-                '             <span role="button">' + call_status[status] + '</span>\n' +
+                '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
                 '          </h6>\n' +
                 '    </div>\n' +
                 '    <div class="collapse"\n' +
@@ -869,10 +873,6 @@ function createCategoryPanesAndFilters() {
                 '         </div>\n' +
                 '    </div>\n' +
                 '</div>');
-
-        // make grid visible
-        if (status == 'P')
-            $('#call-heading-' + status).addClass('show');
 
     });
 
