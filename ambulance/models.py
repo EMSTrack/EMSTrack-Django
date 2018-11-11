@@ -266,7 +266,12 @@ class CallPublishMixin:
         super().save(*args, **kwargs)
 
         if publish:
-            self.publish()
+            if remove:
+                # This makes sure that if message arrives after retention
+                # clearing message that it will not be retained
+                self.publish(retain=False)
+            else:
+                self.publish()
 
         if remove:
             self.remove()
@@ -335,17 +340,17 @@ class Call(CallPublishMixin,
                      publish=publish,
                      remove=remove)
 
-    def publish(self):
+    def publish(self, *args, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call(self)
+        SingletonPublishClient().publish_call(self, *args, **kwargs)
 
-    def remove(self):
+    def remove(self, *args, **kwargs):
 
         # remove topic from mqtt server
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_call(self)
+        SingletonPublishClient().remove_call(self, *args, **kwargs)
 
     def abort(self):
 
@@ -473,17 +478,17 @@ class AmbulanceCall(CallPublishMixin,
                      publish=publish,
                      remove=remove)
 
-    def publish(self):
+    def publish(self, *args, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call_status(self)
+        SingletonPublishClient().publish_call_status(self, *args, **kwargs)
 
-    def remove(self):
+    def remove(self, *args, **kwargs):
 
         # remove from mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_call_status(self)
+        SingletonPublishClient().remove_call_status(self, *args, **kwargs)
 
     class Meta:
         unique_together = ('call', 'ambulance')
