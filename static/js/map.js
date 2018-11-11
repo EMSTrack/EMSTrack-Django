@@ -714,8 +714,6 @@ function addCallToGrid(call) {
 
 function addCallToMap(call) {
 
-    return;
-
     // set icon by status
     var coloredIcon = patientIcon;
 
