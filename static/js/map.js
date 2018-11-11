@@ -8,6 +8,7 @@ var locationMarkers = {};   // Store location markers
 var locations = {};	        // Store location details
 
 var calls = {};             // Store call details
+var patientMarkers = {};   // Store hospital markers
 
 // Initialize category panes
 var visibleCategory = {};
@@ -25,6 +26,10 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = settings['class'];
 }
 
+var patientIcon = L.icon({
+	iconUrl: '/static/icons/maki/marker-15.svg',
+	iconSize: [15, 15]
+});
 var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/maki/hospital-15.svg',
 	iconSize: [15, 15]
@@ -595,6 +600,9 @@ function updateCall(call) {
         // add call to grid
         addCallToGrid(call);
 
+        // add call to map
+        addCallToMap(call);
+        
     }
 
 }
@@ -698,6 +706,39 @@ function addCallToGrid(call) {
     });
 
 };
+
+function addCallToMap(call) {
+    
+    // set icon by status
+    var coloredIcon = patientIcon;
+
+    // If patient marker doesn't exist
+    patientMarkers[call.id] = L.marker([call.location.latitude,
+            call.location.longitude],
+        {
+            icon: coloredIcon,
+            pane: 'patient'
+        })
+        .bindPopup("<strong>PATIENTS NAMES</strong>")
+        .addTo(mymap);
+
+    // TODO: ADD PATIENTS NAMES
+
+    // Bind id to icons
+    patientMarkers[call.id]._icon.id = call.id;
+
+    // Collapse panel on icon hover.
+    patientMarkers[call.id]
+        .on('mouseover',
+            function (e) {
+                // open popup bubble
+                this.openPopup().on('mouseout',
+                    function (e) {
+                        this.closePopup();
+                    });
+            });
+
+}
 
 function addAmbulanceToMap(ambulance) {
 
