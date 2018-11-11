@@ -579,9 +579,6 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.D.name)
 
-        # Abort call
-        call.abort()
-
         # expect status ended call
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
@@ -597,6 +594,9 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
+
+        # Abort call
+        call.abort()
 
         # process messages
         self.loop(test_client, subscribe_client)
