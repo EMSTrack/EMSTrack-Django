@@ -593,8 +593,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
         }
 
-        // add call to grid
-        addCallToGrid(ambulance_id, call_id, status);
+        // TODO: Update ambulance status
 
     }
 }
@@ -622,14 +621,7 @@ function addCallToGrid(call) {
             '     </div>' +
             '</div>\n');
 
-    var array = call.ambulancecall_set;
-    console.log(array);
-    console.log(array.length);
-    var len = 0;//array.length;
-    for (var i = 0; i < len; i++) {
-
-        // get ambulance_call
-        var ambulance_call = call.ambulancecall_set[i];
+    call.ambulancecall_set.forEach( function(ambulance_call) {
 
         // get ambulance
         var ambulance = ambulances[ambulance_call.ambulance_id];
@@ -649,19 +641,20 @@ function addCallToGrid(call) {
             .click(function (e) {
                 onGridButtonClick(ambulance);
             });
-        // .on('dragstart', function (e) {
-        //     // on start of drag, copy information and fade button
-        //     this.style.opacity = '0.4';
-        //     e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
-        // })
-        // .on('dragend', function (e) {
-        //     // Restore opacity
-        //     this.style.opacity = '1.0';
-        // })
-        // .dblclick( function(e) {
-        //     addToDispatchingList(ambulance);
-        // })
-    };
+            // .on('dragstart', function (e) {
+            //     // on start of drag, copy information and fade button
+            //     this.style.opacity = '0.4';
+            //     e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
+            // })
+            // .on('dragend', function (e) {
+            //     // Restore opacity
+            //     this.style.opacity = '1.0';
+            // })
+            // .dblclick( function(e) {
+            //     addToDispatchingList(ambulance);
+            // })
+
+    });
 
 };
 
