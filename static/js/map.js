@@ -621,6 +621,7 @@ function addCallToGrid(call) {
             '</div>\n');
 
     // update labels
+    console.log($('#call-' + status + '-header'));
     $('#call-' + status + '-header').html(call_status[status] + ' ('
         + $('#call-grid-' + status).children().length + ')');
 
