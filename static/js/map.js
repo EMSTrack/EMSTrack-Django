@@ -636,31 +636,31 @@ function addCallToGrid(call) {
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append('<button type="button"'
-            + ' id="call-grid-button-' + ambulance.id + '"'
-            + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
-            + ' style="margin: 2px 2px;"'
-            + ' draggable="true">'
-            + ambulance.identifier
-            + '</button>');
+                + ' id="call-grid-button-' + ambulance.id + '"'
+                + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
+                + ' style="margin: 2px 2px;"'
+                + ' draggable="true">'
+                + ambulance.identifier
+                + '</button>');
 
         // Make button clickable and draggable
         $('#call-grid-button-' + ambulance.id)
-            .click( function(e) {
+            .click(function (e) {
                 onGridButtonClick(ambulance);
             });
-            // .on('dragstart', function (e) {
-            //     // on start of drag, copy information and fade button
-            //     this.style.opacity = '0.4';
-            //     e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
-            // })
-            // .on('dragend', function (e) {
-            //     // Restore opacity
-            //     this.style.opacity = '1.0';
-            // })
-            // .dblclick( function(e) {
-            //     addToDispatchingList(ambulance);
-            // })
-    );
+        // .on('dragstart', function (e) {
+        //     // on start of drag, copy information and fade button
+        //     this.style.opacity = '0.4';
+        //     e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
+        // })
+        // .on('dragend', function (e) {
+        //     // Restore opacity
+        //     this.style.opacity = '1.0';
+        // })
+        // .dblclick( function(e) {
+        //     addToDispatchingList(ambulance);
+        // })
+    };
 
 };
 
