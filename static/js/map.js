@@ -623,11 +623,15 @@ function addCallToGrid(call) {
             '</div>\n');
 
     console.log(call.ambulancecall_set);
-    
-    call.ambulancecall_set.forEach( function(ambulancecall) {
+
+    var len = call.ambulancecall_set.length;
+    for (var i = 0; i < len; len++) {
+
+        // get ambulance_call
+        var ambulance_call = call.ambulancecall_set[i];
 
         // get ambulance
-        var ambulance = ambulances[ambulancecall.ambulance_id];
+        var ambulance = ambulances[ambulance_call.ambulance_id];
 
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
