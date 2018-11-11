@@ -717,6 +717,17 @@ function addCallToMap(call) {
     // set icon by status
     var coloredIcon = patientIcon;
 
+    // patients
+    var patients = "";
+    var isFirst = true;
+    call.patient_set.forEach(function (patient) {
+       if (isFirst) {
+           patients += patient.name;
+           isFirst = false;
+       } else
+           patients += ", " + patient.name;
+    });
+
     // If patient marker doesn't exist
     patientMarkers[call.id] = L.marker([call.location.latitude,
             call.location.longitude],
@@ -724,10 +735,8 @@ function addCallToMap(call) {
             icon: coloredIcon,
             pane: 'patient'
         })
+        .bindPopup("<strong>" + patients + "</strong>")
         .addTo(mymap);
-        //.bindPopup("<strong>PATIENTS NAMES</strong>")
-
-    // TODO: ADD PATIENTS NAMES
 
     // Bind id to icons
     patientMarkers[call.id]._icon.id = call.id;
@@ -905,6 +914,9 @@ function createCategoryPanesAndFilters() {
     // add hospital
     visibleCategory['hospital'] = true;
 
+    // add patient
+    visibleCategory['patient'] = true;
+
     // add location_type
     Object.keys(location_type).forEach(function(type) {
         visibleCategory[type] = false;
@@ -923,6 +935,10 @@ function createCategoryPanesAndFilters() {
     // Create hospital category pane
     var pane = mymap.createPane('hospital');
     pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
+
+    // Create patient category pane
+    var pane = mymap.createPane('patient');
+    pane.style.display = (visibleCategory['patient'] ? 'block' : 'none');
 
     // Create location category panes
     Object.keys(location_type).forEach(function (type) {
