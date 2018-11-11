@@ -602,6 +602,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 function addCallToGrid(call) {
 
     console.log('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
+    console.log(call);
 
     // Add call to calls
     calls[call.id] = call;
@@ -621,6 +622,8 @@ function addCallToGrid(call) {
             '     </div>' +
             '</div>\n');
 
+    console.log(call.ambulancecall_set);
+    
     call.ambulancecall_set.forEach( function(ambulancecall) {
 
         // get ambulance
