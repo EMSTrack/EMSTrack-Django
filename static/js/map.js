@@ -588,6 +588,11 @@ function updateCall(call) {
 
                     // Remove from calls
                     delete calls[id];
+
+                    // Remove patient from map
+                    mymap.removeLayer(patientMarkers[id]);
+                    delete patientMarkers[id];
+
                 }
             }
             // No changes needed if status does not change
