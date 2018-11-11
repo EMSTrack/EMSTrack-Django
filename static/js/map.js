@@ -645,6 +645,9 @@ function addCallToGrid(call) {
 
         // Make button clickable and draggable
         $('#call-grid-button-' + ambulance.id)
+            .click( function(e) {
+                onGridButtonClick(ambulance);
+            });
             // .on('dragstart', function (e) {
             //     // on start of drag, copy information and fade button
             //     this.style.opacity = '0.4';
@@ -657,11 +660,7 @@ function addCallToGrid(call) {
             // .dblclick( function(e) {
             //     addToDispatchingList(ambulance);
             // })
-            .click( function(e) {
-                onGridButtonClick(ambulance);
-            });
-
-    });
+    );
 
 };
 
