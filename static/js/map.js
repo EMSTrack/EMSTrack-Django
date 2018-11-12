@@ -453,7 +453,7 @@ function updateAmbulance(ambulance) {
         if (old_grid_length)
             $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
         else
-            $('#ambulance-' + old_status + '-header').hide();
+            $('#ambulance-' + old_status + '-header-count').hide();
 
     } else {
 
