@@ -683,7 +683,7 @@ function addCallToGrid(call) {
             '     </button>\n' +
             '     ' + date + '\n' +
             '  </div>\n' +
-            '  <div class="card-body" id="call-item-grid-' + call.id + '">\n' +
+            '  <div class="card-body px-0" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
             '</div>\n');
         // .append(
