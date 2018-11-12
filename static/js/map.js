@@ -676,8 +676,12 @@ function addCallToGrid(call) {
             '<div class="form-group form-check mt-0 mb-1 status-' + status + '" id="call-item-' + call.id + '">\n' +
             '     <input type="checkbox" class="form-check-input" id="call-' + call.id + '">\n' +
             '     <label class="form-check-label" for="call-' + call.id + '">\n' +
-            '       <strong class="txt-' + call_priority_css[call.priority].class + '">' + date + '</strong>\n' +
+            '       <strong>' + date + '</strong>\n' +
             '     </label>\n' +
+            '     <button type="button" style="margin: 2px 2px;"\n' +
+            '             class="btn btn-sm btn-' + call_priority_css[call.priority].class + '" float-right>' +
+            '       ' + call_priority_css[call.priority].html + '\n' +
+            '     </button>\n' +
             '     <div id="call-item-grid-' + call.id + '">' +
             '     </div>' +
             '</div>\n');
