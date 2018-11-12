@@ -1,8 +1,8 @@
 /* generated with http://blog.koalite.com/bbg/ */
 
 .btn-outline-yellow {
-  color: #000000;
-  background-color: #FFFFFF;
+  color: #F5E234;
+  /* background-color: #FFFFFF; */
   border-color: #F5E234;
 }
 
@@ -11,8 +11,8 @@
 .btn-outline-yellow:active,
 .btn-outline-yellow.active,
 .open .dropdown-toggle.btn-outline-yellow {
-  color: #000000;
-  background-color: #CFBF2D;
+  color: #FFFFEE;
+  background-color: #F5E234;
   border-color: #F5E234;
 }
 
