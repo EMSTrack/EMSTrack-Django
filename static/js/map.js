@@ -557,8 +557,7 @@ function updateCall(call) {
     if (id in calls) {
 
         // retrieve old status
-        var status_re = /status-(\w)/;
-        var matches = status_re.match($('#call-item-' + id).attr('class'));
+        var matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
         var old_status = null;
         if (matches.length > 0) {
 
