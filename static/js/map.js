@@ -526,7 +526,7 @@ function addAmbulanceToGrid(ambulance) {
             this.style.opacity = '1.0';
         })
         .click( function(e) {
-            onGridButtonClick(ambulance);
+            onGridAmbulanceButtonClick(ambulance);
         })
         .dblclick( function(e) {
             addToDispatchingList(ambulance);
@@ -678,14 +678,23 @@ function addCallToGrid(call) {
             '     <label class="form-check-label" for="call-' + call.id + '">\n' +
             '       <strong>' + date + '</strong>\n' +
             '     </label>\n' +
-            '     <button type="button" style="margin: 2px 2px;"\n' +
-            '             class="btn btn-sm btn-' + call_priority_css[call.priority].class + '" float-right>' +
+            '     <button type="button"\n' +
+            '             id="call-' + call.id + '-button"\n' +
+            '             style="margin: 2px 2px;"\n' +
+            '             class="btn btn-sm btn-' + call_priority_css[call.priority].class + ' float-right">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
             '     <div id="call-item-grid-' + call.id + '">' +
             '     </div>' +
             '</div>\n');
 
+    // Make call button clickable
+    $('#call-' + call.id + '-button-')
+        .click(function (e) {
+            onCallButtonClick(call);
+        });
+
+    // add ambulances
     call.ambulancecall_set.forEach( function(ambulance_call) {
 
         // get ambulance
@@ -704,7 +713,7 @@ function addCallToGrid(call) {
         // Make button clickable and draggable
         $('#call-grid-button-' + ambulance.id)
             .click(function (e) {
-                onGridButtonClick(ambulance);
+                onGridAmbulanceButtonClick(ambulance);
             });
             // .on('dragstart', function (e) {
             //     // on start of drag, copy information and fade button
@@ -1144,7 +1153,7 @@ function createCategoryPanesAndFilters() {
 
 };
 
-function onGridButtonClick(ambulance) {
+function onGridAmbulanceButtonClick(ambulance) {
 
     if (visibleCategory[ambulance.status]) {
 
@@ -1156,6 +1165,24 @@ function onGridButtonClick(ambulance) {
         ambulanceMarkers[ambulance.id].openPopup();
         setTimeout(function () {
             ambulanceMarkers[ambulance.id].closePopup();
+        }, 2500);
+
+    }
+
+}
+
+function onCallButtonClick(call) {
+
+    if (visibleCategory['patient']) {
+
+        // Center icon on map
+        var position = patientMarkers[call.id].getLatLng();
+        mymap.setView(position, mymap.getZoom());
+
+        // Open popup for 2.5 seconds.
+        patientMarkers[call.id].openPopup();
+        setTimeout(function () {
+            patientMarkers[call.id].closePopup();
         }, 2500);
 
     }
