@@ -1171,7 +1171,9 @@ function updateAmbulanceStatus(ambulance, status) {
     $('#modal-button-close').hide();
     bsdialog('Are you sure you want to modify ambulance "<b>'
         + ambulance.identifier
-        + '</b>" status?', 'alert-danger', 'Attention')
+        + '</b>" status to <em>'
+        + ambulance_status[status]
+        + '</em>?', 'alert-danger', 'Attention')
         .on('hide.bs.modal', function(event) {
 
             var $activeElement = $(document.activeElement);
