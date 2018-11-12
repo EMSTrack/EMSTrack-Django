@@ -558,18 +558,7 @@ function updateCall(call) {
             old_status = matches[0];
             if (status != old_status) {
 
-                // Update old label
-                var old_grid_length = $('#call-grid-' + old_status).children().length - 1;
-                if (old_grid_length > 0)
-                    $('#call-' + old_status + '-header').html(call_status[old_status] + ' (' + old_grid_length + ')');
-                else
-                    $('#call-' + old_status + '-header').html(call_status[old_status]);
-
                 if (status != 'E') {
-
-                    // update new label
-                    $('#call-' + status + '-header').html(call_status[status] + ' ('
-                        + $('#call-grid-' + status).children().length + 1 + ')');
 
                     // move to new category
                     $('#call-item-' + id)
@@ -594,6 +583,10 @@ function updateCall(call) {
                     delete patientMarkers[id];
 
                 }
+
+                // update call counter
+                updateCallCounter();
+
             }
             // No changes needed if status does not change
 
@@ -638,6 +631,27 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
     }
 }
 
+function updateCallCounter() {
+
+    var total = 0;
+    call_status.forEach(function (status) {
+        if (status != 'E') {
+            var count = $('#call-grid-' + status).children().length;
+            total += count;
+            if (count > 0)
+                $('#call-' + status + '-header-count').html('(' + count + ')');
+            else
+                $('#call-' + status + '-header-count').hide();
+        }
+    });
+
+    if (total > 0)
+        $('#call-header-count').html('(' + total+ ')');
+    else
+        $('#call-header-count').hide();
+
+}
+
 function addCallToGrid(call) {
 
     console.log('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
@@ -658,8 +672,6 @@ function addCallToGrid(call) {
     // Format date
     date = (new Date(Date.parse(date))).toLocaleTimeString();
 
-    var grid_length = $('#call-grid-' + status).children().length + 1;
-
     // Add item to call grid
     $('#call-grid-' + status)
         .append(
@@ -671,9 +683,6 @@ function addCallToGrid(call) {
             '     <div id="call-item-grid-' + call.id + '">' +
             '     </div>' +
             '</div>\n');
-
-    // update labels
-    $('#call-' + status + '-header').html(call_status[status] + ' (' + grid_length + ')');
 
     call.ambulancecall_set.forEach( function(ambulance_call) {
 
@@ -709,6 +718,9 @@ function addCallToGrid(call) {
             // })
 
     });
+
+    // update call counter
+    updateCallCounter();
 
 };
 
@@ -978,6 +990,7 @@ function createCategoryPanesAndFilters() {
                 '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
+                '             <span id="call-' + status + '-header-count" role="button"></span>\n' +
                 '          </h6>\n' +
                 '    </div>\n' +
                 '    <div class="collapse"\n' +
