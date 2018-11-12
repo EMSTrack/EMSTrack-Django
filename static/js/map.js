@@ -668,7 +668,7 @@ function addCallToGrid(call) {
         date = call.started_at;
 
     // Format date
-    date = (new Date(Date.parse(date))).toLocaleString();
+    date = (new Date(Date.parse(date))).toLocaleTimeString();
 
     // Add item to call grid
     $('#call-grid-' + status)
@@ -678,7 +678,7 @@ function addCallToGrid(call) {
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
             '             style="margin: 2px 2px;"\n' +
-            '             class="btn btn-sm btn-outline-' + call_priority_css[call.priority].class + '">' +
+            '             class="btn btn-outline-' + call_priority_css[call.priority].class + '">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
             '     <strong>' + date + '</strong>\n' +
