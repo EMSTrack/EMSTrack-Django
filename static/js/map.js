@@ -1173,6 +1173,8 @@ function onGridAmbulanceButtonClick(ambulance) {
 
 function onCallButtonClick(call) {
 
+    console.log('onCallButtonClick');
+
     if (visibleCategory['patient']) {
 
         // Center icon on map
