@@ -1221,9 +1221,8 @@ function updateAmbulanceStatus(ambulance, status) {
                     // Do something with the button that closed the modal
                     // Update status
                     doUpdateAmbulanceStatus(ambulance, status);
-
                 }
-s
+
             }
 
         })
