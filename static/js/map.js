@@ -634,7 +634,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 function updateCallCounter() {
 
     var total = 0;
-    call_status.forEach(function (status) {
+    Object.keys(call_status).forEach(function(status) {
         if (status != 'E') {
             var count = $('#call-grid-' + status).children().length;
             total += count;
