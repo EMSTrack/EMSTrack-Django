@@ -2,7 +2,7 @@
 
 .btn-outline-yellow {
   color: #F5E234;
-  /* background-color: #FFFFFF; */
+  background-color: #FFFFEE;
   border-color: #F5E234;
 }
 
@@ -11,8 +11,8 @@
 .btn-outline-yellow:active,
 .btn-outline-yellow.active,
 .open .dropdown-toggle.btn-outline-yellow {
-  color: #FFFFEE;
-  background-color: #000000;
+  color: #000000;
+  background-color: #F5E234;
   border-color: #F5E234;
 }
 
