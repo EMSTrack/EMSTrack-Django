@@ -370,46 +370,55 @@ function onMessageArrived(message) {
     // split topic
     var topic = message.destinationName.split("/");
 
-    try {
+    // empty payload?
+    if (message.payloadString) {
 
-        // parse message
-        var data = JSON.parse(message.payloadString);
+        try {
 
-        // Look for ambulance/{id}/data
-        if (topic[0] === 'ambulance' &&
-            topic[2] == 'data') {
-            updateAmbulance(data);
+            // parse message
+            var data = JSON.parse(message.payloadString);
+
+            // Look for ambulance/{id}/data
+            if (topic[0] === 'ambulance' &&
+                topic[2] == 'data') {
+                updateAmbulance(data);
+            }
+
+            // Look for hospital/{id}/data
+            else if (topic[0] === 'hospital' &&
+                topic[2] == 'data') {
+                updateHospital(data);
+            }
+
+            // Look for call/{id}/data
+            else if (topic[0] === 'call' &&
+                topic[2] == 'data') {
+                updateCall(data);
+            }
+
+            // look for ambulance call information
+            else if (topic[0] === 'ambulance' &&
+                topic[2] == 'call' &&
+                topic[4] == 'status') {
+                var ambulance_id = topic[1];
+                var call_id = topic[3];
+                updateAmbulanceCall(ambulance_id, call_id, data);
+            }
+
+            else
+                console.log('Unknown topic ' + topic);
+
+        } catch (e) {
+
+            bsalert('Error processing message "' +
+                message.destinationName + ':' + message.payloadString +
+                '"' + '<br/>' + 'error = "' + e + '"');
+
         }
 
-        // Look for hospital/{id}/data
-        else if (topic[0] === 'hospital' &&
-            topic[2] == 'data') {
-            updateHospital(data);
-        }
-
-        // Look for call/{id}/data
-        else if (topic[0] === 'call' &&
-            topic[2] == 'data') {
-            updateCall(data);
-        }
-
-        // look for ambulance call information
-        else if (topic[0] === 'ambulance' &&
-            topic[2] == 'call' &&
-            topic[4] == 'status') {
-            var ambulance_id = topic[1];
-            var call_id = topic[3];
-            updateAmbulanceCall(ambulance_id, call_id, data);
-        }
-
-        else
-            console.log('Unknown topic ' + topic);
-
-    } catch (e) {
-        bsalert('Error processing message "' +
-            message.destinationName + ':' + message.payloadString +
-            '"' + '<br/>' + 'error = "' + e + '"');
-    }
+    } else
+        // This can happen if a topic is being unretained
+        console.log('Message "' + message.destinationName  + '" has an empty payload');
 
 };
 
