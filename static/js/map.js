@@ -23,7 +23,7 @@ for (var key in ambulance_css) {
 
     var settings = ambulance_css[key];
     ambulance_icons[key] = L.icon(settings['icon']);
-    ambulance_buttons[key] = settings['class'];
+    ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
 var patientIcon = L.icon({
@@ -1138,7 +1138,6 @@ function createCategoryPanesAndFilters() {
 
     });
 
-
 };
 
 function onGridButtonClick(ambulance) {
@@ -1186,7 +1185,7 @@ function updateAmbulanceStatus(ambulance, status) {
                     doUpdateAmbulanceStatus(ambulance, status);
 
                 }
-
+s
             }
 
         })

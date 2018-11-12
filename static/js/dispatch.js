@@ -563,6 +563,45 @@ var newPatientForm = function(index, symbol) {
 // Ready function
 $(function() {
 
+    // Add call priority buttons
+    Object.keys(call_priority).forEach(function(priority){
+
+        $('#priority-buttons')
+            .append(
+                '<label class="btn btn-' + call_priority_css[priority].class + 'success">\n' +
+                '  <input type="radio" name="priority" autocomplete="off" value="A">\n' +
+                '  ' + call_priority_css[priority].html + '\n' +
+                '</label>\n');
+
+    })
+    $('#ambulance-selection')
+        .append('<label class="btn btn-success">
+                            <input type="radio" name="priority" autocomplete="off" value="A">
+                            A
+                        </label>
+                        <label class="btn btn-yellow">
+                            <input type="radio" name="priority" autocomplete="off" value="B">
+                            B
+                        </label>
+                        <label class="btn btn-warning">
+                            <input type="radio" name="priority" autocomplete="off" value="C">
+                            C
+                        </label>
+                        <label class="btn btn-danger">
+                            <input type="radio" name="priority" autocomplete="off" value="D">
+                            D
+                        </label>
+                        <label class="btn btn-info">
+                            <input type="radio" name="priority" autocomplete="off" value="E">
+                            E
+                        </label>
+                        <label class="btn btn-secondary">
+                            <input type="radio" name="priority" autocomplete="off" value="O">
+                            &Omega;
+                        </label>
+
+
+
     // Make ambulance-selection droppable
     $('#ambulance-selection')
         .on('dragover', function(e) {

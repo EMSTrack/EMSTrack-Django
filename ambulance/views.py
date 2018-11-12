@@ -10,7 +10,8 @@ from django.views.generic import TemplateView, ListView, \
 from django.views.generic.detail import BaseDetailView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Location, LocationType, CallStatus, AmbulanceCallStatus
+    Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
+    CallPriority
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -113,49 +114,78 @@ AmbulanceCSS = {
             'iconUrl': '/static/icons/cars/ambulance_blue.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-primary'
+        'class': 'primary'
     },
     'AV': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_green.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-success'
+        'class': 'success'
     },
     'OS': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_gray.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-secondary'
+        'class': 'secondary'
     },
     'PB': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_red.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-danger'
+        'class': 'danger'
     },
     'AP': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_orange.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-warning'
+        'class': 'warning'
     },
     'HB': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_purple.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-info'
+        'class': 'info'
     },
     'AH': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_yellow.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-yellow'
+        'class': 'yellow'
+    }
+}
+
+
+# CallPriority css information
+CallPriorityCSS = {
+    'A': {
+        'class': 'success',
+        'html': 'A'
+    },
+    'B': {
+        'class': 'yellow',
+        'html': 'B'
+    },
+    'C': {
+        'class': 'warning',
+        'html': 'C'
+    },
+    'D': {
+        'class': 'danger',
+        'html': 'D'
+    },
+    'E': {
+        'class': 'info',
+        'html': 'E'
+    },
+    'O': {
+        'class': 'secondary',
+        'html': '&Omega;'
     }
 }
 
@@ -173,12 +203,15 @@ class AmbulanceMap(TemplateView):
                                     for m in LocationType}
         context['call_status'] = {m.name: m.value
                                   for m in CallStatus}
+        context['call_priority'] = {m.name: m.value
+                                    for m in CallPriority}
         context['ambulancecall_status'] = {m.name: m.value
                                            for m in AmbulanceCallStatus}
         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         context['ambulance_css'] = AmbulanceCSS
+        context['call_priority_css'] = CallPriorityCSS
         return context
 
 

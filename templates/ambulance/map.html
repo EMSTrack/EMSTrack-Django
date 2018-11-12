@@ -8,6 +8,7 @@
         var ambulance_capability = {{ ambulance_capability|safe }};
         var location_type= {{ location_type|safe }};
         var call_status = {{ call_status|safe }};
+        var call_priority = {{ call_priority|safe }};
         var ambulancecall_status = {{ ambulancecall_status|safe }};
         var username = '{{ user.get_username|safe }}';
         var APIBaseUrl = '{% url 'index' %}api/';
@@ -17,6 +18,7 @@
         };
         var clientId = '{{ client_id|safe }}';
         var ambulance_css = {{ ambulance_css|safe }};
+        var call_priority_css = {{ call_priority_css|safe }};
     </script>
 
 {% endblock %}
