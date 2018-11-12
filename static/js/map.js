@@ -449,12 +449,11 @@ function updateAmbulance(ambulance) {
             .appendTo($('#ambulance-grid-' + status));
 
         // update labels
-        $('#ambulance-' + status + '-header').html(ambulance_status[status] + ' (' + new_grid_length + ')');
+        $('#ambulance-' + status + '-header-count').html('(' + new_grid_length + ')').show();
         if (old_grid_length)
-            $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status] +
-                ' (' + old_grid_length + ')');
+            $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
         else
-            $('#ambulance-' + old_status + '-header').html(ambulance_status[old_status]);
+            $('#ambulance-' + old_status + '-header').hide();
 
     } else {
 
@@ -639,14 +638,14 @@ function updateCallCounter() {
             var count = $('#call-grid-' + status).children().length;
             total += count;
             if (count > 0)
-                $('#call-' + status + '-header-count').html('(' + count + ')');
+                $('#call-' + status + '-header-count').html('(' + count + ')').show();
             else
                 $('#call-' + status + '-header-count').hide();
         }
     });
 
     if (total > 0)
-        $('#call-header-count').html('(' + total+ ')');
+        $('#call-header-count').html('(' + total+ ')').show();
     else
         $('#call-header-count').hide();
 
@@ -990,7 +989,7 @@ function createCategoryPanesAndFilters() {
                 '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
-                '             <span id="call-' + status + '-header-count" role="button"></span>\n' +
+                '             <span id="call-' + status + '-header-count"></span>\n' +
                 '          </h6>\n' +
                 '    </div>\n' +
                 '    <div class="collapse"\n' +
@@ -1023,6 +1022,7 @@ function createCategoryPanesAndFilters() {
             '             <span id="ambulance-' + status + '-header" role="button">' +
             '                    ' + ambulance_status[status] + '\n' +
             '             </span>\n' +
+            '             <span id="ambulance-' + status + '-header-count"></span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse"\n' +
