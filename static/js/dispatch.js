@@ -569,7 +569,7 @@ $(function() {
         $('#priority-buttons')
             .append(
                 '<label class="btn btn-outline-' + call_priority_css[priority].class + '">\n' +
-                '  <input type="radio" name="priority" autocomplete="off" value="A">\n' +
+                '  <input type="radio" name="priority" autocomplete="off" value="' + priority + '">\n' +
                 '  ' + call_priority_css[priority].html + '\n' +
                 '</label>\n');
 
