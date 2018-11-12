@@ -559,9 +559,9 @@ function updateCall(call) {
         // retrieve old status
         var matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
         var old_status = null;
-        if (matches.length > 0) {
+        if (matches.length > 1) {
 
-            old_status = matches[0];
+            old_status = matches[1];
             if (status != old_status) {
 
                 if (status != 'E') {
