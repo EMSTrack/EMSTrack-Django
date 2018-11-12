@@ -678,7 +678,7 @@ function addCallToGrid(call) {
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
             '             style="margin: 2px 2px;"\n' +
-            '             class="btn btn-outline-' + call_priority_css[call.priority].class + ' bg-light">' +
+            '             class="btn btn-outline-' + call_priority_css[call.priority].class + '">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
             '     <strong>' + date + '</strong>\n' +
