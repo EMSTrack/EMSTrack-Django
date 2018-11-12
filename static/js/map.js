@@ -679,9 +679,9 @@ function addCallToGrid(call) {
             '             id="call-' + call.id + '-button"\n' +
             '             style="margin: 2px 2px;"\n' +
             '             class="btn btn-sm btn-' + call_priority_css[call.priority].class + '">' +
-            '       <strong>' + call_priority_css[call.priority].html + '</strong>\n' +
+            '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
-            '     ' + date + '\n' +
+            '     <strong>' + date + '</strong>\n' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
@@ -1022,7 +1022,7 @@ function createCategoryPanesAndFilters() {
                 '         id="call-' + status + '"\n' +
                 '         aria-labelledby="call-heading-' + status + '"\n' +
                 '         data-parent="#call-status">\n' +
-                '         <div class="card-body py-1 px-1"\n' +
+                '         <div class="card-body py-0 px-0"\n' +
                 '              id="call-grid-' + status + '">\n' +
                 '         </div>\n' +
                 '    </div>\n' +
