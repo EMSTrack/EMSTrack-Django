@@ -689,7 +689,7 @@ function addCallToGrid(call) {
             '</div>\n');
 
     // Make call button clickable
-    $('#call-' + call.id + '-button-')
+    $('#call-' + call.id + '-button')
         .click(function (e) {
             onCallButtonClick(call);
         });
@@ -1172,8 +1172,6 @@ function onGridAmbulanceButtonClick(ambulance) {
 }
 
 function onCallButtonClick(call) {
-
-    console.log('onCallButtonClick');
 
     if (visibleCategory['patient']) {
 
