@@ -534,8 +534,7 @@ function addAmbulanceToGrid(ambulance) {
 
     // Update label
     var status = ambulance.status;
-    $('#ambulance-' + status + '-header').html(ambulance_status[status] +
-        ' (' + $('#ambulance-grid-' + status).children().length + ')');
+    $('#ambulance-' + status + '-header-count').html('(' + $('#ambulance-grid-' + status).children().length + ')');
 
 };
 
