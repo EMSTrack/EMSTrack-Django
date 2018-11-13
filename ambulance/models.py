@@ -58,7 +58,7 @@ class AmbulanceStatus(Enum):
 AmbulanceStatusOrder = [ 
     AmbulanceStatus.AV,
     AmbulanceStatus.PB,
-    AmbulanceStatus.AT,
+    AmbulanceStatus.AP,
     AmbulanceStatus.HB,
     AmbulanceStatus.AH,
     AmbulanceStatus.OS,
