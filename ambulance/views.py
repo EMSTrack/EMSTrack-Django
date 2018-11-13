@@ -11,7 +11,7 @@ from django.views.generic.detail import BaseDetailView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
-    CallPriority
+    CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -197,14 +197,19 @@ class AmbulanceMap(TemplateView):
         context = super().get_context_data(**kwargs)
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
+        context['ambulance_status_order'] = [m.name for m in AmbulanceStatusOrder]
         context['ambulance_capability'] = {m.name: m.value
                                            for m in AmbulanceCapability}
+        context['ambulance_capability_order'] = [m.name for m in AmbulanceCapabilityOrder]
         context['location_type'] = {m.name: m.value
                                     for m in LocationType}
+        context['location_type_order'] = [m.name for m in LocationTypeOrder]
         context['call_status'] = {m.name: m.value
                                   for m in CallStatus}
+        context['call_status_order'] = [m.name for m in CallStatusOrder]
         context['call_priority'] = {m.name: m.value
                                     for m in CallPriority}
+        context['call_priority_order'] = [m.name for m in CallPriorityOrder]
         context['ambulancecall_status'] = {m.name: m.value
                                            for m in AmbulanceCallStatus}
         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']

@@ -55,10 +55,28 @@ class AmbulanceStatus(Enum):
     AH = 'At hospital'
 
 
+AmbulanceStatusOrder = [ 
+    AmbulanceStatus.AV,
+    AmbulanceStatus.PB,
+    AmbulanceStatus.AT,
+    AmbulanceStatus.HB,
+    AmbulanceStatus.AH,
+    AmbulanceStatus.OS,
+    AmbulanceStatus.UK
+] 
+
+
 class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'
     R = 'Rescue'
+
+
+AmbulanceCapabilityOrder = [ 
+    AmbulanceCapability.B,
+    AmbulanceCapability.A,
+    AmbulanceCapability.R
+] 
 
 
 class Ambulance(UpdatedByModel):
@@ -238,7 +256,7 @@ class Ambulance(UpdatedByModel):
 # Call related models
 
 class CallPriority(Enum):
-    A = 'Resucitation'
+    A = 'Resuscitation'
     B = 'Emergent'
     C = 'Urgent'
     D = 'Less urgent'
@@ -246,11 +264,27 @@ class CallPriority(Enum):
     O = 'Omega'
 
 
+CallPriorityOrder = [ 
+    CallPriority.A,
+    CallPriority.B,
+    CallPriority.C,
+    CallPriority.D,
+    CallPriority.E,
+    CallPriority.O,
+] 
+
+
 class CallStatus(Enum):
     P = 'Pending'
     S = 'Started'
     E = 'Ended'
 
+
+CallStatusOrder = [ 
+    CallStatus.P,
+    CallStatus.S,
+    CallStatus.E
+] 
 
 class CallPublishMixin:
 
@@ -567,6 +601,13 @@ class LocationType(Enum):
     b = 'Base'
     a = 'AED'
     o = 'Other'
+
+
+LocationTypeOrder = [
+    LocationType.b,
+    LocationType.a,
+    LocationType.o
+]
 
 
 class Location(AddressModel, UpdatedByModel):

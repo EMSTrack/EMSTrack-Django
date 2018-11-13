@@ -640,7 +640,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 function updateCallCounter() {
 
     var total = 0;
-    Object.keys(call_status).forEach(function(status) {
+    call_status_order.forEach(function(status) {
         if (status != 'E') {
             var count = $('#call-grid-' + status).children().length;
             total += count;
@@ -948,12 +948,12 @@ function createCategoryPanesAndFilters() {
     // Initialize visibleCategories
 
     // add status
-    Object.keys(ambulance_status).forEach(function(status) {
+    ambulance_status_order.forEach(function(status) {
         visibleCategory[status] = true;
     });
 
     // add capability
-    Object.keys(ambulance_capability).forEach(function(capability) {
+    ambulance_capability_order.forEach(function(capability) {
         visibleCategory[capability] = true;
     });
 
@@ -964,15 +964,15 @@ function createCategoryPanesAndFilters() {
     visibleCategory['patient'] = true;
 
     // add location_type
-    Object.keys(location_type).forEach(function(type) {
+    location_type_order.forEach(function(type) {
         visibleCategory[type] = false;
     });
 
     // Initialize panes
 
     // Create ambulance status category panes
-    Object.keys(ambulance_status).forEach(function (status) {
-        Object.keys(ambulance_capability).forEach(function (capability) {
+    ambulance_status_order.forEach(function (status) {
+        ambulance_capability_order.forEach(function (capability) {
             var pane = mymap.createPane(status+"|"+capability);
             pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
         });
@@ -987,13 +987,13 @@ function createCategoryPanesAndFilters() {
     pane.style.display = (visibleCategory['patient'] ? 'block' : 'none');
 
     // Create location category panes
-    Object.keys(location_type).forEach(function (type) {
+    location_type_order.forEach(function (type) {
         var pane = mymap.createPane(type);
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
     });
 
     // Create call status grids
-    Object.keys(call_status).forEach(function (status) {
+    call_status_order.forEach(function (status) {
 
         // ignore ended calls
         if (status != 'E')
@@ -1024,7 +1024,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create ambulance status grids
-    Object.keys(ambulance_status).forEach(function (status) {
+    ambulance_status_order.forEach(function (status) {
 
         // Create grid
         $("#ambulance-status").append(
@@ -1072,7 +1072,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create capability options
-    Object.keys(ambulance_capability).forEach(function (capability) {
+    ambulance_capability_order.forEach(function (capability) {
 
         $("#ambulance-capability").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
@@ -1104,7 +1104,7 @@ function createCategoryPanesAndFilters() {
         '            for="location-patient">Patient</label>\n' +
         '</div>');
 
-    Object.keys(location_type).forEach(function (type) {
+    location_type_order.forEach(function (type) {
         $("#location-type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
@@ -1140,14 +1140,14 @@ function createCategoryPanesAndFilters() {
         // Modify panes
         if (this.value == 'status') {
             // Add to all visible capability panes
-            Object.keys(ambulance_capability).forEach(function (capability) {
+            ambulance_capability_order.forEach(function (capability) {
                 if (visibleCategory[capability]) {
                     mymap.getPane(layer+"|"+capability).style.display = display;
                 }
             });
         } else if (this.value == 'capability') {
             // Add to all visible status layers
-            Object.keys(ambulance_status).forEach(function (status) {
+            ambulance_status_order.forEach(function (status) {
                 if (visibleCategory[status]) {
                     mymap.getPane(status+"|"+layer).style.display = display;
                 }

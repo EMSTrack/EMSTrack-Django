@@ -564,7 +564,7 @@ var newPatientForm = function(index, symbol) {
 $(function() {
 
     // Add call priority buttons
-    Object.keys(call_priority).forEach(function(priority){
+    call_priority_order.forEach(function(priority){
 
         $('#priority-buttons')
             .append(
