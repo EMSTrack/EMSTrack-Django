@@ -14,6 +14,9 @@ from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
 
+import logging
+logger = logging.getLogger(__name__)
+
 
 # Django REST Framework Viewsets
 
@@ -76,6 +79,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         """
         Retrieve and paginate ambulance updates.
         Use ?page=10&page_size=100 to control pagination.
+        Use ?call_id=x to retrieve updates to call x.
         """
 
         # retrieve updates
@@ -91,6 +95,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 if call.ended_at is not None:
                     ambulance_updates.filter(updated_on__range=(call.started_at, call.ended_at))
                 elif call.started_at is not None:
+                    logger.debug('HERE')
                     ambulance_updates.filter(updated_on__gte=call.started_at)
                 else:
                     # call hasn't started yet, return none
