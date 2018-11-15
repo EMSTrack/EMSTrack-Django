@@ -10,7 +10,7 @@ from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.viewsets import IsCreateByAdminOrSuper
 
-from .models import Location, Ambulance, LocationType, Call
+from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
 
@@ -90,8 +90,11 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # filter call
                 if call.ended_at is not None:
                     ambulance_updates.filter(updated_on__range=(call.started_at, call.ended_at))
-                else:
+                elif call.started_at is not None:
                     ambulance_updates.filter(updated_on__gte=call.started_at)
+                else:
+                    # call hasn't started yet, return none
+                    ambulance_updates = AmbulanceUpdate.objects.none()
 
             except Call.DoesNotExist as e:
                 raise Http404("Call with id '{}' does not exist.".format(call_id))
