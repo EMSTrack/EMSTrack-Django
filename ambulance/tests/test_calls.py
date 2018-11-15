@@ -337,7 +337,7 @@ class TestCall(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
 
         # call hasn't started yet
-        self.assertCountEqual(result['results'], 0)
+        self.assertEqual(len(result['results']), 0)
 
         # set call started
         c1.started_at = ambulance_update_1.updated_on
