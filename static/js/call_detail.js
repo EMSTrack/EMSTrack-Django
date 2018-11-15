@@ -1,5 +1,5 @@
 var map;
-var page;
+
 $(function () {
 
     // Set up map widget

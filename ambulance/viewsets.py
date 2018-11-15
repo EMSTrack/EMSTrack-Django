@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
@@ -80,6 +81,20 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # retrieve updates
         ambulance = self.get_object()
         ambulance_updates = ambulance.ambulanceupdate_set.order_by('-timestamp')
+
+        # retrieve only call updates
+        call_id = self.request.query_params.get('call_id', None)
+        if call_id is not None:
+            try:
+                call = Call.objects.get(id=call_id)
+                # filter call
+                if call.ended_at is not None:
+                    ambulance_updates.filter(updated_on__range=(call.started_at, call.ended_at))
+                else:
+                    ambulance_updates.filter(updated_on__gte=call.started_at)
+
+            except Call.DoesNotExist as e:
+                raise Http404("Call with id '%s' does not exist.".format(call_id))
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)
