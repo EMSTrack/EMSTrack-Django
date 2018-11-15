@@ -93,10 +93,10 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 call = Call.objects.get(id=call_id)
                 # filter call
                 if call.ended_at is not None:
-                    ambulance_updates.filter(updated_on__range=(call.started_at, call.ended_at))
+                    ambulance_updates = ambulance_updates.filter(updated_on__range=(call.started_at, call.ended_at))
                 elif call.started_at is not None:
                     logger.debug('HERE')
-                    ambulance_updates.filter(updated_on__gte=call.started_at)
+                    ambulance_updates = ambulance_updates.filter(updated_on__gte=call.started_at)
                 else:
                     # call hasn't started yet, return none
                     ambulance_updates = AmbulanceUpdate.objects.none()
