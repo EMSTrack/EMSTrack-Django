@@ -302,9 +302,6 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
-        # cannot have duplicate
-        self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
-
         # retrieve ambulance updates
         queryset = AmbulanceUpdate.objects.filter(ambulance=self.a1.id)
         answer1 = []
@@ -341,6 +338,10 @@ class TestCall(TestSetup):
 
         # logout
         client.logout()
+
+        # cannot have duplicate
+        # This must be last
+        self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
 
     def test_call_serializer_create(self):
 
