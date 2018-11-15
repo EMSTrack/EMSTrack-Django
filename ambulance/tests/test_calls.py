@@ -305,7 +305,7 @@ class TestCall(TestSetup):
         # retrieve ambulance updates
         queryset = AmbulanceUpdate\
             .objects.filter(ambulance=self.a1.id)\
-            .filter(updated_on__geq=ambulance_update_1.updated_on)
+            .filter(updated_on__gte=ambulance_update_1.updated_on)
         answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
