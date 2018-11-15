@@ -303,7 +303,9 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         # retrieve ambulance updates
-        queryset = AmbulanceUpdate.objects.filter(ambulance=self.a1.id)
+        queryset = AmbulanceUpdate\
+            .objects.filter(ambulance=self.a1.id)\
+            .filter(updated_on__geq=ambulance_update_1.updated_on)
         answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
@@ -320,7 +322,7 @@ class TestCall(TestSetup):
                 'updated_on': date2iso(u.updated_on)
             }
             answer1.append(serializer.data)
-        self.assertEqual(len(answer1), 4)
+        self.assertEqual(len(answer1), 3)
 
         # instantiate client
         client = Client()
@@ -333,9 +335,21 @@ class TestCall(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        logger.debug(result['results'])
+
+        # call hasn't started yet
+        self.assertCountEqual(result['results'], 0)
+
+        # set call started
+        c1.started_at = ambulance_update_1.updated_on
+        c1.save()
+
+        # redo query
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
         self.assertCountEqual(result['results'], answer1)
-        self.assertEqual(len(result['results']), 3)
 
         # logout
         client.logout()
