@@ -306,6 +306,24 @@ class TestCall(TestSetup):
         self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
 
         # retrieve ambulance updates
+        queryset = AmbulanceUpdate.objects.filter(ambulance=self.a1.id)
+        answer1 = []
+        for u in queryset:
+            serializer = AmbulanceUpdateSerializer(u)
+            result = {
+                'id': u.id,
+                'ambulance_id': u.ambulance.id,
+                'ambulance_identifier': u.ambulance.identifier,
+                'comment': u.comment,
+                'status': u.status,
+                'orientation': u.orientation,
+                'location': point2str(u.location),
+                'timestamp': date2iso(u.timestamp),
+                'updated_by_username': u.updated_by.username,
+                'updated_on': date2iso(u.updated_on)
+            }
+            answer1.append(serializer.data)
+        self.assertEqual(len(answer1), 3)
 
         # instantiate client
         client = Client()
@@ -318,8 +336,8 @@ class TestCall(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        # self.assertCountEqual(result['results'], answer1)
-        # self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result['results'], answer1)
+        self.assertEqual(len(result['results']), 3)
 
         # logout
         client.logout()
