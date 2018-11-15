@@ -339,13 +339,13 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         # Abort the call
         call.abort()
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
-
-        # expect blank ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
 
         # Check if call status is Ended
         call = Call.objects.get(id=call.id)
@@ -353,6 +353,10 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
 
         # expect blank call
         test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # Client handshake
