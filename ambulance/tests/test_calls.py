@@ -320,7 +320,6 @@ class TestCall(TestSetup):
                 'updated_on': date2iso(u.updated_on)
             }
             answer1.append(serializer.data)
-        logger.debug(answer1)
         self.assertEqual(len(answer1), 4)
 
         # instantiate client
@@ -334,6 +333,7 @@ class TestCall(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
+        logger.debug(result['results'])
         self.assertCountEqual(result['results'], answer1)
         self.assertEqual(len(result['results']), 3)
 
