@@ -94,7 +94,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                     ambulance_updates.filter(updated_on__gte=call.started_at)
 
             except Call.DoesNotExist as e:
-                raise Http404("Call with id '%s' does not exist.".format(call_id))
+                raise Http404("Call with id '{}' does not exist.".format(call_id))
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)

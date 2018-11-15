@@ -305,6 +305,25 @@ class TestCall(TestSetup):
         # cannot have duplicate
         self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
 
+        # retrieve ambulance updates
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        # self.assertCountEqual(result['results'], answer1)
+        # self.assertEqual(len(result['results']), 4)
+
+        # logout
+        client.logout()
+
     def test_call_serializer_create(self):
 
         call = {
