@@ -150,7 +150,7 @@ function addSegment(map, updates, layer) {
 function addAmbulanceRoute(map, data) {
 
     // paginated?
-    if (results in data) {
+    if ('results' in data) {
         data = data.results
     }
 
