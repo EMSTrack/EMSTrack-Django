@@ -128,16 +128,29 @@ function addAmbulanceRoute(map, data, byStatus) {
 	    // grab segment
         var segment = segments[i];
 
+        // initial point
+        var initialPoint = segment[0];
+
+
         if (i == 0) {
 
             // add starting marker
-            console.log("Adding initial '" + status + "' marker");
+            console.log("Adding initial '" + initialPoint.status + "' marker");
             createMarker(segment[0])
-                .addTo(map.map);
+                .addTo(map.map)
+                .bindPopup('<strong>' + ambulance_status[initialPoint.status] + '</strong>')
+                .on('mouseover',
+                    function (e) {
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function (e) {
+                                this.closePopup();
+                            });
+                    });
 
         } else if (byStatus) { // && i > 0
 
-            var status = segment[0].status;
+            var status = initialPoint.status;
             if (last_segment[last_segment.length - 1].status != status) {
                 // add status marker
                 console.log("Adding '" + status + "' marker");
@@ -163,11 +176,11 @@ function addAmbulanceRoute(map, data, byStatus) {
         // last segment?
         if (i == n - 1)
             // add ending marker
-            var final = segment[segment.length - 1];
-            console.log("Adding final '" + status + "' marker");
-            createMarker(final)
+            var finalPoint = segment[segment.length - 1];
+            console.log("Adding final '" + finalPoint.status + "' marker");
+            createMarker(finalPoint)
                 .addTo(map.map)
-                .bindPopup('<strong>' + ambulance_status[final.status] + '</strong>')
+                .bindPopup('<strong>' + ambulance_status[finalPoint.status] + '</strong>')
                     .on('mouseover',
                         function (e) {
                             // open popup bubble
