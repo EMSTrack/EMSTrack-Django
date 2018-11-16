@@ -16,7 +16,7 @@ $(function () {
     });
 
     // add patient marker
-    addMarker(call, icon)
+    createMarker(call, icon)
         .addTo(map.map)
         .bindPopup('<strong>hi</strong>')
         .on('mouseover',
