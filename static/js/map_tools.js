@@ -138,6 +138,7 @@ function addAmbulanceRoute(map, data, byStatus) {
             var status = segment[0].status;
             if (last_segment[last_segment.length - 1].status != status) {
                 // add status marker
+                console.log("Adding '" + status + "' marker");
                 createMarker(segment[0])
                     .addTo(map.map)
                     .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
