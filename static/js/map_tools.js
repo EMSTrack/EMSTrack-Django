@@ -39,6 +39,8 @@ function breakSegments(data, byStatus, separationRadius, timeInterval) {
 			var newStatus = false;
 			if (byStatus && lastPosition.status != currentPosition.status) {
 			    newStatus = true;
+			    // will break segment, add current position first
+                currentSegment.push(currentPosition);
             }
 			if (newStatus ||
                 distance > separationRadius[1] ||
