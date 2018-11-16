@@ -174,21 +174,22 @@ function addAmbulanceRoute(map, data, byStatus) {
             .addTo(map.map);
 
         // last segment?
-        if (i == n - 1 && segment.length > 0)
+        if (i == n - 1 && segment.length > 0) {
             // add ending marker
             var finalPoint = segment[segment.length - 1];
             console.log("Adding final '" + finalPoint.status + "' marker");
             createMarker(finalPoint)
                 .addTo(map.map)
                 .bindPopup('<strong>' + ambulance_status[finalPoint.status] + '</strong>')
-                    .on('mouseover',
-                        function (e) {
-                            // open popup bubble
-                            this.openPopup().on('mouseout',
-                                function (e) {
-                                    this.closePopup();
-                                });
-                        });
+                .on('mouseover',
+                    function (e) {
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function (e) {
+                                this.closePopup();
+                            });
+                    });
+        }
 
         last_segment = segment;
 
