@@ -42,7 +42,7 @@ $(function () {
 function retrieveAmbulances(ambulance_id) {
 
     // Build url
-    var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates/?call_id=' +_call.id;
+    var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates/?call_id=' + call.id;
 
     $.ajax({
         type: 'GET',
