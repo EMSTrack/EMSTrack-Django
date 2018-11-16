@@ -130,6 +130,7 @@ function addAmbulanceRoute(map, data, byStatus) {
 
         if (i == 0)
             // add starting marker
+            console.log("Adding initial '" + status + "' marker");
             createMarker(segment[0])
                 .addTo(map.map);
 
@@ -149,7 +150,7 @@ function addAmbulanceRoute(map, data, byStatus) {
                                 function (e) {
                                     this.closePopup();
                                 });
-                        });;
+                        });
             }
 
         }
@@ -161,8 +162,19 @@ function addAmbulanceRoute(map, data, byStatus) {
         // last segment?
         if (i == n - 1)
             // add ending marker
-            createMarker(segment[0])
-                .addTo(map.map);
+            var end = segment[segment.length - 1];
+            console.log("Adding final '" + status + "' marker");
+            createMarker(end)
+                .addTo(map.map)
+                .bindPopup('<strong>' + ambulance_status[end.status] + '</strong>')
+                    .on('mouseover',
+                        function (e) {
+                            // open popup bubble
+                            this.openPopup().on('mouseout',
+                                function (e) {
+                                    this.closePopup();
+                                });
+                        });
 
         last_segment = segment;
 
