@@ -165,7 +165,7 @@ function addAmbulanceRoute(map, data) {
     });
 
     // create route filter
-    createRouteFilter(segments);
+    //createRouteFilter(segments);
 
     console.log('Centering map');
     map.center(data.results[0].location);
