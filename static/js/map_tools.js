@@ -128,13 +128,14 @@ function addAmbulanceRoute(map, data, byStatus) {
 	    // grab segment
         var segment = segments[i];
 
-        if (i == 0)
+        if (i == 0) {
+
             // add starting marker
             console.log("Adding initial '" + status + "' marker");
             createMarker(segment[0])
                 .addTo(map.map);
 
-        else if (byStatus) { // && i > 0
+        } else if (byStatus) { // && i > 0
 
             var status = segment[0].status;
             if (last_segment[last_segment.length - 1].status != status) {
