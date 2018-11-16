@@ -289,6 +289,12 @@ class CallDetailView(LoginRequiredMixin,
                      DetailView):
     model = Call
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ambulance_status'] = {m.name: m.value
+                                       for m in AmbulanceStatus}
+        return context
+
     def get_success_url(self):
         return self.object.get_absolute_url()
 
