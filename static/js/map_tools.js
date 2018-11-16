@@ -16,10 +16,11 @@ function calculateDistanceHaversine(location1, location2, radius) {
     return radius * c;
 }
 
-function breakSegments(data, separationRadius, timeInterval) {
+function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
 	separationRadius = separationRadius || [100, 10000]; // 10m, 10km
 	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
+    byStatus = byStatus || false; // split by status as well?
 
 	var segments = [];
 
@@ -35,7 +36,13 @@ function breakSegments(data, separationRadius, timeInterval) {
 		if (lastPosition != null) {
 			var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
 			var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
-			if (distance > separationRadius[1] || interval > timeInterval[1] ||
+			var newStatus = false;
+			if (byStatus && lastPosition.status != currentPosition.status) {
+			    newStatus = true;
+            }
+			if (newStatus ||
+                distance > separationRadius[1] ||
+                interval > timeInterval[1] ||
                 (interval > timeInterval[0] && distance > separationRadius[0])) {
                 // terminate current segment
                 segments.push(currentSegment);
@@ -48,6 +55,7 @@ function breakSegments(data, separationRadius, timeInterval) {
 
 		// update lastPosition
 		lastPosition = currentPosition;
+
 	}
 
 	// anything left?
@@ -75,60 +83,7 @@ function createMarker(call_or_update, icon) {
 
 }
 
-function addSegment(map, updates, layer) {
-
-	// Add status markers
-	// TODO: color depending on status
-
-    // Create layer
-    map.createLayer(layer);
-
-	// First entry
-	var lastStatus;
-	if (updates.length >= 2) {
-
-		// Retrieve last entry (first position)
-		entry = updates[updates.length - 1];
-
-		// add marker
-		createMarker(entry)
-            .addTo(map.map);
-
-		// entry status
-		lastStatus = entry.status;
-
-	}
-
-	// Mid updates
-	for (var i = updates.length - 2; i > 0; i--) {
-
-		// Retrieve next entry
-		entry = updates[i];
-
-		if (entry.status != lastStatus) {
-
-            // add marker
-            createMarker(entry)
-                .addTo(map.map);
-
-        }
-
-		// entry status
-		lastStatus = entry.status;
-
-	}
-
-	// Last entry
-	if (updates.length > 0) {
-
-		// Retrieve last entry (first position)
-		entry = updates[0];
-
-		// add marker
-		createMarker(entry)
-            .addTo(map.map);
-
-	}
+function createSegmentLine(map, updates) {
 
 	// Store data in an array
 	var latlngs = [];
@@ -142,12 +97,14 @@ function addSegment(map, updates, layer) {
 
 	// Add line to map
 	console.log('Adding segment');
-	map.addLine(latlngs, 1, "red", null, layer);
+	return L.polyline(latlngs, {color: "red"});
 
 }
 
 // Interact with widget to add an ambulance route
-function addAmbulanceRoute(map, data) {
+function addAmbulanceRoute(map, data, byStatus) {
+
+    byStatus = byStatus || false;
 
     // paginated?
     if ('results' in data) {
@@ -159,13 +116,14 @@ function addAmbulanceRoute(map, data) {
         return;
 
     // break segments
-    var segments = breakSegments(data);
+    var segments = breakSegments(data, byStatus);
 
     // loop on segments
     segments.forEach( function(segment, index) {
 
         // add segment to map
-        addSegment(map, segment, 'layer_' + index);
+        createSegment(map, segment)
+            .addTo(map.map);
 
     });
 
