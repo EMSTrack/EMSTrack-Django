@@ -60,7 +60,7 @@ function breakSegments(data, separationRadius, timeInterval) {
 
 }
 
-function createMarker(call_or_update, layer, icon) {
+function createMarker(call_or_update, icon) {
 
     // default marker
     var icon = icon || L.icon({
@@ -91,7 +91,7 @@ function addSegment(map, updates, layer) {
 		entry = updates[updates.length - 1];
 
 		// add marker
-		createMarker(entry, layer)
+		createMarker(entry)
             .addTo(map.map);
 
 		// entry status
@@ -108,7 +108,7 @@ function addSegment(map, updates, layer) {
 		if (entry.status != lastStatus) {
 
             // add marker
-            createMarker(entry, layer)
+            createMarker(entry)
                 .addTo(map.map);
 
         }
@@ -125,7 +125,7 @@ function addSegment(map, updates, layer) {
 		entry = updates[0];
 
 		// add marker
-		createMarker(entry, layer)
+		createMarker(entry)
             .addTo(map.map);
 
 	}
