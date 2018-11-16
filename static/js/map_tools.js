@@ -149,12 +149,17 @@ function addSegment(map, updates, layer) {
 // Interact with widget to add an ambulance route
 function addAmbulanceRoute(map, data) {
 
+    // paginated?
+    if (results in data) {
+        data = data.results
+    }
+
     // short return
-    if (data.results.length == 0)
+    if (data.length == 0)
         return;
 
     // break segments
-    var segments = breakSegments(data.results);
+    var segments = breakSegments(data);
 
     // loop on segments
     segments.forEach( function(segment, index) {
@@ -168,7 +173,7 @@ function addAmbulanceRoute(map, data) {
     //createRouteFilter(segments);
 
     console.log('Centering map');
-    map.center(data.results[0].location);
+    map.center(data[0].location);
 
 }
 
