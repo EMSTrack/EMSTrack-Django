@@ -132,7 +132,7 @@ function addAmbulanceRoute(map, data, byStatus) {
 
         else if (byStatus) { // && i > 0
 
-            if (last_segment[last_segment.lenght - 1].status != segment[0].status) {
+            if (last_segment[last_segment.length - 1].status != segment[0].status) {
                 // add status marker
                 createMarker(segment[0]);
             }
