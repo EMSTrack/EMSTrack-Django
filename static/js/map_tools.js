@@ -64,7 +64,7 @@ function createMarker(call_or_update, icon) {
 
     // default marker
     var icon = icon || L.icon({
-        iconUrl: '/static/icons/cars/ambulance_blue.svg',
+        iconUrl: '/static/icons/flag/blue.svg',
         iconSize: [15, 30],
     });
 

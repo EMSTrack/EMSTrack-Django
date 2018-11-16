@@ -11,7 +11,7 @@ $(function () {
 
     // patient marker
     var icon = icon || L.icon({
-        iconUrl: '/static/icons/cars/ambulance_blue.svg',
+        iconUrl: '/static/icons/maki/marker-15.svg',
         iconSize: [15, 30],
     });
 
