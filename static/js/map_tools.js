@@ -135,10 +135,20 @@ function addAmbulanceRoute(map, data, byStatus) {
 
         else if (byStatus) { // && i > 0
 
-            if (last_segment[last_segment.length - 1].status != segment[0].status) {
+            var status = segment[0].status;
+            if (last_segment[last_segment.length - 1].status != status) {
                 // add status marker
                 createMarker(segment[0])
-                    .addTo(map.map);
+                    .addTo(map.map)
+                    .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
+                    .on('mouseover',
+                        function (e) {
+                            // open popup bubble
+                            this.openPopup().on('mouseout',
+                                function (e) {
+                                    this.closePopup();
+                                });
+                        });;
             }
 
         }
