@@ -174,7 +174,7 @@ function addAmbulanceRoute(map, data, byStatus) {
             .addTo(map.map);
 
         // last segment?
-        if (i == n - 1)
+        if (i == n - 1 and segment.length > 0)
             // add ending marker
             var finalPoint = segment[segment.length - 1];
             console.log("Adding final '" + finalPoint.status + "' marker");
