@@ -275,9 +275,9 @@ class CallListView(LoginRequiredMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = self.get_queryset()
-        context['pending_list'] = queryset.filter(status=CallStatus.P.name)
-        context['started_list'] = queryset.filter(status=CallStatus.S.name)
-        context['ended_list'] = queryset.filter(status=CallStatus.E.name)
+        context['pending_list'] = queryset.filter(status=CallStatus.P.name).order_by('pending_at')
+        context['started_list'] = queryset.filter(status=CallStatus.S.name).order_by('-started_at')
+        context['ended_list'] = queryset.filter(status=CallStatus.E.name).order_by('-started_at')
         return context
 
 
