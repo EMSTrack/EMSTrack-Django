@@ -63,7 +63,7 @@ function breakSegments(data, separationRadius, timeInterval) {
 function createMarker(call_or_update, icon) {
 
     // default marker
-    var icon = icon || L.icon({
+    icon = icon || L.icon({
         iconUrl: '/static/icons/flag/blue.svg',
         iconSize: [15, 30],
     });
