@@ -128,13 +128,15 @@ function addAmbulanceRoute(map, data, byStatus) {
 
         if (i == 0)
             // add starting marker
-            createMarker(segment[0]);
+            createMarker(segment[0])
+                .addTo(map.map);
 
         else if (byStatus) { // && i > 0
 
             if (last_segment[last_segment.length - 1].status != segment[0].status) {
                 // add status marker
-                createMarker(segment[0]);
+                createMarker(segment[0])
+                    .addTo(map.map);
             }
 
         }
@@ -146,7 +148,8 @@ function addAmbulanceRoute(map, data, byStatus) {
         // last segment?
         if (i == n - 1)
             // add ending marker
-            createMarker(segment[0]);
+            createMarker(segment[0])
+                .addTo(map.map);
 
         last_segment = segment;
 
