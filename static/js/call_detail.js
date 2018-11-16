@@ -59,7 +59,7 @@ function retrieveAmbulances(ambulance_id) {
 
             console.log('Got data from API')
 
-            addAmbulanceRoute(data)
+            addAmbulanceRoute(map, data)
 
         }
 
