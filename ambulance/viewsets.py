@@ -104,8 +104,11 @@ class AmbulanceViewSet(mixins.ListModelMixin,
             except Call.DoesNotExist as e:
                 raise Http404("Call with id '{}' does not exist.".format(call_id))
 
+        # order records
+        ambulance_updates = ambulance_updates.order_by('-timestamp')
+
         # paginate
-        page = self.paginate_queryset(ambulance_updates.order_by('-timestamp'))
+        page = self.paginate_queryset(ambulance_updates, request)
 
         if page is not None:
             serializer = AmbulanceUpdateSerializer(page, many=True)
