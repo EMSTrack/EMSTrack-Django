@@ -60,7 +60,7 @@ function breakSegments(data, separationRadius, timeInterval) {
 
 }
 
-function createMarker(call_or_update, icon) {
+function createMarker(call_or_update, layer, icon) {
 
     // default marker
     var icon = icon || L.icon({
