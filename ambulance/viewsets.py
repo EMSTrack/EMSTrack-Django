@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulancePageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
-    page_size = 25
+    # page_size = 25
     max_page_size = 1000
 
 
@@ -108,7 +108,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         ambulance_updates = ambulance_updates.order_by('-timestamp')
 
         # paginate
-        page = self.paginate_queryset(ambulance_updates, request)
+        page = self.paginate_queryset(ambulance_updates)
 
         if page is not None:
             serializer = AmbulanceUpdateSerializer(page, many=True)
