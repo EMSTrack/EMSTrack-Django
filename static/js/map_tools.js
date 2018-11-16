@@ -151,10 +151,12 @@ function addAmbulanceRoute(map, data, byStatus) {
         } else if (byStatus) { // && i > 0
 
             var status = initialPoint.status;
-            if (last_segment[last_segment.length - 1].status != status) {
+            var last_status = last_segment[last_segment.length - 1].status;
+            console.log('status = ' + status + ', last_status = ' + last_status);
+            if (last_status != status) {
                 // add status marker
                 console.log("Adding '" + status + "' marker");
-                createMarker(segment[0])
+                createMarker(initialPoint)
                     .addTo(map.map)
                     .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
                     .on('mouseover',
