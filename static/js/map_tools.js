@@ -119,13 +119,38 @@ function addAmbulanceRoute(map, data, byStatus) {
     var segments = breakSegments(data, byStatus);
 
     // loop on segments
-    segments.forEach( function(segment, index) {
+    var n = segments.length;
+    var last_segment = null;
+	for (var i = 0; i < n; i++) {
+
+	    // grab segment
+        var segment = segments[i];
+
+        if (i == 0)
+            // add starting marker
+            createMarker(segment[0]);
+
+        else if (byStatus) { // && i > 0
+
+            if (last_segment[last_segment.lenght - 1].status != segment[0].status) {
+                // add status marker
+                createMarker(segment[0]);
+            }
+
+        }
 
         // add segment to map
         createSegmentLine(map, segment)
             .addTo(map.map);
 
-    });
+        // last segment?
+        if (i == n - 1)
+            // add ending marker
+            createMarker(segment[0]);
+
+        last_segment = segment;
+
+    }
 
     // create route filter
     //createRouteFilter(segments);
