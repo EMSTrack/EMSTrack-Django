@@ -163,11 +163,11 @@ function addAmbulanceRoute(map, data, byStatus) {
         // last segment?
         if (i == n - 1)
             // add ending marker
-            var end = segment[segment.length - 1];
+            var final = segment[segment.length - 1];
             console.log("Adding final '" + status + "' marker");
-            createMarker(end)
+            createMarker(final)
                 .addTo(map.map)
-                .bindPopup('<strong>' + ambulance_status[end.status] + '</strong>')
+                .bindPopup('<strong>' + ambulance_status[final.status] + '</strong>')
                     .on('mouseover',
                         function (e) {
                             // open popup bubble
