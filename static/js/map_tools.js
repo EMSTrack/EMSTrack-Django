@@ -122,7 +122,7 @@ function addAmbulanceRoute(map, data, byStatus) {
     segments.forEach( function(segment, index) {
 
         // add segment to map
-        createSegment(map, segment)
+        createSegmentLine(map, segment)
             .addTo(map.map);
 
     });
