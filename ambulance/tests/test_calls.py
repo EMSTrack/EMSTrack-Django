@@ -303,7 +303,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         # start call
-        c1.started_at = ambulance_update_1.created_at
+        c1.started_at = ambulance_update_1.updated_on
         c1.save()
 
         # retrieve ambulance updates
