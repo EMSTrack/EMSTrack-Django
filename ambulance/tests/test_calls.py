@@ -302,14 +302,10 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
-        # start call
-        c1.started_at = ambulance_update_1.updated_on
-        c1.save()
-
         # retrieve ambulance updates
         queryset = AmbulanceUpdate\
             .objects.filter(ambulance=self.a1.id)\
-            .filter(timestamp__gte=c1.started_at)
+            .filter(timestamp__gte=ambulance_update_1.updated_on)
         answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
@@ -344,7 +340,7 @@ class TestCall(TestSetup):
         # call hasn't started yet
         self.assertEqual(len(result), 0)
 
-        # set call started
+        # start call
         c1.started_at = ambulance_update_1.updated_on
         c1.save()
 
