@@ -426,8 +426,7 @@ class AmbulanceCallStatus(Enum):
     C = 'Completed'
 
 
-class AmbulanceCallHistory(CallPublishMixin,
-                           models.Model):
+class AmbulanceCallHistory(models.Model):
 
     # status
     AMBULANCE_CALL_STATUS_CHOICES = \
