@@ -537,9 +537,9 @@ class AmbulanceCall(CallPublishMixin,
                      remove=remove)
 
         # call history save
-        #copy = AmbulanceCallHistory(status=self.status, call=self.call,
-        #                            ambulance=self.ambulance, created_at=self.created_at)
-        #copy.save()
+        copy = AmbulanceCallHistory(status=self.status, call=self.call,
+                                    ambulance=self.ambulance, created_at=self.created_at)
+        copy.save()
 
 
     def publish(self, *args, **kwargs):
