@@ -1091,16 +1091,16 @@ class TestAmbulanceBulkUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer1)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer1)
+        self.assertEqual(len(result), 4)
 
         # retrieve ambulances updates
         response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer3)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer3)
+        self.assertEqual(len(result), 4)
 
         # logout
         client.logout()
