@@ -326,6 +326,7 @@ class TestCall(TestSetup):
                 'updated_on': date2iso(u.updated_on)
             }
             answer1.append(serializer.data)
+        logger.debug(answer1)
         self.assertEqual(len(answer1), 3)
 
         # instantiate client
