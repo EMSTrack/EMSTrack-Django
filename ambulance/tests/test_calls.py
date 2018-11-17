@@ -302,6 +302,10 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
+        # start call
+        c1.started_at = ambulance_update_1.created_at
+        c1.save()
+
         # retrieve ambulance updates
         queryset = AmbulanceUpdate\
             .objects.filter(ambulance=self.a1.id)\
