@@ -90,8 +90,11 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         call_id = self.request.query_params.get('call_id', None)
         if call_id is not None:
             try:
+                # TODO: filter call based on active intervals.
+                #       go back to AmbulanceCallHistory and select active intervals:
+                #       between Ongoing and Suspended or Completed
+                #       If no history is available, use the following code:
                 call = Call.objects.get(id=call_id)
-                # filter call
                 if call.ended_at is not None:
                     ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
                 elif call.started_at is not None:
