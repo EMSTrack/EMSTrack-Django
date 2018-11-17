@@ -426,6 +426,28 @@ class AmbulanceCallStatus(Enum):
     C = 'Completed'
 
 
+class AmbulanceCallHistory(CallPublishMixin,
+                           models.Model):
+
+    # status
+    AMBULANCE_CALL_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCallStatus]
+    status = models.CharField(max_length=1,
+                              choices=AMBULANCE_CALL_STATUS_CHOICES,
+                              default=AmbulanceCallStatus.R.name)
+
+    # call
+    call = models.ForeignKey(Call,
+                             on_delete=models.CASCADE)
+
+    # ambulance
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    # created at
+    created_at = models.DateTimeField()
+
+
 class AmbulanceCall(CallPublishMixin,
                     models.Model):
 
@@ -514,6 +536,12 @@ class AmbulanceCall(CallPublishMixin,
         super().save(*args, **kwargs,
                      publish=publish,
                      remove=remove)
+
+        # call history save
+        copy = AmbulanceCallHistory(status=self.status, call=self.call,
+                                    ambulance=self.ambulance, created_at=self.created_at)
+        copy.save()
+
 
     def publish(self, *args, **kwargs):
 
