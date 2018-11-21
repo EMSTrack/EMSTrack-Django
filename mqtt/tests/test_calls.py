@@ -339,10 +339,6 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         # Abort the call
         call.abort()
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
         # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
