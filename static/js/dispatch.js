@@ -563,6 +563,18 @@ var newPatientForm = function(index, symbol) {
 // Ready function
 $(function() {
 
+    // Add call priority buttons
+    call_priority_order.forEach(function(priority){
+
+        $('#priority-buttons')
+            .append(
+                '<label class="btn btn-outline-' + call_priority_css[priority].class + '">\n' +
+                '  <input type="radio" name="priority" autocomplete="off" value="' + priority + '">\n' +
+                '  ' + call_priority_css[priority].html + '\n' +
+                '</label>\n');
+
+    });
+
     // Make ambulance-selection droppable
     $('#ambulance-selection')
         .on('dragover', function(e) {

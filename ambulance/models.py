@@ -55,10 +55,28 @@ class AmbulanceStatus(Enum):
     AH = 'At hospital'
 
 
+AmbulanceStatusOrder = [ 
+    AmbulanceStatus.AV,
+    AmbulanceStatus.PB,
+    AmbulanceStatus.AP,
+    AmbulanceStatus.HB,
+    AmbulanceStatus.AH,
+    AmbulanceStatus.OS,
+    AmbulanceStatus.UK
+] 
+
+
 class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'
     R = 'Rescue'
+
+
+AmbulanceCapabilityOrder = [ 
+    AmbulanceCapability.B,
+    AmbulanceCapability.A,
+    AmbulanceCapability.R
+] 
 
 
 class Ambulance(UpdatedByModel):
@@ -238,7 +256,7 @@ class Ambulance(UpdatedByModel):
 # Call related models
 
 class CallPriority(Enum):
-    A = 'Resucitation'
+    A = 'Resuscitation'
     B = 'Emergent'
     C = 'Urgent'
     D = 'Less urgent'
@@ -246,10 +264,27 @@ class CallPriority(Enum):
     O = 'Omega'
 
 
+CallPriorityOrder = [ 
+    CallPriority.A,
+    CallPriority.B,
+    CallPriority.C,
+    CallPriority.D,
+    CallPriority.E,
+    CallPriority.O,
+] 
+
+
 class CallStatus(Enum):
     P = 'Pending'
     S = 'Started'
     E = 'Ended'
+
+
+CallStatusOrder = [ 
+    CallStatus.P,
+    CallStatus.S,
+    CallStatus.E
+] 
 
 
 class CallPublishMixin:
@@ -259,11 +294,22 @@ class CallPublishMixin:
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('remove', False)
+
         # save to Call
         super().save(*args, **kwargs)
 
         if publish:
-            self.publish()
+            if remove:
+                # This makes sure that if message arrives after retention
+                # clearing message that it will not be retained
+                self.publish(retain=False)
+            else:
+                self.publish()
+
+        if remove:
+            self.remove()
 
 
 class Call(CallPublishMixin,
@@ -300,17 +346,19 @@ class Call(CallPublishMixin,
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('remove', False)
+
         if self.status == CallStatus.E.name:
 
             # timestamp
             self.ended_at = timezone.now()
 
             # remove topic from mqtt server
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().remove_call(self)
+            remove = True
 
             # prevent publication
-            publish = False
+            # publish = False
 
         elif self.status == CallStatus.S.name:
 
@@ -323,13 +371,21 @@ class Call(CallPublishMixin,
             self.pending_at = timezone.now()
 
         # call super
-        super().save(*args, **kwargs, publish=publish)
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
 
-    def publish(self):
+    def publish(self, *args, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call(self)
+        SingletonPublishClient().publish_call(self, *args, **kwargs)
+
+    def remove(self, *args, **kwargs):
+
+        # remove topic from mqtt server
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_call(self, *args, **kwargs)
 
     def abort(self):
 
@@ -349,6 +405,8 @@ class Call(CallPublishMixin,
                 ambulancecall.status = AmbulanceCallStatus.C.name
                 ambulancecall.save()
 
+            # At the last ambulance call will be closed
+
         else:
             # if no ambulancecalls, force abort
 
@@ -366,6 +424,27 @@ class AmbulanceCallStatus(Enum):
     D = 'Declined'
     S = 'Suspended'
     C = 'Completed'
+
+
+class AmbulanceCallHistory(models.Model):
+
+    # status
+    AMBULANCE_CALL_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCallStatus]
+    status = models.CharField(max_length=1,
+                              choices=AMBULANCE_CALL_STATUS_CHOICES,
+                              default=AmbulanceCallStatus.R.name)
+
+    # call
+    call = models.ForeignKey(Call,
+                             on_delete=models.CASCADE)
+
+    # ambulance
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    # created at
+    created_at = models.DateTimeField()
 
 
 class AmbulanceCall(CallPublishMixin,
@@ -394,6 +473,9 @@ class AmbulanceCall(CallPublishMixin,
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('publish', False)
+
         # changed to ongoing?
         if self.status == AmbulanceCallStatus.O.name:
 
@@ -421,17 +503,23 @@ class AmbulanceCall(CallPublishMixin,
 
                 logger.debug('This is the last ambulance; will end call.')
 
-                # change call status to finished
+                # publish first
+                self.publish()
+
+                # then change call status to finished
                 call.status = CallStatus.E.name
                 call.save()
 
-                # prevent publication
+                # prevent publication, already published
                 publish = False
 
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(ongoing_ambulancecalls)
+
+                # publish and remove from mqtt
+                remove = True
 
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
@@ -444,13 +532,27 @@ class AmbulanceCall(CallPublishMixin,
             logger.debug('Ambulance call suspended.')
 
         # call super
-        super().save(*args, **kwargs, publish=publish)
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
 
-    def publish(self):
+        # call history save
+        copy = AmbulanceCallHistory(status=self.status, call=self.call,
+                                    ambulance=self.ambulance, created_at=self.created_at)
+        copy.save()
+
+
+    def publish(self, *args, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call_status(self)
+        SingletonPublishClient().publish_call_status(self, *args, **kwargs)
+
+    def remove(self, *args, **kwargs):
+
+        # remove from mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_call_status(self, *args, **kwargs)
 
     class Meta:
         unique_together = ('call', 'ambulance')
@@ -527,6 +629,13 @@ class LocationType(Enum):
     b = 'Base'
     a = 'AED'
     o = 'Other'
+
+
+LocationTypeOrder = [
+    LocationType.b,
+    LocationType.a,
+    LocationType.o
+]
 
 
 class Location(AddressModel, UpdatedByModel):

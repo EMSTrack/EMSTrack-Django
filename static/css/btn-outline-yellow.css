@@ -1,0 +1,47 @@
+/* generated with http://blog.koalite.com/bbg/ */
+
+.btn-outline-yellow {
+  color: #F5E234;
+  background-color: #f8f9fa;
+  border-color: #F5E234;
+}
+
+.btn-outline-yellow:hover,
+.btn-outline-yellow:focus,
+.btn-outline-yellow:active,
+.btn-outline-yellow.active,
+.open .dropdown-toggle.btn-outline-yellow {
+  color: #000000;
+  background-color: #F5E234;
+  border-color: #F5E234;
+}
+
+.btn-outline-yellow:active,
+.btn-outline-yellow.active,
+.open .dropdown-toggle.btn-outline-yellow {
+  background-image: none;
+}
+
+.btn-outline-yellow.disabled,
+.btn-outline-yellow[disabled],
+fieldset[disabled] .btn-outline-yellow,
+.btn-outline-yellow.disabled:hover,
+.btn-outline-yellow[disabled]:hover,
+fieldset[disabled] .btn-outline-yellow:hover,
+.btn-outline-yellow.disabled:focus,
+.btn-outline-yellow[disabled]:focus,
+fieldset[disabled] .btn-outline-yellow:focus,
+.btn-outline-yellow.disabled:active,
+.btn-outline-yellow[disabled]:active,
+fieldset[disabled] .btn-outline-yellow:active,
+.btn-outline-yellow.disabled.active,
+.btn-outline-yellow[disabled].active,
+fieldset[disabled] .btn-outline-yellow.active {
+  background-color: #F5E234;
+  border-color: #F5E234;
+}
+
+.btn-outline-yellow .badge {
+  color: #F5E234;
+  background-color: #000000;
+}

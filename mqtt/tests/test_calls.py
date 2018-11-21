@@ -209,8 +209,16 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
 
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # expect blank call
         test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect status completed ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # expect blank ambulancecall
@@ -497,7 +505,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # subscribe to call and ambulance call status
+        # Expect ambulance call status to go declined
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -509,7 +517,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.P.name)
 
-        # Check if ambulancecall status is Requested
+        # Check if ambulancecall status is Declined
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.D.name)
 
@@ -557,8 +565,16 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
 
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # expect blank call
         test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect status completed ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # expect blank ambulancecall
@@ -578,6 +594,191 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
 
 
 class TestMQTTCallsDeclineRegularUser(TestMQTTCallsDecline):
+
+    def test(self):
+        super().test('testuser2', 'very_secret', self.a3.id)
+
+
+class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
+
+    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
+
+        if not ambulance_id:
+            ambulance_id = self.a1.id
+
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
+        # Start test client
+
+        broker.update(settings.MQTT)
+        client_id = 'test_mqtt_subscribe_admin'
+        broker['USERNAME'] = username
+        broker['PASSWORD'] = password
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
+
+        # Ambulance handshake: ambulance login
+        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
+                            'ambulance login')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id)
+
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # create call using serializer, one ambulance first
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'number': '123',
+            'street': 'asdasdasd asd asd asdas',
+            'ambulancecall_set': [{'ambulance_id': ambulance_id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Check if call status is Pending
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.P.name)
+
+        # Check if ambulancecall status is Requested
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
+
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # test_client publishes "Declined" to call status
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+                                                                                   ambulance_id, call.id), "declined")
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Expect ambulance call status to go declined
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # Check if call status is Pending
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.P.name)
+
+        # Check if ambulancecall status is Declined
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.D.name)
+
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect blank call
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
+        # expect status completed ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # Abort call
+        call.abort()
+
+        # process messages
+        self.loop(test_client, subscribe_client)
+
+        # Check if ambulancecall status is Completed
+        ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
+
+        # Check if call status is Ended
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.E.name)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
+
+class TestMQTTCallsDeclineInTheMiddleRegularUser(TestMQTTCallsDeclineInTheMiddle):
 
     def test(self):
         super().test('testuser2', 'very_secret', self.a3.id)
@@ -780,6 +981,10 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client)
 
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -962,9 +1167,17 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
+        # expect status finished ambulancecall
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+
         # expect blank ambulancecall
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
+
+        # expect status ended call
+        test_client2.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
 
         # expect blank call
         test_client2.expect('call/{}/data'.format(call.id))
@@ -1041,7 +1254,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
 
-         # Client handshake
+        # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
@@ -1320,6 +1533,10 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client)
 
+        # expect blank ambulancecall
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
@@ -1354,16 +1571,32 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
+        # expect 'Completed' ambulancecall
+        test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
+        self.is_subscribed(test_client2)
+
         # expect blank ambulancecall
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
+
+        # expect status ended call
+        test_client2.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
 
         # expect blank call
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
 
+        # expect 'Completed' ambulancecall -> does not receive since it was already made not retain
+        # test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        # self.is_subscribed(test_client)
+
         # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
+        self.is_subscribed(test_client)
+
+        # expect status ended call
+        test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
         # expect blank call
@@ -1371,8 +1604,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.is_subscribed(test_client)
 
         # process messages
-        self.loop(test_client)
-        self.loop(test_client2)
+        self.loop(test_client2, test_client)
         subscribe_client.loop()
 
         # Check if ambulancecall status is Completed

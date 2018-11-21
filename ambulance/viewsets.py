@@ -1,3 +1,4 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
@@ -9,16 +10,19 @@ from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.viewsets import IsCreateByAdminOrSuper
 
-from .models import Location, Ambulance, LocationType, Call
+from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 # Django REST Framework Viewsets
 
 class AmbulancePageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
-    page_size = 25
+    # page_size = 25
     max_page_size = 1000
 
 
@@ -75,11 +79,36 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         """
         Retrieve and paginate ambulance updates.
         Use ?page=10&page_size=100 to control pagination.
+        Use ?call_id=x to retrieve updates to call x.
         """
 
         # retrieve updates
         ambulance = self.get_object()
-        ambulance_updates = ambulance.ambulanceupdate_set.order_by('-timestamp')
+        ambulance_updates = ambulance.ambulanceupdate_set
+
+        # retrieve only call updates
+        call_id = self.request.query_params.get('call_id', None)
+        if call_id is not None:
+            try:
+                # TODO: filter call based on active intervals.
+                #       go back to AmbulanceCallHistory and select active intervals:
+                #       between Ongoing and Suspended or Completed
+                #       If no history is available, use the following code:
+                call = Call.objects.get(id=call_id)
+                if call.ended_at is not None:
+                    ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
+                elif call.started_at is not None:
+                    logger.debug('HERE')
+                    ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
+                else:
+                    # call hasn't started yet, return none
+                    ambulance_updates = AmbulanceUpdate.objects.none()
+
+            except Call.DoesNotExist as e:
+                raise Http404("Call with id '{}' does not exist.".format(call_id))
+
+        # order records
+        ambulance_updates = ambulance_updates.order_by('-timestamp')
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)

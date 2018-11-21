@@ -10,7 +10,8 @@ from django.views.generic import TemplateView, ListView, \
 from django.views.generic.detail import BaseDetailView
 
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Location, LocationType, CallStatus, AmbulanceCallStatus
+    Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
+    CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -113,49 +114,78 @@ AmbulanceCSS = {
             'iconUrl': '/static/icons/cars/ambulance_blue.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-primary'
+        'class': 'primary'
     },
     'AV': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_green.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-success'
+        'class': 'success'
     },
     'OS': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_gray.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-secondary'
+        'class': 'secondary'
     },
     'PB': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_red.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-danger'
+        'class': 'danger'
     },
     'AP': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_orange.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-warning'
+        'class': 'warning'
     },
     'HB': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_purple.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-info'
+        'class': 'info'
     },
     'AH': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_yellow.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-yellow'
+        'class': 'yellow'
+    }
+}
+
+
+# CallPriority css information
+CallPriorityCSS = {
+    'A': {
+        'class': 'success',
+        'html': 'A'
+    },
+    'B': {
+        'class': 'yellow',
+        'html': 'B'
+    },
+    'C': {
+        'class': 'warning',
+        'html': 'C'
+    },
+    'D': {
+        'class': 'danger',
+        'html': 'D'
+    },
+    'E': {
+        'class': 'info',
+        'html': 'E'
+    },
+    'O': {
+        'class': 'secondary',
+        'html': '&Omega;'
     }
 }
 
@@ -167,18 +197,26 @@ class AmbulanceMap(TemplateView):
         context = super().get_context_data(**kwargs)
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
+        context['ambulance_status_order'] = [m.name for m in AmbulanceStatusOrder]
         context['ambulance_capability'] = {m.name: m.value
                                            for m in AmbulanceCapability}
+        context['ambulance_capability_order'] = [m.name for m in AmbulanceCapabilityOrder]
         context['location_type'] = {m.name: m.value
                                     for m in LocationType}
+        context['location_type_order'] = [m.name for m in LocationTypeOrder]
         context['call_status'] = {m.name: m.value
                                   for m in CallStatus}
+        context['call_status_order'] = [m.name for m in CallStatusOrder]
+        context['call_priority'] = {m.name: m.value
+                                    for m in CallPriority}
+        context['call_priority_order'] = [m.name for m in CallPriorityOrder]
         context['ambulancecall_status'] = {m.name: m.value
                                            for m in AmbulanceCallStatus}
         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         context['ambulance_css'] = AmbulanceCSS
+        context['call_priority_css'] = CallPriorityCSS
         return context
 
 
@@ -237,9 +275,9 @@ class CallListView(LoginRequiredMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = self.get_queryset()
-        context['pending_list'] = queryset.filter(status=CallStatus.P.name)
-        context['started_list'] = queryset.filter(status=CallStatus.S.name)
-        context['ended_list'] = queryset.filter(status=CallStatus.E.name)
+        context['pending_list'] = queryset.filter(status=CallStatus.P.name).order_by('pending_at')
+        context['started_list'] = queryset.filter(status=CallStatus.S.name).order_by('-started_at')
+        context['ended_list'] = queryset.filter(status=CallStatus.E.name).order_by('-started_at')
         return context
 
 
@@ -250,6 +288,12 @@ class CallDetailView(LoginRequiredMixin,
                      UpdatedByMixin,
                      DetailView):
     model = Call
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ambulance_status'] = {m.name: m.value
+                                       for m in AmbulanceStatus}
+        return context
 
     def get_success_url(self):
         return self.object.get_absolute_url()

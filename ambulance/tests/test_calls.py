@@ -302,7 +302,63 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
+        # retrieve ambulance updates
+        queryset = AmbulanceUpdate\
+            .objects.filter(ambulance=self.a1.id)\
+            .filter(timestamp__gte=ambulance_update_1.updated_on)
+        answer1 = []
+        for u in queryset:
+            serializer = AmbulanceUpdateSerializer(u)
+            result = {
+                'id': u.id,
+                'ambulance_id': u.ambulance.id,
+                'ambulance_identifier': u.ambulance.identifier,
+                'comment': u.comment,
+                'status': u.status,
+                'orientation': u.orientation,
+                'location': point2str(u.location),
+                'timestamp': date2iso(u.timestamp),
+                'updated_by_username': u.updated_by.username,
+                'updated_on': date2iso(u.updated_on)
+            }
+            answer1.append(serializer.data)
+        logger.debug(answer1)
+        self.assertEqual(len(answer1), 2)
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+
+        # call hasn't started yet
+        self.assertEqual(len(result), 0)
+
+        # start call
+        c1.started_at = ambulance_update_1.updated_on
+        c1.save()
+
+        # redo query
+        # retrieve ambulances updates
+        response = client.get('/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        logger.debug(result)
+        logger.debug(answer1)
+        self.assertCountEqual(result, answer1)
+
+        # logout
+        client.logout()
+
         # cannot have duplicate
+        # This must be last
         self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
 
     def test_call_serializer_create(self):
