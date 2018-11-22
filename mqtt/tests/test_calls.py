@@ -344,16 +344,8 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # expect status ended call
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
         # expect blank call
         test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # expect status completed ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # expect blank ambulancecall
