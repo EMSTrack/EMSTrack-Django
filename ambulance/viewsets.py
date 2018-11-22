@@ -93,6 +93,13 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # TODO: filter call based on active intervals.
                 #       go back to AmbulanceCallHistory and select active intervals:
                 #       between Ongoing and Suspended or Completed
+
+                #       If there is a available history, user the following code:
+                    # available_zone = []
+                    # for time in ambulance_updates:
+
+
+
                 #       If no history is available, use the following code:
                 call = Call.objects.get(id=call_id)
                 if call.ended_at is not None:
