@@ -803,7 +803,7 @@ class TestCall(TestSetup):
             'patient_set': []
             }
         logger.debug(data)
-        response = client.post('/api/call/', data)
+        response = client.post('/api/call/', data, content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
         c1 = Call.objects.get(status=CallStatus.P.name)
