@@ -361,7 +361,7 @@ class CallSerializer(serializers.ModelSerializer):
                         waypoint['waypoint_location'] = WaypointLocation.objects.create(**waypoint_location)
                     elif _type == WaypointType.IA.name or _type == WaypointType.WA.name:
                         waypoint_address = waypoint.pop('waypoint_address',{})
-                        waypoint['waypoint_address'] = WaypointLocation.objects.create(**waypoint_address)
+                        waypoint['waypoint_address'] = WaypointAddress.objects.create(**waypoint_address)
                     elif _type == WaypointType.HO.name:
                         # TODO: Handle hospitals
                         pass
