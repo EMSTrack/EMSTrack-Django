@@ -847,13 +847,13 @@ class TestCall(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         # Will fail for anyone not superuser
-        response = client.post('/api/call/',
-                               {
-                                   'status': CallStatus.P.name,
-                                   'priority': CallPriority.B.name,
-                                   'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
-                                   'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
-                               })
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
         # logout
