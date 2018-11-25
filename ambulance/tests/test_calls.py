@@ -449,7 +449,9 @@ class TestCall(TestSetup):
 
         call = {
             'status': CallStatus.P.name,
-            'priority': CallPriority.B.name
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [],
+            'patient_set': []
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
@@ -480,6 +482,8 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
+            'ambulancecall_set': [],
+            'patient_set': []
         }
         serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
@@ -524,7 +528,8 @@ class TestCall(TestSetup):
                         }
                     ]
                 }
-            ]
+            ],
+            'patient_set': []
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
