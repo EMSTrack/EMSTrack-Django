@@ -82,7 +82,7 @@ class TestCall(TestSetup):
         ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
 
         # serialization
-        wpl_1 = WaypointLocation.create()
+        wpl_1 = WaypointLocation.objects.create()
         wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False,
                                       type=WaypointType.IL.name, waypoint_location=wpl_1)
         serializer = WaypointSerializer(wp_1)
