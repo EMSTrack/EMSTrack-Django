@@ -796,13 +796,14 @@ class TestCall(TestSetup):
         #     }
         # ],
 
-        response = client.post('/api/call/',
-                               {
-                                   'status': CallStatus.P.name,
-                                   'priority': CallPriority.B.name,
-                                   'ambulancecall_set': json.dumps([{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]),
-                                   'patient_set': json.dumps([{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}])
-                               })
+        data = json.dumps({
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+            })
+        logger.debug(data)
+        response = client.post('/api/call/', data)
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
         c1 = Call.objects.get(status=CallStatus.P.name)
