@@ -306,7 +306,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
 
-    patient_set = PatientSerializer(many=True, required=False)
+    patient_set = PatientSerializer(many=True, required=False, read_only=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
 
     class Meta:
@@ -398,7 +398,7 @@ class CallSerializer(serializers.ModelSerializer):
 
         logger.debug('VALIDATE_PATIENT_SET')
         logger.debug(data)
-        
+
         return data
 
     def validate(self, data):
