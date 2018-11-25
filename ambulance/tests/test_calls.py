@@ -831,6 +831,9 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
+        self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set']), 2)
+        self.assertEqual(len(expected_ambulancecall_set[1]['waypoint_set']), 1)
+
         # logout
         client.logout()
 
