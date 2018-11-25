@@ -831,8 +831,7 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
-        logger.debug(expected_ambulancecall_set[0])
-        logger.debug(expected_ambulancecall_set[1])
+        logger.debug(expected_ambulancecall_set)
 
         self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set']), 2)
         self.assertEqual(len(expected_ambulancecall_set[1]['waypoint_set']), 1)
