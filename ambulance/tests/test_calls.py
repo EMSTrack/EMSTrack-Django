@@ -488,7 +488,16 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': self.a1.id,
+                    'waypoint_set': []
+                },
+                {
+                    'ambulance_id': self.a2.id,
+                    'waypoint_set': []
+                }
+            ]
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
