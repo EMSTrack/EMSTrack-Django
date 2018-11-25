@@ -26,7 +26,7 @@ class TestCall(TestSetup):
     def test_patient_serializer(self):
 
         # test PatientSerializer
-        c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+        c1 = Call.objects.create(updated_by=self.u1)
 
         # serialization
         p1 = Patient.objects.create(call=c1)
@@ -76,7 +76,7 @@ class TestCall(TestSetup):
     def test_call_serializer(self):
 
         # create call
-        c1 = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+        c1 = Call.objects.create(updated_by=self.u1)
 
         # it is fine to have no ambulances because it is pending
         serializer = CallSerializer(c1)
@@ -85,15 +85,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -114,8 +105,7 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
-            'ambulanceupdate_set': []
+            'created_at': date2iso(ambulance_call.created_at)
         }
         self.assertDictEqual(serializer.data, expected)
 
@@ -127,15 +117,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -159,8 +140,7 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
-            'ambulanceupdate_set': []
+            'created_at': date2iso(ambulance_call.created_at)
         }
         self.assertDictEqual(serializer.data, expected)
 
@@ -172,15 +152,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -199,15 +170,12 @@ class TestCall(TestSetup):
 
         # create ambulance update to use in event
         ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
-                                                            ambulance_call=ambulance_call_2,
                                                             status=AmbulanceStatus.PB.name,
                                                             updated_by=self.u1)
         ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1,
-                                                            ambulance_call=ambulance_call_2,
                                                             status=AmbulanceStatus.AP.name,
                                                             updated_by=self.u1)
         ambulance_update_3 = AmbulanceUpdate.objects.create(ambulance=self.a1,
-                                                            ambulance_call=ambulance_call_2,
                                                             status=AmbulanceStatus.HB.name,
                                                             updated_by=self.u1)
 
@@ -216,15 +184,14 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
-            'ambulanceupdate_set': []
+            'created_at': date2iso(ambulance_call.created_at)
         }
-        self.assertCountEqual(serializer.data['ambulanceupdate_set'],
-                              [AmbulanceUpdateSerializer(ambulance_update_1).data,
-                               AmbulanceUpdateSerializer(ambulance_update_2).data,
-                               AmbulanceUpdateSerializer(ambulance_update_3).data])
-        result = serializer.data
-        result['ambulanceupdate_set'] = []
+        # self.assertCountEqual(serializer.data['ambulanceupdate_set'],
+        #                       [AmbulanceUpdateSerializer(ambulance_update_1).data,
+        #                        AmbulanceUpdateSerializer(ambulance_update_2).data,
+        #                        AmbulanceUpdateSerializer(ambulance_update_3).data])
+        # result = serializer.data
+        # result['ambulanceupdate_set'] = []
         self.assertDictEqual(result, expected)
 
         serializer = CallSerializer(c1)
@@ -235,15 +202,15 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
+            # 'number': c1.number,
+            # 'street': c1.street,
+            # 'unit': c1.unit,
+            # 'neighborhood': c1.neighborhood,
+            # 'city': c1.city,
+            # 'state': c1.state,
+            # 'zipcode': c1.zipcode,
+            # 'country': c1.country,
+            # 'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -274,15 +241,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -365,16 +323,14 @@ class TestCall(TestSetup):
 
         call = {
             'status': CallStatus.P.name,
-            'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
+            'priority': CallPriority.B.name
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
-        serializer.save(updated_by=self.u1)
+        call = serializer.save(updated_by=self.u1)
 
         # test CallSerializer
-        c1 = Call.objects.get(number='123', street='asdasdasd asd asd asdas')
+        c1 = Call.objects.get(id=call.id)
         serializer = CallSerializer(c1)
 
         result = {
@@ -382,15 +338,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -407,8 +354,6 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
         }
         serializer = CallSerializer(data=call)
         self.assertFalse(serializer.is_valid())
@@ -417,8 +362,6 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]
         }
         serializer = CallSerializer(data=call)
@@ -443,15 +386,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -476,8 +410,6 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -498,15 +430,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -533,8 +456,6 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'will fail',
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a1.id}]
         }
         serializer = CallSerializer(data=call)
@@ -550,7 +471,7 @@ class TestCall(TestSetup):
         # superuser first
 
         # Update call status
-        c = Call.objects.create(number="123", street="dunno", updated_by=self.u1)
+        c = Call.objects.create(updated_by=self.u1)
         user = self.u1
         status = CallStatus.S.name
 
@@ -568,15 +489,6 @@ class TestCall(TestSetup):
             'status': status,
             'details': c.details,
             'priority': c.priority,
-            'number': c.number,
-            'street': c.street,
-            'unit': c.unit,
-            'neighborhood': c.neighborhood,
-            'city': c.city,
-            'state': c.state,
-            'zipcode': c.zipcode,
-            'country': c.country,
-            'location': point2str(c.location),
             'created_at': date2iso(c.created_at),
             'pending_at': date2iso(c.pending_at),
             'started_at': date2iso(c.started_at),
@@ -589,81 +501,81 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # Update call street
-        street = 'new street'
-
-        serializer = CallSerializer(c, 
-                                    data={
-                                        'street': street,
-                                    }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
-         
-        # test
-        serializer = CallSerializer(c)
-        result = {
-            'id': c.id,
-            'status': c.status,
-            'details': c.details,
-            'priority': c.priority,
-            'number': c.number,
-            'street': street,
-            'unit': c.unit,
-            'neighborhood': c.neighborhood,
-            'city': c.city,
-            'state': c.state,
-            'zipcode': c.zipcode,
-            'country': c.country,
-            'location': point2str(c.location),
-            'created_at': date2iso(c.created_at),
-            'pending_at': date2iso(c.pending_at),
-            'started_at': date2iso(c.started_at),
-            'ended_at': date2iso(c.ended_at),
-            'comment': c.comment,    
-            'updated_by': c.updated_by.id,
-            'updated_on': date2iso(c.updated_on),
-            'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
-            'patient_set': PatientSerializer(many=True).data
-        }
-        self.assertDictEqual(serializer.data, result)
-
-        # Update call location
-        location = {'latitude': -2., 'longitude': 7.}
-
-        serializer = CallSerializer(c, 
-                                    data={
-                                        'location': location,
-                                    }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
-
-        # test
-        serializer = CallSerializer(c)
-        result = {
-            'id': c.id,
-            'status': c.status,
-            'details': c.details,
-            'priority': c.priority,
-            'number': c.number,
-            'street': c.street,
-            'unit': c.unit,
-            'neighborhood': c.neighborhood,
-            'city': c.city,
-            'state': c.state,
-            'zipcode': c.zipcode,
-            'country': c.country,
-            'location': point2str(location),
-            'created_at': date2iso(c.created_at),
-            'pending_at': date2iso(c.pending_at),
-            'started_at': date2iso(c.started_at),
-            'ended_at': date2iso(c.ended_at),
-            'comment': c.comment,
-            'updated_by': c.updated_by.id,
-            'updated_on': date2iso(c.updated_on),
-            'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
-            'patient_set': PatientSerializer(many=True).data
-        }
-        self.assertDictEqual(serializer.data, result)
+        # # Update call street
+        # street = 'new street'
+        #
+        # serializer = CallSerializer(c,
+        #                             data={
+        #                                 'street': street,
+        #                             }, partial=True)
+        # serializer.is_valid()
+        # serializer.save(updated_by=user)
+        #
+        # # test
+        # serializer = CallSerializer(c)
+        # result = {
+        #     'id': c.id,
+        #     'status': c.status,
+        #     'details': c.details,
+        #     'priority': c.priority,
+        #     'number': c.number,
+        #     'street': street,
+        #     'unit': c.unit,
+        #     'neighborhood': c.neighborhood,
+        #     'city': c.city,
+        #     'state': c.state,
+        #     'zipcode': c.zipcode,
+        #     'country': c.country,
+        #     'location': point2str(c.location),
+        #     'created_at': date2iso(c.created_at),
+        #     'pending_at': date2iso(c.pending_at),
+        #     'started_at': date2iso(c.started_at),
+        #     'ended_at': date2iso(c.ended_at),
+        #     'comment': c.comment,
+        #     'updated_by': c.updated_by.id,
+        #     'updated_on': date2iso(c.updated_on),
+        #     'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
+        #     'patient_set': PatientSerializer(many=True).data
+        # }
+        # self.assertDictEqual(serializer.data, result)
+        #
+        # # Update call location
+        # location = {'latitude': -2., 'longitude': 7.}
+        #
+        # serializer = CallSerializer(c,
+        #                             data={
+        #                                 'location': location,
+        #                             }, partial=True)
+        # serializer.is_valid()
+        # serializer.save(updated_by=user)
+        #
+        # # test
+        # serializer = CallSerializer(c)
+        # result = {
+        #     'id': c.id,
+        #     'status': c.status,
+        #     'details': c.details,
+        #     'priority': c.priority,
+        #     'number': c.number,
+        #     'street': c.street,
+        #     'unit': c.unit,
+        #     'neighborhood': c.neighborhood,
+        #     'city': c.city,
+        #     'state': c.state,
+        #     'zipcode': c.zipcode,
+        #     'country': c.country,
+        #     'location': point2str(location),
+        #     'created_at': date2iso(c.created_at),
+        #     'pending_at': date2iso(c.pending_at),
+        #     'started_at': date2iso(c.started_at),
+        #     'ended_at': date2iso(c.ended_at),
+        #     'comment': c.comment,
+        #     'updated_by': c.updated_by.id,
+        #     'updated_on': date2iso(c.updated_on),
+        #     'ambulancecall_set': AmbulanceCallSerializer(many=True).data,
+        #     'patient_set': PatientSerializer(many=True).data
+        # }
+        # self.assertDictEqual(serializer.data, result)
 
         # Need more tests for updates by regular authorized user
 
@@ -677,13 +589,11 @@ class TestCall(TestSetup):
                                {
                                    'status': CallStatus.P.name,
                                    'priority': CallPriority.B.name,
-                                   'number': '123',
-                                   'street': 'asdasdasd asd asd asdas',
                                    'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
                                    'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
                                })
         self.assertEqual(response.status_code, 201)
-        c1 = Call.objects.get(number='123')
+        c1 = Call.objects.get(status=CallStatus.P.name)
 
         serializer = CallSerializer(c1)
 
@@ -695,15 +605,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            'number': c1.number,
-            'street': c1.street,
-            'unit': c1.unit,
-            'neighborhood': c1.neighborhood,
-            'city': c1.city,
-            'state': c1.state,
-            'zipcode': c1.zipcode,
-            'country': c1.country,
-            'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
@@ -736,8 +637,6 @@ class TestCall(TestSetup):
                                {
                                    'status': CallStatus.P.name,
                                    'priority': CallPriority.B.name,
-                                   'number': '123',
-                                   'street': 'asdasdasd asd asd asdas',
                                    'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
                                    'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
                                })
