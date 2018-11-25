@@ -140,7 +140,9 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at)
+            'created_at': date2iso(ambulance_call.created_at),
+            'status': ambulance_call.status,
+            'waypoint_set': []
         }
         self.assertDictEqual(serializer.data, expected)
 

@@ -280,7 +280,7 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id',
+        fields = ['id', 'ambulance_id', 'status',
                   'created_at',
                   'waypoint_set']  # , 'ambulanceupdate_set']
         read_only_fields = ['created_at']
