@@ -665,6 +665,8 @@ class WaypointAddress(AddressModel):
 
 
 class WaypointType(Enum):
+    IL = 'IncidentLocation'
+    IA = 'IncidentAddress'
     WL = 'WaypointLocation'
     WA = 'WaypointAddress'
     HO = 'Hospital'
