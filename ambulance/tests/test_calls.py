@@ -13,7 +13,7 @@ import json
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
     AmbulanceUpdate, AmbulanceStatus, Waypoint, WaypointType, WaypointLocation
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
-    AmbulanceUpdateSerializer, WaypointSerializer
+    AmbulanceUpdateSerializer, WaypointSerializer, WaypointLocationSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -83,6 +83,7 @@ class TestCall(TestSetup):
 
         # serialization
         wpl_1 = WaypointLocation.objects.create()
+        wpl_1_serializer = WaypointLocationSerializer(wpl_1)
         wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False,
                                       type=WaypointType.IL.name, waypoint_location=wpl_1)
         serializer = WaypointSerializer(wp_1)
@@ -92,7 +93,7 @@ class TestCall(TestSetup):
             'visited': False,
             'type': WaypointType.IL.name,
             'waypoint_address': None,
-            'waypoint_location': wpl_1,
+            'waypoint_location': wpl_1_serializer.data,
             'hospital': None,
             'location': None
         }
