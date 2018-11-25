@@ -282,14 +282,14 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
     waypoint_set = WaypointSerializer(many=True, required=False)
-    # ambulanceupdate_set = AmbulanceUpdateSerializer(many=True, required=False)
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id',
+        fields = ['id',
+                  'ambulance_id',
                   'status',
                   'created_at',
-                  'waypoint_set']  # , 'ambulanceupdate_set']
+                  'waypoint_set']
         read_only_fields = ['created_at']
 
 
@@ -308,7 +308,6 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
-    # location = PointField(required=False)
 
     class Meta:
         model = Call
@@ -324,7 +323,7 @@ class CallSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         logger.debug('CALL::CREATE')
-        logger.debug(self.data)
+        logger.debug(self.initial_data)
         logger.debug(validated_data)
 
         # Get current user.
@@ -336,7 +335,6 @@ class CallSerializer(serializers.ModelSerializer):
         
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
         patient_set = validated_data.pop('patient_set', [])
-
 
         # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
@@ -385,8 +383,6 @@ class CallSerializer(serializers.ModelSerializer):
 
     def update(self, instance, data):
 
-        logger.debug('CALL::UPDATE')
-
         # Get current user.
         user = data['updated_by']
 
@@ -399,9 +395,6 @@ class CallSerializer(serializers.ModelSerializer):
         return super().update(instance, data)
 
     def validate(self, data):
-
-        logger.debug('CALL::VALIDATE')
-        logger.debug(self.initial_data)
 
         if 'status' in data and data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
             raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
