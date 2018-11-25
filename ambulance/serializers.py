@@ -260,6 +260,10 @@ class WaypointAddressSerializer(serializers.ModelSerializer):
 
 class WaypointSerializer(serializers.ModelSerializer):
 
+    waypoint_location = WaypointLocationSerializer(required=False)
+    waypoint_address = WaypointAddressSerializer(required=False)
+    location = LocationSerializer(required=False)
+
     class Meta:
         model = Waypoint
         fields = ['id',
