@@ -267,7 +267,7 @@ class TestCall(TestSetup):
 
         wpl_2 = WaypointAddress.objects.create(number='123', street='adsasd')
         wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, visited=True,
-                                       type=WaypointType.WA.name, waypoint_location=wpl_2)
+                                       type=WaypointType.WA.name, waypoint_address=wpl_2)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
