@@ -323,6 +323,8 @@ class CallSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
+        logger.debug('CALL::CREATE')
+
         # Get current user.
         user = validated_data['updated_by']
 
@@ -379,6 +381,8 @@ class CallSerializer(serializers.ModelSerializer):
         return call
 
     def update(self, instance, data):
+
+        logger.debug('CALL::UPDATE')
 
         # Get current user.
         user = data['updated_by']
