@@ -124,9 +124,14 @@ class TestCall(TestSetup):
             'location': None
         }
         self.assertDictEqual(serializer.data, result)
+        result = {
+            'id': wpl_1.id,
+            'location': point2str(wpl_1.location)
+        }
+        self.assertDictEqual(serializer.data['waypoint_location'], result)
 
         # serialization
-        wpl_2 = WaypointAddress.objects.create()
+        wpl_2 = WaypointAddress.objects.create(number='123', street='adsasd')
         wpl_2_serializer = WaypointAddressSerializer(wpl_2)
         wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True,
                                        type=WaypointType.IA.name, waypoint_address=wpl_2)
@@ -142,6 +147,19 @@ class TestCall(TestSetup):
             'location': None
         }
         self.assertDictEqual(serializer.data, result)
+        result = {
+            'id': wpl_2.id,
+            'number': '123',
+            'street': 'adsasd',
+            'unit': wpl_2.unit,
+            'neighborhood': wpl_2.neighborhood,
+            'city': wpl_2.city,
+            'state': wpl_2.state,
+            'zipcode': wpl_2.zipcode,
+            'country': wpl_2.country,
+            'location': point2str(wpl_2.location)
+        }
+        self.assertDictEqual(serializer.data['waypoint_address'], result)
 
     def test_call_serializer(self):
 
@@ -246,6 +264,10 @@ class TestCall(TestSetup):
         wpl_1 = WaypointLocation.objects.create()
         wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, visited=False,
                                        type=WaypointType.IL.name, waypoint_location=wpl_1)
+
+        wpl_2 = WaypointAddress.objects.create(number='123', street='adsasd')
+        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, visited=True,
+                                       type=WaypointType.WA.name, waypoint_location=wpl_2)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
