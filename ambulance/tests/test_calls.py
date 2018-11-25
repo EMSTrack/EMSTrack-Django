@@ -568,8 +568,8 @@ class TestCall(TestSetup):
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
-        logger.debug(expected_ambulancecall_set[0])
-        logger.debug(expected_ambulancecall_set[1])
+        # logger.debug(expected_ambulancecall_set[0])
+        # logger.debug(expected_ambulancecall_set[1])
 
         self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set']), 2)
         self.assertEqual(len(expected_ambulancecall_set[1]['waypoint_set']), 1)
@@ -757,7 +757,43 @@ class TestCall(TestSetup):
                                {
                                    'status': CallStatus.P.name,
                                    'priority': CallPriority.B.name,
-                                   'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+                                   'ambulancecall_set': [
+                                       {
+                                           'ambulance_id': self.a1.id,
+                                           'waypoint_set': [
+                                               {
+                                                   'order': 0,
+                                                   'type': WaypointType.IA.name,
+                                                   'waypoint_address': {
+                                                       'number': '123',
+                                                       'street': 'some street'
+                                                   }
+                                               },
+                                               {
+                                                   'order': 1,
+                                                   'type': WaypointType.WL.name,
+                                                   'visited': True,
+                                                   'waypoint_location': {
+                                                       'logitude': -110.54,
+                                                       'latitude': 35.75
+                                                   }
+                                               }
+                                           ]
+                                       },
+                                       {
+                                           'ambulance_id': self.a2.id,
+                                           'waypoint_set': [
+                                               {
+                                                   'order': 0,
+                                                   'type': WaypointType.WA.name,
+                                                   'waypoint_address': {
+                                                       'number': '321',
+                                                       'street': 'another street'
+                                                   }
+                                               }
+                                           ]
+                                       }
+                                   ],
                                    'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
                                })
         self.assertEqual(response.status_code, 201)
