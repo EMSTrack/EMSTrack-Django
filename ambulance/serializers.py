@@ -313,8 +313,7 @@ class CallSerializer(serializers.ModelSerializer):
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
                   'ambulancecall_set',
-                  'patient_set',
-                  'waypoint_set']
+                  'patient_set']
         read_only_fields = ['created_at', 'updated_by']
 
     def create(self, validated_data):
