@@ -499,6 +499,14 @@ class TestCall(TestSetup):
                                 'number': '123',
                                 'street': 'some street'
                             }
+                        },
+                        {
+                            'order': 1,
+                            'type': WaypointType.WL.name,
+                            'waypoint_location': {
+                                'logitude': -110.54,
+                                'latitude': 35.75
+                            }
                         }
                     ]
                 },
