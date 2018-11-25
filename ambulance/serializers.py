@@ -324,6 +324,7 @@ class CallSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         logger.debug('CALL::CREATE')
+        logger.debug(self.data)
         logger.debug(validated_data)
 
         # Get current user.
