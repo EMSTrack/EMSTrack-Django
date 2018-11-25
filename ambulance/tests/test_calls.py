@@ -88,7 +88,6 @@ class TestCall(TestSetup):
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
-            'ambulancecall_id': ac_1.id,
             'order': 0,
             'visited': False,
             'type': WaypointType.IL.name,
