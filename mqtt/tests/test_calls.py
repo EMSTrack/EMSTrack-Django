@@ -546,9 +546,19 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': ambulance_id}],
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': ambulance_id,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.IA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                }
+                ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
@@ -735,9 +745,31 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': ambulance_id1}, {'ambulance_id': ambulance_id2}],
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': ambulance_id1,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.IA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                },
+                {
+                    'ambulance_id': ambulance_id2,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.WA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                }
+                ],
+            # 'ambulancecall_set': [{'ambulance_id': ambulance_id1}, {'ambulance_id': ambulance_id2}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
@@ -1210,9 +1242,33 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': ambulance_id1}, {'ambulance_id': ambulance_id2}],
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': ambulance_id1,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.IA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                },
+                {
+                    'ambulance_id': ambulance_id2,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.WA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                }
+                ],
+            # 'number': '123',
+            # 'street': 'asdasdasd asd asd asdas',
+            # 'ambulancecall_set': [{'ambulance_id': ambulance_id1}, {'ambulance_id': ambulance_id2}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
