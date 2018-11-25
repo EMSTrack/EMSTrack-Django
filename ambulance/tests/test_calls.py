@@ -103,15 +103,15 @@ class TestCall(TestSetup):
         wpl_2 = WaypointAddress.objects.create()
         wpl_2_serializer = WaypointAddressSerializer(wpl_2)
         wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True,
-                                       type=WaypointType.IA.name, waypoint_location=wpl_2)
+                                       type=WaypointType.IA.name, waypoint_address=wpl_2)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
             'order': 1,
             'visited': True,
             'type': WaypointType.IA.name,
-            'waypoint_address': None,
-            'waypoint_location': wpl_2_serializer.data,
+            'waypoint_address': wpl_2_serializer.data,
+            'waypoint_location': None,
             'hospital': None,
             'location': None
         }
