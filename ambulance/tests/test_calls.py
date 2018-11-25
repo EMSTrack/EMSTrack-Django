@@ -73,6 +73,16 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
+    def test_waypoint_serializers(self):
+
+        wpl_1 = WaypointLocation.objects.create()
+        serializer = WaypointLocationSerializer(wpl_1)
+        result = {
+            'id': wpl_1.id,
+            'location': point2str(wpl_1.location)
+        }
+        self.assertDictEqual(serializer.data, result)
+
     def test_waypoint_serializer(self):
 
         # create call
