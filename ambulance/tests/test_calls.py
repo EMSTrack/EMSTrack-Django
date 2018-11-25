@@ -799,8 +799,8 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'ambulancecall_set': json.dumps([{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]),
-            'patient_set': json.dumps([{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}])
+            'ambulancecall_set': [],
+            'patient_set': []
             }
         logger.debug(data)
         response = client.post('/api/call/', data)
