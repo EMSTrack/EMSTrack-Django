@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus
+    AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, WaypointType
 from ambulance.serializers import CallSerializer
 from emstrack.tests.util import point2str
 from hospital.models import Hospital, \
@@ -94,9 +94,19 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'number': '123',
-            'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': ambulance_id}],
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': ambulance_id,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.IA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                }
+                ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
@@ -319,7 +329,19 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
-            'ambulancecall_set': [{'ambulance_id': ambulance_id}],
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': ambulance_id,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.IA.name,
+                            'number': '123',
+                            'street': 'asdasdasd asd asd asdas'
+                        }
+                    ]
+                }
+                ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         serializer = CallSerializer(data=call)
