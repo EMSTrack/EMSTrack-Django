@@ -324,6 +324,7 @@ class CallSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         logger.debug('CALL::CREATE')
+        logger.debug(validated_data)
 
         # Get current user.
         user = validated_data['updated_by']
@@ -335,8 +336,6 @@ class CallSerializer(serializers.ModelSerializer):
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
         patient_set = validated_data.pop('patient_set', [])
 
-        logger.debug(ambulancecall_set)
-        logger.debug(patient_set)
 
         # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
