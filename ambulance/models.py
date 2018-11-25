@@ -253,6 +253,49 @@ class Ambulance(UpdatedByModel):
                                                self.updated_on)
 
 
+class AmbulanceUpdate(models.Model):
+
+    # ambulance
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    # # ambulance call
+    # # TODO: Is it possible to enforce that ambulance_call.ambulance == ambulance?
+    # ambulance_call = models.ForeignKey(AmbulanceCall,
+    #                                    on_delete=models.SET_NULL,
+    #                                    null=True)
+
+    # ambulance status
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              default=AmbulanceStatus.UK.name)
+
+    # location
+    orientation = models.FloatField(default=0.0)
+    location = models.PointField(srid=4326, default=defaults['location'])
+
+    # timestamp, indexed
+    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
+
+    # comment
+    comment = models.CharField(max_length=254, null=True, blank=True)
+
+    # updated by
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=['ambulance', 'timestamp'],
+                name='ambulance_timestamp_idx',
+            ),
+        ]
+
+
 # Call related models
 
 class CallPriority(Enum):
@@ -302,8 +345,7 @@ class CallPublishMixin:
 
         if publish:
             if remove:
-                # This makes sure that if message arrives after retention
-                # clearing message that it will not be retained
+                # This makes sure that it will not be retained
                 self.publish(retain=False)
             else:
                 self.publish()
@@ -313,7 +355,6 @@ class CallPublishMixin:
 
 
 class Call(CallPublishMixin,
-           AddressModel,
            UpdatedByModel):
 
     # status
@@ -357,9 +398,6 @@ class Call(CallPublishMixin,
             # remove topic from mqtt server
             remove = True
 
-            # prevent publication
-            # publish = False
-
         elif self.status == CallStatus.S.name:
 
             # timestamp
@@ -375,17 +413,17 @@ class Call(CallPublishMixin,
                      publish=publish,
                      remove=remove)
 
-    def publish(self, *args, **kwargs):
+    def publish(self, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call(self, *args, **kwargs)
+        SingletonPublishClient().publish_call(self, **kwargs)
 
-    def remove(self, *args, **kwargs):
+    def remove(self):
 
         # remove topic from mqtt server
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_call(self, *args, **kwargs)
+        SingletonPublishClient().remove_call(self)
 
     def abort(self):
 
@@ -415,7 +453,7 @@ class Call(CallPublishMixin,
             self.save()
 
     def __str__(self):
-        return "{} ({})".format(self.location, self.priority)
+        return "{} ({})".format(self.status, self.priority)
 
 
 class AmbulanceCallStatus(Enum):
@@ -541,67 +579,23 @@ class AmbulanceCall(CallPublishMixin,
                                     ambulance=self.ambulance, created_at=self.created_at)
         copy.save()
 
-
-    def publish(self, *args, **kwargs):
+    def publish(self, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call_status(self, *args, **kwargs)
+        SingletonPublishClient().publish_call_status(self, **kwargs)
 
-    def remove(self, *args, **kwargs):
+    def remove(self):
 
         # remove from mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_call_status(self, *args, **kwargs)
+        SingletonPublishClient().remove_call_status(self)
 
     class Meta:
         unique_together = ('call', 'ambulance')
 
 
-class AmbulanceUpdate(models.Model):
-
-    # ambulance
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
-
-    # ambulance call
-    # TODO: Is it possible to enforce that ambulance_call.ambulance == ambulance?
-    ambulance_call = models.ForeignKey(AmbulanceCall,
-                                       on_delete=models.SET_NULL,
-                                       null=True)
-
-    # ambulance status
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
-                              default=AmbulanceStatus.UK.name)
-
-    # location
-    orientation = models.FloatField(default=0.0)
-    location = models.PointField(srid=4326, default=defaults['location'])
-
-    # timestamp, indexed
-    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
-
-    # comment
-    comment = models.CharField(max_length=254, null=True, blank=True)
-
-    # updated by
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        indexes = [
-            models.Index(
-                fields=['ambulance', 'timestamp'],
-                name='ambulance_timestamp_idx',
-            ),
-        ]
-
-
-# Patient might be expanded in the future
+# Patient, might be expanded in the future
 
 class Patient(CallPublishMixin,
               models.Model):
@@ -639,6 +633,7 @@ LocationTypeOrder = [
 
 
 class Location(AddressModel, UpdatedByModel):
+
     # location name
     name = models.CharField(max_length=254, unique=True)
 
@@ -657,6 +652,62 @@ class Location(AddressModel, UpdatedByModel):
 
     def __str__(self):
         return "{} @{} ({})".format(self.name, self.location, self.comment)
+
+
+# Waypoint related models
+
+class WaypointLocation(models.Model):
+    location = models.PointField(srid=4326, default=defaults['location'])
+
+
+class WaypointAddress(AddressModel):
+    pass
+
+
+class WaypointType(Enum):
+    WL = 'WaypointLocation'
+    WA = 'WaypointAddress'
+    HO = 'Hospital'
+    LO = 'Location'
+
+
+class Waypoint(models.Model):
+    # call
+    ambulance_call = models.ForeignKey(AmbulanceCall,
+                                       on_delete=models.CASCADE)
+
+    # order
+    order = models.PositiveIntegerField()
+
+    # visited
+    visited = models.BooleanField(default=False)
+
+    # Type
+    WAYPOINT_TYPE_CHOICES = \
+        [(m.name, m.value) for m in WaypointType]
+    type = models.CharField(max_length=2,
+                            choices=WAYPOINT_TYPE_CHOICES,
+                            default=WaypointType.W.name)
+
+    # WaypointAddress
+    waypoint_address = models.ForeignKey(WaypointAddress,
+                                         on_delete=models.CASCADE,
+                                         blank=True, null=True)
+
+    # WaypointLocation
+    waypoint_location = models.ForeignKey(WaypointLocation,
+                                          on_delete=models.CASCADE,
+                                          blank=True, null=True)
+
+    # Hospital
+    hospital = models.ForeignKey('hospital.Hospital',
+                                 on_delete=models.CASCADE,
+                                 blank=True, null=True)
+
+    # Location
+    location = models.ForeignKey(Location,
+                                 on_delete=models.CASCADE,
+                                 blank=True, null=True)
 
 
 # THOSE NEED REVIEWING

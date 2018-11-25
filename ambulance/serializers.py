@@ -7,7 +7,8 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, WaypointAddress, \
+    WaypointLocation, Waypoint
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -237,18 +238,51 @@ class LocationSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+# Waypoint Serializers
+
+class WaypointLocationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WaypointLocation
+        fields = ['id',
+                  'location']
+
+
+class WaypointAddressSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = WaypointAddress
+        fields = ['id',
+                  'number', 'street', 'unit', 'neighborhood',
+                  'city', 'state', 'zipcode', 'country',
+                  'location']
+
+
+class WaypointSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Waypoint
+        fields = ['id', 'call_id',
+                  'order', 'visited',
+                  'type',
+                  'waypoint_address', 'waypoint_location',
+                  'hospital', 'location',
+                  'location']
+
+
 # AmbulanceCall Serializer
 
 class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
-    ambulanceupdate_set = AmbulanceUpdateSerializer(many=True, required=False)
+    waypoint_set = WaypointSerializer(many=True, required=False)
+    # ambulanceupdate_set = AmbulanceUpdateSerializer(many=True, required=False)
 
     class Meta:
         model = AmbulanceCall
         fields = ['id', 'ambulance_id',
                   'created_at',
-                  'ambulanceupdate_set']
+                  'waypoint_set']  # , 'ambulanceupdate_set']
         read_only_fields = ['created_at']
 
 
@@ -267,18 +301,20 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
-    location = PointField(required=False)
+    # location = PointField(required=False)
 
     class Meta:
         model = Call
         fields = ['id', 'status', 'details', 'priority',
-                  'number', 'street', 'unit', 'neighborhood',
-                  'city', 'state', 'zipcode', 'country',
-                  'location',
+                  # 'number', 'street', 'unit', 'neighborhood',
+                  # 'city', 'state', 'zipcode', 'country',
+                  # 'location',
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
-                  'ambulancecall_set', 'patient_set']
+                  'ambulancecall_set',
+                  'patient_set',
+                  'waypoint_set']
         read_only_fields = ['created_at', 'updated_by']
 
     def create(self, validated_data):
