@@ -11,9 +11,9 @@ from io import BytesIO
 import json
 
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
-    AmbulanceUpdate, AmbulanceStatus, Waypoint, WaypointType, WaypointLocation
+    AmbulanceUpdate, AmbulanceStatus, Waypoint, WaypointType, WaypointLocation, WaypointAddress
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
-    AmbulanceUpdateSerializer, WaypointSerializer, WaypointLocationSerializer
+    AmbulanceUpdateSerializer, WaypointSerializer, WaypointLocationSerializer, WaypointAddressSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -85,7 +85,7 @@ class TestCall(TestSetup):
         wpl_1 = WaypointLocation.objects.create()
         wpl_1_serializer = WaypointLocationSerializer(wpl_1)
         wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False,
-                                      type=WaypointType.IL.name, waypoint_location=wpl_1)
+                                       type=WaypointType.IL.name, waypoint_location=wpl_1)
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
@@ -94,6 +94,24 @@ class TestCall(TestSetup):
             'type': WaypointType.IL.name,
             'waypoint_address': None,
             'waypoint_location': wpl_1_serializer.data,
+            'hospital': None,
+            'location': None
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # serialization
+        wpl_2 = WaypointAddress.objects.create()
+        wpl_2_serializer = WaypointAddressSerializer(wpl_2)
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True,
+                                       type=WaypointType.IA.name, waypoint_location=wpl_2)
+        serializer = WaypointSerializer(wp_2)
+        result = {
+            'id': wp_2.id,
+            'order': 1,
+            'visited': True,
+            'type': WaypointType.IA.name,
+            'waypoint_address': None,
+            'waypoint_location': wpl_2_serializer.data,
             'hospital': None,
             'location': None
         }
