@@ -560,13 +560,16 @@ class TestCall(TestSetup):
         }
 
         result = serializer.data
-        logger.debug(result['ambulancecall_set'])
-        logger.debug(expected['ambulancecall_set'])
+        # logger.debug(result['ambulancecall_set'])
+        # logger.debug(expected['ambulancecall_set'])
         self.assertCountEqual(result['ambulancecall_set'],
                               expected['ambulancecall_set'])
         expected['ambulancecall_set'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
+
+        logger.debug(expected_ambulancecall_set[0])
+        logger.debug(expected_ambulancecall_set[1])
 
         self.assertEqual(len(expected_ambulancecall_set[0]), 2)
         self.assertEqual(len(expected_ambulancecall_set[1]), 1)
