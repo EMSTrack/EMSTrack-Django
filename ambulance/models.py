@@ -688,8 +688,7 @@ class Waypoint(models.Model):
     WAYPOINT_TYPE_CHOICES = \
         [(m.name, m.value) for m in WaypointType]
     type = models.CharField(max_length=2,
-                            choices=WAYPOINT_TYPE_CHOICES,
-                            default=WaypointType.W.name)
+                            choices=WAYPOINT_TYPE_CHOICES)
 
     # WaypointAddress
     waypoint_address = models.ForeignKey(WaypointAddress,
