@@ -796,12 +796,12 @@ class TestCall(TestSetup):
         #     }
         # ],
 
-        data = json.dumps({
+        data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
-            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
-            })
+            'ambulancecall_set': json.dumps([{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}]),
+            'patient_set': json.dumps([{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}])
+            }
         logger.debug(data)
         response = client.post('/api/call/', data)
         logger.debug(response.content)
