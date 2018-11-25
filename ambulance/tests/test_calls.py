@@ -216,6 +216,36 @@ class TestCall(TestSetup):
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
+        # Add waypoints to ambulancecalls
+        wpl_1 = WaypointLocation.objects.create()
+        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, visited=False,
+                                       type=WaypointType.IL.name, waypoint_location=wpl_1)
+
+        serializer = CallSerializer(c1)
+        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
+        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
+
+        expected = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecall_set': [],
+            'patient_set': []
+        }
+        self.assertCountEqual(serializer.data['ambulancecall_set'],
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        result = serializer.data
+        result['ambulancecall_set'] = []
+        self.assertDictEqual(result, expected)
+
         # create ambulance update to use in event
         ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
                                                             status=AmbulanceStatus.PB.name,
