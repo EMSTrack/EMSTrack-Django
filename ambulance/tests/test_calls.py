@@ -463,7 +463,7 @@ class TestCall(TestSetup):
         self.assertRaises(IntegrityError, serializer.save, updated_by=self.u1)
 
         # make sure no call was created
-        self.assertRaises(Call.DoesNotExist, Call.objects.get, street='will fail')
+        self.assertRaises(Call.DoesNotExist, Call.objects.get, status=CallStatus.S.name, priority=CallPriority.B.name)
 
     # THESE ARE FAILING!
     def _test_call_update_serializer(self):
