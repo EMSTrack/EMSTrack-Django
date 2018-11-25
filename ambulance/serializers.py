@@ -307,7 +307,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 class CallSerializer(serializers.ModelSerializer):
 
-    patient_set = PatientSerializer(many=True, required=True, read_only=False)
+    patient_set = PatientSerializer(many=True, required=False, read_only=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
 
     class Meta:
