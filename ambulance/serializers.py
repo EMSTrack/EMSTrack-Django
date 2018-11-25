@@ -8,7 +8,7 @@ from drf_extra_fields.geo_fields import PointField
 from login.models import Client
 from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, WaypointAddress, \
-    WaypointLocation, Waypoint
+    WaypointLocation, Waypoint, WaypointType
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -346,8 +346,26 @@ class CallSerializer(serializers.ModelSerializer):
             # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
-                obj = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
-                obj.save(publish=False)
+                waypoint_set = ambulancecall.pop('waypoint_set', [])
+                ambulance_call = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
+                ambulance_call.save(publish=False)
+                # add waypoints
+                for waypoint in waypoint_set:
+                    _type = waypoint.get('type')
+                    if _type == WaypointType.IL.name or _type == WaypointType.WL.name:
+                        waypoint_location = waypoint.pop('waypoint_location',{})
+                        waypoint['waypoint_location'] = WaypointLocation.object.create(**waypoint_location)
+                    elif _type == WaypointType.IA.name or _type == WaypointType.WA.name:
+                        waypoint_address = waypoint.pop('waypoint_address',{})
+                        waypoint['waypoint_address'] = WaypointLocation.object.create(**waypoint_address)
+                    elif _type == WaypointType.HO.name:
+                        # TODO: Handle hospitals
+                        pass
+                    elif _type == WaypointType.LO.name:
+                        # TODO: Handle locations
+                        pass
+                    obj = Waypoint(ambulance_call=ambulance_call, **waypoint)
+                    obj.save()
 
             # publish call to mqtt only after all includes have succeeded
             call.publish()
