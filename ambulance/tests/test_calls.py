@@ -800,23 +800,16 @@ class TestCall(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        logger.debug(data)
         response = client.post('/api/call/', data, content_type='application/json')
-        logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
-        c1 = Call.objects.get(status=CallStatus.P.name)
 
+        c1 = Call.objects.get(status=CallStatus.P.name)
         serializer = CallSerializer(c1)
 
         expected_patient_set = PatientSerializer(Patient.objects.filter(call_id=c1.id), many=True).data
         expected_ambulancecall_set = AmbulanceCallSerializer(AmbulanceCall.objects.filter(call_id=c1.id), many=True).data
 
-        logger.debug(serializer.data)
-        logger.debug(expected_patient_set)
-        logger.debug(expected_ambulancecall_set)
-
         self.assertEqual(len(expected_patient_set), 2)
-
         self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set']), 2)
         self.assertEqual(len(expected_ambulancecall_set[1]['waypoint_set']), 1)
 
@@ -847,13 +840,13 @@ class TestCall(TestSetup):
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
 
-
         # logout
         client.logout()
 
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
+        # Will fail for anyone not superuser
         response = client.post('/api/call/',
                                {
                                    'status': CallStatus.P.name,
