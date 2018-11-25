@@ -491,7 +491,16 @@ class TestCall(TestSetup):
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
-                    'waypoint_set': []
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.IA.name,
+                            'waypoint_address': {
+                                'number': '123',
+                                'street': 'some street'
+                            }
+                        }
+                    ]
                 },
                 {
                     'ambulance_id': self.a2.id,
