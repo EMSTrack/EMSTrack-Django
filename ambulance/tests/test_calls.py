@@ -503,6 +503,7 @@ class TestCall(TestSetup):
                         {
                             'order': 1,
                             'type': WaypointType.WL.name,
+                            'visited': True,
                             'waypoint_location': {
                                 'logitude': -110.54,
                                 'latitude': 35.75
@@ -512,7 +513,16 @@ class TestCall(TestSetup):
                 },
                 {
                     'ambulance_id': self.a2.id,
-                    'waypoint_set': []
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'type': WaypointType.WA.name,
+                            'waypoint_address': {
+                                'number': '321',
+                                'street': 'another street'
+                            }
+                        }
+                    ]
                 }
             ]
         }
@@ -557,6 +567,9 @@ class TestCall(TestSetup):
         expected['ambulancecall_set'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
+
+        self.assertEqual(len(expected_ambulancecall_set[0]), 2)
+        self.assertEqual(len(expected_ambulancecall_set[1]), 1)
 
         # Pending Call with ambulancecall_set and patient_set
         call = {
