@@ -401,7 +401,7 @@ class CallSerializer(serializers.ModelSerializer):
     def validate(self, data):
 
         logger.debug('CALL::VALIDATE')
-        logger.debug(self.data)
+        logger.debug(self.initial_data)
 
         if 'status' in data and data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
             raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
