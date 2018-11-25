@@ -803,7 +803,7 @@ class TestCall(TestSetup):
                                    'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
                                    'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
                                })
-        logger.debug(response)
+        logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
         c1 = Call.objects.get(status=CallStatus.P.name)
 
