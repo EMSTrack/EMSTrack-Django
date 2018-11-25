@@ -242,6 +242,8 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class WaypointLocationSerializer(serializers.ModelSerializer):
 
+    location = PointField(required=False)
+
     class Meta:
         model = WaypointLocation
         fields = ['id',
@@ -249,6 +251,8 @@ class WaypointLocationSerializer(serializers.ModelSerializer):
 
 
 class WaypointAddressSerializer(serializers.ModelSerializer):
+
+    location = PointField(required=False)
 
     class Meta:
         model = WaypointAddress
