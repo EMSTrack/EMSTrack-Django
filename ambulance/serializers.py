@@ -260,14 +260,14 @@ class WaypointAddressSerializer(serializers.ModelSerializer):
 
 class WaypointSerializer(serializers.ModelSerializer):
 
+    ambulancecall_id = serializers.PrimaryKeyRelatedField(queryset=AmbulanceCall.objects.all(), read_only=False)
+
     class Meta:
         model = Waypoint
-        fields = ['id', 'call_id',
-                  'order', 'visited',
-                  'type',
+        fields = ['id', 'ambulancecall_id',
+                  'order', 'visited', 'type',
                   'waypoint_address', 'waypoint_location',
-                  'hospital', 'location',
-                  'location']
+                  'hospital', 'location']
 
 
 # AmbulanceCall Serializer
@@ -280,7 +280,8 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id', 'status',
+        fields = ['id', 'ambulance_id',
+                  'status',
                   'created_at',
                   'waypoint_set']  # , 'ambulanceupdate_set']
         read_only_fields = ['created_at']

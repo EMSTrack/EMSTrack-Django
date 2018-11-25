@@ -11,9 +11,9 @@ from io import BytesIO
 import json
 
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
-    AmbulanceUpdate, AmbulanceStatus
+    AmbulanceUpdate, AmbulanceStatus, Waypoint, WaypointType, WaypointLocation
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
-    AmbulanceUpdateSerializer
+    AmbulanceUpdateSerializer, WaypointSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -70,6 +70,32 @@ class TestCall(TestSetup):
             'id': p1.id,
             'name': 'Maria',
             'age': None
+        }
+        self.assertDictEqual(serializer.data, result)
+
+    def test_waypoint_serializer(self):
+
+        # create call
+        c_1 = Call.objects.create(updated_by=self.u1)
+
+        # create ambulance call
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
+
+        # serialization
+        wpl_1 = WaypointLocation.create()
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False,
+                                      type=WaypointType.IL.name, waypoint_location=wpl_1)
+        serializer = WaypointSerializer(wp_1)
+        result = {
+            'id': wp_1.id,
+            'ambulancecall_id': ac_1.id,
+            'order': 0,
+            'visited': False,
+            'type': WaypointType.IL.name,
+            'waypoint_address': None,
+            'waypoint_location': wpl_1,
+            'hospital': None,
+            'location': None
         }
         self.assertDictEqual(serializer.data, result)
 
