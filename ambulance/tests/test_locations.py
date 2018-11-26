@@ -72,7 +72,7 @@ class TestLocationGetList(TestSetup):
             'updated_on': date2iso(l1.updated_on)
         }
         result = serializer.data
-        self.asserEqual(result, expected)
+        self.assertEqual(result, expected)
         
         json = {
             'type': LocationType.w.name,
@@ -108,7 +108,7 @@ class TestLocationGetList(TestSetup):
             'updated_on': date2iso(l2.updated_on)
         }
         result = serializer.data
-        self.asserEqual(result, expected)
+        self.assertEqual(result, expected)
 
     def test_location_get_list_viewset(self):
         # instantiate client
