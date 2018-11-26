@@ -622,56 +622,45 @@ class Patient(CallPublishMixin,
 class LocationType(Enum):
     b = 'Base'
     a = 'AED'
+    i = 'Incident'
+    h = 'Hospital'
+    w = 'Waypoint'
     o = 'Other'
 
 
 LocationTypeOrder = [
+    LocationType.h,
     LocationType.b,
     LocationType.a,
-    LocationType.o
+    LocationType.o,
+    LocationType.i,
+    LocationType.w
 ]
 
 
-class Location(AddressModel, UpdatedByModel):
+class Location(AddressModel,
+               UpdatedByModel):
 
     # location name
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(max_length=254, blank=True, null=True)
 
     # location type
     LOCATION_TYPE_CHOICES = \
         [(m.name, m.value) for m in LocationType]
     type = models.CharField(max_length=1,
-                            choices=LOCATION_TYPE_CHOICES,
-                            default=LocationType.o.name)
+                            choices=LOCATION_TYPE_CHOICES)
 
-    # location
-    location = models.PointField(srid=4326, null=True)
+    # location: already in address
+    # location = models.PointField(srid=4326, null=True)
 
     def get_absolute_url(self):
         return reverse('ambulance:location_detail', kwargs={'pk': self.id})
-
+e
     def __str__(self):
         return "{} @{} ({})".format(self.name, self.location, self.comment)
 
 
 # Waypoint related models
-
-class WaypointLocation(models.Model):
-    location = models.PointField(srid=4326, default=defaults['location'])
-
-
-class WaypointAddress(AddressModel):
-    pass
-
-
-class WaypointType(Enum):
-    IL = 'IncidentLocation'
-    IA = 'IncidentAddress'
-    WL = 'WaypointLocation'
-    WA = 'WaypointAddress'
-    HO = 'Hospital'
-    LO = 'Location'
-
 
 class Waypoint(models.Model):
     # call
@@ -683,27 +672,6 @@ class Waypoint(models.Model):
 
     # visited
     visited = models.BooleanField(default=False)
-
-    # Type
-    WAYPOINT_TYPE_CHOICES = \
-        [(m.name, m.value) for m in WaypointType]
-    type = models.CharField(max_length=2,
-                            choices=WAYPOINT_TYPE_CHOICES)
-
-    # WaypointAddress
-    waypoint_address = models.ForeignKey(WaypointAddress,
-                                         on_delete=models.CASCADE,
-                                         blank=True, null=True)
-
-    # WaypointLocation
-    waypoint_location = models.ForeignKey(WaypointLocation,
-                                          on_delete=models.CASCADE,
-                                          blank=True, null=True)
-
-    # Hospital
-    hospital = models.ForeignKey('hospital.Hospital',
-                                 on_delete=models.CASCADE,
-                                 blank=True, null=True)
 
     # Location
     location = models.ForeignKey(Location,

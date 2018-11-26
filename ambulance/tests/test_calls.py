@@ -11,9 +11,9 @@ from io import BytesIO
 import json
 
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
-    AmbulanceUpdate, AmbulanceStatus, Waypoint, WaypointType, WaypointLocation, WaypointAddress
+    AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
-    AmbulanceUpdateSerializer, WaypointSerializer, WaypointLocationSerializer, WaypointAddressSerializer
+    AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -108,47 +108,52 @@ class TestCall(TestSetup):
         ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
 
         # serialization
-        wpl_1 = WaypointLocation.objects.create()
-        wpl_1_serializer = WaypointLocationSerializer(wpl_1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False,
-                                       type=WaypointType.IL.name, waypoint_location=wpl_1)
+        wpl_1 = Location.objects.create(type=LocationType.i.name)
+        wpl_1_serializer = LocationSerializer(wpl_1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False, location=wpl_1)
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
             'order': 0,
             'visited': False,
-            'type': WaypointType.IL.name,
-            'waypoint_address': None,
-            'waypoint_location': wpl_1_serializer.data,
-            'hospital': None,
-            'location': None
+            'location': wpl_1_serializer.data
         }
         self.assertDictEqual(serializer.data, result)
         result = {
             'id': wpl_1.id,
-            'location': point2str(wpl_1.location)
+            'type': LocationType.i.name,
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by,
+            'updated_on': wpl_1.updated_on
         }
-        self.assertDictEqual(serializer.data['waypoint_location'], result)
+        self.assertDictEqual(serializer.data['location'], result)
 
         # serialization
-        wpl_2 = WaypointAddress.objects.create(number='123', street='adsasd')
-        wpl_2_serializer = WaypointAddressSerializer(wpl_2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True,
-                                       type=WaypointType.IA.name, waypoint_address=wpl_2)
+        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd')
+        wpl_2_serializer = LocationSerializer(wpl_2)
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True, location=wpl_2)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
             'order': 1,
             'visited': True,
-            'type': WaypointType.IA.name,
-            'waypoint_address': wpl_2_serializer.data,
-            'waypoint_location': None,
-            'hospital': None,
-            'location': None
+            'location': wpl_2_serializer.data
         }
         self.assertDictEqual(serializer.data, result)
         result = {
             'id': wpl_2.id,
+            'type': LocationType.h.name,
+            'location': point2str(wpl_2.location),
             'number': '123',
             'street': 'adsasd',
             'unit': wpl_2.unit,
@@ -157,9 +162,12 @@ class TestCall(TestSetup):
             'state': wpl_2.state,
             'zipcode': wpl_2.zipcode,
             'country': wpl_2.country,
-            'location': point2str(wpl_2.location)
+            'name': wpl_2.name,
+            'comment': wpl_2.comment,
+            'updated_by': wpl_2.updated_by,
+            'updated_on': wpl_2.updated_on
         }
-        self.assertDictEqual(serializer.data['waypoint_address'], result)
+        self.assertDictEqual(serializer.data['location'], result)
 
     def test_call_serializer(self):
 
@@ -261,13 +269,11 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         # Add waypoints to ambulancecalls
-        wpl_1 = WaypointLocation.objects.create()
-        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, visited=False,
-                                       type=WaypointType.IL.name, waypoint_location=wpl_1)
+        wpl_1 = Location.objects.create(type=LocationType.i.name)
+        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, visited=False, location=wpl_1)
 
-        wpl_2 = WaypointAddress.objects.create(number='123', street='adsasd')
-        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, visited=True,
-                                       type=WaypointType.WA.name, waypoint_address=wpl_2)
+        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd')
+        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, visited=True, location=wpl_2)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
@@ -497,19 +503,21 @@ class TestCall(TestSetup):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'waypoint_address': {
+                            'location': {
+                                'type': LocationType.i.name,
                                 'number': '123',
                                 'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
-                            'type': WaypointType.WL.name,
                             'visited': True,
-                            'waypoint_location': {
-                                'logitude': -110.54,
-                                'latitude': 35.75
+                            'location': {
+                                'type': LocationType.w.name,
+                                'location': {
+                                    'logitude': -110.54,
+                                    'latitude': 35.75
+                                }
                             }
                         }
                     ]
@@ -519,8 +527,8 @@ class TestCall(TestSetup):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.WA.name,
-                            'waypoint_address': {
+                            'location': {
+                                'type': LocationType.i.name,
                                 'number': '321',
                                 'street': 'another street'
                             }
@@ -767,17 +775,17 @@ class TestCall(TestSetup):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'waypoint_address': {
+                            'location': {
+                                'type': LocationType.i.name,
                                 'number': '123',
                                 'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
-                            'type': WaypointType.WL.name,
                             'visited': True,
-                            'waypoint_location': {
+                            'location': {
+                                'type': LocationType.w.name,
                                 'location': {
                                     'longitude': -110.54,
                                     'latitude': 35.75
@@ -791,8 +799,8 @@ class TestCall(TestSetup):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.WA.name,
-                            'waypoint_address': {
+                            'location': {
+                                'type': LocationType.i.name,
                                 'number': '321',
                                 'street': 'another street'
                             }

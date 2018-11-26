@@ -7,8 +7,8 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, WaypointAddress, \
-    WaypointLocation, Waypoint, WaypointType
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
+    LocationType
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -240,40 +240,15 @@ class LocationSerializer(serializers.ModelSerializer):
 
 # Waypoint Serializers
 
-class WaypointLocationSerializer(serializers.ModelSerializer):
-
-    location = PointField(required=False)
-
-    class Meta:
-        model = WaypointLocation
-        fields = ['id',
-                  'location']
-
-
-class WaypointAddressSerializer(serializers.ModelSerializer):
-
-    location = PointField(required=False)
-
-    class Meta:
-        model = WaypointAddress
-        fields = ['id',
-                  'number', 'street', 'unit', 'neighborhood',
-                  'city', 'state', 'zipcode', 'country',
-                  'location']
-
-
 class WaypointSerializer(serializers.ModelSerializer):
 
-    waypoint_location = WaypointLocationSerializer(required=False)
-    waypoint_address = WaypointAddressSerializer(required=False)
-    location = LocationSerializer(required=False)
+    location = LocationSerializer(required=True)
 
     class Meta:
         model = Waypoint
         fields = ['id',
-                  'order', 'visited', 'type',
-                  'waypoint_address', 'waypoint_location',
-                  'hospital', 'location']
+                  'order', 'visited',
+                  'location']
 
 
 # AmbulanceCall Serializer
@@ -357,20 +332,25 @@ class CallSerializer(serializers.ModelSerializer):
                 ambulance_call.save(publish=False)
                 # add waypoints
                 for waypoint in waypoint_set:
-                    _type = waypoint.get('type')
-                    if _type == WaypointType.IL.name or _type == WaypointType.WL.name:
-                        waypoint_location = waypoint.pop('waypoint_location',{})
-                        waypoint['waypoint_location'] = WaypointLocation.objects.create(**waypoint_location)
-                    elif _type == WaypointType.IA.name or _type == WaypointType.WA.name:
-                        waypoint_address = waypoint.pop('waypoint_address',{})
-                        waypoint['waypoint_address'] = WaypointAddress.objects.create(**waypoint_address)
-                    elif _type == WaypointType.HO.name:
-                        # TODO: Handle hospitals
-                        pass
-                    elif _type == WaypointType.LO.name:
-                        # TODO: Handle locations
-                        pass
-                    obj = Waypoint(ambulance_call=ambulance_call, **waypoint)
+                    location = waypoint.pop('location', {})
+                    if not location:
+                        raise serializers.ValidationError('Location is not defined')
+                    if id in location:
+                        # location already exists, retrieve
+                        location = Location.objects.get(id=location['id'])
+                    else:
+                        # location does not exist, create one
+                        if type not in location:
+                            raise serializers.ValidationError('Location type is not defined')
+                        elif location['type'] == LocationType.h.name:
+                            raise serializers.ValidationError('Hospitals must be created before using as waypoints')
+                        elif location['type'] == LocationType.i.name or location['type'] == LocationType.w.name:
+                            # TODO: check to see if a close by waypoint already exists to contain proliferation
+                            location = Location.objects.create(**location)
+                        else:
+                            raise serializers.ValidationError("Invalid waypoint '{}'".format(location))
+                    # add waypoint
+                    obj = Waypoint(ambulance_call=ambulance_call, **waypoint, location=location)
                     obj.save()
 
             # publish call to mqtt only after all includes have succeeded
