@@ -652,6 +652,7 @@ class Location(AddressModel,
 
     # location: already in address
     # location = models.PointField(srid=4326, null=True)
+    location = models.PointField(srid=4326, default = defaults['location'])
 
     def get_absolute_url(self):
         return reverse('ambulance:location_detail', kwargs={'pk': self.id})
