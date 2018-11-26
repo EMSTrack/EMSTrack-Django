@@ -6,7 +6,6 @@
     <script>
         var ambulance_status = {{ ambulance_status|safe }};
         var call = {
-            location: {latitude:{{ call.location.x|safe }}, longitude:{{ call.location.y|safe }}},
             id:{{ call.id|safe }},
             status: '{{ call.status|get_call_status|safe }}'
         };
