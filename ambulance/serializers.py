@@ -336,13 +336,12 @@ class CallSerializer(serializers.ModelSerializer):
                     logger.debug('location = {}'.format(location))
                     if not location:
                         raise serializers.ValidationError('Location is not defined')
-                    if id in location:
+                    if 'id' in location:
                         # location already exists, retrieve
                         location = Location.objects.get(id=location['id'])
                     else:
                         # location does not exist, create one
-                        logger.debug('location = {}'.format(location))
-                        if type not in location:
+                        if 'type' not in location:
                             raise serializers.ValidationError('Location type is not defined')
                         elif location['type'] == LocationType.h.name:
                             raise serializers.ValidationError('Hospitals must be created before using as waypoints')
