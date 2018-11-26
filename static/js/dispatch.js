@@ -352,45 +352,45 @@ function dispatchCall() {
     }
 
     // location information
-    var address = {};
-    address['location'] = currentAddress['location'];
+    var location = {};
+    location['type'] = 'i';
+    location['location'] = currentAddress['location'];
 
-    // address information
-    address['neighborhood'] = currentAddress['neighborhood'];
-    address['city'] = currentAddress['city'];
-    address['state'] = currentAddress['state'];
-    address['country'] = currentAddress['country'];
-    address['zipcode'] = currentAddress['zipcode'];
+    // location information
+    location['neighborhood'] = currentAddress['neighborhood'];
+    location['city'] = currentAddress['city'];
+    location['state'] = currentAddress['state'];
+    location['country'] = currentAddress['country'];
+    location['zipcode'] = currentAddress['zipcode'];
 
     // Has the user modified the street address?
-    if (street_address != currentAddress['street_address']) {
+    if (!(street_address === currentAddress['street_address'])) {
 
-        // parse street address
-        var address = geocoder.parse_street_address(street_address, address['country']);
+        // parse street location
+        var address = geocoder.parse_street_address(street_address, location['country']);
 
-        address['number'] = address['number'];
-        address['street'] = address['street'];
-        address['unit'] = address['unit'];
+        location['number'] = address['number'];
+        location['street'] = address['street'];
+        location['unit'] = address['unit'];
 
     } else {
 
-        address['number'] = currentAddress['number'];
-        address['street'] = currentAddress['street'];
-        address['unit'] = currentAddress['unit'];
+        location['number'] = currentAddress['number'];
+        location['street'] = currentAddress['street'];
+        location['unit'] = currentAddress['unit'];
 
     }
 
     // Make sure blanks are undefined
-    if (address['number'] === "") {
-        address['number'] = undefined;
+    if (location['number'] === "") {
+        location['number'] = undefined;
     }
 
     // incident single waypoint information, for now
     var waypoints = []
     var waypoint = {};
     waypoint['order'] = 0;
-    waypoint['type'] = 'IA';
-    waypoint['waypoint_address'] = address;
+    waypoint['location'] = location;
 
     // add waypoint
     waypoints.push(waypoint);
