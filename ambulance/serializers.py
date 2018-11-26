@@ -333,6 +333,7 @@ class CallSerializer(serializers.ModelSerializer):
                 # add waypoints
                 for waypoint in waypoint_set:
                     location = waypoint.pop('location', {})
+                    logger.debug('location = {}'.format(location))
                     if not location:
                         raise serializers.ValidationError('Location is not defined')
                     if id in location:
