@@ -5,7 +5,7 @@ from django.conf import settings
 from rest_framework.parsers import JSONParser
 from io import BytesIO
 
-from ambulance.models import Location
+from ambulance.models import Location, LocationType
 from ambulance.serializers import LocationSerializer
 
 from emstrack.tests.util import date2iso, point2str, dict2point
@@ -37,6 +37,78 @@ class TestLocationGetList(TestSetup):
                 'updated_on': date2iso(h.updated_on)
             }
             self.assertDictEqual(serializer.data, result)
+
+    def test_location_serializer_create(self):
+        
+        # test LocationSerializer create
+        json = {
+            'type': LocationType.i.name,
+            'number': '123',
+            'street': 'some street'
+        }
+        serializer = LocationSerializer(data=json)
+        serializer.is_valid()
+        loc = serializer.save(updated_by=self.u1)
+
+        # test CallSerializer
+        l1 = Location.objects.get(id=loc.id)
+        serializer = LocationSerializer(l1)
+
+        expected = {
+            'id': l1.id,
+            'name': l1.name,
+            'type': l1.type,
+            'number': '123',
+            'street': 'some street',
+            'unit': l1.unit,
+            'neighborhood': l1.neighborhood,
+            'city': l1.city,
+            'state': l1.state,
+            'zipcode': l1.zipcode,
+            'country': l1.country,
+            'location': point2str(l1.location),
+            'comment': l1.comment,
+            'updated_by': l1.updated_by.id,
+            'updated_on': date2iso(l1.updated_on)
+        }
+        result = serializer.data
+        self.asserEqual(result, expected)
+        
+        json = {
+            'type': LocationType.w.name,
+            'location': {
+                'logitude': -110.54,
+                'latitude': 35.75
+            }
+        }
+
+        serializer = LocationSerializer(data=json)
+        serializer.is_valid()
+        loc = serializer.save(updated_by=self.u1)
+
+        # test CallSerializer
+        l2 = Location.objects.get(id=loc.id)
+        serializer = LocationSerializer(l2)
+
+        expected = {
+            'id': l2.id,
+            'name': l2.name,
+            'type': l2.type,
+            'number': l2.number,
+            'street': l2.street,
+            'unit': l2.unit,
+            'neighborhood': l2.neighborhood,
+            'city': l2.city,
+            'state': l2.state,
+            'zipcode': l2.zipcode,
+            'country': l2.country,
+            'location': {'longitude': -110.54, 'latitude': 35.75},
+            'comment': l2.comment,
+            'updated_by': l2.updated_by.id,
+            'updated_on': date2iso(l2.updated_on)
+        }
+        result = serializer.data
+        self.asserEqual(result, expected)
 
     def test_location_get_list_viewset(self):
         # instantiate client

@@ -375,13 +375,6 @@ class CallSerializer(serializers.ModelSerializer):
 
         return super().update(instance, data)
 
-    def validate_patient_set(self, data):
-
-        logger.debug('VALIDATE_PATIENT_SET')
-        logger.debug(data)
-
-        return data
-
     def validate(self, data):
 
         if 'status' in data and \
