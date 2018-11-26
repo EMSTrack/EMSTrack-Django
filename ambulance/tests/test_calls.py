@@ -287,10 +287,10 @@ class TestCall(TestSetup):
         self.assertDictEqual(result, expected)
 
         # Add waypoints to ambulancecalls
-        wpl_1 = Location.objects.create(type=LocationType.i.name)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, visited=False, location=wpl_1)
 
-        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd')
+        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u2)
         wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, visited=True, location=wpl_2)
 
         serializer = CallSerializer(c1)
