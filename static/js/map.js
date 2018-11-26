@@ -780,14 +780,14 @@ function addCallToMap(call) {
 
             var location;
             if (waypoint.type === 'IA')
-                location = waypoint['waypoint_address'];
+                location = waypoint['waypoint_address'].location;
             else if (waypoint.type === 'IL')
-                location = waypoint['waypoint_location'];
+                location = waypoint['waypoint_location'].location;
 
             if (location) {
                 var id = call.id + '_' + ambulance_id;
                 patientMarkers[id] = L.marker(
-                    [waypoint.location.latitude, waypoint.location.longitude],
+                    [location.latitude, location.longitude],
                     {
                         icon: coloredIcon,
                         pane: 'patient'
