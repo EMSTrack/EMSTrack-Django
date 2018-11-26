@@ -747,7 +747,7 @@ function addCallToMap(call) {
     // set icon by status
     var coloredIcon = patientIcon;
 
-    // patients
+    // get patients
     var patients = "";
     var isFirst = true;
     call.patient_set.forEach(function (patient) {
@@ -771,33 +771,44 @@ function addCallToMap(call) {
     // Format date
     date = (new Date(Date.parse(date))).toLocaleTimeString();
 
-    // If patient marker doesn't exist
-    patientMarkers[call.id] = L.marker([call.location.latitude,
-            call.location.longitude],
-        {
-            icon: coloredIcon,
-            pane: 'patient'
-        })
-        .bindPopup(
-            '<strong>' + date + '</strong>' +
-            '<br/>' +
-            patients
-        )
-        .addTo(mymap);
+    // Add incident locations
+    call.ambulancecall_set.forEach(function (ambulance_call) {
 
-    // Bind id to icons
-    patientMarkers[call.id]._icon.id = call.id;
+        var ambulance_id = ambulance_call.ambulance_id;
+        var waypoint_set = ambulance_call['waypoint_set'];
+        waypoint_set.forEach(function (waypoint) {
 
-    // Collapse panel on icon hover.
-    patientMarkers[call.id]
-        .on('mouseover',
-            function (e) {
-                // open popup bubble
-                this.openPopup().on('mouseout',
+            var id = call.id + '_' + ambulance_id;
+            patientMarkers[id] = L.marker(
+                [waypoint.location.latitude, waypoint.location.longitude],
+                {
+                    icon: coloredIcon,
+                    pane: 'patient'
+                })
+                .bindPopup(
+                    '<strong>' + date + '</strong>' +
+                    '<br/>' +
+                    patients
+                )
+                .addTo(mymap);
+
+            // Bind id to icons
+            patientMarkers[id]._icon.id = id;
+
+            // Collapse panel on icon hover.
+            patientMarkers[id]
+                .on('mouseover',
                     function (e) {
-                        this.closePopup();
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function (e) {
+                                this.closePopup();
+                            });
                     });
-            });
+
+        });
+
+    });
 
 }
 

@@ -351,42 +351,53 @@ function dispatchCall() {
         return;
     }
 
+    // incident single waypoint information, for now
+    var waypoints = []
+    var waypoint = {};
+    waypoint['order'] = 0;
+    waypoint['type'] = 'IA';
+
+    // location information
+    waypoint['location'] = currentAddress['location'];
+
     // address information
-    form['neighborhood'] = currentAddress['neighborhood'];
-    form['city'] = currentAddress['city'];
-    form['state'] = currentAddress['state'];
-    form['country'] = currentAddress['country'];
-    form['zipcode'] = currentAddress['zipcode'];
-    form['location'] = currentAddress['location'];
+    waypoint['neighborhood'] = currentAddress['neighborhood'];
+    waypoint['city'] = currentAddress['city'];
+    waypoint['state'] = currentAddress['state'];
+    waypoint['country'] = currentAddress['country'];
+    waypoint['zipcode'] = currentAddress['zipcode'];
 
     // Has the user modified the street address?
     if (street_address != currentAddress['street_address']) {
 
         // parse street address
-        var address = geocoder.parse_street_address(street_address, form['country']);
+        var address = geocoder.parse_street_address(street_address, waypoint['country']);
 
-        form['number'] = address['number'];
-        form['street'] = address['street'];
-        form['unit'] = address['unit'];
+        waypoint['number'] = address['number'];
+        waypoint['street'] = address['street'];
+        waypoint['unit'] = address['unit'];
 
     } else {
 
-        form['number'] = currentAddress['number'];
-        form['street'] = currentAddress['street'];
-        form['unit'] = currentAddress['unit'];
+        waypoint['number'] = currentAddress['number'];
+        waypoint['street'] = currentAddress['street'];
+        waypoint['unit'] = currentAddress['unit'];
 
     }
 
     // Make sure blanks are undefined
-    if (form['number'] == "") {
-        form['number'] = undefined;
+    if (waypoint['number'] == "") {
+        waypoint['number'] = undefined;
     }
+
+    // add waypoint
+    waypoints.push(waypoint);
 
     // ambulances
     var ambulances = [];
     for (var id in dispatchingAmbulances) {
         if (dispatchingAmbulances.hasOwnProperty(id))
-            ambulances.push({ 'ambulance_id': id });
+            ambulances.push({ 'ambulance_id': id, 'waypoint_set': waypoints });
 		}
     form['ambulancecall_set'] = ambulances;
 

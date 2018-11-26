@@ -824,32 +824,30 @@ class SubscribeClient(BaseClient):
 
                 # change ambulancecall status to ongoing
                 ambulancecall.status = AmbulanceCallStatus.O.name
-                ambulancecall.save()
 
             elif status.casefold() == "declined":
 
-                # change ambulancecall status to declined
-
+                # change ambulancecall status to decline
                 ambulancecall.status = AmbulanceCallStatus.D.name
-                ambulancecall.save()
 
             elif status.casefold() == "suspended":
 
                 # change ambulancecall status to suspended
                 ambulancecall.status = AmbulanceCallStatus.S.name
-                ambulancecall.save()
 
             elif status.casefold() == "finished":
 
                 # change ambulance status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name
-                ambulancecall.save()
 
             else:
 
                 self.send_error_message(user, client, msg.topic, msg.payload,
                                         "Invalid status '{}'".format(status))
                 return
+
+            # save changes
+            ambulancecall.save()
 
         except Exception as e:
 

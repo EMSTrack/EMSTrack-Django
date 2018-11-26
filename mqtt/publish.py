@@ -3,7 +3,7 @@ import logging
 import os
 
 from ambulance.models import CallStatus, AmbulanceCallStatus
-from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import AmbulanceSerializer, AmbulanceCallSerializer
 from ambulance.serializers import CallSerializer
 from hospital.models import Equipment
 from hospital.serializers import HospitalSerializer, \
@@ -43,7 +43,7 @@ class MessagePublishClient:
     def remove_hospital_equipment(self, hospital, **kwargs):
         pass
 
-    # For call
+    # For calls
 
     def publish_call(self, call, **kwargs):
         pass
@@ -51,6 +51,11 @@ class MessagePublishClient:
     def remove_call(self, call, **kwargs):
         pass
 
+    def publish_call_status(self, **kwargs):
+        pass
+
+    def remove_call_status(self, **kwargs):
+        pass
 
 class PublishClient(BaseClient):
 
