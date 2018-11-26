@@ -75,7 +75,7 @@ class TestCall(TestSetup):
 
     def test_waypoint_serializers(self):
 
-        wpl_1 = Location.objects.create(type=LocationType.i.name,updated_by=self.u1)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         serializer = LocationSerializer(wpl_1)
         result = {
             'id': wpl_1.id,
@@ -91,8 +91,8 @@ class TestCall(TestSetup):
             'country': wpl_1.country,
             'name': wpl_1.name,
             'comment': wpl_1.comment,
-            'updated_by': wpl_1.updated_by,
-            'updated_on': wpl_1.updated_on
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -112,8 +112,8 @@ class TestCall(TestSetup):
             'country': wpl_2.country,
             'name': wpl_2.name,
             'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by,
-            'updated_on': wpl_2.updated_on
+            'updated_by': wpl_2.updated_by.id,
+            'updated_on': date2iso(wpl_2.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -151,8 +151,8 @@ class TestCall(TestSetup):
             'country': wpl_1.country,
             'name': wpl_1.name,
             'comment': wpl_1.comment,
-            'updated_by': wpl_1.updated_by,
-            'updated_on': wpl_1.updated_on
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
 
@@ -182,8 +182,8 @@ class TestCall(TestSetup):
             'country': wpl_2.country,
             'name': wpl_2.name,
             'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by,
-            'updated_on': wpl_2.updated_on
+            'updated_by': wpl_2.updated_by.id,
+            'updated_on': date2iso(wpl_2.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
 
