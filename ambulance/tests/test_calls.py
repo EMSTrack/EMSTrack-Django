@@ -75,18 +75,33 @@ class TestCall(TestSetup):
 
     def test_waypoint_serializers(self):
 
-        wpl_1 = WaypointLocation.objects.create()
-        serializer = WaypointLocationSerializer(wpl_1)
+        wpl_1 = Location.objects.create(type=LocationType.i.name,updated_by=self.u1)
+        serializer = LocationSerializer(wpl_1)
         result = {
             'id': wpl_1.id,
-            'location': point2str(wpl_1.location)
+            'type': LocationType.i.name,
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by,
+            'updated_on': wpl_1.updated_on
         }
         self.assertDictEqual(serializer.data, result)
 
-        wpl_2 = WaypointAddress.objects.create(number='123', street='adsasd')
-        serializer = WaypointAddressSerializer(wpl_2)
+        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u1)
+        serializer = LocationSerializer(wpl_2)
         result = {
             'id': wpl_2.id,
+            'type': LocationType.h.name,
+            'location': point2str(wpl_2.location),
             'number': '123',
             'street': 'adsasd',
             'unit': wpl_2.unit,
@@ -95,7 +110,10 @@ class TestCall(TestSetup):
             'state': wpl_2.state,
             'zipcode': wpl_2.zipcode,
             'country': wpl_2.country,
-            'location': point2str(wpl_2.location)
+            'name': wpl_2.name,
+            'comment': wpl_2.comment,
+            'updated_by': wpl_2.updated_by,
+            'updated_on': wpl_2.updated_on
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -108,7 +126,7 @@ class TestCall(TestSetup):
         ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
 
         # serialization
-        wpl_1 = Location.objects.create(type=LocationType.i.name)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         wpl_1_serializer = LocationSerializer(wpl_1)
         wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False, location=wpl_1)
         serializer = WaypointSerializer(wp_1)
@@ -139,7 +157,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data['location'], result)
 
         # serialization
-        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd')
+        wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u1)
         wpl_2_serializer = LocationSerializer(wpl_2)
         wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True, location=wpl_2)
         serializer = WaypointSerializer(wp_2)

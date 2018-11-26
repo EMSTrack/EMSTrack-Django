@@ -346,7 +346,7 @@ class CallSerializer(serializers.ModelSerializer):
                             raise serializers.ValidationError('Hospitals must be created before using as waypoints')
                         elif location['type'] == LocationType.i.name or location['type'] == LocationType.w.name:
                             # TODO: check to see if a close by waypoint already exists to contain proliferation
-                            location = Location.objects.create(**location)
+                            location = Location.objects.create(**location, updated_by=user)
                         else:
                             raise serializers.ValidationError("Invalid waypoint '{}'".format(location))
                     # add waypoint
