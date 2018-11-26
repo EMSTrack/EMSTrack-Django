@@ -381,7 +381,7 @@ function dispatchCall() {
     }
 
     // Make sure blanks are undefined
-    if (address['number'] == "") {
+    if (address['number'] === "") {
         address['number'] = undefined;
     }
 

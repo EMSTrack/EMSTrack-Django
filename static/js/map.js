@@ -778,33 +778,42 @@ function addCallToMap(call) {
         var waypoint_set = ambulance_call['waypoint_set'];
         waypoint_set.forEach(function (waypoint) {
 
-            var id = call.id + '_' + ambulance_id;
-            patientMarkers[id] = L.marker(
-                [waypoint.location.latitude, waypoint.location.longitude],
-                {
-                    icon: coloredIcon,
-                    pane: 'patient'
-                })
-                .bindPopup(
-                    '<strong>' + date + '</strong>' +
-                    '<br/>' +
-                    patients
-                )
-                .addTo(mymap);
+            var location;
+            if (waypoint.type === 'IA')
+                location = waypoint['waypoint_address'];
+            else if (waypoint.type === 'IL')
+                location = waypoint['waypoint_location'];
 
-            // Bind id to icons
-            patientMarkers[id]._icon.id = id;
+            if (location) {
+                var id = call.id + '_' + ambulance_id;
+                patientMarkers[id] = L.marker(
+                    [waypoint.location.latitude, waypoint.location.longitude],
+                    {
+                        icon: coloredIcon,
+                        pane: 'patient'
+                    })
+                    .bindPopup(
+                        '<strong>' + date + '</strong>' +
+                        '<br/>' +
+                        patients
+                    )
+                    .addTo(mymap);
 
-            // Collapse panel on icon hover.
-            patientMarkers[id]
-                .on('mouseover',
-                    function (e) {
-                        // open popup bubble
-                        this.openPopup().on('mouseout',
-                            function (e) {
-                                this.closePopup();
-                            });
-                    });
+                // Bind id to icons
+                patientMarkers[id]._icon.id = id;
+
+                // Collapse panel on icon hover.
+                patientMarkers[id]
+                    .on('mouseover',
+                        function (e) {
+                            // open popup bubble
+                            this.openPopup().on('mouseout',
+                                function (e) {
+                                    this.closePopup();
+                                });
+                        });
+
+            }
 
         });
 
