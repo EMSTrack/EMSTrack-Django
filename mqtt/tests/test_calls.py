@@ -5,7 +5,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, WaypointType
+    AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, LocationType
 from ambulance.serializers import CallSerializer
 from emstrack.tests.util import point2str
 from hospital.models import Hospital, \
@@ -100,9 +100,11 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 }
@@ -335,9 +337,11 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 }
@@ -552,9 +556,11 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 }
@@ -751,9 +757,11 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 },
@@ -762,9 +770,11 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.WA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 }
@@ -1248,9 +1258,11 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.IA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 },
@@ -1259,9 +1271,11 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
                     'waypoint_set': [
                         {
                             'order': 0,
-                            'type': WaypointType.WA.name,
-                            'number': '123',
-                            'street': 'asdasdasd asd asd asdas'
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'asdasdasd asd asd asdas'
+                            }
                         }
                     ]
                 }
