@@ -77,7 +77,7 @@ class TestLocationGetList(TestSetup):
         json = {
             'type': LocationType.w.name,
             'location': {
-                'logitude': -110.54,
+                'longitude': -110.54,
                 'latitude': 35.75
             }
         }
