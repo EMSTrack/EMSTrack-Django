@@ -341,6 +341,7 @@ class CallSerializer(serializers.ModelSerializer):
                         location = Location.objects.get(id=location['id'])
                     else:
                         # location does not exist, create one
+                        logger.debug('location = {}'.format(location))
                         if type not in location:
                             raise serializers.ValidationError('Location type is not defined')
                         elif location['type'] == LocationType.h.name:
