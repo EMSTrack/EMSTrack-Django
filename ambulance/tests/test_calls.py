@@ -778,8 +778,10 @@ class TestCall(TestSetup):
                             'type': WaypointType.WL.name,
                             'visited': True,
                             'waypoint_location': {
-                                'logitude': -110.54,
-                                'latitude': 35.75
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
+                                }
                             }
                         }
                     ]
