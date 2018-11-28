@@ -584,9 +584,25 @@ function updateCall(call) {
                     // Remove from calls
                     delete calls[id];
 
-                    // Remove patient from map
-                    mymap.removeLayer(patientMarkers[id]);
-                    delete patientMarkers[id];
+                    // Remove patients from map
+                    call.ambulancecall_set.forEach(function (ambulance_call) {
+
+                        var ambulance_id = ambulance_call.ambulance_id;
+                        var waypoint_set = ambulance_call['waypoint_set'];
+                        waypoint_set.forEach(function (waypoint) {
+
+                            var location = waypoint['location'];
+                            if (location.type === 'i') {
+                                var id = call.id + '_' + ambulance_id;
+
+                                mymap.removeLayer(patientMarkers[id]);
+                                delete patientMarkers[id];
+
+                            }
+
+                        });
+
+                    });
 
                 }
 
