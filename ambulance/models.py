@@ -671,10 +671,9 @@ class Location(AddressModel,
 # Waypoint related models
 
 class WaypointStatus(Enum):
-    A = 'Active'
+    N = 'Not visited'
     V = 'Visiting'
     D = 'Visited'
-    I = 'Inactive'
 
 
 class Waypoint(models.Model):
@@ -690,7 +689,10 @@ class Waypoint(models.Model):
         [(m.name, m.value) for m in WaypointStatus]
     status = models.CharField(max_length=1,
                               choices=WAYPOINT_STATUS_CHOICES,
-                              default=WaypointStatus.A.name)
+                              default=WaypointStatus.N.name)
+
+    # active
+    active = models.BooleanField(default=True)
 
     # Location
     location = models.ForeignKey(Location,
@@ -698,7 +700,10 @@ class Waypoint(models.Model):
                                  blank=True, null=True)
 
     def is_active(self):
-        return self.status != WaypointStatus.I.name
+        return self.active
+
+    def is_not_visited(self):
+        return self.status == WaypointStatus.N.name
 
     def is_visited(self):
         return self.status == WaypointStatus.D.name
