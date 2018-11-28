@@ -247,7 +247,7 @@ class WaypointSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waypoint
         fields = ['id',
-                  'order', 'visited',
+                  'order', 'status',
                   'location']
 
 

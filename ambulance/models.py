@@ -670,6 +670,13 @@ class Location(AddressModel,
 
 # Waypoint related models
 
+class WaypointStatus(Enum):
+    A = 'Active'
+    V = 'Visiting'
+    D = 'Visited'
+    I = 'Inactive'
+
+
 class Waypoint(models.Model):
     # call
     ambulance_call = models.ForeignKey(AmbulanceCall,
@@ -678,13 +685,26 @@ class Waypoint(models.Model):
     # order
     order = models.PositiveIntegerField()
 
-    # visited
-    visited = models.BooleanField(default=False)
+    # status
+    WAYPOINT_STATUS_CHOICES = \
+        [(m.name, m.value) for m in WaypointStatus]
+    status = models.CharField(max_length=1,
+                              choices=WAYPOINT_STATUS_CHOICES,
+                              default=WaypointStatus.A.name)
 
     # Location
     location = models.ForeignKey(Location,
                                  on_delete=models.CASCADE,
                                  blank=True, null=True)
+
+    def is_active(self):
+        return self.status != WaypointStatus.I.name
+
+    def is_visited(self):
+        return self.status == WaypointStatus.D.name
+
+    def is_visiting(self):
+        return self.status == WaypointStatus.V.name
 
 
 # THOSE NEED REVIEWING

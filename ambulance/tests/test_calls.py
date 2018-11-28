@@ -11,7 +11,7 @@ from io import BytesIO
 import json
 
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
-    AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType
+    AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType, WaypointStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
     AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer
 from emstrack.tests.util import date2iso, point2str
@@ -128,12 +128,12 @@ class TestCall(TestSetup):
         # serialization
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         wpl_1_serializer = LocationSerializer(wpl_1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, visited=False, location=wpl_1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.A.name, location=wpl_1)
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
             'order': 0,
-            'visited': False,
+            'status': WaypointStatus.A.name,
             'location': wpl_1_serializer.data
         }
         self.assertDictEqual(serializer.data, result)
@@ -159,12 +159,12 @@ class TestCall(TestSetup):
         # serialization
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u1)
         wpl_2_serializer = LocationSerializer(wpl_2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, visited=True, location=wpl_2)
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.D.name, location=wpl_2)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
             'order': 1,
-            'visited': True,
+            'status': WaypointStatus.D.name,
             'location': wpl_2_serializer.data
         }
         self.assertDictEqual(serializer.data, result)
@@ -288,10 +288,10 @@ class TestCall(TestSetup):
 
         # Add waypoints to ambulancecalls
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, visited=False, location=wpl_1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, status=WaypointStatus.A.name, location=wpl_1)
 
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, visited=True, location=wpl_2)
+        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, status=WaypointStatus.D.name, location=wpl_2)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
@@ -529,7 +529,7 @@ class TestCall(TestSetup):
                         },
                         {
                             'order': 1,
-                            'visited': True,
+                            'status': WaypointStatus.D.name,
                             'location': {
                                 'type': LocationType.w.name,
                                 'location': {
@@ -801,7 +801,7 @@ class TestCall(TestSetup):
                         },
                         {
                             'order': 1,
-                            'visited': True,
+                            'status': WaypointStatus.D.name,
                             'location': {
                                 'type': LocationType.w.name,
                                 'location': {
