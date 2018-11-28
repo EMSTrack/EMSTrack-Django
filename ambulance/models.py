@@ -53,6 +53,10 @@ class AmbulanceStatus(Enum):
     AP = 'At patient'
     HB = 'Hospital bound'
     AH = 'At hospital'
+    BB = 'Base bound'
+    AB = 'At base'
+    WB = 'Waypoint bound'
+    AW = 'At waypoint'
 
 
 AmbulanceStatusOrder = [ 
@@ -61,6 +65,10 @@ AmbulanceStatusOrder = [
     AmbulanceStatus.AP,
     AmbulanceStatus.HB,
     AmbulanceStatus.AH,
+    AmbulanceStatus.BB,
+    AmbulanceStatus.AB,
+    AmbulanceStatus.WB,
+    AmbulanceStatus.AW,
     AmbulanceStatus.OS,
     AmbulanceStatus.UK
 ] 
