@@ -396,7 +396,7 @@ class TestCall(TestSetup):
         result = {
             'id': self.h1.id,
             'type': LocationType.h.name,
-            'location': None,
+            'location': point2str(self.h1.location),
             'number': self.h1.number,
             'street': self.h1.street,
             'unit': self.h1.unit,
@@ -410,14 +410,7 @@ class TestCall(TestSetup):
             'updated_by': self.h1.updated_by.id,
             'updated_on': date2iso(self.h1.updated_on)
         }
-        self.maxDiff = None
-        logger.debug(wp_3_serializer.data['location'])
-        logger.debug(result)
-        self.assertDictEqual(wp_3_serializer.data['location']['location'], point2str(self.h1.location))
-        result['location'] = None
-        answer = dict(wp_3_serializer.data['location'])
-        answer['location'] = None
-        self.assertDictEqual(answer, result)
+        self.assertDictEqual(wp_3_serializer.data['location'], result)
 
         # add patients
         p1 = Patient.objects.create(call=c1, name='Jose', age=3)
