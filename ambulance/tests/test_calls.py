@@ -411,6 +411,7 @@ class TestCall(TestSetup):
             'updated_on': date2iso(self.h1.updated_on)
         }
         logger.debug(wp_3_serializer.data)
+        logger.debug(result)
         self.assertDictEqual(wp_3_serializer.data['location'], result)
 
         # add patients
