@@ -410,6 +410,7 @@ class TestCall(TestSetup):
             'updated_by': self.h1.updated_by.id,
             'updated_on': date2iso(self.h1.updated_on)
         }
+        self.maxDiff = None
         logger.debug(wp_3_serializer.data['location'])
         logger.debug(result)
         self.assertDictEqual(wp_3_serializer.data['location'], result)
