@@ -65,6 +65,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     serializer_class = AmbulanceSerializer
 
     @detail_route(methods=['get', 'post'], pagination_class=AmbulancePageNumberPagination)
+    
     def updates(self, request, pk=None, **kwargs):
 
         if request.method == 'GET':
@@ -74,6 +75,33 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         elif request.method == 'POST':
             # put updates
             return self.updates_put(request, pk, updated_by=self.request.user, **kwargs)
+
+
+    # The function that we are going to filter out the working time of ambulance
+    # and extract the unavailable time range for ambulance
+    def extract_unavailable_zone(ambulance_history):
+
+        unavailable_zone = []
+        unavailable_zone.append(None)
+        seenOngoing = False
+
+        for h in ambulance_history:
+
+            # Started timestamp
+            if seenOngoing == False and h.status == AmbulanceCallStatus.O.name:
+                unavailable_zone.append(h.create_at)
+                seenOngoing = True
+
+            # If we already seen ongoing status, seeing another kind of status
+            elif seenOngoing == True and h.status != AmbulanceCallStatus.O.name:
+                unavailable_zone.append(h.create_at)
+                seenOngoing = False
+
+        # If the last status is not ongoing, we should put a None to ensure pair
+        if seenOngoing == False:
+            unavailable_zone.append(None)
+
+        return unavailable_zone
 
     def updates_get(self, request, pk=None, **kwargs):
         """
@@ -94,24 +122,41 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 #       go back to AmbulanceCallHistory and select active intervals:
                 #       between Ongoing and Suspended or Completed
 
-                #       If there is a available history, user the following code:
+                ambulance_history = ambulance.ambulancecallhistory_set.filter(call_id = call_id).order_by('create_at')
+                
+                #  If there is a available history, user the following code:
+                if ambulance_history is not None:
 
-                ambulance_history = ambulance.ambulancecallhistory
-                    # available_zone = []
-                    # for time in ambulance_updates:
+                    unavailable_zone = extract_unavailable_zone(ambulance_history)
 
+                    unavailable_zone = list(zip(*[iter(unavailable_zone)] * 2))
 
+                    # Update the info
+                    for (t1, t2) in unavailable_zone:
+                        if t1 == None:
+                            ambulance_updates.exclude(timestamp_lte=t2)
+                        elif t2 == None:
+                            ambulance_updates.exclude(timestamp__gte=t1)
+                        else:
+                            ambulance_updates.exclude(timestamp__range=(t1, t2))
 
-                #       If no history is available, use the following code:
-                call = Call.objects.get(id=call_id)
-                if call.ended_at is not None:
-                    ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
-                elif call.started_at is not None:
-                    logger.debug('HERE')
-                    ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
+                #  If no history is available, use the following code:
                 else:
+
+                    call = Call.objects.get(id=call_id)
+
+                    # If the call is ended
+                    if call.ended_at is not None:
+                        ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
+                    
+                    # If the call is still active
+                    elif call.started_at is not None:
+                        logger.debug('HERE')
+                        ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
+
                     # call hasn't started yet, return none
-                    ambulance_updates = AmbulanceUpdate.objects.none()
+                    else:
+                        ambulance_updates = AmbulanceUpdate.objects.none()
 
             except Call.DoesNotExist as e:
                 raise Http404("Call with id '{}' does not exist.".format(call_id))
