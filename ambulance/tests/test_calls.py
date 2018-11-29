@@ -397,7 +397,7 @@ class TestCall(TestSetup):
             'id': self.h1.id,
             'type': LocationType.h.name,
             'location': None,
-            'number': self.h1.street,
+            'number': self.h1.number,
             'street': self.h1.street,
             'unit': self.h1.unit,
             'neighborhood': self.h1.neighborhood,
