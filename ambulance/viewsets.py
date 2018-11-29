@@ -152,7 +152,7 @@ class LocationViewSet(mixins.ListModelMixin,
     list:
     Retrieve list of locations.
     """
-    queryset = Location.objects.all()
+    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
     serializer_class = LocationSerializer
 
 
