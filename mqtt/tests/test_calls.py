@@ -340,6 +340,20 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
+        # test_client publishes client_id to location_client
+        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
+                            json.dumps({
+                                'location_client_id': client_id,
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
+        # subscribe to call and ambulance call status
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()

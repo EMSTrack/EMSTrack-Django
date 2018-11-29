@@ -95,6 +95,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 #       between Ongoing and Suspended or Completed
 
                 #       If there is a available history, user the following code:
+
+                ambulance_history = ambulance.ambulancecallhistory
                     # available_zone = []
                     # for time in ambulance_updates:
 
