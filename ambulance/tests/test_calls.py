@@ -415,7 +415,7 @@ class TestCall(TestSetup):
         logger.debug(result)
         self.assertDictEqual(wp_3_serializer.data['location']['location'], point2str(self.h1.location))
         result['location'] = None
-        answer = wp_3_serializer.data['location']
+        answer = dict(wp_3_serializer.data['location'])
         answer['location'] = None
         self.assertDictEqual(answer, result)
 
