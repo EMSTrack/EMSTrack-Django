@@ -259,10 +259,12 @@ class AmbulanceMap(TemplateView):
 
 class LocationAdminListView(ListView):
     model = Location
+    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
 
 
 class LocationAdminDetailView(DetailView):
     model = Location
+    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
 
 
 class LocationAdminCreateView(SuccessMessageMixin,
