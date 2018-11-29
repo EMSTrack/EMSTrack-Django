@@ -73,7 +73,7 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-    def test_waypoint_serializers(self):
+    def test_location_serializer(self):
 
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         serializer = LocationSerializer(wpl_1)
@@ -293,30 +293,7 @@ class TestCall(TestSetup):
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u2)
         wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, status=WaypointStatus.D.name, location=wpl_2)
 
-        serializer = CallSerializer(c1)
-        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
-        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
-
-        expected = {
-            'id': c1.id,
-            'status': c1.status,
-            'details': c1.details,
-            'priority': c1.priority,
-            'created_at': date2iso(c1.created_at),
-            'pending_at': date2iso(c1.pending_at),
-            'started_at': date2iso(c1.started_at),
-            'ended_at': date2iso(c1.ended_at),
-            'comment': c1.comment,
-            'updated_by': c1.updated_by.id,
-            'updated_on': date2iso(c1.updated_on),
-            'ambulancecall_set': [],
-            'patient_set': []
-        }
-        self.assertCountEqual(serializer.data['ambulancecall_set'],
-                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
-        result = serializer.data
-        result['ambulancecall_set'] = []
-        self.assertDictEqual(result, expected)
+        wp_3 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=2, status=WaypointStatus.N.name, location=self.h1)
 
         # create ambulance update to use in event
         ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
@@ -329,22 +306,8 @@ class TestCall(TestSetup):
                                                             status=AmbulanceStatus.HB.name,
                                                             updated_by=self.u1)
 
-        # ambulance_call = ambulance_call_2
-        # serializer = AmbulanceCallSerializer(ambulance_call)
-        # expected = {
-        #     'id': ambulance_call.id,
-        #     'ambulance_id': ambulance_call.ambulance.id,
-        #     'created_at': date2iso(ambulance_call.created_at)
-        # }
-        # # self.assertCountEqual(serializer.data['ambulanceupdate_set'],
-        #                       [AmbulanceUpdateSerializer(ambulance_update_1).data,
-        #                        AmbulanceUpdateSerializer(ambulance_update_2).data,
-        #                        AmbulanceUpdateSerializer(ambulance_update_3).data])
-        # result = serializer.data
-        # result['ambulanceupdate_set'] = []
-        # self.assertDictEqual(result, expected)
-
         serializer = CallSerializer(c1)
+        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
 
         expected = {
@@ -352,15 +315,6 @@ class TestCall(TestSetup):
             'status': c1.status,
             'details': c1.details,
             'priority': c1.priority,
-            # 'number': c1.number,
-            # 'street': c1.street,
-            # 'unit': c1.unit,
-            # 'neighborhood': c1.neighborhood,
-            # 'city': c1.city,
-            # 'state': c1.state,
-            # 'zipcode': c1.zipcode,
-            # 'country': c1.country,
-            # 'location': point2str(c1.location),
             'created_at': date2iso(c1.created_at),
             'pending_at': date2iso(c1.pending_at),
             'started_at': date2iso(c1.started_at),
