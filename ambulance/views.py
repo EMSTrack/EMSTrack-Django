@@ -109,6 +109,7 @@ class AmbulanceUpdateView(LoginRequiredMixin,
 
 # Ambulance css information
 AmbulanceCSS = {
+
     'UK': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_blue.svg',
@@ -130,6 +131,7 @@ AmbulanceCSS = {
         },
         'class': 'secondary'
     },
+
     'PB': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_red.svg',
@@ -144,20 +146,53 @@ AmbulanceCSS = {
         },
         'class': 'warning'
     },
+
     'HB': {
         'icon': {
-            'iconUrl': '/static/icons/cars/ambulance_purple.svg',
+            'iconUrl': '/static/icons/cars/ambulance_red.svg',
             'iconSize': [15, 30],
         },
-        'class': 'info'
+        'class': 'danger'
     },
     'AH': {
         'icon': {
-            'iconUrl': '/static/icons/cars/ambulance_yellow.svg',
+            'iconUrl': '/static/icons/cars/ambulance_orange.svg',
             'iconSize': [15, 30],
         },
-        'class': 'yellow'
+        'class': 'warning'
+    },
+
+    'BB': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_red.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'danger'
+    },
+    'AB': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_orange.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'warning'
+    },
+
+
+    'WB': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_red.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'danger'
+    },
+    'AW': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_orange.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'warning'
     }
+
 }
 
 
