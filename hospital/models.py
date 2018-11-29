@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.gis.db import models
 from django.template.defaulttags import register
 
+from ambulance.models import Location, LocationType
 from emstrack.models import AddressModel, UpdatedByModel
 
 
@@ -16,14 +17,15 @@ def get_equipment_type(type):
 
 # Hospital model
 
-class Hospital(AddressModel,
-               UpdatedByModel):
-    name = models.CharField(max_length=254, unique=True)
+class Hospital(Location):
 
     def save(self, *args, **kwargs):
 
         # creation?
         created = self.pk is None
+
+        # enforce type hospital
+        self.type = LocationType.B.name
 
         # save to Hospital
         super().save(*args, **kwargs)
@@ -56,21 +58,9 @@ class Hospital(AddressModel,
 
     def __str__(self):
         return ('Hospital {}(id={})\n' +
-                '   Address: {} {} {}\n' +
-                '            {} {} {}\n' +
-                '            {} \n' +
-                '  Location: {}\n' +
                 '   Comment: {}\n' +
                 '   Updated: {} by {}').format(self.name,
                                                self.id,
-                                               self.number,
-                                               self.street,
-                                               self.unit,
-                                               self.city,
-                                               self.state,
-                                               self.zipcode,
-                                               self.country,
-                                               self.location,
                                                self.comment,
                                                self.updated_by,
                                                self.updated_on)
