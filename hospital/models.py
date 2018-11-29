@@ -25,7 +25,7 @@ class Hospital(Location):
         created = self.pk is None
 
         # enforce type hospital
-        self.type = LocationType.B.name
+        self.type = LocationType.b.name
 
         # save to Hospital
         super().save(*args, **kwargs)
