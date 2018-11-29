@@ -242,6 +242,7 @@ class TestMQTTCallsRegularUser(TestMQTTCalls):
     def test(self):
         super().test('testuser2', 'very_secret', self.a3.id)
 
+
 # -------------------------------------------------------------------------------------------
 # New Testing 
 # Test aborting the call once the call is created.
@@ -398,23 +399,6 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
