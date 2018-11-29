@@ -25,7 +25,7 @@ class HospitalPermissionMixin(BasePermissionMixin):
 class HospitalEquipmentInline(InlineFormSet):
     model = HospitalEquipment
     fields = ['equipment', 'value', 'comment']
-    extra = 1
+    factory_kwargs = {'extra': 1}
 
 
 class HospitalCreateView(LoginRequiredMixin,
