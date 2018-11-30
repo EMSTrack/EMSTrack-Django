@@ -459,8 +459,22 @@ class TestCall(TestSetup):
             'updated_by': wpl_2.updated_by.id,
             'updated_on': date2iso(wpl_2.updated_on)
         }
-        self.maxDiff = None
         self.assertDictEqual(dict(serializer.data['location']), result)
+
+        # update waypoint 3
+        data = {
+            'order': 2,
+            'status': WaypointStatus.N.name,
+            'active': False,
+            'location': {
+                'id': 20,
+                'type': LocationType.h.name
+            }
+        }
+        serializer = WaypointSerializer(wp_3, data=data)
+        serializer.is_valid()
+        logger.debug(serializer.errors)
+        wp_3 = serializer.save(updated_by=self.u1)
 
     def test_call_serializer(self):
 
