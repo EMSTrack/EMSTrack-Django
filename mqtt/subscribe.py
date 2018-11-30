@@ -912,6 +912,7 @@ class SubscribeClient(BaseClient):
                 if waypoint_id > 0:
 
                     # waypoint exists, update
+                    logger.debug('will update waypoint')
 
                     # retrieve serializer
                     waypoint = Waypoint.objects.get(pk=waypoint_id)
@@ -924,9 +925,10 @@ class SubscribeClient(BaseClient):
                 else:
 
                     # waypoint does not exist, create
+                    logger.debug('will create waypoint')
 
                     # create waypoint
-                    data['ambulance_call'] = ambulance_call
+                    data['ambulance_call_id'] = ambulance_call.id
                     serializer = WaypointSerializer(data=data)
 
             except Waypoint.DoesNotExist:
