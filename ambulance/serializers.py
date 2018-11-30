@@ -252,6 +252,7 @@ class WaypointSerializer(serializers.ModelSerializer):
 
         # retrieve or create location
         location = validated_data.pop('location')
+        logger.debug(self.initial_data)
         logger.debug(location)
         if 'id' not in location or location['id'] is None:
             logger.debug('will create waypoint location')
