@@ -265,7 +265,7 @@ class WaypointSerializer(serializers.ModelSerializer):
         # create waypoint and add location
         waypoint = super().create(validated_data)
         waypoint.location = location
-        waypoint.save()
+        # waypoint.save()
 
         return waypoint
 
