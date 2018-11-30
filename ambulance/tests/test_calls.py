@@ -189,6 +189,27 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data['location'], result)
 
+    def test_waypoint_serializer_create(self):
+
+        # create call
+        c_1 = Call.objects.create(updated_by=self.u1)
+
+        # create ambulance call
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
+
+        # serialization
+        data = {
+            'order': 0,
+            'status': WaypointStatus.N.name,
+            'active': True,
+            'location': {
+                'type': LocationType.i.name
+            }
+        }
+        serializer = WaypointSerializer(data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+
     def test_call_serializer(self):
 
         # create call

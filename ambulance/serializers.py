@@ -245,10 +245,13 @@ class WaypointSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
+        # get current user
+        user = validated_data['updated_by']
+
         # retrieve or create location
         location = validated_data.pop('location')
         if location['id'] is not None:
-            location = Location.objects.create(**location)
+            location = Location.objects.create(**location, updated_by=user)
         else:
             location = Location.objects.get(id=location['id'])
 
