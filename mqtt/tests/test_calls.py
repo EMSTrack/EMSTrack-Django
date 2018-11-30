@@ -205,6 +205,20 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # test_client publishes new waypoint
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/waypoint/{}/data'.format(username, client_id,
+                                                                                             ambulance_id, call.id, -1),
+                            json.dumps({
+                                'order': 2,
+                                'location': {
+                                    'type': LocationType.w.name
+                                }
+                            }))
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), "finished")
