@@ -76,24 +76,24 @@ class TestCall(TestSetup):
 
     def test_location_serializer(self):
 
-        wpl_2 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        serializer = LocationSerializer(wpl_2)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
+        serializer = LocationSerializer(wpl_1)
         result = {
-            'id': wpl_2.id,
+            'id': wpl_1.id,
             'type': LocationType.i.name,
-            'location': point2str(wpl_2.location),
-            'number': wpl_2.number,
-            'street': wpl_2.street,
-            'unit': wpl_2.unit,
-            'neighborhood': wpl_2.neighborhood,
-            'city': wpl_2.city,
-            'state': wpl_2.state,
-            'zipcode': wpl_2.zipcode,
-            'country': wpl_2.country,
-            'name': wpl_2.name,
-            'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by.id,
-            'updated_on': date2iso(wpl_2.updated_on)
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -121,57 +121,57 @@ class TestCall(TestSetup):
     def test_waypoint_serializer(self):
 
         # create call
-        c_2 = Call.objects.create(updated_by=self.u1)
+        c_1 = Call.objects.create(updated_by=self.u1)
 
         # create ambulance call
-        ac_2 = AmbulanceCall.objects.create(call=c_2, ambulance=self.a1)
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
 
         # serialization
-        wpl_2 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wpl_2_serializer = LocationSerializer(wpl_2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_2, order=0, status=WaypointStatus.N.name,
-                                       location=wpl_2, updated_by=self.u1)
-        serializer = WaypointSerializer(wp_2)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
+        wpl_1_serializer = LocationSerializer(wpl_1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name,
+                                       location=wpl_1, updated_by=self.u1)
+        serializer = WaypointSerializer(wp_1)
         result = {
-            'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'id': wp_1.id,
+            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
-            'location': wpl_2_serializer.data,
-            'comment': wp_2.comment,
-            'updated_by': wp_2.updated_by.id,
-            'updated_on': date2iso(wp_2.updated_on)
+            'location': wpl_1_serializer.data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         result = {
-            'id': wpl_2.id,
+            'id': wpl_1.id,
             'type': LocationType.i.name,
-            'location': point2str(wpl_2.location),
-            'number': wpl_2.number,
-            'street': wpl_2.street,
-            'unit': wpl_2.unit,
-            'neighborhood': wpl_2.neighborhood,
-            'city': wpl_2.city,
-            'state': wpl_2.state,
-            'zipcode': wpl_2.zipcode,
-            'country': wpl_2.country,
-            'name': wpl_2.name,
-            'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by.id,
-            'updated_on': date2iso(wpl_2.updated_on)
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
 
         # serialization
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u1)
         wpl_2_serializer = LocationSerializer(wpl_2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_2, order=1, status=WaypointStatus.D.name,
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.D.name,
                                        location=wpl_2, updated_by=self.u1)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.D.name,
             'active': True,
@@ -203,10 +203,10 @@ class TestCall(TestSetup):
     def test_waypoint_serializer_create(self):
 
         # create call
-        c_2 = Call.objects.create(updated_by=self.u1)
+        c_1 = Call.objects.create(updated_by=self.u1)
 
         # create ambulance call
-        ac_2 = AmbulanceCall.objects.create(call=c_2, ambulance=self.a1)
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
 
         # serialization
         data = {
@@ -219,39 +219,39 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_2.id)
+        wp_1 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
 
-        wpl_2 = wp_2.location
-        wpl_2_serializer = LocationSerializer(wpl_2)
-        serializer = WaypointSerializer(wp_2)
+        wpl_1 = wp_1.location
+        wpl_1_serializer = LocationSerializer(wpl_1)
+        serializer = WaypointSerializer(wp_1)
         result = {
-            'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'id': wp_1.id,
+            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
-            'location': wpl_2_serializer.data,
-            'comment': wp_2.comment,
-            'updated_by': wp_2.updated_by.id,
-            'updated_on': date2iso(wp_2.updated_on)
+            'location': wpl_1_serializer.data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         result = {
-            'id': wpl_2.id,
+            'id': wpl_1.id,
             'type': LocationType.i.name,
-            'location': point2str(wpl_2.location),
-            'number': wpl_2.number,
-            'street': wpl_2.street,
-            'unit': wpl_2.unit,
-            'neighborhood': wpl_2.neighborhood,
-            'city': wpl_2.city,
-            'state': wpl_2.state,
-            'zipcode': wpl_2.zipcode,
-            'country': wpl_2.country,
-            'name': wpl_2.name,
-            'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by.id,
-            'updated_on': date2iso(wpl_2.updated_on)
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
 
@@ -267,7 +267,7 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_2.id)
+        wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
     
         wpl_2 = self.h1.location_ptr
         wpl_2_serializer = LocationSerializer(wpl_2)
@@ -276,7 +276,7 @@ class TestCall(TestSetup):
         logger.debug(serializer.data['location'])
         result = {
             'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.V.name,
             'active': True,
@@ -317,59 +317,59 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1, ambulance_call_id=ac_2.id)
+        self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1, ambulance_call_id=ac_1.id)
 
     def test_waypoint_serializer_update(self):
 
         # create call
-        c_2 = Call.objects.create(updated_by=self.u1)
+        c_1 = Call.objects.create(updated_by=self.u1)
 
         # create ambulance call
-        ac_2 = AmbulanceCall.objects.create(call=c_2, ambulance=self.a1)
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
 
         # waypoint creation
-        wpl_2 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_2, order=0, status=WaypointStatus.N.name,
-                                       location=wpl_2, updated_by=self.u1)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name,
+                                       location=wpl_1, updated_by=self.u1)
 
         wpl_2 = Location.objects.create(type=LocationType.w.name, number='123', street='adsasd', updated_by=self.u1)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_2, order=1, status=WaypointStatus.D.name,
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.D.name,
                                        location=wpl_2, updated_by=self.u1)
 
         wpl_3 = self.h1.location_ptr
-        wp_3 = Waypoint.objects.create(ambulance_call=ac_2, order=1, status=WaypointStatus.V.name,
+        wp_3 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.V.name,
                                        location=wpl_3, updated_by=self.u1)
 
-        wpl_2_serializer = LocationSerializer(wpl_2)
-        serializer = WaypointSerializer(wp_2)
+        wpl_1_serializer = LocationSerializer(wpl_1)
+        serializer = WaypointSerializer(wp_1)
         result = {
-            'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'id': wp_1.id,
+            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
-            'location': wpl_2_serializer.data,
-            'comment': wp_2.comment,
-            'updated_by': wp_2.updated_by.id,
-            'updated_on': date2iso(wp_2.updated_on)
+            'location': wpl_1_serializer.data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         result = {
-            'id': wpl_2.id,
+            'id': wpl_1.id,
             'type': LocationType.i.name,
-            'location': point2str(wpl_2.location),
-            'number': wpl_2.number,
-            'street': wpl_2.street,
-            'unit': wpl_2.unit,
-            'neighborhood': wpl_2.neighborhood,
-            'city': wpl_2.city,
-            'state': wpl_2.state,
-            'zipcode': wpl_2.zipcode,
-            'country': wpl_2.country,
-            'name': wpl_2.name,
-            'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by.id,
-            'updated_on': date2iso(wpl_2.updated_on)
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
 
@@ -379,41 +379,41 @@ class TestCall(TestSetup):
             'status': WaypointStatus.V.name,
             'active': True
         }
-        serializer = WaypointSerializer(wp_2, data=data)
+        serializer = WaypointSerializer(wp_1, data=data)
         serializer.is_valid()
         logger.debug(serializer.errors)
-        wp_2 = serializer.save(updated_by=self.u1)
+        wp_1 = serializer.save(updated_by=self.u1)
 
-        wpl_2_serializer = LocationSerializer(wpl_2)
-        serializer = WaypointSerializer(wp_2)
+        wpl_1_serializer = LocationSerializer(wpl_1)
+        serializer = WaypointSerializer(wp_1)
         result = {
-            'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'id': wp_1.id,
+            'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.V.name,
             'active': True,
-            'location': wpl_2_serializer.data,
-            'comment': wp_2.comment,
-            'updated_by': wp_2.updated_by.id,
-            'updated_on': date2iso(wp_2.updated_on)
+            'location': wpl_1_serializer.data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         result = {
-            'id': wpl_2.id,
+            'id': wpl_1.id,
             'type': LocationType.i.name,
-            'location': point2str(wpl_2.location),
-            'number': wpl_2.number,
-            'street': wpl_2.street,
-            'unit': wpl_2.unit,
-            'neighborhood': wpl_2.neighborhood,
-            'city': wpl_2.city,
-            'state': wpl_2.state,
-            'zipcode': wpl_2.zipcode,
-            'country': wpl_2.country,
-            'name': wpl_2.name,
-            'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by.id,
-            'updated_on': date2iso(wpl_2.updated_on)
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.number,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
 
@@ -432,7 +432,7 @@ class TestCall(TestSetup):
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'ambulance_call_id': ac_1.id,
             'order': 2,
             'status': WaypointStatus.N.name,
             'active': False,
@@ -487,9 +487,9 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, expected)
 
         # create first ambulance call
-        ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
+        ambulance_call_1 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
 
-        ambulance_call = ambulance_call_2
+        ambulance_call = ambulance_call_1
         serializer = AmbulanceCallSerializer(ambulance_call)
         expected = {
             'id': ambulance_call.id,
@@ -501,7 +501,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, expected)
 
         serializer = CallSerializer(c1)
-        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
+        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
 
         expected = {
             'id': c1.id,
@@ -518,7 +518,7 @@ class TestCall(TestSetup):
             'ambulancecall_set': [],
             'patient_set': []
         }
-        self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_2.data])
+        self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_1.data])
         result = serializer.data
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
@@ -556,15 +556,15 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
-                              [ambulance_call_serializer_2.data, ambulance_call_serializer_2.data])
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         result = serializer.data
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
         # Add waypoints to ambulancecalls
-        wpl_2 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=0, status=WaypointStatus.N.name,
-                                       location=wpl_2, updated_by=self.u1)
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, status=WaypointStatus.N.name,
+                                       location=wpl_1, updated_by=self.u1)
 
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u2)
         wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, status=WaypointStatus.D.name,
@@ -574,7 +574,7 @@ class TestCall(TestSetup):
                                        location=self.h1, updated_by=self.u2)
 
         # create ambulance update to use in event
-        ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1,
+        ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
                                                             status=AmbulanceStatus.PB.name,
                                                             updated_by=self.u1)
         ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1,
@@ -585,7 +585,7 @@ class TestCall(TestSetup):
                                                             updated_by=self.u1)
 
         serializer = CallSerializer(c1)
-        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
+        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
 
         expected = {
@@ -604,42 +604,42 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
-                              [ambulance_call_serializer_2.data, ambulance_call_serializer_2.data])
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         result = serializer.data
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
-        wp_2_serializer = WaypointSerializer(wp_2)
+        wp_1_serializer = WaypointSerializer(wp_1)
         result = {
-            'id': wp_2.id,
-            'ambulance_call_id': ambulance_call_2.id,
+            'id': wp_1.id,
+            'ambulance_call_id': ambulance_call_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
-            'location': LocationSerializer(wpl_2).data,
-            'comment': wp_2.comment,
-            'updated_by': wp_2.updated_by.id,
-            'updated_on': date2iso(wp_2.updated_on)
+            'location': LocationSerializer(wpl_1).data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
-        self.assertDictEqual(wp_2_serializer.data, result)
+        self.assertDictEqual(wp_1_serializer.data, result)
         result = {
-            'id': wpl_2.id,
+            'id': wpl_1.id,
             'type': LocationType.i.name,
-            'location': point2str(wpl_2.location),
-            'number': wpl_2.street,
-            'street': wpl_2.street,
-            'unit': wpl_2.unit,
-            'neighborhood': wpl_2.neighborhood,
-            'city': wpl_2.city,
-            'state': wpl_2.state,
-            'zipcode': wpl_2.zipcode,
-            'country': wpl_2.country,
-            'name': wpl_2.name,
-            'comment': wpl_2.comment,
-            'updated_by': wpl_2.updated_by.id,
-            'updated_on': date2iso(wpl_2.updated_on)
+            'location': point2str(wpl_1.location),
+            'number': wpl_1.street,
+            'street': wpl_1.street,
+            'unit': wpl_1.unit,
+            'neighborhood': wpl_1.neighborhood,
+            'city': wpl_1.city,
+            'state': wpl_1.state,
+            'zipcode': wpl_1.zipcode,
+            'country': wpl_1.country,
+            'name': wpl_1.name,
+            'comment': wpl_1.comment,
+            'updated_by': wpl_1.updated_by.id,
+            'updated_on': date2iso(wpl_1.updated_on)
         }
-        self.assertDictEqual(wp_2_serializer.data['location'], result)
+        self.assertDictEqual(wp_1_serializer.data['location'], result)
 
         wp_2_serializer = WaypointSerializer(wp_2)
         result = {
@@ -709,7 +709,7 @@ class TestCall(TestSetup):
         p1 = Patient.objects.create(call=c1, name='Jose', age=3)
         p2 = Patient.objects.create(call=c1, name='Maria', age=4)
 
-        patient_serializer_2 = PatientSerializer(p1)
+        patient_serializer_1 = PatientSerializer(p1)
         patient_serializer_2 = PatientSerializer(p2)
 
         serializer = CallSerializer(c1)
@@ -730,9 +730,9 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
-                              [ambulance_call_serializer_2.data, ambulance_call_serializer_2.data])
+                              [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['patient_set'],
-                              [patient_serializer_2.data, patient_serializer_2.data])
+                              [patient_serializer_2.data, patient_serializer_1.data])
         result = serializer.data
         result['ambulancecall_set'] = []
         result['patient_set'] = []
@@ -741,7 +741,7 @@ class TestCall(TestSetup):
         # retrieve ambulance updates
         queryset = AmbulanceUpdate\
             .objects.filter(ambulance=self.a1.id)\
-            .filter(timestamp__gte=ambulance_update_2.updated_on)
+            .filter(timestamp__gte=ambulance_update_1.updated_on)
         answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
@@ -777,7 +777,7 @@ class TestCall(TestSetup):
         self.assertEqual(len(result), 0)
 
         # start call
-        c1.started_at = ambulance_update_2.updated_on
+        c1.started_at = ambulance_update_1.updated_on
         c1.save()
 
         # redo query
