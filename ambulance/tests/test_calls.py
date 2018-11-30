@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from django.db import IntegrityError
 
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, serializers
 from io import BytesIO
 import json
 
@@ -266,7 +266,6 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        logger.debug(serializer.errors)
         wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
     
         wpl_2 = self.h1.location_ptr
@@ -305,6 +304,19 @@ class TestCall(TestSetup):
             'updated_on': date2iso(wpl_2.updated_on)
         }
         self.assertDictEqual(serializer.data['location'], result)
+
+        # try to create hospital waypoint
+        data = {
+            'order': 1,
+            'status': WaypointStatus.V.name,
+            'active': True,
+            'location': {
+                'type': LocationType.h.name
+            }
+        }
+        serializer = WaypointSerializer(data=data)
+        serializer.is_valid()
+        self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1, ambulance_call_id=ac_1.id)
 
     def test_call_serializer(self):
 
