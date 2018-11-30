@@ -6,7 +6,8 @@ from django.urls import reverse
 
 from django.db import IntegrityError
 
-from rest_framework.parsers import JSONParser, serializers
+from rest_framework.parsers import JSONParser
+from rest_framework import serializers
 from io import BytesIO
 import json
 
