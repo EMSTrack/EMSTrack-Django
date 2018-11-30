@@ -219,6 +219,9 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        waypoint = ambulancecall.waypoint_set
+        self.assertEqual(len(waypoint), 2)
+
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), "finished")
