@@ -265,6 +265,7 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
+        logger.debug(serializer.errors)
         wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
     
         wpl_2 = wp_2.location
