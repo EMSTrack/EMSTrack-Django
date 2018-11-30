@@ -474,7 +474,7 @@ class TestCall(TestSetup):
         serializer = WaypointSerializer(wp_3, data=data)
         serializer.is_valid()
         logger.debug(serializer.errors)
-        wp_3 = serializer.save(updated_by=self.u1)
+        self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1)
 
     def test_call_serializer(self):
 
