@@ -220,7 +220,7 @@ class TestCall(TestSetup):
         serializer.is_valid()
         wp_1 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
 
-        wpl_1 = wp_1['location']
+        wpl_1 = wp_1.location
         wpl_1_serializer = LocationSerializer(wpl_1)
         serializer = WaypointSerializer(wp_1)
         result = {
