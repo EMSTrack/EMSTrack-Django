@@ -271,6 +271,7 @@ class TestCall(TestSetup):
     
         wpl_2 = self.h1.location_ptr
         wpl_2_serializer = LocationSerializer(wpl_2)
+        logger.debug(wpl_2_serializer.data)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
