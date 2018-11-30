@@ -11,9 +11,9 @@ from io import BytesIO
 from login.models import Client, ClientLog, ClientStatus, ClientActivity
 from .client import BaseClient
 
-from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall
+from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall, Waypoint
 from ambulance.models import Call
-from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer, WaypointSerializer
 from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital, HospitalEquipment
@@ -70,9 +70,13 @@ class SubscribeClient(BaseClient):
         self.client.message_callback_add('user/+/client/+/status',
                                          self.on_client_status)
 
-        # call handler
+        # ambulance call handler
         self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/status',
                                          self.on_call_ambulance)
+
+        # ambulance call waypoint handler
+        self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/waypoint/+/data',
+                                         self.on_call_ambulance_waypoint)
 
         # subscribe
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
@@ -81,6 +85,7 @@ class SubscribeClient(BaseClient):
         self.subscribe('user/+/client/+/hospital/+/equipment/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/status', 2)
+        self.subscribe('user/+/client/+/ambulance/+/call/+/waypoint/+/data', 2)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
@@ -857,3 +862,105 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, client, msg.topic, msg.payload, e)
 
         logger.debug('on_call_ambulance: DONE')
+
+    # handle calls
+    def on_call_ambulance_waypoint(self, clnt, userdata, msg):
+
+        try:
+
+            logger.debug("on_call_ambulance_waypoint: msg = '{}:{}'".format(msg.topic, msg.payload))
+
+            # parse topic
+            user, client, data, ambulance_id, call_id, waypoint_id = self.parse_topic(msg, 6)
+            waypoint_id = int(waypoint_id)
+
+        except Exception as e:
+
+            logger.debug("on_call_ambulance_waypoint: ParseException '{}".format(e))
+            return
+
+        try:
+
+            ambulance_call = AmbulanceCall.objects.get(ambulance__pk=ambulance_id, call__pk=call_id)
+
+        except Ambulance.DoesNotExist:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
+            return
+
+        except Call.DoesNotExist:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Call with id '{}' does not exist".format(call_id))
+            return
+
+        except Exception as e:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
+            return
+
+        try:
+
+            try:
+
+                if waypoint_id > 0:
+
+                    # waypoint exists, update
+
+                    # retrieve serializer
+                    waypoint = Waypoint.objects.get(pk=waypoint_id)
+
+                    # update waypoint
+                    serializer = WaypointSerializer(waypoint,
+                                                    data=data,
+                                                    partial=True)
+
+                else:
+
+                    # waypoint does not exist, create
+
+                    # create waypoint
+                    data['ambulance_call'] = ambulance_call
+                    serializer = WaypointSerializer(data=data)
+
+            except Waypoint.DoesNotExist:
+
+                logger.debug('on_call_ambulance_waypoint: INVALID waypoint id')
+
+                # send error message to user
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Waypoint with id '{}' does not exist".format(waypoint_id))
+                return
+
+            except Exception as e:
+
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Exception: '{}'".format(e))
+                return
+
+            if serializer.is_valid():
+
+                logger.debug('on_call_ambulance_waypoint: valid serializer')
+
+                # save to database
+                serializer.save(updated_by=user)
+
+            else:
+
+                logger.debug('on_call_ambulance_waypoint: INVALID serializer')
+
+                # send error message to user
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        serializer.errors)
+
+        except Exception as e:
+
+            logger.debug('on_call_ambulance_waypoint: EXCEPTION')
+
+            # send error message to user
+            self.send_error_message(user, client, msg.topic, msg.payload, e)
+
+        logger.debug('on_call_ambulance_waypoint: DONE')
+
