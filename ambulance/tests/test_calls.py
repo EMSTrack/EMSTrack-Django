@@ -260,7 +260,8 @@ class TestCall(TestSetup):
             'status': WaypointStatus.V.name,
             'active': True,
             'location': {
-                'id': self.h1.id
+                'id': self.h1.id,
+                'type': LocationType.h.name
             }
         }
         serializer = WaypointSerializer(data=data)
