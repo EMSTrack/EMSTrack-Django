@@ -220,7 +220,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # has the waypoint been created?
-        waypoint = ambulancecall.waypoint_set
+        waypoint = ambulancecall.waypoint_set.all()
         self.assertEqual(len(waypoint), 2)
 
         # test_client publishes "Finished" to call status
