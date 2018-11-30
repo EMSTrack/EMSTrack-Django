@@ -289,7 +289,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, result)
         result = {
             'id': wpl_2.id,
-            'type': LocationType.i.name,
+            'type': LocationType.h.name,
             'location': point2str(wpl_2.location),
             'number': wpl_2.number,
             'street': wpl_2.street,
