@@ -251,7 +251,12 @@ class WaypointSerializer(serializers.ModelSerializer):
         user = validated_data['updated_by']
 
         # retrieve location
-        location = validated_data.pop('location')
+        location = validated_data.pop('location', None)
+        if location is None:
+            raise serializers.ValidationError('Waypoin must have a location')
+
+        # retrive initial location
+        # location id is not present in validated_data
         initial_location = self.initial_data['location']
 
         # create waypoint
