@@ -260,7 +260,10 @@ class WaypointSerializer(serializers.ModelSerializer):
         # retrieve or create?
         if 'id' not in initial_location or initial_location['id'] is None:
             logger.debug('will create waypoint location')
-            location = Location.objects.create(**location, updated_by=user)
+            if location['type'] in (LocationType.i.name, LocationType.w.name):
+                location = Location.objects.create(**location, updated_by=user)
+            else:
+                raise serializers.ValidationError('Users can only create incident and waypoint locations')
         else:
             logger.debug('will retrieve waypoint location')
             location = Location.objects.get(id=initial_location['id'])
