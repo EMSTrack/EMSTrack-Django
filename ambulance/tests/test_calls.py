@@ -256,7 +256,7 @@ class TestCall(TestSetup):
 
         # serialization
         data = {
-            'order': 0,
+            'order': 1,
             'status': WaypointStatus.V.name,
             'active': True,
             'location': {
@@ -275,8 +275,8 @@ class TestCall(TestSetup):
         result = {
             'id': wp_2.id,
             'ambulance_call_id': ac_1.id,
-            'order': 0,
-            'status': WaypointStatus.N.name,
+            'order': 1,
+            'status': WaypointStatus.V.name,
             'active': True,
             'location': wpl_2_serializer.data,
             'comment': wp_2.comment,
