@@ -269,12 +269,12 @@ class TestCall(TestSetup):
         logger.debug(serializer.errors)
         wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
     
-        wpl_2 = wp_2.location
+        wpl_2 = self.h1
         wpl_2_serializer = LocationSerializer(wpl_2)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
-            'ambulance_call_id': ac_2.id,
+            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
