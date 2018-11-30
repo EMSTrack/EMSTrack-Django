@@ -950,8 +950,15 @@ class SubscribeClient(BaseClient):
 
                 logger.debug('on_call_ambulance_waypoint: valid serializer')
 
-                # save to database
-                serializer.save(updated_by=user)
+                if waypoint_id > 0:
+
+                    # save to database
+                    serializer.save(updated_by=user)
+
+                else:
+
+                    # save to database
+                    serializer.save(updated_by=user, ambulance_call_id=ambulance_call.id)
 
             else:
 
