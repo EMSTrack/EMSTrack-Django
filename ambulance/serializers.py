@@ -364,7 +364,7 @@ class CallSerializer(serializers.ModelSerializer):
                         else:
                             raise serializers.ValidationError("Invalid waypoint '{}'".format(location))
                     # add waypoint
-                    obj = Waypoint.objectx.create(ambulance_call=ambulance_call, **waypoint,
+                    obj = Waypoint.objects.create(ambulance_call=ambulance_call, **waypoint,
                                                   location=location, updated_by=user)
 
             # publish call to mqtt only after all includes have succeeded
