@@ -275,6 +275,11 @@ class WaypointSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
 
+        # retrieve location
+        location = validated_data.pop('location', None)
+        if location is not None:
+            raise serializers.ValidationError('Waypoint locations cannot be updated.')
+
         return super().update(instance, validated_data)
 
 
