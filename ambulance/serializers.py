@@ -255,12 +255,13 @@ class WaypointSerializer(serializers.ModelSerializer):
         else:
             location = Location.objects.get(id=location['id'])
 
-        return super().create(validated_data, location=location)
+        return super().create(validated_data)
 
     def update(self, instance, validated_data):
 
         # location cannot change
-        if instance['location']['id'] != validated_data['location']['id']:
+        location = validated_data.pop('location')
+        if instance['location']['id'] != location['id']:
             raise serializers.ValidationError('Waypoint location cannot be altered.')
 
         return super().update(instance, validated_data)
