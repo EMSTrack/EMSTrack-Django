@@ -251,9 +251,9 @@ class WaypointSerializer(serializers.ModelSerializer):
         # retrieve or create location
         location = validated_data.pop('location')
         if 'id' not in location or location['id'] is not None:
-            location = Location.objects.create(**location, updated_by=user)
+            validated_data['location'] = Location.objects.create(**location, updated_by=user)
         else:
-            location = Location.objects.get(id=location['id'])
+            validated_data['location'] = Location.objects.get(id=location['id'])
 
         return super().create(validated_data)
 
