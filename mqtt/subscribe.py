@@ -221,6 +221,10 @@ class SubscribeClient(BaseClient):
 
             return user, client, data, values[5], values[7]
 
+        elif expect == 6 and len(values) == 11:
+
+            return user, client, data, values[5], values[7], values[9]
+
         else:
 
             # send error message to user
