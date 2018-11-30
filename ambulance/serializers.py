@@ -92,8 +92,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 # fine, clear or update location client
                 validated_data['location_client'] = location_client
 
-        logger.debug('validated_data = {}'.format(validated_data))
-
         return super().update(instance, validated_data)
 
 
@@ -109,9 +107,6 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                     update['location'] != current['location']):
 
                     current['orientation'] = calculate_orientation(current['location'], update['location'])
-                    logger.debug('< {} - {} = {}'.format(current['location'],
-                                                         update['location'],
-                                                         current['orientation']))
 
             # clear timestamp
             current.pop('timestamp', None)
@@ -120,8 +115,6 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
             current.update(**update)
 
             return current
-
-        logger.debug('validated_data = {}'.format(validated_data))
 
         # process updates inside a transaction
         try:
@@ -231,7 +224,7 @@ class LocationSerializer(serializers.ModelSerializer):
         user = validated_data['updated_by']
 
         # check credentials
-        # only super can create
+        # only super can update
         if not user.is_superuser:
             raise PermissionDenied()
 
@@ -247,8 +240,27 @@ class WaypointSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waypoint
         fields = ['id',
-                  'order', 'status',
+                  'order', 'status', 'active',
                   'location']
+
+    def create(self, validated_data):
+
+        # retrieve or create location
+        location = validated_data.pop('location')
+        if location['id'] is not None:
+            location = Location.objects.create(**location)
+        else:
+            location = Location.objects.get(id=location['id'])
+
+        return super().create(validated_data, location=location)
+
+    def update(self, instance, validated_data):
+
+        # location cannot change
+        if instance['location']['id'] != validated_data['location']['id']:
+            raise serializers.ValidationError('Waypoint location cannot be altered.')
+
+        return super().update(instance, validated_data)
 
 
 # AmbulanceCall Serializer
@@ -298,10 +310,6 @@ class CallSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
-        logger.debug('CALL::CREATE')
-        logger.debug(self.initial_data)
-        logger.debug(validated_data)
-
         # Get current user.
         user = validated_data['updated_by']
 
@@ -333,7 +341,6 @@ class CallSerializer(serializers.ModelSerializer):
                 # add waypoints
                 for waypoint in waypoint_set:
                     location = waypoint.pop('location', {})
-                    logger.debug('location = {}'.format(location))
                     if not location:
                         raise serializers.ValidationError('Location is not defined')
                     if 'id' in location:

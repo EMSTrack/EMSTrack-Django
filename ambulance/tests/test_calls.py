@@ -134,6 +134,7 @@ class TestCall(TestSetup):
             'id': wp_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
+            'active': True,
             'location': wpl_1_serializer.data
         }
         self.assertDictEqual(serializer.data, result)
@@ -165,6 +166,7 @@ class TestCall(TestSetup):
             'id': wp_2.id,
             'order': 1,
             'status': WaypointStatus.D.name,
+            'active': True,
             'location': wpl_2_serializer.data
         }
         self.assertDictEqual(serializer.data, result)
@@ -336,6 +338,7 @@ class TestCall(TestSetup):
             'id': wp_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
+            'active': True,
             'location': LocationSerializer(wpl_1).data
         }
         self.assertDictEqual(wp_1_serializer.data, result)
@@ -363,6 +366,7 @@ class TestCall(TestSetup):
             'id': wp_2.id,
             'order': 1,
             'status': WaypointStatus.D.name,
+            'active': True,
             'location': LocationSerializer(wpl_2).data
         }
         self.assertDictEqual(wp_2_serializer.data, result)
@@ -390,6 +394,7 @@ class TestCall(TestSetup):
             'id': wp_3.id,
             'order': 2,
             'status': WaypointStatus.V.name,
+            'active': True,
             'location': LocationSerializer(self.h1).data
         }
         self.assertDictEqual(wp_3_serializer.data, result)
