@@ -444,7 +444,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, result)
         result = {
             'id': wpl_2.id,
-            'type': LocationType.i.name,
+            'type': LocationType.w.name,
             'location': point2str(wpl_2.location),
             'number': wpl_2.number,
             'street': wpl_2.street,
@@ -461,7 +461,6 @@ class TestCall(TestSetup):
         }
         self.maxDiff = None
         self.assertDictEqual(dict(serializer.data['location']), result)
-
 
     def test_call_serializer(self):
 
