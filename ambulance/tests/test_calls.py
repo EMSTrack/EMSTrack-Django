@@ -207,7 +207,7 @@ class TestCall(TestSetup):
 
         # serialization
         data = {
-            'ambulance_call': ac_1.id,
+            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
