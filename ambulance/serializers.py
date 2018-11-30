@@ -241,8 +241,9 @@ class WaypointSerializer(serializers.ModelSerializer):
         model = Waypoint
         fields = ['id',
                   'order', 'status', 'active',
-                  'location']
-        read_only_fields = ('location',)
+                  'location',
+                  'comment', 'updated_by', 'updated_on']
+        read_only_fields = ('location', 'updated_by')
 
     def create(self, validated_data):
 
@@ -256,6 +257,7 @@ class WaypointSerializer(serializers.ModelSerializer):
         else:
             location = Location.objects.get(id=location['id'])
 
+        # create waypoint and add location
         waypoint = super().create(validated_data)
         waypoint.location = location
         waypoint.save()

@@ -676,7 +676,8 @@ class WaypointStatus(Enum):
     D = 'Visited'
 
 
-class Waypoint(models.Model):
+class Waypoint(models.Model,
+               UpdatedByModel):
     # call
     ambulance_call = models.ForeignKey(AmbulanceCall,
                                        on_delete=models.CASCADE)

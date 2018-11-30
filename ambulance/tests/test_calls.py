@@ -167,7 +167,10 @@ class TestCall(TestSetup):
             'order': 1,
             'status': WaypointStatus.D.name,
             'active': True,
-            'location': wpl_2_serializer.data
+            'location': wpl_2_serializer.data,
+            'comment': wp_2.comment,
+            'updated_by': wp_2.updated_by.id,
+            'updated_on': date2iso(wp_2.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         result = {
@@ -208,7 +211,7 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        call = serializer.save(updated_by=self.u1)
+        waypoint = serializer.save()
 
     def test_call_serializer(self):
 
@@ -360,7 +363,10 @@ class TestCall(TestSetup):
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
-            'location': LocationSerializer(wpl_1).data
+            'location': LocationSerializer(wpl_1).data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
         self.assertDictEqual(wp_1_serializer.data, result)
         result = {
@@ -388,7 +394,10 @@ class TestCall(TestSetup):
             'order': 1,
             'status': WaypointStatus.D.name,
             'active': True,
-            'location': LocationSerializer(wpl_2).data
+            'location': LocationSerializer(wpl_2).data,
+            'comment': wp_2.comment,
+            'updated_by': wp_2.updated_by.id,
+            'updated_on': date2iso(wp_2.updated_on)
         }
         self.assertDictEqual(wp_2_serializer.data, result)
         result = {
@@ -416,7 +425,10 @@ class TestCall(TestSetup):
             'order': 2,
             'status': WaypointStatus.V.name,
             'active': True,
-            'location': LocationSerializer(self.h1).data
+            'location': LocationSerializer(self.h1).data,
+            'comment': wp_3.comment,
+            'updated_by': wp_3.updated_by.id,
+            'updated_on': date2iso(wp_3.updated_on)
         }
         self.assertDictEqual(wp_3_serializer.data, result)
         result = {
