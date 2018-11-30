@@ -254,6 +254,53 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data['location'], result)
 
+        # serialization
+        data = {
+            'order': 0,
+            'status': WaypointStatus.V.name,
+            'active': True,
+            'location': {
+                'id': self.h1.id
+            }
+        }
+        serializer = WaypointSerializer(data=data)
+        serializer.is_valid()
+        wp_2 = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
+    
+        wpl_2 = wp_2.location
+        wpl_2_serializer = LocationSerializer(wpl_2)
+        serializer = WaypointSerializer(wp_2)
+        result = {
+            'id': wp_2.id,
+            'ambulance_call_id': ac_2.id,
+            'order': 0,
+            'status': WaypointStatus.N.name,
+            'active': True,
+            'location': wpl_2_serializer.data,
+            'comment': wp_2.comment,
+            'updated_by': wp_2.updated_by.id,
+            'updated_on': date2iso(wp_2.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
+        result = {
+            'id': wpl_2.id,
+            'type': LocationType.i.name,
+            'location': point2str(wpl_2.location),
+            'number': wpl_2.number,
+            'street': wpl_2.street,
+            'unit': wpl_2.unit,
+            'neighborhood': wpl_2.neighborhood,
+            'city': wpl_2.city,
+            'state': wpl_2.state,
+            'zipcode': wpl_2.zipcode,
+            'country': wpl_2.country,
+            'name': wpl_2.name,
+            'comment': wpl_2.comment,
+            'updated_by': wpl_2.updated_by.id,
+            'updated_on': date2iso(wpl_2.updated_on)
+        }
+        self.assertDictEqual(serializer.data['location'], result)
+
     def test_call_serializer(self):
 
         # create call
