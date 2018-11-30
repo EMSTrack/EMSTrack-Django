@@ -128,14 +128,18 @@ class TestCall(TestSetup):
         # serialization
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         wpl_1_serializer = LocationSerializer(wpl_1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name, location=wpl_1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name,
+                                       location=wpl_1, updated_by=self.u1)
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
-            'location': wpl_1_serializer.data
+            'location': wpl_1_serializer.data,
+            'comment': wp_1.comment,
+            'updated_by': wp_1.updated_by.id,
+            'updated_on': date2iso(wp_1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
         result = {
@@ -160,7 +164,8 @@ class TestCall(TestSetup):
         # serialization
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u1)
         wpl_2_serializer = LocationSerializer(wpl_2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.D.name, location=wpl_2)
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.D.name,
+                                       location=wpl_2, updated_by=self.u1)
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
@@ -211,7 +216,7 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        waypoint = serializer.save()
+        waypoint = serializer.save(updated_by=self.u1)
 
     def test_call_serializer(self):
 
@@ -314,12 +319,15 @@ class TestCall(TestSetup):
 
         # Add waypoints to ambulancecalls
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, status=WaypointStatus.N.name, location=wpl_1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, status=WaypointStatus.N.name,
+                                       location=wpl_1, updated_by=self.u1)
 
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u2)
-        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, status=WaypointStatus.D.name, location=wpl_2)
+        wp_2 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=1, status=WaypointStatus.D.name,
+                                       location=wpl_2, updated_by=self.u2)
 
-        wp_3 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=2, status=WaypointStatus.V.name, location=self.h1)
+        wp_3 = Waypoint.objects.create(ambulance_call=ambulance_call_2, order=2, status=WaypointStatus.V.name,
+                                       location=self.h1, updated_by=self.u2)
 
         # create ambulance update to use in event
         ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
