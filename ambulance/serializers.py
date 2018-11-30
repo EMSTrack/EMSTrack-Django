@@ -235,7 +235,7 @@ class LocationSerializer(serializers.ModelSerializer):
 
 class WaypointSerializer(serializers.ModelSerializer):
 
-    location = LocationSerializer(required=True)
+    location = LocationSerializer(required=False)
 
     class Meta:
         model = Waypoint
