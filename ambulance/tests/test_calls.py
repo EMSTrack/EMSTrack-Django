@@ -319,6 +319,16 @@ class TestCall(TestSetup):
         serializer.is_valid()
         self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1, ambulance_call_id=ac_1.id)
 
+        # try to create waypoint without location
+        data = {
+            'order': 1,
+            'status': WaypointStatus.V.name,
+            'active': True
+        }
+        serializer = WaypointSerializer(data=data)
+        serializer.is_valid()
+        self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1, ambulance_call_id=ac_1.id)
+
     def test_waypoint_serializer_update(self):
 
         # create call
