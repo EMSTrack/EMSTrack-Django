@@ -273,6 +273,7 @@ class TestCall(TestSetup):
         wpl_2_serializer = LocationSerializer(wpl_2)
         logger.debug(wpl_2_serializer.data)
         serializer = WaypointSerializer(wp_2)
+        logger.debug(serializer.data['location'])
         result = {
             'id': wp_2.id,
             'ambulance_call_id': ac_1.id,
