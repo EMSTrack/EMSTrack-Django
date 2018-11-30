@@ -133,6 +133,7 @@ class TestCall(TestSetup):
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
+            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
@@ -169,6 +170,7 @@ class TestCall(TestSetup):
         serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
+            'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.D.name,
             'active': True,
@@ -368,6 +370,7 @@ class TestCall(TestSetup):
         wp_1_serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
+            'ambulance_call_id': ambulance_call_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
@@ -399,6 +402,7 @@ class TestCall(TestSetup):
         wp_2_serializer = WaypointSerializer(wp_2)
         result = {
             'id': wp_2.id,
+            'ambulance_call_id': ambulance_call_2.id,
             'order': 1,
             'status': WaypointStatus.D.name,
             'active': True,
@@ -430,6 +434,7 @@ class TestCall(TestSetup):
         wp_3_serializer = WaypointSerializer(wp_3)
         result = {
             'id': wp_3.id,
+            'ambulance_call_id': ambulance_call_2.id,
             'order': 2,
             'status': WaypointStatus.V.name,
             'active': True,
