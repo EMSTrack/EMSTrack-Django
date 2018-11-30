@@ -207,7 +207,6 @@ class TestCall(TestSetup):
 
         # serialization
         data = {
-            'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.N.name,
             'active': True,
@@ -217,7 +216,7 @@ class TestCall(TestSetup):
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
-        waypoint = serializer.save(updated_by=self.u1)
+        waypoint = serializer.save(updated_by=self.u1, ambulance_call_id=ac_1.id)
 
     def test_call_serializer(self):
 
