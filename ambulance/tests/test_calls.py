@@ -319,6 +319,27 @@ class TestCall(TestSetup):
         serializer.is_valid()
         self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1, ambulance_call_id=ac_1.id)
 
+    def test_waypoint_serializer_update(self):
+
+        # create call
+        c_1 = Call.objects.create(updated_by=self.u1)
+
+        # create ambulance call
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
+
+        # waypoint creation
+        wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name,
+                                       location=wpl_1, updated_by=self.u1)
+
+        wpl_2 = Location.objects.create(type=LocationType.w.name, number='123', street='adsasd', updated_by=self.u1)
+        wp_2 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.D.name,
+                                       location=wpl_2, updated_by=self.u1)
+
+        wpl_3 = self.h1.location_ptr
+        wp_3 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.V.name,
+                                       location=wpl_3, updated_by=self.u1)
+
     def test_call_serializer(self):
 
         # create call
