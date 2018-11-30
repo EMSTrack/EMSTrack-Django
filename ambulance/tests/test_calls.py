@@ -459,7 +459,8 @@ class TestCall(TestSetup):
             'updated_by': wpl_2.updated_by.id,
             'updated_on': date2iso(wpl_2.updated_on)
         }
-        self.assertDictEqual(serializer.data['location'], result)
+        self.maxDiff = None
+        self.assertDictEqual(dict(serializer.data['location']), result)
 
 
     def test_call_serializer(self):
