@@ -242,6 +242,7 @@ class WaypointSerializer(serializers.ModelSerializer):
         fields = ['id',
                   'order', 'status', 'active',
                   'location']
+        read_only_fields = ('location',)
 
     def create(self, validated_data):
 
@@ -251,18 +252,17 @@ class WaypointSerializer(serializers.ModelSerializer):
         # retrieve or create location
         location = validated_data.pop('location')
         if 'id' not in location or location['id'] is not None:
-            validated_data['location'] = Location.objects.create(**location, updated_by=user)
+            location = Location.objects.create(**location, updated_by=user)
         else:
-            validated_data['location'] = Location.objects.get(id=location['id'])
+            location = Location.objects.get(id=location['id'])
 
-        return super().create(validated_data)
+        waypoint = super().create(validated_data)
+        waypoint.location = location
+        waypoint.save()
+
+        return waypoint
 
     def update(self, instance, validated_data):
-
-        # location cannot change
-        location = validated_data.pop('location')
-        if instance['location']['id'] != location['id']:
-            raise serializers.ValidationError('Waypoint location cannot be altered.')
 
         return super().update(instance, validated_data)
 
