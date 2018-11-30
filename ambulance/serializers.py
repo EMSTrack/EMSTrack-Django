@@ -204,7 +204,7 @@ class LocationSerializer(serializers.ModelSerializer):
                   'location',
                   'name', 'type',
                   'comment', 'updated_by', 'updated_on']
-        read_only_fields = ('updated_by',)
+        read_only_fields = ('id', 'updated_by')
 
     def create(self, validated_data):
 
