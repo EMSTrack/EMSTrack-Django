@@ -116,7 +116,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for waypoint in ambulancecall.waypoint_set.all %}
+                {% for waypoint in ambulancecall.waypoint_set.all|dictsort:"order" %}
                 <tr>
                     <td>
                         {{ waypoint.order }}
