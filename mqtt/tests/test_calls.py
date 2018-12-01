@@ -234,9 +234,9 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # test_client updates waypoint
         waypoint = waypoint_set.get(order=2)
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/waypoint/{}/data'.format(username, client_id,
-                                                                                             ambulance_id, call.id, -1),
+                                                                                             ambulance_id, call.id,
+                                                                                             waypoint.id),
                             json.dumps({
-                                'id': waypoint.id,
                                 'order': 1,
                                 'status': WaypointStatus.V,
                                 'location': {
