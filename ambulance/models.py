@@ -338,7 +338,7 @@ CallStatusOrder = [
 ] 
 
 
-class CallPublishMixin:
+class PublishMixin:
 
     def save(self, *args, **kwargs):
 
@@ -362,7 +362,7 @@ class CallPublishMixin:
             self.remove()
 
 
-class Call(CallPublishMixin,
+class Call(PublishMixin,
            UpdatedByModel):
 
     # status
@@ -493,7 +493,7 @@ class AmbulanceCallHistory(models.Model):
     created_at = models.DateTimeField()
 
 
-class AmbulanceCall(CallPublishMixin,
+class AmbulanceCall(PublishMixin,
                     models.Model):
 
     # status
@@ -605,7 +605,7 @@ class AmbulanceCall(CallPublishMixin,
 
 # Patient, might be expanded in the future
 
-class Patient(CallPublishMixin,
+class Patient(PublishMixin,
               models.Model):
     """
     A model that provides patient fields.
@@ -676,7 +676,8 @@ class WaypointStatus(Enum):
     D = 'Visited'
 
 
-class Waypoint(UpdatedByModel):
+class Waypoint(PublishMixin,
+               UpdatedByModel):
     # call
     ambulance_call = models.ForeignKey(AmbulanceCall,
                                        on_delete=models.CASCADE)
@@ -710,6 +711,26 @@ class Waypoint(UpdatedByModel):
 
     def is_visiting(self):
         return self.status == WaypointStatus.V.name
+
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', False)
+
+        # remove?
+        remove = kwargs.pop('remove', False)
+
+        # call super
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
+
+    def remove(self):
+        pass
+
+    def publish(self, **kwargs):
+
+        logger.debug('Will publish')
 
 
 # THOSE NEED REVIEWING
