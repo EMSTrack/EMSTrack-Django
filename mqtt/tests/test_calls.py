@@ -205,10 +205,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # subscribe to call and ambulance call status
-        test_client.expect('call/{}/data'.format(ambulance_id))
-        self.is_subscribed(test_client)
-
         # test_client publishes new waypoint
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/waypoint/{}/data'.format(username, client_id,
                                                                                              ambulance_id, call.id, -1),
@@ -227,6 +223,14 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         waypoint = ambulancecall.waypoint_set.all()
         self.assertEqual(len(waypoint), 2)
 
+        # subscribe to call and ambulance call status
+        test_client.expect('call/{}/data'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+        
         # test_client publishes "Finished" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), "finished")
