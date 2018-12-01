@@ -67,6 +67,23 @@
     <div class="row">
         <div class="col">
 
+            <h3>Ambulances:</h3>
+
+            <table class="table table-striped table-sm">
+                <tbody>
+                {% for ambulancecall in call.ambulancecall_set.all %}
+                <tr>
+                    <td>
+                        {{ ambulancecall.ambulance.identifier }}
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        <div class="col">
+
             <h3>Patients:</h3>
 
             <table class="table table-striped table-sm">
@@ -83,23 +100,6 @@
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-        <div class="col">
-
-            <h3>Ambulances:</h3>
-
-            <table class="table table-striped table-sm">
-                <tbody>
-                {% for ambulancecall in call.ambulancecall_set.all %}
-                <tr>
-                    <td>
-                        {{ ambulancecall.ambulance.identifier }}
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-
         </div>
     </div>
 
