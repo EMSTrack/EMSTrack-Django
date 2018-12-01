@@ -953,12 +953,12 @@ class SubscribeClient(BaseClient):
                 if waypoint_id > 0:
 
                     # save to database
-                    serializer.save(updated_by=user)
+                    serializer.save(updated_by=user, publish=True)
 
                 else:
 
                     # save to database
-                    serializer.save(updated_by=user, ambulance_call_id=ambulance_call.id)
+                    serializer.save(updated_by=user, ambulance_call_id=ambulance_call.id, publish=True)
 
             else:
 

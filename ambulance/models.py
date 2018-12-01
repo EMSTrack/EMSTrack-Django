@@ -732,6 +732,10 @@ class Waypoint(PublishMixin,
 
         logger.debug('Will publish')
 
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self.ambulance_call.call)
+
 
 # THOSE NEED REVIEWING
 
