@@ -117,7 +117,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for waypoint in ambulancecall.waypoint_set %}
+                {% for waypoint in ambulancecall.waypoint_set.all %}
                 <tr>
                     <td>
                         {{ waypoint.order }}
