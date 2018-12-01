@@ -29,6 +29,9 @@ def get_ambulance_capability(key):
 def get_location_type(key):
     return LocationType[key].value
 
+@register.filter
+def get_location_coordinates(key):
+    return str(key.x) + ", " + str(key.y)
 
 @register.filter
 def get_call_status(key):
