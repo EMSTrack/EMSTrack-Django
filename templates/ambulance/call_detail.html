@@ -104,7 +104,7 @@
 
             {% for ambulancecall in call.ambulancecall_set.all %}
 
-            <h4><{{ ambulancecall.ambulance.identifier }}/h4>
+            <h4><{{ ambulancecall.ambulance.identifier }}</h4>
 
             <table class="table table-striped table-sm">
                 <thead>
@@ -112,8 +112,8 @@
                     <td>Order</td>
                     <td>Type</td>
                     <td>Coordinates</td>
-                    <td>Active</td>
                     <td>Status</td>
+                    <td>Active</td>
                 </tr>
                 </thead>
                 <tbody>
@@ -129,10 +129,10 @@
                         {{ waypoint.location.location|get_location_coordinates }}
                     </td>
                     <td>
-                        {{ waypoint.active }}
+                        {{ waypoint.status|get_waypoint_status }}
                     </td>
                     <td>
-                        {{ waypoint.status }}
+                        {{ waypoint.active|get_check }}
                     </td>
                 </tr>
                 {% endfor %}

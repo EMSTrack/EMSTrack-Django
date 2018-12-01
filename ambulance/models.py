@@ -29,9 +29,11 @@ def get_ambulance_capability(key):
 def get_location_type(key):
     return LocationType[key].value
 
+
 @register.filter
 def get_location_coordinates(key):
     return str(key.x) + ", " + str(key.y)
+
 
 @register.filter
 def get_call_status(key):
@@ -42,6 +44,10 @@ def get_call_status(key):
 def get_call_priority(key):
     return CallPriority[key].value
 
+
+@register.filter
+def get_waypoint_status(key):
+    return WaypointStatus[key].value
 
 # Ambulance location models
 
