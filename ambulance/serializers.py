@@ -250,6 +250,9 @@ class WaypointSerializer(serializers.ModelSerializer):
         # get current user
         user = validated_data['updated_by']
 
+        # publish?
+        publish = validated_data.pop('publish', False)
+
         # retrieve location
         location = validated_data.pop('location', None)
         if location is None:
@@ -275,17 +278,24 @@ class WaypointSerializer(serializers.ModelSerializer):
 
         # add location to waypoint
         waypoint.location = location
+        waypoint.save(publish=publish)
 
         return waypoint
 
     def update(self, instance, validated_data):
+
+        # publish?
+        publish = validated_data.pop('publish', False)
 
         # retrieve location
         location = validated_data.pop('location', None)
         if location is not None:
             raise serializers.ValidationError('Waypoint locations cannot be updated.')
 
-        return super().update(instance, validated_data)
+        waypoint = super().update(instance, validated_data)
+        waypoint.save(publish=publish)
+
+        return waypoint
 
 
 # AmbulanceCall Serializer
