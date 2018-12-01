@@ -238,7 +238,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                                                                                              waypoint.id),
                             json.dumps({
                                 'order': 1,
-                                'status': WaypointStatus.V,
+                                'status': WaypointStatus.V.name,
                                 'location': {
                                     'type': LocationType.w.name
                                 }
