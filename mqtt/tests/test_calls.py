@@ -205,6 +205,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
+        # subscribe to call and ambulance call status
+        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
+        self.is_subscribed(test_client)
+
         # test_client publishes new waypoint
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/waypoint/{}/data'.format(username, client_id,
                                                                                              ambulance_id, call.id, -1),
