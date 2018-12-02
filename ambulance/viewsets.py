@@ -178,6 +178,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 # Call ViewSet
 
 class CallViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
                   CreateModelUpdateByMixin,
                   BasePermissionMixin,
                   viewsets.GenericViewSet):
@@ -189,6 +190,9 @@ class CallViewSet(mixins.ListModelMixin,
 
     create:
     Create new call instance.
+
+    retrieve:
+    Retrieve an existing call instance.
     """
 
     permission_classes = (IsAuthenticated,

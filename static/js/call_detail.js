@@ -26,7 +26,7 @@ $(function () {
         ambulancecall['waypoint_set'].forEach(function(waypoint) {
 
             console.log(waypoint);
-            
+
             // add waypoint markers
             createMarker(waypoint, icon)
                 .addTo(map.map)
