@@ -1,7 +1,7 @@
 function addCallToMap(call, map) {
 
     console.log('Adding call to map');
-    console.log(call);
+    // console.log(call);
 
     // waypoint markers
     var icon = icon || L.icon({
@@ -12,12 +12,14 @@ function addCallToMap(call, map) {
     // loop through ambulancecall records
     call['ambulancecall_set'].forEach(function(ambulancecall) {
 
-        console.log(ambulancecall);
+        console.log('Adding ambulancecall');
+        // console.log(ambulancecall);
 
         // loop through waypoints
         ambulancecall['waypoint_set'].forEach(function(waypoint) {
 
-            console.log(waypoint);
+            console.log('Adding waypoint');
+            // console.log(waypoint);
 
             // waypoint label
             var label = location_type[waypoint['location']['type']];
@@ -54,6 +56,8 @@ function addCallToMap(call, map) {
 
 function retrieveCall(call_id, map) {
 
+    console.log("Retrieving call '" + call_id + "'from API");
+
     // Build url
     var url = APIBaseUrl + 'call/' + call_id + '/';
 
@@ -70,7 +74,7 @@ function retrieveCall(call_id, map) {
 
         success: function (data) {
 
-            console.log('Got call from API');
+            console.log("Got call '" + call_id + "'from API");
             addCallToMap(data, map);
 
         }
@@ -78,7 +82,7 @@ function retrieveCall(call_id, map) {
     })
         .done(function (data) {
             if (console && console.log) {
-                console.log("Done retrieving call data from API");
+                console.log("Done retrieving call '" + call_id + "' from API");
             }
         });
 
@@ -86,6 +90,8 @@ function retrieveCall(call_id, map) {
 
 
 function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
+
+    console.log("Retrieving ambulance '" + ambulance_id + "' from API");
 
     // Build url
     var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates/?call_id=' + call_id;
@@ -103,8 +109,7 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
 
         success: function (data) {
 
-            console.log('Got ambulance updates from API');
-
+            console.log("Got ambulance '" + ambulance_id + "' from API");
             addAmbulanceRoute(map, data, true);
 
         }
@@ -112,7 +117,7 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
     })
         .done(function (data) {
             if (console && console.log) {
-                console.log("Done retrieving ambulance updates from API");
+                console.log("Done retrieving ambulance '" + ambulance_id + "' from API");
             }
         });
 
