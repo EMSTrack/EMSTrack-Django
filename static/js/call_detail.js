@@ -15,12 +15,18 @@ $(function () {
         iconSize: [15, 30],
     });
 
+    console.log(call);
+
     // loop through ambulancecall records
     call['ambulancecall_set'].forEach(function(ambulancecall) {
+
+        console.log(ambulancecall);
 
         // loop through waypoints
         ambulancecall['waypoint_set'].forEach(function(waypoint) {
 
+            console.log(waypoint);
+            
             // add waypoint markers
             createMarker(waypoint, icon)
                 .addTo(map.map)
