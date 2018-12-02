@@ -20,7 +20,7 @@ function addCallToMap(call, map) {
             console.log(waypoint);
 
             // add waypoint markers
-            createMarker(waypoint, icon)
+            createMarker(waypoint['location'], icon)
                 .addTo(map.map)
                 .bindPopup("<strong>" + waypoint['type'] + "</strong>")
                 .on('mouseover',
