@@ -15,18 +15,26 @@ $(function () {
         iconSize: [15, 30],
     });
 
-    // add patient marker
-    createMarker(call, icon)
-        .addTo(map.map)
-        .bindPopup('<strong>hi</strong>')
-        .on('mouseover',
-            function (e) {
-                // open popup bubble
-                this.openPopup().on('mouseout',
+    // loop through ambulancecall records
+    call['ambulancecall_set'].forEach(function(ambulancecall) {
+
+        // loop through waypoints
+        ambulancecall['waypoint_set'].forEach(function(waypoint) {
+
+            // add waypoint markers
+            createMarker(waypoint, icon)
+                .addTo(map.map)
+                .bindPopup("<strong>" + waypoint['type'] + "</strong>")
+                .on('mouseover',
                     function (e) {
-                        this.closePopup();
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function (e) {
+                                this.closePopup();
+                            });
                     });
-            });
+        });
+    });
 
     // add segments
     if (call.status == "Started" || call.status == "Ended") {
