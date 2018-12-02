@@ -38,7 +38,7 @@ function addCallToMap(call, map) {
         if (call['status'] === "S" || call.status === "E") {
 
             // Gotta separate these. Started => live updates
-            retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], map);
+            retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], call['id'], map);
 
         } else
             console.error("Call status " + call.status + " not handled");
@@ -80,10 +80,10 @@ function retrieveCall(call_id, map) {
 }
 
 
-function retrieveAmbulanceUpdates(ambulance_id, map) {
+function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
 
     // Build url
-    var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates/?call_id=' + call.id;
+    var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates/?call_id=' + call_id;
 
     $.ajax({
         type: 'GET',
