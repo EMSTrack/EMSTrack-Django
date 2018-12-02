@@ -4,18 +4,8 @@
 
 {% block leaflethead %}
     <script>
-        var ambulance_status = {{ ambulance_status|safe }};
-        var call = {
-            id:{{ call.id|safe }},
-            status: '{{ call.status|get_call_status|safe }}'
-        };
-        var ambulances = [];
+        var call_id={{ call.id|safe }};
         var APIBaseUrl = '{% url 'index' %}api/';
-        
-        {% for ambulancecall in call.ambulancecall_set.all %}
-            ambulances.push({{ ambulancecall.ambulance_id }});
-        {% endfor %}
-
     </script>
 {% endblock %}
 

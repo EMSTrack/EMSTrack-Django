@@ -1,21 +1,13 @@
-var map;
+function addCallToMap(call, map) {
 
-$(function () {
+    console.log('Adding call to map');
+    console.log(call);
 
-    // Set up map widget
-    options = {
-        map_id: "map",
-        zoom: 12
-    }
-    map = new LeafletPolylineWidget(options);
-
-    // patient marker
+    // waypoint markers
     var icon = icon || L.icon({
         iconUrl: '/static/icons/maki/marker-15.svg',
         iconSize: [15, 30],
     });
-
-    console.log(call);
 
     // loop through ambulancecall records
     call['ambulancecall_set'].forEach(function(ambulancecall) {
@@ -40,20 +32,55 @@ $(function () {
                             });
                     });
         });
+
+        // add ambulance updates
+
+        if (call['status'] === "S" || call.status === "E") {
+
+            // Gotta separate these. Started => live updates
+            retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], map);
+
+        } else
+            console.error("Call status " + call.status + " not handled");
+
     });
 
-    // add segments
-    if (call.status == "Started" || call.status == "Ended") {
-        
-        // Gotta separate these. Started => live updates
-        ambulances.forEach(id => { retrieveAmbulances(id); });
+}
 
-    } else
-        console.error("Call status " + call.status + " not handled");
+function retrieveCall(call_id, map) {
 
-});
+    // Build url
+    var url = APIBaseUrl + 'call/' + call_id + '/';
 
-function retrieveAmbulances(ambulance_id) {
+    $.ajax({
+        type: 'GET',
+        datatype: "json",
+        url: url,
+
+        fail: function (msg) {
+
+            alert('Could not retrieve call from API:' + msg);
+
+        },
+
+        success: function (data) {
+
+            console.log('Got call from API');
+            addCallToMap(data, map);
+
+        }
+
+    })
+        .done(function (data) {
+            if (console && console.log) {
+                console.log("Done retrieving call data from API");
+            }
+        });
+
+}
+
+
+function retrieveAmbulanceUpdates(ambulance_id, map) {
 
     // Build url
     var url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates/?call_id=' + call.id;
@@ -65,23 +92,38 @@ function retrieveAmbulances(ambulance_id) {
 
         fail: function (msg) {
 
-            alert('Could not retrieve data from API:' + msg)
+            alert('Could not retrieve ambulance updates from API:' + msg);
 
         },
 
         success: function (data) {
 
-            console.log('Got data from API')
+            console.log('Got ambulance updates from API');
 
-            addAmbulanceRoute(map, data, true)
+            addAmbulanceRoute(map, data, true);
 
         }
 
     })
         .done(function (data) {
             if (console && console.log) {
-                console.log("Done retrieving ambulance data from API");
+                console.log("Done retrieving ambulance updates from API");
             }
         });
 
 }
+
+$(function () {
+
+    // Set up map widget
+    options = {
+        map_id: "map",
+        zoom: 12
+    }
+    var map = new LeafletPolylineWidget(options);
+
+    // Retrieve call
+    retrieveCall(call_id, map);
+
+});
+
