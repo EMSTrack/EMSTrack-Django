@@ -328,6 +328,8 @@ class CallDetailView(LoginRequiredMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['location_type'] = {m.name: m.value
+                                       for m in LocationType}
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
         return context

@@ -19,10 +19,15 @@ function addCallToMap(call, map) {
 
             console.log(waypoint);
 
+            // waypoint label
+            var label = location_type[waypoint['location']['type']];
+            if (waypoint['location']['name'])
+                label += ": " + waypoint['location']['name'];
+
             // add waypoint markers
             createMarker(waypoint['location'], icon)
                 .addTo(map.map)
-                .bindPopup("<strong>" + waypoint['type'] + "</strong>")
+                .bindPopup("<strong>" + label + "</strong>")
                 .on('mouseover',
                     function (e) {
                         // open popup bubble
