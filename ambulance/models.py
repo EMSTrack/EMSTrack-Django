@@ -46,6 +46,11 @@ def get_call_priority(key):
 
 
 @register.filter
+def get_ambulance_call_status(key):
+    return AmbulanceCallStatus[key].value
+
+
+@register.filter
 def get_waypoint_status(key):
     return WaypointStatus[key].value
 
