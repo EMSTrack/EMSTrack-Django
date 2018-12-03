@@ -535,9 +535,6 @@ class AmbulanceCall(PublishMixin,
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
 
-            # retrieve call
-            call = self.call
-
             # retrieve all ongoing ambulances
             ongoing_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
 
@@ -569,6 +566,9 @@ class AmbulanceCall(PublishMixin,
         elif self.status == AmbulanceCallStatus.D.name:
 
             logger.debug('Ambulance call declined.')
+
+            # publish call tp update status
+            call.publish()
 
         # changed to suspended?
         elif self.status == AmbulanceCallStatus.S.name:
