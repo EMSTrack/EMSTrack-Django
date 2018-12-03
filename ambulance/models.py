@@ -680,9 +680,29 @@ class Location(AddressModel,
 # Waypoint related models
 
 class WaypointStatus(Enum):
-    N = 'Not visited'
+    C = 'Created'
     V = 'Visiting'
     D = 'Visited'
+    S = 'Skipped'
+
+
+class WaypointHistory(UpdatedByModel):
+    # waypoint
+    waypoint = models.ForeignKey(Waypoint,
+                                 on_delete=models.CASCADE)
+
+    # order
+    order = models.PositiveIntegerField()
+
+    # status
+    WAYPOINT_STATUS_CHOICES = \
+        [(m.name, m.value) for m in WaypointStatus]
+    status = models.CharField(max_length=1,
+                              choices=WAYPOINT_STATUS_CHOICES,
+                              default=WaypointStatus.C.name)
+
+    # active
+    active = models.BooleanField(default=True)
 
 
 class Waypoint(PublishMixin,
@@ -699,7 +719,7 @@ class Waypoint(PublishMixin,
         [(m.name, m.value) for m in WaypointStatus]
     status = models.CharField(max_length=1,
                               choices=WAYPOINT_STATUS_CHOICES,
-                              default=WaypointStatus.N.name)
+                              default=WaypointStatus.C.name)
 
     # active
     active = models.BooleanField(default=True)
@@ -712,14 +732,17 @@ class Waypoint(PublishMixin,
     def is_active(self):
         return self.active
 
-    def is_not_visited(self):
-        return self.status == WaypointStatus.N.name
+    def is_created(self):
+        return self.status == WaypointStatus.C.name
 
     def is_visited(self):
         return self.status == WaypointStatus.D.name
 
     def is_visiting(self):
         return self.status == WaypointStatus.V.name
+
+    def is_skipped(self):
+        return self.status == WaypointStatus.S.name
 
     def save(self, *args, **kwargs):
 
@@ -733,6 +756,12 @@ class Waypoint(PublishMixin,
         super().save(*args, **kwargs,
                      publish=publish,
                      remove=remove)
+
+        # waypoint history save
+        copy = WaypointHistory(waypoint=self.id,
+                               order=self.order, status=self.status, active=self.active,
+                               comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
+        copy.save()
 
     def remove(self):
         pass

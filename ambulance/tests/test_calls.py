@@ -129,14 +129,14 @@ class TestCall(TestSetup):
         # serialization
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
         wpl_1_serializer = LocationSerializer(wpl_1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name,
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.C.name,
                                        location=wpl_1, updated_by=self.u1)
         serializer = WaypointSerializer(wp_1)
         result = {
             'id': wp_1.id,
             'ambulance_call_id': ac_1.id,
             'order': 0,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
@@ -211,7 +211,7 @@ class TestCall(TestSetup):
         # serialization
         data = {
             'order': 0,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': True,
             'location': {
                 'type': LocationType.i.name
@@ -228,7 +228,7 @@ class TestCall(TestSetup):
             'id': wp_1.id,
             'ambulance_call_id': ac_1.id,
             'order': 0,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
@@ -340,7 +340,7 @@ class TestCall(TestSetup):
 
         # waypoint creation
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.N.name,
+        wp_1 = Waypoint.objects.create(ambulance_call=ac_1, order=0, status=WaypointStatus.C.name,
                                        location=wpl_1, updated_by=self.u1)
 
         wpl_2 = Location.objects.create(type=LocationType.w.name, number='123', street='adsasd', updated_by=self.u1)
@@ -357,7 +357,7 @@ class TestCall(TestSetup):
             'id': wp_1.id,
             'ambulance_call_id': ac_1.id,
             'order': 0,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
@@ -431,7 +431,7 @@ class TestCall(TestSetup):
         # update waypoint 2
         data = {
             'order': 2,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': False
         }
         serializer = WaypointSerializer(wp_2, data=data)
@@ -445,7 +445,7 @@ class TestCall(TestSetup):
             'id': wp_2.id,
             'ambulance_call_id': ac_1.id,
             'order': 2,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': False,
             'location': wpl_2_serializer.data,
             'comment': wp_2.comment,
@@ -475,7 +475,7 @@ class TestCall(TestSetup):
         # update waypoint 3
         data = {
             'order': 2,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': False,
             'location': {
                 'id': 20,
@@ -588,7 +588,7 @@ class TestCall(TestSetup):
 
         # Add waypoints to ambulancecalls
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
-        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, status=WaypointStatus.N.name,
+        wp_1 = Waypoint.objects.create(ambulance_call=ambulance_call_1, order=0, status=WaypointStatus.C.name,
                                        location=wpl_1, updated_by=self.u1)
 
         wpl_2 = Location.objects.create(type=LocationType.h.name, number='123', street='adsasd', updated_by=self.u2)
@@ -639,7 +639,7 @@ class TestCall(TestSetup):
             'id': wp_1.id,
             'ambulance_call_id': ambulance_call_1.id,
             'order': 0,
-            'status': WaypointStatus.N.name,
+            'status': WaypointStatus.C.name,
             'active': True,
             'location': LocationSerializer(wpl_1).data,
             'comment': wp_1.comment,
