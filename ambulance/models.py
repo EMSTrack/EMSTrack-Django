@@ -739,7 +739,7 @@ class Waypoint(PublishMixin,
                      remove=remove)
 
         # waypoint history save
-        copy = WaypointHistory(waypoint=self.id,
+        copy = WaypointHistory(waypoint=self,
                                order=self.order, status=self.status, active=self.active,
                                comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
         copy.save()
