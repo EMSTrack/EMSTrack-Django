@@ -481,27 +481,6 @@ class AmbulanceCallStatus(Enum):
     C = 'Completed'
 
 
-class AmbulanceCallHistory(models.Model):
-
-    # status
-    AMBULANCE_CALL_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceCallStatus]
-    status = models.CharField(max_length=1,
-                              choices=AMBULANCE_CALL_STATUS_CHOICES,
-                              default=AmbulanceCallStatus.R.name)
-
-    # call
-    call = models.ForeignKey(Call,
-                             on_delete=models.CASCADE)
-
-    # ambulance
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
-
-    # created at
-    created_at = models.DateTimeField()
-
-
 class AmbulanceCall(PublishMixin,
                     models.Model):
 
@@ -592,8 +571,8 @@ class AmbulanceCall(PublishMixin,
                      remove=remove)
 
         # call history save
-        copy = AmbulanceCallHistory(status=self.status, call=self.call,
-                                    ambulance=self.ambulance, created_at=self.created_at)
+        copy = AmbulanceCallHistory(ambulance_call=self,
+                                    status=self.status, created_at=self.created_at)
         copy.save()
 
     def publish(self, **kwargs):
@@ -610,6 +589,22 @@ class AmbulanceCall(PublishMixin,
 
     class Meta:
         unique_together = ('call', 'ambulance')
+
+
+class AmbulanceCallHistory(models.Model):
+    # ambulance_call
+    ambulance_call = models.ForeignKey(AmbulanceCall,
+                                       on_delete=models.CASCADE)
+
+    # status
+    AMBULANCE_CALL_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCallStatus]
+    status = models.CharField(max_length=1,
+                              choices=AMBULANCE_CALL_STATUS_CHOICES,
+                              default=AmbulanceCallStatus.R.name)
+
+    # created at
+    created_at = models.DateTimeField()
 
 
 # Patient, might be expanded in the future
