@@ -600,8 +600,7 @@ class AmbulanceCallHistory(models.Model):
     AMBULANCE_CALL_STATUS_CHOICES = \
         [(m.name, m.value) for m in AmbulanceCallStatus]
     status = models.CharField(max_length=1,
-                              choices=AMBULANCE_CALL_STATUS_CHOICES,
-                              default=AmbulanceCallStatus.R.name)
+                              choices=AMBULANCE_CALL_STATUS_CHOICES)
 
     # created at
     created_at = models.DateTimeField()
@@ -763,8 +762,7 @@ class WaypointHistory(UpdatedByModel):
     WAYPOINT_STATUS_CHOICES = \
         [(m.name, m.value) for m in WaypointStatus]
     status = models.CharField(max_length=1,
-                              choices=WAYPOINT_STATUS_CHOICES,
-                              default=WaypointStatus.C.name)
+                              choices=WAYPOINT_STATUS_CHOICES)
 
     # active
     active = models.BooleanField(default=True)
