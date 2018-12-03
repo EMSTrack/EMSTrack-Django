@@ -240,7 +240,7 @@ class WaypointSerializer(serializers.ModelSerializer):
     class Meta:
         model = Waypoint
         fields = ['id', 'ambulance_call_id',
-                  'order', 'status', 'active',
+                  'order', 'status',
                   'location',
                   'comment', 'updated_by', 'updated_on']
         read_only_fields = ('id', 'ambulance_call_id', 'location', 'updated_by')

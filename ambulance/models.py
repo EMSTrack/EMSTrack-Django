@@ -696,16 +696,10 @@ class Waypoint(PublishMixin,
                               choices=WAYPOINT_STATUS_CHOICES,
                               default=WaypointStatus.C.name)
 
-    # active
-    active = models.BooleanField(default=True)
-
     # Location
     location = models.ForeignKey(Location,
                                  on_delete=models.CASCADE,
                                  blank=True, null=True)
-
-    def is_active(self):
-        return self.active
 
     def is_created(self):
         return self.status == WaypointStatus.C.name
@@ -734,7 +728,7 @@ class Waypoint(PublishMixin,
 
         # waypoint history save
         copy = WaypointHistory(waypoint=self,
-                               order=self.order, status=self.status, active=self.active,
+                               order=self.order, status=self.status,
                                comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
         copy.save()
 
@@ -763,9 +757,6 @@ class WaypointHistory(UpdatedByModel):
         [(m.name, m.value) for m in WaypointStatus]
     status = models.CharField(max_length=1,
                               choices=WAYPOINT_STATUS_CHOICES)
-
-    # active
-    active = models.BooleanField(default=True)
 
 
 # THOSE NEED REVIEWING

@@ -137,7 +137,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.C.name,
-            'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
             'updated_by': wp_1.updated_by.id,
@@ -174,7 +173,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.D.name,
-            'active': True,
             'location': wpl_2_serializer.data,
             'comment': wp_2.comment,
             'updated_by': wp_2.updated_by.id,
@@ -212,7 +210,6 @@ class TestCall(TestSetup):
         data = {
             'order': 0,
             'status': WaypointStatus.C.name,
-            'active': True,
             'location': {
                 'type': LocationType.i.name
             }
@@ -229,7 +226,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.C.name,
-            'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
             'updated_by': wp_1.updated_by.id,
@@ -259,7 +255,6 @@ class TestCall(TestSetup):
         data = {
             'order': 1,
             'status': WaypointStatus.V.name,
-            'active': True,
             'location': {
                 'id': self.h1.id,
                 'type': LocationType.h.name
@@ -280,7 +275,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.V.name,
-            'active': True,
             'location': wpl_2_serializer.data,
             'comment': wp_2.comment,
             'updated_by': wp_2.updated_by.id,
@@ -311,7 +305,6 @@ class TestCall(TestSetup):
         data = {
             'order': 1,
             'status': WaypointStatus.V.name,
-            'active': True,
             'location': {
                 'type': LocationType.h.name
             }
@@ -324,7 +317,6 @@ class TestCall(TestSetup):
         data = {
             'order': 1,
             'status': WaypointStatus.V.name,
-            'active': True
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
@@ -358,7 +350,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 0,
             'status': WaypointStatus.C.name,
-            'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
             'updated_by': wp_1.updated_by.id,
@@ -387,8 +378,7 @@ class TestCall(TestSetup):
         # update waypoint 1
         data = {
             'order': 1,
-            'status': WaypointStatus.V.name,
-            'active': True
+            'status': WaypointStatus.V.name
         }
         serializer = WaypointSerializer(wp_1, data=data)
         serializer.is_valid()
@@ -402,7 +392,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 1,
             'status': WaypointStatus.V.name,
-            'active': True,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
             'updated_by': wp_1.updated_by.id,
@@ -431,8 +420,7 @@ class TestCall(TestSetup):
         # update waypoint 2
         data = {
             'order': 2,
-            'status': WaypointStatus.C.name,
-            'active': False
+            'status': WaypointStatus.C.name
         }
         serializer = WaypointSerializer(wp_2, data=data)
         serializer.is_valid()
@@ -446,7 +434,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ac_1.id,
             'order': 2,
             'status': WaypointStatus.C.name,
-            'active': False,
             'location': wpl_2_serializer.data,
             'comment': wp_2.comment,
             'updated_by': wp_2.updated_by.id,
@@ -476,7 +463,6 @@ class TestCall(TestSetup):
         data = {
             'order': 2,
             'status': WaypointStatus.C.name,
-            'active': False,
             'location': {
                 'id': 20,
                 'type': LocationType.h.name
@@ -640,7 +626,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ambulance_call_1.id,
             'order': 0,
             'status': WaypointStatus.C.name,
-            'active': True,
             'location': LocationSerializer(wpl_1).data,
             'comment': wp_1.comment,
             'updated_by': wp_1.updated_by.id,
@@ -672,7 +657,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ambulance_call_2.id,
             'order': 1,
             'status': WaypointStatus.D.name,
-            'active': True,
             'location': LocationSerializer(wpl_2).data,
             'comment': wp_2.comment,
             'updated_by': wp_2.updated_by.id,
@@ -704,7 +688,6 @@ class TestCall(TestSetup):
             'ambulance_call_id': ambulance_call_2.id,
             'order': 2,
             'status': WaypointStatus.V.name,
-            'active': True,
             'location': LocationSerializer(self.h1).data,
             'comment': wp_3.comment,
             'updated_by': wp_3.updated_by.id,

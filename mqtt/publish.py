@@ -57,6 +57,7 @@ class MessagePublishClient:
     def remove_call_status(self, **kwargs):
         pass
 
+
 class PublishClient(BaseClient):
 
     def __init__(self, broker, **kwargs):
