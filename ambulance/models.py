@@ -686,25 +686,6 @@ class WaypointStatus(Enum):
     S = 'Skipped'
 
 
-class WaypointHistory(UpdatedByModel):
-    # waypoint
-    waypoint = models.ForeignKey(Waypoint,
-                                 on_delete=models.CASCADE)
-
-    # order
-    order = models.PositiveIntegerField()
-
-    # status
-    WAYPOINT_STATUS_CHOICES = \
-        [(m.name, m.value) for m in WaypointStatus]
-    status = models.CharField(max_length=1,
-                              choices=WAYPOINT_STATUS_CHOICES,
-                              default=WaypointStatus.C.name)
-
-    # active
-    active = models.BooleanField(default=True)
-
-
 class Waypoint(PublishMixin,
                UpdatedByModel):
     # call
@@ -773,6 +754,25 @@ class Waypoint(PublishMixin,
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call(self.ambulance_call.call)
+
+
+class WaypointHistory(UpdatedByModel):
+    # waypoint
+    waypoint = models.ForeignKey(Waypoint,
+                                 on_delete=models.CASCADE)
+
+    # order
+    order = models.PositiveIntegerField()
+
+    # status
+    WAYPOINT_STATUS_CHOICES = \
+        [(m.name, m.value) for m in WaypointStatus]
+    status = models.CharField(max_length=1,
+                              choices=WAYPOINT_STATUS_CHOICES,
+                              default=WaypointStatus.C.name)
+
+    # active
+    active = models.BooleanField(default=True)
 
 
 # THOSE NEED REVIEWING
