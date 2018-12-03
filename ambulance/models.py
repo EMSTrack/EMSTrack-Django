@@ -515,17 +515,22 @@ class AmbulanceCall(PublishMixin,
         # remove?
         remove = kwargs.pop('publish', False)
 
+        # retrieve call
+        call = self.call
+
         # changed to ongoing?
         if self.status == AmbulanceCallStatus.O.name:
-
-            # retrieve call
-            call = self.call
 
             if call.status != CallStatus.S.name:
 
                 # change call status to started
                 call.status = CallStatus.S.name
                 call.save()
+
+            else:
+
+                # publish call tp update status
+                call.publish()
 
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
@@ -570,6 +575,9 @@ class AmbulanceCall(PublishMixin,
 
             logger.debug('Ambulance call suspended.')
 
+            # publish call tp update status
+            call.publish()
+
         # call super
         super().save(*args, **kwargs,
                      publish=publish,
@@ -585,7 +593,6 @@ class AmbulanceCall(PublishMixin,
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call_status(self, **kwargs)
-        SingletonPublishClient().publish_call(self.call, **kwargs)
 
     def remove(self):
 
