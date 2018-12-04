@@ -587,9 +587,8 @@ class AmbulanceCall(PublishMixin,
                      remove=remove)
 
         # call history save
-        copy = AmbulanceCallHistory(ambulance_call=self,
-                                    status=self.status, created_at=self.created_at)
-        copy.save()
+        AmbulanceCallHistory.objects.create(ambulance_call=self,
+                                            status=self.status, created_at=self.created_at)
 
         # publish call?
         if publish_call:
@@ -747,10 +746,9 @@ class Waypoint(PublishMixin,
                      remove=remove)
 
         # waypoint history save
-        copy = WaypointHistory(waypoint=self,
-                               order=self.order, status=self.status,
-                               comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
-        copy.save()
+        WaypointHistory.objects.create(waypoint=self,
+                                       order=self.order, status=self.status,
+                                       comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
 
     def remove(self):
         pass
