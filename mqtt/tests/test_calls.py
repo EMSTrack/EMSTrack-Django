@@ -1264,8 +1264,8 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = client_id2
 
         test_client2 = MQTTTestClient(broker,
-                                     check_payload=False,
-                                     debug=True)
+                                      check_payload=False,
+                                      debug=True)
         self.is_connected(test_client2)
 
         # Client handshake
@@ -1416,7 +1416,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
                              "accepted")
 
         # process messages
-        self.loop(test_client2)
+        self.loop(test_client2, test_client1)
         subscribe_client.loop()
 
         # subscribe ambulance call status

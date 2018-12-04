@@ -515,6 +515,9 @@ class AmbulanceCall(PublishMixin,
         # remove?
         remove = kwargs.pop('publish', False)
 
+        # publish call?
+        publish_call = False
+
         # retrieve call
         call = self.call
 
@@ -530,7 +533,7 @@ class AmbulanceCall(PublishMixin,
             else:
 
                 # publish call tp update status
-                call.publish()
+                publish_call = True
 
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
@@ -568,7 +571,7 @@ class AmbulanceCall(PublishMixin,
             logger.debug('Ambulance call declined.')
 
             # publish call tp update status
-            call.publish()
+            publish_call = True
 
         # changed to suspended?
         elif self.status == AmbulanceCallStatus.S.name:
@@ -576,7 +579,7 @@ class AmbulanceCall(PublishMixin,
             logger.debug('Ambulance call suspended.')
 
             # publish call tp update status
-            call.publish()
+            publish_call = True
 
         # call super
         super().save(*args, **kwargs,
@@ -587,6 +590,10 @@ class AmbulanceCall(PublishMixin,
         copy = AmbulanceCallHistory(ambulance_call=self,
                                     status=self.status, created_at=self.created_at)
         copy.save()
+
+        # publish call?
+        if publish_call:
+            call.publish()
 
     def publish(self, **kwargs):
 
