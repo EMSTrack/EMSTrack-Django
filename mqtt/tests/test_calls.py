@@ -1414,17 +1414,13 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # will get call because of next call status change
-        test_client1.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client1)
-
         # test_client publishes "Accepted" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
                              "accepted")
 
         # process messages
-        self.loop(test_client2, test_client1)
+        self.loop(test_client2)
         subscribe_client.loop()
 
         # subscribe ambulance call status
