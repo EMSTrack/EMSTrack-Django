@@ -900,6 +900,10 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # test_client publishes "patient bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
                             json.dumps({
