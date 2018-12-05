@@ -280,7 +280,8 @@ class WaypointSerializer(serializers.ModelSerializer):
         # waypoint.location = location
         # waypoint.save(publish=publish, history=False)
 
-        waypoint = super().create(validated_data, location=location)
+        validated_data['location'] = location
+        waypoint = super().create(validated_data)
 
         return waypoint
 
