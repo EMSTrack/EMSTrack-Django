@@ -293,7 +293,7 @@ class WaypointSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Waypoint locations cannot be updated.')
 
         waypoint = super().update(instance, validated_data)
-        waypoint.save(publish=publish)
+        waypoint.publish()
 
         return waypoint
 
