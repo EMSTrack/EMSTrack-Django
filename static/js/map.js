@@ -273,7 +273,7 @@ function onConnect() {
             var location = data[index];
             addLocationToMap(location);
         });
-    };
+    });
 
     $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
 
@@ -282,7 +282,7 @@ function onConnect() {
             var location = data[index];
             addLocationToMap(location);
         });
-    };
+    });
 
     /*
         // retrieve calls from api
