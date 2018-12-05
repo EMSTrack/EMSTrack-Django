@@ -358,7 +358,7 @@ function dispatchCall() {
 
     // overwrite location
     location['location'] = {'latitude': currentLocation['lat'], 'longitude': currentLocation['lng']};
-    
+
     // location information
     location['neighborhood'] = currentAddress['neighborhood'];
     location['city'] = currentAddress['city'];
