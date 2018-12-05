@@ -34,6 +34,10 @@ var hospitalIcon = L.icon({
 	iconUrl: '/static/icons/maki/hospital-15.svg',
 	iconSize: [15, 15]
 });
+var incidentIcon = L.icon({
+	iconUrl: '/static/icons/maki/marker-15.svg',
+	iconSize: [15, 15]
+});
 var defibrillatorIcon = L.icon({
 	iconUrl: '/static/icons/maki/defibrillator-15.svg',
 	iconSize: [15, 15]
@@ -262,14 +266,21 @@ function onConnect() {
 
     // retrieve locations from api
     console.log("Retrieving locations from API");
-    $.getJSON(APIBaseUrl + 'location/', function (data) {
+    $.getJSON(APIBaseUrl + 'location/Hospital/', function (data) {
 
         // add location
         $.each(data, function (index) {
             var location = data[index];
         	addLocationToMap(location);
         });
-        
+    $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
+
+        // add location
+        $.each(data, function (index) {
+            var location = data[index];
+        	addLocationToMap(location);
+        });
+
     });
 
     /*
@@ -945,9 +956,9 @@ function addLocationToMap(location) {
         icon = defibrillatorIcon;
     else if (location.type === 'b')
         icon = baseIcon;
-    else
-        icon = otherIcon;
-        
+    else if (location.type === 'i')
+        icon = incidentIcon;
+
     // If location marker doesn't exist
     locationMarkers[location.id] = L.marker([location.location.latitude,
             location.location.longitude],
