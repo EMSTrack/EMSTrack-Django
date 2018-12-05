@@ -262,9 +262,6 @@ class WaypointSerializer(serializers.ModelSerializer):
         # location id is not present in validated_data
         initial_location = self.initial_data['location']
 
-        # create waypoint
-        # waypoint = super().create(validated_data)
-
         # retrieve or create?
         if 'id' not in initial_location or initial_location['id'] is None:
             logger.debug('will create waypoint location')
@@ -276,13 +273,11 @@ class WaypointSerializer(serializers.ModelSerializer):
             logger.debug('will retrieve waypoint location')
             location = Location.objects.get(id=initial_location['id'])
 
-        # add location to waypoint
-        # waypoint.location = location
-        # waypoint.save(publish=publish, history=False)
-
+        # create waypoint and publish
         validated_data['location'] = location
         waypoint = super().create(validated_data)
-        waypoint.publish()
+        if publish:
+            waypoint.publish()
 
         return waypoint
 
@@ -296,8 +291,10 @@ class WaypointSerializer(serializers.ModelSerializer):
         if location is not None:
             raise serializers.ValidationError('Waypoint locations cannot be updated.')
 
+        # update waypoint and publish
         waypoint = super().update(instance, validated_data)
-        waypoint.publish()
+        if publish:
+            waypoint.publish()
 
         return waypoint
 
