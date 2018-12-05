@@ -271,15 +271,18 @@ function onConnect() {
         // add location
         $.each(data, function (index) {
             var location = data[index];
-        	addLocationToMap(location);
+            addLocationToMap(location);
         });
+    };
+
     $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
 
         // add location
         $.each(data, function (index) {
             var location = data[index];
-        	addLocationToMap(location);
+            addLocationToMap(location);
         });
+    };
 
     /*
         // retrieve calls from api
