@@ -263,7 +263,7 @@ class WaypointSerializer(serializers.ModelSerializer):
         initial_location = self.initial_data['location']
 
         # create waypoint
-        waypoint = super().create(validated_data)
+        # waypoint = super().create(validated_data)
 
         # retrieve or create?
         if 'id' not in initial_location or initial_location['id'] is None:
@@ -277,8 +277,10 @@ class WaypointSerializer(serializers.ModelSerializer):
             location = Location.objects.get(id=initial_location['id'])
 
         # add location to waypoint
-        waypoint.location = location
-        waypoint.save(publish=publish, history=False)
+        # waypoint.location = location
+        # waypoint.save(publish=publish, history=False)
+
+        waypoint = super().create(validated_data, location=location)
 
         return waypoint
 
