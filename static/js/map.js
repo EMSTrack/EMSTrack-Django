@@ -281,8 +281,6 @@ function onConnect() {
         	addLocationToMap(location);
         });
 
-    });
-
     /*
         // retrieve calls from api
         console.log("Retrieving calls from API");
