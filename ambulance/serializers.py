@@ -282,6 +282,7 @@ class WaypointSerializer(serializers.ModelSerializer):
 
         validated_data['location'] = location
         waypoint = super().create(validated_data)
+        waypoint.publish()
 
         return waypoint
 

@@ -740,19 +740,15 @@ class Waypoint(PublishMixin,
         # remove?
         remove = kwargs.pop('remove', False)
 
-        # history?
-        history = kwargs.pop('history', True)
-
         # call super
         super().save(*args, **kwargs,
                      publish=publish,
                      remove=remove)
 
-        if history:
-            # waypoint history save
-            WaypointHistory.objects.create(waypoint=self,
-                                           order=self.order, status=self.status,
-                                           comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
+        # waypoint history save
+        WaypointHistory.objects.create(waypoint=self,
+                                       order=self.order, status=self.status,
+                                       comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
 
     def remove(self):
         pass
