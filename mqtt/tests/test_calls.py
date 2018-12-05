@@ -1451,6 +1451,14 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
+        # will get call because of next call status change
+        test_client1.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client1)
+
+        # process messages
+        self.loop(test_client1)
+        subscribe_client.loop()
+
         # test_client publishes "patient bound" to status
         test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
                             json.dumps({
