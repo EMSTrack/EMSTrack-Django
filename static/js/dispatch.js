@@ -206,8 +206,8 @@ var updateCurrentLocation = function(location) {
     currentLocation = location;
 
     // update coordinates on form
-    $('#curr-lat').html(currentLocation.lat.toFixed(10));
-    $('#curr-lng').html(currentLocation.lng.toFixed(10));
+    $('#curr-lat').html(currentLocation.lat.toFixed(8));
+    $('#curr-lng').html(currentLocation.lng.toFixed(8));
 
     // remove existing marker
     markersGroup.clearLayers();
@@ -356,6 +356,9 @@ function dispatchCall() {
     location['type'] = 'i';
     location['location'] = currentAddress['location'];
 
+    // overwrite location
+    location['location'] = {'latitude': currentLocation['lat'], 'longitude': currentLocation['lng']};
+    
     // location information
     location['neighborhood'] = currentAddress['neighborhood'];
     location['city'] = currentAddress['city'];
