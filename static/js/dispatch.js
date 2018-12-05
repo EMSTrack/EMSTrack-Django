@@ -206,8 +206,8 @@ var updateCurrentLocation = function(location) {
     currentLocation = location;
 
     // update coordinates on form
-    $('#curr-lat').html(currentLocation.lat.toFixed(8));
-    $('#curr-lng').html(currentLocation.lng.toFixed(8));
+    $('#curr-lat').html(currentLocation.lat.toFixed(6));
+    $('#curr-lng').html(currentLocation.lng.toFixed(6));
 
     // remove existing marker
     markersGroup.clearLayers();
