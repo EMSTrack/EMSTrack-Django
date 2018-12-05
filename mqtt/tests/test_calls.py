@@ -1400,6 +1400,10 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         test_client1.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client1)
 
+        # process messages
+        self.loop(test_client1)
+        subscribe_client.loop()
+
         # test_client publishes client_id to location_client
         test_client2.publish('user/{}/client/{}/ambulance/{}/data'.format(username2, client_id2, ambulance_id2),
                              json.dumps({
