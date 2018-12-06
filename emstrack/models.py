@@ -46,13 +46,13 @@ class AddressModel(models.Model):
     An abstract base class model that provides address fields.
     """
 
-    number = models.CharField(max_length=30, default="")
-    street = models.CharField(max_length=254, default="")
-    unit = models.CharField(max_length=30, null=True, blank=True)
-    neighborhood = models.CharField(max_length=100, null=True, blank=True)
+    number = models.CharField(max_length=30, blank=True)
+    street = models.CharField(max_length=254, blank=True)
+    unit = models.CharField(max_length=30, blank=True)
+    neighborhood = models.CharField(max_length=100, blank=True)
     city = models.CharField(max_length=100, default=defaults['city'])
     state = models.CharField(max_length=3, default=defaults['state'])
-    zipcode = models.CharField(max_length=12, default="")
+    zipcode = models.CharField(max_length=12, blank=True)
     country = models.CharField(max_length=2, default=defaults['country'])
 
     location = models.PointField(srid=4326, default=defaults['location'])
@@ -66,7 +66,7 @@ class UpdatedByModel(models.Model):
     An abstract base class model that provides comments and update fields.
     """
 
-    comment = models.CharField(max_length=254, null=True, blank=True)
+    comment = models.CharField(max_length=254, blank=True)
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)

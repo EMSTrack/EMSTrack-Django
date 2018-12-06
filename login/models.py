@@ -40,7 +40,7 @@ class GroupProfile(models.Model):
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE)
 
-    description = models.CharField(max_length=100, blank=True, null=True)
+    description = models.CharField(max_length=100, blank=True)
     priority = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=10)
 
     def get_absolute_url(self):
@@ -312,6 +312,6 @@ class ClientLog(models.Model):
     activity = models.CharField(max_length=2,
                                 choices=CLIENT_ACTIVITIES_CHOICES)
 
-    details = models.CharField(max_length=100, blank=True, null=True)
+    details = models.CharField(max_length=100, blank=True)
 
     updated_on = models.DateTimeField(auto_now=True)

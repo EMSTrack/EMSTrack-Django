@@ -302,7 +302,7 @@ class AmbulanceUpdate(models.Model):
     timestamp = models.DateTimeField(db_index=True, default=timezone.now)
 
     # comment
-    comment = models.CharField(max_length=254, null=True, blank=True)
+    comment = models.CharField(max_length=254, blank=True)
 
     # updated by
     updated_by = models.ForeignKey(User,
@@ -672,7 +672,7 @@ class Location(AddressModel,
                UpdatedByModel):
 
     # location name
-    name = models.CharField(max_length=254, blank=True, null=True)
+    name = models.CharField(max_length=254, blank=True)
 
     # location type
     LOCATION_TYPE_CHOICES = \
