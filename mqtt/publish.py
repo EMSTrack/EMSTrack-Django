@@ -213,3 +213,5 @@ class SingletonPublishClient(PublishClient):
 
             logger.info('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
             logger.info('>> Generated exception: {}'.format(e))
+
+

@@ -1,5 +1,6 @@
 import logging
 import sys
+import threading
 import time
 
 import paho.mqtt.client as mqtt
@@ -18,6 +19,10 @@ class MQTTException(Exception):
     def __init__(self, message, value=None):
         super().__init__(message)
         self.value = value
+
+
+RETRY_TIMER_SECONDS = 30
+RETRY_MAX_ATTEMPTS = 10
 
 
 class BaseClient:
@@ -81,6 +86,11 @@ class BaseClient:
                             self.broker['PORT'],
                             self.broker['KEEPALIVE'])
 
+        # add buffer
+        self.buffer = []
+        self.number_of_unsuccessful_attempts = 0
+        self.buffer_lock = threading.Lock()
+
     def done(self):
         return len(self.published) == 0 and len(self.subscribed) == 0
 
@@ -103,7 +113,60 @@ class BaseClient:
     def on_message(self, client, userdata, msg):
         pass
 
+    def add_to_buffer(self, topic, payload=None, qos=0, retain=False):
+
+        # acquire lock
+        self.buffer_lock.acquire()
+
+        # add to buffer
+        self.buffer.append({'topic': topic, 'payload': payload, 'qos': qos, 'retain': retain})
+
+        # release lock
+        self.buffer_lock.release()
+
+    def send_buffer(self):
+
+        # acquire lock
+        self.buffer_lock.acquire()
+
+        # are there any messages on the buffer?
+        while len(self.buffer) > 0:
+            # attempt to send buffered messages
+            message = self.buffer.pop(0)
+            result = self.client.publish(**message)
+            if result.rc != mqtt.MQTT_ERR_SUCCESS:
+                # put message back and increment counter
+                self.buffer.insert(0, message)
+                self.number_of_unsuccessful_attempts += 1
+            else:
+                self.number_of_unsuccessful_attempts = 0
+
+        # release lock
+        self.buffer_lock.release()
+
+        if self.number_of_unsuccessful_attempts > RETRY_MAX_ATTEMPTS:
+            raise MQTTException('Could not publish to MQTT broker.' +
+                                'Tried {} times before failing'.format(self.number_of_unsuccessful_attempts))
+
     def publish(self, topic, payload=None, qos=0, retain=False):
+
+        # are there any messages on the buffer?
+        if len(self.buffer) > 0:
+
+            # attempt to send buffered messages
+            self.send_buffer()
+
+        # was unsuccessful?
+        if self.number_of_unsuccessful_attempts:
+
+            # add to buffer
+            self.add_to_buffer(topic, payload, qos, retain)
+
+            # set up timer
+            threading.Timer(RETRY_TIMER_SECONDS, self.send_buffer).start()
+
+            # then quit
+            return
 
         # NOTE: The whole forgive mid thing is necessary because
         # on_publish was getting called before publish ended
