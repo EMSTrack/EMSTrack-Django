@@ -538,7 +538,7 @@ class TestCall(TestSetup):
         ambulance_call_1.status = AmbulanceCallStatus.O.name
         ambulance_call_1.save()
 
-        serializer = AmbulanceCallSerializer(ambulance_call_1)
+        ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
@@ -546,7 +546,7 @@ class TestCall(TestSetup):
             'status': AmbulanceCallStatus.O.name,
             'waypoint_set': []
         }
-        self.assertDictEqual(serializer.data, expected)
+        self.assertDictEqual(ambulance_call_serializer_1.data, expected)
 
         # create second ambulance call
         ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
@@ -590,7 +590,7 @@ class TestCall(TestSetup):
         ambulance_call_2.status = AmbulanceCallStatus.O.name
         ambulance_call_2.save()
 
-        serializer = AmbulanceCallSerializer(ambulance_call_2)
+        ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
@@ -598,7 +598,7 @@ class TestCall(TestSetup):
             'status': AmbulanceCallStatus.O.name,
             'waypoint_set': []
         }
-        self.assertDictEqual(serializer.data, expected)
+        self.assertDictEqual(ambulance_call_serializer_2.data, expected)
 
         # Add waypoints to ambulancecalls
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
