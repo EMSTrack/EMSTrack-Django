@@ -12,7 +12,7 @@ from io import BytesIO
 import json
 
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
-    AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType, WaypointStatus
+    AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType, WaypointStatus, AmbulanceCallStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
     AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer
 from emstrack.tests.util import date2iso, point2str
@@ -534,6 +534,20 @@ class TestCall(TestSetup):
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
+        # set ongoing
+        ambulance_call_1.status = AmbulanceCallStatus.O.name
+        ambulance_call_1.save()
+
+        serializer = AmbulanceCallSerializer(ambulance_call_1)
+        expected = {
+            'id': ambulance_call.id,
+            'ambulance_id': ambulance_call.ambulance.id,
+            'created_at': date2iso(ambulance_call.created_at),
+            'status': AmbulanceCallStatus.O.name,
+            'waypoint_set': []
+        }
+        self.assertDictEqual(serializer.data, expected)
+
         # create second ambulance call
         ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
 
@@ -571,6 +585,20 @@ class TestCall(TestSetup):
         result = serializer.data
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
+
+        # set ongoing
+        ambulance_call_2.status = AmbulanceCallStatus.O.name
+        ambulance_call_2.save()
+
+        serializer = AmbulanceCallSerializer(ambulance_call_2)
+        expected = {
+            'id': ambulance_call.id,
+            'ambulance_id': ambulance_call.ambulance.id,
+            'created_at': date2iso(ambulance_call.created_at),
+            'status': AmbulanceCallStatus.O.name,
+            'waypoint_set': []
+        }
+        self.assertDictEqual(serializer.data, expected)
 
         # Add waypoints to ambulancecalls
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
