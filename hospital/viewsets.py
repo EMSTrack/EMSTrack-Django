@@ -3,7 +3,7 @@ import logging
 from django.core.exceptions import PermissionDenied
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from emstrack.mixins import BasePermissionMixin, \
@@ -54,7 +54,7 @@ class HospitalViewSet(mixins.ListModelMixin,
 
     serializer_class = HospitalSerializer
 
-    @detail_route()
+    @action(detail=True)
     def metadata(self, request, pk=None, **kwargs):
         """
         Retrive hospital equipment metadata.
