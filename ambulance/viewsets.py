@@ -134,17 +134,15 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
                 # If there is a available history, filter call based on active intervals
 
-                # parse active times
+                # parse inactive times
                 unavailable_times = self.extract_unavailable_zone(ambulance_history)
                 logger.debug(unavailable_times)
-                unavailable_times = list(zip(*[iter(unavailable_times)] * 2))
-                logger.debug(unavailable_times)
 
-                # create filter
-                for (t1, t2) in unavailable_times:
-                    if t1 is None:
+                # create filter to exclude inactive times
+                for (t1, t2) in zip(*[iter(unavailable_times)] * 2):
+                    if t1 is None and t2 is not None:
                         ambulance_updates = ambulance_updates.exclude(timestamp__lte=t2)
-                    elif t2 is None:
+                    elif t2 is None and t1 is not None:
                         ambulance_updates = ambulance_updates.exclude(timestamp__gte=t1)
                     else:
                         ambulance_updates = ambulance_updates.exclude(timestamp__range=(t1, t2))
