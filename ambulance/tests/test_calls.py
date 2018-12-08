@@ -624,7 +624,7 @@ class TestCall(TestSetup):
 
         # create ambulance update to use in event
         self.a1.status = AmbulanceStatus.PB.name
-        self.a1.timestamp = timezone.now
+        self.a1.timestamp = timezone.now()
         self.a1.save()
         ambulance_update_1 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.PB.name)
 
@@ -633,7 +633,7 @@ class TestCall(TestSetup):
         ambulance_call_1.save()
 
         self.a1.status = AmbulanceStatus.AP.name
-        self.a1.timestamp = timezone.now
+        self.a1.timestamp = timezone.now()
         self.a1.save()
         ambulance_update_2 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.AP.name)
 
@@ -642,7 +642,7 @@ class TestCall(TestSetup):
         ambulance_call_1.save()
 
         self.a1status = AmbulanceStatus.HB.name
-        self.a1.timestamp = timezone.now
+        self.a1.timestamp = timezone.now()
         self.a1.save()
 
         serializer = CallSerializer(c1)
