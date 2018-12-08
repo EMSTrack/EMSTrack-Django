@@ -99,20 +99,40 @@
             <h3>Ambulances:</h3>
 
             {% for ambulancecall in call.ambulancecall_set.all %}
-                <h4>{{ ambulancecall.ambulance.identifier }}
-                    {% if call.status != "E" %}
-                        ({{ ambulancecall.ambulance.status|get_ambulance_status }},
-                         {{ ambulancecall.status|get_ambulance_call_status }})
-                    {% endif %}
-                </h4>
+            <h4>{{ ambulancecall.ambulance.identifier }}
+                {% if call.status != "E" %}
+                ({{ ambulancecall.ambulance.status|get_ambulance_status }},
+                {{ ambulancecall.status|get_ambulance_call_status }})
+                {% endif %}
+            </h4>
 
+            <h5>Progress:</h5>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <td>Status</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    {% for history in ambulancecallhistory_set.all|dictsort:"updated_on" %}
+                    <td>
+                        <p>
+                            {{ history.status|get_ambulance_call_status }} @ {{ history.updated_on }}
+                        </p>
+                    </td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+
+            <h5>Waypoints:</h5>
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
                     <td>Order</td>
                     <td>Type</td>
                     <td>Coordinates</td>
-                    <td>Timestamp</td>
                     <td>Status</td>
                 </tr>
                 </thead>
@@ -132,23 +152,13 @@
                         {{ waypoint.updated_on }}
                     </td>
                     <td>
-                        {{ waypoint.status|get_waypoint_status }}
+                    {% for wpnt in waypoint.waypointhistory_set.all|dictsortreversed:"updated_on" %}
+                        <p>
+                            {{ wpnt.status|get_waypoint_status }} @ {{ wpnt.updated_on }}
+                        </p>
+                    {% endfor %}
                     </td>
                 </tr>
-                    {% for wpnt in waypoint.waypointhistory_set.all|dictsortreversed:"updated_on" %}
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                {{ wpnt.updated_on }}
-                            </td>
-                            <td>
-                                {{ wpnt.status|get_waypoint_status }}
-                            </td>
-                        </tr>
-
-                    {% endfor %}
                 {% endfor %}
                 </tbody>
             </table>
