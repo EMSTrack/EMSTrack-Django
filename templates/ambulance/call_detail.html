@@ -115,7 +115,7 @@
                 </thead>
                 <tbody>
                 <tr>
-                    {% for history in ambulancecallhistory_set.all|dictsort:"updated_on" %}
+                    {% for history in ambulancecall.ambulancecallhistory_set.all|dictsort:"updated_on" %}
                     <td>
                         <p>
                             {{ history.status|get_ambulance_call_status }} @ {{ history.updated_on }}
