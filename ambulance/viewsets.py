@@ -136,6 +136,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # retrieve updates
         ambulance = self.get_object()
         ambulance_updates = ambulance.ambulanceupdate_set.all()
+        logger.debug(ambulance_updates)
 
         # retrieve only call updates
         call_id = self.request.query_params.get('call_id', None)
@@ -177,6 +178,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # calculate union of the active intervals
                 if ranges:
                     ambulance_updates = ambulance_updates.union(*ranges)
+                    logger.debug(ambulance_updates)
+
 
             else:
 
