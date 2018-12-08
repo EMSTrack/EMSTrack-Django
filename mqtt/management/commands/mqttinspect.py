@@ -54,7 +54,7 @@ class Client(PublishClient):
 
         if self.verbosity > 0:
             self.stdout.write(
-                self.style.SUCCESS("<< Finished cleaning MQTT topics '{}'.".format(self.base_topic + '#')))
+                self.style.SUCCESS("<< End of MQTT topics '{}'.".format(self.base_topic + '#')))
 
     def on_connect(self, client, userdata, flags, rc):
 
@@ -78,7 +78,7 @@ class Client(PublishClient):
 
             if self.verbosity > 0:
                 self.stdout.write(self.style.SUCCESS(" > {}".format(msg.topic)))
-                self.stdout.write(self.style.SUCCESS("   {}".format(msg.payload)))
+                self.stdout.write("   {}".format(str(msg.payload)))
 
             # last activity
             self.last_activity = timezone.now()
