@@ -138,6 +138,9 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # parse inactive times
                 unavailable_times = self.extract_unavailable_zone(ambulance_history)
                 logger.debug(unavailable_times)
+                logger.debug(ambulance_updates)
+                for entry in ambulance_updates:
+                    logger.debug(entry)
 
                 # create filter to exclude inactive times
                 for (t1, t2) in zip(*[iter(unavailable_times)] * 2):
