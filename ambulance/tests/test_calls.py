@@ -777,7 +777,7 @@ class TestCall(TestSetup):
         # retrieve ambulance updates
         queryset = AmbulanceUpdate\
             .objects.filter(ambulance=self.a1.id)\
-            .exclude(timestamp__lt=ambulance_update_1.timestamp)
+            .filter(timestamp__gte=ambulance_update_1.timestamp)
         answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
