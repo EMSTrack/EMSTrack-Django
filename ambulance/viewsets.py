@@ -169,7 +169,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # order records
         ambulance_updates = ambulance_updates.order_by('-timestamp')
 
-        logger('-------------')
+        logger.debug('-------------')
         for entry in ambulance_updates:
             logger.debug(entry.timestamp)
 
