@@ -149,9 +149,6 @@
                         {{ waypoint.location.location|get_location_coordinates }}
                     </td>
                     <td>
-                        {{ waypoint.updated_on }}
-                    </td>
-                    <td>
                     {% for wpnt in waypoint.waypointhistory_set.all|dictsortreversed:"updated_on" %}
                         <p>
                             {{ wpnt.status|get_waypoint_status }} @ {{ wpnt.updated_on }}
