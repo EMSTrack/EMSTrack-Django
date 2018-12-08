@@ -101,6 +101,31 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         return unavailable_zone
 
+    # Filter out the working time of ambulance and extract the vailable time range for ambulance
+    @staticmethod
+    def extract_available_zone(ambulance_history):
+
+        available_zone = []
+        ongoing = False
+
+        for h in ambulance_history:
+
+            # Started timestamp
+            if ongoing is False and h.status == AmbulanceCallStatus.O.name:
+                available_zone.append(h.created_at)
+                ongoing = True
+
+            # If we already seen ongoing status, seeing another kind of status
+            elif ongoing is True and h.status != AmbulanceCallStatus.O.name:
+                available_zone.append(h.created_at)
+                ongoing = False
+
+        # If the last status is not ongoing, we should put a None to ensure pair
+        if ongoing is True:
+            available_zone.append(None)
+
+        return available_zone
+
     def updates_get(self, request, pk=None, **kwargs):
         """
         Retrieve and paginate ambulance updates.
@@ -136,19 +161,22 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # If there is a available history, filter call based on active intervals
 
                 # parse inactive times
-                unavailable_times = self.extract_unavailable_zone(ambulance_history)
-                logger.debug(unavailable_times)
+                available_times = self.extract_available_zone(ambulance_history)
+                logger.debug(available_times)
                 for entry in ambulance_updates:
                     logger.debug(entry.timestamp)
 
                 # create filter to exclude inactive times
-                for (t1, t2) in zip(*[iter(unavailable_times)] * 2):
-                    if t1 is None and t2 is not None:
-                        ambulance_updates = ambulance_updates.exclude(timestamp__lt=t2)
-                    elif t2 is None and t1 is not None:
-                        ambulance_updates = ambulance_updates.exclude(timestamp__gt=t1)
+                ranges = []
+                for (t1, t2) in zip(*[iter(available_times)] * 2):
+                    if t2 is None:
+                        ranges.append(ambulance_updates.filter(timestamp__gte=t1))
                     else:
-                        ambulance_updates = ambulance_updates.exclude(timestamp__range=(t1, t2))
+                        ranges.append(ambulance_updates.exclude(timestamp__range=(t1, t2)))
+
+                # calculate union of the active intervals
+                if ranges:
+                    ambulance_updates = ambulance_updates.union(*ranges)
 
             else:
 
