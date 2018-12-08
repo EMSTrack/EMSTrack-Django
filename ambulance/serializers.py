@@ -372,7 +372,7 @@ class CallSerializer(serializers.ModelSerializer):
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
                 waypoint_set = ambulancecall.pop('waypoint_set', [])
-                ambulance_call = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
+                ambulance_call = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall, updated_by=user)
                 ambulance_call.save(publish=False)
                 # add waypoints
                 for waypoint in waypoint_set:
