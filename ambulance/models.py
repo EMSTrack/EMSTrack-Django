@@ -188,10 +188,11 @@ class Ambulance(UpdatedByModel):
         logger.debug('location_client_changed: {}'.format(location_client_changed))
         # TODO: Check if client is logged with ambulance if setting location_client
 
-        # if comment, status or location changed
+        # if comment, capability, status or location changed
         model_changed = False
         if has_moved or \
                 self._loaded_values['status'] != self.status or \
+                self._loaded_values['capability'] != self.capability or \
                 self._loaded_values['comment'] != self.comment:
 
             # save to Ambulance
@@ -201,7 +202,7 @@ class Ambulance(UpdatedByModel):
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
-                    for k in ('status', 'orientation',
+                    for k in ('capability', 'status', 'orientation',
                               'location', 'timestamp',
                               'comment', 'updated_by', 'updated_on')}
             data['ambulance'] = self
@@ -213,11 +214,10 @@ class Ambulance(UpdatedByModel):
             # model changed
             model_changed = True
 
-        # if identifier or capability changed
+        # if identifier changed
         # NOTE: self._loaded_values is NEVER None because has_moved is True
         elif (location_client_changed or
-              self._loaded_values['identifier'] != self.identifier or
-              self._loaded_values['capability'] != self.capability):
+              self._loaded_values['identifier'] != self.identifier):
 
             # save only to Ambulance
             super().save(*args, **kwargs)
@@ -281,11 +281,11 @@ class AmbulanceUpdate(UpdatedByHistoryModel):
     ambulance = models.ForeignKey(Ambulance,
                                   on_delete=models.CASCADE)
 
-    # # ambulance call
-    # # TODO: Is it possible to enforce that ambulance_call.ambulance == ambulance?
-    # ambulance_call = models.ForeignKey(AmbulanceCall,
-    #                                    on_delete=models.SET_NULL,
-    #                                    null=True)
+    # ambulance capability
+    AMBULANCE_CAPABILITY_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCapability]
+    capability = models.CharField(max_length=1,
+                                  choices=AMBULANCE_CAPABILITY_CHOICES)
 
     # ambulance status
     AMBULANCE_STATUS_CHOICES = \
@@ -300,14 +300,6 @@ class AmbulanceUpdate(UpdatedByHistoryModel):
 
     # timestamp, indexed
     timestamp = models.DateTimeField(db_index=True, default=timezone.now)
-
-    # comment
-    # comment = models.CharField(max_length=254, blank=True)
-
-    # updated by
-    # updated_by = models.ForeignKey(User,
-    #                                on_delete=models.CASCADE)
-    # updated_on = models.DateTimeField(default=timezone.now)
 
     class Meta:
         indexes = [

@@ -43,10 +43,11 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
 
-        # timestamp must be defined together with either comment, status or location
-        if 'timestamp' in data and not ('comment' in data or 'location' in data or 'status' in data):
+        # timestamp must be defined together with either comment, capability, status or location
+        if 'timestamp' in data and not ('comment' in data or 'capability' in data or
+                                        'location' in data or 'status' in data):
             raise serializers.ValidationError('timestamp can only be set when either comment, location, ' +
-                                              'or status are modified')
+                                              'capability, or status are modified')
 
         return data
 
@@ -132,7 +133,8 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 # get ambulance and create template from first update
                 # all ambulances are the same in a bulk update
                 ambulance = validated_data[0].get('ambulance')
-                data = {k: getattr(ambulance, k) for k in ('status', 'orientation', 'location', 'comment')}
+                data = {k: getattr(ambulance, k) for k in ('capability', 'status',
+                                                           'orientation', 'location', 'comment')}
 
                 # loop through
                 for k in range(0, n-1):
@@ -181,7 +183,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
         fields = ['id',
                   'ambulance_id',
                   'ambulance_identifier',
-                  'status', 'orientation',
+                  'capability', 'status', 'orientation',
                   'location', 'timestamp',
                   'comment',
                   'updated_by_username', 'updated_on']
