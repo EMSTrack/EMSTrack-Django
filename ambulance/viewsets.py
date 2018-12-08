@@ -161,7 +161,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
             if ambulance_history:
 
-                # If there is a available history, filter call based on active intervals
+                # If there is available history, filter call based on active intervals
 
                 # parse active times
                 available_times = self.extract_available_zone(ambulance_history)
@@ -169,20 +169,25 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 for entry in ambulance_updates:
                     logger.debug(entry.timestamp)
 
-                # create filter to exclude inactive times
-                ranges = []
-                for (t1, t2) in zip(*[iter(available_times)] * 2):
-                    if t2 is None:
-                        ranges.append(ambulance_updates.filter(timestamp__gte=t1))
-                    else:
-                        ranges.append(ambulance_updates.filter(timestamp__range=(t1, t2)))
+                if available_times:
+                    # create filter to include only active times
+                    ranges = []
+                    for (t1, t2) in zip(*[iter(available_times)] * 2):
+                        if t2 is None:
+                            ranges.append(ambulance_updates.filter(timestamp__gte=t1))
+                        else:
+                            ranges.append(ambulance_updates.filter(timestamp__range=(t1, t2)))
 
-                # calculate union of the active intervals
-                if len(ranges) == 1:
-                    ambulance_updates = ranges[0]
-                elif len(ranges) > 1:
-                    ambulance_updates = ranges[0].union(*ranges[1:])
-                logger.debug(ambulance_updates)
+                    # calculate union of the active intervals
+                    if len(ranges) == 1:
+                        ambulance_updates = ranges[0]
+                    elif len(ranges) > 1:
+                        ambulance_updates = ranges[0].union(*ranges[1:])
+                    logger.debug(ambulance_updates)
+
+                else:
+                    # no active time yet, return nothing!
+                    ambulance_updates = AmbulanceUpdate.objects.none()
 
             else:
 
@@ -203,7 +208,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
         # order records
         ambulance_updates = ambulance_updates.order_by('-timestamp')
 
-        logger.debug('-------------')
         for entry in ambulance_updates:
             logger.debug(entry.timestamp)
 
