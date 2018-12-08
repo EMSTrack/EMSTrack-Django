@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.template.defaulttags import register
 
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
-from emstrack.models import AddressModel, UpdatedByModel, defaults
+from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
 
 logger = logging.getLogger(__name__)
 
@@ -275,7 +275,7 @@ class Ambulance(UpdatedByModel):
                                                self.updated_on)
 
 
-class AmbulanceUpdate(models.Model):
+class AmbulanceUpdate(UpdatedByHistoryModel):
 
     # ambulance
     ambulance = models.ForeignKey(Ambulance,
@@ -302,12 +302,12 @@ class AmbulanceUpdate(models.Model):
     timestamp = models.DateTimeField(db_index=True, default=timezone.now)
 
     # comment
-    comment = models.CharField(max_length=254, blank=True)
+    # comment = models.CharField(max_length=254, blank=True)
 
     # updated by
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(default=timezone.now)
+    # updated_by = models.ForeignKey(User,
+    #                                on_delete=models.CASCADE)
+    # updated_on = models.DateTimeField(default=timezone.now)
 
     class Meta:
         indexes = [
@@ -487,7 +487,7 @@ class AmbulanceCallStatus(Enum):
 
 
 class AmbulanceCall(PublishMixin,
-                    models.Model):
+                    UpdatedByModel):
 
     # status
     AMBULANCE_CALL_STATUS_CHOICES = \
@@ -505,7 +505,7 @@ class AmbulanceCall(PublishMixin,
                                   on_delete=models.CASCADE)
 
     # created at
-    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
 
@@ -587,8 +587,9 @@ class AmbulanceCall(PublishMixin,
                      remove=remove)
 
         # call history save
-        AmbulanceCallHistory.objects.create(ambulance_call=self,
-                                            status=self.status, created_at=self.created_at)
+        AmbulanceCallHistory.objects.create(ambulance_call=self, status=self.status,
+                                            comment=self.comment,
+                                            updated_by=self.updated_by, updated_on=self.updated_on)
 
         # publish call?
         if publish_call:
@@ -610,7 +611,7 @@ class AmbulanceCall(PublishMixin,
         unique_together = ('call', 'ambulance')
 
 
-class AmbulanceCallHistory(models.Model):
+class AmbulanceCallHistory(UpdatedByHistoryModel):
     # ambulance_call
     ambulance_call = models.ForeignKey(AmbulanceCall,
                                        on_delete=models.CASCADE)
@@ -622,7 +623,7 @@ class AmbulanceCallHistory(models.Model):
                               choices=AMBULANCE_CALL_STATUS_CHOICES)
 
     # created at
-    created_at = models.DateTimeField()
+    # created_at = models.DateTimeField()
 
 
 # Patient, might be expanded in the future

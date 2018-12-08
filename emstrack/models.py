@@ -6,6 +6,7 @@ from django.template.defaulttags import register
 
 
 # filters
+from django.utils import timezone
 from django.utils.safestring import mark_safe
 
 
@@ -70,6 +71,20 @@ class UpdatedByModel(models.Model):
     updated_by = models.ForeignKey(User,
                                    on_delete=models.CASCADE)
     updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class UpdatedByHistoryModel(models.Model):
+    """
+    An abstract base class model that provides comments and update fields.
+    """
+
+    comment = models.CharField(max_length=254, blank=True)
+    updated_by = models.ForeignKey(User,
+                                   on_delete=models.CASCADE)
+    updated_on = models.DateTimeField(default=timezone.now)
 
     class Meta:
         abstract = True

@@ -311,9 +311,9 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
         fields = ['id',
                   'ambulance_id',
                   'status',
-                  'created_at',
+                  'comment', 'updated_by', 'updated_on',
                   'waypoint_set']
-        read_only_fields = ['created_at']
+        read_only_fields = ('id', 'updated_by')
 
 
 # Patient Serializer
