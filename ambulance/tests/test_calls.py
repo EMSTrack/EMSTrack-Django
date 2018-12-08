@@ -627,7 +627,6 @@ class TestCall(TestSetup):
         ambulance_update_1 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.PB.name)
 
         # set suspended
-        time.sleep(1)
         ambulance_call_1.status = AmbulanceCallStatus.S.name
         ambulance_call_1.save()
 
@@ -636,7 +635,6 @@ class TestCall(TestSetup):
         ambulance_update_2 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.AP.name)
 
         # set ongoing
-        time.sleep(1)
         ambulance_call_1.status = AmbulanceCallStatus.O.name
         ambulance_call_1.save()
 
