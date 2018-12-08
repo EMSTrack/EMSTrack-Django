@@ -110,6 +110,8 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         for h in ambulance_history:
 
+            logger.debug(h)
+
             # Started timestamp
             if ongoing is False and h.status == AmbulanceCallStatus.O.name:
                 available_zone.append(h.created_at)
