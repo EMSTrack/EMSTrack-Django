@@ -161,7 +161,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
                 # If there is a available history, filter call based on active intervals
 
-                # parse inactive times
+                # parse active times
                 available_times = self.extract_available_zone(ambulance_history)
                 logger.debug(available_times)
                 for entry in ambulance_updates:
@@ -179,7 +179,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 if ranges:
                     ambulance_updates = ambulance_updates.union(*ranges)
                     logger.debug(ambulance_updates)
-
 
             else:
 
