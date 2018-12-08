@@ -618,6 +618,7 @@ class TestCall(TestSetup):
                                                             updated_by=self.u1)
 
         # set suspended
+        time.sleep(1)
         ambulance_call_1.status = AmbulanceCallStatus.S.name
         ambulance_call_1.save()
 
@@ -626,6 +627,7 @@ class TestCall(TestSetup):
                                                             updated_by=self.u1)
 
         # set ongoing
+        time.sleep(1)
         ambulance_call_1.status = AmbulanceCallStatus.O.name
         ambulance_call_1.save()
 
