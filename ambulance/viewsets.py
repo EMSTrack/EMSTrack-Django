@@ -110,7 +110,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         # retrieve updates
         ambulance = self.get_object()
-        ambulance_updates = ambulance.ambulanceupdate_set
+        ambulance_updates = ambulance.ambulanceupdate_set.all()
 
         # retrieve only call updates
         call_id = self.request.query_params.get('call_id', None)
