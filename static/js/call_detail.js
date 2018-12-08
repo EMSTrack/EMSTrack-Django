@@ -109,7 +109,7 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
 
         success: function (data) {
 
-            console.log("Got ambulance '" + ambulance_id + "' from API");
+            console.log("Got '" + data.length + "' ambulance '" + ambulance_id + "' updates from API");
             addAmbulanceRoute(map, data, true);
 
         }
@@ -117,7 +117,7 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
     })
         .done(function (data) {
             if (console && console.log) {
-                console.log("Done retrieving ambulance '" + ambulance_id + "' from API");
+                console.log("Done retrieving ambulance '" + ambulance_id + "' updates from API");
             }
         });
 
