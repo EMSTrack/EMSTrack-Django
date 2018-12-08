@@ -506,7 +506,9 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
+            'comment': ambulance_call.comment,
+            'updated_by': ambulance_call.updated_by.id,
+            'updated_on': date2iso(ambulance_call.updated_on),
             'status': ambulance_call.status,
             'waypoint_set': []
         }
@@ -543,7 +545,9 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
+            'comment': ambulance_call.comment,
+            'updated_by': ambulance_call.updated_by.id,
+            'updated_on': date2iso(ambulance_call.updated_on),
             'status': AmbulanceCallStatus.O.name,
             'waypoint_set': []
         }
@@ -557,7 +561,9 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
+            'comment': ambulance_call.comment,
+            'updated_by': ambulance_call.updated_by.id,
+            'updated_on': date2iso(ambulance_call.updated_on),
             'status': ambulance_call.status,
             'waypoint_set': []
         }
@@ -595,7 +601,9 @@ class TestCall(TestSetup):
         expected = {
             'id': ambulance_call.id,
             'ambulance_id': ambulance_call.ambulance.id,
-            'created_at': date2iso(ambulance_call.created_at),
+            'comment': ambulance_call.comment,
+            'updated_by': ambulance_call.updated_by.id,
+            'updated_on': date2iso(ambulance_call.updated_on),
             'status': AmbulanceCallStatus.O.name,
             'waypoint_set': []
         }
