@@ -149,9 +149,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                         ambulance_updates = ambulance_updates.exclude(timestamp__gte=t1)
                     else:
                         ambulance_updates = ambulance_updates.exclude(timestamp__range=(t1, t2))
-                        
-                for entry in ambulance_updates:
-                    logger.debug(entry.timestamp)
 
             else:
 
@@ -171,6 +168,10 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         # order records
         ambulance_updates = ambulance_updates.order_by('-timestamp')
+
+        logger('-------------')
+        for entry in ambulance_updates:
+            logger.debug(entry.timestamp)
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)
