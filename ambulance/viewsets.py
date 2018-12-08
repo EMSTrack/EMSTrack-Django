@@ -87,12 +87,12 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
             # Started timestamp
             if ongoing is False and h.status == AmbulanceCallStatus.O.name:
-                unavailable_zone.append(h.created_at)
+                unavailable_zone.append(h.updated_on)
                 ongoing = True
 
             # If we already seen ongoing status, seeing another kind of status
             elif ongoing is True and h.status != AmbulanceCallStatus.O.name:
-                unavailable_zone.append(h.created_at)
+                unavailable_zone.append(h.updated_on)
                 ongoing = False
 
         # If the last status is not ongoing, we should put a None to ensure pair
@@ -110,16 +110,16 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         for h in ambulance_history:
 
-            logger.debug('status = %s, created_at = %s', h.status, h.created_at)
+            logger.debug('status = %s, updated_on = %s', h.status, h.updated_on)
 
             # Started timestamp
             if ongoing is False and h.status == AmbulanceCallStatus.O.name:
-                available_zone.append(h.created_at)
+                available_zone.append(h.updated_on)
                 ongoing = True
 
             # If we already seen ongoing status, seeing another kind of status
             elif ongoing is True and h.status != AmbulanceCallStatus.O.name:
-                available_zone.append(h.created_at)
+                available_zone.append(h.updated_on)
                 ongoing = False
 
         # If the last status is not ongoing, we should put a None to ensure pair
@@ -156,7 +156,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
             ambulance_history = AmbulanceCallHistory.objects\
                 .filter(ambulance_call=ambulance_call)\
-                .order_by('created_at')
+                .order_by('updated_on')
             logger.debug(ambulance_history)
 
             if ambulance_history:
