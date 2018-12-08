@@ -125,7 +125,7 @@ class TestCall(TestSetup):
         c_1 = Call.objects.create(updated_by=self.u1)
 
         # create ambulance call
-        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1, updated_by=self.u1)
 
         # serialization
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
@@ -205,7 +205,7 @@ class TestCall(TestSetup):
         c_1 = Call.objects.create(updated_by=self.u1)
 
         # create ambulance call
-        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1, updated_by=self.u1)
 
         # serialization
         data = {
@@ -329,7 +329,7 @@ class TestCall(TestSetup):
         c_1 = Call.objects.create(updated_by=self.u1)
 
         # create ambulance call
-        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1)
+        ac_1 = AmbulanceCall.objects.create(call=c_1, ambulance=self.a1, updated_by=self.u1)
 
         # waypoint creation
         wpl_1 = Location.objects.create(type=LocationType.i.name, updated_by=self.u1)
@@ -499,7 +499,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(serializer.data, expected)
 
         # create first ambulance call
-        ambulance_call_1 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1)
+        ambulance_call_1 = AmbulanceCall.objects.create(call=c1, ambulance=self.a1, updated_by=self.u1)
 
         ambulance_call = ambulance_call_1
         serializer = AmbulanceCallSerializer(ambulance_call)
@@ -550,7 +550,7 @@ class TestCall(TestSetup):
         self.assertDictEqual(ambulance_call_serializer_1.data, expected)
 
         # create second ambulance call
-        ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
+        ambulance_call_2 = AmbulanceCall.objects.create(call=c1, ambulance=self.a3, updated_by=self.u1)
 
         ambulance_call = ambulance_call_2
         serializer = AmbulanceCallSerializer(ambulance_call)
@@ -831,7 +831,7 @@ class TestCall(TestSetup):
 
         # cannot have duplicate
         # This must be last
-        self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1)
+        self.assertRaises(IntegrityError, AmbulanceCall.objects.create, call=c1, ambulance=self.a1, updated_by=self.u1)
 
     def test_call_serializer_create(self):
 
@@ -1300,8 +1300,8 @@ class TestCall(TestSetup):
         self.assertCountEqual(result, answer)
 
         # add ambulances to calls, can only read a3
-        AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
-        AmbulanceCall.objects.create(call=c2, ambulance=self.a2)
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a3, updated_by=self.u1)
+        AmbulanceCall.objects.create(call=c2, ambulance=self.a2, updated_by=self.u1)
 
         response = client.get('/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
@@ -1350,8 +1350,8 @@ class TestCall(TestSetup):
         self.assertNotContains(response, 'suhmuh')
 
         # add ambulances to calls, can only read a3
-        AmbulanceCall.objects.create(call=c1, ambulance=self.a3)
-        AmbulanceCall.objects.create(call=c2, ambulance=self.a2)
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a3, updated_by=self.u1)
+        AmbulanceCall.objects.create(call=c2, ambulance=self.a2, updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_list'))
         self.assertEquals(response.status_code, 200)
