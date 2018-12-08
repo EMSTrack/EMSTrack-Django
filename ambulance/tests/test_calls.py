@@ -622,27 +622,23 @@ class TestCall(TestSetup):
                                        location=self.h1, updated_by=self.u2)
 
         # create ambulance update to use in event
-        ambulance_update_1 = AmbulanceUpdate.objects.create(ambulance=self.a1,
-                                                            status=AmbulanceStatus.PB.name,
-                                                            updated_by=self.u1)
+        self.a1.update(status=AmbulanceStatus.PB.name, updated_by=self.u1)
+        ambulance_update_1 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.PB.name)
 
         # set suspended
         time.sleep(1)
         ambulance_call_1.status = AmbulanceCallStatus.S.name
         ambulance_call_1.save()
 
-        ambulance_update_2 = AmbulanceUpdate.objects.create(ambulance=self.a1,
-                                                            status=AmbulanceStatus.AP.name,
-                                                            updated_by=self.u1)
+        self.a1.update(status=AmbulanceStatus.AP.name, updated_by=self.u1)
+        ambulance_update_2 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.AP.name)
 
         # set ongoing
         time.sleep(1)
         ambulance_call_1.status = AmbulanceCallStatus.O.name
         ambulance_call_1.save()
 
-        ambulance_update_3 = AmbulanceUpdate.objects.create(ambulance=self.a1,
-                                                            status=AmbulanceStatus.HB.name,
-                                                            updated_by=self.u1)
+        self.a1.update(status=AmbulanceStatus.HB.name, updated_by=self.u1)
 
         serializer = CallSerializer(c1)
         ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
