@@ -808,8 +808,8 @@ class TestCall(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        #logger.debug(result)
-        #logger.debug(answer1)
+        logger.debug(response.content)
+        logger.debug(answer1)
         self.assertCountEqual(result, answer1)
 
         # logout
