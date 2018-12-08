@@ -1,4 +1,5 @@
 import logging
+import time
 
 from django.test import Client
 from django.conf import settings
