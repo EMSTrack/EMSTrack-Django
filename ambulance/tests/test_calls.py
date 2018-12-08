@@ -808,22 +808,8 @@ class TestCall(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-
-        # call hasn't started yet
-        self.assertEqual(len(result), 0)
-
-        # start call
-        c1.started_at = ambulance_update_1.updated_on
-        c1.save()
-
-        # redo query
-        # retrieve ambulances updates
-        response = client.get('/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
-                              follow=True)
-        self.assertEqual(response.status_code, 200)
-        result = JSONParser().parse(BytesIO(response.content))
-        logger.debug(result)
-        logger.debug(answer1)
+        #logger.debug(result)
+        #logger.debug(answer1)
         self.assertCountEqual(result, answer1)
 
         # logout
