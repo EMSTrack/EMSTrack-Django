@@ -787,7 +787,8 @@ class TestCall(TestSetup):
         # retrieve ambulance updates
         queryset = AmbulanceUpdate\
             .objects.filter(ambulance=self.a1.id)\
-            .filter(timestamp__gte=ambulance_update_1.timestamp)
+            .filter(timestamp__gte=ambulance_update_1.timestamp)\
+            .exclude(id=ambulance_update_2.id)
         answer1 = []
         for u in queryset:
             serializer = AmbulanceUpdateSerializer(u)
@@ -805,7 +806,7 @@ class TestCall(TestSetup):
             }
             answer1.append(serializer.data)
         logger.debug(answer1)
-        self.assertEqual(len(answer1), 3)
+        self.assertEqual(len(answer1), 2)
 
         # instantiate client
         client = Client()
