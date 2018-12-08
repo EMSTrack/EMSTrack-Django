@@ -795,7 +795,7 @@ class TestCall(TestSetup):
             }
             answer1.append(serializer.data)
         logger.debug(answer1)
-        self.assertEqual(len(answer1), 2)
+        self.assertEqual(len(answer1), 3)
 
         # instantiate client
         client = Client()
