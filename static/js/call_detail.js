@@ -10,13 +10,13 @@ function addCallToMap(call, map) {
     });
 
     // loop through ambulancecall records
-    call['ambulancecall_set'].forEach(function(ambulancecall) {
+    call['ambulancecall_set'].forEach(function (ambulancecall) {
 
         console.log('Adding ambulancecall');
         // console.log(ambulancecall);
 
         // loop through waypoints
-        ambulancecall['waypoint_set'].forEach(function(waypoint) {
+        ambulancecall['waypoint_set'].forEach(function (waypoint) {
 
             console.log('Adding waypoint');
             // console.log(waypoint);
@@ -41,14 +41,7 @@ function addCallToMap(call, map) {
         });
 
         // add ambulance updates
-
-        if (call['status'] === "S" || call.status === "E") {
-
-            // Gotta separate these. Started => live updates
-            retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], call['id'], map);
-
-        } else
-            console.error("Call status " + call.status + " not handled");
+        retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], call['id'], map);
 
     });
 
