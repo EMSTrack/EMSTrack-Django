@@ -144,9 +144,9 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # create filter to exclude inactive times
                 for (t1, t2) in zip(*[iter(unavailable_times)] * 2):
                     if t1 is None and t2 is not None:
-                        ambulance_updates = ambulance_updates.exclude(timestamp__lte=t2)
+                        ambulance_updates = ambulance_updates.exclude(timestamp__lt=t2)
                     elif t2 is None and t1 is not None:
-                        ambulance_updates = ambulance_updates.exclude(timestamp__gte=t1)
+                        ambulance_updates = ambulance_updates.exclude(timestamp__gt=t1)
                     else:
                         ambulance_updates = ambulance_updates.exclude(timestamp__range=(t1, t2))
 
