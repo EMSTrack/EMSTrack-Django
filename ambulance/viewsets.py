@@ -129,6 +129,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
             ambulance_history = AmbulanceCallHistory.objects\
                 .filter(ambulance_call=ambulance_call)\
                 .order_by('created_at')
+            logger.debug(ambulance_history)
 
             if ambulance_history:
 
