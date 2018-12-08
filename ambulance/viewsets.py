@@ -173,12 +173,14 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                     if t2 is None:
                         ranges.append(ambulance_updates.filter(timestamp__gte=t1))
                     else:
-                        ranges.append(ambulance_updates.exclude(timestamp__range=(t1, t2)))
+                        ranges.append(ambulance_updates.filter(timestamp__range=(t1, t2)))
 
                 # calculate union of the active intervals
-                if ranges:
-                    ambulance_updates = ambulance_updates.union(*ranges)
-                    logger.debug(ambulance_updates)
+                if len(ranges) == 1:
+                    ambulance_updates = ranges[0]
+                elif len(ranges) > 1:
+                    ambulance_updates = ranges[0].union(*ranges[1:])
+                logger.debug(ambulance_updates)
 
             else:
 
