@@ -13,8 +13,8 @@ from login.permissions import get_permissions
 from .models import Hospital
 from emstrack.models import Equipment, EquipmentItem
 
-from .serializers import HospitalSerializer, \
-    HospitalEquipmentSerializer, EquipmentSerializer
+from .serializers import HospitalSerializer
+from emstrack.serializers import EquipmentItemSerializer, EquipmentSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
 
     queryset = EquipmentItem.objects.all()
 
-    serializer_class = HospitalEquipmentSerializer
+    serializer_class = EquipmentItemSerializer
     lookup_field = 'equipment_id'
 
     # make sure both fields are looked up

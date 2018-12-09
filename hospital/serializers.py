@@ -3,48 +3,16 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
+from emstrack.serializers import EquipmentItemSerializer
 from login.permissions import get_permissions
 from .models import Hospital
-from emstrack.models import Equipment, EquipmentItem
-
-
-# EquipmentItem serializers
-
-class HospitalEquipmentSerializer(serializers.ModelSerializer):
-    equipment_name = serializers.CharField(source='equipment.name')
-    equipment_type = serializers.CharField(source='equipment.type')
-
-    class Meta:
-        model = EquipmentItem
-        fields = ('hospital_id',
-                  'equipment_id', 'equipment_name', 'equipment_type',
-                  'value', 'comment',
-                  'updated_by', 'updated_on')
-        read_only_fields = ('hospital_id',
-                            'equipment_id', 'equipment_name', 'equipment_type',
-                            'updated_by',)
-
-    # def validate(self, data):
-    #     # call super
-    #     validated_data = super().validate(data)
-    #
-    #     # TODO: validate equipment value using equipment_type
-    #     return validated_data
-
-
-# EquipmentMetadata serializer
-
-class EquipmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Equipment
-        fields = '__all__'
 
 
 # Hospital serializer
 # TODO: Handle equipment in create and update
 
 class HospitalSerializer(serializers.ModelSerializer):
-    hospitalequipment_set = HospitalEquipmentSerializer(many=True, read_only=True)
+    hospitalequipment_set = EquipmentItemSerializer(many=True, read_only=True)
     location = PointField(required=False)
 
     class Meta:

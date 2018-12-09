@@ -6,8 +6,8 @@ from ambulance.models import CallStatus, AmbulanceCallStatus
 from ambulance.serializers import AmbulanceSerializer, AmbulanceCallSerializer
 from ambulance.serializers import CallSerializer
 from emstrack.models import Equipment
-from hospital.serializers import HospitalSerializer, \
-    HospitalEquipmentSerializer, EquipmentSerializer
+from hospital.serializers import HospitalSerializer
+from emstrack.serializers import EquipmentItemSerializer, EquipmentSerializer
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 from .client import BaseClient, MQTTException
@@ -34,13 +34,13 @@ class MessagePublishClient:
     def remove_hospital(self, hospital, **kwargs):
         pass
 
-    def publish_hospital_metadata(self, hospital, **kwargs):
+    def publish_equipment_metadata(self, hospital, **kwargs):
         pass
 
-    def publish_hospital_equipment(self, hospital, **kwargs):
+    def publish_equipment_item(self, hospital, **kwargs):
         pass
 
-    def remove_hospital_equipment(self, hospital, **kwargs):
+    def remove_equipment_item(self, hospital, **kwargs):
         pass
 
     # For calls
@@ -115,23 +115,24 @@ class PublishClient(BaseClient):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
         self.remove_topic('hospital/{}/metadata'.format(hospital.id))
 
-    def publish_hospital_metadata(self, hospital, qos=2, retain=True):
-        hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-        equipment = Equipment.objects.filter(id__in=hospital_equipment)
-        self.publish_topic('hospital/{}/metadata'.format(hospital.id),
+    def publish_equipment_metadata(self, equipment, qos=2, retain=True):
+        equipment_items = equipment.equipmentitem_set.values('equipment')
+        equipment = Equipment.objects.filter(id__in=equipment_items)
+        self.publish_topic('equipment/{}/metadata'.format(equipment.id),
                            EquipmentSerializer(equipment, many=True),
                            qos=qos,
                            retain=retain)
 
-    def publish_equipment_item(self, type, id, equipment, qos=2, retain=True):
-        self.publish_topic('{}/{}/equipment/{}/data'.format(type, id, equipment.equipment.id),
-                           HospitalEquipmentSerializer(equipment),
+    def publish_equipment_item(self, equipment_item, qos=2, retain=True):
+        self.publish_topic('equipment/{}/item/{}/data'.format(equipment_item.equipment_holder.id,
+                                                              equipment_item.equipment.id),
+                           EquipmentItemSerializer(equipment_item),
                            qos=qos,
                            retain=retain)
 
-    def remove_hospital_equipment(self, equipment):
-        self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                 equipment.equipment.id))
+    def remove_equipment_item(self, equipment):
+        self.remove_topic('equipment/{}/item/{}/data'.format(equipment.equipment_holder.id,
+                                                             equipment.equipment.id))
 
     def publish_call(self, call, qos=2, retain=True):
         # otherwise, publish call data

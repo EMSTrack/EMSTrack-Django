@@ -141,7 +141,7 @@ class Client(PublishClient):
 
         # seeding hospital metadata
         for hospital in Hospital.objects.all():
-            self.publish_hospital_metadata(hospital)
+            self.publish_equipment_metadata(hospital)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))

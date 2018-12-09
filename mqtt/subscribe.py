@@ -18,7 +18,8 @@ from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital
 from emstrack.models import EquipmentItem
-from hospital.serializers import HospitalSerializer, HospitalEquipmentSerializer
+from hospital.serializers import HospitalSerializer
+from emstrack.serializers import EquipmentItemSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -492,9 +493,9 @@ class SubscribeClient(BaseClient):
             logger.debug('on_hospital_equipment: equipment = {}'.format(hospital_equipment))
 
             # update hospital equipment
-            serializer = HospitalEquipmentSerializer(hospital_equipment,
-                                                     data=data,
-                                                     partial=True)
+            serializer = EquipmentItemSerializer(hospital_equipment,
+                                                 data=data,
+                                                 partial=True)
             if serializer.is_valid():
 
                 logger.debug('on_hospital_equipment: valid serializer')
