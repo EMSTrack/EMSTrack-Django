@@ -157,7 +157,7 @@ class EquipmentItem(UpdatedByModel):
         super().delete(*args, **kwargs)
 
     class Meta:
-        unique_together = ('hospital', 'equipment',)
+        unique_together = ('equipment_holder', 'equipment',)
 
     def __str__(self):
         return "Hospital: {}, Equipment: {}, Count: {}".format(self.equipment_holder, self.equipment, self.value)
