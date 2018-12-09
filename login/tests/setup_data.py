@@ -109,31 +109,31 @@ class TestSetupData:
 
         # add equipment
         cls.he1 = EquipmentItem.objects.create(
-            equipment_holder=cls.h1,
+            equipment_holder=cls.h1.equipment,
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
 
         cls.he2 = EquipmentItem.objects.create(
-            equipment_holder=cls.h1,
+            equipment_holder=cls.h1.equipment,
             equipment=cls.e2,
             value='45',
             updated_by=cls.u1)
 
         cls.he3 = EquipmentItem.objects.create(
-            equipment_holder=cls.h2,
+            equipment_holder=cls.h2.equipment,
             equipment=cls.e1,
             value='False',
             updated_by=cls.u1)
 
         cls.he4 = EquipmentItem.objects.create(
-            equipment_holder=cls.h2,
+            equipment_holder=cls.h2.equipment,
             equipment=cls.e3,
             value='True',
             updated_by=cls.u1)
 
         cls.he5 = EquipmentItem.objects.create(
-            equipment_holder=cls.h3,
+            equipment_holder=cls.h3.equipment,
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
