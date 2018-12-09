@@ -9,8 +9,8 @@ from emstrack.models import EquipmentHolder
 
 class Hospital(Location):
 
-    equipment = models.ForeignKey(EquipmentHolder,
-                                  on_delete=models.CASCADE)
+    equipment = models.OneToOneField(EquipmentHolder,
+                                     on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
 
