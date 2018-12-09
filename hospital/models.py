@@ -1,11 +1,16 @@
+from django.contrib.gis.db import models
 from django.urls import reverse
 
 from ambulance.models import Location, LocationType
+from emstrack.models import EquipmentHolder
 
 
 # Hospital model
 
 class Hospital(Location):
+
+    equipment_holder = models.OneToOneField(EquipmentHolder,
+                                            on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
 
