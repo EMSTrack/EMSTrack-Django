@@ -141,7 +141,7 @@ class EquipmentItem(UpdatedByModel):
 
         # publish to mqtt
         client = SingletonPublishClient()
-        client.publish_hospital_equipment(self)
+        client.publish_equipment_item(self, 'hospital', self.equipment_holder.hospital, self.equipment)
         if created:
             client.publish_hospital_metadata(self.equipment_holder)
 

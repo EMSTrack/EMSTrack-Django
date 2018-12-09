@@ -130,7 +130,7 @@ class Client(PublishClient):
 
         # seeding hospital 
         for obj in EquipmentItem.objects.all():
-            self.publish_hospital_equipment(obj)
+            self.publish_equipment_item(obj)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital equipment data"))
