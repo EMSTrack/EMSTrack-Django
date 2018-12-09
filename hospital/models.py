@@ -9,13 +9,17 @@ from emstrack.models import EquipmentHolder
 
 class Hospital(Location):
 
-    equipment_holder = models.OneToOneField(EquipmentHolder,
-                                            on_delete=models.CASCADE)
+    equipment = models.ForeignKey(EquipmentHolder,
+                                  on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
 
         # creation?
         created = self.pk is None
+
+        # create equipment holder?
+        if created:
+            self.equipment = EquipmentHolder.objects.create()
 
         # enforce type hospital
         self.type = LocationType.h.name
