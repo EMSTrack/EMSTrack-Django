@@ -12,8 +12,6 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.safestring import mark_safe
 
-from hospital.models import Hospital
-
 
 @register.filter
 def get_equipment_type(type):
