@@ -9,7 +9,7 @@ from io import BytesIO
 import json
 
 from hospital.models import Hospital
-from emstrack.models import EquipmentType, Equipment, HospitalEquipment
+from emstrack.models import EquipmentType, Equipment, EquipmentItem
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 
@@ -41,7 +41,7 @@ class TestHospitalGetList(TestSetup):
                 'comment': h.comment,
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on),
-                'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),many=True).data
+                'hospitalequipment_set': HospitalEquipmentSerializer(EquipmentItem.objects.filter(hospital_id=h.id), many=True).data
             }
             logger.debug('answer= {}'.format(serializer.data))
             logger.debug('result = {}'.format(result))
@@ -214,7 +214,7 @@ class TestHospitalUpdate(TestSetup):
             'location': point2str(h.location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on),
-            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+            'hospitalequipment_set': HospitalEquipmentSerializer(EquipmentItem.objects.filter(hospital_id=h.id),
                                                                  many=True).data
         }
         self.assertDictEqual(serializer.data, result)
@@ -246,7 +246,7 @@ class TestHospitalUpdate(TestSetup):
             'location': point2str(location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on),
-            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+            'hospitalequipment_set': HospitalEquipmentSerializer(EquipmentItem.objects.filter(hospital_id=h.id),
                                                                  many=True).data
         }
         self.assertDictEqual(serializer.data, result)
@@ -282,7 +282,7 @@ class TestHospitalUpdate(TestSetup):
             'location': point2str(h.location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on),
-            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+            'hospitalequipment_set': HospitalEquipmentSerializer(EquipmentItem.objects.filter(hospital_id=h.id),
                                                                  many=True).data
         }
         self.assertDictEqual(serializer.data, result)
@@ -314,7 +314,7 @@ class TestHospitalUpdate(TestSetup):
             'location': point2str(location),
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on),
-            'hospitalequipment_set': HospitalEquipmentSerializer(HospitalEquipment.objects.filter(hospital_id=h.id),
+            'hospitalequipment_set': HospitalEquipmentSerializer(EquipmentItem.objects.filter(hospital_id=h.id),
                                                                  many=True).data
         }
         self.assertDictEqual(serializer.data, result)
@@ -524,7 +524,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
@@ -533,7 +533,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
+            EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
@@ -542,7 +542,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
@@ -551,7 +551,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
+            EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve any hospital equipment
@@ -560,7 +560,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h3.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h3.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve inexistent
@@ -585,7 +585,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
@@ -594,7 +594,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
+            EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
@@ -603,7 +603,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve own hospital equipment
@@ -612,7 +612,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
+            EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
         self.assertDictEqual(result, answer)
 
         # logout
@@ -662,8 +662,8 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data,
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
         ]
 
         self.assertCountEqual(result, answer)
@@ -674,8 +674,8 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data,
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
         ]
         self.assertCountEqual(result, answer)
 
@@ -685,7 +685,7 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h3.id, equipment=self.e1.id)).data
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h3.id, equipment=self.e1.id)).data
         ]
         self.assertCountEqual(result, answer)
 
@@ -706,8 +706,8 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data,
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e2.id)).data
         ]
 
         self.assertCountEqual(result, answer)
@@ -718,8 +718,8 @@ class TestHospitalEquipmentGetList(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data,
-            HospitalEquipmentSerializer(HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data,
+            HospitalEquipmentSerializer(EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e3.id)).data
         ]
         self.assertCountEqual(result, answer)
 
@@ -773,7 +773,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve equipment value
@@ -794,7 +794,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h1.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve equipment comment
@@ -849,7 +849,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve equipment value
@@ -870,7 +870,7 @@ class TestHospitalEquipmentUpdate(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = HospitalEquipmentSerializer(
-            HospitalEquipment.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
+            EquipmentItem.objects.get(hospital=self.h2.id, equipment=self.e1.id)).data
         self.assertDictEqual(result, answer)
 
         # retrieve equipment comment

@@ -12,7 +12,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from ambulance.models import Ambulance, \
     AmbulanceCapability
 from hospital.models import Hospital
-from emstrack.models import EquipmentType, Equipment, HospitalEquipment
+from emstrack.models import EquipmentType, Equipment, EquipmentItem
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient
@@ -255,20 +255,20 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.e3 = Equipment.objects.get(name='MRI - Ressonance')
             
             # add hospital equipment
-            cls.he1 = HospitalEquipment.objects.get(hospital=cls.h1,
-                                                    equipment=cls.e1)
+            cls.he1 = EquipmentItem.objects.get(hospital=cls.h1,
+                                                equipment=cls.e1)
             
-            cls.he2 = HospitalEquipment.objects.get(hospital=cls.h1,
-                                                    equipment=cls.e2)
+            cls.he2 = EquipmentItem.objects.get(hospital=cls.h1,
+                                                equipment=cls.e2)
 
-            cls.he3 = HospitalEquipment.objects.get(hospital=cls.h2,
-                                                    equipment=cls.e1)
+            cls.he3 = EquipmentItem.objects.get(hospital=cls.h2,
+                                                equipment=cls.e1)
             
-            cls.he4 = HospitalEquipment.objects.get(hospital=cls.h2,
-                                                    equipment=cls.e3)
+            cls.he4 = EquipmentItem.objects.get(hospital=cls.h2,
+                                                equipment=cls.e3)
             
-            cls.he5 = HospitalEquipment.objects.get(hospital=cls.h3,
-                                                    equipment=cls.e1)
+            cls.he5 = EquipmentItem.objects.get(hospital=cls.h3,
+                                                equipment=cls.e1)
 
             
         except:
@@ -347,31 +347,31 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 type=EquipmentType.B.name)
             
             # add hospital equipment
-            cls.he1 = HospitalEquipment.objects.create(
+            cls.he1 = EquipmentItem.objects.create(
                 hospital=cls.h1,
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)
             
-            cls.he2 = HospitalEquipment.objects.create(
+            cls.he2 = EquipmentItem.objects.create(
                 hospital=cls.h1,
                 equipment=cls.e2,
                 value='45',
                 updated_by=cls.u1)
 
-            cls.he3 = HospitalEquipment.objects.create(
+            cls.he3 = EquipmentItem.objects.create(
                 hospital=cls.h2,
                 equipment=cls.e1,
                 value='False',
                 updated_by=cls.u1)
             
-            cls.he4 = HospitalEquipment.objects.create(
+            cls.he4 = EquipmentItem.objects.create(
                 hospital=cls.h2,
                 equipment=cls.e3,
                 value='True',
                 updated_by=cls.u1)
             
-            cls.he5 = HospitalEquipment.objects.create(
+            cls.he5 = EquipmentItem.objects.create(
                 hospital=cls.h3,
                 equipment=cls.e1,
                 value='True',

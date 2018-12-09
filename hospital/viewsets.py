@@ -11,7 +11,7 @@ from emstrack.mixins import BasePermissionMixin, \
 from login.permissions import get_permissions
 
 from .models import Hospital
-from emstrack.models import Equipment, HospitalEquipment
+from emstrack.models import Equipment, EquipmentItem
 
 from .serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
@@ -68,7 +68,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         return Response(serializer.data)
 
 
-# HospitalEquipment viewset
+# EquipmentItem viewset
 
 class HospitalEquipmentViewSet(mixins.ListModelMixin,
                                mixins.RetrieveModelMixin,
@@ -90,7 +90,7 @@ class HospitalEquipmentViewSet(mixins.ListModelMixin,
     Partially update existing hospital equipment instance.
     """
 
-    queryset = HospitalEquipment.objects.all()
+    queryset = EquipmentItem.objects.all()
 
     serializer_class = HospitalEquipmentSerializer
     lookup_field = 'equipment_id'

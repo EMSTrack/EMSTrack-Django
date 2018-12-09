@@ -186,7 +186,7 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
 
     class Meta:
         model = UserHospitalPermission
-        fields = ['hospital', 'can_read', 'can_write']
+        fields = ['equipment_holder', 'can_read', 'can_write']
 
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
@@ -202,7 +202,7 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
 
     class Meta:
         model = GroupHospitalPermission
-        fields = ['hospital', 'can_read', 'can_write']
+        fields = ['equipment_holder', 'can_read', 'can_write']
 
 
 class GroupProfileAdminForm(forms.ModelForm):

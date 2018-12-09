@@ -20,7 +20,7 @@ from ambulance.models import Ambulance, \
 from ambulance.serializers import AmbulanceSerializer
 
 from hospital.models import Hospital
-from emstrack.models import EquipmentType, Equipment, HospitalEquipment
+from emstrack.models import EquipmentType, Equipment, EquipmentItem
 from hospital.serializers import EquipmentSerializer, \
     HospitalSerializer, HospitalEquipmentSerializer
 
@@ -81,7 +81,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
+        for e in EquipmentItem.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
@@ -130,7 +130,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
+        for e in EquipmentItem.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
@@ -179,7 +179,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
+        for e in EquipmentItem.objects.all():
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
@@ -236,7 +236,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all user hospital equipments
-        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
+        for e in EquipmentItem.objects.filter(hospital__id__in=can_read):
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
@@ -287,7 +287,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all user hospital equipments
-        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
+        for e in EquipmentItem.objects.filter(hospital__id__in=can_read):
             client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
                                                                  e.equipment.id),
                           JSONRenderer().render(HospitalEquipmentSerializer(e).data),
@@ -359,8 +359,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
         obj.save()
@@ -373,8 +373,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
 
         # Start client as testuser1
@@ -417,8 +417,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
         obj.value = 'True'
         obj.save()
@@ -431,8 +431,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'True')
 
         # Start client as testuser2
@@ -492,8 +492,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
         obj.save()
@@ -506,8 +506,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
 
 
@@ -651,8 +651,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Modify hospital equipment
 
         # retrieve current equipment value
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'True')
 
         # retrieve message that is there already due to creation
@@ -680,8 +680,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # verify change
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
+                                        equipment_id=self.e1.id)
         self.assertEqual(obj.value, 'False')
 
         # test bulk ambulance update

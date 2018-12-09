@@ -121,9 +121,13 @@ class Equipment(models.Model):
         return reverse('hospital:equipment_detail', kwargs={'pk': self.id})
 
 
-class HospitalEquipment(UpdatedByModel):
-    hospital = models.ForeignKey(Hospital,
-                                 on_delete=models.CASCADE)
+class EquipmentHolder(models.Model):
+    pass
+
+
+class EquipmentItem(UpdatedByModel):
+    equipment_holder = models.ForeignKey(EquipmentHolder,
+                                         on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment,
                                   on_delete=models.CASCADE)
     value = models.CharField(max_length=254)
@@ -133,7 +137,7 @@ class HospitalEquipment(UpdatedByModel):
         # creation?
         created = self.pk is None
 
-        # save to HospitalEquipment
+        # save to EquipmentItem
         super().save(*args, **kwargs)
         from mqtt.publish import SingletonPublishClient
 
@@ -141,7 +145,7 @@ class HospitalEquipment(UpdatedByModel):
         client = SingletonPublishClient()
         client.publish_hospital_equipment(self)
         if created:
-            client.publish_hospital_metadata(self.hospital)
+            client.publish_hospital_metadata(self.equipment_holder)
 
     def delete(self, *args, **kwargs):
 
@@ -149,13 +153,13 @@ class HospitalEquipment(UpdatedByModel):
         from mqtt.publish import SingletonPublishClient
         client = SingletonPublishClient()
         client.remove_hospital_equipment(self)
-        client.publish_hospital_metadata(self.hospital)
+        client.publish_hospital_metadata(self.equipment_holder)
 
-        # delete from HospitalEquipment
+        # delete from EquipmentItem
         super().delete(*args, **kwargs)
 
     class Meta:
         unique_together = ('hospital', 'equipment',)
 
     def __str__(self):
-        return "Hospital: {}, Equipment: {}, Count: {}".format(self.hospital, self.equipment, self.value)
+        return "Hospital: {}, Equipment: {}, Count: {}".format(self.equipment_holder, self.equipment, self.value)

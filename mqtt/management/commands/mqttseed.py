@@ -11,7 +11,7 @@ from mqtt.publish import PublishClient
 from ambulance.models import Ambulance, Call, CallStatus, AmbulanceCallStatus
 
 from hospital.models import Hospital
-from emstrack.models import HospitalEquipment
+from emstrack.models import EquipmentItem
 
 
 class Client(PublishClient):
@@ -129,7 +129,7 @@ class Client(PublishClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding hospital equipment data"))
 
         # seeding hospital 
-        for obj in HospitalEquipment.objects.all():
+        for obj in EquipmentItem.objects.all():
             self.publish_hospital_equipment(obj)
 
         if self.verbosity > 0:

@@ -6,7 +6,7 @@ from extra_views import InlineFormSet, CreateWithInlinesView, \
     UpdateWithInlinesView
 
 from .models import Hospital
-from emstrack.models import Equipment, HospitalEquipment
+from emstrack.models import Equipment, EquipmentItem
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
@@ -24,7 +24,7 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
 
 class HospitalEquipmentInline(InlineFormSet):
-    model = HospitalEquipment
+    model = EquipmentItem
     fields = ['equipment', 'value', 'comment']
     factory_kwargs = {'extra': 1}
 
@@ -76,7 +76,7 @@ class HospitalListView(LoginRequiredMixin,
     ordering = ['name']
 
 
-# HospitalEquipment
+# EquipmentItem
 
 class EquipmentAdminListView(ListView):
     model = Equipment

@@ -5,17 +5,17 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.permissions import get_permissions
 from .models import Hospital
-from emstrack.models import Equipment, HospitalEquipment
+from emstrack.models import Equipment, EquipmentItem
 
 
-# HospitalEquipment serializers
+# EquipmentItem serializers
 
 class HospitalEquipmentSerializer(serializers.ModelSerializer):
     equipment_name = serializers.CharField(source='equipment.name')
     equipment_type = serializers.CharField(source='equipment.type')
 
     class Meta:
-        model = HospitalEquipment
+        model = EquipmentItem
         fields = ('hospital_id',
                   'equipment_id', 'equipment_name', 'equipment_type',
                   'value', 'comment',

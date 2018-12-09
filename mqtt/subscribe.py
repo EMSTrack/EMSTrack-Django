@@ -17,7 +17,7 @@ from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital
-from emstrack.models import HospitalEquipment
+from emstrack.models import EquipmentItem
 from hospital.serializers import HospitalSerializer, HospitalEquipmentSerializer
 
 logger = logging.getLogger(__name__)
@@ -469,10 +469,10 @@ class SubscribeClient(BaseClient):
         try:
 
             # retrieve hospital equipment
-            hospital_equipment = HospitalEquipment.objects.get(hospital=hospital_id,
-                                                               equipment_id=equipment_id)
+            hospital_equipment = EquipmentItem.objects.get(hospital=hospital_id,
+                                                           equipment_id=equipment_id)
 
-        except HospitalEquipment.DoesNotExist:
+        except EquipmentItem.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload,

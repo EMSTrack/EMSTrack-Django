@@ -9,7 +9,7 @@ from ambulance.models import Ambulance, \
 from ambulance.serializers import CallSerializer
 from emstrack.tests.util import point2str
 from hospital.models import Hospital
-from emstrack.models import HospitalEquipment
+from emstrack.models import EquipmentItem
 from login.models import Client, ClientStatus, ClientLog
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from ..subscribe import SubscribeClient
