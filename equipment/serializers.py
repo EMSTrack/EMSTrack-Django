@@ -1,6 +1,4 @@
-from rest_framework import serializers
-
-from emstrack.models import EquipmentItem, Equipment
+from equipment.models import EquipmentItem, Equipment
 
 
 class EquipmentItemSerializer(serializers.ModelSerializer):

@@ -20,9 +20,9 @@ from ambulance.models import Ambulance, \
 from ambulance.serializers import AmbulanceSerializer
 
 from hospital.models import Hospital
-from emstrack.models import EquipmentType, Equipment, EquipmentItem
+from equipment.models import EquipmentType, Equipment, EquipmentItem
 from hospital.serializers import HospitalSerializer
-from emstrack.serializers import EquipmentItemSerializer, EquipmentSerializer
+from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 

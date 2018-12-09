@@ -3,7 +3,7 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
-from emstrack.serializers import EquipmentItemSerializer
+from equipment.serializers import EquipmentItemSerializer
 from login.permissions import get_permissions
 from .models import Hospital
 

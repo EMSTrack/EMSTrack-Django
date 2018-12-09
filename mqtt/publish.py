@@ -5,9 +5,9 @@ import os
 from ambulance.models import CallStatus, AmbulanceCallStatus
 from ambulance.serializers import AmbulanceSerializer, AmbulanceCallSerializer
 from ambulance.serializers import CallSerializer
-from emstrack.models import Equipment
+from equipment.models import Equipment
 from hospital.serializers import HospitalSerializer
-from emstrack.serializers import EquipmentItemSerializer, EquipmentSerializer
+from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 from .client import BaseClient, MQTTException

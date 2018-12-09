@@ -1,12 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView
 
-from extra_views import InlineFormSet, CreateWithInlinesView, \
-    UpdateWithInlinesView
+from extra_views import CreateWithInlinesView, UpdateWithInlinesView
 
+from equipment.views import EquipmentItemInline
 from .models import Hospital
-from emstrack.models import Equipment, EquipmentItem
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
@@ -23,19 +21,13 @@ class HospitalPermissionMixin(BasePermissionMixin):
     queryset = Hospital.objects.all()
 
 
-class HospitalEquipmentInline(InlineFormSet):
-    model = EquipmentItem
-    fields = ['equipment', 'value', 'comment']
-    factory_kwargs = {'extra': 1}
-
-
 class HospitalCreateView(LoginRequiredMixin,
                          SuccessMessageWithInlinesMixin,
                          UpdatedByWithInlinesMixin,
                          HospitalPermissionMixin,
                          CreateWithInlinesView):
     model = Hospital
-    inlines = [HospitalEquipmentInline]
+    inlines = [EquipmentItemInline]
     form_class = HospitalCreateForm
 
     def get_success_message(self, cleaned_data):
@@ -51,7 +43,7 @@ class HospitalUpdateView(LoginRequiredMixin,
                          HospitalPermissionMixin,
                          UpdateWithInlinesView):
     model = Hospital
-    inlines = [HospitalEquipmentInline]
+    inlines = [EquipmentItemInline]
     form_class = HospitalUpdateForm
 
     def get_success_message(self, cleaned_data):
@@ -74,38 +66,3 @@ class HospitalListView(LoginRequiredMixin,
 
     model = Hospital
     ordering = ['name']
-
-
-# EquipmentItem
-
-class EquipmentAdminListView(ListView):
-    model = Equipment
-    ordering = ['name']
-
-
-class EquipmentAdminDetailView(DetailView):
-    model = Equipment
-
-
-class EquipmentAdminCreateView(SuccessMessageMixin,
-                               CreateView):
-    model = Equipment
-    fields = ['name', 'type']
-
-    def get_success_message(self, cleaned_data):
-        return "Successfully created equipment '{}'".format(self.object.name)
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
-
-class EquipmentAdminUpdateView(SuccessMessageMixin,
-                               UpdateView):
-    model = Equipment
-    fields = ['name', 'type']
-
-    def get_success_message(self, cleaned_data):
-        return "Successfully updated equipment '{}'".format(self.object.name)
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()

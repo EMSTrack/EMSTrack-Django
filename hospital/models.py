@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 from django.urls import reverse
 
 from ambulance.models import Location, LocationType
-from emstrack.models import EquipmentHolder
+from equipment.models import EquipmentHolder
 
 
 # Hospital model

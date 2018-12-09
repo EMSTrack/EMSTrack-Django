@@ -23,7 +23,8 @@ from rest_framework.views import APIView
 
 from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
 from emstrack.mixins import SuccessMessageWithInlinesMixin
-from emstrack.models import defaults, EquipmentType
+from emstrack.models import defaults
+from equipment.models import EquipmentType
 from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \

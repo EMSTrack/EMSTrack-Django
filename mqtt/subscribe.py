@@ -17,9 +17,9 @@ from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
 from ambulance.serializers import CallSerializer
 
 from hospital.models import Hospital
-from emstrack.models import EquipmentItem
+from equipment.models import EquipmentItem
 from hospital.serializers import HospitalSerializer
-from emstrack.serializers import EquipmentItemSerializer
+from equipment.serializers import EquipmentItemSerializer
 
 logger = logging.getLogger(__name__)
 
