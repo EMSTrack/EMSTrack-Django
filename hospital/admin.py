@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Hospital, Equipment, HospitalEquipment
+from .models import Hospital
+from emstrack.models import Equipment, HospitalEquipment
 
 from emstrack.admin import EMSTrackAdmin
 

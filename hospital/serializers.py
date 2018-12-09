@@ -4,7 +4,8 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
 from login.permissions import get_permissions
-from .models import Hospital, Equipment, HospitalEquipment
+from .models import Hospital
+from emstrack.models import Equipment, HospitalEquipment
 
 
 # HospitalEquipment serializers

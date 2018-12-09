@@ -8,8 +8,8 @@ from rest_framework.parsers import JSONParser
 from io import BytesIO
 import json
 
-from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
+from hospital.models import Hospital
+from emstrack.models import EquipmentType, Equipment, HospitalEquipment
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 

@@ -11,7 +11,8 @@ from ambulance.models import Ambulance, \
     AmbulanceCapability, Location, LocationType
 
 from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
+    HospitalEquipment
+from emstrack.models import EquipmentType, Equipment
 
 
 class TestSetupData:

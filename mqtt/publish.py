@@ -5,7 +5,7 @@ import os
 from ambulance.models import CallStatus, AmbulanceCallStatus
 from ambulance.serializers import AmbulanceSerializer, AmbulanceCallSerializer
 from ambulance.serializers import CallSerializer
-from hospital.models import Equipment
+from emstrack.models import Equipment
 from hospital.serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer
 from login.serializers import UserProfileSerializer

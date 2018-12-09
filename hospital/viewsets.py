@@ -10,7 +10,8 @@ from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.permissions import get_permissions
 
-from .models import Hospital, HospitalEquipment, Equipment
+from .models import Hospital
+from emstrack.models import Equipment, HospitalEquipment
 
 from .serializers import HospitalSerializer, \
     HospitalEquipmentSerializer, EquipmentSerializer

@@ -10,7 +10,8 @@ from mqtt.publish import PublishClient
 
 from ambulance.models import Ambulance, Call, CallStatus, AmbulanceCallStatus
 
-from hospital.models import Hospital, HospitalEquipment
+from hospital.models import Hospital
+from emstrack.models import HospitalEquipment
 
 
 class Client(PublishClient):

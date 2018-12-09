@@ -5,7 +5,8 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from extra_views import InlineFormSet, CreateWithInlinesView, \
     UpdateWithInlinesView
 
-from .models import Hospital, HospitalEquipment, Equipment
+from .models import Hospital
+from emstrack.models import Equipment, HospitalEquipment
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 

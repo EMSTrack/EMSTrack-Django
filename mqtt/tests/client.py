@@ -11,8 +11,8 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from ambulance.models import Ambulance, \
     AmbulanceCapability
-from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
+from hospital.models import Hospital
+from emstrack.models import EquipmentType, Equipment, HospitalEquipment
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient

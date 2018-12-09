@@ -8,8 +8,8 @@ from ambulance.models import Ambulance, \
     AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, LocationType, WaypointStatus
 from ambulance.serializers import CallSerializer
 from emstrack.tests.util import point2str
-from hospital.models import Hospital, \
-    HospitalEquipment
+from hospital.models import Hospital
+from emstrack.models import HospitalEquipment
 from login.models import Client, ClientStatus, ClientLog
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from ..subscribe import SubscribeClient
