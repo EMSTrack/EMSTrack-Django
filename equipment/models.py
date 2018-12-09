@@ -7,6 +7,10 @@ from django.urls import reverse
 from emstrack.models import UpdatedByModel
 
 
+class EquipmentHolder(models.Model):
+    pass
+
+
 class EquipmentType(Enum):
     B = 'Boolean'
     I = 'Integer'
@@ -26,10 +30,6 @@ class Equipment(models.Model):
 
     def get_absolute_url(self):
         return reverse('equipment:detail', kwargs={'pk': self.id})
-
-
-class EquipmentHolder(models.Model):
-    pass
 
 
 class EquipmentItem(UpdatedByModel):
