@@ -1,4 +1,6 @@
-from equipment.models import EquipmentItem, Equipment
+from rest_framework import serializers
+
+from .models import EquipmentItem, Equipment
 
 
 class EquipmentItemSerializer(serializers.ModelSerializer):
