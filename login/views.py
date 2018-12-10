@@ -463,7 +463,7 @@ class MQTTAclView(CsrfExemptMixin,
                         if (can_read and
                                 ((len(topic) == 3 and topic[2] == 'data') or
                                  (len(topic) == 3 and topic[2] == 'metadata') or
-                                 (len(topic) == 5 and topic[2] == 'equipment' and topic[4] == 'data'))):
+                                 (len(topic) == 5 and topic[2] == 'item' and topic[4] == 'data'))):
                             return HttpResponse('OK')
 
                     except EquipmentHolder.DoesNotExist:
