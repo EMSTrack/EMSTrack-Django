@@ -64,20 +64,35 @@ class Permissions:
                     # e.g.: objs = group.groupprofile.hospitals.all()
                     objs = model.objects.all()
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in Hospitals.objects.all()})
-                    getattr(self, profile_field).update({
-                        e.id: {
+                    permissions = {}
+                    equipment_permissions = {}
+                    for e in objs:
+                        permissions.put(e.id, {
                             object_field: e,
                             'can_read': True,
                             'can_write': True
-                        } for e in objs})
-                    logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
-                    # add equipments
-                    self.equipments.update({
-                        e.id: {
+                        })
+                        equipment_permissions.put(e.equipment_holder.id, {
                             'equipment_holder': e.equipment_holder,
                             'can_read': True,
                             'can_write': True
-                        } for e in objs})
+                        })
+                    getattr(self, profile_field).update(permissions)
+                    self.equipments.update(equipment_permissions)
+                    # getattr(self, profile_field).update({
+                    #     e.id: {
+                    #         object_field: e,
+                    #         'can_read': True,
+                    #         'can_write': True
+                    #     } for e in objs})
+                    # # add equipments
+                    # self.equipments.update({
+                    #     e.equipment_holder.id: {
+                    #         'equipment_holder': e.equipment_holder,
+                    #         'can_read': True,
+                    #         'can_write': True
+                    #     } for e in objs})
+                    logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
                     logger.debug('superuser, {} = {}'.format('equipments', self.equipments))
 
             else:

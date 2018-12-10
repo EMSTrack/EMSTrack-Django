@@ -24,7 +24,7 @@ class EquipmentHolder(models.Model):
         else:
             retval += ", Unknown"
         return retval
-    
+
 
 class EquipmentType(Enum):
     B = 'Boolean'
