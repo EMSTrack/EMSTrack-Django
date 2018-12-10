@@ -105,9 +105,24 @@ class EquipmentViewSet(BasePermissionMixin,
     Partially update existing hospital instance.
     """
 
-    filter_field = 'hospital__id'
-    profile_field = 'hospitals'
     queryset = EquipmentHolder.objects.all()
+
+    def get_queryset(self):
+
+        # get equipment holder
+        equipment_holder = self.get_object()
+
+        # is hospital?
+        if equipment_holder.is_hospital():
+            self.profile_field = 'hospitals'
+            self.filter_field = 'hospital__id'
+
+        elif equipment_holder.is_ambulance():
+            self.profile_field = 'ambulances'
+            self.filter_field = 'ambulance__id'
+
+        # call BasePermissionMixin get_queryset
+        return super().get_queryset()
 
     @action(detail=True)
     def metadata(self, request, pk=None, **kwargs):
