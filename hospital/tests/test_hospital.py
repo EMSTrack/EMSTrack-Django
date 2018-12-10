@@ -42,7 +42,7 @@ class TestHospitalGetList(TestSetup):
                 'updated_by': h.updated_by.id,
                 'updated_on': date2iso(h.updated_on),
                 'hospitalequipment_set': 
-                    EquipmentItemSerializer(EquipmentItem.objects.filter(equipment_holder_id=h.equipment.id), 
+                    EquipmentItemSerializer(EquipmentItem.objects.filter(equipment_holder_id=h.equipment_holder.id),
                                             many=True).data
             }
             logger.debug('answer= {}'.format(serializer.data))
@@ -217,7 +217,7 @@ class TestHospitalUpdate(TestSetup):
             'updated_by': user.id,
             'updated_on': date2iso(h.updated_on),
             'hospitalequipment_set':
-                EquipmentItemSerializer(EquipmentItem.objects.filter(equipment_holder_id=h.equipment.id),
+                EquipmentItemSerializer(EquipmentItem.objects.filter(equipment_holder_id=h.equipment_holder.id),
                                         many=True).data
         }
         self.assertDictEqual(serializer.data, result)
