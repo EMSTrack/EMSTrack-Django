@@ -63,6 +63,7 @@ class Permissions:
                 for (model, profile_field, object_field) in zip(self.models, self.profile_fields, self.object_fields):
                     # e.g.: objs = group.groupprofile.hospitals.all()
                     objs = model.objects.all()
+
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in Hospitals.objects.all()})
                     permissions = {}
                     equipment_permissions = {}
@@ -79,21 +80,8 @@ class Permissions:
                         }
                     getattr(self, profile_field).update(permissions)
                     self.equipments.update(equipment_permissions)
-                    # getattr(self, profile_field).update({
-                    #     e.id: {
-                    #         object_field: e,
-                    #         'can_read': True,
-                    #         'can_write': True
-                    #     } for e in objs})
-                    # # add equipments
-                    # self.equipments.update({
-                    #     e.equipment_holder.id: {
-                    #         'equipment_holder': e.equipment_holder,
-                    #         'can_read': True,
-                    #         'can_write': True
-                    #     } for e in objs})
-                    logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
-                    logger.debug('superuser, {} = {}'.format('equipments', self.equipments))
+                    # logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
+                    # logger.debug('superuser, {} = {}'.format('equipments', self.equipments))
 
             else:
 
@@ -105,21 +93,6 @@ class Permissions:
                         objs = getattr(group, 'group' + object_field + 'permission_set').all()
 
                         # e.g.: self.ambulances.update({e.ambulance_id: {...} for e in objs})
-                        # getattr(self, profile_field).update({
-                        #     getattr(e, object_field + '_id'): {
-                        #         object_field: getattr(e, object_field),
-                        #         'can_read': e.can_read,
-                        #         'can_write': e.can_write
-                        #     } for e in objs})
-                        # logger.debug('group = {}, {} = {}'.format(group.name, profile_field, getattr(self, profile_field)))
-                        # add equipments
-                        # self.equipments.update({
-                        #     e.id: {
-                        #         'equipment_holder': getattr(e, object_field).equipment_holder,
-                        #         'can_read': e.can_read,
-                        #         'can_write': e.can_write
-                        #     } for e in objs})
-
                         permissions = {}
                         equipment_permissions = {}
                         for e in objs:
@@ -144,21 +117,6 @@ class Permissions:
                     objs = getattr(user, 'user' + object_field + 'permission_set').all()
 
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in user.profile.hospitals.all()})
-                    # getattr(self, profile_field).update({
-                    #     getattr(e, object_field + '_id'): {
-                    #         object_field: getattr(e, object_field),
-                    #         'can_read': e.can_read,
-                    #         'can_write': e.can_write
-                    #     } for e in objs})
-                    # logger.debug('user, {} = {}'.format(profile_field, getattr(self, profile_field)))
-                    # add equipments
-                    # self.equipments.update({
-                    #     e.id: {
-                    #         'equipment_holder': getattr(e, object_field).equipment_holder,
-                    #         'can_read': e.can_read,
-                    #         'can_write': e.can_write
-                    #     } for e in objs})
-
                     permissions = {}
                     equipment_permissions = {}
                     for e in objs:
