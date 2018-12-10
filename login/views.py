@@ -24,7 +24,7 @@ from rest_framework.views import APIView
 from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
-from equipment.models import EquipmentType
+from equipment.models import EquipmentType, EquipmentHolder
 from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
@@ -400,9 +400,7 @@ class MQTTAclView(CsrfExemptMixin,
                         return HttpResponse('OK')
 
                 #  - hospital/{hospital-id}/data
-                #  - hospital/{hospital-id}/metadata
-                #  - hospital/{hospital-id}/equipment/+/data
-                elif (len(topic) >= 3 and
+                elif (len(topic) == 3 and
                       topic[0] == 'hospital'):
 
                     # get hospital id
@@ -421,6 +419,54 @@ class MQTTAclView(CsrfExemptMixin,
                             return HttpResponse('OK')
 
                     except ObjectDoesNotExist:
+                        pass
+
+                #  - equipment/{equipment-holder-id}/metadata
+                #  - equipment/{equipment-holder-id}/equipment/+/data
+                elif (len(topic) >= 3 and
+                      topic[0] == 'equipment'):
+
+                    # get hospital id
+                    equipment_holder_id = int(topic[1])
+
+                    # get equipment_holder
+                    try:
+                        equipment_holder = EquipmentHolder.objects.get(id=equipment_holder_id)
+
+                        # is user authorized?
+                        can_read = False
+
+                        # try hospital first
+                        try:
+
+                            # get hospital_id
+                            hospital_id = equipment_holder.hospital.id
+
+                            # perm = user.profile.hospitals.get(hospital=hospital_id)
+                            can_read = get_permissions(user).check_can_read(hospital=hospital_id)
+
+                        except ObjectDoesNotExist:
+
+                            # try ambulance next
+                            try:
+
+                                # get ambulance_id
+                                ambulance_id = equipment_holder.ambulance.id
+
+                                # perm = user.profile.hospitals.get(hospital=hospital_id)
+                                can_read = get_permissions(user).check_can_read(ambulance=ambulance_id)
+
+                            except ObjectDoesNotExist:
+                                pass
+
+                        # can read?
+                        if (can_read and
+                                ((len(topic) == 3 and topic[2] == 'data') or
+                                 (len(topic) == 3 and topic[2] == 'metadata') or
+                                 (len(topic) == 5 and topic[2] == 'equipment' and topic[4] == 'data'))):
+                            return HttpResponse('OK')
+
+                    except EquipmentHolder.DoesNotExist:
                         pass
 
                 #  - ambulance/{ambulance-id}/data
