@@ -15,7 +15,7 @@ class TestPermissions(TestSetup):
         perms = Permissions(u)
         self.assertEqual(3, len(perms.ambulances))
         self.assertEqual(3, len(perms.hospitals))
-        # self.assertEqual(6, len(perms.equipments))
+        self.assertEqual(6, len(perms.equipments))
 
         answer = [self.a1.id, self.a2.id, self.a3.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
