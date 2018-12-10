@@ -67,16 +67,16 @@ class Permissions:
                     permissions = {}
                     equipment_permissions = {}
                     for e in objs:
-                        permissions.put(e.id, {
+                        permissions[e.id] = {
                             object_field: e,
                             'can_read': True,
                             'can_write': True
-                        })
-                        equipment_permissions.put(e.equipment_holder.id, {
+                        }
+                        equipment_permissions[e.equipment_holder.id] = {
                             'equipment_holder': e.equipment_holder,
                             'can_read': True,
                             'can_write': True
-                        })
+                        }
                     getattr(self, profile_field).update(permissions)
                     self.equipments.update(equipment_permissions)
                     # getattr(self, profile_field).update({
