@@ -70,7 +70,7 @@ class Permissions:
                             'can_read': True,
                             'can_write': True
                         } for e in objs})
-                    # logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
+                    logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
                     # add equipments
                     self.equipments.update({
                         e.id: {
