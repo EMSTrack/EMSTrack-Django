@@ -89,8 +89,7 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
                 raise PermissionDenied()
 
         except EquipmentHolder.DoesNotExist as e:
-            # will simply return empty query
-            pass
+            raise PermissionDenied()
 
         # build queryset
         filter = {'equipment_holder_id': equipment_holder_id}
