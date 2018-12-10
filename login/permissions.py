@@ -78,7 +78,7 @@ class Permissions:
                             'can_read': True,
                             'can_write': True
                         } for e in objs})
-                    logger.debug('superuser, {} = {}'.format('equipments', e.equipment_holder))
+                    logger.debug('superuser, {} = {}'.format('equipments', self.equipments))
 
             else:
 
