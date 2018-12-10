@@ -138,27 +138,44 @@ class Permissions:
                         getattr(self, profile_field).update(permissions)
                         self.equipments.update(equipment_permissions)
 
-
-
                 # add user permissions
                 for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
                     # e.g.: objs = user.userhospitalpermission_set.all()
                     objs = getattr(user, 'user' + object_field + 'permission_set').all()
+
                     # e.g.: self.hospitals.update({e.hospital_id: {...} for e in user.profile.hospitals.all()})
-                    getattr(self, profile_field).update({
-                        getattr(e, object_field + '_id'): {
-                            object_field: getattr(e, object_field),
-                            'can_read': e.can_read,
-                            'can_write': e.can_write
-                        } for e in objs})
+                    # getattr(self, profile_field).update({
+                    #     getattr(e, object_field + '_id'): {
+                    #         object_field: getattr(e, object_field),
+                    #         'can_read': e.can_read,
+                    #         'can_write': e.can_write
+                    #     } for e in objs})
                     # logger.debug('user, {} = {}'.format(profile_field, getattr(self, profile_field)))
                     # add equipments
-                    self.equipments.update({
-                        e.id: {
-                            'equipment_holder': getattr(e, object_field).equipment_holder,
-                            'can_read': e.can_read,
-                            'can_write': e.can_write
-                        } for e in objs})
+                    # self.equipments.update({
+                    #     e.id: {
+                    #         'equipment_holder': getattr(e, object_field).equipment_holder,
+                    #         'can_read': e.can_read,
+                    #         'can_write': e.can_write
+                    #     } for e in objs})
+
+                    permissions = {}
+                    equipment_permissions = {}
+                    for e in objs:
+                        id = getattr(e, object_field + '_id')
+                        obj = getattr(e, object_field)
+                        permissions[id] = {
+                            object_field: obj,
+                            'can_read': True,
+                            'can_write': True
+                        }
+                        equipment_permissions[obj.equipment_holder.id] = {
+                            'equipment_holder': obj.equipment_holder,
+                            'can_read': True,
+                            'can_write': True
+                        }
+                    getattr(self, profile_field).update(permissions)
+                    self.equipments.update(equipment_permissions)
 
             # build permissions
             for profile_field in self.profile_fields:
