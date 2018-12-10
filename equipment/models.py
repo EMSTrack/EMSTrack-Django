@@ -15,6 +15,16 @@ class EquipmentHolder(models.Model):
     def is_ambulance(self):
         return hasattr(self, 'ambulance')
 
+    def __str__(self):
+        retval = "Equipment '{}'".format(self.id)
+        if self.is_hospital():
+            retval += ", Hospital '{}'".format(self.hospital)
+        elif self.is_ambulance():
+            retval += ", Ambulance '{}'".format(self.ambulance)
+        else:
+            retval += ", Unknown"
+        return retval
+    
 
 class EquipmentType(Enum):
     B = 'Boolean'
