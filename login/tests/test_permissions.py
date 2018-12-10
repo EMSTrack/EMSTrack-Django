@@ -10,6 +10,8 @@ class TestPermissions(TestSetup):
 
         all_ambulances = {self.a1.id, self.a2.id, self.a3.id}
         all_hospitals = {self.h1.id, self.h2.id, self.h3.id}
+        all_equipments = {self.a1.equipment_holder.id, self.a2.equipment_holder.id, self.a3.equipment_holder.id, 
+                          self.h1.equipment_holder.id, self.h2.equipment_holder.id, self.h3.equipment_holder.id}
 
         u = self.u1
         perms = Permissions(u)
@@ -44,6 +46,22 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+
+        answer = [self.a1.equipment_holder.id, self.a2.equipment_holder.id, self.a3.equipment_holder.id,
+                  self.h1.equipment_holder.id, self.h2.equipment_holder.id, self.h3.equipment_holder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
+                
         answer = {
             'ambulances': {
                 self.a1.id: {
