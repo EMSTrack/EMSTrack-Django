@@ -401,7 +401,8 @@ class MQTTAclView(CsrfExemptMixin,
 
                 #  - hospital/{hospital-id}/data
                 elif (len(topic) == 3 and
-                      topic[0] == 'hospital'):
+                      topic[0] == 'hospital' and
+                      topic[2] == 'data'):
 
                     # get hospital id
                     hospital_id = int(topic[1])
@@ -412,17 +413,14 @@ class MQTTAclView(CsrfExemptMixin,
                         # perm = user.profile.hospitals.get(hospital=hospital_id)
                         can_read = get_permissions(user).check_can_read(hospital=hospital_id)
 
-                        if (can_read and
-                                ((len(topic) == 3 and topic[2] == 'data') or
-                                 (len(topic) == 3 and topic[2] == 'metadata') or
-                                 (len(topic) == 5 and topic[2] == 'equipment' and topic[4] == 'data'))):
+                        if (can_read):
                             return HttpResponse('OK')
 
                     except ObjectDoesNotExist:
                         pass
 
                 #  - equipment/{equipment-holder-id}/metadata
-                #  - equipment/{equipment-holder-id}/equipment/+/data
+                #  - equipment/{equipment-holder-id}/item/+/data
                 elif (len(topic) >= 3 and
                       topic[0] == 'equipment'):
 
