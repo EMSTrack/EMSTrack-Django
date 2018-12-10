@@ -109,7 +109,7 @@ class TestSetupData:
 
         # add equipment
         cls.he1 = EquipmentItem.objects.create(
-            equipment_holder=cls.h1.equipment_holder_holder,
+            equipment_holder=cls.h1.equipment_holder,
             equipment=cls.e1,
             value='True',
             updated_by=cls.u1)
