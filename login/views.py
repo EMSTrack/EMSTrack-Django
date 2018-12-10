@@ -426,10 +426,12 @@ class MQTTAclView(CsrfExemptMixin,
 
                     # get hospital id
                     equipment_holder_id = int(topic[1])
+                    logger.debug(equipment_holder_id)
 
                     # get equipment_holder
                     try:
                         equipment_holder = EquipmentHolder.objects.get(id=equipment_holder_id)
+                        logger.debug(equipment_holder)
 
                         # is user authorized?
                         can_read = False
@@ -439,6 +441,7 @@ class MQTTAclView(CsrfExemptMixin,
 
                             # get hospital_id
                             hospital_id = equipment_holder.hospital.id
+                            logger.debug(hospital_id)
 
                             # perm = user.profile.hospitals.get(hospital=hospital_id)
                             can_read = get_permissions(user).check_can_read(hospital=hospital_id)
@@ -458,6 +461,7 @@ class MQTTAclView(CsrfExemptMixin,
                                 pass
 
                         # can read?
+                        logger.debug(can_read)
                         if (can_read and
                                 ((len(topic) == 3 and topic[2] == 'data') or
                                  (len(topic) == 3 and topic[2] == 'metadata') or
