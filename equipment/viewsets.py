@@ -96,8 +96,7 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
         return self.queryset.filter(**filter)
 
 
-class EquipmentViewSet(mixins.RetrieveModelMixin,
-                       BasePermissionMixin,
+class EquipmentViewSet(BasePermissionMixin,
                        viewsets.GenericViewSet):
     """
     API endpoint for manipulating equipment.
@@ -106,24 +105,9 @@ class EquipmentViewSet(mixins.RetrieveModelMixin,
     Partially update existing hospital instance.
     """
 
+    profile_field = 'equipments'
+    filter_field = 'id'
     queryset = EquipmentHolder.objects.all()
-
-    def get_queryset(self):
-
-        # get equipment holder
-        equipment_holder = self.get_object()
-
-        # is hospital?
-        if equipment_holder.is_hospital():
-            self.profile_field = 'hospitals'
-            self.filter_field = 'hospital__id'
-
-        elif equipment_holder.is_ambulance():
-            self.profile_field = 'ambulances'
-            self.filter_field = 'ambulance__id'
-
-        # call BasePermissionMixin get_queryset
-        return super().get_queryset()
 
     @action(detail=True)
     def metadata(self, request, pk=None, **kwargs):

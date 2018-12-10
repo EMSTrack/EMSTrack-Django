@@ -49,6 +49,11 @@ class Permissions:
             self.can_read[profile_field] = []
             self.can_write[profile_field] = []
 
+        # add equipments
+        self.equipments = {}
+        self.can_read['equipments'] = []
+        self.can_write['equipments'] = []
+
         # retrieve permissions if not None
         if user is not None:
 
@@ -66,6 +71,13 @@ class Permissions:
                             'can_write': True
                         } for e in objs})
                     # logger.debug('superuser, {} = {}'.format(profile_field, getattr(self, profile_field)))
+                    # add equipments
+                    self.equipments.update({
+                        e.id: {
+                            'equipment_holder': e.equipment_holder,
+                            'can_read': True,
+                            'can_write': True
+                        } for e in objs})
 
             else:
 
@@ -84,6 +96,13 @@ class Permissions:
                                 'can_write': e.can_write
                             } for e in objs})
                         # logger.debug('group = {}, {} = {}'.format(group.name, profile_field, getattr(self, profile_field)))
+                        # add equipments
+                        self.equipments.update({
+                            e.id: {
+                                'equipment_holder': getattr(e, object_field).equipment_holder,
+                                'can_read': e.can_read,
+                                'can_write': e.can_write
+                            } for e in objs})
 
                 # add user permissions
                 for (profile_field, object_field) in zip(self.profile_fields, self.object_fields):
@@ -97,6 +116,13 @@ class Permissions:
                             'can_write': e.can_write
                         } for e in objs})
                     # logger.debug('user, {} = {}'.format(profile_field, getattr(self, profile_field)))
+                    # add equipments
+                    self.equipments.update({
+                        e.id: {
+                            'equipment_holder': getattr(e, object_field).equipment_holder,
+                            'can_read': e.can_read,
+                            'can_write': e.can_write
+                        } for e in objs})
 
             # build permissions
             for profile_field in self.profile_fields:
@@ -109,6 +135,12 @@ class Permissions:
                         self.can_write[profile_field].append(id)
                 # logger.debug('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
                 # logger.debug('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
+            # add equipments
+            for (id, obj) in self.equipments.items():
+                if obj['can_read']:
+                    self.can_read['equipments'].append(id)
+                if obj['can_write']:
+                    self.can_write['equipments'].append(id)
 
     def check_can_read(self, **kwargs):
         assert len(kwargs) == 1

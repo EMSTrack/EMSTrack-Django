@@ -8,6 +8,7 @@ from django.template.defaulttags import register
 
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
 from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
+from equipment.models import EquipmentHolder
 
 logger = logging.getLogger(__name__)
 
@@ -104,6 +105,9 @@ class Ambulance(UpdatedByModel):
 
     # TODO: Should we consider denormalizing Ambulance to avoid duplication with AmbulanceUpdate?
 
+    equipment_holder = models.OneToOneField(EquipmentHolder,
+                                            on_delete=models.CASCADE)
+
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
 
@@ -156,6 +160,10 @@ class Ambulance(UpdatedByModel):
 
         # loaded_values?
         loaded_values = self._loaded_values is not None
+
+        # create equipment holder?
+        if created:
+            self.equipment_holder = EquipmentHolder.objects.create()
 
         # has location changed?
         has_moved = False
