@@ -127,13 +127,13 @@ class Permissions:
                             obj = getattr(e, object_field)
                             permissions[id] = {
                                 object_field: obj,
-                                'can_read': True,
-                                'can_write': True
+                                'can_read': e.can_read,
+                                'can_write': e.can_write
                             }
                             equipment_permissions[obj.equipment_holder.id] = {
                                 'equipment_holder': obj.equipment_holder,
-                                'can_read': True,
-                                'can_write': True
+                                'can_read': e.can_read,
+                                'can_write': e.can_write
                             }
                         getattr(self, profile_field).update(permissions)
                         self.equipments.update(equipment_permissions)
@@ -166,13 +166,13 @@ class Permissions:
                         obj = getattr(e, object_field)
                         permissions[id] = {
                             object_field: obj,
-                            'can_read': True,
-                            'can_write': True
+                            'can_read': e.can_read,
+                            'can_write': e.can_write
                         }
                         equipment_permissions[obj.equipment_holder.id] = {
                             'equipment_holder': obj.equipment_holder,
-                            'can_read': True,
-                            'can_write': True
+                            'can_read': e.can_read,
+                            'can_write': e.can_write
                         }
                     getattr(self, profile_field).update(permissions)
                     self.equipments.update(equipment_permissions)
@@ -188,6 +188,7 @@ class Permissions:
                         self.can_write[profile_field].append(id)
                 # logger.debug('can_read[{}] = {}'.format(profile_field, self.can_read[profile_field]))
                 # logger.debug('can_write[{}] = {}'.format(profile_field, self.can_write[profile_field]))
+
             # add equipments
             for (id, obj) in self.equipments.items():
                 if obj['can_read']:
