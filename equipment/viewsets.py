@@ -105,7 +105,7 @@ class EquipmentViewSet(BasePermissionMixin,
     Partially update existing hospital instance.
     """
 
-    filter_field = 'id'
+    filter_field = 'hospital__id'
     profile_field = 'hospitals'
     queryset = EquipmentHolder.objects.all()
 
