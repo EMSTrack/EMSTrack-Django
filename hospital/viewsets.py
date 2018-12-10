@@ -59,7 +59,7 @@ class HospitalViewSet(mixins.ListModelMixin,
         """
 
         hospital = self.get_object()
-        hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+        hospital_equipment = hospital.equipment_holder.equipmentitem_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=hospital_equipment)
         serializer = EquipmentSerializer(equipment, many=True)
         return Response(serializer.data)

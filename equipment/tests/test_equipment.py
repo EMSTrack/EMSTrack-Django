@@ -19,8 +19,7 @@ class TestEquipmentItemGetList(TestSetup):
         for he in (self.he1, self.he2, self.he3, self.he4):
             serializer = EquipmentItemSerializer(he)
             result = {
-                'hospital_id': he.hospital.id,
-                # 'hospital_name': he.hospital.name,
+                'equipment_holder_id': he.equipment_holder.id,
                 'equipment_id': he.equipment.id,
                 'equipment_name': he.equipment.name,
                 'equipment_type': he.equipment.type,
