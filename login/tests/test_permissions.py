@@ -237,6 +237,7 @@ class TestPermissions(TestSetup):
         perms = Permissions(u)
         self.assertEqual(2, len(perms.ambulances))
         self.assertEqual(0, len(perms.hospitals))
+        self.assertEqual(2, len(perms.equipments))
         answer = [self.a3.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         for id in all_ambulances:
@@ -265,6 +266,20 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+        answer = [self.a3.equipment_holder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        answer = [self.a3.equipment_holder.id]
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
         answer = {
             'ambulances': {
                 self.a1.id: {
