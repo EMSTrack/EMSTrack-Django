@@ -8,7 +8,12 @@ from emstrack.models import UpdatedByModel
 
 
 class EquipmentHolder(models.Model):
-    pass
+
+    def is_hospital(self):
+        return hasattr(self, 'hospital')
+
+    def is_ambulance(self):
+        return hasattr(self, 'ambulance')
 
 
 class EquipmentType(Enum):

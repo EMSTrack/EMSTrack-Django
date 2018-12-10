@@ -1,10 +1,12 @@
 from django.core.exceptions import PermissionDenied
 
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-from emstrack.mixins import UpdateModelUpdateByMixin
-from equipment.models import EquipmentItem
-from equipment.serializers import EquipmentItemSerializer
+from emstrack.mixins import UpdateModelUpdateByMixin, BasePermissionMixin
+from equipment.models import EquipmentItem, EquipmentHolder, Equipment
+from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 from hospital.viewsets import logger
 from login.permissions import get_permissions
 
@@ -40,31 +42,82 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
         # retrieve user
         user = self.request.user
 
-        # retrieve id
-        equipment_holder_id = int(self.kwargs['equipment_holder_id'])
-
-        logger.debug('kwargs = {}'.format(self.kwargs))
-
         # return nothing if anonymous
         if user.is_anonymous:
             raise PermissionDenied()
+        
+        # retrieve id
+        equipment_holder_id = int(self.kwargs['equipment_holder_id'])
+        logger.debug('kwargs = {}'.format(self.kwargs))
 
-        # logger.debug('user = {}'.format(user))
-        # logger.debug('hospital_id = {}'.format(id))
-        # logger.debug('can_read = {}'.format(get_permissions(user).check_can_read(hospital=id)))
-        # logger.debug('can_write = {}'.format(get_permissions(user).check_can_write(hospital=id)))
+        try:
+            
+            # retrieve equipment_holder
+            equipment_holder = EquipmentHolder.objects.get(id=equipment_holder_id)
 
-        # check permission (and also existence)
-        if self.request.method == 'GET':
-            if not get_permissions(user).check_can_read(hospital=equipment_holder_id):
+            # read or write?
+            if self.request.method == 'GET':
+                is_write = False
+            elif (self.request.method == 'PUT' or
+                  self.request.method == 'PATCH' or
+                  self.request.method == 'DELETE'):
+                is_write = True
+
+            # is hospital?
+            if equipment_holder.is_hospital():
+
+                # check permission (and also existence)
+                if is_write:
+                    if not get_permissions(user).check_can_write(hospital=equipment_holder.hospital.id):
+                        raise PermissionDenied()
+                else:
+                    if not get_permissions(user).check_can_read(hospital=equipment_holder.hospital.id):
+                        raise PermissionDenied()
+
+            # is ambulance?
+            elif equipment_holder.is_ambulance():
+
+                # check permission (and also existence)
+                if is_write:
+                    if not get_permissions(user).check_can_write(ambulance=equipment_holder.ambulance.id):
+                        raise PermissionDenied()
+                else:
+                    if not get_permissions(user).check_can_read(ambulance=equipment_holder.ambulance.id):
+                        raise PermissionDenied()
+
+            else:
                 raise PermissionDenied()
 
-        elif (self.request.method == 'PUT' or
-              self.request.method == 'PATCH' or
-              self.request.method == 'DELETE'):
-            if not get_permissions(user).check_can_write(hospital=equipment_holder_id):
-                raise PermissionDenied()
+        except EquipmentHolder.DoesNotExist as e:
+            # will simply return empty query
+            pass
 
         # build queryset
         filter = {'equipment_holder_id': equipment_holder_id}
         return self.queryset.filter(**filter)
+
+
+class EquipmentViewSet(BasePermissionMixin,
+                       viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating equipment.
+
+    metadata
+    Partially update existing hospital instance.
+    """
+
+    filter_field = 'id'
+    profile_field = 'hospitals'
+    queryset = EquipmentHolder.objects.all()
+
+    @action(detail=True)
+    def metadata(self, request, pk=None, **kwargs):
+        """
+        Retrive hospital equipment metadata.
+        """
+
+        hospital = self.get_object()
+        hospital_equipment = hospital.equipment_holder.equipmentitem_set.values('equipment')
+        equipment = Equipment.objects.filter(id__in=hospital_equipment)
+        serializer = EquipmentSerializer(equipment, many=True)
+        return Response(serializer.data)

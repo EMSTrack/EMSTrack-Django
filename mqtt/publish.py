@@ -113,7 +113,7 @@ class PublishClient(BaseClient):
 
     def remove_hospital(self, hospital):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
-        self.remove_topic('hospital/{}/metadata'.format(hospital.id))
+        self.remove_topic('equipment/{}/metadata'.format(hospital.equipment_holder.id))
 
     def publish_equipment_metadata(self, equipment_holder, qos=2, retain=True):
         equipment_items = equipment_holder.equipmentitem_set.values('equipment')
