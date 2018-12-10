@@ -205,7 +205,7 @@ class TestPermissions(TestSetup):
                 self.h1.equipment_holder.id: {
                     'equipment_holder': self.h1.equipment_holder,
                     'can_read': True,
-                    'can_write': True
+                    'can_write': False
                 },
                 self.h2.equipment_holder.id: {
                     'equipment_holder': self.h2.equipment_holder,
