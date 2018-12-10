@@ -116,7 +116,7 @@ class EquipmentViewSet(BasePermissionMixin,
         """
 
         equipment_holder = self.get_object()
-        equipments = equipment_holder.equipmentitem_set.values('equipment')
-        equipment = Equipment.objects.filter(id__in=equipments)
+        equipment_list = equipment_holder.equipmentitem_set.values('equipment')
+        equipment = Equipment.objects.filter(id__in=equipment_list)
         serializer = EquipmentSerializer(equipment, many=True)
         return Response(serializer.data)
