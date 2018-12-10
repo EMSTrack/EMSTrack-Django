@@ -179,6 +179,7 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_read(equipment=id))
             else:
                 self.assertFalse(perms.check_can_read(equipment=id))
+        answer = [self.h2.equipment_holder.id]
         self.assertCountEqual(answer, perms.get_can_write('equipments'))
         for id in all_equipments:
             if id in answer:
