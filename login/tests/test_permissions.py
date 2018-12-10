@@ -571,7 +571,7 @@ class TestPermissions(TestSetup):
             'hospitals': {},
             'equipments': {
                 self.a1.equipment_holder.id: {
-                    'ambulance': self.a1.equipment_holder,
+                    'equipment_holder': self.a1.equipment_holder,
                     'can_read': False,
                     'can_write': False
                 },
@@ -618,7 +618,7 @@ class TestPermissions(TestSetup):
             'hospitals': {},
             'equipments': {
                 self.a1.equipment_holder.id: {
-                    'ambulance': self.a1.equipment_holder,
+                    'equipment_holder': self.a1.equipment_holder,
                     'can_read': True,
                     'can_write': True
                 },
