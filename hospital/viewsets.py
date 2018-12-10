@@ -51,15 +51,3 @@ class HospitalViewSet(mixins.ListModelMixin,
     queryset = Hospital.objects.all()
 
     serializer_class = HospitalSerializer
-
-    @action(detail=True)
-    def metadata(self, request, pk=None, **kwargs):
-        """
-        Retrive hospital equipment metadata.
-        """
-
-        hospital = self.get_object()
-        hospital_equipment = hospital.equipment_holder.equipmentitem_set.values('equipment')
-        equipment = Equipment.objects.filter(id__in=hospital_equipment)
-        serializer = EquipmentSerializer(equipment, many=True)
-        return Response(serializer.data)

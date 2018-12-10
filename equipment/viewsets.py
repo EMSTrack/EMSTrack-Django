@@ -115,8 +115,8 @@ class EquipmentViewSet(BasePermissionMixin,
         Retrive hospital equipment metadata.
         """
 
-        hospital = self.get_object()
-        hospital_equipment = hospital.equipment_holder.equipmentitem_set.values('equipment')
-        equipment = Equipment.objects.filter(id__in=hospital_equipment)
+        equipment_holder = self.get_object()
+        equipments = equipment_holder.equipmentitem_set.values('equipment')
+        equipment = Equipment.objects.filter(id__in=equipments)
         serializer = EquipmentSerializer(equipment, many=True)
         return Response(serializer.data)
