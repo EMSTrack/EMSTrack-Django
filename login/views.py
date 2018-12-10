@@ -424,7 +424,7 @@ class MQTTAclView(CsrfExemptMixin,
                 elif (len(topic) >= 3 and
                       topic[0] == 'equipment'):
 
-                    # get hospital id
+                    # get equipment_holder_id
                     equipment_holder_id = int(topic[1])
                     logger.debug(equipment_holder_id)
 
@@ -561,10 +561,8 @@ class MQTTAclView(CsrfExemptMixin,
                             pass
 
                     #  - user/{username}/client/{client-id}/hospital/{hospital-id}/data
-                    #  - user/{username}/client/{client-id}/hospital/{hospital-id}/equipment/+/data
                     elif (topic[4] == 'hospital' and
-                          ((len(topic) == 7 and topic[6] == 'data') or
-                           (len(topic) == 9 and topic[6] == 'equipment' and topic[8] == 'data'))):
+                          len(topic) == 7 and topic[6] == 'data'):
 
                         # get hospital_id
                         hospital_id = int(topic[5])
@@ -579,6 +577,54 @@ class MQTTAclView(CsrfExemptMixin,
                                 return HttpResponse('OK')
 
                         except ObjectDoesNotExist:
+                            pass
+
+                    #  - user/{username}/client/{client-id}/equipment/{equipment-holder-id}/item/+/data
+                    elif (topic[4] == 'equipment' and
+                          len(topic) == 9 and topic[6] == 'item' and topic[8] == 'data'):
+
+                        # get equipment_holder_id
+                        equipment_holder_id = int(topic[1])
+                        logger.debug(equipment_holder_id)
+
+                        # get equipment_holder
+                        try:
+                            equipment_holder = EquipmentHolder.objects.get(id=equipment_holder_id)
+                            logger.debug(equipment_holder)
+
+                            # is user authorized?
+                            can_write = False
+
+                            # try hospital first
+                            try:
+
+                                # get hospital_id
+                                hospital_id = equipment_holder.hospital.id
+                                logger.debug(hospital_id)
+
+                                # perm = user.profile.hospitals.get(hospital=hospital_id)
+                                can_write = get_permissions(user).check_can_write(hospital=hospital_id)
+
+                            except ObjectDoesNotExist:
+
+                                # try ambulance next
+                                try:
+
+                                    # get ambulance_id
+                                    ambulance_id = equipment_holder.ambulance.id
+
+                                    # perm = user.profile.hospitals.get(hospital=hospital_id)
+                                    can_write = get_permissions(user).check_can_write(ambulance=ambulance_id)
+
+                                except ObjectDoesNotExist:
+                                    pass
+
+                            # can read?
+                            logger.debug(can_write)
+                            if can_write:
+                                return HttpResponse('OK')
+
+                        except EquipmentHolder.ObjectDoesNotExist:
                             pass
 
         except User.DoesNotExist:
