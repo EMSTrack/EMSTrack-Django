@@ -96,7 +96,8 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
         return self.queryset.filter(**filter)
 
 
-class EquipmentViewSet(BasePermissionMixin,
+class EquipmentViewSet(mixins.RetrieveModelMixin,
+                       BasePermissionMixin,
                        viewsets.GenericViewSet):
     """
     API endpoint for manipulating equipment.
