@@ -96,12 +96,46 @@ class TestPermissions(TestSetup):
                     'can_read': True,
                     'can_write': True
                 }
+            },
+            'equipments': {
+                self.a1.equipment_holder.id: {
+                    'equipment_holder': self.a1.equipment_holder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.a2.equipment_holder.id: {
+                    'equipment_holder': self.a2.equipment_holder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.a3.equipment_holder.id: {
+                    'equipment_holder': self.a3.equipment_holder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h1.equipment_holder.id: {
+                    'equipment_holder': self.h1.equipment_holder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h2.equipment_holder.id: {
+                    'equipment_holder': self.h2.equipment_holder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h3.equipment_holder.id: {
+                    'equipment_holder': self.h3.equipment_holder,
+                    'can_read': True,
+                    'can_write': True
+                }
             }
         }
         for id in all_ambulances:
             self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
         for id in all_hospitals:
             self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
+        for id in all_equipments:
+            self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
 
         # regular users without groups
 
