@@ -155,8 +155,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Modify hospital equipment
 
         # retrieve current equipment value
-        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
-                                        equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
         # retrieve message that is there already due to creation
