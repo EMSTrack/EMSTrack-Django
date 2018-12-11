@@ -65,7 +65,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for equipment in hospital.hospitalequipment_set.all %}
+                {% for equipment in hospital.equipment_holder.equipmentitem_set.all %}
                 <tr>
                     <td>{{ equipment.equipment.name }}</td>
                     <td>{{ equipment.value }}</td>

@@ -2,15 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from extra_views import CreateWithInlinesView, UpdateWithInlinesView
-
-from equipment.views import EquipmentItemInline
 from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, \
-    UpdatedByMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
 
 # Django views
