@@ -90,6 +90,9 @@ class AmbulanceCreateView(LoginRequiredMixin,
     model = Ambulance
     form_class = AmbulanceCreateForm
 
+    def get_success_message(self, cleaned_data):
+        return "Successfully created ambulance '{}'".format(cleaned_data['identifier'])
+
     def get_success_url(self):
         return self.object.get_absolute_url()
     
@@ -102,6 +105,9 @@ class AmbulanceUpdateView(LoginRequiredMixin,
     
     model = Ambulance
     form_class = AmbulanceUpdateForm
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated ambulance '{}'".format(cleaned_data['identifier'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()

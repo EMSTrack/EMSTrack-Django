@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import ListView, DetailView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from extra_views import CreateWithInlinesView, UpdateWithInlinesView
 
@@ -8,7 +9,8 @@ from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin
+from emstrack.mixins import BasePermissionMixin, SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, \
+    UpdatedByMixin
 
 
 # Django views
@@ -22,12 +24,15 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
 
 class HospitalCreateView(LoginRequiredMixin,
-                         SuccessMessageWithInlinesMixin,
-                         UpdatedByWithInlinesMixin,
+                         # SuccessMessageWithInlinesMixin,
+                         # UpdatedByWithInlinesMixin,
+                         # CreateWithInlinesView):
+                         SuccessMessageMixin,
+                         UpdatedByMixin,
                          HospitalPermissionMixin,
-                         CreateWithInlinesView):
+                         CreateView):
     model = Hospital
-    inlines = [EquipmentItemInline]
+    # inlines = [EquipmentItemInline]
     form_class = HospitalCreateForm
 
     def get_success_message(self, cleaned_data):
@@ -38,12 +43,15 @@ class HospitalCreateView(LoginRequiredMixin,
 
 
 class HospitalUpdateView(LoginRequiredMixin,
-                         SuccessMessageWithInlinesMixin,
-                         UpdatedByWithInlinesMixin,
+                         # SuccessMessageWithInlinesMixin,
+                         # UpdatedByWithInlinesMixin,
+                         # UpdateWithInlinesView):
+                         SuccessMessageMixin,
+                         UpdatedByMixin,
                          HospitalPermissionMixin,
-                         UpdateWithInlinesView):
+                         UpdateView):
     model = Hospital
-    inlines = [EquipmentItemInline]
+    # inlines = [EquipmentItemInline]
     form_class = HospitalUpdateForm
 
     def get_success_message(self, cleaned_data):
