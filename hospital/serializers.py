@@ -12,18 +12,19 @@ from .models import Hospital
 # TODO: Handle equipment in create and update
 
 class HospitalSerializer(serializers.ModelSerializer):
-    hospitalequipment_set = EquipmentItemSerializer(many=True, read_only=True)
+    # hospitalequipment_set = EquipmentItemSerializer(many=True, read_only=True)
     location = PointField(required=False)
 
     class Meta:
         model = Hospital
-        fields = ['id',
+        fields = ['id', 'equipment_holder_id',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location',
                   'name',
                   'comment', 'updated_by', 'updated_on',
-                  'hospitalequipment_set']
+                  # 'hospitalequipment_set'
+                  ]
         read_only_fields = ('updated_by',)
 
     def create(self, validated_data):
