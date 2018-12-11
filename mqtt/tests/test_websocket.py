@@ -261,8 +261,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
-                                        equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
         obj.save()
@@ -275,8 +275,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = EquipmentItem.objects.get(hospital_id=self.h1.id,
-                                        equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
         # Done?
