@@ -426,14 +426,14 @@ class MQTTAclView(CsrfExemptMixin,
 
                     # get equipment_holder_id
                     equipment_holder_id = int(topic[1])
-                    logger.debug('equipment_holder_id = {}'.format(equipment_holder_id))
+                    # logger.debug('equipment_holder_id = {}'.format(equipment_holder_id))
 
                     # is user authorized?
                     try:
 
                         # perm = user.profile.hospitals.get(hospital=hospital_id)
                         can_read = get_permissions(user).check_can_read(equipment=equipment_holder_id)
-                        logger.debug('can read? = {}'.format(can_read))
+                        # logger.debug('can read? = {}'.format(can_read))
 
                         # can read?
                         if (can_read and
@@ -442,8 +442,8 @@ class MQTTAclView(CsrfExemptMixin,
                             return HttpResponse('OK')
 
                     except ObjectDoesNotExist:
-                        logger.debug('ObjectDoesNotExist exception')
-                        # pass
+                        # logger.debug('ObjectDoesNotExist exception')
+                        pass
 
                 #  - ambulance/{ambulance-id}/data
                 #  - ambulance/{ambulance-id}/call/{call-id}/status
