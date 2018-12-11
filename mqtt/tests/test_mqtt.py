@@ -417,7 +417,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'False')
         obj.value = 'True'
@@ -431,7 +431,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet yet no comments')
 
-        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
@@ -492,7 +492,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
@@ -506,7 +506,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
@@ -651,7 +651,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Modify hospital equipment
 
         # retrieve current equipment value
-        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
@@ -680,7 +680,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # verify change
-        obj = EquipmentItem.objects.get(equipment_holder=self.h1,
+        obj = EquipmentItem.objects.get(equipment_holder=self.h1.equipment_holder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
