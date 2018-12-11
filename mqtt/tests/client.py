@@ -19,6 +19,7 @@ from mqtt.client import BaseClient
 
 logger = logging.getLogger(__name__)
 
+
 class MQTTTestCase(StaticLiveServerTestCase):
 
     @classmethod
@@ -270,7 +271,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.he5 = EquipmentItem.objects.get(equipment_holder=cls.h3.equipment_holder,
                                                 equipment=cls.e1)
 
-            
         except:
 
             # Add users
