@@ -84,7 +84,7 @@ class SubscribeClient(BaseClient):
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
         self.subscribe('user/+/client/+/ambulance/+/status', 2)
         self.subscribe('user/+/client/+/hospital/+/data', 2)
-        self.subscribe('user/+/client/+/hospital/+/equipment/+/data', 2)
+        self.subscribe('user/+/client/+/equipment/+/item/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/waypoint/+/data', 2)
