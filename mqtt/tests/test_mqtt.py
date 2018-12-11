@@ -236,7 +236,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all user hospital equipments
-        for e in EquipmentItem.objects.filter(hospital__id__in=can_read):
+        for e in EquipmentItem.objects.filter(equipment_holder__id__in=can_read):
             client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
@@ -287,7 +287,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           qos)
 
         # Expect all user hospital equipments
-        for e in EquipmentItem.objects.filter(hospital__id__in=can_read):
+        for e in EquipmentItem.objects.filter(equipment_holder__id__in=can_read):
             client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
