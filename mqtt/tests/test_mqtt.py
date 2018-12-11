@@ -82,7 +82,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Expect all hospital equipments
         for e in EquipmentItem.objects.all():
-            client.expect('equipment/{}/item/{}/data'.format(e.hospital.equipment_holder.id,
+            client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
@@ -131,7 +131,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Expect all hospital equipments
         for e in EquipmentItem.objects.all():
-            client.expect('equipment/{}/item/{}/data'.format(e.hospital.equipment_holder.id,
+            client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
@@ -180,7 +180,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Expect all hospital equipments
         for e in EquipmentItem.objects.all():
-            client.expect('equipment/{}/item/{}/data'.format(e.hospital.equipment_holder.id,
+            client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
@@ -237,7 +237,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Expect all user hospital equipments
         for e in EquipmentItem.objects.filter(hospital__id__in=can_read):
-            client.expect('equipment/{}/item/{}/data'.format(e.hospital.equipment_holder.id,
+            client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
@@ -288,7 +288,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
 
         # Expect all user hospital equipments
         for e in EquipmentItem.objects.filter(hospital__id__in=can_read):
-            client.expect('equipment/{}/item/{}/data'.format(e.hospital.equipment_holder.id,
+            client.expect('equipment/{}/item/{}/data'.format(e.equipment_holder.id,
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
