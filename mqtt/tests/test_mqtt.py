@@ -705,6 +705,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                 'value': 'False',
                             }), qos=0)
 
+        # process messages
+        self.loop(test_client)
+        subscribe_client.loop()
+
         # expect update once
         test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipment_holder.id,
                                                               self.e1.id))
