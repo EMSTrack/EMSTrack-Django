@@ -65,8 +65,8 @@ class SubscribeClient(BaseClient):
                                          self.on_hospital)
 
         # hospital equipment handler
-        self.client.message_callback_add('user/+/client/+/hospital/+/equipment/+/data',
-                                         self.on_hospital_equipment)
+        self.client.message_callback_add('user/+/client/+/equipment/+/item/+/data',
+                                         self.on_equipment_item)
 
         # client status handler
         self.client.message_callback_add('user/+/client/+/status',
@@ -453,32 +453,32 @@ class SubscribeClient(BaseClient):
         logger.debug('on_hospital: DONE')
 
     # Update hospital equipment
-    def on_hospital_equipment(self, clnt, userdata, msg):
+    def on_equipment_item(self, clnt, userdata, msg):
 
         try:
 
-            logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
+            logger.debug("on_equipment_item: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
-            user, client, data, hospital_id, equipment_id = self.parse_topic(msg, 5)
+            user, client, data, equipment_holder_id, equipment_id = self.parse_topic(msg, 5)
 
         except Exception as e:
 
-            logger.debug("on_hospital_equipment: ParseException '{}'".format(e))
+            logger.debug("on_equipment_item: ParseException '{}'".format(e))
             return
 
         try:
 
             # retrieve hospital equipment
-            hospital_equipment = EquipmentItem.objects.get(hospital=hospital_id,
-                                                           equipment_id=equipment_id)
+            equipment_item = EquipmentItem.objects.get(equipment_holder_id=equipment_holder_id,
+                                                       equipment_id=equipment_id)
 
         except EquipmentItem.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload,
-                                    "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(
-                                        hospital_id, equipment_id))
+                                    "Equipment with equipment_holder id '{}' and equipment id '{}' does not exist".format(
+                                        equipment_holder_id, equipment_id))
             return
 
         except Exception as e:
@@ -490,22 +490,22 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            logger.debug('on_hospital_equipment: equipment = {}'.format(hospital_equipment))
+            logger.debug('on_equipment_item: equipment = {}'.format(equipment_item))
 
             # update hospital equipment
-            serializer = EquipmentItemSerializer(hospital_equipment,
+            serializer = EquipmentItemSerializer(equipment_item,
                                                  data=data,
                                                  partial=True)
             if serializer.is_valid():
 
-                logger.debug('on_hospital_equipment: valid serializer')
+                logger.debug('on_equipment_item: valid serializer')
 
                 # save to database
                 serializer.save(updated_by=user)
 
             else:
 
-                logger.debug('on_hospital_equipment: INVALID serializer')
+                logger.debug('on_equipment_item: INVALID serializer')
 
                 # send error message to user
                 self.send_error_message(user, client, msg.topic, msg.payload,
@@ -513,12 +513,12 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_hospital_equipment: serializer EXCEPTION')
+            logger.debug('on_equipment_item: serializer EXCEPTION')
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload, e)
 
-        logger.debug('on_hospital_equipment: DONE')
+        logger.debug('on_equipment_item: DONE')
 
     # update client information
     def on_client_status(self, clnt, userdata, msg):
