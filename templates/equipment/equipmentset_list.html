@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+
+            <h1>Equipment Sets</h1>
+
+            <p>
+                <a href="{% url 'equipment:set-create' %}">new</a>
+            </p>
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for equipmentset in equipmentset_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'equipment:detail-set' pk=equipmentset.id %}">{{ equipmentset.name }}</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
