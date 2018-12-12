@@ -3,7 +3,6 @@
 
 {% block head %}
 {{ form.media }}
-{{ formset.media }}
 {% endblock %}
 
 {% block content %}
@@ -21,6 +20,8 @@
 
                 {% for formset in inlines %}
 
+                    {{ formset.media }}
+                
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
