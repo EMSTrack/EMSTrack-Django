@@ -30,7 +30,6 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Value</th>
                     <th>Comment</th>
                     <th>Updated on</th>
                     <th>by</th>
@@ -40,6 +39,9 @@
                 {% for equipment in equipmentset.equipmentsetitem_set.all %}
                 <tr>
                     <td>{{ equipment.equipment.name }}</td>
+                    <td>{{ equipment.comment }}</td>
+                    <td>{{ equipment.updated_by }}</td>
+                    <td>{{ equipment.updated_on }}</td>
                 </tr>
                 {% endfor %}
                 </tbody>

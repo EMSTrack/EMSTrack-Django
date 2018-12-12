@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
-from extra_views import InlineFormSet, UpdateWithInlinesView
+from extra_views import InlineFormSet, UpdateWithInlinesView, CreateWithInlinesView
 
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
     UpdatedByMixin
@@ -72,8 +72,7 @@ class EquipmentSetAdminDetailView(DetailView):
 
 class EquipmentSetAdminCreateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByWithInlinesMixin,
-                                  UpdatedByMixin,
-                                  CreateView):
+                                  CreateWithInlinesView):
     model = EquipmentSet
     inlines = [EquipmentSetInline]
     form_class = EquipmentSetCreateForm
@@ -87,8 +86,7 @@ class EquipmentSetAdminCreateView(SuccessMessageWithInlinesMixin,
 
 class EquipmentSetAdminUpdateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByWithInlinesMixin,
-                                  UpdatedByMixin,
-                                  UpdateView):
+                                  UpdateWithInlinesView):
     model = EquipmentSet
     inlines = [EquipmentSetInline]
     form_class = EquipmentSetUpdateForm
