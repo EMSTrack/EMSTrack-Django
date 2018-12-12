@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from extra_views import InlineFormSet, UpdateWithInlinesView
 
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin
+from equipment.forms import EquipmentHolderUpdateForm
 from .models import EquipmentItem, Equipment, EquipmentHolder
 
 
