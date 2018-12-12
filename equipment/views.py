@@ -14,7 +14,6 @@ from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, Equ
 class EquipmentItemInline(InlineFormSet):
     model = EquipmentItem
     form_class = EquipmentItemForm
-    # fields = ['equipment', 'value', 'comment']
     factory_kwargs = {'extra': 1}
 
 

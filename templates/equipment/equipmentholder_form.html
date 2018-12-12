@@ -13,10 +13,12 @@
     <div class="row">
         <div class="col">
 
-            <h1>Equipments</h1>
+            <h1>Equipment Holder</h1>
 
             <form method="POST" class="post-form">
                 {% csrf_token %}
+
+                <h3>Equipment:</h3>
 
                 {% for formset in inlines %}
 
