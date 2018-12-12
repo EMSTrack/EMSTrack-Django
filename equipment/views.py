@@ -5,12 +5,13 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from extra_views import InlineFormSet, UpdateWithInlinesView
 
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin
-from equipment.forms import EquipmentHolderUpdateForm
+from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm
 from .models import EquipmentItem, Equipment, EquipmentHolder
 
 
 class EquipmentItemInline(InlineFormSet):
     model = EquipmentItem
+    form_class = EquipmentItemForm
     fields = ['equipment', 'value', 'comment']
     factory_kwargs = {'extra': 1}
 
