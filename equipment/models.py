@@ -7,6 +7,11 @@ from django.urls import reverse
 from emstrack.models import UpdatedByModel
 
 
+@register.filter
+def get_equipment_type(type):
+    return EquipmentType[type].value
+
+
 class EquipmentHolder(models.Model):
 
     def is_hospital(self):
@@ -99,8 +104,3 @@ class EquipmentItem(UpdatedByModel):
 
     def __str__(self):
         return "EquipmentHolder: {}, Equipment: {}, Count: {}".format(self.equipment_holder, self.equipment, self.value)
-
-
-@register.filter
-def get_equipment_type(type):
-    return EquipmentType[type].value
