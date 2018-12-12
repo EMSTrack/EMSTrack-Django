@@ -18,25 +18,10 @@
 
                 {% for form in inlines %}
 
-                    {% for hidden in form.hidden_fields %}
-                        {{ hidden }}
-                    {% endfor %}
-
-                    {% for field in form.visible_fields %}
-                    <div class="form-group">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                        {{ field }}
-                        {% for error in field.errors %}
-                        <span class="help-block">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endfor %}
-
-                <!--
                 <table>
                     {{ form }}
                 </table>
-                -->
+
                 {% endfor %}
 
                 <p>
