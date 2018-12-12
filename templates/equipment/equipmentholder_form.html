@@ -17,9 +17,9 @@
                 {% csrf_token %}
 
                 {% for form in inlines %}
-                <table>
-                    {{ form }}
-                </table>
+                <ul>
+                    {{ form.as_ul }}
+                </ul>
                 {% endfor %}
 
                 <p>
