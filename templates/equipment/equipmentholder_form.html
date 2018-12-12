@@ -43,7 +43,7 @@
                         <script type="form-template" data-formset-empty-form>
                             {% escapescript %}
                                 <div data-formset-form>
-                                    {{ formset.empty_form }}
+                                    {{ formset.empty_form.as_ul }}
                                     <button type="button" data-formset-move-up-button>Move up</button>
                                     <button type="button" data-formset-move-down-button>Move down</button>
                                     <button type="button" data-formset-delete-button>Delete form</button>
