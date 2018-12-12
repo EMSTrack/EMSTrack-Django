@@ -4,7 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from extra_views import InlineFormSet, UpdateWithInlinesView
 
-from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin
+from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin
 from .models import EquipmentItem, Equipment, EquipmentHolder
 
 
@@ -47,8 +47,11 @@ class EquipmentAdminUpdateView(SuccessMessageMixin,
         return self.object.get_absolute_url()
 
 
-class EquipmentPermissionMixin(object):
-    pass
+class EquipmentPermissionMixin(BasePermissionMixin):
+
+    filter_field = 'id'
+    profile_field = 'equipments'
+    queryset = EquipmentHolder.objects.all()
 
 
 class EquipmentHolderUpdateView(LoginRequiredMixin,
