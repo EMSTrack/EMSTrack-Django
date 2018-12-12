@@ -2,7 +2,7 @@ from django import forms
 
 from djangoformsetjs.utils import formset_media_js
 
-from equipment.models import EquipmentHolder, EquipmentItem
+from equipment.models import EquipmentHolder, EquipmentItem, EquipmentSetItem
 
 
 class EquipmentItemForm(forms.ModelForm):
@@ -26,3 +26,15 @@ class EquipmentHolderCreateForm(forms.ModelForm):
 
 class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
     pass
+
+
+class EquipmentSetItemForm(forms.ModelForm):
+
+    class Meta:
+        model = EquipmentSetItem
+        fields = ['equipment']
+
+    class Media(object):
+        js = formset_media_js + (
+            # Other form media here
+        )

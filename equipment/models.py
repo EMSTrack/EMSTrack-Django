@@ -47,6 +47,20 @@ class Equipment(models.Model):
         return reverse('equipment:detail', kwargs={'pk': self.id})
 
 
+class EquipmentSet(models.Model):
+    name = models.CharField(max_length=254, unique=True)
+
+    def get_absolute_url(self):
+        return reverse('equipment:set-detail', kwargs={'pk': self.id})
+
+
+class EquipmentSetItem(models.Model):
+    equipment_set = models.ForeignKey(EquipmentSet,
+                                      on_delete=models.CASCADE)
+    equipment = models.ForeignKey(Equipment,
+                                  on_delete=models.CASCADE)
+
+
 class EquipmentItem(UpdatedByModel):
     equipment_holder = models.ForeignKey(EquipmentHolder,
                                          on_delete=models.CASCADE)

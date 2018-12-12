@@ -4,17 +4,26 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from extra_views import InlineFormSet, UpdateWithInlinesView
 
-from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin
-from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm
-from .models import EquipmentItem, Equipment, EquipmentHolder
+from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
+    UpdatedByMixin
+from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm, EquipmentSetItemForm
+from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, EquipmentSetItem
 
 
 class EquipmentItemInline(InlineFormSet):
     model = EquipmentItem
     form_class = EquipmentItemForm
-    fields = ['equipment', 'value', 'comment']
+    # fields = ['equipment', 'value', 'comment']
     factory_kwargs = {'extra': 1}
 
+
+class EquipmentSetInline(InlineFormSet):
+    model = EquipmentSetItem
+    form_class = EquipmentSetItemForm
+    factory_kwargs = {'extra': 1}
+
+
+# Equipments
 
 class EquipmentAdminListView(ListView):
     model = Equipment
@@ -48,6 +57,49 @@ class EquipmentAdminUpdateView(SuccessMessageMixin,
     def get_success_url(self):
         return self.object.get_absolute_url()
 
+
+# Equipment sets
+
+class EquipmentSetAdminListView(ListView):
+    model = EquipmentSet
+    ordering = ['name']
+
+
+class EquipmentSetAdminDetailView(DetailView):
+    model = EquipmentSet
+
+
+class EquipmentSetAdminCreateView(SuccessMessageWithInlinesMixin,
+                                  UpdatedByWithInlinesMixin,
+                                  UpdatedByMixin,
+                                  CreateView):
+    model = EquipmentSet
+    fields = ['name']
+    inlines = [EquipmentSetInline]
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully created equipment set '{}'".format(self.object.name)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+class EquipmentSetAdminUpdateView(SuccessMessageWithInlinesMixin,
+                                  UpdatedByWithInlinesMixin,
+                                  UpdatedByMixin,
+                                  UpdateView):
+    model = EquipmentSet
+    fields = ['name']
+    inlines = [EquipmentSetInline]
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated equipment set '{}'".format(self.object.name)
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+
+# Equipment holder
 
 class EquipmentPermissionMixin(BasePermissionMixin):
 
