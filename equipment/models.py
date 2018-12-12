@@ -51,7 +51,7 @@ class EquipmentSet(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
     def get_absolute_url(self):
-        return reverse('equipment:set-detail', kwargs={'pk': self.id})
+        return reverse('equipment:detail-set', kwargs={'pk': self.id})
 
 
 class EquipmentSetItem(models.Model):
