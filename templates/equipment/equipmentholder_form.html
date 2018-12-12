@@ -19,7 +19,7 @@
             <form method="POST" class="post-form">
                 {% csrf_token %}
 
-                {% for form in inlines %}
+                {% for formset in inlines %}
 
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
