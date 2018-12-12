@@ -21,7 +21,7 @@
                 {% for formset in inlines %}
 
                     {{ formset.media }}
-                
+
                     <div id="formset" data-formset-prefix="{{ formset.prefix }}">
                         {{ formset.management_form }}
 
@@ -29,7 +29,7 @@
                             <!-- New forms will be inserted in here -->
                             {% for form in formset %}
                                 <div data-formset-form>
-                                    {{ form }}
+                                    {{ form.as_ul }}
                                     <button type="button" data-formset-move-up-button>Move up</button>
                                     <button type="button" data-formset-move-down-button>Move down</button>
                                     <button type="button" data-formset-delete-button>Delete form</button>
