@@ -6,7 +6,8 @@ from extra_views import InlineFormSet, UpdateWithInlinesView
 
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
     UpdatedByMixin
-from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm, EquipmentSetItemForm
+from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm, EquipmentSetItemForm, EquipmentSetCreateForm, \
+    EquipmentSetUpdateForm
 from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, EquipmentSetItem
 
 
@@ -74,8 +75,8 @@ class EquipmentSetAdminCreateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByMixin,
                                   CreateView):
     model = EquipmentSet
-    fields = ['name']
     inlines = [EquipmentSetInline]
+    form_class = EquipmentSetCreateForm
 
     def get_success_message(self, cleaned_data):
         return "Successfully created equipment set '{}'".format(self.object.name)
@@ -89,8 +90,8 @@ class EquipmentSetAdminUpdateView(SuccessMessageWithInlinesMixin,
                                   UpdatedByMixin,
                                   UpdateView):
     model = EquipmentSet
-    fields = ['name']
     inlines = [EquipmentSetInline]
+    form_class = EquipmentSetUpdateForm
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated equipment set '{}'".format(self.object.name)
