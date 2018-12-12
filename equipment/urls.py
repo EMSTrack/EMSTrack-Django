@@ -26,7 +26,7 @@ urlpatterns = [
         name='update'),
 
     url(r'^update_items/(?P<pk>[0-9]+)$',
-        login_required(views.EquipmentUpdateView.as_view()),
+        login_required(views.EquipmentHolderUpdateView.as_view()),
         name='update-items'),
 
 ]
