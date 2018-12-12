@@ -54,7 +54,7 @@ class EquipmentSet(models.Model):
         return reverse('equipment:detail-set', kwargs={'pk': self.id})
 
 
-class EquipmentSetItem(models.Model):
+class EquipmentSetItem(UpdatedByModel):
     equipment_set = models.ForeignKey(EquipmentSet,
                                       on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment,
