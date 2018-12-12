@@ -1,7 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block head %}
+{{ form.media }}
+{% endblock %}
+
 {% block content %}
+
+{% load formset_tags %}
 
 <div class="container">
     <div class="row">
