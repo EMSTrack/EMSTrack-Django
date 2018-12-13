@@ -83,7 +83,7 @@ class EquipmentHolderUpdateMixin:
                     .exclude(equipment_id__in=equipmentitemset)\
                     .values('equipment_id')
                 logger.debug(equipmentsnotin)
-                equipments.update(equipmentsnotin)
+                equipments.update(equipmentsnotin.values())
             logger.debug(equipments)
 
             # wrap in atomic in case of errors
