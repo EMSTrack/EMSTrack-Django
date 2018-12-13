@@ -18,7 +18,6 @@ class HospitalCreateForm(forms.ModelForm):
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'comment',
-                  'equipment_holder__equipmentsets',
                   'location']
 
 
