@@ -54,7 +54,7 @@
                 Equipment sets:
             </h3>
 
-            {% if hospital.equipmentholder.equipmentsets.all|length %}
+            {% if hospital.equipmentholder.equipmentsets.count %}
 
                 <table class="table table-striped table-sm">
                     <thead>
@@ -89,7 +89,7 @@
                 Equipment:
             </h3>
 
-            {% if hospital.equipmentholder.equipmentitem_set.all|length %}
+            {% if hospital.equipmentholder.equipmentitem_set.count %}
 
                 <table class="table table-striped table-sm">
                     <thead>
