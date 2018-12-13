@@ -1,7 +1,11 @@
+import logging
+
 from django.db import transaction, IntegrityError
 
 from equipment.forms import EquipmentHolderUpdateForm
 from equipment.models import EquipmentItem
+
+logger = logging.getLogger(__name__)
 
 
 class EquipmentHolderCreateMixin:
@@ -69,6 +73,18 @@ class EquipmentHolderUpdateMixin:
 
         # Save form
         if equipmentholder_form.is_valid():
+
+            # assemble equipments in all equipmentsets not in current equipmentitems
+            equipmentitemset = self.object.equipmentholder.equipmentitem_set.all().values('equipment_id')
+            logger.debug(equipmentitemset)
+            equipments = set()
+            for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
+                equipmentsnotin = equipmentset.equipmentsetitem_set\
+                    .filter(equipment_id__not__in=equipmentitemset)\
+                    .values('equipment_id')
+                logger.debug(equipmentsnotin)
+                equipments.update(equipmentsnotin)
+            logger.debug(equipments)
 
             # wrap in atomic in case of errors
             with transaction.atomic():
