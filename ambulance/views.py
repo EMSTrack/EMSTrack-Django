@@ -9,6 +9,7 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 from django.views.generic.detail import BaseDetailView
 
+from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder
@@ -23,7 +24,6 @@ from emstrack.views import get_page_links, get_page_size_links
 # Ambulance views
 
 class AmbulancePermissionMixin(BasePermissionMixin):
-
     filter_field = 'id'
     profile_field = 'ambulances'
     queryset = Ambulance.objects.all()
@@ -34,7 +34,6 @@ class AmbulanceDetailView(LoginRequiredMixin,
                           UpdatedByMixin,
                           AmbulancePermissionMixin,
                           DetailView):
-
     model = Ambulance
     
     def get_context_data(self, **kwargs):
@@ -83,10 +82,10 @@ class AmbulanceListView(LoginRequiredMixin,
 
 class AmbulanceCreateView(LoginRequiredMixin,
                           SuccessMessageMixin,
+                          EquipmentHolderCreateMixin,
                           UpdatedByMixin,
                           AmbulancePermissionMixin,
                           CreateView):
-    
     model = Ambulance
     form_class = AmbulanceCreateForm
 
@@ -99,10 +98,10 @@ class AmbulanceCreateView(LoginRequiredMixin,
 
 class AmbulanceUpdateView(LoginRequiredMixin,
                           SuccessMessageMixin,
+                          EquipmentHolderUpdateMixin,
                           UpdatedByMixin,
                           AmbulancePermissionMixin,
                           UpdateView):
-    
     model = Ambulance
     form_class = AmbulanceUpdateForm
 

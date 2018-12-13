@@ -13,7 +13,6 @@ from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 # Django views
 
 class HospitalPermissionMixin(BasePermissionMixin):
-
     filter_field = 'id'
     profile_field = 'hospitals'
     queryset = Hospital.objects.all()
@@ -54,13 +53,11 @@ class HospitalUpdateView(LoginRequiredMixin,
 class HospitalDetailView(LoginRequiredMixin,
                          HospitalPermissionMixin,
                          DetailView):
-
     model = Hospital
 
 
 class HospitalListView(LoginRequiredMixin,
                        HospitalPermissionMixin,
                        ListView):
-
     model = Hospital
     ordering = ['name']
