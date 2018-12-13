@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from djangoformsetjs.utils import formset_media_js
 
@@ -45,6 +46,9 @@ class EquipmentHolderCreateForm(forms.ModelForm):
     class Meta:
         model = EquipmentHolder
         fields = ['equipmentsets']
+        labels = {
+            'equipmentsets': _('Equipment sets'),
+        }
 
 
 class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):
