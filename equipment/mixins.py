@@ -76,20 +76,24 @@ class EquipmentHolderUpdateMixin:
 
             # assemble equipments in all equipmentsets not in current equipmentitems
             equipmentitemset = self.object.equipmentholder.equipmentitem_set.all().values('equipment_id')
-            logger.debug(equipmentitemset)
             equipments = set()
             for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
-                for k,v in equipmentset.equipmentsetitem_set\
-                        .exclude(equipment_id__in=equipmentitemset)\
-                        .values('equipment_id').items():
-                    equipments.add(v)
-            logger.debug(equipments)
+                for equipment in equipmentset.equipmentsetitem_set\
+                        .exclude(equipment_id__in=equipmentitemset):
+                    equipments.add(equipment.equipment)
 
             # wrap in atomic in case of errors
             with transaction.atomic():
 
                 # save equipmentholder form
                 equipmentholder_form.save()
+
+                # Add equipments
+                user = form.instance.updated_by
+                for equipment in equipments:
+                    EquipmentItem.objects.create(equipmentholder=self.object.equipmentholder,
+                                                 equipment=equipment,
+                                                 updated_by=user)
 
                 # Call super
                 return super().form_valid(form)
