@@ -74,12 +74,12 @@ urlpatterns = [
     
     url(r'^mqtt/login/$',
         views.MQTTLoginView.as_view(),
-        name='mqtt_login'),
+        name='login-mqtt'),
     url(r'^mqtt/superuser/$',
         views.MQTTSuperuserView.as_view(),
-        name='mqtt_superuser'),
+        name='superuser-mqtt'),
     url(r'^mqtt/acl/$',
         views.MQTTAclView.as_view(),
-        name='mqtt_acl'),
+        name='acl-mqtt'),
     
 ]
