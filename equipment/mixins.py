@@ -80,7 +80,7 @@ class EquipmentHolderUpdateMixin:
             equipments = set()
             for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
                 equipmentsnotin = equipmentset.equipmentsetitem_set\
-                    .filter(equipment_id__not__in=equipmentitemset)\
+                    .exclude(equipment_id__in=equipmentitemset)\
                     .values('equipment_id')
                 logger.debug(equipmentsnotin)
                 equipments.update(equipmentsnotin)
