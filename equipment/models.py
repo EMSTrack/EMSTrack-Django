@@ -12,6 +12,11 @@ def get_equipment_type(type):
     return EquipmentType[type].value
 
 
+@register.filter
+def get_equipment_holder_url(equipment_holder):
+    return equipment_holder.get_absolute_url()
+
+
 class EquipmentHolder(models.Model):
 
     def is_hospital(self):
@@ -19,6 +24,20 @@ class EquipmentHolder(models.Model):
 
     def is_ambulance(self):
         return hasattr(self, 'ambulance')
+
+    def get_type(self):
+        if self.is_hospital():
+            return "Hospital"
+        elif self.is_ambulance():
+            return "Ambulance"
+        return None
+
+    def get_name(self):
+        if self.is_hospital():
+            return self.hospital
+        elif self.is_ambulance():
+            return self.ambulance
+        return None
 
     def __str__(self):
         retval = "Equipment '{}'".format(self.id)
@@ -29,6 +48,14 @@ class EquipmentHolder(models.Model):
         else:
             retval += ", Unknown"
         return retval
+
+    def get_absolute_url(self):
+        if self.is_hospital():
+            return reverse('hospital:detail', kwargs={'pk': self.hospital.id})
+        elif self.is_ambulance():
+            return reverse('ambulance:detail', kwargs={'pk': self.ambulance.id})
+        else:
+            return reverse('equipment:detail-holder', kwargs={'pk': self.id})
 
 
 class EquipmentType(Enum):
