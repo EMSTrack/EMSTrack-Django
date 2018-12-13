@@ -162,7 +162,10 @@ class Ambulance(UpdatedByModel):
         loaded_values = self._loaded_values is not None
 
         # create equipment holder?
-        if created and self.equipmentholder is None:
+        try:
+            if created or self.equipmentholder is None:
+                self.equipmentholder = EquipmentHolder.objects.create()
+        except EquipmentHolder.DoesNotExist:
             self.equipmentholder = EquipmentHolder.objects.create()
 
         # has location changed?
