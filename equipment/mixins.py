@@ -36,9 +36,11 @@ class EquipmentHolderCreateMixin:
                 equipmentholder = equipmentholder_form.save()
 
                 # Add equipments
+                user = form.instance.updated_by
                 for equipment in equipments:
                     EquipmentItem.objects.create(equipmentholder=equipmentholder,
-                                                 equipment=equipment)
+                                                 equipment=equipment,
+                                                 updated_by=user)
 
                 # add equipmentholder to form and save
                 form.instance.equipmentholder = equipmentholder
