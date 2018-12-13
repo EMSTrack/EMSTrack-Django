@@ -23,21 +23,22 @@ class EquipmentHolderCreateMixin:
         # Save form
         if equipmentholder_form.is_valid():
 
+            # assemble equipments in all equipmentsets
+            equipments = set()
+            for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
+                for equipmentsetitem in equipmentset.equipmentsetitem_set.all():
+                    equipments.add(equipmentsetitem.equipment)
+
             # wrap in atomic in case of errors
             with transaction.atomic():
 
                 # Create equipmentholder
                 equipmentholder = equipmentholder_form.save()
 
-                # Add equipments in equipmentset
-                for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
-                    try:
-                        for equipmentsetitem in equipmentset.equipmentsetitem_set.all():
-                            EquipmentItem.objects.create(equipmentholder=equipmentholder,
-                                                         equipment=equipmentsetitem.equipment)
-                    except IntegrityError:
-                        # ignore duplicates
-                        pass
+                # Add equipments
+                for equipment in equipments:
+                    EquipmentItem.objects.create(equipmentholder=equipmentholder,
+                                                 equipment=equipment)
 
                 # add equipmentholder to form and save
                 form.instance.equipmentholder = equipmentholder
