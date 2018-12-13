@@ -44,7 +44,7 @@ class EquipmentHolderCreateForm(forms.ModelForm):
 
     class Meta:
         model = EquipmentHolder
-        fields = []
+        fields = ['equipmentsets']
 
 
 class EquipmentHolderUpdateForm(EquipmentHolderCreateForm):

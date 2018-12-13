@@ -17,7 +17,9 @@ class HospitalCreateForm(forms.ModelForm):
         fields = ['name',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
-                  'comment', 'location']
+                  'comment',
+                  'equipment_holder__equipmentsets',
+                  'location']
 
 
 class HospitalUpdateForm(HospitalCreateForm):

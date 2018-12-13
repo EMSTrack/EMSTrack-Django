@@ -23,6 +23,17 @@ class EquipmentSetInline(InlineFormSet):
     factory_kwargs = {'extra': 1}
 
 
+class EquipmentHolderInline(InlineFormSet):
+    model = EquipmentHolder
+    form_class = EquipmentHolderUpdateForm
+    factory_kwargs = {
+        'min_num': 1,
+        'max_num': 1,
+        'extra': 0,
+        'can_delete': False
+    }
+
+
 # Equipments
 
 class EquipmentAdminListView(ListView):

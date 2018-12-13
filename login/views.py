@@ -125,7 +125,8 @@ class GroupHospitalPermissionAdminInline(InlineFormSet):
     }
 
 
-class GroupAdminCreateView(SuccessMessageMixin, CreateView):
+class GroupAdminCreateView(SuccessMessageMixin,
+                           CreateView):
     model = Group
     fields = ['name']
     template_name = 'login/group_create.html'
@@ -137,7 +138,8 @@ class GroupAdminCreateView(SuccessMessageMixin, CreateView):
         return self.object.groupprofile.get_absolute_url()
 
 
-class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
+class GroupAdminUpdateView(SuccessMessageWithInlinesMixin,
+                           UpdateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminUpdateForm

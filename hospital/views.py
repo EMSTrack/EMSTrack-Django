@@ -1,12 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView
 
+from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
+
+from equipment.views import EquipmentHolderInline
 from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, SuccessMessageWithInlinesMixin, \
+    UpdatedByWithInlinesMixin
 
 
 # Django views
@@ -20,15 +24,12 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
 
 class HospitalCreateView(LoginRequiredMixin,
-                         # SuccessMessageWithInlinesMixin,
-                         # UpdatedByWithInlinesMixin,
-                         # CreateWithInlinesView):
-                         SuccessMessageMixin,
-                         UpdatedByMixin,
+                         SuccessMessageWithInlinesMixin,
+                         UpdatedByWithInlinesMixin,
                          HospitalPermissionMixin,
-                         CreateView):
+                         CreateWithInlinesView):
     model = Hospital
-    # inlines = [EquipmentItemInline]
+    inlines = [EquipmentHolderInline]
     form_class = HospitalCreateForm
 
     def get_success_message(self, cleaned_data):
