@@ -168,17 +168,17 @@
     var pathname = window.location.pathname;
 
     // exclude home page
-    if (pathname != '/') {
+    if (pathname !== '/') {
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
-        if ((pathname == "{% url 'login:user_list' %}") ||
-            (pathname == "{% url 'login:group_list' %}") ||
-            (pathname == "{% url 'equipment:list' %}") ||
-            (pathname == "{% url 'equipment:list-set' %}") ||
-            (pathname == "{% url 'ambulance:location_list' %}") ||
-            (pathname == "{% url 'login:client_list' %}") ||
-            (pathname == "{% url 'login:restart' %}")) {
+        if ((pathname === "{% url 'login:user_list' %}") ||
+            (pathname === "{% url 'login:group_list' %}") ||
+            (pathname === "{% url 'equipment:list' %}") ||
+            (pathname === "{% url 'equipment:list-set' %}") ||
+            (pathname === "{% url 'ambulance:location_list' %}") ||
+            (pathname === "{% url 'login:client_list' %}") ||
+            (pathname === "{% url 'login:restart' %}")) {
 
             // Make admin menu active
             $('#navitemDropdown').addClass('nav-item active');
