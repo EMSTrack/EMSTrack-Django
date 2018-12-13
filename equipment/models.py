@@ -12,11 +12,6 @@ def get_equipment_type(type):
     return EquipmentType[type].value
 
 
-@register.filter
-def get_equipment_holder_url(equipment_holder):
-    return equipment_holder.get_absolute_url()
-
-
 class EquipmentHolder(models.Model):
 
     def is_hospital(self):
@@ -27,9 +22,9 @@ class EquipmentHolder(models.Model):
 
     def get_type(self):
         if self.is_hospital():
-            return "Hospital"
+            return "hospital"
         elif self.is_ambulance():
-            return "Ambulance"
+            return "ambulance"
         return None
 
     def get_name(self):
