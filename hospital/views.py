@@ -2,7 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from equipment.forms import EquipmentHolderUpdateForm
+from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
@@ -21,6 +21,7 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
 class HospitalCreateView(LoginRequiredMixin,
                          SuccessMessageMixin,
+                         EquipmentHolderCreateMixin,
                          UpdatedByMixin,
                          HospitalPermissionMixin,
                          CreateView):
@@ -36,34 +37,12 @@ class HospitalCreateView(LoginRequiredMixin,
 
 class HospitalUpdateView(LoginRequiredMixin,
                          SuccessMessageMixin,
+                         EquipmentHolderUpdateMixin,
                          UpdatedByMixin,
                          HospitalPermissionMixin,
                          UpdateView):
     model = Hospital
     form_class = HospitalUpdateForm
-    equipmentholder_form = EquipmentHolderUpdateForm
-
-    def get_context_data(self, **kwargs):
-        # Get the context
-        context = super().get_context_data(**kwargs)
-
-        # Add the equipmentholder form
-        context['equipmentholder_form'] = self.equipmentholder_form(self.request.POST or None,
-                                                                    instance=self.object.equipmentholder)
-
-        return context
-
-    def form_valid(self, form):
-        # Get the equipmentholder form
-        equipmentholder_form = self.equipmentholder_form(self.request.POST,
-                                                         instance=self.object.equipmentholder)
-
-        # Save form
-        if equipmentholder_form.is_valid():
-            equipmentholder_form.save(commit=False)
-
-        # Call super
-        return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated hospital '{}'".format(cleaned_data['name'])

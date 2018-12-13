@@ -18,7 +18,7 @@ class Hospital(Location):
         created = self.pk is None
 
         # create equipment holder?
-        if created:
+        if created and self.equipmentholder is None:
             self.equipmentholder = EquipmentHolder.objects.create()
 
         # enforce type hospital
