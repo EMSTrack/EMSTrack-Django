@@ -13,7 +13,7 @@
 
             <p>
                 <strong>Name:</strong>
-                <a href="{% url 'equipment:update' pk=equipment.id %}">{{ equipment.name }}</a>
+                <a href="{% url 'equipment:update' pk=equipment.id %}">{{ equipment.get_name }}</a>
             </p>
             <p>
                 <strong>Type:</strong>
