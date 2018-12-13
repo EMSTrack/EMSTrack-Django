@@ -20,8 +20,8 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
 class HospitalCreateView(LoginRequiredMixin,
                          SuccessMessageMixin,
-                         EquipmentHolderCreateMixin,
                          UpdatedByMixin,
+                         EquipmentHolderCreateMixin,
                          HospitalPermissionMixin,
                          CreateView):
     model = Hospital
