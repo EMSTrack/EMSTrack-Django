@@ -89,7 +89,7 @@
                 Equipment:
             </h3>
 
-            {% if hospital.equipmentholder.equipmentitem_set %}
+            {% if hospital.equipmentholder.equipmentitem_set.all|length %}
 
                 <table class="table table-striped table-sm">
                     <thead>
