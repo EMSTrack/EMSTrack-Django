@@ -27,42 +27,42 @@ urlpatterns = [
 
     url(r'^user/create/$',
         staff_member_required(views.UserAdminCreateView.as_view()),
-        name='user_create'),
+        name='create-user'),
 
     url(r'^user/detail/(?P<pk>[0-9]+)$',
         staff_member_required(views.UserAdminDetailView.as_view()),
-        name='user_detail'),
+        name='detail-user'),
 
     url(r'^user/update/(?P<pk>[0-9]+)$',
         staff_member_required(views.UserAdminUpdateView.as_view()),
-        name='user_update'),
+        name='update-user'),
 
     # Group Admin
 
     url(r'^group/$',
         staff_member_required(views.GroupAdminListView.as_view()),
-        name='group_list'),
+        name='list-group'),
 
     url(r'^group/create/$',
         staff_member_required(views.GroupAdminCreateView.as_view()),
-        name='group_create'),
+        name='create-group'),
 
     url(r'^group/detail/(?P<pk>[0-9]+)$',
         staff_member_required(views.GroupAdminDetailView.as_view()),
-        name='group_detail'),
+        name='detail-group'),
 
     url(r'^group/update/(?P<pk>[0-9]+)$',
         staff_member_required(views.GroupAdminUpdateView.as_view()),
-        name='group_update'),
+        name='update-group'),
 
     # client admin
     url(r'^client/$',
         staff_member_required(views.ClientListView.as_view()),
-        name='client_list'),
+        name='list-client'),
 
     url(r'^client/detail/(?P<pk>[0-9]+)$',
         staff_member_required(views.ClientDetailView.as_view()),
-        name='client_detail'),
+        name='detail-client'),
 
     # restart
 
