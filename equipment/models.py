@@ -39,6 +39,8 @@ class EquipmentSet(models.Model):
     def get_absolute_url(self):
         return reverse('equipment:detail-set', kwargs={'pk': self.id})
 
+    def __str__(self):
+        return self.name
 
 class EquipmentSetItem(UpdatedByModel):
     equipment_set = models.ForeignKey(EquipmentSet,
