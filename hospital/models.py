@@ -9,8 +9,8 @@ from equipment.models import EquipmentHolder
 
 class Hospital(Location):
 
-    equipment_holder = models.OneToOneField(EquipmentHolder,
-                                            on_delete=models.CASCADE)
+    equipmentholder = models.OneToOneField(EquipmentHolder,
+                                           on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
 
@@ -19,7 +19,7 @@ class Hospital(Location):
 
         # create equipment holder?
         if created:
-            self.equipment_holder = EquipmentHolder.objects.create()
+            self.equipmentholder = EquipmentHolder.objects.create()
 
         # enforce type hospital
         self.type = LocationType.h.name

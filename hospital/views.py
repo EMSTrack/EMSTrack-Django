@@ -1,32 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DetailView, UpdateView
-
-from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from equipment.forms import EquipmentHolderUpdateForm
-from equipment.models import EquipmentHolder
-from equipment.views import EquipmentHolderInline
 from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, SuccessMessageWithInlinesMixin, \
-    UpdatedByWithInlinesMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
 
 # Django views
-
-class HospitalInline(InlineFormSet):
-    model = Hospital
-    form_class = HospitalUpdateForm
-    factory_kwargs = {
-        'min_num': 1,
-        'max_num': 1,
-        'extra': 0,
-        'can_delete': False
-    }
-
 
 class HospitalPermissionMixin(BasePermissionMixin):
 
@@ -36,12 +20,11 @@ class HospitalPermissionMixin(BasePermissionMixin):
 
 
 class HospitalCreateView(LoginRequiredMixin,
-                         SuccessMessageWithInlinesMixin,
-                         UpdatedByWithInlinesMixin,
+                         SuccessMessageMixin,
+                         UpdatedByMixin,
                          HospitalPermissionMixin,
-                         CreateWithInlinesView):
+                         CreateView):
     model = Hospital
-    inlines = [EquipmentHolderInline]
     form_class = HospitalCreateForm
 
     def get_success_message(self, cleaned_data):
@@ -51,37 +34,42 @@ class HospitalCreateView(LoginRequiredMixin,
         return self.object.get_absolute_url()
 
 
-# class HospitalUpdateView(LoginRequiredMixin,
-#                          SuccessMessageWithInlinesMixin,
-#                          UpdatedByWithInlinesMixin,
-#                          HospitalPermissionMixin,
-#                          UpdateWithInlinesView):
-#     model = Hospital
-#     inlines = [EquipmentHolderInline]
-#     form_class = HospitalUpdateForm
-#
-#     def get_success_message(self, cleaned_data):
-#         return "Successfully updated hospital '{}'".format(cleaned_data['name'])
-#
-#     def get_success_url(self):
-#         return self.object.get_absolute_url()
-
-
 class HospitalUpdateView(LoginRequiredMixin,
-                         SuccessMessageWithInlinesMixin,
-                         UpdatedByWithInlinesMixin,
+                         SuccessMessageMixin,
+                         UpdatedByMixin,
                          HospitalPermissionMixin,
-                         UpdateWithInlinesView):
-    model = EquipmentHolder
-    inlines = [HospitalInline]
-    form_class = EquipmentHolderUpdateForm
+                         UpdateView):
+    model = Hospital
+    form_class = HospitalUpdateForm
+    equipmentholder_form = EquipmentHolderUpdateForm
+
+    def get_context_data(self, **kwargs):
+        # Get the context
+        context = super().get_context_data(**kwargs)
+
+        # Add the equipmentholder form
+        context['equipmentholder_form'] = self.equipmentholder_form(self.request.POST or None,
+                                                                    instance=self.object.equipmentholder)
+
+        return context
+
+    def form_valid(self, form):
+        # Get the equipmentholder form
+        equipmentholder_form = self.equipmentholder_form(self.request.POST,
+                                                         instance=self.object.equipmentholder)
+
+        # Save form
+        if equipmentholder_form.is_valid():
+            equipmentholder_form.save(commit=False)
+
+        # Call super
+        return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated hospital '{}'".format(cleaned_data['name'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()
-
 
 
 class HospitalDetailView(LoginRequiredMixin,
