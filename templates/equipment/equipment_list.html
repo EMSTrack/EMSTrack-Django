@@ -18,6 +18,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
+                    <th>Default</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,9 @@
                     </td>
                     <td>
                         {{ equipment.type|get_equipment_type }}
+                    </td>
+                    <td>
+                        {{ equipment.default }}
                     </td>
                 </tr>
                 {% endfor %}
