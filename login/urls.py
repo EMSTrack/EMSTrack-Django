@@ -23,7 +23,7 @@ urlpatterns = [
     
     url(r'^user/$',
         staff_member_required(views.UserAdminListView.as_view()),
-        name='user_list'),
+        name='list-user'),
 
     url(r'^user/create/$',
         staff_member_required(views.UserAdminCreateView.as_view()),
