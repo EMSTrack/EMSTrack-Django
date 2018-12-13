@@ -42,8 +42,6 @@ class HospitalCreateView(LoginRequiredMixin,
 class HospitalUpdateView(LoginRequiredMixin,
                          SuccessMessageWithInlinesMixin,
                          UpdatedByWithInlinesMixin,
-                         SuccessMessageMixin,
-                         UpdatedByMixin,
                          HospitalPermissionMixin,
                          UpdateWithInlinesView):
     model = Hospital
