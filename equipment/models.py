@@ -12,7 +12,44 @@ def get_equipment_type(type):
     return EquipmentType[type].value
 
 
+class EquipmentType(Enum):
+    B = 'Boolean'
+    I = 'Integer'
+    S = 'String'
+
+
+class Equipment(models.Model):
+    name = models.CharField(max_length=254, unique=True)
+
+    EQUIPMENT_TYPE_CHOICES = \
+        [(m.name, m.value) for m in EquipmentType]
+    type = models.CharField(max_length=1,
+                            choices=EQUIPMENT_TYPE_CHOICES)
+
+    def __str__(self):
+        return "{} ({})".format(self.name, self.type)
+
+    def get_absolute_url(self):
+        return reverse('equipment:detail', kwargs={'pk': self.id})
+
+
+class EquipmentSet(models.Model):
+    name = models.CharField(max_length=254, unique=True)
+
+    def get_absolute_url(self):
+        return reverse('equipment:detail-set', kwargs={'pk': self.id})
+
+
+class EquipmentSetItem(UpdatedByModel):
+    equipment_set = models.ForeignKey(EquipmentSet,
+                                      on_delete=models.CASCADE)
+    equipment = models.ForeignKey(Equipment,
+                                  on_delete=models.CASCADE)
+
+
 class EquipmentHolder(models.Model):
+
+    equipmentsets = models.ManyToManyField(EquipmentSet, blank=True)
 
     def is_hospital(self):
         return hasattr(self, 'hospital')
@@ -51,41 +88,6 @@ class EquipmentHolder(models.Model):
             return reverse('ambulance:detail', kwargs={'pk': self.ambulance.id})
         else:
             return reverse('equipment:detail-holder', kwargs={'pk': self.id})
-
-
-class EquipmentType(Enum):
-    B = 'Boolean'
-    I = 'Integer'
-    S = 'String'
-
-
-class Equipment(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-
-    EQUIPMENT_TYPE_CHOICES = \
-        [(m.name, m.value) for m in EquipmentType]
-    type = models.CharField(max_length=1,
-                            choices=EQUIPMENT_TYPE_CHOICES)
-
-    def __str__(self):
-        return "{} ({})".format(self.name, self.type)
-
-    def get_absolute_url(self):
-        return reverse('equipment:detail', kwargs={'pk': self.id})
-
-
-class EquipmentSet(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-
-    def get_absolute_url(self):
-        return reverse('equipment:detail-set', kwargs={'pk': self.id})
-
-
-class EquipmentSetItem(UpdatedByModel):
-    equipment_set = models.ForeignKey(EquipmentSet,
-                                      on_delete=models.CASCADE)
-    equipment = models.ForeignKey(Equipment,
-                                  on_delete=models.CASCADE)
 
 
 class EquipmentItem(UpdatedByModel):

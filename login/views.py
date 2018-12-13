@@ -196,7 +196,8 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
     }
 
 
-class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView):
+class UserAdminCreateView(SuccessMessageWithInlinesMixin,
+                          CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
@@ -212,7 +213,8 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView)
     # TODO: Choose between provided password and email generated password
 
 
-class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
+class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
+                          UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
