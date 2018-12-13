@@ -124,7 +124,7 @@ class EquipmentItem(UpdatedByModel):
         created = self.pk is None
 
         # if no value, set default value
-        if self.value is None:
+        if not self.value:
             self.value = self.equipment.default
 
         # save to EquipmentItem
