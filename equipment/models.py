@@ -38,7 +38,7 @@ class Equipment(models.Model):
     def save(self, *args, **kwargs):
 
         # set default value
-        if self.default is None:
+        if not self.default:
             self.default = EquipmentTypeDefaults[self.type]
 
         # call super
