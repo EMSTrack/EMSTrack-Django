@@ -83,6 +83,7 @@ class EquipmentHolderUpdateMixin:
                     .exclude(equipment_id__in=equipmentitemset)\
                     .values('equipment_id')
                 logger.debug(equipmentsnotin)
+                equipmentsnotinvalues = equipmentsnotin.values()
                 equipments.update(equipmentsnotin.values())
             logger.debug(equipments)
 
