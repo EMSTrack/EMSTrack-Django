@@ -34,9 +34,9 @@ class EquipmentHolder(models.Model):
 
     def get_name(self):
         if self.is_hospital():
-            return self.hospital
+            return self.hospital.name
         elif self.is_ambulance():
-            return self.ambulance
+            return self.ambulance.name
         return None
 
     def __str__(self):
