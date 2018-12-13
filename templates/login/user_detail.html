@@ -13,7 +13,7 @@
 
             <p>
                 <strong>Username:</strong>
-                <a href="{% url 'login:user_update' pk=user.id %}">{{ user.username }}</a>
+                <a href="{% url 'login:update-user' pk=user.id %}">{{ user.username }}</a>
             </p>
             <p>
                 <strong>First:</strong>
@@ -54,7 +54,7 @@
                 {% for group in group_list %}
                 <tr>
                     <td>
-                        <a href="{% url 'login:group_detail' pk=user.id %}">{{ group.name }}</a>
+                        <a href="{% url 'login:detail-group' pk=user.id %}">{{ group.name }}</a>
                     </td>
                     <td>
                         {{ group.groupprofile.description }}

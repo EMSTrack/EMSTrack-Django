@@ -46,7 +46,7 @@
             {% if user.is_staff and ambulance.location_client %}
             <p>
                 <strong>Location client:</strong>
-                <a href="{% url 'login:client_detail' pk=ambulance.location_client.id %}">{{ ambulance.location_client.client_id }}</a>
+                <a href="{% url 'login:detail-client' pk=ambulance.location_client.id %}">{{ ambulance.location_client.client_id }}</a>
             </p>
             {% endif %}
             <p>
