@@ -42,6 +42,7 @@ class EquipmentSet(models.Model):
     def __str__(self):
         return self.name
 
+
 class EquipmentSetItem(UpdatedByModel):
     equipment_set = models.ForeignKey(EquipmentSet,
                                       on_delete=models.CASCADE)

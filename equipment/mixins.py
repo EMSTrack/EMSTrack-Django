@@ -1,6 +1,7 @@
-from django.db import transaction
+from django.db import transaction, IntegrityError
 
 from equipment.forms import EquipmentHolderUpdateForm
+from equipment.models import EquipmentItem
 
 
 class EquipmentHolderCreateMixin:
@@ -28,9 +29,19 @@ class EquipmentHolderCreateMixin:
                 # Create equipmentholder
                 equipmentholder = equipmentholder_form.save()
 
+                # Add equipments in equipmentset
+                for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
+                    try:
+                        for equipmentsetitem in equipmentset.equipmentsetitem_set.all():
+                            EquipmentItem.objects.create(equipmentholder=equipmentholder,
+                                                         equipment=equipmentsetitem.equipment)
+                    except IntegrityError:
+                        # ignore duplicates
+                        pass
+
                 # add equipmentholder to form and save
                 form.instance.equipmentholder = equipmentholder
-
+                
                 # call super
                 return super().form_valid(form)
 
