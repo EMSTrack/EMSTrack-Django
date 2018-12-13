@@ -1,3 +1,5 @@
+from django.db import transaction
+
 from equipment.forms import EquipmentHolderUpdateForm
 
 
@@ -19,14 +21,18 @@ class EquipmentHolderCreateMixin:
 
         # Save form
         if equipmentholder_form.is_valid():
-            # Create equipmentholder
-            equipmentholder = equipmentholder_form.save()
 
-            # add equipmentholder to form and save
-            form.instance.equipmentholder = equipmentholder
+            # wrap in atomic in case of errors
+            with transaction.atomic():
 
-            # call super
-            return super().form_valid(form)
+                # Create equipmentholder
+                equipmentholder = equipmentholder_form.save()
+
+                # add equipmentholder to form and save
+                form.instance.equipmentholder = equipmentholder
+
+                # call super
+                return super().form_valid(form)
 
 
 class EquipmentHolderUpdateMixin:
@@ -49,7 +55,12 @@ class EquipmentHolderUpdateMixin:
 
         # Save form
         if equipmentholder_form.is_valid():
-            equipmentholder_form.save()
 
-        # Call super
-        return super().form_valid(form)
+            # wrap in atomic in case of errors
+            with transaction.atomic():
+
+                # save equipmentholder form
+                equipmentholder_form.save()
+
+                # Call super
+                return super().form_valid(form)
