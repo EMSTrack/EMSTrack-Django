@@ -47,13 +47,13 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
             raise PermissionDenied()
         
         # retrieve id
-        equipment_holder_id = int(self.kwargs['equipment_holder_id'])
+        equipmentholder_id = int(self.kwargs['equipmentholder_id'])
         logger.debug('kwargs = {}'.format(self.kwargs))
 
         try:
             
-            # retrieve equipment_holder
-            equipment_holder = EquipmentHolder.objects.get(id=equipment_holder_id)
+            # retrieve equipmentholder
+            equipmentholder = EquipmentHolder.objects.get(id=equipmentholder_id)
 
             # read or write?
             if self.request.method == 'GET':
@@ -64,25 +64,25 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
                 is_write = True
 
             # is hospital?
-            if equipment_holder.is_hospital():
+            if equipmentholder.is_hospital():
 
                 # check permission (and also existence)
                 if is_write:
-                    if not get_permissions(user).check_can_write(hospital=equipment_holder.hospital.id):
+                    if not get_permissions(user).check_can_write(hospital=equipmentholder.hospital.id):
                         raise PermissionDenied()
                 else:
-                    if not get_permissions(user).check_can_read(hospital=equipment_holder.hospital.id):
+                    if not get_permissions(user).check_can_read(hospital=equipmentholder.hospital.id):
                         raise PermissionDenied()
 
             # is ambulance?
-            elif equipment_holder.is_ambulance():
+            elif equipmentholder.is_ambulance():
 
                 # check permission (and also existence)
                 if is_write:
-                    if not get_permissions(user).check_can_write(ambulance=equipment_holder.ambulance.id):
+                    if not get_permissions(user).check_can_write(ambulance=equipmentholder.ambulance.id):
                         raise PermissionDenied()
                 else:
-                    if not get_permissions(user).check_can_read(ambulance=equipment_holder.ambulance.id):
+                    if not get_permissions(user).check_can_read(ambulance=equipmentholder.ambulance.id):
                         raise PermissionDenied()
 
             else:
@@ -92,7 +92,7 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
             raise PermissionDenied()
 
         # build queryset
-        filter = {'equipment_holder_id': equipment_holder_id}
+        filter = {'equipmentholder_id': equipmentholder_id}
         return self.queryset.filter(**filter)
 
 
@@ -115,8 +115,8 @@ class EquipmentViewSet(BasePermissionMixin,
         Retrive hospital equipment metadata.
         """
 
-        equipment_holder = self.get_object()
-        equipment_list = equipment_holder.equipmentitem_set.values('equipment')
+        equipmentholder = self.get_object()
+        equipment_list = equipmentholder.equipmentitem_set.values('equipment')
         equipment = Equipment.objects.filter(id__in=equipment_list)
         serializer = EquipmentSerializer(equipment, many=True)
         return Response(serializer.data)

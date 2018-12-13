@@ -9,11 +9,11 @@ class EquipmentItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EquipmentItem
-        fields = ('equipment_holder_id',
+        fields = ('equipmentholder_id',
                   'equipment_id', 'equipment_name', 'equipment_type',
                   'value', 'comment',
                   'updated_by', 'updated_on')
-        read_only_fields = ('equipment_holder_id',
+        read_only_fields = ('equipmentholder_id',
                             'equipment_id', 'equipment_name', 'equipment_type',
                             'updated_by',)
 

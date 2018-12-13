@@ -428,15 +428,15 @@ class MQTTAclView(CsrfExemptMixin,
                 elif (len(topic) >= 3 and
                       topic[0] == 'equipment'):
 
-                    # get equipment_holder_id
-                    equipment_holder_id = int(topic[1])
-                    # logger.debug('equipment_holder_id = {}'.format(equipment_holder_id))
+                    # get equipmentholder_id
+                    equipmentholder_id = int(topic[1])
+                    # logger.debug('equipmentholder_id = {}'.format(equipmentholder_id))
 
                     # is user authorized?
                     try:
 
                         # perm = user.profile.hospitals.get(hospital=hospital_id)
-                        can_read = get_permissions(user).check_can_read(equipment=equipment_holder_id)
+                        can_read = get_permissions(user).check_can_read(equipment=equipmentholder_id)
                         # logger.debug('can read? = {}'.format(can_read))
 
                         # can read?
@@ -561,14 +561,14 @@ class MQTTAclView(CsrfExemptMixin,
                     elif (topic[4] == 'equipment' and
                           len(topic) == 9 and topic[6] == 'item' and topic[8] == 'data'):
 
-                        # get equipment_holder_id
-                        equipment_holder_id = int(topic[1])
+                        # get equipmentholder_id
+                        equipmentholder_id = int(topic[1])
 
                         # is user authorized?
                         try:
 
                             # perm = user.profile.hospitals.get(hospital=hospital_id)
-                            can_write = get_permissions(user).check_can_write(equipment=equipment_holder_id)
+                            can_write = get_permissions(user).check_can_write(equipment=equipmentholder_id)
 
                             if can_write:
                                 return HttpResponse('OK')

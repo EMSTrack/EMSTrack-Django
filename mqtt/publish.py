@@ -113,25 +113,25 @@ class PublishClient(BaseClient):
 
     def remove_hospital(self, hospital):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
-        self.remove_topic('equipment/{}/metadata'.format(hospital.equipment_holder.id))
+        self.remove_topic('equipment/{}/metadata'.format(hospital.equipmentholder.id))
 
-    def publish_equipment_metadata(self, equipment_holder, qos=2, retain=True):
-        equipment_items = equipment_holder.equipmentitem_set.values('equipment')
+    def publish_equipment_metadata(self, equipmentholder, qos=2, retain=True):
+        equipment_items = equipmentholder.equipmentitem_set.values('equipment')
         equipments = Equipment.objects.filter(id__in=equipment_items)
-        self.publish_topic('equipment/{}/metadata'.format(equipment_holder.id),
+        self.publish_topic('equipment/{}/metadata'.format(equipmentholder.id),
                            EquipmentSerializer(equipments, many=True),
                            qos=qos,
                            retain=retain)
 
     def publish_equipment_item(self, equipment_item, qos=2, retain=True):
-        self.publish_topic('equipment/{}/item/{}/data'.format(equipment_item.equipment_holder.id,
+        self.publish_topic('equipment/{}/item/{}/data'.format(equipment_item.equipmentholder.id,
                                                               equipment_item.equipment.id),
                            EquipmentItemSerializer(equipment_item),
                            qos=qos,
                            retain=retain)
 
     def remove_equipment_item(self, equipment_item):
-        self.remove_topic('equipment/{}/item/{}/data'.format(equipment_item.equipment_holder.id,
+        self.remove_topic('equipment/{}/item/{}/data'.format(equipment_item.equipmentholder.id,
                                                              equipment_item.equipment.id))
 
     def publish_call(self, call, qos=2, retain=True):

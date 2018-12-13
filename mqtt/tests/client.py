@@ -256,19 +256,19 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.e3 = Equipment.objects.get(name='MRI - Ressonance')
             
             # add hospital equipment
-            cls.he1 = EquipmentItem.objects.get(equipment_holder=cls.h1.equipment_holder,
+            cls.he1 = EquipmentItem.objects.get(equipmentholder=cls.h1.equipmentholder,
                                                 equipment=cls.e1)
             
-            cls.he2 = EquipmentItem.objects.get(equipment_holder=cls.h1.equipment_holder,
+            cls.he2 = EquipmentItem.objects.get(equipmentholder=cls.h1.equipmentholder,
                                                 equipment=cls.e2)
 
-            cls.he3 = EquipmentItem.objects.get(equipment_holder=cls.h2.equipment_holder,
+            cls.he3 = EquipmentItem.objects.get(equipmentholder=cls.h2.equipmentholder,
                                                 equipment=cls.e1)
             
-            cls.he4 = EquipmentItem.objects.get(equipment_holder=cls.h2.equipment_holder,
+            cls.he4 = EquipmentItem.objects.get(equipmentholder=cls.h2.equipmentholder,
                                                 equipment=cls.e3)
             
-            cls.he5 = EquipmentItem.objects.get(equipment_holder=cls.h3.equipment_holder,
+            cls.he5 = EquipmentItem.objects.get(equipmentholder=cls.h3.equipmentholder,
                                                 equipment=cls.e1)
 
         except:
@@ -348,31 +348,31 @@ class MQTTTestCase(StaticLiveServerTestCase):
             
             # add hospital equipment
             cls.he1 = EquipmentItem.objects.create(
-                equipment_holder=cls.h1.equipment_holder,
+                equipmentholder=cls.h1.equipmentholder,
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)
             
             cls.he2 = EquipmentItem.objects.create(
-                equipment_holder=cls.h1.equipment_holder,
+                equipmentholder=cls.h1.equipmentholder,
                 equipment=cls.e2,
                 value='45',
                 updated_by=cls.u1)
 
             cls.he3 = EquipmentItem.objects.create(
-                equipment_holder=cls.h2.equipment_holder,
+                equipmentholder=cls.h2.equipmentholder,
                 equipment=cls.e1,
                 value='False',
                 updated_by=cls.u1)
             
             cls.he4 = EquipmentItem.objects.create(
-                equipment_holder=cls.h2.equipment_holder,
+                equipmentholder=cls.h2.equipmentholder,
                 equipment=cls.e3,
                 value='True',
                 updated_by=cls.u1)
             
             cls.he5 = EquipmentItem.objects.create(
-                equipment_holder=cls.h3.equipment_holder,
+                equipmentholder=cls.h3.equipmentholder,
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)

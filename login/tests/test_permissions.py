@@ -10,8 +10,8 @@ class TestPermissions(TestSetup):
 
         all_ambulances = {self.a1.id, self.a2.id, self.a3.id}
         all_hospitals = {self.h1.id, self.h2.id, self.h3.id}
-        all_equipments = {self.a1.equipment_holder.id, self.a2.equipment_holder.id, self.a3.equipment_holder.id, 
-                          self.h1.equipment_holder.id, self.h2.equipment_holder.id, self.h3.equipment_holder.id}
+        all_equipments = {self.a1.equipmentholder.id, self.a2.equipmentholder.id, self.a3.equipmentholder.id, 
+                          self.h1.equipmentholder.id, self.h2.equipmentholder.id, self.h3.equipmentholder.id}
 
         u = self.u1
         perms = Permissions(u)
@@ -47,8 +47,8 @@ class TestPermissions(TestSetup):
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
 
-        answer = [self.a1.equipment_holder.id, self.a2.equipment_holder.id, self.a3.equipment_holder.id,
-                  self.h1.equipment_holder.id, self.h2.equipment_holder.id, self.h3.equipment_holder.id]
+        answer = [self.a1.equipmentholder.id, self.a2.equipmentholder.id, self.a3.equipmentholder.id,
+                  self.h1.equipmentholder.id, self.h2.equipmentholder.id, self.h3.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_read('equipments'))
         for id in all_equipments:
             if id in answer:
@@ -98,33 +98,33 @@ class TestPermissions(TestSetup):
                 }
             },
             'equipments': {
-                self.a1.equipment_holder.id: {
-                    'equipment_holder': self.a1.equipment_holder,
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.a2.equipment_holder.id: {
-                    'equipment_holder': self.a2.equipment_holder,
+                self.a2.equipmentholder.id: {
+                    'equipmentholder': self.a2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.a3.equipment_holder.id: {
-                    'equipment_holder': self.a3.equipment_holder,
+                self.a3.equipmentholder.id: {
+                    'equipmentholder': self.a3.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.h1.equipment_holder.id: {
-                    'equipment_holder': self.h1.equipment_holder,
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.h2.equipment_holder.id: {
-                    'equipment_holder': self.h2.equipment_holder,
+                self.h2.equipmentholder.id: {
+                    'equipmentholder': self.h2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.h3.equipment_holder.id: {
-                    'equipment_holder': self.h3.equipment_holder,
+                self.h3.equipmentholder.id: {
+                    'equipmentholder': self.h3.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 }
@@ -172,14 +172,14 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
-        answer = [self.h1.equipment_holder.id, self.h2.equipment_holder.id]
+        answer = [self.h1.equipmentholder.id, self.h2.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_read('equipments'))
         for id in all_equipments:
             if id in answer:
                 self.assertTrue(perms.check_can_read(equipment=id))
             else:
                 self.assertFalse(perms.check_can_read(equipment=id))
-        answer = [self.h2.equipment_holder.id]
+        answer = [self.h2.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_write('equipments'))
         for id in all_equipments:
             if id in answer:
@@ -202,13 +202,13 @@ class TestPermissions(TestSetup):
                 },
             },
             'equipments': {
-                self.h1.equipment_holder.id: {
-                    'equipment_holder': self.h1.equipment_holder,
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
                     'can_read': True,
                     'can_write': False
                 },
-                self.h2.equipment_holder.id: {
-                    'equipment_holder': self.h2.equipment_holder,
+                self.h2.equipmentholder.id: {
+                    'equipmentholder': self.h2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
@@ -266,14 +266,14 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
-        answer = [self.a3.equipment_holder.id]
+        answer = [self.a3.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_read('equipments'))
         for id in all_equipments:
             if id in answer:
                 self.assertTrue(perms.check_can_read(equipment=id))
             else:
                 self.assertFalse(perms.check_can_read(equipment=id))
-        answer = [self.a3.equipment_holder.id]
+        answer = [self.a3.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_write('equipments'))
         for id in all_equipments:
             if id in answer:
@@ -296,13 +296,13 @@ class TestPermissions(TestSetup):
             'hospitals': {
             },
             'equipments': {
-                self.a1.equipment_holder.id: {
-                    'equipment_holder': self.a1.equipment_holder,
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
                     'can_read': False,
                     'can_write': False
                 },
-                self.a3.equipment_holder.id: {
-                    'equipment_holder': self.a3.equipment_holder,
+                self.a3.equipmentholder.id: {
+                    'equipmentholder': self.a3.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
@@ -362,14 +362,14 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
-        answer = [self.h1.equipment_holder.id, self.h2.equipment_holder.id]
+        answer = [self.h1.equipmentholder.id, self.h2.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_read('equipments'))
         for id in all_equipments:
             if id in answer:
                 self.assertTrue(perms.check_can_read(equipment=id))
             else:
                 self.assertFalse(perms.check_can_read(equipment=id))
-        answer = [self.h2.equipment_holder.id]
+        answer = [self.h2.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_write('equipments'))
         for id in all_equipments:
             if id in answer:
@@ -392,13 +392,13 @@ class TestPermissions(TestSetup):
                 },
             },
             'equipments': {
-                self.h1.equipment_holder.id: {
-                    'equipment_holder': self.h1.equipment_holder,
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
                     'can_read': True,
                     'can_write': False
                 },
-                self.h2.equipment_holder.id: {
-                    'equipment_holder': self.h2.equipment_holder,
+                self.h2.equipmentholder.id: {
+                    'equipmentholder': self.h2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
@@ -456,16 +456,16 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
-        answer = [self.a2.equipment_holder.id, self.a3.equipment_holder.id,
-                  self.h1.equipment_holder.id, self.h3.equipment_holder.id]
+        answer = [self.a2.equipmentholder.id, self.a3.equipmentholder.id,
+                  self.h1.equipmentholder.id, self.h3.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_read('equipments'))
         for id in all_equipments:
             if id in answer:
                 self.assertTrue(perms.check_can_read(equipment=id))
             else:
                 self.assertFalse(perms.check_can_read(equipment=id))
-        answer = [self.a2.equipment_holder.id, self.a3.equipment_holder.id,
-                  self.h1.equipment_holder.id]
+        answer = [self.a2.equipmentholder.id, self.a3.equipmentholder.id,
+                  self.h1.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_write('equipments'))
         for id in all_equipments:
             if id in answer:
@@ -503,28 +503,28 @@ class TestPermissions(TestSetup):
                 }
             },
             'equipments': {
-                self.a1.equipment_holder.id: {
-                    'equipment_holder': self.a1.equipment_holder,
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
                     'can_read': False,
                     'can_write': False
                 },
-                self.a2.equipment_holder.id: {
-                    'equipment_holder': self.a2.equipment_holder,
+                self.a2.equipmentholder.id: {
+                    'equipmentholder': self.a2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.a3.equipment_holder.id: {
-                    'equipment_holder': self.a3.equipment_holder,
+                self.a3.equipmentholder.id: {
+                    'equipmentholder': self.a3.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.h1.equipment_holder.id: {
-                    'equipment_holder': self.h1.equipment_holder,
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
-                self.h3.equipment_holder.id: {
-                    'equipment_holder': self.h3.equipment_holder,
+                self.h3.equipmentholder.id: {
+                    'equipmentholder': self.h3.equipmentholder,
                     'can_read': True,
                     'can_write': False
                 }
@@ -570,8 +570,8 @@ class TestPermissions(TestSetup):
             },
             'hospitals': {},
             'equipments': {
-                self.a1.equipment_holder.id: {
-                    'equipment_holder': self.a1.equipment_holder,
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
                     'can_read': False,
                     'can_write': False
                 },
@@ -604,7 +604,7 @@ class TestPermissions(TestSetup):
         answer = [self.a1.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         self.assertCountEqual(answer, perms.get_can_write('ambulances'))
-        answer = [self.a1.equipment_holder.id]
+        answer = [self.a1.equipmentholder.id]
         self.assertCountEqual(answer, perms.get_can_read('equipments'))
         self.assertCountEqual(answer, perms.get_can_write('equipments'))
         answer = {
@@ -617,8 +617,8 @@ class TestPermissions(TestSetup):
             },
             'hospitals': {},
             'equipments': {
-                self.a1.equipment_holder.id: {
-                    'equipment_holder': self.a1.equipment_holder,
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },

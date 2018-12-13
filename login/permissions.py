@@ -73,8 +73,8 @@ class Permissions:
                             'can_read': True,
                             'can_write': True
                         }
-                        equipment_permissions[e.equipment_holder.id] = {
-                            'equipment_holder': e.equipment_holder,
+                        equipment_permissions[e.equipmentholder.id] = {
+                            'equipmentholder': e.equipmentholder,
                             'can_read': True,
                             'can_write': True
                         }
@@ -103,8 +103,8 @@ class Permissions:
                                 'can_read': e.can_read,
                                 'can_write': e.can_write
                             }
-                            equipment_permissions[obj.equipment_holder.id] = {
-                                'equipment_holder': obj.equipment_holder,
+                            equipment_permissions[obj.equipmentholder.id] = {
+                                'equipmentholder': obj.equipmentholder,
                                 'can_read': e.can_read,
                                 'can_write': e.can_write
                             }
@@ -127,8 +127,8 @@ class Permissions:
                             'can_read': e.can_read,
                             'can_write': e.can_write
                         }
-                        equipment_permissions[obj.equipment_holder.id] = {
-                            'equipment_holder': obj.equipment_holder,
+                        equipment_permissions[obj.equipmentholder.id] = {
+                            'equipmentholder': obj.equipmentholder,
                             'can_read': e.can_read,
                             'can_write': e.can_write
                         }

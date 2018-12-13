@@ -140,8 +140,8 @@ class Client(PublishClient):
             self.stdout.write(self.style.SUCCESS(">> Seeding equipment metadata"))
 
         # seeding hospital metadata
-        for equipment_holder in EquipmentHolder.objects.all():
-            self.publish_equipment_metadata(equipment_holder)
+        for equipmentholder in EquipmentHolder.objects.all():
+            self.publish_equipment_metadata(equipmentholder)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding equipment metadata"))

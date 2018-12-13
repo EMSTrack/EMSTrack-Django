@@ -91,7 +91,7 @@ class EquipmentHolder(models.Model):
 
 
 class EquipmentItem(UpdatedByModel):
-    equipment_holder = models.ForeignKey(EquipmentHolder,
+    equipmentholder = models.ForeignKey(EquipmentHolder,
                                          on_delete=models.CASCADE)
     equipment = models.ForeignKey(Equipment,
                                   on_delete=models.CASCADE)
@@ -110,7 +110,7 @@ class EquipmentItem(UpdatedByModel):
         client = SingletonPublishClient()
         client.publish_equipment_item(self)
         if created:
-            client.publish_equipment_metadata(self.equipment_holder)
+            client.publish_equipment_metadata(self.equipmentholder)
 
     def delete(self, *args, **kwargs):
 
@@ -118,13 +118,13 @@ class EquipmentItem(UpdatedByModel):
         from mqtt.publish import SingletonPublishClient
         client = SingletonPublishClient()
         client.remove_equipment_item(self)
-        client.publish_equipment_metadata(self.equipment_holder)
+        client.publish_equipment_metadata(self.equipmentholder)
 
         # delete from EquipmentItem
         super().delete(*args, **kwargs)
 
     class Meta:
-        unique_together = ('equipment_holder', 'equipment',)
+        unique_together = ('equipmentholder', 'equipment',)
 
     def __str__(self):
-        return "EquipmentHolder: {}, Equipment: {}, Count: {}".format(self.equipment_holder, self.equipment, self.value)
+        return "EquipmentHolder: {}, Equipment: {}, Count: {}".format(self.equipmentholder, self.equipment, self.value)
