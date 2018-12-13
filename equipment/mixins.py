@@ -88,7 +88,8 @@ class EquipmentHolderUpdateMixin:
                 # save equipmentholder form
                 equipmentholder_form.save()
 
-                # Add equipments
+                # Add missing equipments
+                # Do not delete any other equipment
                 user = form.instance.updated_by
                 for equipment in equipments:
                     EquipmentItem.objects.create(equipmentholder=self.object.equipmentholder,
