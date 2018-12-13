@@ -4,6 +4,8 @@ from django.views.generic import ListView, DetailView, UpdateView
 
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 
+from equipment.forms import EquipmentHolderUpdateForm
+from equipment.models import EquipmentHolder
 from equipment.views import EquipmentHolderInline
 from .models import Hospital
 
@@ -14,6 +16,16 @@ from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, SuccessMessageW
 
 
 # Django views
+
+class HospitalInline(InlineFormSet):
+    model = Hospital
+    form_class = HospitalUpdateForm
+    factory_kwargs = {
+        'min_num': 1,
+        'max_num': 1,
+        'extra': 0,
+        'can_delete': False
+    }
 
 
 class HospitalPermissionMixin(BasePermissionMixin):
@@ -39,20 +51,37 @@ class HospitalCreateView(LoginRequiredMixin,
         return self.object.get_absolute_url()
 
 
+# class HospitalUpdateView(LoginRequiredMixin,
+#                          SuccessMessageWithInlinesMixin,
+#                          UpdatedByWithInlinesMixin,
+#                          HospitalPermissionMixin,
+#                          UpdateWithInlinesView):
+#     model = Hospital
+#     inlines = [EquipmentHolderInline]
+#     form_class = HospitalUpdateForm
+#
+#     def get_success_message(self, cleaned_data):
+#         return "Successfully updated hospital '{}'".format(cleaned_data['name'])
+#
+#     def get_success_url(self):
+#         return self.object.get_absolute_url()
+
+
 class HospitalUpdateView(LoginRequiredMixin,
                          SuccessMessageWithInlinesMixin,
                          UpdatedByWithInlinesMixin,
                          HospitalPermissionMixin,
                          UpdateWithInlinesView):
-    model = Hospital
-    inlines = [EquipmentHolderInline]
-    form_class = HospitalUpdateForm
+    model = EquipmentHolder
+    inlines = [HospitalInline]
+    form_class = EquipmentHolderUpdateForm
 
     def get_success_message(self, cleaned_data):
         return "Successfully updated hospital '{}'".format(cleaned_data['name'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()
+
 
 
 class HospitalDetailView(LoginRequiredMixin,
