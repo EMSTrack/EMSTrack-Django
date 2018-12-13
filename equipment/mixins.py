@@ -23,7 +23,7 @@ class EquipmentHolderCreateMixin:
             equipmentholder = equipmentholder_form.save()
 
             # add equipmentholder to form and save
-            form.instance.equipmentholder = equipmentholder.id
+            form.instance.equipmentholder = equipmentholder
 
             # call super
             return super().form_valid(form)
