@@ -79,12 +79,10 @@ class EquipmentHolderUpdateMixin:
             logger.debug(equipmentitemset)
             equipments = set()
             for equipmentset in equipmentholder_form.cleaned_data['equipmentsets']:
-                equipmentsnotin = equipmentset.equipmentsetitem_set\
-                    .exclude(equipment_id__in=equipmentitemset)\
-                    .values('equipment_id')
-                logger.debug(equipmentsnotin)
-                equipmentsnotinvalues = equipmentsnotin.values()
-                equipments.update(equipmentsnotin.values())
+                for k,v in equipmentset.equipmentsetitem_set\
+                        .exclude(equipment_id__in=equipmentitemset)\
+                        .values('equipment_id').items():
+                    equipments.add(v)
             logger.debug(equipments)
 
             # wrap in atomic in case of errors
