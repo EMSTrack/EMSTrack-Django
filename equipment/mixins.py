@@ -41,7 +41,7 @@ class EquipmentHolderCreateMixin:
 
                 # add equipmentholder to form and save
                 form.instance.equipmentholder = equipmentholder
-                
+
                 # call super
                 return super().form_valid(form)
 
