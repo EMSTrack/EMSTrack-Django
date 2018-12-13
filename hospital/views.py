@@ -40,15 +40,14 @@ class HospitalCreateView(LoginRequiredMixin,
 
 
 class HospitalUpdateView(LoginRequiredMixin,
-                         # SuccessMessageWithInlinesMixin,
-                         # UpdatedByWithInlinesMixin,
-                         # UpdateWithInlinesView):
+                         SuccessMessageWithInlinesMixin,
+                         UpdatedByWithInlinesMixin,
                          SuccessMessageMixin,
                          UpdatedByMixin,
                          HospitalPermissionMixin,
-                         UpdateView):
+                         UpdateWithInlinesView):
     model = Hospital
-    # inlines = [EquipmentItemInline]
+    inlines = [EquipmentHolderInline]
     form_class = HospitalUpdateForm
 
     def get_success_message(self, cleaned_data):
