@@ -18,6 +18,13 @@ class EquipmentType(Enum):
     S = 'String'
 
 
+EquipmentTypeDefaults = {
+    EquipmentType.B.name: "True",
+    EquipmentType.I.name: "0",
+    EquipmentType.S.name: ""
+}
+
+
 class Equipment(models.Model):
     name = models.CharField(max_length=254, unique=True)
 
@@ -25,6 +32,17 @@ class Equipment(models.Model):
         [(m.name, m.value) for m in EquipmentType]
     type = models.CharField(max_length=1,
                             choices=EQUIPMENT_TYPE_CHOICES)
+
+    default = models.CharField(max_length=254)
+
+    def save(self, *args, **kwargs):
+
+        # set default value
+        if self.default is None:
+            self.default = EquipmentTypeDefaults[self.type]
+
+        # call super
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return "{} ({})".format(self.name, self.type)
@@ -104,6 +122,10 @@ class EquipmentItem(UpdatedByModel):
 
         # creation?
         created = self.pk is None
+
+        # if no value, set default value
+        if self.value is None:
+            self.value = self.equipment.default
 
         # save to EquipmentItem
         super().save(*args, **kwargs)
