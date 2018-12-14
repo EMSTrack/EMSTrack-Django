@@ -82,8 +82,8 @@ class AmbulanceListView(LoginRequiredMixin,
 
 class AmbulanceCreateView(LoginRequiredMixin,
                           SuccessMessageMixin,
-                          EquipmentHolderCreateMixin,
                           UpdatedByMixin,
+                          EquipmentHolderCreateMixin,
                           AmbulancePermissionMixin,
                           CreateView):
     model = Ambulance
@@ -98,8 +98,8 @@ class AmbulanceCreateView(LoginRequiredMixin,
 
 class AmbulanceUpdateView(LoginRequiredMixin,
                           SuccessMessageMixin,
-                          EquipmentHolderUpdateMixin,
                           UpdatedByMixin,
+                          EquipmentHolderUpdateMixin,
                           AmbulancePermissionMixin,
                           UpdateView):
     model = Ambulance
