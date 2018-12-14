@@ -10,6 +10,8 @@
 
             <h1>Online clients</h1>
 
+            {% if client_list %}
+
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
@@ -47,6 +49,12 @@
                 </tbody>
             </table>
 
+            {% else %}
+
+            <p>There are no clients online.</p>
+
+            {% endif %}
+
         </div>
     </div>
 
@@ -71,8 +79,10 @@
     </div>
     {% endif %}
 
-    <div class="row">
+   <div class="row">
         <div class="col">
+
+            {% if not_online %}
 
             <table class="table table-striped table-sm">
                 <thead>
@@ -111,7 +121,13 @@
                 </tbody>
             </table>
 
-        </div>
+             {% else %}
+
+            <p>There are no clients offline.</p>
+
+            {% endif %}
+
+       </div>
     </div>
 
     {% if not_online.has_other_pages %}
