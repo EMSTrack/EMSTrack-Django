@@ -63,9 +63,19 @@ class AddressModel(models.Model):
 
     def get_address(self):
         address_str = ' '.join((self.number, self.street, self.unit))
-        address_str = ', '.join((address_str, self.neighborhood, self.city, self.state))
+
+        if address_str:
+            address_str = ', '.join((address_str, self.neighborhood))
+        else:
+            address_str = self.neighborhood
+
+        if address_str:
+            address_str = ', '.join((address_str, self.city, self.state))
+        else:
+            address_str = ', '.join((self.city, self.state))
+
         address_str = ' '.join((address_str, self.zipcode))
-        address_str = '. '.join((address_str, self.country))
+        address_str = ', '.join((address_str, self.country))
 
         return address_str
 
