@@ -315,11 +315,41 @@ class CallListView(LoginRequiredMixin,
     model = Call
 
     def get_context_data(self, **kwargs):
+
+        # add paginated ended calls to context
+
+        # call supper
         context = super().get_context_data(**kwargs)
+
+        # query all calls
         queryset = self.get_queryset()
+
+        # filter
         context['pending_list'] = queryset.filter(status=CallStatus.P.name).order_by('pending_at')
         context['started_list'] = queryset.filter(status=CallStatus.S.name).order_by('-started_at')
-        context['ended_list'] = queryset.filter(status=CallStatus.E.name).order_by('-ended_at')
+
+         # query ended and paginate
+        ended_calls_query = queryset.filter(status=CallStatus.E.name).order_by('-ended_at')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
+
+        # paginate
+        paginator = Paginator(ended_calls_query, page_size)
+        try:
+            ended_calls = paginator.page(page)
+        except PageNotAnInteger:
+            ended_calls = paginator.page(1)
+        except EmptyPage:
+            ended_calls = paginator.page(paginator.num_pages)
+
+        context['ended_list'] = ended_calls
+        context['page_links'] = get_page_links(self.request, ended_calls)
+        context['page_size_links'] = get_page_size_links(self.request, ended_calls, page_sizes)
+        context['page_size'] = int(page_size)
+
         return context
 
 
