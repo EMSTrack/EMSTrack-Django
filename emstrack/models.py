@@ -70,12 +70,12 @@ class AddressModel(models.Model):
             address_str = self.neighborhood.strip()
 
         if address_str:
-            address_str = ', '.join((address_str, self.city, self.state))
+            address_str = ', '.join((address_str, self.city, self.state)).strip()
         else:
-            address_str = ', '.join((self.city, self.state))
+            address_str = ', '.join((self.city, self.state)).strip()
 
-        address_str = ' '.join((address_str, self.zipcode))
-        address_str = ', '.join((address_str, self.country))
+        address_str = ' '.join((address_str, self.zipcode)).strip()
+        address_str = ', '.join((address_str, self.country)).strip()
 
         return address_str
 
