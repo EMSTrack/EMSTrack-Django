@@ -257,15 +257,15 @@ class ClientListView(ListView):
         # paginate
         paginator = Paginator(not_online_query, page_size)
         try:
-            updates = paginator.page(page)
+            not_online = paginator.page(page)
         except PageNotAnInteger:
-            updates = paginator.page(1)
+            not_online = paginator.page(1)
         except EmptyPage:
-            updates = paginator.page(paginator.num_pages)
+            not_online = paginator.page(paginator.num_pages)
 
-        context['not_online'] = updates
-        context['page_links'] = get_page_links(self.request, updates)
-        context['page_size_links'] = get_page_size_links(self.request, updates, page_sizes)
+        context['not_online'] = not_online
+        context['page_links'] = get_page_links(self.request, not_online)
+        context['page_size_links'] = get_page_size_links(self.request, not_online, page_sizes)
         context['page_size'] = int(page_size)
 
 
