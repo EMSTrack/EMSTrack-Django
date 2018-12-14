@@ -236,7 +236,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 class ClientListView(ListView):
     model = Client
-    # queryset = Client.objects.filter(status=ClientStatus.O.name)
+    queryset = Client.objects.filter(status=ClientStatus.O.name)
     ordering = ['-status', '-updated_on']
 
     def get_context_data(self, **kwargs):
@@ -268,6 +268,7 @@ class ClientListView(ListView):
         context['page_size_links'] = get_page_size_links(self.request, not_online, page_sizes)
         context['page_size'] = int(page_size)
 
+        return context
 
 class ClientDetailView(DetailView):
     model = Client
