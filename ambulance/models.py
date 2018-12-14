@@ -476,6 +476,9 @@ class Call(PublishMixin,
             self.status = CallStatus.E.name
             self.save()
 
+    def get_ambulances(self):
+        return ', '.join(ac.ambulance.identifier for ac in self.ambulancecall_set.all())
+
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)
 

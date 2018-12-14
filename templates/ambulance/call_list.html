@@ -28,11 +28,7 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.pending_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
-                            <td>
-                            {% for ambulancecall in call.ambulancecall_set.all %}
-                            {{ ambulancecall.ambulance.identifier }}
-                            {% endfor %}
-                            </td>
+                            <td>{{ call.get_ambulances }}</td>
                         </tr>
 
                     {% endfor %}
@@ -66,11 +62,7 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.started_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
-                            <td>
-                            {% for ambulancecall in call.ambulancecall_set.all %}
-                            {{ ambulancecall.ambulance.identifier }}
-                            {% endfor %}
-                            </td>
+                            <td>{{ call.get_ambulances }}</td>
                         </tr>
 
                     {% endfor %}
@@ -121,11 +113,7 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.ended_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
-                            <td>
-                            {% for ambulancecall in call.ambulancecall_set.all %}
-                            {{ ambulancecall.ambulance.identifier }}
-                            {% endfor %}
-                            </td>
+                            <td>{{ call.get_ambulances }}</td>
                         </tr>
 
                     {% endfor %}
