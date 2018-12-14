@@ -64,8 +64,9 @@ class AddressModel(models.Model):
     def get_address(self):
         address_str = ' '.join((self.number, self.street, self.unit)).strip()
 
-        if address_str and self.neighborhood:
-            address_str = ', '.join((address_str, self.neighborhood)).strip()
+        if address_str:
+            if self.neighborhood:
+                address_str = ', '.join((address_str, self.neighborhood)).strip()
         else:
             address_str = self.neighborhood.strip()
 
