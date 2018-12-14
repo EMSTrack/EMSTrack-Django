@@ -11,6 +11,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core import management
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
@@ -24,6 +25,7 @@ from rest_framework.views import APIView
 from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
+from emstrack.views import get_page_links, get_page_size_links
 from equipment.models import EquipmentType, EquipmentHolder
 from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
@@ -35,7 +37,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, Client
+    GroupHospitalPermission, Client, ClientStatus
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -234,7 +236,37 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 class ClientListView(ListView):
     model = Client
+    queryset = Client.objects.filter(status=ClientStatus.O.name)
     ordering = ['-status', '-updated_on']
+
+    def get_context_data(self, **kwargs):
+
+        # add paginated offline clients to context
+
+        # call supper
+        context = super().get_context_data(**kwargs)
+
+        # query
+        not_online_query = Client.objects.exclude(status=ClientStatus.O.name).order_by('-updated_on')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 250)
+        page_sizes = [250, 500, 1000]
+
+        # paginate
+        paginator = Paginator(not_online_query, page_size)
+        try:
+            updates = paginator.page(page)
+        except PageNotAnInteger:
+            updates = paginator.page(1)
+        except EmptyPage:
+            updates = paginator.page(paginator.num_pages)
+
+        context['not_online'] = updates
+        context['page_links'] = get_page_links(self.request, updates)
+        context['page_size_links'] = get_page_size_links(self.request, updates, page_sizes)
+        context['page_size'] = int(page_size)
 
 
 class ClientDetailView(DetailView):
