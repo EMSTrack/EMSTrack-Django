@@ -31,9 +31,7 @@
 						<a href="{% url 'hospital:detail' pk=hospital.id %}">{{ hospital.name }}</a>
 					</td>
 					<td>
-						{{ hospital.number }} {{ hospital.street }} {{ hospital.unit }},
-						{{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }},
-						{{ hospital.country }}
+						{{ hospital.get_address }}
 					</td>
 					<td>{{ hospital.comment }}</td>
 					<td>{{ hospital.updated_on }}</td>

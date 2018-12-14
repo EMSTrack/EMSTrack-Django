@@ -23,9 +23,7 @@
             </p>
             <p>
                 <strong>Address:</strong>
-                {{ hospital.number }} {{ hospital.street }} {{ hospital.unit }},
-                {{ hospital.city }}, {{ hospital.state }} {{ hospital.zipcode }},
-                {{ hospital.country }}
+                {{ hospital.get_address }}
             </p>
             <p>
                 <strong>Location:</strong>

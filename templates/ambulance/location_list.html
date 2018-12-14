@@ -33,9 +33,7 @@
 						{{ location.type|get_location_type }}
 					</td>
 					<td>
-						{{ location.number }} {{ location.street }} {{ location.unit }},
-						{{ location.city }}, {{ location.state }} {{ location.zipcode }},
-						{{ location.country }}
+						{{ location.get_address }}
 					</td>
 					<td>{{ location.comment }}</td>
 					<td>{{ location.updated_on }}</td>

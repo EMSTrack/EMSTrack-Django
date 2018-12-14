@@ -61,6 +61,14 @@ class AddressModel(models.Model):
     class Meta:
         abstract = True
 
+    def get_address(self):
+        address_str = ' '.join((self.number, self.street, self.unit))
+        address_str = ', '.join((address_str, self.neighborhood, self.city, self.state))
+        address_str = ' '.join((address_str, self.zipcode))
+        address_str = '. '.join((address_str, self.country))
+
+        return address_str
+
 
 class UpdatedByModel(models.Model):
     """
