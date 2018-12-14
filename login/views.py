@@ -251,8 +251,8 @@ class ClientListView(ListView):
 
         # get current page
         page = self.request.GET.get('page', 1)
-        page_size = self.request.GET.get('page_size', 250)
-        page_sizes = [250, 500, 1000]
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
 
         # paginate
         paginator = Paginator(not_online_query, page_size)
@@ -269,6 +269,7 @@ class ClientListView(ListView):
         context['page_size'] = int(page_size)
 
         return context
+
 
 class ClientDetailView(DetailView):
     model = Client
