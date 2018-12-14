@@ -236,7 +236,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 class ClientListView(ListView):
     model = Client
-    queryset = Client.objects.filter(status=ClientStatus.O.name)
+    # queryset = Client.objects.filter(status=ClientStatus.O.name)
     ordering = ['-status', '-updated_on']
 
     def get_context_data(self, **kwargs):
