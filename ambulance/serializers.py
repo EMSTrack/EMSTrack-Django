@@ -110,6 +110,7 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                     current['orientation'] = calculate_orientation(current['location'], update['location'])
 
             # clear timestamp
+            # if update has no timestamp, save should create one
             current.pop('timestamp', None)
 
             # update data
@@ -140,20 +141,18 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 for k in range(0, n-1):
 
                     # process update
-                    retdata = process_update(validated_data[k], data)
+                    data = process_update(validated_data[k], data)
 
-                    if retdata is not None:
+                    # create update object
+                    obj = AmbulanceUpdate(**data)
+                    obj.save()
 
-                        # create update object
-                        obj = AmbulanceUpdate(**data)
-                        obj.save()
-
-                        # append to objects list
-                        instances.append(obj)
+                    # append to objects list
+                    instances.append(obj)
 
                 # on last update, update ambulance instead
 
-                # process update
+                # process last update
                 data = process_update(validated_data[-1], data)
 
                 # save to ambulance will automatically create update
