@@ -205,8 +205,14 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 else:
                     ambulance_updates = AmbulanceUpdate.objects.none()
 
-        # order records
-        ambulance_updates = ambulance_updates.order_by('-timestamp')
+
+            # order records in ascending order
+            ambulance_updates = ambulance_updates.order_by('timestamp')
+
+        else:
+
+            # order records in descending order
+            ambulance_updates = ambulance_updates.order_by('-timestamp')
 
         # for entry in ambulance_updates:
         #     logger.debug(entry.timestamp)
