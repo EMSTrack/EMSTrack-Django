@@ -157,9 +157,9 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
-        # Check if ambulancecall status changed to Ongoing
+        # Check if ambulancecall status changed to accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
@@ -628,9 +628,9 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
-        # Check if ambulancecall status changed to Ongoing
+        # Check if ambulancecall status changed to accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
@@ -1046,9 +1046,9 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
-        # Check if ambulancecall status changed to Ongoing
+        # Check if ambulancecall status changed to accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
@@ -1239,9 +1239,9 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.C.name)
 
-        # Check if ambulancecall2 status is Ongoing
+        # Check if ambulancecall2 status is accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # subscribe to call
         test_client2.expect('call/{}/data'.format(call.id))
@@ -1550,9 +1550,9 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
-        # Check if ambulancecall status changed to Ongoing
+        # Check if ambulancecall status changed to accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
@@ -1597,13 +1597,13 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
 
-        # Check if ambulancecall1 status is Ongoing
+        # Check if ambulancecall1 status is accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id1)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
-        # Check if ambulancecall2 status is Ongoing
+        # Check if ambulancecall2 status is accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # subscribe to call
         test_client2.expect('call/{}/data'.format(call.id))
@@ -1717,7 +1717,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
 
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
-        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.O.name)
+        self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # Check if call status is Started
         call = Call.objects.get(id=call.id)

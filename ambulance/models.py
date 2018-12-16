@@ -455,13 +455,13 @@ class Call(PublishMixin,
         if self.status == CallStatus.E.name:
             return
 
-        # retrieve all ongoing ambulances
-        ongoing_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+        # retrieve all accepted ambulances
+        accepted_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
 
-        if ongoing_ambulancecalls:
+        if accepted_ambulancecalls:
             # if  ambulancecalls, set ambulancecall to complete until all done
 
-            for ambulancecall in ongoing_ambulancecalls:
+            for ambulancecall in accepted_ambulancecalls:
 
                 # change call status to finished
                 ambulancecall.status = AmbulanceCallStatus.C.name
@@ -485,7 +485,7 @@ class Call(PublishMixin,
 
 class AmbulanceCallStatus(Enum):
     R = 'Requested'
-    O = 'Ongoing'
+    A = 'Accepted'
     D = 'Declined'
     S = 'Suspended'
     C = 'Completed'
@@ -526,8 +526,8 @@ class AmbulanceCall(PublishMixin,
         # retrieve call
         call = self.call
 
-        # changed to ongoing?
-        if self.status == AmbulanceCallStatus.O.name:
+        # changed to accepted?
+        if self.status == AmbulanceCallStatus.A.name:
 
             if call.status != CallStatus.S.name:
 
@@ -543,12 +543,12 @@ class AmbulanceCall(PublishMixin,
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
 
-            # retrieve all ongoing ambulances
-            ongoing_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+            # retrieve all accepted ambulances
+            accepted_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
 
-            set_size = len(ongoing_ambulancecalls)
+            set_size = len(accepted_ambulancecalls)
             if (set_size == 0 or
-                    (set_size == 1 and ongoing_ambulancecalls[0].ambulance is not self)):
+                    (set_size == 1 and accepted_ambulancecalls[0].ambulance is not self)):
 
                 logger.debug('This is the last ambulance; will end call.')
 
@@ -565,7 +565,7 @@ class AmbulanceCall(PublishMixin,
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
-                logger.debug(ongoing_ambulancecalls)
+                logger.debug(accepted_ambulancecalls)
 
                 # publish and remove from mqtt
                 remove = True

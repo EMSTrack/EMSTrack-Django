@@ -833,8 +833,8 @@ class SubscribeClient(BaseClient):
 
             if status.casefold() == "accepted":
 
-                # change ambulancecall status to ongoing
-                ambulancecall.status = AmbulanceCallStatus.O.name
+                # change ambulancecall status to accepted
+                ambulancecall.status = AmbulanceCallStatus.A.name
 
             elif status.casefold() == "declined":
 

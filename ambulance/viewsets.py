@@ -81,22 +81,22 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     def extract_unavailable_zone(ambulance_history):
 
         unavailable_zone = [None]
-        ongoing = False
+        accepted = False
 
         for h in ambulance_history:
 
             # Started timestamp
-            if ongoing is False and h.status == AmbulanceCallStatus.O.name:
+            if accepted is False and h.status == AmbulanceCallStatus.A.name:
                 unavailable_zone.append(h.updated_on)
-                ongoing = True
+                accepted = True
 
-            # If we already seen ongoing status, seeing another kind of status
-            elif ongoing is True and h.status != AmbulanceCallStatus.O.name:
+            # If we already seen accepted status, seeing another kind of status
+            elif accepted is True and h.status != AmbulanceCallStatus.A.name:
                 unavailable_zone.append(h.updated_on)
-                ongoing = False
+                accepted = False
 
-        # If the last status is not ongoing, we should put a None to ensure pair
-        if ongoing is False:
+        # If the last status is not accepted, we should put a None to ensure pair
+        if accepted is False:
             unavailable_zone.append(None)
 
         return unavailable_zone
@@ -106,24 +106,24 @@ class AmbulanceViewSet(mixins.ListModelMixin,
     def extract_available_zone(ambulance_history):
 
         available_zone = []
-        ongoing = False
+        accepted = False
 
         for h in ambulance_history:
 
             # logger.debug('status = %s, updated_on = %s', h.status, h.updated_on)
 
             # Started timestamp
-            if ongoing is False and h.status == AmbulanceCallStatus.O.name:
+            if accepted is False and h.status == AmbulanceCallStatus.A.name:
                 available_zone.append(h.updated_on)
-                ongoing = True
+                accepted = True
 
-            # If we already seen ongoing status, seeing another kind of status
-            elif ongoing is True and h.status != AmbulanceCallStatus.O.name:
+            # If we already seen accepted status, seeing another kind of status
+            elif accepted is True and h.status != AmbulanceCallStatus.A.name:
                 available_zone.append(h.updated_on)
-                ongoing = False
+                accepted = False
 
-        # If the last status is not ongoing, we should put a None to ensure pair
-        if ongoing is True:
+        # If the last status is not accepted, we should put a None to ensure pair
+        if accepted is True:
             available_zone.append(None)
 
         return available_zone

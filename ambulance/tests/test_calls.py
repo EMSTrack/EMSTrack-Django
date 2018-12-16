@@ -538,8 +538,8 @@ class TestCall(TestSetup):
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
-        # set ongoing
-        ambulance_call_1.status = AmbulanceCallStatus.O.name
+        # set accepted
+        ambulance_call_1.status = AmbulanceCallStatus.A.name
         ambulance_call_1.save()
 
         ambulance_call_serializer_1 = AmbulanceCallSerializer(ambulance_call_1)
@@ -549,7 +549,7 @@ class TestCall(TestSetup):
             'comment': ambulance_call.comment,
             'updated_by': ambulance_call.updated_by.id,
             'updated_on': date2iso(ambulance_call.updated_on),
-            'status': AmbulanceCallStatus.O.name,
+            'status': AmbulanceCallStatus.A.name,
             'waypoint_set': []
         }
         self.assertDictEqual(ambulance_call_serializer_1.data, expected)
@@ -594,8 +594,8 @@ class TestCall(TestSetup):
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
-        # set ongoing
-        ambulance_call_2.status = AmbulanceCallStatus.O.name
+        # set accepted
+        ambulance_call_2.status = AmbulanceCallStatus.A.name
         ambulance_call_2.save()
 
         ambulance_call_serializer_2 = AmbulanceCallSerializer(ambulance_call_2)
@@ -605,7 +605,7 @@ class TestCall(TestSetup):
             'comment': ambulance_call.comment,
             'updated_by': ambulance_call.updated_by.id,
             'updated_on': date2iso(ambulance_call.updated_on),
-            'status': AmbulanceCallStatus.O.name,
+            'status': AmbulanceCallStatus.A.name,
             'waypoint_set': []
         }
         self.assertDictEqual(ambulance_call_serializer_2.data, expected)
@@ -637,8 +637,8 @@ class TestCall(TestSetup):
         self.a1.save()
         ambulance_update_2 = AmbulanceUpdate.objects.get(status=AmbulanceStatus.AP.name)
 
-        # set ongoing
-        ambulance_call_1.status = AmbulanceCallStatus.O.name
+        # set accepted
+        ambulance_call_1.status = AmbulanceCallStatus.A.name
         ambulance_call_1.save()
 
         self.a1status = AmbulanceStatus.HB.name
@@ -875,7 +875,7 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # Ongoing Call without Ambulancecall_Set fails
+        # accepted Call without Ambulancecall_Set fails
         call = {
             'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
