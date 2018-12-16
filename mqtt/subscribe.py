@@ -831,22 +831,22 @@ class SubscribeClient(BaseClient):
                                         "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
 
-            if status.casefold() == "accepted":
+            if status.casefold() == AmbulanceCallStatus.A.value.casefold():
 
                 # change ambulancecall status to accepted
                 ambulancecall.status = AmbulanceCallStatus.A.name
 
-            elif status.casefold() == "declined":
+            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
 
                 # change ambulancecall status to decline
                 ambulancecall.status = AmbulanceCallStatus.D.name
 
-            elif status.casefold() == "suspended":
+            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
 
                 # change ambulancecall status to suspended
                 ambulancecall.status = AmbulanceCallStatus.S.name
 
-            elif status.casefold() == "finished":
+            elif status.casefold() == AmbulanceCallStatus.C.value.casefold():
 
                 # change ambulance status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name

@@ -139,7 +139,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "accepted")
+                                                                                   ambulance_id, call.id), AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -257,9 +257,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # test_client publishes "Finished" to call status
+        # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "finished")
+                                                                                   ambulance_id, call.id),
+                            AmbulanceCallStatus.C.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -586,7 +587,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "declined")
+                                                                                   ambulance_id, call.id), AmbulanceCallStatus.D.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -610,7 +611,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "accepted")
+                                                                                   ambulance_id, call.id), AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -636,9 +637,10 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
-        # test_client publishes "Finished" to call status
+        # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "finished")
+                                                                                   ambulance_id, call.id),
+                            AmbulanceCallStatus.C.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -813,7 +815,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), "declined")
+                                                                                   ambulance_id, call.id), AmbulanceCallStatus.D.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -1028,7 +1030,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id1, call.id), "accepted")
+                                                                                   ambulance_id1, call.id), AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -1102,9 +1104,10 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.loop(test_client)
         subscribe_client.loop()
 
-        # test_client publishes "Finished" to call status
+        # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id1, call.id), "finished")
+                                                                                   ambulance_id1, call.id),
+                            AmbulanceCallStatus.C.value.casefold())
 
         # process messages
         self.loop(test_client)
@@ -1217,7 +1220,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
-                             "accepted")
+                             AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client2)
@@ -1291,16 +1294,16 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # test_client publishes "Finished" to call status
+        # test_client publishes "completed" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                    ambulance_id2, call.id),
-                             "finished")
+                             AmbulanceCallStatus.C.value.casefold())
 
         # process messages
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # expect status finished ambulancecall
+        # expect status completed ambulancecall
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
@@ -1532,7 +1535,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
 
         # test_client publishes "Accepted" to call status
         test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                    ambulance_id1, call.id), "accepted")
+                                                                                    ambulance_id1, call.id), AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client1)
@@ -1579,7 +1582,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
-                             "accepted")
+                             AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client2)
@@ -1691,9 +1694,10 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client1)
         subscribe_client.loop()
 
-        # test_client publishes "Finished" to call status
+        # test_client publishes "completed" to call status
         test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id1, call.id), "finished")
+                                                                                   ambulance_id1, call.id),
+                             AmbulanceCallStatus.C.value.casefold())
 
         # process messages
         self.loop(test_client1)
@@ -1733,9 +1737,10 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.loop(test_client2)
         subscribe_client.loop()
 
-        # test_client publishes "Finished" to call status
+        # test_client publishes "completed" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
-                                                                                   ambulance_id2, call.id), "finished")
+                                                                                   ambulance_id2, call.id),
+                             AmbulanceCallStatus.C.value.casefold())
 
         # process messages
         self.loop(test_client2)

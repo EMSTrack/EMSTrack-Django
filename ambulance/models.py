@@ -455,15 +455,15 @@ class Call(PublishMixin,
         if self.status == CallStatus.E.name:
             return
 
-        # retrieve all accepted ambulances
-        accepted_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+        # retrieve all calls not completed
+        not_completed_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
 
-        if accepted_ambulancecalls:
+        if not_completed_ambulancecalls:
             # if  ambulancecalls, set ambulancecall to complete until all done
 
-            for ambulancecall in accepted_ambulancecalls:
+            for ambulancecall in not_completed_ambulancecalls:
 
-                # change call status to finished
+                # change call status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name
                 ambulancecall.save()
 
@@ -472,7 +472,7 @@ class Call(PublishMixin,
         else:
             # if no ambulancecalls, force abort
 
-            # change call status to finished
+            # change call status to ended
             self.status = CallStatus.E.name
             self.save()
 
@@ -555,7 +555,7 @@ class AmbulanceCall(PublishMixin,
                 # publish first
                 self.publish()
 
-                # then change call status to finished
+                # then change call status to ended
                 call.status = CallStatus.E.name
                 call.save()
 
