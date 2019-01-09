@@ -11,13 +11,14 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from ambulance.models import Ambulance, \
     AmbulanceCapability
-from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
+from hospital.models import Hospital
+from equipment.models import EquipmentType, Equipment, EquipmentItem
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient
 
 logger = logging.getLogger(__name__)
+
 
 class MQTTTestCase(StaticLiveServerTestCase):
 
@@ -255,22 +256,21 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.e3 = Equipment.objects.get(name='MRI - Ressonance')
             
             # add hospital equipment
-            cls.he1 = HospitalEquipment.objects.get(hospital=cls.h1,
-                                                    equipment=cls.e1)
+            cls.he1 = EquipmentItem.objects.get(equipmentholder=cls.h1.equipmentholder,
+                                                equipment=cls.e1)
             
-            cls.he2 = HospitalEquipment.objects.get(hospital=cls.h1,
-                                                    equipment=cls.e2)
+            cls.he2 = EquipmentItem.objects.get(equipmentholder=cls.h1.equipmentholder,
+                                                equipment=cls.e2)
 
-            cls.he3 = HospitalEquipment.objects.get(hospital=cls.h2,
-                                                    equipment=cls.e1)
+            cls.he3 = EquipmentItem.objects.get(equipmentholder=cls.h2.equipmentholder,
+                                                equipment=cls.e1)
             
-            cls.he4 = HospitalEquipment.objects.get(hospital=cls.h2,
-                                                    equipment=cls.e3)
+            cls.he4 = EquipmentItem.objects.get(equipmentholder=cls.h2.equipmentholder,
+                                                equipment=cls.e3)
             
-            cls.he5 = HospitalEquipment.objects.get(hospital=cls.h3,
-                                                    equipment=cls.e1)
+            cls.he5 = EquipmentItem.objects.get(equipmentholder=cls.h3.equipmentholder,
+                                                equipment=cls.e1)
 
-            
         except:
 
             # Add users
@@ -347,32 +347,32 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 type=EquipmentType.B.name)
             
             # add hospital equipment
-            cls.he1 = HospitalEquipment.objects.create(
-                hospital=cls.h1,
+            cls.he1 = EquipmentItem.objects.create(
+                equipmentholder=cls.h1.equipmentholder,
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)
             
-            cls.he2 = HospitalEquipment.objects.create(
-                hospital=cls.h1,
+            cls.he2 = EquipmentItem.objects.create(
+                equipmentholder=cls.h1.equipmentholder,
                 equipment=cls.e2,
                 value='45',
                 updated_by=cls.u1)
 
-            cls.he3 = HospitalEquipment.objects.create(
-                hospital=cls.h2,
+            cls.he3 = EquipmentItem.objects.create(
+                equipmentholder=cls.h2.equipmentholder,
                 equipment=cls.e1,
                 value='False',
                 updated_by=cls.u1)
             
-            cls.he4 = HospitalEquipment.objects.create(
-                hospital=cls.h2,
+            cls.he4 = EquipmentItem.objects.create(
+                equipmentholder=cls.h2.equipmentholder,
                 equipment=cls.e3,
                 value='True',
                 updated_by=cls.u1)
             
-            cls.he5 = HospitalEquipment.objects.create(
-                hospital=cls.h3,
+            cls.he5 = EquipmentItem.objects.create(
+                equipmentholder=cls.h3.equipmentholder,
                 equipment=cls.e1,
                 value='True',
                 updated_by=cls.u1)

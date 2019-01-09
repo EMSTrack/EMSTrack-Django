@@ -28,7 +28,7 @@ class UserProfile(models.Model):
                                 on_delete=models.CASCADE)
 
     def get_absolute_url(self):
-        return reverse('login:user_detail', kwargs={'pk': self.user.id})
+        return reverse('login:detail-user', kwargs={'pk': self.user.id})
 
     def __str__(self):
         return '{}'.format(self.user)
@@ -40,11 +40,11 @@ class GroupProfile(models.Model):
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE)
 
-    description = models.CharField(max_length=100, blank=True, null=True)
+    description = models.CharField(max_length=100, blank=True)
     priority = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=10)
 
     def get_absolute_url(self):
-        return reverse('login:group_detail', kwargs={'pk': self.group.id})
+        return reverse('login:detail-group', kwargs={'pk': self.group.id})
 
     def __str__(self):
         return '{}: description = {}'.format(self.group, self.description)
@@ -312,6 +312,6 @@ class ClientLog(models.Model):
     activity = models.CharField(max_length=2,
                                 choices=CLIENT_ACTIVITIES_CHOICES)
 
-    details = models.CharField(max_length=100, blank=True, null=True)
+    details = models.CharField(max_length=100, blank=True)
 
     updated_on = models.DateTimeField(auto_now=True)

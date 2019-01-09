@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from .models import UserProfile
@@ -45,7 +45,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
                           IsUserOrAdminOrSuper,)
     lookup_field = 'username'
 
-    @detail_route(methods=['get'])
+    @action(detail=True, methods=['get'])
     def profile(self, request, **kwargs):
         """
         Retrieve user's extended profile.

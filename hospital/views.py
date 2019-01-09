@@ -1,40 +1,30 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
-from extra_views import InlineFormSet, CreateWithInlinesView, \
-    UpdateWithInlinesView
-
-from .models import Hospital, HospitalEquipment, Equipment
+from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
+from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
 
 
 # Django views
 
-
 class HospitalPermissionMixin(BasePermissionMixin):
-
     filter_field = 'id'
     profile_field = 'hospitals'
     queryset = Hospital.objects.all()
 
 
-class HospitalEquipmentInline(InlineFormSet):
-    model = HospitalEquipment
-    fields = ['equipment', 'value', 'comment']
-    extra = 1
-
-
 class HospitalCreateView(LoginRequiredMixin,
-                         SuccessMessageWithInlinesMixin,
-                         UpdatedByWithInlinesMixin,
+                         SuccessMessageMixin,
+                         UpdatedByMixin,
+                         EquipmentHolderCreateMixin,
                          HospitalPermissionMixin,
-                         CreateWithInlinesView):
+                         CreateView):
     model = Hospital
-    inlines = [HospitalEquipmentInline]
     form_class = HospitalCreateForm
 
     def get_success_message(self, cleaned_data):
@@ -45,12 +35,12 @@ class HospitalCreateView(LoginRequiredMixin,
 
 
 class HospitalUpdateView(LoginRequiredMixin,
-                         SuccessMessageWithInlinesMixin,
-                         UpdatedByWithInlinesMixin,
+                         SuccessMessageMixin,
+                         UpdatedByMixin,
+                         EquipmentHolderUpdateMixin,
                          HospitalPermissionMixin,
-                         UpdateWithInlinesView):
+                         UpdateView):
     model = Hospital
-    inlines = [HospitalEquipmentInline]
     form_class = HospitalUpdateForm
 
     def get_success_message(self, cleaned_data):
@@ -63,48 +53,11 @@ class HospitalUpdateView(LoginRequiredMixin,
 class HospitalDetailView(LoginRequiredMixin,
                          HospitalPermissionMixin,
                          DetailView):
-
     model = Hospital
 
 
 class HospitalListView(LoginRequiredMixin,
                        HospitalPermissionMixin,
                        ListView):
-
     model = Hospital
     ordering = ['name']
-
-
-# HospitalEquipment
-
-class EquipmentAdminListView(ListView):
-    model = Equipment
-    ordering = ['name']
-
-
-class EquipmentAdminDetailView(DetailView):
-    model = Equipment
-
-
-class EquipmentAdminCreateView(SuccessMessageMixin,
-                               CreateView):
-    model = Equipment
-    fields = ['name', 'type']
-
-    def get_success_message(self, cleaned_data):
-        return "Successfully created equipment '{}'".format(self.object.name)
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
-
-class EquipmentAdminUpdateView(SuccessMessageMixin,
-                               UpdateView):
-    model = Equipment
-    fields = ['name', 'type']
-
-    def get_success_message(self, cleaned_data):
-        return "Successfully updated equipment '{}'".format(self.object.name)
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()

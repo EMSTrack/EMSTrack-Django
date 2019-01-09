@@ -1,14 +1,14 @@
 import logging
 from enum import Enum
 
-from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.template.defaulttags import register
 
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
-from emstrack.models import AddressModel, UpdatedByModel, defaults
+from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
+from equipment.models import EquipmentHolder
 
 logger = logging.getLogger(__name__)
 
@@ -31,6 +31,11 @@ def get_location_type(key):
 
 
 @register.filter
+def get_location_coordinates(key):
+    return str(key.x) + ", " + str(key.y)
+
+
+@register.filter
 def get_call_status(key):
     return CallStatus[key].value
 
@@ -39,6 +44,15 @@ def get_call_status(key):
 def get_call_priority(key):
     return CallPriority[key].value
 
+
+@register.filter
+def get_ambulance_call_status(key):
+    return AmbulanceCallStatus[key].value
+
+
+@register.filter
+def get_waypoint_status(key):
+    return WaypointStatus[key].value
 
 # Ambulance location models
 
@@ -53,6 +67,25 @@ class AmbulanceStatus(Enum):
     AP = 'At patient'
     HB = 'Hospital bound'
     AH = 'At hospital'
+    BB = 'Base bound'
+    AB = 'At base'
+    WB = 'Waypoint bound'
+    AW = 'At waypoint'
+
+
+AmbulanceStatusOrder = [ 
+    AmbulanceStatus.AV,
+    AmbulanceStatus.PB,
+    AmbulanceStatus.AP,
+    AmbulanceStatus.HB,
+    AmbulanceStatus.AH,
+    AmbulanceStatus.BB,
+    AmbulanceStatus.AB,
+    AmbulanceStatus.WB,
+    AmbulanceStatus.AW,
+    AmbulanceStatus.OS,
+    AmbulanceStatus.UK
+] 
 
 
 class AmbulanceCapability(Enum):
@@ -61,9 +94,19 @@ class AmbulanceCapability(Enum):
     R = 'Rescue'
 
 
+AmbulanceCapabilityOrder = [ 
+    AmbulanceCapability.B,
+    AmbulanceCapability.A,
+    AmbulanceCapability.R
+] 
+
+
 class Ambulance(UpdatedByModel):
 
     # TODO: Should we consider denormalizing Ambulance to avoid duplication with AmbulanceUpdate?
+
+    equipmentholder = models.OneToOneField(EquipmentHolder,
+                                           on_delete=models.CASCADE)
 
     # ambulance properties
     identifier = models.CharField(max_length=50, unique=True)
@@ -118,6 +161,13 @@ class Ambulance(UpdatedByModel):
         # loaded_values?
         loaded_values = self._loaded_values is not None
 
+        # create equipment holder?
+        try:
+            if created or self.equipmentholder is None:
+                self.equipmentholder = EquipmentHolder.objects.create()
+        except EquipmentHolder.DoesNotExist:
+            self.equipmentholder = EquipmentHolder.objects.create()
+
         # has location changed?
         has_moved = False
         if (not loaded_values) or \
@@ -148,10 +198,11 @@ class Ambulance(UpdatedByModel):
         logger.debug('location_client_changed: {}'.format(location_client_changed))
         # TODO: Check if client is logged with ambulance if setting location_client
 
-        # if comment, status or location changed
+        # if comment, capability, status or location changed
         model_changed = False
         if has_moved or \
                 self._loaded_values['status'] != self.status or \
+                self._loaded_values['capability'] != self.capability or \
                 self._loaded_values['comment'] != self.comment:
 
             # save to Ambulance
@@ -161,7 +212,7 @@ class Ambulance(UpdatedByModel):
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
-                    for k in ('status', 'orientation',
+                    for k in ('capability', 'status', 'orientation',
                               'location', 'timestamp',
                               'comment', 'updated_by', 'updated_on')}
             data['ambulance'] = self
@@ -173,11 +224,10 @@ class Ambulance(UpdatedByModel):
             # model changed
             model_changed = True
 
-        # if identifier or capability changed
+        # if identifier changed
         # NOTE: self._loaded_values is NEVER None because has_moved is True
         elif (location_client_changed or
-              self._loaded_values['identifier'] != self.identifier or
-              self._loaded_values['capability'] != self.capability):
+              self._loaded_values['identifier'] != self.identifier):
 
             # save only to Ambulance
             super().save(*args, **kwargs)
@@ -235,15 +285,60 @@ class Ambulance(UpdatedByModel):
                                                self.updated_on)
 
 
+class AmbulanceUpdate(UpdatedByHistoryModel):
+
+    # ambulance
+    ambulance = models.ForeignKey(Ambulance,
+                                  on_delete=models.CASCADE)
+
+    # ambulance capability
+    AMBULANCE_CAPABILITY_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCapability]
+    capability = models.CharField(max_length=1,
+                                  choices=AMBULANCE_CAPABILITY_CHOICES)
+
+    # ambulance status
+    AMBULANCE_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceStatus]
+    status = models.CharField(max_length=2,
+                              choices=AMBULANCE_STATUS_CHOICES,
+                              default=AmbulanceStatus.UK.name)
+
+    # location
+    orientation = models.FloatField(default=0.0)
+    location = models.PointField(srid=4326, default=defaults['location'])
+
+    # timestamp, indexed
+    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=['ambulance', 'timestamp'],
+                name='ambulance_timestamp_idx',
+            ),
+        ]
+
+
 # Call related models
 
 class CallPriority(Enum):
-    A = 'Resucitation'
+    A = 'Resuscitation'
     B = 'Emergent'
     C = 'Urgent'
     D = 'Less urgent'
     E = 'Not urgent'
     O = 'Omega'
+
+
+CallPriorityOrder = [ 
+    CallPriority.A,
+    CallPriority.B,
+    CallPriority.C,
+    CallPriority.D,
+    CallPriority.E,
+    CallPriority.O,
+] 
 
 
 class CallStatus(Enum):
@@ -252,22 +347,38 @@ class CallStatus(Enum):
     E = 'Ended'
 
 
-class CallPublishMixin:
+CallStatusOrder = [ 
+    CallStatus.P,
+    CallStatus.S,
+    CallStatus.E
+] 
+
+
+class PublishMixin:
 
     def save(self, *args, **kwargs):
 
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('remove', False)
+
         # save to Call
         super().save(*args, **kwargs)
 
         if publish:
-            self.publish()
+            if remove:
+                # This makes sure that it will not be retained
+                self.publish(retain=False)
+            else:
+                self.publish()
+
+        if remove:
+            self.remove()
 
 
-class Call(CallPublishMixin,
-           AddressModel,
+class Call(PublishMixin,
            UpdatedByModel):
 
     # status
@@ -300,17 +411,16 @@ class Call(CallPublishMixin,
         # publish?
         publish = kwargs.pop('publish', True)
 
+        # remove?
+        remove = kwargs.pop('remove', False)
+
         if self.status == CallStatus.E.name:
 
             # timestamp
             self.ended_at = timezone.now()
 
             # remove topic from mqtt server
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().remove_call(self)
-
-            # prevent publication
-            publish = False
+            remove = True
 
         elif self.status == CallStatus.S.name:
 
@@ -323,13 +433,21 @@ class Call(CallPublishMixin,
             self.pending_at = timezone.now()
 
         # call super
-        super().save(*args, **kwargs, publish=publish)
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
 
-    def publish(self):
+    def publish(self, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call(self)
+        SingletonPublishClient().publish_call(self, **kwargs)
+
+    def remove(self):
+
+        # remove topic from mqtt server
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_call(self)
 
     def abort(self):
 
@@ -337,38 +455,44 @@ class Call(CallPublishMixin,
         if self.status == CallStatus.E.name:
             return
 
-        # retrieve all ongoing ambulances
-        ongoing_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
+        # retrieve all calls not completed
+        not_completed_ambulancecalls = self.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
 
-        if ongoing_ambulancecalls:
+        if not_completed_ambulancecalls:
             # if  ambulancecalls, set ambulancecall to complete until all done
 
-            for ambulancecall in ongoing_ambulancecalls:
+            for ambulancecall in not_completed_ambulancecalls:
 
-                # change call status to finished
+                # change call status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name
                 ambulancecall.save()
+
+            # At the last ambulance call will be closed
 
         else:
             # if no ambulancecalls, force abort
 
-            # change call status to finished
+            # change call status to ended
             self.status = CallStatus.E.name
             self.save()
 
+    def get_ambulances(self):
+        return ', '.join(ac.ambulance.identifier for ac in self.ambulancecall_set.all())
+
     def __str__(self):
-        return "{} ({})".format(self.location, self.priority)
+        return "{} ({})".format(self.status, self.priority)
 
 
 class AmbulanceCallStatus(Enum):
     R = 'Requested'
-    O = 'Ongoing'
-    I = 'Interrupted'
+    A = 'Accepted'
+    D = 'Declined'
+    S = 'Suspended'
     C = 'Completed'
 
 
-class AmbulanceCall(CallPublishMixin,
-                    models.Model):
+class AmbulanceCall(PublishMixin,
+                    UpdatedByModel):
 
     # status
     AMBULANCE_CALL_STATUS_CHOICES = \
@@ -386,18 +510,24 @@ class AmbulanceCall(CallPublishMixin,
                                   on_delete=models.CASCADE)
 
     # created at
-    created_at = models.DateTimeField(auto_now_add=True)
+    # created_at = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
 
         # publish?
         publish = kwargs.pop('publish', True)
 
-        # changed to ongoing?
-        if self.status == AmbulanceCallStatus.O.name:
+        # remove?
+        remove = kwargs.pop('publish', False)
 
-            # retrieve call
-            call = self.call
+        # publish call?
+        publish_call = False
+
+        # retrieve call
+        call = self.call
+
+        # changed to accepted?
+        if self.status == AmbulanceCallStatus.A.name:
 
             if call.status != CallStatus.S.name:
 
@@ -405,93 +535,105 @@ class AmbulanceCall(CallPublishMixin,
                 call.status = CallStatus.S.name
                 call.save()
 
+            else:
+
+                # publish call tp update status
+                publish_call = True
+
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
 
-            # retrieve call
-            call = self.call
+            # retrieve all accepted ambulances
+            accepted_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
 
-            # retrieve all ongoing ambulances
-            ongoing_ambulancecalls = call.ambulancecall_set.exclude(status=AmbulanceCallStatus.C.name)
-
-            set_size = len(ongoing_ambulancecalls)
+            set_size = len(accepted_ambulancecalls)
             if (set_size == 0 or
-                    (set_size == 1 and ongoing_ambulancecalls[0].ambulance is not self)):
+                    (set_size == 1 and accepted_ambulancecalls[0].ambulance is not self)):
 
                 logger.debug('This is the last ambulance; will end call.')
 
-                # change call status to finished
+                # publish first
+                self.publish()
+
+                # then change call status to ended
                 call.status = CallStatus.E.name
                 call.save()
 
-                # prevent publication
+                # prevent publication, already published
                 publish = False
 
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
-                logger.debug(ongoing_ambulancecalls)
+                logger.debug(accepted_ambulancecalls)
+
+                # publish and remove from mqtt
+                remove = True
+
+        # changed to declined?
+        elif self.status == AmbulanceCallStatus.D.name:
+
+            logger.debug('Ambulance call declined.')
+
+            # publish call tp update status
+            publish_call = True
+
+        # changed to suspended?
+        elif self.status == AmbulanceCallStatus.S.name:
+
+            logger.debug('Ambulance call suspended.')
+
+            # publish call tp update status
+            publish_call = True
 
         # call super
-        super().save(*args, **kwargs, publish=publish)
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
 
-    def publish(self):
+        # call history save
+        AmbulanceCallHistory.objects.create(ambulance_call=self, status=self.status,
+                                            comment=self.comment,
+                                            updated_by=self.updated_by, updated_on=self.updated_on)
+
+        # publish call?
+        if publish_call:
+            call.publish()
+
+    def publish(self, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_call_status(self)
+        SingletonPublishClient().publish_call_status(self, **kwargs)
 
+    def remove(self):
+
+        # remove from mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_call_status(self)
 
     class Meta:
         unique_together = ('call', 'ambulance')
 
 
-class AmbulanceUpdate(models.Model):
-
-    # ambulance
-    ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
-
-    # ambulance call
-    # TODO: Is it possible to enforce that ambulance_call.ambulance == ambulance?
+class AmbulanceCallHistory(UpdatedByHistoryModel):
+    # ambulance_call
     ambulance_call = models.ForeignKey(AmbulanceCall,
-                                       on_delete=models.SET_NULL,
-                                       null=True)
+                                       on_delete=models.CASCADE)
 
-    # ambulance status
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
-                              default=AmbulanceStatus.UK.name)
+    # status
+    AMBULANCE_CALL_STATUS_CHOICES = \
+        [(m.name, m.value) for m in AmbulanceCallStatus]
+    status = models.CharField(max_length=1,
+                              choices=AMBULANCE_CALL_STATUS_CHOICES)
 
-    # location
-    orientation = models.FloatField(default=0.0)
-    location = models.PointField(srid=4326, default=defaults['location'])
-
-    # timestamp, indexed
-    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
-
-    # comment
-    comment = models.CharField(max_length=254, null=True, blank=True)
-
-    # updated by
-    updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(default=timezone.now)
-
-    class Meta:
-        indexes = [
-            models.Index(
-                fields=['ambulance', 'timestamp'],
-                name='ambulance_timestamp_idx',
-            ),
-        ]
+    # created at
+    # created_at = models.DateTimeField()
 
 
-# Patient might be expanded in the future
+# Patient, might be expanded in the future
 
-class Patient(CallPublishMixin,
+class Patient(PublishMixin,
               models.Model):
     """
     A model that provides patient fields.
@@ -516,28 +658,129 @@ class Patient(CallPublishMixin,
 class LocationType(Enum):
     b = 'Base'
     a = 'AED'
+    i = 'Incident'
+    h = 'Hospital'
+    w = 'Waypoint'
     o = 'Other'
 
 
-class Location(AddressModel, UpdatedByModel):
+LocationTypeOrder = [
+    LocationType.h,
+    LocationType.b,
+    LocationType.a,
+    LocationType.o,
+    LocationType.i,
+    LocationType.w
+]
+
+
+class Location(AddressModel,
+               UpdatedByModel):
+
     # location name
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(max_length=254, blank=True)
 
     # location type
     LOCATION_TYPE_CHOICES = \
         [(m.name, m.value) for m in LocationType]
     type = models.CharField(max_length=1,
-                            choices=LOCATION_TYPE_CHOICES,
-                            default=LocationType.o.name)
+                            choices=LOCATION_TYPE_CHOICES)
 
-    # location
-    location = models.PointField(srid=4326, null=True)
+    # location: already in address
+    # location = models.PointField(srid=4326, null=True)
 
     def get_absolute_url(self):
         return reverse('ambulance:location_detail', kwargs={'pk': self.id})
 
     def __str__(self):
         return "{} @{} ({})".format(self.name, self.location, self.comment)
+
+
+# Waypoint related models
+
+class WaypointStatus(Enum):
+    C = 'Created'
+    V = 'Visiting'
+    D = 'Visited'
+    S = 'Skipped'
+
+
+class Waypoint(PublishMixin,
+               UpdatedByModel):
+    # call
+    ambulance_call = models.ForeignKey(AmbulanceCall,
+                                       on_delete=models.CASCADE)
+
+    # order
+    order = models.PositiveIntegerField()
+
+    # status
+    WAYPOINT_STATUS_CHOICES = \
+        [(m.name, m.value) for m in WaypointStatus]
+    status = models.CharField(max_length=1,
+                              choices=WAYPOINT_STATUS_CHOICES,
+                              default=WaypointStatus.C.name)
+
+    # Location
+    location = models.ForeignKey(Location,
+                                 on_delete=models.CASCADE,
+                                 blank=True, null=True)
+
+    def is_created(self):
+        return self.status == WaypointStatus.C.name
+
+    def is_visited(self):
+        return self.status == WaypointStatus.D.name
+
+    def is_visiting(self):
+        return self.status == WaypointStatus.V.name
+
+    def is_skipped(self):
+        return self.status == WaypointStatus.S.name
+
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', False)
+
+        # remove?
+        remove = kwargs.pop('remove', False)
+
+        # call super
+        super().save(*args, **kwargs,
+                     publish=publish,
+                     remove=remove)
+
+        # waypoint history save
+        WaypointHistory.objects.create(waypoint=self,
+                                       order=self.order, status=self.status,
+                                       comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
+
+    def remove(self):
+        pass
+
+    def publish(self, **kwargs):
+
+        logger.debug('Will publish')
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self.ambulance_call.call)
+
+
+class WaypointHistory(UpdatedByModel):
+    # waypoint
+    waypoint = models.ForeignKey(Waypoint,
+                                 on_delete=models.CASCADE)
+
+    # order
+    order = models.PositiveIntegerField()
+
+    # status
+    WAYPOINT_STATUS_CHOICES = \
+        [(m.name, m.value) for m in WaypointStatus]
+    status = models.CharField(max_length=1,
+                              choices=WAYPOINT_STATUS_CHOICES)
 
 
 # THOSE NEED REVIEWING

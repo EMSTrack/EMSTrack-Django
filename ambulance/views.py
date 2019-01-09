@@ -9,8 +9,10 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 from django.views.generic.detail import BaseDetailView
 
+from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
-    Call, Location, LocationType, CallStatus, AmbulanceCallStatus
+    Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
+    CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -22,7 +24,6 @@ from emstrack.views import get_page_links, get_page_size_links
 # Ambulance views
 
 class AmbulancePermissionMixin(BasePermissionMixin):
-
     filter_field = 'id'
     profile_field = 'ambulances'
     queryset = Ambulance.objects.all()
@@ -33,7 +34,6 @@ class AmbulanceDetailView(LoginRequiredMixin,
                           UpdatedByMixin,
                           AmbulancePermissionMixin,
                           DetailView):
-
     model = Ambulance
     
     def get_context_data(self, **kwargs):
@@ -83,11 +83,14 @@ class AmbulanceListView(LoginRequiredMixin,
 class AmbulanceCreateView(LoginRequiredMixin,
                           SuccessMessageMixin,
                           UpdatedByMixin,
+                          EquipmentHolderCreateMixin,
                           AmbulancePermissionMixin,
                           CreateView):
-    
     model = Ambulance
     form_class = AmbulanceCreateForm
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully created ambulance '{}'".format(cleaned_data['identifier'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -96,11 +99,14 @@ class AmbulanceCreateView(LoginRequiredMixin,
 class AmbulanceUpdateView(LoginRequiredMixin,
                           SuccessMessageMixin,
                           UpdatedByMixin,
+                          EquipmentHolderUpdateMixin,
                           AmbulancePermissionMixin,
                           UpdateView):
-    
     model = Ambulance
     form_class = AmbulanceUpdateForm
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated ambulance '{}'".format(cleaned_data['identifier'])
 
     def get_success_url(self):
         return self.object.get_absolute_url()
@@ -108,54 +114,118 @@ class AmbulanceUpdateView(LoginRequiredMixin,
 
 # Ambulance css information
 AmbulanceCSS = {
+
     'UK': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_blue.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-primary'
+        'class': 'primary'
     },
     'AV': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_green.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-success'
+        'class': 'success'
     },
     'OS': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_gray.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-secondary'
+        'class': 'secondary'
     },
+
     'PB': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_red.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-danger'
+        'class': 'danger'
     },
     'AP': {
         'icon': {
             'iconUrl': '/static/icons/cars/ambulance_orange.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-warning'
+        'class': 'warning'
     },
+
     'HB': {
         'icon': {
-            'iconUrl': '/static/icons/cars/ambulance_purple.svg',
+            'iconUrl': '/static/icons/cars/ambulance_red.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-info'
+        'class': 'danger'
     },
     'AH': {
         'icon': {
-            'iconUrl': '/static/icons/cars/ambulance_yellow.svg',
+            'iconUrl': '/static/icons/cars/ambulance_orange.svg',
             'iconSize': [15, 30],
         },
-        'class': 'btn-yellow'
+        'class': 'warning'
+    },
+
+    'BB': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_red.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'danger'
+    },
+    'AB': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_orange.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'warning'
+    },
+
+
+    'WB': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_red.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'danger'
+    },
+    'AW': {
+        'icon': {
+            'iconUrl': '/static/icons/cars/ambulance_orange.svg',
+            'iconSize': [15, 30],
+        },
+        'class': 'warning'
+    }
+
+}
+
+
+# CallPriority css information
+CallPriorityCSS = {
+    'A': {
+        'class': 'success',
+        'html': 'A'
+    },
+    'B': {
+        'class': 'yellow',
+        'html': 'B'
+    },
+    'C': {
+        'class': 'warning',
+        'html': 'C'
+    },
+    'D': {
+        'class': 'danger',
+        'html': 'D'
+    },
+    'E': {
+        'class': 'info',
+        'html': 'E'
+    },
+    'O': {
+        'class': 'secondary',
+        'html': '&Omega;'
     }
 }
 
@@ -167,18 +237,26 @@ class AmbulanceMap(TemplateView):
         context = super().get_context_data(**kwargs)
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
+        context['ambulance_status_order'] = [m.name for m in AmbulanceStatusOrder]
         context['ambulance_capability'] = {m.name: m.value
                                            for m in AmbulanceCapability}
+        context['ambulance_capability_order'] = [m.name for m in AmbulanceCapabilityOrder]
         context['location_type'] = {m.name: m.value
                                     for m in LocationType}
+        context['location_type_order'] = [m.name for m in LocationTypeOrder]
         context['call_status'] = {m.name: m.value
                                   for m in CallStatus}
+        context['call_status_order'] = [m.name for m in CallStatusOrder]
+        context['call_priority'] = {m.name: m.value
+                                    for m in CallPriority}
+        context['call_priority_order'] = [m.name for m in CallPriorityOrder]
         context['ambulancecall_status'] = {m.name: m.value
                                            for m in AmbulanceCallStatus}
         context['broker_websockets_host'] = settings.MQTT['BROKER_WEBSOCKETS_HOST']
         context['broker_websockets_port'] = settings.MQTT['BROKER_WEBSOCKETS_PORT']
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         context['ambulance_css'] = AmbulanceCSS
+        context['call_priority_css'] = CallPriorityCSS
         return context
 
 
@@ -186,10 +264,12 @@ class AmbulanceMap(TemplateView):
 
 class LocationAdminListView(ListView):
     model = Location
+    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
 
 
 class LocationAdminDetailView(DetailView):
     model = Location
+    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
 
 
 class LocationAdminCreateView(SuccessMessageMixin,
@@ -235,11 +315,41 @@ class CallListView(LoginRequiredMixin,
     model = Call
 
     def get_context_data(self, **kwargs):
+
+        # add paginated ended calls to context
+
+        # call supper
         context = super().get_context_data(**kwargs)
+
+        # query all calls
         queryset = self.get_queryset()
-        context['pending_list'] = queryset.filter(status=CallStatus.P.name)
-        context['started_list'] = queryset.filter(status=CallStatus.S.name)
-        context['ended_list'] = queryset.filter(status=CallStatus.E.name)
+
+        # filter
+        context['pending_list'] = queryset.filter(status=CallStatus.P.name).order_by('pending_at')
+        context['started_list'] = queryset.filter(status=CallStatus.S.name).order_by('-started_at')
+
+         # query ended and paginate
+        ended_calls_query = queryset.filter(status=CallStatus.E.name).order_by('-ended_at')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
+
+        # paginate
+        paginator = Paginator(ended_calls_query, page_size)
+        try:
+            ended_calls = paginator.page(page)
+        except PageNotAnInteger:
+            ended_calls = paginator.page(1)
+        except EmptyPage:
+            ended_calls = paginator.page(paginator.num_pages)
+
+        context['ended_list'] = ended_calls
+        context['page_links'] = get_page_links(self.request, ended_calls)
+        context['page_size_links'] = get_page_size_links(self.request, ended_calls, page_sizes)
+        context['page_size'] = int(page_size)
+
         return context
 
 
@@ -250,6 +360,14 @@ class CallDetailView(LoginRequiredMixin,
                      UpdatedByMixin,
                      DetailView):
     model = Call
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['location_type'] = {m.name: m.value
+                                       for m in LocationType}
+        context['ambulance_status'] = {m.name: m.value
+                                       for m in AmbulanceStatus}
+        return context
 
     def get_success_url(self):
         return self.object.get_absolute_url()

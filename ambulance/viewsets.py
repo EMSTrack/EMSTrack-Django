@@ -1,7 +1,8 @@
+from django.http import Http404
 from rest_framework import status
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 
@@ -9,16 +10,20 @@ from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.viewsets import IsCreateByAdminOrSuper
 
-from .models import Location, Ambulance, LocationType, Call
+from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
+    AmbulanceCallStatus
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 # Django REST Framework Viewsets
 
 class AmbulancePageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
-    page_size = 25
+    # page_size = 25
     max_page_size = 1000
 
 
@@ -60,7 +65,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
     serializer_class = AmbulanceSerializer
 
-    @detail_route(methods=['get', 'post'], pagination_class=AmbulancePageNumberPagination)
+    @action(detail=True, methods=['get', 'post'], pagination_class=AmbulancePageNumberPagination)
     def updates(self, request, pk=None, **kwargs):
 
         if request.method == 'GET':
@@ -71,15 +76,146 @@ class AmbulanceViewSet(mixins.ListModelMixin,
             # put updates
             return self.updates_put(request, pk, updated_by=self.request.user, **kwargs)
 
+    # Filter out the working time of ambulance and extract the unavailable time range for ambulance
+    @staticmethod
+    def extract_unavailable_zone(ambulance_history):
+
+        unavailable_zone = [None]
+        accepted = False
+
+        for h in ambulance_history:
+
+            # Started timestamp
+            if accepted is False and h.status == AmbulanceCallStatus.A.name:
+                unavailable_zone.append(h.updated_on)
+                accepted = True
+
+            # If we already seen accepted status, seeing another kind of status
+            elif accepted is True and h.status != AmbulanceCallStatus.A.name:
+                unavailable_zone.append(h.updated_on)
+                accepted = False
+
+        # If the last status is not accepted, we should put a None to ensure pair
+        if accepted is False:
+            unavailable_zone.append(None)
+
+        return unavailable_zone
+
+    # Filter out the working time of ambulance and extract the vailable time range for ambulance
+    @staticmethod
+    def extract_available_zone(ambulance_history):
+
+        available_zone = []
+        accepted = False
+
+        for h in ambulance_history:
+
+            # logger.debug('status = %s, updated_on = %s', h.status, h.updated_on)
+
+            # Started timestamp
+            if accepted is False and h.status == AmbulanceCallStatus.A.name:
+                available_zone.append(h.updated_on)
+                accepted = True
+
+            # If we already seen accepted status, seeing another kind of status
+            elif accepted is True and h.status != AmbulanceCallStatus.A.name:
+                available_zone.append(h.updated_on)
+                accepted = False
+
+        # If the last status is not accepted, we should put a None to ensure pair
+        if accepted is True:
+            available_zone.append(None)
+
+        return available_zone
+
     def updates_get(self, request, pk=None, **kwargs):
         """
         Retrieve and paginate ambulance updates.
         Use ?page=10&page_size=100 to control pagination.
+        Use ?call_id=x to retrieve updates to call x.
         """
 
         # retrieve updates
         ambulance = self.get_object()
-        ambulance_updates = ambulance.ambulanceupdate_set.order_by('-timestamp')
+        ambulance_updates = ambulance.ambulanceupdate_set.all()
+        # logger.debug(ambulance_updates)
+
+        # retrieve only call updates
+        call_id = self.request.query_params.get('call_id', None)
+        if call_id is not None:
+            try:
+
+                # retrieve call
+                call = Call.objects.get(id=call_id)
+
+                # retrieve ambulance_call
+                ambulance_call = AmbulanceCall.objects.get(ambulance=ambulance, call=call)
+
+            except (Call.DoesNotExist, Ambulance.objects.DoesNotExist) as e:
+                raise Http404("Call with id '{}' does not exist.".format(call_id))
+
+            ambulance_history = AmbulanceCallHistory.objects\
+                .filter(ambulance_call=ambulance_call)\
+                .order_by('updated_on')
+            # logger.debug(ambulance_history)
+
+            if ambulance_history:
+
+                # If there is available history, filter call based on active intervals
+
+                # parse active times
+                available_times = self.extract_available_zone(ambulance_history)
+                # logger.debug(available_times)
+                # for entry in ambulance_updates:
+                #     logger.debug(entry.timestamp)
+
+                if available_times:
+                    # create filter to include only active times
+                    ranges = []
+                    for (t1, t2) in zip(*[iter(available_times)] * 2):
+                        if t2 is None:
+                            ranges.append(ambulance_updates.filter(timestamp__gte=t1))
+                        else:
+                            ranges.append(ambulance_updates.filter(timestamp__range=(t1, t2)))
+
+                    # calculate union of the active intervals
+                    if len(ranges) == 1:
+                        ambulance_updates = ranges[0]
+                    elif len(ranges) > 1:
+                        ambulance_updates = ranges[0].union(*ranges[1:])
+                    # logger.debug(ambulance_updates)
+
+                else:
+                    # no active time yet, return nothing!
+                    ambulance_updates = AmbulanceUpdate.objects.none()
+
+            else:
+
+                # If no history is available, go for compatibility
+
+                # if the call is ended
+                if call.ended_at is not None:
+                    ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
+
+                # iff the call is still active
+                elif call.started_at is not None:
+                    ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
+
+                # call hasn't started yet, return none
+                else:
+                    ambulance_updates = AmbulanceUpdate.objects.none()
+
+
+            # order records in ascending order
+            ambulance_updates = ambulance_updates.order_by('timestamp')
+
+        else:
+
+            # order records in descending order
+            ambulance_updates = ambulance_updates.order_by('-timestamp')
+
+        # for entry in ambulance_updates:
+        #     logger.debug(entry.timestamp)
 
         # paginate
         page = self.paginate_queryset(ambulance_updates)
@@ -123,7 +259,7 @@ class LocationViewSet(mixins.ListModelMixin,
     list:
     Retrieve list of locations.
     """
-    queryset = Location.objects.all()
+    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
     serializer_class = LocationSerializer
 
 
@@ -149,6 +285,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 # Call ViewSet
 
 class CallViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
                   CreateModelUpdateByMixin,
                   BasePermissionMixin,
                   viewsets.GenericViewSet):
@@ -160,6 +297,9 @@ class CallViewSet(mixins.ListModelMixin,
 
     create:
     Create new call instance.
+
+    retrieve:
+    Retrieve an existing call instance.
     """
 
     permission_classes = (IsAuthenticated,

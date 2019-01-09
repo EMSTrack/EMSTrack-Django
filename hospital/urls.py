@@ -1,6 +1,4 @@
-from django.conf.urls import url, include
-from django.contrib.admin.views.decorators import staff_member_required
-
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
 from . import views
@@ -23,23 +21,5 @@ urlpatterns = [
     url(r'^update/(?P<pk>[0-9]+)$',
         login_required(views.HospitalUpdateView.as_view()),
         name="update"),
-
-    # Admin
-
-    url(r'^equipment/list$',
-        staff_member_required(views.EquipmentAdminListView.as_view()),
-        name='equipment_list'),
-
-    url(r'^equipment/create$',
-        staff_member_required(views.EquipmentAdminCreateView.as_view()),
-        name='equipment_create'),
-
-    url(r'^equipment/detail/(?P<pk>[0-9]+)$',
-        staff_member_required(views.EquipmentAdminDetailView.as_view()),
-        name='equipment_detail'),
-
-    url(r'^equipment/update/(?P<pk>[0-9]+)$',
-        staff_member_required(views.EquipmentAdminUpdateView.as_view()),
-        name='equipment_update'),
 
 ]

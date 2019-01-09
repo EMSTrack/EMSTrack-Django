@@ -5,9 +5,15 @@
 
     <script>
         var ambulance_status = {{ ambulance_status|safe }};
+        var ambulance_status_order = {{ ambulance_status_order|safe }};
         var ambulance_capability = {{ ambulance_capability|safe }};
+        var ambulance_capability_order = {{ ambulance_capability_order|safe }};
         var location_type= {{ location_type|safe }};
+        var location_type_order= {{ location_type_order|safe }};
         var call_status = {{ call_status|safe }};
+        var call_status_order = {{ call_status_order|safe }};
+        var call_priority = {{ call_priority|safe }};
+        var call_priority_order = {{ call_priority_order|safe }};
         var ambulancecall_status = {{ ambulancecall_status|safe }};
         var username = '{{ user.get_username|safe }}';
         var APIBaseUrl = '{% url 'index' %}api/';
@@ -17,6 +23,7 @@
         };
         var clientId = '{{ client_id|safe }}';
         var ambulance_css = {{ ambulance_css|safe }};
+        var call_priority_css = {{ call_priority_css|safe }};
     </script>
 
 {% endblock %}
@@ -74,11 +81,11 @@
                 data-target="#call-status"
                 aria-expanded="true" aria-controls="call-status">
                 <span class="fas fa-phone"></span>
-                Calls
+                <span id="call-header">Calls</span>
+                <span id="call-header-count"></span>
             </h5>
             <div class="collapse ml-1"
-                 id="call-status"
-                 data-parent="#filtersDiv">
+                 id="call-status">
                 <!--
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="current-call-1">
@@ -97,8 +104,7 @@
                 Ambulances
             </h5>
             <div class="collapse show"
-                 id="ambulance-status"
-                 data-parent="#filtersDiv">
+                 id="ambulance-status">
                 <!--
                 <div class="card form-group" id="ambulance-card-available">
                     <div class="card-header px-1 py-0"
@@ -131,8 +137,7 @@
                 Capability
             </h5>
             <div class="collapse ml-1"
-                 id="ambulance-capability"
-                 data-parent="#filtersDiv">
+                 id="ambulance-capability">
                 <!--
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="capability-basic">
@@ -154,8 +159,7 @@
                 Locations
             </h5>
             <div class="collapse ml-1"
-                 id="location-type"
-                 data-parent="#filtersDiv">
+                 id="location-type">
                 <!--
                 <div class="form-group form-check mt-0 mb-1">
                     <input type="checkbox" class="form-check-input" id="location-hospital">
@@ -183,7 +187,10 @@
 
                 <h5>Priority</h5>
                 <form required>
-                    <div class="btn-group btn-group-toggle border rounded" data-toggle="buttons">
+                    <div id="priority-buttons"
+                         class="btn-group btn-group-toggle border rounded"
+                         data-toggle="buttons">
+                        <!--
                         <label class="btn btn-success">
                             <input type="radio" name="priority" autocomplete="off" value="A">
                             A
@@ -208,6 +215,7 @@
                             <input type="radio" name="priority" autocomplete="off" value="O">
                             &Omega;
                         </label>
+                        -->
                     </div>
                 </form>
 
@@ -316,7 +324,9 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="modal-button-ok" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                    <button id="modal-button-cancel" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="modal-button-close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>

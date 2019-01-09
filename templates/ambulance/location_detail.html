@@ -21,9 +21,7 @@
             </p>
             <p>
                 <strong>Address:</strong>
-                {{ location.number }} {{ location.street }} {{ location.unit }},
-                {{ location.city }}, {{ location.state }} {{ location.zipcode }},
-                {{ location.country }}
+                {{ location.get_address }}
             </p>
             <p>
                 <strong>Location:</strong>

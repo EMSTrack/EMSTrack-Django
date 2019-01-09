@@ -19,10 +19,10 @@ from ambulance.models import Ambulance, \
     AmbulanceStatus, AmbulanceCapability
 from ambulance.serializers import AmbulanceSerializer
 
-from hospital.models import Hospital, \
-    Equipment, HospitalEquipment, EquipmentType
-from hospital.serializers import EquipmentSerializer, \
-    HospitalSerializer, HospitalEquipmentSerializer
+from hospital.models import Hospital
+from equipment.models import EquipmentType, Equipment, EquipmentItem, EquipmentHolder
+from hospital.serializers import HospitalSerializer
+from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 
@@ -74,17 +74,20 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
-            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            client.expect('hospital/{}/metadata'.format(hospital.id),
+
+        # Expect all equipmentholders
+        for equipmentholder in EquipmentHolder.objects.all():
+            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=equipment_items)
+            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
                           JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
                           qos)
 
-        # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
-            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.id),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+        # Expect all equipment items
+        for e in EquipmentItem.objects.all():
+            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
+                                                             e.equipment.id),
+                          JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
 
         # Expect all profiles
@@ -123,17 +126,25 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
-            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            client.expect('hospital/{}/metadata'.format(hospital.id),
+            # hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+            # equipment = Equipment.objects.filter(id__in=hospital_equipment)
+            # client.expect('hospital/{}/metadata'.format(hospital.id),
+            #              JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+            #              qos)
+
+        # Expect all equipmentholders
+        for equipmentholder in EquipmentHolder.objects.all():
+            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=equipment_items)
+            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
                           JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
                           qos)
 
         # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
-            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.id),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+        for e in EquipmentItem.objects.all():
+            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
+                                                             e.equipment.id),
+                          JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
 
         # Expect all profiles
@@ -172,17 +183,25 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
-            hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            client.expect('hospital/{}/metadata'.format(hospital.id),
+            # hospital_equipment = hospital.hospitalequipment_set.values('equipment')
+            # equipment = Equipment.objects.filter(id__in=hospital_equipment)
+            # client.expect('hospital/{}/metadata'.format(hospital.id),
+            #               JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+            #               qos)
+
+        # Expect all equipmentholders
+        for equipmentholder in EquipmentHolder.objects.all():
+            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=equipment_items)
+            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
                           JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
                           qos)
 
         # Expect all hospital equipments
-        for e in HospitalEquipment.objects.all():
-            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.id),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+        for e in EquipmentItem.objects.all():
+            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
+                                                             e.equipment.id),
+                          JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
 
         # Expect all profiles
@@ -235,11 +254,20 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
 
+        # Expect all equipmentholders
+        can_read = get_permissions(user).get_can_read('equipments')
+        for equipmentholder in EquipmentHolder.objects.filter(id__in=can_read):
+            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=equipment_items)
+            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
+                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+                          qos)
+
         # Expect all user hospital equipments
-        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
-            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.id),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+        for e in EquipmentItem.objects.filter(equipmentholder__id__in=can_read):
+            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
+                                                             e.equipment.id),
+                          JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
 
         # Subscribed?
@@ -286,11 +314,20 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
 
+        # Expect all equipmentholders
+        can_read = get_permissions(user).get_can_read('equipments')
+        for equipmentholder in EquipmentHolder.objects.filter(id__in=can_read):
+            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
+            equipment = Equipment.objects.filter(id__in=equipment_items)
+            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
+                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
+                          qos)
+
         # Expect all user hospital equipments
-        for e in HospitalEquipment.objects.filter(hospital__id__in=can_read):
-            client.expect('hospital/{}/equipment/{}/data'.format(e.hospital.id,
-                                                                 e.equipment.id),
-                          JSONRenderer().render(HospitalEquipmentSerializer(e).data),
+        for e in EquipmentItem.objects.filter(equipmentholder__id__in=can_read):
+            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
+                                                             e.equipment.id),
+                          JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
 
         # Subscribed?
@@ -325,8 +362,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
-                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.id))
+                  'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                     self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -359,8 +396,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
         obj.save()
@@ -373,8 +410,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
         # Start client as testuser1
@@ -399,8 +436,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # subscribe to ambulance/+/data
         topics = ('hospital/{}/data'.format(self.h1.id),
-                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.id))
+                  'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                     self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -417,8 +454,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
         obj.value = 'True'
         obj.save()
@@ -431,8 +468,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
         # Start client as testuser2
@@ -458,8 +495,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a3.id),
                   'hospital/{}/data'.format(self.h1.id),
-                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.id))
+                  'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                     self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -492,8 +529,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
         obj.save()
@@ -506,8 +543,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
 
@@ -651,19 +688,19 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Modify hospital equipment
 
         # retrieve current equipment value
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
         # retrieve message that is there already due to creation
-        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.id))
+        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                              self.e1.id))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                                     client_id,
-                                                                                     self.h1.id,
-                                                                                     self.e1.id),
+        test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
+                                                                                 client_id,
+                                                                                 self.h1.equipmentholder.id,
+                                                                                 self.e1.id),
                             json.dumps({
                                 'value': 'False',
                             }), qos=0)
@@ -673,15 +710,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # expect update once
-        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.id))
+        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                              self.e1.id))
+
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # verify change
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
         # test bulk ambulance update
@@ -814,10 +852,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
             self.is_subscribed(test_client)
 
-            test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                                         client_id,
-                                                                                         self.h1.id,
-                                                                                         self.e1.id),
+            test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
+                                                                                     client_id,
+                                                                                     self.h1.equipmentholder.id,
+                                                                                     self.e1.id),
                                 '{ "value": ',
                                 qos=0)
 
@@ -872,10 +910,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
             test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
 
-            test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                                         client_id,
-                                                                                         self.h1.id,
-                                                                                         -1),
+            test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
+                                                                                     client_id,
+                                                                                     self.h1.equipmentholder.id,
+                                                                                     -1),
                                 json.dumps({
                                     'comment': 'comment',
                                 }), qos=0)

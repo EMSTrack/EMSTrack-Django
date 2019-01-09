@@ -4,7 +4,8 @@ import ssl
 from django.conf import settings
 
 from ambulance.models import Ambulance, AmbulanceStatus
-from hospital.models import Hospital, HospitalEquipment
+from hospital.models import Hospital
+from equipment.models import EquipmentItem
 from login.models import Client, ClientStatus, ClientLog
 from mqtt.subscribe import SubscribeClient
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
@@ -154,19 +155,19 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Modify hospital equipment
 
         # retrieve current equipment value
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
         # retrieve message that is there already due to creation
-        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.id))
+        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                              self.e1.id))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/client/{}/hospital/{}/equipment/{}/data'.format(self.u1.username,
-                                                                                     client_id,
-                                                                                     self.h1.id,
-                                                                                     self.e1.id),
+        test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
+                                                                                 client_id,
+                                                                                 self.h1.equipmentholder.id,
+                                                                                 self.e1.id),
                             json.dumps({
                                 'value': 'False',
                             }), qos=0)
@@ -176,15 +177,15 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         subscribe_client.loop()
 
         # expect update once
-        test_client.expect('hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                                  self.e1.id))
+        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                              self.e1.id))
         # process messages
         self.loop(test_client)
         subscribe_client.loop()
 
         # verify change
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
         # Client handshake
@@ -226,8 +227,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
-                  'hospital/{}/equipment/{}/data'.format(self.h1.id,
-                                                         self.e1.id))
+                  'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                     self.e1.id))
         [client.expect(t) for t in topics]
         self.is_subscribed(client)
 
@@ -260,8 +261,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # modify data in hospital_equipment and save should trigger message
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'True')
         obj.value = 'False'
         obj.save()
@@ -274,8 +275,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'yet no comments')
 
-        obj = HospitalEquipment.objects.get(hospital_id=self.h1.id,
-                                            equipment_id=self.e1.id)
+        obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
+                                        equipment=self.e1)
         self.assertEqual(obj.value, 'False')
 
         # Done?

@@ -10,7 +10,8 @@ from mqtt.publish import PublishClient
 
 from ambulance.models import Ambulance, Call, CallStatus, AmbulanceCallStatus
 
-from hospital.models import Hospital, HospitalEquipment
+from hospital.models import Hospital
+from equipment.models import EquipmentItem, EquipmentHolder
 
 
 class Client(PublishClient):
@@ -41,8 +42,8 @@ class Client(PublishClient):
 
         # Seed hospitals
         self.seed_hospital_data()
-        self.seed_hospital_equipment_data()
-        self.seed_hospital_metadata()
+        self.seed_equipment_data()
+        self.seed_equipment_metadata()
 
         # Seed ambulances
         self.seed_ambulance_data()
@@ -63,10 +64,15 @@ class Client(PublishClient):
         self.pubset.add(result.mid)
 
         # echo if verbosity > 0
-        if self.verbosity > 1:
-            self.stdout.write("   {}: {}".format(topic, message))
-        elif self.verbosity > 0:
-            self.stdout.write("   {}".format(topic))
+        if self.verbosity > 0:
+            if message is None:
+                op = '-'
+            else:
+                op = '+'
+            if self.verbosity > 1:
+                self.stdout.write("   {}{}: {}".format(op, topic, message))
+            elif self.verbosity > 0:
+                self.stdout.write("   {}{}".format(op, topic))
 
     def seed_settings(self):
         if self.verbosity > 0:
@@ -117,28 +123,28 @@ class Client(PublishClient):
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS("<< Done seeding hospital data"))
 
-    def seed_hospital_equipment_data(self):
+    def seed_equipment_data(self):
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding hospital equipment data"))
+            self.stdout.write(self.style.SUCCESS(">> Seeding equipment data"))
 
         # seeding hospital 
-        for obj in HospitalEquipment.objects.all():
-            self.publish_hospital_equipment(obj)
+        for obj in EquipmentItem.objects.all():
+            self.publish_equipment_item(obj)
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital equipment data"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding equipment data"))
 
-    def seed_hospital_metadata(self):
+    def seed_equipment_metadata(self):
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Seeding hospital metadata"))
+            self.stdout.write(self.style.SUCCESS(">> Seeding equipment metadata"))
 
         # seeding hospital metadata
-        for hospital in Hospital.objects.all():
-            self.publish_hospital_metadata(hospital)
+        for equipmentholder in EquipmentHolder.objects.all():
+            self.publish_equipment_metadata(equipmentholder)
 
         if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS("<< Done seeding hospital metadata"))
+            self.stdout.write(self.style.SUCCESS("<< Done seeding equipment metadata"))
 
     def seed_call_data(self):
 

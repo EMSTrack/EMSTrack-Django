@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+
+            <h1>Equipment Set</h1>
+
+            <h3>Details:</h3>
+
+            <p>
+                <strong>Name:</strong>
+                <a href="{% url 'equipment:update-set' pk=equipmentset.id %}">{{ equipmentset.name }}</a>
+            </p>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>
+                Equipment:
+            </h3>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Comment</th>
+                    <th>Updated on</th>
+                    <th>by</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for equipment in equipmentset.equipmentsetitem_set.all %}
+                <tr>
+                    <td>{{ equipment.equipment.name }}</td>
+                    <td>{{ equipment.comment }}</td>
+                    <td>{{ equipment.updated_by }}</td>
+                    <td>{{ equipment.updated_on }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

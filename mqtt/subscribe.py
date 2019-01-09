@@ -11,13 +11,15 @@ from io import BytesIO
 from login.models import Client, ClientLog, ClientStatus, ClientActivity
 from .client import BaseClient
 
-from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall
+from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall, Waypoint
 from ambulance.models import Call
-from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer
+from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer, WaypointSerializer
 from ambulance.serializers import CallSerializer
 
-from hospital.models import Hospital, HospitalEquipment
-from hospital.serializers import HospitalSerializer, HospitalEquipmentSerializer
+from hospital.models import Hospital
+from equipment.models import EquipmentItem
+from hospital.serializers import HospitalSerializer
+from equipment.serializers import EquipmentItemSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -63,24 +65,29 @@ class SubscribeClient(BaseClient):
                                          self.on_hospital)
 
         # hospital equipment handler
-        self.client.message_callback_add('user/+/client/+/hospital/+/equipment/+/data',
-                                         self.on_hospital_equipment)
+        self.client.message_callback_add('user/+/client/+/equipment/+/item/+/data',
+                                         self.on_equipment_item)
 
         # client status handler
         self.client.message_callback_add('user/+/client/+/status',
                                          self.on_client_status)
 
-        # call handler
+        # ambulance call handler
         self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/status',
                                          self.on_call_ambulance)
+
+        # ambulance call waypoint handler
+        self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/waypoint/+/data',
+                                         self.on_call_ambulance_waypoint)
 
         # subscribe
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
         self.subscribe('user/+/client/+/ambulance/+/status', 2)
         self.subscribe('user/+/client/+/hospital/+/data', 2)
-        self.subscribe('user/+/client/+/hospital/+/equipment/+/data', 2)
+        self.subscribe('user/+/client/+/equipment/+/item/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)
         self.subscribe('user/+/client/+/ambulance/+/call/+/status', 2)
+        self.subscribe('user/+/client/+/ambulance/+/call/+/waypoint/+/data', 2)
 
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
@@ -215,6 +222,10 @@ class SubscribeClient(BaseClient):
         elif expect == 5 and len(values) == 9:
 
             return user, client, data, values[5], values[7]
+
+        elif expect == 6 and len(values) == 11:
+
+            return user, client, data, values[5], values[7], values[9]
 
         else:
 
@@ -442,32 +453,32 @@ class SubscribeClient(BaseClient):
         logger.debug('on_hospital: DONE')
 
     # Update hospital equipment
-    def on_hospital_equipment(self, clnt, userdata, msg):
+    def on_equipment_item(self, clnt, userdata, msg):
 
         try:
 
-            logger.debug("on_hospital_equipment: msg = '{}:{}'".format(msg.topic, msg.payload))
+            logger.debug("on_equipment_item: msg = '{}:{}'".format(msg.topic, msg.payload))
 
             # parse topic
-            user, client, data, hospital_id, equipment_id = self.parse_topic(msg, 5)
+            user, client, data, equipmentholder_id, equipment_id = self.parse_topic(msg, 5)
 
         except Exception as e:
 
-            logger.debug("on_hospital_equipment: ParseException '{}'".format(e))
+            logger.debug("on_equipment_item: ParseException '{}'".format(e))
             return
 
         try:
 
             # retrieve hospital equipment
-            hospital_equipment = HospitalEquipment.objects.get(hospital=hospital_id,
-                                                               equipment_id=equipment_id)
+            equipment_item = EquipmentItem.objects.get(equipmentholder_id=equipmentholder_id,
+                                                       equipment_id=equipment_id)
 
-        except HospitalEquipment.DoesNotExist:
+        except EquipmentItem.DoesNotExist:
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload,
-                                    "Hospital equipment with hospital id '{}' and name '{}' does not exist".format(
-                                        hospital_id, equipment_id))
+                                    "Equipment with equipmentholder id '{}' and equipment id '{}' does not exist".format(
+                                        equipmentholder_id, equipment_id))
             return
 
         except Exception as e:
@@ -479,22 +490,22 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            logger.debug('on_hospital_equipment: equipment = {}'.format(hospital_equipment))
+            logger.debug('on_equipment_item: equipment = {}'.format(equipment_item))
 
             # update hospital equipment
-            serializer = HospitalEquipmentSerializer(hospital_equipment,
-                                                     data=data,
-                                                     partial=True)
+            serializer = EquipmentItemSerializer(equipment_item,
+                                                 data=data,
+                                                 partial=True)
             if serializer.is_valid():
 
-                logger.debug('on_hospital_equipment: valid serializer')
+                logger.debug('on_equipment_item: valid serializer')
 
                 # save to database
                 serializer.save(updated_by=user)
 
             else:
 
-                logger.debug('on_hospital_equipment: INVALID serializer')
+                logger.debug('on_equipment_item: INVALID serializer')
 
                 # send error message to user
                 self.send_error_message(user, client, msg.topic, msg.payload,
@@ -502,12 +513,12 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_hospital_equipment: serializer EXCEPTION')
+            logger.debug('on_equipment_item: serializer EXCEPTION')
 
             # send error message to user
             self.send_error_message(user, client, msg.topic, msg.payload, e)
 
-        logger.debug('on_hospital_equipment: DONE')
+        logger.debug('on_equipment_item: DONE')
 
     # update client information
     def on_client_status(self, clnt, userdata, msg):
@@ -769,7 +780,7 @@ class SubscribeClient(BaseClient):
 
             logger.debug("on_call_ambulance: msg = '{}:{}'".format(msg.topic, msg.payload))
 
-            #parse topic
+            # parse topic
             user, client, status, ambulance_id, call_id = self.parse_topic(msg, 5, json=False)
 
         except Exception as e:
@@ -820,23 +831,34 @@ class SubscribeClient(BaseClient):
                                         "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
 
-            if status.casefold() == "accepted":
+            if status.casefold() == AmbulanceCallStatus.A.value.casefold():
 
-                # change ambulancecall status to ongoing
-                ambulancecall.status = AmbulanceCallStatus.O.name
-                ambulancecall.save()
+                # change ambulancecall status to accepted
+                ambulancecall.status = AmbulanceCallStatus.A.name
 
-            elif status.casefold() == "finished":
+            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
+
+                # change ambulancecall status to decline
+                ambulancecall.status = AmbulanceCallStatus.D.name
+
+            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
+
+                # change ambulancecall status to suspended
+                ambulancecall.status = AmbulanceCallStatus.S.name
+
+            elif status.casefold() == AmbulanceCallStatus.C.value.casefold():
 
                 # change ambulance status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name
-                ambulancecall.save()
 
             else:
 
                 self.send_error_message(user, client, msg.topic, msg.payload,
                                         "Invalid status '{}'".format(status))
                 return
+
+            # save changes
+            ambulancecall.save()
 
         except Exception as e:
 
@@ -846,3 +868,114 @@ class SubscribeClient(BaseClient):
             self.send_error_message(user, client, msg.topic, msg.payload, e)
 
         logger.debug('on_call_ambulance: DONE')
+
+    # handle calls
+    def on_call_ambulance_waypoint(self, clnt, userdata, msg):
+
+        try:
+
+            logger.debug("on_call_ambulance_waypoint: msg = '{}:{}'".format(msg.topic, msg.payload))
+
+            # parse topic
+            user, client, data, ambulance_id, call_id, waypoint_id = self.parse_topic(msg, 6)
+            waypoint_id = int(waypoint_id)
+
+        except Exception as e:
+
+            logger.debug("on_call_ambulance_waypoint: ParseException '{}".format(e))
+            return
+
+        try:
+
+            ambulance_call = AmbulanceCall.objects.get(ambulance__pk=ambulance_id, call__pk=call_id)
+
+        except Ambulance.DoesNotExist:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Ambulance with id '{}' does not exist".format(ambulance_id))
+            return
+
+        except Call.DoesNotExist:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Call with id '{}' does not exist".format(call_id))
+            return
+
+        except Exception as e:
+
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
+            return
+
+        try:
+
+            try:
+
+                if waypoint_id > 0:
+
+                    # waypoint exists, update
+                    logger.debug('will update waypoint')
+
+                    # retrieve serializer
+                    waypoint = Waypoint.objects.get(pk=waypoint_id)
+
+                    # update waypoint
+                    serializer = WaypointSerializer(waypoint,
+                                                    data=data,
+                                                    partial=True)
+
+                else:
+
+                    # waypoint does not exist, create
+                    logger.debug('will create waypoint')
+
+                    # create waypoint
+                    data['ambulance_call_id'] = ambulance_call.id
+                    serializer = WaypointSerializer(data=data)
+
+            except Waypoint.DoesNotExist:
+
+                logger.debug('on_call_ambulance_waypoint: INVALID waypoint id')
+
+                # send error message to user
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Waypoint with id '{}' does not exist".format(waypoint_id))
+                return
+
+            except Exception as e:
+
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Exception: '{}'".format(e))
+                return
+
+            if serializer.is_valid():
+
+                logger.debug('on_call_ambulance_waypoint: valid serializer')
+
+                if waypoint_id > 0:
+
+                    # save to database
+                    serializer.save(updated_by=user, publish=True)
+
+                else:
+
+                    # save to database
+                    serializer.save(updated_by=user, ambulance_call_id=ambulance_call.id, publish=True)
+
+            else:
+
+                logger.debug('on_call_ambulance_waypoint: INVALID serializer')
+
+                # send error message to user
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        serializer.errors)
+
+        except Exception as e:
+
+            logger.debug('on_call_ambulance_waypoint: EXCEPTION')
+
+            # send error message to user
+            self.send_error_message(user, client, msg.topic, msg.payload, e)
+
+        logger.debug('on_call_ambulance_waypoint: DONE')
+

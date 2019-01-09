@@ -825,6 +825,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'ambulance_id': u.ambulance.id,
                 'ambulance_identifier': u.ambulance.identifier,
                 'comment': u.comment,
+                'capability': u.capability,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
@@ -876,6 +877,7 @@ class TestAmbulanceUpdates(TestSetup):
                 'ambulance_id': u.ambulance.id,
                 'ambulance_identifier': a.identifier,
                 'comment': u.comment,
+                'capability': u.capability,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
@@ -899,16 +901,16 @@ class TestAmbulanceUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer1)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer1)
+        self.assertEqual(len(result), 4)
 
         # retrieve ambulances updates
         response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer3)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer3)
+        self.assertEqual(len(result), 4)
 
         # logout
         client.logout()
@@ -942,8 +944,8 @@ class TestAmbulanceUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer3)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer3)
+        self.assertEqual(len(result), 4)
 
         # logout
         client.logout()
@@ -987,6 +989,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
                 'ambulance_id': u.ambulance.id,
                 'ambulance_identifier': u.ambulance.identifier,
                 'comment': u.comment,
+                'capability': u.capability,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
@@ -1048,6 +1051,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
                 'ambulance_id': a.id,
                 'ambulance_identifier': a.identifier,
                 'comment': u.comment,
+                'capability': u.capability,
                 'status': u.status,
                 'orientation': u.orientation,
                 'location': point2str(u.location),
@@ -1091,16 +1095,16 @@ class TestAmbulanceBulkUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer1)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer1)
+        self.assertEqual(len(result), 4)
 
         # retrieve ambulances updates
         response = client.get('/api/ambulance/{}/updates/'.format(self.a3.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer3)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer3)
+        self.assertEqual(len(result), 4)
 
         # logout
         client.logout()
@@ -1134,8 +1138,8 @@ class TestAmbulanceBulkUpdates(TestSetup):
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
-        self.assertCountEqual(result['results'], answer3)
-        self.assertEqual(len(result['results']), 4)
+        self.assertCountEqual(result, answer3)
+        self.assertEqual(len(result), 4)
 
         # logout
         client.logout()

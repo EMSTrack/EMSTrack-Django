@@ -11,6 +11,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core import management
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
@@ -24,7 +25,8 @@ from rest_framework.views import APIView
 from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
-from hospital.models import EquipmentType
+from emstrack.views import get_page_links, get_page_size_links
+from equipment.models import EquipmentType, EquipmentHolder
 from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
@@ -35,7 +37,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, Client
+    GroupHospitalPermission, Client, ClientStatus
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -125,7 +127,8 @@ class GroupHospitalPermissionAdminInline(InlineFormSet):
     }
 
 
-class GroupAdminCreateView(SuccessMessageMixin, CreateView):
+class GroupAdminCreateView(SuccessMessageMixin,
+                           CreateView):
     model = Group
     fields = ['name']
     template_name = 'login/group_create.html'
@@ -137,7 +140,8 @@ class GroupAdminCreateView(SuccessMessageMixin, CreateView):
         return self.object.groupprofile.get_absolute_url()
 
 
-class GroupAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
+class GroupAdminUpdateView(SuccessMessageWithInlinesMixin,
+                           UpdateWithInlinesView):
     model = Group
     template_name = 'login/group_form.html'
     form_class = GroupAdminUpdateForm
@@ -196,7 +200,8 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
     }
 
 
-class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView):
+class UserAdminCreateView(SuccessMessageWithInlinesMixin,
+                          CreateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
@@ -212,7 +217,8 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin, CreateWithInlinesView)
     # TODO: Choose between provided password and email generated password
 
 
-class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView):
+class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
+                          UpdateWithInlinesView):
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
@@ -230,7 +236,39 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin, UpdateWithInlinesView)
 
 class ClientListView(ListView):
     model = Client
+    queryset = Client.objects.filter(status=ClientStatus.O.name)
     ordering = ['-status', '-updated_on']
+
+    def get_context_data(self, **kwargs):
+
+        # add paginated offline clients to context
+
+        # call supper
+        context = super().get_context_data(**kwargs)
+
+        # query
+        not_online_query = Client.objects.exclude(status=ClientStatus.O.name).order_by('-updated_on')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
+
+        # paginate
+        paginator = Paginator(not_online_query, page_size)
+        try:
+            not_online = paginator.page(page)
+        except PageNotAnInteger:
+            not_online = paginator.page(1)
+        except EmptyPage:
+            not_online = paginator.page(paginator.num_pages)
+
+        context['not_online'] = not_online
+        context['page_links'] = get_page_links(self.request, not_online)
+        context['page_size_links'] = get_page_size_links(self.request, not_online, page_sizes)
+        context['page_size'] = int(page_size)
+
+        return context
 
 
 class ClientDetailView(DetailView):
@@ -400,10 +438,9 @@ class MQTTAclView(CsrfExemptMixin,
                         return HttpResponse('OK')
 
                 #  - hospital/{hospital-id}/data
-                #  - hospital/{hospital-id}/metadata
-                #  - hospital/{hospital-id}/equipment/+/data
-                elif (len(topic) >= 3 and
-                      topic[0] == 'hospital'):
+                elif (len(topic) == 3 and
+                      topic[0] == 'hospital' and
+                      topic[2] == 'data'):
 
                     # get hospital id
                     hospital_id = int(topic[1])
@@ -414,13 +451,36 @@ class MQTTAclView(CsrfExemptMixin,
                         # perm = user.profile.hospitals.get(hospital=hospital_id)
                         can_read = get_permissions(user).check_can_read(hospital=hospital_id)
 
-                        if (can_read and
-                                ((len(topic) == 3 and topic[2] == 'data') or
-                                 (len(topic) == 3 and topic[2] == 'metadata') or
-                                 (len(topic) == 5 and topic[2] == 'equipment' and topic[4] == 'data'))):
+                        if (can_read):
                             return HttpResponse('OK')
 
                     except ObjectDoesNotExist:
+                        pass
+
+                #  - equipment/{equipment-holder-id}/metadata
+                #  - equipment/{equipment-holder-id}/item/+/data
+                elif (len(topic) >= 3 and
+                      topic[0] == 'equipment'):
+
+                    # get equipmentholder_id
+                    equipmentholder_id = int(topic[1])
+                    # logger.debug('equipmentholder_id = {}'.format(equipmentholder_id))
+
+                    # is user authorized?
+                    try:
+
+                        # perm = user.profile.hospitals.get(hospital=hospital_id)
+                        can_read = get_permissions(user).check_can_read(equipment=equipmentholder_id)
+                        # logger.debug('can read? = {}'.format(can_read))
+
+                        # can read?
+                        if (can_read and
+                                ((len(topic) == 3 and topic[2] == 'metadata') or
+                                 (len(topic) == 5 and topic[2] == 'item' and topic[4] == 'data'))):
+                            return HttpResponse('OK')
+
+                    except ObjectDoesNotExist:
+                        # logger.debug('ObjectDoesNotExist exception')
                         pass
 
                 #  - ambulance/{ambulance-id}/data
@@ -490,9 +550,12 @@ class MQTTAclView(CsrfExemptMixin,
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/status
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/status
+                    #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/waypoint/{waypoint_id}/data
                     elif (topic[4] == 'ambulance' and
                           ((len(topic) == 7 and (topic[6] == 'data' or topic[6] == 'status')) or
-                           (len(topic) == 9 and (topic[6] == 'call' and topic[8] == 'status')))):
+                           (len(topic) == 9 and (topic[6] == 'call' and topic[8] == 'status')) or
+                           (len(topic) == 11 and
+                            (topic[6] == 'call' and topic[8] == 'waypoint' and topic[10] == 'data')))):
 
                         # get ambulance_id
                         ambulance_id = int(topic[5])
@@ -510,10 +573,8 @@ class MQTTAclView(CsrfExemptMixin,
                             pass
 
                     #  - user/{username}/client/{client-id}/hospital/{hospital-id}/data
-                    #  - user/{username}/client/{client-id}/hospital/{hospital-id}/equipment/+/data
                     elif (topic[4] == 'hospital' and
-                          ((len(topic) == 7 and topic[6] == 'data') or
-                           (len(topic) == 9 and topic[6] == 'equipment' and topic[8] == 'data'))):
+                          len(topic) == 7 and topic[6] == 'data'):
 
                         # get hospital_id
                         hospital_id = int(topic[5])
@@ -523,6 +584,25 @@ class MQTTAclView(CsrfExemptMixin,
 
                             # perm = user.profile.hospitals.get(hospital=hospital_id)
                             can_write = get_permissions(user).check_can_write(hospital=hospital_id)
+
+                            if can_write:
+                                return HttpResponse('OK')
+
+                        except ObjectDoesNotExist:
+                            pass
+
+                    #  - user/{username}/client/{client-id}/equipment/{equipment-holder-id}/item/+/data
+                    elif (topic[4] == 'equipment' and
+                          len(topic) == 9 and topic[6] == 'item' and topic[8] == 'data'):
+
+                        # get equipmentholder_id
+                        equipmentholder_id = int(topic[1])
+
+                        # is user authorized?
+                        try:
+
+                            # perm = user.profile.hospitals.get(hospital=hospital_id)
+                            can_write = get_permissions(user).check_can_write(equipment=equipmentholder_id)
 
                             if can_write:
                                 return HttpResponse('OK')

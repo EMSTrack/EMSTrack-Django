@@ -3,11 +3,11 @@ import logging
 import os
 
 from ambulance.models import CallStatus, AmbulanceCallStatus
-from ambulance.serializers import AmbulanceSerializer
+from ambulance.serializers import AmbulanceSerializer, AmbulanceCallSerializer
 from ambulance.serializers import CallSerializer
-from hospital.models import Equipment
-from hospital.serializers import HospitalSerializer, \
-    HospitalEquipmentSerializer, EquipmentSerializer
+from equipment.models import Equipment
+from hospital.serializers import HospitalSerializer
+from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 from .client import BaseClient, MQTTException
@@ -34,21 +34,27 @@ class MessagePublishClient:
     def remove_hospital(self, hospital, **kwargs):
         pass
 
-    def publish_hospital_metadata(self, hospital, **kwargs):
+    def publish_equipment_metadata(self, hospital, **kwargs):
         pass
 
-    def publish_hospital_equipment(self, hospital, **kwargs):
+    def publish_equipment_item(self, hospital, **kwargs):
         pass
 
-    def remove_hospital_equipment(self, hospital, **kwargs):
+    def remove_equipment_item(self, hospital, **kwargs):
         pass
 
-    # For call
+    # For calls
 
     def publish_call(self, call, **kwargs):
         pass
 
     def remove_call(self, call, **kwargs):
+        pass
+
+    def publish_call_status(self, **kwargs):
+        pass
+
+    def remove_call_status(self, **kwargs):
         pass
 
 
@@ -107,26 +113,26 @@ class PublishClient(BaseClient):
 
     def remove_hospital(self, hospital):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
-        self.remove_topic('hospital/{}/metadata'.format(hospital.id))
+        self.remove_topic('equipment/{}/metadata'.format(hospital.equipmentholder.id))
 
-    def publish_hospital_metadata(self, hospital, qos=2, retain=True):
-        hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-        equipment = Equipment.objects.filter(id__in=hospital_equipment)
-        self.publish_topic('hospital/{}/metadata'.format(hospital.id),
-                           EquipmentSerializer(equipment, many=True),
+    def publish_equipment_metadata(self, equipmentholder, qos=2, retain=True):
+        equipment_items = equipmentholder.equipmentitem_set.values('equipment')
+        equipments = Equipment.objects.filter(id__in=equipment_items)
+        self.publish_topic('equipment/{}/metadata'.format(equipmentholder.id),
+                           EquipmentSerializer(equipments, many=True),
                            qos=qos,
                            retain=retain)
 
-    def publish_hospital_equipment(self, equipment, qos=2, retain=True):
-        self.publish_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                  equipment.equipment.id),
-                           HospitalEquipmentSerializer(equipment),
+    def publish_equipment_item(self, equipment_item, qos=2, retain=True):
+        self.publish_topic('equipment/{}/item/{}/data'.format(equipment_item.equipmentholder.id,
+                                                              equipment_item.equipment.id),
+                           EquipmentItemSerializer(equipment_item),
                            qos=qos,
                            retain=retain)
 
-    def remove_hospital_equipment(self, equipment):
-        self.remove_topic('hospital/{}/equipment/{}/data'.format(equipment.hospital.id,
-                                                                 equipment.equipment.id))
+    def remove_equipment_item(self, equipment_item):
+        self.remove_topic('equipment/{}/item/{}/data'.format(equipment_item.equipmentholder.id,
+                                                             equipment_item.equipment.id))
 
     def publish_call(self, call, qos=2, retain=True):
         # otherwise, publish call data
@@ -207,3 +213,5 @@ class SingletonPublishClient(PublishClient):
 
             logger.info('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
             logger.info('>> Generated exception: {}'.format(e))
+
+

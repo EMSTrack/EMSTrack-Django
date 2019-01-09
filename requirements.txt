@@ -9,3 +9,4 @@ django-extra-fields
 django-extra-views
 django-nose
 paho-mqtt
+django-formset-js

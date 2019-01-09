@@ -20,15 +20,8 @@
 
                 <table>
                     {{ form }}
+                    {{ equipmentholder_form }}
                 </table>
-
-                <h3>Equipment:</h3>
-
-                {% for form in inlines %}
-                <table>
-                    {{ form }}
-                </table>
-                {% endfor %}
 
                 <p>
                     <button type="submit" class="btn btn-primary">Save</button>

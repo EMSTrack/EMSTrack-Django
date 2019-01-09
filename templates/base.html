@@ -5,6 +5,9 @@
     <meta charset="utf-8"/>
     <meta name="viewpoint" content="width=device-width, initial-scale=1">
 
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{%  static 'favicon.png' %}">
+
     <!-- Bootstrap CSS -->
     <!--
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -12,6 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/btn-yellow.css' %}">
+    <link rel="stylesheet" href="{% static 'css/btn-outline-yellow.css' %}">
 
     <!-- JQuery and Bootstrap js -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"
@@ -90,11 +94,12 @@
                     Admin
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'login:user_list' %}">Users</a>
-                    <a class="dropdown-item" href="{% url 'login:group_list' %}">Groups</a>
-                    <a class="dropdown-item" href="{% url 'hospital:equipment_list' %}">Equipment</a>
+                    <a class="dropdown-item" href="{% url 'login:list-user' %}">Users</a>
+                    <a class="dropdown-item" href="{% url 'login:list-group' %}">Groups</a>
+                    <a class="dropdown-item" href="{% url 'equipment:list' %}">Equipment</a>
+                    <a class="dropdown-item" href="{% url 'equipment:list-set' %}">Equipment Sets</a>
                     <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">Locations</a>
-                    <a class="dropdown-item" href="{% url 'login:client_list' %}">Clients</a>
+                    <a class="dropdown-item" href="{% url 'login:list-client' %}">Clients</a>
                     <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">Reinitialize</a>
                 </div>
             </li>
@@ -163,14 +168,17 @@
     var pathname = window.location.pathname;
 
     // exclude home page
-    if (pathname != '/') {
+    if (pathname !== '/') {
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
-        if ((pathname == "{% url 'login:user_list' %}") ||
-            (pathname == "{% url 'login:group_list' %}") ||
-            (pathname == "{% url 'hospital:equipment_list' %}") ||
-            (pathname == "{% url 'ambulance:location_list' %}")) {
+        if ((pathname === "{% url 'login:list-user' %}") ||
+            (pathname === "{% url 'login:list-group' %}") ||
+            (pathname === "{% url 'equipment:list' %}") ||
+            (pathname === "{% url 'equipment:list-set' %}") ||
+            (pathname === "{% url 'ambulance:location_list' %}") ||
+            (pathname === "{% url 'login:list-client' %}") ||
+            (pathname === "{% url 'login:restart' %}")) {
 
             // Make admin menu active
             $('#navitemDropdown').addClass('nav-item active');

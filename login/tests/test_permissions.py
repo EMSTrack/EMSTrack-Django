@@ -10,11 +10,14 @@ class TestPermissions(TestSetup):
 
         all_ambulances = {self.a1.id, self.a2.id, self.a3.id}
         all_hospitals = {self.h1.id, self.h2.id, self.h3.id}
+        all_equipments = {self.a1.equipmentholder.id, self.a2.equipmentholder.id, self.a3.equipmentholder.id, 
+                          self.h1.equipmentholder.id, self.h2.equipmentholder.id, self.h3.equipmentholder.id}
 
         u = self.u1
         perms = Permissions(u)
         self.assertEqual(3, len(perms.ambulances))
         self.assertEqual(3, len(perms.hospitals))
+        self.assertEqual(6, len(perms.equipments))
 
         answer = [self.a1.id, self.a2.id, self.a3.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
@@ -43,6 +46,22 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+
+        answer = [self.a1.equipmentholder.id, self.a2.equipmentholder.id, self.a3.equipmentholder.id,
+                  self.h1.equipmentholder.id, self.h2.equipmentholder.id, self.h3.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
+                
         answer = {
             'ambulances': {
                 self.a1.id: {
@@ -77,12 +96,46 @@ class TestPermissions(TestSetup):
                     'can_read': True,
                     'can_write': True
                 }
+            },
+            'equipments': {
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.a2.equipmentholder.id: {
+                    'equipmentholder': self.a2.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.a3.equipmentholder.id: {
+                    'equipmentholder': self.a3.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h2.equipmentholder.id: {
+                    'equipmentholder': self.h2.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h3.equipmentholder.id: {
+                    'equipmentholder': self.h3.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                }
             }
         }
         for id in all_ambulances:
             self.assertDictEqual(answer['ambulances'][id], perms.get(ambulance=id))
         for id in all_hospitals:
             self.assertDictEqual(answer['hospitals'][id], perms.get(hospital=id))
+        for id in all_equipments:
+            self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
 
         # regular users without groups
 
@@ -90,6 +143,7 @@ class TestPermissions(TestSetup):
         perms = Permissions(u)
         self.assertEqual(0, len(perms.ambulances))
         self.assertEqual(2, len(perms.hospitals))
+        self.assertEqual(2, len(perms.equipments))
         answer = []
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         for id in all_ambulances:
@@ -118,6 +172,20 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+        answer = [self.h1.equipmentholder.id, self.h2.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        answer = [self.h2.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
         answer = {
             'ambulances': {
             },
@@ -129,6 +197,18 @@ class TestPermissions(TestSetup):
                 },
                 self.h2.id: {
                     'hospital': self.h2,
+                    'can_read': True,
+                    'can_write': True
+                },
+            },
+            'equipments': {
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
+                    'can_read': True,
+                    'can_write': False
+                },
+                self.h2.equipmentholder.id: {
+                    'equipmentholder': self.h2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
@@ -146,11 +226,18 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
+        for id in all_equipments:
+            if id in answer['equipments']:
+                self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(equipment=id)
 
         u = self.u3
         perms = Permissions(u)
         self.assertEqual(2, len(perms.ambulances))
         self.assertEqual(0, len(perms.hospitals))
+        self.assertEqual(2, len(perms.equipments))
         answer = [self.a3.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         for id in all_ambulances:
@@ -179,6 +266,20 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+        answer = [self.a3.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        answer = [self.a3.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
         answer = {
             'ambulances': {
                 self.a1.id: {
@@ -193,6 +294,18 @@ class TestPermissions(TestSetup):
                 }
             },
             'hospitals': {
+            },
+            'equipments': {
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
+                    'can_read': False,
+                    'can_write': False
+                },
+                self.a3.equipmentholder.id: {
+                    'equipmentholder': self.a3.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
             }
         }
         for id in all_ambulances:
@@ -207,6 +320,12 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
+        for id in all_equipments:
+            if id in answer['equipments']:
+                self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(equipment=id)
 
         # regular users with groups
 
@@ -214,6 +333,7 @@ class TestPermissions(TestSetup):
         perms = Permissions(u)
         self.assertEqual(0, len(perms.ambulances))
         self.assertEqual(2, len(perms.hospitals))
+        self.assertEqual(2, len(perms.equipments))
         answer = []
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         for id in all_ambulances:
@@ -242,6 +362,20 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+        answer = [self.h1.equipmentholder.id, self.h2.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        answer = [self.h2.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
         answer = {
             'ambulances': {
             },
@@ -253,6 +387,18 @@ class TestPermissions(TestSetup):
                 },
                 self.h2.id: {
                     'hospital': self.h2,
+                    'can_read': True,
+                    'can_write': True
+                },
+            },
+            'equipments': {
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
+                    'can_read': True,
+                    'can_write': False
+                },
+                self.h2.equipmentholder.id: {
+                    'equipmentholder': self.h2.equipmentholder,
                     'can_read': True,
                     'can_write': True
                 },
@@ -270,11 +416,18 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
+        for id in all_equipments:
+            if id in answer['equipments']:
+                self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(equipment=id)
 
         u = self.u5
         perms = Permissions(u)
         self.assertEqual(3, len(perms.ambulances))
         self.assertEqual(2, len(perms.hospitals))
+        self.assertEqual(5, len(perms.equipments))
         answer = [self.a2.id, self.a3.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         for id in all_ambulances:
@@ -303,6 +456,22 @@ class TestPermissions(TestSetup):
                 self.assertTrue(perms.check_can_write(hospital=id))
             else:
                 self.assertFalse(perms.check_can_write(hospital=id))
+        answer = [self.a2.equipmentholder.id, self.a3.equipmentholder.id,
+                  self.h1.equipmentholder.id, self.h3.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_read(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_read(equipment=id))
+        answer = [self.a2.equipmentholder.id, self.a3.equipmentholder.id,
+                  self.h1.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
+        for id in all_equipments:
+            if id in answer:
+                self.assertTrue(perms.check_can_write(equipment=id))
+            else:
+                self.assertFalse(perms.check_can_write(equipment=id))
         answer = {
             'ambulances': {
                 self.a1.id: {
@@ -332,6 +501,33 @@ class TestPermissions(TestSetup):
                     'can_read': True,
                     'can_write': False
                 }
+            },
+            'equipments': {
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
+                    'can_read': False,
+                    'can_write': False
+                },
+                self.a2.equipmentholder.id: {
+                    'equipmentholder': self.a2.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.a3.equipmentholder.id: {
+                    'equipmentholder': self.a3.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h1.equipmentholder.id: {
+                    'equipmentholder': self.h1.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+                self.h3.equipmentholder.id: {
+                    'equipmentholder': self.h3.equipmentholder,
+                    'can_read': True,
+                    'can_write': False
+                }
             }
         }
         for id in all_ambulances:
@@ -346,15 +542,24 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
+        for id in all_equipments:
+            if id in answer['equipments']:
+                self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(equipment=id)
 
         # Group priority testing
         u = self.u6
         perms = Permissions(u)
         self.assertEqual(1, len(perms.ambulances))
         self.assertEqual(0, len(perms.hospitals))
+        self.assertEqual(1, len(perms.equipments))
         answer = []
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         self.assertCountEqual(answer, perms.get_can_write('ambulances'))
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
         answer = {
             'ambulances': {
                 self.a1.id: {
@@ -363,7 +568,14 @@ class TestPermissions(TestSetup):
                     'can_write': False
                 },
             },
-            'hospitals': {}
+            'hospitals': {},
+            'equipments': {
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
+                    'can_read': False,
+                    'can_write': False
+                },
+            },
         }
         for id in all_ambulances:
             if id in answer['ambulances']:
@@ -377,14 +589,24 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)
+        for id in all_equipments:
+            if id in answer['equipments']:
+                self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(equipment=id)
 
         u = self.u7
         perms = Permissions(u)
         self.assertEqual(1, len(perms.ambulances))
         self.assertEqual(0, len(perms.hospitals))
+        self.assertEqual(1, len(perms.equipments))
         answer = [self.a1.id]
         self.assertCountEqual(answer, perms.get_can_read('ambulances'))
         self.assertCountEqual(answer, perms.get_can_write('ambulances'))
+        answer = [self.a1.equipmentholder.id]
+        self.assertCountEqual(answer, perms.get_can_read('equipments'))
+        self.assertCountEqual(answer, perms.get_can_write('equipments'))
         answer = {
             'ambulances': {
                 self.a1.id: {
@@ -393,7 +615,14 @@ class TestPermissions(TestSetup):
                     'can_write': True
                 },
             },
-            'hospitals': {}
+            'hospitals': {},
+            'equipments': {
+                self.a1.equipmentholder.id: {
+                    'equipmentholder': self.a1.equipmentholder,
+                    'can_read': True,
+                    'can_write': True
+                },
+            },
         }
         for id in all_ambulances:
             if id in answer['ambulances']:
@@ -407,6 +636,12 @@ class TestPermissions(TestSetup):
             else:
                 with self.assertRaises(KeyError):
                     perms.get(hospital=id)          
+        for id in all_equipments:
+            if id in answer['equipments']:
+                self.assertDictEqual(answer['equipments'][id], perms.get(equipment=id))
+            else:
+                with self.assertRaises(KeyError):
+                    perms.get(equipment=id)
 
     def test_cache(self):
 

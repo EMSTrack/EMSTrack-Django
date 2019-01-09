@@ -3,58 +3,28 @@ from django.core.exceptions import PermissionDenied
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 
+from equipment.serializers import EquipmentItemSerializer
 from login.permissions import get_permissions
-from .models import Hospital, Equipment, HospitalEquipment
-
-
-# HospitalEquipment serializers
-
-class HospitalEquipmentSerializer(serializers.ModelSerializer):
-    equipment_name = serializers.CharField(source='equipment.name')
-    equipment_type = serializers.CharField(source='equipment.type')
-
-    class Meta:
-        model = HospitalEquipment
-        fields = ('hospital_id',
-                  'equipment_id', 'equipment_name', 'equipment_type',
-                  'value', 'comment',
-                  'updated_by', 'updated_on')
-        read_only_fields = ('hospital_id',
-                            'equipment_id', 'equipment_name', 'equipment_type',
-                            'updated_by',)
-
-    # def validate(self, data):
-    #     # call super
-    #     validated_data = super().validate(data)
-    #
-    #     # TODO: validate equipment value using equipment_type
-    #     return validated_data
-
-
-# EquipmentMetadata serializer
-
-class EquipmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Equipment
-        fields = '__all__'
+from .models import Hospital
 
 
 # Hospital serializer
 # TODO: Handle equipment in create and update
 
 class HospitalSerializer(serializers.ModelSerializer):
-    hospitalequipment_set = HospitalEquipmentSerializer(many=True, read_only=True)
+    # hospitalequipment_set = EquipmentItemSerializer(many=True, read_only=True)
     location = PointField(required=False)
 
     class Meta:
         model = Hospital
-        fields = ['id',
+        fields = ['id', 'equipmentholder_id',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
                   'location',
                   'name',
                   'comment', 'updated_by', 'updated_on',
-                  'hospitalequipment_set']
+                  # 'hospitalequipment_set'
+                  ]
         read_only_fields = ('updated_by',)
 
     def create(self, validated_data):

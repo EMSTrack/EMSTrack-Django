@@ -17,8 +17,10 @@ class HospitalCreateForm(forms.ModelForm):
         fields = ['name',
                   'number', 'street', 'unit', 'neighborhood',
                   'city', 'state', 'zipcode', 'country',
-                  'location', 'comment']
+                  'comment',
+                  'location']
 
 
 class HospitalUpdateForm(HospitalCreateForm):
     pass
+

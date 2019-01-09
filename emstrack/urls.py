@@ -12,7 +12,8 @@ from login.views import PasswordView, SettingsView
 from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, \
 LocationTypeViewSet, CallViewSet
 
-from hospital.viewsets import HospitalViewSet, HospitalEquipmentViewSet
+from hospital.viewsets import HospitalViewSet
+from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
 
 from .views import IndexView
 
@@ -40,9 +41,13 @@ router.register(r'hospital',
                 HospitalViewSet,
                 base_name='api-hospital')
 
-router.register(r'hospital/(?P<hospital_id>[0-9]+)/equipment',
-                HospitalEquipmentViewSet,
-                base_name='api-hospital-equipment')
+router.register(r'equipment/(?P<equipmentholder_id>[0-9]+)/item',
+                EquipmentItemViewSet,
+                base_name='api-equipment')
+
+router.register(r'equipment',
+                EquipmentViewSet,
+                base_name='api-equipment-metadata')
 
 router.register(r'call',
                 CallViewSet,
@@ -75,9 +80,12 @@ urlpatterns = [
     # login
     url(r'^auth/', include('login.urls')),
 
+    # equipment
+    url(r'^equipment/', include('equipment.urls')),
+
     # admin
     url(r'^admin/', admin.site.urls),
-    
+
     # password change
     url(r'^password_change/$',
         auth_views.PasswordChangeView.as_view(),

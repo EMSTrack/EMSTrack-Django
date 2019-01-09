@@ -7,7 +7,8 @@ from drf_extra_fields.geo_fields import PointField
 
 from login.models import Client
 from login.permissions import get_permissions
-from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus
+from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
+    LocationType
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -42,10 +43,11 @@ class AmbulanceSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
 
-        # timestamp must be defined together with either comment, status or location
-        if 'timestamp' in data and not ('comment' in data or 'location' in data or 'status' in data):
+        # timestamp must be defined together with either comment, capability, status or location
+        if 'timestamp' in data and not ('comment' in data or 'capability' in data or
+                                        'location' in data or 'status' in data):
             raise serializers.ValidationError('timestamp can only be set when either comment, location, ' +
-                                              'or status are modified')
+                                              'capability, or status are modified')
 
         return data
 
@@ -91,8 +93,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
                 # fine, clear or update location client
                 validated_data['location_client'] = location_client
 
-        logger.debug('validated_data = {}'.format(validated_data))
-
         return super().update(instance, validated_data)
 
 
@@ -108,19 +108,15 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                     update['location'] != current['location']):
 
                     current['orientation'] = calculate_orientation(current['location'], update['location'])
-                    logger.debug('< {} - {} = {}'.format(current['location'],
-                                                         update['location'],
-                                                         current['orientation']))
 
             # clear timestamp
+            # if update has no timestamp, save should create one
             current.pop('timestamp', None)
 
             # update data
             current.update(**update)
 
             return current
-
-        logger.debug('validated_data = {}'.format(validated_data))
 
         # process updates inside a transaction
         try:
@@ -138,26 +134,25 @@ class AmbulanceUpdateListSerializer(serializers.ListSerializer):
                 # get ambulance and create template from first update
                 # all ambulances are the same in a bulk update
                 ambulance = validated_data[0].get('ambulance')
-                data = {k: getattr(ambulance, k) for k in ('status', 'orientation', 'location', 'comment')}
+                data = {k: getattr(ambulance, k) for k in ('capability', 'status',
+                                                           'orientation', 'location', 'comment')}
 
                 # loop through
                 for k in range(0, n-1):
 
                     # process update
-                    retdata = process_update(validated_data[k], data)
+                    data = process_update(validated_data[k], data)
 
-                    if retdata is not None:
+                    # create update object
+                    obj = AmbulanceUpdate(**data)
+                    obj.save()
 
-                        # create update object
-                        obj = AmbulanceUpdate(**data)
-                        obj.save()
-
-                        # append to objects list
-                        instances.append(obj)
+                    # append to objects list
+                    instances.append(obj)
 
                 # on last update, update ambulance instead
 
-                # process update
+                # process last update
                 data = process_update(validated_data[-1], data)
 
                 # save to ambulance will automatically create update
@@ -187,7 +182,7 @@ class AmbulanceUpdateSerializer(serializers.ModelSerializer):
         fields = ['id',
                   'ambulance_id',
                   'ambulance_identifier',
-                  'status', 'orientation',
+                  'capability', 'status', 'orientation',
                   'location', 'timestamp',
                   'comment',
                   'updated_by_username', 'updated_on']
@@ -210,7 +205,7 @@ class LocationSerializer(serializers.ModelSerializer):
                   'location',
                   'name', 'type',
                   'comment', 'updated_by', 'updated_on']
-        read_only_fields = ('updated_by',)
+        read_only_fields = ('id', 'updated_by')
 
     def create(self, validated_data):
 
@@ -230,11 +225,79 @@ class LocationSerializer(serializers.ModelSerializer):
         user = validated_data['updated_by']
 
         # check credentials
-        # only super can create
+        # only super can update
         if not user.is_superuser:
             raise PermissionDenied()
 
         return super().update(instance, validated_data)
+
+
+# Waypoint Serializers
+
+class WaypointSerializer(serializers.ModelSerializer):
+
+    location = LocationSerializer(required=False)
+
+    class Meta:
+        model = Waypoint
+        fields = ['id', 'ambulance_call_id',
+                  'order', 'status',
+                  'location',
+                  'comment', 'updated_by', 'updated_on']
+        read_only_fields = ('id', 'ambulance_call_id', 'location', 'updated_by')
+
+    def create(self, validated_data):
+
+        # get current user
+        user = validated_data['updated_by']
+
+        # publish?
+        publish = validated_data.pop('publish', False)
+
+        # retrieve location
+        location = validated_data.pop('location', None)
+        if location is None:
+            raise serializers.ValidationError('Waypoint must have a location')
+
+        # retrieve initial location
+        # location id is not present in validated_data
+        initial_location = self.initial_data['location']
+
+        # retrieve or create?
+        if 'id' not in initial_location or initial_location['id'] is None:
+            logger.debug('will create waypoint location')
+            if location['type'] in (LocationType.i.name, LocationType.w.name):
+                location = Location.objects.create(**location, updated_by=user)
+            else:
+                raise serializers.ValidationError('Users can only create incident and waypoint locations')
+        else:
+            logger.debug('will retrieve waypoint location')
+            location = Location.objects.get(id=initial_location['id'])
+
+        # create waypoint and publish
+        validated_data['location'] = location
+        waypoint = super().create(validated_data)
+        if publish:
+            waypoint.publish()
+
+        return waypoint
+
+    def update(self, instance, validated_data):
+
+        # publish?
+        publish = validated_data.pop('publish', False)
+
+        # retrieve location
+        location = validated_data.pop('location', None)
+        if location is not None:
+            raise serializers.ValidationError('Waypoint locations cannot be updated.')
+
+        # update waypoint and publish
+        waypoint = super().update(instance, validated_data)
+        if publish:
+            waypoint.publish()
+
+        return waypoint
 
 
 # AmbulanceCall Serializer
@@ -242,14 +305,16 @@ class LocationSerializer(serializers.ModelSerializer):
 class AmbulanceCallSerializer(serializers.ModelSerializer):
 
     ambulance_id = serializers.PrimaryKeyRelatedField(queryset=Ambulance.objects.all(), read_only=False)
-    ambulanceupdate_set = AmbulanceUpdateSerializer(many=True, required=False)
+    waypoint_set = WaypointSerializer(many=True, required=False)
 
     class Meta:
         model = AmbulanceCall
-        fields = ['id', 'ambulance_id',
-                  'created_at',
-                  'ambulanceupdate_set']
-        read_only_fields = ['created_at']
+        fields = ['id',
+                  'ambulance_id',
+                  'status',
+                  'comment', 'updated_by', 'updated_on',
+                  'waypoint_set']
+        read_only_fields = ('id', 'updated_by')
 
 
 # Patient Serializer
@@ -259,6 +324,7 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = ['id', 'name', 'age']
+        read_only_fields = []
 
 
 # Call serializer
@@ -267,18 +333,16 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
-    location = PointField(required=False)
 
     class Meta:
         model = Call
-        fields = ['id', 'status', 'details', 'priority',
-                  'number', 'street', 'unit', 'neighborhood',
-                  'city', 'state', 'zipcode', 'country',
-                  'location',
+        fields = ['id',
+                  'status', 'details', 'priority',
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
-                  'ambulancecall_set', 'patient_set']
+                  'ambulancecall_set',
+                  'patient_set']
         read_only_fields = ['created_at', 'updated_by']
 
     def create(self, validated_data):
@@ -308,8 +372,31 @@ class CallSerializer(serializers.ModelSerializer):
             # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
-                obj = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall)
-                obj.save(publish=False)
+                waypoint_set = ambulancecall.pop('waypoint_set', [])
+                ambulance_call = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall, updated_by=user)
+                ambulance_call.save(publish=False)
+                # add waypoints
+                for waypoint in waypoint_set:
+                    location = waypoint.pop('location', {})
+                    if not location:
+                        raise serializers.ValidationError('Location is not defined')
+                    if 'id' in location:
+                        # location already exists, retrieve
+                        location = Location.objects.get(id=location['id'])
+                    else:
+                        # location does not exist, create one
+                        if 'type' not in location:
+                            raise serializers.ValidationError('Location type is not defined')
+                        elif location['type'] == LocationType.h.name:
+                            raise serializers.ValidationError('Hospitals must be created before using as waypoints')
+                        elif location['type'] == LocationType.i.name or location['type'] == LocationType.w.name:
+                            # TODO: check to see if a close by waypoint already exists to contain proliferation
+                            location = Location.objects.create(**location, updated_by=user)
+                        else:
+                            raise serializers.ValidationError("Invalid waypoint '{}'".format(location))
+                    # add waypoint
+                    obj = Waypoint.objects.create(ambulance_call=ambulance_call, **waypoint,
+                                                  location=location, updated_by=user)
 
             # publish call to mqtt only after all includes have succeeded
             call.publish()
@@ -334,6 +421,9 @@ class CallSerializer(serializers.ModelSerializer):
         return super().update(instance, data)
 
     def validate(self, data):
-        if 'status' in data and data['status'] != CallStatus.P.name and not ('ambulancecall_set' in data):
+
+        if 'status' in data and \
+                data['status'] != CallStatus.P.name and \
+                (not ('ambulancecall_set' in data) or len(data['ambulancecall_set']) == 0):
             raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
         return data
