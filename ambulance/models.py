@@ -92,12 +92,14 @@ class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'
     R = 'Rescue'
+    M = 'Medic'
 
 
 AmbulanceCapabilityOrder = [ 
     AmbulanceCapability.B,
     AmbulanceCapability.A,
-    AmbulanceCapability.R
+    AmbulanceCapability.R,
+    AmbulanceCapability.M
 ] 
 
 
