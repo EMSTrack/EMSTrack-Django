@@ -33,6 +33,30 @@ class UserProfile(models.Model):
     def __str__(self):
         return '{}'.format(self.user)
 
+    def save(self, *args, **kwargs):
+
+        # save to UserProfile
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_profile(self.user)
+
+    def delete(self, *args, **kwargs):
+
+        # delete from UserProfile
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+        # remove from mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_profile(self.user)
+
 
 # GroupProfile
 
@@ -51,6 +75,22 @@ class GroupProfile(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['priority'])]
+
+    def save(self, *args, **kwargs):
+
+        # save to GroupProfile
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
+
+    def delete(self, *args, **kwargs):
+
+        # delete from GroupProfile
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        cache_clear()
 
 
 # Group Ambulance and Hospital Permissions

@@ -96,6 +96,9 @@ class PublishClient(BaseClient):
                            qos=qos,
                            retain=retain)
 
+    def remove_profile(self, user):
+        self.remove_topic('user/{}/profile'.format(user.username))
+
     def publish_ambulance(self, ambulance, qos=2, retain=True):
         self.publish_topic('ambulance/{}/data'.format(ambulance.id),
                            AmbulanceSerializer(ambulance),
