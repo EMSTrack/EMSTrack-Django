@@ -210,7 +210,7 @@ class SingletonPublishClient(PublishClient):
             # register atexit handler to make sure it disconnects at exit
             atexit.register(self.disconnect)
 
-        except MQTTException as e:
+        except (MQTTException, OSError) as e:
 
             self.active = False
 
