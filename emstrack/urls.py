@@ -9,8 +9,7 @@ from rest_framework_swagger.views import get_swagger_view
 from login.viewsets import ProfileViewSet
 from login.views import PasswordView, SettingsView
 
-from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, \
-LocationTypeViewSet, CallViewSet
+from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet
 
 from hospital.viewsets import HospitalViewSet
 from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
@@ -58,8 +57,8 @@ urlpatterns = [
     # Router API urls
     url(r'^api/', include(router.urls)),
     url(r'^docs/', login_required(schema_view)),
-    url(r'^api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework')),
+    # url(r'^api-auth/', include('rest_framework.urls',
+    #                            namespace='rest_framework')),
 
     # Add mqtt_password to api
     url(r'^api/user/(?P<user__username>[\w.@+-]+)/password/$',

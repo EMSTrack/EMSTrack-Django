@@ -68,7 +68,7 @@ urlpatterns = [
     # restart
 
     url(r'^restart/$',
-        views.RestartView.as_view(),
+        staff_member_required(views.RestartView.as_view()),
         name='restart'),
 
     # rest token
