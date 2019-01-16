@@ -57,8 +57,8 @@ urlpatterns = [
     # Router API urls
     url(r'^api/', include(router.urls)),
     url(r'^docs/', login_required(schema_view)),
-    # url(r'^api-auth/', include('rest_framework.urls',
-    #                            namespace='rest_framework')),
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
 
     # Add mqtt_password to api
     url(r'^api/user/(?P<user__username>[\w.@+-]+)/password/$',
