@@ -5,6 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.serializers import APIException
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
@@ -275,11 +276,12 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         try:
-            type = LocationType(self.kwargs['type']).name
+            location_type = self.kwargs['type']
+            location_type_name = LocationType(location_type).name
         except ValueError:
-            type = ''
+            raise APIException("Invalid location type '{}'".format(location_type))
 
-        return Location.objects.filter(type=type)
+        return Location.objects.filter(type=location_type_name)
 
 
 # Call ViewSet
