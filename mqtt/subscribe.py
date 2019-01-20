@@ -841,7 +841,7 @@ class SubscribeClient(BaseClient):
                 # change ambulancecall status to decline
                 ambulancecall.status = AmbulanceCallStatus.D.name
 
-            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
+            elif status.casefold() == AmbulanceCallStatus.S.value.casefold():
 
                 # change ambulancecall status to suspended
                 ambulancecall.status = AmbulanceCallStatus.S.name
