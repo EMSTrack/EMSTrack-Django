@@ -304,8 +304,7 @@ class CallViewSet(mixins.ListModelMixin,
     Retrieve an existing call instance.
     """
 
-    permission_classes = (IsAuthenticated,
-                          IsCreateByAdminOrSuper)
+    permission_classes = (IsAuthenticated&IsCreateByAdminOrSuper,)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
