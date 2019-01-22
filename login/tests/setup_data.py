@@ -55,6 +55,12 @@ class TestSetupData:
             email='test7@user.com',
             password='exceedingly_secret')
 
+        cls.u8 = User.objects.create_user(
+            username='staff',
+            email='staff@user.com',
+            password='so_secret',
+            is_staff=True)
+
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
             identifier='BC-179',

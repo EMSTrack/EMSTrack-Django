@@ -239,6 +239,11 @@ class MQTTTestCase(StaticLiveServerTestCase):
             # Add users
             cls.u2 = User.objects.get(username='testuser1')
             cls.u3 = User.objects.get(username='testuser2')
+            cls.u4 = User.objects.get(username='testuser3')
+            cls.u5 = User.objects.get(username='testuser4')
+            cls.u6 = User.objects.get(username='highprioritytestuser')
+            cls.u7 = User.objects.get(username='lowprioritytestuser')
+            cls.u8 = User.objects.get(username='staff')
 
             # Add ambulances
             cls.a1 = Ambulance.objects.get(identifier='BC-179')
@@ -293,6 +298,22 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 username='testuser4',
                 email='test4@user.com',
                 password='extremely_secret')
+
+            cls.u6 = User.objects.create_user(
+                username='highprioritytestuser',
+                email='test6@user.com',
+                password='exceptionally_secret')
+
+            cls.u7 = User.objects.create_user(
+                username='lowprioritytestuser',
+                email='test7@user.com',
+                password='exceedingly_secret')
+
+            cls.u8 = User.objects.create_user(
+                username='staff',
+                email='staff@user.com',
+                password='so_secret',
+                is_staff=True)
 
             # Add ambulances
             cls.a1 = Ambulance.objects.create(

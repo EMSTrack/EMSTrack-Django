@@ -29,9 +29,8 @@ class IsCreateByAdminOrSuper(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        user = User.objects.get(username=request.user.username)
         if view.action == 'create':
-            return user.is_staff or user.is_superuser
+            return request.user.is_staff or request.user.is_superuser
         else:
             return True
 

@@ -1247,7 +1247,7 @@ class TestCall(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
-        # Will fail for anyone not superuser
+        # Will fail for anyone not superuser or staff
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
@@ -1256,6 +1256,22 @@ class TestCall(TestSetup):
         }
         response = client.post('/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 403)
+
+        # logout
+        client.logout()
+
+        # login as staff
+        client.login(username='staff', password='so_secret')
+
+        # Should not fail
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/api/call/', data, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
 
         # logout
         client.logout()
