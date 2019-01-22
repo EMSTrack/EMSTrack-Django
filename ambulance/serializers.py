@@ -351,7 +351,7 @@ class CallSerializer(serializers.ModelSerializer):
         user = validated_data['updated_by']
 
         # Make sure user is Super.
-        if not user.is_superuser:
+        if not (user.is_superuser or user.is_staff):
             raise PermissionDenied()
         
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])

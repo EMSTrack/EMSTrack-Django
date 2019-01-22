@@ -206,7 +206,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 else:
                     ambulance_updates = AmbulanceUpdate.objects.none()
 
-
             # order records in ascending order
             ambulance_updates = ambulance_updates.order_by('timestamp')
 
@@ -304,7 +303,8 @@ class CallViewSet(mixins.ListModelMixin,
     Retrieve an existing call instance.
     """
 
-    permission_classes = (IsAuthenticated&IsCreateByAdminOrSuper,)
+    permission_classes = (IsAuthenticated,
+                          IsCreateByAdminOrSuper)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
