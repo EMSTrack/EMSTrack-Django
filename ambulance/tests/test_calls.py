@@ -1263,7 +1263,7 @@ class TestCall(TestSetup):
         # login as staff
         client.login(username='staff', password='so_secret')
 
-        # Should not fail
+        # Should not fail, is staff
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
