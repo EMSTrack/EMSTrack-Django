@@ -31,7 +31,7 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
 
 # BasePermissionMixin
 
-class BasePermissionMixin(BasePermission):
+class BasePermissionMixin:
     filter_field = 'id'
     profile_field = 'ambulances'
     queryset = None
