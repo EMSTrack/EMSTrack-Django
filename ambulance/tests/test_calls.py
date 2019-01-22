@@ -1271,7 +1271,7 @@ class TestCall(TestSetup):
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         response = client.post('/api/call/', data, content_type='application/json')
-        logger.debug(response)
+        logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
 
         # logout
