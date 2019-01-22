@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
@@ -8,6 +10,8 @@ from rest_framework.response import Response
 from .models import UserProfile
 
 from .serializers import UserProfileSerializer
+
+logger = logging.getLogger(__name__)
 
 # Django REST Framework Viewsets
 
@@ -29,6 +33,7 @@ class IsCreateByAdminOrSuper(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+        logger.debug(request.user)
         if view.action == 'create':
             return request.user.is_staff or request.user.is_superuser
         else:
