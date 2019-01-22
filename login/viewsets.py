@@ -36,7 +36,7 @@ class IsCreateByAdminOrSuper(permissions.BasePermission):
         logger.debug(request.user)
         logger.debug(request.user.is_staff)
         logger.debug(view.action)
-        logger.debug(request.user.is_staff or request.user_is_superuser)
+        logger.debug(request.user.is_staff or request.user.is_superuser)
         if view.action == 'create':
             return request.user.is_staff or request.user.is_superuser
         else:
