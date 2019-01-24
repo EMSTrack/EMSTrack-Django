@@ -482,6 +482,9 @@ class MQTTTestClientPublishSubscribeMixin:
 
         # publish
         self.publishing += 1
+        if self.debug:
+            logging.debug('Publishing topic={}, publishing={}'.format(topic, self.publishing))
+
         super().publish(topic, payload, qos, retain)
 
     def on_publish(self, client, userdata, mid):
@@ -497,6 +500,9 @@ class MQTTTestClientPublishSubscribeMixin:
 
         # publish
         self.subscribing += 1
+        if self.debug:
+            logging.debug('Subscribing topic={}, publishing={}'.format(topic, self.subscribing))
+
         super().subscribe(topic, qos)
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
