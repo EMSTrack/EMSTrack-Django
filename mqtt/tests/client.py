@@ -480,10 +480,11 @@ class MQTTTestClient(BaseClient):
         self.expecting_messages = {}
         self.expecting_patterns = {}
         self.expecting = 0
-        
-        # publishing
+
+        # publishing and subscribing
         self.publishing = 0
-        
+        self.subscribing = 0
+
     def done(self):
 
         return self.expecting == 0 and self.publishing == 0
@@ -510,7 +511,28 @@ class MQTTTestClient(BaseClient):
         if self.debug:
             logging.debug('Just published mid={}[publishing={}]'.format(mid,
                                                                         self.publishing))
-        
+
+    def subscribe(self, topic, qos=0):
+
+        # publish
+        self.subscribing +=1
+        super().subscribe(topic, qos)
+
+    def on_subscribe(self, client, userdata, mid, granted_qos):
+
+        # did subscribe?
+        super().on_subscribe(client, userdata, mid)
+        self.subscribing -=1
+
+        if self.debug:
+            logging.debug('Just subscribed mid={}, qos={}'.format(mid, granted_qos))
+
+    def has_published(self):
+        return self.publishing == 0
+
+    def has_subscribed(self):
+        return self.subscribing == 0
+
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
@@ -587,11 +609,11 @@ class TestMQTT:
 
         # connected?
         k = 0
-        while not client.connected and k < MAX_TRIES:
+        while (not client.is_connected()) and k < MAX_TRIES:
             k += 1
             client.loop()
 
-        self.assertEqual(client.connected, True)
+        self.assertEqual(client.is_connected(), True)
 
     def is_subscribed(self, client, MAX_TRIES=10):
 
@@ -599,13 +621,13 @@ class TestMQTT:
 
         # connected?
         k = 0
-        while len(client.subscribed) and k < MAX_TRIES:
+        while (not client.has_subscribed()) and k < MAX_TRIES:
             k += 1
             time.sleep(1)
 
         client.loop_stop()
 
-        self.assertEqual(len(client.subscribed), 0)
+        self.assertEqual(client.is_subscribed(), True)
 
     def loop(self, *clients, MAX_TRIES=10):
 

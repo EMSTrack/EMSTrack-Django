@@ -66,8 +66,8 @@ class BaseClient:
 
         self.client.on_connect = self.on_connect
 
-        self.subscribed = {}
-        self.published = {}
+        # self.subscribed = {}
+        # self.published = {}
 
         self.client.on_publish = self.on_publish
         self.client.on_subscribe = self.on_subscribe
@@ -172,7 +172,7 @@ class BaseClient:
         # NOTE: The whole forgive mid thing is necessary because
         # on_publish was getting called before publish ended
         # forgive mid if qos = 0
-        #if qos == 0:
+        # if qos == 0:
         #    self.forgive_mid = True
 
         # try to publish
@@ -235,8 +235,8 @@ class BaseClient:
                                                                           mid,
                                                                           qos))
 
-        # otherwise add to dictionary of subscribed
-        self.subscribed[mid] = (topic, qos)
+        # # otherwise add to dictionary of subscribed
+        # self.subscribed[mid] = (topic, qos)
 
         # logger.debug('topic = {}, mid = {}'.format(topic, mid))
 
@@ -260,6 +260,9 @@ class BaseClient:
     # disconnect
     def disconnect(self):
         self.client.disconnect()
+
+    def is_connected(self):
+        return self.connected
 
     # loop
     def loop(self, *args, **kwargs):
