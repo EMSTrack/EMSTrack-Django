@@ -2,9 +2,6 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.auth.models import User
 
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
-
 from login.permissions import cache_clear
 from mqtt.publish import PublishClient
 

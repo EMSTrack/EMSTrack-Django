@@ -2,12 +2,12 @@ import atexit
 import logging
 import os
 
-from ambulance.models import CallStatus, AmbulanceCallStatus
-from ambulance.serializers import AmbulanceSerializer, AmbulanceCallSerializer
+from ambulance.models import AmbulanceCallStatus
+from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
 from equipment.models import Equipment
-from hospital.serializers import HospitalSerializer
 from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
+from hospital.serializers import HospitalSerializer
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 from .client import BaseClient, MQTTException
