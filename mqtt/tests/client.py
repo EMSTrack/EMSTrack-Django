@@ -468,6 +468,15 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
 class MQTTTestClientPublishSubscribeMixin:
 
+    def __init__(self, *args, **kwargs):
+
+        # call supper
+        super().__init__(*args, **kwargs)
+
+        # publishing and subscribing
+        self.publishing = 0
+        self.subscribing = 0
+
     def has_published(self):
         return self.publishing == 0
 
@@ -523,10 +532,6 @@ class MQTTTestSubscribeClient(MQTTTestClientPublishSubscribeMixin,
         # call supper
         super().__init__(*args, **kwargs)
 
-        # publishing and subscribing
-        self.publishing = 0
-        self.subscribing = 0
-
 
 # MQTTTestClient
 class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
@@ -544,10 +549,6 @@ class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
         self.expecting_messages = {}
         self.expecting_patterns = {}
         self.expecting = 0
-
-        # publishing and subscribing
-        self.publishing = 0
-        self.subscribing = 0
 
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
