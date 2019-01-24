@@ -220,7 +220,8 @@ class BaseClient:
         #     self.published[mid] = None
         #     if not self.forgive_mid:
         #         raise MQTTException('Unknown publish mid', mid)
-        pass
+
+        logger.debug('on_publish')
 
     def subscribe(self, topic, qos=0):
 
@@ -254,7 +255,8 @@ class BaseClient:
         # else:
         #     raise MQTTException('Unknown subscribe mid', mid)
 
-        pass
+        # pass
+        logger.debug('on_subscribe')
 
     def on_disconnect(self, client, userdata, rc):
         # logger.debug('disconnecting reason {}'.format(rc))
