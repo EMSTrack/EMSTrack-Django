@@ -492,7 +492,7 @@ class MQTTTestClientPublishSubscribeMixin:
         # publish
         self.publishing += 1
         if self.debug:
-            logger.debug('Publishing topic={}, publishing={}'.format(topic, self.publishing))
+            logger.debug("Publishing to '{}', publishing={}".format(topic, self.publishing))
 
         super().publish(topic, payload, qos, retain)
 
@@ -503,14 +503,14 @@ class MQTTTestClientPublishSubscribeMixin:
         self.publishing -= 1
 
         if self.debug:
-            logger.debug('Just published mid={}, publishing={}]'.format(mid, self.publishing))
+            logger.debug("Just published mid={}, publishing={}]".format(mid, self.publishing))
 
     def subscribe(self, topic, qos=0):
 
         # publish
         self.subscribing += 1
         if self.debug:
-            logger.debug('Subscribing topic={}, publishing={}'.format(topic, self.subscribing))
+            logger.debug("Subscribing to '{}', subscribing={}".format(topic, self.subscribing))
 
         super().subscribe(topic, qos)
 
@@ -609,7 +609,6 @@ class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
             self.expecting_messages[topic] = []
 
             # and subscribe
-            logger.debug("Subscribing to topic '{}'".format(topic))
             self.subscribe(topic, qos)
 
         else:
@@ -674,7 +673,7 @@ class TestMQTT:
             for client in clients:
                 if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
                     logger.debug(('expecting = {}, ' +
-                                   'publishing = {}').format(client.expecting,
-                                                             client.publishing))
+                                  'publishing = {}').format(client.expecting,
+                                                            client.publishing))
 
         self.assertEqual(done, True)

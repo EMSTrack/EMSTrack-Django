@@ -197,20 +197,20 @@ class BaseClient:
         #         # add to dictionary of published
         #         self.published[result.mid] = (topic, payload, qos, retain)
 
-        # debug? 
-        if self.debug:
-            logger.debug(("Just published '{}[mid={}]:{}'" +
-                          "(qos={},retain={})").format(topic,
-                                                       result.mid,
-                                                       payload,
-                                                       qos,
-                                                       retain))
+        # # debug?
+        # if self.debug:
+        #     logger.debug(("Just published '{}[mid={}]:{}'" +
+        #                   "(qos={},retain={})").format(topic,
+        #                                                result.mid,
+        #                                                payload,
+        #                                                qos,
+        #                                                retain))
 
     def on_publish(self, client, userdata, mid):
 
-        # debug? 
-        if self.debug:
-            logger.debug("Published mid={}".format(mid))
+        # # debug?
+        # if self.debug:
+        #     logger.debug("Published mid={}".format(mid))
 
         # if mid in self.published:
         #     # remove from list of subscribed
@@ -220,6 +220,7 @@ class BaseClient:
         #     self.published[mid] = None
         #     if not self.forgive_mid:
         #         raise MQTTException('Unknown publish mid', mid)
+        pass
 
     def subscribe(self, topic, qos=0):
 
@@ -230,10 +231,10 @@ class BaseClient:
                                 result)
 
         # debug? 
-        if self.debug:
-            logger.debug("Just subscribed to '{}'[mid={}][qos={}]".format(topic,
-                                                                          mid,
-                                                                          qos))
+        # if self.debug:
+        #     logger.debug("Just subscribed to '{}'[mid={}][qos={}]".format(topic,
+        #                                                                   mid,
+        #                                                                   qos))
 
         # # otherwise add to dictionary of subscribed
         # self.subscribed[mid] = (topic, qos)
@@ -243,8 +244,8 @@ class BaseClient:
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
         # debug? 
-        if self.debug:
-            logger.debug("Subscribed mid={}, qos={}".format(mid, granted_qos))
+        # if self.debug:
+        #     logger.debug("Subscribed mid={}, qos={}".format(mid, granted_qos))
 
         # if mid in self.subscribed:
         #     # remove from list of subscribed
@@ -252,6 +253,8 @@ class BaseClient:
         #
         # else:
         #     raise MQTTException('Unknown subscribe mid', mid)
+
+        pass
 
     def on_disconnect(self, client, userdata, rc):
         # logger.debug('disconnecting reason {}'.format(rc))
