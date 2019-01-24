@@ -151,6 +151,8 @@ class BaseClient:
 
     def publish(self, topic, payload=None, qos=0, retain=False):
 
+        logger.debug('publish')
+
         # are there any messages on the buffer?
         if len(self.buffer) > 0:
 
@@ -224,6 +226,8 @@ class BaseClient:
         logger.debug('on_publish')
 
     def subscribe(self, topic, qos=0):
+
+        logger.debug('subscribe')
 
         # try to subscribe
         result, mid = self.client.subscribe(topic, qos)
