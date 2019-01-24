@@ -466,16 +466,13 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.u5.groups.set([cls.g1, cls.g3])
 
 
-class MQTTTestSubscribeClient(SubscribeClient):
+class MQTTTestClientPublishSubscribeMixin:
 
-    def __init__(self, *args, **kwargs):
+    def has_published(self):
+        return self.publishing == 0
 
-        # call supper
-        super().__init__(*args, **kwargs)
-
-        # publishing and subscribing
-        self.publishing = 0
-        self.subscribing = 0
+    def has_subscribed(self):
+        return self.subscribing == 0
 
     def done(self):
 
@@ -494,8 +491,7 @@ class MQTTTestSubscribeClient(SubscribeClient):
         self.publishing -= 1
 
         if self.debug:
-            logging.debug('Just published mid={}[publishing={}]'.format(mid,
-                                                                        self.publishing))
+            logging.debug('Just published mid={}, publishing={}]'.format(mid, self.publishing))
 
     def subscribe(self, topic, qos=0):
 
@@ -510,17 +506,25 @@ class MQTTTestSubscribeClient(SubscribeClient):
         self.subscribing -= 1
 
         if self.debug:
-            logging.debug('Just subscribed mid={}, qos={}'.format(mid, granted_qos))
+            logging.debug('Just subscribed mid={}, qos={}, subscribing={}'.format(mid, granted_qos, self.subscribing))
 
-    def has_published(self):
-        return self.publishing == 0
 
-    def has_subscribed(self):
-        return self.subscribing == 0
+class MQTTTestSubscribeClient(MQTTTestClientPublishSubscribeMixin,
+                              SubscribeClient):
+
+    def __init__(self, *args, **kwargs):
+
+        # call supper
+        super().__init__(*args, **kwargs)
+
+        # publishing and subscribing
+        self.publishing = 0
+        self.subscribing = 0
 
 
 # MQTTTestClient
-class MQTTTestClient(BaseClient):
+class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
+                     BaseClient):
 
     def __init__(self, *args, **kwargs):
 
@@ -538,54 +542,6 @@ class MQTTTestClient(BaseClient):
         # publishing and subscribing
         self.publishing = 0
         self.subscribing = 0
-
-    def done(self):
-
-        return self.expecting == 0 and self.publishing == 0
-        
-    # The callback for when the client receives a CONNACK
-    # response from the server.
-    def on_connect(self, client, userdata, flags, rc):
-
-        # is connected?
-        return super().on_connect(client, userdata, flags, rc)
-
-    def publish(self, topic, payload = None, qos = 0, retain = False):
-
-        # publish
-        self.publishing +=1 
-        super().publish(topic, payload, qos, retain)
-
-    def on_publish(self, client, userdata, mid):
-
-        # did publish?
-        super().on_publish(client, userdata, mid)
-        self.publishing -=1 
-
-        if self.debug:
-            logging.debug('Just published mid={}[publishing={}]'.format(mid,
-                                                                        self.publishing))
-
-    def subscribe(self, topic, qos=0):
-
-        # publish
-        self.subscribing +=1
-        super().subscribe(topic, qos)
-
-    def on_subscribe(self, client, userdata, mid, granted_qos):
-
-        # did subscribe?
-        super().on_subscribe(client, userdata, mid)
-        self.subscribing -=1
-
-        if self.debug:
-            logging.debug('Just subscribed mid={}, qos={}'.format(mid, granted_qos))
-
-    def has_published(self):
-        return self.publishing == 0
-
-    def has_subscribed(self):
-        return self.subscribing == 0
 
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
