@@ -92,8 +92,8 @@ class BaseClient:
         self.buffer_lock = threading.Lock()
         self.publish_lock = threading.Lock()
 
-    def done(self):
-        return len(self.published) == 0 and len(self.subscribed) == 0
+    # def done(self):
+    #     return len(self.published) == 0 and len(self.subscribed) == 0
 
     def on_connect(self, client, userdata, flags, rc):
 

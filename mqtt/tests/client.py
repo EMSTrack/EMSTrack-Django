@@ -492,7 +492,7 @@ class MQTTTestClientPublishSubscribeMixin:
         # publish
         self.publishing += 1
         if self.debug:
-            logging.debug('Publishing topic={}, publishing={}'.format(topic, self.publishing))
+            logger.debug('Publishing topic={}, publishing={}'.format(topic, self.publishing))
 
         super().publish(topic, payload, qos, retain)
 
@@ -503,14 +503,14 @@ class MQTTTestClientPublishSubscribeMixin:
         self.publishing -= 1
 
         if self.debug:
-            logging.debug('Just published mid={}, publishing={}]'.format(mid, self.publishing))
+            logger.debug('Just published mid={}, publishing={}]'.format(mid, self.publishing))
 
     def subscribe(self, topic, qos=0):
 
         # publish
         self.subscribing += 1
         if self.debug:
-            logging.debug('Subscribing topic={}, publishing={}'.format(topic, self.subscribing))
+            logger.debug('Subscribing topic={}, publishing={}'.format(topic, self.subscribing))
 
         super().subscribe(topic, qos)
 
@@ -521,7 +521,7 @@ class MQTTTestClientPublishSubscribeMixin:
         self.subscribing -= 1
 
         if self.debug:
-            logging.debug('Just subscribed mid={}, qos={}, subscribing={}'.format(mid, granted_qos, self.subscribing))
+            logger.debug('Just subscribed mid={}, qos={}, subscribing={}'.format(mid, granted_qos, self.subscribing))
 
 
 class MQTTTestSubscribeClient(MQTTTestClientPublishSubscribeMixin,
@@ -670,10 +670,10 @@ class TestMQTT:
             client.loop_stop()
 
         if not done:
-            # logging.debug('NOT DONE:')
+            # logger.debug('NOT DONE:')
             for client in clients:
                 if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
-                    logging.debug(('expecting = {}, ' +
+                    logger.debug(('expecting = {}, ' +
                                    'publishing = {}').format(client.expecting,
                                                              client.publishing))
 
