@@ -681,7 +681,7 @@ class TestMQTT:
 
         client.loop_stop()
 
-        self.assertEqual(client.is_subscribed(), True)
+        self.assertEqual(client.has_subscribed(), True)
 
     def loop(self, *clients, MAX_TRIES=10):
 
