@@ -16,6 +16,7 @@ from equipment.models import EquipmentType, Equipment, EquipmentItem
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient
+from mqtt.subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
 
@@ -463,6 +464,59 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
             cls.u4.groups.set([cls.g2])
             cls.u5.groups.set([cls.g1, cls.g3])
+
+
+class MQTTTestSubscribeClient(SubscribeClient):
+
+    def __init__(self, *args, **kwargs):
+
+        # call supper
+        super().__init__(*args, **kwargs)
+
+        # publishing and subscribing
+        self.publishing = 0
+        self.subscribing = 0
+
+    def done(self):
+
+        return self.has_published() and self.has_subscribed()
+
+    def publish(self, topic, payload=None, qos=0, retain=False):
+
+        # publish
+        self.publishing += 1
+        super().publish(topic, payload, qos, retain)
+
+    def on_publish(self, client, userdata, mid):
+
+        # did publish?
+        super().on_publish(client, userdata, mid)
+        self.publishing -= 1
+
+        if self.debug:
+            logging.debug('Just published mid={}[publishing={}]'.format(mid,
+                                                                        self.publishing))
+
+    def subscribe(self, topic, qos=0):
+
+        # publish
+        self.subscribing += 1
+        super().subscribe(topic, qos)
+
+    def on_subscribe(self, client, userdata, mid, granted_qos):
+
+        # did subscribe?
+        super().on_subscribe(client, userdata, mid)
+        self.subscribing -= 1
+
+        if self.debug:
+            logging.debug('Just subscribed mid={}, qos={}'.format(mid, granted_qos))
+
+    def has_published(self):
+        return self.publishing == 0
+
+    def has_subscribed(self):
+        return self.subscribing == 0
 
 
 # MQTTTestClient

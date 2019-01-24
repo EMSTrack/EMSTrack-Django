@@ -26,7 +26,7 @@ from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 
-from ..subscribe import SubscribeClient
+from .client import MQTTTestSubscribeClient as SubscribeClient
 
 logger = logging.getLogger(__name__)
 
