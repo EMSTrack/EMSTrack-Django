@@ -180,9 +180,9 @@ class Ambulance(UpdatedByModel):
         if has_moved and loaded_values and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
-            logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
-                                                 self.location,
-                                                 self.orientation))
+            # logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
+            #                                      self.location,
+            #                                      self.orientation))
 
         # logger.debug('loaded_values: {}'.format(loaded_values))
         # logger.debug('_loaded_values: {}'.format(self._loaded_values))
@@ -197,7 +197,7 @@ class Ambulance(UpdatedByModel):
         if loaded_values and location_client_id != self._loaded_values['location_client_id']:
             location_client_changed = True
 
-        logger.debug('location_client_changed: {}'.format(location_client_changed))
+        # logger.debug('location_client_changed: {}'.format(location_client_changed))
         # TODO: Check if client is logged with ambulance if setting location_client
 
         # if comment, capability, status or location changed
@@ -210,7 +210,7 @@ class Ambulance(UpdatedByModel):
             # save to Ambulance
             super().save(*args, **kwargs)
 
-            logger.debug('SAVED')
+            # logger.debug('SAVED')
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
