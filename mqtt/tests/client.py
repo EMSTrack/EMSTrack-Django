@@ -517,7 +517,7 @@ class MQTTTestClientPublishSubscribeMixin:
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
         # did subscribe?
-        super().on_subscribe(client, userdata, mid)
+        super().on_subscribe(client, userdata, mid, granted_qos)
         self.subscribing -= 1
 
         if self.debug:
