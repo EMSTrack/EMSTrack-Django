@@ -80,19 +80,21 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         client.expect('user/{}/error'.format(broker['USERNAME']))
         client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
+        self.is_subscribed(client)
 
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
+        self.is_subscribed(client)
 
         client.expect('hospital/{}/data'.format(self.h1.id))
         client.expect('hospital/{}/data'.format(self.h2.id))
         client.expect('hospital/{}/data'.format(self.h3.id))
+        self.is_subscribed(client)
 
         client.expect('equipment/{}/item/+/data'.format(self.h1.id))
         client.expect('equipment/{}/item/+/data'.format(self.h2.id))
         client.expect('equipment/{}/item/+/data'.format(self.h3.id))
-
         self.is_subscribed(client)
 
         client.wait()
@@ -110,18 +112,22 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         client.expect('user/{}/error'.format(broker['USERNAME']))
         client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
+        self.is_subscribed(client)
 
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
+        self.is_subscribed(client)
 
         client.expect('hospital/{}/data'.format(self.h1.id))
         client.expect('hospital/{}/data'.format(self.h2.id))
         client.expect('hospital/{}/data'.format(self.h3.id))
+        self.is_subscribed(client)
 
         client.expect('equipment/{}/item/+/data'.format(self.h1.id))
         client.expect('equipment/{}/item/+/data'.format(self.h2.id))
         client.expect('equipment/{}/item/+/data'.format(self.h3.id))
+        self.is_subscribed(client)
 
         # client doesn't know it cannot subscribe to certain topics!
         # full testing in test_mqtt
@@ -142,18 +148,22 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         client.expect('user/{}/error'.format(broker['USERNAME']))
         client.expect('settings')
         client.expect('user/{}/profile'.format(broker['USERNAME']))
+        self.is_subscribed(client)
 
         client.expect('ambulance/{}/data'.format(self.a1.id))
         client.expect('ambulance/{}/data'.format(self.a2.id))
         client.expect('ambulance/{}/data'.format(self.a3.id))
+        self.is_subscribed(client)
 
         client.expect('hospital/{}/data'.format(self.h1.id))
         client.expect('hospital/{}/data'.format(self.h2.id))
         client.expect('hospital/{}/data'.format(self.h3.id))
+        self.is_subscribed(client)
 
         client.expect('equipment/{}/item/+/data'.format(self.h1.id))
         client.expect('equipment/{}/item/+/data'.format(self.h2.id))
         client.expect('equipment/{}/item/+/data'.format(self.h3.id))
+        self.is_subscribed(client)
 
         # client doesn't know it cannot subscribe to certain topics!
         # full testing in test_mqtt
