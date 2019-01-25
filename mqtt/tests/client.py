@@ -643,7 +643,7 @@ class TestMQTT:
 
         client.loop_stop()
 
-        logger.debug('has_subscribed = {}, k = {}', client.has_subscribed(), k)
+        logger.debug('has_subscribed = {}, k = {}'.format(client.has_subscribed(), k))
 
         self.assertEqual(client.has_subscribed(), True)
 
