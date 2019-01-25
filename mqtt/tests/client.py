@@ -633,15 +633,16 @@ class TestMQTT:
 
     def is_subscribed(self, client, MAX_TRIES=10):
 
-        client.loop_start()
+        # client.loop_start()
 
         # connected?
         k = 0
         while (not client.has_subscribed()) and k < MAX_TRIES:
             k += 1
+            client.loop()
             time.sleep(1)
 
-        client.loop_stop()
+        # client.loop_stop()
 
         logger.debug('has_subscribed = {}, k = {}'.format(client.has_subscribed(), k))
 
