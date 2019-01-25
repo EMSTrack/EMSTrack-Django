@@ -62,12 +62,14 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
         client.expect('settings',
                       JSONRenderer().render(SettingsView.get_settings()),
                       qos)
+        self.is_subscribed(client)
 
         # Expect all ambulances
         for ambulance in Ambulance.objects.all():
             client.expect('ambulance/{}/data'.format(ambulance.id),
                           JSONRenderer().render(AmbulanceSerializer(ambulance).data),
                           qos)
+            self.is_subscribed(client)
 
         # Expect all hospitals
         for hospital in Hospital.objects.all():
