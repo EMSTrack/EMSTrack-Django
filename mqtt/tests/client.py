@@ -626,17 +626,26 @@ class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
 
 class TestMQTT:
 
+    DELAY = 0.1
+
     def is_connected(self, client, MAX_TRIES=10):
+
+        # loop
+        client.loop()
 
         # connected?
         k = 0
         while (not client.is_connected()) and k < MAX_TRIES:
             k += 1
             client.loop()
+            time.sleep(TestMQTT.DELAY)
 
         self.assertEqual(client.is_connected(), True)
 
     def is_subscribed(self, client, MAX_TRIES=10):
+
+        # loop
+        client.loop()
 
         # client.loop_start()
 
@@ -645,7 +654,7 @@ class TestMQTT:
         while (not client.has_subscribed()) and k < MAX_TRIES:
             k += 1
             client.loop()
-            time.sleep(1)
+            time.sleep(TestMQTT.DELAY)
 
         # client.loop_stop()
 
@@ -670,7 +679,7 @@ class TestMQTT:
             for client in clients:
                 done = done and client.done()
             k += 1
-            time.sleep(1)
+            time.sleep(TestMQTT.DELAY)
 
         # stop clients
         for client in clients:
