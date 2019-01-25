@@ -76,6 +76,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
             client.expect('hospital/{}/data'.format(hospital.id),
                           JSONRenderer().render(HospitalSerializer(hospital).data),
                           qos)
+            self.is_subscribed(client)
 
         # Expect all equipmentholders
         for equipmentholder in EquipmentHolder.objects.all():
@@ -84,6 +85,7 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
             client.expect('equipment/{}/metadata'.format(equipmentholder.id),
                           JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
                           qos)
+            self.is_subscribed(client)
 
         # Expect all equipment items
         for e in EquipmentItem.objects.all():
@@ -91,15 +93,14 @@ class TestMQTTSeed(TestMQTT, MQTTTestCase):
                                                              e.equipment.id),
                           JSONRenderer().render(EquipmentItemSerializer(e).data),
                           qos)
+            self.is_subscribed(client)
 
         # Expect all profiles
         for user in User.objects.all():
             client.expect('user/{}/profile'.format(user.username),
                           JSONRenderer().render(UserProfileSerializer(user).data),
                           qos)
-
-        # Subscribed?
-        self.is_subscribed(client)
+            self.is_subscribed(client)
 
         # Done?
         self.loop(client)
