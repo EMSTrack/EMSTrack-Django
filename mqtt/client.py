@@ -157,6 +157,9 @@ class BaseClient:
                 # set up timer for retrying
                 threading.Timer(RETRY_TIMER_SECONDS, self.send_buffer).start()
 
+                # break from loop
+                break
+
         # release lock
         self.buffer_lock.release()
 
