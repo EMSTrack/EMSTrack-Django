@@ -52,7 +52,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # disconnect temporarily
         publish_client.client.disconnect()
-        self.is_disconnected(client)
+        self.is_disconnected(publish_client)
 
         # expect more ambulance
         client.expect(topic)
@@ -70,7 +70,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # reconnect
         publish_client.client.reconnect()
-        self.is_connected(client)
+        self.is_connected(publish_client)
 
         # process messages
         self.loop(client)
