@@ -21,7 +21,7 @@ class MQTTException(Exception):
         self.value = value
 
 
-RETRY_TIMER_SECONDS = 10
+RETRY_TIMER_SECONDS = 3
 RETRY_MAX_ATTEMPTS = 10
 
 

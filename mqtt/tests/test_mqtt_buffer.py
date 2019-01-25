@@ -68,7 +68,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         self.is_connected(publish_client)
 
         # wait for timer to come alive
-        time.sleep(3 * RETRY_TIMER_SECONDS)
+        time.sleep(2 * RETRY_TIMER_SECONDS)
 
         # make sure timer got called
         publish_client.buffer_lock.acquire()
