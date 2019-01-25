@@ -1,19 +1,14 @@
-import json
+import logging
 import logging
 import time
 
 from django.conf import settings
-from django.utils import timezone
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus
-from emstrack.tests.util import point2str
-from equipment.models import EquipmentItem
-from hospital.models import Hospital
-from login.models import Client, ClientStatus, ClientLog, ClientActivity
 from mqtt.publish import SingletonPublishClient
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
-from .client import MQTTTestSubscribeClient as SubscribeClient
+from mqtt.client import RETRY_TIMER_SECONDS
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +66,19 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # reconnect
         publish_client.client.reconnect()
         self.is_connected(publish_client)
+
+        # wait for timer to come alive
+        time.sleep(2 * RETRY_TIMER_SECONDS)
+
+        # make sure timer got called
+        publish_client.buffer_lock.acquire()
+        self.assertTrue(len(publish_client.buffer) == 0)
+        publish_client.buffer_lock.release()
+
+        # save will trigger failed publish
+        publish_client.buffer_lock.acquire()
+        self.assertTrue(len(publish_client.buffer) > 0)
+        publish_client.buffer_lock.release()
 
         # process messages
         self.loop(client)
