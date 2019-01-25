@@ -642,6 +642,20 @@ class TestMQTT:
 
         self.assertEqual(client.is_connected(), True)
 
+    def is_disconnected(self, client, MAX_TRIES=10):
+
+        # loop
+        client.loop()
+
+        # disconnected?
+        k = 0
+        while (client.is_connected()) and k < MAX_TRIES:
+            k += 1
+            client.loop()
+            time.sleep(TestMQTT.DELAY)
+
+        self.assertEqual(client.is_connected(), False)
+
     def is_subscribed(self, client, MAX_TRIES=10):
 
         # loop
