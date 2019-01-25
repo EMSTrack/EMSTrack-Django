@@ -184,9 +184,9 @@ class Ambulance(UpdatedByModel):
                                                  self.location,
                                                  self.orientation))
 
-        logger.debug('loaded_values: {}'.format(loaded_values))
-        logger.debug('_loaded_values: {}'.format(self._loaded_values))
-        logger.debug('self.location_client: {}'.format(self.location_client))
+        # logger.debug('loaded_values: {}'.format(loaded_values))
+        # logger.debug('_loaded_values: {}'.format(self._loaded_values))
+        # logger.debug('self.location_client: {}'.format(self.location_client))
 
         # location_client changed?
         if self.location_client is None:
@@ -221,7 +221,7 @@ class Ambulance(UpdatedByModel):
             obj = AmbulanceUpdate(**data)
             obj.save()
 
-            logger.debug('UPDATE SAVED')
+            # logger.debug('UPDATE SAVED')
 
             # model changed
             model_changed = True
@@ -234,7 +234,7 @@ class Ambulance(UpdatedByModel):
             # save only to Ambulance
             super().save(*args, **kwargs)
 
-            logger.debug('SAVED')
+            # logger.debug('SAVED')
 
             # model changed
             model_changed = True
@@ -246,7 +246,7 @@ class Ambulance(UpdatedByModel):
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().publish_ambulance(self)
 
-            logger.debug('PUBLISHED ON MQTT')
+            # logger.debug('PUBLISHED ON MQTT')
 
         # just created?
         if created:
