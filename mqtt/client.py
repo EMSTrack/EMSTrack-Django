@@ -188,6 +188,10 @@ class BaseClient:
 
     def _publish(self, topic, payload=None, qos=0, retain=False):
 
+        logger.debug('topic = {}', topic)
+        logger.debug('payload = {}', payload)
+        logger.debug('qos = {}', qos)
+        logger.debug('retain = {}', retain)
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
             logger.debug('Could not publish to topic (rc = {})'.format(result.rc))
