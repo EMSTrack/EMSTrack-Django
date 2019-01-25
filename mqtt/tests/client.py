@@ -669,7 +669,7 @@ class TestMQTT:
 
         # starts clients
         for client in clients:
-            client.loop_start()
+            client.loop()
 
         # connected?
         k = 0
@@ -679,11 +679,10 @@ class TestMQTT:
             for client in clients:
                 done = done and client.done()
             k += 1
+            # stop clients
+            for client in clients:
+                client.loop()
             time.sleep(TestMQTT.DELAY)
-
-        # stop clients
-        for client in clients:
-            client.loop_stop()
 
         if not done:
             # logger.debug('NOT DONE:')
