@@ -1,5 +1,6 @@
 import json
 import ssl
+import time
 
 from django.conf import settings
 
@@ -49,6 +50,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(test_client, publish_client)
+
+        time.sleep(1)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
