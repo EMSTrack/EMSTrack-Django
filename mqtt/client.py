@@ -151,8 +151,6 @@ class BaseClient:
 
     def publish(self, topic, payload=None, qos=0, retain=False):
 
-        # logger.debug('publish')
-
         # are there any messages on the buffer?
         if len(self.buffer) > 0:
 
@@ -171,64 +169,16 @@ class BaseClient:
             # then quit
             return
 
-        # NOTE: The whole forgive mid thing is necessary because
-        # on_publish was getting called before publish ended
-        # forgive mid if qos = 0
-        # if qos == 0:
-        #    self.forgive_mid = True
-
         # try to publish
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
             raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
                                 result.rc)
 
-        # if qos != 0:
-        #     # add to dictionary of published
-        #     self.published[result.mid] = (topic, payload, qos, retain)
-        # else:
-        #
-        #     # reset forgive_mid
-        #     self.forgive_mid = False
-        #
-        #     # on_published already called?
-        #     if result.mid in self.published:
-        #         if self.published.pop(result.mid) is not None:
-        #             raise MQTTException('Cannot make sense of mid', result.mid)
-        #     else:
-        #         # add to dictionary of published
-        #         self.published[result.mid] = (topic, payload, qos, retain)
-
-        # # debug?
-        # if self.debug:
-        #     logger.debug(("Just published '{}[mid={}]:{}'" +
-        #                   "(qos={},retain={})").format(topic,
-        #                                                result.mid,
-        #                                                payload,
-        #                                                qos,
-        #                                                retain))
-
     def on_publish(self, client, userdata, mid):
-
-        # # debug?
-        # if self.debug:
-        #     logger.debug("Published mid={}".format(mid))
-
-        # if mid in self.published:
-        #     # remove from list of subscribed
-        #     del self.published[mid]
-        #
-        # else:
-        #     self.published[mid] = None
-        #     if not self.forgive_mid:
-        #         raise MQTTException('Unknown publish mid', mid)
-
-        # logger.debug('on_publish')
         pass
 
     def subscribe(self, topic, qos=0):
-
-        # logger.debug('subscribe')
 
         # try to subscribe
         result, mid = self.client.subscribe(topic, qos)
@@ -236,31 +186,7 @@ class BaseClient:
             raise MQTTException('Could not subscribe to topic',
                                 result)
 
-        # debug? 
-        # if self.debug:
-        #     logger.debug("Just subscribed to '{}'[mid={}][qos={}]".format(topic,
-        #                                                                   mid,
-        #                                                                   qos))
-
-        # # otherwise add to dictionary of subscribed
-        # self.subscribed[mid] = (topic, qos)
-
-        # logger.debug('topic = {}, mid = {}'.format(topic, mid))
-
     def on_subscribe(self, client, userdata, mid, granted_qos):
-
-        # debug? 
-        # if self.debug:
-        #     logger.debug("Subscribed mid={}, qos={}".format(mid, granted_qos))
-
-        # if mid in self.subscribed:
-        #     # remove from list of subscribed
-        #     del self.subscribed[mid]
-        #
-        # else:
-        #     raise MQTTException('Unknown subscribe mid', mid)
-
-        # logger.debug('on_subscribe')
         pass
 
     def on_disconnect(self, client, userdata, rc):
