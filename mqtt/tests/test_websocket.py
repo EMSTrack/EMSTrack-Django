@@ -7,8 +7,9 @@ from ambulance.models import Ambulance, AmbulanceStatus
 from hospital.models import Hospital
 from equipment.models import EquipmentItem
 from login.models import Client, ClientStatus, ClientLog
-from mqtt.subscribe import SubscribeClient
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
+
+from .client import MQTTTestSubscribeClient as SubscribeClient
 
 
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
