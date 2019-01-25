@@ -85,8 +85,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Modify ambulance
 
@@ -107,8 +106,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
