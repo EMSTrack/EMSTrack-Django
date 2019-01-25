@@ -76,7 +76,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         publish_client.buffer_lock.release()
 
         # process messages
-        self.loop(client)
+        self.loop(client, publish_client)
         # client.wait()
 
         # assert change
