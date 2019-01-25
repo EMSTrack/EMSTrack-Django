@@ -132,6 +132,9 @@ class BaseClient:
 
         # are there any messages on the buffer?
         while len(self.buffer) > 0:
+
+            logger.debug('send_buffer len = {}'.format(len(self.buffer)))
+
             # attempt to send buffered messages
             message = self.buffer.pop(0)
 
