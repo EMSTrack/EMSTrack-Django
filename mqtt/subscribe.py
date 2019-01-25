@@ -567,6 +567,8 @@ class SubscribeClient(BaseClient):
             elif status == ClientStatus.D or status == ClientStatus.F:
 
                 # user client offline or disconnected
+
+                # client is being created
                 if client._state.adding:
 
                     # client does not exist yet
