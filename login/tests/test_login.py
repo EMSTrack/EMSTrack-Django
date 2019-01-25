@@ -15,9 +15,7 @@ from ..models import TemporaryPassword
 
 from ..serializers import UserProfileSerializer
 
-from login.tests.setup_data import TestSetup as MQTTTestCase
-
-# from mqtt.tests.client import MQTTTestCase
+from mqtt.tests.client import MQTTTestCase
 
 logger = logging.getLogger(__name__)
 
