@@ -54,8 +54,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -70,8 +69,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -112,8 +110,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id=self.a1.id)
@@ -137,15 +134,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Hospital.objects.get(id=self.h1.id)
@@ -172,15 +167,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # expect update once
         test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                               self.e1.id))
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
@@ -191,8 +184,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # wait for disconnect
         test_client.wait()

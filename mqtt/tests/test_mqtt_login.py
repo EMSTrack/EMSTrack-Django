@@ -168,5 +168,4 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # client doesn't know it cannot subscribe to certain topics!
         # full testing in test_mqtt
         self.is_subscribed(client)
-
         client.wait()
