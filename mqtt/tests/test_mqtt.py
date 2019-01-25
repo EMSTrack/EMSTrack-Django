@@ -1,31 +1,25 @@
+import json
 import logging
 import time
 
-from django.contrib.auth.models import User
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.utils import timezone
-
 from rest_framework.renderers import JSONRenderer
-import json
-
-from emstrack.tests.util import point2str
-from login.models import Client, ClientStatus, ClientLog, ClientActivity
-from login.permissions import get_permissions
-
-from login.serializers import UserProfileSerializer
-from login.views import SettingsView
 
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
+    AmbulanceStatus
 from ambulance.serializers import AmbulanceSerializer
-
-from hospital.models import Hospital
-from equipment.models import EquipmentType, Equipment, EquipmentItem, EquipmentHolder
-from hospital.serializers import HospitalSerializer
+from emstrack.tests.util import point2str
+from equipment.models import Equipment, EquipmentItem, EquipmentHolder
 from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
-
+from hospital.models import Hospital
+from hospital.serializers import HospitalSerializer
+from login.models import Client, ClientStatus, ClientLog, ClientActivity
+from login.permissions import get_permissions
+from login.serializers import UserProfileSerializer
+from login.views import SettingsView
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
-
 from .client import MQTTTestSubscribeClient as SubscribeClient
 
 logger = logging.getLogger(__name__)

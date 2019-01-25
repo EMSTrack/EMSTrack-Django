@@ -2,16 +2,13 @@ import json
 import logging
 
 from django.conf import settings
-from django.utils import timezone
 
-from ambulance.models import Ambulance, \
-    AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, LocationType, WaypointStatus
+from ambulance.models import AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, LocationType, \
+    WaypointStatus
 from ambulance.serializers import CallSerializer
-from emstrack.tests.util import point2str
-from hospital.models import Hospital
-from equipment.models import EquipmentItem
 from login.models import Client, ClientStatus, ClientLog
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
+from .client import MQTTTestSubscribeClient as SubscribeClient
 from ..subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
