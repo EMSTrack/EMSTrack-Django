@@ -133,7 +133,7 @@ class BaseClient:
         # are there any messages on the buffer?
         while len(self.buffer) > 0:
 
-            logger.debug('send_buffer len = {}'.format(len(self.buffer)))
+            logger.debug('> send_buffer len = {}'.format(len(self.buffer)))
 
             # attempt to send buffered messages
             message = self.buffer.pop(0)
@@ -148,6 +148,8 @@ class BaseClient:
 
             except MQTTException:
 
+                logger.debug('could not send message')
+
                 # put message back
                 self.buffer.insert(0, message)
 
@@ -159,6 +161,8 @@ class BaseClient:
 
                 # break from loop
                 break
+
+        logger.debug('< send_buffer len = {}'.format(len(self.buffer)))
 
         # release lock
         self.buffer_lock.release()
