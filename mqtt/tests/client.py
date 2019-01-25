@@ -484,7 +484,6 @@ class MQTTTestClientPublishSubscribeMixin:
         return self.subscribing == 0
 
     def done(self):
-
         return self.has_published() and self.has_subscribed()
 
     def publish(self, topic, payload=None, qos=0, retain=False):
@@ -549,6 +548,12 @@ class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
         self.expecting_messages = {}
         self.expecting_patterns = {}
         self.expecting = 0
+
+    def is_expecting(self):
+        return self.expecting > 0
+
+    def done(self):
+        return super().done() and not self.is_expecting()
 
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
@@ -674,9 +679,11 @@ class TestMQTT:
         if not done:
             # logger.debug('NOT DONE:')
             for client in clients:
-                if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
-                    logger.debug(('expecting = {}, ' +
-                                  'publishing = {}').format(client.expecting,
-                                                            client.publishing))
+                if hasattr(client, 'expecting'):
+                    logger.debug('expecting = {}'.format(client.expecting))
+                if hasattr(client, 'publishing'):
+                    logger.debug('publishing = {}'.format(client.publishing))
+                if hasattr(client, 'subscribing'):
+                    logger.debug('subscribing= {}'.format(client.subscribing))
 
         self.assertEqual(done, True)

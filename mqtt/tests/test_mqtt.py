@@ -365,7 +365,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
         [client.expect(t) for t in topics]
-        # self.is_subscribed(client)
+        self.is_subscribed(client)
 
         # process messages
         self.loop(client)
