@@ -29,7 +29,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = 'test_websocket_test_mqtt_subscribe'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -38,7 +38,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start test client over websockets
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_websocket_mqtt_test_mqtt_subscribe_admin'
         username = broker['USERNAME']
 
         broker['CLIENT_ID'] = client_id
@@ -203,7 +203,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_websocket_mqtt_test_mqtt_publish'
 
         client = MQTTTestClient(broker,
                                 transport='websockets',
