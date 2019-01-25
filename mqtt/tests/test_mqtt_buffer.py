@@ -77,7 +77,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(client)
-        client.wait()
+        # client.wait()
 
         # assert change
         obj = Ambulance.objects.get(id=self.a1.id)
