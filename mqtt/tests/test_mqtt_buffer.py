@@ -75,11 +75,6 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         self.assertTrue(len(publish_client.buffer) == 0)
         publish_client.buffer_lock.release()
 
-        # save will trigger failed publish
-        publish_client.buffer_lock.acquire()
-        self.assertTrue(len(publish_client.buffer) > 0)
-        publish_client.buffer_lock.release()
-
         # process messages
         self.loop(client)
         client.wait()
