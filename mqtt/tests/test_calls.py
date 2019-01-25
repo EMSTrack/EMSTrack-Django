@@ -9,7 +9,6 @@ from ambulance.serializers import CallSerializer
 from login.models import Client, ClientStatus, ClientLog
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from .client import MQTTTestSubscribeClient as SubscribeClient
-from ..subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
 
