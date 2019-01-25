@@ -191,6 +191,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
     def test(self):
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',
