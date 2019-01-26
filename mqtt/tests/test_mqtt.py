@@ -1640,8 +1640,8 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
 
         # reconnecting with same client-id
         test_client = MQTTTestClient(broker,
-                                check_payload=False,
-                                debug=False)
+                                     check_payload=False,
+                                     debug=False)
         self.is_connected(test_client)
 
         # Client handshake: online
