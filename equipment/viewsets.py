@@ -16,19 +16,19 @@ class EquipmentItemViewSet(mixins.ListModelMixin,
                            UpdateModelUpdateByMixin,
                            viewsets.GenericViewSet):
     """
-    API endpoint for manipulating hospital equipment.
+    API endpoint for manipulating equipment.
 
     list:
-    Retrieve list of hospital equipment.
+    Retrieve list of equipment.
 
     retrieve:
-    Retrieve an existing hospital equipment instance.
+    Retrieve an existing equipment instance.
 
     update:
-    Update existing hospital equipment instance.
+    Update existing equipment instance.
 
     partial_update:
-    Partially update existing hospital equipment instance.
+    Partially update existing equipment instance.
     """
 
     queryset = EquipmentItem.objects.all()
@@ -101,8 +101,8 @@ class EquipmentViewSet(BasePermissionMixin,
     """
     API endpoint for manipulating equipment.
 
-    metadata
-    Partially update existing hospital instance.
+    metadata:
+    Retrieve equipment metadata.
     """
 
     profile_field = 'equipments'
@@ -112,7 +112,7 @@ class EquipmentViewSet(BasePermissionMixin,
     @action(detail=True)
     def metadata(self, request, pk=None, **kwargs):
         """
-        Retrive hospital equipment metadata.
+        Retrive equipment metadata.
         """
 
         equipmentholder = self.get_object()

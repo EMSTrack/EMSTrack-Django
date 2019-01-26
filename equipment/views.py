@@ -48,7 +48,7 @@ class EquipmentAdminDetailView(DetailView):
 class EquipmentAdminCreateView(SuccessMessageMixin,
                                CreateView):
     model = Equipment
-    fields = ['name', 'type']
+    fields = ['name', 'type', 'default']
 
     def get_success_message(self, cleaned_data):
         return "Successfully created equipment '{}'".format(self.object.name)
