@@ -1666,10 +1666,6 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
 
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
-
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
@@ -1680,3 +1676,8 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
         self.assertEqual(obj[2].status, ClientStatus.F.name)
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
