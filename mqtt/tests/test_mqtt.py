@@ -1638,7 +1638,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # reconnecting with same client-id
+        # reconnecting with same client-id, forces a disconnect
         test_client = MQTTTestClient(broker,
                                      check_payload=False,
                                      debug=False)
