@@ -291,7 +291,7 @@ function onConnect() {
             console.log('Subscribing to topic: ' + topicName);
 
             // Subscribe to calls
-            var topicName = "ambulance/" + ambulancei.id + "/call/+/status";
+            var topicName = "ambulance/" + ambulance.id + "/call/+/status";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
 
