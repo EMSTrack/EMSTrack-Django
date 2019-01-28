@@ -237,6 +237,7 @@ function onConnect() {
     mqttClient.send(onlineMessage);
     console.log('Sent online message');
 
+/*
     // retrieve profile from api
     console.log("Retrieving profile from API");
     $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
@@ -263,9 +264,10 @@ function onConnect() {
         });
 
     });
-
+*/
 
     // Retrieve ambulances from API
+    console.log("Retrieving ambulances from API");
     $.getJSON(APIBaseUrl + 'ambulance/', function (data) {
 
         n = 0;
@@ -278,13 +280,24 @@ function onConnect() {
             // update ambulance
             updateAmbulance(ambulance);
 
-            // Center of the ambulances
+            // calculate center of the ambulances
             n = n + 1;
             lat += ambulance.location.latitude;
             lon += ambulance.location.longitude;
 
+            // Subscribe to ambulance
+            var topicName = "ambulance/" + ambulances.id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+
+            // Subscribe to calls
+            var topicName = "ambulance/" + ambulancei.id + "/call/+/status";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
+
         });
 
+        // Center map
         if (n > 0) {
             // Set map view
             lat = lat / n;
@@ -297,6 +310,7 @@ function onConnect() {
     });
 
     // Retrieve hospitals from API
+    console.log("Retrieving hospitals from API");
     $.getJSON(APIBaseUrl + 'hospital/', function (data) {
 
         // Retrieve hospitals
@@ -304,6 +318,11 @@ function onConnect() {
 
             // update hospital
             updateHospital(hospital);
+
+            // subscribe to hospital
+            var topicName = "hospital/" + hospital.id + "/data";
+            mqttClient.subscribe(topicName);
+            console.log('Subscribing to topic: ' + topicName);
 
         });
     });
