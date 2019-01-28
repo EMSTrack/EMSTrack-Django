@@ -280,7 +280,7 @@ class ClientDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         # retrieve log
-        context['clientlog_list'] = self.object.clientlog_set.all()
+        context['clientlog_list'] = self.object.clientlog_set.all().order_by('-updated_on')
 
         return context
 

@@ -1023,7 +1023,7 @@ class SubscribeClient(BaseClient):
                 cache_clear()
 
                 if self.verbosity > 0:
-                    self.stdout.write(self.style.SUCCESS(" > Clearing cache'"))
+                    self.stdout.write(self.style.SUCCESS(" > Clearing cache"))
 
             else:
 
