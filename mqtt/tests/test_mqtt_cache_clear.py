@@ -87,11 +87,29 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
 
+        # clear cache
+        cache_clear()
+
+        # retrieve permissions for user u1
+        get_permissions(self.u1)
+        get_permissions(self.u1)
+        get_permissions(self.u1)
+        get_permissions(self.u1)
+        info = cache_info()
+        self.assertEqual(info.hits, 3)
+        self.assertEqual(info.misses, 1)
+        self.assertEqual(info.currsize, 1)
+
         # send cache_clear
         test_client.publish('message', 'cache_clear')
 
         # process messages
         self.loop(test_client, subscribe_client)
+
+        info = cache_info()
+        self.assertEqual(info.hits, 0)
+        self.assertEqual(info.misses, 0)
+        self.assertEqual(info.currsize, 0)
 
         # wait for disconnect
         test_client.wait()
