@@ -1003,6 +1003,10 @@ class SubscribeClient(BaseClient):
 
             logger.debug("on_message: msg = '{}'".format(msg.topic, msg.payload))
 
+            if self.verbosity > 0:
+                self.stdout.write(self.style.SUCCESS(" > Parsing message '{}:{}'".format(msg.topic,
+                                                                                         msg.payload)))
+
             # Parse message
             data = msg.payload.decode()
 
