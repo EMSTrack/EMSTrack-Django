@@ -224,47 +224,10 @@ var bsdialog = function(message, alertClass, title) {
 
 }
 
-/* Handle connect */
-function onConnect() {
+function getData(subscribe) {
 
-    console.log("Connected to MQTT broker");
-
-    // handshake online
-    var onlineMessage = new Paho.MQTT.Message('online');
-    onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
-    onlineMessage.qos = 2;
-    onlineMessage.retained = false;
-    mqttClient.send(onlineMessage);
-    console.log('Sent online message');
-
-/*
-    // retrieve profile from api
-    console.log("Retrieving profile from API");
-    $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
-
-        // Subscribe to ambulances
-        $.each(data.ambulances, function (index) {
-            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
-        });
-
-        // Subscribe to hospitals
-        $.each(data.hospitals, function (index) {
-            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
-        });
-
-        // Subscribe to calls
-        $.each(data.ambulances, function (index) {
-            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/call/+/status";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
-        });
-
-    });
-*/
+    // default is true
+    subscribe = subscribe || true;
 
     // Retrieve ambulances from API
     console.log("Retrieving ambulances from API");
@@ -285,15 +248,19 @@ function onConnect() {
             lat += ambulance.location.latitude;
             lon += ambulance.location.longitude;
 
-            // Subscribe to ambulance
-            var topicName = "ambulance/" + ambulance.id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
+            if (subscribe) {
 
-            // Subscribe to calls
-            var topicName = "ambulance/" + ambulance.id + "/call/+/status";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
+                // Subscribe to ambulance
+                var topicName = "ambulance/" + ambulance.id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+                // Subscribe to calls
+                topicName = "ambulance/" + ambulance.id + "/call/+/status";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+            }
 
         });
 
@@ -319,10 +286,14 @@ function onConnect() {
             // update hospital
             updateHospital(hospital);
 
-            // subscribe to hospital
-            var topicName = "hospital/" + hospital.id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
+            if (subscribe) {
+
+                // subscribe to hospital
+                var topicName = "hospital/" + hospital.id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+            }
 
         });
     });
@@ -366,6 +337,24 @@ function onConnect() {
         });
     */
 
+}
+
+/* Handle connect */
+function onConnect() {
+
+    console.log("Connected to MQTT broker");
+
+    // handshake online
+    var onlineMessage = new Paho.MQTT.Message('online');
+    onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
+    onlineMessage.qos = 2;
+    onlineMessage.retained = false;
+    mqttClient.send(onlineMessage);
+    console.log('Sent online message');
+
+    // get data
+    getData();
+
 };
 
 /* Handle missconnection */
@@ -374,67 +363,8 @@ function onConnectFailure(message) {
     bsalert("Connection to MQTT broker failed: " + message.errorMessage +
         "Information will not be updated in real time.");
 
-/*
-    // Load hospital data from API
-    $.ajax({
-        type: 'GET',
-        datatype: "json",
-        url: APIBaseUrl + 'hospital/',
-
-        error: function (msg) {
-
-            bsalert('Could not retrieve data from API:' + msg)
-
-        },
-
-        success: function (data) {
-
-            console.log('Got data from API')
-
-            $.each(data, function (i, hospital) {
-
-                // update hospital
-                updateHospital(hospital);
-
-            });
-        }
-    })
-        .done(function (data) {
-            if (console && console.log) {
-                console.log("Done retrieving hospital data from API");
-            }
-        });
-
-    // Load ambulance data from API
-    $.ajax({
-        type: 'GET',
-        datatype: "json",
-        url: APIBaseUrl + 'ambulance/',
-
-        error: function (msg) {
-
-            bsalert('Could not retrieve data from API:' + msg)
-
-        },
-
-        success: function (data) {
-
-            console.log('Got data from API')
-
-            $.each(data, function (i, ambulance) {
-
-                // update ambulance
-                updateAmbulance(ambulance);
-
-            });
-        }
-    })
-        .done(function (data) {
-            if (console && console.log) {
-                console.log("Done retrieving ambulance data from API");
-            }
-        });
-*/
+    // get data without subscribing
+    getData(false);
 
 };
 
