@@ -1017,7 +1017,7 @@ class SubscribeClient(BaseClient):
 
         try:
 
-            if data == "cache_clear":
+            if data == ''"cache_clear"'':
 
                 # call cache clear
                 cache_clear()
