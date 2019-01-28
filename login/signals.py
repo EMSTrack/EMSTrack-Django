@@ -1,8 +1,9 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 
 from django.contrib.auth.models import User, Group
 
+from login.permissions import cache_clear
 from .models import UserProfile, GroupProfile
 
 
@@ -11,6 +12,14 @@ from .models import UserProfile, GroupProfile
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
+
+
+@receiver(m2m_changed, sender=User.groups.through)
+def user_groups_changed_handler(sender, instance, action, **kwargs):
+    if action == 'post_add' or action == 'post_remove':
+
+        # invalidate permissions cache
+        cache_clear()
 
 
 # Add signal to automatically extend group profile
