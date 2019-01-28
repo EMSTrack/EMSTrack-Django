@@ -1,9 +1,9 @@
 import logging
-from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError, transaction
 
 from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
+from rest_framework.exceptions import PermissionDenied
 
 from login.models import Client
 from login.permissions import get_permissions

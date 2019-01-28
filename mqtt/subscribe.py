@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.models import User
 
 from django.db import IntegrityError, transaction
+from rest_framework.exceptions import PermissionDenied
 
 from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
@@ -363,7 +364,7 @@ class SubscribeClient(BaseClient):
                                 # raise error to rollback transaction
                                 raise ClientException()
 
-                    except ClientException:
+                    except (ClientException, PermissionDenied):
 
                         # send error message to user
                         self.send_error_message(user, client, msg.topic, msg.payload,
