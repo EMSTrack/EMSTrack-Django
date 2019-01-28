@@ -1,5 +1,4 @@
 from login.permissions import cache_clear
-from mqtt.publish import SingletonPublishClient
 
 
 def mqtt_cache_clear():
@@ -8,4 +7,5 @@ def mqtt_cache_clear():
     cache_clear()
 
     # and signal through mqtt
+    from mqtt.publish import SingletonPublishClient
     SingletonPublishClient().publish_message('cache_clear')
