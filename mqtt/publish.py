@@ -19,7 +19,16 @@ logger = logging.getLogger(__name__)
 
 class MessagePublishClient:
 
+    def publish_message(self, **kwargs):
+        pass
+
+    def publish_settings(self, **kwargs):
+        pass
+
     def publish_profile(self, user, **kwargs):
+        pass
+
+    def remove_profile(self, user, **kwargs):
         pass
 
     def publish_ambulance(self, ambulance, **kwargs):
@@ -83,6 +92,12 @@ class PublishClient(BaseClient):
     def remove_topic(self, topic, qos=0):
         if self.active:
             super().remove_topic(topic, qos)
+
+    def publish_message(self, message, qos=2):
+        self.publish_topic('message',
+                           message,
+                           qos=qos,
+                           retain=False)
 
     def publish_settings(self, qos=2, retain=True):
         self.publish_topic('settings',

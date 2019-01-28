@@ -533,8 +533,15 @@ class MQTTAclView(CsrfExemptMixin,
 
                 # permission to publish:
 
+                #  - message
+                if (len(topic) == 1 and
+                        topic[0] == 'message' and
+                        user.is_superuser):
+
+                    return HttpResponse('OK')
+
                 #  - user/{username}/client/{client-id}/#
-                if (len(topic) >= 5 and
+                elif (len(topic) >= 5 and
                         topic[0] == 'user' and
                         topic[1] == user.username and
                         topic[2] == 'client' and
