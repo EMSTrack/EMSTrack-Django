@@ -379,10 +379,11 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_ambulance: serializer EXCEPTION')
+            logger.debug('on_ambulance: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         logger.debug('on_ambulance: DONE')
 
@@ -445,10 +446,11 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_hospital: serializer EXCEPTION')
+            logger.debug('on_hospital: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         logger.debug('on_hospital: DONE')
 
@@ -513,10 +515,11 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_equipment_item: serializer EXCEPTION')
+            logger.debug('on_equipment_item: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         logger.debug('on_equipment_item: DONE')
 
@@ -867,7 +870,8 @@ class SubscribeClient(BaseClient):
             logger.debug('on_call_ambulance: ambulance EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
 
         logger.debug('on_call_ambulance: DONE')
 
@@ -977,7 +981,8 @@ class SubscribeClient(BaseClient):
             logger.debug('on_call_ambulance_waypoint: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
 
         logger.debug('on_call_ambulance_waypoint: DONE')
 
