@@ -286,7 +286,7 @@ function onConnect() {
             lon += ambulance.location.longitude;
 
             // Subscribe to ambulance
-            var topicName = "ambulance/" + ambulances.id + "/data";
+            var topicName = "ambulance/" + ambulance.id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
 
