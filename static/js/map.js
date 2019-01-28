@@ -138,7 +138,7 @@ $(function () {
 
     });
 
-    // Event handler for when some1pxg is drawn. Only handles
+    // Event handler for when something is drawn. Only handles
     // when a new drawing is made for now.
     mymap.on(L.Draw.Event.CREATED,
         function (e) {
@@ -264,7 +264,51 @@ function onConnect() {
 
     });
 
-    // retrieve locations from api
+
+    // Retrieve ambulances from API
+    $.getJSON(APIBaseUrl + 'ambulance/', function (data) {
+
+        n = 0;
+        lat = 0;
+        lon = 0;
+
+        // Retrieve ambulances
+        $.each(data, function (i, ambulance) {
+
+            // update ambulance
+            updateAmbulance(ambulance);
+
+            // Center of the ambulances
+            n = n + 1;
+            lat += ambulance.location.latitude;
+            lon += ambulance.location.longitude;
+
+        });
+
+        if (n > 0) {
+            // Set map view
+            lat = lat / n;
+            lon = lon / n;
+            console.log('Center at lat = ' + lat + ', lon = ' + lon);
+
+            mymap.setView([lat, lon], 12);
+        }
+
+    });
+
+    // Retrieve hospitals from API
+    $.getJSON(APIBaseUrl + 'hospital/', function (data) {
+
+        // Retrieve hospitals
+        $.each(data, function (i, hospital) {
+
+            // update hospital
+            updateHospital(hospital);
+
+        });
+    });
+
+    // Retrieve hospitals from API
     console.log("Retrieving locations from API");
     $.getJSON(APIBaseUrl + 'location/Hospital/', function (data) {
 
@@ -275,6 +319,7 @@ function onConnect() {
         });
     });
 
+    // Retrieve bases from API
     $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
 
         // add location
@@ -310,6 +355,7 @@ function onConnectFailure(message) {
     bsalert("Connection to MQTT broker failed: " + message.errorMessage +
         "Information will not be updated in real time.");
 
+/*
     // Load hospital data from API
     $.ajax({
         type: 'GET',
@@ -369,6 +415,7 @@ function onConnectFailure(message) {
                 console.log("Done retrieving ambulance data from API");
             }
         });
+*/
 
 };
 
