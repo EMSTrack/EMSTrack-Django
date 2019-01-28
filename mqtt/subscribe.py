@@ -1022,6 +1022,9 @@ class SubscribeClient(BaseClient):
                 # call cache clear
                 cache_clear()
 
+                if self.verbosity > 0:
+                    self.stdout.write(self.style.SUCCESS(" > Clearing cache'"))
+
             else:
 
                 logger.debug("on_message: unknown message '{}'".format(data))
