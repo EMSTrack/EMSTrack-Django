@@ -159,8 +159,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
         # Wait for start
         cls.run_until_success(["service",
-                                "mosquitto",
-                                "status"])
+                               "mosquitto",
+                               "status"])
 
 
         time.sleep(2)
@@ -212,8 +212,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         
         # Wait for start
         cls.run_until_success(["service",
-                                "mosquitto",
-                                "status"])
+                               "mosquitto",
+                               "status"])
         
         # print('>> Starting mqttclient')
         

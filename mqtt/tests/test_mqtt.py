@@ -1628,8 +1628,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1639,18 +1638,17 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # reconnecting with same client-id
+        # reconnecting with same client-id, forces a disconnect
         test_client = MQTTTestClient(broker,
-                                check_payload=False,
-                                debug=False)
+                                     check_payload=False,
+                                     debug=False)
         self.is_connected(test_client)
 
         # Client handshake: online
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1666,12 +1664,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1679,7 +1672,13 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 3)
+        self.assertEqual(len(obj), 4)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
-        self.assertEqual(obj[2].status, ClientStatus.F.name)
+        self.assertEqual(obj[2].status, ClientStatus.D.name)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+
