@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 
-from login.permissions import cache_clear
+from mqtt.publish import mqtt_cache_clear
 
 
 # filters
@@ -39,7 +39,7 @@ class UserProfile(models.Model):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -51,7 +51,7 @@ class UserProfile(models.Model):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # remove from mqtt
         from mqtt.publish import SingletonPublishClient
@@ -82,7 +82,7 @@ class GroupProfile(models.Model):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
     def delete(self, *args, **kwargs):
 
@@ -90,7 +90,7 @@ class GroupProfile(models.Model):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
 
 # Group Ambulance and Hospital Permissions
@@ -118,7 +118,7 @@ class UserAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -130,7 +130,7 @@ class UserAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -160,7 +160,7 @@ class UserHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -172,7 +172,7 @@ class UserHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -202,7 +202,7 @@ class GroupAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -216,7 +216,7 @@ class GroupAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -247,7 +247,7 @@ class GroupHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -261,7 +261,7 @@ class GroupHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():

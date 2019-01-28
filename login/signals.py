@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from django.contrib.auth.models import User, Group
 
-from login.permissions import cache_clear
+from mqtt.publish import mqtt_cache_clear
 from .models import UserProfile, GroupProfile
 
 
@@ -19,7 +19,7 @@ def user_groups_changed_handler(sender, instance, action, **kwargs):
     if action == 'post_add' or action == 'post_remove':
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
 
 # Add signal to automatically extend group profile
