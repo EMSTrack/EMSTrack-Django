@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 
-from mqtt.publish import mqtt_cache_clear
+from mqtt.cache_clear import mqtt_cache_clear
 
 
 # filters

@@ -3,7 +3,7 @@ from django.dispatch import receiver
 
 from django.contrib.auth.models import User, Group
 
-from mqtt.publish import mqtt_cache_clear
+from mqtt.cache_clear import mqtt_cache_clear
 from .models import UserProfile, GroupProfile
 
 

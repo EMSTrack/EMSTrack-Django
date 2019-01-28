@@ -8,7 +8,6 @@ from ambulance.serializers import CallSerializer
 from equipment.models import Equipment
 from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
 from hospital.serializers import HospitalSerializer
-from login.permissions import cache_clear
 from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 from .client import BaseClient, MQTTException
@@ -235,13 +234,5 @@ class SingletonPublishClient(PublishClient):
 
 
 # mqtt_cache_clear
-
-def mqtt_cache_clear():
-
-    # call cache_clear locally
-    cache_clear()
-
-    # and signal through mqtt
-    SingletonPublishClient().publish_message('cache_clear')
 
 

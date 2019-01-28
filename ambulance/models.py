@@ -251,7 +251,7 @@ class Ambulance(UpdatedByModel):
         # just created?
         if created:
             # invalidate permissions cache
-            from mqtt.publish import mqtt_cache_clear
+            from mqtt.cache_clear import mqtt_cache_clear
             mqtt_cache_clear()
 
     def delete(self, *args, **kwargs):
@@ -261,7 +261,7 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().remove_ambulance(self)
 
         # invalidate permissions cache
-        from mqtt.publish import mqtt_cache_clear
+        from mqtt.cache_clear import mqtt_cache_clear
         mqtt_cache_clear()
 
         # delete from Ambulance
