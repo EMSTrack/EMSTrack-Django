@@ -118,7 +118,7 @@
 				</tr>
                 </thead>
                 <tbody>
-				{% for location in aed_list %}
+				{% for location in incident_list %}
 				<tr>
 					<td>
                         <a href="{% url 'ambulance:location_detail' pk=location.id %}">{{ location.get_address }}</a>
