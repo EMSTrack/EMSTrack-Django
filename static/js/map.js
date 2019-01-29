@@ -30,7 +30,7 @@ for (var key in ambulance_css) {
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
 
 var redMarker = L.AwesomeMarkers.icon({
-    icon: 'coffee',
+    // icon: 'coffee',
     markerColor: 'red'
 });
 
