@@ -1,4 +1,6 @@
-markers-custom {
-  margin-top: 40px;
-  font-size: 32px;
+marker-custom {
+  position: absolute;
+  margin-top: 10px;
+  margin-left: -30px;
+  font-size: 14px;
 }
