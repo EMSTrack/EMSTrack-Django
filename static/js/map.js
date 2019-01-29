@@ -26,6 +26,11 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
+var redMarker = L.VectorMarkers.icon({
+    icon: 'coffee',
+    markerColor: 'red'
+});
+
 var patientIcon = L.icon({
 	iconUrl: '/static/icons/maki/marker-15.svg',
 	iconSize: [15, 15]
@@ -388,26 +393,26 @@ function onMessageArrived(message) {
 
             // Look for ambulance/{id}/data
             if (topic[0] === 'ambulance' &&
-                topic[2] == 'data') {
+                topic[2] === 'data') {
                 updateAmbulance(data);
             }
 
             // Look for hospital/{id}/data
             else if (topic[0] === 'hospital' &&
-                topic[2] == 'data') {
+                topic[2] === 'data') {
                 updateHospital(data);
             }
 
             // Look for call/{id}/data
             else if (topic[0] === 'call' &&
-                topic[2] == 'data') {
+                topic[2] === 'data') {
                 updateCall(data);
             }
 
             // look for ambulance call information
             else if (topic[0] === 'ambulance' &&
-                topic[2] == 'call' &&
-                topic[4] == 'status') {
+                topic[2] === 'call' &&
+                topic[4] === 'status') {
                 var ambulance_id = topic[1];
                 var call_id = topic[3];
                 updateAmbulanceCall(ambulance_id, call_id, data);
@@ -428,7 +433,7 @@ function onMessageArrived(message) {
         // This can happen if a topic is being unretained
         console.log('Message "' + message.destinationName  + '" has an empty payload');
 
-};
+}
 
 function updateAmbulance(ambulance) {
 
@@ -516,7 +521,7 @@ function addAmbulanceToGrid(ambulance) {
         ' to grid');
 
     // make grid visible
-    if (ambulance.status == 'AV')
+    if (ambulance.status === 'AV')
         $('#ambulance-' + ambulance.status).addClass('show');
 
     // Add button to ambulance grid
@@ -570,9 +575,9 @@ function updateCall(call) {
         if (matches.length > 1) {
 
             old_status = matches[1];
-            if (status != old_status) {
+            if (status !== old_status) {
 
-                if (status != 'E') {
+                if (status !== 'E') {
 
                     // move to new category
                     $('#call-item-' + id)
@@ -637,7 +642,7 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
-    if (status == 'C') {
+    if (status === 'C') {
 
         // Completed ambulance call, unsubscribe
         var topicName = "ambulance/" + ambulance_id + "/call/+/status";
@@ -650,7 +655,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
         if (!(call_id in calls)) {
 
             // subscribe to call
-            var topicName = "call/" + call_id + "/data";
+            topicName = "call/" + call_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
 
@@ -665,7 +670,7 @@ function updateCallCounter() {
 
     var total = 0;
     call_status_order.forEach(function(status) {
-        if (status != 'E') {
+        if (status !== 'E') {
             var count = $('#call-grid-' + status).children().length;
             total += count;
             if (count > 0)
@@ -694,9 +699,9 @@ function addCallToGrid(call) {
 
     // Get relevant date
     var date = call.updated_on;
-    if (status == 'P')
+    if (status === 'P')
         date = call.pending_at;
-    else if (status == 'S')
+    else if (status === 'S')
         date = call.started_at;
 
     // Format date
@@ -764,12 +769,13 @@ function addCallToGrid(call) {
     // update call counter
     updateCallCounter();
 
-};
+}
 
 function addCallToMap(call) {
 
     // set icon by status
-    var coloredIcon = patientIcon;
+    // var coloredIcon = patientIcon;
+    var coloredIcon = redMarker;
 
     // get patients
     var patients = "";
@@ -787,9 +793,9 @@ function addCallToMap(call) {
 
     // Get relevant date
     var date = call.updated_on;
-    if (status == 'P')
+    if (status === 'P')
         date = call.pending_at;
-    else if (status == 'S')
+    else if (status === 'S')
         date = call.started_at;
 
     // Format date
