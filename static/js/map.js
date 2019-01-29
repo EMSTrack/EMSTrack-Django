@@ -26,8 +26,11 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
-var redMarker = L.VectorMarkers.icon({
-    icon: 'coffee',
+icon.fa <- makeAwesomeIcon(icon = 'flag', markerColor = 'red', library='fa',
+                           iconColor = 'black')
+
+var patientMarker = L.VectorMarkers.icon({
+    icon: icon.fa,
     markerColor: 'red'
 });
 
