@@ -26,19 +26,10 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
-icon.fa <- makeAwesomeIcon(icon = 'flag', markerColor = 'red', library='fa',
-                           iconColor = 'black')
-
 // Creates a red marker with the coffee icon
 var redMarker = L.AwesomeMarkers.icon({
     icon: 'coffee',
     markerColor: 'red'
-});
-
-// Creates a red marker with the coffee icon
-var blueMarker = L.AwesomeMarkers.icon({
-    icon: icon.fa,
-    markerColor: 'blue'
 });
 
 var patientIcon = L.icon({
