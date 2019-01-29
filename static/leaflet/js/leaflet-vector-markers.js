@@ -140,7 +140,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var iconOptions = {
 	  iconSize: [30, 50],
 	  iconAnchor: [15, 50],
-	  popupAnchor: [10, -30], //[2, -40],
+	  popupAnchor: [20, -40], //[2, -40],
 	  shadowAnchor: [39, 45],
 	  shadowSize: [54, 51],
 	  className: 'vector-marker',
