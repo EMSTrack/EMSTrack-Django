@@ -27,8 +27,10 @@ for (var key in ambulance_css) {
 }
 
 // Creates a red marker with the coffee icon
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+
 var redMarker = L.AwesomeMarkers.icon({
-    icon: 'fa-coffee',
+    icon: 'coffee',
     markerColor: 'red'
 });
 
