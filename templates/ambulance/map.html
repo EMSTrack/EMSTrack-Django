@@ -346,15 +346,19 @@
         async defer></script>
 -->
 
+<!-- leaflet vector markers -->
+
+<script src="{% static 'leaflet/js/leaflet.awesome-markers.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet/css/leaflet.awesome-markers.css' %}">
+
+<script src="{% static 'leaflet/js/leaflet-vector-markers.js' %}"></script>
+<link rel="stylesheet" href="{% static 'leaflet/css/leaflet-vector-markers.css' %}">
+
 <!-- Load javascript code -->
 <script src="{% static 'js/geocoder.js' %}"></script>
 <script src="{% static 'js/dispatch.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
 
-<!-- leaflet vector markers -->
-
-<script src="{% static 'leaflet/js/leaflet-vector-markers.js' %}"></script>
-<link rel="stylesheet" href="{% static 'leaflet/css/leaflet-vector-markers.css' %}">
 
 {% endblock %}
