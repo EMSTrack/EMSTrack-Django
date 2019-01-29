@@ -29,8 +29,8 @@ for (var key in ambulance_css) {
 // Creates a red marker with the coffee icon
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
 
-var redMarker = L.VectorMarkers.icon({
-    // icon: 'coffee',
+var patientMarker = L.VectorMarkers.icon({
+    icon: 'plus',
     markerColor: 'red',
     extraClasses: 'marker-custom'
 });
@@ -777,10 +777,6 @@ function addCallToGrid(call) {
 
 function addCallToMap(call) {
 
-    // set icon by status
-    // var coloredIcon = patientIcon;
-    var coloredIcon = redMarker;
-
     // get patients
     var patients = "";
     var isFirst = true;
@@ -819,7 +815,7 @@ function addCallToMap(call) {
                 patientMarkers[id] = L.marker(
                     [location.location.latitude, location.location.longitude],
                     {
-                        icon: coloredIcon,
+                        icon: patientMarker,
                         pane: 'patient'
                     })
                     .bindPopup(
