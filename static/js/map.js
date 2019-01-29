@@ -31,7 +31,8 @@ L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
 
 var redMarker = L.VectorMarkers.icon({
     // icon: 'coffee',
-    markerColor: 'red'
+    markerColor: 'red',
+    extraClasses: 'marker-custom'
 });
 
 var patientIcon = L.icon({
