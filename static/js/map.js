@@ -817,7 +817,7 @@ function addCallToGrid(call) {
 
 }
 
-function addWaypoints(call_id, ambulance_id, waypoint_set, patients) {
+function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients) {
 
     // waypoints layer id
     const id = call_id + '_' + ambulance_id;
@@ -935,7 +935,7 @@ function addCallToMap(call) {
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
         // add waypoints
-        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], patients);
+        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], date, patients);
 
 /*
         var ambulance_id = ambulance_call.ambulance_id;
