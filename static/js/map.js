@@ -667,7 +667,7 @@ function updateCall(call) {
             }
 
         } else
-            
+
             console.log('Could not match current call status');
 
     } else {
