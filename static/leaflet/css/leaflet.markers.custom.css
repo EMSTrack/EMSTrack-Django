@@ -5,6 +5,12 @@
   font-size: 14px;
 }
 
+.fa-stack-marker-xs {
+   font-size: 12px;
+  margin-left: -11px;
+  margin-top: -36px
+}
+
 .fa-stack-marker-sm {
    font-size: 18px;
   margin-left: -16px;

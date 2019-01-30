@@ -30,9 +30,10 @@ var newFontAwesomeStackedIcon = function (options) {
         return new L.divIcon({
             html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
                   '<i class="fas fa-map-marker fa-stack-2x"></i>' +
-                  '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-top:-0.3em"></i>' +
+                  '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-to\
+p:0.2em"></i>' +
                   '</span>',
-            popupAnchor: [0, -30],
+            popupAnchor: [0, -15],
             className: 'myDivIcon'
         });
     }
@@ -40,13 +41,26 @@ var newFontAwesomeStackedIcon = function (options) {
 // Creates a red marker with the coffee icon
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
 
-var patientMarker = L.VectorMarkers.icon({
+var patientMarker = newFontAwesomeStackedIcon({
     icon: 'plus',
-    markerColor: 'red',
-    extraClasses: 'marker-custom'
+    extraClasses: 'fa-stack-marker-xs text-danger'
 });
 
-var patientMarker = newFontAwesomeStackedIcon({icon: 'plus', extraClasses: 'fa-stack-marker-sm'});
+var hospitalMarker = newFontAwesomeStackedIcon({
+    icon: 'hospital',
+    extraClasses: 'fa-stack-marker-xs text-warning'
+});
+
+var waypointMarker = newFontAwesomeStackedIcon({
+    icon: 'map',
+    extraClasses: 'fa-stack-marker-xs text-primary'
+});
+
+var baseMarker = newFontAwesomeStackedIcon({
+    icon: 'home',
+    extraClasses: 'fa-stack-marker-xs text-success'
+});
+
 
 var patientIcon = L.icon({
 	iconUrl: '/static/icons/maki/marker-15.svg',
