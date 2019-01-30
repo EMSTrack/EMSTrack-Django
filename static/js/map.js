@@ -889,7 +889,7 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients) {
 function removeWaypoints(call_id, ambulance_id) {
 
     // build id
-    const id = call.id + '_' + ambulance_id;
+    const id = call_id + '_' + ambulance_id;
 
     // remove layer
     mymap.removeLayer(patientMarkers[id]);
