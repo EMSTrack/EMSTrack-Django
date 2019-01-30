@@ -35,6 +35,8 @@ var patientMarker = L.VectorMarkers.icon({
     extraClasses: 'marker-custom'
 });
 
+var patientMarker = newFontAwesomeStackedIcon({icon: 'plus', extraClasses: 'fa-stack-marker-lg'});
+
 var patientIcon = L.icon({
 	iconUrl: '/static/icons/maki/marker-15.svg',
 	iconSize: [15, 15]
