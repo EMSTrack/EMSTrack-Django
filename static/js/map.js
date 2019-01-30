@@ -601,16 +601,15 @@ function updateCall(call) {
     if (id in calls) {
 
         // retrieve old status
-        var matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
-        var old_status = null;
+        const matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
+        let old_status = null;
         if (matches.length > 1) {
 
+            // call exists!
             old_status = matches[1];
             if (status !== old_status) {
 
-                // get patients
-                const patients = compilePatients(call);
-
+                // status changed
                 if (status !== 'E') {
 
                     // move to new category
@@ -633,8 +632,16 @@ function updateCall(call) {
 
                 }
 
-                // update call counter
-                updateCallCounter();
+            }
+
+            // update call counter
+            updateCallCounter();
+
+            // get patients
+            const patients = compilePatients(call);
+
+            // Put new waypoints if call not ended
+            if (status !== 'E') {
 
                 // update waypoints
                 call.ambulancecall_set.forEach(function (ambulance_call) {
@@ -642,36 +649,15 @@ function updateCall(call) {
                     // Remove waypoints
                     removeWaypoints(call.id, ambulance_call.ambulance_id);
 
-                    // Put new waypoints if call not ended
-                    if (status !== 'E') {
-
-                        // add waypoints
-                        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], patients);
-
-                    }
-
-/*
-                        var ambulance_id = ambulance_call.ambulance_id;
-                        var waypoint_set = ambulance_call['waypoint_set'];
-                        waypoint_set.forEach(function (waypoint) {
-
-                            var location = waypoint['location'];
-                            if (location.type === 'i') {
-                                var id = call.id + '_' + ambulance_id;
-
-                                mymap.removeLayer(patientMarkers[id]);
-                                delete patientMarkers[id];
-
-                            }
-
-                        });
-*/
+                    // add waypoints
+                    addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], patients);
 
                 });
 
             }
 
         } else
+
             console.log('Could not match current call status');
 
     } else {
