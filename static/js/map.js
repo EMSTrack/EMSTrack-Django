@@ -640,8 +640,18 @@ function updateCall(call) {
             // get patients
             const patients = compilePatients(call);
 
-            // Put new waypoints if call not ended
-            if (status !== 'E') {
+            // Update waypoints
+            if (status === 'E') {
+
+                // remove waypoints
+                call.ambulancecall_set.forEach(function (ambulance_call) {
+
+                    // Remove waypoints
+                    removeWaypoints(call.id, ambulance_call.ambulance_id);
+
+                });
+
+            } else {
 
                 // update waypoints
                 call.ambulancecall_set.forEach(function (ambulance_call) {
@@ -657,7 +667,7 @@ function updateCall(call) {
             }
 
         } else
-
+            
             console.log('Could not match current call status');
 
     } else {
