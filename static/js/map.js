@@ -608,6 +608,9 @@ function updateCall(call) {
             old_status = matches[1];
             if (status !== old_status) {
 
+                // get patients
+                const patients = compilePatients(call);
+
                 if (status !== 'E') {
 
                     // move to new category
@@ -628,9 +631,26 @@ function updateCall(call) {
                     // Remove from calls
                     delete calls[id];
 
-                    // Remove patients from map
-                    call.ambulancecall_set.forEach(function (ambulance_call) {
+                }
 
+                // update call counter
+                updateCallCounter();
+
+                // update waypoints
+                call.ambulancecall_set.forEach(function (ambulance_call) {
+
+                    // Remove waypoints
+                    removeWaypoints(call.id, ambulance_call.ambulance_id);
+
+                    // Put new waypoints if call not ended
+                    if (status !== 'E') {
+
+                        // add waypoints
+                        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], patients);
+
+                    }
+
+/*
                         var ambulance_id = ambulance_call.ambulance_id;
                         var waypoint_set = ambulance_call['waypoint_set'];
                         waypoint_set.forEach(function (waypoint) {
@@ -645,16 +665,11 @@ function updateCall(call) {
                             }
 
                         });
+*/
 
-                    });
-
-                }
-
-                // update call counter
-                updateCallCounter();
+                });
 
             }
-            // No changes needed if status does not change
 
         } else
             console.log('Could not match current call status');
@@ -802,24 +817,112 @@ function addCallToGrid(call) {
 
 }
 
+function addWaypoints(call_id, ambulance_id, waypoint_set, patients) {
+
+    // waypoints layer id
+    const id = call_id + '_' + ambulance_id;
+
+    // create group layer
+    patientMarkers[id] = L.layerGroup();
+
+    // loop over waypoints
+    waypoint_set.forEach(function (waypoint) {
+
+        const location = waypoint['location'];
+        let icon;
+        if (location.type === 'i') {
+            icon = patientMarker;
+        } else if (location.type === 'h') {
+            icon = hospitalMarker;
+        } else if (location.type === 'w') {
+            icon = waypointMarker
+        } else if (location.type === 'b') {
+            icon = baseMarker
+        } else {
+            console.log("Unknown waypoint type '" + location.type + "'. Aborting.");
+            return;
+        }
+
+        // create marker
+        let marker = L.marker(
+            [location.location.latitude, location.location.longitude],
+            {
+                icon: icon,
+                pane: 'patient'
+            });
+
+        // Add popup to the incident location
+        if (location.type === 'i') {
+
+            marker.bindPopup(
+                '<strong>' + date + '</strong>' +
+                '<br/>' +
+                patients
+            );
+
+            // Collapse panel on icon hover.
+            marker
+                .on('mouseover',
+                    function (e) {
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function (e) {
+                                this.closePopup();
+                            });
+                    });
+
+        }
+
+        // add layer to group layer
+        patientMarkers[id].addLayer( marker );
+
+    });
+
+    // Bind id to icons
+    patientMarkers[id]._icon.id = id;
+
+    // add group layer to map
+    patientMarkers[id].addTo(mymap);
+
+}
+
+function removeWaypoints(call_id, ambulance_id) {
+
+    // build id
+    const id = call.id + '_' + ambulance_id;
+
+    // remove layer
+    mymap.removeLayer(patientMarkers[id]);
+    delete patientMarkers[id];
+
+}
+
+function compilePatients(call) {
+
+    // get patients
+    let patients = "";
+    let isFirst = true;
+    call.patient_set.forEach(function (patient) {
+        if (isFirst) {
+            patients += patient.name;
+            isFirst = false;
+        } else
+            patients += ", " + patient.name;
+    });
+
+    return patients;
+}
+
 function addCallToMap(call) {
 
     // get patients
-    var patients = "";
-    var isFirst = true;
-    call.patient_set.forEach(function (patient) {
-       if (isFirst) {
-           patients += patient.name;
-           isFirst = false;
-       } else
-           patients += ", " + patient.name;
-    });
+    const patients = compilePatients(call);
 
     // Get status
-    var status = call.status;
+    const status = call.status;
 
     // Get relevant date
-    var date = call.updated_on;
+    let date = call.updated_on;
     if (status === 'P')
         date = call.pending_at;
     else if (status === 'S')
@@ -831,6 +934,10 @@ function addCallToMap(call) {
     // Add incident locations
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
+        // add waypoints
+        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], patients);
+
+/*
         var ambulance_id = ambulance_call.ambulance_id;
         var waypoint_set = ambulance_call['waypoint_set'];
         waypoint_set.forEach(function (waypoint) {
@@ -869,6 +976,7 @@ function addCallToMap(call) {
             }
 
         });
+*/
 
     });
 
