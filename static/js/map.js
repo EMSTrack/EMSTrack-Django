@@ -879,7 +879,7 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients) {
     });
 
     // Bind id to icons
-    patientMarkers[id]._icon.id = id;
+    // patientMarkers[id]._icon.id = id;
 
     // add group layer to map
     patientMarkers[id].addTo(mymap);
