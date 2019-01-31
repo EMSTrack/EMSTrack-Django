@@ -1154,7 +1154,7 @@ function createCategoryPanesAndFilters() {
                 '             data-target="#call-' + status + '"\n' +
                 '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
                 '             <input class="filter-checkbox" value="call-status" data-status="' + status + '"\n' +
-                '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
+                '                    type="checkbox" id="call-checkbox-' + status + '" checked>\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
                 '             <span id="call-' + status + '-header-count"></span>\n' +
                 '          </h6>\n' +
