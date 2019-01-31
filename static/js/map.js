@@ -1111,10 +1111,10 @@ function createCategoryPanesAndFilters() {
     // add hospital
     visibleCategory['hospital'] = true;
 
-/*
-    // add patient
-    visibleCategory['patient'] = true;
-*/
+    // add calls
+    call_status_order.forEach(function (status) {
+        visibleCategory['call_' + status] = true;
+    });
 
     // add location_type
     location_type_order.forEach(function(type) {
@@ -1127,19 +1127,11 @@ function createCategoryPanesAndFilters() {
     let pane = mymap.createPane('hospital');
     pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
 
-/*
-    // Create patient category pane
-    pane = mymap.createPane('patient');
-    pane.style.display = (visibleCategory['patient'] ? 'block' : 'none');
-
-*/
-
     // Create location category panes
     location_type_order.forEach(function (type) {
         pane = mymap.createPane(type);
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
     });
-
 
     // Create ambulance status category panes
     ambulance_status_order.forEach(function (status) {
@@ -1252,17 +1244,6 @@ function createCategoryPanesAndFilters() {
         '            for="location-hospital">Hospital</label>\n' +
         '</div>');
 
-/*
-    // add patient
-    $("#location-type").append(
-        '<div class="form-group form-check mt-0 mb-1">\n' +
-        '     <input class="form-check-input filter-checkbox" value="location" data-status="patient"\n' +
-        '            type="checkbox" id="location-patient" ' + (visibleCategory['patient'] ? 'checked' : '') + '>\n' +
-        '     <label class="form-check-label"\n' +
-        '            for="location-patient">Patient</label>\n' +
-        '</div>');
-*/
-
     location_type_order.forEach(function (type) {
         $("#location-type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
@@ -1320,7 +1301,7 @@ function visibilityCheckbox(checkbox) {
     } else if (checkbox.value == 'call') {
         // Add to all visible status layers
         call_status_order.forEach(function (status) {
-            if (visibleCategory[status]) {
+            if (visibleCategory['call_' + status]) {
                 mymap.getPane(status+"|"+layer).style.display = display;
             }
         });
