@@ -458,6 +458,8 @@ function onMessageArrived(message) {
                 message.destinationName + ':' + message.payloadString +
                 '"' + '<br/>' + 'error = "' + e + '"');
 
+            throw e;
+
         }
 
     } else
