@@ -762,7 +762,7 @@ function addCallToGrid(call) {
         .append(
             '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
             '  <div class="card-header px-1 py-1" id="call-' + call.id + '">\n' +
-            '     <input class="form-check-input filter-checkbox" value="call" data-status="call_' + call.id + '"\n' +
+            '     <input class="filter-checkbox" value="call" data-status="call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory['call_' + call.id] ? 'checked' : '') + '>\n' +
             '     <button type="button"\n' +
