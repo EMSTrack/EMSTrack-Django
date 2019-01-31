@@ -946,7 +946,7 @@ function addCallToMap(call) {
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
         // add waypoints
-        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], date, patients);
+        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], date, patients, status);
 
     });
 
