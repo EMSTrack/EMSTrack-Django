@@ -791,7 +791,7 @@ function addCallToGrid(call) {
             event.stopPropagation();
 
         })
-        .change(visibilityCheckbox(event));
+        .change(function () { visibilityCheckbox(this); } );
 
     // add ambulances
     call.ambulancecall_set.forEach( function(ambulance_call) {
@@ -1284,7 +1284,7 @@ function createCategoryPanesAndFilters() {
             event.stopPropagation();
 
         })
-        .change(visibilityCheckbox(event));
+        .change(function () { visibilityCheckbox(this); } );
 
 /*
     $('.filter-checkbox').change(function (event) {
@@ -1328,14 +1328,14 @@ function createCategoryPanesAndFilters() {
 
 }
 
-function visibilityCheckbox(event) {
+function visibilityCheckbox(checkbox) {
 
     // Which layer?
-    const layer = this.getAttribute('data-status');
+    const layer = checkbox.getAttribute('data-status');
 
     // Display or hide?
     let display;
-    if (this.checked) {
+    if (checkbox.checked) {
         display = 'block';
         visibleCategory[layer] = true;
     } else {
@@ -1346,14 +1346,14 @@ function visibilityCheckbox(event) {
     console.log("filter-checkbox.change: layer = '" + layer + "', display = '" + display + "'");
 
     // Modify panes
-    if (this.value == 'status') {
+    if (checkbox.value == 'status') {
         // Add to all visible capability panes
         ambulance_capability_order.forEach(function (capability) {
             if (visibleCategory[capability]) {
                 mymap.getPane(layer+"|"+capability).style.display = display;
             }
         });
-    } else if (this.value == 'capability') {
+    } else if (checkbox.value == 'capability') {
         // Add to all visible status layers
         ambulance_status_order.forEach(function (status) {
             if (visibleCategory[status]) {
