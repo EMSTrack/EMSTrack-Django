@@ -1289,6 +1289,8 @@ function createCategoryPanesAndFilters() {
             visibleCategory[layer] = false;
         }
 
+        console.log("filter-checkbox.change: layer = '" + layer + "', display = '" + display + "'");
+
         // Modify panes
         if (this.value == 'status') {
             // Add to all visible capability panes
