@@ -1359,6 +1359,8 @@ function onCallButtonClick(call) {
 
     if (visibleCategory['patient']) {
 
+        // TODO: update based on the next waypoint
+
         // Center icon on map
         var position = patientMarkers[call.id].getLatLng();
         mymap.setView(position, mymap.getZoom());
