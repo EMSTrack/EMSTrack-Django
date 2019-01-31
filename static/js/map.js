@@ -610,14 +610,14 @@ function updateCall(call) {
             if (status !== old_status) {
 
                 // Create new visible category
-                visibleCategory['call_' + call.id + "|" + status] = true;
+                visibleCategory[status + "|" + 'call_' + call.id] = true;
 
                 // Create new pane
-                let pane = mymap.createPane('call_' + call.id + "|" + status);
-                pane.style.display = (visibleCategory['call_' + call.id + "|" + status] ? 'block' : 'none');
+                let pane = mymap.createPane(status + "|" + 'call_' + call.id);
+                pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
 
                 // remove old visibile category
-                delete visibleCategory['call_' + id + "|"  + old_status]
+                delete visibleCategory[old_status + "|" + 'call_' + id]
 
                 // status changed
                 if (status !== 'E') {
@@ -626,10 +626,6 @@ function updateCall(call) {
                     $('#call-item-' + id)
                         .detach()
                         .appendTo($('#call-grid-' + status));
-
-                    // change data-status
-                    $('#call-checkbox-' + id)
-                        .atrr("data-status", "call_" + id + "|" + status);
 
                 } else { // status == 'E'
 
@@ -762,20 +758,20 @@ function addCallToGrid(call) {
     date = (new Date(Date.parse(date))).toLocaleTimeString();
 
     // Create visible category
-    visibleCategory['call_' + call.id + "|" + status] = true;
+    visibleCategory[status + "|" + 'call_' + call.id] = true;
 
     // Create pane
-    let pane = mymap.createPane('call_' + call.id + "|" + status);
-    pane.style.display = (visibleCategory['call_' + call.id + "|" + status] ? 'block' : 'none');
+    let pane = mymap.createPane(status + "|" + 'call_' + call.id);
+    pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
 
     // Add item to call grid
     $('#call-grid-' + status)
         .append(
             '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
             '  <div class="card-header px-1 py-1" id="call-' + call.id + '">\n' +
-            '     <input class="filter-checkbox" value="call" data-status="call_' + call.id + '|' + status + '"\n' +
+            '     <input class="filter-checkbox" value="call" data-status="call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
-            (visibleCategory['call_' + call.id + "|" + status] ? 'checked' : '') + '>\n' +
+            (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
             '             style="margin: 2px 2px;"\n' +
@@ -864,7 +860,7 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients, statu
             [location.location.latitude, location.location.longitude],
             {
                 icon: icon,
-                pane: 'call_' + call_id + "|" + status
+                pane:  status + "|" + 'call_' + call_id
             });
 
         // Add popup to the incident location
@@ -1315,6 +1311,13 @@ function visibilityCheckbox(checkbox) {
     } else if (checkbox.value == 'capability') {
         // Add to all visible status layers
         ambulance_status_order.forEach(function (status) {
+            if (visibleCategory[status]) {
+                mymap.getPane(status+"|"+layer).style.display = display;
+            }
+        });
+    } else if (checkbox.value == 'call') {
+        // Add to all visible status layers
+        call_status_order.forEach(function (status) {
             if (visibleCategory[status]) {
                 mymap.getPane(status+"|"+layer).style.display = display;
             }
