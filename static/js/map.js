@@ -651,6 +651,9 @@ function updateCall(call) {
 
                 });
 
+                // remove visibile category
+                delete visibleCategory['call_' + id]
+
             } else {
 
                 // update waypoints
@@ -703,8 +706,6 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
         }
 
-        // TODO: Update ambulance status
-
     }
 }
 
@@ -749,6 +750,13 @@ function addCallToGrid(call) {
     // Format date
     date = (new Date(Date.parse(date))).toLocaleTimeString();
 
+    // Create visible category
+    visibleCategory['call_' + call.id] = true;
+
+    // Create pane
+    let pane = mymap.createPane('call_' + call.id);
+    pane.style.display = (visibleCategory['call_' + call.id] ? 'block' : 'none');
+
     // Add item to call grid
     $('#call-grid-' + status)
         .append(
@@ -761,6 +769,8 @@ function addCallToGrid(call) {
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
             '     <strong>' + date + '</strong>\n' +
+            '     <input class="form-check-input filter-checkbox text-right" value="call" data-status="call" \n' +
+            '            type="checkbox" id="call-checkbox-' + call.id + '">\n' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
@@ -844,7 +854,7 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients) {
             [location.location.latitude, location.location.longitude],
             {
                 icon: icon,
-                pane: 'patient'
+                pane: 'call_' + call_id
             });
 
         // Add popup to the incident location
@@ -873,9 +883,6 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients) {
         patientMarkers[id].addLayer( marker );
 
     });
-
-    // Bind id to icons
-    // patientMarkers[id]._icon.id = id;
 
     // add group layer to map
     patientMarkers[id].addTo(mymap);
@@ -932,47 +939,6 @@ function addCallToMap(call) {
 
         // add waypoints
         addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], date, patients);
-
-/*
-        var ambulance_id = ambulance_call.ambulance_id;
-        var waypoint_set = ambulance_call['waypoint_set'];
-        waypoint_set.forEach(function (waypoint) {
-
-            var location = waypoint['location'];
-
-            if (location.type === 'i') {
-                var id = call.id + '_' + ambulance_id;
-                patientMarkers[id] = L.marker(
-                    [location.location.latitude, location.location.longitude],
-                    {
-                        icon: patientMarker,
-                        pane: 'patient'
-                    })
-                    .bindPopup(
-                        '<strong>' + date + '</strong>' +
-                        '<br/>' +
-                        patients
-                    )
-                    .addTo(mymap);
-
-                // Bind id to icons
-                patientMarkers[id]._icon.id = id;
-
-                // Collapse panel on icon hover.
-                patientMarkers[id]
-                    .on('mouseover',
-                        function (e) {
-                            // open popup bubble
-                            this.openPopup().on('mouseout',
-                                function (e) {
-                                    this.closePopup();
-                                });
-                        });
-
-            }
-
-        });
-*/
 
     });
 
@@ -1137,8 +1103,10 @@ function createCategoryPanesAndFilters() {
     // add hospital
     visibleCategory['hospital'] = true;
 
+/*
     // add patient
     visibleCategory['patient'] = true;
+*/
 
     // add location_type
     location_type_order.forEach(function(type) {
@@ -1147,26 +1115,30 @@ function createCategoryPanesAndFilters() {
 
     // Initialize panes
 
-    // Create ambulance status category panes
-    ambulance_status_order.forEach(function (status) {
-        ambulance_capability_order.forEach(function (capability) {
-            var pane = mymap.createPane(status+"|"+capability);
-            pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
-        });
-    });
-
     // Create hospital category pane
-    var pane = mymap.createPane('hospital');
+    let pane = mymap.createPane('hospital');
     pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
 
+/*
     // Create patient category pane
-    var pane = mymap.createPane('patient');
+    pane = mymap.createPane('patient');
     pane.style.display = (visibleCategory['patient'] ? 'block' : 'none');
+
+*/
 
     // Create location category panes
     location_type_order.forEach(function (type) {
-        var pane = mymap.createPane(type);
+        pane = mymap.createPane(type);
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
+    });
+
+
+    // Create ambulance status category panes
+    ambulance_status_order.forEach(function (status) {
+        ambulance_capability_order.forEach(function (capability) {
+            pane = mymap.createPane(status + "|" + capability);
+            pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
+        });
     });
 
     // Create call status grids
@@ -1272,6 +1244,7 @@ function createCategoryPanesAndFilters() {
         '            for="location-hospital">Hospital</label>\n' +
         '</div>');
 
+/*
     // add patient
     $("#location-type").append(
         '<div class="form-group form-check mt-0 mb-1">\n' +
@@ -1280,6 +1253,7 @@ function createCategoryPanesAndFilters() {
         '     <label class="form-check-label"\n' +
         '            for="location-patient">Patient</label>\n' +
         '</div>');
+*/
 
     location_type_order.forEach(function (type) {
         $("#location-type").append(
@@ -1302,10 +1276,10 @@ function createCategoryPanesAndFilters() {
     $('.filter-checkbox').change(function (event) {
 
         // Which layer?
-        var layer = this.getAttribute('data-status');
+        const layer = this.getAttribute('data-status');
 
         // Display or hide?
-        var display;
+        let display;
         if (this.checked) {
             display = 'block';
             visibleCategory[layer] = true;
