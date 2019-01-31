@@ -1154,7 +1154,7 @@ function createCategoryPanesAndFilters() {
                 '             data-toggle="collapse"\n' +
                 '             data-target="#call-' + status + '"\n' +
                 '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
-                '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
+                '             <input class="filter-checkbox" value="call-status" data-status="' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
                 '             <span id="call-' + status + '-header-count"></span>\n' +
@@ -1269,7 +1269,11 @@ function createCategoryPanesAndFilters() {
 function visibilityCheckbox(checkbox) {
 
     // Which layer?
-    const layer = checkbox.getAttribute('data-status');
+    let layer = checkbox.getAttribute('data-status');
+
+    // special prefix for calls
+    if (checkbox.value == 'call-status')
+        layer = 'call_' + layer;
 
     // Display or hide?
     let display;
@@ -1298,11 +1302,12 @@ function visibilityCheckbox(checkbox) {
                 mymap.getPane(status+"|"+layer).style.display = display;
             }
         });
-    } else if (checkbox.value == 'call_status') {
-        // Add to all visible status layers
-        call_status_order.forEach(function (status) {
-            if (visibleCategory['call_' + status]) {
-                mymap.getPane(status+"|"+layer).style.display = display;
+    } else if (checkbox.value == 'call-status') {
+        // Add to all visible call layers
+        let status = checkbox.getAttribute('data-status');
+        calls.forEach(function (call) {
+            if (call.status === status) {
+                mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
             }
         });
     } else {
