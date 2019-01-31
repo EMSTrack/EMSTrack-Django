@@ -783,6 +783,16 @@ function addCallToGrid(call) {
             onCallButtonClick(call);
         });
 
+    // Add listener to remove or add layer when filter checkbox is clicked
+    $('#call-checkbox-' + call.id)
+        .click(function (event) {
+
+            // Stop propagation to avoid collapse
+            event.stopPropagation();
+
+        })
+        .change(visibilityCheckbox(event));
+
     // add ambulances
     call.ambulancecall_set.forEach( function(ambulance_call) {
 
@@ -1267,13 +1277,16 @@ function createCategoryPanesAndFilters() {
     });
 
     // Add listener to remove or add layer when filter checkbox is clicked
-    $('.filter-checkbox').click(function (event) {
+    $('.filter-checkbox')
+        .click(function (event) {
 
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
+            // Stop propagation to avoid collapse
+            event.stopPropagation();
 
-    });
+        })
+        .change(visibilityCheckbox(event));
 
+/*
     $('.filter-checkbox').change(function (event) {
 
         // Which layer?
@@ -1311,8 +1324,47 @@ function createCategoryPanesAndFilters() {
         }
 
     });
+*/
 
-};
+}
+
+function visibilityCheckbox(event) {
+
+    // Which layer?
+    const layer = this.getAttribute('data-status');
+
+    // Display or hide?
+    let display;
+    if (this.checked) {
+        display = 'block';
+        visibleCategory[layer] = true;
+    } else {
+        display = 'none';
+        visibleCategory[layer] = false;
+    }
+
+    console.log("filter-checkbox.change: layer = '" + layer + "', display = '" + display + "'");
+
+    // Modify panes
+    if (this.value == 'status') {
+        // Add to all visible capability panes
+        ambulance_capability_order.forEach(function (capability) {
+            if (visibleCategory[capability]) {
+                mymap.getPane(layer+"|"+capability).style.display = display;
+            }
+        });
+    } else if (this.value == 'capability') {
+        // Add to all visible status layers
+        ambulance_status_order.forEach(function (status) {
+            if (visibleCategory[status]) {
+                mymap.getPane(status+"|"+layer).style.display = display;
+            }
+        });
+    } else {
+        mymap.getPane(layer).style.display = display;
+    }
+
+}
 
 function onGridAmbulanceButtonClick(ambulance) {
 
