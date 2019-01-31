@@ -771,7 +771,7 @@ function addCallToGrid(call) {
         .append(
             '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
             '  <div class="card-header px-1 py-1" id="call-' + call.id + '">\n' +
-            '     <input class="filter-checkbox" value="call" data-status="call_' + call.id + '"\n' +
+            '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
             '     <button type="button"\n' +
@@ -1298,7 +1298,7 @@ function visibilityCheckbox(checkbox) {
                 mymap.getPane(status+"|"+layer).style.display = display;
             }
         });
-    } else if (checkbox.value == 'call') {
+    } else if (checkbox.value == 'call_status') {
         // Add to all visible status layers
         call_status_order.forEach(function (status) {
             if (visibleCategory['call_' + status]) {
