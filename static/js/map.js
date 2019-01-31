@@ -8,7 +8,7 @@ var locationMarkers = {};   // Store location markers
 var locations = {};	        // Store location details
 
 var calls = {};             // Store call details
-var patientMarkers = {};   // Store hospital markers
+var patientMarkers = {};    // Store hospital markers
 
 // Initialize category panes
 var visibleCategory = {};
@@ -30,8 +30,7 @@ var newFontAwesomeStackedIcon = function (options) {
         return new L.divIcon({
             html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
                   '<i class="fas fa-map-marker fa-stack-2x"></i>' +
-                  '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-to\
-p:0.2em"></i>' +
+                  '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-top:0.2em"></i>' +
                   '</span>',
             popupAnchor: [0, -15],
             className: 'myDivIcon'
@@ -1305,11 +1304,11 @@ function visibilityCheckbox(checkbox) {
     } else if (checkbox.value == 'call-status') {
         // Add to all visible call layers
         let status = checkbox.getAttribute('data-status');
-        calls.forEach(function (call) {
+        for (const call of calls) {
             if (call.status === status) {
                 mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
             }
-        });
+        }
     } else {
         mymap.getPane(layer).style.display = display;
     }
