@@ -1270,7 +1270,7 @@ function visibilityCheckbox(checkbox) {
     // Which layer?
     let layer = checkbox.getAttribute('data-status');
 
-    // special prefix for calls
+    // special prefix for calls =
     if (checkbox.value == 'call-status')
         layer = 'call_' + layer;
 
@@ -1304,9 +1304,12 @@ function visibilityCheckbox(checkbox) {
     } else if (checkbox.value == 'call-status') {
         // Add to all visible call layers
         let status = checkbox.getAttribute('data-status');
-        for (const call of calls) {
-            if (call.status === status) {
-                mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
+        for (const key in calls) {
+            if (calls.hasOwnProperty(key)) {
+                const call = calls[key];
+                if (call.status === status) {
+                    mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
+                }
             }
         }
     } else {
