@@ -914,18 +914,23 @@ function addCallToGrid(call) {
 
 function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
 
-    return '<strong>' + date + '</strong><br/>' +
-        '<strong>Details:</strong><br/>' +
-        call.details + '<br/>' +
-        '<strong>Patients:</strong><br/>' +
-        patients + '</br>' +
-        '<strong>Number of waypoints:</strong><br/>' +
-        number_of_waypoints + '</br>' +
-        '<strong>Next waypoint:</strong><br/>' +
-        '<em>Type:</em><br/>' +
-        waypoint.type + '</br>' +
-        '<em>Address:</em><br/>' +
-        waypoint.address;
+    return (
+        '<h1>Priority:</h1>' +
+        '<span class="text-right">' + call.priority + '</span><br/>' +
+        '<strong>Date:</strong>' +
+        '<span class="text-right">' + date + '</span><br/>' +
+        '<strong>Details:</strong>' +
+        '<span class="text-right">' + call.details + '</span><br/>' +
+        '<strong>Patients:</strong>' +
+        '<span class="text-right">' + patients + '</span><br/>' +
+        '<strong>Number of waypoints:</strong>' +
+        '<span class="text-right">' + number_of_waypoints + '</span><br/>' +
+        '<h2>Next waypoint:</h2><br/>' +
+        '<em>Type:</em>' +
+        '<span class="text-right">' + waypoint.location.type + '</span><br/>' +
+        '<em>Address:</em>' +
+        waypoint.location
+    );
 }
 
 function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
