@@ -934,9 +934,9 @@ function locationToHtml(location) {
 
     return (
         '<p><em>Type:</em>' +
-        '<span class="text-right">' + location_type[location.type] + '</span></p>' +
+        '<span class="float-right">' + location_type[location.type] + '</span></p>' +
         '<p><em>Address:</em>' +
-        '<span class="text-right">' + address_str + '</span></p>'
+        '<span class="float-right">' + address_str + '</span></p>'
     );
 
 }
@@ -944,6 +944,7 @@ function locationToHtml(location) {
 function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
 
     return (
+        '<div class="my-0 py-0">' +
         '<p><strong>Priority:</strong>' +
         '<span class="float-right">' + call.priority + '</span></p>' +
         '<p><strong>Date:</strong>' +
@@ -955,7 +956,8 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
         '<p><strong>Number of waypoints:</strong>' +
         '<span class="float-right">' + number_of_waypoints + '</span></p>' +
         '<p><strong>Next waypoint:</strong></p>' +
-        locationToHtml(waypoint.location)
+        locationToHtml(waypoint.location) +
+        '</div>'
     );
 }
 
