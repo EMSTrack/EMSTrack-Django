@@ -26,6 +26,15 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
+// Initialize ambulabce call status
+var ambulance_call_buttons = {
+    R: 'btn-danger', // 'Requested'
+    A: 'btn-success', // 'Accepted'
+    D: 'btn-secondary', // 'Declined'
+    S: 'btn-primary', // 'Suspended'
+    C: 'btn-dark' // 'Completed'
+};
+
 function newFontAwesomeStackedIcon(options) {
         return new L.divIcon({
             html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
@@ -752,6 +761,24 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
+    // retrieve old status
+    const matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
+    let old_status = null;
+    if (matches.length > 1) {
+
+        // ambulance call exists!
+        old_status = matches[1];
+        if (status !== old_status) {
+
+            // update button class
+            $('#call-grid-button-' + ambulance_id)
+                .removeClass(ambulance_call_buttons[old_status])
+                .addClass(ambulance_call_buttons[status]);
+
+        }
+
+    }
+
     if (status === 'C') {
 
         // Completed ambulance call, unsubscribe
@@ -855,13 +882,15 @@ function addCallToGrid(call) {
     call.ambulancecall_set.forEach( function(ambulance_call) {
 
         // get ambulance
-        var ambulance = ambulances[ambulance_call.ambulance_id];
+        const ambulance = ambulances[ambulance_call.ambulance_id];
 
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append('<button type="button"'
                 + ' id="call-grid-button-' + ambulance.id + '"'
-                + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
+                + ' class="btn btn-sm '
+                + ambulance_call_buttons[ambulance_call.status]
+                + ' status-' + ambulance_call.status + '"'
                 + ' style="margin: 2px 2px;"'
                 + ' draggable="true">'
                 + ambulance.identifier
