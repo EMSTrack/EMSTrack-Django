@@ -667,7 +667,7 @@ function updateCall(call) {
                 } else { // status == 'E'
 
                     // Completed call, unsubscribe
-                    var topicName = "call/" + id + "/data";
+                    const topicName = "call/" + id + "/data";
                     mqttClient.unsubscribe(topicName);
                     console.log('Unsubscribing from topic: ' + topicName);
 
@@ -708,7 +708,7 @@ function updateCall(call) {
 
                     // add waypoints
                     let nextWaypoint = addWaypoints(call.id, ambulance_call.ambulance_id,
-                        ambulance_call['waypoint_set'], patients);
+                        ambulance_call['waypoint_set'], patients, status);
 
                     // set next waypoint
                     ambulance_call['next_waypoint'] = nextWaypoint;
