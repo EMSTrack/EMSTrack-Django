@@ -966,7 +966,7 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
 
 function callToHtmlShort(call, date) {
 
-    return (date + ', ' + , call.patient_set.length + ' patient(s)');
+    return (date + ', ' + call.patient_set.length + ' patient(s)');
 
 }
 
