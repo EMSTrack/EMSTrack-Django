@@ -707,6 +707,13 @@ function updateCall(call) {
             // update call counter
             updateCallCounter();
 
+            // Get call date
+            const date = callDate(call);
+
+            // update label
+            $('#call-text-' + call.id)
+                .html( callToHtmlShort(call, date) );
+
             // Update waypoints
             if (status === 'E') {
 
@@ -722,9 +729,6 @@ function updateCall(call) {
 
                 // get patients
                 const patients = compilePatients(call);
-
-                // Get call date
-                const date = callDate(call);
 
                 // update waypoints
                 for (const ambulance_call of call.ambulancecall_set) {
@@ -859,7 +863,7 @@ function addCallToGrid(call) {
             '             class="btn btn-outline-' + call_priority_css[call.priority].class + '">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
-            '     <strong>' + date + '</strong>\n' +
+            '     <div class="float-right" id="call-text-' + call.id + '">' + callToHtmlShort(call, date) + '</div>\n' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
@@ -958,6 +962,12 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
         locationToHtml(waypoint.location) +
         '</div>'
     );
+}
+
+function callToHtmlShort(call, date) {
+
+    return (date + ', ' + , call.patient_set.length + ' patient(s)');
+
 }
 
 function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
