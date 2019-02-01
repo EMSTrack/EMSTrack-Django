@@ -631,8 +631,8 @@ function addAmbulanceToGrid(ambulance) {
 function updateCall(call) {
 
     // retrieve id
-    var id = call.id;
-    var status = call.status;
+    const id = call.id;
+    const status = call.status;
 
     // already exists?
     if (id in calls) {
@@ -701,7 +701,7 @@ function updateCall(call) {
             } else {
 
                 // update waypoints
-                call.ambulancecall_set.forEach(function (ambulance_call) {
+                for (const ambulance_call of call.ambulancecall_set) {
 
                     // Remove waypoints
                     removeWaypoints(call.id, ambulance_call.ambulance_id);
@@ -713,7 +713,7 @@ function updateCall(call) {
                     // set next waypoint
                     ambulance_call['next_waypoint'] = nextWaypoint;
 
-                });
+                }
 
             }
 
