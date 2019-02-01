@@ -888,6 +888,7 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients, statu
     waypoint_set.forEach(function (waypoint) {
 
         // get icon
+        const location = waypoint.location;
         const icon = waypointIcon(waypoint);
 
         // is it next?
