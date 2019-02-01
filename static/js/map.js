@@ -707,9 +707,6 @@ function updateCall(call) {
             // update call counter
             updateCallCounter();
 
-            // get patients
-            const patients = compilePatients(call);
-
             // Update waypoints
             if (status === 'E') {
 
@@ -723,7 +720,10 @@ function updateCall(call) {
 
             } else {
 
-                // Get call data
+                // get patients
+                const patients = compilePatients(call);
+
+                // Get call date
                 const date = callDate(call);
 
                 // update waypoints
@@ -959,7 +959,7 @@ function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
             [location.location.latitude, location.location.longitude],
             {
                 icon: icon,
-                pane:  status + "|" + 'call_' + call.id
+                pane:  call.status + "|" + 'call_' + call.id
             });
 
         // Add popup to the incident location
