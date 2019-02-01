@@ -1308,7 +1308,14 @@ function visibilityCheckbox(checkbox) {
             if (calls.hasOwnProperty(key)) {
                 const call = calls[key];
                 if (call.status === status) {
+
+                    // change pane visibility
                     mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
+
+                    // check/uncheck call checkbox
+                    $('call-checkbox-' + call.id)
+                        .prop('checked', true);
+
                 }
             }
         }
