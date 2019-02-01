@@ -762,7 +762,7 @@ function updateCall(call) {
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
     // retrieve old status
-    const matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
+    const matches = $('#call-item-grid' + call_id).attr('class').match(/status-(\w)/);
     let old_status = null;
     if (matches.length > 1) {
 
