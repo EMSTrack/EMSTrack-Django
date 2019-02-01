@@ -919,7 +919,7 @@ function addCallToGrid(call) {
 function locationToHtml(location) {
 
     // format address
-    let address_str = [location.number, location.street, location.unit].join().trim();
+    let address_str = [location.number, location.street, location.unit].join(' ').trim();
 
     if (address_str !== "") {
         if (location.neighborhood !== "")
