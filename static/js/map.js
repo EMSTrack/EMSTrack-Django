@@ -912,10 +912,39 @@ function addCallToGrid(call) {
 
 }
 
+function locationToHtml(location) {
+
+    // format address
+    let address_str = [location.number, location.street, location.unit].join().trim();
+
+    if (address_str !== "") {
+        if (location.neighborhood !== "")
+            address_str = [address_str, location.neighborhood].join(', ').trim();
+        else
+            address_str += location.neighborhood.trim()
+    }
+
+    if (address_str !== "")
+        address_str = [address_str, location.city, location.state].join(', ').trim();
+    else
+        address_str = [location.city, location.state].join(', ').trim();
+
+    address_str = [address_str, location.zipcode].join(' ').trim();
+    address_str = [address_str, location.country].join(', ').trim();
+
+    return (
+        '<em>Type:</em>' +
+        '<span class="text-right">' + location_type[location.type] + '</span><br/>' +
+        '<em>Address:</em>' +
+        '<span class="text-right">' + address_str + '</span><br/>'
+    );
+
+}
+
 function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
 
     return (
-        '<h1>Priority:</h1>' +
+        '<strong>Priority:</strong>' +
         '<span class="text-right">' + call.priority + '</span><br/>' +
         '<strong>Date:</strong>' +
         '<span class="text-right">' + date + '</span><br/>' +
@@ -925,11 +954,8 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
         '<span class="text-right">' + patients + '</span><br/>' +
         '<strong>Number of waypoints:</strong>' +
         '<span class="text-right">' + number_of_waypoints + '</span><br/>' +
-        '<h2>Next waypoint:</h2><br/>' +
-        '<em>Type:</em>' +
-        '<span class="text-right">' + waypoint.location.type + '</span><br/>' +
-        '<em>Address:</em>' +
-        waypoint.location
+        '<strong>Next waypoint:</strong><br/>' +
+        locationToHtml(waypoint.location)
     );
 }
 
