@@ -940,7 +940,7 @@ function locationToHtml(location) {
         '<p class="my-0 py-0"><em>Type:</em>' +
         '<span class="float-right">' + location_type[location.type] + '</span></p>' +
         '<p class="my-0 py-0"><em>Address:</em></p>' +
-        '<p class="mt-0 pt-0"><span class="float-right">' + address_str + '</span></p>' +
+        '<p class="mt-0 pt-0"><span class="d-inline-block float-right">' + address_str + '</span></p>' +
         '</div>'
     );
 
