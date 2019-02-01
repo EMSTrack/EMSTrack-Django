@@ -1394,22 +1394,25 @@ function onCallButtonClick(call) {
     if (visibleCategory[call.status + '|call_' + call.id] === true) {
 
         // calculate center of next waypoints
-        let center = {longitude: 0., latitude: 0.};
+        let center = {lon: 0., lat: 0.};
         let n = 0;
         call.ambulancecall_set.forEach(function (ambulance_call) {
 
             const nextWaypoint = ambulance_call['next_waypoint'];
             if (nextWaypoint != null) {
-                center.longitude += nextWaypoint.location.longitude;
-                center.latitude += nextWaypoint.location.latitude;
+                center.lon += nextWaypoint.location.longitude;
+                center.lat += nextWaypoint.location.latitude;
                 n++;
             }
 
         });
 
         // center map
-        if (n > 0)
-            mymap.setView([center.latitude, center.longitude], mymap.getZoom());
+        if (n > 0) {
+            center.lon /= n;
+            center.lat /= n;
+            mymap.setView(center, mymap.getZoom());
+        }
 
     }
 
