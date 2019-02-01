@@ -1400,8 +1400,9 @@ function onCallButtonClick(call) {
 
             const nextWaypoint = ambulance_call['next_waypoint'];
             if (nextWaypoint != null) {
-                center.lon += nextWaypoint.location.longitude;
-                center.lat += nextWaypoint.location.latitude;
+                const location = waypoint.location;
+                center.lon += location.location.longitude;
+                center.lat += location.location.latitude;
                 n++;
             }
 
