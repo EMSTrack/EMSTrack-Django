@@ -26,7 +26,7 @@ for (var key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
-var newFontAwesomeStackedIcon = function (options) {
+function newFontAwesomeStackedIcon(options) {
         return new L.divIcon({
             html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
                   '<i class="fas fa-map-marker fa-stack-2x"></i>' +
@@ -39,6 +39,45 @@ var newFontAwesomeStackedIcon = function (options) {
 
 // Creates a red marker with the coffee icon
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+
+function waypointIcon(waypoint) {
+
+    const location = waypoint['location'];
+    let icon;
+    if (location.type === 'i') {
+        icon = 'plus';
+    } else if (location.type === 'h') {
+        icon = 'hospital';
+    } else if (location.type === 'w') {
+        icon = 'map';
+    } else if (location.type === 'b') {
+        icon = 'home';
+    } else {
+        console.log("Unknown waypoint location type '" + location.type + "'.");
+        icon = 'question';
+    }
+
+    let color_class;
+    if (waypoint.status === 'C') {
+        color_class = 'text-danger';
+    } else if (waypoint.status === 'V') {
+        color_class = 'text-primary';
+    } else if (waypoint.status === 'D') {
+        color_class = 'text-success';
+    } else if (waypoint.status === 'S') {
+        color_class = 'text-muted';
+    } else {
+        console.log("Unknown waypoint class '" + waypoint.status + "'.");
+        color_class = 'text-warning';
+    }
+
+    return newFontAwesomeStackedIcon({
+        icon: icon,
+        extraClasses: 'fa-stack-marker-xs ' + color_class
+    });
+
+}
+
 
 var patientMarker = newFontAwesomeStackedIcon({
     icon: 'plus',
@@ -96,9 +135,6 @@ var locationIcon = L.icon({
 
 });
 
-// TODO: different icons for different location types
-// TODO: different colors for ambulance status
-
 /**
  * Ambulance statuses 
  */
@@ -119,7 +155,7 @@ var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW
 var geocoder = new Geocoder({ access_token: accessToken });
 
 // resize map
-var resizeMap = function() {
+function resizeMap() {
     $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 5);
     mymap.invalidateSize();
 };
@@ -231,7 +267,7 @@ $(function () {
 });
 
 // alert using bootstrap modal
-var bsalert = function(message, alertClass, title) {
+function bsalert(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
@@ -247,7 +283,7 @@ var bsalert = function(message, alertClass, title) {
 }
 
 // alert using bootstrap modal
-var bsdialog = function(message, alertClass, title) {
+function bsdialog(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
@@ -671,7 +707,11 @@ function updateCall(call) {
                     removeWaypoints(call.id, ambulance_call.ambulance_id);
 
                     // add waypoints
-                    addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], patients);
+                    let nextWaypoint = addWaypoints(call.id, ambulance_call.ambulance_id,
+                        ambulance_call['waypoint_set'], patients);
+
+                    // set next waypoint
+                    ambulance_call['next_waypoint'] = nextWaypoint;
 
                 });
 
@@ -832,29 +872,28 @@ function addCallToGrid(call) {
 
 function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients, status) {
 
+    // sort waypoints
+    waypoint_set.sort(function(a,b) {return (a.order - b.order);});
+
     // waypoints layer id
     const id = call_id + '_' + ambulance_id;
 
     // create group layer
     patientMarkers[id] = L.layerGroup();
 
+    // waypoint center
+    let nextWaypoint = null;
+
     // loop over waypoints
     waypoint_set.forEach(function (waypoint) {
 
-        const location = waypoint['location'];
-        let icon;
-        if (location.type === 'i') {
-            icon = patientMarker;
-        } else if (location.type === 'h') {
-            icon = hospitalMarker;
-        } else if (location.type === 'w') {
-            icon = waypointMarker
-        } else if (location.type === 'b') {
-            icon = baseMarker
-        } else {
-            console.log("Unknown waypoint type '" + location.type + "'. Aborting.");
-            return;
-        }
+        // get icon
+        const icon = waypointIcon(waypoint);
+
+        // is it next?
+        if (waypoint.status === 'C' || waypoint.status === 'V' &&
+            nextWaypoint === null)
+            nextWaypoint = waypoint;
 
         // create marker
         let marker = L.marker(
@@ -893,6 +932,9 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients, statu
 
     // add group layer to map
     patientMarkers[id].addTo(mymap);
+
+    // return next waypoint
+    return nextWaypoint;
 
 }
 
@@ -945,7 +987,11 @@ function addCallToMap(call) {
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
         // add waypoints
-        addWaypoints(call.id, ambulance_call.ambulance_id, ambulance_call['waypoint_set'], date, patients, status);
+        let nextWaypoint = addWaypoints(call.id, ambulance_call.ambulance_id,
+            ambulance_call['waypoint_set'], date, patients, status);
+
+        // set next waypoint
+        ambulance_call['next_waypoint'] = nextWaypoint;
 
     });
 
@@ -1271,7 +1317,7 @@ function visibilityCheckbox(checkbox) {
     let layer = checkbox.getAttribute('data-status');
 
     // special prefix for calls =
-    if (checkbox.value == 'call-status')
+    if (checkbox.value === 'call-status')
         layer = 'call_' + layer;
 
     // Display or hide?
@@ -1283,10 +1329,6 @@ function visibilityCheckbox(checkbox) {
         display = 'none';
         visibleCategory[layer] = false;
     }
-
-    console.log("filter-checkbox.change: layer = '" + layer +
-        "', display = '" + display + "'" +
-        "', value = '" + checkbox.value + "'");
 
     // Modify panes
     if (checkbox.value === 'status') {
@@ -1333,7 +1375,7 @@ function onGridAmbulanceButtonClick(ambulance) {
     if (visibleCategory[ambulance.status]) {
 
         // Center icon on map
-        var position = ambulanceMarkers[ambulance.id].getLatLng();
+        const position = ambulanceMarkers[ambulance.id].getLatLng();
         mymap.setView(position, mymap.getZoom());
 
         // Open popup for 2.5 seconds.
@@ -1348,19 +1390,25 @@ function onGridAmbulanceButtonClick(ambulance) {
 
 function onCallButtonClick(call) {
 
-    if (visibleCategory['patient']) {
+    if (visibleCategory[call.status + '|call_' + call.id] === true) {
 
-        // TODO: update based on the next waypoint
+        // calculate center of next waypoints
+        let center = {longitude: 0., latitude: 0.};
+        let n = 0;
+        call.ambulancecall_set.forEach(function (ambulance_call) {
 
-        // Center icon on map
-        var position = patientMarkers[call.id].getLatLng();
-        mymap.setView(position, mymap.getZoom());
+            const nextWaypoint = ambulance_call['next_waypoint'];
+            if (nextWaypoint != null) {
+                center.longitude += nextWaypoint.location.longitude;
+                center.latitude += nextWaypoint.location.latitude;
+                n++;
+            }
 
-        // Open popup for 2.5 seconds.
-        patientMarkers[call.id].openPopup();
-        setTimeout(function () {
-            patientMarkers[call.id].closePopup();
-        }, 2500);
+        });
+
+        // center map
+        if (n > 0)
+            mymap.setView([center.latitude, center.longitude], mymap.getZoom());
 
     }
 
