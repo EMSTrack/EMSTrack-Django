@@ -23,7 +23,7 @@ class SignupForm(auth_forms.UserCreationForm):
         required=True,
         widget=forms.TextInput(
             attrs={'autofocus': True,
-                   'placeholder': 'Username',
+                   'placeholder': _('Username'),
                    'class': 'form-control input-lg'}
         ),
     )
@@ -32,7 +32,7 @@ class SignupForm(auth_forms.UserCreationForm):
         strip=False,
         required=True,
         widget=forms.PasswordInput(
-            attrs={'placeholder': 'Password',
+            attrs={'placeholder': _('Password'),
                    'class': 'form-control input-lg'}
         ),
     )
@@ -41,7 +41,7 @@ class SignupForm(auth_forms.UserCreationForm):
         strip=False,
         required=True,
         widget=forms.PasswordInput(
-            attrs={'placeholder': 'Confirm password',
+            attrs={'placeholder': _('Confirm password'),
                    'class': 'form-control input-lg'}
         ),
     )
@@ -50,7 +50,7 @@ class SignupForm(auth_forms.UserCreationForm):
         max_length=30,
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'First name',
+            attrs={'placeholder': _('First name'),
                    'class': 'form-control input-lg'}
         )
     )
@@ -59,7 +59,7 @@ class SignupForm(auth_forms.UserCreationForm):
         max_length=30,
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder': 'Last name',
+            attrs={'placeholder': _('Last name'),
                    'class': 'form-control input-lg'}
         )
     )
@@ -67,7 +67,7 @@ class SignupForm(auth_forms.UserCreationForm):
         label=_("Email"),
         required=True,
         widget=forms.EmailInput(
-            attrs={'placeholder': 'Email',
+            attrs={'placeholder': _('Email'),
                    'class': 'form-control input-lg'}
         )
     )
@@ -87,7 +87,7 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         required=True,
         widget=forms.TextInput(
             attrs={'autofocus': True,
-                   'placeholder': 'Username',
+                   'placeholder': _('Username'),
                    'class': 'form-control input-lg'}
         ),
     )
@@ -96,7 +96,7 @@ class AuthenticationForm(auth_forms.AuthenticationForm):
         strip=False,
         required=True,
         widget=forms.PasswordInput(
-            attrs={'placeholder': 'Password',
+            attrs={'placeholder': _('Password'),
                    'class': 'form-control input-lg'}
         ),
     )
