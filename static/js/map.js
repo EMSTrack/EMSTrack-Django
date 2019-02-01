@@ -733,8 +733,8 @@ function updateCall(call) {
                     removeWaypoints(call.id, ambulance_call.ambulance_id);
 
                     // add waypoints
-                    let nextWaypoint = addWaypoints(call.id, ambulance_call.ambulance_id,
-                        ambulance_call['waypoint_set'], date, patients, status);
+                    let nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
+                        ambulance_call['waypoint_set'], date, patients);
 
                     // set next waypoint
                     ambulance_call['next_waypoint'] = nextWaypoint;
@@ -882,7 +882,7 @@ function addCallToGrid(call) {
         .change(function () { visibilityCheckbox(this); } );
 
     // add ambulances
-    call.ambulancecall_set.forEach( function(ambulance_call) {
+    for (const ambulance_call of call.ambulancecall_set) {
 
         // get ambulance
         const ambulance = ambulances[ambulance_call.ambulance_id];
@@ -905,20 +905,36 @@ function addCallToGrid(call) {
                 onGridAmbulanceButtonClick(ambulance);
             });
 
-    });
+    }
 
     // update call counter
     updateCallCounter();
 
 }
 
-function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients, status) {
+function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
+
+    return '<strong>' + date + '</strong><br/>' +
+        '<strong>Details:</strong><br/>' +
+        call.details + '<br/>' +
+        '<strong>Patients:</strong><br/>' +
+        patients + '</br>' +
+        '<strong>Number of waypoints:</strong><br/>' +
+        number_of_waypoints + '</br>' +
+        '<strong>Next waypoint:</strong><br/>' +
+        '<em>Type:</em><br/>' +
+        waypoint.type + '</br>' +
+        '<em>Address:</em><br/>' +
+        waypoint.address;
+}
+
+function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
 
     // sort waypoints
     waypoint_set.sort(function(a,b) {return (a.order - b.order);});
 
     // waypoints layer id
-    const id = call_id + '_' + ambulance_id;
+    const id = call.id + '_' + ambulance_id;
 
     // create group layer
     patientMarkers[id] = L.layerGroup();
@@ -943,17 +959,15 @@ function addWaypoints(call_id, ambulance_id, waypoint_set, date, patients, statu
             [location.location.latitude, location.location.longitude],
             {
                 icon: icon,
-                pane:  status + "|" + 'call_' + call_id
+                pane:  status + "|" + 'call_' + call.id
             });
 
         // Add popup to the incident location
-        if (location.type === 'i') {
+        if (waypoint === nextWaypoint) {
 
-            marker.bindPopup(
-                '<strong>' + date + '</strong>' +
-                '<br/>' +
-                patients
-            );
+            // bind popup to next waypoint
+            marker.bindPopup( callToHtml(call, date, patients,
+                waypoint_set.length, waypoint) );
 
             // Collapse panel on icon hover.
             marker
@@ -1013,9 +1027,6 @@ function addCallToMap(call) {
     // get patients
     const patients = compilePatients(call);
 
-    // Get status
-    const status = call.status;
-
     // Get relevant date
     let date = callDate(call);
 
@@ -1023,8 +1034,8 @@ function addCallToMap(call) {
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
         // add waypoints
-        let nextWaypoint = addWaypoints(call.id, ambulance_call.ambulance_id,
-            ambulance_call['waypoint_set'], date, patients, status);
+        let nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
+            ambulance_call['waypoint_set'], date, patients);
 
         // set next waypoint
         ambulance_call['next_waypoint'] = nextWaypoint;
@@ -1464,11 +1475,11 @@ function updateAmbulanceStatus(ambulance, status) {
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
     $('#modal-button-close').hide();
-    bsdialog('Do you want to modify ambulance <b>'
+    bsdialog('Do you want to modify ambulance <strong>'
         + ambulance.identifier
-        + '</b> status to <b>'
+        + '</strong> status to <strong>'
         + ambulance_status[status]
-        + '</b>?', 'alert-danger', 'Attention')
+        + '</strong>?', 'alert-danger', 'Attention')
         .on('hide.bs.modal', function(event) {
 
             var $activeElement = $(document.activeElement);
