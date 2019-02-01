@@ -761,29 +761,6 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
-    // retrieve old status
-    let button = $('#call-grid-button-' + call_id + '-' + ambulance_id);
-    if (button !== undefined) {
-
-        // button exists!
-        const matches = button.attr('class').match(/status-(\w)/);
-        let old_status = null;
-        if (matches.length > 1) {
-
-            // ambulance call exists!
-            old_status = matches[1];
-            if (status !== old_status) {
-
-                // update button class
-                $('#call-grid-button-' + ambulance_id)
-                    .removeClass(ambulance_call_buttons[old_status])
-                    .addClass(ambulance_call_buttons[status]);
-
-            }
-
-        }
-    }
-
     if (status === 'C') {
 
         // Completed ambulance call, unsubscribe
@@ -793,8 +770,29 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
     } else {
 
-        // subscribe to call if not already subscribed
-        if (!(call_id in calls)) {
+        if (call_id in calls) {
+
+            // retrieve old status
+            const matches = $('#call-grid-button-' + call_id + '-' + ambulance_id).attr('class').match(/status-(\w)/);
+            let old_status = null;
+            if (matches.length > 1) {
+
+                // ambulance call exists!
+                old_status = matches[1];
+                if (status !== old_status) {
+
+                    // update button class
+                    $('#call-grid-button-' + ambulance_id)
+                        .removeClass(ambulance_call_buttons[old_status])
+                        .addClass(ambulance_call_buttons[status]);
+
+                }
+
+            }
+
+        } else {
+
+            // subscribe to call if not already subscribed
 
             // subscribe to call
             topicName = "call/" + call_id + "/data";
