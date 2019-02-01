@@ -762,7 +762,7 @@ function updateCall(call) {
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
     // retrieve old status
-    const matches = $('#call-item-grid' + call_id).attr('class').match(/status-(\w)/);
+    const matches = $('#call-grid-button-' + call_id + '-' + ambulance_id).attr('class').match(/status-(\w)/);
     let old_status = null;
     if (matches.length > 1) {
 
@@ -887,7 +887,7 @@ function addCallToGrid(call) {
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append('<button type="button"'
-                + ' id="call-grid-button-' + ambulance.id + '"'
+                + ' id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
                 + ' class="btn btn-sm '
                 + ambulance_call_buttons[ambulance_call.status]
                 + ' status-' + ambulance_call.status + '"'
@@ -897,7 +897,7 @@ function addCallToGrid(call) {
                 + '</button>');
 
         // Make button clickable and draggable
-        $('#call-grid-button-' + ambulance.id)
+        $('#call-grid-button-' + call.id + '-'+ ambulance.id)
             .click(function (e) {
                 onGridAmbulanceButtonClick(ambulance);
             });
