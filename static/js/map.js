@@ -1313,7 +1313,7 @@ function visibilityCheckbox(checkbox) {
                     mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
 
                     // check/uncheck call checkbox
-                    $('call-checkbox-' + call.id)
+                    $('#call-checkbox-' + call.id)
                         .prop('checked', true);
 
                 }
