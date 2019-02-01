@@ -945,9 +945,9 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
 
     return (
         '<div class="my-0 py-0">' +
-        '<p><strong>Priority:</strong>' +
+        '<p class="my-0 py-0"><strong>Priority:</strong>' +
         '<span class="float-right">' + call.priority + '</span></p>' +
-        '<p><strong>Date:</strong>' +
+        '<p class="my-0 py-0"><strong>Date:</strong>' +
         '<span class="float-right">' + date + '</span></p>' +
         '<p><strong>Details:</strong>' +
         '<span class="float-right">' + call.details + '</span></p>' +
