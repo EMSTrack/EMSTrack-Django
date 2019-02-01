@@ -966,8 +966,16 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
 
 function callToHtmlShort(call, date) {
 
-    return (date + ', ' + call.patient_set.length + ' patient(s)');
+    let patients;
+    if (call.patient_set.length === 0) {
+        patients = "no patient information";
+    } else if (call.patient_set.length === 1) {
+        patients = '1 patient';
+    } else if (call.patient_set.length > 1) {
+        patients = call.patient_set.length + ' patients';
+    }
 
+    return (date + ', ' + patients);
 }
 
 function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
@@ -1051,15 +1059,11 @@ function removeWaypoints(call_id, ambulance_id) {
 function compilePatients(call) {
 
     // get patients
-    let patients = "";
-    let isFirst = true;
-    call.patient_set.forEach(function (patient) {
-        if (isFirst) {
-            patients += patient.name;
-            isFirst = false;
-        } else
-            patients += ", " + patient.name;
-    });
+    let patients;
+    if (call.patient_set.length === 0) {
+        patients = "No patient information";
+    } else
+        patients = call.patient_set.join(', ');
 
     return patients;
 }
@@ -1076,7 +1080,7 @@ function addCallToMap(call) {
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
         // add waypoints
-        let nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
+        const nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
             ambulance_call['waypoint_set'], date, patients);
 
         // set next waypoint
