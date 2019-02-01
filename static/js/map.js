@@ -40,6 +40,20 @@ function newFontAwesomeStackedIcon(options) {
 // Creates a red marker with the coffee icon
 L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
 
+function callDate(call) {
+
+    // Get relevant date
+    let date = call.updated_on;
+    if (status === 'P')
+        date = call.pending_at;
+    else if (status === 'S')
+        date = call.started_at;
+
+    // Format date
+    return (new Date(Date.parse(date))).toLocaleTimeString();
+
+}
+
 function waypointIcon(waypoint) {
 
     const location = waypoint['location'];
@@ -700,6 +714,9 @@ function updateCall(call) {
 
             } else {
 
+                // Get call data
+                const date = callDate(call);
+
                 // update waypoints
                 for (const ambulance_call of call.ambulancecall_set) {
 
@@ -708,7 +725,7 @@ function updateCall(call) {
 
                     // add waypoints
                     let nextWaypoint = addWaypoints(call.id, ambulance_call.ambulance_id,
-                        ambulance_call['waypoint_set'], patients, status);
+                        ambulance_call['waypoint_set'], date, patients, status);
 
                     // set next waypoint
                     ambulance_call['next_waypoint'] = nextWaypoint;
@@ -786,17 +803,10 @@ function addCallToGrid(call) {
     calls[call.id] = call;
 
     // Get status
-    var status = call.status;
+    const status = call.status;
 
     // Get relevant date
-    var date = call.updated_on;
-    if (status === 'P')
-        date = call.pending_at;
-    else if (status === 'S')
-        date = call.started_at;
-
-    // Format date
-    date = (new Date(Date.parse(date))).toLocaleTimeString();
+    const date = callDate(call);
 
     // Create visible category
     visibleCategory[status + "|" + 'call_' + call.id] = true;
@@ -975,14 +985,7 @@ function addCallToMap(call) {
     const status = call.status;
 
     // Get relevant date
-    let date = call.updated_on;
-    if (status === 'P')
-        date = call.pending_at;
-    else if (status === 'S')
-        date = call.started_at;
-
-    // Format date
-    date = (new Date(Date.parse(date))).toLocaleTimeString();
+    let date = callDate(call);
 
     // Add incident locations
     call.ambulancecall_set.forEach(function (ambulance_call) {
