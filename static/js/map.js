@@ -920,9 +920,8 @@ function locationToHtml(location) {
     if (address_str !== "") {
         if (location.neighborhood !== "")
             address_str = [address_str, location.neighborhood].join(', ').trim();
-        else
-            address_str += location.neighborhood.trim()
-    }
+    } else
+        address_str += location.neighborhood.trim()
 
     if (address_str !== "")
         address_str = [address_str, location.city, location.state].join(', ').trim();
