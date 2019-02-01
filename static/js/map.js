@@ -935,7 +935,7 @@ function locationToHtml(location) {
     return (
         '<p class="my-0 py-0"><em>Type:</em>' +
         '<span class="float-right">' + location_type[location.type] + '</span></p>' +
-        '<p class="my-0 py-0"><em>Address:</em>' +
+        '<p class="my-0 pt-0"><em>Address:</em>' +
         '<span class="float-right">' + address_str + '</span></p>'
     );
 
