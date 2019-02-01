@@ -1396,7 +1396,7 @@ function onCallButtonClick(call) {
         // calculate center of next waypoints
         let center = {lon: 0., lat: 0.};
         let n = 0;
-        call.ambulancecall_set.forEach(function (ambulance_call) {
+        for (const ambulance_call of call.ambulancecall_set) {
 
             const nextWaypoint = ambulance_call['next_waypoint'];
             if (nextWaypoint != null) {
@@ -1405,7 +1405,7 @@ function onCallButtonClick(call) {
                 n++;
             }
 
-        });
+        }
 
         // center map
         if (n > 0) {
