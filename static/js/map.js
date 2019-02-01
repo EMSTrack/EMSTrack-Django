@@ -1284,26 +1284,29 @@ function visibilityCheckbox(checkbox) {
         visibleCategory[layer] = false;
     }
 
-    console.log("filter-checkbox.change: layer = '" + layer + "', display = '" + display + "'");
+    console.log("filter-checkbox.change: layer = '" + layer +
+        "', display = '" + display + "'" +
+        "', value = '" + checkbox.value + "'");
 
     // Modify panes
-    if (checkbox.value == 'status') {
+    if (checkbox.value === 'status') {
         // Add to all visible capability panes
         ambulance_capability_order.forEach(function (capability) {
             if (visibleCategory[capability]) {
                 mymap.getPane(layer+"|"+capability).style.display = display;
             }
         });
-    } else if (checkbox.value == 'capability') {
+    } else if (checkbox.value === 'capability') {
         // Add to all visible status layers
         ambulance_status_order.forEach(function (status) {
             if (visibleCategory[status]) {
                 mymap.getPane(status+"|"+layer).style.display = display;
             }
         });
-    } else if (checkbox.value == 'call-status') {
+    } else if (checkbox.value === 'call-status') {
         // Add to all visible call layers
         let status = checkbox.getAttribute('data-status');
+        const checked = checkbox.checked;
         for (const key in calls) {
             if (calls.hasOwnProperty(key)) {
                 const call = calls[key];
@@ -1314,7 +1317,7 @@ function visibilityCheckbox(checkbox) {
 
                     // check/uncheck call checkbox
                     $('#call-checkbox-' + call.id)
-                        .prop('checked', true);
+                        .prop('checked', checked);
 
                 }
             }
