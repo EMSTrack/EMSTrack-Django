@@ -970,7 +970,7 @@ function callToHtmlShort(call, date) {
 
     let patients;
     if (call.patient_set.length === 0) {
-        patients = "no patient information";
+        patients = "no patients";
     } else if (call.patient_set.length === 1) {
         patients = '1 patient';
     } else if (call.patient_set.length > 1) {
