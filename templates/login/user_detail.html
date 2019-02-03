@@ -35,6 +35,10 @@
                 <strong>Active:</strong>
                 {{ user.is_active }}
             </p>
+            <p>
+                <strong>Dispatcher:</strong>
+                {{ user.userprofile.is_dispatcher }}
+            </p>
         </div>
     </div>
 
@@ -100,8 +104,7 @@
                 {% endfor %}
                 </tbody>
             </table>
-
-
+            
             {% else %}
 
                 {% if user.is_staff %}

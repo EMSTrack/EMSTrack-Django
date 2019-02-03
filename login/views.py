@@ -33,11 +33,11 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm, RestartForm
+    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, Client, ClientStatus
+    GroupHospitalPermission, Client, ClientStatus, UserProfile
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -158,6 +158,17 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 # Users
 
+class UserProfileAdminInline(InlineFormSet):
+    model = UserProfile
+    form_class = UserProfileAdminForm
+    factory_kwargs = {
+        'min_num': 1,
+        'max_num': 1,
+        'extra': 0,
+        'can_delete': False
+    }
+
+
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
@@ -222,7 +233,8 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
-    inlines = [UserAmbulancePermissionAdminInline,
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
     def get_success_message(self, cleaned_data):
