@@ -216,7 +216,8 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
-    inlines = [UserAmbulancePermissionAdminInline,
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
     def get_success_message(self, cleaned_data):
