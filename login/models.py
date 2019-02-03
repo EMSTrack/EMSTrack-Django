@@ -26,7 +26,7 @@ def get_client_activity(key):
 class UserProfile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
-    iS_dispatcher = models.BooleanField(default=False)
+    is_dispatcher = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('login:detail-user', kwargs={'pk': self.user.id})
