@@ -20,6 +20,7 @@
                     <th>Last</th>
                     <th>Email</th>
                     <th>Staff</th>
+                    <th>Dispatcher</th>
                     <th>Active</th>
                 </tr>
                 </thead>
@@ -40,6 +41,9 @@
                     </td>
                     <td>
                         {{ user.is_staff|get_check }}
+                    </td>
+                    <td>
+                        {{ user.userprofile.is_dispatcher|get_check }}
                     </td>
                     <td>
                         {{ user.is_active|get_check_or_times }}
