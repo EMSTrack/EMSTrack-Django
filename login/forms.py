@@ -228,7 +228,7 @@ class UserProfileAdminForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         labels = {
-            'name': _('Dispatcher'),
+            'is_dispatcher': _('Dispatcher'),
         }
         exclude = ['user']
 
