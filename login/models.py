@@ -24,7 +24,8 @@ def get_client_activity(key):
 
 
 @register.filter
-def is_dispatcher(user):
+def is_dispatcher(key):
+    user = User.get(username=key)
     return user.is_super or user.is_staff or user.userprofile.is_dispatcher
 
 
