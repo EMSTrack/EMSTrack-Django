@@ -242,9 +242,11 @@ class UserAdminCreateForm(auth_forms.UserCreationForm):
     def save(self, commit=True):
         # UserCreationForm calls ModelForm.save() with commit = False, which prevents groups from being saved.
         # Calling save_m2m() afterwards should fix that
-        super().save(commit)
+        instance = super().save(commit)
         if commit:
             self.save_m2m()
+
+        return instance
 
 
 class UserAdminUpdateForm(forms.ModelForm):
