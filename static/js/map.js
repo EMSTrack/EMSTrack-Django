@@ -279,10 +279,10 @@ $(function () {
         });
 
     })
-        .fail(function (jqxhr, testStatus, error) {
+        .fail(function (jqxhr, textStatus, error) {
 
             bsalert("Connection to MQTT broker failed: \"" +
-                testStatus + "," + error + "\"\n" +
+                textStatus + "," + error + "\"\n" +
                 "Information will not be updated in real time.");
 
         });

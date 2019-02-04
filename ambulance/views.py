@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
@@ -421,6 +422,11 @@ class CallAbortView(LoginRequiredMixin,
         return self.object.get_absolute_url()
 
     def get(self, request, *args, **kwargs):
+
+        # Make sure user is super, staff, or dispatcher.
+        user = request.user
+        if not (user.is_superuser or user.is_staff or user.userprofile.is_dispatcher):
+            return HttpResponseForbidden()
 
         # get call object
         self.object = self.get_object()
