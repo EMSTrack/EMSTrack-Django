@@ -350,8 +350,8 @@ class CallSerializer(serializers.ModelSerializer):
         # Get current user.
         user = validated_data['updated_by']
 
-        # Make sure user is Super.
-        if not (user.is_superuser or user.is_staff):
+        # Make sure user is super, staff, or dispatcher.
+        if not (user.is_superuser or user.is_staff or user.userprofile.is_dispatcher):
             raise PermissionDenied()
         
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
@@ -401,7 +401,7 @@ class CallSerializer(serializers.ModelSerializer):
             # publish call to mqtt only after all includes have succeeded
             call.publish()
 
-            # then publish ambulances
+            # then publish ambulance calls
             for ambulancecall in call.ambulancecall_set.all():
                 ambulancecall.publish()
 
