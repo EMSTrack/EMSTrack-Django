@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -7,21 +8,21 @@
     <div class="row">
         <div class="col">
 
-            <h1>Users</h1>
+            <h1>{% trans "Users" }</h1>
 
             <p>
-                <a href="{% url 'login:create-user' %}">new</a>
+                <a href="{% url 'login:create-user' %}">{% trans "new" }</a>
             </p>
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Username</th>
-                    <th>First</th>
-                    <th>Last</th>
-                    <th>Email</th>
-                    <th>Staff</th>
-                    <th>Dispatcher</th>
-                    <th>Active</th>
+                    <th>{% trans "Username" }</th>
+                    <th>{% trans "First" }</th>
+                    <th>{% trans "Last" }</th>
+                    <th>{% trans "Email" }</th>
+                    <th>{% trans "Staff" }</th>
+                    <th>{% trans "Dispatcher" }</th>
+                    <th>{% trans "Active" }</th>
                 </tr>
                 </thead>
                 <tbody>
