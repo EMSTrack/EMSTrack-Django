@@ -227,6 +227,9 @@ class GroupAdminUpdateForm(forms.ModelForm):
 class UserProfileAdminForm(forms.ModelForm):
     class Meta:
         model = UserProfile
+        labels = {
+            'name': _('Dispatcher'),
+        }
         exclude = ['user']
 
 
