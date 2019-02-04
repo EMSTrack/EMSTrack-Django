@@ -7,13 +7,7 @@ from mqtt.cache_clear import mqtt_cache_clear
 from .models import UserProfile, GroupProfile
 
 
-# Add signal to automatically extend user profile
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         UserProfile.objects.create(user=instance)
-
-
+# Add signal to automatically clear cache when group permissions change
 @receiver(m2m_changed, sender=User.groups.through)
 def user_groups_changed_handler(sender, instance, action, **kwargs):
     if action == 'post_add' or action == 'post_remove':
@@ -27,3 +21,14 @@ def user_groups_changed_handler(sender, instance, action, **kwargs):
 def create_group_profile(sender, instance, created, **kwargs):
     if created:
         GroupProfile.objects.create(group=instance)
+
+
+# Add signal to automatically extend user profile
+# @receiver(post_save, sender=User)
+# def create_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         UserProfile.objects.create(user=instance)
+#
+# This was removed because CreateWithInlinesView automatically adds user profile
+# It might be necessary to create user profile by hand if user creation is done
+# by any other means other than the django view.
