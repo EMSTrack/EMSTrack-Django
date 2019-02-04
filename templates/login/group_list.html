@@ -21,6 +21,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Priority</th>
+                    <th>Number of users</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,6 +35,9 @@
                     </td>
                     <td>
                         {{ group.groupprofile.priority }}
+                    </td>
+                    <td>
+                        {{ group.user_set.count }}
                     </td>
                 </tr>
                 {% endfor %}
