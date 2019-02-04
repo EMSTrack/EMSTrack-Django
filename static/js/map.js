@@ -1588,6 +1588,11 @@ function doUpdateAmbulanceStatus(ambulance, status) {
             console.log("Failed to post ambulance status update.");
             console.log(jqXHR.responseText);
 
+            bsalert("Could not update ambulance status \"" +
+                textStatus + "," + errorThrown + "\"\n" +
+                "You likely have not enough rights to update this ambulance.");
+
+
         }
     });
 
