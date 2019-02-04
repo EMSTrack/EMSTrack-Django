@@ -38,7 +38,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        {% if user.is_super or user.is_staff or user.userprofile.is_dispatcher %}
+        {% if user|is_dispatcher %}
             <button class="btn btn-primary px-3 mx-1"
                     id="dispatchBeginButton"
                     data-toggle="collapse"

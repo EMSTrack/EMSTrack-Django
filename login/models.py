@@ -23,6 +23,11 @@ def get_client_activity(key):
     return ClientActivity[key].value
 
 
+@register.filter
+def is_dispatcher(user):
+    return user.is_super or user.is_staff or user.userprofile.is_dispatcher
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
