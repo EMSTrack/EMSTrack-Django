@@ -64,7 +64,7 @@ class TestViews(TestSetup):
                                            kwargs={'pk': self.a1.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('Maintenance due' in response.content)
+        self.assertTrue('Maintenance due' in response.content.decode())
         logger.debug(response.content)
         logger.debug(response.redirect_chain)
 
