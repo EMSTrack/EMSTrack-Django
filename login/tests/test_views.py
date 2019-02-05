@@ -55,6 +55,15 @@ class TestViews(TestSetup):
         # self.assertDictEqual(result, answer)
 
         # user detail
+        logger.debug(reverse('ambulance:detail', kwargs={'pk': self.a1.id}))
+        response = self.client.get(reverse('login:detail-user', kwargs={'pk': self.a1.id}),
+                                   follow=True)
+        self.assertEqual(response.status_code, 200)
+        logger.debug(response.content)
+        logger.debug(response.redirect_chain)
+        self.assertTrue(False)
+
+        # user detail
         logger.debug(reverse('login:detail-user', kwargs={'pk': self.u2.id}))
         response = self.client.get(reverse('login:detail-user', kwargs={'pk': self.u2.id}),
                                    follow=True)
