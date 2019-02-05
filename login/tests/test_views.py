@@ -58,15 +58,10 @@ class TestViews(TestSetup):
         self.assertDictEqual(result, answer)
 
         # create user
-        response = self.client.post(reverse('login:create-user'),
-                                    {'username': "LatestTest",
-                                     'password1': 'pass1234pass',
-                                     'password2': 'pass1234pass',
-                                     },
-                                    )
+        response = self.client.post(reverse('login:detail-user', kwargs={'pk':self.u1.id}),
+                                    follow=True)
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(User.objects.last().username, "LatestTest")
 
         # logout
         client.logout()
