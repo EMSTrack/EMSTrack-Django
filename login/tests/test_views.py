@@ -69,6 +69,7 @@ class TestViews(TestSetup):
                                    follow=True)
         self.assertEqual(response.status_code, 200)
         logger.debug(response.content.decode())
+        self.assertEqual(User.objects.last().username, "newuser")
 
         # logout
         self.client.logout()
