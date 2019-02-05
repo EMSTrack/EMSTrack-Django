@@ -71,9 +71,14 @@ class TestViews(TestSetup):
                                            kwargs={'pk': self.u1.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        logger.debug(response.content.decode())
-        logger.debug(response.redirect_chain)
-        self.assertTrue(False)
+        self.assertTrue('admin@user.com' in response.content.decode())
+
+        # user create
+        response = self.client.get(reverse('login:detail-user',
+                                           kwargs={'pk': self.u1.id}),
+                                   follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('admin@user.com' in response.content.decode())
 
         # logout
         self.client.logout()
