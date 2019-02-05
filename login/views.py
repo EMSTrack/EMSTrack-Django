@@ -211,7 +211,7 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
     }
 
 
-class UserAdminCreateView(SuccessMessageWithInlinesMixin,
+class UserAdminCreateView2(SuccessMessageWithInlinesMixin,
                           CreateWithInlinesView):
     model = User
     template_name = 'login/user_create_form.html'
@@ -259,6 +259,39 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         return self.object.userprofile.get_absolute_url()
 
     # TODO: Choose between provided password and email generated password
+
+
+class UserAdminCreateView(SuccessMessageWithInlinesMixin,
+                          CreateWithInlinesView):
+    model = User
+    template_name = 'login/user_form.html'
+    form_class = UserAdminCreateForm
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
+               UserHospitalPermissionAdminInline]
+
+    def forms_valid(self, form, inlines):
+
+        # process form
+        response = self.form_valid(form)
+
+        # process first inline
+        formset = inlines[0]
+        userprofile = formset.save(commit=False)
+        userprofile.user = form.instance
+        userprofile.save()
+
+        # process other inlines
+        for formset in inlines[1:]:
+            formset.save()
+
+        return response
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully updated user '{}'".format(self.object.username)
+
+    def get_success_url(self):
+        return self.object.userprofile.get_absolute_url()
 
 
 class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
