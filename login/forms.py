@@ -240,8 +240,8 @@ class UserProfileCreateAdminForm(UserProfileAdminForm):
 
     def save(self, commit=True):
         # profile will be created by signal
-        instance = super(UserProfileAdminForm, self).save(commit)
-        logger.error('instace = {}'.format(instance))
+        instance = super(UserProfileAdminForm, self).save(False)
+        logger.error('instance = {}'.format(instance))
         return instance
 
 
