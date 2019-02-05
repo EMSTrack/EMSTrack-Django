@@ -76,9 +76,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         username = broker['USERNAME']
         broker['CLIENT_ID'] = client_id
 
-        test_client = MQTTTestClient(broker,
-                                     check_payload=False,
-                                     debug=True)
+        test_client = SingletonPublishClient()
         self.is_connected(test_client)
 
         # clear cache
@@ -96,10 +94,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # send cache_clear
         # test_client.publish('message', '"cache_clear"')
-        SingletonPublishClient().publish_message('cache_clear')
+        test_client.publish_message('cache_clear')
+        test_client.loop()
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(subscribe_client)
 
         info = cache_info()
         self.assertEqual(info.hits, 0)
@@ -107,5 +106,4 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(info.currsize, 0)
 
         # wait for disconnect
-        test_client.wait()
         subscribe_client.wait()
