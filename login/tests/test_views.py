@@ -50,7 +50,7 @@ class TestViews(TestSetup):
                                      },
                                     follow=True)
         self.assertEqual(response.status_code, 200)
-        logger.debug(response.body)
+        logger.debug(response.content)
         self.assertEqual(User.objects.last().username, "LatestTest")
 
         # logout
