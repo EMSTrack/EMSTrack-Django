@@ -41,7 +41,9 @@ class TestViews(TestSetup):
         client = Client()
 
         # login as admin
-        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+        login = client.login(username=settings.MQTT['USERNAME'],
+                             password=settings.MQTT['PASSWORD'])
+        logger.debug(login)
 
         # create user
         response = self.client.post(reverse('login:create-user'),
