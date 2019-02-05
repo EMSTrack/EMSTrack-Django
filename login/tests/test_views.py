@@ -57,6 +57,7 @@ class TestViews(TestSetup):
         # ambulance list
         response = self.client.get(reverse('ambulance:list'), follow=True)
         self.assertEqual(response.status_code, 200)
+        logger.debug(response.content.decode())
         self.assertTrue('Maintenance Due' in response.content.decode())
 
         # ambulance detail
