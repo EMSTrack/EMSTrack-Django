@@ -53,6 +53,7 @@ class TestViews(TestSetup):
         response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
+        logger.debug(response.redirect_chain)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         self.assertDictEqual(result, answer)
