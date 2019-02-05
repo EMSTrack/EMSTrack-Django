@@ -224,9 +224,28 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         # call supper
         context = super().get_context_data(**kwargs)
 
-        context['profile_form'] = UserProfileAdminForm()
+        # add userprofile form
+        self.userprofile_form = UserProfileAdminForm()
+        context['profile_form'] = self.userprofile_form
 
         return context
+
+    def form_valid(self, form):
+
+        # return quickly if userprofile is not valid
+        if all(self.userprofile_form.is_valid(), super().form_valid(form)):
+
+            # call super save
+            user = super().save()
+
+            # retrieve and update userprofile
+            userprofile = self.userprofile_form.instance
+            userprofile.user = user
+
+            # save userprofile instead of creating
+            userprofile.save()
+        else:
+            return False
 
     def get_success_message(self, cleaned_data):
         return "Successfully created user '{}'".format(self.object.username)
