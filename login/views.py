@@ -33,7 +33,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm
+    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm, UserProfileCreateAdminForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
