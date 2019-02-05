@@ -47,7 +47,7 @@ class TestViews(TestSetup):
         # login as admin
         login = client.login(username=settings.MQTT['USERNAME'],
                              password=settings.MQTT['PASSWORD'])
-        logger.debug(login)
+        self.assertTrue(login)
 
         # retrieve any ambulance
         response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
@@ -63,7 +63,7 @@ class TestViews(TestSetup):
                                      'password1': 'pass1234pass',
                                      'password2': 'pass1234pass',
                                      },
-                                    follow=True)
+                                    )
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(User.objects.last().username, "LatestTest")
