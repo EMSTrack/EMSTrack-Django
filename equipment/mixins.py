@@ -1,6 +1,6 @@
 import logging
 
-from django.db import transaction, IntegrityError
+from django.db import transaction
 
 from equipment.forms import EquipmentHolderUpdateForm
 from equipment.models import EquipmentItem

@@ -239,7 +239,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         # Get the userprofile form
         userprofile_form = self.userprofile_form(self.request.POST)
 
-        # return quickly if userprofile is not valid
+        # Save userprofile form
         if userprofile_form.is_valid():
 
             # retrieve and update userprofile
