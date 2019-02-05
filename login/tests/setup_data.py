@@ -23,7 +23,7 @@ class TestSetupData:
             username=settings.MQTT['USERNAME'],
             email='admin@user.com',
             password=settings.MQTT['PASSWORD'],
-            is_superuser=True, is_staff=True)
+            is_superuser=True)
 
         cls.u2 = User.objects.create_user(
             username='testuser1',
