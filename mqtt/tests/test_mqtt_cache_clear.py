@@ -1,4 +1,5 @@
 import logging
+import time
 
 from django.conf import settings
 
@@ -99,6 +100,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(subscribe_client)
+
+        time.sleep(0.1)
 
         info = cache_info()
         self.assertEqual(info.hits, 0)
