@@ -229,6 +229,8 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         # userprofile is created by a signal
         # not sure if the signal is called synchronously with the call to save()
         # if not, this could be subject to a concurrency issue
+        # the following post claims they are not asynchronous
+        # https://stackoverflow.com/questions/11899088/is-django-post-save-signal-asynchronous
         userprofile_form = inlines[0][0]
         userprofile_form.cleaned_data.pop('id', None)
         UserProfile.objects.filter(user=form.instance).update(**userprofile_form.cleaned_data)

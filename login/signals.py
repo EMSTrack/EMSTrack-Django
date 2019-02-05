@@ -28,7 +28,3 @@ def create_group_profile(sender, instance, created, **kwargs):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
-#
-# This was removed because CreateWithInlinesView automatically adds user profile
-# It might be necessary to create user profile by hand if user creation is done
-# by any other means other than the django view.

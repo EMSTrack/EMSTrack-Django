@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 
 from login.permissions import cache_clear, get_permissions, cache_info
+from mqtt.publish import SingletonPublishClient
 from mqtt.subscribe import SubscribeClient
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from .client import MQTTTestSubscribeClient as SubscribeClient
@@ -94,7 +95,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(info.currsize, 1)
 
         # send cache_clear
-        test_client.publish('message', 'cache_clear')
+        # test_client.publish('message', 'cache_clear')
+        SingletonPublishClient().publish_message('cache_clear')
 
         # process messages
         self.loop(test_client, subscribe_client)
