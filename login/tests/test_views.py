@@ -52,6 +52,9 @@ class TestViews(TestSetup):
         # retrieve any ambulance
         response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
                               follow=True)
+        # Check our user is logged in
+        self.assertEqual(str(response.context['user']), settings.MQTT['USERNAME'])
+        # Check that we got a response "success"
         self.assertEqual(response.status_code, 200)
         logger.debug(response.redirect_chain)
         result = JSONParser().parse(BytesIO(response.content))
