@@ -277,6 +277,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
 
         # update userprofile without creating
         userprofile_form = inlines[0][0]
+        userprofile_form.cleaned_data.pop('id', None)
         UserProfile.objects.filter(user=form.instance).update(**userprofile_form.cleaned_data)
 
         # process other inlines
