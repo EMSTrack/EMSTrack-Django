@@ -61,10 +61,10 @@ class TestViews(TestSetup):
 
         # ambulance detail
         response = self.client.get(reverse('ambulance:detail',
-                                           kwargs={pk: self.a1.id}),
+                                           kwargs={'pk': self.a1.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('Maintenance Due' in response.content)
+        self.assertTrue('Maintenance due' in response.content)
         logger.debug(response.content)
         logger.debug(response.redirect_chain)
 
