@@ -62,11 +62,11 @@ class TestViews(TestSetup):
         self.assertTrue('admin@user.com' in response.content.decode())
 
         # user create
-        response = self.client.get(reverse('login:create-user'),
-                                   {'username': 'newuser',
-                                    'password1': 'aasd67asd',
-                                    'password2': 'aasd67asd'},
-                                   follow=True)
+        response = self.client.post(reverse('login:create-user'),
+                                    {'username': 'newuser',
+                                     'password1': 'aasd67asd',
+                                     'password2': 'aasd67asd'},
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         logger.debug(response.content.decode())
         self.assertEqual(User.objects.last().username, "newuser")
