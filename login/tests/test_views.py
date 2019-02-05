@@ -39,8 +39,6 @@ class TestModels(TestSetup):
 
 class TestViews(TestSetup):
 
-    factory = RequestFactory()
-
     def test(self):
 
         # login as admin
@@ -56,9 +54,17 @@ class TestViews(TestSetup):
         # answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         # self.assertDictEqual(result, answer)
 
-        # user detail
+        # ambulance list
         response = self.client.get(reverse('ambulance:list'), follow=True)
         self.assertEqual(response.status_code, 200)
+        self.assertTrue('Maintenance Due' in response.content)
+
+        # ambulance detail
+        response = self.client.get(reverse('ambulance:detail',
+                                           kwargs={pk: self.a1.id}),
+                                   follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('Maintenance Due' in response.content)
         logger.debug(response.content)
         logger.debug(response.redirect_chain)
 
