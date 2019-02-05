@@ -211,56 +211,6 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
     }
 
 
-class UserAdminCreateView2(SuccessMessageWithInlinesMixin,
-                          CreateWithInlinesView):
-    model = User
-    template_name = 'login/user_create_form.html'
-    form_class = UserAdminCreateForm
-    inlines = [UserAmbulancePermissionAdminInline,
-               UserHospitalPermissionAdminInline]
-    userprofile_form = UserProfileAdminForm
-
-    def get_context_data(self, **kwargs):
-
-        # call supper
-        context = super().get_context_data(**kwargs)
-
-        # add userprofile form
-        context['userprofile_form'] = self.userprofile_form
-
-        return context
-
-    def form_valid(self, form):
-        """If the form is valid, save the associated model."""
-
-        # save model
-        self.object = form.save()
-
-        # Get the userprofile form
-        userprofile_form = self.userprofile_form(self.request.POST)
-
-        # Save userprofile form
-        if userprofile_form.is_valid():
-
-            # retrieve and update userprofile
-            userprofile = userprofile_form.save(commit=False)
-            userprofile.user = self.object
-            userprofile.save()
-
-            # TODO: what if userprofile is not valid?
-
-            # call super to redirect
-            return super().form_valid(form)
-
-    def get_success_message(self, cleaned_data):
-        return "Successfully created user '{}'".format(self.object.username)
-
-    def get_success_url(self):
-        return self.object.userprofile.get_absolute_url()
-
-    # TODO: Choose between provided password and email generated password
-
-
 class UserAdminCreateView(SuccessMessageWithInlinesMixin,
                           CreateWithInlinesView):
     model = User
@@ -276,6 +226,9 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         response = self.form_valid(form)
 
         # update userprofile without creating
+        # userprofile is created by a signal
+        # not sure if the signal is called synchronously with the call to save()
+        # if not, this could be subject to a concurrency issue
         userprofile_form = inlines[0][0]
         userprofile_form.cleaned_data.pop('id', None)
         UserProfile.objects.filter(user=form.instance).update(**userprofile_form.cleaned_data)
