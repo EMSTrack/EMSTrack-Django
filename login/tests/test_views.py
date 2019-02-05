@@ -3,7 +3,7 @@ from io import BytesIO
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import Client
+from django.test import Client, RequestFactory
 from django.urls import reverse
 from rest_framework.parsers import JSONParser
 
@@ -39,6 +39,8 @@ class TestModels(TestSetup):
 
 class TestViews(TestSetup):
 
+    factory = RequestFactory()
+
     def test(self):
 
         # login as admin
@@ -55,13 +57,10 @@ class TestViews(TestSetup):
         # self.assertDictEqual(result, answer)
 
         # user detail
-        logger.debug(reverse('ambulance:detail', kwargs={'pk': self.a1.id}))
-        response = self.client.get(reverse('login:detail-user', kwargs={'pk': self.a1.id}),
-                                   follow=True)
+        response = self.client.get(reverse('ambulance:list'), follow=True)
         self.assertEqual(response.status_code, 200)
         logger.debug(response.content)
         logger.debug(response.redirect_chain)
-        self.assertTrue(False)
 
         # user detail
         logger.debug(reverse('login:detail-user', kwargs={'pk': self.u2.id}))
