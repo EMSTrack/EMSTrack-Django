@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import Client
+from django.urls import reverse
 
 from login.tests.setup_data import TestSetup
 
@@ -43,7 +44,7 @@ class TestViews(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create user
-        response = self.client.post('/auth/user/create/',
+        response = self.client.post(reverse('login:create-user'),
                                     {'username': "LatestTest",
                                      'password1': 'pass1234pass',
                                      'password2': 'pass1234pass',
