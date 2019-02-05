@@ -47,7 +47,8 @@ class TestViews(TestSetup):
                                     {'username': "LatestTest",
                                      'password1': 'pass1234pass',
                                      'password2': 'pass1234pass',
-                                     })
+                                     },
+                                    follow=True)
         self.assertEqual(response.status_code, 200)
         logger.debug(response.body)
         self.assertEqual(User.objects.last().username, "LatestTest")
