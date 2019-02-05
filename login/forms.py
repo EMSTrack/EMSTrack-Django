@@ -235,10 +235,12 @@ class UserProfileAdminForm(forms.ModelForm):
 
 class UserProfileCreateAdminForm(UserProfileAdminForm):
 
-    pass
-    # def save(self, commit=True):
-    #     # profile will be created by signal
-    #     instance = super(UserProfileAdminForm, self).save(False)
+    def save(self, commit=True):
+        # profile will be created by signal
+        instance = super(UserProfileAdminForm, self).save(commit)
+
+        return instance
+
 
 
 class UserAdminCreateForm(auth_forms.UserCreationForm):
