@@ -231,21 +231,23 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         return context
 
     def form_valid(self, form):
+        """If the form is valid, save the associated model."""
+
+        # save model
+        self.object = form.save()
 
         # return quickly if userprofile is not valid
-        if all(self.userprofile_form.is_valid(), super().form_valid(form)):
-
-            # call super save
-            user = super().save()
+        if self.userprofile_form.is_valid():
 
             # retrieve and update userprofile
-            userprofile = self.userprofile_form.instance
-            userprofile.user = user
-
-            # save userprofile instead of creating
+            userprofile = self.userprofile_form.save(commit=False)
+            userprofile.user = self.object
             userprofile.save()
-        else:
-            return False
+
+        # TODO: what if userprofile is not valid?
+
+        # call super to redirect
+        return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         return "Successfully created user '{}'".format(self.object.username)
