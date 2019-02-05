@@ -275,9 +275,9 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         # process form
         response = self.form_valid(form)
 
-        # process first inline
-        formset = inlines[0]
-        userprofile = formset.save(commit=False)
+        # process userprofile without creating
+        userprofile_form = inlines[0][0]
+        userprofile = userprofile_form.save(commit=False)
         userprofile.user = form.instance
         userprofile.save()
 
