@@ -275,11 +275,9 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         # process form
         response = self.form_valid(form)
 
-        # process userprofile without creating
+        # update userprofile without creating
         userprofile_form = inlines[0][0]
-        userprofile = userprofile_form.save(commit=False)
-        userprofile.user = form.instance
-        userprofile.save()
+        UserProfile.objects.get(user=form.instance).update(**userprofile_form.cleaned_data)
 
         # process other inlines
         for formset in inlines[1:]:
