@@ -218,6 +218,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
     form_class = UserAdminCreateForm
     inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
+    userprofile_form = UserProfileAdminForm
 
     def get_context_data(self, **kwargs):
 
@@ -225,7 +226,6 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         context = super().get_context_data(**kwargs)
 
         # add userprofile form
-        self.userprofile_form = UserProfileAdminForm()
         context['profile_form'] = self.userprofile_form
 
         return context
@@ -236,11 +236,14 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         # save model
         self.object = form.save()
 
+        # Get the userprofile form
+        userprofile_form = self.userprofile_form(self.request.POST)
+
         # return quickly if userprofile is not valid
-        if self.userprofile_form.is_valid():
+        if userprofile_form.is_valid():
 
             # retrieve and update userprofile
-            userprofile = self.userprofile_form.save(commit=False)
+            userprofile = userprofile_form.save(commit=False)
             userprofile.user = self.object
             userprofile.save()
 
