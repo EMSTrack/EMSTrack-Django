@@ -62,6 +62,7 @@ class TestViews(TestSetup):
                                    follow=True)
         self.assertEqual(response.status_code, 200)
         logger.debug(response.content)
+        logger.debug(response.redirect_chain)
         self.assertTrue(False)
 
         # logout
