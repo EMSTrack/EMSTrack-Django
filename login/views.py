@@ -247,10 +247,10 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
             userprofile.user = self.object
             userprofile.save()
 
-        # TODO: what if userprofile is not valid?
+            # TODO: what if userprofile is not valid?
 
-        # call super to redirect
-        return super().form_valid(form)
+            # call super to redirect
+            return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
         return "Successfully created user '{}'".format(self.object.username)
