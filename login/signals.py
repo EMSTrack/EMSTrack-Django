@@ -24,10 +24,10 @@ def create_group_profile(sender, instance, created, **kwargs):
 
 
 # Add signal to automatically extend user profile
-# @receiver(post_save, sender=User)
-# def create_user_profile(sender, instance, created, **kwargs):
-#     if created:
-#         UserProfile.objects.create(user=instance)
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
 #
 # This was removed because CreateWithInlinesView automatically adds user profile
 # It might be necessary to create user profile by hand if user creation is done

@@ -169,6 +169,10 @@ class UserProfileAdminInline(InlineFormSet):
     }
 
 
+class UserProfileCreateAdminInline(UserProfileAdminInline):
+    form_class = UserProfileCreateAdminForm
+
+
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
@@ -216,7 +220,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
-    inlines = [UserProfileAdminInline,
+    inlines = [UserProfileCreateAdminInline,
                UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
