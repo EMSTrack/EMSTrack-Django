@@ -57,7 +57,7 @@ class TestViews(TestSetup):
         # ambulance list
         response = self.client.get(reverse('ambulance:list'), follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('Maintenance Due' in response.content)
+        self.assertTrue('Maintenance Due' in response.content.decode())
 
         # ambulance detail
         response = self.client.get(reverse('ambulance:detail',
