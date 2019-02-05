@@ -226,7 +226,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
         context = super().get_context_data(**kwargs)
 
         # add userprofile form
-        context['profile_form'] = self.userprofile_form
+        context['userprofile_form'] = self.userprofile_form
 
         return context
 
