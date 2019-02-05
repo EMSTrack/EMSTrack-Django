@@ -1,8 +1,12 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import Client
 
 from login.tests.setup_data import TestSetup
+
+logger = logging.getLogger(__name__)
 
 
 class TestModels(TestSetup):
@@ -39,12 +43,14 @@ class TestViews(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # create user
-        self.client.post('/auth/user/create/',
-                         {'username': "LatestTest",
-                          'password1': 'pass1234pass',
-                          'password2': 'pass1234pass',
-                          })
+        response = self.client.post('/auth/user/create/',
+                                    {'username': "LatestTest",
+                                     'password1': 'pass1234pass',
+                                     'password2': 'pass1234pass',
+                                     })
+        self.assertEqual(response.status_code, 200)
+        logger.debug(response.body)
         self.assertEqual(User.objects.last().username, "LatestTest")
-        
+
         # logout
         client.logout()
