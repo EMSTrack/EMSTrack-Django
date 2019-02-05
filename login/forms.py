@@ -1,3 +1,4 @@
+import logging
 from datetime import timedelta
 
 import django.forms as forms
@@ -14,6 +15,8 @@ from ambulance.models import Ambulance
 from hospital.models import Hospital
 from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission, UserProfile, \
     GroupAmbulancePermission, GroupHospitalPermission
+
+logger = logging.getLogger(__name__)
 
 
 class SignupForm(auth_forms.UserCreationForm):
@@ -238,9 +241,8 @@ class UserProfileCreateAdminForm(UserProfileAdminForm):
     def save(self, commit=True):
         # profile will be created by signal
         instance = super(UserProfileAdminForm, self).save(commit)
-
+        logger.error('instace = {}'.format(instance))
         return instance
-
 
 
 class UserAdminCreateForm(auth_forms.UserCreationForm):
