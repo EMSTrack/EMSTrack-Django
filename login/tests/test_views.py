@@ -54,18 +54,6 @@ class TestViews(TestSetup):
         # answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         # self.assertDictEqual(result, answer)
 
-        # ambulance list
-        response = self.client.get(reverse('ambulance:list'), follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue('Maintenance due' in response.content.decode())
-
-        # ambulance detail
-        response = self.client.get(reverse('ambulance:detail',
-                                           kwargs={'pk': self.a1.id}),
-                                   follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue('Maintenance due' in response.content.decode())
-
         # user detail
         response = self.client.get(reverse('login:detail-user',
                                            kwargs={'pk': self.u1.id}),
@@ -74,11 +62,13 @@ class TestViews(TestSetup):
         self.assertTrue('admin@user.com' in response.content.decode())
 
         # user create
-        response = self.client.get(reverse('login:detail-user',
-                                           kwargs={'pk': self.u1.id}),
+        response = self.client.get(reverse('login:create-user'),
+                                   {'username': 'newuser',
+                                    'password1': 'aasd67asd',
+                                    'password2': 'aasd67asd'},
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertTrue('admin@user.com' in response.content.decode())
+        logger.debug(response.content.decode())
 
         # logout
         self.client.logout()
