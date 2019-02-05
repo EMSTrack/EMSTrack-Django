@@ -41,17 +41,14 @@ class TestViews(TestSetup):
 
     def test(self):
 
-        # instantiate client
-        client = Client()
-
         # login as admin
-        login = client.login(username=settings.MQTT['USERNAME'],
-                             password=settings.MQTT['PASSWORD'])
+        login = self.client.login(username=settings.MQTT['USERNAME'],
+                                  password=settings.MQTT['PASSWORD'])
         self.assertTrue(login)
 
         # retrieve any ambulance
-        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
-                              follow=True)
+        response = self.client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
+                                   follow=True)
         # Check our user is logged in
         self.assertEqual(str(response.context['user']), settings.MQTT['USERNAME'])
         # Check that we got a response "success"
@@ -70,4 +67,4 @@ class TestViews(TestSetup):
         self.assertTrue(False)
 
         # logout
-        client.logout()
+        self.client.logout()
