@@ -57,11 +57,12 @@ class TestViews(TestSetup):
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
         self.assertDictEqual(result, answer)
 
-        # create user
-        response = self.client.post(reverse('login:detail-user', kwargs={'pk':self.u1.id}),
-                                    follow=True)
-        logger.debug(response.content)
+        # user detail
+        response = self.client.get(reverse('login:detail-user', kwargs={'pk':self.u1.id}),
+                                   follow=True)
         self.assertEqual(response.status_code, 200)
+        logger.debug(response.content)
+        self.assertTrue(false)
 
         # logout
         client.logout()
