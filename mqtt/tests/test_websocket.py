@@ -18,6 +18,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
     def test(self):
 
+        # Make sure publish client is looped
+        SingletonPublishClient().loop()
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',

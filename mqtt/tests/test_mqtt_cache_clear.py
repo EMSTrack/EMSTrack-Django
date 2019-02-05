@@ -95,7 +95,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(info.currsize, 1)
 
         # send cache_clear
-        # test_client.publish('message', 'cache_clear')
+        # test_client.publish('message', '"cache_clear"')
         SingletonPublishClient().publish_message('cache_clear')
 
         # process messages
