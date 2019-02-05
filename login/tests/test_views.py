@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.models import User
 from django.test import Client
 
 from login.tests.setup_data import TestSetup
@@ -37,5 +38,13 @@ class TestViews(TestSetup):
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
+        # create user
+        self.client.post('/auth/user/create/',
+                         {'username': "LatestTest",
+                          'password1': 'pass1234pass',
+                          'password2': 'pass1234pass',
+                          })
+        self.assertEqual(User.objects.last().username, "LatestTest")
+        
         # logout
         client.logout()
