@@ -65,15 +65,13 @@ class TestViews(TestSetup):
                                    follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('Maintenance due' in response.content.decode())
-        logger.debug(response.content)
-        logger.debug(response.redirect_chain)
 
         # user detail
-        logger.debug(reverse('login:detail-user', kwargs={'pk': self.u2.id}))
-        response = self.client.get(reverse('login:detail-user', kwargs={'pk': self.u2.id}),
+        response = self.client.get(reverse('login:detail-user',
+                                           kwargs={'pk': self.u1.id}),
                                    follow=True)
         self.assertEqual(response.status_code, 200)
-        logger.debug(response.content)
+        logger.debug(response.content.decode())
         logger.debug(response.redirect_chain)
         self.assertTrue(False)
 
