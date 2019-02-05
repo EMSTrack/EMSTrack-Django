@@ -49,8 +49,8 @@ class TestViews(TestSetup):
                                      'password2': 'pass1234pass',
                                      },
                                     follow=True)
-        self.assertEqual(response.status_code, 200)
         logger.debug(response.content)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(User.objects.last().username, "LatestTest")
 
         # logout
