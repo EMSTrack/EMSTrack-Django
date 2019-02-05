@@ -33,7 +33,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm, UserProfileCreateAdminForm
+    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
@@ -169,10 +169,6 @@ class UserProfileAdminInline(InlineFormSet):
     }
 
 
-class UserProfileCreateAdminInline(UserProfileAdminInline):
-    form_class = UserProfileCreateAdminForm
-
-
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
@@ -218,11 +214,19 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
 class UserAdminCreateView(SuccessMessageWithInlinesMixin,
                           CreateWithInlinesView):
     model = User
-    template_name = 'login/user_form.html'
+    template_name = 'login/user_create_form.html'
     form_class = UserAdminCreateForm
-    inlines = [UserProfileCreateAdminInline,
-               UserAmbulancePermissionAdminInline,
+    inlines = [UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
+
+    def get_context_data(self, **kwargs):
+
+        # call supper
+        context = super().get_context_data(**kwargs)
+
+        context['profile_form'] = UserProfileAdminForm()
+
+        return context
 
     def get_success_message(self, cleaned_data):
         return "Successfully created user '{}'".format(self.object.username)

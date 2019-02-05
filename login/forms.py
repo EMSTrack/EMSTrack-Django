@@ -236,15 +236,6 @@ class UserProfileAdminForm(forms.ModelForm):
         exclude = ['user']
 
 
-class UserProfileCreateAdminForm(UserProfileAdminForm):
-
-    def save(self, commit=True):
-        # profile will be created by signal
-        instance = super(UserProfileAdminForm, self).save(False)
-        logger.error('instance = {}'.format(instance))
-        return instance
-
-
 class UserAdminCreateForm(auth_forms.UserCreationForm):
     class Meta:
         model = User
