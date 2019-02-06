@@ -78,7 +78,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = client_id
 
         test_client = SingletonPublishClient()
-        self.is_connected(test_client)
+        # self.is_connected(test_client)
 
         # clear cache
         cache_clear()
