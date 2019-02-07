@@ -53,7 +53,7 @@ router.register(r'call',
                 CallViewSet,
                 base_name='api-call')
 
-urlpatterns = [
+urlpatterns = i18n_patterns(*[
 
     # Router API urls
     url(r'^api/', include(router.urls)),
@@ -75,7 +75,8 @@ urlpatterns = [
     url(r'^api/version/$',
         VersionView.as_view(),
         name='version'),
-    ]
+
+])
 
 urlpatterns += i18n_patterns(*[
 
