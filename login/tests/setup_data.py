@@ -29,6 +29,8 @@ class TestSetupData:
             username='testuser1',
             email='test1@user.com',
             password='top_secret')
+        cls.u2.userprofile.is_dispatcher = True
+        cls.u2.userprofile.save()
 
         cls.u3 = User.objects.create_user(
             username='testuser2',
