@@ -1302,6 +1302,17 @@ class TestCall(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 403)
 
+        # Should fail, dispacther but not in authorized list of ambulances
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a3.id}, {'ambulance_id': self.a1.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/api/call/', data, content_type='application/json')
+        logger.debug(response.content)
+        self.assertEqual(response.status_code, 403)
+
         # logout
         client.logout()
 
