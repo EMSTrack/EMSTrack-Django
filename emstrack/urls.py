@@ -7,7 +7,7 @@ from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
 from login.viewsets import ProfileViewSet
-from login.views import PasswordView, SettingsView
+from login.views import PasswordView, SettingsView, VersionView
 
 from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet
 
@@ -65,11 +65,16 @@ urlpatterns = [
         PasswordView.as_view(),
         name='mqtt_password'),
 
-    # Add mqtt_settings to api
+    # Add settings to api
     url(r'^api/settings/$',
         SettingsView.as_view(),
         name='mqtt_settings'),
-    
+
+    # Add version to api
+    url(r'^api/version/$',
+        VersionView.as_view(),
+        name='version'),
+
     # ambulance
     url(r'^ambulance/', include('ambulance.urls')),
 

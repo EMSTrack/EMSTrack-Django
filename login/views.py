@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
+from emstrack import CURRENT_VERSION, MINIMUM_VERSION
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
@@ -758,3 +759,25 @@ class SettingsView(APIView):
         """
 
         return Response(self.get_settings())
+
+
+class VersionView(APIView):
+    """
+    Retrieve current version.
+    """
+
+    @staticmethod
+    def get_settings():
+
+        # assemble all settings
+        version = {'current': CURRENT_VERSION,
+                   'minimum': MINIMUM_VERSION }
+
+        return version
+
+    def get(self, request, user__username=None):
+        """
+        Retrieve current settings and options.
+        """
+
+        return Response(self.get_version())
