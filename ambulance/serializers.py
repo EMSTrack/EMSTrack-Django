@@ -372,6 +372,12 @@ class CallSerializer(serializers.ModelSerializer):
             # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
+
+                # check permisssions in case of dispatcher
+                if not (user.is_superuser or user.is_staff):
+                    if not get_permissions(user).check_can_read(ambulance=ambulance.id):
+                        raise PermissionDenied()
+
                 waypoint_set = ambulancecall.pop('waypoint_set', [])
                 ambulance_call = AmbulanceCall(call=call, ambulance=ambulance, **ambulancecall, updated_by=user)
                 ambulance_call.save(publish=False)
