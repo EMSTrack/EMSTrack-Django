@@ -1245,7 +1245,7 @@ class TestCall(TestSetup):
         client.logout()
 
         # login as testuser2
-        client.login(username='testuser2', password='very_secret')
+        client.login(username='testuser3', password='highly_secret')
 
         # Will fail for anyone not superuser or staff or dispatcher
         data = {
