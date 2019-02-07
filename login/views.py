@@ -767,17 +767,17 @@ class VersionView(APIView):
     """
 
     @staticmethod
-    def get_settings():
+    def get_version():
 
         # assemble all settings
         version = {'current': CURRENT_VERSION,
-                   'minimum': MINIMUM_VERSION }
+                   'minimum': MINIMUM_VERSION}
 
         return version
 
     def get(self, request, user__username=None):
         """
-        Retrieve current settings and options.
+        Retrieve current version.
         """
 
         return Response(self.get_version())
