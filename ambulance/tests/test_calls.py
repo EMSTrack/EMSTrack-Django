@@ -1280,7 +1280,7 @@ class TestCall(TestSetup):
         # login as dispatcher
         client.login(username='testuser2', password='very_secret')
 
-        # Should not fail, is dispacther
+        # Should not fail, is dispatcher
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
@@ -1291,7 +1291,7 @@ class TestCall(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
 
-        # Should fail, dispacther but not in authorized list of ambulances
+        # Should fail, dispatcher but not in authorized list of ambulances
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
@@ -1302,7 +1302,7 @@ class TestCall(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 403)
 
-        # Should fail, dispacther but not in authorized list of ambulances
+        # Should fail, dispatcher but not in authorized list of ambulances
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
