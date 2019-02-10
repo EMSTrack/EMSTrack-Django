@@ -522,9 +522,6 @@ class AmbulanceCall(PublishMixin,
         # remove?
         remove = kwargs.pop('publish', False)
 
-        # publish call?
-        publish_call = False
-
         # retrieve call
         call = self.call
 
@@ -535,12 +532,7 @@ class AmbulanceCall(PublishMixin,
 
                 # change call status to started
                 call.status = CallStatus.S.name
-                call.save()
-
-            else:
-
-                # publish call tp update status
-                publish_call = True
+                call.save(publish=False)
 
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
@@ -554,39 +546,27 @@ class AmbulanceCall(PublishMixin,
 
                 logger.debug('This is the last ambulance; will end call.')
 
-                # publish first
-                self.publish()
-
                 # then change call status to ended
                 call.status = CallStatus.E.name
-                call.save()
-
-                # prevent publication, already published
-                publish = False
+                call.save(publish=False)
 
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(accepted_ambulancecalls)
 
-                # publish and remove from mqtt
-                remove = True
+            # publish and remove from mqtt
+            remove = True
 
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
 
             logger.debug('Ambulance call declined.')
 
-            # publish call tp update status
-            publish_call = True
-
         # changed to suspended?
         elif self.status == AmbulanceCallStatus.S.name:
 
             logger.debug('Ambulance call suspended.')
-
-            # publish call tp update status
-            publish_call = True
 
         # call super
         super().save(*args, **kwargs,
@@ -598,9 +578,8 @@ class AmbulanceCall(PublishMixin,
                                             comment=self.comment,
                                             updated_by=self.updated_by, updated_on=self.updated_on)
 
-        # publish call?
-        if publish_call:
-            call.publish()
+        # publish call
+        call.publish()
 
     def publish(self, **kwargs):
 
