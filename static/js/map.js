@@ -332,8 +332,7 @@ function getData(subscribe) {
         lon = 0;
 
         // Update ambulances
-        let ambulance;
-        for (ambulance in data) {
+        data.forEach((ambulance) => {
 
             // update ambulance
             updateAmbulance(ambulance);
@@ -343,7 +342,8 @@ function getData(subscribe) {
             lat += ambulance.location.latitude;
             lon += ambulance.location.longitude;
 
-        }
+
+        });
 
         // Center map
         if (n > 0) {
@@ -357,7 +357,7 @@ function getData(subscribe) {
 
         if (subscribe) {
 
-            for (ambulance in data) {
+            data.forEach((ambulance) => {
 
                 // Subscribe to ambulance
                 let topicName = "ambulance/" + ambulance.id + "/data";
@@ -369,7 +369,7 @@ function getData(subscribe) {
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
 
-            }
+            });
 
         }
 
@@ -572,6 +572,10 @@ function updateAmbulance(ambulance) {
             $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
         else
             $('#ambulance-' + old_status + '-header-count').hide();
+
+        console.log("> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
+        console.log("> newstatus '" + status + "' count = '" + new_grid_length + "'");
+
 
     } else {
 
