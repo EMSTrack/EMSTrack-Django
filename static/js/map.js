@@ -332,7 +332,8 @@ function getData(subscribe) {
         lon = 0;
 
         // Update ambulances
-        data.forEach((ambulance) => {
+        let ambulance;
+        for (ambulance in data) {
 
             // update ambulance
             updateAmbulance(ambulance);
@@ -342,8 +343,7 @@ function getData(subscribe) {
             lat += ambulance.location.latitude;
             lon += ambulance.location.longitude;
 
-
-        });
+        }
 
         // Center map
         if (n > 0) {
@@ -357,7 +357,7 @@ function getData(subscribe) {
 
         if (subscribe) {
 
-            data.forEach((ambulance) => {
+            for (ambulance in data) {
 
                 // Subscribe to ambulance
                 let topicName = "ambulance/" + ambulance.id + "/data";
@@ -369,7 +369,7 @@ function getData(subscribe) {
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
 
-            });
+            }
 
         }
 
