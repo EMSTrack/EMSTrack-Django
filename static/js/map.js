@@ -540,10 +540,17 @@ function updateAmbulance(ambulance) {
     if (id in ambulances) {
 
         // get ambulance's old status
-        var old_status = ambulances[id].status;
-        var status = ambulance.status;
-        var old_grid_length = $('#ambulance-grid-' + old_status).children().length - 1;
-        var new_grid_length = $('#ambulance-grid-' + status).children().length + 1;
+        const old_status = ambulances[id].status;
+        const status = ambulance.status;
+
+        let old_grid_length;
+        let new_grid_length;
+        if (old_status !== status) {
+            old_grid_length = $('#ambulance-grid-' + old_status).children().length - 1;
+            new_grid_length = $('#ambulance-grid-' + status).children().length + 1;
+        } else {
+            old_grid_length = new_grid_length = $('#ambulance-grid-' + status).children().length ;
+        }
 
         // Remove existing marker
         mymap.removeLayer(ambulanceMarkers[id]);
@@ -558,24 +565,26 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // Move and update grid button
-        var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
-            + ' status-' + status
-            + ' capability-' + ambulance.capability;
-        $("#grid-button-" + id).attr("class", btnClass)
-            .detach()
-            .appendTo($('#ambulance-grid-' + status));
+        if (old_status !== status) {
 
-        // update labels
-        $('#ambulance-' + status + '-header-count').html('(' + new_grid_length + ')').show();
-        if (old_grid_length)
-            $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
-        else
-            $('#ambulance-' + old_status + '-header-count').hide();
+            // Move and update grid button
+            var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
+                + ' status-' + status
+                + ' capability-' + ambulance.capability;
+            $("#grid-button-" + id).attr("class", btnClass)
+                .detach()
+                .appendTo($('#ambulance-grid-' + status));
 
-        console.log("> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
-        console.log("> newstatus '" + status + "' count = '" + new_grid_length + "'");
+            // update count labels
+            $('#ambulance-' + status + '-header-count').html('(' + new_grid_length + ')').show();
+            if (old_grid_length)
+                $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
+            else
+                $('#ambulance-' + old_status + '-header-count').hide();
 
+            console.log("> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
+            console.log("> newstatus '" + status + "' count = '" + new_grid_length + "'");
+        }
 
     } else {
 
