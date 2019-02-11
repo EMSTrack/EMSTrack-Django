@@ -657,7 +657,7 @@ function addAmbulanceToGrid(ambulance) {
         .html('(' + count + ')')
         .show();
 
-    log.console("> status '" + status + "' count = '" + count + "'");
+    console.log("> status '" + status + "' count = '" + count + "'");
 
 };
 
