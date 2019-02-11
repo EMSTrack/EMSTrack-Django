@@ -331,8 +331,8 @@ function getData(subscribe) {
         lat = 0;
         lon = 0;
 
-        // Retrieve ambulances
-        $.each(data, function (i, ambulance) {
+        // Update ambulances
+        data.forEach((ambulance) => {
 
             // update ambulance
             updateAmbulance(ambulance);
@@ -342,19 +342,6 @@ function getData(subscribe) {
             lat += ambulance.location.latitude;
             lon += ambulance.location.longitude;
 
-            if (subscribe) {
-
-                // Subscribe to ambulance
-                var topicName = "ambulance/" + ambulance.id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-
-                // Subscribe to calls
-                topicName = "ambulance/" + ambulance.id + "/call/+/status";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-
-            }
 
         });
 
@@ -366,6 +353,24 @@ function getData(subscribe) {
             console.log('Center at lat = ' + lat + ', lon = ' + lon);
 
             mymap.setView([lat, lon], 12);
+        }
+
+        if (subscribe) {
+
+            data.forEach((ambulance) => {
+
+                // Subscribe to ambulance
+                let topicName = "ambulance/" + ambulance.id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+                // Subscribe to calls
+                topicName = "ambulance/" + ambulance.id + "/call/+/status";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+            });
+
         }
 
     });
