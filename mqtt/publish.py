@@ -152,7 +152,7 @@ class PublishClient(BaseClient):
         self.remove_topic('equipment/{}/item/{}/data'.format(equipment_item.equipmentholder.id,
                                                              equipment_item.equipment.id))
 
-    def publish_call(self, call, qos=2, retain=True):
+    def publish_call(self, call, qos=2, retain=False):
         # otherwise, publish call data
         self.publish_topic('call/{}/data'.format(call.id),
                            CallSerializer(call),
