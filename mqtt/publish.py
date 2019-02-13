@@ -99,13 +99,13 @@ class PublishClient(BaseClient):
                            qos=qos,
                            retain=False)
 
-    def publish_settings(self, qos=2, retain=True):
+    def publish_settings(self, qos=2, retain=False):
         self.publish_topic('settings',
                            SettingsView.get_settings(),
                            qos=qos,
                            retain=retain)
 
-    def publish_profile(self, user, qos=2, retain=True):
+    def publish_profile(self, user, qos=2, retain=False):
         self.publish_topic('user/{}/profile'.format(user.username),
                            UserProfileSerializer(user),
                            qos=qos,
@@ -114,7 +114,7 @@ class PublishClient(BaseClient):
     def remove_profile(self, user):
         self.remove_topic('user/{}/profile'.format(user.username))
 
-    def publish_ambulance(self, ambulance, qos=2, retain=True):
+    def publish_ambulance(self, ambulance, qos=2, retain=False):
         self.publish_topic('ambulance/{}/data'.format(ambulance.id),
                            AmbulanceSerializer(ambulance),
                            qos=qos,
@@ -123,7 +123,7 @@ class PublishClient(BaseClient):
     def remove_ambulance(self, ambulance):
         self.remove_topic('ambulance/{}/data'.format(ambulance.id))
 
-    def publish_hospital(self, hospital, qos=2, retain=True):
+    def publish_hospital(self, hospital, qos=2, retain=False):
         self.publish_topic('hospital/{}/data'.format(hospital.id),
                            HospitalSerializer(hospital),
                            qos=qos,
@@ -133,7 +133,7 @@ class PublishClient(BaseClient):
         self.remove_topic('hospital/{}/data'.format(hospital.id))
         self.remove_topic('equipment/{}/metadata'.format(hospital.equipmentholder.id))
 
-    def publish_equipment_metadata(self, equipmentholder, qos=2, retain=True):
+    def publish_equipment_metadata(self, equipmentholder, qos=2, retain=False):
         equipment_items = equipmentholder.equipmentitem_set.values('equipment')
         equipments = Equipment.objects.filter(id__in=equipment_items)
         self.publish_topic('equipment/{}/metadata'.format(equipmentholder.id),
@@ -141,7 +141,7 @@ class PublishClient(BaseClient):
                            qos=qos,
                            retain=retain)
 
-    def publish_equipment_item(self, equipment_item, qos=2, retain=True):
+    def publish_equipment_item(self, equipment_item, qos=2, retain=False):
         self.publish_topic('equipment/{}/item/{}/data'.format(equipment_item.equipmentholder.id,
                                                               equipment_item.equipment.id),
                            EquipmentItemSerializer(equipment_item),
@@ -166,7 +166,7 @@ class PublishClient(BaseClient):
 
         self.remove_topic('call/{}/data'.format(call.id))
 
-    def publish_call_status(self, ambulancecall, qos=2, retain=True):
+    def publish_call_status(self, ambulancecall, qos=2, retain=False):
         self.publish_topic('ambulance/{}/call/{}/status'.format(ambulancecall.ambulance_id,
                                                                 ambulancecall.call_id),
                            AmbulanceCallStatus[ambulancecall.status].value.casefold(),
