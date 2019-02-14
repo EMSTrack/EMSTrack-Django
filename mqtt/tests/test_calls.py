@@ -131,16 +131,13 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
 
-        # test_client publishes "Accepted" to call status
-        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
-                                                                                   ambulance_id, call.id), AmbulanceCallStatus.A.value.casefold())
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-
         # expect ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
+
+        # test_client publishes "Accepted" to call status
+        test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+                                                                                   ambulance_id, call.id), AmbulanceCallStatus.A.value.casefold())
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -152,10 +149,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status changed to accepted
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
-
-        # subscribe to call and ambulance call status
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
 
         # test_client publishes "patient bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
@@ -193,6 +186,10 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
 
+        # subscribe to call and ambulance call status
+        test_client.expect('call/{}/data'.format(call.id))
+        self.is_subscribed(test_client)
+
         # test_client publishes new waypoint
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/waypoint/{}/data'.format(username, client_id,
                                                                                              ambulance_id, call.id, -1),
@@ -213,9 +210,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(ambulance_id))
         self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # test_client updates waypoint
         waypoint = waypoint_set.get(order=2)
@@ -238,9 +232,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(ambulance_id))
         self.is_subscribed(test_client)
 
-        # process messages
-        self.loop(test_client, subscribe_client)
-
         # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id),
@@ -256,14 +247,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Check if call status is Ended
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.E.name)
-
-        # expect status ended call
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # expect status completed ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
 
         # Client handshake
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
