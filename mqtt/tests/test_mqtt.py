@@ -305,6 +305,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
 
+        # process messages
+        self.loop(test_client, subscribe_client)
+
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
