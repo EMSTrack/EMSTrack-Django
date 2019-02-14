@@ -3,22 +3,14 @@ import logging
 import time
 
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.utils import timezone
-from rest_framework.renderers import JSONRenderer
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus
-from ambulance.serializers import AmbulanceSerializer
 from emstrack.tests.util import point2str
-from equipment.models import Equipment, EquipmentItem, EquipmentHolder
-from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
+from equipment.models import EquipmentItem
 from hospital.models import Hospital
-from hospital.serializers import HospitalSerializer
 from login.models import Client, ClientStatus, ClientLog, ClientActivity
-from login.permissions import get_permissions
-from login.serializers import UserProfileSerializer
-from login.views import SettingsView
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from .client import MQTTTestSubscribeClient as SubscribeClient
 
@@ -51,11 +43,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        # [client.expect(t) for t in topics]
         self.is_subscribed(client)
-
-        # process messages
-        # self.loop(client)
 
         # expect more ambulance
         client.expect(topics[0])
@@ -125,11 +113,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         topics = ('hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        # [client.expect(t) for t in topics]
         self.is_subscribed(client)
-
-        # process messages
-        # self.loop(client)
 
         # expect more hospital and equipment
         [client.expect(t) for t in topics]
@@ -184,11 +168,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        # [client.expect(t) for t in topics]
         self.is_subscribed(client)
-
-        # process messages
-        # self.loop(client)
 
         # expect more ambulance
         client.expect(topics[0])
@@ -314,8 +294,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
         # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
+        # test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        # self.is_subscribed(test_client)
 
         # publish change
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
@@ -331,6 +311,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
@@ -347,8 +328,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.comment, 'no comments')
 
         # retrieve message that is there already due to creation
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-        self.is_subscribed(test_client)
+        # test_client.expect('hospital/{}/data'.format(self.h1.id))
+        # self.is_subscribed(test_client)
 
         test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username, 
                                                                         client_id,
@@ -363,6 +344,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
@@ -380,9 +362,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'True')
 
         # retrieve message that is there already due to creation
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-        self.is_subscribed(test_client)
+        # test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+        #                                                       self.e1.id))
+        # self.is_subscribed(test_client)
 
         test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
                                                                                  client_id,
@@ -399,6 +381,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # expect update once
         test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                               self.e1.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
@@ -449,8 +432,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
         # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a2.id))
-        self.is_subscribed(test_client)
+        # test_client.expect('ambulance/{}/data'.format(self.a2.id))
+        # self.is_subscribed(test_client)
 
         location = {'latitude': -2., 'longitude': 7.}
         timestamp = timezone.now()
@@ -479,6 +462,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a2.id))
+        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client)
