@@ -311,8 +311,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -327,8 +326,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -353,8 +351,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         call = serializer.save(updated_by=self.u1)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
@@ -371,30 +368,13 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # subscribe to call and ambulance call status
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # expect status ended call
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
-        # expect blank call
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
         # expect status completed ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
-
-        # expect blank ambulancecall
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -416,8 +396,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # wait for disconnect
         test_client.wait()
