@@ -418,23 +418,27 @@ function getData(subscribe) {
         });
     });
 
-    /*
-        // retrieve calls from api
-        console.log("Retrieving calls from API");
-        $.getJSON(APIBaseUrl + 'call/', function (data) {
 
-            console.log('calls = ' + calls);
+    // retrieve calls from api
+    console.log("Retrieving calls from API");
+    $.getJSON(APIBaseUrl + 'call/', function (data) {
 
-            // Subscribe to current calls
-            $.each(data, function (index) {
-                console.log('data[index] = ' + data[index]);
-                var topicName = "call/" + data[index].id + "/data";
+        // Subscribe to current calls
+        $.each(data, function (i, call) {
+
+            // update call
+            updateCall(call);
+
+            if (subscribe) {
+
+                var topicName = "call/" + call.id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
-            });
+            }
 
         });
-    */
+
+    });
 
 }
 
