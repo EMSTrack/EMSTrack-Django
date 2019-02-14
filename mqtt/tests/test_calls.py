@@ -374,10 +374,6 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
-        # expect status completed ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
-
         # Abort the call
         call.abort()
 
@@ -520,10 +516,6 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
 
-        # Expect ambulance call status to go declined
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
-
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), AmbulanceCallStatus.D.value.casefold())
@@ -641,8 +633,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -657,8 +648,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -695,8 +685,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         call = serializer.save(updated_by=self.u1)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
@@ -713,36 +702,14 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # subscribe to call and ambulance call status
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), AmbulanceCallStatus.D.value.casefold())
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect call update
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # Expect ambulance call status to go declined
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
@@ -754,18 +721,6 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
 
         # expect status ended call
         test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # expect blank call
-        test_client.expect('call/{}/data'.format(call.id))
-        self.is_subscribed(test_client)
-
-        # expect status completed ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
-        self.is_subscribed(test_client)
-
-        # expect blank ambulancecall
-        test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
         # Abort call
