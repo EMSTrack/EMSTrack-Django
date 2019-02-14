@@ -96,10 +96,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
-
         # publish change
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username,
                                                                          client_id,
