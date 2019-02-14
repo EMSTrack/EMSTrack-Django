@@ -34,11 +34,6 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=True)
         self.is_connected(client)
 
-        # subscribe to ambulance/+/data
-        topic = 'ambulance/{}/data'.format(self.a1.id)
-        client.expect(topic)
-        self.is_subscribed(client)
-
         # process messages
         self.loop(client)
 
@@ -49,8 +44,10 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         publish_client.client.disconnect()
         self.is_disconnected(publish_client)
 
-        # expect more ambulance
+        # subscribe to ambulance/+/data
+        topic = 'ambulance/{}/data'.format(self.a1.id)
         client.expect(topic)
+        self.is_subscribed(client)
 
         # modify data in ambulance and save should trigger message
         obj = Ambulance.objects.get(id=self.a1.id)

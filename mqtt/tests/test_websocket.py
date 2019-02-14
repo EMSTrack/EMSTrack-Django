@@ -96,10 +96,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
-
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
@@ -120,10 +116,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.status, AmbulanceStatus.OS.name)
 
         # Modify hospital
-
-        # retrieve message that is there already due to creation
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-        self.is_subscribed(test_client)
 
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
@@ -148,11 +140,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.comment, 'no more comments')
 
         # Modify hospital equipment
-
-        # retrieve message that is there already due to creation
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-        self.is_subscribed(test_client)
 
         # expect update once
         test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
@@ -221,14 +208,13 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        [client.expect(t) for t in topics]
-        self.is_subscribed(client)
 
         # process messages
         self.loop(client)
 
         # expect more ambulance
         client.expect(topics[0])
+        self.is_subscribed(client)
 
         # modify data in ambulance and save should trigger message
         obj = Ambulance.objects.get(id=self.a1.id)
