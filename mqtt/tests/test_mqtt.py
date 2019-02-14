@@ -446,22 +446,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             }
         ]
 
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
+        self.is_subscribed(test_client)
+
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                          client_id,
                                                                          self.a2.id),
                             json.dumps(data), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a2.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id=self.a2.id)
