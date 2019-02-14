@@ -326,7 +326,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # test_client.expect('hospital/{}/data'.format(self.h1.id))
         # self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username, 
+        # expect update once
+        test_client.expect('hospital/{}/data'.format(self.h1.id))
+        self.is_subscribed(test_client)
+
+        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
                                                                         client_id,
                                                                         self.h1.id),
                             json.dumps({
@@ -334,16 +338,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Hospital.objects.get(id=self.h1.id)
@@ -361,6 +356,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         #                                                       self.e1.id))
         # self.is_subscribed(test_client)
 
+        # expect update once
+        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
+                                                              self.e1.id))
+        self.is_subscribed(test_client)
+
         test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
                                                                                  client_id,
                                                                                  self.h1.equipmentholder.id,
@@ -370,17 +370,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
