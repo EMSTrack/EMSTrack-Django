@@ -113,10 +113,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Modify hospital
 
-        # expect update once
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-        self.is_subscribed(test_client)
-
         # retrieve current hospital status
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
@@ -136,11 +132,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.comment, 'no more comments')
 
         # Modify hospital equipment
-
-        # expect update once
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-        self.is_subscribed(test_client)
 
         # retrieve current equipment value
         obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
