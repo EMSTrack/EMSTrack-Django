@@ -190,6 +190,9 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_websocket_test_mqtt_subscribe'
+
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
         self.is_connected(subscribe_client)
