@@ -297,6 +297,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # test_client.expect('ambulance/{}/data'.format(self.a1.id))
         # self.is_subscribed(test_client)
 
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
+
         # publish change
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                          client_id, 
@@ -304,13 +308,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             json.dumps({
                                 'status': AmbulanceStatus.OS.name,
                             }), qos=0)
-
-        # process messages
-        self.loop(test_client, subscribe_client)
-
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
 
         # process messages
         self.loop(test_client, subscribe_client)
