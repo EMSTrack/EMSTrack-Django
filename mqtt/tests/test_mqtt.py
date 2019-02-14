@@ -293,10 +293,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # retrieve message that is there already due to creation
-        # test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        # self.is_subscribed(test_client)
-
         # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
@@ -322,10 +318,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
 
-        # retrieve message that is there already due to creation
-        # test_client.expect('hospital/{}/data'.format(self.h1.id))
-        # self.is_subscribed(test_client)
-
         # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
         self.is_subscribed(test_client)
@@ -350,11 +342,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'True')
-
-        # retrieve message that is there already due to creation
-        # test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-        #                                                       self.e1.id))
-        # self.is_subscribed(test_client)
 
         # expect update once
         test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
@@ -410,10 +397,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
-
-        # retrieve message that is there already due to creation
-        # test_client.expect('ambulance/{}/data'.format(self.a2.id))
-        # self.is_subscribed(test_client)
 
         location = {'latitude': -2., 'longitude': 7.}
         timestamp = timezone.now()
@@ -645,7 +628,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
                                                          broker['CLIENT_ID']),
                        'online',
                        qos=1,
-                       retain=True)
+                       retain=False)
 
         # process messages
         self.loop(client)
@@ -718,8 +701,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -735,8 +717,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'online')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=second_client_id)
@@ -753,8 +734,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -772,8 +752,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    'ambulance login')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=second_client_id)
@@ -795,12 +774,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             '{"location_client_id":"' + client_id + '"}', qos=2)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record log
         obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
@@ -818,12 +792,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, test_client, subscribe_client)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
@@ -835,12 +804,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             '{"location_client_id":""}', qos=2)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record log
         obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
@@ -883,12 +847,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a2.id)
@@ -900,8 +859,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             'ambulance logout')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -924,8 +882,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    'ambulance logout')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check client record
         clnt = Client.objects.get(client_id=second_client_id)
@@ -946,15 +903,13 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Client handshake: offline
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # wait for disconnect
         test_client.wait()
