@@ -190,6 +190,11 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
@@ -210,7 +215,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # process messages
-        self.loop(client)
+        self.loop(client, subscribe_client)
 
         # assert change
         obj = Ambulance.objects.get(id=self.a1.id)
