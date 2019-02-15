@@ -364,7 +364,7 @@ function getData(subscribe) {
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
 
-                // Subscribe to calls
+                // Subscribe to ambulance calls
                 topicName = "ambulance/" + ambulance.id + "/call/+/status";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
@@ -823,12 +823,19 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
         } else {
 
-            // subscribe to call if not already subscribed
+            // retrieve call from api
+            console.log("Retrieving call from API");
+            $.getJSON(APIBaseUrl + 'call/' + call_id + '/', function (call) {
 
-            // subscribe to call
-            topicName = "call/" + call_id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
+                // update call
+                updateCall(call);
+
+                // subscribe to call
+                topicName = "call/" + call_id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+            });
 
         }
 
