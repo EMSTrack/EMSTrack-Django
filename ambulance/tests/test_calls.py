@@ -827,7 +827,7 @@ class TestCall(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulances updates
-        response = client.get('/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
+        response = client.get('/en/api/ambulance/{}/updates/?call_id={}'.format(self.a1.id, c1.id),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -1201,7 +1201,7 @@ class TestCall(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', data, content_type='application/json')
+        response = client.post('/en/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         c1 = Call.objects.get(status=CallStatus.P.name)
@@ -1254,7 +1254,7 @@ class TestCall(TestSetup):
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', data, content_type='application/json')
+        response = client.post('/en/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
         # logout
@@ -1270,7 +1270,7 @@ class TestCall(TestSetup):
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', data, content_type='application/json')
+        response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
 
@@ -1287,7 +1287,7 @@ class TestCall(TestSetup):
             'ambulancecall_set': [{'ambulance_id': self.a3.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', data, content_type='application/json')
+        response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
 
@@ -1298,7 +1298,7 @@ class TestCall(TestSetup):
             'ambulancecall_set': [{'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', data, content_type='application/json')
+        response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 403)
 
@@ -1309,7 +1309,7 @@ class TestCall(TestSetup):
             'ambulancecall_set': [{'ambulance_id': self.a3.id}, {'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', data, content_type='application/json')
+        response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 403)
 
@@ -1322,7 +1322,7 @@ class TestCall(TestSetup):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        response = client.get('/api/call/', follow=True)
+        response = client.get('/en/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
 
         result = JSONParser().parse(BytesIO(response.content))
@@ -1333,7 +1333,7 @@ class TestCall(TestSetup):
 
         c1 = Call.objects.create(details='nani', updated_by=self.u1)
 
-        response = client.get('/api/call/', follow=True)
+        response = client.get('/en/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
 
         result = JSONParser().parse(BytesIO(response.content))
@@ -1344,7 +1344,7 @@ class TestCall(TestSetup):
 
         c2 = Call.objects.create(details='suhmuh', updated_by=self.u1)
 
-        response = client.get('/api/call/', follow=True)
+        response = client.get('/en/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
 
         result = JSONParser().parse(BytesIO(response.content))
@@ -1357,7 +1357,7 @@ class TestCall(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
-        response = client.get('/api/call/', follow=True)
+        response = client.get('/en/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
 
         result = JSONParser().parse(BytesIO(response.content))
@@ -1368,7 +1368,7 @@ class TestCall(TestSetup):
         AmbulanceCall.objects.create(call=c1, ambulance=self.a3, updated_by=self.u1)
         AmbulanceCall.objects.create(call=c2, ambulance=self.a2, updated_by=self.u1)
 
-        response = client.get('/api/call/', follow=True)
+        response = client.get('/en/api/call/', follow=True)
         self.assertEquals(response.status_code, 200)
 
         result = JSONParser().parse(BytesIO(response.content))

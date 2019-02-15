@@ -118,7 +118,7 @@ class TestLocationGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve locations
-        response = client.get('/api/location/',
+        response = client.get('/en/api/location/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -134,7 +134,7 @@ class TestLocationGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve locations
-        response = client.get('/api/location/',
+        response = client.get('/en/api/location/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -150,7 +150,7 @@ class TestLocationGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         # retrieve locations
-        response = client.get('/api/location/',
+        response = client.get('/en/api/location/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -170,7 +170,7 @@ class TestLocationGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve locations
-        response = client.get('/api/location/AED/',
+        response = client.get('/en/api/location/AED/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -178,14 +178,14 @@ class TestLocationGetList(TestSetup):
                   LocationSerializer(self.l3).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/Base/',
+        response = client.get('/en/api/location/Base/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [LocationSerializer(self.l2).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/Other/',
+        response = client.get('/en/api/location/Other/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -199,7 +199,7 @@ class TestLocationGetList(TestSetup):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve locations
-        response = client.get('/api/location/AED/',
+        response = client.get('/en/api/location/AED/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -207,14 +207,14 @@ class TestLocationGetList(TestSetup):
                   LocationSerializer(self.l3).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/Base/',
+        response = client.get('/en/api/location/Base/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [LocationSerializer(self.l2).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/Other/',
+        response = client.get('/en/api/location/Other/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -228,7 +228,7 @@ class TestLocationGetList(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         # retrieve locations
-        response = client.get('/api/location/AED/',
+        response = client.get('/en/api/location/AED/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -236,14 +236,14 @@ class TestLocationGetList(TestSetup):
                   LocationSerializer(self.l3).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/Base/',
+        response = client.get('/en/api/location/Base/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [LocationSerializer(self.l2).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/api/location/Other/',
+        response = client.get('/en/api/location/Other/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
