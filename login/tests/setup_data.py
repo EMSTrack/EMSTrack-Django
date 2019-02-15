@@ -23,7 +23,7 @@ class TestSetupData:
             username=settings.MQTT['USERNAME'],
             email='admin@user.com',
             password=settings.MQTT['PASSWORD'],
-            is_superuser=True)
+            is_superuser=True, is_staff=True)
 
         cls.u2 = User.objects.create_user(
             username='testuser1',
@@ -34,6 +34,8 @@ class TestSetupData:
             username='testuser2',
             email='test2@user.com',
             password='very_secret')
+        cls.u3.userprofile.is_dispatcher = True
+        cls.u3.userprofile.save()
 
         cls.u4 = User.objects.create_user(
             username='testuser3',
@@ -54,6 +56,12 @@ class TestSetupData:
             username='lowprioritytestuser',
             email='test7@user.com',
             password='exceedingly_secret')
+
+        cls.u8 = User.objects.create_user(
+            username='staff',
+            email='staff@user.com',
+            password='so_secret',
+            is_staff=True)
 
         # Add ambulances
         cls.a1 = Ambulance.objects.create(

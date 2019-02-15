@@ -1,25 +1,22 @@
 import logging
-
-from django.contrib.auth.models import User
-
-from django.db import IntegrityError, transaction
-
-from rest_framework.parsers import JSONParser
-from rest_framework.renderers import JSONRenderer
 from io import BytesIO
 
-from login.models import Client, ClientLog, ClientStatus, ClientActivity
-from .client import BaseClient
+from django.contrib.auth.models import User
+from django.db import transaction
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.parsers import JSONParser
+from rest_framework.renderers import JSONRenderer
 
 from ambulance.models import Ambulance, CallStatus, AmbulanceCallStatus, AmbulanceCall, Waypoint
 from ambulance.models import Call
 from ambulance.serializers import AmbulanceSerializer, AmbulanceUpdateSerializer, WaypointSerializer
-from ambulance.serializers import CallSerializer
-
-from hospital.models import Hospital
 from equipment.models import EquipmentItem
-from hospital.serializers import HospitalSerializer
 from equipment.serializers import EquipmentItemSerializer
+from hospital.models import Hospital
+from hospital.serializers import HospitalSerializer
+from login.models import Client, ClientLog, ClientStatus, ClientActivity
+from login.permissions import cache_clear
+from .client import BaseClient
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +49,10 @@ class SubscribeClient(BaseClient):
         # connection and reconnect then subscriptions will be renewed.
         # client.subscribe('#', 2)
 
+        # message handler
+        self.client.message_callback_add('message',
+                                         self.on_message)
+
         # ambulance handler
         self.client.message_callback_add('user/+/client/+/ambulance/+/data',
                                          self.on_ambulance)
@@ -81,6 +82,7 @@ class SubscribeClient(BaseClient):
                                          self.on_call_ambulance_waypoint)
 
         # subscribe
+        self.subscribe('message', 2)
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
         self.subscribe('user/+/client/+/ambulance/+/status', 2)
         self.subscribe('user/+/client/+/hospital/+/data', 2)
@@ -144,8 +146,9 @@ class SubscribeClient(BaseClient):
         values = msg.topic.split('/')
 
         # not enough topics?
-        if len(values) < 5:
-            raise ParseException('Topic with less than size 5')
+        min_size = expect * 2 - 1
+        if len(values) < expect * 2 - 1:
+            raise ParseException('Topic with less than size {}'.format(min_size))
 
         username = '__unknown__'
         try:
@@ -363,7 +366,7 @@ class SubscribeClient(BaseClient):
                                 # raise error to rollback transaction
                                 raise ClientException()
 
-                    except ClientException:
+                    except (ClientException, PermissionDenied):
 
                         # send error message to user
                         self.send_error_message(user, client, msg.topic, msg.payload,
@@ -379,14 +382,16 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_ambulance: serializer EXCEPTION')
+            logger.debug('on_ambulance: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         logger.debug('on_ambulance: DONE')
 
     # Update hospital
+
     def on_hospital(self, clnt, userdata, msg):
 
         try:
@@ -445,14 +450,16 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_hospital: serializer EXCEPTION')
+            logger.debug('on_hospital: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         logger.debug('on_hospital: DONE')
 
-    # Update hospital equipment
+    # Update equipment
+
     def on_equipment_item(self, clnt, userdata, msg):
 
         try:
@@ -513,14 +520,16 @@ class SubscribeClient(BaseClient):
 
         except Exception as e:
 
-            logger.debug('on_equipment_item: serializer EXCEPTION')
+            logger.debug('on_equipment_item: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception '{}'".format(e))
 
         logger.debug('on_equipment_item: DONE')
 
     # update client information
+
     def on_client_status(self, clnt, userdata, msg):
 
         try:
@@ -567,6 +576,8 @@ class SubscribeClient(BaseClient):
             elif status == ClientStatus.D or status == ClientStatus.F:
 
                 # user client offline or disconnected
+
+                # client is being created
                 if client._state.adding:
 
                     # client does not exist yet
@@ -657,7 +668,8 @@ class SubscribeClient(BaseClient):
         # client is not online
         logger.debug('on_client_status: done')
 
-    # update client information
+    # update ambulance call status information
+
     def on_client_ambulance_status(self, clnt, userdata, msg):
 
         try:
@@ -774,6 +786,7 @@ class SubscribeClient(BaseClient):
         logger.debug('on_client_ambulance_status: done')
 
     # handle calls
+
     def on_call_ambulance(self, clnt, userdata, msg):
 
         try:
@@ -841,7 +854,7 @@ class SubscribeClient(BaseClient):
                 # change ambulancecall status to decline
                 ambulancecall.status = AmbulanceCallStatus.D.name
 
-            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
+            elif status.casefold() == AmbulanceCallStatus.S.value.casefold():
 
                 # change ambulancecall status to suspended
                 ambulancecall.status = AmbulanceCallStatus.S.name
@@ -865,11 +878,13 @@ class SubscribeClient(BaseClient):
             logger.debug('on_call_ambulance: ambulance EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
 
         logger.debug('on_call_ambulance: DONE')
 
-    # handle calls
+    # handle calls waypoints
+
     def on_call_ambulance_waypoint(self, clnt, userdata, msg):
 
         try:
@@ -975,7 +990,45 @@ class SubscribeClient(BaseClient):
             logger.debug('on_call_ambulance_waypoint: EXCEPTION')
 
             # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload, e)
+            self.send_error_message(user, client, msg.topic, msg.payload,
+                                    "Exception: '{}'".format(e))
 
         logger.debug('on_call_ambulance_waypoint: DONE')
 
+    # handle message
+
+    def on_message(self, clnt, userdata, msg):
+
+        try:
+
+            logger.debug("on_message: msg = '{}'".format(msg.topic, msg.payload))
+
+            if self.verbosity > 0:
+                self.stdout.write(self.style.SUCCESS(" > Parsing message '{}:{}'".format(msg.topic,
+                                                                                         msg.payload)))
+
+            # Parse message
+            data = msg.payload.decode()
+
+        except Exception as e:
+
+            logger.debug("on_message: ParseException '{}'".format(e))
+            return
+
+        try:
+
+            if data == '"cache_clear"':
+
+                # call cache clear
+                cache_clear()
+
+                if self.verbosity > 0:
+                    self.stdout.write(self.style.SUCCESS(" > Clearing cache"))
+
+            else:
+
+                logger.debug("on_message: unknown message '{}'".format(data))
+
+        except Exception as e:
+
+            logger.debug('on_message: EXCEPTION: {}'.format(e))

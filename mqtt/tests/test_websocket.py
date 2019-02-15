@@ -1,5 +1,6 @@
 import json
 import ssl
+import time
 
 from django.conf import settings
 
@@ -7,13 +8,18 @@ from ambulance.models import Ambulance, AmbulanceStatus
 from hospital.models import Hospital
 from equipment.models import EquipmentItem
 from login.models import Client, ClientStatus, ClientLog
-from mqtt.subscribe import SubscribeClient
+from mqtt.publish import SingletonPublishClient
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
+
+from .client import MQTTTestSubscribeClient as SubscribeClient
 
 
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
     def test(self):
+
+        # Make sure publish client is looped
+        SingletonPublishClient().loop()
 
         # Start client as admin
         broker = {
@@ -26,7 +32,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = 'test_websocket_test_mqtt_subscribe'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -35,7 +41,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start test client over websockets
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_websocket_mqtt_test_mqtt_subscribe_admin'
         username = broker['USERNAME']
 
         broker['CLIENT_ID'] = client_id
@@ -53,8 +59,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -69,8 +74,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -84,18 +88,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Modify ambulance
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
-
-        # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
 
         # publish change
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username,
@@ -106,15 +105,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id=self.a1.id)
@@ -126,10 +117,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
 
-        # retrieve message that is there already due to creation
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-        self.is_subscribed(test_client)
-
         test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
                                                                         client_id,
                                                                         self.h1.id),
@@ -138,15 +125,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Hospital.objects.get(id=self.h1.id)
@@ -159,11 +138,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
-        # retrieve message that is there already due to creation
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-        self.is_subscribed(test_client)
-
         test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
                                                                                  client_id,
                                                                                  self.h1.equipmentholder.id,
@@ -173,15 +147,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
@@ -192,8 +158,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # wait for disconnect
         test_client.wait()
@@ -203,6 +168,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
     def test(self):
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',
@@ -214,7 +180,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_websocket_mqtt_test_mqtt_publish'
 
         client = MQTTTestClient(broker,
                                 transport='websockets',
@@ -224,19 +190,26 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_websocket_test_mqtt_subscribe'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        [client.expect(t) for t in topics]
-        self.is_subscribed(client)
 
         # process messages
         self.loop(client)
 
         # expect more ambulance
         client.expect(topics[0])
+        self.is_subscribed(client)
 
         # modify data in ambulance and save should trigger message
         obj = Ambulance.objects.get(id=self.a1.id)
@@ -245,7 +218,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         obj.save()
 
         # process messages
-        self.loop(client)
+        self.loop(client, subscribe_client)
 
         # assert change
         obj = Ambulance.objects.get(id=self.a1.id)

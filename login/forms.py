@@ -1,3 +1,4 @@
+import logging
 from datetime import timedelta
 
 import django.forms as forms
@@ -14,6 +15,8 @@ from ambulance.models import Ambulance
 from hospital.models import Hospital
 from .models import TemporaryPassword, GroupProfile, UserAmbulancePermission, UserHospitalPermission, UserProfile, \
     GroupAmbulancePermission, GroupHospitalPermission
+
+logger = logging.getLogger(__name__)
 
 
 class SignupForm(auth_forms.UserCreationForm):
@@ -227,20 +230,34 @@ class GroupAdminUpdateForm(forms.ModelForm):
 class UserProfileAdminForm(forms.ModelForm):
     class Meta:
         model = UserProfile
+        labels = {
+            'is_dispatcher': _('Dispatcher'),
+        }
         exclude = ['user']
 
 
 class UserAdminCreateForm(auth_forms.UserCreationForm):
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2', 'first_name', 'last_name',
-                  'email', 'is_staff', 'is_active', 'groups']
+        fields = ['username',
+                  'password1', 'password2',
+                  'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
+
+    def save(self, commit=True):
+        # UserCreationForm calls ModelForm.save() with commit = False, which prevents groups from being saved.
+        # Calling save_m2m() afterwards should fix that
+        instance = super().save(commit)
+        if commit:
+            self.save_m2m()
+
+        return instance
 
 
 class UserAdminUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
+        fields = ['username',
+                  'first_name', 'last_name', 'email', 'is_staff', 'is_active', 'groups']
 
     def __init__(self, *args, **kwargs):
         # call super

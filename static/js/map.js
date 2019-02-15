@@ -8,7 +8,7 @@ var locationMarkers = {};   // Store location markers
 var locations = {};	        // Store location details
 
 var calls = {};             // Store call details
-var patientMarkers = {};   // Store hospital markers
+var patientMarkers = {};    // Store hospital markers
 
 // Initialize category panes
 var visibleCategory = {};
@@ -25,6 +25,103 @@ for (var key in ambulance_css) {
     ambulance_icons[key] = L.icon(settings['icon']);
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
+
+// Initialize ambulabce call status
+var ambulance_call_buttons = {
+    R: 'btn-danger', // 'Requested'
+    A: 'btn-success', // 'Accepted'
+    D: 'btn-secondary', // 'Declined'
+    S: 'btn-primary', // 'Suspended'
+    C: 'btn-dark' // 'Completed'
+};
+
+function newFontAwesomeStackedIcon(options) {
+        return new L.divIcon({
+            html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
+                  '<i class="fas fa-map-marker fa-stack-2x"></i>' +
+                  '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-top:0.2em"></i>' +
+                  '</span>',
+            popupAnchor: [0, -15],
+            className: 'myDivIcon'
+        });
+    }
+
+// Creates a red marker with the coffee icon
+L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+
+function callDate(call) {
+
+    // Get relevant date
+    let date = call.updated_on;
+    if (status === 'P')
+        date = call.pending_at;
+    else if (status === 'S')
+        date = call.started_at;
+
+    // Format date
+    return (new Date(Date.parse(date))).toLocaleTimeString();
+
+}
+
+function waypointIcon(waypoint) {
+
+    const location = waypoint['location'];
+    let icon;
+    if (location.type === 'i') {
+        icon = 'plus';
+    } else if (location.type === 'h') {
+        icon = 'hospital';
+    } else if (location.type === 'w') {
+        icon = 'map';
+    } else if (location.type === 'b') {
+        icon = 'home';
+    } else {
+        console.log("Unknown waypoint location type '" + location.type + "'.");
+        icon = 'question';
+    }
+
+    let color_class;
+    if (waypoint.status === 'C') {
+        color_class = 'text-danger';
+    } else if (waypoint.status === 'V') {
+        color_class = 'text-primary';
+    } else if (waypoint.status === 'D') {
+        color_class = 'text-success';
+    } else if (waypoint.status === 'S') {
+        color_class = 'text-muted';
+    } else {
+        console.log("Unknown waypoint class '" + waypoint.status + "'.");
+        color_class = 'text-warning';
+    }
+
+    return newFontAwesomeStackedIcon({
+        icon: icon,
+        extraClasses: 'fa-stack-marker-xs ' + color_class
+    });
+
+}
+
+
+var patientMarker = newFontAwesomeStackedIcon({
+    icon: 'plus',
+    extraClasses: 'fa-stack-marker-xs text-danger'
+});
+
+var hospitalMarker = newFontAwesomeStackedIcon({
+    icon: 'hospital',
+    extraClasses: 'fa-stack-marker-xs text-warning'
+});
+
+var waypointMarker = newFontAwesomeStackedIcon({
+    icon: 'map',
+    extraClasses: 'fa-stack-marker-xs text-primary'
+});
+
+var baseMarker = newFontAwesomeStackedIcon({
+    icon: 'home',
+    extraClasses: 'fa-stack-marker-xs text-success'
+});
+
 
 var patientIcon = L.icon({
 	iconUrl: '/static/icons/maki/marker-15.svg',
@@ -61,9 +158,6 @@ var locationIcon = L.icon({
 
 });
 
-// TODO: different icons for different location types
-// TODO: different colors for ambulance status
-
 /**
  * Ambulance statuses 
  */
@@ -84,7 +178,7 @@ var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW
 var geocoder = new Geocoder({ access_token: accessToken });
 
 // resize map
-var resizeMap = function() {
+function resizeMap() {
     $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 5);
     mymap.invalidateSize();
 };
@@ -138,7 +232,7 @@ $(function () {
 
     });
 
-    // Event handler for when some1pxg is drawn. Only handles
+    // Event handler for when something is drawn. Only handles
     // when a new drawing is made for now.
     mymap.on(L.Draw.Event.CREATED,
         function (e) {
@@ -185,10 +279,10 @@ $(function () {
         });
 
     })
-        .fail(function (jqxhr, testStatus, error) {
+        .fail(function (jqxhr, textStatus, error) {
 
             bsalert("Connection to MQTT broker failed: \"" +
-                testStatus + "," + error + "\"\n" +
+                textStatus + "," + error + "\"\n" +
                 "Information will not be updated in real time.");
 
         });
@@ -196,7 +290,7 @@ $(function () {
 });
 
 // alert using bootstrap modal
-var bsalert = function(message, alertClass, title) {
+function bsalert(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
@@ -212,7 +306,7 @@ var bsalert = function(message, alertClass, title) {
 }
 
 // alert using bootstrap modal
-var bsdialog = function(message, alertClass, title) {
+function bsdialog(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
@@ -221,6 +315,130 @@ var bsdialog = function(message, alertClass, title) {
     $('.modal-title').html(title);
     $('.modal-body').html(message).addClass(alertClass);
     return $("#dispatchModal");
+
+}
+
+function getData(subscribe) {
+
+    // default is true
+    subscribe = subscribe || true;
+
+    // Retrieve ambulances from API
+    console.log("Retrieving ambulances from API");
+    $.getJSON(APIBaseUrl + 'ambulance/', function (data) {
+
+        n = 0;
+        lat = 0;
+        lon = 0;
+
+        // Update ambulances
+        data.forEach((ambulance) => {
+
+            // update ambulance
+            updateAmbulance(ambulance);
+
+            // calculate center of the ambulances
+            n = n + 1;
+            lat += ambulance.location.latitude;
+            lon += ambulance.location.longitude;
+
+
+        });
+
+        // Center map
+        if (n > 0) {
+            // Set map view
+            lat = lat / n;
+            lon = lon / n;
+            console.log('Center at lat = ' + lat + ', lon = ' + lon);
+
+            mymap.setView([lat, lon], 12);
+        }
+
+        if (subscribe) {
+
+            data.forEach((ambulance) => {
+
+                // Subscribe to ambulance
+                let topicName = "ambulance/" + ambulance.id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+                // Subscribe to calls
+                topicName = "ambulance/" + ambulance.id + "/call/+/status";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+            });
+
+        }
+
+    });
+
+    // Retrieve hospitals from API
+    console.log("Retrieving hospitals from API");
+    $.getJSON(APIBaseUrl + 'hospital/', function (data) {
+
+        // Retrieve hospitals
+        $.each(data, function (i, hospital) {
+
+            // update hospital
+            updateHospital(hospital);
+
+            if (subscribe) {
+
+                // subscribe to hospital
+                var topicName = "hospital/" + hospital.id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+
+            }
+
+        });
+    });
+
+    // Retrieve hospitals from API
+    console.log("Retrieving locations from API");
+    $.getJSON(APIBaseUrl + 'location/Hospital/', function (data) {
+
+        // add location
+        $.each(data, function (index) {
+            var location = data[index];
+            addLocationToMap(location);
+        });
+    });
+
+    // Retrieve bases from API
+    $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
+
+        // add location
+        $.each(data, function (index) {
+            var location = data[index];
+            addLocationToMap(location);
+        });
+    });
+
+
+    // retrieve calls from api
+    console.log("Retrieving calls from API");
+    $.getJSON(APIBaseUrl + 'call/', function (data) {
+
+        // Subscribe to current calls
+        $.each(data, function (i, call) {
+
+            // update call
+            updateCall(call);
+
+            if (subscribe) {
+
+                var topicName = "call/" + call.id + "/data";
+                mqttClient.subscribe(topicName);
+                console.log('Subscribing to topic: ' + topicName);
+            }
+
+        });
+
+    });
 
 }
 
@@ -237,70 +455,8 @@ function onConnect() {
     mqttClient.send(onlineMessage);
     console.log('Sent online message');
 
-    // retrieve profile from api
-    console.log("Retrieving profile from API");
-    $.getJSON(APIBaseUrl + 'user/' + username + '/profile/', function (data) {
-
-        // Subscribe to ambulances
-        $.each(data.ambulances, function (index) {
-            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
-        });
-
-        // Subscribe to hospitals
-        $.each(data.hospitals, function (index) {
-            var topicName = "hospital/" + data.hospitals[index].hospital_id + "/data";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
-        });
-
-        // Subscribe to calls
-        $.each(data.ambulances, function (index) {
-            var topicName = "ambulance/" + data.ambulances[index].ambulance_id + "/call/+/status";
-            mqttClient.subscribe(topicName);
-            console.log('Subscribing to topic: ' + topicName);
-        });
-
-    });
-
-    // retrieve locations from api
-    console.log("Retrieving locations from API");
-    $.getJSON(APIBaseUrl + 'location/Hospital/', function (data) {
-
-        // add location
-        $.each(data, function (index) {
-            var location = data[index];
-            addLocationToMap(location);
-        });
-    });
-
-    $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
-
-        // add location
-        $.each(data, function (index) {
-            var location = data[index];
-            addLocationToMap(location);
-        });
-    });
-
-    /*
-        // retrieve calls from api
-        console.log("Retrieving calls from API");
-        $.getJSON(APIBaseUrl + 'call/', function (data) {
-
-            console.log('calls = ' + calls);
-
-            // Subscribe to current calls
-            $.each(data, function (index) {
-                console.log('data[index] = ' + data[index]);
-                var topicName = "call/" + data[index].id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-            });
-
-        });
-    */
+    // get data
+    getData();
 
 };
 
@@ -310,65 +466,8 @@ function onConnectFailure(message) {
     bsalert("Connection to MQTT broker failed: " + message.errorMessage +
         "Information will not be updated in real time.");
 
-    // Load hospital data from API
-    $.ajax({
-        type: 'GET',
-        datatype: "json",
-        url: APIBaseUrl + 'hospital/',
-
-        error: function (msg) {
-
-            bsalert('Could not retrieve data from API:' + msg)
-
-        },
-
-        success: function (data) {
-
-            console.log('Got data from API')
-
-            $.each(data, function (i, hospital) {
-
-                // update hospital
-                updateHospital(hospital);
-
-            });
-        }
-    })
-        .done(function (data) {
-            if (console && console.log) {
-                console.log("Done retrieving hospital data from API");
-            }
-        });
-
-    // Load ambulance data from API
-    $.ajax({
-        type: 'GET',
-        datatype: "json",
-        url: APIBaseUrl + 'ambulance/',
-
-        error: function (msg) {
-
-            bsalert('Could not retrieve data from API:' + msg)
-
-        },
-
-        success: function (data) {
-
-            console.log('Got data from API')
-
-            $.each(data, function (i, ambulance) {
-
-                // update ambulance
-                updateAmbulance(ambulance);
-
-            });
-        }
-    })
-        .done(function (data) {
-            if (console && console.log) {
-                console.log("Done retrieving ambulance data from API");
-            }
-        });
+    // get data without subscribing
+    getData(false);
 
 };
 
@@ -392,26 +491,26 @@ function onMessageArrived(message) {
 
             // Look for ambulance/{id}/data
             if (topic[0] === 'ambulance' &&
-                topic[2] == 'data') {
+                topic[2] === 'data') {
                 updateAmbulance(data);
             }
 
             // Look for hospital/{id}/data
             else if (topic[0] === 'hospital' &&
-                topic[2] == 'data') {
+                topic[2] === 'data') {
                 updateHospital(data);
             }
 
             // Look for call/{id}/data
             else if (topic[0] === 'call' &&
-                topic[2] == 'data') {
+                topic[2] === 'data') {
                 updateCall(data);
             }
 
             // look for ambulance call information
             else if (topic[0] === 'ambulance' &&
-                topic[2] == 'call' &&
-                topic[4] == 'status') {
+                topic[2] === 'call' &&
+                topic[4] === 'status') {
                 var ambulance_id = topic[1];
                 var call_id = topic[3];
                 updateAmbulanceCall(ambulance_id, call_id, data);
@@ -426,13 +525,15 @@ function onMessageArrived(message) {
                 message.destinationName + ':' + message.payloadString +
                 '"' + '<br/>' + 'error = "' + e + '"');
 
+            throw e;
+
         }
 
     } else
         // This can happen if a topic is being unretained
         console.log('Message "' + message.destinationName  + '" has an empty payload');
 
-};
+}
 
 function updateAmbulance(ambulance) {
 
@@ -443,10 +544,17 @@ function updateAmbulance(ambulance) {
     if (id in ambulances) {
 
         // get ambulance's old status
-        var old_status = ambulances[id].status;
-        var status = ambulance.status;
-        var old_grid_length = $('#ambulance-grid-' + old_status).children().length - 1;
-        var new_grid_length = $('#ambulance-grid-' + status).children().length + 1;
+        const old_status = ambulances[id].status;
+        const status = ambulance.status;
+
+        let old_grid_length;
+        let new_grid_length;
+        if (old_status !== status) {
+            old_grid_length = $('#ambulance-grid-' + old_status).children().length - 1;
+            new_grid_length = $('#ambulance-grid-' + status).children().length + 1;
+        } else {
+            old_grid_length = new_grid_length = $('#ambulance-grid-' + status).children().length ;
+        }
 
         // Remove existing marker
         mymap.removeLayer(ambulanceMarkers[id]);
@@ -461,20 +569,26 @@ function updateAmbulance(ambulance) {
         // Overwrite ambulance
         ambulance = ambulances[id]
 
-        // Move and update grid button
-        var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
-            + ' status-' + status
-            + ' capability-' + ambulance.capability;
-        $("#grid-button-" + id).attr("class", btnClass)
-            .detach()
-            .appendTo($('#ambulance-grid-' + status));
+        if (old_status !== status) {
 
-        // update labels
-        $('#ambulance-' + status + '-header-count').html('(' + new_grid_length + ')').show();
-        if (old_grid_length)
-            $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
-        else
-            $('#ambulance-' + old_status + '-header-count').hide();
+            // Move and update grid button
+            var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
+                + ' status-' + status
+                + ' capability-' + ambulance.capability;
+            $("#grid-button-" + id).attr("class", btnClass)
+                .detach()
+                .appendTo($('#ambulance-grid-' + status));
+
+            // update count labels
+            $('#ambulance-' + status + '-header-count').html('(' + new_grid_length + ')').show();
+            if (old_grid_length)
+                $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
+            else
+                $('#ambulance-' + old_status + '-header-count').hide();
+
+            console.log("> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
+            console.log("> newstatus '" + status + "' count = '" + new_grid_length + "'");
+        }
 
     } else {
 
@@ -520,7 +634,7 @@ function addAmbulanceToGrid(ambulance) {
         ' to grid');
 
     // make grid visible
-    if (ambulance.status == 'AV')
+    if (ambulance.status === 'AV')
         $('#ambulance-' + ambulance.status).addClass('show');
 
     // Add button to ambulance grid
@@ -554,29 +668,46 @@ function addAmbulanceToGrid(ambulance) {
         });
 
     // Update label
-    var status = ambulance.status;
-    $('#ambulance-' + status + '-header-count').html('(' + $('#ambulance-grid-' + status).children().length + ')');
+    const status = ambulance.status;
+    const count = $('#ambulance-grid-' + status).children().length;
+    $('#ambulance-' + status + '-header-count')
+        .html('(' + count + ')')
+        .show();
+
+    console.log("> status '" + status + "' count = '" + count + "'");
 
 };
 
 function updateCall(call) {
 
     // retrieve id
-    var id = call.id;
-    var status = call.status;
+    const id = call.id;
+    const status = call.status;
 
     // already exists?
     if (id in calls) {
 
         // retrieve old status
-        var matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
-        var old_status = null;
+        const matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
+        let old_status = null;
         if (matches.length > 1) {
 
+            // call exists!
             old_status = matches[1];
-            if (status != old_status) {
+            if (status !== old_status) {
 
-                if (status != 'E') {
+                // Create new visible category
+                visibleCategory[status + "|" + 'call_' + call.id] = true;
+
+                // Create new pane
+                let pane = mymap.createPane(status + "|" + 'call_' + call.id);
+                pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
+
+                // remove old visibile category
+                delete visibleCategory[old_status + "|" + 'call_' + id]
+
+                // status changed
+                if (status !== 'E') {
 
                     // move to new category
                     $('#call-item-' + id)
@@ -586,7 +717,7 @@ function updateCall(call) {
                 } else { // status == 'E'
 
                     // Completed call, unsubscribe
-                    var topicName = "call/" + id + "/data";
+                    const topicName = "call/" + id + "/data";
                     mqttClient.unsubscribe(topicName);
                     console.log('Unsubscribing from topic: ' + topicName);
 
@@ -596,35 +727,55 @@ function updateCall(call) {
                     // Remove from calls
                     delete calls[id];
 
-                    // Remove patients from map
-                    call.ambulancecall_set.forEach(function (ambulance_call) {
+                }
 
-                        var ambulance_id = ambulance_call.ambulance_id;
-                        var waypoint_set = ambulance_call['waypoint_set'];
-                        waypoint_set.forEach(function (waypoint) {
+            }
 
-                            var location = waypoint['location'];
-                            if (location.type === 'i') {
-                                var id = call.id + '_' + ambulance_id;
+            // update call counter
+            updateCallCounter();
 
-                                mymap.removeLayer(patientMarkers[id]);
-                                delete patientMarkers[id];
+            // Get call date
+            const date = callDate(call);
 
-                            }
+            // update label
+            $('#call-text-' + call.id)
+                .html( callToHtmlShort(call, date) );
 
-                        });
+            // Update waypoints
+            if (status === 'E') {
 
-                    });
+                // remove waypoints
+                call.ambulancecall_set.forEach(function (ambulance_call) {
+
+                    // Remove waypoints
+                    removeWaypoints(call.id, ambulance_call.ambulance_id);
+
+                });
+
+            } else {
+
+                // get patients
+                const patients = compilePatients(call);
+
+                // update waypoints
+                for (const ambulance_call of call.ambulancecall_set) {
+
+                    // Remove waypoints
+                    removeWaypoints(call.id, ambulance_call.ambulance_id);
+
+                    // add waypoints
+                    let nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
+                        ambulance_call['waypoint_set'], date, patients);
+
+                    // set next waypoint
+                    ambulance_call['next_waypoint'] = nextWaypoint;
 
                 }
 
-                // update call counter
-                updateCallCounter();
-
             }
-            // No changes needed if status does not change
 
         } else
+
             console.log('Could not match current call status');
 
     } else {
@@ -641,7 +792,7 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
-    if (status == 'C') {
+    if (status === 'C') {
 
         // Completed ambulance call, unsubscribe
         var topicName = "ambulance/" + ambulance_id + "/call/+/status";
@@ -650,17 +801,36 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
     } else {
 
-        // subscribe to call if not already subscribed
-        if (!(call_id in calls)) {
+        if (call_id in calls) {
+
+            // retrieve old status
+            const matches = $('#call-grid-button-' + call_id + '-' + ambulance_id).attr('class').match(/status-(\w)/);
+            let old_status = null;
+            if (matches.length > 1) {
+
+                // ambulance call exists!
+                old_status = matches[1];
+                if (status !== old_status) {
+
+                    // update button class
+                    $('#call-grid-button-' + ambulance_id)
+                        .removeClass(ambulance_call_buttons[old_status])
+                        .addClass(ambulance_call_buttons[status]);
+
+                }
+
+            }
+
+        } else {
+
+            // subscribe to call if not already subscribed
 
             // subscribe to call
-            var topicName = "call/" + call_id + "/data";
+            topicName = "call/" + call_id + "/data";
             mqttClient.subscribe(topicName);
             console.log('Subscribing to topic: ' + topicName);
 
         }
-
-        // TODO: Update ambulance status
 
     }
 }
@@ -669,7 +839,7 @@ function updateCallCounter() {
 
     var total = 0;
     call_status_order.forEach(function(status) {
-        if (status != 'E') {
+        if (status !== 'E') {
             var count = $('#call-grid-' + status).children().length;
             total += count;
             if (count > 0)
@@ -694,30 +864,33 @@ function addCallToGrid(call) {
     calls[call.id] = call;
 
     // Get status
-    var status = call.status;
+    const status = call.status;
 
     // Get relevant date
-    var date = call.updated_on;
-    if (status == 'P')
-        date = call.pending_at;
-    else if (status == 'S')
-        date = call.started_at;
+    const date = callDate(call);
 
-    // Format date
-    date = (new Date(Date.parse(date))).toLocaleTimeString();
+    // Create visible category
+    visibleCategory[status + "|" + 'call_' + call.id] = true;
+
+    // Create pane
+    let pane = mymap.createPane(status + "|" + 'call_' + call.id);
+    pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
 
     // Add item to call grid
     $('#call-grid-' + status)
         .append(
             '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
             '  <div class="card-header px-1 py-1" id="call-' + call.id + '">\n' +
+            '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
+            '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
+            (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
             '             style="margin: 2px 2px;"\n' +
             '             class="btn btn-outline-' + call_priority_css[call.priority].class + '">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
-            '     <strong>' + date + '</strong>\n' +
+            '     <div class="float-right" id="call-text-' + call.id + '">' + callToHtmlShort(call, date) + '</div>\n' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
@@ -729,117 +902,218 @@ function addCallToGrid(call) {
             onCallButtonClick(call);
         });
 
+    // Add listener to remove or add layer when filter checkbox is clicked
+    $('#call-checkbox-' + call.id)
+        .click(function (event) {
+
+            // Stop propagation to avoid collapse
+            event.stopPropagation();
+
+        })
+        .change(function () { visibilityCheckbox(this); } );
+
     // add ambulances
-    call.ambulancecall_set.forEach( function(ambulance_call) {
+    for (const ambulance_call of call.ambulancecall_set) {
 
         // get ambulance
-        var ambulance = ambulances[ambulance_call.ambulance_id];
+        const ambulance = ambulances[ambulance_call.ambulance_id];
 
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append('<button type="button"'
-                + ' id="call-grid-button-' + ambulance.id + '"'
-                + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status] + '"'
+                + ' id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
+                + ' class="btn btn-sm '
+                + ambulance_call_buttons[ambulance_call.status]
+                + ' status-' + ambulance_call.status + '"'
                 + ' style="margin: 2px 2px;"'
                 + ' draggable="true">'
                 + ambulance.identifier
                 + '</button>');
 
         // Make button clickable and draggable
-        $('#call-grid-button-' + ambulance.id)
+        $('#call-grid-button-' + call.id + '-'+ ambulance.id)
             .click(function (e) {
                 onGridAmbulanceButtonClick(ambulance);
             });
-            // .on('dragstart', function (e) {
-            //     // on start of drag, copy information and fade button
-            //     this.style.opacity = '0.4';
-            //     e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
-            // })
-            // .on('dragend', function (e) {
-            //     // Restore opacity
-            //     this.style.opacity = '1.0';
-            // })
-            // .dblclick( function(e) {
-            //     addToDispatchingList(ambulance);
-            // })
 
-    });
+    }
 
     // update call counter
     updateCallCounter();
 
-};
+}
+
+function locationToHtml(location) {
+
+    // format address
+    let address_str = [location.number, location.street, location.unit].join(' ').trim();
+
+    if (address_str !== "") {
+        if (location.neighborhood !== "")
+            address_str = [address_str, location.neighborhood].join(', ').trim();
+    } else
+        address_str += location.neighborhood.trim()
+
+    if (address_str !== "")
+        address_str = [address_str, location.city, location.state].join(', ').trim();
+    else
+        address_str = [location.city, location.state].join(', ').trim();
+
+    address_str = [address_str, location.zipcode].join(' ').trim();
+    address_str = [address_str, location.country].join(', ').trim();
+
+    return (
+        '<div>' +
+        '<p class="my-0 py-0"><em>Address:</em></p>' +
+        '<p class="my-0 py-0"><span class="text-right">' + address_str + '</span></p>' +
+        '<p class="my-0 py-0"><em>Type:</em>' +
+        '<span class="float-right">' + location_type[location.type] + '</span></p>' +
+        '</div>'
+    );
+
+}
+
+function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
+
+    return (
+        '<div>' +
+        '<p class="my-0 py-0"><strong>Priority:</strong>' +
+        '<span class="float-right">' + call.priority + '</span></p>' +
+        '<p class="my-0 py-0"><strong>Date:</strong>' +
+        '<span class="float-right">' + date + '</span></p>' +
+        '<p class="my-0 py-0"><strong>Details:</strong>' +
+        '<span class="float-right">' + call.details + '</span></p>' +
+        '<p class="my-0 py-0"><strong>Patients:</strong>' +
+        '<span class="float-right">' + patients + '</span></p>' +
+        '<p class="my-0 py-0"><strong>Number of waypoints:</strong>' +
+        '<span class="float-right">' + number_of_waypoints + '</span></p>' +
+        '<p class="my-0 py-0"><strong>Next waypoint:</strong></p>' +
+        locationToHtml(waypoint.location) +
+        '</div>'
+    );
+}
+
+function callToHtmlShort(call, date) {
+
+    let patients;
+    if (call.patient_set.length === 0) {
+        patients = "no patients";
+    } else if (call.patient_set.length === 1) {
+        patients = '1 patient';
+    } else if (call.patient_set.length > 1) {
+        patients = call.patient_set.length + ' patients';
+    }
+
+    return (date + ', ' + patients);
+}
+
+function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
+
+    // sort waypoints
+    waypoint_set.sort(function(a,b) {return (a.order - b.order);});
+
+    // waypoints layer id
+    const id = call.id + '_' + ambulance_id;
+
+    // create group layer
+    patientMarkers[id] = L.layerGroup();
+
+    // waypoint center
+    let nextWaypoint = null;
+
+    // loop over waypoints
+    waypoint_set.forEach(function (waypoint) {
+
+        // get icon
+        const location = waypoint.location;
+        const icon = waypointIcon(waypoint);
+
+        // is it next?
+        if (waypoint.status === 'C' || waypoint.status === 'V' &&
+            nextWaypoint === null)
+            nextWaypoint = waypoint;
+
+        // create marker
+        let marker = L.marker(
+            [location.location.latitude, location.location.longitude],
+            {
+                icon: icon,
+                pane:  call.status + "|" + 'call_' + call.id
+            });
+
+        // Add popup to the incident location
+        if (waypoint === nextWaypoint) {
+
+            // bind popup to next waypoint
+            marker.bindPopup( callToHtml(call, date, patients,
+                waypoint_set.length, waypoint) );
+
+            // Collapse panel on icon hover.
+            marker
+                .on('mouseover',
+                    function (e) {
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function (e) {
+                                this.closePopup();
+                            });
+                    });
+
+        }
+
+        // add layer to group layer
+        patientMarkers[id].addLayer( marker );
+
+    });
+
+    // add group layer to map
+    patientMarkers[id].addTo(mymap);
+
+    // return next waypoint
+    return nextWaypoint;
+
+}
+
+function removeWaypoints(call_id, ambulance_id) {
+
+    // build id
+    const id = call_id + '_' + ambulance_id;
+
+    // remove layer
+    mymap.removeLayer(patientMarkers[id]);
+    delete patientMarkers[id];
+
+}
+
+function compilePatients(call) {
+
+    // get patients
+    let patients;
+    if (call.patient_set.length === 0) {
+        patients = "No patient information";
+    } else
+        patients = call.patient_set.join(', ');
+
+    return patients;
+}
 
 function addCallToMap(call) {
 
-    // set icon by status
-    var coloredIcon = patientIcon;
-
     // get patients
-    var patients = "";
-    var isFirst = true;
-    call.patient_set.forEach(function (patient) {
-       if (isFirst) {
-           patients += patient.name;
-           isFirst = false;
-       } else
-           patients += ", " + patient.name;
-    });
-
-    // Get status
-    var status = call.status;
+    const patients = compilePatients(call);
 
     // Get relevant date
-    var date = call.updated_on;
-    if (status == 'P')
-        date = call.pending_at;
-    else if (status == 'S')
-        date = call.started_at;
-
-    // Format date
-    date = (new Date(Date.parse(date))).toLocaleTimeString();
+    let date = callDate(call);
 
     // Add incident locations
     call.ambulancecall_set.forEach(function (ambulance_call) {
 
-        var ambulance_id = ambulance_call.ambulance_id;
-        var waypoint_set = ambulance_call['waypoint_set'];
-        waypoint_set.forEach(function (waypoint) {
+        // add waypoints
+        const nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
+            ambulance_call['waypoint_set'], date, patients);
 
-            var location = waypoint['location'];
-
-            if (location.type === 'i') {
-                var id = call.id + '_' + ambulance_id;
-                patientMarkers[id] = L.marker(
-                    [location.location.latitude, location.location.longitude],
-                    {
-                        icon: coloredIcon,
-                        pane: 'patient'
-                    })
-                    .bindPopup(
-                        '<strong>' + date + '</strong>' +
-                        '<br/>' +
-                        patients
-                    )
-                    .addTo(mymap);
-
-                // Bind id to icons
-                patientMarkers[id]._icon.id = id;
-
-                // Collapse panel on icon hover.
-                patientMarkers[id]
-                    .on('mouseover',
-                        function (e) {
-                            // open popup bubble
-                            this.openPopup().on('mouseout',
-                                function (e) {
-                                    this.closePopup();
-                                });
-                        });
-
-            }
-
-        });
+        // set next waypoint
+        ambulance_call['next_waypoint'] = nextWaypoint;
 
     });
 
@@ -1004,8 +1278,10 @@ function createCategoryPanesAndFilters() {
     // add hospital
     visibleCategory['hospital'] = true;
 
-    // add patient
-    visibleCategory['patient'] = true;
+    // add calls
+    call_status_order.forEach(function (status) {
+        visibleCategory['call_' + status] = true;
+    });
 
     // add location_type
     location_type_order.forEach(function(type) {
@@ -1014,26 +1290,22 @@ function createCategoryPanesAndFilters() {
 
     // Initialize panes
 
-    // Create ambulance status category panes
-    ambulance_status_order.forEach(function (status) {
-        ambulance_capability_order.forEach(function (capability) {
-            var pane = mymap.createPane(status+"|"+capability);
-            pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
-        });
-    });
-
     // Create hospital category pane
-    var pane = mymap.createPane('hospital');
+    let pane = mymap.createPane('hospital');
     pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
-
-    // Create patient category pane
-    var pane = mymap.createPane('patient');
-    pane.style.display = (visibleCategory['patient'] ? 'block' : 'none');
 
     // Create location category panes
     location_type_order.forEach(function (type) {
-        var pane = mymap.createPane(type);
+        pane = mymap.createPane(type);
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
+    });
+
+    // Create ambulance status category panes
+    ambulance_status_order.forEach(function (status) {
+        ambulance_capability_order.forEach(function (capability) {
+            pane = mymap.createPane(status + "|" + capability);
+            pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
+        });
     });
 
     // Create call status grids
@@ -1049,8 +1321,8 @@ function createCategoryPanesAndFilters() {
                 '             data-toggle="collapse"\n' +
                 '             data-target="#call-' + status + '"\n' +
                 '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
-                '             <input class="filter-checkbox" value="status" data-status="call-' + status + '"\n' +
-                '                    type="checkbox" id="call-checkbox-' + status + '">\n' +
+                '             <input class="filter-checkbox" value="call-status" data-status="' + status + '"\n' +
+                '                    type="checkbox" id="call-checkbox-' + status + '" checked>\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
                 '             <span id="call-' + status + '-header-count"></span>\n' +
                 '          </h6>\n' +
@@ -1139,15 +1411,6 @@ function createCategoryPanesAndFilters() {
         '            for="location-hospital">Hospital</label>\n' +
         '</div>');
 
-    // add patient
-    $("#location-type").append(
-        '<div class="form-group form-check mt-0 mb-1">\n' +
-        '     <input class="form-check-input filter-checkbox" value="location" data-status="patient"\n' +
-        '            type="checkbox" id="location-patient" ' + (visibleCategory['patient'] ? 'checked' : '') + '>\n' +
-        '     <label class="form-check-label"\n' +
-        '            for="location-patient">Patient</label>\n' +
-        '</div>');
-
     location_type_order.forEach(function (type) {
         $("#location-type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
@@ -1159,57 +1422,82 @@ function createCategoryPanesAndFilters() {
     });
 
     // Add listener to remove or add layer when filter checkbox is clicked
-    $('.filter-checkbox').click(function (event) {
+    $('.filter-checkbox')
+        .click(function (event) {
 
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
+            // Stop propagation to avoid collapse
+            event.stopPropagation();
 
-    });
+        })
+        .change(function () { visibilityCheckbox(this); } );
 
-    $('.filter-checkbox').change(function (event) {
+}
 
-        // Which layer?
-        var layer = this.getAttribute('data-status');
+function visibilityCheckbox(checkbox) {
 
-        // Display or hide?
-        var display;
-        if (this.checked) {
-            display = 'block';
-            visibleCategory[layer] = true;
-        } else {
-            display = 'none';
-            visibleCategory[layer] = false;
-        }
+    // Which layer?
+    let layer = checkbox.getAttribute('data-status');
 
-        // Modify panes
-        if (this.value == 'status') {
-            // Add to all visible capability panes
-            ambulance_capability_order.forEach(function (capability) {
-                if (visibleCategory[capability]) {
-                    mymap.getPane(layer+"|"+capability).style.display = display;
+    // special prefix for calls =
+    if (checkbox.value === 'call-status')
+        layer = 'call_' + layer;
+
+    // Display or hide?
+    let display;
+    if (checkbox.checked) {
+        display = 'block';
+        visibleCategory[layer] = true;
+    } else {
+        display = 'none';
+        visibleCategory[layer] = false;
+    }
+
+    // Modify panes
+    if (checkbox.value === 'status') {
+        // Add to all visible capability panes
+        ambulance_capability_order.forEach(function (capability) {
+            if (visibleCategory[capability]) {
+                mymap.getPane(layer+"|"+capability).style.display = display;
+            }
+        });
+    } else if (checkbox.value === 'capability') {
+        // Add to all visible status layers
+        ambulance_status_order.forEach(function (status) {
+            if (visibleCategory[status]) {
+                mymap.getPane(status+"|"+layer).style.display = display;
+            }
+        });
+    } else if (checkbox.value === 'call-status') {
+        // Add to all visible call layers
+        let status = checkbox.getAttribute('data-status');
+        const checked = checkbox.checked;
+        for (const key in calls) {
+            if (calls.hasOwnProperty(key)) {
+                const call = calls[key];
+                if (call.status === status) {
+
+                    // change pane visibility
+                    mymap.getPane(status + "|" + 'call_' + call.id).style.display = display;
+
+                    // check/uncheck call checkbox
+                    $('#call-checkbox-' + call.id)
+                        .prop('checked', checked);
+
                 }
-            });
-        } else if (this.value == 'capability') {
-            // Add to all visible status layers
-            ambulance_status_order.forEach(function (status) {
-                if (visibleCategory[status]) {
-                    mymap.getPane(status+"|"+layer).style.display = display;
-                }
-            });
-        } else {
-            mymap.getPane(layer).style.display = display;
+            }
         }
+    } else {
+        mymap.getPane(layer).style.display = display;
+    }
 
-    });
-
-};
+}
 
 function onGridAmbulanceButtonClick(ambulance) {
 
     if (visibleCategory[ambulance.status]) {
 
         // Center icon on map
-        var position = ambulanceMarkers[ambulance.id].getLatLng();
+        const position = ambulanceMarkers[ambulance.id].getLatLng();
         mymap.setView(position, mymap.getZoom());
 
         // Open popup for 2.5 seconds.
@@ -1224,17 +1512,29 @@ function onGridAmbulanceButtonClick(ambulance) {
 
 function onCallButtonClick(call) {
 
-    if (visibleCategory['patient']) {
+    if (visibleCategory[call.status + '|call_' + call.id] === true) {
 
-        // Center icon on map
-        var position = patientMarkers[call.id].getLatLng();
-        mymap.setView(position, mymap.getZoom());
+        // calculate center of next waypoints
+        let center = {lon: 0., lat: 0.};
+        let n = 0;
+        for (const ambulance_call of call.ambulancecall_set) {
 
-        // Open popup for 2.5 seconds.
-        patientMarkers[call.id].openPopup();
-        setTimeout(function () {
-            patientMarkers[call.id].closePopup();
-        }, 2500);
+            const nextWaypoint = ambulance_call['next_waypoint'];
+            if (nextWaypoint != null) {
+                const location = nextWaypoint.location;
+                center.lon += location.location.longitude;
+                center.lat += location.location.latitude;
+                n++;
+            }
+
+        }
+
+        // center map
+        if (n > 0) {
+            center.lon /= n;
+            center.lat /= n;
+            mymap.setView(center, mymap.getZoom());
+        }
 
     }
 
@@ -1250,11 +1550,11 @@ function updateAmbulanceStatus(ambulance, status) {
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
     $('#modal-button-close').hide();
-    bsdialog('Do you want to modify ambulance <b>'
+    bsdialog('Do you want to modify ambulance <strong>'
         + ambulance.identifier
-        + '</b> status to <b>'
+        + '</strong> status to <strong>'
         + ambulance_status[status]
-        + '</b>?', 'alert-danger', 'Attention')
+        + '</strong>?', 'alert-danger', 'Attention')
         .on('hide.bs.modal', function(event) {
 
             var $activeElement = $(document.activeElement);
@@ -1314,6 +1614,11 @@ function doUpdateAmbulanceStatus(ambulance, status) {
             // Log failure
             console.log("Failed to post ambulance status update.");
             console.log(jqXHR.responseText);
+
+            bsalert("Could not update ambulance status \"" +
+                textStatus + "," + errorThrown + "\"\n" +
+                "You likely have not enough rights to update this ambulance.");
+
 
         }
     });

@@ -8,7 +8,7 @@ from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 
-from login.permissions import cache_clear
+from mqtt.cache_clear import mqtt_cache_clear
 
 
 # filters
@@ -23,15 +23,45 @@ def get_client_activity(key):
     return ClientActivity[key].value
 
 
+@register.filter
+def is_dispatcher(user):
+    return user.is_superuser or user.is_staff or user.userprofile.is_dispatcher
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE)
+    is_dispatcher = models.BooleanField(default=False)
 
     def get_absolute_url(self):
         return reverse('login:detail-user', kwargs={'pk': self.user.id})
 
     def __str__(self):
         return '{}'.format(self.user)
+
+    def save(self, *args, **kwargs):
+
+        # save to UserProfile
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        mqtt_cache_clear()
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_profile(self.user)
+
+    def delete(self, *args, **kwargs):
+
+        # delete from UserProfile
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        mqtt_cache_clear()
+
+        # remove from mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().remove_profile(self.user)
 
 
 # GroupProfile
@@ -51,6 +81,22 @@ class GroupProfile(models.Model):
 
     class Meta:
         indexes = [models.Index(fields=['priority'])]
+
+    def save(self, *args, **kwargs):
+
+        # save to GroupProfile
+        super().save(*args, **kwargs)
+
+        # invalidate permissions cache
+        mqtt_cache_clear()
+
+    def delete(self, *args, **kwargs):
+
+        # delete from GroupProfile
+        super().delete(*args, **kwargs)
+
+        # invalidate permissions cache
+        mqtt_cache_clear()
 
 
 # Group Ambulance and Hospital Permissions
@@ -78,7 +124,7 @@ class UserAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -90,7 +136,7 @@ class UserAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -120,7 +166,7 @@ class UserHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
@@ -132,7 +178,7 @@ class UserHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # publish to mqtt
         # does not remove because user still exists!
@@ -162,7 +208,7 @@ class GroupAmbulancePermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -176,7 +222,7 @@ class GroupAmbulancePermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -207,7 +253,7 @@ class GroupHospitalPermission(Permission):
         super().save(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():
@@ -221,7 +267,7 @@ class GroupHospitalPermission(Permission):
         super().delete(*args, **kwargs)
 
         # invalidate permissions cache
-        cache_clear()
+        mqtt_cache_clear()
 
         # update all profiles for users in the group
         for user in self.group.user_set.all():

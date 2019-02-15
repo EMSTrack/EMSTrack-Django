@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib.admin.views.decorators import staff_member_required
+from rest_framework.authtoken.views import obtain_auth_token
 
 from login import views
 
@@ -67,8 +68,11 @@ urlpatterns = [
     # restart
 
     url(r'^restart/$',
-        views.RestartView.as_view(),
+        staff_member_required(views.RestartView.as_view()),
         name='restart'),
+
+    # rest token
+    url(r'^token/$', obtain_auth_token),
 
     # mqtt login
     

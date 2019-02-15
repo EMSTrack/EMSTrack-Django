@@ -6,6 +6,7 @@ from rest_framework import mixins
 
 # CreateModelUpdateByMixin
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.permissions import BasePermission
 
 from login.permissions import get_permissions
 

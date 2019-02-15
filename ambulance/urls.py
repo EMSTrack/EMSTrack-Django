@@ -46,8 +46,8 @@ urlpatterns = [
         staff_member_required(views.LocationAdminUpdateView.as_view()),
         name='location_update'),
 
-    # NEED REVISING
-    
+    # Calls
+
     url(r'^call/list/$',
         login_required(views.CallListView.as_view()),
         name="call_list"),

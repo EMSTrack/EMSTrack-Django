@@ -16,6 +16,7 @@ from equipment.models import EquipmentType, Equipment, EquipmentItem
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient
+from mqtt.subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
 
@@ -158,8 +159,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
         # Wait for start
         cls.run_until_success(["service",
-                                "mosquitto",
-                                "status"])
+                               "mosquitto",
+                               "status"])
 
 
         time.sleep(2)
@@ -211,8 +212,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         
         # Wait for start
         cls.run_until_success(["service",
-                                "mosquitto",
-                                "status"])
+                               "mosquitto",
+                               "status"])
         
         # print('>> Starting mqttclient')
         
@@ -239,6 +240,11 @@ class MQTTTestCase(StaticLiveServerTestCase):
             # Add users
             cls.u2 = User.objects.get(username='testuser1')
             cls.u3 = User.objects.get(username='testuser2')
+            cls.u4 = User.objects.get(username='testuser3')
+            cls.u5 = User.objects.get(username='testuser4')
+            cls.u6 = User.objects.get(username='highprioritytestuser')
+            cls.u7 = User.objects.get(username='lowprioritytestuser')
+            cls.u8 = User.objects.get(username='staff')
 
             # Add ambulances
             cls.a1 = Ambulance.objects.get(identifier='BC-179')
@@ -293,6 +299,22 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 username='testuser4',
                 email='test4@user.com',
                 password='extremely_secret')
+
+            cls.u6 = User.objects.create_user(
+                username='highprioritytestuser',
+                email='test6@user.com',
+                password='exceptionally_secret')
+
+            cls.u7 = User.objects.create_user(
+                username='lowprioritytestuser',
+                email='test7@user.com',
+                password='exceedingly_secret')
+
+            cls.u8 = User.objects.create_user(
+                username='staff',
+                email='staff@user.com',
+                password='so_secret',
+                is_staff=True)
 
             # Add ambulances
             cls.a1 = Ambulance.objects.create(
@@ -444,8 +466,75 @@ class MQTTTestCase(StaticLiveServerTestCase):
             cls.u5.groups.set([cls.g1, cls.g3])
 
 
+class MQTTTestClientPublishSubscribeMixin:
+
+    def __init__(self, *args, **kwargs):
+
+        # call supper
+        super().__init__(*args, **kwargs)
+
+        # publishing and subscribing
+        self.publishing = 0
+        self.subscribing = 0
+
+    def has_published(self):
+        return self.publishing == 0
+
+    def has_subscribed(self):
+        return self.subscribing == 0
+
+    def done(self):
+        return self.has_published() and self.has_subscribed()
+
+    def publish(self, topic, payload=None, qos=0, retain=False):
+
+        # publish
+        self.publishing += 1
+        if self.debug:
+            logger.debug("Publishing to '{}', publishing={}".format(topic, self.publishing))
+
+        super().publish(topic, payload, qos, retain)
+
+    def on_publish(self, client, userdata, mid):
+
+        # did publish?
+        super().on_publish(client, userdata, mid)
+        self.publishing -= 1
+
+        if self.debug:
+            logger.debug("Just published mid={}, publishing={}]".format(mid, self.publishing))
+
+    def subscribe(self, topic, qos=0):
+
+        # publish
+        self.subscribing += 1
+        if self.debug:
+            logger.debug("Subscribing to '{}', subscribing={}".format(topic, self.subscribing))
+
+        super().subscribe(topic, qos)
+
+    def on_subscribe(self, client, userdata, mid, granted_qos):
+
+        # did subscribe?
+        super().on_subscribe(client, userdata, mid, granted_qos)
+        self.subscribing -= 1
+
+        if self.debug:
+            logger.debug('Just subscribed mid={}, qos={}, subscribing={}'.format(mid, granted_qos, self.subscribing))
+
+
+class MQTTTestSubscribeClient(MQTTTestClientPublishSubscribeMixin,
+                              SubscribeClient):
+
+    def __init__(self, *args, **kwargs):
+
+        # call supper
+        super().__init__(*args, **kwargs)
+
+
 # MQTTTestClient
-class MQTTTestClient(BaseClient):
+class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
+                     BaseClient):
 
     def __init__(self, *args, **kwargs):
 
@@ -459,37 +548,13 @@ class MQTTTestClient(BaseClient):
         self.expecting_messages = {}
         self.expecting_patterns = {}
         self.expecting = 0
-        
-        # publishing
-        self.publishing = 0
-        
+
+    def is_expecting(self):
+        return self.expecting > 0
+
     def done(self):
+        return super().done() and not self.is_expecting()
 
-        return self.expecting == 0 and self.publishing == 0
-        
-    # The callback for when the client receives a CONNACK
-    # response from the server.
-    def on_connect(self, client, userdata, flags, rc):
-
-        # is connected?
-        return super().on_connect(client, userdata, flags, rc)
-
-    def publish(self, topic, payload = None, qos = 0, retain = False):
-
-        # publish
-        self.publishing +=1 
-        super().publish(topic, payload, qos, retain)
-
-    def on_publish(self, client, userdata, mid):
-
-        # did publish?
-        super().on_publish(client, userdata, mid)
-        self.publishing -=1 
-
-        if self.debug:
-            logging.debug('Just published mid={}[publishing={}]'.format(mid,
-                                                                        self.publishing))
-        
     # The callback for when a subscribed message is received from the server.
     def on_message(self, client, userdata, msg):
 
@@ -549,7 +614,6 @@ class MQTTTestClient(BaseClient):
             self.expecting_messages[topic] = []
 
             # and subscribe
-            logger.debug("Subscribing to topic '{}'".format(topic))
             self.subscribe(topic, qos)
 
         else:
@@ -562,29 +626,55 @@ class MQTTTestClient(BaseClient):
 
 class TestMQTT:
 
+    DELAY = 0.1
+
     def is_connected(self, client, MAX_TRIES=10):
+
+        # loop
+        client.loop()
 
         # connected?
         k = 0
-        while not client.connected and k < MAX_TRIES:
+        while (not client.is_connected()) and k < MAX_TRIES:
             k += 1
             client.loop()
+            time.sleep(TestMQTT.DELAY)
 
-        self.assertEqual(client.connected, True)
+        self.assertEqual(client.is_connected(), True)
+
+    def is_disconnected(self, client, MAX_TRIES=10):
+
+        # loop
+        client.loop()
+
+        # disconnected?
+        k = 0
+        while (client.is_connected()) and k < MAX_TRIES:
+            k += 1
+            client.loop()
+            time.sleep(TestMQTT.DELAY)
+
+        self.assertEqual(client.is_connected(), False)
 
     def is_subscribed(self, client, MAX_TRIES=10):
 
-        client.loop_start()
+        # loop
+        client.loop()
+
+        # client.loop_start()
 
         # connected?
         k = 0
-        while len(client.subscribed) and k < MAX_TRIES:
+        while (not client.has_subscribed()) and k < MAX_TRIES:
             k += 1
-            time.sleep(1)
+            client.loop()
+            time.sleep(TestMQTT.DELAY)
 
-        client.loop_stop()
+        # client.loop_stop()
 
-        self.assertEqual(len(client.subscribed), 0)
+        logger.debug('has_subscribed = {}, k = {}'.format(client.has_subscribed(), k))
+
+        self.assertEqual(client.has_subscribed(), True)
 
     def loop(self, *clients, MAX_TRIES=10):
 
@@ -593,7 +683,7 @@ class TestMQTT:
 
         # starts clients
         for client in clients:
-            client.loop_start()
+            client.loop()
 
         # connected?
         k = 0
@@ -603,18 +693,19 @@ class TestMQTT:
             for client in clients:
                 done = done and client.done()
             k += 1
-            time.sleep(1)
-
-        # stop clients
-        for client in clients:
-            client.loop_stop()
+            # stop clients
+            for client in clients:
+                client.loop()
+            time.sleep(TestMQTT.DELAY)
 
         if not done:
-            # logging.debug('NOT DONE:')
+            # logger.debug('NOT DONE:')
             for client in clients:
-                if hasattr(client, 'expecting') and hasattr(client, 'publishing'):
-                    logging.debug(('expecting = {}, ' +
-                                   'publishing = {}').format(client.expecting,
-                                                             client.publishing))
+                if hasattr(client, 'expecting'):
+                    logger.debug('expecting = {}'.format(client.expecting))
+                if hasattr(client, 'publishing'):
+                    logger.debug('publishing = {}'.format(client.publishing))
+                if hasattr(client, 'subscribing'):
+                    logger.debug('subscribing= {}'.format(client.subscribing))
 
         self.assertEqual(done, True)

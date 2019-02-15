@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
+from emstrack import CURRENT_VERSION, MINIMUM_VERSION
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
@@ -33,11 +34,11 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm, RestartForm
+    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
-    GroupHospitalPermission, Client, ClientStatus
+    GroupHospitalPermission, Client, ClientStatus, UserProfile
 from .permissions import get_permissions
 
 logger = logging.getLogger(__name__)
@@ -158,6 +159,17 @@ class GroupAdminUpdateView(SuccessMessageWithInlinesMixin,
 
 # Users
 
+class UserProfileAdminInline(InlineFormSet):
+    model = UserProfile
+    form_class = UserProfileAdminForm
+    factory_kwargs = {
+        'min_num': 1,
+        'max_num': 1,
+        'extra': 0,
+        'can_delete': False
+    }
+
+
 class UserAdminListView(ListView):
     model = User
     template_name = 'login/user_list.html'
@@ -205,16 +217,36 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminCreateForm
-    inlines = [UserAmbulancePermissionAdminInline,
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
+    def forms_valid(self, form, inlines):
+
+        # process form
+        response = self.form_valid(form)
+
+        # update userprofile without creating
+        # userprofile is created by a signal
+        # not sure if the signal is called synchronously with the call to save()
+        # if not, this could be subject to a concurrency issue
+        # the following post claims they are not asynchronous
+        # https://stackoverflow.com/questions/11899088/is-django-post-save-signal-asynchronous
+        userprofile_form = inlines[0][0]
+        userprofile_form.cleaned_data.pop('id', None)
+        UserProfile.objects.filter(user=form.instance).update(**userprofile_form.cleaned_data)
+
+        # process other inlines
+        for formset in inlines[1:]:
+            formset.save()
+
+        return response
+
     def get_success_message(self, cleaned_data):
-        return "Successfully created user '{}'".format(self.object.username)
+        return "Successfully updated user '{}'".format(self.object.username)
 
     def get_success_url(self):
         return self.object.userprofile.get_absolute_url()
-
-    # TODO: Choose between provided password and email generated password
 
 
 class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
@@ -222,7 +254,8 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
-    inlines = [UserAmbulancePermissionAdminInline,
+    inlines = [UserProfileAdminInline,
+               UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
 
     def get_success_message(self, cleaned_data):
@@ -280,7 +313,7 @@ class ClientDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         # retrieve log
-        context['clientlog_list'] = self.object.clientlog_set.all()
+        context['clientlog_list'] = self.object.clientlog_set.all().order_by('-updated_on')
 
         return context
 
@@ -533,8 +566,15 @@ class MQTTAclView(CsrfExemptMixin,
 
                 # permission to publish:
 
+                #  - message
+                if (len(topic) == 1 and
+                        topic[0] == 'message' and
+                        user.is_superuser):
+
+                    return HttpResponse('OK')
+
                 #  - user/{username}/client/{client-id}/#
-                if (len(topic) >= 5 and
+                elif (len(topic) >= 5 and
                         topic[0] == 'user' and
                         topic[1] == user.username and
                         topic[2] == 'client' and
@@ -719,3 +759,25 @@ class SettingsView(APIView):
         """
 
         return Response(self.get_settings())
+
+
+class VersionView(APIView):
+    """
+    Retrieve current version.
+    """
+
+    @staticmethod
+    def get_version():
+
+        # assemble all settings
+        version = {'current': CURRENT_VERSION,
+                   'minimum': MINIMUM_VERSION}
+
+        return version
+
+    def get(self, request, user__username=None):
+        """
+        Retrieve current version.
+        """
+
+        return Response(self.get_version())

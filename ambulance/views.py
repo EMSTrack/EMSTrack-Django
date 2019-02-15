@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
@@ -264,7 +265,44 @@ class AmbulanceMap(TemplateView):
 
 class LocationAdminListView(ListView):
     model = Location
-    queryset = Location.objects.exclude(type=LocationType.h.name).exclude(type=LocationType.w.name)
+
+    def get_context_data(self, **kwargs):
+
+        # add paginated ended calls to context
+        
+        # call supper
+        context = super().get_context_data(**kwargs)
+        
+        # query all calls
+        queryset = self.get_queryset()
+        
+        # filter
+        context['base_list'] = queryset.filter(type=LocationType.b.name).order_by('name')
+        context['aed_list'] = queryset.filter(type=LocationType.a.name).order_by('name')
+
+        # query ended and paginate
+        incident_query = queryset.filter(type=LocationType.i.name).order_by('-updated_on')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
+
+        # paginate
+        paginator = Paginator(incident_query, page_size)
+        try:
+            incident = paginator.page(page)
+        except PageNotAnInteger:
+            incident = paginator.page(1)
+        except EmptyPage:
+            incident = paginator.page(paginator.num_pages)
+
+        context['incident_list'] = incident
+        context['page_links'] = get_page_links(self.request, incident)
+        context['page_size_links'] = get_page_size_links(self.request, incident, page_sizes)
+        context['page_size'] = int(page_size)
+
+        return context
 
 
 class LocationAdminDetailView(DetailView):
@@ -328,7 +366,7 @@ class CallListView(LoginRequiredMixin,
         context['pending_list'] = queryset.filter(status=CallStatus.P.name).order_by('pending_at')
         context['started_list'] = queryset.filter(status=CallStatus.S.name).order_by('-started_at')
 
-         # query ended and paginate
+        # query ended and paginate
         ended_calls_query = queryset.filter(status=CallStatus.E.name).order_by('-ended_at')
 
         # get current page
@@ -384,6 +422,11 @@ class CallAbortView(LoginRequiredMixin,
         return self.object.get_absolute_url()
 
     def get(self, request, *args, **kwargs):
+
+        # Make sure user is super, staff, or dispatcher.
+        user = request.user
+        if not (user.is_superuser or user.is_staff or user.userprofile.is_dispatcher):
+            return HttpResponseForbidden()
 
         # get call object
         self.object = self.get_object()

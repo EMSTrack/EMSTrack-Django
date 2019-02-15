@@ -1,341 +1,20 @@
+import json
 import logging
 import time
 
-from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone
 
-from rest_framework.renderers import JSONRenderer
-import json
-
-from emstrack.tests.util import point2str
-from login.models import Client, ClientStatus, ClientLog, ClientActivity
-from login.permissions import get_permissions
-
-from login.serializers import UserProfileSerializer
-from login.views import SettingsView
-
 from ambulance.models import Ambulance, \
-    AmbulanceStatus, AmbulanceCapability
-from ambulance.serializers import AmbulanceSerializer
-
+    AmbulanceStatus
+from emstrack.tests.util import point2str
+from equipment.models import EquipmentItem
 from hospital.models import Hospital
-from equipment.models import EquipmentType, Equipment, EquipmentItem, EquipmentHolder
-from hospital.serializers import HospitalSerializer
-from equipment.serializers import EquipmentItemSerializer, EquipmentSerializer
-
+from login.models import Client, ClientStatus, ClientLog, ClientActivity
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
-
-from ..subscribe import SubscribeClient
+from .client import MQTTTestSubscribeClient as SubscribeClient
 
 logger = logging.getLogger(__name__)
-
-
-class TestMQTTSeed(TestMQTT, MQTTTestCase):
-
-    def test_mqttseed(self):
-
-        # seed
-        from django.core import management
-
-        management.call_command('mqttseed',
-                                verbosity=1)
-
-        print('>> Processing messages...')
-
-        # Start client as admin
-        broker = {
-            'HOST': 'localhost',
-            'PORT': 1883,
-            'KEEPALIVE': 60,
-            'CLEAN_SESSION': True
-        }
-        broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttseed_admin'
-
-        client = MQTTTestClient(broker)
-        self.is_connected(client)
-
-        qos = 0
-
-        # Expect settings
-        client.expect('settings',
-                      JSONRenderer().render(SettingsView.get_settings()),
-                      qos)
-
-        # Expect all ambulances
-        for ambulance in Ambulance.objects.all():
-            client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          qos)
-
-        # Expect all hospitals
-        for hospital in Hospital.objects.all():
-            client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data),
-                          qos)
-
-        # Expect all equipmentholders
-        for equipmentholder in EquipmentHolder.objects.all():
-            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=equipment_items)
-            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-                          qos)
-
-        # Expect all equipment items
-        for e in EquipmentItem.objects.all():
-            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
-                                                             e.equipment.id),
-                          JSONRenderer().render(EquipmentItemSerializer(e).data),
-                          qos)
-
-        # Expect all profiles
-        for user in User.objects.all():
-            client.expect('user/{}/profile'.format(user.username),
-                          JSONRenderer().render(UserProfileSerializer(user).data),
-                          qos)
-
-        # Subscribed?
-        self.is_subscribed(client)
-
-        # Done?
-        self.loop(client)
-        client.wait()
-
-        # Repeat with same client
-
-        client = MQTTTestClient(broker)
-        self.is_connected(client)
-
-        qos = 0
-
-        # Expect settings
-        client.expect('settings',
-                      JSONRenderer().render(SettingsView.get_settings()),
-                      qos)
-
-        # Expect all ambulances
-        for ambulance in Ambulance.objects.all():
-            client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          qos)
-
-        # Expect all hospitals
-        for hospital in Hospital.objects.all():
-            client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data),
-                          qos)
-            # hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            # equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            # client.expect('hospital/{}/metadata'.format(hospital.id),
-            #              JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-            #              qos)
-
-        # Expect all equipmentholders
-        for equipmentholder in EquipmentHolder.objects.all():
-            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=equipment_items)
-            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-                          qos)
-
-        # Expect all hospital equipments
-        for e in EquipmentItem.objects.all():
-            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
-                                                             e.equipment.id),
-                          JSONRenderer().render(EquipmentItemSerializer(e).data),
-                          qos)
-
-        # Expect all profiles
-        for user in User.objects.all():
-            client.expect('user/{}/profile'.format(user.username),
-                          JSONRenderer().render(UserProfileSerializer(user).data),
-                          qos)
-
-        # Subscribed?
-        self.is_subscribed(client)
-
-        # Done?
-        self.loop(client)
-        client.wait()
-
-        # Repeat with same client and different qos
-
-        client = MQTTTestClient(broker)
-        self.is_connected(client)
-
-        qos = 2
-
-        # Expect settings
-        client.expect('settings',
-                      JSONRenderer().render(SettingsView.get_settings()),
-                      qos)
-
-        # Expect all ambulances
-        for ambulance in Ambulance.objects.all():
-            client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          qos)
-
-        # Expect all hospitals
-        for hospital in Hospital.objects.all():
-            client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data),
-                          qos)
-            # hospital_equipment = hospital.hospitalequipment_set.values('equipment')
-            # equipment = Equipment.objects.filter(id__in=hospital_equipment)
-            # client.expect('hospital/{}/metadata'.format(hospital.id),
-            #               JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-            #               qos)
-
-        # Expect all equipmentholders
-        for equipmentholder in EquipmentHolder.objects.all():
-            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=equipment_items)
-            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-                          qos)
-
-        # Expect all hospital equipments
-        for e in EquipmentItem.objects.all():
-            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
-                                                             e.equipment.id),
-                          JSONRenderer().render(EquipmentItemSerializer(e).data),
-                          qos)
-
-        # Expect all profiles
-        for user in User.objects.all():
-            client.expect('user/{}/profile'.format(user.username),
-                          JSONRenderer().render(UserProfileSerializer(user).data),
-                          qos)
-
-        # Subscribed?
-        self.is_subscribed(client)
-
-        # Done?
-        self.loop(client)
-        client.wait()
-
-        # repeat with another user
-
-        qos = 0
-
-        # Start client as common user
-        broker['USERNAME'] = 'testuser1'
-        broker['PASSWORD'] = 'top_secret'
-        broker['CLIENT_ID'] = 'test_mqttseed_testuser1'
-
-        client = MQTTTestClient(broker)
-        self.is_connected(client)
-
-        # Expect settings
-        client.expect('settings',
-                      JSONRenderer().render(SettingsView.get_settings()),
-                      qos)
-
-        # Expect user profile
-        user = User.objects.get(username='testuser1')
-        client.expect('user/testuser1/profile',
-                      JSONRenderer().render(UserProfileSerializer(user).data),
-                      qos)
-
-        # User Ambulances
-        can_read = get_permissions(user).get_can_read('ambulances')
-        for ambulance in Ambulance.objects.filter(id__in=can_read):
-            client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          qos)
-
-        # User Hospitals
-        can_read = get_permissions(user).get_can_read('hospitals')
-        for hospital in Hospital.objects.filter(id__in=can_read):
-            client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data),
-                          qos)
-
-        # Expect all equipmentholders
-        can_read = get_permissions(user).get_can_read('equipments')
-        for equipmentholder in EquipmentHolder.objects.filter(id__in=can_read):
-            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=equipment_items)
-            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-                          qos)
-
-        # Expect all user hospital equipments
-        for e in EquipmentItem.objects.filter(equipmentholder__id__in=can_read):
-            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
-                                                             e.equipment.id),
-                          JSONRenderer().render(EquipmentItemSerializer(e).data),
-                          qos)
-
-        # Subscribed?
-        self.is_subscribed(client)
-
-        # Done?
-        self.loop(client)
-        client.wait()
-
-        # repeat with another user
-
-        qos = 0
-
-        # Start client as common user
-        broker['USERNAME'] = 'testuser2'
-        broker['PASSWORD'] = 'very_secret'
-        broker['CLIENT_ID'] = 'test_mqttseed_testuser2'
-
-        client = MQTTTestClient(broker)
-        self.is_connected(client)
-
-        # Expect settings
-        client.expect('settings',
-                      JSONRenderer().render(SettingsView.get_settings()),
-                      qos)
-
-        # Expect user profile
-        user = User.objects.get(username='testuser2')
-        client.expect('user/testuser2/profile',
-                      JSONRenderer().render(UserProfileSerializer(user).data),
-                      qos)
-
-        # User Ambulances
-        can_read = get_permissions(user).get_can_read('ambulances')
-        for ambulance in Ambulance.objects.filter(id__in=can_read):
-            client.expect('ambulance/{}/data'.format(ambulance.id),
-                          JSONRenderer().render(AmbulanceSerializer(ambulance).data),
-                          qos)
-
-        # User Hospitals
-        can_read = get_permissions(user).get_can_read('hospitals')
-        for hospital in Hospital.objects.filter(id__in=can_read):
-            client.expect('hospital/{}/data'.format(hospital.id),
-                          JSONRenderer().render(HospitalSerializer(hospital).data),
-                          qos)
-
-        # Expect all equipmentholders
-        can_read = get_permissions(user).get_can_read('equipments')
-        for equipmentholder in EquipmentHolder.objects.filter(id__in=can_read):
-            equipment_items = equipmentholder.equipmentitem_set.values('equipment')
-            equipment = Equipment.objects.filter(id__in=equipment_items)
-            client.expect('equipment/{}/metadata'.format(equipmentholder.id),
-                          JSONRenderer().render(EquipmentSerializer(equipment, many=True).data),
-                          qos)
-
-        # Expect all user hospital equipments
-        for e in EquipmentItem.objects.filter(equipmentholder__id__in=can_read):
-            client.expect('equipment/{}/item/{}/data'.format(e.equipmentholder.id,
-                                                             e.equipment.id),
-                          JSONRenderer().render(EquipmentItemSerializer(e).data),
-                          qos)
-
-        # Subscribed?
-        self.is_subscribed(client)
-
-        # Done?
-        self.loop(client)
-        client.wait()
 
 
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
@@ -356,7 +35,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         client = MQTTTestClient(broker,
                                 check_payload=False,
-                                debug=False)
+                                debug=True)
         self.is_connected(client)
 
         # subscribe to ambulance/+/data
@@ -364,11 +43,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        [client.expect(t) for t in topics]
         self.is_subscribed(client)
-
-        # process messages
-        self.loop(client)
 
         # expect more ambulance
         client.expect(topics[0])
@@ -438,11 +113,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         topics = ('hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        [client.expect(t) for t in topics]
         self.is_subscribed(client)
-
-        # process messages
-        self.loop(client)
 
         # expect more hospital and equipment
         [client.expect(t) for t in topics]
@@ -497,11 +168,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
-        [client.expect(t) for t in topics]
         self.is_subscribed(client)
-
-        # process messages
-        self.loop(client)
 
         # expect more ambulance
         client.expect(topics[0])
@@ -626,7 +293,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a1.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # retrieve message that is there already due to creation
+        # expect update once
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
 
@@ -639,15 +306,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id=self.a1.id)
@@ -659,11 +318,11 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Hospital.objects.get(id=self.h1.id)
         self.assertEqual(obj.comment, 'no comments')
 
-        # retrieve message that is there already due to creation
+        # expect update once
         test_client.expect('hospital/{}/data'.format(self.h1.id))
         self.is_subscribed(test_client)
 
-        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username, 
+        test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
                                                                         client_id,
                                                                         self.h1.id),
                             json.dumps({
@@ -671,15 +330,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('hospital/{}/data'.format(self.h1.id))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Hospital.objects.get(id=self.h1.id)
@@ -692,7 +343,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                         equipment=self.e1)
         self.assertEqual(obj.value, 'True')
 
-        # retrieve message that is there already due to creation
+        # expect update once
         test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                               self.e1.id))
         self.is_subscribed(test_client)
@@ -706,16 +357,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                             }), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
-                                                              self.e1.id))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = EquipmentItem.objects.get(equipmentholder=self.h1.equipmentholder,
@@ -724,20 +366,15 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # test bulk ambulance update
 
+        test_client.expect('ambulance/{}/data'.format(self.a1.id))
+        self.is_subscribed(test_client)
+
         # Ambulance handshake: ambulance logout
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
                             'ambulance logout')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        test_client.expect('ambulance/{}/data'.format(self.a1.id))
-        self.is_subscribed(test_client)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a2.id),
@@ -761,10 +398,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
 
-        # retrieve message that is there already due to creation
-        test_client.expect('ambulance/{}/data'.format(self.a2.id))
-        self.is_subscribed(test_client)
-
         location = {'latitude': -2., 'longitude': 7.}
         timestamp = timezone.now()
         data = [
@@ -781,21 +414,17 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             }
         ]
 
+        # expect update once
+        test_client.expect('ambulance/{}/data'.format(self.a2.id))
+        self.is_subscribed(test_client)
+
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
                                                                          client_id,
                                                                          self.a2.id),
                             json.dumps(data), qos=0)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # expect update once
-        test_client.expect('ambulance/{}/data'.format(self.a2.id))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # verify change
         obj = Ambulance.objects.get(id=self.a2.id)
@@ -999,21 +628,21 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
                                                          broker['CLIENT_ID']),
                        'online',
                        qos=1,
-                       retain=True)
+                       retain=False)
 
         # process messages
         self.loop(client)
 
         # reconnecting with same client-id will trigger will
-        client = MQTTTestClient(broker,
-                                check_payload=False,
-                                debug=False)
-        self.is_connected(client)
-
         client.expect('user/{}/client/{}/status'.format(broker['USERNAME'],
                                                         broker['CLIENT_ID']),
                       'disconnected')
         self.is_subscribed(client)
+
+        client = MQTTTestClient(broker,
+                                check_payload=False,
+                                debug=False)
+        self.is_connected(client)
 
         # process messages
         self.loop(client)
@@ -1072,8 +701,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1089,8 +717,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'online')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=second_client_id)
@@ -1107,8 +734,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1126,8 +752,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    'ambulance login')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=second_client_id)
@@ -1149,12 +774,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             '{"location_client_id":"' + client_id + '"}', qos=2)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record log
         obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
@@ -1172,12 +792,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, test_client, subscribe_client)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
@@ -1189,12 +804,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             '{"location_client_id":""}', qos=2)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record log
         obj = ClientLog.objects.filter(client=Client.objects.get(client_id=client_id)).order_by('-updated_on')[0]
@@ -1237,12 +847,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    '{"location_client_id":"' + second_client_id + '"}', qos=2)
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a2.id)
@@ -1254,8 +859,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                             'ambulance logout')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1278,8 +882,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
                                    'ambulance logout')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # check client record
         clnt = Client.objects.get(client_id=second_client_id)
@@ -1300,15 +903,13 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # Client handshake: offline
         second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
 
         # process messages
-        self.loop(second_test_client)
-        subscribe_client.loop()
+        self.loop(second_test_client, subscribe_client)
 
         # wait for disconnect
         test_client.wait()
@@ -1407,8 +1008,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1425,8 +1025,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
                             'ambulance login')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1444,12 +1043,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
                             '{"location_client_id":"' + client_id + '"}', qos=2)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         ambulance = Ambulance.objects.get(id=self.a1.id)
@@ -1460,8 +1054,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # wait for disconnect
         test_client.wait()
@@ -1538,8 +1131,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1620,8 +1212,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1631,18 +1222,17 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # reconnecting with same client-id
+        # reconnecting with same client-id, forces a disconnect
         test_client = MQTTTestClient(broker,
-                                check_payload=False,
-                                debug=False)
+                                     check_payload=False,
+                                     debug=False)
         self.is_connected(test_client)
 
         # Client handshake: online
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1658,12 +1248,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -1671,7 +1256,13 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 3)
+        self.assertEqual(len(obj), 4)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
-        self.assertEqual(obj[2].status, ClientStatus.F.name)
+        self.assertEqual(obj[2].status, ClientStatus.D.name)
+        self.assertEqual(obj[3].status, ClientStatus.F.name)
+
+        # wait for disconnect
+        test_client.wait()
+        subscribe_client.wait()
+

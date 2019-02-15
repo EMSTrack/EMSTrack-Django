@@ -5,13 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+from rest_framework.exceptions import APIException
 
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.viewsets import IsCreateByAdminOrSuper
+from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus
+    AmbulanceCallStatus, CallStatus
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
 
@@ -65,9 +66,17 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
     serializer_class = AmbulanceSerializer
 
+    @action(detail=True, methods=['get'])
+    def calls(self, request, pk=None, **kwargs):
+        """Retrieve active calls for ambulance instance."""
+        calls = Call.objects.filter(ambulancecall__ambulance_id=pk).exclude(status=CallStatus.E.name)
+
+        serializer = CallSerializer(calls, many=True)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['get', 'post'], pagination_class=AmbulancePageNumberPagination)
     def updates(self, request, pk=None, **kwargs):
-
+        """Bulk retrieve/update ambulance updates."""
         if request.method == 'GET':
             # list updates
             return self.updates_get(request, pk, **kwargs)
@@ -101,7 +110,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         return unavailable_zone
 
-    # Filter out the working time of ambulance and extract the vailable time range for ambulance
+    # Filter out the working time of ambulance and extract the available time range for ambulance
     @staticmethod
     def extract_available_zone(ambulance_history):
 
@@ -205,7 +214,6 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 else:
                     ambulance_updates = AmbulanceUpdate.objects.none()
 
-
             # order records in ascending order
             ambulance_updates = ambulance_updates.order_by('timestamp')
 
@@ -275,11 +283,12 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         try:
-            type = LocationType(self.kwargs['type']).name
+            location_type = self.kwargs['type']
+            location_type_name = LocationType(location_type).name
         except ValueError:
-            type = ''
+            raise APIException("Invalid location type '{}'".format(location_type))
 
-        return Location.objects.filter(type=type)
+        return Location.objects.filter(type=location_type_name)
 
 
 # Call ViewSet
@@ -303,10 +312,26 @@ class CallViewSet(mixins.ListModelMixin,
     """
 
     permission_classes = (IsAuthenticated,
-                          IsCreateByAdminOrSuper)
+                          IsCreateByAdminOrSuperOrDispatcher)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
-    queryset = Call.objects.all()
+    # queryset = Call.objects.all()
 
     serializer_class = CallSerializer
+
+    def get_queryset(self):
+
+        # grab all objects
+        queryset = Call.objects.all()
+
+        status = self.request.query_params.get('status', None)
+        exclude = self.request.query_params.get('exclude', CallStatus.E.name)
+
+        # filter by status
+        if status is not None:
+            queryset = queryset.filter(status=status)
+        elif exclude is not None:
+            queryset = queryset.exclude(status=exclude)
+
+        return queryset

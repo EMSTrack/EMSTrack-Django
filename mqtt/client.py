@@ -21,7 +21,7 @@ class MQTTException(Exception):
         self.value = value
 
 
-RETRY_TIMER_SECONDS = 30
+RETRY_TIMER_SECONDS = 3
 RETRY_MAX_ATTEMPTS = 10
 
 
@@ -39,7 +39,7 @@ class BaseClient:
         self.style = kwargs.pop('style', color_style())
         self.verbosity = kwargs.pop('verbosity', 1)
         self.debug = kwargs.pop('debug', False)
-        self.forgive_mid = False
+        # self.forgive_mid = False
 
         if self.broker['CLIENT_ID']:
             self.client = mqtt.Client(client_id=self.broker['CLIENT_ID'],
@@ -66,8 +66,8 @@ class BaseClient:
 
         self.client.on_connect = self.on_connect
 
-        self.subscribed = {}
-        self.published = {}
+        # self.subscribed = {}
+        # self.published = {}
 
         self.client.on_publish = self.on_publish
         self.client.on_subscribe = self.on_subscribe
@@ -90,9 +90,10 @@ class BaseClient:
         self.buffer = []
         self.number_of_unsuccessful_attempts = 0
         self.buffer_lock = threading.Lock()
+        self.publish_lock = threading.Lock()
 
     def done(self):
-        return len(self.published) == 0 and len(self.subscribed) == 0
+        return True
 
     def on_connect(self, client, userdata, flags, rc):
 
@@ -131,15 +132,37 @@ class BaseClient:
 
         # are there any messages on the buffer?
         while len(self.buffer) > 0:
+
+            logger.debug('> send_buffer len = {}'.format(len(self.buffer)))
+
             # attempt to send buffered messages
             message = self.buffer.pop(0)
-            result = self.client.publish(**message)
-            if result.rc != mqtt.MQTT_ERR_SUCCESS:
-                # put message back and increment counter
-                self.buffer.insert(0, message)
-                self.number_of_unsuccessful_attempts += 1
-            else:
+
+            try:
+
+                # try to publish
+                self._publish(**message)
+
+                # reset counter
                 self.number_of_unsuccessful_attempts = 0
+
+            except MQTTException:
+
+                logger.debug('could not send message')
+
+                # put message back
+                self.buffer.insert(0, message)
+
+                # increment counter
+                self.number_of_unsuccessful_attempts += 1
+
+                # set up timer for retrying
+                threading.Timer(RETRY_TIMER_SECONDS, self.send_buffer).start()
+
+                # break from loop
+                break
+
+        logger.debug('< send_buffer len = {}'.format(len(self.buffer)))
 
         # release lock
         self.buffer_lock.release()
@@ -150,75 +173,32 @@ class BaseClient:
 
     def publish(self, topic, payload=None, qos=0, retain=False):
 
-        # are there any messages on the buffer?
-        if len(self.buffer) > 0:
+        try:
 
-            # attempt to send buffered messages
-            self.send_buffer()
+            # try to publish
+            self._publish(topic, payload, qos, retain)
 
-        # was unsuccessful?
-        if self.number_of_unsuccessful_attempts:
+        except MQTTException:
 
             # add to buffer
             self.add_to_buffer(topic, payload, qos, retain)
 
-            # set up timer
+            # set up timer for retrying
             threading.Timer(RETRY_TIMER_SECONDS, self.send_buffer).start()
 
-            # then quit
-            return
+    def _publish(self, topic, payload=None, qos=0, retain=False):
 
-        # NOTE: The whole forgive mid thing is necessary because
-        # on_publish was getting called before publish ended
-        # forgive mid if qos = 0
-        if qos == 0:
-            self.forgive_mid = True
-
-        # try to publish
+        # logger.debug('topic = {}'.format(topic))
+        # logger.debug('payload = {}'.format(payload))
+        # logger.debug('qos = {}'.format(qos))
+        # logger.debug('retain = {}'.format(retain))
         result = self.client.publish(topic, payload, qos, retain)
         if result.rc:
-            raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc),
-                                result.rc)
-
-        if qos != 0:
-            # add to dictionary of published
-            self.published[result.mid] = (topic, payload, qos, retain)
-        else:
-
-            # reset forgive_mid
-            self.forgive_mid = False
-
-            # on_published already called?
-            if result.mid in self.published:
-                if self.published.pop(result.mid) is not None:
-                    raise MQTTException('Cannot make sense of mid', result.mid)
-            else:
-                # add to dictionary of published
-                self.published[result.mid] = (topic, payload, qos, retain)
-
-        # debug? 
-        if self.debug:
-            logger.debug(("Just published '{}[mid={}]:{}'" +
-                          "(qos={},retain={})").format(topic,
-                                                       result.mid,
-                                                       payload,
-                                                       qos,
-                                                       retain))
+            logger.debug('Could not publish to topic (rc = {})'.format(result.rc))
+            raise MQTTException('Could not publish to topic (rc = {})'.format(result.rc), result.rc)
 
     def on_publish(self, client, userdata, mid):
-
-        # debug? 
-        if self.debug:
-            logger.debug("Published mid={}".format(mid))
-
-        if mid in self.published:
-            # remove from list of subscribed
-            del self.published[mid]
-
-        else:
-            self.published[mid] = None
-            if not self.forgive_mid:
-                raise MQTTException('Unknown publish mid', mid)
+        pass
 
     def subscribe(self, topic, qos=0):
 
@@ -228,29 +208,8 @@ class BaseClient:
             raise MQTTException('Could not subscribe to topic',
                                 result)
 
-        # debug? 
-        if self.debug:
-            logger.debug("Just subscribed to '{}'[mid={}][qos={}]".format(topic,
-                                                                          mid,
-                                                                          qos))
-
-        # otherwise add to dictionary of subscribed
-        self.subscribed[mid] = (topic, qos)
-
-        # logger.debug('topic = {}, mid = {}'.format(topic, mid))
-
     def on_subscribe(self, client, userdata, mid, granted_qos):
-
-        # debug? 
-        if self.debug:
-            logger.debug("Subscribed mid={}, qos={}".format(mid, granted_qos))
-
-        if mid in self.subscribed:
-            # remove from list of subscribed
-            del self.subscribed[mid]
-
-        else:
-            raise MQTTException('Unknown subscribe mid', mid)
+        pass
 
     def on_disconnect(self, client, userdata, rc):
         # logger.debug('disconnecting reason {}'.format(rc))
@@ -259,6 +218,9 @@ class BaseClient:
     # disconnect
     def disconnect(self):
         self.client.disconnect()
+
+    def is_connected(self):
+        return self.connected
 
     # loop
     def loop(self, *args, **kwargs):

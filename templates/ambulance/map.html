@@ -38,33 +38,35 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <button class="btn btn-primary px-3 mx-1"
-                id="dispatchBeginButton"
-                data-toggle="collapse"
-                data-target="#dispatchDiv" aria-controls="dispatchDiv"
-                aria-expanded="false" aria-label="Toggle dispatching"
-                onclick="beginDispatching()">
-            Dispatch Ambulances
-        </button>
+        {% if user|is_dispatcher %}
+            <button class="btn btn-primary px-3 mx-1"
+                    id="dispatchBeginButton"
+                    data-toggle="collapse"
+                    data-target="#dispatchDiv" aria-controls="dispatchDiv"
+                    aria-expanded="false" aria-label="Toggle dispatching"
+                    onclick="beginDispatching()">
+                Dispatch Ambulances
+            </button>
 
-        <button type="button"
-                id="dispatchSubmitButton"
-                class="btn btn-primary px-3 mx-1"
-                onclick="submitDispatching()"
-                style="display: none;">
-            Dispatch
-        </button>
+            <button type="button"
+                    id="dispatchSubmitButton"
+                    class="btn btn-primary px-3 mx-1"
+                    onclick="submitDispatching()"
+                    style="display: none;">
+                Dispatch
+            </button>
 
-        <button type="button"
-                id="dispatchCancelButton"
-                class="btn btn-secondary px-3 mx-1"
-                data-toggle="collapse"
-                data-target="#dispatchDiv"
-                aria-expanded="true"
-                aria-controls="dispatchDiv"
-                style="display: none;">
-            Cancel
-        </button>
+            <button type="button"
+                    id="dispatchCancelButton"
+                    class="btn btn-secondary px-3 mx-1"
+                    data-toggle="collapse"
+                    data-target="#dispatchDiv"
+                    aria-expanded="true"
+                    aria-controls="dispatchDiv"
+                    style="display: none;">
+                Cancel
+            </button>
+        {% endif %}
 
     </nav>
 
@@ -345,6 +347,18 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=dispatchInitAutocomplete"
         async defer></script>
 -->
+
+<!-- leaflet vector markers -->
+
+<script src="{% static 'leaflet/js/leaflet.awesome-stacked-markers.js' %}"></script>
+
+<link rel="stylesheet" href="{% static 'leaflet/css/leaflet.awesome-markers.css' %}">
+<script src="{% static 'leaflet/js/leaflet.awesome-markers.js' %}"></script>
+
+<link rel="stylesheet" href="{% static 'leaflet/css/leaflet-vector-markers.css' %}">
+<script src="{% static 'leaflet/js/leaflet-vector-markers.js' %}"></script>
+
+<link rel="stylesheet" href="{% static 'leaflet/css/leaflet.markers.custom.css' %}">
 
 <!-- Load javascript code -->
 <script src="{% static 'js/geocoder.js' %}"></script>

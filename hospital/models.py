@@ -37,8 +37,8 @@ class Hospital(Location):
         # just created?
         if created:
             # invalidate permissions cache
-            from login.permissions import cache_clear
-            cache_clear()
+            from mqtt.cache_clear import mqtt_cache_clear
+            mqtt_cache_clear()
 
     def delete(self, *args, **kwargs):
 
@@ -47,8 +47,8 @@ class Hospital(Location):
         SingletonPublishClient().remove_hospital(self)
 
         # invalidate permissions cache
-        from login.permissions import cache_clear
-        cache_clear()
+        from mqtt.cache_clear import mqtt_cache_clear
+        mqtt_cache_clear()
 
         # delete from Hospital
         super().delete(*args, **kwargs)

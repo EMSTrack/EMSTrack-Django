@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.models import User
 
 from rest_framework import viewsets, mixins, generics, filters, permissions
@@ -8,6 +10,8 @@ from rest_framework.response import Response
 from .models import UserProfile
 
 from .serializers import UserProfileSerializer
+
+logger = logging.getLogger(__name__)
 
 # Django REST Framework Viewsets
 
@@ -25,7 +29,7 @@ class IsUserOrAdminOrSuper(permissions.BasePermission):
 
 class IsCreateByAdminOrSuper(permissions.BasePermission):
     """
-    Only user or staff can create
+    Only superuser or staff can create
     """
 
     def has_permission(self, request, view):
@@ -34,6 +38,17 @@ class IsCreateByAdminOrSuper(permissions.BasePermission):
         else:
             return True
 
+
+class IsCreateByAdminOrSuperOrDispatcher(permissions.BasePermission):
+    """
+    Only superuser, staff, or dispatcher can create
+    """
+
+    def has_permission(self, request, view):
+        if view.action == 'create':
+            return request.user.is_staff or request.user.is_superuser or request.user.userprofile.is_dispatcher
+        else:
+            return True
 
 # Profile viewset
 

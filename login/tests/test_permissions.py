@@ -667,3 +667,11 @@ class TestPermissions(TestSetup):
         self.assertEqual(info.hits, 6)
         self.assertEqual(info.misses, 2)
         self.assertEqual(info.currsize, 2)
+
+        # clear cache
+        cache_clear()
+
+        info = cache_info()
+        self.assertEqual(info.hits, 0)
+        self.assertEqual(info.misses, 0)
+        self.assertEqual(info.currsize, 0)

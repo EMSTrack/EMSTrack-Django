@@ -92,12 +92,14 @@ class AmbulanceCapability(Enum):
     B = 'Basic'
     A = 'Advanced'
     R = 'Rescue'
+    M = 'Medic'
 
 
 AmbulanceCapabilityOrder = [ 
     AmbulanceCapability.B,
     AmbulanceCapability.A,
-    AmbulanceCapability.R
+    AmbulanceCapability.R,
+    AmbulanceCapability.M
 ] 
 
 
@@ -178,13 +180,13 @@ class Ambulance(UpdatedByModel):
         if has_moved and loaded_values and self._loaded_values['orientation'] == self.orientation:
             # TODO: should we allow for a small radius before updating direction?
             self.orientation = calculate_orientation(self._loaded_values['location'], self.location)
-            logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
-                                                 self.location,
-                                                 self.orientation))
+            # logger.debug('< {} - {} = {}'.format(self._loaded_values['location'],
+            #                                      self.location,
+            #                                      self.orientation))
 
-        logger.debug('loaded_values: {}'.format(loaded_values))
-        logger.debug('_loaded_values: {}'.format(self._loaded_values))
-        logger.debug('self.location_client: {}'.format(self.location_client))
+        # logger.debug('loaded_values: {}'.format(loaded_values))
+        # logger.debug('_loaded_values: {}'.format(self._loaded_values))
+        # logger.debug('self.location_client: {}'.format(self.location_client))
 
         # location_client changed?
         if self.location_client is None:
@@ -195,7 +197,7 @@ class Ambulance(UpdatedByModel):
         if loaded_values and location_client_id != self._loaded_values['location_client_id']:
             location_client_changed = True
 
-        logger.debug('location_client_changed: {}'.format(location_client_changed))
+        # logger.debug('location_client_changed: {}'.format(location_client_changed))
         # TODO: Check if client is logged with ambulance if setting location_client
 
         # if comment, capability, status or location changed
@@ -208,7 +210,7 @@ class Ambulance(UpdatedByModel):
             # save to Ambulance
             super().save(*args, **kwargs)
 
-            logger.debug('SAVED')
+            # logger.debug('SAVED')
 
             # save to AmbulanceUpdate
             data = {k: getattr(self, k)
@@ -219,7 +221,7 @@ class Ambulance(UpdatedByModel):
             obj = AmbulanceUpdate(**data)
             obj.save()
 
-            logger.debug('UPDATE SAVED')
+            # logger.debug('UPDATE SAVED')
 
             # model changed
             model_changed = True
@@ -232,7 +234,7 @@ class Ambulance(UpdatedByModel):
             # save only to Ambulance
             super().save(*args, **kwargs)
 
-            logger.debug('SAVED')
+            # logger.debug('SAVED')
 
             # model changed
             model_changed = True
@@ -244,13 +246,13 @@ class Ambulance(UpdatedByModel):
             from mqtt.publish import SingletonPublishClient
             SingletonPublishClient().publish_ambulance(self)
 
-            logger.debug('PUBLISHED ON MQTT')
+            # logger.debug('PUBLISHED ON MQTT')
 
         # just created?
         if created:
             # invalidate permissions cache
-            from login.permissions import cache_clear
-            cache_clear()
+            from mqtt.cache_clear import mqtt_cache_clear
+            mqtt_cache_clear()
 
     def delete(self, *args, **kwargs):
 
@@ -259,8 +261,8 @@ class Ambulance(UpdatedByModel):
         SingletonPublishClient().remove_ambulance(self)
 
         # invalidate permissions cache
-        from login.permissions import cache_clear
-        cache_clear()
+        from mqtt.cache_clear import mqtt_cache_clear
+        mqtt_cache_clear()
 
         # delete from Ambulance
         super().delete(*args, **kwargs)
@@ -520,9 +522,6 @@ class AmbulanceCall(PublishMixin,
         # remove?
         remove = kwargs.pop('publish', False)
 
-        # publish call?
-        publish_call = False
-
         # retrieve call
         call = self.call
 
@@ -533,12 +532,7 @@ class AmbulanceCall(PublishMixin,
 
                 # change call status to started
                 call.status = CallStatus.S.name
-                call.save()
-
-            else:
-
-                # publish call tp update status
-                publish_call = True
+                call.save(publish=False)
 
         # changed to complete?
         elif self.status == AmbulanceCallStatus.C.name:
@@ -552,39 +546,27 @@ class AmbulanceCall(PublishMixin,
 
                 logger.debug('This is the last ambulance; will end call.')
 
-                # publish first
-                self.publish()
-
                 # then change call status to ended
                 call.status = CallStatus.E.name
-                call.save()
-
-                # prevent publication, already published
-                publish = False
+                call.save(publish=False)
 
             else:
 
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(accepted_ambulancecalls)
 
-                # publish and remove from mqtt
-                remove = True
+            # publish and remove from mqtt
+            remove = True
 
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
 
             logger.debug('Ambulance call declined.')
 
-            # publish call tp update status
-            publish_call = True
-
         # changed to suspended?
         elif self.status == AmbulanceCallStatus.S.name:
 
             logger.debug('Ambulance call suspended.')
-
-            # publish call tp update status
-            publish_call = True
 
         # call super
         super().save(*args, **kwargs,
@@ -596,9 +578,8 @@ class AmbulanceCall(PublishMixin,
                                             comment=self.comment,
                                             updated_by=self.updated_by, updated_on=self.updated_on)
 
-        # publish call?
-        if publish_call:
-            call.publish()
+        # publish call
+        call.publish()
 
     def publish(self, **kwargs):
 
