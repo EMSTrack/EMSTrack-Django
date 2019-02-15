@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-15 00:58+0000\n"
+"POT-Creation-Date: 2019-02-15 01:13+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -116,9 +116,8 @@ msgid "Change password"
 msgstr "Cambiar contraseña"
 
 #: templates/base.html:124
-#, python-format
-msgid "Logout %(first_name)s"
-msgstr "Cerrar sesión"
+msgid "Logout"
+msgstr ""
 
 #: templates/base.html:131
 msgid "Sign Up"
@@ -211,3 +210,6 @@ msgstr ""
 #: templates/login/user_list.html:25
 msgid "Active"
 msgstr ""
+
+#~ msgid "Logout %(first_name)s"
+#~ msgstr "Cerrar sesión"
