@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-15 06:20+0000\n"
+"POT-Creation-Date: 2019-02-15 06:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,7 +151,9 @@ msgid "Ambulances"
 msgstr "Ambulancias"
 
 #: templates/ambulance/ambulance_list.html:18
-#: templates/login/group_list.html:14 templates/login/user_list.html:14
+#, fuzzy
+#| msgid "new"
+msgctxt "feminine"
 msgid "new"
 msgstr "nueva"
 
@@ -212,7 +214,8 @@ msgstr "Dirección"
 msgid ""
 "Click to automatically search for address after changing the coordinates"
 msgstr ""
-"Marque para buscar automáticamente la dirección después de cambiar las coordenadas"
+"Marque para buscar automáticamente la dirección después de cambiar las "
+"coordenadas"
 
 #: templates/ambulance/map.html:251
 msgid "update address"
@@ -341,6 +344,13 @@ msgstr "¿Olvidó tu contraseña?"
 #: templates/index.html:94 templates/index.html:97
 msgid "Signup"
 msgstr "Regístrate"
+
+#: templates/login/group_list.html:14 templates/login/user_list.html:14
+#, fuzzy
+#| msgid "new"
+msgctxt "masculine"
+msgid "new"
+msgstr "nueva"
 
 #: templates/login/group_list.html:25
 msgid "Number of Users"
