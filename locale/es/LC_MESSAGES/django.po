@@ -151,8 +151,6 @@ msgid "Ambulances"
 msgstr "Ambulancias"
 
 #: templates/ambulance/ambulance_list.html:18
-#, fuzzy
-#| msgid "new"
 msgctxt "feminine"
 msgid "new"
 msgstr "nueva"
@@ -346,11 +344,9 @@ msgid "Signup"
 msgstr "Regístrate"
 
 #: templates/login/group_list.html:14 templates/login/user_list.html:14
-#, fuzzy
-#| msgid "new"
 msgctxt "masculine"
 msgid "new"
-msgstr "nueva"
+msgstr "nuevo"
 
 #: templates/login/group_list.html:25
 msgid "Number of Users"
