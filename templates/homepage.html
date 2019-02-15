@@ -1,23 +1,24 @@
 <!-- Homepage contents -->
+{% load i18n %}
 
 <div class="container">
     <div class="row">
         <div class="col">
 
-            <h1>EMSTrack</h1>
+            <h1>{% trans "EMSTrack" %}</h1>
 
-            <h3>Welcome to EMSTrack</h3>
+            <h3>{% trans "Welcome to EMSTrack" %}</h3>
 
             <p>
-                This is an experimental server for the Tijuana Red Cross.
+                {% trans "This is an experimental server for the Tijuana Red Cross." %}
             </p>
 
-            <h3>Mobile Android Application</h3>
+            <h3>{% trans "Mobile Android Application" %}</h3>
 
-            <h4>Installation:</h4>
+            <h4>{% trans "Installation:" %}</h4>
 
             <p>
-                Download the file `app-debug.apk` for the latest release in:
+                {% trans "Download the file `app-debug.apk` for the latest release in:" %}
             </p>
 
             <p>
@@ -25,9 +26,9 @@
             </p>
 
             <p>
-                directly on your phone and follow these
+                {% blocktrans %}directly on your phone and follow these
                 <a href="https://www.cnet.com/how-to/how-to-install-apps-outside-of-google-play/">instructions</a>
-                to install the app.
+                to install the app.{% endblocktrans %}
             </p>
 
         </div>

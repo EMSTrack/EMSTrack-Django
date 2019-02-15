@@ -31,7 +31,7 @@
     <script defer src="https://use.fontawesome.com/releases/v5.7.0/js/all.js"></script>
 
     <!-- title -->
-    <title>{% block title %}EMSTrack - Ambulance Tracker{% endblock %}</title>
+    <title>{% block title %}{% trans "EMSTrack - Ambulance Tracker" %}{% endblock %}</title>
     {% block head %}
     {% endblock %}
 </head>
@@ -43,7 +43,7 @@
      id="base-navbar">
 
     <!-- Navbar brand -->
-    <a class="navbar-brand" href="{% url 'index' %}">EMSTrack</a>
+    <a class="navbar-brand" href="{% url 'index' %}">{% trans "EMSTrack" %}</a>
 
     <!-- Navbar toggle -->
     <button class="navbar-toggler" type="button" data-toggle="collapse"
@@ -59,25 +59,25 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:map' %}">
                     <span class="fas fa-globe"></span>
-                    {% trans "Map" noop %}
+                    {% trans "Map" %}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:call_list' %}">
                     <span class="fas fa-phone"></span>
-                    {% trans "Calls" noop %}
+                    {% trans "Calls" %}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'ambulance:list' %}">
                     <span class="fas fa-ambulance"></span>
-                    {% trans "Ambulances" noop %}
+                    {% trans "Ambulances" %}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'hospital:list' %}">
                     <span class="fas fa-hospital"></span>
-                    {% trans "Hospitals" noop %}
+                    {% trans "Hospitals" %}
                 </a>
             </li>
         </ul>
@@ -92,30 +92,16 @@
                    aria-expanded="false"
                    href="#">
                     <span class="fas fa-wrench"></span>
-                    {% trans "Admin" noop %}
+                    {% trans "Admin" %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'login:list-user' %}">
-                        {% trans "Users" noop %}
-                    </a>
-                    <a class="dropdown-item" href="{% url 'login:list-group' %}">
-                        {% trans "Groups" noop %}
-                    </a>
-                    <a class="dropdown-item" href="{% url 'equipment:list' %}">
-                        {% trans "Equipment" noop %}
-                    </a>
-                    <a class="dropdown-item" href="{% url 'equipment:list-set' %}">
-                        {% trans "Equipment Sets" noop %}
-                    </a>
-                    <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">
-                        {% trans "Locations" noop %}
-                    </a>
-                    <a class="dropdown-item" href="{% url 'login:list-client' %}">
-                        {% trans "Clients" noop %}
-                    </a>
-                    <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">
-                        {% trans "Reinitialize" noop %}
-                    </a>
+                    <a class="dropdown-item" href="{% url 'login:list-user' %}">{% trans "Users" %}</a>
+                    <a class="dropdown-item" href="{% url 'login:list-group' %}">{% trans "Groups" %}</a>
+                    <a class="dropdown-item" href="{% url 'equipment:list' %}">{% trans "Equipment" %}</a>
+                    <a class="dropdown-item" href="{% url 'equipment:list-set' %}">{% trans "Equipment Sets" %}</a>
+                    <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">{% trans "Locations" %}</a>
+                    <a class="dropdown-item" href="{% url 'login:list-client' %}">{% trans "Clients" %}</a>
+                    <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">{% trans "Reinitialize" %}</a>
                 </div>
             </li>
             {% endif %}
@@ -126,32 +112,30 @@
                    aria-expanded="false"
                    href="#">
                     <span class="fas fa-user"></span>
-                    {% trans "Account" noop %}
+                    {% trans "Account" %}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarAccountDropdown">
-                    <a class="dropdown-item" href="{% url 'password_change' %}">
-                        Change password
-                    </a>
+                    <a class="dropdown-item" href="{% url 'password_change' %}">{% trans "Change password" %}</a>
                 </div>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="fas fa-sign-out-alt"></span>
-                    &nbsp;{% trans "Logout" noop %} {{request.user.first_name}}
+                    &nbsp;{% blocktrans with first_name=request.user.first_name %}Logout {{ first_name }}{% endblocktrans %}
                 </a>
             </li>
             {% else %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:signup' %}">
                     <span class="fas fa-user-plus"></span>&nbsp;
-                    {% trans "Sign Up" noop %}
+                    {% trans "Sign Up" %}
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:login' %}"
                    href="#">
                     <span class="fas fa-sign-in-alt"></span>&nbsp;
-                    {% trans "Login" noop %}
+                    {% trans "Login" %}
                 </a>
             </li>
             {% endif %}

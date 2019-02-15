@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -11,7 +12,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 id="loginTitle" class="modal-title">EMSTrack Login</h5>
+                <h5 id="loginTitle" class="modal-title">{% trans "EMSTrack Login" %}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -53,7 +54,7 @@
                     </div>
                     {% endfor %}
 
-                    <a id="passwordReset" href="{% url 'password_reset' %}">Forgot Password?</a>
+                    <a id="passwordReset" href="{% url 'password_reset' %}">{% trans "Forgot Password?" %}</a>
 
                     <input type="hidden" name="next" value="{{ next }}"/>
 
@@ -61,8 +62,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="submitButton">Login</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitButton">{% trans "Login" %}</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Close" %}</button>
             </div>
         </div>
     </div>
@@ -90,10 +91,10 @@
         } else if (pathname == "{% url 'login:signup' %}") {
 
             // adjust modal
-            $('#loginTitle').html('EMSTrack Signup');
+            $('#loginTitle').html('{% trans "EMSTrack Signup" %}');
             $('#signInForm').attr('action', '{% url 'login:signup' %}');
             $('#passwordReset').hide();
-            $('#submitButton').html('Signup');
+            $('#submitButton').html('{% trans "Signup" %}');
 
             // bring up modal
             $('#loginModal').modal({
