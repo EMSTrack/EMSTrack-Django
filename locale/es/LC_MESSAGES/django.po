@@ -49,7 +49,7 @@ msgstr "Email"
 
 #: login/forms.py:234 templates/login/user_list.html:24
 msgid "Dispatcher"
-msgstr ""
+msgstr "Despachador"
 
 #: templates/ambulance/ambulance_detail.html:20
 #: templates/ambulance/ambulance_form.html:14
@@ -60,44 +60,44 @@ msgstr "Ambulancias"
 
 #: templates/ambulance/ambulance_detail.html:23
 msgid "Details"
-msgstr ""
+msgstr "Detalles"
 
 #: templates/ambulance/ambulance_detail.html:27
 #: templates/ambulance/ambulance_list.html:28
 msgid "Identifier"
-msgstr ""
+msgstr "Identificador"
 
 #: templates/ambulance/ambulance_detail.html:35
 #: templates/ambulance/ambulance_list.html:29 templates/ambulance/map.html:142
 msgid "Capability"
-msgstr ""
+msgstr "Capacidad"
 
 #: templates/ambulance/ambulance_detail.html:39
 #: templates/ambulance/ambulance_detail.html:175
 #: templates/ambulance/ambulance_list.html:30
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: templates/ambulance/ambulance_detail.html:43
 #: templates/ambulance/ambulance_detail.html:118
 #: templates/ambulance/ambulance_detail.html:177
 msgid "Comment"
-msgstr ""
+msgstr "Comentario"
 
 #: templates/ambulance/ambulance_detail.html:48
 msgid "Update client"
-msgstr ""
+msgstr "Cliente de actualización"
 
 #: templates/ambulance/ambulance_detail.html:53
 #: templates/ambulance/ambulance_detail.html:119
 #: templates/ambulance/ambulance_detail.html:179
 #: templates/ambulance/ambulance_list.html:32
 msgid "Updated on"
-msgstr ""
+msgstr "Actualizado en"
 
 #: templates/ambulance/ambulance_detail.html:57
 msgid "By"
-msgstr ""
+msgstr "por"
 
 #: templates/ambulance/ambulance_detail.html:75
 #: templates/ambulance/ambulance_detail.html:116
@@ -107,7 +107,7 @@ msgstr "Nombre"
 
 #: templates/ambulance/ambulance_detail.html:90
 msgid "This ambulance has no equipment sets."
-msgstr ""
+msgstr "Esta ambulancia no tiene juego de equipos."
 
 #: templates/ambulance/ambulance_detail.html:102 templates/base.html:100
 msgid "Equipment"
@@ -115,27 +115,27 @@ msgstr "Equipo"
 
 #: templates/ambulance/ambulance_detail.html:107
 msgid "edit"
-msgstr ""
+msgstr "editar"
 
 #: templates/ambulance/ambulance_detail.html:117
 msgid "Value"
-msgstr ""
+msgstr "valor"
 
 #: templates/ambulance/ambulance_detail.html:120
 #: templates/ambulance/ambulance_detail.html:180
 #: templates/ambulance/ambulance_list.html:33
 msgid "by"
-msgstr ""
+msgstr "por"
 
 #: templates/ambulance/ambulance_detail.html:139
 msgid "This ambulance has no registered equipments."
-msgstr ""
+msgstr "Esta ambulancia no tiene equipos."
 
 #: templates/ambulance/ambulance_detail.html:151
 #, fuzzy
 #| msgid "Locations"
 msgid "Past Locations"
-msgstr "Lugares"
+msgstr "Ubicaciones pasadas"
 
 #: templates/ambulance/ambulance_detail.html:176
 #, fuzzy
@@ -145,11 +145,11 @@ msgstr "Lugares"
 
 #: templates/ambulance/ambulance_detail.html:178
 msgid "Timestamp"
-msgstr ""
+msgstr "Marca de tiempo"
 
 #: templates/ambulance/ambulance_form.html:23
 msgid "Save"
-msgstr ""
+msgstr "Salvar"
 
 #: templates/ambulance/ambulance_list.html:12 templates/ambulance/map.html:109
 #: templates/ambulance/map.html:267 templates/base.html:74
@@ -162,31 +162,25 @@ msgid "new"
 msgstr "nuevo"
 
 #: templates/ambulance/ambulance_list.html:31
-#, fuzzy
-#| msgid "Clients"
 msgid "Comments"
-msgstr "Clientes"
+msgstr "Comentarios"
 
 #: templates/ambulance/ambulance_list.html:64
-#, fuzzy
-#| msgid "Ambulances"
 msgid "No ambulances."
-msgstr "Ambulancias"
+msgstr "No hay ambulancias."
 
 #: templates/ambulance/map.html:49
-#, fuzzy
-#| msgid "Ambulances"
 msgid "Dispatch Ambulances"
-msgstr "Ambulancias"
+msgstr "Depacho de Ambulancias"
 
 #: templates/ambulance/map.html:57
 msgid "Dispatch"
-msgstr ""
+msgstr "Despachar"
 
 #: templates/ambulance/map.html:68 templates/ambulance/map.html:346
 #: templates/modal.html:65
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: templates/ambulance/map.html:88 templates/base.html:68
 msgid "Calls"
@@ -202,29 +196,27 @@ msgstr "Descripción"
 
 #: templates/ambulance/map.html:241
 msgid "Street address"
-msgstr ""
+msgstr "Calle"
 
 #: templates/ambulance/map.html:253
 msgid "Coordinates"
-msgstr ""
+msgstr "Coordenadas"
 
 #: templates/ambulance/map.html:279
-#, fuzzy
-#| msgid "Clients"
 msgid "Patients"
-msgstr "Clientes"
+msgstr "Pacientes"
 
 #: templates/ambulance/map.html:343
 msgid "Ok"
-msgstr ""
+msgstr "Ok"
 
 #: templates/ambulance/map.html:349 templates/index.html:66
 msgid "Close"
 msgstr "Cerrar"
 
 #: templates/base.html:34
-msgid "EMSTrack - Ambulance Tracker"
-msgstr "EMSTrack - Rastreador de Ambulancias"
+msgid "Ambulance Tracker"
+msgstr "Rastreador de Ambulancias"
 
 #: templates/base.html:62
 msgid "Map"
@@ -280,19 +272,19 @@ msgstr "Iniciar sesión"
 
 #: templates/homepage.html:13
 msgid "This is an experimental server for the Tijuana Red Cross."
-msgstr ""
+msgstr "Este es un servidor experimental para la Cruz Roja de Tijuana."
 
 #: templates/homepage.html:16
 msgid "Mobile Android Application"
-msgstr ""
+msgstr "Aplicación móvil para Android"
 
 #: templates/homepage.html:18
-msgid "Installation:"
-msgstr ""
+msgid "Installation"
+msgstr "Instalación"
 
 #: templates/homepage.html:21
-msgid "Download the file `app-debug.apk` for the latest release in:"
-msgstr ""
+msgid "Download the file `app-debug.apk` for the latest release in"
+msgstr "Descargue el archivo `app-debug.apk` de la última versión en"
 
 #: templates/homepage.html:29
 msgid ""
@@ -301,6 +293,10 @@ msgid ""
 "outside-of-google-play/\">instructions</a>\n"
 "                to install the app."
 msgstr ""
+"directamente en tu teléfono y sigue estos\n"
+"                <a href=\"https://www.cnet.com/how-to/how-to-install-apps-"
+"outside-of-google-play/\">instrucciones</a>\n"
+"                para instalar la aplicación."
 
 #: templates/index.html:57
 msgid "Forgot Password?"
@@ -308,7 +304,7 @@ msgstr "¿Olvidó tu contraseña?"
 
 #: templates/index.html:94 templates/index.html:97
 msgid "Signup"
-msgstr ""
+msgstr "Regístrate"
 
 #: templates/login/group_list.html:24
 msgid "Priority"
@@ -336,10 +332,4 @@ msgstr "Activo"
 
 #: templates/modal.html:64
 msgid "OK"
-msgstr ""
-
-#~ msgid "EMSTrack"
-#~ msgstr "EMSTrack"
-
-#~ msgid "Welcome to EMSTrack"
-#~ msgstr "Bienvenido a EMSTrack"
+msgstr "OK"
