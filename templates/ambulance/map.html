@@ -190,7 +190,9 @@
                   method="POST" action="">
                 {% csrf_token %}
 
-                <h5>Priority</h5>
+                <h5>
+                    {% trans "Priority" %}
+                </h5>
                 <form required>
                     <div id="priority-buttons"
                          class="btn-group btn-group-toggle border rounded"
@@ -229,12 +231,12 @@
                 </h5>
                 <textarea class="form-control" name="description"
                           rows="3" id="comment"
-                          placeholder="Describe the incident"
+                          placeholder="{% trans "Describe the incident" %}"
                           required></textarea>
 
                 <div class="float-right"
                      title="Click to automatically search for coordinates after changing the address">
-                    update coordinates
+                    {% trans "update coordinates" %}
                     <input id="update-coordinates" type="checkbox">
                 </div>
                 <h5>
@@ -242,11 +244,11 @@
                 </h5>
                 <input id="street" type="text"
                        name="street" class="form-control"
-                       placeholder="Address" required autocomplete="street-address">
+                       placeholder="{% trans "Address" %}" required autocomplete="street-address">
 
                 <div class="float-right"
-                     title="Click to automatically search for address after changing the coordinates">
-                    update address
+                     title="{% trans "Click to automatically search for address after changing the coordinates" %}">
+                    {% trans "update address" %}
                     <input id="update-address" type="checkbox" checked/>
                 </div>
                 <h5>
@@ -255,10 +257,10 @@
                 <div class="card"
                      title="Click on map to update coordinates">
                     <div class="card-body py-1 px-3">
-                        <strong>Lat:</strong>
+                        <strong>{% trans "Lat" %}:</strong>
                         <div id="curr-lat" style="display: inline-block;"></div>
                         , &nbsp;
-                        <strong>Lon:</strong>
+                        <strong>{% trans "Lon" %}:</strong>
                         <div id="curr-lng" style="display: inline-block;"></div>
                     </div>
                 </div>
@@ -271,7 +273,7 @@
                          id="ambulance-selection">
                         <input id="ambulance-selection-message"
                                class="border-0 w-100"
-                               placeholder="Click on or drag ambulances here"/>
+                               placeholder="{% trans "Click on or drag ambulances here" %}"/>
                     </div>
                 </div>
 

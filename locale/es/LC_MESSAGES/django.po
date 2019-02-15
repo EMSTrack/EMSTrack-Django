@@ -171,7 +171,7 @@ msgstr "No hay ambulancias."
 
 #: templates/ambulance/map.html:49
 msgid "Dispatch Ambulances"
-msgstr "Depacho de Ambulancias"
+msgstr "Despacho de Ambulancias"
 
 #: templates/ambulance/map.html:57
 msgid "Dispatch"
