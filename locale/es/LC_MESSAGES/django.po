@@ -117,7 +117,7 @@ msgstr "Cambiar contraseña"
 
 #: templates/base.html:124
 msgid "Logout"
-msgstr ""
+msgstr "Cerrar sesíon"
 
 #: templates/base.html:131
 msgid "Sign Up"
