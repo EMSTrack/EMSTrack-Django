@@ -316,6 +316,22 @@ class CallViewSet(mixins.ListModelMixin,
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
-    queryset = Call.objects.all()
+    # queryset = Call.objects.all()
 
     serializer_class = CallSerializer
+
+    def get_queryset(self):
+
+        # grab all objects
+        queryset = Call.objects.all()
+
+        # filter by status
+        status = self.request.query_params.get('status', None)
+        if status is not None:
+            queryset = queryset.filter(status=status)
+
+        exclude = self.request.query_params.get('exclude', CallStatus.E.name)
+        if exclude is not None and status != exclude:
+            queryset = queryset.exclude(status=exclude)
+
+        return queryset

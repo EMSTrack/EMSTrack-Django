@@ -9,7 +9,7 @@ from rest_framework_swagger.views import get_swagger_view
 from login.viewsets import ProfileViewSet
 from login.views import PasswordView, SettingsView, VersionView
 
-from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet
+from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet, ActiveCallViewSet
 
 from hospital.viewsets import HospitalViewSet
 from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
