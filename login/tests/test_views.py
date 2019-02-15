@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import Client, RequestFactory
 from django.urls import reverse
+from django.utils.translation import activate
 from rest_framework.parsers import JSONParser
 
 from ambulance.models import Ambulance
@@ -55,6 +56,7 @@ class TestViews(TestSetup):
         # self.assertDictEqual(result, answer)
 
         # user detail
+        activate('en')
         response = self.client.get(reverse('login:detail-user',
                                            kwargs={'pk': self.u1.id}),
                                    follow=True)
