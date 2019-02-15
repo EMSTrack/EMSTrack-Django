@@ -506,7 +506,8 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve new ambulance status
-        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
+                              follow = True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -521,7 +522,7 @@ class TestAmbulanceUpdate(TestSetup):
                                     'location': point2str(location),
                                     'timestamp': date2iso(timestamp),
                                 }),
-                                follow = True)
+                                follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
@@ -561,7 +562,8 @@ class TestAmbulanceUpdate(TestSetup):
         client.login(username='testuser2', password='very_secret')
 
         # retrieve ambulance
-        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)),
+                              follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(self.a3).data
@@ -581,7 +583,8 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve new ambulance status
-        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)),
+                              follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -605,7 +608,8 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve new ambulance location
-        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a3.id)),
+                              follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
@@ -628,8 +632,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 404)
 
         # logout
@@ -644,8 +648,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 404)
 
         # set status ambulance
@@ -654,8 +658,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 404)
 
         # set status ambulance
@@ -664,8 +668,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 404)
 
         # logout
