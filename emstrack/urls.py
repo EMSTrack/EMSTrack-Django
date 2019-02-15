@@ -1,3 +1,4 @@
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
@@ -52,7 +53,7 @@ router.register(r'call',
                 CallViewSet,
                 base_name='api-call')
 
-urlpatterns = [
+urlpatterns = i18n_patterns(*[
 
     # Router API urls
     url(r'^api/', include(router.urls)),
@@ -74,6 +75,10 @@ urlpatterns = [
     url(r'^api/version/$',
         VersionView.as_view(),
         name='version'),
+
+])
+
+urlpatterns += i18n_patterns(*[
 
     # ambulance
     url(r'^ambulance/', include('ambulance.urls')),
@@ -115,5 +120,4 @@ urlpatterns = [
     url(r'^$',
         IndexView.as_view(),
         name='index'),
-
-]
+])
