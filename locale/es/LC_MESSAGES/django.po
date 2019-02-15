@@ -151,12 +151,9 @@ msgid "Ambulances"
 msgstr "Ambulancias"
 
 #: templates/ambulance/ambulance_list.html:18
-msgid "new"
-msgstr "nueva"
-
 #: templates/login/group_list.html:14 templates/login/user_list.html:14
 msgid "new"
-msgstr "nuevo"
+msgstr "nueva"
 
 #: templates/ambulance/ambulance_list.html:31
 msgid "Comments"

@@ -15,7 +15,7 @@
             {% if user.is_staff %}
             <p>
                 <a href="{% url 'ambulance:create' %}">
-                    {% trans "new" %}
+                    {% trans "new" context "feminine" %}
                 </a>
             </p>
             {% endif %}

@@ -11,7 +11,7 @@
             <h1>{% trans "Groups" %}</h1>
 
             <p>
-                <a href="{% url 'login:create-group' %}">{% trans "new" %}</a>
+                <a href="{% url 'login:create-group' %}">{% trans "new" context "masculine" %}</a>
             </p>
 
            {% if group_list %}
