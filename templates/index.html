@@ -80,14 +80,14 @@
         // Should start up modal?
         var pathname = window.location.pathname;
         console.log('pathname = ' + pathname);
-        if (pathname == '/auth/login/') {
+        if (pathname === "{% url 'login:login' %}") {
 
             // bring up modal
             $('#loginModal').modal({
                 keyboard: false
             });
 
-        } else if (pathname == '/auth/signup/') {
+        } else if (pathname == "{% url 'login:signup' %}") {
 
             // adjust modal
             $('#loginTitle').html('EMSTrack Signup');
