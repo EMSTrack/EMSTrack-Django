@@ -297,7 +297,7 @@ msgstr "Cerrar sesíon"
 
 #: templates/base.html:131
 msgid "Sign Up"
-msgstr "Regístrate"
+msgstr "Registrar"
 
 #: templates/base.html:138 templates/index.html:15 templates/index.html:65
 msgid "Login"
@@ -341,7 +341,7 @@ msgstr "¿Olvidó tu contraseña?"
 
 #: templates/index.html:94 templates/index.html:97
 msgid "Signup"
-msgstr "Regístrate"
+msgstr "Registrar"
 
 #: templates/login/group_list.html:14 templates/login/user_list.html:14
 msgctxt "masculine"
