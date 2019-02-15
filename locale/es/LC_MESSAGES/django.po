@@ -129,7 +129,7 @@ msgstr "Iniciar sesión"
 
 #: templates/homepage.html:10
 msgid "Welcome to EMSTrack"
-msgstr "Bienvenida a EMSTrack"
+msgstr "Bienvenido a EMSTrack"
 
 #: templates/homepage.html:13
 msgid "This is an experimental server for the Tijuana Red Cross."
@@ -161,11 +161,11 @@ msgstr ""
 
 #: templates/index.html:57
 msgid "Forgot Password?"
-msgstr ""
+msgstr "¿Olvidó tu contraseña?"
 
 #: templates/index.html:66
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: templates/index.html:94
 msgid "EMSTrack Signup"
@@ -177,39 +177,36 @@ msgstr ""
 
 #: templates/login/group_list.html:14 templates/login/user_list.html:14
 msgid "new"
-msgstr ""
+msgstr "nuevo"
 
 #: templates/login/group_list.html:22
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: templates/login/group_list.html:23
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: templates/login/group_list.html:24
 msgid "Priority"
-msgstr ""
+msgstr "Prioridad"
 
 #: templates/login/group_list.html:25
 msgid "Number of Users"
-msgstr ""
+msgstr "Número de Usuarios"
 
 #: templates/login/user_list.html:20
 msgid "First"
-msgstr ""
+msgstr "Nombre"
 
 #: templates/login/user_list.html:21
 msgid "Last"
-msgstr ""
+msgstr "Apellido"
 
 #: templates/login/user_list.html:23
 msgid "Staff"
-msgstr ""
+msgstr "Personal"
 
 #: templates/login/user_list.html:25
 msgid "Active"
-msgstr ""
-
-#~ msgid "Logout %(first_name)s"
-#~ msgstr "Cerrar sesión"
+msgstr "Activo"
