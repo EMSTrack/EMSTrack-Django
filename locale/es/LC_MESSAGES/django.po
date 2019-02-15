@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-15 01:13+0000\n"
+"POT-Creation-Date: 2019-02-15 05:58+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: equipment/forms.py:50
+#: equipment/forms.py:50 templates/ambulance/ambulance_detail.html:67
 msgid "Equipment sets"
 msgstr "Juegos de equipos"
 
@@ -51,25 +51,184 @@ msgstr "Email"
 msgid "Dispatcher"
 msgstr ""
 
+#: templates/ambulance/ambulance_detail.html:20
+#: templates/ambulance/ambulance_form.html:14
+#, fuzzy
+#| msgid "Ambulances"
+msgid "Ambulance"
+msgstr "Ambulancias"
+
+#: templates/ambulance/ambulance_detail.html:23
+msgid "Details"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:27
+#: templates/ambulance/ambulance_list.html:28
+msgid "Identifier"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:35
+#: templates/ambulance/ambulance_list.html:29 templates/ambulance/map.html:142
+msgid "Capability"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:39
+#: templates/ambulance/ambulance_detail.html:175
+#: templates/ambulance/ambulance_list.html:30
+msgid "Status"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:43
+#: templates/ambulance/ambulance_detail.html:118
+#: templates/ambulance/ambulance_detail.html:177
+msgid "Comment"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:48
+msgid "Update client"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:53
+#: templates/ambulance/ambulance_detail.html:119
+#: templates/ambulance/ambulance_detail.html:179
+#: templates/ambulance/ambulance_list.html:32
+msgid "Updated on"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:57
+msgid "By"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:75
+#: templates/ambulance/ambulance_detail.html:116
+#: templates/login/group_list.html:22
+msgid "Name"
+msgstr "Nombre"
+
+#: templates/ambulance/ambulance_detail.html:90
+msgid "This ambulance has no equipment sets."
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:102 templates/base.html:100
+msgid "Equipment"
+msgstr "Equipo"
+
+#: templates/ambulance/ambulance_detail.html:107
+msgid "edit"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:117
+msgid "Value"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:120
+#: templates/ambulance/ambulance_detail.html:180
+#: templates/ambulance/ambulance_list.html:33
+msgid "by"
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:139
+msgid "This ambulance has no registered equipments."
+msgstr ""
+
+#: templates/ambulance/ambulance_detail.html:151
+#, fuzzy
+#| msgid "Locations"
+msgid "Past Locations"
+msgstr "Lugares"
+
+#: templates/ambulance/ambulance_detail.html:176
+#, fuzzy
+#| msgid "Locations"
+msgid "Location"
+msgstr "Lugares"
+
+#: templates/ambulance/ambulance_detail.html:178
+msgid "Timestamp"
+msgstr ""
+
+#: templates/ambulance/ambulance_form.html:23
+msgid "Save"
+msgstr ""
+
+#: templates/ambulance/ambulance_list.html:12 templates/ambulance/map.html:109
+#: templates/ambulance/map.html:267 templates/base.html:74
+msgid "Ambulances"
+msgstr "Ambulancias"
+
+#: templates/ambulance/ambulance_list.html:18
+#: templates/login/group_list.html:14 templates/login/user_list.html:14
+msgid "new"
+msgstr "nuevo"
+
+#: templates/ambulance/ambulance_list.html:31
+#, fuzzy
+#| msgid "Clients"
+msgid "Comments"
+msgstr "Clientes"
+
+#: templates/ambulance/ambulance_list.html:64
+#, fuzzy
+#| msgid "Ambulances"
+msgid "No ambulances."
+msgstr "Ambulancias"
+
+#: templates/ambulance/map.html:49
+#, fuzzy
+#| msgid "Ambulances"
+msgid "Dispatch Ambulances"
+msgstr "Ambulancias"
+
+#: templates/ambulance/map.html:57
+msgid "Dispatch"
+msgstr ""
+
+#: templates/ambulance/map.html:68 templates/ambulance/map.html:346
+#: templates/modal.html:65
+msgid "Cancel"
+msgstr ""
+
+#: templates/ambulance/map.html:88 templates/base.html:68
+msgid "Calls"
+msgstr "Llamadas"
+
+#: templates/ambulance/map.html:164 templates/base.html:102
+msgid "Locations"
+msgstr "Lugares"
+
+#: templates/ambulance/map.html:228 templates/login/group_list.html:23
+msgid "Description"
+msgstr "Descripción"
+
+#: templates/ambulance/map.html:241
+msgid "Street address"
+msgstr ""
+
+#: templates/ambulance/map.html:253
+msgid "Coordinates"
+msgstr ""
+
+#: templates/ambulance/map.html:279
+#, fuzzy
+#| msgid "Clients"
+msgid "Patients"
+msgstr "Clientes"
+
+#: templates/ambulance/map.html:343
+msgid "Ok"
+msgstr ""
+
+#: templates/ambulance/map.html:349 templates/index.html:66
+msgid "Close"
+msgstr "Cerrar"
+
 #: templates/base.html:34
 msgid "EMSTrack - Ambulance Tracker"
 msgstr "EMSTrack - Rastreador de Ambulancias"
 
-#: templates/base.html:46 templates/homepage.html:8
-msgid "EMSTrack"
-msgstr "EMSTrack"
-
 #: templates/base.html:62
 msgid "Map"
 msgstr "Mapa"
-
-#: templates/base.html:68
-msgid "Calls"
-msgstr "Llamadas"
-
-#: templates/base.html:74
-msgid "Ambulances"
-msgstr "Ambulancias"
 
 #: templates/base.html:80
 msgid "Hospitals"
@@ -87,17 +246,9 @@ msgstr "Usuarios"
 msgid "Groups"
 msgstr "Grupos"
 
-#: templates/base.html:100
-msgid "Equipment"
-msgstr "Equipo"
-
 #: templates/base.html:101
 msgid "Equipment Sets"
 msgstr "Juegos de Equipos"
-
-#: templates/base.html:102
-msgid "Locations"
-msgstr "Lugares"
 
 #: templates/base.html:103
 msgid "Clients"
@@ -123,13 +274,9 @@ msgstr "Cerrar sesíon"
 msgid "Sign Up"
 msgstr "Regístrate"
 
-#: templates/base.html:138 templates/index.html:65
+#: templates/base.html:138 templates/index.html:15 templates/index.html:65
 msgid "Login"
 msgstr "Iniciar sesión"
-
-#: templates/homepage.html:10
-msgid "Welcome to EMSTrack"
-msgstr "Bienvenido a EMSTrack"
 
 #: templates/homepage.html:13
 msgid "This is an experimental server for the Tijuana Red Cross."
@@ -155,37 +302,13 @@ msgid ""
 "                to install the app."
 msgstr ""
 
-#: templates/index.html:15
-msgid "EMSTrack Login"
-msgstr ""
-
 #: templates/index.html:57
 msgid "Forgot Password?"
 msgstr "¿Olvidó tu contraseña?"
 
-#: templates/index.html:66
-msgid "Close"
-msgstr "Cerrar"
-
-#: templates/index.html:94
-msgid "EMSTrack Signup"
-msgstr ""
-
-#: templates/index.html:97
+#: templates/index.html:94 templates/index.html:97
 msgid "Signup"
 msgstr ""
-
-#: templates/login/group_list.html:14 templates/login/user_list.html:14
-msgid "new"
-msgstr "nuevo"
-
-#: templates/login/group_list.html:22
-msgid "Name"
-msgstr "Nombre"
-
-#: templates/login/group_list.html:23
-msgid "Description"
-msgstr "Descripción"
 
 #: templates/login/group_list.html:24
 msgid "Priority"
@@ -210,3 +333,13 @@ msgstr "Personal"
 #: templates/login/user_list.html:25
 msgid "Active"
 msgstr "Activo"
+
+#: templates/modal.html:64
+msgid "OK"
+msgstr ""
+
+#~ msgid "EMSTrack"
+#~ msgstr "EMSTrack"
+
+#~ msgid "Welcome to EMSTrack"
+#~ msgstr "Bienvenido a EMSTrack"
