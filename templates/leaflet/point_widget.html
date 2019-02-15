@@ -47,10 +47,10 @@
     // has point
     var point = {
         {% if point %}
-            x: {{ point.x }},
-            y: {{ point.y }},
+            x: {{ point.x|unlocalize }},
+            y: {{ point.y|unlocalize  }},
             {% if point.z %}
-                z: {{ point.z }},
+                z: {{ point.z|unlocalize  }},
             {% else %}
                 z: 0,
             {% endif %}
