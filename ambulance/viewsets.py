@@ -325,13 +325,13 @@ class CallViewSet(mixins.ListModelMixin,
         # grab all objects
         queryset = Call.objects.all()
 
-        # filter by status
         status = self.request.query_params.get('status', None)
+        exclude = self.request.query_params.get('exclude', CallStatus.E.name)
+
+        # filter by status
         if status is not None:
             queryset = queryset.filter(status=status)
-
-        exclude = self.request.query_params.get('exclude', CallStatus.E.name)
-        if exclude is not None and status != exclude:
+        elif exclude is not None:
             queryset = queryset.exclude(status=exclude)
 
         return queryset
