@@ -316,7 +316,7 @@ class CallViewSet(mixins.ListModelMixin,
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
-    # queryset = Call.objects.all()
+    queryset = Call.objects.all()
 
     serializer_class = CallSerializer
 
