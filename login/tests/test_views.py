@@ -47,7 +47,7 @@ class TestViews(TestSetup):
         self.assertTrue(login)
 
         # # retrieve any ambulance
-        # response = self.client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
+        # response = self.client.get('/en/api/ambulance/{}/'.format(str(self.a1.id)),
         #                            follow=True)
         # self.assertEqual(response.status_code, 200)
         # result = JSONParser().parse(BytesIO(response.content))

@@ -131,7 +131,7 @@ class TestProfileViewset(MyTestCase):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve own
-        response = client.get('/api/user/{}/profile/'.format(str(self.u1.username)),
+        response = client.get('/en/api/user/{}/profile/'.format(str(self.u1.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -139,7 +139,7 @@ class TestProfileViewset(MyTestCase):
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
-        response = client.get('/api/user/{}/profile/'.format(str(self.u2.username)),
+        response = client.get('/en/api/user/{}/profile/'.format(str(self.u2.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -147,7 +147,7 @@ class TestProfileViewset(MyTestCase):
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
-        response = client.get('/api/user/{}/profile/'.format(str(self.u3.username)),
+        response = client.get('/en/api/user/{}/profile/'.format(str(self.u3.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -161,7 +161,7 @@ class TestProfileViewset(MyTestCase):
         client.login(username='testuser1', password='top_secret')
 
         # retrieve own
-        response = client.get('/api/user/{}/profile/'.format(str(self.u2.username)),
+        response = client.get('/en/api/user/{}/profile/'.format(str(self.u2.username)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -169,11 +169,11 @@ class TestProfileViewset(MyTestCase):
         self.assertDictEqual(result, answer)
 
         # retrieve someone else's
-        response = client.get('/api/user/{}/profile/'.format(str(self.u1.username)),
+        response = client.get('/en/api/user/{}/profile/'.format(str(self.u1.username)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
 
-        response = client.get('/api/user/{}/profile/'.format(str(self.u3.username)),
+        response = client.get('/en/api/user/{}/profile/'.format(str(self.u3.username)),
                               follow=True)
         self.assertEqual(response.status_code, 403)
 
@@ -689,7 +689,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
 
         # retrieve password hash without being logged in
         username = 'admin'
-        response = client.get('/api/user/{}/password/'.format(username),
+        response = client.get('/en/api/user/{}/password/'.format(username),
                               follow=True)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(response.status_code, 403)
@@ -702,7 +702,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
                      password=settings.MQTT['PASSWORD'])
 
         # retrieve password hash
-        response = client.get('/api/user/{}/password/'.format(username),
+        response = client.get('/en/api/user/{}/password/'.format(username),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         encoded = JSONParser().parse(BytesIO(response.content))
@@ -743,7 +743,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         client.login(username=username, password='top_secret')
 
         # retrieve password hash
-        response = client.get('/api/user/{}/password/'.format(username),
+        response = client.get('/en/api/user/{}/password/'.format(username),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         encoded = JSONParser().parse(BytesIO(response.content))
@@ -784,7 +784,7 @@ class TestMQTTLoginTempPassword(MyTestCase):
         client.login(username=username, password='very_secret')
 
         # retrieve password hash
-        response = client.get('/api/user/{}/password/'.format(username),
+        response = client.get('/en/api/user/{}/password/'.format(username),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         encoded = JSONParser().parse(BytesIO(response.content))
