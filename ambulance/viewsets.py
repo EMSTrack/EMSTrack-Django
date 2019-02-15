@@ -322,8 +322,8 @@ class CallViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
 
-        # grab all objects
-        queryset = Call.objects.all()
+        # grab all objects from super, enforces permissions
+        queryset = super().get_queryset()
 
         status = self.request.query_params.get('status', None)
         exclude = self.request.query_params.get('exclude', CallStatus.E.name)
