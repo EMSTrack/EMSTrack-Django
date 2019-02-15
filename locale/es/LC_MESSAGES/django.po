@@ -53,10 +53,8 @@ msgstr "Despachador"
 
 #: templates/ambulance/ambulance_detail.html:20
 #: templates/ambulance/ambulance_form.html:14
-#, fuzzy
-#| msgid "Ambulances"
 msgid "Ambulance"
-msgstr "Ambulancias"
+msgstr "Ambulancia"
 
 #: templates/ambulance/ambulance_detail.html:23
 msgid "Details"
@@ -132,20 +130,16 @@ msgid "This ambulance has no registered equipments."
 msgstr "Esta ambulancia no tiene equipos."
 
 #: templates/ambulance/ambulance_detail.html:151
-#, fuzzy
-#| msgid "Locations"
 msgid "Past Locations"
 msgstr "Ubicaciones pasadas"
 
 #: templates/ambulance/ambulance_detail.html:176
-#, fuzzy
-#| msgid "Locations"
 msgid "Location"
-msgstr "Lugares"
+msgstr "Lugar"
 
 #: templates/ambulance/ambulance_detail.html:178
 msgid "Timestamp"
-msgstr "Marca de tiempo"
+msgstr "Hora"
 
 #: templates/ambulance/ambulance_form.html:23
 msgid "Save"
@@ -200,13 +194,11 @@ msgstr "Descripción"
 
 #: templates/ambulance/map.html:234
 msgid "Describe the incident"
-msgstr ""
+msgstr "Describe el incidente"
 
 #: templates/ambulance/map.html:239
-#, fuzzy
-#| msgid "Coordinates"
 msgid "update coordinates"
-msgstr "Coordenadas"
+msgstr "actualizar coordenadas"
 
 #: templates/ambulance/map.html:243
 msgid "Street address"
@@ -214,38 +206,33 @@ msgstr "Calle"
 
 #: templates/ambulance/map.html:247
 msgid "Address"
-msgstr ""
+msgstr "Dirección"
 
 #: templates/ambulance/map.html:250
 msgid ""
 "Click to automatically search for address after changing the coordinates"
 msgstr ""
+"Marque para buscar automáticamente la dirección después de cambiar las coordenadas"
 
 #: templates/ambulance/map.html:251
-#, fuzzy
-#| msgid "Street address"
 msgid "update address"
-msgstr "Calle"
+msgstr "actualizar dirección"
 
 #: templates/ambulance/map.html:255
 msgid "Coordinates"
 msgstr "Coordenadas"
 
 #: templates/ambulance/map.html:260
-#, fuzzy
-#| msgid "Last"
 msgid "Lat"
-msgstr "Apellido"
+msgstr "Lat"
 
 #: templates/ambulance/map.html:263
-#, fuzzy
-#| msgid "Login"
 msgid "Lon"
-msgstr "Iniciar sesión"
+msgstr "Lon"
 
 #: templates/ambulance/map.html:276
 msgid "Click on or drag ambulances here"
-msgstr ""
+msgstr "Marque o arrastre ambulancias aquí"
 
 #: templates/ambulance/map.html:281
 msgid "Patients"
@@ -317,7 +304,7 @@ msgstr "Iniciar sesión"
 
 #: templates/homepage.html:10
 msgid "Welcome to"
-msgstr ""
+msgstr "Bienvenido a"
 
 #: templates/homepage.html:13
 msgid "This is an experimental server for the Tijuana Red Cross."
