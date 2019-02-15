@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-15 05:58+0000\n"
+"POT-Creation-Date: 2019-02-15 06:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -152,7 +152,7 @@ msgid "Save"
 msgstr "Salvar"
 
 #: templates/ambulance/ambulance_list.html:12 templates/ambulance/map.html:109
-#: templates/ambulance/map.html:267 templates/base.html:74
+#: templates/ambulance/map.html:269 templates/base.html:74
 msgid "Ambulances"
 msgstr "Ambulancias"
 
@@ -177,7 +177,7 @@ msgstr "Despacho de Ambulancias"
 msgid "Dispatch"
 msgstr "Despachar"
 
-#: templates/ambulance/map.html:68 templates/ambulance/map.html:346
+#: templates/ambulance/map.html:68 templates/ambulance/map.html:348
 #: templates/modal.html:65
 msgid "Cancel"
 msgstr "Cancelar"
@@ -190,27 +190,72 @@ msgstr "Llamadas"
 msgid "Locations"
 msgstr "Lugares"
 
-#: templates/ambulance/map.html:228 templates/login/group_list.html:23
+#: templates/ambulance/map.html:194 templates/login/group_list.html:24
+msgid "Priority"
+msgstr "Prioridad"
+
+#: templates/ambulance/map.html:230 templates/login/group_list.html:23
 msgid "Description"
 msgstr "Descripción"
 
-#: templates/ambulance/map.html:241
+#: templates/ambulance/map.html:234
+msgid "Describe the incident"
+msgstr ""
+
+#: templates/ambulance/map.html:239
+#, fuzzy
+#| msgid "Coordinates"
+msgid "update coordinates"
+msgstr "Coordenadas"
+
+#: templates/ambulance/map.html:243
 msgid "Street address"
 msgstr "Calle"
 
-#: templates/ambulance/map.html:253
+#: templates/ambulance/map.html:247
+msgid "Address"
+msgstr ""
+
+#: templates/ambulance/map.html:250
+msgid ""
+"Click to automatically search for address after changing the coordinates"
+msgstr ""
+
+#: templates/ambulance/map.html:251
+#, fuzzy
+#| msgid "Street address"
+msgid "update address"
+msgstr "Calle"
+
+#: templates/ambulance/map.html:255
 msgid "Coordinates"
 msgstr "Coordenadas"
 
-#: templates/ambulance/map.html:279
+#: templates/ambulance/map.html:260
+#, fuzzy
+#| msgid "Last"
+msgid "Lat"
+msgstr "Apellido"
+
+#: templates/ambulance/map.html:263
+#, fuzzy
+#| msgid "Login"
+msgid "Lon"
+msgstr "Iniciar sesión"
+
+#: templates/ambulance/map.html:276
+msgid "Click on or drag ambulances here"
+msgstr ""
+
+#: templates/ambulance/map.html:281
 msgid "Patients"
 msgstr "Pacientes"
 
-#: templates/ambulance/map.html:343
+#: templates/ambulance/map.html:345
 msgid "Ok"
 msgstr "Ok"
 
-#: templates/ambulance/map.html:349 templates/index.html:66
+#: templates/ambulance/map.html:351 templates/index.html:66
 msgid "Close"
 msgstr "Cerrar"
 
@@ -270,6 +315,10 @@ msgstr "Regístrate"
 msgid "Login"
 msgstr "Iniciar sesión"
 
+#: templates/homepage.html:10
+msgid "Welcome to"
+msgstr ""
+
 #: templates/homepage.html:13
 msgid "This is an experimental server for the Tijuana Red Cross."
 msgstr "Este es un servidor experimental para la Cruz Roja de Tijuana."
@@ -305,10 +354,6 @@ msgstr "¿Olvidó tu contraseña?"
 #: templates/index.html:94 templates/index.html:97
 msgid "Signup"
 msgstr "Regístrate"
-
-#: templates/login/group_list.html:24
-msgid "Priority"
-msgstr "Prioridad"
 
 #: templates/login/group_list.html:25
 msgid "Number of Users"
