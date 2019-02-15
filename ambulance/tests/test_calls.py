@@ -1362,6 +1362,7 @@ class TestCall(TestSetup):
 
         result = JSONParser().parse(BytesIO(response.content))
         answer = CallSerializer([], many=True).data
+        self.maxDiff = None;
         self.assertCountEqual(result, answer)
 
         # add ambulances to calls, can only read a3
