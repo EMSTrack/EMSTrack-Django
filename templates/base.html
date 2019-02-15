@@ -121,7 +121,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:logout' %}">
                     <span class="fas fa-sign-out-alt"></span>
-                    &nbsp;{% blocktrans with first_name=request.user.first_name %}Logout {{ first_name }}{% endblocktrans %}
+                    &nbsp;{% trans "Logout" %} {{ request.user.first_name }}
                 </a>
             </li>
             {% else %}
