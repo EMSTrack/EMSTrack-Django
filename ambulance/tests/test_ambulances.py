@@ -485,7 +485,8 @@ class TestAmbulanceUpdate(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve ambulance
-        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)))
+        response = client.get('/api/ambulance/{}/'.format(str(self.a1.id)),
+                              follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(self.a1).data
@@ -497,8 +498,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
@@ -519,8 +520,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 data=json.dumps({
                                     'location': point2str(location),
                                     'timestamp': date2iso(timestamp),
-                                })
-                                )
+                                }),
+                                follow = True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
@@ -541,16 +542,16 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': 'will fail'
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 400)
 
         # set wrong ambulance id
         response = client.patch('/api/ambulance/100/',
                                 data=json.dumps({
                                     'status': status
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 404)
 
         # logout
@@ -572,8 +573,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
@@ -594,8 +595,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 data=json.dumps({
                                     'location': point2str(location),
                                     'timestamp': date2iso(timestamp),
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
@@ -617,8 +618,8 @@ class TestAmbulanceUpdate(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                })
-                                )
+                                }),
+                                follow=True)
         self.assertEqual(response.status_code, 404)
 
         # set status ambulance
