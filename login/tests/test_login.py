@@ -185,25 +185,25 @@ class TestLogin(MyTestCase):
 
     def test_login(self):
         # blank login
-        response = self.client.get('/auth/login/')
+        response = self.client.get('/en/auth/login/')
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = self.client.post('/auth/login/', {'username': 'testuser11',
+        response = self.client.post('/en/auth/login/', {'username': 'testuser11',
                                                      'password': 'top_secret'},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
 
         # incorrect password
-        response = self.client.post('/auth/login/', {'username': 'testuser1',
+        response = self.client.post('/en/auth/login/', {'username': 'testuser1',
                                                      'password': 'top_secret0'},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
 
         # correct login
-        response = self.client.post('/auth/login/', {'username': 'testuser1',
+        response = self.client.post('/en/auth/login/', {'username': 'testuser1',
                                                      'password': 'top_secret'},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
@@ -212,12 +212,12 @@ class TestLogin(MyTestCase):
         self.assertEqual(response.context['user'].is_superuser, False)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
 
         # login user2
-        response = self.client.post('/auth/login/', {'username': 'testuser2',
+        response = self.client.post('/en/auth/login/', {'username': 'testuser2',
                                                      'password': 'very_secret'},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
@@ -226,7 +226,7 @@ class TestLogin(MyTestCase):
         self.assertEqual(response.context['user'].is_superuser, False)
 
         # login admin
-        response = self.client.post('/auth/login/', {'username': settings.MQTT['USERNAME'],
+        response = self.client.post('/en/auth/login/', {'username': settings.MQTT['USERNAME'],
                                                      'password': settings.MQTT['PASSWORD']},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
@@ -235,7 +235,7 @@ class TestLogin(MyTestCase):
         self.assertEqual(response.context['user'].is_superuser, True)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated, False)
 
@@ -244,86 +244,86 @@ class TestMQTTLogin(MyTestCase):
 
     def test_mqtt_login(self):
         # blank login
-        response = self.client.get('/auth/mqtt/login/')
+        response = self.client.get('/en/auth/mqtt/login/')
         self.assertEqual(response.status_code, 200)
 
         # incorrect username
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'testuser11',
                                      'password': 'top_secret'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
+        response = self.client.post('/en/auth/mqtt/superuser/',
                                     {'username': 'testuser11'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # incorrect password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'testuser1',
                                      'password': 'top_secret0'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
+        response = self.client.post('/en/auth/mqtt/superuser/',
                                     {'username': 'testuser1'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # correct login
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'testuser1',
                                      'password': 'top_secret'},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
+        response = self.client.post('/en/auth/mqtt/superuser/',
                                     {'username': 'testuser1'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
         # login user2
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'testuser2',
                                      'password': 'very_secret'},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # incorrect username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
+        response = self.client.post('/en/auth/mqtt/superuser/',
                                     {'username': 'testuser2'},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
+        response = self.client.post('/en/auth/mqtt/superuser/',
                                     {'username': settings.MQTT['USERNAME']},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # login admin
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': settings.MQTT['USERNAME'],
                                      'password': settings.MQTT['PASSWORD']},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # username superuser
-        response = self.client.post('/auth/mqtt/superuser/',
+        response = self.client.post('/en/auth/mqtt/superuser/',
                                     {'username': settings.MQTT['USERNAME']},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
 
 
@@ -333,7 +333,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         # Settings
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -344,7 +344,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         # Profile
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -353,7 +353,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '2',
@@ -364,7 +364,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         # Hospitals
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -373,7 +373,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -382,7 +382,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -391,7 +391,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -400,7 +400,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -409,7 +409,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -418,7 +418,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -427,7 +427,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -436,7 +436,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -445,7 +445,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -454,7 +454,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -463,7 +463,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -474,7 +474,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         # Ambulances
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -483,7 +483,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -492,7 +492,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -501,7 +501,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -510,7 +510,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -519,7 +519,7 @@ class TestMQTTACLSubscribe(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't subscribe
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
                                      'acc': '1',
@@ -535,7 +535,7 @@ class TestMQTTACLPublish(MyTestCase):
 
         # can't publish
         clientid = 'test_client'
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -544,7 +544,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -553,7 +553,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -562,7 +562,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -571,7 +571,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -580,7 +580,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -591,7 +591,7 @@ class TestMQTTACLPublish(MyTestCase):
         # Hospital data
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -600,7 +600,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -609,7 +609,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -618,7 +618,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -627,7 +627,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 403)
 
         # can't publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -636,7 +636,7 @@ class TestMQTTACLPublish(MyTestCase):
         self.assertEqual(response.status_code, 200)
 
         # can publish
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': clientid,
                                      'acc': '2',
@@ -648,7 +648,7 @@ class TestMQTTACLPublish(MyTestCase):
 
         username = 'testuser2'
         clientid = 'test_client'
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': username,
                                      'clientid': clientid,
                                      'acc': '2',
@@ -660,7 +660,7 @@ class TestMQTTACLPublish(MyTestCase):
 
         username = 'testuser2'
         clientid = 'test_client'
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': username,
                                      'clientid': clientid,
                                      'acc': '2',
@@ -672,7 +672,7 @@ class TestMQTTACLPublish(MyTestCase):
 
         username = 'testuser2'
         clientid = 'test_client'
-        response = self.client.post('/auth/mqtt/acl/',
+        response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': username,
                                      'clientid': clientid,
                                      'acc': '2',
@@ -713,26 +713,26 @@ class TestMQTTLoginTempPassword(MyTestCase):
         self.assertEqual(check_password(password, encoded), True)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
 
         # mqtt login with correct temporary password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'admin',
                                      'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # mqtt login with incorrect username
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'admino',
                                      'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # mqtt login with incorrect encoded password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': 'admin',
                                      'password': encoded + 'r'},
                                     follow=True)
@@ -754,26 +754,26 @@ class TestMQTTLoginTempPassword(MyTestCase):
         self.assertEqual(check_password(password, encoded), True)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
 
         # mqtt login with correct temporary password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': username,
                                      'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # mqtt login with incorrect username
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': username + 'o',
                                      'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # mqtt login with incorrect encoded password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': username,
                                      'password': encoded + 'r'},
                                     follow=True)
@@ -795,26 +795,26 @@ class TestMQTTLoginTempPassword(MyTestCase):
         self.assertEqual(check_password(password, encoded), True)
 
         # logout
-        response = self.client.get('/auth/logout/', follow=True)
+        response = self.client.get('/en/auth/logout/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
 
         # mqtt login with correct temporary password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': username,
                                      'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
         # mqtt login with incorrect username
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': username + 'o',
                                      'password': encoded},
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
         # mqtt login with incorrect encoded password
-        response = self.client.post('/auth/mqtt/login/',
+        response = self.client.post('/en/auth/mqtt/login/',
                                     {'username': username,
                                      'password': encoded + 'r'},
                                     follow=True)
