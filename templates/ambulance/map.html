@@ -46,7 +46,7 @@
                     data-target="#dispatchDiv" aria-controls="dispatchDiv"
                     aria-expanded="false" aria-label="Toggle dispatching"
                     onclick="beginDispatching()">
-                Dispatch Ambulances
+                {% trans "Dispatch Ambulances" %}
             </button>
 
             <button type="button"
@@ -54,7 +54,7 @@
                     class="btn btn-primary px-3 mx-1"
                     onclick="submitDispatching()"
                     style="display: none;">
-                Dispatch
+                {% trans "Dispatch" %}
             </button>
 
             <button type="button"
@@ -65,7 +65,7 @@
                     aria-expanded="true"
                     aria-controls="dispatchDiv"
                     style="display: none;">
-                Cancel
+                {% trans "Cancel" %}
             </button>
         {% endif %}
 
@@ -84,7 +84,9 @@
                 data-target="#call-status"
                 aria-expanded="true" aria-controls="call-status">
                 <span class="fas fa-phone"></span>
-                <span id="call-header">Calls</span>
+                <span id="call-header">
+                    {% trans "Calls" %}
+                </span>
                 <span id="call-header-count"></span>
             </h5>
             <div class="collapse ml-1"
@@ -104,7 +106,7 @@
                 aria-expanded="true"
                 aria-controls="ambulance-status">
                 <span class="fas fa-ambulance"></span>
-                Ambulances
+                {% trans "Ambulances" %}
             </h5>
             <div class="collapse show"
                  id="ambulance-status">
@@ -137,7 +139,7 @@
                 data-target="#ambulance-capability"
                 aria-expanded="true" aria-controls="ambulance-capability">
                 <span class="fas fa-bed"></span>
-                Capability
+                {% trans "Capability" %}
             </h5>
             <div class="collapse ml-1"
                  id="ambulance-capability">
@@ -159,7 +161,7 @@
                 data-target="#location-type"
                 aria-expanded="true" aria-controls="location-type">
                 <span class="fas fa-map-marker"></span>
-                Locations
+                {% trans "Locations" %}
             </h5>
             <div class="collapse ml-1"
                  id="location-type">
@@ -222,7 +224,9 @@
                     </div>
                 </form>
 
-                <h5> Description</h5>
+                <h5>
+                    {% trans "Description" %}
+                </h5>
                 <textarea class="form-control" name="description"
                           rows="3" id="comment"
                           placeholder="Describe the incident"
@@ -233,7 +237,9 @@
                     update coordinates
                     <input id="update-coordinates" type="checkbox">
                 </div>
-                <h5>Street address</h5>
+                <h5>
+                    {% trans "Street address" %}
+                </h5>
                 <input id="street" type="text"
                        name="street" class="form-control"
                        placeholder="Address" required autocomplete="street-address">
@@ -243,7 +249,9 @@
                     update address
                     <input id="update-address" type="checkbox" checked/>
                 </div>
-                <h5>Coordinates</h5>
+                <h5>
+                    {% trans "Coordinates" %}
+                </h5>
                 <div class="card"
                      title="Click on map to update coordinates">
                     <div class="card-body py-1 px-3">
@@ -255,7 +263,9 @@
                     </div>
                 </div>
 
-                <h5>Ambulances</h5>
+                <h5>
+                    {% trans "Ambulances" %}
+                </h5>
                 <div class="card px-0 py-0">
                     <div class="card-body py-1 px-2"
                          id="ambulance-selection">
@@ -265,7 +275,9 @@
                     </div>
                 </div>
 
-                <h5>Patients</h5>
+                <h5>
+                    {% trans "Patients" %}
+                </h5>
                 <div id="patients">
                     <!--
                     <div class="form-row" id="patient-0">
@@ -327,9 +339,15 @@
                 <div class="modal-body">
                 </div>
                 <div class="modal-footer">
-                    <button id="modal-button-ok" type="button" class="btn btn-primary" data-dismiss="modal">Ok</button>
-                    <button id="modal-button-cancel" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button id="modal-button-close" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="modal-button-ok" type="button" class="btn btn-primary" data-dismiss="modal">
+                        {% trans "Ok" %}
+                    </button>
+                    <button id="modal-button-cancel" type="button" class="btn btn-secondary" data-dismiss="modal">
+                        {% trans "Cancel" %}
+                    </button>
+                    <button id="modal-button-close" type="button" class="btn btn-secondary" data-dismiss="modal">
+                        {% trans "Close" %}
+                    </button>
                 </div>
             </div>
         </div>
