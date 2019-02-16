@@ -96,10 +96,9 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # send cache_clear
         # test_client.publish('message', '"cache_clear"')
         test_client.publish_message('cache_clear')
-        test_client.loop()
 
         # process messages
-        self.loop(subscribe_client)
+        self.loop(test_client, subscribe_client)
 
         time.sleep(0.1)
 
