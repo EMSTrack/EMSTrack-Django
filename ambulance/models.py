@@ -63,17 +63,17 @@ def get_waypoint_status(key):
 # Ambulance model
 
 class AmbulanceStatus(Enum):
-    UK = 'Unknown'
-    AV = 'Available'
-    OS = 'Out of service'
-    PB = 'Incident bound'
-    AP = 'At incident'
-    HB = 'Hospital bound'
-    AH = 'At hospital'
-    BB = 'Base bound'
-    AB = 'At base'
-    WB = 'Waypoint bound'
-    AW = 'At waypoint'
+    UK = _('Unknown')
+    AV = _('Available')
+    OS = _('Out of service')
+    PB = _('Incident bound')
+    AP = _('At incident')
+    HB = _('Hospital bound')
+    AH = _('At hospital')
+    BB = _('Base bound')
+    AB = _('At base')
+    WB = _('Waypoint bound')
+    AW = _('At waypoint')
 
 
 AmbulanceStatusOrder = [ 
@@ -92,10 +92,10 @@ AmbulanceStatusOrder = [
 
 
 class AmbulanceCapability(Enum):
-    B = 'Basic'
-    A = 'Advanced'
-    R = 'Rescue'
-    M = 'Medic'
+    B = _('Basic')
+    A = _('Advanced')
+    R = _('Rescue')
+    M = _('Medic')
 
 
 AmbulanceCapabilityOrder = [ 
