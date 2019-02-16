@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 17:39+0000\n"
+"POT-Creation-Date: 2019-02-16 18:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,53 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-# AmbulanceStatus
-msgid "Unknown"
-msgstr "Desconocido"
-
-msgid "Available"
-msgstr "Disponible"
-
-msgid "Out of service"
-msgstr "Fuera de servicio"
-
-msgid "Incident bound"
-msgstr "Hacia el incidente"
-
-msgid "At incident"
-msgstr "En el incidente"
-
-msgid "Hospital bound"
-msgstr "Hacia el hospital"
-
-msgid "At hospital"
-msgstr "En el hospital"
-
-msgid "Base bound"
-msgstr "Hacia la base"
-
-msgid "At base"
-msgstr "En la base"
-
-msgid "Waypoint bound"
-msgstr "Hacia un punto de ruta"
-
-msgid "At waypoint"
-msgstr "En en punto de ruta"
-
-# AmbulanceCapability
-msgid "Basic"
-msgstr "Basica"
-
-msgid "Advanced"
-msgstr "Avanzada"
-
-msgid "Rescue"
-msgstr "Rescate"
-
-msgid "Medic"
-msgstr "Médica"
 
 #: ambulance/models.py:115
 msgid "equipmentholder"
@@ -85,7 +38,7 @@ msgstr "estado"
 msgid "orientation"
 msgstr "orientación"
 
-#: ambulance/models.py:132
+#: ambulance/models.py:132 emstrack/models.py:59
 msgid "location"
 msgstr "ubicación"
 
@@ -96,6 +49,60 @@ msgstr "hora"
 #: ambulance/models.py:142
 msgid "location_client"
 msgstr "client_de_localización"
+
+#: emstrack/models.py:50
+msgid "number"
+msgstr ""
+
+#: emstrack/models.py:51
+msgid "street"
+msgstr ""
+
+#: emstrack/models.py:52
+msgid "unit"
+msgstr ""
+
+#: emstrack/models.py:53
+msgid "neighborhood"
+msgstr ""
+
+#: emstrack/models.py:54
+msgid "city"
+msgstr ""
+
+#: emstrack/models.py:55
+#, fuzzy
+#| msgid "status"
+msgid "state"
+msgstr "estado"
+
+#: emstrack/models.py:56
+msgid "zipcode"
+msgstr ""
+
+#: emstrack/models.py:57
+#, fuzzy
+#| msgid "Account"
+msgid "country"
+msgstr "Cuenta"
+
+#: emstrack/models.py:89 emstrack/models.py:104
+#, fuzzy
+#| msgid "Comment"
+msgid "comment"
+msgstr "Comentario"
+
+#: emstrack/models.py:92 emstrack/models.py:107
+#, fuzzy
+#| msgid "Updated on"
+msgid "updated_by"
+msgstr "Actualizado en"
+
+#: emstrack/models.py:93 emstrack/models.py:108
+#, fuzzy
+#| msgid "Updated on"
+msgid "updated_on"
+msgstr "Actualizado en"
 
 #: equipment/forms.py:50 templates/ambulance/ambulance_detail.html:67
 msgid "Equipment sets"
@@ -450,3 +457,50 @@ msgstr "Activo"
 #: templates/modal.html:64
 msgid "OK"
 msgstr "OK"
+
+# AmbulanceStatus
+#~ msgid "Unknown"
+#~ msgstr "Desconocido"
+
+#~ msgid "Available"
+#~ msgstr "Disponible"
+
+#~ msgid "Out of service"
+#~ msgstr "Fuera de servicio"
+
+#~ msgid "Incident bound"
+#~ msgstr "Hacia el incidente"
+
+#~ msgid "At incident"
+#~ msgstr "En el incidente"
+
+#~ msgid "Hospital bound"
+#~ msgstr "Hacia el hospital"
+
+#~ msgid "At hospital"
+#~ msgstr "En el hospital"
+
+#~ msgid "Base bound"
+#~ msgstr "Hacia la base"
+
+#~ msgid "At base"
+#~ msgstr "En la base"
+
+#~ msgid "Waypoint bound"
+#~ msgstr "Hacia un punto de ruta"
+
+#~ msgid "At waypoint"
+#~ msgstr "En en punto de ruta"
+
+# AmbulanceCapability
+#~ msgid "Basic"
+#~ msgstr "Basica"
+
+#~ msgid "Advanced"
+#~ msgstr "Avanzada"
+
+#~ msgid "Rescue"
+#~ msgstr "Rescate"
+
+#~ msgid "Medic"
+#~ msgstr "Médica"
