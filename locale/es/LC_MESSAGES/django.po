@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 22:11+0000\n"
+"POT-Creation-Date: 2019-02-16 22:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ambulance/forms.py:13 ambulance/forms.py:46 hospital/forms.py:12
+#: templates/ambulance/ambulance_detail.html:176
+#: templates/ambulance/location_detail.html:11
+#: templates/ambulance/location_detail.html:28
+#: templates/ambulance/location_form.html:18
+#: templates/hospital/hospital_detail.html:30
+msgid "Location"
+msgstr "Ubicación"
 
 # AmbulanceStatus
 #: ambulance/models.py:65
@@ -102,7 +111,7 @@ msgid "orientation"
 msgstr "orientación"
 
 #: ambulance/models.py:131 ambulance/models.py:308 ambulance/models.py:699
-#: emstrack/models.py:59
+#: emstrack/admin.py:12 emstrack/models.py:59
 msgid "location"
 msgstr "ubicación"
 
@@ -228,7 +237,8 @@ msgstr "AED"
 msgid "Incident"
 msgstr "Incidente"
 
-#: ambulance/models.py:636 templates/hospital/hospital_detail.html:11
+#: ambulance/models.py:636 login/forms.py:189 login/forms.py:207
+#: templates/hospital/hospital_detail.html:11
 #: templates/hospital/hospital_form.html:15
 #: templates/login/client_detail.html:39 templates/login/client_list.html:23
 #: templates/login/client_list.html:95 templates/login/group_detail.html:116
@@ -385,7 +395,17 @@ msgstr "Apellido"
 msgid "Email"
 msgstr "Email"
 
-#: login/forms.py:234 templates/login/user_detail.html:40
+#: login/forms.py:180 login/forms.py:198
+#: templates/ambulance/ambulance_detail.html:20
+#: templates/ambulance/ambulance_form.html:14
+#: templates/ambulance/dispatch_list.html:23
+#: templates/login/client_detail.html:32 templates/login/client_list.html:22
+#: templates/login/client_list.html:94 templates/login/group_detail.html:88
+#: templates/login/user_detail.html:93
+msgid "Ambulance"
+msgstr "Ambulancia"
+
+#: login/forms.py:238 templates/login/user_detail.html:40
 #: templates/login/user_list.html:24
 msgid "Dispatcher"
 msgstr "Despachador"
@@ -482,15 +502,6 @@ msgstr "clientes"
 #: login/models.py:371
 msgid "activity"
 msgstr "actividad"
-
-#: templates/ambulance/ambulance_detail.html:20
-#: templates/ambulance/ambulance_form.html:14
-#: templates/ambulance/dispatch_list.html:23
-#: templates/login/client_detail.html:32 templates/login/client_list.html:22
-#: templates/login/client_list.html:94 templates/login/group_detail.html:88
-#: templates/login/user_detail.html:93
-msgid "Ambulance"
-msgstr "Ambulancia"
 
 #: templates/ambulance/ambulance_detail.html:23
 #: templates/ambulance/call_detail.html:30
@@ -632,14 +643,6 @@ msgstr "Esta ambulancia no tiene equipos."
 #: templates/ambulance/ambulance_detail.html:151
 msgid "Past Locations"
 msgstr "Ubicaciones pasadas"
-
-#: templates/ambulance/ambulance_detail.html:176
-#: templates/ambulance/location_detail.html:11
-#: templates/ambulance/location_detail.html:28
-#: templates/ambulance/location_form.html:18
-#: templates/hospital/hospital_detail.html:30
-msgid "Location"
-msgstr "Ubicación"
 
 #: templates/ambulance/ambulance_detail.html:178
 msgid "Timestamp"
