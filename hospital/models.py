@@ -1,5 +1,6 @@
 from django.contrib.gis.db import models
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from ambulance.models import Location, LocationType
 from equipment.models import EquipmentHolder
@@ -10,7 +11,8 @@ from equipment.models import EquipmentHolder
 class Hospital(Location):
 
     equipmentholder = models.OneToOneField(EquipmentHolder,
-                                           on_delete=models.CASCADE)
+                                           on_delete=models.CASCADE,
+                                           verbose_name=_('equipmentholder'))
 
     def save(self, *args, **kwargs):
 
@@ -64,5 +66,3 @@ class Hospital(Location):
                                                self.comment,
                                                self.updated_by,
                                                self.updated_on)
-
-

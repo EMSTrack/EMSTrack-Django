@@ -7,7 +7,9 @@ from django.contrib.auth.models import Group
 from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
+from emstrack.util import make_choices
 from mqtt.cache_clear import mqtt_cache_clear
 
 
@@ -30,8 +32,9 @@ def is_dispatcher(user):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User,
-                                on_delete=models.CASCADE)
-    is_dispatcher = models.BooleanField(default=False)
+                                on_delete=models.CASCADE,
+                                verbose_name=_('user'))
+    is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
 
     def get_absolute_url(self):
         return reverse('login:detail-user', kwargs={'pk': self.user.id})
@@ -68,10 +71,11 @@ class UserProfile(models.Model):
 
 class GroupProfile(models.Model):
     group = models.OneToOneField(Group,
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 verbose_name=_('group'))
 
-    description = models.CharField(max_length=100, blank=True)
-    priority = models.PositiveIntegerField(validators=[MinValueValidator(1)], default=10)
+    description = models.CharField(_('description'), max_length=100, blank=True)
+    priority = models.PositiveIntegerField(_('priority'), validators=[MinValueValidator(1)], default=10)
 
     def get_absolute_url(self):
         return reverse('login:detail-group', kwargs={'pk': self.group.id})
@@ -102,8 +106,8 @@ class GroupProfile(models.Model):
 # Group Ambulance and Hospital Permissions
 
 class Permission(models.Model):
-    can_read = models.BooleanField(default=True)
-    can_write = models.BooleanField(default=False)
+    can_read = models.BooleanField(_('can_read'), default=True)
+    can_write = models.BooleanField(_('can_write'), default=False)
 
     class Meta:
         abstract = True
@@ -111,9 +115,11 @@ class Permission(models.Model):
 
 class UserAmbulancePermission(Permission):
     user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             verbose_name=_('user'))
     ambulance = models.ForeignKey('ambulance.Ambulance',
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('ambulance'))
 
     class Meta:
         unique_together = ('user', 'ambulance')
@@ -153,9 +159,11 @@ class UserAmbulancePermission(Permission):
 
 class UserHospitalPermission(Permission):
     user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             verbose_name=_('user'))
     hospital = models.ForeignKey('hospital.Hospital',
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 verbose_name=_('hospital'))
 
     class Meta:
         unique_together = ('user', 'hospital')
@@ -195,9 +203,11 @@ class UserHospitalPermission(Permission):
 
 class GroupAmbulancePermission(Permission):
     group = models.ForeignKey(Group,
-                              on_delete=models.CASCADE)
+                              on_delete=models.CASCADE,
+                              verbose_name=_('group'))
     ambulance = models.ForeignKey('ambulance.Ambulance',
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('ambulance'))
 
     class Meta:
         unique_together = ('group', 'ambulance')
@@ -240,9 +250,11 @@ class GroupAmbulancePermission(Permission):
 
 class GroupHospitalPermission(Permission):
     group = models.ForeignKey(Group,
-                              on_delete=models.CASCADE)
+                              on_delete=models.CASCADE,
+                              verbose_name=_('group'))
     hospital = models.ForeignKey('hospital.Hospital',
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 verbose_name=_('hospital'))
 
     class Meta:
         unique_together = ('group', 'hospital')
@@ -287,9 +299,10 @@ class GroupHospitalPermission(Permission):
 
 class TemporaryPassword(models.Model):
     user = models.OneToOneField(User,
-                                on_delete=models.CASCADE)
-    password = models.CharField(max_length=254)
-    created_on = models.DateTimeField(auto_now=True)
+                                on_delete=models.CASCADE,
+                                verbose_name=_('user'))
+    password = models.CharField(_('password'), max_length=254)
+    created_on = models.DateTimeField(_('created_on'), auto_now=True)
 
     def __str__(self):
         return '"{}" (created on: {})'.format(self.password, self.created_on)
@@ -297,37 +310,38 @@ class TemporaryPassword(models.Model):
 
 # Client status
 class ClientStatus(Enum):
-    O = 'online'
-    F = 'offline'
-    D = 'disconnected'
+    O = _('online')
+    F = _('offline')
+    D = _('disconnected')
 
 
 # Client information
 class Client(models.Model):
 
     # NOTE: This shouldn't be needed but django was giving me a hard time
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(_('id'), primary_key=True)
 
     # WARNING: mqtt client_id's can be up to 65536 bytes!
-    client_id = models.CharField(max_length=254, unique=True)
+    client_id = models.CharField(_('client_id'), max_length=254, unique=True)
 
     user = models.ForeignKey(User,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             verbose_name=_('user'))
 
-    CLIENT_STATUS_CHOICES = \
-        [(m.name, m.value) for m in ClientStatus]
-    status = models.CharField(max_length=1,
-                              choices=CLIENT_STATUS_CHOICES)
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(ClientStatus))
 
     ambulance = models.ForeignKey('ambulance.Ambulance',
                                   on_delete=models.CASCADE,
-                                  blank=True, null=True)
+                                  blank=True, null=True,
+                                  verbose_name=_('ambulance'))
 
     hospital = models.ForeignKey('hospital.Hospital',
                                  on_delete=models.CASCADE,
-                                 blank=True, null=True)
+                                 blank=True, null=True,
+                                 verbose_name=_('hospital'))
 
-    updated_on = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(_('updated_on'), auto_now=True)
 
     def __str__(self):
         return self.client_id
@@ -335,29 +349,28 @@ class Client(models.Model):
 
 # Client activity
 class ClientActivity(Enum):
-    HS = 'handshake'
-    AI = 'ambulance login'
-    AO = 'ambulance logout'
-    TL = 'ambulance stop location'
-    SL = 'ambulance start location'
-    HI = 'hospital login'
-    HO = 'hospital logout'
+    HS = _('handshake')
+    AI = _('ambulance login')
+    AO = _('ambulance logout')
+    TL = _('ambulance stop location')
+    SL = _('ambulance start location')
+    HI = _('hospital login')
+    HO = _('hospital logout')
 
 
 # Client log
 class ClientLog(models.Model):
 
     client = models.ForeignKey(Client,
-                               on_delete=models.CASCADE)
+                               on_delete=models.CASCADE,
+                               verbose_name=_('client'))
 
-    status = models.CharField(max_length=1,
-                              choices=Client.CLIENT_STATUS_CHOICES)
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(ClientStatus))
 
-    CLIENT_ACTIVITIES_CHOICES = \
-        [(m.name, m.value) for m in ClientActivity]
-    activity = models.CharField(max_length=2,
-                                choices=CLIENT_ACTIVITIES_CHOICES)
+    activity = models.CharField(_('activity'), max_length=2,
+                                choices=make_choices(ClientActivity))
 
-    details = models.CharField(max_length=100, blank=True)
+    details = models.CharField(_('details'), max_length=100, blank=True)
 
-    updated_on = models.DateTimeField(auto_now=True)
+    updated_on = models.DateTimeField(_('updated_on'), auto_now=True)

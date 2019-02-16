@@ -3,8 +3,10 @@ from enum import Enum
 from django.contrib.gis.db import models
 from django.template.defaulttags import register
 from django.urls import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from emstrack.models import UpdatedByModel
+from emstrack.util import make_choices
 
 
 @register.filter
@@ -13,9 +15,9 @@ def get_equipment_type(type):
 
 
 class EquipmentType(Enum):
-    B = 'Boolean'
-    I = 'Integer'
-    S = 'String'
+    B = _('Boolean')
+    I = _('Integer')
+    S = _('String')
 
 
 EquipmentTypeDefaults = {
@@ -26,14 +28,12 @@ EquipmentTypeDefaults = {
 
 
 class Equipment(models.Model):
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(_('name'), max_length=254, unique=True)
 
-    EQUIPMENT_TYPE_CHOICES = \
-        [(m.name, m.value) for m in EquipmentType]
-    type = models.CharField(max_length=1,
-                            choices=EQUIPMENT_TYPE_CHOICES)
+    type = models.CharField(_('type'), max_length=1,
+                            choices=make_choices(EquipmentType))
 
-    default = models.CharField(max_length=254)
+    default = models.CharField(_('default'), max_length=254)
 
     def save(self, *args, **kwargs):
 
@@ -52,7 +52,7 @@ class Equipment(models.Model):
 
 
 class EquipmentSet(models.Model):
-    name = models.CharField(max_length=254, unique=True)
+    name = models.CharField(_('name'), max_length=254, unique=True)
 
     def get_absolute_url(self):
         return reverse('equipment:detail-set', kwargs={'pk': self.id})
@@ -63,14 +63,16 @@ class EquipmentSet(models.Model):
 
 class EquipmentSetItem(UpdatedByModel):
     equipment_set = models.ForeignKey(EquipmentSet,
-                                      on_delete=models.CASCADE)
+                                      on_delete=models.CASCADE,
+                                      verbose_name=_('equipment_set'))
     equipment = models.ForeignKey(Equipment,
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('equipment'))
 
 
 class EquipmentHolder(models.Model):
 
-    equipmentsets = models.ManyToManyField(EquipmentSet, blank=True)
+    equipmentsets = models.ManyToManyField(EquipmentSet, blank=True, verbose_name=_('equipmentsets'))
 
     def is_hospital(self):
         return hasattr(self, 'hospital')
@@ -113,10 +115,12 @@ class EquipmentHolder(models.Model):
 
 class EquipmentItem(UpdatedByModel):
     equipmentholder = models.ForeignKey(EquipmentHolder,
-                                         on_delete=models.CASCADE)
+                                        on_delete=models.CASCADE,
+                                        verbose_name=_('equipmentholder'))
     equipment = models.ForeignKey(Equipment,
-                                  on_delete=models.CASCADE)
-    value = models.CharField(max_length=254)
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('equipment'))
+    value = models.CharField(_('value'), max_length=254)
 
     def save(self, *args, **kwargs):
 

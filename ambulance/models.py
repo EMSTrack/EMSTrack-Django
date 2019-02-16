@@ -5,7 +5,6 @@ from django.contrib.gis.db import models
 from django.utils import timezone
 from django.urls import reverse
 from django.template.defaulttags import register
-
 from django.utils.translation import ugettext_lazy as _
 
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
