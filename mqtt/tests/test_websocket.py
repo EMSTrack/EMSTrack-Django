@@ -7,7 +7,7 @@ from django.conf import settings
 from ambulance.models import Ambulance, AmbulanceStatus
 from hospital.models import Hospital
 from equipment.models import EquipmentItem
-from login.models import Client, ClientStatus, ClientLog
+from login.models import Client, ClientStatus, ClientLog, ClientActivity
 from mqtt.publish import SingletonPublishClient
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
 
