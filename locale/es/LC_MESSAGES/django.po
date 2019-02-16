@@ -115,16 +115,12 @@ msgid "location_client"
 msgstr "client_de_localización"
 
 #: ambulance/models.py:296 ambulance/models.py:506
-#, fuzzy
-#| msgid "Ambulance"
 msgid "ambulance"
-msgstr "Ambulancia"
+msgstr "ambulancia"
 
 #: ambulance/models.py:326
-#, fuzzy
-#| msgid "Description"
 msgid "Resuscitation"
-msgstr "Descripción"
+msgstr "Resucitación"
 
 #: ambulance/models.py:327
 msgid "Emergent"
