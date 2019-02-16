@@ -11,7 +11,7 @@
             <h1>{% trans "Equipment Sets" %}</h1>
 
             <p>
-                <a href="{% url 'equipment:create-set' %}">{% trans "new" %}</a>
+                <a href="{% url 'equipment:create-set' %}">{% trans "new" context "masculine" %}</a>
             </p>
 
             {% if equipmentset_list %}

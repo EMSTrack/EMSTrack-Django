@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -7,36 +8,36 @@
     <div class="row">
         <div class="col">
 
-            <h1>User</h1>
+            <h1>{% trans "User" %}</h1>
 
-            <h3>Details:</h3>
+            <h3>{% trans "Details" %}:</h3>
 
             <p>
-                <strong>Username:</strong>
+                <strong>{% trans "Username" %}:</strong>
                 <a href="{% url 'login:update-user' pk=user.id %}">{{ user.username }}</a>
             </p>
             <p>
-                <strong>First:</strong>
+                <strong>{% trans "First" %}:</strong>
                 {{ user.first_name }}
             </p>
             <p>
-                <strong>Last:</strong>
+                <strong>{% trans "Last" %}:</strong>
                 {{ user.last_name }}
             </p>
             <p>
-                <strong>Email:</strong>
+                <strong>{% trans "Email" %}:</strong>
                 {{ user.email}}
             </p>
             <p>
-                <strong>Staff:</strong>
+                <strong>{% trans "Staff" %}:</strong>
                 {{ user.is_staff }}
             </p>
             <p>
-                <strong>Active:</strong>
+                <strong>{% trans "Active" %}:</strong>
                 {{ user.is_active }}
             </p>
             <p>
-                <strong>Dispatcher:</strong>
+                <strong>{% trans "Dispatcher" %}:</strong>
                 {{ user.userprofile.is_dispatcher }}
             </p>
         </div>
@@ -52,8 +53,8 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Description" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -72,7 +73,7 @@
 
             {% else %}
 
-            <p>This user does not belongs to any group yet.</p>
+            <p>{% trans "This user does not belongs to any group yet." %}</p>
 
             {% endif %}
 
@@ -82,16 +83,16 @@
      <div class="row">
         <div class="col">
 
-            <h3>Permissions:</h3>
+            <h3>{% trans "Permissions" %}:</h3>
 
             {% if ambulance_list %}
 
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Ambulance</th>
-                    <th>Read</th>
-                    <th>Write</th>
+                    <th>{% trans "Ambulance" %}</th>
+                    <th>{% trans "Read" %}</th>
+                    <th>{% trans "Write" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -108,9 +109,9 @@
             {% else %}
 
                 {% if user.is_staff %}
-                    <p>This user is staff and does not need permission to access any ambulances.</p>
+                    <p>{% trans "This user is staff and does not need permission to access any ambulances." %}</p>
                 {% else %}
-                    <p>This user does not have access to any ambulances.</p>
+                    <p>{% trans "This user does not have access to any ambulances." %}</p>
                 {% endif %}
 
             {% endif %}
@@ -120,9 +121,9 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Hospital</th>
-                    <th>Read</th>
-                    <th>Write</th>
+                    <th>{% trans "Hospital" %}</th>
+                    <th>{% trans "Read" %}</th>
+                    <th>{% trans "Write" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -139,9 +140,9 @@
             {% else %}
 
                 {% if user.is_staff %}
-                    <p>This user is staff and does not need permission to access any hospitals.</p>
+                    <p>{% trans "This user is staff and does not need permission to access any hospitals." %}</p>
                 {% else %}
-                    <p>This user does not have access to any hospitals.</p>
+                    <p>{% trans "This user does not have access to any hospitals." %}</p>
                 {% endif %}
 
             {% endif %}

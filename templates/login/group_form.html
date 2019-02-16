@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -8,12 +9,12 @@
     <div class="row">
         <div class="col">
 
-            <h1>Group</h1>
+            <h1>{% trans "Group" %}</h1>
 
             <form method="POST" class="post-form">
                 {% csrf_token %}
 
-                <h3>Details:</h3>
+                <h3>{% trans "Details" %}:</h3>
 
                 <table>
                     {{ form }}
@@ -22,7 +23,7 @@
                     {% endfor %}
                 </table>
 
-                <h3>Permissions:</h3>
+                <h3>{% trans "Permissions" %}:</h3>
 
                 {% for form in inlines|slice:"1:" %}
                 <table>
@@ -31,7 +32,7 @@
                 {% endfor %}
 
                 <p>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                 </p>
             </form>
         </div>
