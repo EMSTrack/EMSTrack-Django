@@ -6,8 +6,11 @@ from django.utils import timezone
 from django.urls import reverse
 from django.template.defaulttags import register
 
+from django.utils.translation import ugettext_lazy as _
+
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
 from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
+from emstrack.util import make_choices
 from equipment.models import EquipmentHolder
 
 logger = logging.getLogger(__name__)
@@ -108,37 +111,35 @@ class Ambulance(UpdatedByModel):
     # TODO: Should we consider denormalizing Ambulance to avoid duplication with AmbulanceUpdate?
 
     equipmentholder = models.OneToOneField(EquipmentHolder,
-                                           on_delete=models.CASCADE)
+                                           on_delete=models.CASCADE,
+                                           verbose_name=_('equipmentholder'))
 
     # ambulance properties
-    identifier = models.CharField(max_length=50, unique=True)
+    identifier = models.CharField(_('identifier'), max_length=50, unique=True)
 
     # TODO: Should we add an active flag?
 
-    AMBULANCE_CAPABILITY_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceCapability]
-    capability = models.CharField(max_length=1,
-                                  choices=AMBULANCE_CAPABILITY_CHOICES)
+    capability = models.CharField(_('capability'), max_length=1,
+                                  choices=make_choices(AmbulanceCapability))
 
     # status
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
+    status = models.CharField(_('status'), max_length=2,
+                              choices=make_choices(AmbulanceStatus),
                               default=AmbulanceStatus.UK.name)
 
     # location
-    orientation = models.FloatField(default=0.0)
-    location = models.PointField(srid=4326, default=defaults['location'])
+    orientation = models.FloatField(_('orientation'), default=0.0)
+    location = models.PointField(_('location'), srid=4326, default=defaults['location'])
 
     # timestamp
-    timestamp = models.DateTimeField(default=timezone.now)
+    timestamp = models.DateTimeField(_('timestamp'), default=timezone.now)
 
     # location client
     location_client = models.ForeignKey('login.Client',
                                         on_delete=models.CASCADE,
                                         blank=True, null=True,
-                                        related_name='location_client_set')
+                                        related_name='location_client_set',
+                                        verbose_name=_('location_client'))
 
     # default value for _loaded_values
     _loaded_values = None
