@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -7,14 +8,14 @@
     <div class="row">
         <div class="col">
 
-            <h1>Hospital</h1>
+            <h1>{% trans "Hospital" %}</h1>
 
             <h3>
-                Details:
+                {% trans "Details" %}:
             </h3>
 
             <p>
-                <strong>Name:</strong>
+                <strong>{% trans "Name" %}:</strong>
                 {% if user.is_staff %}
                 <a href="{% url 'hospital:update' pk=hospital.id %}">{{ hospital.name }}</a>
                 {% else %}
@@ -22,23 +23,23 @@
                 {% endif %}
             </p>
             <p>
-                <strong>Address:</strong>
+                <strong>{% trans "Address" %}:</strong>
                 {{ hospital.get_address }}
             </p>
             <p>
-                <strong>Location:</strong>
+                <strong>{% trans "Location" %}:</strong>
                 {{ hospital.location }}
             </p>
             <p>
-                <strong>Comment:</strong>
+                <strong>{% trans "Comment" %}:</strong>
                 {{ hospital.comment }}
             </p>
             <p>
-                <strong>Updated on:</strong>
+                <strong>{% trans "Updated on" %}:</strong>
                 {{ hospital.updated_on }}
             </p>
             <p>
-                <strong>By:</strong>
+                <strong>{% trans "By" %}:</strong>
                 {{ hospital.updated_by }}
             </p>
 
@@ -49,7 +50,7 @@
         <div class="col">
 
             <h3>
-                Equipment sets:
+                {% trans "Equipment sets" %}:
             </h3>
 
             {% if hospital.equipmentholder.equipmentsets.exists%}
@@ -57,7 +58,7 @@
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>{% trans "Name" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -72,7 +73,7 @@
             {% else %}
 
                 <p>
-                    This hospital has no equipment sets.
+                    {% trans "This hospital has no equipment sets." %}
                 </p>
 
             {% endif %}
@@ -84,11 +85,11 @@
         <div class="col">
 
             <h3>
-                Equipment:
+                {% trans "Equipment" %}:
             </h3>
 
             {% if user.is_staff %}
-                <p><a href="{% url 'equipment:update-holder' pk=hospital.equipmentholder.id %}">edit</a></p>
+                <p><a href="{% url 'equipment:update-holder' pk=hospital.equipmentholder.id %}">{% trans "edit" %}</a></p>
             {% endif %}
 
             {% if hospital.equipmentholder.equipmentitem_set.exists%}
@@ -96,11 +97,11 @@
                 <table class="table table-striped table-sm">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Value</th>
-                        <th>Comment</th>
-                        <th>Updated on</th>
-                        <th>by</th>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Value" %}</th>
+                        <th>{% trans "Comment" %}</th>
+                        <th>{% trans "Updated on" %}</th>
+                        <th>{% trans "by" %}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -119,7 +120,7 @@
             {% else %}
 
                 <p>
-                    This hospital has no registered equipments.
+                    {% trans "This hospital has no registered equipments." %}
                 </p>
 
             {% endif %}

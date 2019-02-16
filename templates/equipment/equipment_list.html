@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -8,10 +9,10 @@
     <div class="row">
         <div class="col-md-6">
 
-            <h1>Equipment</h1>
+            <h1>{% trans "Equipment" %}</h1>
 
             <p>
-                <a href="{% url 'equipment:create' %}">new</a>
+                <a href="{% url 'equipment:create' %}">{% trans "new" context "masculine" %}</a>
             </p>
 
             {% if equipment_list %}
@@ -19,9 +20,9 @@
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Default</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Type" %}</th>
+                    <th>{% trans "Default" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -43,7 +44,7 @@
 
             {% else %}
 
-            <p>No equipments have been created yet.</p>
+            <p>{% trans "No equipments have been created yet." %}</p>
 
             {% endif %}
 

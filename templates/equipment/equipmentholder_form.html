@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block head %}
 {{ form.media }}
@@ -13,16 +14,16 @@
     <div class="row">
         <div class="col">
 
-            <h1>{{ equipmentholder.get_name }}'s Equipments</h1>
+            <h1>{% blocktrans %}{{ equipmentholder.get_name }}'s Equipments {% endblocktrans %}</h1>
 
             <p>
-                <a href="{{ equipmentholder.get_absolute_url }}">back to {{ equipmentholder.get_type }}</a>
+                <a href="{{ equipmentholder.get_absolute_url }}">{% trans "back to" %} {{ equipmentholder.get_type }}</a>
             </p>
 
             <form method="POST" class="post-form">
                 {% csrf_token %}
 
-                <h3>Equipment:</h3>
+                <h3>{% trans "Equipment" %}:</h3>
 
                 {% for formset in inlines %}
 
@@ -36,9 +37,9 @@
                             {% for form in formset %}
                                 <div data-formset-form>
                                     {{ form.as_ul }}
-                                    <button type="button" data-formset-move-up-button>Move up</button>
-                                    <button type="button" data-formset-move-down-button>Move down</button>
-                                    <button type="button" data-formset-delete-button>Delete form</button>
+                                    <!--button type="button" data-formset-move-up-button>Move up</button>
+                                    <button type="button" data-formset-move-down-button>Move down</button-->
+                                    <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
                                 </div>
                             {% endfor %}
                         </div>
@@ -50,15 +51,15 @@
                             {% escapescript %}
                                 <div data-formset-form>
                                     {{ formset.empty_form.as_ul }}
-                                    <button type="button" data-formset-move-up-button>Move up</button>
-                                    <button type="button" data-formset-move-down-button>Move down</button>
-                                    <button type="button" data-formset-delete-button>Delete form</button>
+                                    <!--button type="button" data-formset-move-up-button>Move up</button>
+                                    <button type="button" data-formset-move-down-button>Move down</button-->
+                                    <button type="button" data-formset-delete-button>{% trans "Delete form" %}</button>
                                 </div>
                             {% endescapescript %}
                         </script>
 
                         <!-- This button will add a new form when clicked -->
-                        <input type="button" value="Add another" data-formset-add>
+                        <input type="button" value="{% trans "Add another" %}" data-formset-add>
 
                         <script>jQuery(function($) {
                             $("#formset").formset({
@@ -71,18 +72,8 @@
 
                 {% endfor %}
 
-                <!--
-                {% for form in inlines %}
-
-                <table>
-                    {{ form }}
-                </table>
-
-                {% endfor %}
-                -->
-
                 <p>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
                 </p>
 
             </form>

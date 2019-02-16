@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load i18n %}
 
 {% block content %}
 
@@ -7,12 +8,12 @@
     <div class="row">
         <div class="col">
 
-            <h1>Equipment Set</h1>
+            <h1>{% trans "Equipment Set" %}</h1>
 
-            <h3>Details:</h3>
+            <h3>{% trans "Details" %}:</h3>
 
             <p>
-                <strong>Name:</strong>
+                <strong>{% trans "Name" %}:</strong>
                 <a href="{% url 'equipment:update-set' pk=equipmentset.id %}">{{ equipmentset.name }}</a>
             </p>
 
@@ -23,16 +24,16 @@
         <div class="col">
 
             <h3>
-                Equipment:
+                {% trans "Equipment" %}:
             </h3>
 
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Comment</th>
-                    <th>Updated on</th>
-                    <th>by</th>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Comment" %}</th>
+                    <th>{% trans "Updated on" %}</th>
+                    <th>{% trans "by" %}</th>
                 </tr>
                 </thead>
                 <tbody>

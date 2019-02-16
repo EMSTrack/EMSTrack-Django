@@ -634,15 +634,15 @@ msgstr "Prioridad"
 
 #: templates/ambulance/call_detail.html:46
 msgid "Pending at"
-msgstr "Pendientes en"
+msgstr "Pendiente en"
 
 #: templates/ambulance/call_detail.html:49
 msgid "Started at"
-msgstr "Empezadas en"
+msgstr "Empezada en"
 
 #: templates/ambulance/call_detail.html:52
 msgid "Ended at"
-msgstr "Terminadas en"
+msgstr "Terminada en"
 
 #: templates/ambulance/call_detail.html:73 templates/ambulance/map.html:281
 msgid "Patients"
