@@ -292,27 +292,24 @@ class AmbulanceUpdate(UpdatedByHistoryModel):
 
     # ambulance
     ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('ambulance'))
 
     # ambulance capability
-    AMBULANCE_CAPABILITY_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceCapability]
-    capability = models.CharField(max_length=1,
-                                  choices=AMBULANCE_CAPABILITY_CHOICES)
+    capability = models.CharField(_('capability'), max_length=1,
+                                  choices=make_choices(AmbulanceCapability))
 
     # ambulance status
-    AMBULANCE_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceStatus]
-    status = models.CharField(max_length=2,
-                              choices=AMBULANCE_STATUS_CHOICES,
+    status = models.CharField(_('status'), max_length=2,
+                              choices=make_choices(AmbulanceStatus),
                               default=AmbulanceStatus.UK.name)
 
     # location
-    orientation = models.FloatField(default=0.0)
-    location = models.PointField(srid=4326, default=defaults['location'])
+    orientation = models.FloatField(_('orientation'), default=0.0)
+    location = models.PointField(_('location'), srid=4326, default=defaults['location'])
 
     # timestamp, indexed
-    timestamp = models.DateTimeField(db_index=True, default=timezone.now)
+    timestamp = models.DateTimeField(_('timestamp'), db_index=True, default=timezone.now)
 
     class Meta:
         indexes = [
@@ -326,12 +323,12 @@ class AmbulanceUpdate(UpdatedByHistoryModel):
 # Call related models
 
 class CallPriority(Enum):
-    A = 'Resuscitation'
-    B = 'Emergent'
-    C = 'Urgent'
-    D = 'Less urgent'
-    E = 'Not urgent'
-    O = 'Omega'
+    A = _('Resuscitation')
+    B = _('Emergent')
+    C = _('Urgent')
+    D = _('Less urgent')
+    E = _('Not urgent')
+    O = _('Omega')
 
 
 CallPriorityOrder = [ 
@@ -345,9 +342,9 @@ CallPriorityOrder = [
 
 
 class CallStatus(Enum):
-    P = 'Pending'
-    S = 'Started'
-    E = 'Ended'
+    P = _('Pending')
+    S = _('Started')
+    E = _('Ended')
 
 
 CallStatusOrder = [ 
@@ -385,29 +382,25 @@ class Call(PublishMixin,
            UpdatedByModel):
 
     # status
-    CALL_STATUS_CHOICES = \
-        [(m.name, m.value) for m in CallStatus]
-    status = models.CharField(max_length=1,
-                              choices=CALL_STATUS_CHOICES,
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(CallStatus),
                               default=CallStatus.P.name)
 
     # details
-    details = models.CharField(max_length=500, default="")
+    details = models.CharField(_('details'), max_length=500, default="")
 
     # call priority
-    CALL_PRIORITY_CHOICES = \
-        [(m.name, m.value) for m in CallPriority]
-    priority = models.CharField(max_length=1,
-                                choices=CALL_PRIORITY_CHOICES,
+    priority = models.CharField(_('priority'), max_length=1,
+                                choices=make_choices(CallPriority),
                                 default=CallPriority.E.name)
 
     # timestamps
-    pending_at = models.DateTimeField(null=True, blank=True)
-    started_at = models.DateTimeField(null=True, blank=True)
-    ended_at = models.DateTimeField(null=True, blank=True)
+    pending_at = models.DateTimeField(_('pending_at'), null=True, blank=True)
+    started_at = models.DateTimeField(_('started_at'), null=True, blank=True)
+    ended_at = models.DateTimeField(_('ended_at'), null=True, blank=True)
 
     # created at
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(_('created_at'), auto_now_add=True)
 
     def save(self, *args, **kwargs):
 
@@ -487,30 +480,30 @@ class Call(PublishMixin,
 
 
 class AmbulanceCallStatus(Enum):
-    R = 'Requested'
-    A = 'Accepted'
-    D = 'Declined'
-    S = 'Suspended'
-    C = 'Completed'
+    R = _('Requested')
+    A = _('Accepted')
+    D = _('Declined')
+    S = _('Suspended')
+    C = _('Completed')
 
 
 class AmbulanceCall(PublishMixin,
                     UpdatedByModel):
 
     # status
-    AMBULANCE_CALL_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceCallStatus]
-    status = models.CharField(max_length=1,
-                              choices=AMBULANCE_CALL_STATUS_CHOICES,
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(AmbulanceCallStatus),
                               default=AmbulanceCallStatus.R.name)
 
     # call
     call = models.ForeignKey(Call,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             verbose_name=_('call'))
 
     # ambulance
     ambulance = models.ForeignKey(Ambulance,
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('ambulance'))
 
     # created at
     # created_at = models.DateTimeField(auto_now_add=True)
@@ -601,13 +594,12 @@ class AmbulanceCall(PublishMixin,
 class AmbulanceCallHistory(UpdatedByHistoryModel):
     # ambulance_call
     ambulance_call = models.ForeignKey(AmbulanceCall,
-                                       on_delete=models.CASCADE)
+                                       on_delete=models.CASCADE,
+                                       verbose_name=_('ambulance_call'))
 
     # status
-    AMBULANCE_CALL_STATUS_CHOICES = \
-        [(m.name, m.value) for m in AmbulanceCallStatus]
-    status = models.CharField(max_length=1,
-                              choices=AMBULANCE_CALL_STATUS_CHOICES)
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(AmbulanceCallStatus))
 
     # created at
     # created_at = models.DateTimeField()
@@ -622,10 +614,11 @@ class Patient(PublishMixin,
     """
 
     call = models.ForeignKey(Call,
-                             on_delete=models.CASCADE)
+                             on_delete=models.CASCADE,
+                             verbose_name=_('call'))
 
-    name = models.CharField(max_length=254, default="")
-    age = models.IntegerField(null=True)
+    name = models.CharField(_('name'), max_length=254, default="")
+    age = models.IntegerField(_('age'), null=True)
 
     def publish(self):
 
@@ -638,12 +631,12 @@ class Patient(PublishMixin,
 
 # noinspection PyPep8
 class LocationType(Enum):
-    b = 'Base'
-    a = 'AED'
-    i = 'Incident'
-    h = 'Hospital'
-    w = 'Waypoint'
-    o = 'Other'
+    b = _('Base')
+    a = _('AED')
+    i = _('Incident')
+    h = _('Hospital')
+    w = _('Waypoint')
+    o = _('Other')
 
 
 LocationTypeOrder = [
@@ -660,13 +653,11 @@ class Location(AddressModel,
                UpdatedByModel):
 
     # location name
-    name = models.CharField(max_length=254, blank=True)
+    name = models.CharField(_('name'), max_length=254, blank=True)
 
     # location type
-    LOCATION_TYPE_CHOICES = \
-        [(m.name, m.value) for m in LocationType]
-    type = models.CharField(max_length=1,
-                            choices=LOCATION_TYPE_CHOICES)
+    type = models.CharField(_('type'), max_length=1,
+                            choices=make_choices(LocationType))
 
     # location: already in address
     # location = models.PointField(srid=4326, null=True)
@@ -681,32 +672,32 @@ class Location(AddressModel,
 # Waypoint related models
 
 class WaypointStatus(Enum):
-    C = 'Created'
-    V = 'Visiting'
-    D = 'Visited'
-    S = 'Skipped'
+    C = _('Created')
+    V = _('Visiting')
+    D = _('Visited')
+    S = _('Skipped')
 
 
 class Waypoint(PublishMixin,
                UpdatedByModel):
     # call
     ambulance_call = models.ForeignKey(AmbulanceCall,
-                                       on_delete=models.CASCADE)
+                                       on_delete=models.CASCADE,
+                                       verbose_name=_('ambulance_call'))
 
     # order
-    order = models.PositiveIntegerField()
+    order = models.PositiveIntegerField(_('order'))
 
     # status
-    WAYPOINT_STATUS_CHOICES = \
-        [(m.name, m.value) for m in WaypointStatus]
-    status = models.CharField(max_length=1,
-                              choices=WAYPOINT_STATUS_CHOICES,
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(WaypointStatus),
                               default=WaypointStatus.C.name)
 
     # Location
     location = models.ForeignKey(Location,
                                  on_delete=models.CASCADE,
-                                 blank=True, null=True)
+                                 blank=True, null=True,
+                                 verbose_name=_('location'))
 
     def is_created(self):
         return self.status == WaypointStatus.C.name
@@ -753,23 +744,22 @@ class Waypoint(PublishMixin,
 class WaypointHistory(UpdatedByModel):
     # waypoint
     waypoint = models.ForeignKey(Waypoint,
-                                 on_delete=models.CASCADE)
+                                 on_delete=models.CASCADE,
+                                 verbose_name=_('waypoint'))
 
     # order
-    order = models.PositiveIntegerField()
+    order = models.PositiveIntegerField(_('order'))
 
     # status
-    WAYPOINT_STATUS_CHOICES = \
-        [(m.name, m.value) for m in WaypointStatus]
-    status = models.CharField(max_length=1,
-                              choices=WAYPOINT_STATUS_CHOICES)
+    status = models.CharField(_('status'), max_length=1,
+                              choices=make_choices(WaypointStatus))
 
 
 # THOSE NEED REVIEWING
 
 class Region(models.Model):
-    name = models.CharField(max_length=254, unique=True)
-    center = models.PointField(srid=4326, null=True)
+    name = models.CharField(_('name'), max_length=254, unique=True)
+    center = models.PointField(_('center'), srid=4326, null=True)
 
     def __str__(self):
         return self.name
