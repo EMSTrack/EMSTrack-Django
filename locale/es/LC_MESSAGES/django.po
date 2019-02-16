@@ -338,26 +338,18 @@ msgid "default"
 msgstr ""
 
 #: equipment/models.py:67
-#, fuzzy
-#| msgid "Equipment sets"
 msgid "equipment_set"
-msgstr "Juegos de equipos"
+msgstr "juegos_de_equipos"
 
 #: equipment/models.py:70 equipment/models.py:122
-#, fuzzy
-#| msgid "Equipment"
 msgid "equipment"
-msgstr "Equipo"
+msgstr "equipo"
 
 #: equipment/models.py:75
-#, fuzzy
-#| msgid "Equipment sets"
 msgid "equipmentsets"
-msgstr "Juegos de equipos"
+msgstr "juegosdeequipos"
 
 #: equipment/models.py:123
-#, fuzzy
-#| msgid "Value"
 msgid "value"
 msgstr "valor"
 
@@ -396,116 +388,92 @@ msgid "user"
 msgstr ""
 
 #: login/models.py:37
-#, fuzzy
-#| msgid "Dispatcher"
 msgid "is_dispatcher"
-msgstr "Despachador"
+msgstr "es_despachador"
 
 #: login/models.py:75 login/models.py:207 login/models.py:254
-#, fuzzy
-#| msgid "Groups"
 msgid "group"
-msgstr "Grupos"
+msgstr "grupo"
 
 #: login/models.py:77
-#, fuzzy
-#| msgid "Description"
 msgid "description"
-msgstr "Descripción"
+msgstr "descripción"
 
 #: login/models.py:109
 msgid "can_read"
-msgstr ""
+msgstr "puede_leer"
 
 #: login/models.py:110
 msgid "can_write"
-msgstr ""
+msgstr "puede_escribir"
 
 #: login/models.py:166 login/models.py:257 login/models.py:342
-#, fuzzy
-#| msgid "Hospital"
 msgid "hospital"
-msgstr "Hospital"
+msgstr "hospital"
 
 #: login/models.py:304
-#, fuzzy
-#| msgid "Password"
 msgid "password"
-msgstr "Contraseña"
+msgstr "contraseña"
 
 #: login/models.py:305
-#, fuzzy
-#| msgid "created_at"
 msgid "created_on"
 msgstr "creado_en"
 
 #: login/models.py:313
 msgid "online"
-msgstr ""
+msgstr "conectado"
 
 #: login/models.py:314
 msgid "offline"
-msgstr ""
+msgstr "desconectado"
 
 #: login/models.py:315
 msgid "disconnected"
-msgstr ""
+msgstr "desconectado"
 
 #: login/models.py:322
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #: login/models.py:325
-#, fuzzy
-#| msgid "Clients"
 msgid "client_id"
-msgstr "Clientes"
+msgstr "cliente_id"
 
 #: login/models.py:352
 msgid "handshake"
-msgstr ""
+msgstr "conectó"
 
 #: login/models.py:353
-#, fuzzy
-#| msgid "ambulance"
 msgid "ambulance login"
-msgstr "ambulancia"
+msgstr "conectó ambulancia"
 
 #: login/models.py:354
-#, fuzzy
-#| msgid "ambulance"
 msgid "ambulance logout"
-msgstr "ambulancia"
+msgstr "desconectó ambulancia"
 
 #: login/models.py:355
 msgid "ambulance stop location"
-msgstr ""
+msgstr "ambulancia empezó localizacion"
 
 #: login/models.py:356
 msgid "ambulance start location"
-msgstr ""
+msgstr "ambulancia terminó localizacion"
 
 #: login/models.py:357
-#, fuzzy
-#| msgid "Hospital bound"
 msgid "hospital login"
-msgstr "Hacia el hospital"
+msgstr "conectó hospital"
 
 #: login/models.py:358
-#, fuzzy
-#| msgid "Hospital bound"
 msgid "hospital logout"
-msgstr "Hacia el hospital"
+msgstr "desconectó hospital"
 
 #: login/models.py:366
-#, fuzzy
-#| msgid "Clients"
 msgid "client"
-msgstr "Clientes"
+msgstr "clientes"
 
 #: login/models.py:371
 msgid "activity"
-msgstr ""
+msgstr "actividad"
 
 #: templates/ambulance/ambulance_detail.html:20
 #: templates/ambulance/ambulance_form.html:14
