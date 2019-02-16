@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 18:02+0000\n"
+"POT-Creation-Date: 2019-02-16 18:20+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,68 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# AmbulanceStatus
+#: ambulance/models.py:66
+msgid "Unknown"
+msgstr "Desconocido"
+
+#: ambulance/models.py:67
+msgid "Available"
+msgstr "Disponible"
+
+#: ambulance/models.py:68
+msgid "Out of service"
+msgstr "Fuera de servicio"
+
+#: ambulance/models.py:69
+msgid "Incident bound"
+msgstr "Hacia el incidente"
+
+#: ambulance/models.py:70
+msgid "At incident"
+msgstr "En el incidente"
+
+#: ambulance/models.py:71
+msgid "Hospital bound"
+msgstr "Hacia el hospital"
+
+#: ambulance/models.py:72
+msgid "At hospital"
+msgstr "En el hospital"
+
+#: ambulance/models.py:73
+msgid "Base bound"
+msgstr "Hacia la base"
+
+#: ambulance/models.py:74
+msgid "At base"
+msgstr "En la base"
+
+#: ambulance/models.py:75
+msgid "Waypoint bound"
+msgstr "Hacia un punto de ruta"
+
+#: ambulance/models.py:76
+msgid "At waypoint"
+msgstr "En en punto de ruta"
+
+# AmbulanceCapability
+#: ambulance/models.py:95
+msgid "Basic"
+msgstr "Basica"
+
+#: ambulance/models.py:96
+msgid "Advanced"
+msgstr "Avanzada"
+
+#: ambulance/models.py:97
+msgid "Rescue"
+msgstr "Rescate"
+
+#: ambulance/models.py:98
+msgid "Medic"
+msgstr "Médica"
 
 #: ambulance/models.py:115
 msgid "equipmentholder"
@@ -447,50 +509,3 @@ msgstr "Activo"
 #: templates/modal.html:64
 msgid "OK"
 msgstr "OK"
-
-# AmbulanceStatus
-msgid "Unknown"
-msgstr "Desconocido"
-
-msgid "Available"
-msgstr "Disponible"
-
-msgid "Out of service"
-msgstr "Fuera de servicio"
-
-msgid "Incident bound"
-msgstr "Hacia el incidente"
-
-msgid "At incident"
-msgstr "En el incidente"
-
-msgid "Hospital bound"
-msgstr "Hacia el hospital"
-
-msgid "At hospital"
-msgstr "En el hospital"
-
-msgid "Base bound"
-msgstr "Hacia la base"
-
-msgid "At base"
-msgstr "En la base"
-
-msgid "Waypoint bound"
-msgstr "Hacia un punto de ruta"
-
-msgid "At waypoint"
-msgstr "En en punto de ruta"
-
-# AmbulanceCapability
-msgid "Basic"
-msgstr "Basica"
-
-msgid "Advanced"
-msgstr "Avanzada"
-
-msgid "Rescue"
-msgstr "Rescate"
-
-msgid "Medic"
-msgstr "Médica"
