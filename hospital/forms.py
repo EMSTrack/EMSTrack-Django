@@ -9,7 +9,7 @@ from .models import Hospital
 
 class HospitalCreateForm(forms.ModelForm):
     location = PointField(
-        label=_('location'),
+        label=_('Location'),
         widget=LeafletPointWidget(attrs={'map_width': 500,
                                          'map_height': 300})
     )
