@@ -177,7 +177,8 @@ class HospitalPermissionModelChoiceField(forms.ModelChoiceField):
 
 
 class UserAmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
+    ambulance = AmbulancePermissionModelChoiceField(label=_('ambulance'),
+                                                    queryset=Ambulance.objects.all())
 
     class Meta:
         model = UserAmbulancePermission
@@ -185,7 +186,8 @@ class UserAmbulancePermissionAdminForm(forms.ModelForm):
 
 
 class UserHospitalPermissionAdminForm(forms.ModelForm):
-    hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
+    hospital = HospitalPermissionModelChoiceField(label=_('hospital'),
+                                                  queryset=Hospital.objects.all())
 
     class Meta:
         model = UserHospitalPermission
@@ -193,7 +195,8 @@ class UserHospitalPermissionAdminForm(forms.ModelForm):
 
 
 class GroupAmbulancePermissionAdminForm(forms.ModelForm):
-    ambulance = AmbulancePermissionModelChoiceField(queryset=Ambulance.objects.all())
+    ambulance = AmbulancePermissionModelChoiceField(label=_('ambulance'),
+                                                    queryset=Ambulance.objects.all())
 
     class Meta:
         model = GroupAmbulancePermission
@@ -201,7 +204,8 @@ class GroupAmbulancePermissionAdminForm(forms.ModelForm):
 
 
 class GroupHospitalPermissionAdminForm(forms.ModelForm):
-    hospital = HospitalPermissionModelChoiceField(queryset=Hospital.objects.all())
+    hospital = HospitalPermissionModelChoiceField(label=_('hospital'),
+                                                  queryset=Hospital.objects.all())
 
     class Meta:
         model = GroupHospitalPermission

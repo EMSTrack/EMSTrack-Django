@@ -1124,7 +1124,7 @@ msgstr "Este grupo no tiene acceso a ninguna ambulancia."
 
 #: templates/login/group_detail.html:134
 msgid "This group does not have access to any hospitals."
-msgstr "Este grup no tiene accesso a ningún hospital."
+msgstr "Este grupo no tiene accesso a ningún hospital."
 
 #: templates/login/group_list.html:25
 msgid "Number of Users"
