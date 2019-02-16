@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 19:21+0000\n"
+"POT-Creation-Date: 2019-02-16 19:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,15 +143,15 @@ msgstr "No urgent"
 msgid "Omega"
 msgstr "Omega"
 
-#: ambulance/models.py:344
+#: ambulance/models.py:344 templates/ambulance/call_list.html:12
 msgid "Pending"
 msgstr "Pendientes"
 
-#: ambulance/models.py:345
+#: ambulance/models.py:345 templates/ambulance/call_list.html:46
 msgid "Started"
 msgstr "Empezadas"
 
-#: ambulance/models.py:346
+#: ambulance/models.py:346 templates/ambulance/call_list.html:83
 msgid "Ended"
 msgstr "Terminadas"
 
@@ -224,7 +224,7 @@ msgstr "base"
 msgid "AED"
 msgstr "AED"
 
-#: ambulance/models.py:635
+#: ambulance/models.py:635 templates/ambulance/location_list.html:93
 msgid "Incident"
 msgstr "Incidente"
 
@@ -477,10 +477,17 @@ msgstr "actividad"
 
 #: templates/ambulance/ambulance_detail.html:20
 #: templates/ambulance/ambulance_form.html:14
+#: templates/ambulance/dispatch_list.html:22
 msgid "Ambulance"
 msgstr "Ambulancia"
 
 #: templates/ambulance/ambulance_detail.html:23
+#: templates/ambulance/call_detail.html:30
+#: templates/ambulance/call_detail.html:37
+#: templates/ambulance/call_list.html:20 templates/ambulance/call_list.html:54
+#: templates/ambulance/call_list.html:105
+#: templates/ambulance/location_detail.html:12
+#: templates/ambulance/location_form.html:19
 msgid "Details"
 msgstr "Detalles"
 
@@ -497,12 +504,15 @@ msgstr "Capacidad"
 #: templates/ambulance/ambulance_detail.html:39
 #: templates/ambulance/ambulance_detail.html:175
 #: templates/ambulance/ambulance_list.html:30
+#: templates/ambulance/call_detail.html:33
+#: templates/ambulance/call_detail.html:130
 msgid "Status"
 msgstr "Estado"
 
 #: templates/ambulance/ambulance_detail.html:43
 #: templates/ambulance/ambulance_detail.html:118
 #: templates/ambulance/ambulance_detail.html:177
+#: templates/ambulance/location_detail.html:31
 msgid "Comment"
 msgstr "Comentario"
 
@@ -514,16 +524,23 @@ msgstr "Cliente de actualización"
 #: templates/ambulance/ambulance_detail.html:119
 #: templates/ambulance/ambulance_detail.html:179
 #: templates/ambulance/ambulance_list.html:32
+#: templates/ambulance/location_detail.html:35
+#: templates/ambulance/location_list.html:26
+#: templates/ambulance/location_list.html:63
+#: templates/ambulance/location_list.html:116
 msgid "Updated on"
 msgstr "Actualizado en"
 
 #: templates/ambulance/ambulance_detail.html:57
+#: templates/ambulance/location_detail.html:39
 msgid "By"
 msgstr "por"
 
 #: templates/ambulance/ambulance_detail.html:75
 #: templates/ambulance/ambulance_detail.html:116
-#: templates/login/group_list.html:22
+#: templates/ambulance/location_detail.html:15
+#: templates/ambulance/location_list.html:23
+#: templates/ambulance/location_list.html:60 templates/login/group_list.html:22
 msgid "Name"
 msgstr "Nombre"
 
@@ -546,6 +563,9 @@ msgstr "valor"
 #: templates/ambulance/ambulance_detail.html:120
 #: templates/ambulance/ambulance_detail.html:180
 #: templates/ambulance/ambulance_list.html:33
+#: templates/ambulance/location_list.html:27
+#: templates/ambulance/location_list.html:64
+#: templates/ambulance/location_list.html:117
 msgid "by"
 msgstr "por"
 
@@ -558,6 +578,9 @@ msgid "Past Locations"
 msgstr "Ubicaciones pasadas"
 
 #: templates/ambulance/ambulance_detail.html:176
+#: templates/ambulance/location_detail.html:10
+#: templates/ambulance/location_detail.html:27
+#: templates/ambulance/location_form.html:17
 msgid "Location"
 msgstr "Ubicación"
 
@@ -566,10 +589,14 @@ msgid "Timestamp"
 msgstr "Hora"
 
 #: templates/ambulance/ambulance_form.html:23
+#: templates/ambulance/location_form.html:26
 msgid "Save"
 msgstr "Salvar"
 
-#: templates/ambulance/ambulance_list.html:12 templates/ambulance/map.html:109
+#: templates/ambulance/ambulance_list.html:12
+#: templates/ambulance/call_detail.html:99
+#: templates/ambulance/call_list.html:22 templates/ambulance/call_list.html:56
+#: templates/ambulance/call_list.html:107 templates/ambulance/map.html:109
 #: templates/ambulance/map.html:269 templates/base.html:74
 msgid "Ambulances"
 msgstr "Ambulancias"
@@ -580,12 +607,175 @@ msgid "new"
 msgstr "nueva"
 
 #: templates/ambulance/ambulance_list.html:31
+#: templates/ambulance/location_list.html:25
+#: templates/ambulance/location_list.html:62
+#: templates/ambulance/location_list.html:115
 msgid "Comments"
 msgstr "Comentarios"
 
 #: templates/ambulance/ambulance_list.html:64
 msgid "No ambulances."
 msgstr "No hay ambulancias."
+
+#: templates/ambulance/call_detail.html:23
+msgid "ABORT CALL"
+msgstr ""
+
+#: templates/ambulance/call_detail.html:28
+#, fuzzy
+#| msgid "Calls"
+msgid "Call"
+msgstr "Llamadas"
+
+#: templates/ambulance/call_detail.html:41
+#: templates/ambulance/call_list.html:21 templates/ambulance/call_list.html:55
+#: templates/ambulance/call_list.html:106 templates/ambulance/map.html:194
+#: templates/login/group_list.html:24
+msgid "Priority"
+msgstr "Prioridad"
+
+#: templates/ambulance/call_detail.html:46
+#, fuzzy
+#| msgid "Pending"
+msgid "Pending at"
+msgstr "Pendientes"
+
+#: templates/ambulance/call_detail.html:49
+#, fuzzy
+#| msgid "Started"
+msgid "Started at"
+msgstr "Empezadas"
+
+#: templates/ambulance/call_detail.html:52
+#, fuzzy
+#| msgid "Ended"
+msgid "Ended at"
+msgstr "Terminadas"
+
+#: templates/ambulance/call_detail.html:73 templates/ambulance/map.html:281
+msgid "Patients"
+msgstr "Pacientes"
+
+#: templates/ambulance/call_detail.html:91
+msgid "No patient names are available."
+msgstr ""
+
+#: templates/ambulance/call_detail.html:123
+#, fuzzy
+#| msgid "Waypoint"
+msgid "Waypoints"
+msgstr "Punto de ruta"
+
+#: templates/ambulance/call_detail.html:127
+#, fuzzy
+#| msgid "order"
+msgid "Order"
+msgstr "orden"
+
+#: templates/ambulance/call_detail.html:128
+#: templates/ambulance/location_detail.html:19
+msgid "Type"
+msgstr ""
+
+#: templates/ambulance/call_detail.html:129 templates/ambulance/map.html:255
+msgid "Coordinates"
+msgstr "Coordenadas"
+
+#: templates/ambulance/call_detail.html:164
+msgid "Progress"
+msgstr ""
+
+#: templates/ambulance/call_list.html:10 templates/ambulance/map.html:88
+#: templates/base.html:68
+msgid "Calls"
+msgstr "Llamadas"
+
+#: templates/ambulance/call_list.html:19 templates/ambulance/call_list.html:53
+#: templates/ambulance/call_list.html:104
+#, fuzzy
+#| msgid "Timestamp"
+msgid "Time"
+msgstr "Hora"
+
+#: templates/ambulance/call_list.html:41
+msgid "No calls currently pending."
+msgstr ""
+
+#: templates/ambulance/call_list.html:75
+msgid "No calls currently started."
+msgstr ""
+
+#: templates/ambulance/call_list.html:126
+msgid "No calls ended yet."
+msgstr ""
+
+#: templates/ambulance/dispatch_list.html:6
+#, fuzzy
+#| msgid "Dispatch"
+msgid "Dispatch List"
+msgstr "Despachar"
+
+#: templates/ambulance/dispatch_list.html:23
+#, fuzzy
+#| msgid "Priority"
+msgid "Priority Name"
+msgstr "Prioridad"
+
+#: templates/ambulance/dispatch_list.html:24
+msgid "Call Time"
+msgstr ""
+
+#: templates/ambulance/dispatch_list.html:25
+#, fuzzy
+#| msgid "street"
+msgid "Street"
+msgstr "calle"
+
+#: templates/ambulance/dispatch_list.html:26
+#: templates/ambulance/location_detail.html:23
+#: templates/ambulance/location_list.html:24
+#: templates/ambulance/location_list.html:61
+#: templates/ambulance/location_list.html:114 templates/ambulance/map.html:247
+msgid "Address"
+msgstr "Dirección"
+
+#: templates/ambulance/dispatch_list.html:27 templates/ambulance/map.html:230
+#: templates/login/group_list.html:23
+msgid "Description"
+msgstr "Descripción"
+
+#: templates/ambulance/dispatch_list.html:47
+#, fuzzy
+#| msgid "Dispatch Ambulances"
+msgid "No dispatched ambulance."
+msgstr "Despacho de Ambulancias"
+
+#: templates/ambulance/location_list.html:10 templates/ambulance/map.html:164
+#: templates/base.html:102
+msgid "Locations"
+msgstr "Ubicaciones"
+
+#: templates/ambulance/location_list.html:16
+#, fuzzy
+#| msgid "Base"
+msgid "Bases"
+msgstr "base"
+
+#: templates/ambulance/location_list.html:49
+msgid "No bases have been created yet."
+msgstr ""
+
+#: templates/ambulance/location_list.html:53
+msgid "AEDs"
+msgstr ""
+
+#: templates/ambulance/location_list.html:86
+msgid "No AEDs have been created yet."
+msgstr ""
+
+#: templates/ambulance/location_list.html:137
+msgid "No incident have been created yet."
+msgstr ""
 
 #: templates/ambulance/map.html:49
 msgid "Dispatch Ambulances"
@@ -600,22 +790,6 @@ msgstr "Despachar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/ambulance/map.html:88 templates/base.html:68
-msgid "Calls"
-msgstr "Llamadas"
-
-#: templates/ambulance/map.html:164 templates/base.html:102
-msgid "Locations"
-msgstr "Ubicaciones"
-
-#: templates/ambulance/map.html:194 templates/login/group_list.html:24
-msgid "Priority"
-msgstr "Prioridad"
-
-#: templates/ambulance/map.html:230 templates/login/group_list.html:23
-msgid "Description"
-msgstr "Descripción"
-
 #: templates/ambulance/map.html:234
 msgid "Describe the incident"
 msgstr "Describe el incidente"
@@ -628,10 +802,6 @@ msgstr "actualizar coordenadas"
 msgid "Street address"
 msgstr "Calle"
 
-#: templates/ambulance/map.html:247
-msgid "Address"
-msgstr "Dirección"
-
 #: templates/ambulance/map.html:250
 msgid ""
 "Click to automatically search for address after changing the coordinates"
@@ -642,10 +812,6 @@ msgstr ""
 #: templates/ambulance/map.html:251
 msgid "update address"
 msgstr "actualizar dirección"
-
-#: templates/ambulance/map.html:255
-msgid "Coordinates"
-msgstr "Coordenadas"
 
 #: templates/ambulance/map.html:260
 msgid "Lat"
@@ -658,10 +824,6 @@ msgstr "Lon"
 #: templates/ambulance/map.html:276
 msgid "Click on or drag ambulances here"
 msgstr "Marque o arrastre ambulancias aquí"
-
-#: templates/ambulance/map.html:281
-msgid "Patients"
-msgstr "Pacientes"
 
 #: templates/ambulance/map.html:345
 msgid "Ok"
