@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 18:20+0000\n"
+"POT-Creation-Date: 2019-02-16 18:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -479,6 +479,10 @@ msgstr "¿Olvidó tu contraseña?"
 #: templates/index.html:94 templates/index.html:97
 msgid "Signup"
 msgstr "Registrar"
+
+#: templates/leaflet/point_widget.html:29
+msgid "Latitude"
+msgstr ""
 
 #: templates/login/group_list.html:14 templates/login/user_list.html:14
 msgctxt "masculine"
