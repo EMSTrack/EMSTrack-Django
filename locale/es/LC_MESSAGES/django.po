@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 18:26+0000\n"
+"POT-Creation-Date: 2019-02-16 18:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -87,29 +87,208 @@ msgstr "portadordeequipo"
 msgid "identifier"
 msgstr "identificador"
 
-#: ambulance/models.py:122
+#: ambulance/models.py:122 ambulance/models.py:299
 msgid "capability"
 msgstr "capacidad"
 
-#: ambulance/models.py:126
+#: ambulance/models.py:126 ambulance/models.py:303 ambulance/models.py:385
+#: ambulance/models.py:494 ambulance/models.py:601 ambulance/models.py:692
+#: ambulance/models.py:754
 msgid "status"
 msgstr "estado"
 
-#: ambulance/models.py:131
+#: ambulance/models.py:131 ambulance/models.py:308
 msgid "orientation"
 msgstr "orientación"
 
-#: ambulance/models.py:132 emstrack/models.py:59
+#: ambulance/models.py:132 ambulance/models.py:309 ambulance/models.py:700
+#: emstrack/models.py:59
 msgid "location"
 msgstr "ubicación"
 
-#: ambulance/models.py:135
+#: ambulance/models.py:135 ambulance/models.py:312
 msgid "timestamp"
 msgstr "hora"
 
 #: ambulance/models.py:142
 msgid "location_client"
 msgstr "client_de_localización"
+
+#: ambulance/models.py:296 ambulance/models.py:506
+#, fuzzy
+#| msgid "Ambulance"
+msgid "ambulance"
+msgstr "Ambulancia"
+
+#: ambulance/models.py:326
+#, fuzzy
+#| msgid "Description"
+msgid "Resuscitation"
+msgstr "Descripción"
+
+#: ambulance/models.py:327
+msgid "Emergent"
+msgstr ""
+
+#: ambulance/models.py:328
+msgid "Urgent"
+msgstr ""
+
+#: ambulance/models.py:329
+msgid "Less urgent"
+msgstr ""
+
+#: ambulance/models.py:330
+msgid "Not urgent"
+msgstr ""
+
+#: ambulance/models.py:331
+msgid "Omega"
+msgstr ""
+
+#: ambulance/models.py:345
+msgid "Pending"
+msgstr ""
+
+#: ambulance/models.py:346
+msgid "Started"
+msgstr ""
+
+#: ambulance/models.py:347
+msgid "Ended"
+msgstr ""
+
+#: ambulance/models.py:390
+#, fuzzy
+#| msgid "Details"
+msgid "details"
+msgstr "Detalles"
+
+#: ambulance/models.py:393
+#, fuzzy
+#| msgid "Priority"
+msgid "priority"
+msgstr "Prioridad"
+
+#: ambulance/models.py:398
+msgid "pending_at"
+msgstr ""
+
+#: ambulance/models.py:399
+msgid "started_at"
+msgstr ""
+
+#: ambulance/models.py:400
+msgid "ended_at"
+msgstr ""
+
+#: ambulance/models.py:403
+msgid "created_at"
+msgstr ""
+
+#: ambulance/models.py:483
+msgid "Requested"
+msgstr ""
+
+#: ambulance/models.py:484
+msgid "Accepted"
+msgstr ""
+
+#: ambulance/models.py:485
+msgid "Declined"
+msgstr ""
+
+#: ambulance/models.py:486
+msgid "Suspended"
+msgstr ""
+
+#: ambulance/models.py:487
+msgid "Completed"
+msgstr ""
+
+#: ambulance/models.py:501 ambulance/models.py:618
+msgid "call"
+msgstr ""
+
+#: ambulance/models.py:598 ambulance/models.py:686
+#, fuzzy
+#| msgid "Ambulance"
+msgid "ambulance_call"
+msgstr "Ambulancia"
+
+#: ambulance/models.py:620 ambulance/models.py:656 ambulance/models.py:761
+#, fuzzy
+#| msgid "Username"
+msgid "name"
+msgstr "Usuario"
+
+#: ambulance/models.py:621
+msgid "age"
+msgstr ""
+
+#: ambulance/models.py:634
+msgid "Base"
+msgstr ""
+
+#: ambulance/models.py:635
+msgid "AED"
+msgstr ""
+
+#: ambulance/models.py:636
+#, fuzzy
+#| msgid "At incident"
+msgid "Incident"
+msgstr "En el incidente"
+
+#: ambulance/models.py:637
+#, fuzzy
+#| msgid "Hospitals"
+msgid "Hospital"
+msgstr "Hospitales"
+
+#: ambulance/models.py:638
+#, fuzzy
+#| msgid "At waypoint"
+msgid "Waypoint"
+msgstr "En en punto de ruta"
+
+#: ambulance/models.py:639
+msgid "Other"
+msgstr ""
+
+#: ambulance/models.py:659
+msgid "type"
+msgstr ""
+
+#: ambulance/models.py:675
+msgid "Created"
+msgstr ""
+
+#: ambulance/models.py:676
+msgid "Visiting"
+msgstr ""
+
+#: ambulance/models.py:677
+msgid "Visited"
+msgstr ""
+
+#: ambulance/models.py:678
+msgid "Skipped"
+msgstr ""
+
+#: ambulance/models.py:689 ambulance/models.py:751
+msgid "order"
+msgstr ""
+
+#: ambulance/models.py:748
+#, fuzzy
+#| msgid "At waypoint"
+msgid "waypoint"
+msgstr "En en punto de ruta"
+
+#: ambulance/models.py:762
+msgid "center"
+msgstr ""
 
 #: emstrack/models.py:50
 msgid "number"
@@ -484,6 +663,7 @@ msgstr "Registrar"
 msgid "Latitude"
 msgstr "Latitud"
 
+#: templates/leaflet/point_widget.html:33
 msgid "Longitude"
 msgstr "Longitud"
 
