@@ -361,7 +361,8 @@ class SubscribeClient(BaseClient):
                                     log.save()
 
                             # otherwise must match location_client
-                            elif ambulance.location_client is None or ambulance.location_client.client_id != client.client_id:
+                            elif ambulance.location_client is None or \
+                                    ambulance.location_client.client_id != client.client_id:
 
                                 # raise error to rollback transaction
                                 raise ClientException()
@@ -549,7 +550,7 @@ class SubscribeClient(BaseClient):
             try:
 
                 # handle status
-                status = ClientStatus(data)
+                status = ClientStatus[data]
 
             except ValueError as e:
 
@@ -689,7 +690,7 @@ class SubscribeClient(BaseClient):
             try:
 
                 # handle activity
-                activity = ClientActivity(data)
+                activity = ClientActivity[data]
 
             except ValueError:
 
@@ -805,6 +806,7 @@ class SubscribeClient(BaseClient):
 
             ambulance = Ambulance.objects.get(id=ambulance_id)
             call = Call.objects.get(id=call_id)
+            status = AmbulanceCallStatus[status]
 
         except Ambulance.DoesNotExist:
 
@@ -844,22 +846,22 @@ class SubscribeClient(BaseClient):
                                         "Ambulance with id '{}' is not part of call '{}'".format(ambulance_id, call_id))
                 return
 
-            if status.casefold() == AmbulanceCallStatus.A.value.casefold():
+            if status == AmbulanceCallStatus.A:
 
                 # change ambulancecall status to accepted
                 ambulancecall.status = AmbulanceCallStatus.A.name
 
-            elif status.casefold() == AmbulanceCallStatus.D.value.casefold():
+            elif status == AmbulanceCallStatus.D:
 
                 # change ambulancecall status to decline
                 ambulancecall.status = AmbulanceCallStatus.D.name
 
-            elif status.casefold() == AmbulanceCallStatus.S.value.casefold():
+            elif status == AmbulanceCallStatus.S:
 
                 # change ambulancecall status to suspended
                 ambulancecall.status = AmbulanceCallStatus.S.name
 
-            elif status.casefold() == AmbulanceCallStatus.C.value.casefold():
+            elif status == AmbulanceCallStatus.C:
 
                 # change ambulance status to completed
                 ambulancecall.status = AmbulanceCallStatus.C.name

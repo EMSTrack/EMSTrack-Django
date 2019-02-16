@@ -265,7 +265,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client)
@@ -371,14 +371,14 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance logout
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance logout')
+                            ClientActivity.AO.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a2.id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client)
@@ -731,7 +731,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -749,7 +749,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a2.id),
-                                   'ambulance login')
+                                   ClientActivity.AI.name)
 
         # process messages
         self.loop(second_test_client, subscribe_client)
@@ -856,7 +856,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance logout
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance logout')
+                            ClientActivity.AO.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -879,7 +879,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance logout
         second_test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, second_client_id, self.a2.id),
-                                   'ambulance logout')
+                                   ClientActivity.AO.name)
 
         # process messages
         self.loop(second_test_client, subscribe_client)
@@ -1022,7 +1022,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client, subscribe_client)

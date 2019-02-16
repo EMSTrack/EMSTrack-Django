@@ -71,7 +71,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client, subscribe_client)

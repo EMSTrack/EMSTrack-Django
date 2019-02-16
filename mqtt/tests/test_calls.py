@@ -6,7 +6,7 @@ from django.conf import settings
 from ambulance.models import AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, LocationType, \
     WaypointStatus
 from ambulance.serializers import CallSerializer
-from login.models import Client, ClientStatus, ClientLog
+from login.models import Client, ClientStatus, ClientLog, ClientActivity
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from .client import MQTTTestSubscribeClient as SubscribeClient
 
@@ -55,7 +55,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client)
@@ -71,7 +71,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client)
@@ -138,7 +138,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id),
-                            AmbulanceCallStatus.A.value.casefold())
+                            AmbulanceCallStatus.A.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -236,7 +236,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id),
-                            AmbulanceCallStatus.C.value.casefold())
+                            AmbulanceCallStatus.C.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -309,7 +309,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -324,7 +324,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -439,7 +439,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client)
@@ -455,7 +455,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client)
@@ -520,7 +520,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), 
-                            AmbulanceCallStatus.D.value.casefold())
+                            AmbulanceCallStatus.D.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -540,7 +540,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), 
-                            AmbulanceCallStatus.A.value.casefold())
+                            AmbulanceCallStatus.A.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -564,7 +564,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id),
-                            AmbulanceCallStatus.C.value.casefold())
+                            AmbulanceCallStatus.C.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -633,7 +633,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -648,7 +648,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -710,7 +710,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id, call.id), 
-                            AmbulanceCallStatus.D.value.casefold())
+                            AmbulanceCallStatus.D.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -802,7 +802,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -817,7 +817,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id1),
-                            'ambulance login')
+                            ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -897,7 +897,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id1, call.id), 
-                            AmbulanceCallStatus.A.value.casefold())
+                            AmbulanceCallStatus.A.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -953,7 +953,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # test_client publishes "completed" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                    ambulance_id1, call.id),
-                            AmbulanceCallStatus.C.value.casefold())
+                            AmbulanceCallStatus.C.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -996,7 +996,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.is_connected(test_client2)
 
         # Client handshake
-        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'online')
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1011,7 +1011,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client2.publish('user/{}/client/{}/ambulance/{}/status'.format(username2, client_id2, ambulance_id2),
-                             'ambulance login')
+                             ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1045,7 +1045,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
-                             AmbulanceCallStatus.A.value.casefold())
+                             AmbulanceCallStatus.A.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1101,7 +1101,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # test_client publishes "completed" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
-                             AmbulanceCallStatus.C.value.casefold())
+                             AmbulanceCallStatus.C.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1173,7 +1173,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.is_connected(test_client1)
 
         # Client handshake
-        test_client1.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client1.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client1, subscribe_client)
@@ -1188,7 +1188,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client1.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id1),
-                             'ambulance login')
+                             ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client1, subscribe_client)
@@ -1214,7 +1214,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.is_connected(test_client2)
 
         # Client handshake
-        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'online')
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1229,7 +1229,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
 
         # Ambulance handshake: ambulance login
         test_client2.publish('user/{}/client/{}/ambulance/{}/status'.format(username2, client_id2, ambulance_id2),
-                             'ambulance login')
+                             ClientActivity.AI.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1312,7 +1312,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                     ambulance_id1, call.id), 
-                             AmbulanceCallStatus.A.value.casefold())
+                             AmbulanceCallStatus.A.name)
 
         # process messages
         self.loop(test_client1, subscribe_client)
@@ -1341,7 +1341,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # test_client publishes "Accepted" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
-                             AmbulanceCallStatus.A.value.casefold())
+                             AmbulanceCallStatus.A.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
@@ -1432,7 +1432,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # test_client publishes "completed" to call status
         test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
                                                                                     ambulance_id1, call.id),
-                             AmbulanceCallStatus.C.value.casefold())
+                             AmbulanceCallStatus.C.name)
 
         # process messages
         self.loop(test_client2, test_client1, subscribe_client)
@@ -1469,7 +1469,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         # test_client publishes "completed" to call status
         test_client2.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username2, client_id2,
                                                                                     ambulance_id2, call.id),
-                             AmbulanceCallStatus.C.value.casefold())
+                             AmbulanceCallStatus.C.name)
 
         # process messages
         self.loop(test_client2, test_client1, subscribe_client)
@@ -1487,13 +1487,13 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Client handshake
-        test_client1.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client1.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client1, subscribe_client)
 
         # Client handshake
-        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
