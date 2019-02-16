@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.template.defaulttags import register
-
+from django.utils.translation import ugettext_lazy as _
 
 # filters
 from django.utils import timezone
@@ -47,16 +47,16 @@ class AddressModel(models.Model):
     An abstract base class model that provides address fields.
     """
 
-    number = models.CharField(max_length=30, blank=True)
-    street = models.CharField(max_length=254, blank=True)
-    unit = models.CharField(max_length=30, blank=True)
-    neighborhood = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, default=defaults['city'])
-    state = models.CharField(max_length=3, default=defaults['state'])
-    zipcode = models.CharField(max_length=12, blank=True)
-    country = models.CharField(max_length=2, default=defaults['country'])
+    number = models.CharField(_('number'), max_length=30, blank=True)
+    street = models.CharField(_('street'), max_length=254, blank=True)
+    unit = models.CharField(_('unit'), max_length=30, blank=True)
+    neighborhood = models.CharField(_('neighborhood'), max_length=100, blank=True)
+    city = models.CharField(_('city'), max_length=100, default=defaults['city'])
+    state = models.CharField(_('state'), max_length=3, default=defaults['state'])
+    zipcode = models.CharField(_('zipcode'), max_length=12, blank=True)
+    country = models.CharField(_('country'), max_length=2, default=defaults['country'])
 
-    location = models.PointField(srid=4326, default=defaults['location'])
+    location = models.PointField(_('location'), srid=4326, default=defaults['location'])
 
     class Meta:
         abstract = True
@@ -86,10 +86,11 @@ class UpdatedByModel(models.Model):
     An abstract base class model that provides comments and update fields.
     """
 
-    comment = models.CharField(max_length=254, blank=True)
+    comment = models.CharField(_('comment'), max_length=254, blank=True)
     updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(auto_now=True)
+                                   on_delete=models.CASCADE,
+                                   verbose_name=_('updated_by'))
+    updated_on = models.DateTimeField(_('updated_on'), auto_now=True)
 
     class Meta:
         abstract = True
@@ -100,12 +101,11 @@ class UpdatedByHistoryModel(models.Model):
     An abstract base class model that provides comments and update fields.
     """
 
-    comment = models.CharField(max_length=254, blank=True)
+    comment = models.CharField(_('comment'), max_length=254, blank=True)
     updated_by = models.ForeignKey(User,
-                                   on_delete=models.CASCADE)
-    updated_on = models.DateTimeField(default=timezone.now)
+                                   on_delete=models.CASCADE,
+                                   verbose_name=_('updated_by'))
+    updated_on = models.DateTimeField(_('updated_on'), default=timezone.now)
 
     class Meta:
         abstract = True
-
-
