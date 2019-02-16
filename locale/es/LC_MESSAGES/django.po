@@ -63,7 +63,6 @@ msgstr "Hacia un punto de ruta"
 msgid "At waypoint"
 msgstr "En en punto de ruta"
 
-# AmbulanceCapability
 #: ambulance/models.py:95
 msgid "Basic"
 msgstr "Basica"
