@@ -3,7 +3,7 @@
 
 {% block content %}
 
-    <h1>Dispatch List</h1>
+    <h1>{% trans "Dispatch List" %}</h1>
 
 <style>
 th {
@@ -19,12 +19,12 @@ th {
             <table class="table table-striped table-sm">
                 <thead>
                 <tr>
-                    <th>Ambulance</th>
-                    <th>Priority Name</th>
-                    <th>Call Time</th>
-                    <th>Street</th>
-                    <th>Address</th>
-                    <th>Description</th>
+                    <th>{% trans "Ambulance" %}</th>
+                    <th>{% trans "Priority Name" %}</th>
+                    <th>{% trans "Call Time" %}</th>
+                    <th>{% trans "Street" %}</th>
+                    <th>{% trans "Address" %}</th>
+                    <th>{% trans "Description" %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@ th {
     </div>
 </div>
 {% else %}
-    <p>No dispatched ambulance.</p>
+    <p>{% trans "No dispatched ambulance." %}</p>
 {% endif %}
 
     <br/>

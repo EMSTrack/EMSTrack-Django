@@ -7,36 +7,36 @@
     <div class="row">
         <div class="col">
 
-            <h1>Location</h1>
+            <h1>{% trans "Location" %}</h1>
 
-            <h3>Details:</h3>
+            <h3>{% trans "Details" %}:</h3>
 
             <p>
-                <strong>Name:</strong>
+                <strong>{% trans "Name" %}:</strong>
                 <a href="{% url 'ambulance:location_update' pk=location.id %}">{{ location.name }}</a>
             </p>
             <p>
-                <strong>Type:</strong>
+                <strong>{% trans "Type" %}:</strong>
                 {{ location.type|get_location_type }}
             </p>
             <p>
-                <strong>Address:</strong>
+                <strong>{% trans "Address" %}:</strong>
                 {{ location.get_address }}
             </p>
             <p>
-                <strong>Location:</strong>
+                <strong>{% trans "Location" %}:</strong>
                 {{ location.location }}
             </p>
             <p>
-                <strong>Comment:</strong>
+                <strong>{% trans "Comment" %}:</strong>
                 {{ location.comment }}
             </p>
             <p>
-                <strong>Updated on:</strong>
+                <strong>{% trans "Updated on" %}:</strong>
                 {{ location.updated_on }}
             </p>
             <p>
-                <strong>By:</strong>
+                <strong>{% trans "By" %}:</strong>
                 {{ location.updated_by }}
             </p>
             
