@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.gis.forms import PointField
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 from emstrack.forms import LeafletPointWidget
 
