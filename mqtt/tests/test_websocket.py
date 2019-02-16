@@ -56,7 +56,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -155,7 +155,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)

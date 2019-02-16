@@ -249,7 +249,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client)
@@ -433,7 +433,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(point2str(obj.location), point2str(location))
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client)
@@ -609,7 +609,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         broker['WILL'] = {
             'topic': 'user/{}/client/{}/status'.format(broker['USERNAME'],
                                                        broker['CLIENT_ID']),
-            'payload': 'disconnected'
+            'payload': ClientStatus.D.name
         }
 
         client = MQTTTestClient(broker,
@@ -620,13 +620,13 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         # Expect status
         client.expect('user/{}/client/{}/status'.format(broker['USERNAME'],
                                                         broker['CLIENT_ID']),
-                      'online')
+                      ClientStatus.O.name)
         self.is_subscribed(client)
 
         # Publish client status
         client.publish('user/{}/client/{}/status'.format(broker['USERNAME'],
                                                          broker['CLIENT_ID']),
-                       'online',
+                       ClientStatus.O.name,
                        qos=1,
                        retain=False)
 
@@ -636,7 +636,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         # reconnecting with same client-id will trigger will
         client.expect('user/{}/client/{}/status'.format(broker['USERNAME'],
                                                         broker['CLIENT_ID']),
-                      'disconnected')
+                      ClientStatus.D.name)
         self.is_subscribed(client)
 
         client = MQTTTestClient(broker,
@@ -698,7 +698,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.is_connected(second_test_client)
 
         # Client handshake: online
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -714,7 +714,7 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.activity, ClientActivity.HS.name)
 
         # Client handshake: online
-        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'online')
+        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(second_test_client, subscribe_client)
@@ -900,13 +900,13 @@ class TestMQTTHandshake(TestMQTT, MQTTTestCase):
         self.assertTrue(ambulance.location_client is None)
 
         # Client handshake: offline
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
 
         # Client handshake: offline
-        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), 'offline')
+        second_test_client.publish('user/{}/client/{}/status'.format(username, second_client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(second_test_client, subscribe_client)
@@ -1005,7 +1005,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake: online
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -1051,7 +1051,7 @@ class TestMQTTHandshakeWithoutAmbulanceLogout(TestMQTT, MQTTTestCase):
         self.assertEqual(ambulance.location_client.client_id, client_id)
 
         # Client handshake: offline
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -1119,7 +1119,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = client_id
         broker['WILL'] = {
             'topic': 'user/{}/client/{}/status'.format(username, client_id),
-            'payload': 'disconnected'
+            'payload': ClientStatus.D.name
         }
 
         test_client = MQTTTestClient(broker,
@@ -1128,7 +1128,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake: online
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -1200,7 +1200,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         broker['CLIENT_ID'] = client_id
         broker['WILL'] = {
             'topic': 'user/{}/client/{}/status'.format(username, client_id),
-            'payload': 'disconnected'
+            'payload': ClientStatus.D.name
         }
 
         test_client = MQTTTestClient(broker,
@@ -1209,7 +1209,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake: online
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -1229,7 +1229,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.is_connected(test_client)
 
         # Client handshake: online
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'online')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -1245,7 +1245,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[1].status, ClientStatus.O.name)
 
         # Client handshake: offline
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)

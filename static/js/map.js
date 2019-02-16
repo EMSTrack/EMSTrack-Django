@@ -260,7 +260,7 @@ $(function () {
         mqttClient.onMessageArrived = onMessageArrived;
 
         // set will message
-        var willMessage = new Paho.MQTT.Message('disconnected');
+        var willMessage = new Paho.MQTT.Message('D');
         willMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
         willMessage.qos = 2;
         willMessage.retained = false;
@@ -448,7 +448,7 @@ function onConnect() {
     console.log("Connected to MQTT broker");
 
     // handshake online
-    var onlineMessage = new Paho.MQTT.Message('online');
+    var onlineMessage = new Paho.MQTT.Message('O');
     onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
     onlineMessage.qos = 2;
     onlineMessage.retained = false;

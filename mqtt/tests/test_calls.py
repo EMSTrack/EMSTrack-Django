@@ -250,7 +250,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client)
@@ -390,7 +390,7 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -578,7 +578,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -742,7 +742,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client)
@@ -971,7 +971,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.S.name)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), 'offline')
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client, subscribe_client)
@@ -1119,7 +1119,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         self.assertEqual(call.status, CallStatus.E.name)
 
         # Client handshake
-        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), 'offline')
+        test_client2.publish('user/{}/client/{}/status'.format(username2, client_id2), ClientStatus.F.name)
 
         # process messages
         self.loop(test_client2, subscribe_client)
