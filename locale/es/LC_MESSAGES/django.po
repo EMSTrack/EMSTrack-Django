@@ -1042,68 +1042,52 @@ msgid "Longitude"
 msgstr "Longitud"
 
 #: templates/login/client_detail.html:11
-#, fuzzy
-#| msgid "Clients"
 msgid "Client"
-msgstr "Clientes"
+msgstr "Cliente"
 
 #: templates/login/client_detail.html:16 templates/login/client_list.html:19
 #: templates/login/client_list.html:91
-#, fuzzy
-#| msgid "Clients"
 msgid "Client ID"
-msgstr "Clientes"
+msgstr "Identificación del cliente"
 
 #: templates/login/client_detail.html:21 templates/login/client_list.html:20
 #: templates/login/client_list.html:92 templates/login/user_detail.html:11
 #: templates/login/user_form.html:11
-#, fuzzy
-#| msgid "Users"
 msgid "User"
-msgstr "Usuarios"
+msgstr "Usuario"
 
 #: templates/login/client_detail.html:54
-#, fuzzy
-#| msgid "Login"
 msgid "Log"
-msgstr "Iniciar sesión"
+msgstr "Histórico"
 
 #: templates/login/client_detail.html:60
-#, fuzzy
-#| msgid "activity"
 msgid "Activity"
-msgstr "actividad"
+msgstr "Actividad"
 
 #: templates/login/client_list.html:12
-#, fuzzy
-#| msgid "location_client"
 msgid "Online clients"
-msgstr "client_de_localización"
+msgstr "Clientes conectados"
 
 #: templates/login/client_list.html:55
 msgid "There are no clients online."
-msgstr ""
+msgstr "No hay ningún cliente conectado."
 
 #: templates/login/client_list.html:66
-#, fuzzy
-#| msgid "location_client"
 msgid "Offline clients"
-msgstr "client_de_localización"
+msgstr "Clientes desconectados"
 
 #: templates/login/client_list.html:127
 msgid "There are no clients offline."
-msgstr ""
+msgstr "No hay ningún cliente desconectado."
 
 #: templates/login/group_create.html:11 templates/login/group_detail.html:11
 #: templates/login/group_form.html:12
-#, fuzzy
-#| msgid "Groups"
 msgid "Group"
-msgstr "Grupos"
+msgstr "Grupo"
 
 #: templates/login/group_create.html:23
 msgid "Edit the group after creation to provide more details."
-msgstr ""
+msgstr "Edite el grupo después de la creación para entrar más detalles."
 
 #: templates/login/group_detail.html:44 templates/login/user_detail.html:20
 #: templates/login/user_list.html:20
@@ -1116,33 +1100,31 @@ msgid "Last"
 msgstr "Apellido"
 
 #: templates/login/group_detail.html:71
-#, fuzzy
-#| msgid "This hospital has no equipment sets."
 msgid "This group has no users yet."
-msgstr "Este hospital no tiene juegos de equipos."
+msgstr "Este grupo no tiene usuarios."
 
 #: templates/login/group_detail.html:81 templates/login/group_form.html:26
 #: templates/login/user_detail.html:86 templates/login/user_form.html:25
 msgid "Permissions"
-msgstr ""
+msgstr "Permisiónes"
 
 #: templates/login/group_detail.html:89 templates/login/group_detail.html:117
 #: templates/login/user_detail.html:94 templates/login/user_detail.html:125
 msgid "Read"
-msgstr ""
+msgstr "Leer"
 
 #: templates/login/group_detail.html:90 templates/login/group_detail.html:118
 #: templates/login/user_detail.html:95 templates/login/user_detail.html:126
 msgid "Write"
-msgstr ""
+msgstr "Escribir"
 
 #: templates/login/group_detail.html:107
 msgid "This group does not have access to any ambulances."
-msgstr ""
+msgstr "Este grupo no tiene acceso a ninguna ambulancia."
 
 #: templates/login/group_detail.html:134
 msgid "This group does not have access to any hospitals."
-msgstr ""
+msgstr "Este grup no tiene accesso a ningún hospital."
 
 #: templates/login/group_list.html:25
 msgid "Number of Users"
@@ -1164,19 +1146,21 @@ msgstr ""
 msgid ""
 "This user is staff and does not need permission to access any ambulances."
 msgstr ""
+"Este usuario es personal y no necesita de permisión para accesar ambulancias."
 
 #: templates/login/user_detail.html:114
 msgid "This user does not have access to any ambulances."
-msgstr ""
+msgstr "Este usuario no tiene permisión para accesar ninguna ambulancia."
 
 #: templates/login/user_detail.html:143
 msgid ""
 "This user is staff and does not need permission to access any hospitals."
 msgstr ""
+"Este usuario es personal y no necesita de permisión para accesar hospitales."
 
 #: templates/login/user_detail.html:145
 msgid "This user does not have access to any hospitals."
-msgstr ""
+msgstr "Este usuario no tiene permisión para accesar ningún hospital."
 
 #: templates/modal.html:64
 msgid "OK"
