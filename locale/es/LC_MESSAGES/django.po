@@ -128,167 +128,151 @@ msgstr "Descripción"
 
 #: ambulance/models.py:327
 msgid "Emergent"
-msgstr ""
+msgstr "Emergente"
 
 #: ambulance/models.py:328
 msgid "Urgent"
-msgstr ""
+msgstr "Urgente"
 
 #: ambulance/models.py:329
 msgid "Less urgent"
-msgstr ""
+msgstr "Menos urgent"
 
 #: ambulance/models.py:330
 msgid "Not urgent"
-msgstr ""
+msgstr "No urgent"
 
 #: ambulance/models.py:331
 msgid "Omega"
-msgstr ""
+msgstr "Omega"
 
 #: ambulance/models.py:345
 msgid "Pending"
-msgstr ""
+msgstr "Pendiente"
 
 #: ambulance/models.py:346
 msgid "Started"
-msgstr ""
+msgstr "Empezado"
 
 #: ambulance/models.py:347
 msgid "Ended"
-msgstr ""
+msgstr "Terminado"
 
 #: ambulance/models.py:390
-#, fuzzy
-#| msgid "Details"
 msgid "details"
-msgstr "Detalles"
+msgstr "detalles"
 
 #: ambulance/models.py:393
-#, fuzzy
-#| msgid "Priority"
 msgid "priority"
-msgstr "Prioridad"
+msgstr "prioridad"
 
 #: ambulance/models.py:398
 msgid "pending_at"
-msgstr ""
+msgstr "pendiente_en"
 
 #: ambulance/models.py:399
 msgid "started_at"
-msgstr ""
+msgstr "empezado_en"
 
 #: ambulance/models.py:400
 msgid "ended_at"
-msgstr ""
+msgstr "terminado_en"
 
 #: ambulance/models.py:403
 msgid "created_at"
-msgstr ""
+msgstr "creado_en"
 
 #: ambulance/models.py:483
 msgid "Requested"
-msgstr ""
+msgstr "Requisitado"
 
 #: ambulance/models.py:484
 msgid "Accepted"
-msgstr ""
+msgstr "Aceptado"
 
 #: ambulance/models.py:485
 msgid "Declined"
-msgstr ""
+msgstr "Rechazado"
 
 #: ambulance/models.py:486
 msgid "Suspended"
-msgstr ""
+msgstr "Suspendido"
 
 #: ambulance/models.py:487
 msgid "Completed"
-msgstr ""
+msgstr "Completado"
 
 #: ambulance/models.py:501 ambulance/models.py:618
 msgid "call"
-msgstr ""
+msgstr "llamada"
 
 #: ambulance/models.py:598 ambulance/models.py:686
-#, fuzzy
-#| msgid "Ambulance"
 msgid "ambulance_call"
-msgstr "Ambulancia"
+msgstr "ambulance_llamada"
 
 #: ambulance/models.py:620 ambulance/models.py:656 ambulance/models.py:761
-#, fuzzy
-#| msgid "Username"
 msgid "name"
-msgstr "Usuario"
+msgstr "nombre"
 
 #: ambulance/models.py:621
 msgid "age"
-msgstr ""
+msgstr "edad"
 
 #: ambulance/models.py:634
 msgid "Base"
-msgstr ""
+msgstr "base"
 
 #: ambulance/models.py:635
 msgid "AED"
-msgstr ""
+msgstr "AED"
 
 #: ambulance/models.py:636
-#, fuzzy
-#| msgid "At incident"
 msgid "Incident"
-msgstr "En el incidente"
+msgstr "Incidente"
 
 #: ambulance/models.py:637
-#, fuzzy
-#| msgid "Hospitals"
 msgid "Hospital"
-msgstr "Hospitales"
+msgstr "Hospital"
 
 #: ambulance/models.py:638
-#, fuzzy
-#| msgid "At waypoint"
 msgid "Waypoint"
-msgstr "En en punto de ruta"
+msgstr "Punto de ruta"
 
 #: ambulance/models.py:639
 msgid "Other"
-msgstr ""
+msgstr "Otro"
 
 #: ambulance/models.py:659
 msgid "type"
-msgstr ""
+msgstr "tipo"
 
 #: ambulance/models.py:675
 msgid "Created"
-msgstr ""
+msgstr "Creado"
 
 #: ambulance/models.py:676
 msgid "Visiting"
-msgstr ""
+msgstr "Visitando"
 
 #: ambulance/models.py:677
 msgid "Visited"
-msgstr ""
+msgstr "Visitado"
 
 #: ambulance/models.py:678
 msgid "Skipped"
-msgstr ""
+msgstr "Saltado"
 
 #: ambulance/models.py:689 ambulance/models.py:751
 msgid "order"
-msgstr ""
+msgstr "orden"
 
 #: ambulance/models.py:748
-#, fuzzy
-#| msgid "At waypoint"
 msgid "waypoint"
-msgstr "En en punto de ruta"
+msgstr "punto_de_ruta"
 
 #: ambulance/models.py:762
 msgid "center"
-msgstr ""
+msgstr "centro"
 
 #: emstrack/models.py:50
 msgid "number"
