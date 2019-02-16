@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-15 06:47+0000\n"
+"POT-Creation-Date: 2019-02-16 17:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,54 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ambulance/models.py:115
+#, fuzzy
+#| msgid "Equipment"
+msgid "equipmentholder"
+msgstr "Equipo"
+
+#: ambulance/models.py:118
+#, fuzzy
+#| msgid "Identifier"
+msgid "identifier"
+msgstr "Identificador"
+
+#: ambulance/models.py:122
+#, fuzzy
+#| msgid "Capability"
+msgid "capability"
+msgstr "Capacidad"
+
+#: ambulance/models.py:126
+#, fuzzy
+#| msgid "Status"
+msgid "status"
+msgstr "Estado"
+
+#: ambulance/models.py:131
+#, fuzzy
+#| msgid "Location"
+msgid "orientation"
+msgstr "Lugar"
+
+#: ambulance/models.py:132
+#, fuzzy
+#| msgid "Location"
+msgid "location"
+msgstr "Lugar"
+
+#: ambulance/models.py:135
+#, fuzzy
+#| msgid "Timestamp"
+msgid "timestamp"
+msgstr "Hora"
+
+#: ambulance/models.py:142
+#, fuzzy
+#| msgid "Location"
+msgid "location_client"
+msgstr "Lugar"
 
 #: equipment/forms.py:50 templates/ambulance/ambulance_detail.html:67
 msgid "Equipment sets"
