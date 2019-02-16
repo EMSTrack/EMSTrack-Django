@@ -18,53 +18,84 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+# AmbulanceStatus
+msgid "Unknown"
+msgstr "Desconocido"
+
+msgid "Available"
+msgstr "Disponible"
+
+msgid "Out of service"
+msgstr "Fuera de servicio"
+
+msgid "Incident bound"
+msgstr "Hacia el incidente"
+
+msgid "At incident"
+msgstr "En el incidente"
+
+msgid "Hospital bound"
+msgstr "Hacia el hospital"
+
+msgid "At hospital"
+msgstr "En el hospital"
+
+msgid "Base bound"
+msgstr "Hacia la base"
+
+msgid "At base"
+msgstr "En la base"
+
+msgid "Waypoint bound"
+msgstr "Hacia un punto de ruta"
+
+msgid "At waypoint"
+msgstr "En en punto de ruta"
+
+# AmbulanceCapability
+msgid "Basic"
+msgstr "Basica"
+
+msgid "Advanced"
+msgstr "Avanzada"
+
+msgid "Rescue"
+msgstr "Rescate"
+
+msgid "Medic"
+msgstr "Médica"
+
 #: ambulance/models.py:115
-#, fuzzy
-#| msgid "Equipment"
 msgid "equipmentholder"
-msgstr "Equipo"
+msgstr "portadordeequipo"
 
 #: ambulance/models.py:118
-#, fuzzy
-#| msgid "Identifier"
 msgid "identifier"
-msgstr "Identificador"
+msgstr "identificador"
 
 #: ambulance/models.py:122
-#, fuzzy
-#| msgid "Capability"
 msgid "capability"
-msgstr "Capacidad"
+msgstr "capacidad"
 
 #: ambulance/models.py:126
-#, fuzzy
-#| msgid "Status"
 msgid "status"
-msgstr "Estado"
+msgstr "estado"
 
 #: ambulance/models.py:131
-#, fuzzy
-#| msgid "Location"
 msgid "orientation"
-msgstr "Lugar"
+msgstr "orientación"
 
 #: ambulance/models.py:132
-#, fuzzy
-#| msgid "Location"
 msgid "location"
-msgstr "Lugar"
+msgstr "ubicación"
 
 #: ambulance/models.py:135
-#, fuzzy
-#| msgid "Timestamp"
 msgid "timestamp"
-msgstr "Hora"
+msgstr "hora"
 
 #: ambulance/models.py:142
-#, fuzzy
-#| msgid "Location"
 msgid "location_client"
-msgstr "Lugar"
+msgstr "client_de_localización"
 
 #: equipment/forms.py:50 templates/ambulance/ambulance_detail.html:67
 msgid "Equipment sets"
@@ -183,7 +214,7 @@ msgstr "Ubicaciones pasadas"
 
 #: templates/ambulance/ambulance_detail.html:176
 msgid "Location"
-msgstr "Lugar"
+msgstr "Ubicación"
 
 #: templates/ambulance/ambulance_detail.html:178
 msgid "Timestamp"
@@ -230,7 +261,7 @@ msgstr "Llamadas"
 
 #: templates/ambulance/map.html:164 templates/base.html:102
 msgid "Locations"
-msgstr "Lugares"
+msgstr "Ubicaciones"
 
 #: templates/ambulance/map.html:194 templates/login/group_list.html:24
 msgid "Priority"
