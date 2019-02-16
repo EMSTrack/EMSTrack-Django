@@ -482,7 +482,10 @@ msgstr "Registrar"
 
 #: templates/leaflet/point_widget.html:29
 msgid "Latitude"
-msgstr ""
+msgstr "Latitud"
+
+msgid "Longitude"
+msgstr "Longitud"
 
 #: templates/login/group_list.html:14 templates/login/user_list.html:14
 msgctxt "masculine"
