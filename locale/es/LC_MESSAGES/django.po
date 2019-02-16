@@ -643,11 +643,6 @@ msgstr "Salvar"
 msgid "Ambulances"
 msgstr "Ambulancias"
 
-#: templates/ambulance/ambulance_list.html:18
-msgctxt "feminine"
-msgid "new"
-msgstr "nueva"
-
 #: templates/ambulance/ambulance_list.html:31
 #: templates/ambulance/location_list.html:26
 #: templates/ambulance/location_list.html:63
@@ -953,6 +948,7 @@ msgstr "Adicionar otro"
 msgid "Equipment Set"
 msgstr "Juego de Equipos"
 
+#: templates/ambulance/ambulance_list.html:18
 #: templates/equipment/equipmentset_list.html:14
 msgctxt "feminine"
 msgid "new"
