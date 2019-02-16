@@ -148,15 +148,15 @@ msgstr "Omega"
 
 #: ambulance/models.py:345
 msgid "Pending"
-msgstr "Pendiente"
+msgstr "Pendientes"
 
 #: ambulance/models.py:346
 msgid "Started"
-msgstr "Empezado"
+msgstr "Empezadas"
 
 #: ambulance/models.py:347
 msgid "Ended"
-msgstr "Terminado"
+msgstr "Terminadas"
 
 #: ambulance/models.py:390
 msgid "details"
@@ -300,7 +300,7 @@ msgstr "estado"
 
 #: emstrack/models.py:56
 msgid "zipcode"
-msgstr "código_postal"
+msgstr "código postal"
 
 #: emstrack/models.py:57
 msgid "country"

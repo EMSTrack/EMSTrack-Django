@@ -9,6 +9,7 @@ from .models import Ambulance, Call, Location
 
 class AmbulanceCreateForm(forms.ModelForm):
     location = PointField(
+        _('location'),
         widget=LeafletPointWidget(attrs={'map_width': 500,
                                          'map_height': 300})
     )
@@ -41,6 +42,7 @@ class AmbulanceUpdateForm(AmbulanceCreateForm):
 
 class LocationAdminCreateForm(forms.ModelForm):
     location = PointField(
+        _('location'),
         widget=LeafletPointWidget(attrs={'map_width': 500,
                                          'map_height': 300})
     )
@@ -63,20 +65,3 @@ class CallCreateForm(forms.ModelForm):
     class Meta:
         model = Call
         fields = '__all__'
-
-# class AmbulanceStatusCreateForm(forms.ModelForm):
-#     class Meta:
-#         model = AmbulanceStatus
-#         fields = '__all__'
-
-
-# class AmbulanceStatusUpdateForm(forms.ModelForm):
-#     class Meta:
-#         model = AmbulanceStatus
-#         fields = '__all__'
-
-
-# class AmbulanceCapabilityCreateForm(forms.ModelForm):
-#     class Meta:
-#         model = AmbulanceCapability
-#         fields = '__all__'
