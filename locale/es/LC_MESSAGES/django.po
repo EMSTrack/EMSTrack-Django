@@ -323,19 +323,19 @@ msgstr "Juegos de equipos"
 
 #: equipment/models.py:18
 msgid "Boolean"
-msgstr ""
+msgstr "Booleano"
 
 #: equipment/models.py:19
 msgid "Integer"
-msgstr ""
+msgstr "Entero"
 
 #: equipment/models.py:20
 msgid "String"
-msgstr ""
+msgstr "Texto"
 
 #: equipment/models.py:36
 msgid "default"
-msgstr ""
+msgstr "estándar"
 
 #: equipment/models.py:67
 msgid "equipment_set"
@@ -385,7 +385,7 @@ msgstr "Despachador"
 #: login/models.py:36 login/models.py:119 login/models.py:163
 #: login/models.py:303 login/models.py:329
 msgid "user"
-msgstr ""
+msgstr "usuário"
 
 #: login/models.py:37
 msgid "is_dispatcher"
@@ -619,13 +619,11 @@ msgstr "No hay ambulancias."
 
 #: templates/ambulance/call_detail.html:23
 msgid "ABORT CALL"
-msgstr ""
+msgstr "ABORTAR LLAMADA"
 
 #: templates/ambulance/call_detail.html:28
-#, fuzzy
-#| msgid "Calls"
 msgid "Call"
-msgstr "Llamadas"
+msgstr "Llamada"
 
 #: templates/ambulance/call_detail.html:41
 #: templates/ambulance/call_list.html:21 templates/ambulance/call_list.html:55
@@ -635,22 +633,16 @@ msgid "Priority"
 msgstr "Prioridad"
 
 #: templates/ambulance/call_detail.html:46
-#, fuzzy
-#| msgid "Pending"
 msgid "Pending at"
-msgstr "Pendientes"
+msgstr "Pendientes en"
 
 #: templates/ambulance/call_detail.html:49
-#, fuzzy
-#| msgid "Started"
 msgid "Started at"
-msgstr "Empezadas"
+msgstr "Empezadas en"
 
 #: templates/ambulance/call_detail.html:52
-#, fuzzy
-#| msgid "Ended"
 msgid "Ended at"
-msgstr "Terminadas"
+msgstr "Terminadas en"
 
 #: templates/ambulance/call_detail.html:73 templates/ambulance/map.html:281
 msgid "Patients"
@@ -658,24 +650,20 @@ msgstr "Pacientes"
 
 #: templates/ambulance/call_detail.html:91
 msgid "No patient names are available."
-msgstr ""
+msgstr "No hay nombres de pacientes disponibles."
 
 #: templates/ambulance/call_detail.html:123
-#, fuzzy
-#| msgid "Waypoint"
 msgid "Waypoints"
-msgstr "Punto de ruta"
+msgstr "Puntos de ruta"
 
 #: templates/ambulance/call_detail.html:127
-#, fuzzy
-#| msgid "order"
 msgid "Order"
-msgstr "orden"
+msgstr "Orden"
 
 #: templates/ambulance/call_detail.html:128
 #: templates/ambulance/location_detail.html:19
 msgid "Type"
-msgstr ""
+msgstr "Tipo"
 
 #: templates/ambulance/call_detail.html:129 templates/ambulance/map.html:255
 msgid "Coordinates"
@@ -683,7 +671,7 @@ msgstr "Coordenadas"
 
 #: templates/ambulance/call_detail.html:164
 msgid "Progress"
-msgstr ""
+msgstr "Progreso"
 
 #: templates/ambulance/call_list.html:10 templates/ambulance/map.html:88
 #: templates/base.html:68
@@ -692,44 +680,36 @@ msgstr "Llamadas"
 
 #: templates/ambulance/call_list.html:19 templates/ambulance/call_list.html:53
 #: templates/ambulance/call_list.html:104
-#, fuzzy
-#| msgid "Timestamp"
 msgid "Time"
 msgstr "Hora"
 
 #: templates/ambulance/call_list.html:41
 msgid "No calls currently pending."
-msgstr ""
+msgstr "No hay llamadas pendientes."
 
 #: templates/ambulance/call_list.html:75
 msgid "No calls currently started."
-msgstr ""
+msgstr "No hay llamadas empezadas."
 
 #: templates/ambulance/call_list.html:126
 msgid "No calls ended yet."
-msgstr ""
+msgstr "No hay llamadas terminadas."
 
 #: templates/ambulance/dispatch_list.html:6
-#, fuzzy
-#| msgid "Dispatch"
 msgid "Dispatch List"
-msgstr "Despachar"
+msgstr "Lista de Despacho"
 
 #: templates/ambulance/dispatch_list.html:23
-#, fuzzy
-#| msgid "Priority"
 msgid "Priority Name"
 msgstr "Prioridad"
 
 #: templates/ambulance/dispatch_list.html:24
 msgid "Call Time"
-msgstr ""
+msgstr "Hora"
 
 #: templates/ambulance/dispatch_list.html:25
-#, fuzzy
-#| msgid "street"
 msgid "Street"
-msgstr "calle"
+msgstr "Calle"
 
 #: templates/ambulance/dispatch_list.html:26
 #: templates/ambulance/location_detail.html:23
@@ -745,10 +725,8 @@ msgid "Description"
 msgstr "Descripción"
 
 #: templates/ambulance/dispatch_list.html:47
-#, fuzzy
-#| msgid "Dispatch Ambulances"
 msgid "No dispatched ambulance."
-msgstr "Despacho de Ambulancias"
+msgstr "No hay ambulancias despachadas."
 
 #: templates/ambulance/location_list.html:10 templates/ambulance/map.html:164
 #: templates/base.html:102
@@ -756,10 +734,8 @@ msgid "Locations"
 msgstr "Ubicaciones"
 
 #: templates/ambulance/location_list.html:16
-#, fuzzy
-#| msgid "Base"
 msgid "Bases"
-msgstr "base"
+msgstr "Base"
 
 #: templates/ambulance/location_list.html:49
 msgid "No bases have been created yet."
