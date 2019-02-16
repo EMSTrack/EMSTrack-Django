@@ -571,7 +571,7 @@ msgstr "Nombre"
 
 #: templates/ambulance/ambulance_detail.html:90
 msgid "This ambulance has no equipment sets."
-msgstr "Esta ambulancia no tiene juego de equipos."
+msgstr "Esta ambulancia no tiene juegos de equipos."
 
 #: templates/ambulance/ambulance_detail.html:102 templates/base.html:100
 #: templates/equipment/equipment_detail.html:11
@@ -786,19 +786,19 @@ msgstr "Base"
 
 #: templates/ambulance/location_list.html:50
 msgid "No bases have been created yet."
-msgstr ""
+msgstr "No se han creados bases."
 
 #: templates/ambulance/location_list.html:54
 msgid "AEDs"
-msgstr ""
+msgstr "AEDs"
 
 #: templates/ambulance/location_list.html:87
 msgid "No AEDs have been created yet."
-msgstr ""
+msgstr "No se han creados AEDs."
 
 #: templates/ambulance/location_list.html:138
 msgid "No incident have been created yet."
-msgstr ""
+msgstr "No se han creados incidentes."
 
 #: templates/ambulance/map.html:49
 msgid "Dispatch Ambulances"
@@ -914,10 +914,8 @@ msgstr "Iniciar sesión"
 
 #: templates/equipment/equipment_detail.html:24
 #: templates/equipment/equipment_list.html:25
-#, fuzzy
-#| msgid "default"
 msgid "Default"
-msgstr "estándar"
+msgstr "Estándar"
 
 #: templates/equipment/equipment_list.html:15
 #: templates/hospital/hospital_list.html:15 templates/login/group_list.html:14
@@ -928,45 +926,41 @@ msgstr "nuevo"
 
 #: templates/equipment/equipment_list.html:47
 msgid "No equipments have been created yet."
-msgstr ""
+msgstr "No se han creados equipos."
 
 #: templates/equipment/equipmentholder_form.html:17
 #, python-format
 msgid "%(equipmentholder.get_name)s's Equipments "
-msgstr ""
+msgstr "Equipos de %(equipmentholder.get_name)s"
 
 #: templates/equipment/equipmentholder_form.html:20
 msgid "back to"
-msgstr ""
+msgstr "retornar a"
 
 #: templates/equipment/equipmentholder_form.html:42
 #: templates/equipment/equipmentholder_form.html:56
 #: templates/equipment/equipmentset_form.html:44
 msgid "Delete form"
-msgstr ""
+msgstr "Remover formulario"
 
 #: templates/equipment/equipmentholder_form.html:62
 #: templates/equipment/equipmentset_form.html:64
 msgid "Add another"
-msgstr ""
+msgstr "Adicionar otro"
 
 #: templates/equipment/equipmentset_detail.html:11
 #: templates/equipment/equipmentset_form.html:17
-#, fuzzy
-#| msgid "Equipment Sets"
 msgid "Equipment Set"
-msgstr "Juegos de Equipos"
+msgstr "Juego de Equipos"
 
 #: templates/equipment/equipmentset_list.html:14
-#, fuzzy
-#| msgctxt "feminine"
-#| msgid "new"
+msgctxt "feminine"
 msgid "new"
 msgstr "nueva"
 
 #: templates/equipment/equipmentset_list.html:38
 msgid "No equipment sets have been created yet."
-msgstr ""
+msgstr "No se han creado juegos de equipos."
 
 #: templates/homepage.html:10
 msgid "Welcome to"
@@ -1001,22 +995,16 @@ msgstr ""
 "                para instalar la aplicación."
 
 #: templates/hospital/hospital_detail.html:76
-#, fuzzy
-#| msgid "This ambulance has no equipment sets."
 msgid "This hospital has no equipment sets."
-msgstr "Esta ambulancia no tiene juego de equipos."
+msgstr "Este hospital no tiene juegos de equipos."
 
 #: templates/hospital/hospital_detail.html:123
-#, fuzzy
-#| msgid "This ambulance has no registered equipments."
 msgid "This hospital has no registered equipments."
-msgstr "Esta ambulancia no tiene equipos."
+msgstr "Este hospital no tiene equipos."
 
 #: templates/hospital/hospital_list.html:50
-#, fuzzy
-#| msgid "hospital"
 msgid "No hospitals."
-msgstr "hospital"
+msgstr "No hospitales."
 
 #: templates/index.html:57
 msgid "Forgot Password?"
