@@ -22,12 +22,14 @@ from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesV
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus
+from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType, Call, CallStatus, AmbulanceCallStatus, \
+    AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallPriority, CallPriorityOrder, CallStatusOrder, LocationTypeOrder, \
+    WaypointStatus
 from emstrack import CURRENT_VERSION, MINIMUM_VERSION
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
-from equipment.models import EquipmentType, EquipmentHolder
+from equipment.models import EquipmentType, EquipmentHolder, EquipmentTypeDefaults
 from login import permissions
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
@@ -732,20 +734,40 @@ class SettingsView(APIView):
 
     @staticmethod
     def get_settings():
+
+        # from ambulance/models.py
         ambulance_status = {m.name: m.value for m in AmbulanceStatus}
+        ambulance_status_order = AmbulanceStatusOrder
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
-        equipment_type = {m.name: m.value for m in EquipmentType}
-        location_type = {m.name: m.value for m in LocationType}
+        ambulance_capability_order = AmbulanceCapabilityOrder
+        call_priority = {m.name: m.value for m in CallPriority}
+        call_priority_order = CallPriorityOrder
         call_status = {m.name: m.value for m in CallStatus}
+        call_status_order = CallStatusOrder
         ambulancecall_status = {m.name: m.value for m in AmbulanceCallStatus}
+        location_type = {m.name: m.value for m in LocationType}
+        location_type_order = LocationTypeOrder
+        waypoint_status = {m.name: m.value for m in WaypointStatus}
+
+        # from equipment/models.py
+        equipment_type = {m.name: m.value for m in EquipmentType}
+        equipment_type_defaults = {m.name: m.value for m in EquipmentTypeDefaults}
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
+                        'ambulance_status_order': ambulance_status_order,
                         'ambulance_capability': ambulance_capability,
-                        'equipment_type': equipment_type,
-                        'location_type': location_type,
+                        'ambulance_capability_order': ambulance_capability_order,
+                        'call_priority': call_priority,
+                        'call_priority_order': call_priority_order,
                         'call_status': call_status,
+                        'call_status_order': call_status_order,
                         'ambulancecall_status': ambulancecall_status,
+                        'location_type': location_type,
+                        'location_type_order': location_type_order,
+                        'waypoint_status': waypoint_status,
+                        'equipment_type': equipment_type,
+                        'equipment_type_defaults': equipment_type_defaults,
                         'defaults': defaults.copy()}
 
         # serialize defaults.location
