@@ -5,8 +5,6 @@ from django.http import HttpResponseRedirect
 from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
 
-from login.permissions import get_permissions
-
 logger = logging.getLogger(__name__)
 
 
@@ -48,6 +46,7 @@ class BasePermissionMixin:
             raise PermissionDenied()
 
         # get permissions
+        from login.permissions import get_permissions
         permissions = get_permissions(user)
 
         # otherwise only return objects that the user can read or write to
