@@ -737,16 +737,16 @@ class SettingsView(APIView):
 
         # from ambulance/models.py
         ambulance_status = {m.name: m.value for m in AmbulanceStatus}
-        ambulance_status_order = AmbulanceStatusOrder
+        ambulance_status_order = [m.name for m in AmbulanceStatusOrder]
         ambulance_capability = {m.name: m.value for m in AmbulanceCapability}
-        ambulance_capability_order = AmbulanceCapabilityOrder
+        ambulance_capability_order = [m.name for m in AmbulanceCapabilityOrder]
         call_priority = {m.name: m.value for m in CallPriority}
-        call_priority_order = CallPriorityOrder
+        call_priority_order = [m.name for m in CallPriorityOrder]
         call_status = {m.name: m.value for m in CallStatus}
-        call_status_order = CallStatusOrder
+        call_status_order = [m.name for m in CallStatusOrder]
         ambulancecall_status = {m.name: m.value for m in AmbulanceCallStatus}
         location_type = {m.name: m.value for m in LocationType}
-        location_type_order = LocationTypeOrder
+        location_type_order = [m.name for m in LocationTypeOrder]
         waypoint_status = {m.name: m.value for m in WaypointStatus}
 
         # from equipment/models.py
