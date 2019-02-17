@@ -8,6 +8,7 @@ from django.template.defaulttags import register
 from django.utils.translation import ugettext_lazy as _
 
 from emstrack.latlon import calculate_orientation, calculate_distance, stationary_radius
+from emstrack.mixins import PublishMixin
 from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
 from emstrack.util import make_choices
 from equipment.models import EquipmentHolder
@@ -346,21 +347,7 @@ CallStatusOrder = [
     CallStatus.P,
     CallStatus.S,
     CallStatus.E
-] 
-
-
-class PublishMixin:
-
-    def save(self, *args, **kwargs):
-
-        # publish?
-        publish = kwargs.pop('publish', True)
-
-        # save to Call
-        super().save(*args, **kwargs)
-
-        if publish:
-            self.publish()
+]
 
 
 class Call(PublishMixin,

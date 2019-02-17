@@ -138,19 +138,6 @@ class EquipmentItem(UpdatedByModel):
         # publish to mqtt
         client = SingletonPublishClient()
         client.publish_equipment_item(self)
-        if created:
-            client.publish_equipment_metadata(self.equipmentholder)
-
-    def delete(self, *args, **kwargs):
-
-        # remove from mqtt
-        from mqtt.publish import SingletonPublishClient
-        client = SingletonPublishClient()
-        client.remove_equipment_item(self)
-        client.publish_equipment_metadata(self.equipmentholder)
-
-        # delete from EquipmentItem
-        super().delete(*args, **kwargs)
 
     class Meta:
         unique_together = ('equipmentholder', 'equipment',)

@@ -1,16 +1,15 @@
 from enum import Enum
 
-from django.contrib.gis.db import models
-
-from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
+from django.contrib.gis.db import models
 from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from emstrack.util import make_choices
-from mqtt.cache_clear import mqtt_cache_clear
+from login.mixins import ClearPermissionCacheMixin
 
 
 # filters
@@ -30,7 +29,8 @@ def is_dispatcher(user):
     return user.is_superuser or user.is_staff or user.userprofile.is_dispatcher
 
 
-class UserProfile(models.Model):
+class UserProfile(ClearPermissionCacheMixin,
+                  models.Model):
     user = models.OneToOneField(User,
                                 on_delete=models.CASCADE,
                                 verbose_name=_('user'))
@@ -42,34 +42,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return '{}'.format(self.user)
 
-    def save(self, *args, **kwargs):
-
-        # save to UserProfile
-        super().save(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # publish to mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_profile(self.user)
-
-    def delete(self, *args, **kwargs):
-
-        # delete from UserProfile
-        super().delete(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # remove from mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_profile(self.user)
-
 
 # GroupProfile
 
-class GroupProfile(models.Model):
+class GroupProfile(ClearPermissionCacheMixin,
+                   models.Model):
     group = models.OneToOneField(Group,
                                  on_delete=models.CASCADE,
                                  verbose_name=_('group'))
@@ -86,22 +63,6 @@ class GroupProfile(models.Model):
     class Meta:
         indexes = [models.Index(fields=['priority'])]
 
-    def save(self, *args, **kwargs):
-
-        # save to GroupProfile
-        super().save(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-    def delete(self, *args, **kwargs):
-
-        # delete from GroupProfile
-        super().delete(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
 
 # Group Ambulance and Hospital Permissions
 
@@ -113,7 +74,8 @@ class Permission(models.Model):
         abstract = True
 
 
-class UserAmbulancePermission(Permission):
+class UserAmbulancePermission(ClearPermissionCacheMixin,
+                              Permission):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
                              verbose_name=_('user'))
@@ -124,31 +86,6 @@ class UserAmbulancePermission(Permission):
     class Meta:
         unique_together = ('user', 'ambulance')
 
-    def save(self, *args, **kwargs):
-
-        # save to UserAmbulancePermission
-        super().save(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # publish to mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_profile(self.user)
-
-    def delete(self, *args, **kwargs):
-
-        # delete from UserAmbulancePermission
-        super().delete(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # publish to mqtt
-        # does not remove because user still exists!
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_profile(self.user)
-
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
                                                          self.ambulance.identifier,
@@ -157,7 +94,8 @@ class UserAmbulancePermission(Permission):
                                                          self.can_write)
 
 
-class UserHospitalPermission(Permission):
+class UserHospitalPermission(ClearPermissionCacheMixin,
+                             Permission):
     user = models.ForeignKey(User,
                              on_delete=models.CASCADE,
                              verbose_name=_('user'))
@@ -168,31 +106,6 @@ class UserHospitalPermission(Permission):
     class Meta:
         unique_together = ('user', 'hospital')
 
-    def save(self, *args, **kwargs):
-
-        # save to UserHospitalPermission
-        super().save(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # publish to mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_profile(self.user)
-
-    def delete(self, *args, **kwargs):
-
-        # delete from UserHospitalPermission
-        super().delete(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # publish to mqtt
-        # does not remove because user still exists!
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_profile(self.user)
-
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.user,
                                                          self.hospital.name,
@@ -201,7 +114,8 @@ class UserHospitalPermission(Permission):
                                                          self.can_write)
 
 
-class GroupAmbulancePermission(Permission):
+class GroupAmbulancePermission(ClearPermissionCacheMixin,
+                               Permission):
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE,
                               verbose_name=_('group'))
@@ -212,34 +126,6 @@ class GroupAmbulancePermission(Permission):
     class Meta:
         unique_together = ('group', 'ambulance')
 
-    def save(self, *args, **kwargs):
-
-        # save to GroupAmbulancePermission
-        super().save(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # update all profiles for users in the group
-        for user in self.group.user_set.all():
-            # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().publish_profile(user)
-
-    def delete(self, *args, **kwargs):
-
-        # delete from GroupAmbulancePermission
-        super().delete(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # update all profiles for users in the group
-        for user in self.group.user_set.all():
-            # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().publish_profile(user)
-
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.ambulance.identifier,
@@ -248,7 +134,8 @@ class GroupAmbulancePermission(Permission):
                                                          self.can_write)
 
 
-class GroupHospitalPermission(Permission):
+class GroupHospitalPermission(ClearPermissionCacheMixin,
+                              Permission):
     group = models.ForeignKey(Group,
                               on_delete=models.CASCADE,
                               verbose_name=_('group'))
@@ -258,34 +145,6 @@ class GroupHospitalPermission(Permission):
 
     class Meta:
         unique_together = ('group', 'hospital')
-
-    def save(self, *args, **kwargs):
-
-        # save to GroupHospitalPermission
-        super().save(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # update all profiles for users in the group
-        for user in self.group.user_set.all():
-            # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().publish_profile(user)
-
-    def delete(self, *args, **kwargs):
-
-        # delete from GroupHospitalPermission
-        super().delete(*args, **kwargs)
-
-        # invalidate permissions cache
-        mqtt_cache_clear()
-
-        # update all profiles for users in the group
-        for user in self.group.user_set.all():
-            # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().publish_profile(user)
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,

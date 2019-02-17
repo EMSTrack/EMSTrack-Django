@@ -44,10 +44,6 @@ class Hospital(Location):
 
     def delete(self, *args, **kwargs):
 
-        # remove from mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_hospital(self)
-
         # invalidate permissions cache
         from mqtt.cache_clear import mqtt_cache_clear
         mqtt_cache_clear()

@@ -3,10 +3,7 @@ import logging
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from rest_framework import mixins
-
-# CreateModelUpdateByMixin
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.permissions import BasePermission
 
 from login.permissions import get_permissions
 
@@ -124,3 +121,17 @@ class UpdatedByMixin:
 
         # call super
         return super().form_valid(form)
+
+
+class PublishMixin:
+
+    def save(self, *args, **kwargs):
+
+        # publish?
+        publish = kwargs.pop('publish', True)
+
+        # save to Call
+        super().save(*args, **kwargs)
+
+        if publish:
+            self.publish()
