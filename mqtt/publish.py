@@ -2,7 +2,6 @@ import atexit
 import logging
 import os
 
-from ambulance.models import AmbulanceCallStatus
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
 from equipment.models import Equipment

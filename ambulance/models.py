@@ -256,10 +256,6 @@ class Ambulance(UpdatedByModel):
 
     def delete(self, *args, **kwargs):
 
-        # remove from mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_ambulance(self)
-
         # invalidate permissions cache
         from mqtt.cache_clear import mqtt_cache_clear
         mqtt_cache_clear()
@@ -360,21 +356,11 @@ class PublishMixin:
         # publish?
         publish = kwargs.pop('publish', True)
 
-        # remove?
-        remove = kwargs.pop('remove', False)
-
         # save to Call
         super().save(*args, **kwargs)
 
         if publish:
-            if remove:
-                # This makes sure that it will not be retained
-                self.publish(retain=False)
-            else:
-                self.publish()
-
-        if remove:
-            self.remove()
+            self.publish()
 
 
 class Call(PublishMixin,
@@ -403,19 +389,10 @@ class Call(PublishMixin,
 
     def save(self, *args, **kwargs):
 
-        # publish?
-        publish = kwargs.pop('publish', True)
-
-        # remove?
-        remove = kwargs.pop('remove', False)
-
         if self.status == CallStatus.E.name:
 
             # timestamp
             self.ended_at = timezone.now()
-
-            # remove topic from mqtt server
-            remove = True
 
         elif self.status == CallStatus.S.name:
 
@@ -428,21 +405,13 @@ class Call(PublishMixin,
             self.pending_at = timezone.now()
 
         # call super
-        super().save(*args, **kwargs,
-                     publish=publish,
-                     remove=remove)
+        super().save(*args, **kwargs)
 
     def publish(self, **kwargs):
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call(self, **kwargs)
-
-    def remove(self):
-
-        # remove topic from mqtt server
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_call(self)
 
     def abort(self):
 
@@ -509,12 +478,6 @@ class AmbulanceCall(PublishMixin,
 
     def save(self, *args, **kwargs):
 
-        # publish?
-        publish = kwargs.pop('publish', True)
-
-        # remove?
-        remove = kwargs.pop('publish', False)
-
         # retrieve call
         call = self.call
 
@@ -548,9 +511,6 @@ class AmbulanceCall(PublishMixin,
                 logger.debug('There are still {} ambulances in this call.'.format(set_size))
                 logger.debug(accepted_ambulancecalls)
 
-            # publish and remove from mqtt
-            remove = True
-
         # changed to declined?
         elif self.status == AmbulanceCallStatus.D.name:
 
@@ -562,9 +522,7 @@ class AmbulanceCall(PublishMixin,
             logger.debug('Ambulance call suspended.')
 
         # call super
-        super().save(*args, **kwargs,
-                     publish=publish,
-                     remove=remove)
+        super().save(*args, **kwargs)
 
         # call history save
         AmbulanceCallHistory.objects.create(ambulance_call=self, status=self.status,
@@ -579,12 +537,6 @@ class AmbulanceCall(PublishMixin,
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
         SingletonPublishClient().publish_call_status(self, **kwargs)
-
-    def remove(self):
-
-        # remove from mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().remove_call_status(self)
 
     class Meta:
         unique_together = ('call', 'ambulance')
@@ -712,28 +664,17 @@ class Waypoint(PublishMixin,
 
     def save(self, *args, **kwargs):
 
-        # publish?
-        publish = kwargs.pop('publish', False)
-
-        # remove?
-        remove = kwargs.pop('remove', False)
-
         # call super
-        super().save(*args, **kwargs,
-                     publish=publish,
-                     remove=remove)
+        super().save(*args, **kwargs)
 
         # waypoint history save
         WaypointHistory.objects.create(waypoint=self,
                                        order=self.order, status=self.status,
                                        comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
 
-    def remove(self):
-        pass
-
     def publish(self, **kwargs):
 
-        logger.debug('Will publish')
+        # logger.debug('Will publish')
 
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
