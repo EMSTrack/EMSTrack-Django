@@ -751,7 +751,7 @@ class SettingsView(APIView):
 
         # from equipment/models.py
         equipment_type = {m.name: m.value for m in EquipmentType}
-        equipment_type_defaults = {m.name: m.value for m in EquipmentTypeDefaults}
+        equipment_type_defaults = {k: v for (k,v) in EquipmentTypeDefaults.items()}
 
         # assemble all settings
         all_settings = {'ambulance_status': ambulance_status,
