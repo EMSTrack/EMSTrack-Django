@@ -9,7 +9,6 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core import management
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
@@ -29,8 +28,8 @@ from emstrack import CURRENT_VERSION, MINIMUM_VERSION
 from emstrack.mixins import SuccessMessageWithInlinesMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
-from equipment.models import EquipmentType, EquipmentHolder, EquipmentTypeDefaults
-from login import permissions
+from equipment.models import EquipmentType, EquipmentTypeDefaults
+from mqtt.cache_clear import mqtt_cache_clear
 from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     UserAdminCreateForm, UserAdminUpdateForm, \
     GroupAdminUpdateForm, \
@@ -351,10 +350,7 @@ class RestartView(FormView):
         try:
 
             # invalidate permission cache
-            permissions.cache_clear()
-
-            # reseed mqtt
-            management.call_command('mqttseed', verbosity=0)
+            mqtt_cache_clear()
 
             # add message
             messages.info(self.request, 'Successfully reinitialized system.')
