@@ -28,7 +28,7 @@ urlpatterns = [
         login_required(views.AmbulanceUpdateView.as_view()),
         name='update'),
 
-    url(r'logout/(?P<pk>\d+)$',
+    url(r'^logout/(?P<pk>\d+)$',
         login_required(views.AmbulanceLogoutView.as_view()),
         name='logout'),
 
@@ -56,11 +56,11 @@ urlpatterns = [
         login_required(views.CallListView.as_view()),
         name="call_list"),
 
-    url(r'call/detail/(?P<pk>\d+)$', 
+    url(r'^call/detail/(?P<pk>\d+)$',
         login_required(views.CallDetailView.as_view()),
         name='call_detail'),
 
-    url(r'call/abort/(?P<pk>\d+)$',
+    url(r'^call/abort/(?P<pk>\d+)$',
         login_required(views.CallAbortView.as_view()),
         name='call_abort'),
 
