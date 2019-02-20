@@ -462,7 +462,7 @@ class AmbulanceLogoutView(LoginRequiredMixin,
         location_client = ambulance.location_client
         if location_client is not None:
 
-            # logout client object
+            # logout ambulance from client
             from login.models import ClientLog, ClientActivity
             log = ClientLog(client=location_client,
                             status=location_client.status,
