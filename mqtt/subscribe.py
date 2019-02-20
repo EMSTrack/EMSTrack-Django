@@ -319,11 +319,11 @@ class SubscribeClient(BaseClient):
                             old_location_client = ambulance.location_client
 
                             # save to database
-                            serializer.save(updated_by=user)
+                            new_ambulance = serializer.save(updated_by=user)
                             is_valid = True
 
                             # retrieve location client
-                            new_location_client = Ambulance.objects.get(id=ambulance_id).location_client
+                            new_location_client = new_ambulance.location_client
 
                             # logger.debug("old_location_client: {}".format(old_location_client))
                             # logger.debug("new_location_client: {}".format(new_location_client))
