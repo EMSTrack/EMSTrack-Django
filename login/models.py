@@ -206,7 +206,7 @@ class Client(models.Model):
         return self.client_id
 
     def get_absolute_url(self):
-        return reverse('login:detail', kwargs={'pk': self.id})
+        return reverse('login:detail-client', kwargs={'pk': self.id})
 
 
 # Client activity
