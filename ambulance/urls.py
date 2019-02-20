@@ -28,7 +28,7 @@ urlpatterns = [
         login_required(views.AmbulanceUpdateView.as_view()),
         name='update'),
 
-    url(r'abort/(?P<pk>\d+)$',
+    url(r'logout/(?P<pk>\d+)$',
         login_required(views.AmbulanceLogoutView.as_view()),
         name='logout'),
 
