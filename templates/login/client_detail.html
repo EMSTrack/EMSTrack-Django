@@ -31,10 +31,12 @@
             <p>
             <div class="form-inline">
                 <strong>{% trans "Ambulance" %}:</strong>
+                &nbsp;
                 {{ client.ambulance.identifier }}
+                &nbsp;
                 {% if client.ambulance.location_client == client and request.user.is_staff %}
                  <form class="form-inline" action="{% url 'ambulance:logout' pk=client.ambulance.id %}" method="get">
-                    <input type="submit" class="btn btn-danger btn-sm" value="{% trans "Disconnect" %}">
+                    <input type="submit" class="btn btn-danger btn-xs" value="{% trans "Disconnect" %}">
                 </form>
                 {% endif %}
             </div>
