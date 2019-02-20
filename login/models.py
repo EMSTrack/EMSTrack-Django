@@ -205,6 +205,9 @@ class Client(models.Model):
     def __str__(self):
         return self.client_id
 
+    def get_absolute_url(self):
+        return reverse('login:detail', kwargs={'pk': self.id})
+
 
 # Client activity
 class ClientActivity(Enum):

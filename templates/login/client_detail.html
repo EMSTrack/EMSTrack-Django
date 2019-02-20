@@ -31,6 +31,13 @@
             <p>
                 <strong>{% trans "Ambulance" %}:</strong>
                 {{ client.ambulance.identifier }}
+                {% if user.is_staff %}
+                <td>
+                    <form action="{% url 'ambulance:logout' pk=client.ambulance %}" method="get">
+                        <input type="submit" class="btn btn-danger" value="{% trans "Disconnect" %}">
+                    </form>
+                </td>
+                {% endif %}
             </p>
             {% endif %}
 

@@ -436,46 +436,45 @@ class CallAbortView(LoginRequiredMixin,
 
         return redirect('ambulance:call_list')
 
-# Admin page
-# class AdminView(ListView):
-#    model = Call
-#   template_name = 'ambulance/dispatch_list.html'
-#    context_object_name = "ambulance_call"
 
+# Ambulance logout
+class AmbulanceLogoutView(LoginRequiredMixin,
+                          SuccessMessageMixin,
+                          UpdatedByMixin,
+                          AmbulancePermissionMixin,
+                          BaseDetailView):
+    model = Ambulance
 
-# # AmbulanceStatus list page
-# class AmbulanceStatusCreateView(CreateView):
-#     model = AmbulanceStatus
-#     context_object_name = "ambulance_status_form"
-#     form_class = AmbulanceStatusCreateForm
-#     success_url = reverse_lazy('status')
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
-#     def get_context_data(self, **kwargs):
-#         context = super(AmbulanceStatusCreateView, self).get_context_data(**kwargs)
-#         context['statuses'] = AmbulanceStatus.objects.all().order_by('id')
-#         return context
+    def get(self, request, *args, **kwargs):
 
+        # Make sure user is super, staff, or dispatcher.
+        user = request.user
+        if not (user.is_superuser or user.is_staff):
+            return HttpResponseForbidden()
 
-# # AmbulanceStatus update page
-# class AmbulanceStatusUpdateView(UpdateView):
-#     model = AmbulanceStatus
-#     form_class = AmbulanceStatusUpdateForm
-#     template_name = 'ambulances/ambulance_status_edit.html'
-#     success_url = reverse_lazy('status')
+        # get ambulance object
+        self.object = self.get_object()
+        ambulance = self.object
 
-#     def get_object(self, queryset=None):
-#         obj = AmbulanceStatus.objects.get(id=self.kwargs['pk'])
-#         return obj
+        location_client = ambulance.location_client
+        if location_client is not None:
 
-#     def get_context_data(self, **kwargs):
-#         context = super(AmbulanceStatusUpdateView, self).get_context_data(**kwargs)
-#         context['id'] = self.kwargs['pk']
-#         return context
+            # logout client object
+            from login.models import ClientLog, ClientActivity
+            log = ClientLog(client=location_client,
+                            status=location_client.status,
+                            activity=ClientActivity.TL.name,
+                            details=location_client.ambulance.identifier)
+            log.save()
 
+        # clear location_client_id
+        ambulance.location_client = None
+        ambulance.save()
 
-# # Ambulance map page
-# class AmbulanceMap(views.JSONResponseMixin, views.AjaxResponseMixin, ListView):
-#     template_name = 'ambulances/ambulance_map.html'
-
-#     def get_queryset(self):
-#         return Ambulance.objects.all()
+        if location_client is not None:
+            return redirect(location_client)
+        else:
+            return redirect(ambulance)
