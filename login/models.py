@@ -172,6 +172,7 @@ class ClientStatus(Enum):
     O = _('online')
     F = _('offline')
     D = _('disconnected')
+    R = _('reconnected')
 
 
 # Client information

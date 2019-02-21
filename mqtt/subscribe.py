@@ -2,6 +2,7 @@ import logging
 from io import BytesIO
 
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
@@ -562,7 +563,7 @@ class SubscribeClient(BaseClient):
             logger.debug('on_client_status: status = ' + status.name)
 
             # online
-            if status == ClientStatus.O:
+            if status == ClientStatus.O or status == ClientStatus.R:
 
                 # user just logged in
                 # retrieve and modify record
@@ -572,6 +573,22 @@ class SubscribeClient(BaseClient):
                 # log operation
                 log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
                 log.save()
+
+                if status == ClientStatus.R:
+                    try:
+
+                        latest = ClientLog.objects.filter(status=ClientStatus.D.name,
+                                                          activity=ClientActivity.AO.name).latest('updated_on')
+
+                        # restore latest ambulance client
+                        identifier = latest.details
+                        if identifier is not None:
+                            ambulance = Ambulance.get(identifier=identifier)
+                            ambulance.location_client = client
+                            ambulance.save()
+
+                    except ObjectDoesNotExist:
+                        pass
 
             # offline or disconnected
             elif status == ClientStatus.D or status == ClientStatus.F:
