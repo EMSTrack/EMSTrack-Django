@@ -52,7 +52,7 @@ function retrieveCall(call_id, map) {
     console.log("Retrieving call '" + call_id + "'from API");
 
     // Build url
-    var url = APIBaseUrl + 'call/' + call_id + '/';
+    var url = APIBaseUrl + 'call/' + call_id + '/?exclude=';
 
     $.ajax({
         type: 'GET',
