@@ -595,7 +595,7 @@ class SubscribeClient(BaseClient):
 
                             # log operation
                             log = ClientLog(client=client, status=client.status,
-                                            activity=ClientActivity.AO.name,
+                                            activity=ClientActivity.AI.name,
                                             details=identifier)
                             log.save()
 
