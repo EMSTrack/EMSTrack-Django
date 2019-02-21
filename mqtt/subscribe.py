@@ -567,7 +567,7 @@ class SubscribeClient(BaseClient):
 
                 # user just logged in
                 # retrieve and modify record
-                client.status = status.name
+                client.status = ClientStatus.O.name
                 client.save()
 
                 # log operation
