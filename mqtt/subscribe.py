@@ -577,15 +577,26 @@ class SubscribeClient(BaseClient):
                 if status == ClientStatus.R:
                     try:
 
+                        # retrieve latest ambulance logout
                         latest = ClientLog.objects.filter(status=ClientStatus.D.name,
                                                           activity=ClientActivity.AO.name).latest('updated_on')
 
-                        # restore latest ambulance client
                         identifier = latest.details
                         if identifier is not None:
+
+                            # restore latest ambulance client
                             ambulance = Ambulance.objects.get(identifier=identifier)
                             ambulance.location_client = client
                             ambulance.save()
+
+                            # restore client ambulance
+                            client.ambulance = ambulance
+                            client.save()
+
+                            # log operation
+                            log = ClientLog(client=client, status=client.status, activity=ClientActivity.AO,
+                                            details=identifier)
+                            log.save()
 
                     except ObjectDoesNotExist:
                         pass
