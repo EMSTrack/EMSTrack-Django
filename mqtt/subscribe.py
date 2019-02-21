@@ -583,7 +583,7 @@ class SubscribeClient(BaseClient):
                         # restore latest ambulance client
                         identifier = latest.details
                         if identifier is not None:
-                            ambulance = Ambulance.get(identifier=identifier)
+                            ambulance = Ambulance.objects.get(identifier=identifier)
                             ambulance.location_client = client
                             ambulance.save()
 
