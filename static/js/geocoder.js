@@ -13,7 +13,7 @@ var Geocoder = function(options) {
     this.parser_configurations = {
 
         'US': {
-            regex: /^(\d+)(\D+)((suite|ste|#)?\s*\d+)?$/i,
+            regex: /^(\d+)?(\D+)((suite|ste|#)?\s*\d+)?$/i,
             street_components: ['number', 'street', 'unit']
         },
 
