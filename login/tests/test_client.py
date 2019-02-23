@@ -47,8 +47,9 @@ class TestClient(TestSetup):
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 2)
 
         # go online with ambulance
-        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
-                                        status=ClientStatus.O.name, ambulance=self.a1)
+        client1.status = ClientStatus.O.name
+        client1.ambulance = self.a1
+        client1.save()
 
         a = Ambulance.objects.get(id=self.a1.id)
         client1 = Client.objects.get(id=client1.id)
