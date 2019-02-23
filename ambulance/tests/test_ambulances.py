@@ -349,6 +349,7 @@ class TestAmbulanceUpdate(TestSetup):
 
         except IntegrityError:
 
+            client2 = loginClient.objects.get(client_id='client_id_2')
             self.assertTrue(True)
 
         self.assertEqual(client1.ambulance, a)
