@@ -36,6 +36,12 @@ class TestClient(TestSetup):
         self.assertEqual(a.client, client1)
         self.assertEqual(client1.hospital, None)
 
+        log = ClientLog.objects.filter(id=client1.id).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.AI.name)
+        self.assertEqual(log.details, self.a1.identifier)
+
         # logout ambulance
         client1.ambulance = None
         client1.save()
@@ -46,6 +52,12 @@ class TestClient(TestSetup):
         self.assertEqual(client1.ambulance, None)
         self.assertFalse(hasattr(a, 'client'))
         self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(id=client1.id).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.AO.name)
+        self.assertEqual(log.details, self.a1.identifier)
 
         # login ambulance a2
         client1.ambulance = self.a2
@@ -58,6 +70,12 @@ class TestClient(TestSetup):
         self.assertEqual(a.client, client1)
         self.assertEqual(client1.hospital, None)
 
+        log = ClientLog.objects.filter(id=client1.id).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.AI.name)
+        self.assertEqual(log.details, self.a2.identifier)
+
         # go offline
         client1.status = ClientStatus.F.name
         client1.save()
@@ -68,3 +86,9 @@ class TestClient(TestSetup):
         self.assertEqual(client1.ambulance, None)
         self.assertFalse(hasattr(a, 'client'))
         self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(id=client1.id).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
