@@ -229,6 +229,9 @@ class Client(models.Model):
 
     def save(self, *args, **kwargs):
 
+        from ambulance.models import Ambulance
+        from hospital.models import Hospital
+
         # creation?
         created = self.pk is None
 
@@ -260,7 +263,6 @@ class Client(models.Model):
                     if identifier is not None:
 
                         # restore latest ambulance client
-                        from ambulance.models import Ambulance
                         ambulance = Ambulance.objects.get(identifier=identifier)
                         self.ambulance = ambulance
 
@@ -269,47 +271,50 @@ class Client(models.Model):
 
             # ambulance login?
             if (self.ambulance is not None and
-                    (not loaded_values or self._loaded_values['ambulance'] != self.ambulance)):
+                    (not loaded_values or self._loaded_values['ambulance_id'] != self.ambulance.id)):
 
                 # log ambulance login operation
                 log.append({'client': self, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.AI.name,
                             'details': self.ambulance.identifier})
 
-            elif self.ambulance is None and loaded_values and self._loaded_values['ambulance'] is not None:
+            elif self.ambulance is None and loaded_values and self._loaded_values['ambulance_id'] is not None:
 
                 # log ambulance logout operation
+                last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
                 log.append({'client': self, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.AO.name,
-                            'details': self._loaded_values['ambulance'].identifier})
+                            'details': last_ambulance.identifier})
 
             # hospital login?
             if (self.hospital is not None and
-                    (not loaded_values or self._loaded_values['hospital'] != self.hospital)):
+                    (not loaded_values or self._loaded_values['hospital_id'] != self.hospital.id)):
 
                 # log hospital login operation
                 log.append({'client': self, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.HI.name,
-                            'details': self.hospital.identifier})
+                            'details': self.hospital.name})
 
-            elif self.hospital is None and loaded_values and self._loaded_values['hospital'] is not None:
+            elif self.hospital is None and loaded_values and self._loaded_values['hospital_id'] is not None:
 
                 # log hospital logout operation
+                last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
                 log.append({'client': self, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.HO.name,
-                            'details': self._loaded_values['hospital'].identifier})
+                            'details': last_hospital.name})
 
         # offline or disconnected
         elif self.status == ClientStatus.D.name or self.status == ClientStatus.F.name:
 
             # has ambulance?
-            if loaded_values and self._loaded_values['ambulance'] is not None:
+            if loaded_values and self._loaded_values['ambulance_id'] is not None:
 
                 # log ambulance logout activity
+                last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
                 log.append({'client': self,
                             'status': self.status,
                             'activity': ClientActivity.AO.name,
-                            'details': self._loaded_values['ambulance']})
+                            'details': last_ambulance.identifier})
 
             if self.ambulance is not None:
 
@@ -321,17 +326,19 @@ class Client(models.Model):
                 self.ambulance = None
 
             # has hospital?
-            if loaded_values and self._loaded_values['hospital'] is not None:
+            if loaded_values and self._loaded_values['hospital_id'] is not None:
+
                 # log hospital logout activity
+                last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
                 log.append({'client': self,
                             'status': self.status,
                             'activity': ClientActivity.HO.name,
-                            'details': self._loaded_values['hospital']})
+                            'details': last_hospital.name})
 
             if self.hospital is not None:
                 # log warning
                 logger.error("Client.save() called with status '{}' and hospital '{} not None".format(self.status,
-                                                                                                       self.hospital))
+                                                                                                      self.hospital))
 
                 # logout hospital
                 self.hospital = None
