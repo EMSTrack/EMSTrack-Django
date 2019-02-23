@@ -317,12 +317,11 @@ class TestAmbulanceUpdate(TestSetup):
         client2 = loginClient(client_id='client_id_2', user_id=self.u2.id)
         client2.save()
 
-        # serializer = AmbulanceSerializer(a,
-        #                                  data={
-        #                                      'client_id': client1.client_id
-        #                                  }, partial=True)
-        # serializer.is_valid()
-        # serializer.save(updated_by=user)
+        self.assertEqual(client1.ambulance, a)
+        self.assertEqual(a.client, client1)
+
+        self.assertEqual(client2.ambulance, None)
+        self.assertEqual(a.client, None)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -343,6 +342,14 @@ class TestAmbulanceUpdate(TestSetup):
 
         # will not change
         client2.ambulance = a
+        client2.save()
+
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(a.client, None)
+
+        self.assertEqual(client2.ambulance, a)
+        self.assertEqual(a.client, client2)
+
         # serializer = AmbulanceSerializer(a,
         #                                  data={
         #                                      'client_id': client2.client_id
