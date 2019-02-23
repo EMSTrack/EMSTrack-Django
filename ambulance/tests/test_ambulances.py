@@ -348,6 +348,7 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertEqual(IntegrityError, type(raised.exception))
 
         client2 = loginClient.objects.get(client_id='client_id_2')
+        a = Ambulance.objects.get(id=a.id)
 
         self.assertEqual(client1.ambulance, a)
         self.assertEqual(client2.ambulance, None)
