@@ -17,9 +17,9 @@ class TestClient(TestSetup):
         self.assertEqual(client1.hospital, None)
 
         # login ambulance
-        client1.ambulance = self.a
+        client1.ambulance = self.a1
         client1.save()
 
-        self.assertEqual(client1.ambulance, self.a)
+        self.assertEqual(client1.ambulance, self.a1)
         self.assertEqual(client1.hospital, None)
 
