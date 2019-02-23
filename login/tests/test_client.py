@@ -70,7 +70,7 @@ class TestClient(TestSetup):
         self.assertEqual(a.client, client1)
         self.assertEqual(client1.hospital, None)
 
-        log = ClientLog.objects.filter(id=client1.id).latest('-updated_on')
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
         self.assertEqual(log.client, client1)
         self.assertEqual(log.status, ClientStatus.O.name)
         self.assertEqual(log.activity, ClientActivity.AI.name)
@@ -87,7 +87,7 @@ class TestClient(TestSetup):
         self.assertFalse(hasattr(a, 'client'))
         self.assertEqual(client1.hospital, None)
 
-        log = ClientLog.objects.filter(id=client1.id).latest('-updated_on')
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
         self.assertEqual(log.client, client1)
         self.assertEqual(log.status, ClientStatus.F.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
