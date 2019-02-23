@@ -318,10 +318,8 @@ class TestAmbulanceUpdate(TestSetup):
         client2.save()
 
         self.assertEqual(client1.ambulance, a)
-        self.assertEqual(a.client, client1)
-
         self.assertEqual(client2.ambulance, None)
-        self.assertEqual(hasattr(a, 'client'), False)
+        self.assertEqual(a.client, client1)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -345,8 +343,6 @@ class TestAmbulanceUpdate(TestSetup):
         client2.save()
 
         self.assertEqual(client1.ambulance, None)
-        self.assertEqual(a.client, None)
-
         self.assertEqual(client2.ambulance, a)
         self.assertEqual(a.client, client2)
 
