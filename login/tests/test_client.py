@@ -1,7 +1,5 @@
 import logging
 
-from django.db import transaction, IntegrityError
-
 from ambulance.models import Ambulance
 from hospital.models import Hospital
 from login.models import Client, ClientStatus, ClientLog, ClientActivity
@@ -30,9 +28,27 @@ class TestClient(TestSetup):
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 1)
 
-        # login ambulance a1
-        client1.ambulance = self.a1
+        # go offline
+        client1.status = ClientStatus.F.name
         client1.save()
+
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.F.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 2)
+
+        # go online with ambulance
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+                                        status=ClientStatus.O.name, ambulance=self.a1)
 
         a = Ambulance.objects.get(id=self.a1.id)
         client1 = Client.objects.get(id=client1.id)
@@ -54,68 +70,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 3)
-
-        # logout ambulance
-        client1.ambulance = None
-        client1.save()
-
-        a = Ambulance.objects.get(id=self.a1.id)
-        client1 = Client.objects.get(id=client1.id)
-
-        self.assertEqual(client1.status, ClientStatus.O.name)
-        self.assertEqual(client1.ambulance, None)
-        self.assertFalse(hasattr(a, 'client'))
-        self.assertEqual(client1.hospital, None)
-
-        log = ClientLog.objects.filter(client=client1).latest('updated_on')
-        self.assertEqual(log.client, client1)
-        self.assertEqual(log.status, ClientStatus.O.name)
-        self.assertEqual(log.activity, ClientActivity.AO.name)
-        self.assertEqual(log.details, self.a1.identifier)
-
-        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
-        self.assertEqual(log.client, client1)
-        self.assertEqual(log.status, ClientStatus.O.name)
-        self.assertEqual(log.activity, ClientActivity.HS.name)
-        self.assertEqual(log.details, '')
-
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 5)
-
-        # login ambulance a2
-        client1.ambulance = self.a2
-        client1.save()
-
-        a = Ambulance.objects.get(id=self.a2.id)
-        client1 = Client.objects.get(id=client1.id)
-
-        self.assertEqual(client1.status, ClientStatus.O.name)
-        self.assertEqual(client1.ambulance, self.a2)
-        self.assertEqual(a.client, client1)
-        self.assertEqual(client1.hospital, None)
-
-        log = ClientLog.objects.filter(client=client1).latest('updated_on')
-        self.assertEqual(log.client, client1)
-        self.assertEqual(log.status, ClientStatus.O.name)
-        self.assertEqual(log.activity, ClientActivity.AI.name)
-        self.assertEqual(log.details, self.a2.identifier)
-
-        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
-        self.assertEqual(log.client, client1)
-        self.assertEqual(log.status, ClientStatus.O.name)
-        self.assertEqual(log.activity, ClientActivity.HS.name)
-        self.assertEqual(log.details, '')
-
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
-
-        # try to login ambulance 1
-        with self.assertRaises(Exception) as raised:
-            with transaction.atomic():
-                client1.ambulance = self.a1
-                client1.save()
-        self.assertEqual(IntegrityError, type(raised.exception))
-
-        client1 = Client.objects.get(id=client1.id)
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 4)
 
         # go offline
         client1.status = ClientStatus.F.name
@@ -141,7 +96,127 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.AO.name)
         self.assertEqual(log.details, self.a2.identifier)
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 6)
+
+        # client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+                                        status=ClientStatus.O.name)
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
+
+        # login ambulance a1
+        client1.ambulance = self.a1
+        client1.save()
+
+        a = Ambulance.objects.get(id=self.a1.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.ambulance, self.a1)
+        self.assertEqual(a.client, client1)
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.AI.name)
+        self.assertEqual(log.details, self.a1.identifier)
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 9)
+
+        # logout ambulance
+        client1.ambulance = None
+        client1.save()
+
+        a = Ambulance.objects.get(id=self.a1.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertFalse(hasattr(a, 'client'))
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.AO.name)
+        self.assertEqual(log.details, self.a1.identifier)
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 11)
+
+        # login ambulance a2
+        client1.ambulance = self.a2
+        client1.save()
+
+        a = Ambulance.objects.get(id=self.a2.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.ambulance, self.a2)
+        self.assertEqual(a.client, client1)
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.AI.name)
+        self.assertEqual(log.details, self.a2.identifier)
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 13)
+
+        # go offline
+        client1.status = ClientStatus.F.name
+        client1.save()
+
+        a = Ambulance.objects.get(id=self.a2.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.F.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertFalse(hasattr(a, 'client'))
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.AO.name)
+        self.assertEqual(log.details, self.a2.identifier)
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 15)
 
     def testHospital(self):
 
@@ -239,15 +314,6 @@ class TestClient(TestSetup):
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
 
-        # try to login hospital 1
-        with self.assertRaises(Exception) as raised:
-            with transaction.atomic():
-                client1.hospital = self.h1
-                client1.save()
-        self.assertEqual(IntegrityError, type(raised.exception))
-
-        client1 = Client.objects.get(id=client1.id)
-
         # go offline
         client1.status = ClientStatus.F.name
         client1.save()
@@ -273,3 +339,23 @@ class TestClient(TestSetup):
         self.assertEqual(log.details, self.h2.name)
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 9)
+
+    def testClientSerializer(self):
+
+        # test AmbulanceSerializer
+        for a in (self.a1, self.a2, self.a3):
+            serializer = AmbulanceSerializer(a)
+            result = {
+                'id': a.id,
+                'identifier': a.identifier,
+                'comment': a.comment,
+                'capability': a.capability,
+                'status': AmbulanceStatus.UK.name,
+                'orientation': a.orientation,
+                'location': point2str(a.location),
+                'timestamp': date2iso(a.timestamp),
+                'client_id': None,
+                'updated_by': a.updated_by.id,
+                'updated_on': date2iso(a.updated_on)
+            }
+            self.assertDictEqual(serializer.data, result)
