@@ -203,6 +203,9 @@ class Client(models.Model):
 
     updated_on = models.DateTimeField(_('updated_on'), auto_now=True)
 
+    # default value for _loaded_values
+    _loaded_values = None
+    
     def __str__(self):
         return self.client_id
 
