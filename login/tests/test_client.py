@@ -43,7 +43,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.AI.name)
         self.assertEqual(log.details, self.a1.identifier)
 
-        log = ClientLog.objects.filter(client=client1).order_by('updated_on')[-2]
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
         self.assertEqual(log.client, client1)
         self.assertEqual(log.status, ClientStatus.F.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
