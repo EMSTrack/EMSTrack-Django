@@ -163,7 +163,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.details, '')
 
         # logout ambulance
-        client1.ambulance = None
+        client1.hospital = None
         client1.save()
 
         h = Hospital.objects.get(id=self.h1.id)
@@ -187,7 +187,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.details, '')
 
         # login ambulance a2
-        client1.ambulance = self.a2
+        client1.hospital = self.h2
         client1.save()
 
         h = Hospital.objects.get(id=self.h2.id)
