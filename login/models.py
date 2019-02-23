@@ -205,7 +205,7 @@ class Client(models.Model):
 
     # default value for _loaded_values
     _loaded_values = None
-    
+
     def __str__(self):
         return self.client_id
 
@@ -262,14 +262,14 @@ class Client(models.Model):
 
             # ambulance login?
             if (self.ambulance is not None and
-                    (loaded_values is None or self._loaded_values['ambulance'] != self.ambulance)):
+                    (not loaded_values or self._loaded_values['ambulance'] != self.ambulance)):
 
                 # log ambulance login operation
                 log.append({'client': self, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.AI.name,
                             'details': self.ambulance.identifier})
 
-            elif self.ambulance is None and loaded_values is not None and self._loaded_values['ambulance'] is not None:
+            elif self.ambulance is None and loaded_values and self._loaded_values['ambulance'] is not None:
 
                 # log ambulance logout operation
                 log.append({'client': self, 'status': ClientStatus.O.name,
@@ -278,14 +278,14 @@ class Client(models.Model):
 
             # hospital login?
             if (self.hospital is not None and
-                    (loaded_values is None or self._loaded_values['hospital'] != self.hospital)):
+                    (not loaded_values or self._loaded_values['hospital'] != self.hospital)):
 
                 # log hospital login operation
                 log.append({'client': self, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.HI.name,
                             'details': self.hospital.identifier})
 
-            elif self.hospital is None and loaded_values is not None and self._loaded_values['hospital'] is not None:
+            elif self.hospital is None and loaded_values and self._loaded_values['hospital'] is not None:
 
                 # log hospital logout operation
                 log.append({'client': self, 'status': ClientStatus.O.name,
