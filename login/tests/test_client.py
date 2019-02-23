@@ -45,7 +45,7 @@ class TestClient(TestSetup):
 
         log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
         self.assertEqual(log.client, client1)
-        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.status, ClientStatus.O.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
@@ -67,6 +67,12 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.AO.name)
         self.assertEqual(log.details, self.a1.identifier)
 
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
         # login ambulance a2
         client1.ambulance = self.a2
         client1.save()
@@ -85,6 +91,12 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.AI.name)
         self.assertEqual(log.details, self.a2.identifier)
 
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
         # go offline
         client1.status = ClientStatus.F.name
         client1.save()
@@ -102,3 +114,9 @@ class TestClient(TestSetup):
         self.assertEqual(log.status, ClientStatus.F.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.AO.name)
+        self.assertEqual(log.details, self.a2.identifier)
