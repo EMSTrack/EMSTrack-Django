@@ -30,6 +30,7 @@ class TestClient(TestSetup):
         client1.save()
 
         a = Ambulance.objects.get(id=self.a1.id)
+        client1 = Client.objects.get(id=client1.id)
 
         self.assertEqual(client1.status, ClientStatus.O.name)
         self.assertEqual(client1.ambulance, self.a1)
@@ -47,6 +48,7 @@ class TestClient(TestSetup):
         client1.save()
 
         a = Ambulance.objects.get(id=self.a1.id)
+        client1 = Client.objects.get(id=client1.id)
 
         self.assertEqual(client1.status, ClientStatus.O.name)
         self.assertEqual(client1.ambulance, None)
@@ -64,6 +66,7 @@ class TestClient(TestSetup):
         client1.save()
 
         a = Ambulance.objects.get(id=self.a2.id)
+        client1 = Client.objects.get(id=client1.id)
 
         self.assertEqual(client1.status, ClientStatus.O.name)
         self.assertEqual(client1.ambulance, self.a2)
@@ -81,6 +84,7 @@ class TestClient(TestSetup):
         client1.save()
 
         a = Ambulance.objects.get(id=self.a2.id)
+        client1 = Client.objects.get(id=client1.id)
 
         self.assertEqual(client1.status, ClientStatus.F.name)
         self.assertEqual(client1.ambulance, None)
