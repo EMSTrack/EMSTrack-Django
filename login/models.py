@@ -209,6 +209,123 @@ class Client(models.Model):
     def get_absolute_url(self):
         return reverse('login:detail-client', kwargs={'pk': self.id})
 
+    @classmethod
+    def from_db(cls, db, field_names, values):
+
+        # call super
+        instance = super(Client, cls).from_db(db, field_names, values)
+
+        # store the original field values on the instance
+        instance._loaded_values = dict(zip(field_names, values))
+
+        # return instance
+        return instance
+
+    def save(self, *args, **kwargs):
+
+        # creation?
+        created = self.pk is None
+
+        # loaded_values?
+        loaded_values = self._loaded_values is not None
+
+        # log
+        log = []
+
+        # online or reconnect
+        if self.status == ClientStatus.O.name or self.status == ClientStatus.R.name:
+
+            # log operation
+            log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
+
+            if self.status == ClientStatus.R.name and self.ambulance is None:
+
+                try:
+
+                    # retrieve latest ambulance logout
+                    latest = ClientLog.objects.filter(status=ClientStatus.D.name,
+                                                      activity=ClientActivity.AO.name).latest('updated_on')
+
+                    identifier = latest.details
+                    if identifier is not None:
+
+                        # restore latest ambulance client
+                        from ambulance.models import Ambulance
+                        ambulance = Ambulance.objects.get(identifier=identifier)
+                        self.ambulance = ambulance
+
+                except ClientLog.DoesNotExist:
+                    pass
+
+            # ambulance login?
+            if (self.ambulance is not None and
+                    (loaded_values is None or self._loaded_values['ambulance'] != self.ambulance)):
+
+                # log ambulance login operation
+                log.append({'client': self, 'status': ClientStatus.O.name,
+                            'activity': ClientActivity.AI.name,
+                            'details': self.ambulance.identifier})
+
+            elif self.ambulance is None and loaded_values is not None and self._loaded_values['ambulance'] is not None:
+
+                # log ambulance logout operation
+                log.append({'client': self, 'status': ClientStatus.O.name,
+                            'activity': ClientActivity.AO.name,
+                            'details': self._loaded_values['ambulance'].identifier})
+
+            # hospital login?
+            if (self.hospital is not None and
+                    (loaded_values is None or self._loaded_values['hospital'] != self.hospital)):
+
+                # log hospital login operation
+                log.append({'client': self, 'status': ClientStatus.O.name,
+                            'activity': ClientActivity.HI.name,
+                            'details': self.hospital.identifier})
+
+            elif self.hospital is None and loaded_values is not None and self._loaded_values['hospital'] is not None:
+
+                # log hospital logout operation
+                log.append({'client': self, 'status': ClientStatus.O.name,
+                            'activity': ClientActivity.HO.name,
+                            'details': self._loaded_values['hospital'].identifier})
+
+        # offline or disconnected
+        elif self.status == ClientStatus.D.name or self.status == ClientStatus.F.name:
+
+            # has ambulance?
+            if self.ambulance is not None:
+
+                # log ambulance logout activity
+                log.append({'client': self,
+                            'status': self.status,
+                            'activity': ClientActivity.AO.name,
+                            'details': self.ambulance.identifier})
+
+                # logout ambulance
+                self.ambulance = None
+
+            # has hospital?
+            if self.hospital is not None:
+
+                # log hospital logout activity
+                log.append({'client': self,
+                            'status': self.status,
+                            'activity': ClientActivity.HO.name,
+                            'details': self.hospital.name})
+
+                # logout hospital
+                self.hospital = None
+
+            # log operation
+            log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
+
+        # call super
+        super().save(*args, **kwargs)
+
+        # save logs
+        for entry in log:
+            ClientLog.objects.create(**entry)
+
 
 # Client activity
 class ClientActivity(Enum):

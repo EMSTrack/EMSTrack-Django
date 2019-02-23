@@ -2,7 +2,7 @@ import logging
 
 from rest_framework import serializers
 
-from .models import UserAmbulancePermission, UserHospitalPermission
+from .models import UserAmbulancePermission, UserHospitalPermission, Client
 
 from .permissions import get_permissions
 
@@ -50,3 +50,15 @@ class UserProfileSerializer(serializers.Serializer):
 
     def get_hospitals(self, user):
         return HospitalPermissionSerializer(self._permissions.get_permissions('hospitals').values(), many=True).data
+
+
+# Client serializers
+
+class ClientSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Client
+        fields = ['id', 'client_id',
+                  'user', 'status', 'ambulance', 'hospital',
+                  'updated_on']
+        read_only_fields = ('user',)
