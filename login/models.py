@@ -182,7 +182,7 @@ class ClientStatus(Enum):
 class Client(models.Model):
 
     # NOTE: This shouldn't be needed but django was giving me a hard time
-    id = models.AutoField(_('id'), primary_key=True)
+    # id = models.AutoField(_('id'), primary_key=True)
 
     # WARNING: mqtt client_id's can be up to 65536 bytes!
     client_id = models.CharField(_('client_id'), max_length=254, unique=True)
