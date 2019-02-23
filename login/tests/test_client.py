@@ -1,5 +1,6 @@
 import logging
 
+from ambulance.models import Ambulance
 from login.models import Client, ClientStatus, ClientLog
 from login.tests.setup_data import TestSetup
 
@@ -20,6 +21,19 @@ class TestClient(TestSetup):
         client1.ambulance = self.a1
         client1.save()
 
+        a = Ambulance.objects.get(id=self.a1)
+
         self.assertEqual(client1.ambulance, self.a1)
+        self.assertEqual(a.client, client1)
+        self.assertEqual(client1.hospital, None)
+
+        # logout ambulance
+        client1.ambulance = None
+        client1.save()
+
+        a = Ambulance.objects.get(id=self.a1)
+
+        self.assertEqual(client1.ambulance, None)
+        self.assertFalse(hasattr(a, 'client'))
         self.assertEqual(client1.hospital, None)
 
