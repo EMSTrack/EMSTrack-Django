@@ -21,7 +21,7 @@ class TestClient(TestSetup):
         client1.ambulance = self.a1
         client1.save()
 
-        a = Ambulance.objects.get(id=self.a1)
+        a = Ambulance.objects.get(id=self.a1.id)
 
         self.assertEqual(client1.ambulance, self.a1)
         self.assertEqual(a.client, client1)
@@ -31,7 +31,7 @@ class TestClient(TestSetup):
         client1.ambulance = None
         client1.save()
 
-        a = Ambulance.objects.get(id=self.a1)
+        a = Ambulance.objects.get(id=self.a1.id)
 
         self.assertEqual(client1.ambulance, None)
         self.assertFalse(hasattr(a, 'client'))
