@@ -191,15 +191,15 @@ class Client(models.Model):
     status = models.CharField(_('status'), max_length=1,
                               choices=make_choices(ClientStatus))
 
-    ambulance = models.ForeignKey('ambulance.Ambulance',
-                                  on_delete=models.CASCADE,
-                                  blank=True, null=True,
-                                  verbose_name=_('ambulance'))
+    ambulance = models.OneToOneField('ambulance.Ambulance',
+                                     on_delete=models.CASCADE,
+                                     blank=True, null=True,
+                                     verbose_name=_('ambulance'))
 
-    hospital = models.ForeignKey('hospital.Hospital',
-                                 on_delete=models.CASCADE,
-                                 blank=True, null=True,
-                                 verbose_name=_('hospital'))
+    hospital = models.OneToOneField('hospital.Hospital',
+                                    on_delete=models.CASCADE,
+                                    blank=True, null=True,
+                                    verbose_name=_('hospital'))
 
     updated_on = models.DateTimeField(_('updated_on'), auto_now=True)
 

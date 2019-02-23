@@ -5,7 +5,6 @@ from rest_framework import serializers
 from drf_extra_fields.geo_fields import PointField
 from rest_framework.exceptions import PermissionDenied
 
-from login.models import Client
 from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
     LocationType
@@ -18,8 +17,7 @@ logger = logging.getLogger(__name__)
 
 class AmbulanceSerializer(serializers.ModelSerializer):
 
-    location_client_id = serializers.CharField(source='location_client.client_id',
-                                               required=False, allow_blank=True, allow_null=True)
+    client_id = serializers.CharField(source='client.client_id', required=False)
     location = PointField(required=False)
     
     class Meta:
@@ -27,19 +25,9 @@ class AmbulanceSerializer(serializers.ModelSerializer):
         fields = ['id', 'identifier',
                   'capability', 'status',
                   'orientation', 'location',
-                  'timestamp', 'location_client_id',
+                  'timestamp', 'client_id',
                   'comment', 'updated_by', 'updated_on']
-        read_only_fields = ('updated_by',)
-
-    def validate_location_client_id(self, value):
-
-        if value:
-            try:
-                Client.objects.get(client_id=value)
-            except Client.DoesNotExist:
-                raise serializers.ValidationError("Client '{}' does not exist".format(value))
-
-        return value
+        read_only_fields = ('updated_by', 'client_id')
 
     def validate(self, data):
 
@@ -77,21 +65,21 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
 
-        # update location_client
-        # stored in validated_data as {'location_client': {'client_id': client_id}}
-        if 'location_client' in validated_data:
-
-            # retrieve new location_client and remove it from validated_data
-            location_client = None
-            client_id = validated_data.pop('location_client')['client_id']
-            if client_id:
-                location_client = Client.objects.get(client_id=client_id)
-
-            # reset location_client if either new or old is None, otherwise ignore
-            if instance.location_client is None or location_client is None:
-
-                # fine, clear or update location client
-                validated_data['location_client'] = location_client
+        # # update location_client
+        # # stored in validated_data as {'location_client': {'client_id': client_id}}
+        # if 'location_client' in validated_data:
+        #
+        #     # retrieve new location_client and remove it from validated_data
+        #     location_client = None
+        #     client_id = validated_data.pop('location_client')['client_id']
+        #     if client_id:
+        #         location_client = Client.objects.get(client_id=client_id)
+        #
+        #     # reset location_client if either new or old is None, otherwise ignore
+        #     if instance.location_client is None or location_client is None:
+        #
+        #         # fine, clear or update location client
+        #         validated_data['location_client'] = location_client
 
         return super().update(instance, validated_data)
 

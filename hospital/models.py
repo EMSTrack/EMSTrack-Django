@@ -14,6 +14,9 @@ class Hospital(Location):
                                            on_delete=models.CASCADE,
                                            verbose_name=_('equipmentholder'))
 
+    # active
+    active = models.BooleanField(_('active'), default=True)
+
     def save(self, *args, **kwargs):
 
         # creation?

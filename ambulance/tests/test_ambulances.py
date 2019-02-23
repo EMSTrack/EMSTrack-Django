@@ -38,7 +38,7 @@ class TestAmbulanceGetList(TestSetup):
                 'orientation': a.orientation,
                 'location': point2str(a.location),
                 'timestamp': date2iso(a.timestamp),
-                'location_client_id': None,
+                'client_id': None,
                 'updated_by': a.updated_by.id,
                 'updated_on': date2iso(a.updated_on)
             }
@@ -200,7 +200,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_client_id': None,
+            'client_id': None,
             'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -229,7 +229,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
-            'location_client_id': None,
+            'client_id': None,
             'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -267,7 +267,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': status,
             'orientation': a.orientation,
             'location': point2str(a.location),
-            'location_client_id': None,
+            'client_id': None,
             'timestamp': date2iso(a.timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -296,7 +296,7 @@ class TestAmbulanceUpdate(TestSetup):
             'status': a.status,
             'orientation': a.orientation,
             'location': point2str(location),
-            'location_client_id': None,
+            'client_id': None,
             'timestamp': date2iso(timestamp),
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
@@ -310,19 +310,19 @@ class TestAmbulanceUpdate(TestSetup):
                                          }, partial=True)
         self.assertEqual(serializer.is_valid(), False)
 
-        # update location_client
-        client1 = loginClient(client_id='client_id_1', user_id=self.u1.id)
+        # update client
+        client1 = loginClient(client_id='client_id_1', user_id=self.u1.id, ambulance=a)
         client1.save()
 
         client2 = loginClient(client_id='client_id_2', user_id=self.u2.id)
         client2.save()
 
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'location_client_id': client1.client_id
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
+        # serializer = AmbulanceSerializer(a,
+        #                                  data={
+        #                                      'client_id': client1.client_id
+        #                                  }, partial=True)
+        # serializer.is_valid()
+        # serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -335,7 +335,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client_id': client1.client_id,
+            'client_id': client1.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -344,7 +344,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will not change
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client_id': client2.client_id
+                                             'client_id': client2.client_id
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -360,7 +360,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client_id': client1.client_id,
+            'client_id': client1.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -369,7 +369,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will reset
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client_id': None
+                                             'client_id': None
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -385,7 +385,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client_id': None,
+            'client_id': None,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -394,7 +394,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will change
         serializer = AmbulanceSerializer(a,
                                          data={
-                                             'location_client_id': client2.client_id
+                                             'client_id': client2.client_id
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -410,7 +410,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client_id': client2.client_id,
+            'client_id': client2.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -435,7 +435,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client_id': client2.client_id,
+            'client_id': client2.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -445,7 +445,7 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': AmbulanceStatus.PB.name,
-                                             'location_client_id': client1.client_id
+                                             'client_id': client1.client_id
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -461,7 +461,7 @@ class TestAmbulanceUpdate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(location),
             'timestamp': date2iso(timestamp),
-            'location_client_id': client2.client_id,
+            'client_id': client2.client_id,
             'updated_by': user.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -471,7 +471,7 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': AmbulanceStatus.PB.name,
-                                             'location_client_id': '__invalid__'
+                                             'client_id': '__invalid__'
                                          }, partial=True)
 
         self.assertFalse(serializer.is_valid())
@@ -699,7 +699,7 @@ class TestAmbulanceCreate(TestSetup):
             'orientation': a.orientation,
             'location': point2str(a.location),
             'timestamp': date2iso(a.timestamp),
-            'location_client_id': None,
+            'client_id': None,
             'updated_by': self.u1.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -1019,7 +1019,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
-            'location_client_id': None,
+            'client_id': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }
@@ -1081,7 +1081,7 @@ class TestAmbulanceBulkUpdates(TestSetup):
             'orientation': orientation,
             'location': point2str(location),
             'timestamp': date2iso(a.timestamp),
-            'location_client_id': None,
+            'client_id': None,
             'updated_by': a.updated_by.id,
             'updated_on': date2iso(a.updated_on)
         }

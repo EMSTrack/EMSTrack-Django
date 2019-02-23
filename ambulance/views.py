@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
@@ -450,7 +451,7 @@ class AmbulanceLogoutView(LoginRequiredMixin,
 
     def get(self, request, *args, **kwargs):
 
-        # Make sure user is super, staff, or dispatcher.
+        # Make sure user is super or staff
         user = request.user
         if not (user.is_superuser or user.is_staff):
             return HttpResponseForbidden()
@@ -459,22 +460,25 @@ class AmbulanceLogoutView(LoginRequiredMixin,
         self.object = self.get_object()
         ambulance = self.object
 
-        location_client = ambulance.location_client
-        if location_client is not None:
+        try:
+            client = ambulance.client
 
             # logout ambulance from client
             from login.models import ClientLog, ClientActivity
-            log = ClientLog(client=location_client,
-                            status=location_client.status,
+            log = ClientLog(client=client,
+                            status=client.status,
                             activity=ClientActivity.TL.name,
-                            details=location_client.ambulance.identifier)
+                            details=client.ambulance.identifier)
             log.save()
 
-        # clear location_client_id
-        ambulance.location_client = None
+        except ObjectDoesNotExist:
+            client = None
+
+        # clear client
+        ambulance.client = None
         ambulance.save()
 
-        if location_client is not None:
-            return redirect(location_client)
+        if client is not None:
+            return redirect(client)
         else:
             return redirect(ambulance)

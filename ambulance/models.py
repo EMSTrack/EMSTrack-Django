@@ -134,12 +134,15 @@ class Ambulance(UpdatedByModel):
     # timestamp
     timestamp = models.DateTimeField(_('timestamp'), default=timezone.now)
 
-    # location client
-    location_client = models.ForeignKey('login.Client',
-                                        on_delete=models.CASCADE,
-                                        blank=True, null=True,
-                                        related_name='location_client_set',
-                                        verbose_name=_('location_client'))
+    # active
+    active = models.BooleanField(_('active'), default=True)
+
+    # # location client
+    # location_client = models.ForeignKey('login.Client',
+    #                                     on_delete=models.CASCADE,
+    #                                     blank=True, null=True,
+    #                                     related_name='location_client_set',
+    #                                     verbose_name=_('location_client'))
 
     # default value for _loaded_values
     _loaded_values = None
@@ -187,19 +190,18 @@ class Ambulance(UpdatedByModel):
 
         # logger.debug('loaded_values: {}'.format(loaded_values))
         # logger.debug('_loaded_values: {}'.format(self._loaded_values))
-        # logger.debug('self.location_client: {}'.format(self.location_client))
 
-        # location_client changed?
-        if self.location_client is None:
-            location_client_id = None
-        else:
-            location_client_id = self.location_client.id
-        location_client_changed = False
-        if loaded_values and location_client_id != self._loaded_values['location_client_id']:
-            location_client_changed = True
+        # # logger.debug('self.location_client: {}'.format(self.location_client))
+        # # location_client changed?
+        # if self.location_client is None:
+        #     location_client_id = None
+        # else:
+        #     location_client_id = self.location_client.id
+        # location_client_changed = False
+        # if loaded_values and location_client_id != self._loaded_values['location_client_id']:
+        #     location_client_changed = True
 
         # logger.debug('location_client_changed: {}'.format(location_client_changed))
-        # TODO: Check if client is logged with ambulance if setting location_client
 
         # if comment, capability, status or location changed
         model_changed = False
@@ -229,8 +231,7 @@ class Ambulance(UpdatedByModel):
 
         # if identifier changed
         # NOTE: self._loaded_values is NEVER None because has_moved is True
-        elif (location_client_changed or
-              self._loaded_values['identifier'] != self.identifier):
+        elif self._loaded_values['identifier'] != self.identifier:
 
             # save only to Ambulance
             super().save(*args, **kwargs)
@@ -271,7 +272,6 @@ class Ambulance(UpdatedByModel):
         return ('Ambulance {}(id={}) ({}) [{}]:\n' +
                 '    Status: {}\n' +
                 '  Location: {} @ {}\n' +
-                ' LocClient: {}\n' +
                 '   Updated: {} by {}').format(self.identifier,
                                                self.id,
                                                AmbulanceCapability[self.capability].value,
@@ -279,7 +279,6 @@ class Ambulance(UpdatedByModel):
                                                AmbulanceStatus[self.status].value,
                                                self.location,
                                                self.timestamp,
-                                               self.location_client,
                                                self.updated_by,
                                                self.updated_on)
 
