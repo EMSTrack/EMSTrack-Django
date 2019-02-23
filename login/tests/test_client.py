@@ -1,5 +1,7 @@
 import logging
 
+from django.db import transaction, IntegrityError
+
 from ambulance.models import Ambulance
 from hospital.models import Hospital
 from login.models import Client, ClientStatus, ClientLog, ClientActivity
@@ -106,6 +108,15 @@ class TestClient(TestSetup):
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
 
+        # try to login ambulance 1
+        with self.assertRaises(Exception) as raised:
+            with transaction.atomic():
+                client1.ambulance = self.a1
+                client1.save()
+        self.assertEqual(IntegrityError, type(raised.exception))
+
+        client1 = Client.objects.get(id=client1.id)
+
         # go offline
         client1.status = ClientStatus.F.name
         client1.save()
@@ -148,6 +159,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 1)
+
         # login ambulance a1
         client1.hospital = self.h1
         client1.save()
@@ -171,6 +184,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.status, ClientStatus.O.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 3)
 
         # logout ambulance
         client1.hospital = None
@@ -196,6 +211,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 5)
+
         # login ambulance a2
         client1.hospital = self.h2
         client1.save()
@@ -220,6 +237,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
+
         # go offline
         client1.status = ClientStatus.F.name
         client1.save()
@@ -243,3 +262,5 @@ class TestClient(TestSetup):
         self.assertEqual(log.status, ClientStatus.F.name)
         self.assertEqual(log.activity, ClientActivity.HO.name)
         self.assertEqual(log.details, self.h2.name)
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 9)
