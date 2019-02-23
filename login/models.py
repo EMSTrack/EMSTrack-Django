@@ -343,6 +343,9 @@ class Client(models.Model):
                 # logout hospital
                 self.hospital = None
 
+            # log operation
+            log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
+
         # call super
         super().save(*args, **kwargs)
 
