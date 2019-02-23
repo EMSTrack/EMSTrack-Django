@@ -341,16 +341,10 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
         # will not change
-        try:
+        client2.ambulance = a
+        self.assertRaises(IntegrityError, client2.save())
 
-            client2.ambulance = a
-            client2.save()
-            self.assertTrue(False)
-
-        except Exception:
-
-            client2 = loginClient.objects.get(client_id='client_id_2')
-            self.assertTrue(True)
+        client2 = loginClient.objects.get(client_id='client_id_2')
 
         self.assertEqual(client1.ambulance, a)
         self.assertEqual(client2.ambulance, None)
