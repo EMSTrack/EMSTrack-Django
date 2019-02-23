@@ -299,31 +299,38 @@ class Client(models.Model):
         elif self.status == ClientStatus.D.name or self.status == ClientStatus.F.name:
 
             # has ambulance?
-            if self.ambulance is not None:
+            if loaded_values and self._loaded_values['ambulance'] is not None:
 
                 # log ambulance logout activity
                 log.append({'client': self,
                             'status': self.status,
                             'activity': ClientActivity.AO.name,
-                            'details': self.ambulance.identifier})
+                            'details': self._loaded_values['ambulance']})
+
+            if self.ambulance is not None:
+
+                # log warning
+                logger.error("Client.save() called with status '{}' and ambulance '{} not None".format(self.status,
+                                                                                                       self.ambulance))
 
                 # logout ambulance
                 self.ambulance = None
 
             # has hospital?
-            if self.hospital is not None:
-
+            if loaded_values and self._loaded_values['hospital'] is not None:
                 # log hospital logout activity
                 log.append({'client': self,
                             'status': self.status,
                             'activity': ClientActivity.HO.name,
-                            'details': self.hospital.name})
+                            'details': self._loaded_values['hospital']})
+
+            if self.hospital is not None:
+                # log warning
+                logger.error("Client.save() called with status '{}' and hospital '{} not None".format(self.status,
+                                                                                                       self.hospital))
 
                 # logout hospital
                 self.hospital = None
-
-            # log operation
-            log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
 
         # call super
         super().save(*args, **kwargs)
