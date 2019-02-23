@@ -342,7 +342,9 @@ class TestAmbulanceUpdate(TestSetup):
 
         # will not change
         client2.ambulance = a
-        self.assertRaises(IntegrityError, client2.save())
+        with self.assertRaises(Exception) as raised:
+            client2.save()
+        self.assertEqual(IntegrityError, type(raised.exception))
 
         client2 = loginClient.objects.get(client_id='client_id_2')
 
