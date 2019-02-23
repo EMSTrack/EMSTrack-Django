@@ -347,7 +347,7 @@ class TestAmbulanceUpdate(TestSetup):
             client2.save()
             self.assertTrue(False)
 
-        except IntegrityError:
+        except Exception:
 
             client2 = loginClient.objects.get(client_id='client_id_2')
             self.assertTrue(True)
