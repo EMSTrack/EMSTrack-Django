@@ -95,7 +95,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.client, client1)
         self.assertEqual(log.status, ClientStatus.F.name)
         self.assertEqual(log.activity, ClientActivity.AO.name)
-        self.assertEqual(log.details, self.a2.identifier)
+        self.assertEqual(log.details, self.a1.identifier)
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 6)
 
