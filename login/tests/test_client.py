@@ -23,7 +23,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.client, client1)
         self.assertEqual(log.status, ClientStatus.O.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
-        self.assertEqual(log.details, None)
+        self.assertEqual(log.details, '')
 
         # login ambulance a1
         client1.ambulance = self.a1
