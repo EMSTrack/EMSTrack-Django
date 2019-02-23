@@ -238,6 +238,10 @@ class Client(models.Model):
         # log
         log = []
 
+        logger.debug('self = {}'.format(self))
+        if loaded_values:
+            logger.debug('_loaded_values = {}'.format(self._loaded_values)
+
         # online or reconnect
         if self.status == ClientStatus.O.name or self.status == ClientStatus.R.name:
 
