@@ -1,7 +1,7 @@
 import logging
 import math
 
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from django.test import Client
 
 from django.utils import timezone
@@ -343,7 +343,8 @@ class TestAmbulanceUpdate(TestSetup):
         # will not change
         client2.ambulance = a
         with self.assertRaises(Exception) as raised:
-            client2.save()
+            with transaction.atomic():
+                client2.save()
         self.assertEqual(IntegrityError, type(raised.exception))
 
         client2 = loginClient.objects.get(client_id='client_id_2')
