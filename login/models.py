@@ -1,3 +1,4 @@
+import logging
 from enum import Enum
 
 from django.contrib.auth.models import Group
@@ -10,6 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from emstrack.util import make_choices
 from login.mixins import ClearPermissionCacheMixin
+
+logger = logging.getLogger(__name__)
 
 
 # filters
@@ -327,6 +330,7 @@ class Client(models.Model):
 
         # save logs
         for entry in log:
+            logger.debug(entry)
             ClientLog.objects.create(**entry)
 
 
