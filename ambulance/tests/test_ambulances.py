@@ -1,5 +1,7 @@
 import logging
 import math
+
+from django.db import IntegrityError
 from django.test import Client
 
 from django.utils import timezone
@@ -339,12 +341,19 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
         # will not change
-        client2.ambulance = a
-        client2.save()
+        try:
 
-        self.assertEqual(client1.ambulance, None)
-        self.assertEqual(client2.ambulance, a)
-        self.assertEqual(a.client, client2)
+            client2.ambulance = a
+            client2.save()
+            self.assertTrue(False)
+
+        except IntegrityError:
+
+            self.assertTrue(True)
+
+        self.assertEqual(client1.ambulance, a)
+        self.assertEqual(client2.ambulance, None)
+        self.assertEqual(a.client, client1)
 
         # serializer = AmbulanceSerializer(a,
         #                                  data={
@@ -372,6 +381,12 @@ class TestAmbulanceUpdate(TestSetup):
 
         # will reset
         client2.ambulance = None
+        client2.save()
+
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client2.ambulance, None)
+        self.assertEqual(hasattr(a, 'client'), False)
+
         # serializer = AmbulanceSerializer(a,
         #                                  data={
         #                                      'client_id': None
@@ -398,6 +413,12 @@ class TestAmbulanceUpdate(TestSetup):
 
         # will change
         client2.ambulance = a
+        client2.save()
+
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client2.ambulance, a)
+        self.assertEqual(a.client, client2)
+
         # serializer = AmbulanceSerializer(a,
         #                                  data={
         #                                      'client_id': client2.client_id
