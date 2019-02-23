@@ -240,7 +240,26 @@ class TestClient(TestSetup):
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 1)
 
-        # login ambulance a1
+        # go offline
+        client1.status = ClientStatus.F.name
+        client1.save()
+
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.F.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 2)
+
+        # go online with hospital
+        client1.status = ClientStatus.O.name
         client1.hospital = self.h1
         client1.save()
 
@@ -264,7 +283,78 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 3)
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 4)
+
+        # go offline
+        client1.status = ClientStatus.F.name
+        client1.save()
+
+        h = Hospital.objects.get(id=self.h1.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.F.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertFalse(hasattr(h, 'client'))
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.F.name)
+        self.assertEqual(log.activity, ClientActivity.HO.name)
+        self.assertEqual(log.details, self.h1.name)
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 6)
+
+        # client online
+        client1.status = ClientStatus.O.name
+        client1.save()
+
+        h = Ambulance.objects.get(id=self.h1.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client1.hospital, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
+
+        # login hospital a1
+        client1.hospital = self.h1
+        client1.save()
+
+        h = Hospital.objects.get(id=self.h1.id)
+        client1 = Client.objects.get(id=client1.id)
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.hospital, self.h1)
+        self.assertEqual(h.client, client1)
+        self.assertEqual(client1.ambulance, None)
+
+        log = ClientLog.objects.filter(client=client1).latest('updated_on')
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HI.name)
+        self.assertEqual(log.details, self.h1.name)
+
+        log = ClientLog.objects.filter(client=client1).order_by('-updated_on')[1]
+        self.assertEqual(log.client, client1)
+        self.assertEqual(log.status, ClientStatus.O.name)
+        self.assertEqual(log.activity, ClientActivity.HS.name)
+        self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 9)
 
         # logout ambulance
         client1.hospital = None
@@ -290,7 +380,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 5)
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 11)
 
         # login ambulance a2
         client1.hospital = self.h2
@@ -316,7 +406,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 13)
 
         # go offline
         client1.status = ClientStatus.F.name
@@ -342,7 +432,7 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HO.name)
         self.assertEqual(log.details, self.h2.name)
 
-        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 9)
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 15)
 
     def testClientSerializer(self):
 
