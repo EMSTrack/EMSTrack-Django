@@ -11,7 +11,7 @@ class TestClient(TestSetup):
     def testSave(self):
 
         # client online
-        client1 = Client.objects.create(client='client_id_1', user=self.u1,
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
                                         status=ClientStatus.O.name)
         self.assertEqual(client1.ambulance, None)
         self.assertEqual(client1.hospital, None)
