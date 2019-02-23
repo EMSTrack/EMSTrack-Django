@@ -26,6 +26,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 1)
+
         # login ambulance a1
         client1.ambulance = self.a1
         client1.save()
@@ -49,6 +51,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.status, ClientStatus.O.name)
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 3)
 
         # logout ambulance
         client1.ambulance = None
@@ -74,6 +78,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 5)
+
         # login ambulance a2
         client1.ambulance = self.a2
         client1.save()
@@ -98,6 +104,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.activity, ClientActivity.HS.name)
         self.assertEqual(log.details, '')
 
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 7)
+
         # go offline
         client1.status = ClientStatus.F.name
         client1.save()
@@ -121,6 +129,8 @@ class TestClient(TestSetup):
         self.assertEqual(log.status, ClientStatus.F.name)
         self.assertEqual(log.activity, ClientActivity.AO.name)
         self.assertEqual(log.details, self.a2.identifier)
+
+        self.assertEqual(len(ClientLog.objects.filter(client=client1)), 9)
 
     def testHospital(self):
 
