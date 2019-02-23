@@ -342,12 +342,13 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
         # will not change
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'client_id': client2.client_id
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
+        client2.ambulance = a
+        # serializer = AmbulanceSerializer(a,
+        #                                  data={
+        #                                      'client_id': client2.client_id
+        #                                  }, partial=True)
+        # serializer.is_valid()
+        # serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -367,12 +368,13 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
         # will reset
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'client_id': None
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
+        client2.ambulance = None
+        # serializer = AmbulanceSerializer(a,
+        #                                  data={
+        #                                      'client_id': None
+        #                                  }, partial=True)
+        # serializer.is_valid()
+        # serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -392,12 +394,13 @@ class TestAmbulanceUpdate(TestSetup):
         self.assertDictEqual(serializer.data, result)
 
         # will change
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'client_id': client2.client_id
-                                         }, partial=True)
-        serializer.is_valid()
-        serializer.save(updated_by=user)
+        client2.ambulance = a
+        # serializer = AmbulanceSerializer(a,
+        #                                  data={
+        #                                      'client_id': client2.client_id
+        #                                  }, partial=True)
+        # serializer.is_valid()
+        # serializer.save(updated_by=user)
 
         # test
         serializer = AmbulanceSerializer(a)
@@ -445,7 +448,6 @@ class TestAmbulanceUpdate(TestSetup):
         serializer = AmbulanceSerializer(a,
                                          data={
                                              'status': AmbulanceStatus.PB.name,
-                                             'client_id': client1.client_id
                                          }, partial=True)
         serializer.is_valid()
         serializer.save(updated_by=user)
@@ -466,15 +468,6 @@ class TestAmbulanceUpdate(TestSetup):
             'updated_on': date2iso(a.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
-
-        # invalid client id
-        serializer = AmbulanceSerializer(a,
-                                         data={
-                                             'status': AmbulanceStatus.PB.name,
-                                             'client_id': '__invalid__'
-                                         }, partial=True)
-
-        self.assertFalse(serializer.is_valid())
 
     def test_ambulance_patch_viewset(self):
 
