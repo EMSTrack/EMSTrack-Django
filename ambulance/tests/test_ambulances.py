@@ -374,6 +374,7 @@ class TestAmbulanceUpdate(TestSetup):
         # will reset
         client1.ambulance = None
         client1.save()
+        a = Ambulance.objects.get(id=a.id)
 
         self.assertEqual(client1.ambulance, None)
         self.assertEqual(client2.ambulance, None)
