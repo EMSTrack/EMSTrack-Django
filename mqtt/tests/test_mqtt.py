@@ -375,6 +375,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                       content_type='application/json',
                                       data=json.dumps({
                                           'client_id': client_id,
+                                          'status': ClientStatus.O.name,
                                           'ambulance': self.a2.id,
                                       }),
                                       follow=True)
