@@ -71,6 +71,9 @@ class ClientSerializer(serializers.ModelSerializer):
         """
         This will create or update a client if existing
         """
-        instance, created = Client.objects.get_or_create(**validated_data)
+        instance, created = Client.objects.update_or_create(
+            client_id=validated_data.get('client_id'),
+            defaults=validated_data
+        )
 
         return instance
