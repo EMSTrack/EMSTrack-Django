@@ -285,8 +285,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance, self.a1.id)
-        self.assertEqual(clnt.hospital, self.h1.id)
+        self.assertEqual(clnt.ambulance, self.a1)
+        self.assertEqual(clnt.hospital, self.h1)
 
         # Modify ambulance
 
@@ -383,8 +383,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance, self.a2.id)
-        self.assertEqual(clnt.hospital, self.h1.id)
+        self.assertEqual(clnt.ambulance, self.a2)
+        self.assertEqual(clnt.hospital, self.h1)
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
