@@ -63,3 +63,14 @@ class ClientSerializer(serializers.ModelSerializer):
                   'user', 'status', 'ambulance', 'hospital',
                   'updated_on']
         read_only_fields = ('user', 'updated_on')
+
+    def create(self, validated_data):
+        client_id = validated_data.get('client_id')
+        try:
+            instance = Client.objects.get(client_id=client_id)
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+        except Client.DoesNotExist:
+            instance = Client(**validated_data)
+
+        return instance
