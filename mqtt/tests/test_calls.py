@@ -318,7 +318,7 @@ class TestMQTTCallsRegularUser(TestMQTTCalls):
 # -------------------------------------------------------------------------------------------
 # New Testing 
 # Test aborting the call once the call is created.
-class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
+class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
 
     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
 
