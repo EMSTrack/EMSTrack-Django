@@ -12,16 +12,20 @@ logger = logging.getLogger(__name__)
 
 class CreateModelUpdateByMixin(mixins.CreateModelMixin):
 
+    updated_by_field = 'updated_by'
+
     def perform_create(self, serializer):
-        serializer.save(updated_by=self.request.user)
+        serializer.save(dict([(self.updated_by_field, self.request.user)]))
 
 
 # UpdateModelUpdateByMixin
 
 class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
 
+    updated_by_field = 'updated_by'
+
     def perform_update(self, serializer):
-        serializer.save(updated_by=self.request.user)
+        serializer.save(dict([(self.updated_by_field, self.request.user)]))
 
 
 # BasePermissionMixin

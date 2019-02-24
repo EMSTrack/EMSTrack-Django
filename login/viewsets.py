@@ -72,6 +72,7 @@ class ProfileViewSet(viewsets.GenericViewSet):
 class ClientViewSet(mixins.CreateModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.RetrieveModelMixin,
+
                     viewsets.GenericViewSet):
     """
     API endpoint for manipulating Clients.
