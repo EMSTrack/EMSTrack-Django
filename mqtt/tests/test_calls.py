@@ -24,6 +24,8 @@ class TestMQTTCallBase(TestMQTT):
         # call super
         super().__init__(*args, **kwargs)
 
+        logger.debug('TestMQTTCallBase.__init__')
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',
