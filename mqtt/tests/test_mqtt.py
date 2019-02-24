@@ -379,8 +379,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                           'ambulance': self.a2.id,
                                       }),
                                       follow=True)
-        result = JSONParser().parse(BytesIO(response.content))
-        logger.debug(result)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # logger.debug(result)
         self.assertEqual(response.status_code, 201)
 
         # check record
@@ -436,6 +436,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
+        self.assertEqual(clnt.ambulance, None)
+        self.assertEqual(clnt.hospital, None)
 
         # wait for disconnect
         test_client.wait()
