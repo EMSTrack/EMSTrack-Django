@@ -1,8 +1,10 @@
 import logging
 
 from ambulance.models import Ambulance
+from emstrack.tests.util import date2iso
 from hospital.models import Hospital
 from login.models import Client, ClientStatus, ClientLog, ClientActivity
+from login.serializers import ClientSerializer
 from login.tests.setup_data import TestSetup
 
 logger = logging.getLogger(__name__)
@@ -436,22 +438,20 @@ class TestClient(TestSetup):
 
     def testClientSerializer(self):
 
-        # # test AmbulanceSerializer
-        # for a in (self.a1, self.a2, self.a3):
-        #     serializer = AmbulanceSerializer(a)
-        #     result = {
-        #         'id': a.id,
-        #         'identifier': a.identifier,
-        #         'comment': a.comment,
-        #         'capability': a.capability,
-        #         'status': AmbulanceStatus.UK.name,
-        #         'orientation': a.orientation,
-        #         'location': point2str(a.location),
-        #         'timestamp': date2iso(a.timestamp),
-        #         'client_id': None,
-        #         'updated_by': a.updated_by.id,
-        #         'updated_on': date2iso(a.updated_on)
-        #     }
-        #     self.assertDictEqual(serializer.data, result)
+        # test ClientSerializer
 
-        pass
+        # client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+                                        status=ClientStatus.O.name, ambulance=self.a1)
+
+        serializer = ClientSerializer(client1)
+        result = {
+            'id': client1.id,
+            'client_id': client1.client_id,
+            'user': client1.user,
+            'status': client1.status,
+            'ambulance': client1.ambulance,
+            'hospital': client1.hospital,
+            'updated_on': date2iso(client1.updated_on)
+        }
+        self.assertDictEqual(serializer.data, result)
