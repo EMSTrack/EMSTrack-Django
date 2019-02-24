@@ -64,8 +64,17 @@ class ClientSerializer(serializers.ModelSerializer):
                   'updated_on']
         read_only_fields = ('id', 'user', 'updated_on')
 
+    def validate_client_id(self, value):
+        """
+        Override default validator to avoid complaining about uniqueness.
+        Method create() will create or update if existing.
+        """
+        return value
+
     def create(self, validated_data):
-        """ This will create or update a client if existing """
+        """
+        This will create or update a client if existing
+        """
         instance, created = Client.objects.get_or_create(**validated_data)
 
         return instance
