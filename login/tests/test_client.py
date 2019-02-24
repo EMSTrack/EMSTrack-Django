@@ -458,6 +458,7 @@ class TestClient(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
+        # create client
         serializer = ClientSerializer(data={
             'client_id': 'client_id_3',
             'status': ClientStatus.O.name,
@@ -470,6 +471,23 @@ class TestClient(TestSetup):
         client2 = Client.objects.get(client_id='client_id_3')
 
         self.assertEqual(client2.status, ClientStatus.O.name)
+        self.assertEqual(client2.user, self.u2)
         self.assertEqual(client2.ambulance, None)
         self.assertEqual(client2.hospital, None)
 
+        # create client
+        serializer = ClientSerializer(data={
+            'client_id': 'client_id_4',
+            'status': ClientStatus.O.name,
+            'ambulance': self.a1.id,
+            'hospital': None
+        })
+        serializer.is_valid()
+        serializer.save(user=self.u1)
+
+        client2 = Client.objects.get(client_id='client_id_4')
+
+        self.assertEqual(client2.status, ClientStatus.O.name)
+        self.assertEqual(client2.user, self.u1)
+        self.assertEqual(client2.ambulance, self.a1)
+        self.assertEqual(client2.hospital, None)
