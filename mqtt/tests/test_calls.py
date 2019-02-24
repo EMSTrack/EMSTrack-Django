@@ -126,6 +126,24 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id:
             ambulance_id = self.a1.id
 
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
+        broker['CLIENT_ID'] = 'test_mqttclient'
+
+        subscribe_client = SubscribeClient(broker,
+                                           debug=True)
+        self.is_connected(subscribe_client)
+        self.is_subscribed(subscribe_client)
+
         # Start test client
 
         # client_id = 'test_mqtt_subscribe_admin'
@@ -157,7 +175,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
-        self.loop(test_client, self.subscribe_client)
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
