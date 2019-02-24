@@ -7,7 +7,7 @@ from django.contrib.auth import views as auth_views
 from rest_framework import routers
 from rest_framework_swagger.views import get_swagger_view
 
-from login.viewsets import ProfileViewSet
+from login.viewsets import ProfileViewSet, ClientViewSet
 from login.views import PasswordView, SettingsView, VersionView
 
 from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet
@@ -52,6 +52,10 @@ router.register(r'equipment',
 router.register(r'call',
                 CallViewSet,
                 base_name='api-call')
+
+router.register(r'client',
+                ClientViewSet,
+                base_name='api-client')
 
 urlpatterns = i18n_patterns(*[
 

@@ -1,12 +1,13 @@
 import logging
 
 from django.contrib.auth.models import User
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, mixins
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .serializers import UserProfileSerializer
+from login.models import Client
+from .serializers import UserProfileSerializer, ClientSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -65,3 +66,26 @@ class ProfileViewSet(viewsets.GenericViewSet):
         """
         return Response(UserProfileSerializer(self.get_object()).data)
 
+
+# Client ViewSet
+
+class ClientViewSet(mixins.CreateModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.RetrieveModelMixin,
+                    viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating Clients.
+
+    create:
+    Create new Client instance.
+
+    update:
+    Update an existing Client instance.
+
+    retrieve:
+    Retrieve an existing Client instance.
+    """
+
+    permission_classes = (IsAuthenticated,)
+    queryset = Client.objects.all()
+    serializer_class = ClientSerializer
