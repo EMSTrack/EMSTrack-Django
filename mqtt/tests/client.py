@@ -23,6 +23,11 @@ logger = logging.getLogger(__name__)
 
 class MQTTTestCase(StaticLiveServerTestCase):
 
+    def __init__(self, *args, **kwargs):
+
+        # call super
+        super().__init__(*args, **kwargs)
+
     @classmethod
     def run_until_success(cls, args, **kwargs):
 
@@ -627,6 +632,11 @@ class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
 class TestMQTT:
 
     DELAY = 0.1
+
+    def __init__(self, *args, **kwargs):
+
+        # call super
+        super().__init__(*args, **kwargs)
 
     def is_connected(self, client, MAX_TRIES=10):
 
