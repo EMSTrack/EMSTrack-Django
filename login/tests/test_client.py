@@ -563,7 +563,7 @@ class TestClient(TestSetup):
         self.assertDictEqual(result, answer)
 
         # set status and ambulance
-        status = ClientStatus.F.name
+        status = ClientStatus.O.name
         response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
                                 content_type='application/json',
                                 data=json.dumps({
