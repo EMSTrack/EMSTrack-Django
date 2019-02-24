@@ -608,7 +608,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['hospital'], self.h1.id)
 
         # set wrong attribute
-        response = client.patch('/en/api/client/{}/'.format(str(client1.id)),
+        response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': 'will fail'
@@ -626,7 +626,7 @@ class TestClient(TestSetup):
 
         # logout
         client.logout()
-        
+
         #
         # # login as testuser2
         # client.login(username='testuser2', password='very_secret')
