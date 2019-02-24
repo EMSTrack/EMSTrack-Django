@@ -378,6 +378,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                           'ambulance': self.a2.id,
                                       }),
                                       follow=True)
+        result = JSONParser().parse(BytesIO(response.content))
+        logger.debug(result)
         self.assertEqual(response.status_code, 201)
 
         # check record
