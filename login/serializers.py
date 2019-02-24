@@ -66,14 +66,6 @@ class ClientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """ This will create or update a client if existing """
-        client_id = validated_data.get('client_id')
-        try:
-            instance = Client.objects.get(client_id=client_id)
-            for attr, value in validated_data.items():
-                setattr(instance, attr, value)
-        except Client.DoesNotExist:
-            instance = Client(**validated_data)
-
-        logger.debug('instance = {}'.format(instance))
+        instance, created = Client.objects.get_or_create(**validated_data)
 
         return instance
