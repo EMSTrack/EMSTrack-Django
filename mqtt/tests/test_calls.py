@@ -106,7 +106,7 @@ class TestMQTTCallBase(TestMQTT):
         mqtt_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
-        self.loop(mqtt_client, self.subscribe_client)
+        self.loop(mqtt_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -128,8 +128,44 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
 
         # Start test client
 
+        # client_id = 'test_mqtt_subscribe_admin'
+        # test_client = self.start_mqtt_client(client_id, username, password)
+
+        # Start test client
+
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start subscribe client
+
+        broker.update(settings.MQTT)
         client_id = 'test_mqtt_subscribe_admin'
-        test_client = self.start_mqtt_client(client_id, username, password)
+        broker['USERNAME'] = username
+        broker['PASSWORD'] = password
+        broker['CLIENT_ID'] = client_id
+
+        test_client = MQTTTestClient(broker,
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(test_client)
+
+        # Client handshake
+        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
+
+        # process messages
+        self.loop(test_client, self.subscribe_client)
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+
+        # check record log
+        obj = ClientLog.objects.get(client=clnt)
+        self.assertEqual(obj.status, ClientStatus.O.name)
 
         # start django client
         django_client = self.start_django_client(username, password)
