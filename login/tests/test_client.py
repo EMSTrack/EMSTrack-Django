@@ -450,8 +450,8 @@ class TestClient(TestSetup):
             'client_id': client1.client_id,
             'user': client1.user,
             'status': client1.status,
-            'ambulance': client1.ambulance,
-            'hospital': client1.hospital,
+            'ambulance': client1.ambulance.id,
+            'hospital': None,
             'updated_on': date2iso(client1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
