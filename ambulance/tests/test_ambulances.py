@@ -1,6 +1,7 @@
 import logging
 import math
 
+from django.core.exceptions import PermissionDenied
 from django.db import IntegrityError, transaction
 from django.test import Client
 
@@ -345,7 +346,7 @@ class TestAmbulanceUpdate(TestSetup):
         with self.assertRaises(Exception) as raised:
             with transaction.atomic():
                 client2.save()
-        self.assertEqual(IntegrityError, type(raised.exception))
+        self.assertEqual(PermissionDenied, type(raised.exception))
 
         client2 = loginClient.objects.get(client_id='client_id_2')
         a = Ambulance.objects.get(id=a.id)
