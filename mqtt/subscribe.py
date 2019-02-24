@@ -284,7 +284,7 @@ class SubscribeClient(BaseClient):
             if client.ambulance != ambulance:
                 # send error message to user
                 self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "Client '{}' is not currently authorized to update ambulance '{}'" \
+                                        "Client '{}' is not currently authorized to update ambulance '{}'"
                                         .format(client.client_id, ambulance.identifier))
                 return
 
@@ -314,69 +314,6 @@ class SubscribeClient(BaseClient):
                     # save to database
                     serializer.save(updated_by=user)
                     is_valid = True
-
-                    # try:
-                    #
-                    #     # wrap in atomic in case of errors
-                    #     with transaction.atomic():
-                    #
-                    #         # current location client
-                    #         old_location_client = ambulance.location_client
-                    #
-                    #         # save to database
-                    #         new_ambulance = serializer.save(updated_by=user)
-                    #         is_valid = True
-                    #
-                    #         # retrieve location client
-                    #         new_location_client = new_ambulance.location_client
-                    #
-                    #         # logger.debug("old_location_client: {}".format(old_location_client))
-                    #         # logger.debug("new_location_client: {}".format(new_location_client))
-                    #
-                    #         # change in location client?
-                    #         if old_location_client != new_location_client:
-                    #
-                    #             # logger.debug("location_client changed from '{}' to {}".format(old_location_client,
-                    #             #                                                               new_location_client))
-                    #
-                    #             # log out old client
-                    #             if old_location_client:
-                    #                 client_ambulance = old_location_client.ambulance
-                    #                 if client_ambulance:
-                    #                     details = client_ambulance.identifier
-                    #                 else:
-                    #                     details = 'None'
-                    #                 log = ClientLog(client=old_location_client,
-                    #                                 status=old_location_client.status,
-                    #                                 activity=ClientActivity.TL.name,
-                    #                                 details=details)
-                    #                 log.save()
-                    #
-                    #             # log in new client
-                    #             if new_location_client:
-                    #                 client_ambulance = new_location_client.ambulance
-                    #                 if client_ambulance:
-                    #                     details = client_ambulance.identifier
-                    #                 else:
-                    #                     details = 'None'
-                    #                 log = ClientLog(client=new_location_client,
-                    #                                 status=new_location_client.status,
-                    #                                 activity=ClientActivity.SL.name,
-                    #                                 details=details)
-                    #                 log.save()
-                    #
-                    #         # otherwise must match location_client
-                    #         elif ambulance.location_client is None or \
-                    #                 ambulance.location_client.client_id != client.client_id:
-                    #
-                    #             # raise error to rollback transaction
-                    #             raise ClientException()
-                    #
-                    # except (ClientException, PermissionDenied):
-                    #
-                    #     # send error message to user
-                    #     self.send_error_message(user, client, msg.topic, msg.payload,
-                    #                             "Client '{}' is not currently authorized to update ambulance '{}'".format(client.client_id, ambulance.identifier))
 
             if not is_valid:
 
@@ -434,6 +371,14 @@ class SubscribeClient(BaseClient):
         try:
 
             logger.debug('on_hospital: hospital = {}'.format(hospital))
+
+            # updates must match client
+            if client.hospital != hospital:
+                # send error message to user
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Client '{}' is not currently authorized to update hospital '{}'"
+                                        .format(client.client_id, hospital.name))
+                return
 
             # update hospital
             serializer = HospitalSerializer(hospital,
@@ -552,6 +497,15 @@ class SubscribeClient(BaseClient):
 
         try:
 
+            # is client online?
+            if client.status != ClientStatus.O.name:
+                # client is not online
+                logger.debug('Client "" is not online'.format(client.client_id))
+
+                # send warning message to user
+                self.send_error_message(user, client, msg.topic, msg.payload,
+                                        "Warning: client '{}' is not online".format(client.client_id))
+
             try:
 
                 # handle status
@@ -566,111 +520,9 @@ class SubscribeClient(BaseClient):
 
             logger.debug('on_client_status: status = ' + status.name)
 
-            # online
-            if status == ClientStatus.O or status == ClientStatus.R:
-
-                # user just logged in
-                # retrieve and modify record
-                client.status = ClientStatus.O.name
-                client.save()
-
-                # log operation
-                log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
-                log.save()
-
-                if status == ClientStatus.R:
-                    try:
-
-                        # retrieve latest ambulance logout
-                        latest = ClientLog.objects.filter(status=ClientStatus.D.name,
-                                                          activity=ClientActivity.AO.name).latest('updated_on')
-
-                        identifier = latest.details
-                        if identifier is not None:
-
-                            # restore latest ambulance client
-                            ambulance = Ambulance.objects.get(identifier=identifier)
-                            # ambulance.location_client = client
-                            # ambulance.save()
-
-                            # restore client ambulance
-                            client.ambulance = ambulance
-                            client.save()
-
-                            # log operation
-                            log = ClientLog(client=client, status=ClientStatus.O.name,
-                                            activity=ClientActivity.SL.name,
-                                            details=identifier)
-                            log.save()
-
-                    except ObjectDoesNotExist:
-                        pass
-
-            # offline or disconnected
-            elif status == ClientStatus.D or status == ClientStatus.F:
-
-                # user client offline or disconnected
-
-                # client is being created
-                if client._state.adding:
-
-                    # client does not exist yet
-                    logger.debug('on_client_status: INVALID client')
-
-                    # send error message to user
-                    self.send_error_message(user, client, msg.topic, msg.payload,
-                                            "client '{}' is not valid".format(client.client_id))
-
-                # client exists
-
-                # is online?
-                if client.status != ClientStatus.O.name:
-
-                    # client is not online
-                    logger.debug('on_client_status: not online')
-
-                    # send error message to user
-                    self.send_error_message(user, client, msg.topic, msg.payload,
-                                            "client '{}' is not online".format(client.client_id))
-
-                # update status
-                client.status = status.name
-
-                # has ambulance?
-                if client.ambulance is not None:
-
-                    # log stop location updates
-                    log = ClientLog(client=client,
-                                    status=client.status,
-                                    activity=ClientActivity.TL.name,
-                                    details=client.ambulance.identifier)
-                    log.save()
-
-                    # log ambulance logout activity
-                    log = ClientLog(client=client, status=status.name,
-                                    activity=ClientActivity.AO.name, details=client.ambulance.identifier)
-                    log.save()
-
-                    # logout ambulance
-                    client.ambulance = None
-
-                # has hospital?
-                if client.hospital is not None:
-
-                    # log activity
-                    log = ClientLog(client=client, status=status.name,
-                                    activity=ClientActivity.HO.name, details=client.hospital.name)
-                    log.save()
-
-                    # logout hospital
-                    client.hospital = None
-
-                # save client
-                client.save()
-
-                # log operation
-                log = ClientLog(client=client, status=status.name, activity=ClientActivity.HS.name)
-                log.save()
+            # create or modify client
+            client.status = status.name
+            client.save()
 
         except Exception as e:
 
@@ -739,55 +591,14 @@ class SubscribeClient(BaseClient):
             # ambulance login?
             if activity == ClientActivity.AI:
 
-                # Is client already logged in?
-                if client.ambulance is not None and client.ambulance != ambulance:
-
-                    # is client streaming location?
-                    if client.ambulance.location_client == client:
-
-                        # stop streaming
-                        current_ambulance = client.ambulance
-                        current_ambulance.location_client = None
-                        current_ambulance.save()
-
-                        # log activity
-                        log = ClientLog(client=client,
-                                        status=client.status,
-                                        activity=ClientActivity.TL.name,
-                                        details=client.ambulance.identifier)
-                        log.save()
-
-                    # log activity
-                    log = ClientLog(client=client, status=client.status, activity=ClientActivity.AO,
-                                    details=client.ambulance.identifier)
-                    log.save()
-
+                # save client
                 client.ambulance = ambulance
                 client.save()
 
             elif activity == ClientActivity.AO:
 
-                # is client streaming location?
-                if ambulance.location_client == client:
-
-                    # stop streaming
-                    ambulance.location_client = None
-                    ambulance.save()
-
-                    # log activity
-                    log = ClientLog(client=client,
-                                    status=client.status,
-                                    activity=ClientActivity.TL.name,
-                                    details=client.ambulance.identifier)
-                    log.save()
-
                 client.ambulance = None
                 client.save()
-
-            # log activity
-            log = ClientLog(client=client, status=client.status,
-                            activity=activity.name, details=ambulance.identifier)
-            log.save()
 
         except Exception as e:
 
