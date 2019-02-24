@@ -367,6 +367,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # test bulk ambulance update
 
+        # expect null client after logout
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
 

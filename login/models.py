@@ -276,28 +276,36 @@ class Client(models.Model):
                 except ClientLog.DoesNotExist:
                     pass
 
-            # ambulance login?
-            if (self.ambulance is not None and
-                    (not loaded_values or self._loaded_values['ambulance_id'] != self.ambulance.id)):
-
-                # log ambulance login operation
-                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                            'activity': ClientActivity.AI.name,
-                            'details': self.ambulance.identifier})
-
-                # publish ambulance
-                publish_ambulance.add(self.ambulance)
-
-            elif self.ambulance is None and loaded_values and self._loaded_values['ambulance_id'] is not None:
-
-                # log ambulance logout operation
+            # last ambulance
+            if loaded_values and self._loaded_values['ambulance_id'] is not None:
                 last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
-                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                            'activity': ClientActivity.AO.name,
-                            'details': last_ambulance.identifier})
+            else:
+                last_ambulance = None
 
-                # publish ambulance
-                publish_ambulance.add(last_ambulance)
+            # changed ambulance?
+            if last_ambulance != self.ambulance:
+
+                # ambulance logout?
+                if last_ambulance is not None:
+
+                    # log ambulance logout operation
+                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
+                                'activity': ClientActivity.AO.name,
+                                'details': last_ambulance.identifier})
+
+                    # publish ambulance
+                    publish_ambulance.add(last_ambulance)
+
+                # ambulance login?
+                if self.ambulance is not None:
+
+                    # log ambulance login operation
+                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
+                                'activity': ClientActivity.AI.name,
+                                'details': self.ambulance.identifier})
+
+                    # publish ambulance
+                    publish_ambulance.add(self.ambulance)
 
             # hospital login?
             if (self.hospital is not None and
