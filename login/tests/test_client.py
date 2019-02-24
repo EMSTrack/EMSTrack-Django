@@ -544,15 +544,15 @@ class TestClient(TestSetup):
 
     def test_client_viewset(self):
 
-        # client online
-        client1 = Client.objects.create(client_id='client_id_1', user=self.u2,
-                                        status=ClientStatus.O.name)
-
         # instantiate client
         client = DjangoClient()
 
         # login as admin
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # create client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u2,
+                                        status=ClientStatus.O.name)
 
         # retrieve
         response = client.get('/en/api/client/{}/'.format(str(client1.client_id)),
@@ -626,6 +626,30 @@ class TestClient(TestSetup):
                                 }),
                                 follow=True)
         self.assertEqual(response.status_code, 404)
+
+        # create client
+        response = client.put('/en/api/client/{}/'.format('client_id_2'),
+                              content_type='application/json',
+                              data=json.dumps({
+                                  'status': ClientStatus.O.name,
+                                  'ambulance': None,
+                                  'hospital': self.h2.id
+                              }),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(Client.objects.get(id=client1.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve client
+        response = client.get('/en/api/client/{}/'.format('client_id_2'),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], ClientStatus.O.name)
+        self.assertEqual(result['ambulance'], None)
+        self.assertEqual(result['hospital'], self.h2.id)
+        self.assertEqual(result['user'], self.u1.id)
 
         # logout
         client.logout()
