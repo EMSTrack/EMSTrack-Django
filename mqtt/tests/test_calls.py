@@ -106,7 +106,7 @@ class TestMQTTCallBase(TestMQTT):
         mqtt_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
-        self.loop(mqtt_client)
+        self.loop(mqtt_client, self.subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
