@@ -1,13 +1,10 @@
 import logging
 
 from django.contrib.auth.models import User
-
-from rest_framework import viewsets, mixins, generics, filters, permissions
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
-from .models import UserProfile
 
 from .serializers import UserProfileSerializer
 
@@ -49,6 +46,7 @@ class IsCreateByAdminOrSuperOrDispatcher(permissions.BasePermission):
             return request.user.is_staff or request.user.is_superuser or request.user.userprofile.is_dispatcher
         else:
             return True
+
 
 # Profile viewset
 

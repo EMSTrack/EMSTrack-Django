@@ -4,6 +4,7 @@ from enum import Enum
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import User
 from django.contrib.gis.db import models
+from django.core.exceptions import PermissionDenied
 from django.core.validators import MinValueValidator
 from django.template.defaulttags import register
 from django.urls import reverse
@@ -11,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from emstrack.util import make_choices
 from login.mixins import ClearPermissionCacheMixin
+from login.permissions import get_permissions
 
 logger = logging.getLogger(__name__)
 
@@ -346,6 +348,16 @@ class Client(models.Model):
 
             # log operation
             log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
+
+        # check permissions
+        if self.ambulance is not None or self.hospital is not None:
+
+            permissions = get_permissions(self.user)
+            if self.ambulance is not None and not permissions.get_can_write(ambulance=self.ambulance):
+                raise PermissionDenied(_('Cannot write on ambulance'))
+
+            if self.hospital is not None and not permissions.get_can_write(hospital=self.hospital):
+                raise PermissionDenied(_('Cannot write on hospital'))
 
         # call super
         super().save(*args, **kwargs)
