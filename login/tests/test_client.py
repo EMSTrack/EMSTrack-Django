@@ -469,3 +469,9 @@ class TestClient(TestSetup):
         serializer.is_valid()
         serializer.save(user=self.u2)
 
+        client2 = Client.objects.get(client_id='client_id_2')
+
+        self.assertEqual(client1.status, ClientStatus.O.name)
+        self.assertEqual(client1.ambulance, None)
+        self.assertEqual(client1.hospital, None)
+
