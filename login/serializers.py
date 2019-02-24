@@ -56,6 +56,9 @@ class UserProfileSerializer(serializers.Serializer):
 
 class ClientSerializer(serializers.ModelSerializer):
 
+    # override validators to prevent uniqueness to invalidate data
+    client_id = serializers.CharField(max_length=254, validators=[])
+
     class Meta:
         model = Client
         fields = ['id',
@@ -63,13 +66,6 @@ class ClientSerializer(serializers.ModelSerializer):
                   'user', 'status', 'ambulance', 'hospital',
                   'updated_on']
         read_only_fields = ('id', 'user', 'updated_on')
-
-    def validate_client_id(self, value):
-        """
-        Override default validator to avoid complaining about uniqueness.
-        Method create() will create or update if existing.
-        """
-        return value
 
     def create(self, validated_data):
         """
