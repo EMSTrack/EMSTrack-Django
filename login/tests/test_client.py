@@ -442,15 +442,25 @@ class TestClient(TestSetup):
 
     def testPermissions(self):
 
-        with self.assertRaises(PermissionDenied) as raised:
+        with self.assertRaises(PermissionDenied):
             with transaction.atomic():
                 Client.objects.create(client_id='client_id_1', user=self.u2,
                                       status=ClientStatus.O.name, ambulance=self.a1)
 
-        with self.assertRaises(PermissionDenied) as raised:
+        with self.assertRaises(PermissionDenied):
+            with transaction.atomic():
+                Client.objects.create(client_id='client_id_1', user=self.u2,
+                                      status=ClientStatus.O.name, ambulance=self.a1, hospital=self.h1)
+
+        with self.assertRaises(PermissionDenied):
             with transaction.atomic():
                 Client.objects.create(client_id='client_id_1', user=self.u3,
                                       status=ClientStatus.O.name, hospital=self.h1)
+
+        with self.assertRaises(PermissionDenied):
+            with transaction.atomic():
+                Client.objects.create(client_id='client_id_1', user=self.u3,
+                                      status=ClientStatus.O.name, ambulance=self.a1, hospital=self.h1)
 
     def testClientSerializer(self):
 
