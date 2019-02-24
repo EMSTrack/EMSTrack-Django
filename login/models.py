@@ -404,10 +404,10 @@ class Client(models.Model):
             ClientLog.objects.create(**entry)
 
         # publish to mqtt
+        # logger.debug('publish_ambulance = {}'.format(publish_ambulance))
+        # logger.debug('publish_hospital = {}'.format(publish_hospital))
         from mqtt.publish import SingletonPublishClient
 
-        logger.debug('publish_ambulance = {}'.format(publish_ambulance))
-        logger.debug('publish_hospital = {}'.format(publish_hospital))
         for ambulance in publish_ambulance:
             SingletonPublishClient().publish_ambulance(ambulance)
 

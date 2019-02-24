@@ -390,6 +390,10 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.ambulance, self.a2)
         self.assertEqual(clnt.hospital, self.h1)
 
+        # retrieve last ambulance
+        obj = Ambulance.objects.get(id=self.a1.id)
+        self.assertEqual(obj.client, None)
+
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
         self.assertEqual(obj.status, AmbulanceStatus.UK.name)
