@@ -1,19 +1,17 @@
 import json
 import logging
 import time
-from io import BytesIO
 
 from django.conf import settings
-from django.utils import timezone
 from django.test import Client as DjangoClient
-from rest_framework.parsers import JSONParser
+from django.utils import timezone
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus
 from emstrack.tests.util import point2str
 from equipment.models import EquipmentItem
 from hospital.models import Hospital
-from login.models import Client, ClientStatus, ClientLog, ClientActivity
+from login.models import Client, ClientStatus, ClientLog
 from .client import MQTTTestCase, MQTTTestClient, TestMQTT
 from .client import MQTTTestSubscribeClient as SubscribeClient
 

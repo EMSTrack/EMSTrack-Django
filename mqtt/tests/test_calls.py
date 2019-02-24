@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.conf import settings
+from django.test import Client as DjangoClient
 
 from ambulance.models import AmbulanceStatus, CallStatus, CallPriority, Call, AmbulanceCallStatus, LocationType, \
     WaypointStatus
@@ -16,12 +17,12 @@ logger = logging.getLogger(__name__)
 # TODO: test that started_at, pending_at and ended_at get actually set in calls
 # TODO: test that Call.abort() terminates a call properly in every stage of the call
 
-class TestMQTTCalls(TestMQTT, MQTTTestCase):
+class TestMQTTCallBase(TestMQTT):
 
-    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
+    def __init__(self, *args, **kwargs):
 
-        if not ambulance_id:
-            ambulance_id = self.a1.id
+        # call super
+        super().__init__(*args, **kwargs)
 
         # Start client as admin
         broker = {
@@ -36,30 +37,74 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'
 
-        subscribe_client = SubscribeClient(broker,
-                                           debug=True)
-        self.is_connected(subscribe_client)
-        self.is_subscribed(subscribe_client)
+        self.subscribe_client = SubscribeClient(broker, debug=True)
+        self.is_connected(self.subscribe_client)
+        self.is_subscribed(self.subscribe_client)
 
-        # Start test client
+    def loop(self, *args):
+        super().loop(self.subscribe_client, *args)
+
+    def wait(self, *clients):
+        for client in clients:
+            client.wait()
+        self.subscribe_client.wait()
+
+    def start_django_client(self, username, password):
+
+        # start django client
+        django_client = DjangoClient()
+
+        # login as admin
+        django_client.login(username=username, password=password)
+
+        return django_client
+
+    def set_django_client(self, django_client, client_id, ambulance_id, hospital_id, status=ClientStatus.O):
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': status.name,
+                                          'ambulance': ambulance_id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, status.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id)
+        self.assertEqual(clnt.hospital, hospital_id)
+
+    def start_mqtt_client(self, client_id, username, password):
+
+        # Start client as admin
+        broker = {
+            'HOST': 'localhost',
+            'PORT': 1883,
+            'KEEPALIVE': 60,
+            'CLEAN_SESSION': True
+        }
+
+        # Start client
 
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
         broker['USERNAME'] = username
         broker['PASSWORD'] = password
         broker['CLIENT_ID'] = client_id
 
-        test_client = MQTTTestClient(broker,
+        mqtt_client = MQTTTestClient(broker,
                                      check_payload=False,
                                      debug=True)
-        self.is_connected(test_client)
+        self.is_connected(mqtt_client)
 
         # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
+        mqtt_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(mqtt_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -69,18 +114,26 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            ClientActivity.AI.name)
+        return mqtt_client
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
 
-        # check record
-        clnt = Client.objects.get(client_id=client_id)
-        self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, ambulance_id)
+class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
+
+    def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
+
+        if not ambulance_id:
+            ambulance_id = self.a1.id
+
+        # Start test client
+
+        client_id = 'test_mqtt_subscribe_admin'
+        test_client = self.start_mqtt_client(client_id, username, password)
+
+        # start django client
+        django_client = self.start_django_client(username, password)
+
+        # login ambulance
+        self.set_django_client(django_client, client_id, ambulance_id, None)
 
         # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
@@ -112,7 +165,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         call = serializer.save(updated_by=self.u1)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
@@ -121,15 +174,6 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # expect ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
@@ -141,7 +185,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             AmbulanceCallStatus.A.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if call status changed to Started
         call = Call.objects.get(id=call.id)
@@ -158,7 +202,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # test_client publishes "at patient" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
@@ -167,7 +211,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # test_client publishes "hospital bound" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
@@ -176,7 +220,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # test_client publishes "at hospital" to status
         test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
@@ -185,7 +229,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
@@ -202,7 +246,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # has the waypoint been created?
         waypoint_set = ambulancecall.waypoint_set.all()
@@ -223,7 +267,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             }))
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # has the waypoint been created?
         waypoint = ambulancecall.waypoint_set.all()
@@ -239,7 +283,7 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
                             AmbulanceCallStatus.C.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
@@ -254,11 +298,9 @@ class TestMQTTCalls(TestMQTT, MQTTTestCase):
 
         # process messages
         self.loop(test_client)
-        subscribe_client.loop()
 
         # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
+        self.wait(test_client)
 
 
 class TestMQTTCallsRegularUser(TestMQTTCalls):
@@ -322,17 +364,28 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            ClientActivity.AI.name)
+        # start django client
+        django_client = DjangoClient()
 
-        # process messages
-        self.loop(test_client, subscribe_client)
+        # login as admin
+        django_client.login(username=username, password=password)
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': ambulance_id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, ambulance_id)
+        self.assertEqual(clnt.hospital, None)
 
         # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
@@ -361,15 +414,6 @@ class TestMQTTCallsAbort(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # expect status ended call
         test_client.expect('call/{}/data'.format(call.id))
@@ -453,18 +497,28 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            ClientActivity.AI.name)
+        # start django client
+        django_client = DjangoClient()
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        # login as admin
+        django_client.login(username=username, password=password)
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': ambulance_id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
         self.assertEqual(clnt.ambulance.id, ambulance_id)
+        self.assertEqual(clnt.hospital, None)
 
         # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
@@ -507,15 +561,6 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
@@ -646,12 +691,28 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id),
-                            ClientActivity.AI.name)
+        # start django client
+        django_client = DjangoClient()
 
-        # process messages
-        self.loop(test_client, subscribe_client)
+        # login as admin
+        django_client.login(username=username, password=password)
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': ambulance_id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id)
+        self.assertEqual(clnt.hospital, None)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -697,15 +758,6 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # test_client publishes "Declined" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
@@ -815,12 +867,28 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, ambulance_id1),
-                            ClientActivity.AI.name)
+        # start django client
+        django_client = DjangoClient()
 
-        # process messages
-        self.loop(test_client, subscribe_client)
+        # login as admin
+        django_client.login(username=username, password=password)
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': ambulance_id1
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
+
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance.id, ambulance_id1)
+        self.assertEqual(clnt.hospital, None)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -884,15 +952,6 @@ class TestMQTTCallsMultipleAmbulances(TestMQTT, MQTTTestCase):
         # Check if ambulancecall status is Requested
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id2)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client, subscribe_client)
 
         # test_client publishes "Accepted" to call status
         test_client.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
