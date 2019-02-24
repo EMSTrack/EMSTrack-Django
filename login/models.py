@@ -353,10 +353,10 @@ class Client(models.Model):
         if self.ambulance is not None or self.hospital is not None:
 
             permissions = get_permissions(self.user)
-            if self.ambulance is not None and not permissions.get_can_write(ambulance=self.ambulance):
+            if self.ambulance is not None and not permissions.check_can_write(ambulance=self.ambulance):
                 raise PermissionDenied(_('Cannot write on ambulance'))
 
-            if self.hospital is not None and not permissions.get_can_write(hospital=self.hospital):
+            if self.hospital is not None and not permissions.check_can_write(hospital=self.hospital):
                 raise PermissionDenied(_('Cannot write on hospital'))
 
         # call super
