@@ -43,8 +43,8 @@ class TestMQTTCallBase(TestMQTT):
         self.is_connected(self.subscribe_client)
         self.is_subscribed(self.subscribe_client)
 
-    def loop(self, *args):
-        super().loop(self.subscribe_client, *args)
+    def loop(self, *args, max_tries=10):
+        super().loop(*args, self.subscribe_client, max_tries)
 
     def wait(self, *clients):
         for client in clients:

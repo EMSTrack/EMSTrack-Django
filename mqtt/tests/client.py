@@ -638,35 +638,35 @@ class TestMQTT:
         # call super
         super().__init__(*args, **kwargs)
 
-    def is_connected(self, client, MAX_TRIES=10):
+    def is_connected(self, client, max_tries=10):
 
         # loop
         client.loop()
 
         # connected?
         k = 0
-        while (not client.is_connected()) and k < MAX_TRIES:
+        while (not client.is_connected()) and k < max_tries:
             k += 1
             client.loop()
             time.sleep(TestMQTT.DELAY)
 
         self.assertEqual(client.is_connected(), True)
 
-    def is_disconnected(self, client, MAX_TRIES=10):
+    def is_disconnected(self, client, max_tries=10):
 
         # loop
         client.loop()
 
         # disconnected?
         k = 0
-        while (client.is_connected()) and k < MAX_TRIES:
+        while (client.is_connected()) and k < max_tries:
             k += 1
             client.loop()
             time.sleep(TestMQTT.DELAY)
 
         self.assertEqual(client.is_connected(), False)
 
-    def is_subscribed(self, client, MAX_TRIES=10):
+    def is_subscribed(self, client, max_tries=10):
 
         # loop
         client.loop()
@@ -675,7 +675,7 @@ class TestMQTT:
 
         # connected?
         k = 0
-        while (not client.has_subscribed()) and k < MAX_TRIES:
+        while (not client.has_subscribed()) and k < max_tries:
             k += 1
             client.loop()
             time.sleep(TestMQTT.DELAY)
@@ -686,7 +686,7 @@ class TestMQTT:
 
         self.assertEqual(client.has_subscribed(), True)
 
-    def loop(self, *clients, MAX_TRIES=10):
+    def loop(self, *clients, max_tries=10):
 
         # logger.debug('clients = {}'.format(clients))
         # logger.debug('MAX_TRIES = {}'.format(MAX_TRIES))
@@ -698,7 +698,7 @@ class TestMQTT:
         # connected?
         k = 0
         done = False
-        while not done and k < MAX_TRIES:
+        while not done and k < max_tries:
             done = True
             for client in clients:
                 done = done and client.done()

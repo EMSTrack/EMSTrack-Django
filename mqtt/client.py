@@ -239,10 +239,10 @@ class BaseClient:
         self.client.loop_forever()
 
     # wait for disconnect
-    def wait(self, MAX_TRIES=10):
+    def wait(self, max_tries=10):
         self.disconnect()
         k = 0
-        while self.connected and k < MAX_TRIES:
+        while self.connected and k < max_tries:
             k += 1
             time.sleep(1)
 
