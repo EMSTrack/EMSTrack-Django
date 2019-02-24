@@ -546,7 +546,7 @@ class TestClient(TestSetup):
 
         # client online
         client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
-                                        status=ClientStatus.O.name, ambulance=self.a1)
+                                        status=ClientStatus.O.name)
 
         # instantiate client
         client = DjangoClient()
@@ -562,12 +562,13 @@ class TestClient(TestSetup):
         answer = ClientSerializer(client1).data
         self.assertDictEqual(result, answer)
 
-        # set status
+        # set status and ambulance
         status = ClientStatus.F.name
         response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
+                                    'ambulance': self.a1.id
                                 }),
                                 follow=True)
         self.assertEqual(response.status_code, 200)
@@ -581,6 +582,7 @@ class TestClient(TestSetup):
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
+        self.assertEqual(result['ambulance'], self.a1.id)
 
         # # set status location
         # timestamp = timezone.now()
