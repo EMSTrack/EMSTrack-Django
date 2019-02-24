@@ -398,31 +398,6 @@ class TestAmbulanceUpdate(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # will change
-        client2.ambulance = a
-        client2.save()
-
-        self.assertEqual(client1.ambulance, None)
-        self.assertEqual(client2.ambulance, a)
-        self.assertEqual(a.client, client2)
-
-        # test
-        serializer = AmbulanceSerializer(a)
-        result = {
-            'id': a.id,
-            'identifier': a.identifier,
-            'comment': a.comment,
-            'capability': a.capability,
-            'status': a.status,
-            'orientation': a.orientation,
-            'location': point2str(location),
-            'timestamp': date2iso(timestamp),
-            'client_id': client2.client_id,
-            'updated_by': user.id,
-            'updated_on': date2iso(a.updated_on)
-        }
-        self.assertDictEqual(serializer.data, result)
-
         # will not change in partial update
         serializer = AmbulanceSerializer(a,
                                          data={
