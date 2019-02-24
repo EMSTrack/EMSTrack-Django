@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from emstrack.mixins import CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.models import Client
 from .serializers import UserProfileSerializer, ClientSerializer
 
@@ -69,10 +70,9 @@ class ProfileViewSet(viewsets.GenericViewSet):
 
 # Client ViewSet
 
-class ClientViewSet(mixins.CreateModelMixin,
-                    mixins.UpdateModelMixin,
+class ClientViewSet(CreateModelUpdateByMixin,
+                    UpdateModelUpdateByMixin,
                     mixins.RetrieveModelMixin,
-
                     viewsets.GenericViewSet):
     """
     API endpoint for manipulating Clients.
@@ -91,3 +91,4 @@ class ClientViewSet(mixins.CreateModelMixin,
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
     lookup_field = 'client_id'
+    update_by_field = 'user'

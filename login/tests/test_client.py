@@ -545,7 +545,7 @@ class TestClient(TestSetup):
     def test_client_viewset(self):
 
         # client online
-        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u2,
                                         status=ClientStatus.O.name)
 
         # instantiate client
@@ -561,6 +561,7 @@ class TestClient(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         answer = ClientSerializer(client1).data
         self.assertDictEqual(result, answer)
+        self.assertEqual(result['user'], self.u2.id)
 
         # set status and ambulance
         status = ClientStatus.O.name
@@ -585,6 +586,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['status'], status)
         self.assertEqual(result['ambulance'], self.a1.id)
         self.assertEqual(result['hospital'], self.h1.id)
+        self.assertEqual(result['user'], self.u1.id)
 
         # reset ambulance
         response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
@@ -606,6 +608,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['status'], status)
         self.assertEqual(result['ambulance'], None)
         self.assertEqual(result['hospital'], self.h1.id)
+        self.assertEqual(result['user'], self.u1.id)
 
         # set wrong attribute
         response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
