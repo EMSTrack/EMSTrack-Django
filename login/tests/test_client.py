@@ -471,7 +471,7 @@ class TestClient(TestSetup):
 
         client2 = Client.objects.get(client_id='client_id_2')
 
-        self.assertEqual(client1.status, ClientStatus.O.name)
-        self.assertEqual(client1.ambulance, None)
-        self.assertEqual(client1.hospital, None)
+        self.assertEqual(client2.status, ClientStatus.O.name)
+        self.assertEqual(client2.ambulance, None)
+        self.assertEqual(client2.hospital, None)
 
