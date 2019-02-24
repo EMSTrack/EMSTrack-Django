@@ -555,7 +555,7 @@ class TestClient(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve
-        response = client.get('/en/api/client/{}/'.format(str(client1.id)),
+        response = client.get('/en/api/client/{}/'.format(str(client1.client_id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -564,7 +564,7 @@ class TestClient(TestSetup):
 
         # set status
         status = ClientStatus.F.name
-        response = client.patch('/en/api/client/{}/'.format(str(client1.id)),
+        response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
@@ -576,7 +576,7 @@ class TestClient(TestSetup):
         self.assertDictEqual(result, answer)
 
         # retrieve new status
-        response = client.get('/en/api/client/{}/'.format(str(client1.id)),
+        response = client.get('/en/api/client/{}/'.format(str(client1.client_id)),
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
