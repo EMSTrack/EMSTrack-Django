@@ -652,6 +652,31 @@ class TestClient(TestSetup):
         self.assertEqual(result['hospital'], self.h2.id)
         self.assertEqual(result['user'], self.u1.id)
 
+        # create client as update
+        response = client.post('/en/api/client/',
+                               content_type='application/json',
+                               data=json.dumps({
+                                   'client_id': 'client_id_2',
+                                   'status': ClientStatus.O.name,
+                                   'ambulance': self.a1.id,
+                                   'hospital': None
+                               }),
+                               follow=True)
+        self.assertEqual(response.status_code, 201)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(Client.objects.get(client_id='client_id_2')).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve client
+        response = client.get('/en/api/client/{}/'.format('client_id_2'),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], ClientStatus.O.name)
+        self.assertEqual(result['ambulance'], self.a1.id)
+        self.assertEqual(result['hospital'], None)
+        self.assertEqual(result['user'], self.u1.id)
+
         # logout
         client.logout()
 
