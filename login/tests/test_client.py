@@ -568,7 +568,8 @@ class TestClient(TestSetup):
                                 content_type='application/json',
                                 data=json.dumps({
                                     'status': status,
-                                    'ambulance': self.a1.id
+                                    'ambulance': self.a1.id,
+                                    'hospital': self.h1.id
                                 }),
                                 follow=True)
         self.assertEqual(response.status_code, 200)
@@ -583,6 +584,28 @@ class TestClient(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], status)
         self.assertEqual(result['ambulance'], self.a1.id)
+        self.assertEqual(result['hospital'], self.h1.id)
+
+        # reset ambulance
+        response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
+                                content_type='application/json',
+                                data=json.dumps({
+                                    'ambulance': None
+                                }),
+                                follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(Client.objects.get(id=client1.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve new status
+        response = client.get('/en/api/client/{}/'.format(str(client1.client_id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+        self.assertEqual(result['ambulance'], None)
+        self.assertEqual(result['hospital'], self.h1.id)
 
         # # set status location
         # timestamp = timezone.now()
