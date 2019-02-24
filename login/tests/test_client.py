@@ -637,8 +637,9 @@ class TestClient(TestSetup):
                                   'hospital': self.h2.id
                               }),
                               follow=True)
-        self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
+        logger.debug(result)
+        self.assertEqual(response.status_code, 200)
         answer = ClientSerializer(Client.objects.get(id=client1.id)).data
         self.assertDictEqual(result, answer)
 
