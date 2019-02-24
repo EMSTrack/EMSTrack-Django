@@ -392,7 +392,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # retrieve last ambulance
         obj = Ambulance.objects.get(id=self.a1.id)
-        self.assertEqual(obj.client, None)
+        self.assertEqual(hasattr(obj, 'client'), False)
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
