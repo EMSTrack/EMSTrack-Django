@@ -307,28 +307,36 @@ class Client(models.Model):
                     # publish ambulance
                     publish_ambulance.add(self.ambulance)
 
-            # hospital login?
-            if (self.hospital is not None and
-                    (not loaded_values or self._loaded_values['hospital_id'] != self.hospital.id)):
-
-                # log hospital login operation
-                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                            'activity': ClientActivity.HI.name,
-                            'details': self.hospital.name})
-
-                # publish hospital
-                publish_hospital.add(self.hospital)
-
-            elif self.hospital is None and loaded_values and self._loaded_values['hospital_id'] is not None:
-
-                # log hospital logout operation
+            # last hospital
+            if loaded_values and self._loaded_values['hospital_id'] is not None:
                 last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
-                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
-                            'activity': ClientActivity.HO.name,
-                            'details': last_hospital.name})
+            else:
+                last_hospital = None
 
-                # publish hospital
-                publish_hospital.add(last_hospital)
+            # changed hospital?
+            if last_hospital != self.hospital:
+
+                # hospital logout?
+                if last_hospital is not None:
+
+                    # log hospital logout operation
+                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
+                                'activity': ClientActivity.HO.name,
+                                'details': last_hospital.name})
+
+                    # publish hospital
+                    publish_hospital.add(last_hospital)
+
+                # hospital login?
+                if self.hospital is not None:
+
+                    # log hospital login operation
+                    log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
+                                'activity': ClientActivity.HI.name,
+                                'details': self.hospital.name})
+
+                    # publish hospital
+                    publish_hospital.add(self.hospital)
 
         # offline or disconnected
         elif self.status == ClientStatus.D.name or self.status == ClientStatus.F.name:
