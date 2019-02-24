@@ -250,19 +250,19 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
                                      debug=True)
         self.is_connected(test_client)
 
-        # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
+        # # Client handshake
+        # test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
+        #
+        # # process messages
+        # self.loop(test_client, subscribe_client)
 
-        # process messages
-        self.loop(test_client, subscribe_client)
-
-        # check record
-        clnt = Client.objects.get(client_id=client_id)
-        self.assertEqual(clnt.status, ClientStatus.O.name)
-
-        # check record log
-        obj = ClientLog.objects.get(client=clnt)
-        self.assertEqual(obj.status, ClientStatus.O.name)
+        # # check record
+        # clnt = Client.objects.get(client_id=client_id)
+        # self.assertEqual(clnt.status, ClientStatus.O.name)
+        #
+        # # check record log
+        # obj = ClientLog.objects.get(client=clnt)
+        # self.assertEqual(obj.status, ClientStatus.O.name)
 
         # start django client
         django_client = DjangoClient()
@@ -476,12 +476,6 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
                                 check_payload=False,
                                 debug=False)
         self.is_connected(client)
-
-        # Expect status
-        client.expect('user/{}/client/{}/status'.format(broker['USERNAME'],
-                                                        broker['CLIENT_ID']),
-                      ClientStatus.O.name)
-        self.is_subscribed(client)
 
         # Publish client status
         client.publish('user/{}/client/{}/status'.format(broker['USERNAME'],
