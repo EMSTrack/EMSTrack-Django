@@ -89,3 +89,4 @@ class ClientViewSet(mixins.CreateModelMixin,
     permission_classes = (IsAuthenticated,)
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+    lookup_field = 'client_id'
