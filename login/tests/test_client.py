@@ -495,3 +495,20 @@ class TestClient(TestSetup):
         self.assertEqual(client2.user, self.u1)
         self.assertEqual(client2.ambulance, self.a2)
         self.assertEqual(client2.hospital, None)
+
+        # update client
+        serializer = ClientSerializer(data={
+            'client_id': 'client_id_4',
+            'hospital': self.h1.id
+        }, partial=True)
+        if not serializer.is_valid():
+            logger.debug('errors = {}'.format(serializer.errors))
+            self.assertTrue(False)
+        serializer.save(user=self.u1)
+
+        client2 = Client.objects.get(client_id='client_id_4')
+
+        self.assertEqual(client2.status, ClientStatus.O.name)
+        self.assertEqual(client2.user, self.u1)
+        self.assertEqual(client2.ambulance, self.a2)
+        self.assertEqual(client2.hospital, self.h1)
