@@ -1,5 +1,7 @@
 import logging
 
+from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.utils import timezone
 
 from ambulance.models import Ambulance
@@ -437,6 +439,18 @@ class TestClient(TestSetup):
         self.assertEqual(log.details, self.h2.name)
 
         self.assertEqual(len(ClientLog.objects.filter(client=client1)), 15)
+
+    def testPermissions(self):
+
+        with self.assertRaises(PermissionDenied) as raised:
+            with transaction.atomic():
+                Client.objects.create(client_id='client_id_1', user=self.u2,
+                                      status=ClientStatus.O.name, ambulance=self.a1)
+
+        with self.assertRaises(PermissionDenied) as raised:
+            with transaction.atomic():
+                Client.objects.create(client_id='client_id_1', user=self.u3,
+                                      status=ClientStatus.O.name, hospital=self.h1)
 
     def testClientSerializer(self):
 
