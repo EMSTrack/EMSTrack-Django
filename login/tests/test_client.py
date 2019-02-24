@@ -607,51 +607,26 @@ class TestClient(TestSetup):
         self.assertEqual(result['ambulance'], None)
         self.assertEqual(result['hospital'], self.h1.id)
 
-        # # set status location
-        # timestamp = timezone.now()
-        # location = {'latitude': -2., 'longitude': 7.}
-        #
-        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a1.id)),
-        #                         content_type='application/json',
-        #                         data=json.dumps({
-        #                             'location': point2str(location),
-        #                             'timestamp': date2iso(timestamp),
-        #                         }),
-        #                         follow=True)
-        # self.assertEqual(response.status_code, 200)
-        # result = JSONParser().parse(BytesIO(response.content))
-        # answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
-        # if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
-        #     answer['orientation'] = result['orientation']
-        # self.assertDictEqual(result, answer)
-        #
-        # # retrieve new ambulance location
-        # response = client.get('/en/api/ambulance/{}/'.format(str(self.a1.id)))
-        # self.assertEqual(response.status_code, 200)
-        # result = JSONParser().parse(BytesIO(response.content))
-        # self.assertEqual(result['status'], status)
-        # self.assertEqual(result['location'], point2str(location))
-        # self.assertEqual(result['timestamp'], date2iso(timestamp))
-        #
-        # # set wrong attribute
-        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a1.id)),
-        #                         content_type='application/json',
-        #                         data=json.dumps({
-        #                             'status': 'will fail'
-        #                         }),
-        #                         follow=True)
-        # self.assertEqual(response.status_code, 400)
-        #
-        # # set wrong ambulance id
-        # response = client.patch('/en/api/ambulance/100/',
-        #                         data=json.dumps({
-        #                             'status': status
-        #                         }),
-        #                         follow=True)
-        # self.assertEqual(response.status_code, 404)
-        #
-        # # logout
-        # client.logout()
+        # set wrong attribute
+        response = client.patch('/en/api/client/{}/'.format(str(client1.id)),
+                                content_type='application/json',
+                                data=json.dumps({
+                                    'status': 'will fail'
+                                }),
+                                follow=True)
+        self.assertEqual(response.status_code, 400)
+
+        # set wrong id
+        response = client.patch('/en/api/client/100/',
+                                data=json.dumps({
+                                    'status': status
+                                }),
+                                follow=True)
+        self.assertEqual(response.status_code, 404)
+
+        # logout
+        client.logout()
+        
         #
         # # login as testuser2
         # client.login(username='testuser2', password='very_secret')
