@@ -639,7 +639,7 @@ class TestClient(TestSetup):
                                follow=True)
         self.assertEqual(response.status_code, 201)
         result = JSONParser().parse(BytesIO(response.content))
-        answer = ClientSerializer(Client.objects.get(id=client1.id)).data
+        answer = ClientSerializer(Client.objects.get(id='client_id_2')).data
         self.assertDictEqual(result, answer)
 
         # retrieve client
