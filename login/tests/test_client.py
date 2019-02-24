@@ -658,8 +658,7 @@ class TestClient(TestSetup):
                                data=json.dumps({
                                    'client_id': 'client_id_2',
                                    'status': ClientStatus.O.name,
-                                   'ambulance': self.a1.id,
-                                   'hospital': None
+                                   'ambulance': self.a1.id
                                }),
                                follow=True)
         self.assertEqual(response.status_code, 201)
@@ -674,7 +673,7 @@ class TestClient(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(result['status'], ClientStatus.O.name)
         self.assertEqual(result['ambulance'], self.a1.id)
-        self.assertEqual(result['hospital'], None)
+        self.assertEqual(result['hospital'], self.h2.id)
         self.assertEqual(result['user'], self.u1.id)
 
         # logout
