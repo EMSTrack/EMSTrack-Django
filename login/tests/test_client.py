@@ -1,8 +1,13 @@
+import json
 import logging
+from io import BytesIO
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.utils import timezone
+from rest_framework.parsers import JSONParser
+from django.test import Client as DjangoClient
 
 from ambulance.models import Ambulance
 from emstrack.tests.util import date2iso
@@ -536,3 +541,207 @@ class TestClient(TestSetup):
         self.assertEqual(client2.user, self.u1)
         self.assertEqual(client2.ambulance, self.a2)
         self.assertEqual(client2.hospital, self.h1)
+
+    def test_client_viewset(self):
+
+        # client online
+        client1 = Client.objects.create(client_id='client_id_1', user=self.u1,
+                                        status=ClientStatus.O.name, ambulance=self.a1)
+
+        # instantiate client
+        client = DjangoClient()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # retrieve
+        response = client.get('/en/api/client/{}/'.format(str(client1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(client1).data
+        self.assertDictEqual(result, answer)
+
+        # set status
+        status = ClientStatus.F.name
+        response = client.patch('/en/api/client/{}/'.format(str(client1.id)),
+                                content_type='application/json',
+                                data=json.dumps({
+                                    'status': status,
+                                }),
+                                follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = ClientSerializer(Client.objects.get(id=client1.id)).data
+        self.assertDictEqual(result, answer)
+
+        # retrieve new status
+        response = client.get('/en/api/client/{}/'.format(str(client1.id)),
+                              follow=True)
+        self.assertEqual(response.status_code, 200)
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertEqual(result['status'], status)
+
+        # # set status location
+        # timestamp = timezone.now()
+        # location = {'latitude': -2., 'longitude': 7.}
+        #
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a1.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'location': point2str(location),
+        #                             'timestamp': date2iso(timestamp),
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a1.id)).data
+        # if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
+        #     answer['orientation'] = result['orientation']
+        # self.assertDictEqual(result, answer)
+        #
+        # # retrieve new ambulance location
+        # response = client.get('/en/api/ambulance/{}/'.format(str(self.a1.id)))
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # self.assertEqual(result['status'], status)
+        # self.assertEqual(result['location'], point2str(location))
+        # self.assertEqual(result['timestamp'], date2iso(timestamp))
+        #
+        # # set wrong attribute
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a1.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': 'will fail'
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 400)
+        #
+        # # set wrong ambulance id
+        # response = client.patch('/en/api/ambulance/100/',
+        #                         data=json.dumps({
+        #                             'status': status
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 404)
+        #
+        # # logout
+        # client.logout()
+        #
+        # # login as testuser2
+        # client.login(username='testuser2', password='very_secret')
+        #
+        # # retrieve ambulance
+        # response = client.get('/en/api/ambulance/{}/'.format(str(self.a3.id)),
+        #                       follow=True)
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # answer = AmbulanceSerializer(self.a3).data
+        # self.assertDictEqual(result, answer)
+        #
+        # # set status ambulance
+        # status = AmbulanceStatus.OS.name
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a3.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': status,
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
+        # self.assertDictEqual(result, answer)
+        #
+        # # retrieve new ambulance status
+        # response = client.get('/en/api/ambulance/{}/'.format(str(self.a3.id)),
+        #                       follow=True)
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # self.assertEqual(result['status'], status)
+        #
+        # # set location
+        # timestamp = timezone.now()
+        # location = {'latitude': -2., 'longitude': 7.}
+        #
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a3.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'location': point2str(location),
+        #                             'timestamp': date2iso(timestamp),
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # answer = AmbulanceSerializer(Ambulance.objects.get(id=self.a3.id)).data
+        # if math.fabs(answer['orientation'] - result['orientation']) < 1e-4:
+        #     answer['orientation'] = result['orientation']
+        # self.assertDictEqual(result, answer)
+        #
+        # # retrieve new ambulance location
+        # response = client.get('/en/api/ambulance/{}/'.format(str(self.a3.id)),
+        #                       follow=True)
+        # self.assertEqual(response.status_code, 200)
+        # result = JSONParser().parse(BytesIO(response.content))
+        # self.assertEqual(result['status'], status)
+        # self.assertEqual(result['location'], point2str(location))
+        # self.assertEqual(result['timestamp'], date2iso(timestamp))
+        #
+        # # set status ambulance
+        # status = AmbulanceStatus.OS.name
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a1.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': status,
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 404)
+        #
+        # # set status ambulance
+        # status = AmbulanceStatus.OS.name
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a2.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': status,
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 404)
+        #
+        # # logout
+        # client.logout()
+        #
+        # # login as testuser1
+        # client.login(username='testuser1', password='top_secret')
+        #
+        # # set status ambulance
+        # status = AmbulanceStatus.OS.name
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a1.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': status,
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 404)
+        #
+        # # set status ambulance
+        # status = AmbulanceStatus.OS.name
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a2.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': status,
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 404)
+        #
+        # # set status ambulance
+        # status = AmbulanceStatus.OS.name
+        # response = client.patch('/en/api/ambulance/{}/'.format(str(self.a3.id)),
+        #                         content_type='application/json',
+        #                         data=json.dumps({
+        #                             'status': status,
+        #                         }),
+        #                         follow=True)
+        # self.assertEqual(response.status_code, 404)
+        #
+        # # logout
+        # client.logout()
+
