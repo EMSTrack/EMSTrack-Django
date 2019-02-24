@@ -628,9 +628,10 @@ class TestClient(TestSetup):
         self.assertEqual(response.status_code, 404)
 
         # create client
-        response = client.put('/en/api/client/{}/'.format('client_id_2'),
+        response = client.put('/en/api/client/',
                               content_type='application/json',
                               data=json.dumps({
+                                  'client_id': 'client_id_2',
                                   'status': ClientStatus.O.name,
                                   'ambulance': None,
                                   'hospital': self.h2.id
