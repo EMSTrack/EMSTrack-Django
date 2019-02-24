@@ -394,81 +394,25 @@ class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
         self.wait(test_client)
 
 
-class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
+class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
 
     def test(self, username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'], ambulance_id=None):
 
         if not ambulance_id:
             ambulance_id = self.a1.id
 
-        # Start client as admin
-        broker = {
-            'HOST': 'localhost',
-            'PORT': 1883,
-            'KEEPALIVE': 60,
-            'CLEAN_SESSION': True
-        }
-
-        # Start subscribe client
-
-        broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
-
-        subscribe_client = SubscribeClient(broker,
-                                           debug=True)
-        self.is_connected(subscribe_client)
-        self.is_subscribed(subscribe_client)
+        # starts subscribe client
+        self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-
-        broker.update(settings.MQTT)
         client_id = 'test_mqtt_subscribe_admin'
-        broker['USERNAME'] = username
-        broker['PASSWORD'] = password
-        broker['CLIENT_ID'] = client_id
-
-        test_client = MQTTTestClient(broker,
-                                     check_payload=False,
-                                     debug=True)
-        self.is_connected(test_client)
-
-        # Client handshake
-        test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # check record
-        clnt = Client.objects.get(client_id=client_id)
-        self.assertEqual(clnt.status, ClientStatus.O.name)
-
-        # check record log
-        obj = ClientLog.objects.get(client=clnt)
-        self.assertEqual(obj.status, ClientStatus.O.name)
+        test_client = self.start_mqtt_client(client_id, username, password)
 
         # start django client
-        django_client = DjangoClient()
+        django_client = self.start_django_client(username, password)
 
-        # login as admin
-        django_client.login(username=username, password=password)
-
-        # handshake ambulance and hospital
-        response = django_client.post('/en/api/client/',
-                                      content_type='application/json',
-                                      data=json.dumps({
-                                          'client_id': client_id,
-                                          'status': ClientStatus.O.name,
-                                          'ambulance': ambulance_id
-                                      }),
-                                      follow=True)
-        self.assertEqual(response.status_code, 201)
-
-        # check record
-        clnt = Client.objects.get(client_id=client_id)
-        self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, ambulance_id)
-        self.assertEqual(clnt.hospital, None)
+        # login ambulance
+        self.set_django_client(django_client, client_id, ambulance_id, None)
 
         # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
@@ -502,7 +446,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         call = serializer.save(updated_by=self.u1)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
@@ -518,7 +462,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
                             AmbulanceCallStatus.D.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if call status is Pending
         call = Call.objects.get(id=call.id)
@@ -538,7 +482,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
                             AmbulanceCallStatus.A.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if call status changed to Started
         call = Call.objects.get(id=call.id)
@@ -562,7 +506,7 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
                             AmbulanceCallStatus.C.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # Check if ambulancecall status is Completed
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
@@ -576,11 +520,10 @@ class TestMQTTCallsDecline(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client)
 
         # wait for disconnect
-        test_client.wait()
-        subscribe_client.wait()
+        self.wait(test_client)
 
 
 class TestMQTTCallsDeclineRegularUser(TestMQTTCallsDecline):
