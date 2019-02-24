@@ -252,7 +252,7 @@ class Client(models.Model):
         if self.status == ClientStatus.O.name or self.status == ClientStatus.R.name:
 
             # log operation
-            log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
+            log.append({'client': self, 'user': self.user, 'status': self.status, 'activity': ClientActivity.HS.name})
 
             if self.status == ClientStatus.R.name and self.ambulance is None:
 
@@ -277,7 +277,7 @@ class Client(models.Model):
                     (not loaded_values or self._loaded_values['ambulance_id'] != self.ambulance.id)):
 
                 # log ambulance login operation
-                log.append({'client': self, 'status': ClientStatus.O.name,
+                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.AI.name,
                             'details': self.ambulance.identifier})
 
@@ -285,7 +285,7 @@ class Client(models.Model):
 
                 # log ambulance logout operation
                 last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
-                log.append({'client': self, 'status': ClientStatus.O.name,
+                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.AO.name,
                             'details': last_ambulance.identifier})
 
@@ -294,7 +294,7 @@ class Client(models.Model):
                     (not loaded_values or self._loaded_values['hospital_id'] != self.hospital.id)):
 
                 # log hospital login operation
-                log.append({'client': self, 'status': ClientStatus.O.name,
+                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.HI.name,
                             'details': self.hospital.name})
 
@@ -302,7 +302,7 @@ class Client(models.Model):
 
                 # log hospital logout operation
                 last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
-                log.append({'client': self, 'status': ClientStatus.O.name,
+                log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.HO.name,
                             'details': last_hospital.name})
 
@@ -314,8 +314,7 @@ class Client(models.Model):
 
                 # log ambulance logout activity
                 last_ambulance = Ambulance.objects.get(id=self._loaded_values['ambulance_id'])
-                log.append({'client': self,
-                            'status': self.status,
+                log.append({'client': self, 'user': self.user, 'status': self.status,
                             'activity': ClientActivity.AO.name,
                             'details': last_ambulance.identifier})
 
@@ -333,8 +332,7 @@ class Client(models.Model):
 
                 # log hospital logout activity
                 last_hospital = Hospital.objects.get(id=self._loaded_values['hospital_id'])
-                log.append({'client': self,
-                            'status': self.status,
+                log.append({'client': self, 'user': self.user, 'status': self.status,
                             'activity': ClientActivity.HO.name,
                             'details': last_hospital.name})
 
@@ -347,7 +345,7 @@ class Client(models.Model):
                 self.hospital = None
 
             # log operation
-            log.append({'client': self, 'status': self.status, 'activity': ClientActivity.HS.name})
+            log.append({'client': self, 'user': self.user, 'status': self.status, 'activity': ClientActivity.HS.name})
 
         # check permissions
         if self.ambulance is not None or self.hospital is not None:
@@ -385,6 +383,10 @@ class ClientLog(models.Model):
     client = models.ForeignKey(Client,
                                on_delete=models.CASCADE,
                                verbose_name=_('client'))
+
+    user = models.ForeignKey(User,
+                             on_delete=models.CASCADE,
+                             verbose_name=_('user'))
 
     status = models.CharField(_('status'), max_length=1,
                               choices=make_choices(ClientStatus))
