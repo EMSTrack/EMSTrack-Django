@@ -137,13 +137,6 @@ class Ambulance(UpdatedByModel):
     # active
     active = models.BooleanField(_('active'), default=True)
 
-    # # location client
-    # location_client = models.ForeignKey('login.Client',
-    #                                     on_delete=models.CASCADE,
-    #                                     blank=True, null=True,
-    #                                     related_name='location_client_set',
-    #                                     verbose_name=_('location_client'))
-
     # default value for _loaded_values
     _loaded_values = None
 
@@ -190,18 +183,6 @@ class Ambulance(UpdatedByModel):
 
         # logger.debug('loaded_values: {}'.format(loaded_values))
         # logger.debug('_loaded_values: {}'.format(self._loaded_values))
-
-        # # logger.debug('self.location_client: {}'.format(self.location_client))
-        # # location_client changed?
-        # if self.location_client is None:
-        #     location_client_id = None
-        # else:
-        #     location_client_id = self.location_client.id
-        # location_client_changed = False
-        # if loaded_values and location_client_id != self._loaded_values['location_client_id']:
-        #     location_client_changed = True
-
-        # logger.debug('location_client_changed: {}'.format(location_client_changed))
 
         # if comment, capability, status or location changed
         model_changed = False

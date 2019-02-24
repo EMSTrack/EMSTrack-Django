@@ -244,6 +244,10 @@ class Client(models.Model):
         # log
         log = []
 
+        # publication list
+        publish_ambulance = set()
+        publish_hospital = set()
+
         # logger.debug('self = {}'.format(self))
         # if loaded_values:
         #     logger.debug('_loaded_values = {}'.format(self._loaded_values))
@@ -281,6 +285,9 @@ class Client(models.Model):
                             'activity': ClientActivity.AI.name,
                             'details': self.ambulance.identifier})
 
+                # publish ambulance
+                publish_ambulance.add(self.ambulance)
+
             elif self.ambulance is None and loaded_values and self._loaded_values['ambulance_id'] is not None:
 
                 # log ambulance logout operation
@@ -288,6 +295,9 @@ class Client(models.Model):
                 log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.AO.name,
                             'details': last_ambulance.identifier})
+
+                # publish ambulance
+                publish_ambulance.add(last_ambulance)
 
             # hospital login?
             if (self.hospital is not None and
@@ -298,6 +308,9 @@ class Client(models.Model):
                             'activity': ClientActivity.HI.name,
                             'details': self.hospital.name})
 
+                # publish hospital
+                publish_hospital.add(self.hospital)
+
             elif self.hospital is None and loaded_values and self._loaded_values['hospital_id'] is not None:
 
                 # log hospital logout operation
@@ -305,6 +318,9 @@ class Client(models.Model):
                 log.append({'client': self, 'user': self.user, 'status': ClientStatus.O.name,
                             'activity': ClientActivity.HO.name,
                             'details': last_hospital.name})
+
+                # publish hospital
+                publish_hospital.add(last_hospital)
 
         # offline or disconnected
         elif self.status == ClientStatus.D.name or self.status == ClientStatus.F.name:
@@ -317,6 +333,9 @@ class Client(models.Model):
                 log.append({'client': self, 'user': self.user, 'status': self.status,
                             'activity': ClientActivity.AO.name,
                             'details': last_ambulance.identifier})
+
+                # publish ambulance
+                publish_ambulance.add(last_ambulance)
 
             if self.ambulance is not None:
 
@@ -335,6 +354,9 @@ class Client(models.Model):
                 log.append({'client': self, 'user': self.user, 'status': self.status,
                             'activity': ClientActivity.HO.name,
                             'details': last_hospital.name})
+
+                # publish hospital
+                publish_hospital.add(last_hospital)
 
             if self.hospital is not None:
                 # log warning
@@ -364,6 +386,15 @@ class Client(models.Model):
         for entry in log:
             # logger.debug(entry)
             ClientLog.objects.create(**entry)
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+
+        for ambulance in publish_ambulance:
+            SingletonPublishClient().publish_ambulance(ambulance)
+
+        for hospital in publish_hospital:
+            SingletonPublishClient().publish_hospital(hospital)
 
 
 # Client activity

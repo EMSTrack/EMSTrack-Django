@@ -83,8 +83,8 @@ class ClientViewSet(CreateModelUpdateByMixin,
     update:
     Update an existing Client instance.
 
-    patch:
-    Partially update an existing Client instance.
+    partial_update:
+    Partially update existing Client instance.
 
     retrieve:
     Retrieve an existing Client instance.

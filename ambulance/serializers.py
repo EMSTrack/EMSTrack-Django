@@ -65,22 +65,6 @@ class AmbulanceSerializer(serializers.ModelSerializer):
             if not get_permissions(user).check_can_write(ambulance=instance.id):
                 raise PermissionDenied()
 
-        # # update location_client
-        # # stored in validated_data as {'location_client': {'client_id': client_id}}
-        # if 'location_client' in validated_data:
-        #
-        #     # retrieve new location_client and remove it from validated_data
-        #     location_client = None
-        #     client_id = validated_data.pop('location_client')['client_id']
-        #     if client_id:
-        #         location_client = Client.objects.get(client_id=client_id)
-        #
-        #     # reset location_client if either new or old is None, otherwise ignore
-        #     if instance.location_client is None or location_client is None:
-        #
-        #         # fine, clear or update location client
-        #         validated_data['location_client'] = location_client
-
         return super().update(instance, validated_data)
 
 
