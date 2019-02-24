@@ -458,13 +458,11 @@ class TestClient(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        timestamp = timezone.now()
         serializer = ClientSerializer(data={
             'client_id': 'client_id_3',
             'status': ClientStatus.O.name,
             'ambulance': None,
-            'hospital': None,
-            'updated_on': date2iso(timestamp)
+            'hospital': None
         })
         serializer.is_valid()
         serializer.save(user=self.u2)
@@ -474,5 +472,4 @@ class TestClient(TestSetup):
         self.assertEqual(client2.status, ClientStatus.O.name)
         self.assertEqual(client2.ambulance, None)
         self.assertEqual(client2.hospital, None)
-        self.assertEqual(client2.updated_on, timestamp)
 

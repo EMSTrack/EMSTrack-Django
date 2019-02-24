@@ -62,4 +62,4 @@ class ClientSerializer(serializers.ModelSerializer):
                   'client_id',
                   'user', 'status', 'ambulance', 'hospital',
                   'updated_on']
-        read_only_fields = ('user',)
+        read_only_fields = ('user', 'updated_on')
