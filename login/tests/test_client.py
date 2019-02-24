@@ -5,9 +5,8 @@ from io import BytesIO
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.utils import timezone
-from rest_framework.parsers import JSONParser
 from django.test import Client as DjangoClient
+from rest_framework.parsers import JSONParser
 
 from ambulance.models import Ambulance
 from emstrack.tests.util import date2iso

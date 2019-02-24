@@ -1,9 +1,12 @@
 import json
 import logging
 import time
+from io import BytesIO
 
 from django.conf import settings
 from django.utils import timezone
+from django.test import Client as DjangoClient
+from rest_framework.parsers import JSONParser
 
 from ambulance.models import Ambulance, \
     AmbulanceStatus
@@ -218,6 +221,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
     def test(self):
+
         # Start client as admin
         broker = {
             'HOST': 'localhost',
@@ -227,7 +231,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         }
 
         # Start subscribe client
-
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'
 
@@ -237,7 +240,6 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         self.is_subscribed(subscribe_client)
 
         # Start test client
-
         broker.update(settings.MQTT)
         client_id = 'test_mqtt_subscribe_admin'
         username = broker['USERNAME']
@@ -252,8 +254,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
@@ -263,29 +264,29 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            ClientActivity.AI.name)
+        # start django client
+        django_client = DjangoClient()
 
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        # login as admin
+        django_client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': self.a1.id,
+                                          'hospital': self.h1.id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, self.a1.id)
-
-        # TODO: Test unauthorized client update
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.assertEqual(clnt.ambulance, self.a1.id)
+        self.assertEqual(clnt.hospital, self.h1.id)
 
         # Modify ambulance
 
@@ -369,30 +370,21 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.expect('ambulance/{}/data'.format(self.a1.id))
         self.is_subscribed(test_client)
 
-        # Ambulance handshake: ambulance logout
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            ClientActivity.AO.name)
+        # handshake ambulance
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'ambulance': self.a2.id,
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
 
-        # process messages
-        self.loop(test_client, subscribe_client)
-
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a2.id),
-                            ClientActivity.AI.name)
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a2.id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        # check record
+        clnt = Client.objects.get(client_id=client_id)
+        self.assertEqual(clnt.status, ClientStatus.O.name)
+        self.assertEqual(clnt.ambulance, self.a2.id)
+        self.assertEqual(clnt.hospital, self.h1.id)
 
         # retrieve current ambulance status
         obj = Ambulance.objects.get(id=self.a2.id)
@@ -436,158 +428,16 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.F.name)
 
         # process messages
-        self.loop(test_client)
-        subscribe_client.loop()
+        self.loop(test_client, subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
-        test_invalid_serializer = False
-        if test_invalid_serializer:
-
-            # generate ERROR: JSON formated incorrectly
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-            self.is_subscribed(test_client)
-
-            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username,
-                                                                             client_id,
-                                                                             self.a1.id),
-                                '{ "value": ',
-                                qos=0)
-
-            # process messages
-            self.loop(test_client)
-            subscribe_client.loop()
-
-            # generate ERROR: JSON formated incorrectly
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-            self.is_subscribed(test_client)
-
-            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
-                                                                            client_id,
-                                                                            self.h1.id),
-                                '{ "value": ',
-                                qos=0)
-
-            # process messages
-            self.loop(test_client)
-            subscribe_client.loop()
-
-            # generate ERROR: JSON formated incorrectly
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-            self.is_subscribed(test_client)
-
-            test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
-                                                                                     client_id,
-                                                                                     self.h1.equipmentholder.id,
-                                                                                     self.e1.id),
-                                '{ "value": ',
-                                qos=0)
-
-            # process messages
-            self.loop(test_client)
-            subscribe_client.loop()
-
-            # WARNING: The next tests prevent the test database from
-            # being removed at the end of the test. It is not clear why
-            # but it could be django bug related to the LiveServerThread
-            # not being thread safe:
-            #
-            # https://code.djangoproject.com/ticket/22420 Just run a
-            #
-            # limited set of tests that do not make use of
-            # LiveServerThread for deleting the test database, for
-            # example:
-            #
-            #     ./manage test ambulance.test
-
-            # generate ERROR: wrong id
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-
-            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
-                                                                             client_id,
-                                                                             1111),
-                                json.dumps({
-                                    'status': AmbulanceStatus.OS.name,
-                                }), qos=0)
-
-            # process messages
-            self.loop(test_client, subscribe_client)
-            subscribe_client.loop()
-
-            # generate ERROR: wrong id
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-
-            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
-                                                                            client_id,
-                                                                            1111),
-                                json.dumps({
-                                    'comment': 'comment',
-                                }), qos=0)
-
-            # process messages
-            self.loop(test_client, subscribe_client)
-            subscribe_client.loop()
-
-            # generate ERROR: wrong id
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-
-            test_client.publish('user/{}/client/{}/equipment/{}/item/{}/data'.format(self.u1.username,
-                                                                                     client_id,
-                                                                                     self.h1.equipmentholder.id,
-                                                                                     -1),
-                                json.dumps({
-                                    'comment': 'comment',
-                                }), qos=0)
-
-            # process messages
-            self.loop(test_client, subscribe_client)
-            subscribe_client.loop()
-
-            # generate ERROR: invalid serializer
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-
-            test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(self.u1.username, 
-                                                                             client_id,
-                                                                             self.a1.id),
-                                json.dumps({
-                                    'status': 'Invalid',
-                                }), qos=0)
-
-            # process messages
-            self.loop(test_client, subscribe_client)
-            subscribe_client.loop()
-            self.loop(test_client)
-            subscribe_client.loop()
-
-            # generate ERROR: invalid serializer
-
-            test_client.expect('user/{}/client/{}/error'.format(broker['USERNAME'], client_id))
-
-            test_client.publish('user/{}/client/{}/hospital/{}/data'.format(self.u1.username,
-                                                                            client_id,
-                                                                            self.h1.id),
-                                json.dumps({
-                                    'location': 'PPOINT()',
-                                }), qos=0)
-
-            # process messages
-            self.loop(test_client, subscribe_client)
-            subscribe_client.loop()
-            self.loop(test_client)
-            subscribe_client.loop()
-
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
+        django_client.logout()
 
 
 class TestMQTTWill(TestMQTT, MQTTTestCase):

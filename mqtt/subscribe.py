@@ -58,9 +58,9 @@ class SubscribeClient(BaseClient):
         self.client.message_callback_add('user/+/client/+/ambulance/+/data',
                                          self.on_ambulance)
 
-        # client ambulance status handler
-        self.client.message_callback_add('user/+/client/+/ambulance/+/status',
-                                         self.on_client_ambulance_status)
+        # # client ambulance status handler
+        # self.client.message_callback_add('user/+/client/+/ambulance/+/status',
+        #                                  self.on_client_ambulance_status)
 
         # hospital handler
         self.client.message_callback_add('user/+/client/+/hospital/+/data',
@@ -85,7 +85,7 @@ class SubscribeClient(BaseClient):
         # subscribe
         self.subscribe('message', 2)
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
-        self.subscribe('user/+/client/+/ambulance/+/status', 2)
+        # self.subscribe('user/+/client/+/ambulance/+/status', 2)
         self.subscribe('user/+/client/+/hospital/+/data', 2)
         self.subscribe('user/+/client/+/equipment/+/item/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)
@@ -535,79 +535,79 @@ class SubscribeClient(BaseClient):
 
     # update ambulance call status information
 
-    def on_client_ambulance_status(self, clnt, userdata, msg):
-
-        try:
-
-            logger.debug("on_client_ambulance_status: msg = '{}:{}'".format(msg.topic, msg.payload))
-
-            # parse topic
-            user, client, data, ambulance_id = self.parse_topic(msg, 4, json=False)
-
-        except Exception as e:
-
-            logger.debug("on_client_ambulance_status: ParseException '{}'".format(e))
-            return
-
-        try:
-
-            try:
-
-                # handle activity
-                activity = ClientActivity[data]
-
-            except ValueError:
-
-                # send error message to user
-                self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "activity '{}' is not valid".format(data))
-
-                return
-
-            logger.debug('on_client_ambulance_status: activity = ' + activity.name)
-
-            # retrieve ambulance
-            try:
-
-                ambulance = Ambulance.objects.get(id=ambulance_id)
-
-            except Ambulance.DoesNotExist:
-
-                # send error message to user
-                self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "Ambulance '{}' does not exist".format(ambulance_id))
-                return
-
-            # is client online?
-            if client.status != ClientStatus.O.name:
-
-                # client is not online
-                logger.debug('Client "" is not online'.format(client.client_id))
-
-                # send warning message to user
-                self.send_error_message(user, client, msg.topic, msg.payload,
-                                        "Warning: client '{}' is not online".format(client.client_id))
-
-            # ambulance login?
-            if activity == ClientActivity.AI:
-
-                # save client
-                client.ambulance = ambulance
-                client.save()
-
-            elif activity == ClientActivity.AO:
-
-                client.ambulance = None
-                client.save()
-
-        except Exception as e:
-
-            # send error message to user
-            self.send_error_message(user, client, msg.topic, msg.payload,
-                                    "Exception '{}'".format(e))
-
-        # client is not online
-        logger.debug('on_client_ambulance_status: done')
+    # def on_client_ambulance_status(self, clnt, userdata, msg):
+    #
+    #     try:
+    #
+    #         logger.debug("on_client_ambulance_status: msg = '{}:{}'".format(msg.topic, msg.payload))
+    #
+    #         # parse topic
+    #         user, client, data, ambulance_id = self.parse_topic(msg, 4, json=False)
+    #
+    #     except Exception as e:
+    #
+    #         logger.debug("on_client_ambulance_status: ParseException '{}'".format(e))
+    #         return
+    #
+    #     try:
+    #
+    #         try:
+    #
+    #             # handle activity
+    #             activity = ClientActivity[data]
+    #
+    #         except ValueError:
+    #
+    #             # send error message to user
+    #             self.send_error_message(user, client, msg.topic, msg.payload,
+    #                                     "activity '{}' is not valid".format(data))
+    #
+    #             return
+    #
+    #         logger.debug('on_client_ambulance_status: activity = ' + activity.name)
+    #
+    #         # retrieve ambulance
+    #         try:
+    #
+    #             ambulance = Ambulance.objects.get(id=ambulance_id)
+    #
+    #         except Ambulance.DoesNotExist:
+    #
+    #             # send error message to user
+    #             self.send_error_message(user, client, msg.topic, msg.payload,
+    #                                     "Ambulance '{}' does not exist".format(ambulance_id))
+    #             return
+    #
+    #         # is client online?
+    #         if client.status != ClientStatus.O.name:
+    #
+    #             # client is not online
+    #             logger.debug('Client "" is not online'.format(client.client_id))
+    #
+    #             # send warning message to user
+    #             self.send_error_message(user, client, msg.topic, msg.payload,
+    #                                     "Warning: client '{}' is not online".format(client.client_id))
+    #
+    #         # ambulance login?
+    #         if activity == ClientActivity.AI:
+    #
+    #             # save client
+    #             client.ambulance = ambulance
+    #             client.save()
+    #
+    #         elif activity == ClientActivity.AO:
+    #
+    #             client.ambulance = None
+    #             client.save()
+    #
+    #     except Exception as e:
+    #
+    #         # send error message to user
+    #         self.send_error_message(user, client, msg.topic, msg.payload,
+    #                                 "Exception '{}'".format(e))
+    #
+    #     # client is not online
+    #     logger.debug('on_client_ambulance_status: done')
 
     # handle calls
 
