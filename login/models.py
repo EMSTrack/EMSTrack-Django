@@ -210,8 +210,8 @@ class Client(models.Model):
     _loaded_values = None
 
     def __str__(self):
-        return self.client_id + '[' + self.status + ', user = ' + self.user + ']' + \
-               '(ambulance=' + self.ambulance + ', hospital=' + self.hospital + ')'
+        return '{}[{},{}](ambulance={},hospital={}'.format(self.client_id, self.status,
+                                                           self.user, self.ambulance, self.hospital)
 
     def get_absolute_url(self):
         return reverse('login:detail-client', kwargs={'pk': self.id})
