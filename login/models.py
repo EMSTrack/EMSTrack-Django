@@ -390,6 +390,8 @@ class Client(models.Model):
         # publish to mqtt
         from mqtt.publish import SingletonPublishClient
 
+        logger.debug('publish_ambulance = {}'.format(publish_ambulance))
+        logger.debug('publish_hospital = {}'.format(publish_hospital))
         for ambulance in publish_ambulance:
             SingletonPublishClient().publish_ambulance(ambulance)
 
