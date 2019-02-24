@@ -465,7 +465,11 @@ class TestClient(TestSetup):
             'ambulance': None,
             'hospital': None
         })
-        serializer.is_valid()
+        if serializer.is_valid():
+            self.assertTrue(True)
+        else:
+            logger.debug('errors = {}'.format(serializer.errors))
+            self.assertTrue(False)
         serializer.save(user=self.u2)
 
         client2 = Client.objects.get(client_id='client_id_3')
@@ -482,7 +486,11 @@ class TestClient(TestSetup):
             'ambulance': self.a1.id,
             'hospital': None
         })
-        serializer.is_valid()
+        if serializer.is_valid():
+            self.assertTrue(True)
+        else:
+            logger.debug('errors = {}'.format(serializer.errors))
+            self.assertTrue(False)
         serializer.save(user=self.u1)
 
         client2 = Client.objects.get(client_id='client_id_4')
@@ -491,3 +499,4 @@ class TestClient(TestSetup):
         self.assertEqual(client2.user, self.u1)
         self.assertEqual(client2.ambulance, self.a1)
         self.assertEqual(client2.hospital, None)
+        
