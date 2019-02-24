@@ -78,7 +78,7 @@ class ClientViewSet(CreateModelUpdateByMixin,
     API endpoint for manipulating Clients.
 
     create:
-    Create new Client instance.
+    Create or update Client instance.
 
     update:
     Update an existing Client instance.
