@@ -62,9 +62,10 @@ class ClientSerializer(serializers.ModelSerializer):
                   'client_id',
                   'user', 'status', 'ambulance', 'hospital',
                   'updated_on']
-        read_only_fields = ('user', 'updated_on')
+        read_only_fields = ('id', 'user', 'updated_on')
 
     def create(self, validated_data):
+        """ This will create or update a client if existing """
         client_id = validated_data.get('client_id')
         try:
             instance = Client.objects.get(client_id=client_id)
@@ -72,5 +73,7 @@ class ClientSerializer(serializers.ModelSerializer):
                 setattr(instance, attr, value)
         except Client.DoesNotExist:
             instance = Client(**validated_data)
+
+        logger.debug('instance = {}'.format(instance))
 
         return instance
