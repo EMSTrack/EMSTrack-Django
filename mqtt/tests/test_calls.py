@@ -24,7 +24,17 @@ class TestMQTTCallBase(TestMQTT):
         # call super
         super().__init__(*args, **kwargs)
 
-        logger.debug('TestMQTTCallBase.__init__')
+        self.subscribe_client = None
+
+    def loop(self, *args, max_tries=10):
+        super().loop(*args, self.subscribe_client, max_tries=max_tries)
+
+    def wait(self, *clients):
+        for client in clients:
+            client.wait()
+        self.subscribe_client.wait()
+
+    def start_subscribe_client(self, client_id):
 
         # Start client as admin
         broker = {
@@ -37,19 +47,11 @@ class TestMQTTCallBase(TestMQTT):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = client_id
 
         self.subscribe_client = SubscribeClient(broker, debug=True)
         self.is_connected(self.subscribe_client)
         self.is_subscribed(self.subscribe_client)
-
-    def loop(self, *args, max_tries=10):
-        super().loop(*args, self.subscribe_client, max_tries=max_tries)
-
-    def wait(self, *clients):
-        for client in clients:
-            client.wait()
-        self.subscribe_client.wait()
 
     def start_django_client(self, username, password):
 
@@ -126,23 +128,8 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id:
             ambulance_id = self.a1.id
 
-        # Start client as admin
-        broker = {
-            'HOST': 'localhost',
-            'PORT': 1883,
-            'KEEPALIVE': 60,
-            'CLEAN_SESSION': True
-        }
-
-        # Start subscribe client
-
-        broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
-
-        subscribe_client = SubscribeClient(broker,
-                                           debug=True)
-        self.is_connected(subscribe_client)
-        self.is_subscribed(subscribe_client)
+        # starts subscribe client
+        self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
 
@@ -175,7 +162,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         test_client.publish('user/{}/client/{}/status'.format(username, client_id), ClientStatus.O.name)
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        self.loop(test_client, self.subscribe_client)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
