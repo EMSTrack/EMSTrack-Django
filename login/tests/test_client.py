@@ -1,5 +1,7 @@
 import logging
 
+from django.utils import timezone
+
 from ambulance.models import Ambulance
 from emstrack.tests.util import date2iso
 from hospital.models import Hospital
@@ -455,3 +457,15 @@ class TestClient(TestSetup):
             'updated_on': date2iso(client1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
+
+        timestamp = timezone.now()
+        serializer = ClientSerializer(data={
+            'client_id': 'client_id_2',
+            'status': ClientStatus.O.name,
+            'ambulance': None,
+            'hospital': None,
+            'updated_on': date2iso(timestamp)
+        })
+        serializer.is_valid()
+        serializer.save(user=self.u2)
+
