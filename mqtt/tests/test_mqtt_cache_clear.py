@@ -98,11 +98,13 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         test_client.publish_message('cache_clear')
 
         # process messages
-        self.loop(test_client, subscribe_client)
+        count = 0
+        while info.hits > 0 or count < 10:
+            self.loop(test_client, subscribe_client)
+            time.sleep(0.1)
+            info = cache_info()
+            count += 1
 
-        time.sleep(0.1)
-
-        info = cache_info()
         self.assertEqual(info.hits, 0)
         self.assertEqual(info.misses, 0)
         self.assertEqual(info.currsize, 0)
