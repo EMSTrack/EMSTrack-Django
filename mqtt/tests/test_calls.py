@@ -1234,7 +1234,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.R.name)
 
         # test_client publishes client_id to location_client
-        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id1, ambulance_id1),
                              json.dumps({
                                  'location_client_id': client_id1,
                              }))
@@ -1243,7 +1243,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.loop(test_client1)
 
         # test_client publishes "Accepted" to call status
-        test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+        test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id1,
                                                                                     ambulance_id1, call.id), 
                              AmbulanceCallStatus.A.name)
 
@@ -1292,7 +1292,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.A.name)
 
         # test_client publishes "patient bound" to status
-        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id1, ambulance_id1),
                              json.dumps({
                                  'status': AmbulanceStatus.PB.name,
                              }))
@@ -1310,7 +1310,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.loop(test_client2)
 
         # test_client publishes "at patient" to status
-        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id1, ambulance_id1),
                              json.dumps({
                                  'status': AmbulanceStatus.AP.name,
                              }))
@@ -1328,7 +1328,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.loop(test_client2)
 
         # test_client publishes "hospital bound" to status
-        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id1, ambulance_id1),
                              json.dumps({
                                  'status': AmbulanceStatus.HB.name,
                              }))
@@ -1346,7 +1346,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.loop(test_client2)
 
         # test_client publishes "at hospital" to status
-        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, ambulance_id1),
+        test_client1.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id1, ambulance_id1),
                              json.dumps({
                                  'status': AmbulanceStatus.AH.name,
                              }))
@@ -1363,7 +1363,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.is_subscribed(test_client1)
 
         # test_client publishes "completed" to call status
-        test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id,
+        test_client1.publish('user/{}/client/{}/ambulance/{}/call/{}/status'.format(username, client_id1,
                                                                                     ambulance_id1, call.id),
                              AmbulanceCallStatus.C.name)
 
