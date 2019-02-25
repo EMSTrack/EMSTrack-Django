@@ -325,7 +325,6 @@ class TestClient(TestSetup):
         client1.status = ClientStatus.O.name
         client1.save()
 
-        h = Ambulance.objects.get(id=self.h1.id)
         client1 = Client.objects.get(id=client1.id)
 
         self.assertEqual(client1.status, ClientStatus.O.name)
