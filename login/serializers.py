@@ -58,13 +58,14 @@ class ClientSerializer(serializers.ModelSerializer):
 
     # override validators to prevent uniqueness to invalidate data
     client_id = serializers.CharField(max_length=254, validators=[])
+    username = serializers.CharField(source='user.username', required=False)
 
     class Meta:
         model = Client
-        fields = ['client_id',
-                  'user', 'status', 'ambulance', 'hospital',
+        fields = ['client_id', 'username',
+                  'status', 'ambulance', 'hospital',
                   'updated_on']
-        read_only_fields = ('user', 'updated_on')
+        read_only_fields = ('username', 'updated_on')
 
     def create(self, validated_data):
         """
