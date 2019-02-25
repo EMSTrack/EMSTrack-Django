@@ -259,11 +259,13 @@ $(function () {
         // set callback handlers
         mqttClient.onMessageArrived = onMessageArrived;
 
+        /*
         // set will message
         var willMessage = new Paho.MQTT.Message('D');
         willMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
         willMessage.qos = 2;
         willMessage.retained = false;
+        */
 
         // attempt to connect to MQTT broker
         mqttClient.connect({
@@ -274,8 +276,8 @@ $(function () {
             useSSL: true,
             cleanSession: true,
             onSuccess: onConnect,
-            onFailure: onConnectFailure,
-            willMessage: willMessage,
+            onFailure: onConnectFailure
+            // , willMessage: willMessage,
         });
 
     })
@@ -447,6 +449,7 @@ function onConnect() {
 
     console.log("Connected to MQTT broker");
 
+    /*
     // handshake online
     var onlineMessage = new Paho.MQTT.Message('O');
     onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
@@ -454,6 +457,7 @@ function onConnect() {
     onlineMessage.retained = false;
     mqttClient.send(onlineMessage);
     console.log('Sent online message');
+    */
 
     // get data
     getData();
