@@ -585,15 +585,14 @@ class MQTTAclView(CsrfExemptMixin,
 
                         return HttpResponse('OK')
 
-                    #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/status
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/data
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/status
                     #  - user/{username}/client/{client-id}/ambulance/{ambulance-id}/call/{call-id}/waypoint/{waypoint_id}/data
                     elif (topic[4] == 'ambulance' and
-                          ((len(topic) == 7 and (topic[6] == 'data' or topic[6] == 'status')) or
-                           (len(topic) == 9 and (topic[6] == 'call' and topic[8] == 'status')) or
+                          ((len(topic) == 7 and topic[6] == 'data') or
+                           (len(topic) == 9 and topic[6] == 'call' and topic[8] == 'status') or
                            (len(topic) == 11 and
-                            (topic[6] == 'call' and topic[8] == 'waypoint' and topic[10] == 'data')))):
+                            topic[6] == 'call' and topic[8] == 'waypoint' and topic[10] == 'data'))):
 
                         # get ambulance_id
                         ambulance_id = int(topic[5])
