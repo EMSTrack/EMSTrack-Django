@@ -476,7 +476,7 @@ class TestClient(TestSetup):
         serializer = ClientSerializer(client1)
         result = {
             'client_id': client1.client_id,
-            'user': client1.user.id,
+            'username': client1.user.username,
             'status': client1.status,
             'ambulance': client1.ambulance.id,
             'hospital': None,
@@ -558,7 +558,7 @@ class TestClient(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
         answer = ClientSerializer(client1).data
         self.assertDictEqual(result, answer)
-        self.assertEqual(result['user'], self.u2.id)
+        self.assertEqual(result['username'], self.u2.username)
 
         # set status and ambulance
         status = ClientStatus.O.name
@@ -583,7 +583,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['status'], status)
         self.assertEqual(result['ambulance'], self.a1.id)
         self.assertEqual(result['hospital'], self.h1.id)
-        self.assertEqual(result['user'], self.u1.id)
+        self.assertEqual(result['username'], self.u1.username)
 
         # reset ambulance
         response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
@@ -605,7 +605,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['status'], status)
         self.assertEqual(result['ambulance'], None)
         self.assertEqual(result['hospital'], self.h1.id)
-        self.assertEqual(result['user'], self.u1.id)
+        self.assertEqual(result['username'], self.u1.username)
 
         # set wrong attribute
         response = client.patch('/en/api/client/{}/'.format(str(client1.client_id)),
@@ -647,7 +647,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['status'], ClientStatus.O.name)
         self.assertEqual(result['ambulance'], None)
         self.assertEqual(result['hospital'], self.h2.id)
-        self.assertEqual(result['user'], self.u1.id)
+        self.assertEqual(result['username'], self.u1.username)
 
         # create client as update
         response = client.post('/en/api/client/',
@@ -671,7 +671,7 @@ class TestClient(TestSetup):
         self.assertEqual(result['status'], ClientStatus.O.name)
         self.assertEqual(result['ambulance'], self.a1.id)
         self.assertEqual(result['hospital'], self.h2.id)
-        self.assertEqual(result['user'], self.u1.id)
+        self.assertEqual(result['username'], self.u1.username)
 
         # logout
         client.logout()
