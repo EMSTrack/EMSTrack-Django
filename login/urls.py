@@ -65,6 +65,10 @@ urlpatterns = [
         staff_member_required(views.ClientDetailView.as_view()),
         name='detail-client'),
 
+    url(r'^client/logout/(?P<pk>\d+)$',
+        staff_member_required(views.ClientLogoutView.as_view()),
+        name='logout-client'),
+
     # restart
 
     url(r'^restart/$',

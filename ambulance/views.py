@@ -3,7 +3,6 @@ import uuid
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
@@ -436,50 +435,3 @@ class CallAbortView(LoginRequiredMixin,
         self.object.abort()
 
         return redirect('ambulance:call_list')
-
-
-# Ambulance logout
-class AmbulanceLogoutView(LoginRequiredMixin,
-                          SuccessMessageMixin,
-                          UpdatedByMixin,
-                          AmbulancePermissionMixin,
-                          BaseDetailView):
-    model = Ambulance
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
-    def get(self, request, *args, **kwargs):
-
-        # Make sure user is super or staff
-        user = request.user
-        if not (user.is_superuser or user.is_staff):
-            return HttpResponseForbidden()
-
-        # get ambulance object
-        self.object = self.get_object()
-        ambulance = self.object
-
-        try:
-            client = ambulance.client
-
-            # logout ambulance from client
-            from login.models import ClientLog, ClientActivity
-            log = ClientLog(client=client,
-                            user=user,
-                            status=client.status,
-                            activity=ClientActivity.TL.name,
-                            details=client.ambulance.identifier)
-            log.save()
-
-        except ObjectDoesNotExist:
-            client = None
-
-        # clear client
-        ambulance.client = None
-        ambulance.save()
-
-        if client is not None:
-            return redirect(client)
-        else:
-            return redirect(ambulance)

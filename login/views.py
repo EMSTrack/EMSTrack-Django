@@ -7,14 +7,17 @@ from braces.views import CsrfExemptMixin
 from django.contrib import messages
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User, Group
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
+from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
+from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import FormView, CreateView
 from drf_extra_fields.geo_fields import PointField
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
@@ -25,7 +28,7 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType,
     AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallPriority, CallPriorityOrder, CallStatusOrder, LocationTypeOrder, \
     WaypointStatus
 from emstrack import CURRENT_VERSION, MINIMUM_VERSION
-from emstrack.mixins import SuccessMessageWithInlinesMixin
+from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
 from equipment.models import EquipmentType, EquipmentTypeDefaults
@@ -798,3 +801,30 @@ class VersionView(APIView):
         """
 
         return Response(self.get_version())
+
+
+class ClientLogoutView(LoginRequiredMixin,
+                       SuccessMessageMixin,
+                       UpdatedByMixin,
+                       BaseDetailView):
+    model = Client
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+    def get(self, request, *args, **kwargs):
+
+        # Make sure user is super or staff
+        user = request.user
+        if not (user.is_superuser or user.is_staff):
+            return HttpResponseForbidden()
+
+        # get client
+        self.object = self.get_object()
+        client = self.object
+
+        # remove ambulance
+        client.ambulance = None
+        client.save()
+
+        return redirect(client)

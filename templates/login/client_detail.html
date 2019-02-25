@@ -35,7 +35,7 @@
                 {{ client.ambulance.identifier }}
                 &nbsp;
                 {% if client.ambulance and request.user.is_staff %}
-                 <form class="form-inline" action="{% url 'ambulance:logout' pk=client.ambulance.id %}" method="get">
+                 <form class="form-inline" action="{% url 'login:logout-client' pk=client.id %}" method="get">
                     <input type="submit" class="btn btn-danger btn-sm py-1" value="{% trans "Disconnect" %}">
                 </form>
                 {% endif %}
