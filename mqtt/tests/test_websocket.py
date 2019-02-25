@@ -1,16 +1,15 @@
 import json
 import ssl
-import time
 
 from django.conf import settings
+from django.test import Client as DjangoClient
 
 from ambulance.models import Ambulance, AmbulanceStatus
-from hospital.models import Hospital
 from equipment.models import EquipmentItem
+from hospital.models import Hospital
 from login.models import Client, ClientStatus, ClientLog, ClientActivity
 from mqtt.publish import SingletonPublishClient
 from mqtt.tests.client import MQTTTestCase, MQTTTestClient, TestMQTT
-
 from .client import MQTTTestSubscribeClient as SubscribeClient
 
 
@@ -45,7 +44,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         username = broker['USERNAME']
 
         broker['CLIENT_ID'] = client_id
-        broker['PORT']=8884
+        broker['PORT'] = 8884
 
         test_client = MQTTTestClient(broker,
                                      transport='websockets',
@@ -69,26 +68,29 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         obj = ClientLog.objects.get(client=clnt)
         self.assertEqual(obj.status, ClientStatus.O.name)
 
-        # Ambulance handshake: ambulance login
-        test_client.publish('user/{}/client/{}/ambulance/{}/status'.format(username, client_id, self.a1.id),
-                            ClientActivity.AI.name)
+        # start django client
+        django_client = DjangoClient()
 
-        # process messages
-        self.loop(test_client, subscribe_client)
+        # login as admin
+        django_client.login(username=broker['USERNAME'], password=broker['PASSWORD'])
+
+        # handshake ambulance and hospital
+        response = django_client.post('/en/api/client/',
+                                      content_type='application/json',
+                                      data=json.dumps({
+                                          'client_id': client_id,
+                                          'status': ClientStatus.O.name,
+                                          'ambulance': self.a1.id,
+                                          'hospital': self.h1.id
+                                      }),
+                                      follow=True)
+        self.assertEqual(response.status_code, 201)
 
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.O.name)
-        self.assertEqual(clnt.ambulance.id, self.a1.id)
-
-        # test_client publishes client_id to location_client
-        test_client.publish('user/{}/client/{}/ambulance/{}/data'.format(username, client_id, self.a1.id),
-                            json.dumps({
-                                'location_client_id': client_id,
-                            }))
-
-        # process messages
-        self.loop(test_client, subscribe_client)
+        self.assertEqual(clnt.ambulance, self.a1)
+        self.assertEqual(clnt.hospital, self.h1)
 
         # Modify ambulance
 
@@ -163,6 +165,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # wait for disconnect
         test_client.wait()
         subscribe_client.wait()
+        django_client.logout()
 
 
 class TestMQTTPublish(TestMQTT, MQTTTestCase):

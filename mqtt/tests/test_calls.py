@@ -307,6 +307,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
 
         # wait for disconnect
         self.wait(test_client)
+        django_client.logout()
 
 
 class TestMQTTCallsRegularUser(TestMQTTCalls):
@@ -392,6 +393,7 @@ class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
 
         # wait for disconnect
         self.wait(test_client)
+        django_client.logout()
 
 
 class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
@@ -524,6 +526,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
 
         # wait for disconnect
         self.wait(test_client)
+        django_client.logout()
 
 
 class TestMQTTCallsDeclineRegularUser(TestMQTTCallsDecline):
@@ -634,6 +637,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTTCallBase, MQTTTestCase):
 
         # wait for disconnect
         self.wait(test_client)
+        django_client.logout()
 
 
 class TestMQTTCallsDeclineInTheMiddleRegularUser(TestMQTTCallsDeclineInTheMiddle):
@@ -1035,6 +1039,8 @@ class TestMQTTCallsMultipleAmbulances(TestMQTTCallBase, MQTTTestCase):
 
         # wait for disconnect
         self.wait(test_client2)
+        django_client1.logout()
+        django_client2.logout()
 
 
 # TODO: Create another test where 2 clients to handle two ambulances simultaneously
@@ -1433,3 +1439,5 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
 
         # wait for disconnect
         self.wait(test_client1, test_client2)
+        django_client1.logout()
+        django_client2.logout()
