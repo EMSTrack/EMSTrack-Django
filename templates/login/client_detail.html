@@ -68,6 +68,7 @@
                     <th>{% trans "Status" %}</th>
                     <th>{% trans "Activity" %}</th>
                     <th>{% trans "Details" %}</th>
+                    <th>{% trans "User" %}</th>
                     <th>{% trans "Updated on" %}</th>
                 </tr>
                 </thead>
@@ -82,6 +83,9 @@
                     </td>
                     <td>
                         {{ clientlog.details }}
+                    </td>
+                    <td>
+                        {{ clientlog.user }}
                     </td>
                     <td>
                         {{ clientlog.updated_on }}

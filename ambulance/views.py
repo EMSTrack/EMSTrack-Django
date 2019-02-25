@@ -466,6 +466,7 @@ class AmbulanceLogoutView(LoginRequiredMixin,
             # logout ambulance from client
             from login.models import ClientLog, ClientActivity
             log = ClientLog(client=client,
+                            user=user,
                             status=client.status,
                             activity=ClientActivity.TL.name,
                             details=client.ambulance.identifier)
