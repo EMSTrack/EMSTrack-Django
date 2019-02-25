@@ -57,6 +57,11 @@ def get_ambulance_call_status(key):
 def get_waypoint_status(key):
     return WaypointStatus[key].value
 
+
+@register.filter
+def has_client(key):
+    return hasattr(key, 'client')
+
 # Ambulance location models
 
 

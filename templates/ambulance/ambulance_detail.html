@@ -43,10 +43,10 @@
                 <strong>{% trans "Comment" %}:</strong>
                 {{ ambulance.comment }}
             </p>
-            {% if user.is_staff and ambulance.location_client %}
+            {% if user.is_staff and ambulance|has_client %}
             <p>
                 <strong>{% trans "Update client" %}:</strong>
-                <a href="{% url 'login:detail-client' pk=ambulance.location_client.id %}">{{ ambulance.location_client.client_id }}</a>
+                <a href="{% url 'login:detail-client' pk=ambulance.client.id %}">{{ ambulance.client.client_id }}</a>
             </p>
             {% endif %}
             <p>

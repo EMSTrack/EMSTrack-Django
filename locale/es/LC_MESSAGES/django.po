@@ -119,10 +119,6 @@ msgstr "ubicación"
 msgid "timestamp"
 msgstr "hora"
 
-#: ambulance/models.py:141
-msgid "location_client"
-msgstr "client_de_localización"
-
 #: ambulance/models.py:295 ambulance/models.py:505 login/models.py:122
 #: login/models.py:210 login/models.py:337
 msgid "ambulance"
