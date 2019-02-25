@@ -475,7 +475,6 @@ class TestClient(TestSetup):
 
         serializer = ClientSerializer(client1)
         result = {
-            'id': client1.id,
             'client_id': client1.client_id,
             'user': client1.user.id,
             'status': client1.status,
