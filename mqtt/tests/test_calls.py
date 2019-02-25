@@ -311,7 +311,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
 
 class TestMQTTCallsRegularUser(TestMQTTCalls):
 
-    def test(self):
+    def test2(self):
         super().test('testuser2', 'very_secret', self.a3.id)
 
 
@@ -528,7 +528,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
 
 class TestMQTTCallsDeclineRegularUser(TestMQTTCallsDecline):
 
-    def test(self):
+    def test2(self):
         super().test('testuser2', 'very_secret', self.a3.id)
 
 
@@ -638,7 +638,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTTCallBase, MQTTTestCase):
 
 class TestMQTTCallsDeclineInTheMiddleRegularUser(TestMQTTCallsDeclineInTheMiddle):
 
-    def test(self):
+    def test2(self):
         super().test('testuser2', 'very_secret', self.a3.id)
 
 
