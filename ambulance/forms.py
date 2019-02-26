@@ -17,7 +17,7 @@ class AmbulanceCreateForm(forms.ModelForm):
 
     class Meta:
         model = Ambulance
-        fields = ['identifier', 'capability', 'status', 'comment', 'location']
+        fields = ['identifier', 'capability', 'status', 'active', 'comment', 'location']
 
 
 class AmbulanceUpdateForm(AmbulanceCreateForm):

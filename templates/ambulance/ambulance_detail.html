@@ -40,6 +40,10 @@
                 {{ ambulance.status|get_ambulance_status }}
             </p>
             <p>
+                <strong>{% trans "Active" %}:</strong>
+                {{ ambulance.active|get_check }}
+            </p>
+            <p>
                 <strong>{% trans "Comment" %}:</strong>
                 {{ ambulance.comment }}
             </p>

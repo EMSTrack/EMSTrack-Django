@@ -31,6 +31,10 @@
                 {{ hospital.location }}
             </p>
             <p>
+                <strong>{% trans "Active" %}:</strong>
+                {{ hospital.active|get_check }}
+            </p>
+            <p>
                 <strong>{% trans "Comment" %}:</strong>
                 {{ hospital.comment }}
             </p>
