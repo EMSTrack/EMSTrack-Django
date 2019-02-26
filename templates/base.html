@@ -170,7 +170,7 @@
     console.log("pathname = '" + pathname + "'");
 
     // exclude home page
-    if (!pathname.match(/\/[^\/]\//)) {
+    if (!pathname.match(/\/[^\/]*\//)) {
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
