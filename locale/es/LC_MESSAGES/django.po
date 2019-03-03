@@ -88,6 +88,18 @@ msgstr "Rescate"
 msgid "Medic"
 msgstr "Médica"
 
+#: ambulance/models.py:98
+msgid "Supervisor"
+msgstr "Supervisor"
+
+#: ambulance/models.py:99
+msgid "Professional First Responder"
+msgstr "Primer Respondiente Profesional"
+
+#: ambulance/models.py:100
+msgid "Community First Responder"
+msgstr "Primer Respondiente Comunitario"
+
 #: ambulance/models.py:114 equipment/models.py:119 hospital/models.py:15
 msgid "equipmentholder"
 msgstr "portadordeequipo"
