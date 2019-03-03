@@ -101,6 +101,9 @@ class AmbulanceCapability(Enum):
     A = _('Advanced')
     R = _('Rescue')
     M = _('Medic')
+    S = _('Supervisor')
+    P = _('Professional First Responder')
+    C = _('Community First Responder')
 
 
 AmbulanceCapabilityOrder = [ 

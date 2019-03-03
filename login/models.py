@@ -355,7 +355,7 @@ class Client(models.Model):
 
                     # change status of ambulance to unknown; do not publish yet
                     last_ambulance.status = AmbulanceStatus.UK.name
-                    last_ambulance.status.save(publish=False)
+                    last_ambulance.save(publish=False)
 
                 # publish ambulance
                 publish_ambulance.add(last_ambulance)
