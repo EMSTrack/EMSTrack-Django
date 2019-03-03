@@ -70,6 +70,19 @@ class LoginView(auth_views.LoginView):
     template_name = 'index.html'
     authentication_form = AuthenticationForm
 
+    def form_valid(self, form):
+
+        result = super(LoginView, self).form_valid(form)
+
+        # get user
+        user = self.request.user
+
+        # if user is dispatcher set session to expire in 14 days
+        if user.is_superuser or user.is_staff or user.userprofile.is_dispatcher:
+            self.request.session.set_expiry(14 * 24 * 60 * 60)
+
+        return result
+
 
 # logout
 
