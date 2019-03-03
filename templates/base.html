@@ -165,7 +165,7 @@
 
 <!-- set session expiration -->
 {% if user|is_dispatcher %}
-{% request.session.set_expiry_date(0) %}
+{% request.session.set_expiry(0) %}
 {% endif %}
 
 <script>
