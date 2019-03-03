@@ -111,7 +111,8 @@ AmbulanceCapabilityOrder = [
 ] 
 
 
-class Ambulance(UpdatedByModel):
+class Ambulance(PublishMixin,
+                UpdatedByModel):
 
     # TODO: Should we consider denormalizing Ambulance to avoid duplication with AmbulanceUpdate?
 
@@ -190,7 +191,7 @@ class Ambulance(UpdatedByModel):
         # logger.debug('_loaded_values: {}'.format(self._loaded_values))
 
         # if comment, capability, status or location changed
-        model_changed = False
+        # model_changed = False
         if has_moved or \
                 self._loaded_values['status'] != self.status or \
                 self._loaded_values['capability'] != self.capability or \
@@ -212,8 +213,8 @@ class Ambulance(UpdatedByModel):
 
             # logger.debug('UPDATE SAVED')
 
-            # model changed
-            model_changed = True
+            # # model changed
+            # model_changed = True
 
         # if identifier changed
         # NOTE: self._loaded_values is NEVER None because has_moved is True
@@ -224,23 +225,30 @@ class Ambulance(UpdatedByModel):
 
             # logger.debug('SAVED')
 
-            # model changed
-            model_changed = True
+            # # model changed
+            # model_changed = True
 
-        # Did the model change?
-        if model_changed:
-
-            # publish to mqtt
-            from mqtt.publish import SingletonPublishClient
-            SingletonPublishClient().publish_ambulance(self)
-
-            # logger.debug('PUBLISHED ON MQTT')
+        # # Did the model change?
+        # if model_changed:
+        #
+        #     # publish to mqtt
+        #
+        #     from mqtt.publish import SingletonPublishClient
+        #     SingletonPublishClient().publish_ambulance(self)
+        #
+        #     # logger.debug('PUBLISHED ON MQTT')
 
         # just created?
         if created:
             # invalidate permissions cache
             from mqtt.cache_clear import mqtt_cache_clear
             mqtt_cache_clear()
+
+    def publish(self, **kwargs):
+
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_ambulance(self, **kwargs)
 
     def delete(self, *args, **kwargs):
 

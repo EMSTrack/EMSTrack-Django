@@ -10,6 +10,7 @@ from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from ambulance.models import AmbulanceStatus
 from emstrack.util import make_choices
 from login.mixins import ClearPermissionCacheMixin
 from login.permissions import get_permissions
@@ -349,6 +350,12 @@ class Client(models.Model):
                 log.append({'client': self, 'user': self.user, 'status': self.status,
                             'activity': ClientActivity.AO.name,
                             'details': last_ambulance.identifier})
+
+                if self.status == ClientStatus.F.name and last_ambulance.status != AmbulanceStatus.UK.name:
+
+                    # change status of ambulance to unknown; do not publish yet
+                    last_ambulance.status = AmbulanceStatus.UK.name
+                    last_ambulance.status.save(publish=False)
 
                 # publish ambulance
                 publish_ambulance.add(last_ambulance)
