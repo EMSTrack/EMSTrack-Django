@@ -147,7 +147,9 @@
                     <td>
                     {% for wpnt in waypoint.waypointhistory_set.all|dictsortreversed:"updated_on" %}
                         <p>
-                            {{ wpnt.status|get_waypoint_status }} @ {{ wpnt.updated_on }}
+                            {{ wpnt.status|get_waypoint_status }} @
+                            {{ wpnt.updated_on|date:"DATE_FORMAT" }},
+                            {{ wpnt.updated_on|date:"H:i:s" }}
                         </p>
                     {% endfor %}
                     </td>
