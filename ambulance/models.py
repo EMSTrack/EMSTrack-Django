@@ -110,8 +110,11 @@ AmbulanceCapabilityOrder = [
     AmbulanceCapability.B,
     AmbulanceCapability.A,
     AmbulanceCapability.R,
-    AmbulanceCapability.M
-] 
+    AmbulanceCapability.M,
+    AmbulanceCapability.S,
+    AmbulanceCapability.P,
+    AmbulanceCapability.C
+]
 
 
 class Ambulance(PublishMixin,
