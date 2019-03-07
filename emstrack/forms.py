@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.forms.renderers import TemplatesSetting
 from django.contrib.gis.forms import widgets
 
@@ -19,11 +20,13 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
     def render(self, name, value, attrs=None, renderer=None):
         # add point
         if value:
-            attrs.update({'point': {'x': value.x,
-                                    'y': value.y,
-                                    'z': value.z,
-                                    'srid': value.srid}
-                          })
+            attrs.update({
+                'point': {'x': value.x,
+                          'y': value.y,
+                          'z': value.z,
+                          'srid': value.srid},
+                'access_token': settings.ACCESS_TOKEN
+            })
 
         # use TemplatesSetting as default rendering
         # Otherwise we get in trouble with finding point_widget.html

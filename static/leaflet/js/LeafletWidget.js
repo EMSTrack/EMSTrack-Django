@@ -3,7 +3,7 @@
 var LeafletWidget = function (options) {
 
     this.options = {
-        url: 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWNkZW9saXZlaXJhIiwiYSI6ImNpcWR0NncxdjAyeGRmcm0xdzJ4cGlxMHgifQ.ZkRNtM3-u0mXthxqCVwjtQ',
+        url: 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=',
         options: {
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
             maxZoom: 18,
@@ -33,7 +33,7 @@ var LeafletWidget = function (options) {
     this.map.parent = this;
 
     // create title layer
-    L.tileLayer(this.options.url,
+    L.tileLayer(this.options.url + this.options.access_token,
         this.options.options).addTo(this.map);
 
     // add location controls
