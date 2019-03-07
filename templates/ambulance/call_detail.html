@@ -7,7 +7,8 @@
         var location_type = {{ location_type|safe }};
         var ambulance_status = {{ ambulance_status|safe }};
         var call_id={{ call.id|safe }};
-        var APIBaseUrl = '{% url 'index' %}api/';
+        var APIBaseUrl='{% url 'index' %}api/';
+        var access_token='{{ access_token }}';
     </script>
 {% endblock %}
 
