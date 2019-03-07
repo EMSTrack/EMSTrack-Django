@@ -24,9 +24,13 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
                 'point': {'x': value.x,
                           'y': value.y,
                           'z': value.z,
-                          'srid': value.srid},
-                'access_token': settings.ACCESS_TOKEN
+                          'srid': value.srid}
             })
+
+        # add access_token
+        attrs.update({
+            'access_token': settings.ACCESS_TOKEN
+        })
 
         # use TemplatesSetting as default rendering
         # Otherwise we get in trouble with finding point_widget.html
