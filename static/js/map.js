@@ -174,7 +174,6 @@ var mqttClient;
  * This is a handler for when the page is loaded.
  */
 var mymap;
-var accessToken = 'pk.eyJ1IjoieWFuZ2Y5NiIsImEiOiJjaXltYTNmbTcwMDJzMzNwZnpzM3Z6ZW9kIn0.gjEwLiCIbYhVFUGud9B56w';
 var geocoder = new Geocoder({ access_token: accessToken });
 
 // resize map
