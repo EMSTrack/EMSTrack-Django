@@ -69,6 +69,7 @@ class AmbulanceDetailView(LoginRequiredMixin,
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
+        context['access_token'] = settings.ACCESS_TOKEN
 
         return context
 

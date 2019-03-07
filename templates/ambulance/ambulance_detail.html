@@ -8,6 +8,7 @@
         var ambulance_id = {{ ambulance.id|safe }};
         var APIBaseUrl = '{% url 'index' %}api/';
         var page_size = {{ page_size }};
+        var access_token='{{ access_token }}';
     </script>
 {% endblock %}
 

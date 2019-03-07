@@ -5,7 +5,8 @@ $(function() {
  	// Set up map widget
  	options = {
  		map_id: "map",
- 		zoom: 12
+ 		zoom: 12,
+        access_token: access_token
  	}
  	map = new LeafletPolylineWidget(options);
 
