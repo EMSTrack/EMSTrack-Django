@@ -1372,13 +1372,13 @@ function createCategoryPanesAndFilters() {
             '    </div>\n' +
             '    <div class="collapse"\n' +
             '         id="ambulance-' + status + '"\n' +
-            '         aria-labelledby="ambulance-heading-' + status + '"\n' +
-            '         data-parent="#ambulance-status">\n' +
+            '         aria-labelledby="ambulance-heading-' + status + '">\n' +
             '         <div class="card-body py-1 px-0"\n' +
             '              id="ambulance-grid-' + status + '">\n' +
             '         </div>\n' +
             '    </div>\n' +
             '</div>');
+            //'         data-parent="#ambulance-status">\n' +
 
         // Make them dropable
         $('#ambulance-card-' + status)
