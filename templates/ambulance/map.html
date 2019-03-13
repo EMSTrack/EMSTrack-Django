@@ -381,7 +381,7 @@
     const clientId = '{{ client_id|safe }}';
     const ambulance_css = {{ ambulance_css|safe }};
     const call_priority_css = {{ call_priority_css|safe }};
-    const accessToken = '{{ access_token }}';
+    const map_provider = {{ map_provider|safe }};
 </script>
 
 {% render_bundle 'main' 'js' 'MAP' %}

@@ -6,6 +6,11 @@ export class Geocoder {
 
         this.options = {};
 
+        // Retrieve MapBox access_token
+        const map_provider = options['map_provider'];
+        this.options['access_token'] = map_provider['access_token'];
+        delete options['map_provider'];
+
         // Altering using user-provided options
         for (const property in options) {
             if (options.hasOwnProperty(property)) {

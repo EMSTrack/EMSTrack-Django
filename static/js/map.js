@@ -201,13 +201,11 @@ const STATUS_OUT_OF_SERVICE = "OS";
 // global variable for mqttClient
 let mqttClient;
 
-// TODO: remove hardcoded mapbox access_token
-
 /**
  * This is a handler for when the page is loaded.
  */
 let mymap;
-const geocoder = new Geocoder({access_token: accessToken});
+const geocoder = new Geocoder({map_provider: map_provider});
 
 // resize map
 function resizeMap() {
@@ -232,16 +230,18 @@ $(function () {
 
     // geocoder = L.mapbox.geocoder('mapbox.places');
 
-    // Add layer to map.
-    L.tileLayer(
-        'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + accessToken,
-        {
-            attribution: attribution,
-            maxZoom: 18,
-            id: 'mapbox.streets',
-            accessToken: accessToken
-        }
-    ).addTo(mymap);
+    if (map_provider['provider'] === 'mapbox') {
+        // Add layer to map
+        L.tileLayer(
+            'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + map_provider['access_token'],
+            {
+                attribution: attribution,
+                maxZoom: 18,
+                id: 'mapbox.streets',
+                accessToken: map_provider['access_token']
+            }
+        ).addTo(mymap);
+    }
 
     /*
     // Add the drawing toolbar and the layer of the drawings.

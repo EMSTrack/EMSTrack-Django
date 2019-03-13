@@ -211,7 +211,7 @@
     var ambulance_id = {{ ambulance.id|safe }};
     var APIBaseUrl = '{% url 'index' %}api/';
     var page_size = {{ page_size }};
-    var access_token='{{ access_token }}';
+    var map_provider = {{ map_provider|safe }};
 </script>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w" async defer></script>

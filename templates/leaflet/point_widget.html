@@ -67,7 +67,7 @@
 
     {% block options %}
         const options = {
-            access_token: '{{ access_token }}',
+            map_provider: {{ map_provider|safe }},
             geom_name: '{{ geom_type }}',
             id: '{{ id }}',
             id_lat: '{{ id }}_lat',

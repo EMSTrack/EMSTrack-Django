@@ -21,13 +21,34 @@ export class LeafletWidget {
 
     constructor(options) {
 
-        this.options = {
-            url: 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=',
-            options: {
+        // Retrieve map provider
+        this.map_provider = options['map_provider'];
+        delete options['map_provider'];
+
+        let url;
+        let provider_options;
+        if (this.map_provider['provider'] === 'mapbox') {
+
+            url = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=';
+            provider_options = {
                 attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
                 maxZoom: 18,
                 id: 'mapbox.streets'
-            },
+            };
+
+        } else {
+
+            url = '';
+            provider_options = {
+                maxZoom: 18,
+                type: 'roadmap'
+            };
+
+        }
+
+        this.options = {
+            url: url,
+            options: provider_options,
 
             lat: 32.53530431898372,
             lng: -116.9165934003241,
@@ -53,15 +74,19 @@ export class LeafletWidget {
         // add reference to parent object
         this.map.parent = this;
 
-        const roadMutant = L.gridLayer.googleMutant({
-            maxZoom: 24,
-            type: 'roadmap'
-        }).addTo(this.map);
+        if (this.map_provider['provider'] === 'google') {
 
-        // create title layer
-        // L.tileLayer(this.options.url + this.options.access_token,
-        //    this.options.options)
-        //    .addTo(this.map);
+            // create google map title layer
+            L.gridLayer.googleMutant(this.options.options).addTo(this.map);
+
+        } else {
+
+            // create mapbox title layer
+            L.tileLayer(this.options.url + this.map_provider['access_token'],
+                this.options.options)
+                .addTo(this.map);
+
+        }
 
         if (this.add_location_control) {
 

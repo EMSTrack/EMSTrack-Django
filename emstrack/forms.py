@@ -16,9 +16,9 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
                           'srid': value.srid}
             })
 
-        # add access_token
+        # add map_provider
         attrs.update({
-            'access_token': settings.ACCESS_TOKEN
+            'map_provider': {'provider': settings.MAP_PROVIDER, 'access_token': settings.ACCESS_TOKEN}
         })
 
         return super().render(name, value, attrs, TemplatesSetting())
