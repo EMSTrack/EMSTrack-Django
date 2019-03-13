@@ -1,3 +1,8 @@
+import L from 'leaflet'
+import 'leaflet-rotatedmarker'
+
+import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
+
 var map;
 var page;
 
