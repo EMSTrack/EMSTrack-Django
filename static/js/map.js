@@ -268,6 +268,28 @@ $(function () {
         });
     */
 
+    // Handle begin dispatching button
+    $('#dispatchBeginButton').click(function(event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+        // call end dispatching
+        beginDispatching();
+
+    });
+
+    // Handle submit dispatching button
+    $('#dispatchSubmitButton').click(function(event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+        // call end dispatching
+        submitDispatching();
+
+    });
+
     // Handle cancel dispatching button
     $('#dispatchCancelButton').click(function(event) {
 
@@ -1272,7 +1294,7 @@ function addLocationToMap(location) {
     locations[location.id] = location;
 
     // set icon by status
-    const icon = locationIcon;
+    let icon = locationIcon;
     if (location.type === 'a')
         icon = defibrillatorIcon;
     else if (location.type === 'b')
