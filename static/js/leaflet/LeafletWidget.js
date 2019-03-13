@@ -33,6 +33,7 @@ export class LeafletWidget {
             zoom: 15,
             location_icon_url: '/static/icons/pin/blue.svg',
             location_icon_size: [32, 32],
+            add_location_control: false,
             add_marker_control: false,
         };
 
@@ -54,66 +55,71 @@ export class LeafletWidget {
         L.tileLayer(this.options.url + this.options.access_token,
             this.options.options).addTo(this.map);
 
-        // add location controls
-        const locateControl = L.Control.extend({
+        if (this.add_location_control) {
 
-            options: {
-                position: 'topleft'
-            },
+            // add location controls
+            const locateControl = L.Control.extend({
 
-            onAdd: function (map) {
+                options: {
+                    position: 'topleft'
+                },
 
-                const container = L.DomUtil.create('div',
-                    'leaflet-bar leaflet-control leaflet-control-custom');
+                onAdd: function (map) {
 
-                container.style.width = '32px';
-                container.style.height = '32px';
-                container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
-                container.style.backgroundPosition = 'center';
-                container.style.backgroundSize = '20px 20px';
-                container.style.backgroundColor = 'white';
-                container.style.backgroundRepeat = 'no-repeat';
+                    const container = L.DomUtil.create('div',
+                        'leaflet-bar leaflet-control leaflet-control-custom');
 
-                /* tooltip */
-                container.title = 'Go to your location';
+                    container.style.width = '32px';
+                    container.style.height = '32px';
+                    container.style.backgroundImage = "url('/static/icons/mouse-pointer.svg')";
+                    container.style.backgroundPosition = 'center';
+                    container.style.backgroundSize = '20px 20px';
+                    container.style.backgroundColor = 'white';
+                    container.style.backgroundRepeat = 'no-repeat';
 
-                L.DomEvent
-                    .addListener(container, 'click', L.DomEvent.stopPropagation)
-                    .addListener(container, 'click', L.DomEvent.preventDefault)
-                    .addListener(container, 'click', function () {
-                        map.locate({setView: true, maxZoom: 14});
-                    });
+                    /* tooltip */
+                    container.title = 'Go to your location';
 
-                return container;
-            },
+                    L.DomEvent
+                        .addListener(container, 'click', L.DomEvent.stopPropagation)
+                        .addListener(container, 'click', L.DomEvent.preventDefault)
+                        .addListener(container, 'click', function () {
+                            map.locate({setView: true, maxZoom: 14});
+                        });
 
-        });
+                    return container;
+                },
 
-        this.map.addControl(new locateControl());
+            });
 
-        this.map.on('locationerror', function (e) {
-            alert('Could not find location <br/> ' + e.message);
-        });
+            this.map.addControl(new locateControl());
 
-        // location marker
-        const location_icon = L.icon({
-            iconUrl: this.options.location_icon_url,
-            iconSize: this.options.location_icon_size,
-        });
+            this.map.on('locationerror', function (e) {
+                alert('Could not find location <br/> ' + e.message);
+            });
 
-        // locate
-        this.map.on('locationfound', function (e) {
-            const parent = e.target.parent;
-            if (typeof parent.current_location === 'undefined') {
-                // create marker
-                parent.current_location =
-                    L.marker(parent.map.getCenter(),
-                        {icon: location_icon}).addTo(parent.map);
-            } else {
-                // move marker
-                parent.current_location.setLatLng(e.latlng);
-            }
-        });
+            // location marker
+            const location_icon = L.icon({
+                iconUrl: this.options.location_icon_url,
+                iconSize: this.options.location_icon_size,
+            });
+
+            // locate
+            this.map.on('locationfound', function (e) {
+                const parent = e.target.parent;
+                if (typeof parent.current_location === 'undefined') {
+                    // create marker
+                    parent.current_location =
+                        L.marker(parent.map.getCenter(),
+                            {icon: location_icon}).addTo(parent.map);
+                } else {
+                    // move marker
+                    parent.current_location.setLatLng(e.latlng);
+                }
+            });
+
+        }
+
     }
 
     fitBounds(bounds) {
