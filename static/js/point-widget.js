@@ -5,4 +5,4 @@ $(function () {
     // Create widget
     new LeafletPointWidget(options);
 
-};
+});
