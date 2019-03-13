@@ -10,3 +10,4 @@ django-extra-views
 django-nose
 paho-mqtt
 django-formset-js
+django-webpack-loader
