@@ -243,7 +243,7 @@ export function createRouteFilter(map, segments) {
             position: 'topright'
         },
 
-        onAdd: function (map) {
+        onAdd: function () {
             return container;
         }
 
