@@ -15,7 +15,7 @@ $(function() {
  		map_id: "map",
  		zoom: 12,
         access_token: access_token
- 	}
+ 	};
  	map = new LeafletPolylineWidget(options);
 
  	// get page and page_size parameters
