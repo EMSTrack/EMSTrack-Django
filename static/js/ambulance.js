@@ -10,7 +10,7 @@ let page;
 
 $(function() {
 
- 	// Set up map widget
+ 	// Set up map widget options
  	let options = {
  		map_id: "map",
  		zoom: 12,
