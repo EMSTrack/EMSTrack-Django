@@ -69,7 +69,7 @@ class AmbulanceDetailView(LoginRequiredMixin,
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
-        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.ACCESS_TOKEN}
+        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
         return context
 
@@ -259,7 +259,7 @@ class AmbulanceMap(TemplateView):
         context['client_id'] = 'javascript_client_' + uuid.uuid4().hex
         context['ambulance_css'] = AmbulanceCSS
         context['call_priority_css'] = CallPriorityCSS
-        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.ACCESS_TOKEN}
+        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
         return context
 
@@ -408,7 +408,7 @@ class CallDetailView(LoginRequiredMixin,
                                        for m in LocationType}
         context['ambulance_status'] = {m.name: m.value
                                        for m in AmbulanceStatus}
-        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.ACCESS_TOKEN}
+        context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
         return context
 

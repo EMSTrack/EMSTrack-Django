@@ -18,7 +18,7 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
 
         # add map_provider
         attrs.update({
-            'map_provider': {'provider': settings.MAP_PROVIDER, 'access_token': settings.ACCESS_TOKEN}
+            'map_provider': {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
         })
 
         return super().render(name, value, attrs, TemplatesSetting())
