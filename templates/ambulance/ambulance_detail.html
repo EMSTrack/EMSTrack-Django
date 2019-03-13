@@ -4,7 +4,7 @@
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
 
-{% block leaflethead %}
+{% block head %}
     <script>
         var ambulance_status = {{ ambulance_status|safe }};
         var ambulance_id = {{ ambulance.id|safe }};
