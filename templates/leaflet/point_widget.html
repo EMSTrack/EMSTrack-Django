@@ -1,4 +1,6 @@
 {% load i18n l10n static %}
+{% load render_bundle from webpack_loader %}
+
 <style type="text/css">
     {% block map_css %}{% get_current_language_bidi as LANGUAGE_BIDI %}
     #{{ id }}_div_map {
@@ -81,6 +83,8 @@
     {% endblock %}
 
     // Create widget
-    const {{ module }} = new LeafletPointWidget(options);
+    // const {{ module }} = new LeafletPointWidget(options);
 
 </script>
+
+{% render_bundle 'main' 'js' 'POINT_WIDGET' %}
