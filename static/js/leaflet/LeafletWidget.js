@@ -45,15 +45,22 @@ export class LeafletWidget {
         }
 
         // create map
-        this.map = L.map(this.options.map_id).setView(L.latLng(this.options.lat,
-            this.options.lng),
-            this.options.zoom);
+        this.map = L.map(this.options.map_id)
+            .setView(L.latLng(this.options.lat,
+                this.options.lng),
+                this.options.zoom);
         // add reference to parent object
         this.map.parent = this;
 
+        const roadMutant = L.gridLayer.googleMutant({
+            maxZoom: 24,
+            type: 'roadmap'
+        }).addTo(this.map);
+
         // create title layer
-        L.tileLayer(this.options.url + this.options.access_token,
-            this.options.options).addTo(this.map);
+        // L.tileLayer(this.options.url + this.options.access_token,
+        //    this.options.options)
+        //    .addTo(this.map);
 
         if (this.add_location_control) {
 
