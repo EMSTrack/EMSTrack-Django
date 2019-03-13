@@ -359,9 +359,9 @@ function getData(subscribe) {
     console.log("Retrieving ambulances from API");
     $.getJSON(APIBaseUrl + 'ambulance/', function (data) {
 
-        n = 0;
-        lat = 0;
-        lon = 0;
+        let n = 0;
+        let lat = 0;
+        let lon = 0;
 
         // Update ambulances
         data.forEach((ambulance) => {
