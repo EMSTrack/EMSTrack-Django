@@ -192,6 +192,9 @@ export class GeocoderMapBox extends BaseGeocoder {
                 // parse results
                 const address = this.parse_response(response);
 
+                console.log("response = '" + response + "'");
+                console.log("address= '" + address + "'");
+                
                 // callback
                 if (callback)
                     callback(address, response);
@@ -259,6 +262,9 @@ export class GeocoderMapBox extends BaseGeocoder {
 
                 // parse results
                 const address = this.parse_response(response);
+
+                console.log("response = '" + response + "'");
+                console.log("address= '" + address + "'");
 
                 // callback
                 if (callback)
