@@ -1,6 +1,7 @@
 {% extends "leaflet/base.html" %}
 {% load static %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block leaflethead %}
 
@@ -383,9 +384,13 @@
 <link rel="stylesheet" href="{% static 'leaflet/css/leaflet.markers.custom.css' %}">
 
 <!-- Load javascript code -->
+<!--
 <script src="{% static 'js/geocoder.js' %}"></script>
-<!-- <script src="{% static 'js/dispatch.js' %}"></script> -->
+<script src="{% static 'js/dispatch.js' %}"></script>
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
+-->
+
+{% render_bundle 'main' 'js' 'MAP' %}
 
 {% endblock %}
