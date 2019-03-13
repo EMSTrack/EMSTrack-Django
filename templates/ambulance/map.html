@@ -1,35 +1,7 @@
-{% extends "leaflet/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
-
-{% block leaflethead %}
-
-    <script>
-        var ambulance_status = {{ ambulance_status|safe }};
-        var ambulance_status_order = {{ ambulance_status_order|safe }};
-        var ambulance_capability = {{ ambulance_capability|safe }};
-        var ambulance_capability_order = {{ ambulance_capability_order|safe }};
-        var location_type= {{ location_type|safe }};
-        var location_type_order= {{ location_type_order|safe }};
-        var call_status = {{ call_status|safe }};
-        var call_status_order = {{ call_status_order|safe }};
-        var call_priority = {{ call_priority|safe }};
-        var call_priority_order = {{ call_priority_order|safe }};
-        var ambulancecall_status = {{ ambulancecall_status|safe }};
-        var username = '{{ user.get_username|safe }}';
-        var APIBaseUrl = '{% url 'index' %}api/';
-        var MQTTBroker = {
-            host: '{{ broker_websockets_host|safe }}',
-            port: {{ broker_websockets_port|safe }}
-        };
-        var clientId = '{{ client_id|safe }}';
-        var ambulance_css = {{ ambulance_css|safe }};
-        var call_priority_css = {{ call_priority_css|safe }};
-        var accessToken = '{{ access_token }}';
-    </script>
-
-{% endblock %}
 
 {% block content %}
 
@@ -390,6 +362,30 @@
 <script src="{% static 'js/map.js' %}"></script>
 <script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
 -->
+
+<script>
+    const ambulance_status = {{ ambulance_status|safe }};
+    const ambulance_status_order = {{ ambulance_status_order|safe }};
+    const ambulance_capability = {{ ambulance_capability|safe }};
+    const ambulance_capability_order = {{ ambulance_capability_order|safe }};
+    const location_type= {{ location_type|safe }};
+    const location_type_order= {{ location_type_order|safe }};
+    const call_status = {{ call_status|safe }};
+    const call_status_order = {{ call_status_order|safe }};
+    const call_priority = {{ call_priority|safe }};
+    const call_priority_order = {{ call_priority_order|safe }};
+    const ambulancecall_status = {{ ambulancecall_status|safe }};
+    const username = '{{ user.get_username|safe }}';
+    const APIBaseUrl = '{% url 'index' %}api/';
+    const MQTTBroker = {
+        host: '{{ broker_websockets_host|safe }}',
+        port: {{ broker_websockets_port|safe }}
+    };
+    const clientId = '{{ client_id|safe }}';
+    const ambulance_css = {{ ambulance_css|safe }};
+    const call_priority_css = {{ call_priority_css|safe }};
+    const accessToken = '{{ access_token }}';
+</script>
 
 {% render_bundle 'main' 'js' 'MAP' %}
 
