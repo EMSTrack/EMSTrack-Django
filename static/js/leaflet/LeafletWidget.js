@@ -1,6 +1,7 @@
 import L from 'leaflet'
 import 'leaflet-rotatedmarker'
 import "leaflet/dist/leaflet.css";
+import 'leaflet.gridlayer.googlemutant'
 
 // https://github.com/Leaflet/Leaflet/issues/4968
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
