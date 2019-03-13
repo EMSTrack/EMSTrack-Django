@@ -76,7 +76,7 @@ function newFontAwesomeStackedIcon(options) {
     }
 
 // Creates a red marker with the coffee icon
-L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
+// L.AwesomeMarkers.Icon.prototype.options.prefix = 'fa';
 
 function callDate(call) {
 
