@@ -186,16 +186,17 @@ export class GeocoderMapBox extends BaseGeocoder {
         }
 
         // query mapbox
-        $.getJSON(url, function (response) {
+        $.getJSON(url,
+            (response) => {
 
-            // parse results
-            const address = this.parse_response(response);
+                // parse results
+                const address = this.parse_response(response);
 
-            // callback
-            if (callback)
-                callback(address, response);
+                // callback
+                if (callback)
+                    callback(address, response);
 
-        }.bind(this))
+            })
             .fail(function (jqxhr, textStatus, error) {
 
                 if (callback)
@@ -250,16 +251,17 @@ export class GeocoderMapBox extends BaseGeocoder {
         }
 
         // query mapbox
-        $.getJSON(url, function (response) {
+        $.getJSON(url,
+            (response) =>  {
 
-            // parse results
-            const address = this.parse_response(response);
+                // parse results
+                const address = this.parse_response(response);
 
-            // callback
-            if (callback)
-                callback(address, response);
+                // callback
+                if (callback)
+                    callback(address, response);
 
-        }.bind(this))
+            })
             .fail(function (jqxhr, textStatus, error) {
 
                 if (callback)
