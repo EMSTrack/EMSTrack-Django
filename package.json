@@ -1,0 +1,33 @@
+{
+  "name": "emstrack",
+  "description": "EMSTrack",
+  "version": "0.6.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EMSTrack/WebClientAndServer.git"
+  },
+  "keywords": [],
+  "author": "EMSTrack",
+  "license": "Berkley",
+  "bugs": {
+    "url": "https://github.com/EMSTrack/WebClientAndServer/issues"
+  },
+  "homepage": "https://github.com/EMSTrack/WebClientAndServer",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-loader": "^8.0.5",
+    "css-loader": "^2.1.1",
+    "jquery": "^3.3.1",
+    "leaflet": "^1.4.0",
+    "leaflet-rotatedmarker": "^0.2.0",
+    "style-loader": "^0.23.1",
+    "url-loader": "^1.1.2",
+    "webpack": "^4.29.6",
+    "webpack-bundle-tracker": "^0.4.2-beta",
+    "webpack-cli": "^3.2.3"
+  }
+}
