@@ -189,13 +189,13 @@ export class GeocoderMapBox extends BaseGeocoder {
         $.getJSON(url, function (response) {
 
             // parse results
-            const address = GeocoderMapBox.this.parse_response(response);
+            const address = this.parse_response(response);
 
             // callback
             if (callback)
                 callback(address, response);
 
-        })
+        }.bind(this))
             .fail(function (jqxhr, textStatus, error) {
 
                 if (callback)
@@ -253,13 +253,13 @@ export class GeocoderMapBox extends BaseGeocoder {
         $.getJSON(url, function (response) {
 
             // parse results
-            const address = GeocoderMapBox.this.parse_response(response);
+            const address = this.parse_response(response);
 
             // callback
             if (callback)
                 callback(address, response);
 
-        })
+        }.bind(this))
             .fail(function (jqxhr, textStatus, error) {
 
                 if (callback)
