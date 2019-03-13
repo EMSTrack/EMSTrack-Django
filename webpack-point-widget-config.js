@@ -4,7 +4,7 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   context: __dirname,
-  entry: './static/js/point-widget',
+  entry: './static/js/point_widget',
   mode: 'development',
   output: {
     path: path.resolve('./static/bundles/point-widget'),
