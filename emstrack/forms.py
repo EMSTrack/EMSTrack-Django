@@ -6,17 +6,17 @@ from django.contrib.gis.forms import widgets
 class LeafletPointWidget(widgets.BaseGeometryWidget):
     template_name = 'leaflet/point_widget.html'
 
-    class Media:
-        css = {
-            'all': ('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
-                    # 'leaflet/css/location_form.css',
-                    # 'leaflet/css/LeafletWidget.css'
-                    )
-        }
-        js = (
-            'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
-            'leaflet/js/LeafletWidget.js'
-        )
+    # class Media:
+    #     css = {
+    #         'all': ('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
+    #                 # 'leaflet/css/location_form.css',
+    #                 # 'leaflet/css/LeafletWidget.css'
+    #                 )
+    #     }
+    #     js = (
+    #         'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',
+    #         'leaflet/js/LeafletWidget.js'
+    #     )
 
     def render(self, name, value, attrs=None, renderer=None):
         # add point
