@@ -239,6 +239,7 @@ $(function () {
         }
     ).addTo(mymap);
 
+    /*
     // Add the drawing toolbar and the layer of the drawings.
     var drawnItems = new L.FeatureGroup();
     mymap.addLayer(drawnItems);
@@ -248,17 +249,6 @@ $(function () {
         }
     });
     mymap.addControl(drawControl);
-
-    // Handle cancel dispatching button
-    $('#dispatchCancelButton').click(function(event) {
-
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
-
-        // call end dispatching
-        endDispatching();
-
-    });
 
     // Event handler for when something is drawn. Only handles
     // when a new drawing is made for now.
@@ -272,6 +262,18 @@ $(function () {
             // Do whatever else you need to. (save to db; add to map etc)
             mymap.addLayer(layer);
         });
+    */
+
+    // Handle cancel dispatching button
+    $('#dispatchCancelButton').click(function(event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+        // call end dispatching
+        endDispatching();
+
+    });
 
     // Create category panes and filters
     createCategoryPanesAndFilters();
