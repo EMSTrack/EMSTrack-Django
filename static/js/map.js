@@ -4,6 +4,8 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+import { LeafletWidget } from "./leaflet/LeafletWidget";
+
 import { Geocoder } from "./geocoder";
 
 // Dispatching data
@@ -216,20 +218,36 @@ function resizeMap() {
 // Ready function
 $(function () {
 
+    // Set up map widget options
+ 	let options = {
+ 		map_id: "live-map",
+ 		zoom: 12,
+        map_provider: map_provider
+ 	};
+ 	const map = new LeafletWidget(options);
+
+    // Set map view
+    mymap = map.map;
+
+    /*
     // token and attribution
     const attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
 
     // Set map view
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
+    */
 
     // Map to fill the view
     resizeMap();
 
     // Take care of resizing
-    $(window).on("resize", function () { resizeMap(); }).trigger("resize");
+    $(window).on("resize", function () {
+        resizeMap();
+    }).trigger("resize");
 
     // geocoder = L.mapbox.geocoder('mapbox.places');
 
+    /*
     if (map_provider['provider'] === 'mapbox') {
 
         // Add layer to map
@@ -244,6 +262,7 @@ $(function () {
         ).addTo(mymap);
 
     }
+    */
 
     /*
     // Add the drawing toolbar and the layer of the drawings.
