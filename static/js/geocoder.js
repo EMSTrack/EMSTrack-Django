@@ -197,15 +197,16 @@ export class GeocoderMapBox extends BaseGeocoder {
                     callback(address, response);
 
             })
-            .fail(function (jqxhr, textStatus, error) {
+            .fail(
+                (jqxhr, textStatus, error) => {
 
-                if (callback)
-                    callback(null, {error: error});
-                else
-                    alert("Could not geocode:" +
-                        textStatus + "," + error + "\n");
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not geocode:" +
+                            textStatus + "," + error + "\n");
 
-            });
+                });
 
     }
 
@@ -264,15 +265,16 @@ export class GeocoderMapBox extends BaseGeocoder {
                     callback(address, response);
 
             })
-            .fail(function (jqxhr, textStatus, error) {
+            .fail(
+                (jqxhr, textStatus, error) => {
 
-                if (callback)
-                    callback(null, {error: error});
-                else
-                    alert("Could not geocode:" +
-                        textStatus + "," + error + "\n");
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not geocode:" +
+                            textStatus + "," + error + "\n");
 
-            });
+                });
 
     }
 
