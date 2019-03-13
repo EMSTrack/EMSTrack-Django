@@ -69,6 +69,10 @@ export class GeocoderMapBox extends BaseGeocoder {
 
     constructor(options) {
 
+        // add query default parameters
+        options['types'] = 'address';
+        options['limit'] = 1;
+
         // call super
         super(options);
 
@@ -286,10 +290,6 @@ export class GeocoderGoogle extends BaseGeocoder {
 
     constructor(options) {
 
-        // add query default parameters
-        options['types'] = 'address';
-        options['limit'] = 1;
-
         // call super
         super(options);
 
@@ -381,7 +381,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         }
 
         // construct query
-        parameters['latlgn'] = location.lat + ',' + location.lng;
+        parameters['latlng'] = location.lat + ',' + location.lng;
 
         // add parameters
         let prefix = '?';
