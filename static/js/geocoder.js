@@ -206,7 +206,7 @@ export class GeocoderMapBox extends BaseGeocoder {
                     if (callback)
                         callback(null, {error: error});
                     else
-                        console.log("Could not geocode:" +
+                        console.log("Could not reverse geocode:" +
                             textStatus + "," + error + "\n");
 
                 });
@@ -277,7 +277,7 @@ export class GeocoderMapBox extends BaseGeocoder {
                     if (callback)
                         callback(null, {error: error});
                     else
-                        console.log("Could not geocode:" +
+                        console.log("Could not forward geocode:" +
                             textStatus + "," + error + "\n");
 
                 });

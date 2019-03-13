@@ -1929,7 +1929,7 @@ function updateCurrentAddress(location) {
     geocoder.reverse(location, function (address) {
 
         if (address == null) {
-            bsalert("Could not geocode!");
+            bsalert("Could not reverse geocode!");
             return;
         }
 
@@ -1969,8 +1969,8 @@ function updateCoordinates() {
     // otherwise geocode and update
     geocoder.geocode(address, function (address) {
 
-        if (address != null) {
-            bsalert("Could not geocode!");
+        if (address == null) {
+            bsalert("Could not forward geocode!");
             return;
         }
 
