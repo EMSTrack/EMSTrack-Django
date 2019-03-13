@@ -4,16 +4,6 @@
 {% load i18n %}
 {% load render_bundle from webpack_loader %}
 
-{% block head %}
-    <script>
-        var ambulance_status = {{ ambulance_status|safe }};
-        var ambulance_id = {{ ambulance.id|safe }};
-        var APIBaseUrl = '{% url 'index' %}api/';
-        var page_size = {{ page_size }};
-        var access_token='{{ access_token }}';
-    </script>
-{% endblock %}
-
 {% block content %}
 
 <div class="container">
@@ -215,6 +205,14 @@
     {% endif %}
 
 </div>
+
+<script>
+    var ambulance_status = {{ ambulance_status|safe }};
+    var ambulance_id = {{ ambulance.id|safe }};
+    var APIBaseUrl = '{% url 'index' %}api/';
+    var page_size = {{ page_size }};
+    var access_token='{{ access_token }}';
+</script>
 
 {% render_bundle 'main' 'js' 'AMBULANCE' %}
 
