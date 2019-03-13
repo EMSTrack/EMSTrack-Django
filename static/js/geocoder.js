@@ -69,10 +69,6 @@ export class GeocoderMapBox extends BaseGeocoder {
 
     constructor(options) {
 
-        // add query default parameters
-        options['types'] = 'address';
-        options['limit'] = 1;
-
         // call super
         super(options);
 
