@@ -9,21 +9,21 @@ import { Geocoder } from "./geocoder";
 // Dispatching data
 
 var markersGroup = new L.LayerGroup();
-var isDispatching = false;
-var isFilterOpen = false;
-var placeIcon = L.icon({
-	iconUrl: '/static/icons/place_marker.png',
-	iconSize: [40, 40],
-	iconAnchor: [20, 40],
-	popupAnchor: [0,-40]
+let isDispatching = false;
+let isFilterOpen = false;
+const placeIcon = L.icon({
+    iconUrl: '/static/icons/place_marker.png',
+    iconSize: [40, 40],
+    iconAnchor: [20, 40],
+    popupAnchor: [0, -40]
 });
 
-var dispatchingAmbulances = {};
-var numberOfDispatchingAmbulances = 0;
+let dispatchingAmbulances = {};
+let numberOfDispatchingAmbulances = 0;
 
-var currentAddress;
-var currentLocation;
-var currentPatients;
+let currentAddress;
+let currentLocation;
+let currentPatients;
 
 // Map data
 
