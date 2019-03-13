@@ -57,7 +57,7 @@ export class Geocoder {
     parse_feature(feature) {
 
         // parse feature
-        if (feature['place_type'] === 'address') {
+        if (feature['place_type'] == 'address') {
 
             let address = {
                 street_address: "",
@@ -124,7 +124,7 @@ export class Geocoder {
         }
 
         // log error
-        console.log("Does not know how to parse feature of type'" + feature['place_type'] + "'");
+        console.log("Does not know how to parse feature of type '" + feature['place_type'] + "'");
 
         return null;
 
