@@ -1,16 +1,7 @@
-{% extends "leaflet/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-
-{% block leaflethead %}
-    <script>
-        var location_type = {{ location_type|safe }};
-        var ambulance_status = {{ ambulance_status|safe }};
-        var call_id={{ call.id|safe }};
-        var APIBaseUrl='{% url 'index' %}api/';
-        var access_token='{{ access_token }}';
-    </script>
-{% endblock %}
+{% load render_bundle from webpack_loader %}
 
 {% block content %}
 
@@ -175,8 +166,20 @@
 
 </div>
 
+<script>
+    var location_type = {{ location_type|safe }};
+    var ambulance_status = {{ ambulance_status|safe }};
+    var call_id={{ call.id|safe }};
+    var APIBaseUrl='{% url 'index' %}api/';
+    var access_token='{{ access_token }}';
+</script>
+
+<!--
 <script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
 <script src="{% static 'js/map_tools.js' %}"></script>
 <script src="{% static 'js/call_detail.js' %}"></script>
+-->
+
+{% render_bundle 'main' 'js' 'CALL' %}
 
 {% endblock %}
