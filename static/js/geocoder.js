@@ -288,7 +288,220 @@ export class GeocoderMapBox extends BaseGeocoder {
 
 export class GeocoderGoogle extends BaseGeocoder {
 
+    constructor(options) {
 
+        // add query default parameters
+        options['types'] = 'address';
+        options['limit'] = 1;
+
+        // call super
+        super(options);
+
+    }
+
+    parse_response(response) {
+
+        // retrieve features
+        const results = response.results;
+        if (results.length == 0)
+            return null;
+
+        // parse first feature
+        const feature = results[0];
+        if ('address_components' in feature['types']) {
+
+            let address = {
+                street_address: "",
+                number: "",
+                street: "",
+                unit: undefined,
+                neighborhood: undefined,
+                city: "",
+                state: "",
+                zipcode: undefined,
+                country: "",
+                location: undefined
+            };
+
+            // set location
+            const location = feature['geometry']['location'];
+            address['location'] = {
+                'latitude': location['lat'],
+                'longitude': location['lng']
+            };
+
+            // parse context
+            const context = feature['address_components'];
+            for (let i = 0; i < context.length; i++) {
+                const item = context[i];
+                const types = item['types'];
+                if ('neighborhood' in types)
+                    address['neighborhood'] = item['long_name'];
+                else if ('street_number' in types)
+                    address['number'] = item['short_name'];
+                else if ('route' in types)
+                    address['street_address'] = item['long_name'];
+                else if ('locality' in types)
+                    address['city'] = item['long_name'];
+                else if ('admnistrative_area_level_1' in types)
+                    address['state'] = item['short_name'];
+                else if ('postal_code' in types)
+                    address['zipcode'] = item['short_name'];
+                else if ('country' in types)
+                    address['country'] = item['short_name'].toUpperCase();
+            }
+
+            return address;
+
+        }
+
+        // log error
+        console.log("Does not know how to parse feature of type '" + feature['place_type'] + "'");
+
+        return null;
+    }
+
+    reverse(location, callback, options) {
+
+        options = options || {};
+
+        let property;
+        let url = "https://maps.googleapis.com/maps/api/geocode/json";
+
+        const parameters = this.options;
+
+        // Start with class options
+        for (property in this.options) {
+            if (this.options.hasOwnProperty(property)) {
+                parameters[property] = this.options[property];
+            }
+        }
+
+        // Altering using user-provided options
+        for (property in options) {
+            if (options.hasOwnProperty(property)) {
+                parameters[property] = options[property];
+            }
+        }
+
+        // construct query
+        parameters['latlgn'] = location.lat + ',' + location.lng;
+
+        // add parameters
+        let prefix = '?';
+        for (const option in parameters) {
+            if (parameters.hasOwnProperty(option)) {
+
+                // add options
+                url += prefix
+                    + encodeURIComponent(option)
+                    + "="
+                    + encodeURIComponent(parameters[option]);
+                prefix = '&';
+
+            }
+        }
+
+        console.log("geocode url = '" + url + "'");
+
+        // query mapbox
+        $.getJSON(url,
+            (response) => {
+
+                // parse results
+                const address = this.parse_response(response);
+
+                console.log(response);
+                console.log(address);
+
+                // callback
+                if (callback)
+                    callback(address, response);
+
+            })
+            .fail(
+                (jqxhr, textStatus, error) => {
+
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not reverse geocode:" +
+                            textStatus + "," + error + "\n");
+
+                });
+
+    }
+
+    geocode(query, callback, options) {
+
+        options = options || { autocomplete: 'true' };
+
+        let property;
+        let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+
+        const parameters = this.options;
+
+        // Start with class options
+        for (property in this.options) {
+            if (this.options.hasOwnProperty(property)) {
+                parameters[property] = this.options[property];
+            }
+        }
+
+        // Altering using user-provided options
+        for (property in options) {
+            if (options.hasOwnProperty(property)) {
+                parameters[property] = options[property];
+            }
+        }
+
+        // construct query
+        parameters['address'] = encodeURIComponent(query);
+
+        // add parameters
+        let prefix = '?';
+        for (const option in parameters) {
+            if (parameters.hasOwnProperty(option)) {
+
+                // add options
+                url += prefix
+                    + encodeURIComponent(option)
+                    + "="
+                    + encodeURIComponent(parameters[option]);
+                prefix = '&';
+
+            }
+        }
+
+        console.log("geocode url = '" + url + "'");
+
+        // query mapbox
+        $.getJSON(url,
+            (response) =>  {
+
+                // parse results
+                const address = this.parse_response(response);
+
+                console.log(response);
+                console.log(address);
+
+                // callback
+                if (callback)
+                    callback(address, response);
+
+            })
+            .fail(
+                (jqxhr, textStatus, error) => {
+
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not forward geocode:" +
+                            textStatus + "," + error + "\n");
+
+                });
+
+    }
 
 }
 
@@ -307,6 +520,8 @@ export function GeocoderFactory(map_provider, options) {
         options['access_token'] = map_provider['access_token'];
         return new GeocoderMapBox(options);
     } else if (provider === 'google') {
+        // add access token
+        options['key'] = map_provider['access_token'];
         return new GeocoderGoogle(options);
     } else
         return null;
