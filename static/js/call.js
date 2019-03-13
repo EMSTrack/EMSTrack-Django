@@ -8,13 +8,13 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 import { addAmbulanceRoute, createMarker } from "./map_tools";
 
-function addCallToMap(call, map) {
+function addCallToMap(call, map, icon) {
 
     console.log('Adding call to map');
     // console.log(call);
 
     // waypoint markers
-    const icon = icon || L.icon({
+    icon = icon || L.icon({
         iconUrl: '/static/icons/maki/marker-15.svg',
         iconSize: [15, 30],
     });
