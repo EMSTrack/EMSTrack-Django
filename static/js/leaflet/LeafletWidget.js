@@ -91,7 +91,7 @@ export class LeafletWidget {
         // locate
         this.map.on('locationfound', function (e) {
             const parent = e.target.parent;
-            if (typeof parent.current_location == 'undefined') {
+            if (typeof parent.current_location === 'undefined') {
                 // create marker
                 parent.current_location =
                     L.marker(parent.map.getCenter(),
