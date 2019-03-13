@@ -271,9 +271,6 @@ $(function () {
     // Handle begin dispatching button
     $('#dispatchBeginButton').click(function(event) {
 
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
-
         // call end dispatching
         beginDispatching();
 
@@ -281,9 +278,6 @@ $(function () {
 
     // Handle submit dispatching button
     $('#dispatchSubmitButton').click(function(event) {
-
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
 
         // call end dispatching
         submitDispatching();
