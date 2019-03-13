@@ -1,6 +1,8 @@
-{% extends "leaflet/base.html" %}
+<!-- { % extends "leaflet/base.html" % } -->
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
 
 {% block leaflethead %}
     <script>
@@ -214,7 +216,11 @@
 
 </div>
 
+{% render_bundle 'main' 'js' 'AMBULANCE' %}
+
+<!--
 <script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
 <script src="{% static 'js/ambulance_detail.js' %}"></script>
+-->
 
 {% endblock %}
