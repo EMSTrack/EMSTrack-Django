@@ -36,7 +36,7 @@ export class LeafletWidget {
                 id: 'mapbox.streets'
             };
 
-        } else {
+        } else if (this.map_provider['provider'] === 'google') {
 
             url = '';
             provider_options = {
@@ -79,7 +79,7 @@ export class LeafletWidget {
             // create google map title layer
             L.gridLayer.googleMutant(this.options.options).addTo(this.map);
 
-        } else {
+        } else if (this.map_provider['provider'] === 'mapbox') {
 
             // create mapbox title layer
             L.tileLayer(this.options.url + this.map_provider['access_token'],

@@ -231,6 +231,7 @@ $(function () {
     // geocoder = L.mapbox.geocoder('mapbox.places');
 
     if (map_provider['provider'] === 'mapbox') {
+
         // Add layer to map
         L.tileLayer(
             'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + map_provider['access_token'],
@@ -241,6 +242,7 @@ $(function () {
                 accessToken: map_provider['access_token']
             }
         ).addTo(mymap);
+
     }
 
     /*
