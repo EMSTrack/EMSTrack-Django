@@ -1926,10 +1926,10 @@ function updateCurrentLocation(location) {
 
 function updateCurrentAddress(location) {
 
-    geocoder.reverse(location, function (address, results) {
+    geocoder.reverse(location, function (address, response) {
 
         if (address == null) {
-            bsalert("Could not geocode:\nError " + status + ", " + results['error']);
+            bsalert("Could not geocode:\nError " + status + ", " + response);
             return;
         }
 
@@ -1967,10 +1967,10 @@ function updateCoordinates() {
         return;
 
     // otherwise geocode and update
-    geocoder.geocode(address, function (results, status) {
+    geocoder.geocode(address, function (address, response) {
 
         if (address != null) {
-            bsalert("Could not geocode:\nError " + status + ", " + results['error']);
+            bsalert("Could not geocode:\nError " + status + ", " + response);
             return;
         }
 
