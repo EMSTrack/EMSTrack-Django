@@ -250,6 +250,8 @@ export class GeocoderMapBox extends BaseGeocoder {
             }
         }
 
+        console.log("geocode url = '" + url + "'");
+
         // query mapbox
         $.getJSON(url,
             (response) =>  {
