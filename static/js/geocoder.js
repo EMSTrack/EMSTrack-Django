@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 class BaseGeocoder {
 
     constructor(options) {
