@@ -8,7 +8,7 @@ import { Geocoder } from "./geocoder";
 
 // Dispatching data
 
-var markersGroup = new L.LayerGroup();
+const markersGroup = new L.LayerGroup();
 let isDispatching = false;
 let isFilterOpen = false;
 const placeIcon = L.icon({
@@ -27,36 +27,36 @@ let currentPatients;
 
 // Map data
 
-var ambulanceMarkers = {};  // Store ambulance markers
-var ambulances = {};        // Store ambulance details
+const ambulanceMarkers = {};  // Store ambulance markers
+const ambulances = {};        // Store ambulance details
 
-var hospitalMarkers = {};   // Store hospital markers
-var hospitals = {};	        // Store hospital details
+const hospitalMarkers = {};   // Store hospital markers
+const hospitals = {};	        // Store hospital details
 
-var locationMarkers = {};   // Store location markers
-var locations = {};	        // Store location details
+const locationMarkers = {};   // Store location markers
+const locations = {};	        // Store location details
 
-var calls = {};             // Store call details
-var patientMarkers = {};    // Store hospital markers
+const calls = {};             // Store call details
+const patientMarkers = {};    // Store hospital markers
 
 // Initialize category panes
-var visibleCategory = {};
+const visibleCategory = {};
 
 // Initialize ambulance icons
-var ambulance_icons = {};
-var ambulance_buttons = {};
-for (var key in ambulance_css) {
+const ambulance_icons = {};
+const ambulance_buttons = {};
+for (const key in ambulance_css) {
     // skip loop if the property is from prototype
     if (!ambulance_css.hasOwnProperty(key))
         continue;
 
-    var settings = ambulance_css[key];
+    const settings = ambulance_css[key];
     ambulance_icons[key] = L.icon(settings['icon']);
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
 // Initialize ambulance call status
-var ambulance_call_buttons = {
+const ambulance_call_buttons = {
     R: 'btn-danger', // 'Requested'
     A: 'btn-success', // 'Accepted'
     D: 'btn-secondary', // 'Declined'
@@ -131,79 +131,83 @@ function waypointIcon(waypoint) {
 }
 
 
-var patientMarker = newFontAwesomeStackedIcon({
+const patientMarker = newFontAwesomeStackedIcon({
     icon: 'plus',
     extraClasses: 'fa-stack-marker-xs text-danger'
 });
 
-var hospitalMarker = newFontAwesomeStackedIcon({
+const hospitalMarker = newFontAwesomeStackedIcon({
     icon: 'hospital',
     extraClasses: 'fa-stack-marker-xs text-warning'
 });
 
-var waypointMarker = newFontAwesomeStackedIcon({
+const waypointMarker = newFontAwesomeStackedIcon({
     icon: 'map',
     extraClasses: 'fa-stack-marker-xs text-primary'
 });
 
-var baseMarker = newFontAwesomeStackedIcon({
+const baseMarker = newFontAwesomeStackedIcon({
     icon: 'home',
     extraClasses: 'fa-stack-marker-xs text-success'
 });
 
 
-var patientIcon = L.icon({
-	iconUrl: '/static/icons/maki/marker-15.svg',
-	iconSize: [15, 15]
-});
-var hospitalIcon = L.icon({
-	iconUrl: '/static/icons/maki/hospital-15.svg',
-	iconSize: [15, 15]
-});
-var incidentIcon = L.icon({
-	iconUrl: '/static/icons/maki/marker-15.svg',
-	iconSize: [15, 15]
-});
-var defibrillatorIcon = L.icon({
-	iconUrl: '/static/icons/maki/defibrillator-15.svg',
-	iconSize: [15, 15]
-});
-var baseIcon = L.icon({
-	iconUrl: '/static/icons/maki/home-15.svg',
-	iconSize: [15, 15]
-});
-var otherIcon = L.icon({
-	iconUrl: '/static/icons/maki/marker-15.svg',
-	iconSize: [15, 15],
-	iconAnchor: [7, 15],
-	popupAnchor: [0,-15]
+const patientIcon = L.icon({
+    iconUrl: '/static/icons/maki/marker-15.svg',
+    iconSize: [15, 15]
 });
 
-var locationIcon = L.icon({
-	iconUrl: '/static/icons/maki/marker-15.svg',
-	iconSize: [15, 15],
-	iconAnchor: [7, 15],
-	popupAnchor: [0,-15]
+const hospitalIcon = L.icon({
+    iconUrl: '/static/icons/maki/hospital-15.svg',
+    iconSize: [15, 15]
+});
+
+const incidentIcon = L.icon({
+    iconUrl: '/static/icons/maki/marker-15.svg',
+    iconSize: [15, 15]
+});
+
+const defibrillatorIcon = L.icon({
+    iconUrl: '/static/icons/maki/defibrillator-15.svg',
+    iconSize: [15, 15]
+});
+
+const baseIcon = L.icon({
+    iconUrl: '/static/icons/maki/home-15.svg',
+    iconSize: [15, 15]
+});
+
+const otherIcon = L.icon({
+    iconUrl: '/static/icons/maki/marker-15.svg',
+    iconSize: [15, 15],
+    iconAnchor: [7, 15],
+    popupAnchor: [0, -15]
+});
+
+const locationIcon = L.icon({
+    iconUrl: '/static/icons/maki/marker-15.svg',
+    iconSize: [15, 15],
+    iconAnchor: [7, 15],
+    popupAnchor: [0, -15]
 
 });
 
 /**
- * Ambulance statuses 
+ * Ambulance statuses
  */
-
-var STATUS_AVAILABLE = "AV";
-var STATUS_OUT_OF_SERVICE = "OS";
+const STATUS_AVAILABLE = "AV";
+const STATUS_OUT_OF_SERVICE = "OS";
 
 // global variable for mqttClient
-var mqttClient;
+let mqttClient;
 
 // TODO: remove hardcoded mapbox access_token
 
 /**
  * This is a handler for when the page is loaded.
  */
-var mymap;
-var geocoder = new Geocoder({ access_token: accessToken });
+let mymap;
+const geocoder = new Geocoder({access_token: accessToken});
 
 // resize map
 function resizeMap() {
@@ -215,7 +219,7 @@ function resizeMap() {
 $(function () {
 
     // token and attribution
-    var attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
+    const attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
 
     // Set map view
     mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
@@ -420,7 +424,7 @@ function getData(subscribe) {
             if (subscribe) {
 
                 // subscribe to hospital
-                var topicName = "hospital/" + hospital.id + "/data";
+                const topicName = "hospital/" + hospital.id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
 
@@ -435,7 +439,7 @@ function getData(subscribe) {
 
         // add location
         $.each(data, function (index) {
-            var location = data[index];
+            const location = data[index];
             addLocationToMap(location);
         });
     });
@@ -445,7 +449,7 @@ function getData(subscribe) {
 
         // add location
         $.each(data, function (index) {
-            var location = data[index];
+            const location = data[index];
             addLocationToMap(location);
         });
     });
@@ -463,7 +467,7 @@ function getData(subscribe) {
 
             if (subscribe) {
 
-                var topicName = "call/" + call.id + "/data";
+                const topicName = "call/" + call.id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
             }
@@ -513,7 +517,7 @@ function onMessageArrived(message) {
         '" arrived');
 
     // split topic
-    var topic = message.destinationName.split("/");
+    const topic = message.destinationName.split("/");
 
     // empty payload?
     if (message.payloadString) {
@@ -521,7 +525,7 @@ function onMessageArrived(message) {
         try {
 
             // parse message
-            var data = JSON.parse(message.payloadString);
+            const data = JSON.parse(message.payloadString);
 
             // Look for ambulance/{id}/data
             if (topic[0] === 'ambulance' &&
@@ -545,8 +549,8 @@ function onMessageArrived(message) {
             else if (topic[0] === 'ambulance' &&
                 topic[2] === 'call' &&
                 topic[4] === 'status') {
-                var ambulance_id = topic[1];
-                var call_id = topic[3];
+                const ambulance_id = topic[1];
+                const call_id = topic[3];
                 updateAmbulanceCall(ambulance_id, call_id, data);
             }
 
@@ -572,7 +576,7 @@ function onMessageArrived(message) {
 function updateAmbulance(ambulance) {
 
     // retrieve id
-    var id = ambulance.id;
+    const id = ambulance.id;
 
     // already exists?
     if (id in ambulances) {
@@ -606,7 +610,7 @@ function updateAmbulance(ambulance) {
         if (old_status !== status) {
 
             // Move and update grid button
-            var btnClass = 'btn btn-sm ' + ambulance_buttons[status]
+            const btnClass = 'btn btn-sm ' + ambulance_buttons[status]
                 + ' status-' + status
                 + ' capability-' + ambulance.capability;
             $("#grid-button-" + id).attr("class", btnClass)
@@ -639,7 +643,7 @@ function updateAmbulance(ambulance) {
 function updateHospital(hospital) {
 
     // retrieve id
-    var id = hospital.id;
+    const id = hospital.id;
 
     // already exists?
     if (id in hospitals) {
@@ -826,10 +830,11 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
+    let topicName;
     if (status === 'C') {
 
         // Completed ambulance call, unsubscribe
-        var topicName = "ambulance/" + ambulance_id + "/call/+/status";
+        topicName = "ambulance/" + ambulance_id + "/call/+/status";
         mqttClient.unsubscribe(topicName);
         console.log('Unsubscribing from topic: ' + topicName);
 
@@ -878,10 +883,10 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 
 function updateCallCounter() {
 
-    var total = 0;
+    let total = 0;
     call_status_order.forEach(function(status) {
         if (status !== 'E') {
-            var count = $('#call-grid-' + status).children().length;
+            const count = $('#call-grid-' + status).children().length;
             total += count;
             if (count > 0)
                 $('#call-' + status + '-header-count').html('(' + count + ')').show();
@@ -1227,7 +1232,7 @@ function addHospitalToMap(hospital) {
     hospitals[hospital.id] = hospital;
 
     // set icon by status
-    var coloredIcon = hospitalIcon;
+    const coloredIcon = hospitalIcon;
 
     // If hospital marker doesn't exist
     hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,
@@ -1267,7 +1272,7 @@ function addLocationToMap(location) {
     locations[location.id] = location;
 
     // set icon by status
-    var icon = locationIcon;
+    const icon = locationIcon;
     if (location.type === 'a')
         icon = defibrillatorIcon;
     else if (location.type === 'b')
@@ -1419,8 +1424,8 @@ function createCategoryPanesAndFilters() {
             .on('drop', function(e) {
                 e.preventDefault();
                 // Dropped button, get data
-                var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
-                var ambulance = ambulances[ambulance_id];
+                const ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+                const ambulance = ambulances[ambulance_id];
                 console.log('dropped ambulance ' + ambulance['identifier']);
                 // change status
                 updateAmbulanceStatus(ambulance, status);
@@ -1598,7 +1603,7 @@ function updateAmbulanceStatus(ambulance, status) {
         + '</strong>?', 'alert-danger', 'Attention')
         .on('hide.bs.modal', function(event) {
 
-            var $activeElement = $(document.activeElement);
+            const $activeElement = $(document.activeElement);
 
             if ($activeElement.is('[data-toggle], [data-dismiss]')) {
 
@@ -1618,12 +1623,12 @@ function updateAmbulanceStatus(ambulance, status) {
 function doUpdateAmbulanceStatus(ambulance, status) {
 
     // form
-    var form = { status: status };
+    const form = {status: status};
 
     // make json call
-    var postJsonUrl = APIBaseUrl + 'ambulance/' + ambulance.id + '/';
+    const postJsonUrl = APIBaseUrl + 'ambulance/' + ambulance.id + '/';
 
-    var CSRFToken = Cookies.get('csrftoken');
+    const CSRFToken = Cookies.get('csrftoken');
 
     // retrieve csrf token
     $.ajaxSetup({
@@ -1668,17 +1673,17 @@ function doUpdateAmbulanceStatus(ambulance, status) {
 
 // Dispatching
 
-var submitDispatching = function () {
+function submitDispatching() {
 
     // submit form
     $('#dispatch-form-collapse').submit();
 
 };
 
-var beginDispatching = function () {
+function beginDispatching() {
 
     isDispatching = true;
-    var filtersDiv = $('#filtersDiv');
+    const filtersDiv = $('#filtersDiv');
     isFilterOpen = filtersDiv.hasClass('show');
     console.log('Begin dispatching.');
 
@@ -1721,7 +1726,7 @@ var beginDispatching = function () {
 
 }
 
-var endDispatching = function () {
+function endDispatching() {
 
     isDispatching = false;
     dispatchingAmbulances = {};
@@ -1767,7 +1772,7 @@ var endDispatching = function () {
 
 }
 
-var removeFromDispatchingList = function(ambulance) {
+function removeFromDispatchingList(ambulance) {
 
     // delete from dispatching list
     delete dispatchingAmbulances[ambulance.id];
@@ -1779,7 +1784,7 @@ var removeFromDispatchingList = function(ambulance) {
 
 }
 
-var addToDispatchingList = function(ambulance) {
+function addToDispatchingList(ambulance) {
 
     // quick return if null or not dispatching
     if (ambulance == null || !isDispatching)
@@ -1838,7 +1843,7 @@ var addToDispatchingList = function(ambulance) {
         });
 }
 
-var updateCurrentMarker = function(latlng) {
+function updateCurrentMarker(latlng) {
 
     // update current location
     updateCurrentLocation(latlng);
@@ -1849,7 +1854,7 @@ var updateCurrentMarker = function(latlng) {
 
 }
 
-var updateCurrentLocation = function(location) {
+function updateCurrentLocation(location) {
 
     console.log('Setting current location to: ' + location.lat + ', ' + location.lng);
 
@@ -1864,7 +1869,7 @@ var updateCurrentLocation = function(location) {
     markersGroup.clearLayers();
 
     // laydown marker
-    var marker = L.marker(location,
+    const marker = L.marker(location,
         {
             icon: placeIcon,
             draggable: true
@@ -1884,22 +1889,22 @@ var updateCurrentLocation = function(location) {
     });
 }
 
-var updateCurrentAddress = function(location) {
+function updateCurrentAddress(location) {
 
-    var options = {
+    const options = {
         types: 'address',
         limit: 1
     };
     geocoder.reverse(location, options,
         function (results, status) {
 
-        if (status != "success") {
-            bsalert("Could not geocode:\nError " + status + ", " + results['error']);
-            return;
-        }
+            if ("success" !== status) {
+                bsalert("Could not geocode:\nError " + status + ", " + results['error']);
+                return;
+            }
 
         // quick return if found nothing
-        if (results.length == 0) {
+        if (results.length === 0) {
             console.log('Got nothing from geocode');
             return;
         }
@@ -1928,17 +1933,17 @@ var updateCurrentAddress = function(location) {
 
 }
 
-var updateCoordinates = function() {
+function updateCoordinates() {
 
     // when the user changes the street address
-    var address =$('#street').val();
+    const address = $('#street').val();
 
     // quick return if no address
     if (!address)
         return;
 
     // otherwise geocode and update
-    var options = {
+    const options = {
         types: 'address',
         limit: 1,
         autocomplete: 'true'
@@ -1946,19 +1951,19 @@ var updateCoordinates = function() {
     geocoder.geocode(address, options,
         function (results, status) {
 
-            if (status != "success") {
+            if ("success" !== status) {
                 bsalert("Could not geocode:\nError " + status + ", " + results['error']);
                 return;
             }
 
             // quick return if found nothing
-            if (results.length == 0) {
+            if (results.length === 0) {
                 console.log('Got nothing from geocode');
                 return;
             }
 
             // parse features into address
-            var address = geocoder.parse_feature(results[0]);
+            const address = geocoder.parse_feature(results[0]);
 
             console.log(
                 'Setting currentLocation to:'
@@ -1985,10 +1990,11 @@ var updateCoordinates = function() {
 
 function dispatchCall() {
 
-    var form = {};
+    let obj;
+    const form = {};
 
     // call information
-    var street_address = $('#street').val().trim();
+    const street_address = $('#street').val().trim();
     form['details'] = $('#comment').val().trim();
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
@@ -1997,13 +2003,13 @@ function dispatchCall() {
         bsalert("Please select the priority level.");
         return;
     }
-    if (numberOfDispatchingAmbulances == 0) {
+    if (numberOfDispatchingAmbulances === 0) {
         bsalert("Please dispatch at least one ambulance.");
         return;
     }
 
     // location information
-    var location = {};
+    const location = {};
     location['type'] = 'i';
     location['location'] = currentAddress['location'];
 
@@ -2021,7 +2027,7 @@ function dispatchCall() {
     if (!(street_address === currentAddress['street_address'])) {
 
         // parse street location
-        var address = geocoder.parse_street_address(street_address, location['country']);
+        const address = geocoder.parse_street_address(street_address, location['country']);
 
         location['number'] = address['number'];
         location['street'] = address['street'];
@@ -2041,8 +2047,8 @@ function dispatchCall() {
     }
 
     // incident single waypoint information, for now
-    var waypoints = []
-    var waypoint = {};
+    const waypoints = [];
+    const waypoint = {};
     waypoint['order'] = 0;
     waypoint['location'] = location;
 
@@ -2050,19 +2056,19 @@ function dispatchCall() {
     waypoints.push(waypoint);
 
     // ambulances
-    var ambulances = [];
-    for (var id in dispatchingAmbulances) {
+    const ambulances = [];
+    for (const id in dispatchingAmbulances) {
         if (dispatchingAmbulances.hasOwnProperty(id))
             ambulances.push({ 'ambulance_id': id, 'waypoint_set': waypoints });
 		}
     form['ambulancecall_set'] = ambulances;
 
     // patients
-    var patients = [];
-    for (var index in currentPatients)
+    const patients = [];
+    for (const index in currentPatients)
         if (currentPatients.hasOwnProperty(index)) {
-            var patient = currentPatients[index];
-            var obj = { 'name': patient[0] };
+            const patient = currentPatients[index];
+            obj = { 'name': patient[0] };
             if (patient[1])
                 // add age
                 obj['age'] = parseInt(patient[1]);
@@ -2070,11 +2076,11 @@ function dispatchCall() {
         }
 
     // retrieve last patient
-    var lastPatientForm = $('#patients div.form-row:last');
-    var lastPatientName = lastPatientForm.find('input[type="text"]').val().trim();
+    const lastPatientForm = $('#patients div.form-row:last');
+    const lastPatientName = lastPatientForm.find('input[type="text"]').val().trim();
     if (lastPatientName) {
-        var obj = { 'name':  lastPatientName };
-        var lastPatientAge = lastPatientForm.find('input[type="number"]').val().trim();
+        obj = {'name': lastPatientName};
+        const lastPatientAge = lastPatientForm.find('input[type="number"]').val().trim();
         if (lastPatientAge)
             // add age
             obj['age'] = parseInt(lastPatientAge);
@@ -2085,13 +2091,13 @@ function dispatchCall() {
     form['patient_set'] = patients;
 
     // make json call
-    var postJsonUrl = APIBaseUrl + 'call/';
+    const postJsonUrl = APIBaseUrl + 'call/';
     console.log("Form:");
     console.log(form);
     console.log("Will post:");
     console.log(JSON.stringify(form));
 
-    var CSRFToken = Cookies.get('csrftoken');
+    const CSRFToken = Cookies.get('csrftoken');
     console.log('csrftoken = ' + CSRFToken);
 
     // retrieve csrf token
@@ -2110,7 +2116,7 @@ function dispatchCall() {
         dataType: 'json',
         contentType: 'application/json',
         data: JSON.stringify(form),
-        success: function (data) {
+        success: function () {
 
             // Log success
             console.log("Succesfully posted new call.");
@@ -2119,7 +2125,7 @@ function dispatchCall() {
             endDispatching();
 
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR) {
 
             // Log failure
             console.log("Failed to post new call.");
@@ -2138,12 +2144,12 @@ function dispatchCall() {
 
 // patient functions
 
-var addPatient = function(index) {
+function addPatient(index) {
 
     console.log('Adding patient index ' + index);
 
-    var name = $('#patient-' + index + '-name').val().trim();
-    var age = $('#patient-' + index + '-age').val().trim();
+    const name = $('#patient-' + index + '-name').val().trim();
+    const age = $('#patient-' + index + '-age').val().trim();
 
     // is name empty?
     if (!name) {
@@ -2155,7 +2161,7 @@ var addPatient = function(index) {
     currentPatients[index] = [name, age];
 
     // change button symbol
-    var symbol = $('#patient-' + index + '-symbol');
+    const symbol = $('#patient-' + index + '-symbol');
     symbol.removeClass('fa-plus');
     symbol.addClass('fa-minus');
 
@@ -2169,7 +2175,7 @@ var addPatient = function(index) {
 
 }
 
-var removePatient = function(index) {
+function removePatient(index) {
 
     console.log('Removing patient index ' + index);
 
@@ -2183,7 +2189,7 @@ var removePatient = function(index) {
 
 }
 
-var addPatientForm = function(index) {
+function addPatientForm(index) {
 
     console.log('Adding patient form ' + index);
 
@@ -2196,34 +2202,31 @@ var addPatientForm = function(index) {
 
 }
 
-var newPatientForm = function(index, symbol) {
-
-    var html =
-        '<div class="form-row" id="patient-' + index + '-form">' +
-            '<div class="col-md-7 pr-0">' +
-                '<input id="patient-' + index + '-name" ' +
-                       'type="text" ' +
-                       'class="form-control" ' +
-                       'placeholder="Name">' +
-            '</div>' +
-            '<div class="col-md-3 px-0">' +
-                '<input id="patient-' + index + '-age" ' +
-                       'type="number" min="0" ' +
-                       'class="form-control" ' +
-                       'placeholder="Age">' +
-            '</div>' +
-            '<div class="col-md-2 pl-0">' +
-                '<button class="btn btn-default btn-block btn-new-patient" ' +
-                       ' type="button" ' +
-                       ' id="patient-' + index + '-button">' +
-                    '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
-                '</button>' +
-            '</div>' +
-        '</div>';
+function newPatientForm(index, symbol) {
 
     // console.log('html = "' + html + '"');
 
-    return html;
+    return '<div class="form-row" id="patient-' + index + '-form">' +
+        '<div class="col-md-7 pr-0">' +
+        '<input id="patient-' + index + '-name" ' +
+        'type="text" ' +
+        'class="form-control" ' +
+        'placeholder="Name">' +
+        '</div>' +
+        '<div class="col-md-3 px-0">' +
+        '<input id="patient-' + index + '-age" ' +
+        'type="number" min="0" ' +
+        'class="form-control" ' +
+        'placeholder="Age">' +
+        '</div>' +
+        '<div class="col-md-2 pl-0">' +
+        '<button class="btn btn-default btn-block btn-new-patient" ' +
+        ' type="button" ' +
+        ' id="patient-' + index + '-button">' +
+        '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
+        '</button>' +
+        '</div>' +
+        '</div>';
 
 }
 
