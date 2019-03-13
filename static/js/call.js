@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
-import { addAmbulanceRoute, createMarker } from "./map_tools";
+import { addAmbulanceRoute, createMarker } from "./map-tools";
 
 function addCallToMap(call, map, icon) {
 
