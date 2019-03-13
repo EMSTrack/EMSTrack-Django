@@ -1,4 +1,8 @@
 import { LeafletPointWidget } from "./leaflet/LeafletWidget";
 
-// Create widget
-new LeafletPointWidget(options);
+$(function () {
+
+    // Create widget
+    new LeafletPointWidget(options);
+
+};
