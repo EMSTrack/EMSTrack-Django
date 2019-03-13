@@ -3,10 +3,11 @@ import 'leaflet-rotatedmarker'
 import "leaflet/dist/leaflet.css";
 
 // https://github.com/Leaflet/Leaflet/issues/4968
-/*
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import icon2xUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import iconShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
+/*
 let DefaultIcon = L.icon({
     iconUrl: icon,
     shadowUrl: iconShadow
@@ -18,9 +19,9 @@ L.Marker.prototype.options.icon = DefaultIcon;
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: '/static/leaflet/dist/images/marker-icon-2x.png',
-  iconUrl: '/static/leaflet/dist/images/marker-icon.png',
-  shadowUrl: '/static/leaflet/dist/images/marker-shadow.png',
+  iconRetinaUrl: icon2xUrl,
+  iconUrl: iconUrl,
+  shadowUrl: iconShadowUrl,
 });
 
 // LeafletWidget
