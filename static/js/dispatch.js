@@ -254,7 +254,7 @@ var updateCurrentAddress = function(location) {
         }
 
         // parse features into current address
-        currentAddress = geocoder.parse_feature(results[0]);
+        currentAddress = geocoder.parse_response(results[0]);
 
         console.log(
             'Setting currentAddress to:'
@@ -307,7 +307,7 @@ var updateCoordinates = function() {
             }
 
             // parse features into address
-            var address = geocoder.parse_feature(results[0]);
+            var address = geocoder.parse_response(results[0]);
 
             console.log(
                 'Setting currentLocation to:'

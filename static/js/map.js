@@ -6,7 +6,7 @@ import "leaflet/dist/leaflet.css";
 
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
-import { Geocoder } from "./geocoder";
+import { GeocoderFactory } from "./geocoder";
 
 // Dispatching data
 
@@ -207,7 +207,7 @@ let mqttClient;
  * This is a handler for when the page is loaded.
  */
 let mymap;
-const geocoder = new Geocoder({map_provider: map_provider});
+const geocoder = GeocoderFactory(map_provider);
 
 // resize map
 function resizeMap() {
@@ -1928,26 +1928,15 @@ function updateCurrentLocation(location) {
 
 function updateCurrentAddress(location) {
 
-    const options = {
-        types: 'address',
-        limit: 1
-    };
-    geocoder.reverse(location, options,
-        function (results, status) {
+    geocoder.reverse(location, function (address, results) {
 
-            if ("success" !== status) {
-                bsalert("Could not geocode:\nError " + status + ", " + results['error']);
-                return;
-            }
-
-        // quick return if found nothing
-        if (results.length === 0) {
-            console.log('Got nothing from geocode');
+        if (address == null) {
+            bsalert("Could not geocode:\nError " + status + ", " + results['error']);
             return;
         }
 
         // parse features into current address
-        currentAddress = geocoder.parse_feature(results[0]);
+        currentAddress = address;
 
         console.log(
             'Setting currentAddress to:'
@@ -1980,49 +1969,35 @@ function updateCoordinates() {
         return;
 
     // otherwise geocode and update
-    const options = {
-        types: 'address',
-        limit: 1,
-        autocomplete: 'true'
-    };
-    geocoder.geocode(address, options,
-        function (results, status) {
+    geocoder.geocode(address, function (results, status) {
 
-            if ("success" !== status) {
-                bsalert("Could not geocode:\nError " + status + ", " + results['error']);
-                return;
-            }
+        if (address != null) {
+            bsalert("Could not geocode:\nError " + status + ", " + results['error']);
+            return;
+        }
 
-            // quick return if found nothing
-            if (results.length === 0) {
-                console.log('Got nothing from geocode');
-                return;
-            }
+        console.log(
+            'Setting currentLocation to:'
+            + '\nnumber: ' + address['number']
+            + '\nstreet: ' + address['street']
+            + '\nunit: ' + address['unit']
+            + '\nlocation: ' + address['location']['latitude']
+            + ',' + address['location']['longitude']
+            + '\nneighborhood: ' + address['neighborhood']
+            + '\nzipcode: ' + address['zipcode']
+            + '\ncity: ' + address['city']
+            + '\nstate: ' + address['state']
+            + '\ncountry: ' + address['country']
+        );
 
-            // parse features into address
-            const address = geocoder.parse_feature(results[0]);
-
-            console.log(
-                'Setting currentLocation to:'
-                + '\nnumber: ' + address['number']
-                + '\nstreet: ' + address['street']
-                + '\nunit: ' + address['unit']
-                + '\nlocation: ' + address['location']['latitude']
-                + ',' + address['location']['longitude']
-                + '\nneighborhood: ' + address['neighborhood']
-                + '\nzipcode: ' + address['zipcode']
-                + '\ncity: ' + address['city']
-                + '\nstate: ' + address['state']
-                + '\ncountry: ' + address['country']
-            );
-
-            // set current location
-            updateCurrentLocation({
-                lat: address['location']['latitude'],
-                lng: address['location']['longitude']
-            });
-
+        // set current location
+        updateCurrentLocation({
+            lat: address['location']['latitude'],
+            lng: address['location']['longitude']
         });
+
+    });
+
 }
 
 function dispatchCall() {
