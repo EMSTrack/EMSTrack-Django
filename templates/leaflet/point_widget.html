@@ -41,7 +41,7 @@
 
 <script type="text/javascript">
     {% block map_options %}
-        var map_options = {};
+        const map_options = {};
     {% endblock %}
 
     // has point
@@ -64,7 +64,7 @@
     };
 
     {% block options %}
-        var options = {
+        const options = {
             access_token: '{{ access_token }}',
             geom_name: '{{ geom_type }}',
             id: '{{ id }}',
@@ -81,6 +81,6 @@
     {% endblock %}
 
     // Create widget
-    var {{ module }} = new LeafletPointWidget(options);
+    const {{ module }} = new LeafletPointWidget(options);
 
 </script>

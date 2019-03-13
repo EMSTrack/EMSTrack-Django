@@ -9,8 +9,9 @@ class LeafletPointWidget(widgets.BaseGeometryWidget):
     class Media:
         css = {
             'all': ('https://unpkg.com/leaflet@1.3.1/dist/leaflet.css',
-                    'leaflet/css/location_form.css',
-                    'leaflet/css/LeafletWidget.css')
+                    # 'leaflet/css/location_form.css',
+                    # 'leaflet/css/LeafletWidget.css'
+                    )
         }
         js = (
             'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js',

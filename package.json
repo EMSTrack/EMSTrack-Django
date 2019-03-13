@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "EMSTrack",
-  "license": "Berkley",
+  "license": "BSD-2-Clause",
   "bugs": {
     "url": "https://github.com/EMSTrack/WebClientAndServer/issues"
   },
