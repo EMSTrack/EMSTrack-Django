@@ -457,7 +457,10 @@ export class GeocoderGoogle extends BaseGeocoder {
         }
 
         // normalize query
-        query = query.normalize();
+        const combining = /[\u0300-\u036F]/g;
+        query = query.normalize('NFKD').replace(combining, '');
+
+        console.log("query = '" + query + "'");
 
         // construct query
         parameters['address'] = encodeURIComponent(query);
