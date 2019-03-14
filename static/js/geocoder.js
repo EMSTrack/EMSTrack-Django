@@ -304,56 +304,61 @@ export class GeocoderGoogle extends BaseGeocoder {
         console.log(results);
 
         // parse first feature
-        const feature = results[0];
-        console.log(feature);
-        if (feature['types'].includes('street_address')) {
+        for(let i = 0; i <  results.length; i++) {
 
-            let address = {
-                formatted_address: "",
-                number: "",
-                street: "",
-                unit: undefined,
-                neighborhood: undefined,
-                city: "",
-                state: "",
-                zipcode: undefined,
-                country: "",
-                location: undefined
-            };
+            const feature = results[i];
+            console.log(feature);
+            if ( feature['types'].includes('street_address') ||
+                 feature['types'].includes('route') ||
+                 feature['types'].includes('locality') ) {
 
-            // set location
-            const location = feature['geometry']['location'];
-            address['location'] = {
-                'latitude': location['lat'],
-                'longitude': location['lng']
-            };
+                let address = {
+                    formatted_address: "",
+                    number: "",
+                    street: "",
+                    unit: undefined,
+                    neighborhood: undefined,
+                    city: "",
+                    state: "",
+                    zipcode: undefined,
+                    country: "",
+                    location: undefined
+                };
 
-            // set formated address
-            address['formatted_address'] = feature['formatted_address'];
+                // set location
+                const location = feature['geometry']['location'];
+                address['location'] = {
+                    'latitude': location['lat'],
+                    'longitude': location['lng']
+                };
 
-            // parse context
-            const context = feature['address_components'];
-            for (let i = 0; i < context.length; i++) {
-                const item = context[i];
-                const types = item['types'];
-                if (types.includes('sublocality_level_1'))
-                    address['neighborhood'] = item['short_name'];
-                else if (types.includes('street_number'))
-                    address['number'] = item['short_name'];
-                else if (types.includes('route'))
-                    address['street'] = item['short_name'];
-                else if (types.includes('locality'))
-                    address['city'] = item['long_name'];
-                else if (types.includes('administrative_area_level_1'))
-                    address['state'] = item['short_name'].replace('.', '');
-                else if (types.includes('postal_code'))
-                    address['zipcode'] = item['short_name'];
-                else if (types.includes('country'))
-                    address['country'] = item['short_name'].toUpperCase();
+                // set formated address
+                address['formatted_address'] = feature['formatted_address'];
+
+                // parse context
+                const context = feature['address_components'];
+                for (let i = 0; i < context.length; i++) {
+                    const item = context[i];
+                    const types = item['types'];
+                    if (types.includes('sublocality_level_1'))
+                        address['neighborhood'] = item['short_name'];
+                    else if (types.includes('street_number'))
+                        address['number'] = item['short_name'];
+                    else if (types.includes('route'))
+                        address['street'] = item['short_name'];
+                    else if (types.includes('locality'))
+                        address['city'] = item['long_name'];
+                    else if (types.includes('administrative_area_level_1'))
+                        address['state'] = item['short_name'].replace('.', '');
+                    else if (types.includes('postal_code'))
+                        address['zipcode'] = item['short_name'];
+                    else if (types.includes('country'))
+                        address['country'] = item['short_name'].toUpperCase();
+                }
+
+                return address;
+
             }
-
-            return address;
-
         }
 
         // log error
