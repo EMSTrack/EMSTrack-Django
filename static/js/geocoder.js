@@ -306,7 +306,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         // parse first feature
         const feature = results[0];
         console.log(feature);
-        if ('street_address' in feature['types']) {
+        if (feature['types'].includes('street_address')) {
 
             let address = {
                 street_address: "",
@@ -333,19 +333,19 @@ export class GeocoderGoogle extends BaseGeocoder {
             for (let i = 0; i < context.length; i++) {
                 const item = context[i];
                 const types = item['types'];
-                if ('neighborhood' in types)
+                if (types.includes('neighborhood'))
                     address['neighborhood'] = item['long_name'];
-                else if ('street_number' in types)
+                else if (types.includes('street_number'))
                     address['number'] = item['short_name'];
-                else if ('route' in types)
+                else if (types.includes('route'))
                     address['street_address'] = item['short_name'];
-                else if ('locality' in types)
+                else if (types.includes('locality'))
                     address['city'] = item['long_name'];
-                else if ('admnistrative_area_level_1' in types)
+                else if (types.includes('admnistrative_area_level_1'))
                     address['state'] = item['short_name'];
-                else if ('postal_code' in types)
+                else if (types.includes('postal_code'))
                     address['zipcode'] = item['short_name'];
-                else if ('country' in types)
+                else if (types.includes('country'))
                     address['country'] = item['short_name'].toUpperCase();
             }
 
