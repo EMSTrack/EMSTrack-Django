@@ -1967,7 +1967,7 @@ function updateCoordinates() {
         return;
 
     // otherwise geocode and update
-    geocoder.geocode(address, function (address) {
+    geocoder.geocode(address.normalize(), function (address) {
 
         if (address == null) {
             bsalert("Could not forward geocode!");
