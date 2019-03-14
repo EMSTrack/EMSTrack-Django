@@ -438,7 +438,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         options = options || { autocomplete: 'true' };
 
         let property;
-        let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+        let url = "https://maps.googleapis.com/maps/api/geocode/json";
 
         const parameters = this.options;
 
