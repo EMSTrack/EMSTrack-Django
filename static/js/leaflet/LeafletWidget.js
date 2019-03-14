@@ -59,8 +59,6 @@ export class LeafletWidget {
             add_marker_control: false,
         };
 
-        console.log(this.options);
-
         // Altering using user-provided options
         for (const property in options) {
             if (options.hasOwnProperty(property)) {
@@ -78,18 +76,12 @@ export class LeafletWidget {
 
         if (this.map_provider['provider'] === 'mapbox') {
 
-            console.log('MapBox map!');
-            console.log(this.options.options);
-
             // create mapbox title layer
             L.tileLayer(this.options.url + this.map_provider['access_token'],
                 this.options.options)
                 .addTo(this.map);
 
         } else if (this.map_provider['provider'] === 'google') {
-
-            console.log('Google map!');
-            console.log(this.options.options);
 
             // create google map title layer
             L.gridLayer.googleMutant(this.options.options)
@@ -168,7 +160,6 @@ export class LeafletWidget {
 
         // Get bounds if not given
         bounds = bounds || this.map.getBounds();
-        console.log('bounds = ' + bounds);
 
         // Fit map to bounds
         this.map.fitBounds(bounds);

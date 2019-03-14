@@ -295,7 +295,9 @@ export class GeocoderGoogle extends BaseGeocoder {
 
     }
 
-    parse_response(response) {
+    parse_response(response, filter) {
+
+        filter = filter || [];
 
         // retrieve features
         const results = response['results'];
@@ -304,62 +306,70 @@ export class GeocoderGoogle extends BaseGeocoder {
         console.log(results);
 
         // parse first feature
-        for(let i = 0; i <  results.length; i++) {
+        for (let i = 0; i <  results.length; i++) {
 
             const feature = results[i];
             console.log(feature);
-            if ( feature['types'].includes('street_address') ||
-                 feature['types'].includes('route') ||
-                 feature['types'].includes('locality') ||
-                 feature['types'].includes('political') ) {
 
-                let address = {
-                    formatted_address: "",
-                    number: "",
-                    street: "",
-                    unit: undefined,
-                    neighborhood: undefined,
-                    city: "",
-                    state: "",
-                    zipcode: undefined,
-                    country: "",
-                    location: undefined
-                };
+            // filter types
+            if (filter.length > 0) {
 
-                // set location
-                const location = feature['geometry']['location'];
-                address['location'] = {
-                    'latitude': location['lat'],
-                    'longitude': location['lng']
-                };
-
-                // set formated address
-                address['formatted_address'] = feature['formatted_address'];
-
-                // parse context
-                const context = feature['address_components'];
-                for (let i = 0; i < context.length; i++) {
-                    const item = context[i];
-                    const types = item['types'];
-                    if (types.includes('sublocality_level_1'))
-                        address['neighborhood'] = item['short_name'];
-                    else if (types.includes('street_number'))
-                        address['number'] = item['short_name'];
-                    else if (types.includes('route'))
-                        address['street'] = item['short_name'];
-                    else if (types.includes('locality'))
-                        address['city'] = item['long_name'];
-                    else if (types.includes('administrative_area_level_1'))
-                        address['state'] = item['short_name'].replace('.', '');
-                    else if (types.includes('postal_code'))
-                        address['zipcode'] = item['short_name'];
-                    else if (types.includes('country'))
-                        address['country'] = item['short_name'].toUpperCase();
+                const types = feature['types'];
+                for (let j = 0; j < types.length; j++) {
+                    if ( filter.includes(types[j]) )
+                        break;
                 }
 
-                return address;
-
+                // could not find
+                continue;
             }
+
+            let address = {
+                formatted_address: "",
+                number: "",
+                street: "",
+                unit: undefined,
+                neighborhood: undefined,
+                city: "",
+                state: "",
+                zipcode: undefined,
+                country: "",
+                location: undefined
+            };
+
+            // set location
+            const location = feature['geometry']['location'];
+            address['location'] = {
+                'latitude': location['lat'],
+                'longitude': location['lng']
+            };
+
+            // set formated address
+            address['formatted_address'] = feature['formatted_address'];
+
+            // parse context
+            const context = feature['address_components'];
+            for (let i = 0; i < context.length; i++) {
+                const item = context[i];
+                const types = item['types'];
+                if (types.includes('sublocality_level_1'))
+                    address['neighborhood'] = item['short_name'];
+                else if (types.includes('street_number'))
+                    address['number'] = item['short_name'];
+                else if (types.includes('route'))
+                    address['street'] = item['short_name'];
+                else if (types.includes('locality'))
+                    address['city'] = item['long_name'];
+                else if (types.includes('administrative_area_level_1'))
+                    address['state'] = item['short_name'].replace('.', '');
+                else if (types.includes('postal_code'))
+                    address['zipcode'] = item['short_name'];
+                else if (types.includes('country'))
+                    address['country'] = item['short_name'].toUpperCase();
+            }
+
+            return address;
+
         }
 
         // log error
@@ -416,7 +426,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             (response) => {
 
                 // parse results
-                const address = this.parse_response(response);
+                const address = this.parse_response(response, ['street_address', 'route', 'political']);
 
                 console.log(response);
                 console.log(address);
