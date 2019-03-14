@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
