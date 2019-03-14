@@ -43,7 +43,7 @@ class BaseGeocoder {
 
         const matches = street[0].match(config['regex']);
         if (matches) {
-            console.log(matches);
+            // console.log(matches);
             const street_components = config['street_components'];
             // matches[0] is the entire matched string
             for (let i = 1; i < matches.length; i++) {
@@ -183,7 +183,7 @@ export class GeocoderMapBox extends BaseGeocoder {
             }
         }
 
-        console.log("geocode url = '" + url + "'");
+        // console.log("geocode url = '" + url + "'");
 
         // query mapbox
         $.getJSON(url,
@@ -192,8 +192,8 @@ export class GeocoderMapBox extends BaseGeocoder {
                 // parse results
                 const address = this.parse_response(response);
 
-                console.log(response);
-                console.log(address);
+                // console.log(response);
+                // console.log(address);
 
                 // callback
                 if (callback)
@@ -254,7 +254,7 @@ export class GeocoderMapBox extends BaseGeocoder {
             }
         }
 
-        console.log("geocode url = '" + url + "'");
+        // console.log("geocode url = '" + url + "'");
 
         // query mapbox
         $.getJSON(url,
@@ -263,8 +263,8 @@ export class GeocoderMapBox extends BaseGeocoder {
                 // parse results
                 const address = this.parse_response(response);
 
-                console.log(response);
-                console.log(address);
+                // console.log(response);
+                // console.log(address);
 
                 // callback
                 if (callback)
@@ -303,13 +303,13 @@ export class GeocoderGoogle extends BaseGeocoder {
         const results = response['results'];
         if (results.length === 0)
             return null;
-        console.log(results);
+        // console.log(results);
 
         // parse first feature
         for (let i = 0; i <  results.length; i++) {
 
             const feature = results[i];
-            console.log(feature);
+            // console.log(feature);
 
             // filter types
             if (filter.length > 0) {
@@ -421,7 +421,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             }
         }
 
-        console.log("geocode url = '" + url + "'");
+        // console.log("geocode url = '" + url + "'");
 
         // query mapbox
         $.getJSON(url,
@@ -430,8 +430,8 @@ export class GeocoderGoogle extends BaseGeocoder {
                 // parse results
                 const address = this.parse_response(response, ['street_address', 'route', 'political']);
 
-                console.log(response);
-                console.log(address);
+                // console.log(response);
+                // console.log(address);
 
                 // callback
                 if (callback)
@@ -478,7 +478,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         const combining = /[\u0300-\u036F]/g;
         query = query.normalize('NFKD').replace(combining, '');
 
-        console.log("query = '" + query + "'");
+        // console.log("query = '" + query + "'");
 
         // construct query
         parameters['address'] = encodeURIComponent(query);
@@ -498,7 +498,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             }
         }
 
-        console.log("geocode url = '" + url + "'");
+        // console.log("geocode url = '" + url + "'");
 
         // query mapbox
         $.getJSON(url,
@@ -507,8 +507,8 @@ export class GeocoderGoogle extends BaseGeocoder {
                 // parse results
                 const address = this.parse_response(response);
 
-                console.log(response);
-                console.log(address);
+                // console.log(response);
+                // console.log(address);
 
                 // callback
                 if (callback)
