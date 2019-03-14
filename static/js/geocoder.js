@@ -345,7 +345,7 @@ export class GeocoderGoogle extends BaseGeocoder {
                 else if (types.includes('locality'))
                     address['city'] = item['long_name'];
                 else if (types.includes('administrative_area_level_1'))
-                    address['state'] = item['short_name'];
+                    address['state'] = item['short_name'].replace('.', '');
                 else if (types.includes('postal_code'))
                     address['zipcode'] = item['short_name'];
                 else if (types.includes('country'))
