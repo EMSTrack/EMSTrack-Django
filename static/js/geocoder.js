@@ -320,8 +320,9 @@ export class GeocoderGoogle extends BaseGeocoder {
                         break;
                 }
 
-                // could not find
-                continue;
+                if (j === types.length)
+                    // could not find
+                    continue;
             }
 
             let address = {
