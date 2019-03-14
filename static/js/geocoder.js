@@ -298,12 +298,14 @@ export class GeocoderGoogle extends BaseGeocoder {
     parse_response(response) {
 
         // retrieve features
-        const results = response.results;
+        const results = response['results'];
         if (results.length === 0)
             return null;
+        console.log(results);
 
         // parse first feature
         const feature = results[0];
+        console.log(feature);
         if ('street_address' in feature['types']) {
 
             let address = {
