@@ -310,7 +310,8 @@ export class GeocoderGoogle extends BaseGeocoder {
             console.log(feature);
             if ( feature['types'].includes('street_address') ||
                  feature['types'].includes('route') ||
-                 feature['types'].includes('locality') ) {
+                 feature['types'].includes('locality') ||
+                 feature['types'].includes('political') ) {
 
                 let address = {
                     formatted_address: "",
@@ -362,7 +363,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         }
 
         // log error
-        console.log("Does not know how to parse feature of type '" + feature['place_type'] + "'");
+        console.log("Does not know how to parse address");
 
         return null;
     }
