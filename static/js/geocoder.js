@@ -82,12 +82,12 @@ export class GeocoderMapBox extends BaseGeocoder {
 
         // retrieve features
         const features = response.features;
-        if (features.length == 0)
+        if (features.length === 0)
             return null;
 
         // parse first feature
         const feature = features[0];
-        if (feature['place_type'] == 'address') {
+        if ('address' in feature['place_type']) {
 
             let address = {
                 street_address: "",
@@ -299,12 +299,12 @@ export class GeocoderGoogle extends BaseGeocoder {
 
         // retrieve features
         const results = response.results;
-        if (results.length == 0)
+        if (results.length === 0)
             return null;
 
         // parse first feature
         const feature = results[0];
-        if ('address_components' in feature['types']) {
+        if ('street_address' in feature['types']) {
 
             let address = {
                 street_address: "",
@@ -336,7 +336,7 @@ export class GeocoderGoogle extends BaseGeocoder {
                 else if ('street_number' in types)
                     address['number'] = item['short_name'];
                 else if ('route' in types)
-                    address['street_address'] = item['long_name'];
+                    address['street_address'] = item['short_name'];
                 else if ('locality' in types)
                     address['city'] = item['long_name'];
                 else if ('admnistrative_area_level_1' in types)
