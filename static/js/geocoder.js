@@ -149,7 +149,7 @@ export class GeocoderMapBox extends BaseGeocoder {
         let property;
         let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
-        const parameters = this.options;
+        const parameters = {};
 
         // Start with class options
         for (property in this.options) {
@@ -220,7 +220,7 @@ export class GeocoderMapBox extends BaseGeocoder {
         let property;
         let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
-        const parameters = this.options;
+        const parameters = {};
 
         // Start with class options
         for (property in this.options) {
@@ -369,7 +369,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         let property;
         let url = "https://maps.googleapis.com/maps/api/geocode/json";
 
-        const parameters = this.options;
+        const parameters = {};
 
         // Start with class options
         for (property in this.options) {
@@ -440,7 +440,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         let property;
         let url = "https://maps.googleapis.com/maps/api/geocode/json";
 
-        const parameters = this.options;
+        const parameters = {};
 
         // Start with class options
         for (property in this.options) {
@@ -455,6 +455,9 @@ export class GeocoderGoogle extends BaseGeocoder {
                 parameters[property] = options[property];
             }
         }
+
+        // normalize query
+        query = query.normalize();
 
         // construct query
         parameters['address'] = encodeURIComponent(query);
