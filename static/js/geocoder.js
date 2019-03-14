@@ -336,8 +336,8 @@ export class GeocoderGoogle extends BaseGeocoder {
             for (let i = 0; i < context.length; i++) {
                 const item = context[i];
                 const types = item['types'];
-                if (types.includes('neighborhood'))
-                    address['neighborhood'] = item['long_name'];
+                if (types.includes('sublocality_level_1'))
+                    address['neighborhood'] = item['short_name'];
                 else if (types.includes('street_number'))
                     address['number'] = item['short_name'];
                 else if (types.includes('route'))
