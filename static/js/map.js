@@ -1951,7 +1951,7 @@ function updateCurrentAddress(location) {
         );
 
         // set input text
-        $('#street').val(currentAddress['street_address']);
+        $('#street').val(currentAddress['formatted_address']);
 
     });
 

@@ -90,7 +90,7 @@ export class GeocoderMapBox extends BaseGeocoder {
         if ('address' in feature['place_type']) {
 
             let address = {
-                street_address: "",
+                formatted_address: "",
                 number: "",
                 street: "",
                 unit: undefined,
@@ -126,11 +126,11 @@ export class GeocoderMapBox extends BaseGeocoder {
             }
 
             // set street_address
-            const street_address = feature['place_name'];
-            address['street_address'] = street_address;
+            const formatted_address = feature['place_name'];
+            address['formatted_address'] = formatted_address;
 
             // parse street address
-            return this.parse_street_address(street_address,
+            return this.parse_street_address(formatted_address,
                 address['country'],
                 address);
 
@@ -309,7 +309,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         if (feature['types'].includes('street_address')) {
 
             let address = {
-                street_address: "",
+                formatted_address: "",
                 number: "",
                 street: "",
                 unit: undefined,
@@ -328,6 +328,9 @@ export class GeocoderGoogle extends BaseGeocoder {
                 'longitude': location['lng']
             };
 
+            // set formated address
+            address['formatted_address'] = feature['formatted_address'];
+
             // parse context
             const context = feature['address_components'];
             for (let i = 0; i < context.length; i++) {
@@ -338,10 +341,10 @@ export class GeocoderGoogle extends BaseGeocoder {
                 else if (types.includes('street_number'))
                     address['number'] = item['short_name'];
                 else if (types.includes('route'))
-                    address['street_address'] = item['short_name'];
+                    address['street'] = item['short_name'];
                 else if (types.includes('locality'))
                     address['city'] = item['long_name'];
-                else if (types.includes('admnistrative_area_level_1'))
+                else if (types.includes('administrative_area_level_1'))
                     address['state'] = item['short_name'];
                 else if (types.includes('postal_code'))
                     address['zipcode'] = item['short_name'];
