@@ -315,7 +315,8 @@ export class GeocoderGoogle extends BaseGeocoder {
             if (filter.length > 0) {
 
                 const types = feature['types'];
-                for (let j = 0; j < types.length; j++) {
+                let j = 0;
+                for (; j < types.length; j++) {
                     if ( filter.includes(types[j]) )
                         break;
                 }
