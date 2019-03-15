@@ -20,7 +20,7 @@ describe('mqtt', () => {
     const password = 'cruzrojaadmin';
 
     context('connect', function() {
-        it('should subscribe', function(done) {
+        it('should connect', function(done) {
             mqttClient.connect({
                 userName: userName,
                 password: password,
@@ -31,6 +31,24 @@ describe('mqtt', () => {
                     done(errorMessage);
                 }
             });
+        })
+    })
+
+
+    const resolvingPromise = new Promise(function(resolve, reject) {
+        // the function is executed automatically when the promise is constructed
+        mqttClient.disconnect();
+        while (mqttClient.isConnected) { /* wait */ }
+        resolve('disconnected');
+
+        setTimeout(() => reject(new Error("timeout!")), 1000);
+    });
+
+    context('disconnect', function() {
+        it('should disconnect', function(done) {
+            resolvingPromise.then( (result) => {
+                expect(result).to.equal('disconnected');
+            }).finally(done);
         })
     })
 
