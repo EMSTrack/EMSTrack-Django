@@ -8,7 +8,8 @@
   },
   "jest": {
     "verbose": true,
-    "projects": ["<rootDir>/static/js/tests/*"]
+    "projects": ["<rootDir>/static/js/tests/*"],
+    "presets": ["es2015"]
   },
   "repository": {
     "type": "git",
