@@ -109,14 +109,14 @@ describe('mqtt messages', () => {
 
     it('message arrived', function(done) {
 
-        const fn = (event) => {
+        const fn = (event, message) => {
             if (event.event === 'messageArrived') {
+                console.log(event.object.destinationName);
+                console.log(event.object.payloadString);
                 console.log(event);
-                console.log(event.message.destinationName);
-                console.log(event.message.payloadString);
                 mqttClient.remove(fn);
-                expect(event.message.destinationName).to.equal('test/message');
-                expect(event.message.payloadString).to.equal('Hi!');
+                expect(event.object.destinationName).to.equal('test/message');
+                expect(event.object.payloadString).to.equal('Hi!');
                 done();
             }
         };
