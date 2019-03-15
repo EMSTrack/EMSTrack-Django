@@ -7,29 +7,29 @@ describe('observer', () => {
     const observer = new Observer();
     const fn1 = () => {};
 
-    context('subscribe', function() {
-        it('should subscribe', function() {
-            observer.subscribe(fn1);
-            expect(observer.observers.length).to.equal(1)
-        })
-    })
+    it('should subscribe', function() {
 
-    context('unsubscribe', function() {
-        it('should unsubscribe', function() {
-            observer.unsubscribe(fn1);
-            expect(observer.observers.length).to.equal(0);
-        })
+        observer.subscribe(fn1);
+        expect(observer.observers.length).to.equal(1)
+
     });
 
-    let subscriberHasBeenCalled = false;
-    const fn2 = (data) => subscriberHasBeenCalled = data;
+    it('should unsubscribe', function() {
 
-    context('broadcast', function() {
-        it('should receive', function () {
-            observer.subscribe(fn2);
-            observer.broadcast(true);
-            expect(subscriberHasBeenCalled).to.equal(true);
-        })
+        observer.unsubscribe(fn1);
+        expect(observer.observers.length).to.equal(0);
+
+    });
+
+    it('should receive', function () {
+
+        let subscriberHasBeenCalled = false;
+        const fn2 = (data) => subscriberHasBeenCalled = data;
+
+        observer.subscribe(fn2);
+        observer.broadcast(true);
+        expect(subscriberHasBeenCalled).to.equal(true);
+
     });
 
 });

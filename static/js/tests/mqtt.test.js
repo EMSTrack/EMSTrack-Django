@@ -12,6 +12,7 @@ describe('mqtt', () => {
     const password = 'cruzrojaadmin';
 
     it('should connect', function(done) {
+
         mqttClient.connect({
             userName: userName,
             password: password,
@@ -22,10 +23,13 @@ describe('mqtt', () => {
                 done(errorMessage);
             }
         });
-    })
+
+    });
 
     it('is connected', function() {
+
         expect(mqttClient.isConnected).to.equal(true);
+
     });
 
     it('should disconnect', function(done) {
@@ -40,9 +44,16 @@ describe('mqtt', () => {
         });
 
         resolvingPromise
-            .then( (result) => { expect(result).to.equal('disconnected'); },
-                () => {} )
+            .then(
+                (result) => {
+                    expect(result).to.equal('disconnected');
+                    expect(mqttClient.isConnected).to.equal(false);
+                    expect(mqttClient.client).to.equal(null);
+                },
+                () => {}
+            )
             .finally(done);
+
     })
 
 });
