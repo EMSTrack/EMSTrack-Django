@@ -1,5 +1,3 @@
-require('babel-polyfill');
-
 import { Observer } from "../observer";
 
 test('observer subscribe', () => {
