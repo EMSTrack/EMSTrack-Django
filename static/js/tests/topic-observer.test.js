@@ -56,7 +56,7 @@ describe('topic observer', () => {
         const fn4 = (data) => subscriberHasBeenCalled = data;
 
         observer.observe(fn4, 'topic');
-        observer.broadcast(true);
+        observer.broadcast(true, 'topic');
         expect(subscriberHasBeenCalled).to.equal(true);
         observer.observe(fn4, 'topic');
 
