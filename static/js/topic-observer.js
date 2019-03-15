@@ -31,7 +31,7 @@ export class TopicObserver {
 
     matchAllTopics(topic) {
         const topics = [];
-        const array = this.observers.keys();
+        const array = Object.keys(this.observers);
         for(let i = 0; i < array.length; i++) {
             const regex = array[i];
             let match = false;
@@ -47,7 +47,7 @@ export class TopicObserver {
     }
 
     matchTopic(topic) {
-        const array = this.observers.keys();
+        const array = Object.keys(this.observers);
         for(let i = 0; i < array.length; i++) {
             const regex = array[i];
             let match = false;
