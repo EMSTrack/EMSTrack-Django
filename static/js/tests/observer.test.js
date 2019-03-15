@@ -1,4 +1,4 @@
-import expect from 'chai';
+var expect = require('chai').expect;
 
 import { Observer } from "../observer";
 
