@@ -89,7 +89,7 @@ describe('mqtt messages', () => {
 
         mqttClient.observe(fn);
         mqttClient.publish('test/message', 'Hi!', 2, false);
-        setTimeout(() => done(new Error('timeout!')), 1000);
+        setTimeout(() => done(new Error('timeout!')), 2000);
 
     });
 
@@ -120,7 +120,7 @@ describe('mqtt messages', () => {
 
         mqttClient.observe(fn);
         mqttClient.publish('test/message', 'Hi!', 2, false);
-        setTimeout(() => done(new Error('timeout!')), 1000);
+        setTimeout(() => done(new Error('timeout!')), 2000);
 
     });
 
