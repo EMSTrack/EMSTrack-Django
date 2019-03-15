@@ -1,7 +1,7 @@
 const {runner} = require('mocha-headless-chrome');
 
 const options = {
-    file: 'mqtt.test.html',                      // test page path
+    file: 'static/js/test/mqtt.test.html',                      // test page path
     reporter: 'dot',                             // mocha reporter name
     width: 800,                                  // viewport width
     height: 600,                                 // viewport height
