@@ -5,7 +5,7 @@ var Paho = require('paho-mqtt')
 require('dotenv').config()
 
 global.WebSocket = function(wsurl, protocol) {
-  var ws = new WebSocketClient()
+  var ws = new WebSocketClient({tlsOptions: { rejectUnauthorized: false }})
   var connection
   var obj = {
     send: function(msg) {
