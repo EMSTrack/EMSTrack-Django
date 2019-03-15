@@ -4,7 +4,11 @@
   "version": "0.6.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
+  },
+  "jest": {
+    "verbose": true,
+    "projects": ["<rootDir>/static/js/*"]
   },
   "repository": {
     "type": "git",
@@ -21,14 +25,16 @@
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
+    "jest": "^24.5.0",
     "jquery": "^3.3.1",
     "leaflet": "^1.4.0",
     "leaflet-rotatedmarker": "^0.2.0",
+    "leaflet.gridlayer.googlemutant": "^0.8.0",
+    "paho-mqtt": "^1.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
     "webpack": "^4.29.6",
     "webpack-bundle-tracker": "^0.4.2-beta",
-    "webpack-cli": "^3.2.3",
-    "leaflet.gridlayer.googlemutant": "^0.8.0"
+    "webpack-cli": "^3.2.3"
   }
 }
