@@ -14,7 +14,7 @@ export class TopicObserver {
         if (regex.indexOf('+') >= 0) {
             regex = regex.replace(/\+/g, "[^/]+");
         }
-        if (regex.indexOf('#') === regex.length() - 1) {
+        if (regex.indexOf('#') === regex.length - 1) {
             regex = regex.replace("#", "[a-zA-Z0-9_/ ]+");
         }
         // Invalid topic
