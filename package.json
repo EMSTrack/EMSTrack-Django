@@ -24,6 +24,7 @@
   "homepage": "https://github.com/EMSTrack/WebClientAndServer",
   "devDependencies": {
     "babel-cli": "^6.26.0",
+    "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
     "css-loader": "^2.1.1",
     "jest": "^24.5.0",
