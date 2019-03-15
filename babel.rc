@@ -1,11 +1,12 @@
 // .babelrc
 {
-  "presets": [["env", {"modules": true}]],
+  "presets": [["env", {"modules": false}]],
 
   "plugins": ["syntax-dynamic-import"],
 
   "env": {
     "test": {
+      "presets": [["env", {"modules": true}]],
       "plugins": ["dynamic-import-node"]
     }
   }
