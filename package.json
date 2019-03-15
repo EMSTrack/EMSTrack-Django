@@ -4,7 +4,7 @@
   "version": "0.6.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "./node_modules/mocha/bin/mocha -r esm  --recursive ./static/js/tests/"
   },
   "repository": {
     "type": "git",
@@ -20,10 +20,9 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-loader": "^8.0.5",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.26.0",
+    "chai": "^4.2.0",
     "css-loader": "^2.1.1",
+    "esm": "^3.2.17",
     "leaflet": "^1.4.0",
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet.gridlayer.googlemutant": "^0.8.0",
