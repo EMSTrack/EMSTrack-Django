@@ -27,6 +27,10 @@ export class TopicObserver {
         this.observers[topic] = this.observers[topic].filter((subscriber) => subscriber !== fn);
     }
 
+    hasTopic(topic) {
+        return this.observers.hasOwnProperty(topic);
+    }
+
     broadcast(data, topic) {
 
         // default is all

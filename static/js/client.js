@@ -1,12 +1,12 @@
 import { MqttClient, MqttEvent } from "./mqtt";
 
-import { Observer } from "./observer";
+import { TopicObserver } from "./topic-observer";
 
-export class Client extends Observer {
+export class Client extends TopicObserver {
 
     constructor(host, port, clientId) {
         this.mqttClient = new MqttClient(host, port, clientId);
-        this.observer = null;
+        this.event_observer = null;
     }
 
     connect(username, options) {
@@ -27,7 +27,7 @@ export class Client extends Observer {
                 this.mqttClient.connect(options);
 
                 // register observer
-                this.observer = (event) => this.eventHandler(event);
+                this.event_observer = (event) => this.eventHandler(event);
                 this.mqttClient.observe(this.observer);
 
             });
@@ -41,7 +41,7 @@ export class Client extends Observer {
 
         // remove observer
         this.mqttClient.remove(this.observer);
-        this.observer = null;
+        this.event_observer = null;
 
         // connect to client
         this.mqttClient.disconnect();
@@ -52,9 +52,17 @@ export class Client extends Observer {
 
         if (event.event === 'messageReceived') {
 
+            const topic = event.object.destinationName;
+            const payload = event.object.payloadString;
+
+            // Is this a registered topic?
+            if (this.observers.hasTopic(topic))
+                this.observers.broadcast(payload, topic);
+            else
+                this.observers.broadcast(payload);
+
         }
 
     }
 
 }
-
