@@ -4,7 +4,7 @@
   "version": "0.6.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest-webpack"
   },
   "jest": {
     "verbose": true,
@@ -25,8 +25,10 @@
     "babel-cli": "^6.26.0",
     "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "css-loader": "^2.1.1",
     "jest": "^24.5.0",
+    "jest-webpack": "^0.5.1",
     "jquery": "^3.3.1",
     "leaflet": "^1.4.0",
     "leaflet-rotatedmarker": "^0.2.0",
