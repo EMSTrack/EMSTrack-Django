@@ -332,7 +332,7 @@ class TestMQTTACLSubscribe(MyTestCase):
     def test_mqtt_acl_subscribe(self):
         # Settings
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -343,7 +343,7 @@ class TestMQTTACLSubscribe(MyTestCase):
 
         # Profile
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -363,7 +363,7 @@ class TestMQTTACLSubscribe(MyTestCase):
 
         # Hospitals
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -372,7 +372,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -381,7 +381,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -390,7 +390,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -399,7 +399,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -408,7 +408,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -417,7 +417,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -426,7 +426,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -435,7 +435,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -444,7 +444,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
@@ -453,7 +453,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
@@ -462,7 +462,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
@@ -473,7 +473,7 @@ class TestMQTTACLSubscribe(MyTestCase):
 
         # Ambulances
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -482,7 +482,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -491,7 +491,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser1',
                                      'clientid': 'test_client',
@@ -500,7 +500,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
@@ -509,7 +509,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
-        # can observe
+        # can subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',
@@ -518,7 +518,7 @@ class TestMQTTACLSubscribe(MyTestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # can't observe
+        # can't subscribe
         response = self.client.post('/en/auth/mqtt/acl/',
                                     {'username': 'testuser2',
                                      'clientid': 'test_client',

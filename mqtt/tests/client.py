@@ -520,7 +520,7 @@ class MQTTTestClientPublishSubscribeMixin:
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
 
-        # did observe?
+        # did subscribe?
         super().on_subscribe(client, userdata, mid, granted_qos)
         self.subscribing -= 1
 
@@ -618,7 +618,7 @@ class MQTTTestClient(MQTTTestClientPublishSubscribeMixin,
             self.expecting_topics[topic] = 0
             self.expecting_messages[topic] = []
 
-            # and observe
+            # and subscribe
             self.subscribe(topic, qos)
 
         else:

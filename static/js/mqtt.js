@@ -100,24 +100,6 @@ export class MqttClient extends Observer {
         }
     }
 
-    subscribe(filter, options) {
-        if (this.client !== null) {
-            this.client.subscribe(filter, options);
-        }
-    }
-
-    publish(topic, payload, qos, retained) {
-        if (this.client !== null) {
-            this.client.publish(topic, payload, qos, retained);
-        }
-    }
-
-    unsubscribe(filter, options) {
-        if (this.client !== null) {
-            this.client.unsubscribe(filter, options);
-        }
-    }
-
     onConnected(reconnect, uri) {
         if (this.logLevel > 0)
             console.log("Connected to mqtt client");

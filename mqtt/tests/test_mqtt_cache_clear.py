@@ -60,7 +60,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
 
-        # Start observe client
+        # Start subscribe client
 
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'

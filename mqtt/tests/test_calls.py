@@ -44,7 +44,7 @@ class TestMQTTCallBase(TestMQTT):
             'CLEAN_SESSION': True
         }
 
-        # Start observe client
+        # Start subscribe client
 
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = client_id
@@ -128,7 +128,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id:
             ambulance_id = self.a1.id
 
-        # starts observe client
+        # starts subscribe client
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
@@ -141,7 +141,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         # login ambulance
         self.set_django_client(django_client, client_id, ambulance_id, None)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -237,7 +237,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         # process messages
         self.loop(test_client)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client)
 
@@ -258,7 +258,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         waypoint_set = ambulancecall.waypoint_set.all()
         self.assertEqual(len(waypoint_set), 2)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -279,7 +279,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         waypoint = ambulancecall.waypoint_set.all()
         self.assertEqual(len(waypoint), 2)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('call/{}/data'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -326,7 +326,7 @@ class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id:
             ambulance_id = self.a1.id
 
-        # starts observe client
+        # starts subscribe client
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
@@ -339,7 +339,7 @@ class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
         # login ambulance
         self.set_django_client(django_client, client_id, ambulance_id, None)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -403,7 +403,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id:
             ambulance_id = self.a1.id
 
-        # starts observe client
+        # starts subscribe client
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
@@ -416,7 +416,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
         # login ambulance
         self.set_django_client(django_client, client_id, ambulance_id, None)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -474,7 +474,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
         ambulancecall = call.ambulancecall_set.get(ambulance_id=ambulance_id)
         self.assertEqual(ambulancecall.status, AmbulanceCallStatus.D.name)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -542,7 +542,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id:
             ambulance_id = self.a1.id
 
-        # starts observe client
+        # starts subscribe client
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
@@ -555,7 +555,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTTCallBase, MQTTTestCase):
         # login ambulance
         self.set_django_client(django_client, client_id, ambulance_id, None)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client.expect('ambulance/{}/call/+/status'.format(ambulance_id))
         self.is_subscribed(test_client)
 
@@ -657,7 +657,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id2:
             ambulance_id2 = self.a3.id
 
-        # starts observe client
+        # starts subscribe client
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
@@ -670,7 +670,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTTCallBase, MQTTTestCase):
         # login ambulance
         self.set_django_client(django_client1, client_id1, ambulance_id1, None)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client1.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client1)
 
@@ -937,7 +937,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         if not ambulance_id2:
             ambulance_id2 = self.a3.id
 
-        # starts observe client
+        # starts subscribe client
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
@@ -962,11 +962,11 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         # login ambulance
         self.set_django_client(django_client2, client_id2, ambulance_id2, None)
 
-        # observe to call and ambulance call status
+        # subscribe to call and ambulance call status
         test_client1.expect('ambulance/{}/call/+/status'.format(ambulance_id1))
         self.is_subscribed(test_client1)
 
-        # observe ambulance call status
+        # subscribe ambulance call status
         test_client2.expect('ambulance/{}/call/+/status'.format(ambulance_id2))
         self.is_subscribed(test_client2)
 
@@ -1126,7 +1126,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         # process messages
         self.loop(test_client1)
 
-        # observe to call
+        # subscribe to call
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
 
@@ -1163,7 +1163,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         # process messages
         self.loop(test_client2)
 
-        # observe to call
+        # subscribe to call
         test_client2.expect('call/{}/data'.format(call.id))
         self.is_subscribed(test_client2)
 
