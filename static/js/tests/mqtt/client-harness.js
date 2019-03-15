@@ -65,7 +65,7 @@ global.Paho = Paho
 
 
 function ensureValue(prop, value) {
-  if (prop === '' || prop[0] === '$') {
+  if (prop === null || prop === '' || prop[0] === '$') {
     return value
   }
   return prop
