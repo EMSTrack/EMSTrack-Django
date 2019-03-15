@@ -37,10 +37,10 @@ describe('topic observer', () => {
 
     it('should observe topic', function() {
 
-        expect(observer.matchTopic('topic')).to.equal(false);
+        expect(observer.hasTopic('topic')).to.equal(false);
         observer.observe(fn3, 'topic');
         expect(observer.observers['topic'].length).to.equal(1);
-        expect(observer.matchTopic('topic')).to.equal(true);
+        expect(observer.hasTopic('topic')).to.equal(true);
 
     });
 
