@@ -45,7 +45,7 @@ describe('topic observer', () => {
 
     it('should remove topic', function() {
 
-        observer.remove(fn3);
+        observer.remove(fn3, 'topic');
         expect(observer.observers['topic'].length).to.equal(0);
 
     });
