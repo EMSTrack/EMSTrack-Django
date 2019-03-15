@@ -1,13 +1,8 @@
 // .babelrc
 {
-  "presets": [["env", {"modules": false}]],
-
-  "plugins": ["syntax-dynamic-import"],
-
   "env": {
     "test": {
-      "presets": [["env", {"modules": true}]],
-      "plugins": ["syntax-dynamic-import", "dynamic-import-node", "transform-es2015-modules-commonjs"]
+      "plugins": ["transform-es2015-modules-commonjs"]
     }
   }
 }

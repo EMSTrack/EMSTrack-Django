@@ -9,9 +9,6 @@
   "jest": {
     "verbose": true,
     "projects": ["<rootDir>/static/js/tests/*"],
-    "transform": {
-      "^.+\\.js$": "babel-jest"
-    }
   },
   "repository": {
     "type": "git",
