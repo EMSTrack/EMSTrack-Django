@@ -74,7 +74,7 @@ describe('mqtt messages', () => {
                 done();
             },
             onFailure: (cntxt, errorCode, errorMessage) => {
-                done(errorMessage);
+                done(new Error(errorMessage));
             }
         });
 
@@ -87,7 +87,7 @@ describe('mqtt messages', () => {
                 done();
             },
             onFailure: (cntxt, errorCode, errorMessage) => {
-                done(errorMessage);
+                done(new Error(errorMessage));
             }
         })
 
@@ -102,7 +102,7 @@ describe('mqtt messages', () => {
 
         mqttClient.observe(fn);
         mqttClient.publish('test/message', 'Hi!', 2, false);
-        setTimeout(() => done('error'), 1000);
+        setTimeout(() => done(new Error('timeout!')), 1000);
 
     });
 
