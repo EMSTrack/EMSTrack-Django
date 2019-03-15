@@ -4,11 +4,17 @@
   "version": "0.6.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest-webpack"
+    "test": "jest"
+  },
+  "babel": {
+    "presets": ["es2015"]
   },
   "jest": {
     "verbose": true,
-    "projects": ["<rootDir>/static/js/tests/*"]
+    "projects": [
+      "<rootDir>/static/js/tests/*"
+    ],
+    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest"
   },
   "repository": {
     "type": "git",
