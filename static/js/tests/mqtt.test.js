@@ -30,20 +30,21 @@ describe('mqtt', () => {
         expect(mqttClient.isConnected).to.equal(true);
     });
 
-    const resolvingPromise = new Promise(function(resolve, reject) {
-        // the function is executed automatically when the promise is constructed
-        mqttClient.disconnect();
-        while (mqttClient.isConnected) { /* wait */ }
-        resolve('disconnected');
-
-        setTimeout(() => reject(new Error("timeout!")), 1000);
-    });
-
     it('should disconnect', function(done) {
+        
+        const resolvingPromise = new Promise(function(resolve, reject) {
+            // the function is executed automatically when the promise is constructed
+            mqttClient.disconnect();
+            while (mqttClient.isConnected) { /* wait */ }
+            resolve('disconnected');
+
+            setTimeout(() => reject(new Error("timeout!")), 1000);
+        });
+
         resolvingPromise
             .then( (result) => { expect(result).to.equal('disconnected'); },
                 () => {} )
             .finally(done);
     })
-    
+
 });
