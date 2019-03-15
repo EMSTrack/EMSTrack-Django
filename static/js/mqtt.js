@@ -1,4 +1,4 @@
-import { Paho } from 'paho-mqtt';
+import { Client } from 'paho-mqtt';
 
 import { Observer } from './observer';
 
@@ -29,7 +29,7 @@ export class MqttClient extends Observer {
             return;
 
         // create mqtt client
-        this.client = new Paho.MQTT.Client(this.host, this.port, this.clientId);
+        this.client = new Client(this.host, this.port, this.clientId);
 
         // set callback handlers
         this.client.onMessageArrived = (message) => this.onMessageArrived(message);
