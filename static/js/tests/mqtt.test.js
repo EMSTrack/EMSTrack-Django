@@ -97,7 +97,7 @@ describe('mqtt messages', () => {
 
         const fn = (event) =>  {
             console.log(event);
-            if (event === 'messageSent')
+            if (event.event === 'messageSent')
                 done();
         };
 
