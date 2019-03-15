@@ -40,9 +40,10 @@ describe('mqtt', () => {
 
     context('disconnect', function() {
         it('should disconnect', function(done) {
-            resolvingPromise.then( (result) => {
-                expect(result).to.equal('disconnected');
-            }).finally(done);
+            resolvingPromise
+                .then( (result) => { expect(result).to.equal('disconnected'); },
+                    () => {} )
+                .finally(done);
         })
     })
 
