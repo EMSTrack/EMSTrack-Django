@@ -14,7 +14,7 @@
     "projects": [
       "<rootDir>/static/js/tests/*"
     ],
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest"
+    "transform": {".*": "<rootDir>/node_modules/babel-jest"}
   },
   "repository": {
     "type": "git",
