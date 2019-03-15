@@ -67,10 +67,10 @@ describe('topic observer', () => {
 
     it('should observe pattern', function() {
 
-        expect(observer.matchTopic('topic/+/all')).to.equal(false);
+        expect(observer.hasTopic('topic/+/all')).to.equal(false);
         observer.observe(fn5, 'topic/+/all');
         expect(observer.observers['topic/[/^]+/all'].length).to.equal(1);
-        expect(observer.matchTopic('topic/+/all')).to.equal(true);
+        expect(observer.hasTopic('topic/+/all')).to.equal(true);
 
     });
 
