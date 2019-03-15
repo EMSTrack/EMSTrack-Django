@@ -6,6 +6,8 @@ import { MqttClient } from "../mqtt";
 
 describe('mqtt', () => {
 
+    console.log(settings);
+
     context('subscribe', function() {
         it('should subscribe', function() {
             expect(1).to.equal(1)
