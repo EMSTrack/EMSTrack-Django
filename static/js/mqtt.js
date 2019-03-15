@@ -59,7 +59,8 @@ export class MqttClient extends Observer {
     }
 
     disconnect() {
-        this.client.disconnect();
+        if (this.client !== null)
+            this.client.disconnect();
     }
 
     onConnected(reconnect, uri) {
