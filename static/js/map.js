@@ -455,7 +455,7 @@ function getData(subscribe) {
 
             if (subscribe) {
 
-                // subscribe to hospital
+                // observe to hospital
                 const topicName = "hospital/" + hospital.id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);
@@ -786,7 +786,7 @@ function updateCall(call) {
 
                 } else { // status == 'E'
 
-                    // Completed call, unsubscribe
+                    // Completed call, remove
                     const topicName = "call/" + id + "/data";
                     mqttClient.unsubscribe(topicName);
                     console.log('Unsubscribing from topic: ' + topicName);
@@ -865,7 +865,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
     let topicName;
     if (status === 'C') {
 
-        // Completed ambulance call, unsubscribe
+        // Completed ambulance call, remove
         topicName = "ambulance/" + ambulance_id + "/call/+/status";
         mqttClient.unsubscribe(topicName);
         console.log('Unsubscribing from topic: ' + topicName);
@@ -901,7 +901,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
                 // update call
                 updateCall(call);
 
-                // subscribe to call
+                // observe to call
                 topicName = "call/" + call_id + "/data";
                 mqttClient.subscribe(topicName);
                 console.log('Subscribing to topic: ' + topicName);

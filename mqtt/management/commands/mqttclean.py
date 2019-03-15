@@ -62,7 +62,7 @@ class Client(PublishClient):
         if not super().on_connect(client, userdata, flags, rc):
             return False
 
-        # subscribe to all topics descending from base topic
+        # observe to all topics descending from base topic
         self.subscribe(self.base_topic + '#')
 
         if self.verbosity > 0:

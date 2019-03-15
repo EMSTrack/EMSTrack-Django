@@ -462,7 +462,7 @@ class MQTTAclView(CsrfExemptMixin,
 
             if acc == 1:
 
-                # permission to subscribe:
+                # permission to observe:
 
                 # is user admin?
                 if user.is_staff:

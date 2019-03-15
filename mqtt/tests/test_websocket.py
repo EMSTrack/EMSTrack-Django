@@ -28,7 +28,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
 
-        # Start subscribe client
+        # Start observe client
 
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_websocket_test_mqtt_subscribe'
@@ -201,7 +201,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
 
-        # subscribe to ambulance/+/data
+        # observe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,

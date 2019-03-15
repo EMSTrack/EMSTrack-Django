@@ -39,7 +39,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=True)
         self.is_connected(client)
 
-        # subscribe to ambulance/+/data
+        # observe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
@@ -110,7 +110,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
-        # subscribe to ambulance/+/data
+        # observe to ambulance/+/data
         topics = ('hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
                                                      self.e1.id))
@@ -164,7 +164,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
                                 debug=False)
         self.is_connected(client)
 
-        # subscribe to ambulance/+/data
+        # observe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a3.id),
                   'hospital/{}/data'.format(self.h1.id),
                   'equipment/{}/item/{}/data'.format(self.h1.equipmentholder.id,
@@ -228,7 +228,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
 
-        # Start subscribe client
+        # Start observe client
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'
 
@@ -500,7 +500,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
 
-        # Start subscribe client
+        # Start observe client
 
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'
@@ -581,7 +581,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
 
-        # Start subscribe client
+        # Start observe client
 
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_mqttclient'

@@ -48,7 +48,7 @@ class SubscribeClient(BaseClient):
 
         # Subscribing in on_connect() means that if we lose the
         # connection and reconnect then subscriptions will be renewed.
-        # client.subscribe('#', 2)
+        # client.observe('#', 2)
 
         # message handler
         self.client.message_callback_add('message',
@@ -82,10 +82,10 @@ class SubscribeClient(BaseClient):
         self.client.message_callback_add('user/+/client/+/ambulance/+/call/+/waypoint/+/data',
                                          self.on_call_ambulance_waypoint)
 
-        # subscribe
+        # observe
         self.subscribe('message', 2)
         self.subscribe('user/+/client/+/ambulance/+/data', 2)
-        # self.subscribe('user/+/client/+/ambulance/+/status', 2)
+        # self.observe('user/+/client/+/ambulance/+/status', 2)
         self.subscribe('user/+/client/+/hospital/+/data', 2)
         self.subscribe('user/+/client/+/equipment/+/item/+/data', 2)
         self.subscribe('user/+/client/+/status', 2)

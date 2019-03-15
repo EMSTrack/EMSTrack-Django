@@ -44,7 +44,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         publish_client.client.disconnect()
         self.is_disconnected(publish_client)
 
-        # subscribe to ambulance/+/data
+        # observe to ambulance/+/data
         topic = 'ambulance/{}/data'.format(self.a1.id)
         client.expect(topic)
         self.is_subscribed(client)

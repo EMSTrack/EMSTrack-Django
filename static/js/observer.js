@@ -7,11 +7,11 @@ export class Observer {
         this.observers = [];
     }
 
-    subscribe(fn) {
+    observe(fn) {
         this.observers.push(fn);
     }
 
-    unsubscribe(fn) {
+    remove(fn) {
         this.observers = this.observers.filter((subscriber) => subscriber !== fn);
     }
 

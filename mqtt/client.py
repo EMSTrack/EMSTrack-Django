@@ -202,10 +202,10 @@ class BaseClient:
 
     def subscribe(self, topic, qos=0):
 
-        # try to subscribe
+        # try to observe
         result, mid = self.client.subscribe(topic, qos)
         if result:
-            raise MQTTException('Could not subscribe to topic',
+            raise MQTTException('Could not observe to topic',
                                 result)
 
     def on_subscribe(self, client, userdata, mid, granted_qos):
