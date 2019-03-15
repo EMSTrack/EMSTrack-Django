@@ -121,8 +121,8 @@ describe('mqtt messages', () => {
             if (event.event === 'messageSent')
                 messageSent = true;
             else if (event.event === 'messageArrived') {
-                expect(messageSent).to.equal(true);
                 mqttClient.remove(fn);
+                expect(messageSent).to.equal(true);
                 done();
             }
         };
