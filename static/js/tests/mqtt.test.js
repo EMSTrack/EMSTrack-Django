@@ -92,11 +92,6 @@ describe('mqtt messages', () => {
 
         mqttClient.observe(fn);
         mqttClient.publish('test/message', 'Hi!', 2, false);
-        setTimeout( () => {
-                mqttClient.remove(fn);
-                done(new Error('timeout!'));
-            },
-            2000);
 
     });
 
@@ -119,18 +114,12 @@ describe('mqtt messages', () => {
             console.log(event);
             if (event.event === 'messageArrived') {
                 mqttClient.remove(fn);
-                expect(messageSent).to.equal(true);
                 done();
             }
         };
 
         mqttClient.observe(fn);
         mqttClient.publish('test/message', 'Hi!', 2, false);
-        setTimeout( () => {
-                mqttClient.remove(fn);
-                done(new Error('timeout!'));
-            },
-            2000);
 
     });
 
