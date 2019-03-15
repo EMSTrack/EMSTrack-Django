@@ -6,9 +6,6 @@
   "scripts": {
     "test": "jest"
   },
-  "babel": {
-    "presets": ["es2015"]
-  },
   "jest": {
     "verbose": true,
     "projects": [
