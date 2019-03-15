@@ -87,10 +87,10 @@ describe('topic observer', () => {
         let subscriberHasBeenCalled = false;
         const fn4 = (data) => subscriberHasBeenCalled = data;
 
-        observer.observe(fn4, 'topic');
-        observer.broadcast(true, 'topic');
+        observer.observe(fn4, 'topic/+/all');
+        observer.broadcast(true, 'topic/some/all');
         expect(subscriberHasBeenCalled).to.equal(true);
-        observer.remove(fn4, 'topic');
+        observer.remove(fn4, 'topic/+/all');
 
     });
 

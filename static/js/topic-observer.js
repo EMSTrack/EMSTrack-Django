@@ -63,7 +63,7 @@ export class TopicObserver {
     }
 
     hasTopic(topic) {
-        return this.matchTopic(topic) !== null;
+        return this.matchTopic(TopicObserver.topicToRegex(topic)) !== null;
     }
 
     observe(fn, topic) {
