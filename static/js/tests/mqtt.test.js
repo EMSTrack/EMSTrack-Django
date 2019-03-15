@@ -115,12 +115,9 @@ describe('mqtt messages', () => {
 
     it('message arrived', function(done) {
 
-        let messageSent = false;
         const fn = (event) => {
             console.log(event);
-            if (event.event === 'messageSent')
-                messageSent = true;
-            else if (event.event === 'messageArrived') {
+            if (event.event === 'messageArrived') {
                 mqttClient.remove(fn);
                 expect(messageSent).to.equal(true);
                 done();
