@@ -8,6 +8,6 @@ describe('observer subscribe', () => {
     const observer = new Observer();
     const fn = () => {};
     observer.subscribe(fn);
-    assert.lengthOf(observer.observers.length, 1, 'has length 1');
+    assert.lengthOf(observer.observers, 1, 'has length 1');
 
 });
