@@ -13,21 +13,22 @@ describe('mqtt', () => {
     const userName = 'admin';
     const password = 'cruzrojaadmin';
 
-    context('connect', function() {
-        it('should connect', function(done) {
-            mqttClient.connect({
-                userName: userName,
-                password: password,
-                onSuccess: () => {
-                    done();
-                },
-                onFailure: (cntxt, errorCode, errorMessage) => {
-                    done(errorMessage);
-                }
-            });
-        })
+    it('should connect', function(done) {
+        mqttClient.connect({
+            userName: userName,
+            password: password,
+            onSuccess: () => {
+                done();
+            },
+            onFailure: (cntxt, errorCode, errorMessage) => {
+                done(errorMessage);
+            }
+        });
     })
 
+    it('is connected', function() {
+        expect(mqttClient.isConnected).to.equal(true);
+    });
 
     const resolvingPromise = new Promise(function(resolve, reject) {
         // the function is executed automatically when the promise is constructed
@@ -38,13 +39,11 @@ describe('mqtt', () => {
         setTimeout(() => reject(new Error("timeout!")), 1000);
     });
 
-    context('disconnect', function() {
-        it('should disconnect', function(done) {
-            resolvingPromise
-                .then( (result) => { expect(result).to.equal('disconnected'); },
-                    () => {} )
-                .finally(done);
-        })
+    it('should disconnect', function(done) {
+        resolvingPromise
+            .then( (result) => { expect(result).to.equal('disconnected'); },
+                () => {} )
+            .finally(done);
     })
-
+    
 });
