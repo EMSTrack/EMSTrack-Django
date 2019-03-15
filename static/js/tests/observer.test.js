@@ -1,5 +1,4 @@
 const expect = require('chai').expect;
-const assert = require('chai').assert;
 
 import { Observer } from "../observer";
 
@@ -36,5 +35,5 @@ describe('observer subscribe', () => {
                     expect(subscriberHasBeenCalled).to.equal(true);
                 })
         });
-    
+
 });
