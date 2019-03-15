@@ -80,6 +80,19 @@ describe('mqtt messages', () => {
 
     });
 
+    it('send message', function(done) {
+
+        const fn = (event) =>  {
+            if (event.event === 'messageSent')
+                done();
+        };
+
+        mqttClient.observe(fn);
+        mqttClient.publish('test/message', 'Hi!', 2, false);
+        setTimeout(() => done(new Error('timeout!')), 1000);
+
+    });
+
     it('subscribe', function(done) {
 
         mqttClient.subscribe('test/message', {
@@ -93,12 +106,16 @@ describe('mqtt messages', () => {
 
     });
 
-    it('send message', function(done) {
+    it('message arrived', function(done) {
 
-        const fn = (event) =>  {
-            console.log(event);
+        let messageSent = false;
+        const fn = (event) => {
             if (event.event === 'messageSent')
+                messageSent = true;
+            else if (event.event === 'messageArrived') {
+                expect(messageSent).to.equal(true);
                 done();
+            }
         };
 
         mqttClient.observe(fn);
