@@ -1,4 +1,5 @@
-var expect = require('chai').expect;
+const expect = require('chai').expect;
+const assert = require('chai').assert;
 
 import { Observer } from "../observer";
 
@@ -7,8 +8,6 @@ describe('observer subscribe', () => {
     const observer = new Observer();
     const fn = () => {};
     observer.subscribe(fn);
-    expect(observer.observers.length).to.equal(1);
-
-    expect(1).to.equal(1);
+    assert.lengthOf(observer.observers.length, 1, 'has length 1');
 
 });
