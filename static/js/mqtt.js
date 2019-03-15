@@ -2,6 +2,43 @@ import { Client } from 'paho-mqtt';
 
 import { Observer } from './observer';
 
+export class MqttEvent {
+
+    constructor(event, object) {
+        this.event = event;
+        this.object = object;
+    }
+
+}
+
+export class MqttConnectEvent extends MqttEvent {
+    constructor(reconnect, uri) {
+        super('connect', {reconnect: reconnect, uri: uri});
+    }
+}
+
+
+export class MqttConnectionLostEvent extends MqttEvent {
+    constructor(errorCode, errorMessage) {
+        super('lostConnection', {errorCode: errorCode, errorMessage: errorMessage});
+    }
+}
+
+
+export class MqttMessageSentEvent extends MqttEvent {
+    constructor(message) {
+        super('messageSent', message);
+    }
+}
+
+
+export class MqttMessageArrivedEvent extends MqttEvent {
+    constructor(message) {
+        super('messageArrived', message);
+    }
+}
+
+
 export class MqttClient extends Observer {
 
     constructor(host, port, clientId, logLevel) {
@@ -67,25 +104,26 @@ export class MqttClient extends Observer {
         if (this.logLevel > 0)
             console.log("Connected to mqtt client");
         this.isConnected = true;
+        this.broadcast(new MqttConnectEvent(reconnect, uri));
     }
 
     onConnectionLost(errorCode, errorMessage) {
         if (this.logLevel > 0)
             console.log("Disconnected from mqtt client");
         this.isConnected = false;
+        this.broadcast(new MqttConnectionLostEvent(errorCode, errorMessage));
     }
 
     onMessageDelivered(message) {
         if (this.logLevel > 2)
             console.log("Message '" + message.destinationName + ':' + message.payloadString + "' delivered");
+        this.broadcast(new MqttMessageSentEvent(message));
     }
 
     onMessageArrived(message) {
         if (this.logLevel > 1)
             console.log("Message '" + message.destinationName + ':' + message.payloadString + "' arrived");
-
-        // broadcast message
-        this.broadcast(message);
+        this.broadcast(new MqttMessageArrivedEvent(message));
     }
 
 }
