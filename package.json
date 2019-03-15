@@ -8,7 +8,7 @@
   },
   "jest": {
     "verbose": true,
-    "projects": ["<rootDir>/static/js/tests/*"],
+    "projects": ["<rootDir>/static/js/tests/*"]
   },
   "repository": {
     "type": "git",
