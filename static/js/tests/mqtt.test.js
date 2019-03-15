@@ -96,6 +96,7 @@ describe('mqtt messages', () => {
     it('send message', function(done) {
 
         const fn = (event) =>  {
+            console.log(event);
             if (event === 'messageSent')
                 done();
         };
