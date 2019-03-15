@@ -29,6 +29,36 @@ describe('topic observer', () => {
         observer.observe(fn2);
         observer.broadcast(true);
         expect(subscriberHasBeenCalled).to.equal(true);
+        observer.remove(fn2);
+
+    });
+
+
+    const fn3 = () => {};
+
+    it('should observe topic', function() {
+
+        observer.observe(fn3, 'topic');
+        expect(observer.observers['topic'].length).to.equal(1)
+
+    });
+
+    it('should remove topic', function() {
+
+        observer.remove(fn3);
+        expect(observer.observers['topic'].length).to.equal(0);
+
+    });
+
+    it('should receive topic', function () {
+
+        let subscriberHasBeenCalled = false;
+        const fn4 = (data) => subscriberHasBeenCalled = data;
+
+        observer.observe(fn4, 'topic');
+        observer.broadcast(true);
+        expect(subscriberHasBeenCalled).to.equal(true);
+        observer.observe(fn4, 'topic');
 
     });
 
