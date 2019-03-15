@@ -9,7 +9,6 @@
   "jest": {
     "verbose": true,
     "projects": ["<rootDir>/static/js/tests/*"],
-    "preset": ["es2015"]
   },
   "repository": {
     "type": "git",
