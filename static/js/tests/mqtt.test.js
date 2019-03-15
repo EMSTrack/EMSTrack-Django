@@ -112,6 +112,8 @@ describe('mqtt messages', () => {
         const fn = (event) => {
             if (event.event === 'messageArrived') {
                 mqttClient.remove(fn);
+                expect(event.message.topic).to.equal('test/message');
+                expect(event.message.payload).to.equal('Hi!');
                 done();
             }
         };
