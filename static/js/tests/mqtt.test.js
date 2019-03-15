@@ -14,8 +14,12 @@ describe('mqtt', () => {
             mqttClient.connect({
                 userName: userName,
                 password: password,
-                onSuccess: () => { done(); },
-                onFailure: (cntxt, errorCode, errorMessage) => { done(errorMessage); }
+                onSuccess: () => {
+                    done();
+                },
+                onFailure: (cntxt, errorCode, errorMessage) => {
+                    done(errorMessage);
+                }
             });
         })
     })
