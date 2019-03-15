@@ -7,7 +7,7 @@ const options = {
     height: 600,                                 // viewport height
     timeout: 120000,                             // timeout in ms
     visible: true,                               // show chrome window
-    args: ['--no-sandbox']                       // chrome arguments
+    args: ['no-sandbox']                       // chrome arguments
 };
 
 runner(options)
