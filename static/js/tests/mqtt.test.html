@@ -16,8 +16,9 @@
 
     <!-- load your test files here -->
 
-    <script>
-      mocha.run();
+    <script type="module">
+        mocha.checkLeaks();
+        mocha.run();
     </script>
   </body>
 </html>
