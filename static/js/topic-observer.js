@@ -29,6 +29,43 @@ export class TopicObserver {
             return topic;
     }
 
+    matchAllTopics(topic) {
+        const topics = [];
+        const array = this.observers.keys();
+        for(let i = 0; i < array.length; i++) {
+            const regex = array[i];
+            let match = false;
+            if (regex instanceof RegExp) {
+                match = regex.exec(topic)
+            } else {
+                match = regex === topic;
+            }
+            if (match)
+                topics.add(regex);
+        }
+        return topics;
+    }
+
+    matchTopic(topic) {
+        const array = this.observers.keys();
+        for(let i = 0; i < array.length; i++) {
+            const regex = array[i];
+            let match = false;
+            if (regex instanceof RegExp) {
+                match = regex.exec(topic)
+            } else {
+                match = regex === topic;
+            }
+            if (match)
+                return regex;
+        }
+        return null;
+    }
+
+    hasTopic(topic) {
+        return this.matchTopic(topic) !== null;
+    }
+
     observe(fn, topic) {
 
         // default is all
@@ -59,15 +96,7 @@ export class TopicObserver {
         this.observers[topic] = this.observers[topic].filter((subscriber) => subscriber !== fn);
     }
 
-    hasTopic(topic) {
-        return this.observers.hasOwnProperty(topic);
-    }
-
-    getTopics(pattern) {
-        const keys = this.observers.keys();
-    }
-
-    broadcast(data, topic) {
+     broadcast(data, topic) {
 
         // default is all
         topic = topic || '__all__';

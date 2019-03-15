@@ -33,15 +33,14 @@ describe('topic observer', () => {
 
     });
 
-
     const fn3 = () => {};
 
     it('should observe topic', function() {
 
-        expect(observer.hasTopic('topic')).to.equal(false);
+        expect(observer.matchTopic('topic')).to.equal(false);
         observer.observe(fn3, 'topic');
         expect(observer.observers['topic'].length).to.equal(1);
-        expect(observer.hasTopic('topic')).to.equal(true);
+        expect(observer.matchTopic('topic')).to.equal(true);
 
     });
 
@@ -53,6 +52,36 @@ describe('topic observer', () => {
     });
 
     it('should receive topic', function () {
+
+        let subscriberHasBeenCalled = false;
+        const fn4 = (data) => subscriberHasBeenCalled = data;
+
+        observer.observe(fn4, 'topic');
+        observer.broadcast(true, 'topic');
+        expect(subscriberHasBeenCalled).to.equal(true);
+        observer.observe(fn4, 'topic');
+
+    });
+
+    const fn5 = () => {};
+
+    it('should observe pattern', function() {
+
+        expect(observer.matchTopic('topic/+/all')).to.equal(false);
+        observer.observe(fn5, 'topic/+/all');
+        expect(observer.observers['topic/[/^]+/all'].length).to.equal(1);
+        expect(observer.matchTopic('topic/+/all')).to.equal(true);
+
+    });
+
+    it('should remove pattern', function() {
+
+        observer.remove(fn5, 'topic/+/all');
+        expect(observer.observers['topic/[/^]+/all'].length).to.equal(0);
+
+    });
+
+    it('should receive pattern', function () {
 
         let subscriberHasBeenCalled = false;
         const fn4 = (data) => subscriberHasBeenCalled = data;
