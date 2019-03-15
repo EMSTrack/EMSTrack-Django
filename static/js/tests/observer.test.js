@@ -1,4 +1,4 @@
-import { Observer} from "../observer";
+import { Observer } from "../observer";
 
 test('observer subscribe', () => {
 
@@ -8,4 +8,3 @@ test('observer subscribe', () => {
     expect(observer.observers.length).toBe(1);
 
 });
-
