@@ -6,8 +6,6 @@ import { MqttClient } from "../mqtt";
 
 describe('mqtt', () => {
 
-    console.log(settings);
-
     const mqttClient = new MqttClient('localhost', 8884, 'test-client', 1);
 
     const userName = 'admin';
@@ -31,7 +29,7 @@ describe('mqtt', () => {
     });
 
     it('should disconnect', function(done) {
-        
+
         const resolvingPromise = new Promise(function(resolve, reject) {
             // the function is executed automatically when the promise is constructed
             mqttClient.disconnect();

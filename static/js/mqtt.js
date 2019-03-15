@@ -51,8 +51,6 @@ export class MqttClient extends Observer {
             }
         }
 
-        console.log(this.options);
-
         // attempt to connect to MQTT broker
         this.client.connect(this.options);
 
