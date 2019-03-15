@@ -59,7 +59,7 @@ global.WebSocket = function(wsurl, protocol) {
 var LocalStorage = require('node-localstorage').LocalStorage
 global.localStorage = new LocalStorage('./persistence')
 
-var Paho = require('../paho-mqtt')
+var Paho = require('paho-mqtt')
 global.Paho = Paho
 
 
