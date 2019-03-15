@@ -24,7 +24,7 @@ export class TopicObserver {
         // default is all
         topic = topic || '__all__';
 
-        this.observers = this.observers[topic].filter((subscriber) => subscriber !== fn);
+        this.observers[topic] = this.observers[topic].filter((subscriber) => subscriber !== fn);
     }
 
     broadcast(data, topic) {
