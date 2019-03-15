@@ -6,12 +6,6 @@
   "scripts": {
     "test": "jest"
   },
-  "jest": {
-    "verbose": true,
-    "projects": [
-      "<rootDir>/static/js/tests/*"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/EMSTrack/WebClientAndServer.git"
@@ -25,16 +19,15 @@
   "homepage": "https://github.com/EMSTrack/WebClientAndServer",
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-register": "^6.26.0",
     "css-loader": "^2.1.1",
-    "jest": "^24.5.0",
-    "jest-webpack": "^0.5.1",
-    "jquery": "^3.3.1",
     "leaflet": "^1.4.0",
     "leaflet-rotatedmarker": "^0.2.0",
     "leaflet.gridlayer.googlemutant": "^0.8.0",
+    "mocha": "^6.0.2",
     "paho-mqtt": "^1.1.0",
     "style-loader": "^0.23.1",
     "url-loader": "^1.1.2",
