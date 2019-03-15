@@ -58,6 +58,10 @@ export class MqttClient extends Observer {
 
     }
 
+    disconnect() {
+        this.client.disconnect();
+    }
+
     onConnected(reconnect, uri) {
         if (this.logLevel > 0)
             console.log("Connected to mqtt client");
