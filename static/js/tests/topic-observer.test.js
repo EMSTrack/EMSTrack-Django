@@ -70,7 +70,7 @@ describe('topic observer', () => {
         expect(observer.hasTopic('topic/+/all')).to.equal(false);
         observer.observe(fn5, 'topic/+/all');
         console.log(observer.observers);
-        expect(observer.observers[/topic\/[^\/]+\/all/].length).to.equal(1);
+        expect(observer.observers[/^topic\/[^\/]+\/all$/].length).to.equal(1);
         expect(observer.hasTopic('topic/+/all')).to.equal(true);
 
     });
@@ -78,7 +78,7 @@ describe('topic observer', () => {
     it('should remove pattern', function() {
 
         observer.remove(fn5, 'topic/+/all');
-        expect(observer.observers[/topic\/[^\/]+\/all/].length).to.equal(0);
+        expect(observer.observers[/^topic\/[^\/]+\/all$/].length).to.equal(0);
 
     });
 
