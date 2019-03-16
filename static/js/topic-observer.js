@@ -72,10 +72,11 @@ export function matchFirstTopic(array, topic) {
         console.log("regex = '" + regex + "'");
         if (regex instanceof RegExp) {
             match = regex.exec(topic)
+            console.log("regexp match = '" + match + "'");
         } else {
             match = regex === topic;
+            console.log("string match = '" + match + "'");
         }
-        console.log("match = '" + match + "'");
         if (match)
             return regex;
     }
