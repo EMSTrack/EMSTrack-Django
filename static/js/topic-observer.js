@@ -65,14 +65,17 @@ export function matchAllTopics(array, topic) {
  */
 export function matchFirstTopic(array, topic) {
 
+    console.log("topic = '" + topic + "'");
     for(let i = 0; i < array.length; i++) {
         const regex = array[i];
         let match = false;
+        console.log("regex = '" + regex + "'");
         if (regex instanceof RegExp) {
             match = regex.exec(topic)
         } else {
             match = regex === topic;
         }
+        console.log("match = '" + match + "'");
         if (match)
             return regex;
     }
