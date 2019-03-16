@@ -38,6 +38,7 @@ function matchStringOrRegExp(regex, topic) {
     console.log(topic);
     if (regex.length > 1 && regex[0] === '/' && regex[regex.length - 1] === '/') {
         console.log('> regex');
+        console.log(topic.match(regex));
         return topic.match(regex);
     } else {
         console.log('> string');
