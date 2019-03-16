@@ -88,8 +88,11 @@ describe('topic observer', () => {
         const fn4 = (data) => subscriberHasBeenCalled = data;
 
         observer.observe(fn4, 'topic/+/all');
+        expect(observer.matchesTopic('topic/some/all')).to.equal(true);
+
         observer.broadcast(true, 'topic/some/all');
         expect(subscriberHasBeenCalled).to.equal(true);
+
         observer.remove(fn4, 'topic/+/all');
 
     });
