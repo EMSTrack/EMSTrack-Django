@@ -11,7 +11,7 @@
 export function topicToRegex(topic) {
 
     // Parse topic
-    let regex = topic;
+    let regex = String(topic);
     if (regex.indexOf('+') >= 0) {
         regex = regex.replace(/\+/g, "[^/]+");
     }
