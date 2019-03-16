@@ -35,7 +35,7 @@ export function topicToRegex(topic) {
 
 function matchStringOrRegExp(regex, topic) {
     if (regex.length > 1 && regex[0] === '/' && regex[regex.length - 1] === '/')
-        return topic.match(regex)
+        return topic.match(regex);
     else
         return topic === regex;
 }
