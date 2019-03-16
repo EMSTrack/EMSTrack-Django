@@ -34,10 +34,15 @@ export function topicToRegex(topic) {
 }
 
 function matchStringOrRegExp(regex, topic) {
-    if (regex.length > 1 && regex[0] === '/' && regex[regex.length - 1] === '/')
+    console.log(regex);
+    console.log(topic);
+    if (regex.length > 1 && regex[0] === '/' && regex[regex.length - 1] === '/') {
+        console.log('> regex');
         return topic.match(regex);
-    else
+    } else {
+        console.log('> string');
         return topic === regex;
+    }
 }
 
 /**
