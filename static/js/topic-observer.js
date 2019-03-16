@@ -26,6 +26,9 @@ export function topicToRegex(topic) {
     }
 
     // compile regex?
+    console.log(topic);
+    console.log(regex);
+    console.log(topic === regex);
     if (topic !== regex)
         return new RegExp(regex);
     else
