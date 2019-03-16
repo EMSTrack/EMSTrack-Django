@@ -90,8 +90,12 @@ export class TopicObserver {
         this.keys = Object.keys(this.observers);
     }
 
-     hasTopic(topic) {
+    matchesTopic(topic) {
         return matchFirstTopic(this.keys, topic) !== null;
+    }
+
+    hasTopic(topic) {
+        return this.observers.hasOwnProperty(topicToRegex(topic));
     }
 
     observe(fn, topic) {
