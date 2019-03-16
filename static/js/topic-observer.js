@@ -50,7 +50,7 @@ export function matchAllTopics(array, topic) {
             match = regex === topic;
         }
         if (match)
-            topics.add(regex);
+            topics.push(regex);
     }
     return topics;
 
