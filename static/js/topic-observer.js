@@ -26,14 +26,18 @@ export function topicToRegex(topic) {
     }
 
     // compile regex?
-    console.log(topic);
-    console.log(regex);
-    console.log(topic === regex);
     if (topic !== regex)
-        return new RegExp(regex);
+        return new RegExp('^' + regex + '$');
     else
         return topic;
 
+}
+
+function matchStringOrRegExp(regex, topic) {
+    if (regex.length > 1 && regex[0] === '/' && regex[regex.length - 1] === '/')
+        return topic.match(regex)
+    else
+        return topic === regex;
 }
 
 /**
@@ -47,14 +51,7 @@ export function matchAllTopics(array, topic) {
 
     const topics = [];
     for(let i = 0; i < array.length; i++) {
-        const regex = array[i];
-        let match = false;
-        if (regex instanceof RegExp) {
-            match = regex.exec(topic)
-        } else {
-            match = regex === topic;
-        }
-        if (match)
+        if (matchStringOrRegExp(array[i], topic))
             topics.push(regex);
     }
     return topics;
@@ -70,19 +67,8 @@ export function matchAllTopics(array, topic) {
  */
 export function matchFirstTopic(array, topic) {
 
-    console.log("topic = '" + topic + "'");
     for(let i = 0; i < array.length; i++) {
-        const regex = array[i];
-        let match = false;
-        console.log("regex = '" + regex + "'");
-        if (regex instanceof RegExp) {
-            match = regex.exec(topic)
-            console.log("regexp match = '" + match + "'");
-        } else {
-            match = regex === topic;
-            console.log("string match = '" + match + "'");
-        }
-        if (match)
+        if (matchStringOrRegExp(array[i], topic))
             return regex;
     }
     return null;
