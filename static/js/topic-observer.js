@@ -10,10 +10,10 @@
  */
 export function topicToRegex(topic) {
 
+    // deep copy
+    let regex = (' ' + topic).slice(1);
+
     // Parse topic
-    let regex = Object.assign("", topic);
-    console.log(topic);
-    console.log(regex);
     if (regex.indexOf('+') >= 0) {
         regex = regex.replace(/\+/g, "[^/]+");
     }
