@@ -51,7 +51,8 @@ export function matchAllTopics(array, topic) {
 
     const topics = [];
     for(let i = 0; i < array.length; i++) {
-        if (matchStringOrRegExp(array[i], topic))
+        const regex = array[i]
+        if (matchStringOrRegExp(regex, topic))
             topics.push(regex);
     }
     return topics;
@@ -68,8 +69,10 @@ export function matchAllTopics(array, topic) {
 export function matchFirstTopic(array, topic) {
 
     for(let i = 0; i < array.length; i++) {
-        if (matchStringOrRegExp(array[i], topic))
+        const regex = array[i]
+        if (matchStringOrRegExp(regex, topic))
             return regex;
+
     }
     return null;
 
