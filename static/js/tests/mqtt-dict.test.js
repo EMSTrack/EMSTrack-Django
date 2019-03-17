@@ -113,7 +113,7 @@ describe('mqtt-dict topics', () => {
         expect(Object.keys(dict.dict).length).to.equal(1);
         expect(Object.keys(dict.dict)).to.eql([key1]);
 
-        expect(dict.dict[key1].regexp).to.equal(regexp1);
+        expect(dict.dict[key1].regexp).to.eql(regexp1);
         expect(Object.keys(dict.dict[key1].array).length).to.equal(1);
 
         const obj2 = "object2";
