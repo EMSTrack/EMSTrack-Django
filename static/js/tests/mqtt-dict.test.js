@@ -2,6 +2,26 @@ const expect = require('chai').expect;
 
 import { MqttDict } from "../mqtt-dict";
 
+describe('valid topics', () => {
+
+    it('valid keys', function () {
+
+        let pattern = 'topic/+/data';
+        let regexp = new RegExp('^topic/[^/]+/data$');
+        expect(MqttDict.topicToRegex(pattern)).to.equal(regexp);
+
+        pattern = 'topic/+/data/+/status';
+        regexp = new RegExp('^topic/[^/]+/data/[^/]+/status$');
+        expect(MqttDict.topicToRegex(pattern)).to.equal(regexp);
+
+        pattern = 'topic/+/data/#';
+        regexp = new RegExp('^topic/[^/]+/data/[a-zA-Z0-9_/ ]+$');
+        expect(MqttDict.topicToRegex(pattern)).to.equal(regexp);
+                
+    });
+
+});
+
 describe('mqtt-dict strings', () => {
 
     it('push and remove', function () {
@@ -149,11 +169,6 @@ describe('mqtt-dict topics', () => {
         expect(objects[key1]).to.eql([obj1]);
         expect(objects[key2].length).to.equal(0);
         expect(objects[key2]).to.eql([]);
-
-    });
-
-
-    it('invalid keys', function () {
 
     });
 

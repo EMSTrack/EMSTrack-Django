@@ -69,7 +69,6 @@ describe('topic observer', () => {
 
         expect(observer.hasTopic('topic/+/all')).to.equal(false);
         observer.observe(fn5, 'topic/+/all');
-        console.log(observer.observers);
         expect(observer.observers[/^topic\/[^\/]+\/all$/].length).to.equal(1);
         expect(observer.hasTopic('topic/+/all')).to.equal(true);
 
