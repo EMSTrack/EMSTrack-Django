@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
 
-const jsdom = require('jsdom');
-var document = jsdom.jsdom("");
-var window = document.defaultView;
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM(`...`);
 
 global.window = window
 global.$ = require('jquery');
