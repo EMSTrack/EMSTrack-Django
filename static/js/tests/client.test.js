@@ -1,6 +1,7 @@
 const expect = require('chai').expect;
 
-global.$ = require('jquery')(window);
+global.window = window
+global.$ = require('jquery');
 
 import { Client } from "../client";
 
