@@ -41,6 +41,20 @@ export class MqttDict {
 
     }
 
+    create(topic) {
+
+        const regexp = MqttDict.topicToRegex(topic);
+        const key = regexp.toString();
+
+        // create topic
+        if (!this.dict.hasOwnProperty(key)) {
+            this.dict[key] = {regexp: regexp, array: []};
+            this.keys = Object.keys(this.dict);
+        } else
+            throw new Error("Topic '" + topic + "' already exists");
+
+    }
+
     push(topic, obj) {
 
         const regexp = MqttDict.topicToRegex(topic);

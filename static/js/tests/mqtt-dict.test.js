@@ -77,6 +77,13 @@ describe('mqtt-dict strings', () => {
         expect(objects[key2].length).to.equal(0);
         expect(objects[key2]).to.eql([]);
 
+        const key3 = 'new_key';
+        dict.create(key3);
+        expect(Object.keys(dict.dict).length).to.equal(3);
+        expect(Object.keys(dict.dict[key1].array).length).to.equal(1);
+        expect(Object.keys(dict.dict[key2].array).length).to.equal(0);
+        expect(Object.keys(dict.dict[key3].array).length).to.equal(0);
+
     });
 
 });
