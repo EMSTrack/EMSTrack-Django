@@ -82,6 +82,18 @@ export class MqttDict {
 
     }
 
+    contains(topic) {
+
+        const regexp = MqttDict.topicToRegex(topic);
+        const key = regexp.toString();
+
+        if (this.dict.hasOwnProperty(key))
+            return true;
+        else
+            return false;
+
+    }
+
     matchAll(topic) {
 
         const topics = [];
@@ -106,6 +118,12 @@ export class MqttDict {
         }
 
         return null;
+
+    }
+
+    matches(topic) {
+
+        return this.matchFirst(topic) !== null;
 
     }
 
