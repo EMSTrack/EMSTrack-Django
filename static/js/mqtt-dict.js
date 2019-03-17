@@ -61,6 +61,9 @@ export class MqttDict {
         const regexp = MqttDict.topicToRegex(topic);
         const key = regexp.toString();
 
+        if (!this.dict.hasOwnProperty(key))
+            throw new Error("Unknown topic '" + topic + "'");
+
         this.dict[key].array = this.dict[key].array.filter((subscriber) => subscriber !== obj);
 
     }
