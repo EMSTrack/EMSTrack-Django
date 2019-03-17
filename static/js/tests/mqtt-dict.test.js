@@ -20,6 +20,16 @@ describe('valid topics', () => {
 
     });
 
+    it('invalid keys', function () {
+
+        let pattern = 'topic/#/data/#';
+        expect(() => MqttDict.topicToRegex(pattern)).to.throw();
+
+        pattern = 'topic/+/data/#/';
+        expect(() => MqttDict.topicToRegex(pattern)).to.throw();
+
+    });
+
 });
 
 describe('mqtt-dict strings', () => {
