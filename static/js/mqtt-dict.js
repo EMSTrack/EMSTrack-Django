@@ -48,7 +48,7 @@ export class MqttDict {
 
         // create topic if needed
         if (!this.dict.hasOwnProperty(topic)) {
-            this.dict[key] = {regex: regexp, array: []};
+            this.dict[key] = {regexp: regexp, array: []};
             this.keys = Object.keys(this.dict);
         }
 
