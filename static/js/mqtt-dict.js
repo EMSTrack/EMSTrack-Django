@@ -47,7 +47,7 @@ export class MqttDict {
         const key = regexp.toString();
 
         // create topic if needed
-        if (!this.dict.hasOwnProperty(topic)) {
+        if (!this.dict.hasOwnProperty(key)) {
             this.dict[key] = {regexp: regexp, array: []};
             this.keys = Object.keys(this.dict);
         }
