@@ -4,7 +4,7 @@ import { MqttDict } from "../mqtt-dict";
 
 describe('mqtt-dict strings', () => {
 
-    const dict = MqttDict();
+    const dict = new MqttDict();
 
     it('has topic', function () {
 
