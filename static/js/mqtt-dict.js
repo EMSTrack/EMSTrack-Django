@@ -43,11 +43,12 @@ export class MqttDict {
 
     push(topic, obj) {
 
-        const key = MqttDict.topicToRegex(topic);
+        const regexp = MqttDict.topicToRegex(topic);
+        const key = regexp.toString();
 
         // create topic if needed
         if (!this.dict.hasOwnProperty(topic)) {
-            this.dict[key.toString()] = {key: key, array: []};
+            this.dict[key] = {regex: regexp, array: []};
             this.keys = Object.keys(this.dict);
         }
 
@@ -57,9 +58,9 @@ export class MqttDict {
 
     remove(topic, obj) {
 
-        const key = MqttDict.topicToRegex(topic);
+        const regexp = MqttDict.topicToRegex(topic);
 
-        this.dict[key].array = this.dict[key.toString()].array.filter((subscriber) => subscriber !== obj);
+        this.dict[key].array = this.dict[regexp.toString()].array.filter((subscriber) => subscriber !== obj);
 
     }
 
@@ -68,7 +69,7 @@ export class MqttDict {
         const topics = [];
         for (let i = 0; i < this.keys.length; i++) {
             const key = this.keys[i];
-            const regexp = this.dict[key].key;
+            const regexp = this.dict[key].regexp;
             if (MqttDict.matchStringOrRegExp(regexp, topic))
                 topics.push(key);
         }
@@ -81,7 +82,7 @@ export class MqttDict {
 
         for (let i = 0; i < this.keys.length; i++) {
             const key = this.keys[i];
-            const regexp = this.dict[key].key;
+            const regexp = this.dict[key].regexp;
             if (MqttDict.matchStringOrRegExp(regexp, topic))
                 return key;
         }
