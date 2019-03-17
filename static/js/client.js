@@ -11,6 +11,7 @@ export class Client extends TopicObserver {
 
         this.mqttClient = new MqttClient(host, port, clientId);
         this.event_observer = null;
+        this.APIBaseUrl = 'api/';
     }
 
     connect(username, options) {
@@ -20,7 +21,7 @@ export class Client extends TopicObserver {
             return;
 
         // retrieve temporary password for mqttClient and connect to broker
-        $.getJSON(APIBaseUrl + 'user/' + this.username + '/password/',
+        $.getJSON(this.APIBaseUrl + 'user/' + this.username + '/password/',
             (password) => {
 
                 // override options
