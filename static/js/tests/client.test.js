@@ -49,8 +49,8 @@ describe('client connection', () => {
             .then(
                 (result) => {
                     expect(result).to.equal('disconnected');
-                    expect(client.isConnected).to.equal(false);
-                    expect(client.client).to.equal(null);
+                    expect(client.mqttClient.isConnected).to.equal(false);
+                    expect(client.event_observer).to.equal(null);
                 },
                 () => {}
             )
