@@ -3,19 +3,17 @@ import { MqttDict } from "./mqtt-dict";
 /**
  * Topic observer pattern base class
  */
-ALL = '__all__';
-
 export class TopicObserver {
 
     constructor() {
         this.observers = new MqttDict();
-        this.observers.create(ALL);
+        this.observers.create('__ALL__');
     }
 
     observe(fn, topic) {
 
-        // default is all
-        topic = topic || ALL;
+        // default is '__ALL__'
+        topic = topic || '__ALL__';
 
         // push topic
         this.observers.push(topic, fn);
@@ -23,19 +21,19 @@ export class TopicObserver {
 
     remove(fn, topic) {
 
-        // default is all
-        topic = topic || ALL;
+        // default is '__ALL__'
+        topic = topic || '__ALL__';
 
         this.observers.remove(topic, fn);
     }
 
      broadcast(data, topic) {
 
-        // default is all
-        topic = topic || ALL;
+        // default is '__ALL__'
+        topic = topic || '__ALL__';
 
         // is that a particular topic?
-        if (topic !== ALL) {
+        if (topic !== '__ALL__') {
 
             // match topics and broadcast
             const objects = this.observers.get(topic);
@@ -48,8 +46,8 @@ export class TopicObserver {
 
         }
 
-        // broadcast for all
-         this.observers.get(ALL)[0].forEach((subscriber) => subscriber(data));
+        // broadcast for '__ALL__'
+         this.observers.get('__ALL__')[0].forEach((subscriber) => subscriber(data));
     }
 
 }
