@@ -49,7 +49,7 @@ export class TopicObserver {
         }
 
         // broadcast for all
-         this.observers.get(TopicObserver.ALL)[0].forEach((subscriber) => subscriber(data));
+         this.observers.get(ALL)[0].forEach((subscriber) => subscriber(data));
     }
 
 }
