@@ -22,8 +22,8 @@ export class TopicObserver {
          // match topics and broadcast
          const objects = this.observers.get(topic);
          if (objects.length > 0)
-             objects.forEach(
-                 (array) => array.forEach((subscriber) => subscriber(data))
+             Object.values(objects).forEach(
+                 (value) => value.forEach((subscriber) => subscriber(data))
              );
          else
              console.warn('No topics matched!');

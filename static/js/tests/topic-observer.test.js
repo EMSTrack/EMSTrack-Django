@@ -20,7 +20,7 @@ describe('topic observer', () => {
 
         observer.remove('topic', fn3);
         expect(observer.observers.contains('topic')).to.equal(true);
-        expect(observer.observers.get('topic')).to.eql([]);
+        expect(observer.observers.get('topic')).to.eql({'topic': []});
 
     });
 
