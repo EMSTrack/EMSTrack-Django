@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+global.$ = $;
+
 import { Client } from "../client";
 
 describe('client connection', () => {
