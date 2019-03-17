@@ -144,7 +144,9 @@ describe('mqtt-dict topics', () => {
         expect(objects[key1]).to.eql([obj1]);
 
         objects = dict.get(key2);
-        expect(Object.keys(objects).length).to.equal(1);
+        expect(Object.keys(objects).length).to.equal(2);
+        expect(objects[key1].length).to.equal(1);
+        expect(objects[key1]).to.eql([obj1]);
         expect(objects[key2].length).to.equal(0);
         expect(objects[key2]).to.eql([]);
 
