@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 
 var settings = require('./mqtt/client-harness');
 
-import { MqttClient } from "../mqtt";
+import { MqttClient } from "../mqtt-client";
 
 describe('mqtt connection', () => {
 

@@ -1,4 +1,4 @@
-import Paho from 'mqtt';
+import Paho from 'static/js/mqtt-client';
 
 var mqttClient;
 

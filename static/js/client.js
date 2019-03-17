@@ -1,10 +1,14 @@
-import { MqttClient, MqttEvent } from "./mqtt";
+import { MqttClient, MqttEvent } from "./mqtt-client";
 
 import { TopicObserver } from "./topic-observer";
 
 export class Client extends TopicObserver {
 
     constructor(host, port, clientId) {
+
+        // call super
+        super();
+
         this.mqttClient = new MqttClient(host, port, clientId);
         this.event_observer = null;
     }
@@ -28,7 +32,7 @@ export class Client extends TopicObserver {
 
                 // register observer
                 this.event_observer = (event) => this.eventHandler(event);
-                this.mqttClient.observe(this.observer);
+                this.mqttClient.observe(this.event_observer);
 
             });
     }
