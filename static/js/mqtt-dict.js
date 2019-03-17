@@ -96,7 +96,7 @@ export class MqttDict {
         const keys = this.matchAll(topic);
         if (keys.length > 0)
             keys.forEach(
-                (topic) => { objects[key] = this.dict[topic].array; }
+                (key) => { objects[key] = this.dict[key].array; }
             );
         else
             throw new Error("Unknown topic '" + topic + "'");
