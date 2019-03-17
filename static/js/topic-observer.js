@@ -21,7 +21,7 @@ export class TopicObserver {
 
          // match topics and broadcast
          const objects = this.observers.get(topic);
-         if (objects.length > 0)
+         if (Object.keys(objects).length > 0)
              Object.values(objects).forEach(
                  (value) => value.forEach((subscriber) => subscriber(data))
              );
