@@ -60,7 +60,7 @@ export class Client extends TopicObserver {
             const payload = event.object.payloadString;
 
             // broadcast
-            this.observers.broadcast(payload, topic);
+            this.observers.broadcast(topic, payload);
 
         }
 
