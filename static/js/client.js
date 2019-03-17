@@ -59,11 +59,8 @@ export class Client extends TopicObserver {
             const topic = event.object.destinationName;
             const payload = event.object.payloadString;
 
-            // Is this a registered topic?
-            if (this.observers.hasTopic(topic))
-                this.observers.broadcast(payload, topic);
-            else
-                this.observers.broadcast(payload);
+            // broadcast
+            this.observers.broadcast(payload, topic);
 
         }
 
