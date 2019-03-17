@@ -47,7 +47,7 @@ export class MqttDict {
 
         // create topic if needed
         if (!this.dict.hasOwnProperty(topic)) {
-            this.dict[key] = {key: key, array: []};
+            this.dict[key.toString()] = {key: key, array: []};
             this.keys = Object.keys(this.dict);
         }
 
@@ -59,7 +59,7 @@ export class MqttDict {
 
         const key = MqttDict.topicToRegex(topic);
 
-        this.dict[key].array = this.dict[key].array.filter((subscriber) => subscriber !== obj);
+        this.dict[key].array = this.dict[key.toString()].array.filter((subscriber) => subscriber !== obj);
 
     }
 
