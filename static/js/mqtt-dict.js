@@ -59,8 +59,9 @@ export class MqttDict {
     remove(topic, obj) {
 
         const regexp = MqttDict.topicToRegex(topic);
+        const key = regexp.toString();
 
-        this.dict[key].array = this.dict[regexp.toString()].array.filter((subscriber) => subscriber !== obj);
+        this.dict[key].array = this.dict[key].array.filter((subscriber) => subscriber !== obj);
 
     }
 
