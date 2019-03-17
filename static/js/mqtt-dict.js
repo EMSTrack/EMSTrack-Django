@@ -92,17 +92,17 @@ export class MqttDict {
 
     get(topic) {
 
-        const arrays = [];
+        const objects = {};
         const keys = this.matchAll(topic);
         if (keys.length > 0)
             keys.forEach(
-                (topic) => arrays.push(this.dict[topic].array)
+                (topic) => { objects[key] = this.dict[topic].array; }
             );
         else
             throw new Error("Unknown topic '" + topic + "'");
 
-        return arrays;
-        
+        return objects;
+
     }
 
 }
