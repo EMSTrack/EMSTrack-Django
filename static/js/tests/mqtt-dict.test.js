@@ -103,8 +103,10 @@ describe('mqtt-dict topics', () => {
         const dict = new MqttDict();
 
         const obj1 = "object1";
-        const key1 = 'topic/+/data';
-        dict.push(key1, obj1);
+        const pattern1 = 'topic/+/data';
+        const key1 = /topic\/[^\/]+\/data/.toString();
+
+        dict.push(pattern1, obj1);
         expect(Object.keys(dict.dict).length).to.equal(1);
         expect(dict.dict[key1].key).to.equal(key1);
         expect(Object.keys(dict.dict[key1].array).length).to.equal(1);
