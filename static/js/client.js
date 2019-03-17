@@ -24,6 +24,8 @@ export class Client extends TopicObserver {
         $.getJSON(this.APIBaseUrl + 'user/' + this.username + '/password/',
             (password) => {
 
+                console.log( "success" );
+
                 // override options
                 options['username'] = username;
                 options['password'] = password;
@@ -35,7 +37,14 @@ export class Client extends TopicObserver {
                 this.event_observer = (event) => this.eventHandler(event);
                 this.mqttClient.observe(this.event_observer);
 
+            })
+            .done(function() {
+                console.log( "done" );
+            })
+            .fail(function() {
+                console.log( "error" );
             });
+
     }
 
     disconnect() {
