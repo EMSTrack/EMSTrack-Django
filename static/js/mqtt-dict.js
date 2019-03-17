@@ -101,6 +101,8 @@ export class MqttDict {
         else
             throw new Error("Unknown topic '" + topic + "'");
 
+        return arrays;
+        
     }
 
 }
