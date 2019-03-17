@@ -8,16 +8,16 @@ describe('valid topics', () => {
 
         let pattern = 'topic/+/data';
         let regexp = new RegExp('^topic/[^/]+/data$');
-        expect(MqttDict.topicToRegex(pattern)).to.equal(regexp);
+        expect(MqttDict.topicToRegex(pattern)).to.eql(regexp);
 
         pattern = 'topic/+/data/+/status';
         regexp = new RegExp('^topic/[^/]+/data/[^/]+/status$');
-        expect(MqttDict.topicToRegex(pattern)).to.equal(regexp);
+        expect(MqttDict.topicToRegex(pattern)).to.eql(regexp);
 
         pattern = 'topic/+/data/#';
         regexp = new RegExp('^topic/[^/]+/data/[a-zA-Z0-9_/ ]+$');
-        expect(MqttDict.topicToRegex(pattern)).to.equal(regexp);
-                
+        expect(MqttDict.topicToRegex(pattern)).to.eql(regexp);
+
     });
 
 });
