@@ -117,7 +117,7 @@ describe('mqtt-dict topics', () => {
         expect(Object.keys(dict.dict[key1].array).length).to.equal(1);
 
         const obj2 = "object2";
-        dict.push(key1, obj2);
+        dict.push(pattern1, obj2);
         expect(Object.keys(dict.dict).length).to.equal(1);
         expect(Object.keys(dict.dict[key1].array).length).to.equal(2);
 
