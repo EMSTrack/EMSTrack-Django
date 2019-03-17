@@ -11,7 +11,7 @@ import { Client } from "../client";
 
 describe('client connection', () => {
 
-    const client = new Client('localhost', 8884, 'test-client');
+    const client = new Client('localhost', 8884, 'test-client', 'http://localhost:8000/api/');
 
     const userName = 'admin';
 

@@ -4,14 +4,14 @@ import { TopicObserver } from "./topic-observer";
 
 export class Client extends TopicObserver {
 
-    constructor(host, port, clientId) {
+    constructor(host, port, clientId, ApiBaseUrl) {
 
         // call super
         super();
 
         this.mqttClient = new MqttClient(host, port, clientId);
         this.event_observer = null;
-        this.APIBaseUrl = 'api/';
+        this.ApiBaseUrl = ApiBaseUrl;
     }
 
     connect(username, options) {
@@ -21,7 +21,7 @@ export class Client extends TopicObserver {
             return;
 
         // retrieve temporary password for mqttClient and connect to broker
-        $.getJSON(this.APIBaseUrl + 'user/' + this.username + '/password/',
+        $.getJSON(this.ApiBaseUrl + 'user/' + this.username + '/password/',
             (password) => {
 
                 console.log( "success" );
