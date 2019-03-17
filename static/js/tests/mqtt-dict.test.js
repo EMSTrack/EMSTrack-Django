@@ -40,12 +40,12 @@ describe('mqtt-dict strings', () => {
         let objects = dict.get(key1);
         expect(Object.keys(objects).length).to.equal(1);
         expect(objects[key1].length).to.equal(1);
-        expect(objects[key1]).to.equal([obj1]);
+        expect(objects[key1]).to.eql([obj1]);
 
         keys = dict.get(key2);
         expect(Object.keys(objects).length).to.equal(1);
         expect(objects[key2].length).to.equal(0);
-        expect(objects[key1]).to.equal([]);
+        expect(objects[key1]).to.eql([]);
 
     });
 
