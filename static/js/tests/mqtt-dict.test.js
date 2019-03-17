@@ -104,7 +104,7 @@ describe('mqtt-dict topics', () => {
 
         const obj1 = "object1";
         const pattern1 = 'topic/+/data';
-        const key1 = /^topic\/[^\/]+\/data$/.toString();
+        const key1 = (new RegExp('^topic/[^/]+/data$').toString();
 
         dict.push(pattern1, obj1);
         expect(Object.keys(dict.dict).length).to.equal(1);
