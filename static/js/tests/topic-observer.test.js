@@ -52,7 +52,7 @@ describe('topic observer', () => {
     it('should remove pattern', function() {
 
         observer.remove('topic/+/all', fn5);
-        expect(observer.observers.get('topic/+/all')).to.eql([]);
+        expect(observer.observers.get('topic/+/all')).to.eql({ '/^topic\\/[^\\/]+\\/all$/': []});
 
     });
 
