@@ -91,11 +91,11 @@ describe('client connection', () => {
                 client.subscribe('test/data', fn, {qos: 2});
                 client.publish('test/data', 'something', 2, false);
 
+                setTimeout(() => reject(new Error("timeout!")), 1000);
+
                 while (receivedData === '') { /* wait */
                 }
                 resolve('got it!');
-
-                setTimeout(() => reject(new Error("timeout!")), 1000);
 
             })
                 .then(
