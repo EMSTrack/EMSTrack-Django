@@ -203,7 +203,7 @@ let mqttClient;
  */
 let mymap;
 let apiClient;
-const geocoder = GeocoderFactory(map_provider);
+const geocoder = GeocoderFactory(mapProvider);
 
 // resize map
 function resizeMap() {
