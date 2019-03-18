@@ -6,6 +6,17 @@ import { MqttClient } from "../mqtt-client";
 
 import { AppClient } from "../app-client";
 
+
+describe('client observe', () => {
+
+    it('observe pattern', () => {
+
+        
+
+    });
+
+});
+
 describe('client connection', () => {
 
     const userName = 'admin';
@@ -81,20 +92,19 @@ describe('client connection', () => {
         if (true) {
 
             let receivedData = '';
-            const fn = function (data) {
-                console.log(data);
-                receivedData = data;
-            };
 
             new Promise(function (resolve, reject) {
+
+                const fn = function (data) {
+                    console.log(data);
+                    receivedData = data;
+                    resolve('got it!');
+                };
 
                 setTimeout(() => reject(new Error("timeout!")), 1000);
 
                 client.subscribe('test/data', fn, {qos: 2});
                 client.publish('test/data', 'something', 2, false);
-
-                while (receivedData === '') { /* wait */ }
-                resolve('got it!');
 
             })
                 .then(
