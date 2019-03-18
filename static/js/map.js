@@ -211,7 +211,6 @@ function resizeMap() {
     mymap.invalidateSize();
 };
 
-
 // add initialization hook
 add_init_function(init);
 
@@ -365,7 +364,7 @@ function init (client) {
 
         });
 
-});
+};
 
 // alert using bootstrap modal
 function bsalert(message, alertClass, title) {
