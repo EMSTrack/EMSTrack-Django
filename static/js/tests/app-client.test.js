@@ -38,8 +38,32 @@ describe('client observe', () => {
 
         const client = new AppClient(mqttClient, undefined);
 
-        client.subscribe('test/ambulance/1/data');
-        client.publish('test/ambulance/1/data', 'something', 2, true);
+        let receivedData = '';
+        new Promise(function (resolve, reject) {
+
+            const fn = function (data) {
+                console.log(data);
+                receivedData = data;
+                resolve('got it!');
+            };
+
+            setTimeout(() => reject(new Error("timeout!")), 1000);
+
+            client.subscribe('test/ambulance/1/data', fn);
+            client.publish('test/ambulance/1/data', 'something', 2, true);
+
+        })
+            .then(
+                () => {
+                    expect(receivedData).to.equal('something');
+                    client.unsubscribe('test/data', fn);
+                },
+                () => {
+                }
+            )
+            .catch(
+                () => done(new Error('Did not receive!'))
+            );
 
     });
 
