@@ -57,7 +57,14 @@ export class AppClient extends TopicObserver {
         if (event.event === 'messageReceived') {
 
             const topic = event.object.destinationName;
-            const payload = JSON.parse(event.object.payloadString);
+            let payload;
+
+            try {
+                payload = JSON.parse(event.object.payloadString);
+            } catch(e) {
+                console.log(e);
+                payload = event.object.payloadString;
+            }
 
             console.log(topic);
             console.log(payload);
