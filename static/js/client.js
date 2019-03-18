@@ -1,6 +1,6 @@
 import { MqttClient, MqttEvent } from "./mqtt-client";
 
-const getJSON = require('get-json')
+const axios = require('axios');
 
 import { TopicObserver } from "./topic-observer";
 
@@ -23,14 +23,15 @@ export class Client extends TopicObserver {
             return;
 
         // retrieve temporary password for mqttClient and connect to broker
-        getJSON(this.ApiBaseUrl + 'user/' + this.username + '/password/')
-            .then( (password) => {
+        axios.get(this.ApiBaseUrl + 'user/' + this.username + '/password/')
+            .then(response => {
 
                 console.log( "success" );
+                console.log(response.data);
 
                 // override options
                 options['username'] = username;
-                options['password'] = password;
+                options['password'] = response.data.password;
 
                 // connect to client
                 this.mqttClient.connect(options);
@@ -40,8 +41,8 @@ export class Client extends TopicObserver {
                 this.mqttClient.observe(this.event_observer);
 
             })
-            .catch( (error) => {
-                console.log( "error = " + error);
+            .catch(error => {
+                console.log(error);
             });
 
     }
