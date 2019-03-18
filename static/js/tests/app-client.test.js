@@ -1,5 +1,5 @@
 // const expect = require('chai').expect;
-import { expect, describe, it } from 'chai';
+import { expect } from 'chai';
 
 const axios = require('axios');
 
