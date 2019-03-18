@@ -53,6 +53,20 @@ export class Client extends TopicObserver {
 
     }
 
+    subscribe(filter, options, fn) {
+        this.mqttClient.subscribe(filter, options);
+        this.observers.observe(filter, fn)
+    }
+
+    unsubscribe(filter, options, fn) {
+        this.mqttClient.unsubscribe(filter, options);
+        this.observers.remove(filter, fn)
+    }
+
+    publish(topic, payload, qos, retained) {
+        this.mqttClient.publish(topic, payload, qos, retained);
+    }
+
 }
 
 /*

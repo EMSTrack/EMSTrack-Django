@@ -74,9 +74,33 @@ describe('client connection', () => {
 
     });
 
-    it('create client', function() {
+    it('create client', function(done) {
 
         client = new Client(mqttClient, httpClient);
+
+        let receivedData = '';
+        const fn = function(data) { console.log(data); receivedData = data; };
+
+
+        new Promise(function(resolve, reject) {
+
+            client.subscribe('test/data', {qos: 2}, );
+            client.publish('test/data', 'something', 2, false);
+
+            while (receivedData === '') { /* wait */ }
+            resolve('got it!');
+
+            setTimeout(() => reject(new Error("timeout!")), 1000);
+
+        })
+            .then(
+                () => {
+                    expect(receivedData).to.equal('something');
+                },
+                () => {}
+            )
+            .finally(done);
+
 
     });
 
