@@ -29,11 +29,9 @@ describe('client connection', () => {
             .then( (response) => {
                 token = response.data.token;
                 expect(token !== null).to.equal(true);
-                console.log(token);
                 done();
             })
             .catch( (error ) => {
-                console.log(error);
                 done(new Error(error));
             });
 
@@ -54,7 +52,6 @@ describe('client connection', () => {
                 done();
             })
             .catch( (error ) => {
-                console.log(error);
                 done(new Error(error));
             });
 
