@@ -14,6 +14,7 @@ describe('client connection', () => {
 
     let mqttClient = null;
     let httpClient = null;
+    let client = null;
 
     it('get token', function(done) {
 
@@ -89,8 +90,8 @@ describe('client connection', () => {
 
         const resolvingPromise = new Promise(function(resolve, reject) {
             // the function is executed automatically when the promise is constructed
-            mqttClient.disconnect();
-            while (mqttClient.isConnected) { /* wait */ }
+            client.disconnect();
+            while (client.mqttClient.isConnected) { /* wait */ }
             resolve('disconnected');
 
             setTimeout(() => reject(new Error("timeout!")), 1000);
