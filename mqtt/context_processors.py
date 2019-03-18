@@ -5,9 +5,9 @@ from django.conf import settings
 
 def jstags(request):
     return {
-        'MqttBroker': {
+        'mqtt_broker': {
             'host': settings.MQTT['BROKER_WEBSOCKETS_HOST'],
             'port': settings.MQTT['BROKER_WEBSOCKETS_PORT']
         },
-        'clientId': 'javascript_client_' + uuid.uuid4().hex
+        'client_id': 'javascript_client_' + uuid.uuid4().hex
     }

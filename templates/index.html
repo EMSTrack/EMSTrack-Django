@@ -115,6 +115,8 @@
 <script>
     const username = '{{ user.get_username|safe }}';
     const ApiBaseUrl = '{% url 'index' %}api/';
+    const MqttBroker = {{ mqtt_broker }};
+    const clientId = '{{ client_id }}';
 </script>
 
 {% render_bundle 'main' 'js' 'BASE' %}
