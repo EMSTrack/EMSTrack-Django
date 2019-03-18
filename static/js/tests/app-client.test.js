@@ -51,7 +51,7 @@ describe('client observe', () => {
             setTimeout(() => reject(new Error("timeout!")), 1000);
 
             client.subscribe('test/ambulance/1/data', fn);
-            client.publish('test/ambulance/1/data', 'something', 2, true);
+            client.publish('test/ambulance/1/data', '"something"', 2, true);
 
         })
             .then( () => {
