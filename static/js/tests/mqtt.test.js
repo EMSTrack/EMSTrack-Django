@@ -50,7 +50,7 @@ describe('mqtt connection using password', () => {
                 (result) => {
                     expect(result).to.equal('disconnected');
                     expect(mqttClient.isConnected).to.equal(false);
-                    expect(mqttClient.client).to.equal(null);
+                    expect(mqttClient.client).to.equal(undefined);
                 },
                 () => {}
             )
@@ -141,7 +141,7 @@ describe('mqtt messages', () => {
                 (result) => {
                     expect(result).to.equal('disconnected');
                     expect(mqttClient.isConnected).to.equal(false);
-                    expect(mqttClient.client).to.equal(null);
+                    expect(mqttClient.client).to.equal(undefined);
                 },
                 () => {}
             )

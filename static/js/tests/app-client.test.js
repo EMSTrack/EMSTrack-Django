@@ -2,8 +2,6 @@ const expect = require('chai').expect;
 
 const axios = require('axios');
 
-import { Observer } from "../observer";
-
 import { MqttClient, MqttEvent } from "../mqtt-client";
 
 import { AppClient } from "../app-client";
