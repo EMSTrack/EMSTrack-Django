@@ -72,7 +72,7 @@ export class AppClient extends TopicObserver {
             /* ignore */
         } else if (event.event === 'lostConnection') {
             /* ignore */
-        } else 
+        } else
             console.log("Unknown event type '" + event.event + "'");
 
     }

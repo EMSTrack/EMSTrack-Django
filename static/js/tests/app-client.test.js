@@ -32,16 +32,17 @@ class MockMqttClient extends MqttClient {
 
 describe('client observe', () => {
 
-    it('observe pattern', () => {
+    it('observe pattern', (done) => {
 
         const mqttClient = new MockMqttClient();
 
         const client = new AppClient(mqttClient, undefined);
 
         let receivedData = '';
+        let fn;
         new Promise(function (resolve, reject) {
 
-            const fn = function (data) {
+            fn = function (data) {
                 console.log(data);
                 receivedData = data;
                 resolve('got it!');
@@ -53,14 +54,11 @@ describe('client observe', () => {
             client.publish('test/ambulance/1/data', 'something', 2, true);
 
         })
-            .then(
-                () => {
-                    expect(receivedData).to.equal('something');
-                    client.unsubscribe('test/data', fn);
-                },
-                () => {
-                }
-            )
+            .then( () => {
+                expect(receivedData).to.equal('something');
+                client.unsubscribe('test/ambulance/1/data', fn);
+                done();
+            })
             .catch(
                 () => done(new Error('Did not receive!'))
             );
