@@ -12,7 +12,7 @@ class MockMqttClient extends MqttClient {
         super(undefined, undefined, undefined, 2);
     }
 
-    subscribe(filter, options) {
+    _subscribe(filter, options) {
     }
 
     publish(topic, payload, qos, retained) {
@@ -25,7 +25,7 @@ class MockMqttClient extends MqttClient {
         this.broadcast(new MqttMessageArrivedEvent(message));
     }
 
-    unsubscribe(filter, options) {
+    _unsubscribe(filter, options) {
     }
 
 }
@@ -49,13 +49,13 @@ describe('client observe', () => {
 
             setTimeout(() => reject(new Error("timeout!")), 1000);
 
-            client.subscribe('test/ambulance/1/data', fn);
+            client._subscribe('test/ambulance/1/data', fn);
             client.publish('test/ambulance/1/data', '"something"', 2, true);
 
         })
             .then( () => {
                 expect(receivedData).to.eql({topic: 'test/ambulance/1/data', payload: 'something'});
-                client.unsubscribe('test/ambulance/1/data', fn);
+                client._unsubscribe('test/ambulance/1/data', fn);
                 done();
             })
             .catch(
@@ -147,14 +147,14 @@ describe('client connection', () => {
                 resolve('got it!');
             };
 
-            client.subscribe('test/data', fn);
+            client._subscribe('test/data', fn);
             client.publish('test/data', '"something"', 2, false);
 
         })
             .then(
                 () => {
                     expect(receivedData).to.eql({topic: 'test/data', payload: 'something'});
-                    client.unsubscribe('test/data', fn);
+                    client._unsubscribe('test/data', fn);
                     done();
                 }
             )

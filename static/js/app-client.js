@@ -81,12 +81,12 @@ export class AppClient extends TopicObserver {
 
     }
 
-    subscribe(filter, fn, options = {}) {
+    _subscribe(filter, fn, options = {qos:2}) {
         this.mqttClient.subscribe(filter, options);
         this.observe(filter, fn)
     }
 
-    unsubscribe(filter, fn, options = {}) {
+    _unsubscribe(filter, fn, options = {}) {
         this.mqttClient.unsubscribe(filter, options);
         this.remove(filter, fn)
     }
@@ -111,7 +111,7 @@ export class AppClient extends TopicObserver {
         if (call.status === 'E') {
 
             // call ended? unsubscribe
-            this.unsubscribe('call/' + call.id + '/data', this.updateCall);
+            this._unsubscribe('call/' + call.id + '/data', this.updateCall);
 
         } else {
 
@@ -141,7 +141,7 @@ export class AppClient extends TopicObserver {
                     this.calls[call.id] = call;
 
                     // subscribe
-                    this.subscribe('call/' + call.id + '/data', this.updateCall);
+                    this._subscribe('call/' + call.id + '/data', this.updateCall);
 
                 })
                 .catch( (error) => {
@@ -173,9 +173,9 @@ export class AppClient extends TopicObserver {
                     
                     // subscribe
                     // TODO: check if already subscribed
-                    this.subscribe('ambulance/' + ambulance.id + '/data',
+                    this._subscribe('ambulance/' + ambulance.id + '/data',
                         this.updateAmbulance);
-                    this.subscribe('ambulance/' + ambulance.id + '/call/+/status',
+                    this._subscribe('ambulance/' + ambulance.id + '/call/+/status',
                         this.updateAmbulanceCallStatus);
                     
                 });
@@ -205,7 +205,7 @@ export class AppClient extends TopicObserver {
                     
                     // subscribe
                     // TODO: check if already subscribed
-                    this.subscribe('hospital/' + hospital.id + '/data', this.updateHospital);
+                    this._subscribe('hospital/' + hospital.id + '/data', this.updateHospital);
                     
                 });
 
@@ -234,7 +234,7 @@ export class AppClient extends TopicObserver {
                     
                     // subscribe
                     // TODO: check if already subscribed
-                    this.subscribe('call/' + call.id + '/data', this.updateCall);
+                    this._subscribe('call/' + call.id + '/data', this.updateCall);
                     
                 });
 
