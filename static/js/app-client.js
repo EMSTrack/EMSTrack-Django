@@ -107,7 +107,19 @@ export class AppClient extends TopicObserver {
 
     updateCall(message) {
         const call = message.payload;
-        this.call[call.id] = call;
+
+        if (call.status === 'E') {
+
+            // call ended? unsubscribe
+            this.unsubscribe('call/' + call.id + '/data', this.updateCall);
+
+        } else {
+
+            // update
+            this.call[call.id] = call;
+
+        }
+
     }
 
     updateAmbulanceCallStatus(message) {
@@ -116,9 +128,9 @@ export class AppClient extends TopicObserver {
 
         // get ambulance and call ids
         const topic = message.topic.split('/');
-        // const ambulance_id = topic[1];
         const call_id = topic[3];
 
+        // is this a new call?
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
 
             // retrieve call from api
@@ -131,7 +143,11 @@ export class AppClient extends TopicObserver {
                     // subscribe
                     this.subscribe('call/' + call.id + '/data', this.updateCall);
 
-            });
+                })
+                .catch( (error) => {
+                   console.log("'Could retrieve call with id '" + call_id + "'");
+                   console.log(error);
+                });
 
         }
 
