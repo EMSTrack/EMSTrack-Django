@@ -52,27 +52,28 @@ export class AppClient extends TopicObserver {
      */
     eventHandler(event) {
 
-        console.log(event);
-
         if (event.event === 'messageArrived') {
 
             const topic = event.object.destinationName;
-            console.log(topic);
-
             let payload;
             try {
                 payload = JSON.parse(event.object.payloadString);
             } catch(e) {
-                console.log(e);
+                console.warn('Could not parse incoming message.');
                 payload = event.object.payloadString;
             }
-
-            console.log(payload);
 
             // broadcast
             this.broadcast(topic, {topic: topic, payload: payload});
 
-        }
+        } else if (event.event === 'messageSent') {
+            /* ignore */
+        } else if (event.event === 'connect') {
+            /* ignore */
+        } else if (event.event === 'lostConnection') {
+            /* ignore */
+        } else 
+            console.log("Unknown event type '" + event.event + "'");
 
     }
 
