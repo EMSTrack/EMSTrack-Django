@@ -7,7 +7,7 @@ def jstags(request):
     return {
         'mqtt_broker': {
             'host': settings.MQTT['BROKER_WEBSOCKETS_HOST'],
-            'port': settings.MQTT['BROKER_WEBSOCKETS_PORT']
+            'port': int(settings.MQTT['BROKER_WEBSOCKETS_PORT'])
         },
         'client_id': 'javascript_client_' + uuid.uuid4().hex
     }
