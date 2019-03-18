@@ -6,17 +6,21 @@ import { TopicObserver } from "./topic-observer";
 
 export class Client extends TopicObserver {
 
-    constructor(client) {
+    constructor(mqttClient, httpClient) {
 
         // call super
         super();
 
-        this.mqttClient = client;
+        // mqtt client
+        this.mqttClient = mqttClient;
         this.event_observer = null;
 
         // register observer
         this.event_observer = (event) => this.eventHandler(event);
         this.mqttClient.observe(this.event_observer);
+
+        // http client
+        this.httpClient = httpClient;
 
     }
 

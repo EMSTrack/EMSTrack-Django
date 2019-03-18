@@ -186,7 +186,7 @@ describe('mqtt connection using api', () => {
         });
 
         let mqttPassword = null;
-        
+
         instance.get('user/' + userName + '/password/')
             .then( (response) => {
                 mqttPassword = response.data.password;
