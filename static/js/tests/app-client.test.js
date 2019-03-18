@@ -120,6 +120,8 @@ describe('client connection', () => {
         client.retrieveAmbulances();
         expect(client.ambulances).to.be.an('object');
 
+        done();
+
     });
 
     it('should disconnect', function(done) {
