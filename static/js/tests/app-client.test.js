@@ -88,7 +88,7 @@ describe('client connection', () => {
 
             new Promise(function (resolve, reject) {
 
-                client.subscribe('test/data', {qos: 2}, fn);
+                client.subscribe('test/data', fn, {qos: 2});
                 client.publish('test/data', 'something', 2, false);
 
                 while (receivedData === '') { /* wait */
