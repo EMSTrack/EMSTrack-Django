@@ -215,12 +215,35 @@ function resizeMap() {
 add_init_function(init);
 
 // initialization function
-function init (client) {
+function init( client ) {
 
     console.log('> map.js');
 
     // set apiClient
     apiClient = client;
+
+    // setup ambulances
+    setupAmbulances();
+
+    // signup for ambulance updates
+    console.log('Signing up for ambulance updates');
+    apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
+
+    // signup for ambulance call status updates
+    console.log('Signing up for ambulance call status updates');
+    apiClient.observe('ambulance/+/call/+/status', (message) => {
+        const topics = message.topic.split('/');
+        const ambulance_id = topics[1];
+        const call_id = topics[3];
+        updateAmbulanceCall(ambulance_id, call_id, message.payload);
+    });
+
+    // setup calls
+    setupCalls();
+
+    // signup for call updates
+    console.log('Signing up for call updates');
+    apiClient.observe('call/+/data', (message) => { updateCall(message.payload) } );
 
     // Retrieve hospitals
     console.log('Retrieving hospitals');
@@ -228,45 +251,30 @@ function init (client) {
         .then( (hospitals) => {
             console.log(Object.keys(hospitals).length + ' hospitals retrieved');
 
+            // setup hospitals
+            setupHospitals();
+
+            // signup for hospital updates
+            console.log('Signing up for hospital updates');
+            apiClient.observe('hospital/+/data', (message) => { updateHospital(message.payload) } );
+
             console.log('Retrieving bases');
             return apiClient.retrieveBases();
         })
         .then( (bases) => {
             console.log(Object.keys(bases).length + ' bases retrieved');
 
-            // Setup data
-            console.log('Setting up data');
-            setupData();
-
-            // Signup for updates
-            console.log('Signing up for data updates');
-
-            // signup for ambulance updates
-            apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
-
-            // signup for call updates
-            apiClient.observe('call/+/data', (message) => { updateCall(message.payload) } );
-
-            // signup for hospital updates
-            apiClient.observe('hospital/+/data', (message) => { updateHospital(message.payload) } );
-
-            // signup for ambulance call status updates
-            apiClient.observe('ambulance/+/call/+/status', (message) => {
-                const topics = message.topic.split('/');
-                const ambulance_id = topics[1];
-                const call_id = topics[3];
-                updateAmbulanceCall(ambulance_id, call_id, message.payload);
-            });
-
+            // Setup bases
+            setupBases();
         })
         .catch( (error) => {
             console.log('Failed to retrieve hospitals and bases from ApiClient');
             console.log(error);
         });
-
+    
 }
 
-function setupData() {
+function setupAmbulances() {
 
     // Retrieve ambulances from ApiClient
     console.log("Setup ambulances");
@@ -275,7 +283,7 @@ function setupData() {
     let n = 0;
     let lat = 0;
     let lon = 0;
-    Object.entries(apiClient.ambulances).forEach( (entry) => {
+    Object.entries(apiClient.ambulances).forEach((entry) => {
         const ambulance = entry[1];
         updateAmbulance(ambulance);
 
@@ -295,11 +303,27 @@ function setupData() {
         mymap.setView([lat, lon], 12);
     }
 
+}
+
+function setupCalls() {
+
+    // Retrieve calls from ApiClient
+    console.log("Setup calls");
+
+    Object.entries(apiClient.calls).forEach( (entry) => {
+        const call = entry[1];
+        updateCall(call);
+    });
+
+}
+
+function setupHospitals() {
+
     // Retrieve hospitals from ApiClient
     console.log("Setup hospitals");
 
     // Update hospitals
-    Object.entries(apiClient.hospitals).forEach( (entry) => {
+    Object.entries(apiClient.hospitals).forEach((entry) => {
         const hospital = entry[1];
         updateHospital(hospital);
         const location = hospital;
@@ -307,19 +331,16 @@ function setupData() {
         addLocationToMap(location);
     });
 
+}
+
+function setupBases() {
+
     // Retrieve locations from ApiClient
     console.log("Setup locations");
 
-    Object.entries(apiClient.bases).forEach( (entry) => {
+    Object.entries(apiClient.bases).forEach((entry) => {
         const base = entry[1];
         addLocationToMap(base);
-    });
-
-    // Retrieve calls from ApiClient
-    console.log("Setup calls");
-    Object.entries(apiClient.calls).forEach( (entry) => {
-        const call = entry[1];
-        updateCall(call);
     });
 
 }
@@ -1527,8 +1548,10 @@ function endDispatching() {
     $('#ambulance-selection-message').show();
 
     // clear patients
-    $('#patients').find('.btn-new-patient').off('click');
-    $('#patients').empty();
+    $('#patients')
+        .find('.btn-new-patient')
+        .off('click')
+        .empty();
 
     // show buttons
     $('#dispatchBeginButton').show();
@@ -1948,11 +1971,13 @@ function addPatientForm(index) {
 
     console.log('Adding patient form ' + index);
 
+    const patients = $('#patients');
+
     // add new patient form entry
-    $('#patients').append(newPatientForm(index, 'fa-plus'));
+    patients.append(newPatientForm(index, 'fa-plus'))
 
     // bind addPatient to click
-    $('#patients').find('#patient-' + index + '-button')
+    patients.find('#patient-' + index + '-button')
         .on('click', function(e) { addPatient(index); });
 
 }
