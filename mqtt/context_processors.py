@@ -1,6 +1,7 @@
 import uuid
 
 from django.conf import settings
+from django.urls import reverse
 
 
 def jstags(request):
@@ -9,5 +10,12 @@ def jstags(request):
             'host': settings.MQTT['BROKER_WEBSOCKETS_HOST'],
             'port': int(settings.MQTT['BROKER_WEBSOCKETS_PORT'])
         },
-        'client_id': 'javascript_client_' + uuid.uuid4().hex
+        'client_id': 'javascript_client_' + uuid.uuid4().hex,
+        'admin_urls': [reverse('login:list-user'),
+                       reverse('login:list-group'),
+                       reverse('equipment:list'),
+                       reverse('equipment:list-set'),
+                       reverse('ambulance:location_list'),
+                       reverse('login:list-client'),
+                       reverse('login:restart')]
     }

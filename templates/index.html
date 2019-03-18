@@ -116,8 +116,13 @@
 <script>
     const username = '{{ user.get_username }}';
     const ApiBaseUrl = '{% url 'index' %}api/';
+    {% if request.user.is_authenticated %}
     const MqttBroker = {{ mqtt_broker }};
     const clientId = '{{ client_id }}';
+    {% if request.user.is_staff %}
+    const adminUrls = '{{ admin_urls }}';
+    {% endif %}
+    {% endif %}
 </script>
 {% endautoescape %}
 
