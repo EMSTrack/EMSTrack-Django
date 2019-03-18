@@ -2,11 +2,6 @@ import { TopicObserver } from "./topic-observer";
 
 export class AppClient extends TopicObserver {
     
-    ambulances;
-    hospitals;
-    bases;
-    calls;
-
     /**
      *
      * @param {MqttClient} mqttClient
@@ -28,6 +23,12 @@ export class AppClient extends TopicObserver {
         // http client
         this.httpClient = httpClient;
 
+        // initialize
+        this.ambulances = undefined;
+        this.hospitals = undefined;
+        this.bases = undefined;
+        this.calls = undefined;
+        
     }
 
     disconnect() {
