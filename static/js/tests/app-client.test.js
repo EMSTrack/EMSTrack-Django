@@ -93,7 +93,7 @@ describe('client connection', () => {
                 client.subscribe('test/data', fn, {qos: 2});
                 client.publish('test/data', 'something', 2, false);
 
-                // while (receivedData === '') { /* wait */ }
+                while (receivedData === '') { /* wait */ }
                 resolve('got it!');
 
             })
