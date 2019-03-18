@@ -155,6 +155,7 @@ describe('mqtt connection using api', () => {
 
     const userName = 'admin';
     const password = 'cruzrojaadmin';
+    let token = null;
 
     it('get token', function(done) {
 
@@ -165,13 +166,15 @@ describe('mqtt connection using api', () => {
             }
         )
             .then( (response) => {
+                token = response.data.token;
+                expect(token !== null).to.equal(true);
                 done();
             })
             .catch( (error ) => {
                 console.log(error);
                 done(new Error(errorMessage));
             });
-        
+
     });
 
 });
