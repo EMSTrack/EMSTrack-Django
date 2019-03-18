@@ -162,7 +162,7 @@
     {% endblock %}
 </footer>
 
-{% if map_provider.provider == 'google' %}
+{% if request.user.is_authenticated and map_provider.provider == 'google' %}
 <script src="https://maps.googleapis.com/maps/api/js?key={{ map_provider.access_token }}" async defer></script>
 {% endif %}
 
@@ -173,6 +173,7 @@
     {% if request.user.is_authenticated %}
     const mqttBroker = {{ mqtt_broker }};
     const clientId = '{{ client_id }}';
+    const mapProvider = '{{ map_provider }}';
     {% if request.user.is_staff %}
     const adminUrls = {{ admin_urls }};
     {% endif %}
