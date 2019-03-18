@@ -4,7 +4,7 @@ import { AppClient } from "./app-client";
 
 const axios = require('axios');
 
-let apiClient;
+let apiClient = global.apiClient;
 
 // Ready function
 $(function () {

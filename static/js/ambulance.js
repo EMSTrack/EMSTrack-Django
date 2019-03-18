@@ -6,6 +6,7 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 let map;
 let page;
+let apiClient = global.apiClient;
 
 $(function() {
 
