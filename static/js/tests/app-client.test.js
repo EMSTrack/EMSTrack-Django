@@ -149,7 +149,7 @@ describe('client connection', () => {
 
             client.subscribe('test/data', fn);
             console.log(client.observers.get('test/data'));
-            expect(Object.keys(client.observers.get('test/data')).to.equal(1));
+            expect(Object.keys(client.observers.get('test/data'))).to.equal(1);
             client.publish('test/data', '"something"', 2, false);
 
         })
