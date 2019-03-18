@@ -1,10 +1,12 @@
 const expect = require('chai').expect;
 
-var settings = require('./mqtt/client-harness');
+const settings = require('./mqtt/client-harness');
+
+const axios = require('axios');
 
 import { MqttClient } from "../mqtt-client";
 
-describe('mqtt connection', () => {
+describe('mqtt connection using password', () => {
 
     const mqttClient = new MqttClient('localhost', 8884, 'test-client', 1);
 
@@ -146,5 +148,30 @@ describe('mqtt messages', () => {
             .finally(done);
 
     })
+
+});
+
+describe('mqtt connection using api', () => {
+
+    const userName = 'admin';
+    const password = 'cruzrojaadmin';
+
+    it('get token', function(done) {
+
+        axios.post('http://localhost:8000/en/auth/token/',
+            {
+                username: userName,
+                password: password
+            }
+        )
+            .then( (response) => {
+                done();
+            })
+            .catch( (error ) => {
+                console.log(error);
+                done(new Error(errorMessage));
+            });
+        
+    });
 
 });
