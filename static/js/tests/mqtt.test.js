@@ -17,14 +17,14 @@ describe('mqtt connection using password', () => {
 
         mqttClient.connect({
             userName: userName,
-            password: password,
-            onSuccess: () => {
+            password: password
+        })
+            .then( () => {
                 done();
-            },
-            onFailure: (cntxt, errorCode, errorMessage) => {
-                done(errorMessage);
-            }
-        });
+            })
+            .catch( (error) => {
+                console.log(error); done(new Error('Did not receive!'));
+            });
 
     });
 
@@ -71,14 +71,14 @@ describe('mqtt messages', () => {
 
         mqttClient.connect({
             userName: userName,
-            password: password,
-            onSuccess: () => {
+            password: password
+        })
+            .then( () => {
                 done();
-            },
-            onFailure: (cntxt, errorCode, errorMessage) => {
-                done(new Error(errorMessage));
-            }
-        });
+            })
+            .catch( (error) => {
+                console.log(error); done(new Error('Did not receive!'));
+            });
 
     });
 

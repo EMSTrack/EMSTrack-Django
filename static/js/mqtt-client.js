@@ -24,7 +24,6 @@ export class MqttConnectionLostEvent extends MqttEvent {
     }
 }
 
-
 export class MqttMessageSentEvent extends MqttEvent {
     constructor(message) {
         super('messageSent', message);
@@ -71,7 +70,7 @@ export class MqttClient extends Observer {
         this.client.onConnected = (reconnect, uri) => this.onConnected(reconnect, uri);
 
         // options
-        this.options = {
+        const mqttOptions = {
             timeout: 60,
             useSSL: true,
             cleanSession: true
@@ -80,12 +79,21 @@ export class MqttClient extends Observer {
         // Altering using user-provided options
         for (const property in options) {
             if (options.hasOwnProperty(property)) {
-                this.options[property] = options[property];
+                mqttOptions[property] = options[property];
             }
         }
 
-        // attempt to connect to MQTT broker
-        this.client.connect(this.options);
+        return new Promise( function(resolve, reject) {
+
+            mqttOptions.onSuccess = (ctx) => { resolve('connected'); }
+            mqttOptions.onFailure = (ctx, errorCode, errorMessage) => {
+                reject( new Error("error '" + errorCode + "': " + errorMessage));
+            }
+
+            // attempt to connect to MQTT broker
+            this.client.connect(mqttOptions);
+
+        });
 
     }
 
