@@ -168,10 +168,14 @@ describe('client connection', () => {
 
         // retrieve ambulances
         expect(client.ambulances).to.be.an('undefined');
-        client.retrieveAmbulances();
-        expect(client.ambulances).to.be.an('object');
-
-        done();
+        client.retrieveAmbulances()
+            .then( () => {
+                expect(client.ambulances).to.be.an('object');
+                done('done retrieving');
+            } )
+            .catch( (error) =>
+                { console.log(error); done(new Error(error); ); }
+            );
 
     });
 
