@@ -238,6 +238,9 @@ function init (client) {
             console.log('Setting up data');
             setupData();
 
+            // Signup for updates
+            console.log('Signing up for data updates');
+
             // signup for ambulance updates
             apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
 
