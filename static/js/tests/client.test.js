@@ -50,7 +50,7 @@ describe('client connection', () => {
         httpClient.get('user/' + userName + '/password/')
             .then( (response) => {
                 console.log(response);
-                mqttPassword = response.data.password;
+                mqttPassword = response.data;
                 expect(mqttPassword !== null).to.equal(true);
                 done();
             })

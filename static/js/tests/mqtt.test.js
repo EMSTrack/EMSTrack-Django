@@ -189,7 +189,7 @@ describe('mqtt connection using api', () => {
 
         instance.get('user/' + userName + '/password/')
             .then( (response) => {
-                mqttPassword = response.data.password;
+                mqttPassword = response.data;
                 expect(mqttPassword !== null).to.equal(true);
                 done();
             })
