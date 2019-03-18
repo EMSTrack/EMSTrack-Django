@@ -271,48 +271,68 @@ function init (client) {
     // Create category panes and filters
     createCategoryPanesAndFilters();
 
-    // retrieve temporary password for mqttClient and connect to broker
-    $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {
+    // Setup data
+    setupData();
 
-        // create mqtt broker client
-        mqttClient = new Paho.MQTT.Client(MQTTBroker.host,
-            MQTTBroker.port,
-            clientId);
+}
 
-        // set callback handlers
-        mqttClient.onMessageArrived = onMessageArrived;
+function setupData() {
 
-        /*
-        // set will message
-        var willMessage = new Paho.MQTT.Message('D');
-        willMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
-        willMessage.qos = 2;
-        willMessage.retained = false;
-        */
+    // Retrieve ambulances from ApiClient
+    console.log("Setup ambulances");
 
-        // attempt to connect to MQTT broker
-        mqttClient.connect({
-            //connection attempt timeout in seconds
-            timeout: 60,
-            userName: username,
-            password: password,
-            useSSL: true,
-            cleanSession: true,
-            onSuccess: onConnect,
-            onFailure: onConnectFailure
-            // , willMessage: willMessage,
-        });
+    // Update ambulances
+    let n = 0;
+    let lat = 0;
+    let lon = 0;
+    apiClient.ambulances.forEach( (ambulance) => {
+        updateAmbulance(ambulance);
 
-    })
-        .fail(function (jqxhr, textStatus, error) {
+        // calculate center of the ambulances
+        n = n + 1;
+        lat += ambulance.location.latitude;
+        lon += ambulance.location.longitude;
+    });
 
-            bsalert("Connection to MQTT broker failed: \"" +
-                textStatus + "," + error + "\"\n" +
-                "Information will not be updated in real time.");
+    // Center map
+    if (n > 0) {
+        // Set map view
+        lat = lat / n;
+        lon = lon / n;
+        console.log('Center at lat = ' + lat + ', lon = ' + lon);
 
-        });
+        mymap.setView([lat, lon], 12);
+    }
 
-};
+    // Retrieve hospitals from ApiClient
+    console.log("Setup hospitals");
+
+    // Update hospitals
+    apiClient.hospitals.forEach( (hospital) => {
+        updateHospital(hospital);
+    });
+
+    // Retrieve locations from ApiClient
+    console.log("Setup locations");
+
+    apiClient.hospitals.forEach( (hospital) => {
+        addLocationToMap(hospital);
+    });
+
+    apiClient.bases.forEach( (base) => {
+        addLocationToMap(base);
+    });
+
+    // Retrieve calls from ApiClient
+    console.log("Setup calls");
+    apiClient.calls.forEach( (call) => {
+
+        // update call
+        updateCall(call);
+
+    });
+
+}
 
 // alert using bootstrap modal
 function bsalert(message, alertClass, title) {
@@ -466,37 +486,6 @@ function getData(subscribe) {
     });
 
 }
-
-/* Handle connect */
-function onConnect() {
-
-    console.log("Connected to MQTT broker");
-
-    /*
-    // handshake online
-    var onlineMessage = new Paho.MQTT.Message('O');
-    onlineMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
-    onlineMessage.qos = 2;
-    onlineMessage.retained = false;
-    mqttClient.send(onlineMessage);
-    console.log('Sent online message');
-    */
-
-    // get data
-    getData();
-
-};
-
-/* Handle missconnection */
-function onConnectFailure(message) {
-
-    bsalert("Connection to MQTT broker failed: " + message.errorMessage +
-        "Information will not be updated in real time.");
-
-    // get data without subscribing
-    getData(false);
-
-};
 
 /* Handle 'ambulance/+/data' mqtt messages */
 function onMessageArrived(message) {
