@@ -65,7 +65,7 @@ export class AppClient extends TopicObserver {
                 payload = event.object.payloadString;
             }
 
-            console.log(payload);
+            console.log({topic: topic, payload: payload});
 
             // broadcast
             this.broadcast(topic, {topic: topic, payload: payload});
