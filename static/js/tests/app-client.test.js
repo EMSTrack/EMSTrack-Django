@@ -173,9 +173,9 @@ describe('client connection', () => {
                 expect(client.ambulances).to.be.an('object');
                 done('done retrieving');
             } )
-            .catch( (error) =>
-                { console.log(error); done(new Error(error); ); }
-            );
+            .catch( (error) => {
+                console.log(error); done(new Error(error));
+            });
 
     });
 
