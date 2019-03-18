@@ -6,6 +6,9 @@ const httpClient = require('axios');
 
 let apiClient;
 
+let APIBaseUrl = window.location.origin;
+console.log(APIBaseUrl);
+
 // Ready function
 $(function () {
 
