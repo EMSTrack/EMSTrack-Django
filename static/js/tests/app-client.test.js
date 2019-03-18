@@ -74,13 +74,12 @@ describe('client connection', () => {
 
     });
 
-    it('create client', function(done) {
+    it('publish and receive', function(done) {
 
         client = new AppClient(mqttClient, httpClient);
 
         let receivedData = '';
         const fn = function(data) { console.log(data); receivedData = data; };
-
 
         new Promise(function(resolve, reject) {
 
@@ -101,6 +100,15 @@ describe('client connection', () => {
                 () => {}
             )
             .finally(done);
+
+    });
+
+    it('retrieve data', function(done) {
+
+        // retrieve ambulances
+        expect(client.ambulances).to.be.an('undefined');
+        client.retrieveAmbulances();
+        expect(client.ambulances).to.be.an('object');
 
     });
 

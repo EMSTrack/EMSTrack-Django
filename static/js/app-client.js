@@ -28,7 +28,7 @@ export class AppClient extends TopicObserver {
         this.hospitals = undefined;
         this.bases = undefined;
         this.calls = undefined;
-        
+
     }
 
     disconnect() {
