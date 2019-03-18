@@ -52,6 +52,8 @@ export class AppClient extends TopicObserver {
      */
     eventHandler(event) {
 
+        console.log(event);
+
         if (event.event === 'messageArrived') {
 
             const topic = event.object.destinationName;
@@ -62,6 +64,8 @@ export class AppClient extends TopicObserver {
                 console.warn('Could not parse incoming message.');
                 payload = event.object.payloadString;
             }
+
+            console.log(payload);
 
             // broadcast
             this.broadcast(topic, {topic: topic, payload: payload});
