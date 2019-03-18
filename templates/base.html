@@ -168,9 +168,6 @@
 {% endif %}
 {% endif %}
 
-{% block scripts %}
-{% endblock %}
-
 {% autoescape off %}
 <script>
     const username = '{{ user.get_username }}';
@@ -186,6 +183,9 @@
 {% endautoescape %}
 
 {% render_bundle 'main' 'js' 'BASE' %}
+
+{% block scripts %}
+{% endblock %}
 
 </body>
 </html>

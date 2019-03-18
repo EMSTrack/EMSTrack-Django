@@ -25,9 +25,35 @@ $(function() {
         page_size = searchParams.get('page_size');
 
  	// Retrieve ambulances via AJAX
- 	retrieveAmbulances(ambulance_id)
+    retrieveAmbulanceData(ambulance_id)
 
 });
+
+function retrieveAmbulanceData(ambulance_id) {
+
+    // Build url
+    let url = 'ambulance/' + ambulance_id + '/updates';
+    if (page != null) {
+        url += "?page=" + page;
+        if (page_size != null)
+            url += "&page_size=" + page_size;
+    } else if (page_size != null)
+            url += "?page_size=" + page_size;
+
+    apiClient.httpClient.get(url)
+        .then( (response) => {
+
+            console.log('Got ambulace data from API');
+            addAmbulanceRoute(response.data);
+
+        })
+        .catch( (error) => {
+            console.log('Failed to retrieve ambulance data');
+            console.log(error);
+        });
+
+}
+
 
 function retrieveAmbulances(ambulance_id) {
 
