@@ -330,7 +330,9 @@ function setupData() {
     Object.entries(apiClient.hospitals).forEach( (entry) => {
         const hospital = entry[1];
         updateHospital(hospital);
-        addLocationToMap(hospital);
+        const location = hospital;
+        location.type = 'h';
+        addLocationToMap(location);
     });
 
     // Retrieve locations from ApiClient
