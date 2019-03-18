@@ -105,7 +105,9 @@ describe('client connection', () => {
                     () => {
                     }
                 )
-                .finally(done);
+                .catch(
+                    () => done(new Error('Did not receive!'))
+                );
 
         } else
 
