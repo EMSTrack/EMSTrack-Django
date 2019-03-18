@@ -76,7 +76,7 @@ describe('client connection', () => {
 
     it('create client', function() {
 
-        const client = new Client(mqttClient, httpClient);
+        client = new Client(mqttClient, httpClient);
 
     });
 
