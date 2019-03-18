@@ -70,6 +70,10 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+
 <script>
 
     // Ready function
@@ -80,7 +84,7 @@
         });
 
         // Should start up modal?
-        var pathname = window.location.pathname;
+        const pathname = window.location.pathname;
         // console.log('pathname = ' + pathname);
         if (pathname === "{% url 'login:login' %}") {
 
@@ -89,7 +93,7 @@
                 keyboard: false
             });
 
-        } else if (pathname == "{% url 'login:signup' %}") {
+        } else if (pathname === "{% url 'login:signup' %}") {
 
             // adjust modal
             $('#loginTitle').html('EMSTrack {% trans "Signup" %}');
@@ -109,24 +113,3 @@
 </script>
 
 {% endblock %}
-
-{% block scripts %}
-
-{% autoescape off %}
-<script>
-    const username = '{{ user.get_username }}';
-    const apiBaseUrl = '{% url 'index' %}api/';
-    {% if request.user.is_authenticated %}
-    const mqttBroker = {{ mqtt_broker }};
-    const clientId = '{{ client_id }}';
-    {% if request.user.is_staff %}
-    const adminUrls = {{ admin_urls }};
-    {% endif %}
-    {% endif %}
-</script>
-{% endautoescape %}
-
-{% render_bundle 'main' 'js' 'BASE' %}
-
-{% endblock %}
-

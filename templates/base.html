@@ -169,33 +169,21 @@
 {% block scripts %}
 {% endblock %}
 
+{% autoescape off %}
 <script>
-
-    // make current page active
-    var pathname = window.location.pathname;
-    console.log("pathname = '" + pathname + "'");
-
-    // exclude home page
-    if (!pathname.match(/\/[^\/]*\//)) {
-        // Make current page active
-        $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
-
-        if ((pathname === "{% url 'login:list-user' %}") ||
-            (pathname === "{% url 'login:list-group' %}") ||
-            (pathname === "{% url 'equipment:list' %}") ||
-            (pathname === "{% url 'equipment:list-set' %}") ||
-            (pathname === "{% url 'ambulance:location_list' %}") ||
-            (pathname === "{% url 'login:list-client' %}") ||
-            (pathname === "{% url 'login:restart' %}")) {
-
-            // Make admin menu active
-            $('#navitemDropdown').addClass('nav-item active');
-
-        }
-
-    }
-
+    const username = '{{ user.get_username }}';
+    const apiBaseUrl = '{% url 'index' %}api/';
+    {% if request.user.is_authenticated %}
+    const mqttBroker = {{ mqtt_broker }};
+    const clientId = '{{ client_id }}';
+    {% if request.user.is_staff %}
+    const adminUrls = {{ admin_urls }};
+    {% endif %}
+    {% endif %}
 </script>
+{% endautoescape %}
+
+{% render_bundle 'main' 'js' 'BASE' %}
 
 </body>
 </html>
