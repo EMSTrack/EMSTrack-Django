@@ -42,12 +42,11 @@ describe('client connection', () => {
     it('create http client and get password', function(done) {
 
         httpClient = axios.create({
-            baseURL: 'http://localhost:8000/en/api/',
             timeout: 1000,
             headers: {'Authorization': 'Token ' + token}
         });
 
-        httpClient.get('user/' + userName + '/password/')
+        httpClient.get('http://localhost:8000/en/api/' + 'user/' + userName + '/password/')
             .then( (response) => {
                 mqttPassword = response.data.password;
                 expect(mqttPassword !== null).to.equal(true);
