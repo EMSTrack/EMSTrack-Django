@@ -4,8 +4,6 @@ import { AppClient } from "./app-client";
 
 const axios = require('axios');
 
-let apiClient = global.apiClient;
-
 // initialization
 let init_functions = [];
 global.add_init_function = function add_init_function(fn) {
@@ -59,7 +57,8 @@ $(function () {
         .then( () => {
 
             // instantiate client
-            apiClient = new AppClient(mqttClient, httpClient);
+            const apiClient = new AppClient(mqttClient, httpClient);
+            global.apiClient = apiClient;
 
             // retrieve ambulances
             console.log('Retrieving ambulances');
