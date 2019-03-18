@@ -9,13 +9,19 @@ let apiClient;
 // Ready function
 $(function () {
 
+    // quick return if logged off
+    if (username === '')
+        return;
+
+    // initialize ApiClient
     let mqttClient;
     const httpClient = axios.create({
         baseURL: ApiBaseUrl
     });
 
     // retrieve temporary password for mqttClient and connect to broker
-    console.log('Retrieving MQTT password from ' + ApiBaseUrl);
+    console.log('ApiBaseUrl: ' + ApiBaseUrl);
+    console.log('Retrieving MQTT password');
     httpClient.get('user/' + username + '/password/')
         .then( (response) => {
 
@@ -41,7 +47,7 @@ $(function () {
 
         })
         .then( (ambulances) => {
-            console.log(Object.keys(ambulances).length + ' ambulances retrieved.');
+            console.log(Object.keys(ambulances).length + ' ambulances retrieved');
             console.log('Done initializing ApiClient');
         })
         .catch( (error ) => {

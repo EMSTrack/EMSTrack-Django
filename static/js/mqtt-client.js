@@ -124,14 +124,14 @@ export class MqttClient extends Observer {
 
     onConnected(reconnect, uri) {
         if (this.logLevel > 0)
-            console.log("Connected to mqtt client");
+            console.log("Connected to mqtt broker");
         this.isConnected = true;
         this.broadcast(new MqttConnectEvent(reconnect, uri));
     }
 
     onConnectionLost(errorCode, errorMessage) {
         if (this.logLevel > 0)
-            console.log("Disconnected from mqtt client");
+            console.log("Disconnected from mqtt broker");
         this.isConnected = false;
         this.broadcast(new MqttConnectionLostEvent(errorCode, errorMessage));
     }
