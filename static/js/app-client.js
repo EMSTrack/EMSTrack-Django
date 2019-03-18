@@ -52,7 +52,7 @@ export class AppClient extends TopicObserver {
      */
     eventHandler(event) {
 
-        console.log(event);
+        // console.log(event);
 
         if (event.event === 'messageArrived') {
 
@@ -65,7 +65,7 @@ export class AppClient extends TopicObserver {
                 payload = event.object.payloadString;
             }
 
-            console.log({topic: topic, payload: payload});
+            // console.log({topic: topic, payload: payload});
 
             // broadcast
             this.broadcast(topic, {topic: topic, payload: payload});
@@ -226,7 +226,7 @@ export class AppClient extends TopicObserver {
                 
             })
             .catch( (error) => {
-                console.log('retrievecall: ' + error);
+                console.log('retrieveCall: ' + error);
             });
 
     }

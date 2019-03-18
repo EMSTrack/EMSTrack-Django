@@ -143,14 +143,11 @@ describe('client connection', () => {
         new Promise(function (resolve, reject) {
 
             fn = function (data) {
-                console.log('HERE');
                 receivedData = data;
                 resolve('got it!');
             };
 
             client.subscribe('test/data', fn);
-            console.log(client.observers.get('test/data'));
-            expect(client.observers.get('test/data')['test/data'][0]).to.equal(fn);
             client.publish('test/data', '"something"', 2, false);
 
         })
