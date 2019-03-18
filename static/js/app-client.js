@@ -54,11 +54,12 @@ export class AppClient extends TopicObserver {
 
         console.log(event);
 
-        if (event.event === 'messageReceived') {
+        if (event.event === 'messageArrived') {
 
             const topic = event.object.destinationName;
-            let payload;
+            console.log(topic);
 
+            let payload;
             try {
                 payload = JSON.parse(event.object.payloadString);
             } catch(e) {
@@ -66,7 +67,6 @@ export class AppClient extends TopicObserver {
                 payload = event.object.payloadString;
             }
 
-            console.log(topic);
             console.log(payload);
 
             // broadcast
