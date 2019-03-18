@@ -114,7 +114,7 @@ export class AppClient extends TopicObserver {
                     this.calls[call.id] = call;
 
                     // subscribe
-                    AppClient.this.subscribe('call/' + call.id + '/data', this.updateCall);
+                    this.subscribe('call/' + call.id + '/data', this.updateCall);
 
             });
 

@@ -53,7 +53,7 @@ export class MqttClient extends Observer {
         this.clientId = clientId;
         this.logLevel = logLevel;
 
-        this.client = null;
+        this.client = undefined;
         this.isConnected = false;
     }
 
@@ -94,26 +94,26 @@ export class MqttClient extends Observer {
     }
 
     disconnect() {
-        if (this.client !== null) {
+        if (typeof this.client !== 'undefined') {
             this.client.disconnect();
-            this.client = null;
+            this.client = undefined;
         }
     }
 
     subscribe(filter, options) {
-        if (this.client !== null) {
+        if (typeof this.client !== 'undefined') {
             this.client.subscribe(filter, options);
         }
     }
 
     publish(topic, payload, qos, retained) {
-        if (this.client !== null) {
+        if (typeof this.client !== 'undefined') {
             this.client.publish(topic, payload, qos, retained);
         }
     }
 
     unsubscribe(filter, options) {
-        if (this.client !== null) {
+        if (typeof this.client !== 'undefined') {
             this.client.unsubscribe(filter, options);
         }
     }

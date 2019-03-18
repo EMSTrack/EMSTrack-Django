@@ -2,16 +2,28 @@ const expect = require('chai').expect;
 
 const axios = require('axios');
 
-import { MqttClient } from "../mqtt-client";
+import { Observer } from "../observer";
+
+import { MqttClient, MqttEvent } from "../mqtt-client";
 
 import { AppClient } from "../app-client";
+
+class MockMqttClient extends MqttClient {
+
+    constructor() {
+        super(undefined, undefined, undefined, 2);
+    }
+
+}
 
 
 describe('client observe', () => {
 
     it('observe pattern', () => {
 
-        
+        const mqttClient = new MockMqttClient();
+
+        const client = new AppClient(mqttClient, undefined);
 
     });
 
