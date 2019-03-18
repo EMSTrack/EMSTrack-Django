@@ -158,6 +158,7 @@ describe('client connection', () => {
                 () => {
                     expect(receivedData).to.eql({topic: 'test/data', payload: 'something'});
                     client.unsubscribe('test/data', fn);
+                    done();
                 }
             )
             .catch(
