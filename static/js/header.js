@@ -1,6 +1,6 @@
-import { MqttClient } from "mqtt-client";
+import { MqttClient } from "./mqtt-client";
 
-import { AppClient } from "app-client";
+import { AppClient } from "./app-client";
 
 const httpClient = require('axios');
 
