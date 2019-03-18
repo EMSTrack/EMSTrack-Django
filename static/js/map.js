@@ -271,8 +271,32 @@ function init (client) {
     // Create category panes and filters
     createCategoryPanesAndFilters();
 
-    // Setup data
-    setupData();
+    // Retrieve hospitals
+    console.log('Retrieving hospitals');
+    apiClient.retrieveHospitals()
+        .then( (hospitals) => {
+            console.log(Object.keys(hospitals).length + ' hospitals retrieved');
+
+            console.log('Retrieving bases');
+            return apiClient.retrieveBases();
+        })
+        .then( (bases) => {
+            console.log(Object.keys(bases).length + ' bases retrieved');
+
+            console.log('Retrieving calls');
+            return apiClient.retrieveCalls();
+        })
+        .then( (calls) => {
+            console.log(Object.keys(calls).length + ' calls retrieved');
+
+            // Setup data
+            console.log('Setting up data');
+            setupData();
+        })
+        .catch( (error) => {
+            console.log('Failed to retrieve data from ApiClient');
+            console.log(error);
+        });
 
 }
 
