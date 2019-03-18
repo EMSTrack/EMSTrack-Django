@@ -122,15 +122,15 @@ describe('client connection', () => {
         mqttClient = new MqttClient('localhost', 8884, 'test-client', 0);
 
         mqttClient.connect({
-            userName: userName,
-            password: mqttPassword,
-            onSuccess: () => {
+                userName: userName,
+                password: mqttPassword
+        })
+            .then( () => {
                 done();
-            },
-            onFailure: (cntxt, errorCode, errorMessage) => {
-                done(new Error(errorMessage));
-            }
-        });
+            })
+            .catch( (error) => {
+                console.log(error); done(new Error('Did not receive!'));
+            });
 
     });
 
