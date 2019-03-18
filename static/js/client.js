@@ -23,8 +23,8 @@ export class Client extends TopicObserver {
             return;
 
         // retrieve temporary password for mqttClient and connect to broker
-        getJSON(this.ApiBaseUrl + 'user/' + this.username + '/password/',
-            (password) => {
+        getJSON(this.ApiBaseUrl + 'user/' + this.username + '/password/')
+            .then( (password) => {
 
                 console.log( "success" );
 
@@ -40,11 +40,8 @@ export class Client extends TopicObserver {
                 this.mqttClient.observe(this.event_observer);
 
             })
-            .done(function() {
-                console.log( "done" );
-            })
-            .fail(function() {
-                console.log( "error" );
+            .catch( (error) => {
+                console.log( "error = " + error);
             });
 
     }
