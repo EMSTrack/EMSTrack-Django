@@ -119,7 +119,7 @@ describe('client connection', () => {
 
     it('create mqtt client', function(done) {
 
-        mqttClient = new MqttClient('localhost', 8884, 'test-client', 1);
+        mqttClient = new MqttClient('localhost', 8884, 'test-client', 0);
 
         mqttClient.connect({
             userName: userName,
