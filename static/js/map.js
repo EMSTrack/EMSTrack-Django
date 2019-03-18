@@ -226,20 +226,12 @@ function init (client) {
  	let options = {
  		map_id: "live-map",
  		zoom: 12,
-        map_provider: map_provider
+        map_provider: mapProvider
  	};
  	const map = new LeafletWidget(options);
 
     // Set map view
     mymap = map.map;
-
-    /*
-    // token and attribution
-    const attribution = 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>';
-
-    // Set map view
-    mymap = L.map('live-map').setView([32.5149, -117.0382], 12);
-    */
 
     // Map to fill the view
     resizeMap();
@@ -248,50 +240,6 @@ function init (client) {
     $(window).on("resize", function () {
         resizeMap();
     }).trigger("resize");
-
-    // geocoder = L.mapbox.geocoder('mapbox.places');
-
-    /*
-    if (map_provider['provider'] === 'mapbox') {
-
-        // Add layer to map
-        L.tileLayer(
-            'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=' + map_provider['access_token'],
-            {
-                attribution: attribution,
-                maxZoom: 18,
-                id: 'mapbox.streets',
-                accessToken: map_provider['access_token']
-            }
-        ).addTo(mymap);
-
-    }
-    */
-
-    /*
-    // Add the drawing toolbar and the layer of the drawings.
-    var drawnItems = new L.FeatureGroup();
-    mymap.addLayer(drawnItems);
-    var drawControl = new L.Control.Draw({
-        edit: {
-            featureGroup: drawnItems
-        }
-    });
-    mymap.addControl(drawControl);
-
-    // Event handler for when something is drawn. Only handles
-    // when a new drawing is made for now.
-    mymap.on(L.Draw.Event.CREATED,
-        function (e) {
-            var type = e.layerType;
-            var layer = e.layer;
-            if (type === 'marker') {
-                // Do marker specific actions
-            }
-            // Do whatever else you need to. (save to db; add to map etc)
-            mymap.addLayer(layer);
-        });
-    */
 
     // Handle begin dispatching button
     $('#dispatchBeginButton').click(function(event) {
