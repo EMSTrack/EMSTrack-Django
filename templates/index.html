@@ -112,12 +112,14 @@
 
 {% block scripts %}
 
+{% autoescape off %}
 <script>
-    const username = '{{ user.get_username|safe }}';
+    const username = '{{ user.get_username }}';
     const ApiBaseUrl = '{% url 'index' %}api/';
     const MqttBroker = {{ mqtt_broker }};
     const clientId = '{{ client_id }}';
 </script>
+{% endautoescape %}
 
 {% render_bundle 'main' 'js' 'BASE' %}
 
