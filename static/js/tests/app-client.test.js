@@ -61,7 +61,7 @@ describe('client observe', () => {
                 done();
             })
             .catch(
-                () => done(new Error('Did not receive!'))
+                (error) => { console.log(error); done(new Error('Did not receive!'));}
             );
 
     });
