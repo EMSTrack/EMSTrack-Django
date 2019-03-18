@@ -101,7 +101,6 @@ describe('client connection', () => {
             )
             .finally(done);
 
-
     });
 
     it('should disconnect', function(done) {
