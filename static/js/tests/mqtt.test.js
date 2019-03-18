@@ -177,16 +177,16 @@ describe('mqtt connection using api', () => {
 
     });
 
-    const instance = axios.create({
-        baseURL: 'http://localhost:8000/en/api/',
-        timeout: 1000,
-        headers: {'Authorization': 'Token ' + token}
-    });
-
-    let mqttPassword = null;
-
     it('get password', function(done) {
 
+        const instance = axios.create({
+            baseURL: 'http://localhost:8000/en/api/',
+            timeout: 1000,
+            headers: {'Authorization': 'Token ' + token}
+        });
+
+        let mqttPassword = null;
+        
         instance.get('user/' + userName + '/password/')
             .then( (response) => {
                 mqttPassword = response.data.password;
