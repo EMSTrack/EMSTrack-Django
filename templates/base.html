@@ -162,10 +162,8 @@
     {% endblock %}
 </footer>
 
-{% if map_provider %}
 {% if map_provider.provider == 'google' %}
 <script src="https://maps.googleapis.com/maps/api/js?key={{ map_provider.access_token }}" async defer></script>
-{% endif %}
 {% endif %}
 
 {% autoescape off %}

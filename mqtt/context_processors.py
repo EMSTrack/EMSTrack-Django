@@ -17,5 +17,10 @@ def jstags(request):
                        reverse('equipment:list-set'),
                        reverse('ambulance:location_list'),
                        reverse('login:list-client'),
-                       reverse('login:restart')]
+                       reverse('login:restart')],
+        'map_provider': {
+            'provider': settings.MAP_PROVIDER,
+            'access_token': settings.MAP_PROVIDER_TOKEN
+        },
     }
+
