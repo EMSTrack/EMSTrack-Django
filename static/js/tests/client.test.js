@@ -1,5 +1,7 @@
 const expect = require('chai').expect;
 
+const axios = require('axios');
+
 import { MqttClient } from "../mqtt-client";
 
 import { Client } from "../client";
