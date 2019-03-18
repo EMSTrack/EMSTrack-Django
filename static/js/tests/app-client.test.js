@@ -164,7 +164,7 @@ describe('client connection', () => {
 
     });
 
-    it('retrieve data', function(done) {
+    it('retrieve ambulances', function(done) {
 
         // retrieve ambulances
         expect(client.ambulances).to.be.an('undefined');
@@ -179,6 +179,51 @@ describe('client connection', () => {
 
     });
 
+    it('retrieve hospitals', function(done) {
+
+        // retrieve hospitals
+        expect(client.hospitals).to.be.an('undefined');
+        client.retrieveHospitals()
+            .then( () => {
+                expect(client.hospitals).to.be.an('object');
+                done();
+            } )
+            .catch( (error) => {
+                console.log(error); done(new Error(error));
+            });
+
+    });
+
+    it('retrieve calls', function(done) {
+
+        // retrieve calls
+        expect(client.calls).to.be.an('undefined');
+        client.retrieveCalls()
+            .then( () => {
+                expect(client.calls).to.be.an('object');
+                done();
+            } )
+            .catch( (error) => {
+                console.log(error); done(new Error(error));
+            });
+
+    });
+
+    it('retrieve bases', function(done) {
+
+        // retrieve bases
+        expect(client.bases).to.be.an('undefined');
+        client.retrieveBases()
+            .then( () => {
+                expect(client.bases).to.be.an('object');
+                done();
+            } )
+            .catch( (error) => {
+                console.log(error); done(new Error(error));
+            });
+
+    });
+    
     it('should disconnect', function(done) {
 
         const resolvingPromise = new Promise(function(resolve, reject) {

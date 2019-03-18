@@ -165,7 +165,7 @@ export class AppClient extends TopicObserver {
                 });
 
                 // return ambulances
-                return (this.ambulances);
+                return this.ambulances;
 
             })
 
@@ -178,7 +178,7 @@ export class AppClient extends TopicObserver {
             this.hospitals = {};
 
         // retrieve ambulances
-        this.httpClient.get('hospital/')
+        return this.httpClient.get('hospital/')
             .then( (response) => {
                 
                 // Update hospitals
@@ -192,11 +192,11 @@ export class AppClient extends TopicObserver {
                     this.subscribe('hospital/' + hospital.id + '/data', this.updateHospital);
                     
                 });
-                
+
+                // return hospitals
+                return this.hospitals;
+
             })
-            .catch( (error) => {
-                console.log('retrieveHospital: ' + error);
-            });
 
     }
 
@@ -207,7 +207,7 @@ export class AppClient extends TopicObserver {
             this.calls = {};
 
         // retrieve ambulances
-        this.httpClient.get('call/')
+        return this.httpClient.get('call/')
             .then( (response) => {
                 
                 // Update calls
@@ -221,11 +221,11 @@ export class AppClient extends TopicObserver {
                     this.subscribe('call/' + call.id + '/data', this.updateCall);
                     
                 });
-                
+
+                // return calls
+                return this.calls;
+
             })
-            .catch( (error) => {
-                console.log('retrieveCall: ' + error);
-            });
 
     }
 
@@ -236,7 +236,7 @@ export class AppClient extends TopicObserver {
             this.bases = {};
 
         // retrieve ambulances
-        this.httpClient.get('location/Base/')
+        return this.httpClient.get('location/Base/')
             .then( (response) => {
 
                 // Update bases
@@ -247,10 +247,10 @@ export class AppClient extends TopicObserver {
 
                 });
 
+                // return bases
+                return this.bases;
+
             })
-            .catch( (error) => {
-                console.log('retrieveBase: ' + error);
-            });
 
     }
 
