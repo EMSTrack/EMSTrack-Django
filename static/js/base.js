@@ -6,6 +6,12 @@ const axios = require('axios');
 
 let apiClient = global.apiClient;
 
+// initialization
+let init_functions = [];
+global.add_init_function = function add_init_function(fn) {
+    init_functions.push(fn)
+};
+
 // Ready function
 $(function () {
 
@@ -61,8 +67,13 @@ $(function () {
 
         })
         .then( (ambulances) => {
+
             console.log(Object.keys(ambulances).length + ' ambulances retrieved');
-            console.log('Done initializing ApiClient');
+
+            console.log('Calling initialization functions');
+            // calling initialization function
+            init_functions.forEach( (fn) => fn() );
+
         })
         .catch( (error ) => {
             console.log('Failed to initialize ApiClient');

@@ -8,7 +8,9 @@ let map;
 let page;
 let apiClient = global.apiClient;
 
-$(function() {
+function init () {
+
+    console.log('> ambulance.js');
 
  	// Set up map widget options
  	let options = {
@@ -28,7 +30,9 @@ $(function() {
  	// Retrieve ambulances via AJAX
     retrieveAmbulanceData(ambulance_id)
 
-});
+};
+
+add_init_function(init);
 
 function retrieveAmbulanceData(ambulance_id) {
 
