@@ -6,10 +6,18 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 let map;
 let page;
+let apiClient;
 
-function init () {
+// add initialization hook
+add_init_function(init);
+
+// initialization function
+function init (client) {
 
     console.log('> ambulance.js');
+
+    // set apiClient
+    apiClient = client;
 
  	// Set up map widget options
  	let options = {
@@ -30,8 +38,6 @@ function init () {
     retrieveAmbulanceData(ambulance_id)
 
 };
-
-add_init_function(init);
 
 function retrieveAmbulanceData(ambulance_id) {
 
@@ -54,46 +60,6 @@ function retrieveAmbulanceData(ambulance_id) {
         .catch( (error) => {
             console.log('Failed to retrieve ambulance data');
             console.log(error);
-        });
-
-}
-
-
-function retrieveAmbulances(ambulance_id) {
-
-	// Build url
-    let url = APIBaseUrl + 'ambulance/' + ambulance_id + '/updates';
-    if (page != null) {
-        url += "?page=" + page;
-        if (page_size != null)
-            url += "&page_size=" + page_size;
-    } else if (page_size != null)
-            url += "?page_size=" + page_size;
-
-    $.ajax({
-        type: 'GET',
-        datatype: "json",
-        url: url,
-
-        fail: function (msg) {
-
-            alert('Could not retrieve data from API:' + msg)
-
-        },
-
-        success: function (data) {
-
-            console.log('Got data from API')
-
-            addAmbulanceRoute(data)
-
-        }
-
-    })
-        .done(function () {
-            if (console && console.log) {
-                console.log("Done retrieving ambulance data from API");
-            }
         });
 
 }

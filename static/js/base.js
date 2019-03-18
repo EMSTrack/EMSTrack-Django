@@ -33,6 +33,7 @@ $(function () {
 
     // initialize ApiClient
     let mqttClient;
+    let apiClient;
     const httpClient = axios.create({
         baseURL: apiBaseUrl
     });
@@ -57,8 +58,7 @@ $(function () {
         .then( () => {
 
             // instantiate client
-            const apiClient = new AppClient(mqttClient, httpClient);
-            global.apiClient = apiClient;
+            apiClient = new AppClient(mqttClient, httpClient);
 
             // retrieve ambulances
             console.log('Retrieving ambulances');
@@ -71,7 +71,7 @@ $(function () {
 
             console.log('Calling initialization functions');
             // calling initialization function
-            init_functions.forEach( (fn) => fn() );
+            init_functions.forEach( (fn) => fn(apiClient) );
 
         })
         .catch( (error ) => {
