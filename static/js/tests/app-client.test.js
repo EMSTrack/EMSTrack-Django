@@ -44,6 +44,7 @@ describe('client observe', () => {
 
             fn = function (data) {
                 console.log(data);
+                console.log('got it!');
                 receivedData = data;
                 resolve('got it!');
             };
