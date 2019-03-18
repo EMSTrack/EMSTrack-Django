@@ -66,13 +66,18 @@ $(function () {
 
         })
         .then( (ambulances) => {
-
             console.log(Object.keys(ambulances).length + ' ambulances retrieved');
 
-            console.log('Calling initialization functions');
-            // calling initialization function
-            init_functions.forEach( (fn) => fn(apiClient) );
+            // retrieve calls
+            console.log('Retrieving calls');
+            return apiClient.retrieveCalls();
+        })
+        .then( (calls) => {
+            console.log(Object.keys(calls).length + ' calls retrieved');
 
+            // calling initialization function
+            console.log('Calling initialization functions');
+            init_functions.forEach( (fn) => fn(apiClient) );
         })
         .catch( (error ) => {
             console.log('Failed to initialize ApiClient');

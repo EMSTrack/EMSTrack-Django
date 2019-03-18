@@ -283,18 +283,12 @@ function init (client) {
         .then( (bases) => {
             console.log(Object.keys(bases).length + ' bases retrieved');
 
-            console.log('Retrieving calls');
-            return apiClient.retrieveCalls();
-        })
-        .then( (calls) => {
-            console.log(Object.keys(calls).length + ' calls retrieved');
-
             // Setup data
             console.log('Setting up data');
             setupData();
         })
         .catch( (error) => {
-            console.log('Failed to retrieve data from ApiClient');
+            console.log('Failed to retrieve hospitals and bases from ApiClient');
             console.log(error);
         });
 
