@@ -132,21 +132,22 @@ export class AppClient extends TopicObserver {
         this.httpClient.get('ambulance/')
             .then( (response) => {
 
-                console.log(response.data);
+                // console.log(response.data);
 
                 // Update ambulances
                 response.data.forEach( (ambulance) => {
                     
                     console.log(ambulance);
+                    console.log(this);
 
                     // update ambulance
                     this.ambulances[ambulance.id] = ambulance;
                     
                     // subscribe
                     // TODO: check if already subscribed
-                    AppClient.this.subscribe('ambulance/' + ambulance.id + '/data',
+                    this.subscribe('ambulance/' + ambulance.id + '/data',
                         this.updateAmbulance);
-                    AppClient.this.subscribe('ambulance/' + ambulance.id + '/call/+/status',
+                    this.subscribe('ambulance/' + ambulance.id + '/call/+/status',
                         this.updateAmbulanceCallStatus);
                     
                 });
