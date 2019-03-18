@@ -30,18 +30,18 @@ $(function () {
     // initialize ApiClient
     let mqttClient;
     const httpClient = axios.create({
-        baseURL: ApiBaseUrl
+        baseURL: apiBaseUrl
     });
 
     // retrieve temporary password for mqttClient and connect to broker
-    console.log('ApiBaseUrl: ' + ApiBaseUrl);
+    console.log('ApiBaseUrl: ' + apiBaseUrl);
     console.log('Retrieving MQTT password');
     httpClient.get('user/' + username + '/password/')
         .then( (response) => {
 
             // got password
             const password = response.data;
-            mqttClient = new MqttClient(MqttBroker.host, MqttBroker.port, clientId);
+            mqttClient = new MqttClient(mqttBroker.host, mqttBroker.port, clientId);
 
             console.log('Connecting to MQTT broker');
             return mqttClient.connect({
