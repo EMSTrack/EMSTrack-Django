@@ -88,10 +88,10 @@ describe('client connection', () => {
 
             new Promise(function (resolve, reject) {
 
+                setTimeout(() => reject(new Error("timeout!")), 1000);
+
                 client.subscribe('test/data', fn, {qos: 2});
                 client.publish('test/data', 'something', 2, false);
-
-                setTimeout(() => reject(new Error("timeout!")), 1000);
 
                 while (receivedData === '') { /* wait */
                 }
