@@ -115,9 +115,9 @@
 {% autoescape off %}
 <script>
     const username = '{{ user.get_username }}';
-    const ApiBaseUrl = '{% url 'index' %}api/';
+    const apiBaseUrl = '{% url 'index' %}api/';
     {% if request.user.is_authenticated %}
-    const MqttBroker = {{ mqtt_broker }};
+    const mqttBroker = {{ mqtt_broker }};
     const clientId = '{{ client_id }}';
     {% if request.user.is_staff %}
     const adminUrls = {{ admin_urls }};

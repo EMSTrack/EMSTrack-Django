@@ -10,26 +10,16 @@ let apiClient;
 $(function () {
 
     // make current page active
-    var pathname = window.location.pathname;
-    console.log("pathname = '" + pathname + "'");
+    const pathname = window.location.pathname;
 
     // exclude home page
     if (!pathname.match(/\/[^\/]*\//)) {
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
-        if ((pathname === "{% url 'login:list-user' %}") ||
-            (pathname === "{% url 'login:list-group' %}") ||
-            (pathname === "{% url 'equipment:list' %}") ||
-            (pathname === "{% url 'equipment:list-set' %}") ||
-            (pathname === "{% url 'ambulance:location_list' %}") ||
-            (pathname === "{% url 'login:list-client' %}") ||
-            (pathname === "{% url 'login:restart' %}")) {
-
-            // Make admin menu active
+        // Make admin menu active
+        if (adminUrls.findIndex(pathname) !== -1)
             $('#navitemDropdown').addClass('nav-item active');
-
-        }
 
     }
 
