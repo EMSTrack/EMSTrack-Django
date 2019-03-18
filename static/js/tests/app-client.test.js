@@ -56,7 +56,7 @@ describe('client observe', () => {
 
         })
             .then( () => {
-                expect(receivedData).to.equal('something');
+                expect(receivedData).to.eql({topic: 'test/ambulance/1/data', payload: 'something'});
                 client.unsubscribe('test/ambulance/1/data', fn);
                 done();
             })
