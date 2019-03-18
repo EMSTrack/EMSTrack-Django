@@ -78,7 +78,7 @@ describe('client connection', () => {
 
         client = new AppClient(mqttClient, httpClient);
 
-        if (false) {
+        if (true) {
 
             let receivedData = '';
             const fn = function (data) {
@@ -109,6 +109,7 @@ describe('client connection', () => {
                 .finally(done);
 
         } else
+
             done();
 
     });
