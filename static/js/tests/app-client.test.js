@@ -143,6 +143,7 @@ describe('client connection', () => {
         new Promise(function (resolve, reject) {
 
             fn = function (data) {
+                console.log('HERE');
                 receivedData = data;
                 resolve('got it!');
             };
