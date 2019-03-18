@@ -52,10 +52,15 @@ export class AppClient extends TopicObserver {
      */
     eventHandler(event) {
 
+        console.log(event);
+
         if (event.event === 'messageReceived') {
 
             const topic = event.object.destinationName;
             const payload = JSON.parse(event.object.payloadString);
+
+            console.log(topic);
+            console.log(payload);
 
             // broadcast
             this.broadcast(topic, {topic: topic, payload: payload});

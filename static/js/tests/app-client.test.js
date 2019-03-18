@@ -1,9 +1,8 @@
-// const expect = require('chai').expect;
 import { expect } from 'chai';
 
 const axios = require('axios');
 
-import { MqttClient, MqttEvent } from "../mqtt-client";
+import { MqttClient, MqttMessageArrivedEvent } from "../mqtt-client";
 
 import { AppClient } from "../app-client";
 
@@ -11,6 +10,22 @@ class MockMqttClient extends MqttClient {
 
     constructor() {
         super(undefined, undefined, undefined, 2);
+    }
+
+    subscribe(filter, options) {
+    }
+
+    publish(topic, payload, qos, retained) {
+        const message = {
+            destinationName: topic,
+            payloadString: payload,
+            qos: qos,
+            retained: retained
+        }
+        this.broadcast(new MqttMessageArrivedEvent(message));
+    }
+
+    unsubscribe(filter, options) {
     }
 
 }
@@ -22,6 +37,9 @@ describe('client observe', () => {
         const mqttClient = new MockMqttClient();
 
         const client = new AppClient(mqttClient, undefined);
+
+        client.subscribe('test/ambulance/1/data');
+        client.publish('test/ambulance/1/data', 'something', 2, true);
 
     });
 
