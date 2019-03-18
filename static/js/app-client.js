@@ -125,7 +125,7 @@ export class AppClient extends TopicObserver {
     retrieveAmbulances() {
 
         // initialized if needed
-        if (this.ambulances === null)
+        if (typeof this.ambulances === 'undefined')
             this.ambulances = {};
 
         // retrieve ambulances
@@ -157,7 +157,7 @@ export class AppClient extends TopicObserver {
     retrieveHospitals() {
         
         // initialized if needed
-        if (this.hospitals === null)
+        if (typeof this.hospitals === 'undefined')
             this.hospitals = {};
 
         // retrieve ambulances
@@ -186,7 +186,7 @@ export class AppClient extends TopicObserver {
     retrieveCalls() {
         
         // initialized if needed
-        if (this.calls === null)
+        if (typeof this.calls === 'undefined')
             this.calls = {};
 
         // retrieve ambulances
@@ -215,7 +215,7 @@ export class AppClient extends TopicObserver {
     retrieveBases() {
 
         // initialized if needed
-        if (this.bases === null)
+        if (typeof this.bases === 'undefined')
             this.bases = {};
 
         // retrieve ambulances
