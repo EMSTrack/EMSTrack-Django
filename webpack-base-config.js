@@ -4,15 +4,15 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
   context: __dirname,
-  entry: './static/js/header',
+  entry: './static/js/base',
   mode: 'development',
   output: {
-    path: path.resolve('./static/bundles/call'),
+    path: path.resolve('./static/bundles/base'),
     filename: "[name]-[hash].js"
   },
 
   plugins: [
-    new BundleTracker({filename: './webpack-header-stats.json'})
+    new BundleTracker({filename: './webpack-base-stats.json'})
   ],
   module: {
     rules: [
