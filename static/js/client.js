@@ -23,7 +23,7 @@ export class Client extends TopicObserver {
             return;
 
         // retrieve temporary password for mqttClient and connect to broker
-        axios.get(this.ApiBaseUrl + 'user/' + this.username + '/password/')
+        axios.get(this.ApiBaseUrl + 'user/' + username + '/password/')
             .then(response => {
 
                 console.log( "success" );
