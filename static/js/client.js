@@ -1,5 +1,7 @@
 import { MqttClient, MqttEvent } from "./mqtt-client";
 
+import { getJSON } from 'get-json';
+
 import { TopicObserver } from "./topic-observer";
 
 export class Client extends TopicObserver {
@@ -21,7 +23,7 @@ export class Client extends TopicObserver {
             return;
 
         // retrieve temporary password for mqttClient and connect to broker
-        $.getJSON(this.ApiBaseUrl + 'user/' + this.username + '/password/',
+        getJSON(this.ApiBaseUrl + 'user/' + this.username + '/password/',
             (password) => {
 
                 console.log( "success" );
