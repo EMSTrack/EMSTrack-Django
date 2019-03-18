@@ -1,4 +1,5 @@
-const expect = require('chai').expect;
+// const expect = require('chai').expect;
+import { expect, describe, it } from 'chai';
 
 const axios = require('axios');
 
@@ -13,7 +14,6 @@ class MockMqttClient extends MqttClient {
     }
 
 }
-
 
 describe('client observe', () => {
 
