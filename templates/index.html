@@ -120,7 +120,7 @@
     const MqttBroker = {{ mqtt_broker }};
     const clientId = '{{ client_id }}';
     {% if request.user.is_staff %}
-    const adminUrls = '{{ admin_urls }}';
+    const adminUrls = {{ admin_urls }};
     {% endif %}
     {% endif %}
 </script>
