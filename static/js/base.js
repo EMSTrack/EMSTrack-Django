@@ -2,7 +2,7 @@ import { MqttClient } from "./mqtt-client";
 
 import { AppClient } from "./app-client";
 
-const httpClient = require('axios');
+const axios = require('axios');
 
 let apiClient;
 
@@ -10,10 +10,14 @@ let apiClient;
 $(function () {
 
     let mqttClient;
+    const httpClient = axios.create({
+        baseURL: ApiBaseUrl,
+        timeout: 1000
+    });
 
     // retrieve temporary password for mqttClient and connect to broker
     console.log('Retrieving MQTT password from ' + ApiBaseUrl);
-    httpClient.get(ApiBaseUrl + 'user/' + username + '/password/')
+    httpClient.get('user/' + username + '/password/')
         .then( (response) => {
 
             // got password
