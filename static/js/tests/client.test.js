@@ -29,6 +29,7 @@ describe('client connection', () => {
             .then( (response) => {
                 token = response.data.token;
                 expect(token !== null).to.equal(true);
+                console.log(token);
                 done();
             })
             .catch( (error ) => {
@@ -50,6 +51,7 @@ describe('client connection', () => {
             .then( (response) => {
                 mqttPassword = response.data.password;
                 expect(mqttPassword !== null).to.equal(true);
+                console.log(mqttPassword);
                 done();
             })
             .catch( (error ) => {
@@ -78,7 +80,7 @@ describe('client connection', () => {
 
     it('is connected', function() {
 
-        expect(mqttClient.mqttClient.isConnected).to.equal(true);
+        expect(client.mqttClient.isConnected).to.equal(true);
 
     });
 
