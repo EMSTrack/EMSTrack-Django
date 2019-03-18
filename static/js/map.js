@@ -202,6 +202,7 @@ let mqttClient;
  * This is a handler for when the page is loaded.
  */
 let mymap;
+let apiClient;
 const geocoder = GeocoderFactory(map_provider);
 
 // resize map
@@ -210,8 +211,17 @@ function resizeMap() {
     mymap.invalidateSize();
 };
 
-// Ready function
-$(function () {
+
+// add initialization hook
+add_init_function(init);
+
+// initialization function
+function init (client) {
+
+    console.log('> map.js');
+
+    // set apiClient
+    apiClient = client;
 
     // Set up map widget options
  	let options = {

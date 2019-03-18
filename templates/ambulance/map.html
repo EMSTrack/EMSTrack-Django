@@ -335,6 +335,10 @@
 <!-- Cookies -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js" type="text/javascript"></script>
 
+{% endblock %}
+
+{% block scripts %}
+
 <script>
     const ambulance_status = {{ ambulance_status|safe }};
     const ambulance_status_order = {{ ambulance_status_order|safe }};
@@ -347,18 +351,11 @@
     const call_priority = {{ call_priority|safe }};
     const call_priority_order = {{ call_priority_order|safe }};
     const ambulancecall_status = {{ ambulancecall_status|safe }};
-    const username = '{{ user.get_username|safe }}';
-    const APIBaseUrl = '{% url 'index' %}api/';
-    const MQTTBroker = {
-        host: '{{ broker_websockets_host|safe }}',
-        port: {{ broker_websockets_port|safe }}
-    };
-    const clientId = '{{ client_id|safe }}';
     const ambulance_css = {{ ambulance_css|safe }};
     const call_priority_css = {{ call_priority_css|safe }};
-    const map_provider = {{ map_provider|safe }};
 </script>
 
 {% render_bundle 'main' 'js' 'MAP' %}
 
 {% endblock %}
+
