@@ -41,12 +41,10 @@ export class MqttMessageArrivedEvent extends MqttEvent {
 
 export class MqttClient extends Observer {
 
-    constructor(host, port, clientId, logLevel) {
+    constructor(host, port, clientId, logLevel = 1) {
 
         // call super
         super();
-
-        logLevel = logLevel || 1;
 
         this.host = host;
         this.port = port;
