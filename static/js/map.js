@@ -222,55 +222,6 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
-    // Set up map widget options
- 	let options = {
- 		map_id: "live-map",
- 		zoom: 12,
-        map_provider: mapProvider
- 	};
- 	const map = new LeafletWidget(options);
-
-    // Set map view
-    mymap = map.map;
-
-    // Map to fill the view
-    resizeMap();
-
-    // Take care of resizing
-    $(window).on("resize", function () {
-        resizeMap();
-    }).trigger("resize");
-
-    // Handle begin dispatching button
-    $('#dispatchBeginButton').click(function(event) {
-
-        // call end dispatching
-        beginDispatching();
-
-    });
-
-    // Handle submit dispatching button
-    $('#dispatchSubmitButton').click(function(event) {
-
-        // call end dispatching
-        submitDispatching();
-
-    });
-
-    // Handle cancel dispatching button
-    $('#dispatchCancelButton').click(function(event) {
-
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
-
-        // call end dispatching
-        endDispatching();
-
-    });
-
-    // Create category panes and filters
-    createCategoryPanesAndFilters();
-
     // Retrieve hospitals
     console.log('Retrieving hospitals');
     apiClient.retrieveHospitals()
@@ -1433,7 +1384,7 @@ function updateAmbulanceStatus(ambulance, status) {
 
             if ($activeElement.is('[data-toggle], [data-dismiss]')) {
 
-                if ($activeElement.attr('id') == 'modal-button-ok') {
+                if ($activeElement.attr('id') === 'modal-button-ok') {
                     // Do something with the button that closed the modal
                     // Update status
                     doUpdateAmbulanceStatus(ambulance, status);
@@ -1605,7 +1556,7 @@ function removeFromDispatchingList(ambulance) {
     numberOfDispatchingAmbulances--;
 
     // show message if last button
-    if (numberOfDispatchingAmbulances == 0)
+    if (numberOfDispatchingAmbulances === 0)
         $('#ambulance-selection-message').show();
 
 }
@@ -1626,14 +1577,14 @@ function addToDispatchingList(ambulance) {
     }
 
     // not available?
-    if (ambulance.status != STATUS_AVAILABLE) {
+    if (ambulance.status !== STATUS_AVAILABLE) {
         console.log('Ambulance is not available');
         bsalert('Can only dispatch available ambulances!');
         return;
     }
 
     // hide message if first button
-    if (numberOfDispatchingAmbulances == 0)
+    if (numberOfDispatchingAmbulances === 0)
         $('#ambulance-selection-message').hide();
 
     // add ambulance to list of dispatching ambulances
@@ -1657,7 +1608,7 @@ function addToDispatchingList(ambulance) {
             e.originalEvent.dataTransfer.setData("text/plain", ambulance.id);
         })
         .on('dragend', function (e) {
-            if (e.originalEvent.dataTransfer.dropEffect == 'none') {
+            if (e.originalEvent.dataTransfer.dropEffect === 'none') {
                 // Remove button if not dropped back
                 removeFromDispatchingList(ambulance);
                 // Remove button
@@ -2034,6 +1985,55 @@ function newPatientForm(index, symbol) {
 // Ready function
 $(function() {
 
+    // Set up map widget options
+ 	let options = {
+ 		map_id: "live-map",
+ 		zoom: 12,
+        map_provider: mapProvider
+ 	};
+ 	const map = new LeafletWidget(options);
+
+    // Set map view
+    mymap = map.map;
+
+    // Map to fill the view
+    resizeMap();
+
+    // Take care of resizing
+    $(window).on("resize", function () {
+        resizeMap();
+    }).trigger("resize");
+
+    // Handle begin dispatching button
+    $('#dispatchBeginButton').click(function(event) {
+
+        // call end dispatching
+        beginDispatching();
+
+    });
+
+    // Handle submit dispatching button
+    $('#dispatchSubmitButton').click(function(event) {
+
+        // call end dispatching
+        submitDispatching();
+
+    });
+
+    // Handle cancel dispatching button
+    $('#dispatchCancelButton').click(function(event) {
+
+        // Stop propagation to avoid collapse
+        event.stopPropagation();
+
+        // call end dispatching
+        endDispatching();
+
+    });
+
+    // Create category panes and filters
+    createCategoryPanesAndFilters();
+
     // Add call priority buttons
     call_priority_order.forEach(function(priority){
 
@@ -2054,8 +2054,8 @@ $(function() {
         .on('drop', function(e) {
             e.preventDefault();
             // Dropped button, get data
-            var ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
-            var ambulance = ambulances[ambulance_id];
+            const ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
+            const ambulance = ambulances[ambulance_id];
             console.log('dropped ambulance ' + ambulance['identifier']);
             // and add to dispatching list
             addToDispatchingList(ambulance);
