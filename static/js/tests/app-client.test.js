@@ -43,8 +43,6 @@ describe('client observe', () => {
         new Promise(function (resolve, reject) {
 
             fn = function (data) {
-                console.log(data);
-                console.log('got it!');
                 receivedData = data;
                 resolve('got it!');
             };
@@ -140,39 +138,30 @@ describe('client connection', () => {
 
         client = new AppClient(mqttClient, httpClient);
 
-        if (true) {
+        let receivedData = '';
+        let fn;
+        new Promise(function (resolve, reject) {
 
-            let receivedData = '';
+            fn = function (data) {
+                receivedData = data;
+                resolve('got it!');
+            };
 
-            new Promise(function (resolve, reject) {
+            setTimeout(() => reject(new Error("timeout!")), 1000);
 
-                const fn = function (data) {
-                    console.log(data);
-                    receivedData = data;
-                    resolve('got it!');
-                };
+            client.subscribe('test/data', fn, {qos: 2});
+            client.publish('test/data', '"something"', 2, false);
 
-                setTimeout(() => reject(new Error("timeout!")), 1000);
-
-                client.subscribe('test/data', fn, {qos: 2});
-                client.publish('test/data', 'something', 2, false);
-
-            })
-                .then(
-                    () => {
-                        expect(receivedData).to.equal('something');
-                        client.unsubscribe('test/data', fn);
-                    },
-                    () => {
-                    }
-                )
-                .catch(
-                    () => done(new Error('Did not receive!'))
-                );
-
-        } else
-
-            done();
+        })
+            .then(
+                () => {
+                    expect(receivedData).to.eql({topic: 'test/data', payload: 'something'});
+                    client.unsubscribe('test/data', fn);
+                }
+            )
+            .catch(
+                (error) => { console.log(error); done(new Error('Did not receive!'));}
+            );
 
     });
 
