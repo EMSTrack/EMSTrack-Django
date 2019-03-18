@@ -149,7 +149,7 @@ describe('client connection', () => {
 
             setTimeout(() => reject(new Error("timeout!")), 1000);
 
-            client.subscribe('test/data', fn, {qos: 2});
+            client.subscribe('test/data', fn);
             client.publish('test/data', '"something"', 2, false);
 
         })
