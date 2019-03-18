@@ -12,13 +12,13 @@ $(function () {
     let mqttClient;
 
     // retrieve temporary password for mqttClient and connect to broker
-    console.log('Retrieving MQTT password from ' + APIBaseUrl);
-    httpClient.get(APIBaseUrl + 'user/' + username + '/password/')
+    console.log('Retrieving MQTT password from ' + ApiBaseUrl);
+    httpClient.get(ApiBaseUrl + 'user/' + username + '/password/')
         .then( (response) => {
 
             // got password
             const password = response.data;
-            mqttClient = new MqttClient(MQTTBroker.host, MQTTBroker.port, clientId);
+            mqttClient = new MqttClient(MqttBroker.host, MqttBroker.port, clientId);
 
             console.log('Connecting to MQTT broker');
             return mqttClient.connect({

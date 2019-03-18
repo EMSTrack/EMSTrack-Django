@@ -114,12 +114,7 @@
 
 <script>
     const username = '{{ user.get_username|safe }}';
-    const APIBaseUrl = '{% url 'index' %}api/';
-    const MQTTBroker = {
-        host: '{{ broker_websockets_host|safe }}',
-        port: {{ broker_websockets_port|safe }}
-    };
-    const clientId = '{{ client_id|safe }}';
+    const ApiBaseUrl = '{% url 'index' %}api/';
 </script>
 
 {% render_bundle 'main' 'js' 'BASE' %}
