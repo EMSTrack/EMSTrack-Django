@@ -285,7 +285,8 @@ function setupData() {
     let n = 0;
     let lat = 0;
     let lon = 0;
-    apiClient.ambulances.forEach( (ambulance) => {
+    Object.entries(apiClient.ambulances).forEach( (entry) => {
+        const ambulance = entry[1];
         updateAmbulance(ambulance);
 
         // calculate center of the ambulances
@@ -308,28 +309,25 @@ function setupData() {
     console.log("Setup hospitals");
 
     // Update hospitals
-    apiClient.hospitals.forEach( (hospital) => {
+    Object.entries(apiClient.hospitals).forEach( (entry) => {
+        const hospital = entry[1];
         updateHospital(hospital);
+        addLocationToMap(hospital);
     });
 
     // Retrieve locations from ApiClient
     console.log("Setup locations");
 
-    apiClient.hospitals.forEach( (hospital) => {
-        addLocationToMap(hospital);
-    });
-
-    apiClient.bases.forEach( (base) => {
+    Object.entries(apiClient.bases).forEach( (entry) => {
+        const base = entry[1];
         addLocationToMap(base);
     });
 
     // Retrieve calls from ApiClient
     console.log("Setup calls");
-    apiClient.calls.forEach( (call) => {
-
-        // update call
+    Object.entries(apiClient.calls).forEach( (entry) => {
+        const call = entry[1];
         updateCall(call);
-
     });
 
 }
