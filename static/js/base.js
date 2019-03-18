@@ -11,8 +11,7 @@ $(function () {
 
     let mqttClient;
     const httpClient = axios.create({
-        baseURL: ApiBaseUrl,
-        timeout: 1000
+        baseURL: ApiBaseUrl
     });
 
     // retrieve temporary password for mqttClient and connect to broker
