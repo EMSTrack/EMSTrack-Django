@@ -4,7 +4,7 @@ const axios = require('axios');
 
 import { MqttClient } from "../mqtt-client";
 
-import { Client } from "../client";
+import { AppClient } from "../app-client";
 
 describe('client connection', () => {
 
@@ -76,7 +76,7 @@ describe('client connection', () => {
 
     it('create client', function(done) {
 
-        client = new Client(mqttClient, httpClient);
+        client = new AppClient(mqttClient, httpClient);
 
         let receivedData = '';
         const fn = function(data) { console.log(data); receivedData = data; };
@@ -84,7 +84,7 @@ describe('client connection', () => {
 
         new Promise(function(resolve, reject) {
 
-            client.subscribe('test/data', {qos: 2}, );
+            client.subscribe('test/data', {qos: 2}, fn);
             client.publish('test/data', 'something', 2, false);
 
             while (receivedData === '') { /* wait */ }
@@ -96,6 +96,7 @@ describe('client connection', () => {
             .then(
                 () => {
                     expect(receivedData).to.equal('something');
+                    client.unsubscribe('test/data', fn);
                 },
                 () => {}
             )

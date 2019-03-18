@@ -1,49 +1,43 @@
-import Paho from 'static/js/mqtt-client';
+const axios = require('axios');
 
-var mqttClient;
+import { MqttClient } from "mqtt-client";
+
+import { AppClient } from "app-client";
+
+let client = null;
+
+function subscribe() {
+
+};
 
 // Ready function
 $(function () {
 
     // retrieve temporary password for mqttClient and connect to broker
-    $.getJSON(APIBaseUrl + 'user/' + username + '/password/', function (password) {
+    axios.get(APIBaseUrl + 'user/' + username + '/password/')
+        .then( (response) => {
 
-        // create mqtt broker client
-        mqttClient = new Paho.MQTT.Client(MQTTBroker.host,
-            MQTTBroker.port,
-            clientId);
+            // got password
+            const password = response.data;
+            const mqttClient = new MqttClient('localhost', 8884, 'test-client', 1);
 
-        // set callback handlers
-        mqttClient.onMessageArrived = onMessageArrived;
+            mqttClient.connect({
+                userName: username,
+                password: password,
+                onSuccess: () => {
 
-        /*
-        // set will message
-        var willMessage = new Paho.MQTT.Message('D');
-        willMessage.destinationName = 'user/' + username + '/client/' + clientId + '/status';
-        willMessage.qos = 2;
-        willMessage.retained = false;
-        */
+                    // instantiate client
+                    client = new AppClient(mqttClient);
 
-        // attempt to connect to MQTT broker
-        mqttClient.connect({
-            //connection attempt timeout in seconds
-            timeout: 60,
-            userName: username,
-            password: password,
-            useSSL: true,
-            cleanSession: true,
-            onSuccess: onConnect,
-            onFailure: onConnectFailure
-            // , willMessage: willMessage,
-        });
+                },
+                onFailure: (cntxt, errorCode, errorMessage) => {
+                    console.log(errorMessage);
+                }
+            });
 
-    })
-        .fail(function (jqxhr, textStatus, error) {
-
-            bsalert("Connection to MQTT broker failed: \"" +
-                textStatus + "," + error + "\"\n" +
-                "Information will not be updated in real time.");
-
+        })
+        .catch( (error ) => {
+            console.log(error);
         });
 
 });

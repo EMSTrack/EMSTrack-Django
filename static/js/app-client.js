@@ -4,7 +4,7 @@ const axios = require('axios');
 
 import { TopicObserver } from "./topic-observer";
 
-export class Client extends TopicObserver {
+export class AppClient extends TopicObserver {
 
     constructor(mqttClient, httpClient) {
 
