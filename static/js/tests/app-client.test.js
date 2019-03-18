@@ -147,7 +147,7 @@ describe('client connection', () => {
                 resolve('got it!');
             };
 
-            setTimeout(() => reject(new Error("timeout!")), 1000);
+            // setTimeout(() => reject(new Error("timeout!")), 1000);
 
             client.subscribe('test/data', fn);
             client.publish('test/data', '"something"', 2, false);
