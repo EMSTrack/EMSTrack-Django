@@ -55,9 +55,7 @@ export class MqttClient extends Observer {
         this.isConnected = false;
     }
 
-    connect(options) {
-
-        options = options || {};
+    connect(options = {}) {
 
         // just return if already connected
         if (this.isConnected)

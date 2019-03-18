@@ -81,14 +81,12 @@ export class AppClient extends TopicObserver {
 
     }
 
-    subscribe(filter, fn, options) {
-        options = options || {};
+    subscribe(filter, fn, options = {}) {
         this.mqttClient.subscribe(filter, options);
         this.observe(filter, fn)
     }
 
-    unsubscribe(filter, fn, options) {
-        options = options || {};
+    unsubscribe(filter, fn, options = {}) {
         this.mqttClient.unsubscribe(filter, options);
         this.remove(filter, fn)
     }
@@ -146,7 +144,7 @@ export class AppClient extends TopicObserver {
             this.ambulances = {};
 
         // retrieve ambulances
-        this.httpClient.get('ambulance/')
+        return this.httpClient.get('ambulance/')
             .then( (response) => {
 
                 // console.log(response.data);
@@ -165,11 +163,11 @@ export class AppClient extends TopicObserver {
                         this.updateAmbulanceCallStatus);
                     
                 });
-                
+
+                // return ambulances
+                return (this.ambulances);
+
             })
-            .catch( (error) => {
-                console.log('retrieveAmbulance: ' + error);
-            });
 
     }
     
