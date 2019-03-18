@@ -38,7 +38,7 @@ export class AppClient extends TopicObserver {
             return;
 
         // remove observer
-        this.mqttClient.remove(this.observer);
+        this.mqttClient.remove(this.event_observer);
         this.event_observer = null;
 
         // connect to client
@@ -58,7 +58,7 @@ export class AppClient extends TopicObserver {
             const payload = JSON.parse(event.object.payloadString);
 
             // broadcast
-            this.observers.broadcast(topic, {topic: topic, payload: payload});
+            this.broadcast(topic, {topic: topic, payload: payload});
 
         }
 
@@ -67,13 +67,13 @@ export class AppClient extends TopicObserver {
     subscribe(filter, fn, options) {
         options = options || {};
         this.mqttClient.subscribe(filter, options);
-        this.observers.observe(filter, fn)
+        this.observe(filter, fn)
     }
 
     unsubscribe(filter, fn, options) {
         options = options || {};
         this.mqttClient.unsubscribe(filter, options);
-        this.observers.remove(filter, fn)
+        this.remove(filter, fn)
     }
 
     publish(topic, payload, qos, retained) {
@@ -137,9 +137,6 @@ export class AppClient extends TopicObserver {
                 // Update ambulances
                 response.data.forEach( (ambulance) => {
                     
-                    console.log(ambulance);
-                    console.log(this);
-
                     // update ambulance
                     this.ambulances[ambulance.id] = ambulance;
                     
