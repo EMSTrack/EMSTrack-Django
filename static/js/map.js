@@ -286,6 +286,24 @@ function init (client) {
             // Setup data
             console.log('Setting up data');
             setupData();
+
+            // signup for ambulance updates
+            apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
+
+            // signup for call updates
+            apiClient.observe('call/+/data', (message) => { updateCall(message.payload) } );
+
+            // signup for hospital updates
+            apiClient.observe('hospital/+/data', (message) => { updateHospital(message.payload) } );
+
+            // signup for ambulance call status updates
+            apiClient.observe('ambulance/+/call/+/status', (message) => {
+                const topics = message.topic.split('/');
+                const ambulance_id = topics[1];
+                const call_id = topics[3];
+                updateAmbulanceCall(ambulance_id, call_id, message.payload);
+            });
+
         })
         .catch( (error) => {
             console.log('Failed to retrieve hospitals and bases from ApiClient');
@@ -381,194 +399,6 @@ function bsdialog(message, alertClass, title) {
 
 }
 
-function getData(subscribe) {
-
-    // default is true
-    subscribe = subscribe || true;
-
-    // Retrieve ambulances from API
-    console.log("Retrieving ambulances from API");
-    $.getJSON(APIBaseUrl + 'ambulance/', function (data) {
-
-        let n = 0;
-        let lat = 0;
-        let lon = 0;
-
-        // Update ambulances
-        data.forEach((ambulance) => {
-
-            // update ambulance
-            updateAmbulance(ambulance);
-
-            // calculate center of the ambulances
-            n = n + 1;
-            lat += ambulance.location.latitude;
-            lon += ambulance.location.longitude;
-
-
-        });
-
-        // Center map
-        if (n > 0) {
-            // Set map view
-            lat = lat / n;
-            lon = lon / n;
-            console.log('Center at lat = ' + lat + ', lon = ' + lon);
-
-            mymap.setView([lat, lon], 12);
-        }
-
-        if (subscribe) {
-
-            data.forEach((ambulance) => {
-
-                // Subscribe to ambulance
-                let topicName = "ambulance/" + ambulance.id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-
-                // Subscribe to ambulance calls
-                topicName = "ambulance/" + ambulance.id + "/call/+/status";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-
-            });
-
-        }
-
-    });
-
-    // Retrieve hospitals from API
-    console.log("Retrieving hospitals from API");
-    $.getJSON(APIBaseUrl + 'hospital/', function (data) {
-
-        // Retrieve hospitals
-        $.each(data, function (i, hospital) {
-
-            // update hospital
-            updateHospital(hospital);
-
-            if (subscribe) {
-
-                // subscribe to hospital
-                const topicName = "hospital/" + hospital.id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-
-            }
-
-        });
-    });
-
-    // Retrieve hospitals from API
-    console.log("Retrieving locations from API");
-    $.getJSON(APIBaseUrl + 'location/Hospital/', function (data) {
-
-        // add location
-        $.each(data, function (index) {
-            const location = data[index];
-            addLocationToMap(location);
-        });
-    });
-
-    // Retrieve bases from API
-    $.getJSON(APIBaseUrl + 'location/Base/', function (data) {
-
-        // add location
-        $.each(data, function (index) {
-            const location = data[index];
-            addLocationToMap(location);
-        });
-    });
-
-
-    // retrieve calls from api
-    console.log("Retrieving calls from API");
-    $.getJSON(APIBaseUrl + 'call/', function (data) {
-
-        // Subscribe to current calls
-        $.each(data, function (i, call) {
-
-            // update call
-            updateCall(call);
-
-            if (subscribe) {
-
-                const topicName = "call/" + call.id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-            }
-
-        });
-
-    });
-
-}
-
-/* Handle 'ambulance/+/data' mqtt messages */
-function onMessageArrived(message) {
-
-    console.log('Message "' +
-        message.destinationName + ':' + message.payloadString +
-        '" arrived');
-
-    // split topic
-    const topic = message.destinationName.split("/");
-
-    // empty payload?
-    if (message.payloadString) {
-
-        try {
-
-            // parse message
-            const data = JSON.parse(message.payloadString);
-
-            // Look for ambulance/{id}/data
-            if (topic[0] === 'ambulance' &&
-                topic[2] === 'data') {
-                updateAmbulance(data);
-            }
-
-            // Look for hospital/{id}/data
-            else if (topic[0] === 'hospital' &&
-                topic[2] === 'data') {
-                updateHospital(data);
-            }
-
-            // Look for call/{id}/data
-            else if (topic[0] === 'call' &&
-                topic[2] === 'data') {
-                updateCall(data);
-            }
-
-            // look for ambulance call information
-            else if (topic[0] === 'ambulance' &&
-                topic[2] === 'call' &&
-                topic[4] === 'status') {
-                const ambulance_id = topic[1];
-                const call_id = topic[3];
-                updateAmbulanceCall(ambulance_id, call_id, data);
-            }
-
-            else
-                console.log('Unknown topic ' + topic);
-
-        } catch (e) {
-
-            bsalert('Error processing message "' +
-                message.destinationName + ':' + message.payloadString +
-                '"' + '<br/>' + 'error = "' + e + '"');
-
-            throw e;
-
-        }
-
-    } else
-        // This can happen if a topic is being unretained
-        console.log('Message "' + message.destinationName  + '" has an empty payload');
-
-}
-
 function updateAmbulance(ambulance) {
 
     // retrieve id
@@ -601,7 +431,7 @@ function updateAmbulance(ambulance) {
         ambulances[id].orientation = ambulance.orientation;
 
         // Overwrite ambulance
-        ambulance = ambulances[id]
+        ambulance = ambulances[id];
 
         if (old_status !== status) {
 
@@ -634,7 +464,7 @@ function updateAmbulance(ambulance) {
     // add ambulance to map
     addAmbulanceToMap(ambulance);
 
-};
+}
 
 function updateHospital(hospital) {
 
@@ -659,7 +489,7 @@ function updateHospital(hospital) {
     // add hospital to map
     addHospitalToMap(hospital);
 
-};
+}
 
 function addAmbulanceToGrid(ambulance) {
 
@@ -710,7 +540,7 @@ function addAmbulanceToGrid(ambulance) {
 
     console.log("> status '" + status + "' count = '" + count + "'");
 
-};
+}
 
 function updateCall(call) {
 
@@ -1214,7 +1044,7 @@ function addAmbulanceToMap(ambulance) {
 
             });
 
-};
+}
 
 function addHospitalToMap(hospital) {
 
@@ -1254,7 +1084,7 @@ function addHospitalToMap(hospital) {
                     });
             });
 
-};
+}
 
 function addLocationToMap(location) {
 
@@ -1300,7 +1130,7 @@ function addLocationToMap(location) {
                     });
             });
 
-};
+}
 
 /* Create category filter */
 function createCategoryPanesAndFilters() {
@@ -1585,7 +1415,7 @@ function onCallButtonClick(call) {
 function updateAmbulanceStatus(ambulance, status) {
 
     // return in case of no change
-    if (ambulance.status == status)
+    if (ambulance.status === status)
         return;
 
     // Show modal
@@ -1674,7 +1504,7 @@ function submitDispatching() {
     // submit form
     $('#dispatch-form-collapse').submit();
 
-};
+}
 
 function beginDispatching() {
 
