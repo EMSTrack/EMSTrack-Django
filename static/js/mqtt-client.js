@@ -83,7 +83,7 @@ export class MqttClient extends Observer {
             }
         }
 
-        return new Promise( function(resolve, reject) {
+        return new Promise( (resolve, reject) => {
 
             mqttOptions.onSuccess = (ctx) => { resolve('connected'); }
             mqttOptions.onFailure = (ctx, errorCode, errorMessage) => {
