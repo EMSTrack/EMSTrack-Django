@@ -131,10 +131,14 @@ export class AppClient extends TopicObserver {
         // retrieve ambulances
         this.httpClient.get('ambulance/')
             .then( (response) => {
-                
+
+                console.log(response.data);
+
                 // Update ambulances
                 response.data.forEach( (ambulance) => {
                     
+                    console.log(ambulance);
+
                     // update ambulance
                     this.ambulances[ambulance.id] = ambulance;
                     
