@@ -6,44 +6,17 @@ import { TopicObserver } from "./topic-observer";
 
 export class Client extends TopicObserver {
 
-    constructor(host, port, clientId, ApiBaseUrl) {
+    constructor(client) {
 
         // call super
         super();
 
-        this.mqttClient = new MqttClient(host, port, clientId);
+        this.mqttClient = client;
         this.event_observer = null;
-        this.ApiBaseUrl = ApiBaseUrl;
-    }
 
-    connect(username, options) {
-
-        // return if already connected
-        if (this.mqttClient.isConnected)
-            return;
-
-        // retrieve temporary password for mqttClient and connect to broker
-        axios.get(this.ApiBaseUrl + 'user/' + username + '/password/')
-            .then(response => {
-
-                console.log( "success" );
-                console.log(response.data);
-
-                // override options
-                options['username'] = username;
-                options['password'] = response.data.password;
-
-                // connect to client
-                this.mqttClient.connect(options);
-
-                // register observer
-                this.event_observer = (event) => this.eventHandler(event);
-                this.mqttClient.observe(this.event_observer);
-
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        // register observer
+        this.event_observer = (event) => this.eventHandler(event);
+        this.mqttClient.observe(this.event_observer);
 
     }
 
@@ -77,3 +50,37 @@ export class Client extends TopicObserver {
     }
 
 }
+
+/*
+    connect(username, options) {
+
+        // return if already connected
+        if (this.mqttClient.isConnected)
+            return;
+
+        // retrieve temporary password for mqttClient and connect to broker
+        axios.get(this.ApiBaseUrl + 'user/' + username + '/password/')
+            .then(response => {
+
+                console.log( "success" );
+                console.log(response.data);
+
+                // override options
+                options['username'] = username;
+                options['password'] = response.data.password;
+
+                // connect to client
+                this.mqttClient.connect(options);
+
+                // register observer
+                this.event_observer = (event) => this.eventHandler(event);
+                this.mqttClient.observe(this.event_observer);
+
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+    }
+
+*/

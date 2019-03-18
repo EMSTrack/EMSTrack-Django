@@ -1,16 +1,21 @@
 const expect = require('chai').expect;
 
+import { MqttClient } from "../mqtt-client";
+
 import { Client } from "../client";
 
 describe('client connection', () => {
 
-    const client = new Client('localhost', 8884, 'test-client', 'http://localhost:8000/en/api/');
+    const mqttClient = new MqttClient('localhost', 8884, 'test-client', 1);
 
     const userName = 'admin';
+    const password = 'cruzrojaadmin';
 
-    it('should connect', function(done) {
+    it('connect', function(done) {
 
-        client.connect(userName, {
+        mqttClient.connect({
+            userName: userName,
+            password: password,
             onSuccess: () => {
                 done();
             },
@@ -26,6 +31,8 @@ describe('client connection', () => {
         expect(client.mqttClient.isConnected).to.equal(true);
 
     });
+
+    const client = new Client(mqttClient);
 
     it('should disconnect', function(done) {
 
