@@ -1,6 +1,6 @@
 import { MqttClient, MqttEvent } from "./mqtt-client";
 
-import { getJSON } from 'get-json';
+const getJSON = require('get-json')
 
 import { TopicObserver } from "./topic-observer";
 
