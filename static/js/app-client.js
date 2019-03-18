@@ -101,7 +101,7 @@ export class AppClient extends TopicObserver {
 
         // get ambulance and call ids
         const topic = message.topic.split('/');
-        const ambulance_id = topic[1];
+        // const ambulance_id = topic[1];
         const call_id = topic[3];
 
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
@@ -174,7 +174,7 @@ export class AppClient extends TopicObserver {
                     
                     // subscribe
                     // TODO: check if already subscribed
-                    AppClient.this.subscribe('hospital/' + hospital.id + '/data', this.updateHospital);
+                    this.subscribe('hospital/' + hospital.id + '/data', this.updateHospital);
                     
                 });
                 
@@ -203,7 +203,7 @@ export class AppClient extends TopicObserver {
                     
                     // subscribe
                     // TODO: check if already subscribed
-                    AppClient.this.subscribe('call/' + call.id + '/data', this.updateCall);
+                    this.subscribe('call/' + call.id + '/data', this.updateCall);
                     
                 });
                 
