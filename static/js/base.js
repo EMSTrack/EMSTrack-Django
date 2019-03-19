@@ -27,7 +27,7 @@ $(function () {
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
         // Make admin menu active
-        if (adminUrls.findIndex(pathname) !== -1)
+        if (adminUrls.indexOf(pathname) !== -1)
             $('#navitemDropdown').addClass('nav-item active');
 
     }
