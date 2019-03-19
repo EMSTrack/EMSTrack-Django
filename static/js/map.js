@@ -6,7 +6,9 @@ import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
 
-import jsLogger from 'js-logger';
+// CommonJS import
+const jsLogger = require('js-logger');
+//import jsLogger from 'js-logger';
 
 jsLogger.setLevel(jsLogger.DEBUG);
 
