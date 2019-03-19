@@ -1,3 +1,7 @@
+import jsLogger from 'js-logger';
+
+const logger = jsLogger.get('app-client');
+
 import { TopicObserver } from "./topic-observer";
 
 export class AppClient extends TopicObserver {
@@ -17,7 +21,7 @@ export class AppClient extends TopicObserver {
         this.event_observer = null;
 
         // register observer
-        this.event_observer = (event) => this.eventHandler(event);
+        this.event_observer = (event) => this._eventHandler(event);
         this.mqttClient.observe(this.event_observer);
 
         // http client
@@ -52,41 +56,6 @@ export class AppClient extends TopicObserver {
 
     }
 
-    /**
-     *
-     * @param {MqttEvent} event
-     */
-    eventHandler(event) {
-
-        // console.log(event);
-
-        if (event.event === 'messageArrived') {
-
-            const topic = event.object.destinationName;
-            let payload;
-            try {
-                payload = JSON.parse(event.object.payloadString);
-            } catch(e) {
-                console.warn('Could not parse incoming message.');
-                payload = event.object.payloadString;
-            }
-
-            // console.log({topic: topic, payload: payload});
-
-            // broadcast
-            this.broadcast(topic, {topic: topic, payload: payload});
-
-        } else if (event.event === 'messageSent') {
-            /* ignore */
-        } else if (event.event === 'connect') {
-            /* ignore */
-        } else if (event.event === 'lostConnection') {
-            /* ignore */
-        } else
-            console.log("Unknown event type '" + event.event + "'");
-
-    }
-
     publish(topic, payload, qos, retained) {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
@@ -101,8 +70,6 @@ export class AppClient extends TopicObserver {
         // retrieve ambulances
         return this.httpClient.get('ambulance/')
             .then( (response) => {
-
-                // console.log(response.data);
 
                 // Update ambulances
                 response.data.forEach( (ambulance) => {
@@ -217,11 +184,13 @@ export class AppClient extends TopicObserver {
     // subscribe methods
 
     _subscribe(filter, fn, options = {qos:2}) {
+        logger.debug('subscribing to ' + filter);
         this.mqttClient.subscribe(filter, options);
         this.observe(filter, fn)
     }
 
     _unsubscribe(filter, fn, options = {}) {
+        logger.debug('unsubscribing from ' + filter);
         this.mqttClient.unsubscribe(filter, options);
         this.remove(filter, fn)
     }
@@ -248,19 +217,21 @@ export class AppClient extends TopicObserver {
         else
         // update
             this.call[call.id] = call;
-
     }
 
     _updateAmbulanceCallStatus(message) {
-
         const status = message.payload;
 
         // get ambulance and call ids
         const topic = message.topic.split('/');
+        const ambulance_id = topic[1];
         const call_id = topic[3];
 
         // is this a new call?
+        logger.debug("Received ambulance '" + ambulance_id + "' call status '" + status + "'");
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
+
+            logger.debug('Retrieving call ' + call_id);
 
             // retrieve call from api
             this.httpClient.get('call/' + call_id + '/')
@@ -271,8 +242,8 @@ export class AppClient extends TopicObserver {
 
                 })
                 .catch( (error) => {
-                    console.log("'Could retrieve call with id '" + call_id + "'");
-                    console.log(error);
+                    logger.error("'Could not retrieve call with id '" + call_id + "'");
+                    logger.error(error);
                 });
 
         }
@@ -296,6 +267,43 @@ export class AppClient extends TopicObserver {
 
         // delete call
         delete this.calls[call.id];
+
+    }
+
+    // mqtt event handler
+
+    /**
+     *
+     * @param {MqttEvent} event
+     */
+    _eventHandler(event) {
+
+        logger.debug(event);
+
+        if (event.event === 'messageArrived') {
+
+            const topic = event.object.destinationName;
+            let payload;
+            try {
+                payload = JSON.parse(event.object.payloadString);
+            } catch(e) {
+                console.warn('Could not parse incoming message.');
+                payload = event.object.payloadString;
+            }
+
+            // broadcast
+            const message = {topic: topic, payload: payload};
+            logger.debug(message);
+            this.broadcast(topic, message);
+
+        } else if (event.event === 'messageSent') {
+            /* ignore */
+        } else if (event.event === 'connect') {
+            /* ignore */
+        } else if (event.event === 'lostConnection') {
+            /* ignore */
+        } else
+            logger.warn("Unknown event type '" + event.event + "'");
 
     }
 
