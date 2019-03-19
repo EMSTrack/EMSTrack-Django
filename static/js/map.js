@@ -10,6 +10,8 @@ import jsLogger from 'js-logger';
 
 jsLogger.setLevel(jsLogger.DEBUG);
 
+const logger = jsLogger.get('app-client');
+
 // TODO: Import js-cookies library
 
 // Dispatching data
@@ -223,7 +225,7 @@ add_init_function(init);
 // initialization function
 function init( client ) {
 
-    console.log('> map.js');
+    logger.info('> map.js');
 
     // set apiClient
     apiClient = client;
@@ -232,11 +234,11 @@ function init( client ) {
     setupAmbulances();
 
     // signup for ambulance updates
-    console.log('Signing up for ambulance updates');
+    logger.info('Signing up for ambulance updates');
     apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
 
     // signup for ambulance call status updates
-    console.log('Signing up for ambulance call status updates');
+    logger.info('Signing up for ambulance call status updates');
     apiClient.observe('ambulance/+/call/+/status', (message) => {
         const topics = message.topic.split('/');
         const ambulance_id = topics[1];
@@ -248,33 +250,33 @@ function init( client ) {
     setupCalls();
 
     // signup for call updates
-    console.log('Signing up for call updates');
+    logger.info('Signing up for call updates');
     apiClient.observe('call/+/data', (message) => { updateCall(message.payload) } );
 
     // Retrieve hospitals
-    console.log('Retrieving hospitals');
+    logger.info('Retrieving hospitals');
     apiClient.retrieveHospitals()
         .then( (hospitals) => {
-            console.log(Object.keys(hospitals).length + ' hospitals retrieved');
+            logger.info(Object.keys(hospitals).length + ' hospitals retrieved');
 
             // setup hospitals
             setupHospitals();
 
             // signup for hospital updates
-            console.log('Signing up for hospital updates');
+            logger.info('Signing up for hospital updates');
             apiClient.observe('hospital/+/data', (message) => { updateHospital(message.payload) } );
 
-            console.log('Retrieving bases');
+            logger.info('Retrieving bases');
             return apiClient.retrieveBases();
         })
         .then( (bases) => {
-            console.log(Object.keys(bases).length + ' bases retrieved');
+            logger.info(Object.keys(bases).length + ' bases retrieved');
 
             // Setup bases
             setupBases();
         })
         .catch( (error) => {
-            console.log('Failed to retrieve hospitals and bases from ApiClient');
+            logger.info('Failed to retrieve hospitals and bases from ApiClient');
             console.log(error);
         });
 
@@ -283,7 +285,7 @@ function init( client ) {
 function setupAmbulances() {
 
     // Retrieve ambulances from ApiClient
-    console.log("Setup ambulances");
+    logger.info("Setup ambulances");
 
     // Update ambulances
     let n = 0;
@@ -304,7 +306,7 @@ function setupAmbulances() {
         // Set map view
         lat = lat / n;
         lon = lon / n;
-        console.log('Center at lat = ' + lat + ', lon = ' + lon);
+        logger.info('Center at lat = ' + lat + ', lon = ' + lon);
 
         mymap.setView([lat, lon], 12);
     }
@@ -314,7 +316,7 @@ function setupAmbulances() {
 function setupCalls() {
 
     // Retrieve calls from ApiClient
-    console.log("Setup calls");
+    logger.info("Setup calls");
 
     Object.entries(apiClient.calls).forEach( (entry) => {
         const call = entry[1];
@@ -326,7 +328,7 @@ function setupCalls() {
 function setupHospitals() {
 
     // Retrieve hospitals from ApiClient
-    console.log("Setup hospitals");
+    logger.info("Setup hospitals");
 
     // Update hospitals
     Object.entries(apiClient.hospitals).forEach((entry) => {
@@ -342,7 +344,7 @@ function setupHospitals() {
 function setupBases() {
 
     // Retrieve locations from ApiClient
-    console.log("Setup locations");
+    logger.info("Setup locations");
 
     Object.entries(apiClient.bases).forEach((entry) => {
         const base = entry[1];
@@ -431,8 +433,8 @@ function updateAmbulance(ambulance) {
             else
                 $('#ambulance-' + old_status + '-header-count').hide();
 
-            console.log("> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
-            console.log("> newstatus '" + status + "' count = '" + new_grid_length + "'");
+            logger.debug("> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
+            logger.debug("> newstatus '" + status + "' count = '" + new_grid_length + "'");
         }
 
     } else {
@@ -474,7 +476,7 @@ function updateHospital(hospital) {
 
 function addAmbulanceToGrid(ambulance) {
 
-    console.log('Adding ambulance "' + ambulance.identifier +
+    logger.info('Adding ambulance "' + ambulance.identifier +
         '[id=' + ambulance.id + ', status=' + ambulance.status + ', btn=' + ambulance_buttons[ambulance.status] + ']"' +
         ' to grid');
 
@@ -519,7 +521,7 @@ function addAmbulanceToGrid(ambulance) {
         .html('(' + count + ')')
         .show();
 
-    console.log("> status '" + status + "' count = '" + count + "'");
+    logger.debug("> status '" + status + "' count = '" + count + "'");
 
 }
 
@@ -560,11 +562,6 @@ function updateCall(call) {
                         .appendTo($('#call-grid-' + status));
 
                 } else { // status == 'E'
-
-                    // Completed call, unsubscribe
-                    const topicName = "call/" + id + "/data";
-                    mqttClient.unsubscribe(topicName);
-                    console.log('Unsubscribing from topic: ' + topicName);
 
                     // remove from grid
                     $('#call-item-' + id).remove();
@@ -621,7 +618,7 @@ function updateCall(call) {
 
         } else
 
-            console.log('Could not match current call status');
+            logger.error('Could not match current call status');
 
     } else {
 
@@ -688,7 +685,7 @@ function updateCallCounter() {
 
 function addCallToGrid(call) {
 
-    console.log('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
+    logger.info('Adding call "' + call.id + '[status=' + call.status + ']" to grid');
 
     // Add call to calls
     calls[call.id] = call;
@@ -951,7 +948,7 @@ function addCallToMap(call) {
 
 function addAmbulanceToMap(ambulance) {
 
-    console.log('Adding ambulance "' + ambulance.identifier +
+    logger.info('Adding ambulance "' + ambulance.identifier +
         '[id=' + ambulance.id + ']"' +
         '[' + ambulance.location.latitude + ' ' +
         ambulance.location.longitude + '] ' +
@@ -961,7 +958,7 @@ function addAmbulanceToMap(ambulance) {
     ambulances[ambulance.id] = ambulance;
 
     // Add marker
-    // console.log('orientation = ' + ambulance.orientation);
+    // logger.debug('orientation = ' + ambulance.orientation);
     ambulanceMarkers[ambulance.id] = L.marker(
         [ambulance.location.latitude,
             ambulance.location.longitude],
@@ -1006,7 +1003,7 @@ function addAmbulanceToMap(ambulance) {
 
 function addHospitalToMap(hospital) {
 
-    console.log('Adding hospital "' + hospital.name +
+    logger.info('Adding hospital "' + hospital.name +
         '[id=' + hospital.id + ']"' +
         '[' + hospital.location.latitude + ' ' +
         hospital.location.longitude + '] ' +
@@ -1046,7 +1043,7 @@ function addHospitalToMap(hospital) {
 
 function addLocationToMap(location) {
 
-    console.log('Adding location "' + location.name +
+    logger.info('Adding location "' + location.name +
         '[id=' + location.id + ', type=' + location.type + ']"' +
         '[' + location.location.latitude + ' ' +
         location.location.longitude + '] ' +
@@ -1210,7 +1207,7 @@ function createCategoryPanesAndFilters() {
                 // Dropped button, get data
                 const ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
                 const ambulance = ambulances[ambulance_id];
-                console.log('dropped ambulance ' + ambulance['identifier']);
+                logger.debug('dropped ambulance ' + ambulance['identifier']);
                 // change status
                 updateAmbulanceStatus(ambulance, status);
             });
@@ -1433,7 +1430,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         success: function (data) {
 
             // Log success
-            console.log("Succesfully posted ambulance status update: status = " + status);
+            logger.debug("Succesfully posted ambulance status update: status = " + status);
 
             // show target card
             $('#ambulance-' + status).collapse('show');
@@ -1442,8 +1439,8 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         error: function (jqXHR, textStatus, errorThrown) {
 
             // Log failure
-            console.log("Failed to post ambulance status update.");
-            console.log(jqXHR.responseText);
+            logger.error("Failed to post ambulance status update.");
+            logger.error(jqXHR.responseText);
 
             bsalert("Could not update ambulance status \"" +
                 textStatus + "," + errorThrown + "\"\n" +
@@ -1469,7 +1466,7 @@ function beginDispatching() {
     isDispatching = true;
     const filtersDiv = $('#filtersDiv');
     isFilterOpen = filtersDiv.hasClass('show');
-    console.log('Begin dispatching.');
+    logger.info('Begin dispatching.');
 
     $('#dispatchBeginButton').hide();
     $('#dispatchSubmitButton').show();
@@ -1514,7 +1511,7 @@ function endDispatching() {
 
     isDispatching = false;
     dispatchingAmbulances = {};
-    console.log('End dispatching.');
+    logger.info('End dispatching.');
 
     // remove marker
     markersGroup.clearLayers();
@@ -1577,17 +1574,17 @@ function addToDispatchingList(ambulance) {
         return;
 
     // add ambulance to dispatching list
-    console.log('Adding ambulance ' + ambulance.identifier + ' to dispatching list');
+    logger.info('Adding ambulance ' + ambulance.identifier + ' to dispatching list');
 
     // already in?
     if (ambulance.id in dispatchingAmbulances) {
-        console.log('Already in dispatching list, skip');
+        logger.info('Already in dispatching list, skip');
         return;
     }
 
     // not available?
     if (ambulance.status !== STATUS_AVAILABLE) {
-        console.log('Ambulance is not available');
+        logger.info('Ambulance is not available');
         bsalert('Can only dispatch available ambulances!');
         return;
     }
@@ -1642,7 +1639,7 @@ function updateCurrentMarker(latlng) {
 
 function updateCurrentLocation(location) {
 
-    console.log('Setting current location to: ' + location.lat + ', ' + location.lng);
+    logger.info('Setting current location to: ' + location.lat + ', ' + location.lng);
 
     // set currentLocation
     currentLocation = location;
@@ -1687,7 +1684,7 @@ function updateCurrentAddress(location) {
         // parse features into current address
         currentAddress = address;
 
-        console.log(
+        logger.debug(
             'Setting currentAddress to:'
             + '\nnumber: ' + currentAddress['number']
             + '\nstreet: ' + currentAddress['street']
@@ -1725,7 +1722,7 @@ function updateCoordinates() {
             return;
         }
 
-        console.log(
+        logger.debug(
             'Setting currentLocation to:'
             + '\nnumber: ' + address['number']
             + '\nstreet: ' + address['street']
@@ -1853,13 +1850,13 @@ function dispatchCall() {
 
     // make json call
     const postJsonUrl = apiBaseUrl + 'call/';
-    console.log("Form:");
-    console.log(form);
-    console.log("Will post:");
-    console.log(JSON.stringify(form));
+    logger.debug("Form:");
+    logger.debug(form);
+    logger.debug("Will post:");
+    logger.debug(JSON.stringify(form));
 
     const CSRFToken = Cookies.get('csrftoken');
-    console.log('csrftoken = ' + CSRFToken);
+    logger.debug('csrftoken = ' + CSRFToken);
 
     // retrieve csrf token
     $.ajaxSetup({
@@ -1880,7 +1877,7 @@ function dispatchCall() {
         success: function () {
 
             // Log success
-            console.log("Succesfully posted new call.");
+            logger.info("Succesfully posted new call.");
 
             // End dispatching
             endDispatching();
@@ -1889,8 +1886,8 @@ function dispatchCall() {
         error: function (jqXHR) {
 
             // Log failure
-            console.log("Failed to post new call.");
-            console.log(jqXHR.responseText);
+            logger.debug("Failed to post new call.");
+            logger.debug(jqXHR.responseText);
 
             // Show modal
             bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
@@ -1907,7 +1904,7 @@ function dispatchCall() {
 
 function addPatient(index) {
 
-    console.log('Adding patient index ' + index);
+    logger.debug('Adding patient index ' + index);
 
     const name = $('#patient-' + index + '-name').val().trim();
     const age = $('#patient-' + index + '-age').val().trim();
@@ -1938,7 +1935,7 @@ function addPatient(index) {
 
 function removePatient(index) {
 
-    console.log('Removing patient index ' + index);
+    logger.debug('Removing patient index ' + index);
 
     // remove from storage
     delete currentPatients[index];
@@ -1952,7 +1949,7 @@ function removePatient(index) {
 
 function addPatientForm(index) {
 
-    console.log('Adding patient form ' + index);
+    logger.debug('Adding patient form ' + index);
 
     const patients = $('#patients');
 
@@ -1967,7 +1964,7 @@ function addPatientForm(index) {
 
 function newPatientForm(index, symbol) {
 
-    // console.log('html = "' + html + '"');
+    // logger.debug('html = "' + html + '"');
 
     return '<div class="form-row" id="patient-' + index + '-form">' +
         '<div class="col-md-7 pr-0">' +
@@ -2067,7 +2064,7 @@ $(function() {
             // Dropped button, get data
             const ambulance_id = e.originalEvent.dataTransfer.getData("text/plain");
             const ambulance = ambulances[ambulance_id];
-            console.log('dropped ambulance ' + ambulance['identifier']);
+            logger.debug('dropped ambulance ' + ambulance['identifier']);
             // and add to dispatching list
             addToDispatchingList(ambulance);
         });
