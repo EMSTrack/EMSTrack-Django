@@ -43,18 +43,12 @@ export class AppClient extends TopicObserver {
         this.updateCall = (message) => {
             const call = message.payload;
 
-            if (call.status === 'E') {
-
-                // call ended? unsubscribe
-                this._unsubscribe('call/' + call.id + '/data',
-                    this.updateCall );
-
-            } else {
-
+            if (call.status === 'E')
+                // call ended? remove
+                this.removeCall(call);
+            else
                 // update
                 this.call[call.id] = call;
-
-            }
 
         };
 
@@ -73,12 +67,8 @@ export class AppClient extends TopicObserver {
                 this.httpClient.get('call/' + call_id + '/')
                     .then( (call) => {
 
-                        // update call
-                        this.calls[call.id] = call;
-
-                        // subscribe
-                        this._subscribe('call/' + call.id + '/data',
-                            this.updateCall);
+                        // add call
+                        this.addCall(call);
 
                     })
                     .catch( (error) => {
@@ -154,6 +144,26 @@ export class AppClient extends TopicObserver {
 
     publish(topic, payload, qos, retained) {
         this.mqttClient.publish(topic, payload, qos, retained);
+    }
+
+    addCall(call) {
+
+        // update call
+        this.calls[call.id] = call;
+
+        // subscribe
+        this._subscribe('call/' + call.id + '/data', this.updateCall);
+
+    }
+
+    removeCall(call) {
+
+        // unsubscribe call
+        this._unsubscribe('call/' + call.id + '/data', this.updateCall);
+
+        // delete call
+        delete this.calls[call.id];
+
     }
 
     retrieveAmbulances() {
