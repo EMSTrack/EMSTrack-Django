@@ -21,7 +21,7 @@ $(function () {
 
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
-
+        
         // Make admin menu active
         if (adminUrls.includes(pathname))
             $('#navitemDropdown').addClass('nav-item active');
