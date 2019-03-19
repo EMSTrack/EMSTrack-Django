@@ -31,7 +31,7 @@ $(function () {
     const options = {
         map_id: "map",
         zoom: 12,
-        map_provider: map_provider
+        map_provider: mapProvider
     };
 
     map = new LeafletPolylineWidget(options);
