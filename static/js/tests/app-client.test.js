@@ -21,7 +21,7 @@ class MockMqttClient extends MqttClient {
             payloadString: payload,
             qos: qos,
             retained: retained
-        }
+        };
         this.broadcast(new MqttMessageArrivedEvent(message));
     }
 

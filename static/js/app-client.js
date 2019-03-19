@@ -182,13 +182,13 @@ export class AppClient extends TopicObserver {
     // subscribe methods
 
     _subscribe(filter, fn, options = {qos:2}) {
-        logger.log('debug', 'subscribing to ' + filter);
+        logger.log('debug', 'subscribing to %s', filter);
         this.mqttClient.subscribe(filter, options);
         this.observe(filter, fn)
     }
 
     _unsubscribe(filter, fn, options = {}) {
-        logger.log('debug', 'unsubscribing from ' + filter);
+        logger.log('debug', 'unsubscribing from %s', filter);
         this.mqttClient.unsubscribe(filter, options);
         this.remove(filter, fn)
     }
@@ -226,10 +226,10 @@ export class AppClient extends TopicObserver {
         const call_id = topic[3];
 
         // is this a new call?
-        logger.log('debug', "Received ambulance '" + ambulance_id + "' call status '" + status + "'");
+        logger.log('debug', "Received ambulance '%d' call status '%s'", ambulance_id, status);
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
 
-            logger.log('debug', 'Retrieving call ' + call_id);
+            logger.log('debug', "Retrieving call '%d'", call_id);
 
             // retrieve call from api
             this.httpClient.get('call/' + call_id + '/')
@@ -240,7 +240,7 @@ export class AppClient extends TopicObserver {
 
                 })
                 .catch( (error) => {
-                    logger.log('error', "'Could not retrieve call with id '" + call_id + "'");
+                    logger.log('error', "Could not retrieve call with id '%d'", call_id);
                     logger.log('error', error);
                 });
 
@@ -276,7 +276,7 @@ export class AppClient extends TopicObserver {
      */
     _eventHandler(event) {
 
-        logger.log('debug', event);
+        logger.log('debug', "event: '%s'", event);
 
         if (event.event === 'messageArrived') {
 
@@ -290,7 +290,7 @@ export class AppClient extends TopicObserver {
             }
 
             // broadcast
-            logger.log('debug', {topic: topic, payload: payload});
+            logger.log('debug', "message: '%s'", {topic: topic, payload: payload});
             this.broadcast(topic, {topic: topic, payload: payload});
 
         } else if (event.event === 'messageSent') {
@@ -300,7 +300,7 @@ export class AppClient extends TopicObserver {
         } else if (event.event === 'lostConnection') {
             /* ignore */
         } else
-            logger.log('warn', "Unknown event type '" + event.event + "'");
+            logger.log('warn', "Unknown event type '%s'", event.event);
 
     }
 
