@@ -182,13 +182,13 @@ export class AppClient extends TopicObserver {
     // subscribe methods
 
     _subscribe(filter, fn, options = {qos:2}) {
-        logger.log('debug', 'subscribing to %s', filter);
+        logger.log('debug', "subscribing to '%s'", filter);
         this.mqttClient.subscribe(filter, options);
         this.observe(filter, fn)
     }
 
     _unsubscribe(filter, fn, options = {}) {
-        logger.log('debug', 'unsubscribing from %s', filter);
+        logger.log('debug', "unsubscribing from '%s'", filter);
         this.mqttClient.unsubscribe(filter, options);
         this.remove(filter, fn)
     }
