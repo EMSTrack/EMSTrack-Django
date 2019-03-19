@@ -38,6 +38,8 @@ export class MqttDict {
 
     }
 
+    // key functions
+
     create(topic) {
 
         const regexp = MqttDict.topicToRegex(topic);
@@ -90,6 +92,8 @@ export class MqttDict {
             return false;
 
     }
+
+    // match functions
 
     matchAll(topic) {
 

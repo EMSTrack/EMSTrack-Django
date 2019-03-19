@@ -277,7 +277,7 @@ describe('mqtt-dict topics', () => {
         expect(Object.keys(dict.dict[key1].array).length).to.equal(1);
         expect(Object.keys(dict.dict[key2].array).length).to.equal(0);
 
-        let objects = dict.get(pattern1);
+        let objects = dict.get('topic/something/else');
         expect(Object.keys(objects).length).to.equal(1);
         expect(objects[key1].length).to.equal(1);
         expect(objects[key1]).to.eql([obj1]);
@@ -291,7 +291,7 @@ describe('mqtt-dict topics', () => {
 
     });
 
-    it('push and remove pattern 3', function () {
+    it('push and remove pattern 4', function () {
 
         const dict = new MqttDict();
 
@@ -329,7 +329,7 @@ describe('mqtt-dict topics', () => {
         expect(Object.keys(dict.dict[key1].array).length).to.equal(1);
         expect(Object.keys(dict.dict[key2].array).length).to.equal(0);
 
-        let objects = dict.get(pattern1);
+        let objects = dict.get('topic/4/call/something/else');
         expect(Object.keys(objects).length).to.equal(1);
         expect(objects[key1].length).to.equal(1);
         expect(objects[key1]).to.eql([obj1]);
@@ -342,6 +342,5 @@ describe('mqtt-dict topics', () => {
         expect(objects[key2]).to.eql([]);
 
     });
-
 
 });
