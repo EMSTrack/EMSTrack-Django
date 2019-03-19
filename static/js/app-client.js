@@ -290,9 +290,8 @@ export class AppClient extends TopicObserver {
             }
 
             // broadcast
-            const message = {topic: topic, payload: payload};
-            logger.log('debug', message);
-            this.broadcast(topic, message);
+            logger.log('debug', {topic: topic, payload: payload});
+            this.broadcast(topic, {topic: topic, payload: payload});
 
         } else if (event.event === 'messageSent') {
             /* ignore */
