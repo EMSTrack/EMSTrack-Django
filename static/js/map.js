@@ -2,7 +2,7 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
-import * as Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
