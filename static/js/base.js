@@ -19,7 +19,7 @@ $(function () {
     console.log('pathname: ' + pathname);
 
     // exclude home page
-    if (!pathname.match(/\/[^\/]*\//)) {
+    if (pathname.split('/').length > 3) {
 
         console.log('match!');
 
