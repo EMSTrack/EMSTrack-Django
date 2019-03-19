@@ -29,6 +29,67 @@ export class AppClient extends TopicObserver {
         this.bases = undefined;
         this.calls = undefined;
 
+        // observer methods
+        this.updateAmbulance = (message) => {
+            const ambulance = message.payload;
+            this.ambulances[ambulance.id] = ambulance;
+        };
+
+        this.updateHospital = (message) => {
+            const hospital = message.payload;
+            this.hospitals[hospital.id] = hospital;
+        };
+
+        this.updateCall = (message) => {
+            const call = message.payload;
+
+            if (call.status === 'E') {
+
+                // call ended? unsubscribe
+                this._unsubscribe('call/' + call.id + '/data',
+                    this.updateCall );
+
+            } else {
+
+                // update
+                this.call[call.id] = call;
+
+            }
+
+        };
+
+        this.updateAmbulanceCallStatus = (message) => {
+
+            const status = message.payload;
+
+            // get ambulance and call ids
+            const topic = message.topic.split('/');
+            const call_id = topic[3];
+
+            // is this a new call?
+            if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
+
+                // retrieve call from api
+                this.httpClient.get('call/' + call_id + '/')
+                    .then( (call) => {
+
+                        // update call
+                        this.calls[call.id] = call;
+
+                        // subscribe
+                        this._subscribe('call/' + call.id + '/data',
+                            this.updateCall);
+
+                    })
+                    .catch( (error) => {
+                        console.log("'Could retrieve call with id '" + call_id + "'");
+                        console.log(error);
+                    });
+
+            }
+
+        };
+
     }
 
     disconnect() {
@@ -94,66 +155,6 @@ export class AppClient extends TopicObserver {
     publish(topic, payload, qos, retained) {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
-
-    updateAmbulance = (message) => {
-        const ambulance = message.payload;
-        this.ambulances[ambulance.id] = ambulance;
-    };
-
-    updateHospital = (message) => {
-        const hospital = message.payload;
-        this.hospitals[hospital.id] = hospital;
-    };
-
-    updateCall = (message) => {
-        const call = message.payload;
-
-        if (call.status === 'E') {
-
-            // call ended? unsubscribe
-            this._unsubscribe('call/' + call.id + '/data',
-                this.updateCall );
-
-        } else {
-
-            // update
-            this.call[call.id] = call;
-
-        }
-
-    };
-
-    updateAmbulanceCallStatus = (message) => {
-
-        const status = message.payload;
-
-        // get ambulance and call ids
-        const topic = message.topic.split('/');
-        const call_id = topic[3];
-
-        // is this a new call?
-        if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
-
-            // retrieve call from api
-            this.httpClient.get('call/' + call_id + '/')
-                .then( (call) => {
-
-                    // update call
-                    this.calls[call.id] = call;
-
-                    // subscribe
-                    this._subscribe('call/' + call.id + '/data',
-                        this.updateCall);
-
-                })
-                .catch( (error) => {
-                   console.log("'Could retrieve call with id '" + call_id + "'");
-                   console.log(error);
-                });
-
-        }
-
-    };
 
     retrieveAmbulances() {
 
