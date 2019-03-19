@@ -632,14 +632,7 @@ function updateCall(call) {
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
     let topicName;
-    if (status === 'C') {
-
-        // Completed ambulance call, unsubscribe
-        topicName = "ambulance/" + ambulance_id + "/call/+/status";
-        mqttClient.unsubscribe(topicName);
-        console.log('Unsubscribing from topic: ' + topicName);
-
-    } else {
+    if (status !== 'C') {
 
         if (call_id in calls) {
 
@@ -660,22 +653,6 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
                 }
 
             }
-
-        } else {
-
-            // retrieve call from api
-            console.log("Retrieving call from API");
-            $.getJSON(APIBaseUrl + 'call/' + call_id + '/', function (call) {
-
-                // update call
-                updateCall(call);
-
-                // subscribe to call
-                topicName = "call/" + call_id + "/data";
-                mqttClient.subscribe(topicName);
-                console.log('Subscribing to topic: ' + topicName);
-
-            });
 
         }
 
@@ -1427,7 +1404,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
     const form = {status: status};
 
     // make json call
-    const postJsonUrl = APIBaseUrl + 'ambulance/' + ambulance.id + '/';
+    const postJsonUrl = apiBaseUrl + 'ambulance/' + ambulance.id + '/';
 
     const CSRFToken = Cookies.get('csrftoken');
 
@@ -1869,7 +1846,7 @@ function dispatchCall() {
     form['patient_set'] = patients;
 
     // make json call
-    const postJsonUrl = APIBaseUrl + 'call/';
+    const postJsonUrl = apiBaseUrl + 'call/';
     console.log("Form:");
     console.log(form);
     console.log("Will post:");
