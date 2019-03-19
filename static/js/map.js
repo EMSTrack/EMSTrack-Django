@@ -6,6 +6,10 @@ import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
 
+import jsLogger from 'js-logger';
+
+jsLogger.get('app-client').setLevel(jsLogger.DEBUG);
+
 // TODO: Import js-cookies library
 
 // Dispatching data
