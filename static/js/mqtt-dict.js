@@ -22,12 +22,9 @@ export class MqttDict {
         let regex = (' ' + topic).slice(1);
 
         // Parse topic
-        if (regex.indexOf('+') >= 0) {
-            regex = regex.replace(/\+/g, "[^/]+");
-        }
-        if (regex.indexOf('#') === regex.length - 1) {
-            regex = regex.replace("#", "[a-zA-Z0-9_/ ]+");
-        }
+        regex = regex.replace(/\+/g, "[^/]+");
+        regex = regex.replace(/#$/, "[a-zA-Z0-9_/ ]+");
+
         // Invalid topic
         if (regex.indexOf('#') >= 0) {
             throw new Error("Invalid topic '" + topic + "'");
