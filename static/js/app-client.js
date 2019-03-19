@@ -1,6 +1,4 @@
-import jsLogger from 'js-logger';
-
-const logger = jsLogger.get('app-client');
+import { logger } from "./logger";
 
 import { TopicObserver } from "./topic-observer";
 
@@ -184,13 +182,13 @@ export class AppClient extends TopicObserver {
     // subscribe methods
 
     _subscribe(filter, fn, options = {qos:2}) {
-        logger.debug('subscribing to ' + filter);
+        logger.log('debug', 'subscribing to ' + filter);
         this.mqttClient.subscribe(filter, options);
         this.observe(filter, fn)
     }
 
     _unsubscribe(filter, fn, options = {}) {
-        logger.debug('unsubscribing from ' + filter);
+        logger.log('debug', 'unsubscribing from ' + filter);
         this.mqttClient.unsubscribe(filter, options);
         this.remove(filter, fn)
     }
@@ -228,10 +226,10 @@ export class AppClient extends TopicObserver {
         const call_id = topic[3];
 
         // is this a new call?
-        logger.debug("Received ambulance '" + ambulance_id + "' call status '" + status + "'");
+        logger.log('debug', "Received ambulance '" + ambulance_id + "' call status '" + status + "'");
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
 
-            logger.debug('Retrieving call ' + call_id);
+            logger.log('debug', 'Retrieving call ' + call_id);
 
             // retrieve call from api
             this.httpClient.get('call/' + call_id + '/')
@@ -242,8 +240,8 @@ export class AppClient extends TopicObserver {
 
                 })
                 .catch( (error) => {
-                    logger.error("'Could not retrieve call with id '" + call_id + "'");
-                    logger.error(error);
+                    logger.log('error', "'Could not retrieve call with id '" + call_id + "'");
+                    logger.log('error', error);
                 });
 
         }
@@ -278,7 +276,7 @@ export class AppClient extends TopicObserver {
      */
     _eventHandler(event) {
 
-        logger.debug(event);
+        logger.log('debug', event);
 
         if (event.event === 'messageArrived') {
 
@@ -287,13 +285,13 @@ export class AppClient extends TopicObserver {
             try {
                 payload = JSON.parse(event.object.payloadString);
             } catch(e) {
-                console.warn('Could not parse incoming message.');
+                logger.warn('Could not parse incoming message.');
                 payload = event.object.payloadString;
             }
 
             // broadcast
             const message = {topic: topic, payload: payload};
-            logger.debug(message);
+            logger.log('debug', message);
             this.broadcast(topic, message);
 
         } else if (event.event === 'messageSent') {
@@ -303,7 +301,7 @@ export class AppClient extends TopicObserver {
         } else if (event.event === 'lostConnection') {
             /* ignore */
         } else
-            logger.warn("Unknown event type '" + event.event + "'");
+            logger.log('warn', "Unknown event type '" + event.event + "'");
 
     }
 
