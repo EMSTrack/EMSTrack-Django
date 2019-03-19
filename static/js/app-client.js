@@ -276,7 +276,7 @@ export class AppClient extends TopicObserver {
      */
     _eventHandler(event) {
 
-        logger.log('debug', "event: '%s'", event);
+        logger.log('debug', "event: '%j'", event);
 
         if (event.event === 'messageArrived') {
 
@@ -290,7 +290,7 @@ export class AppClient extends TopicObserver {
             }
 
             // broadcast
-            logger.log('debug', "message: '%s'", {topic: topic, payload: payload});
+            logger.log('debug', "message: '%j'", {topic: topic, payload: payload});
             this.broadcast(topic, {topic: topic, payload: payload});
 
         } else if (event.event === 'messageSent') {
