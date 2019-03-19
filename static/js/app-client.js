@@ -233,10 +233,12 @@ export class AppClient extends TopicObserver {
 
             // retrieve call from api
             this.httpClient.get('call/' + call_id + '/')
-                .then( (call) => {
+                .then( (response) => {
+
+                    logger.log('debug', "Retrieved call '%j'", call);
 
                     // add call
-                    this._addCall(call);
+                    this._addCall(response.data);
 
                 })
                 .catch( (error) => {
