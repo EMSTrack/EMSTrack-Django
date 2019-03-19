@@ -271,7 +271,7 @@ function init( client ) {
             console.log('Failed to retrieve hospitals and bases from ApiClient');
             console.log(error);
         });
-    
+
 }
 
 function setupAmbulances() {

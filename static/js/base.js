@@ -46,7 +46,7 @@ $(function () {
 
             // got password
             const password = response.data;
-            mqttClient = new MqttClient(mqttBroker.host, mqttBroker.port, clientId);
+            mqttClient = new MqttClient(mqttBroker.host, mqttBroker.port, clientId, 2);
 
             console.log('Connecting to MQTT broker');
             return mqttClient.connect({
