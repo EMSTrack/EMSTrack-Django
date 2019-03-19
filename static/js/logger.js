@@ -1,7 +1,11 @@
-const winston = require('winston');
+const { createLogger, format, transports } = require('winston');
 
-export const logger = winston.createLogger({
+export const logger = createLogger({
+    format: combine(
+        format.colorize(),
+        format.json()
+    ),
     transports: [
-        new winston.transports.Console({ level: 'silly' }),
+        new transports.Console({ level: 'silly' }),
     ]
 });
