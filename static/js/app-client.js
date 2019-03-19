@@ -209,15 +209,12 @@ export class AppClient extends TopicObserver {
     _updateCall(message) {
         const call = message.payload;
 
-        logger.log('debug', "Updating call '%j'", call);
-        logger.log('debug', "message='%j'", message);
-
         if (call.status === 'E')
         // call ended? remove
             this._removeCall(call);
         else
         // update
-            this.call[call.id] = call;
+            this.calls[call.id] = call;
     }
 
     _updateAmbulanceCallStatus(message) {
@@ -232,13 +229,9 @@ export class AppClient extends TopicObserver {
         logger.log('debug', "Received ambulance '%d' call '%d' status '%s'", ambulance_id, call_id, status);
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
 
-            logger.log('debug', "Retrieving call '%d'", call_id);
-
             // retrieve call from api
             this.httpClient.get('call/' + call_id + '/')
                 .then( (response) => {
-
-                    logger.log('debug', "Retrieved call '%j'", response.data);
 
                     // add call
                     this._addCall(response.data);
@@ -253,8 +246,6 @@ export class AppClient extends TopicObserver {
     }
 
     _addCall(call) {
-
-        logger.log('debug', "Adding call '%j'", call);
 
         // update call
         this.calls[call.id] = call;
