@@ -37,6 +37,7 @@
     "webpack": "^4.29.6",
     "webpack-bundle-tracker": "^0.4.2-beta",
     "webpack-cli": "^3.2.3",
-    "websocket": "^1.0.28"
+    "websocket": "^1.0.28",
+    "winston": "^3.2.1"
   }
 }
