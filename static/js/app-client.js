@@ -255,7 +255,12 @@ export class AppClient extends TopicObserver {
         this.calls[call.id] = call;
 
         // subscribe
-        this._subscribe('call/' + call.id + '/data', this.updateCall);
+        const topic = 'call/' + call.id + '/data';
+        this._subscribe(topic, this.updateCall);
+
+        // broadcast new call update
+        // this is necessary in case mqtt publication of new call is too fast
+        this.broadcast(topic, {topic: topic, payload: call});
 
     }
 
