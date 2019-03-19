@@ -209,6 +209,9 @@ export class AppClient extends TopicObserver {
     _updateCall(message) {
         const call = message.payload;
 
+        logger.log('debug', "Updating call '%j'", call);
+        logger.log('debug', "message='%j'", message);
+
         if (call.status === 'E')
         // call ended? remove
             this._removeCall(call);
@@ -250,6 +253,8 @@ export class AppClient extends TopicObserver {
     }
 
     _addCall(call) {
+
+        logger.log('debug', "Adding call '%j'", call);
 
         // update call
         this.calls[call.id] = call;
