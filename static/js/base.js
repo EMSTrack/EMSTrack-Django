@@ -16,18 +16,14 @@ $(function () {
     // make current page active
     const pathname = window.location.pathname;
 
-    console.log('pathname: ' + pathname);
-
     // exclude home page
     if (pathname.split('/').length > 3) {
-
-        console.log('match!');
 
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
         // Make admin menu active
-        if (adminUrls.indexOf(pathname) !== -1)
+        if (adminUrls.includes(pathname))
             $('#navitemDropdown').addClass('nav-item active');
 
     }
