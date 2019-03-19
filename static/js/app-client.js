@@ -226,13 +226,19 @@ export class AppClient extends TopicObserver {
         const call_id = topic[3];
 
         // is this a new call?
-        logger.log('debug', "Received ambulance '%d' call status '%s'", ambulance_id, status);
+        logger.log('debug', "Received ambulance '%d' call '%d' status '%s'", ambulance_id, call_id, status);
         if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
 
             logger.log('debug', "Retrieving call '%d'", call_id);
 
+            const pause = (duration) => new Promise(res => setTimeout(res, duration));
+            const backoff = (retries, fn, delay = 500) =>
+                fn().catch(err => retries > 1
+                    ? pause(delay).then(() => backoff(retries - 1, fn, delay * 2))
+                    : Promise.reject(err));
+
             // retrieve call from api
-            this.httpClient.get('call/' + call_id + '/')
+            backoff(3, () => this.httpClient.get('call/' + call_id + '/'), 500)
                 .then( (response) => {
 
                     logger.log('debug', "Retrieved call '%j'", call);
@@ -242,8 +248,7 @@ export class AppClient extends TopicObserver {
 
                 })
                 .catch( (error) => {
-                    logger.log('error', "Could not retrieve call with id '%d'", call_id);
-                    logger.log('error', error);
+                    logger.log('error', "Could not retrieve call with id '%d': '%s'", call_id, error);
                 });
 
         }
