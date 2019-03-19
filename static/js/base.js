@@ -16,8 +16,13 @@ $(function () {
     // make current page active
     const pathname = window.location.pathname;
 
+    console.log('pathname: ' + pathname);
+
     // exclude home page
     if (!pathname.match(/\/[^\/]*\//)) {
+
+        console.log('match!');
+
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
@@ -39,7 +44,7 @@ $(function () {
     });
 
     // retrieve temporary password for mqttClient and connect to broker
-    console.log('ApiBaseUrl: ' + apiBaseUrl);
+    // console.log('ApiBaseUrl: ' + apiBaseUrl);
     console.log('Retrieving MQTT password');
     httpClient.get('user/' + username + '/password/')
         .then( (response) => {
