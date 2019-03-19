@@ -166,19 +166,15 @@
 
 </div>
 
-<script>
-    const location_type = {{ location_type|safe }};
-    const ambulance_status = {{ ambulance_status|safe }};
-    const call_id = {{ call.id|safe }};
-    const APIBaseUrl = '{% url 'index' %}api/';
-    const map_provider = {{ map_provider|safe }};
-</script>
+{% endblock %}
 
-<!--
-<script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
-<script src="{% static 'js/map-tools.js' %}"></script>
-<script src="{% static 'js/call_detail.js' %}"></script>
--->
+{% block scripts %}
+
+{% autoescape off %}
+<script>
+    const call_id = {{ call.id }};
+</script>
+{% endautoescape %}
 
 {% render_bundle 'main' 'js' 'CALL' %}
 

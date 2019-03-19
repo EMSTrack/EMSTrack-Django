@@ -19,6 +19,14 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
+ 	// Retrieve ambulances via AJAX
+    retrieveAmbulanceData(ambulance_id)
+
+}
+
+// Ready function
+$(function() {
+
  	// Set up map widget options
  	let options = {
  		map_id: "map",
@@ -34,10 +42,7 @@ function init (client) {
 	if (searchParams.has('page_size'))
         page_size = searchParams.get('page_size');
 
- 	// Retrieve ambulances via AJAX
-    retrieveAmbulanceData(ambulance_id)
-
-};
+});
 
 function retrieveAmbulanceData(ambulance_id) {
 
@@ -53,7 +58,7 @@ function retrieveAmbulanceData(ambulance_id) {
     apiClient.httpClient.get(url)
         .then( (response) => {
 
-            console.log('Got ambulace data from API');
+            console.log('Got ambulance data from API');
             addAmbulanceRoute(response.data);
 
         })
