@@ -12,7 +12,7 @@ class MockMqttClient extends MqttClient {
         super(undefined, undefined, undefined, 2);
     }
 
-    _subscribe(filter, options) {
+    subscribe(filter, options) {
     }
 
     publish(topic, payload, qos, retained) {
@@ -25,7 +25,7 @@ class MockMqttClient extends MqttClient {
         this.broadcast(new MqttMessageArrivedEvent(message));
     }
 
-    _unsubscribe(filter, options) {
+    unsubscribe(filter, options) {
     }
 
 }
@@ -49,13 +49,13 @@ describe('client observe', () => {
 
             setTimeout(() => reject(new Error("timeout!")), 1000);
 
-            client._subscribe('test/ambulance/1/data', fn);
+            client.subscribe('test/ambulance/1/data', fn);
             client.publish('test/ambulance/1/data', '"something"', 2, true);
 
         })
             .then( () => {
                 expect(receivedData).to.eql({topic: 'test/ambulance/1/data', payload: 'something'});
-                client._unsubscribe('test/ambulance/1/data', fn);
+                client.unsubscribe('test/ambulance/1/data', fn);
                 done();
             })
             .catch(
