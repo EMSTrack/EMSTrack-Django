@@ -34,5 +34,5 @@ export class TopicObserver {
             console.warn('No topics matched!');
 
     }
-    
+
 }
