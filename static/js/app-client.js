@@ -30,55 +30,10 @@ export class AppClient extends TopicObserver {
         this.calls = undefined;
 
         // observer methods
-        this.updateAmbulance = (message) => {
-            const ambulance = message.payload;
-            this.ambulances[ambulance.id] = ambulance;
-        };
-
-        this.updateHospital = (message) => {
-            const hospital = message.payload;
-            this.hospitals[hospital.id] = hospital;
-        };
-
-        this.updateCall = (message) => {
-            const call = message.payload;
-
-            if (call.status === 'E')
-                // call ended? remove
-                this.removeCall(call);
-            else
-                // update
-                this.call[call.id] = call;
-
-        };
-
-        this.updateAmbulanceCallStatus = (message) => {
-
-            const status = message.payload;
-
-            // get ambulance and call ids
-            const topic = message.topic.split('/');
-            const call_id = topic[3];
-
-            // is this a new call?
-            if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
-
-                // retrieve call from api
-                this.httpClient.get('call/' + call_id + '/')
-                    .then( (call) => {
-
-                        // add call
-                        this.addCall(call);
-
-                    })
-                    .catch( (error) => {
-                        console.log("'Could retrieve call with id '" + call_id + "'");
-                        console.log(error);
-                    });
-
-            }
-
-        };
+        this.updateAmbulance = (message) => { this._updateAmbulance(message) };
+        this.updateHospital = (message) => { this._updateHospital(message) };
+        this.updateCall = (message) => { this._updateCall(message) };
+        this.updateAmbulanceCallStatus = (message) => { this._updateAmbulanceCallStatus(message) };
 
     }
 
@@ -132,39 +87,10 @@ export class AppClient extends TopicObserver {
 
     }
 
-    _subscribe(filter, fn, options = {qos:2}) {
-        this.mqttClient.subscribe(filter, options);
-        this.observe(filter, fn)
-    }
-
-    _unsubscribe(filter, fn, options = {}) {
-        this.mqttClient.unsubscribe(filter, options);
-        this.remove(filter, fn)
-    }
-
     publish(topic, payload, qos, retained) {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
-    addCall(call) {
-
-        // update call
-        this.calls[call.id] = call;
-
-        // subscribe
-        this._subscribe('call/' + call.id + '/data', this.updateCall);
-
-    }
-
-    removeCall(call) {
-
-        // unsubscribe call
-        this._unsubscribe('call/' + call.id + '/data', this.updateCall);
-
-        // delete call
-        delete this.calls[call.id];
-
-    }
 
     retrieveAmbulances() {
 
@@ -219,7 +145,7 @@ export class AppClient extends TopicObserver {
                     // subscribe
                     // TODO: check if already subscribed
                     this._subscribe('hospital/' + hospital.id + '/data',
-                        this.updateHospital );
+                        this.updateHospital);
                     
                 });
 
@@ -249,7 +175,7 @@ export class AppClient extends TopicObserver {
                     // subscribe
                     // TODO: check if already subscribed
                     this._subscribe('call/' + call.id + '/data',
-                        this.updateCall );
+                        this.updateCall);
                     
                 });
 
@@ -282,6 +208,94 @@ export class AppClient extends TopicObserver {
                 return this.bases;
 
             })
+
+    }
+
+
+    // private methods
+
+    // subscribe methods
+
+    _subscribe(filter, fn, options = {qos:2}) {
+        this.mqttClient.subscribe(filter, options);
+        this.observe(filter, fn)
+    }
+
+    _unsubscribe(filter, fn, options = {}) {
+        this.mqttClient.unsubscribe(filter, options);
+        this.remove(filter, fn)
+    }
+
+
+    // observer methods
+
+    _updateAmbulance(message) {
+        const ambulance = message.payload;
+        this.ambulances[ambulance.id] = ambulance;
+    }
+
+    _updateHospital(message) {
+        const hospital = message.payload;
+        this.hospitals[hospital.id] = hospital;
+    }
+
+    _updateCall(message) {
+        const call = message.payload;
+
+        if (call.status === 'E')
+        // call ended? remove
+            this._removeCall(call);
+        else
+        // update
+            this.call[call.id] = call;
+
+    }
+
+    _updateAmbulanceCallStatus(message) {
+
+        const status = message.payload;
+
+        // get ambulance and call ids
+        const topic = message.topic.split('/');
+        const call_id = topic[3];
+
+        // is this a new call?
+        if ( !this.calls.hasOwnProperty(call_id) && status !== 'C' ) {
+
+            // retrieve call from api
+            this.httpClient.get('call/' + call_id + '/')
+                .then( (call) => {
+
+                    // add call
+                    this._addCall(call);
+
+                })
+                .catch( (error) => {
+                    console.log("'Could retrieve call with id '" + call_id + "'");
+                    console.log(error);
+                });
+
+        }
+
+    }
+
+    _addCall(call) {
+
+        // update call
+        this.calls[call.id] = call;
+
+        // subscribe
+        this._subscribe('call/' + call.id + '/data', this.updateCall);
+
+    }
+
+    _removeCall(call) {
+
+        // unsubscribe call
+        this._unsubscribe('call/' + call.id + '/data', this.updateCall);
+
+        // delete call
+        delete this.calls[call.id];
 
     }
 
