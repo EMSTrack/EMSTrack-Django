@@ -6,6 +6,8 @@ import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
 
+// TODO: Import js-cookies library
+
 // Dispatching data
 
 const markersGroup = new L.LayerGroup();
