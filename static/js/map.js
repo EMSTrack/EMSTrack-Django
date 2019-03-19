@@ -8,7 +8,7 @@ import { GeocoderFactory } from "./geocoder";
 
 import jsLogger from 'js-logger';
 
-jsLogger.get('app-client').setLevel(jsLogger.DEBUG);
+jsLogger.setLevel(jsLogger.DEBUG);
 
 // TODO: Import js-cookies library
 
