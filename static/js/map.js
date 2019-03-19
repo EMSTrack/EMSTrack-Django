@@ -70,7 +70,7 @@ const ambulance_call_buttons = {
 
 function newFontAwesomeStackedIcon(options) {
         return new L.divIcon({
-            html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
+            html: '<span class="fa-stack fa-1x ' + options.extraClasses + '">' +
                   '<i class="fas fa-map-marker fa-stack-2x"></i>' +
                   '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-top:0.2em"></i>' +
                   '</span>',
@@ -197,10 +197,6 @@ const locationIcon = L.icon({
  * Ambulance statuses
  */
 const STATUS_AVAILABLE = "AV";
-const STATUS_OUT_OF_SERVICE = "OS";
-
-// global variable for mqttClient
-let mqttClient;
 
 /**
  * This is a handler for when the page is loaded.
