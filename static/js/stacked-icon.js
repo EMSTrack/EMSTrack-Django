@@ -84,19 +84,21 @@ class LeafletIconFactory extends BaseIconFactory {
 
         const bottomHtml = BaseIconFactory.toHtml(
             'i',
-            ['fas', 'fa-' + parameters.bottom.icon, parameters.bottom.classes, parameters.bottom.extraClasses].join(' '),
-            [parameters.bottom.style, parameters.bottom.extraStyle].join(';')
+            ['fas', 'fa-' + parameters.bottom.icon,
+                parameters.bottom.classes, parameters.bottom.extraClasses].filter(Boolean).join(' '),
+            [parameters.bottom.style, parameters.bottom.extraStyle].filter(Boolean).join(';')
         );
 
         const topHtml = BaseIconFactory.toHtml(
             'i',
-            ['fas', 'fa-' + parameters.top.icon, parameters.top.classes, parameters.top.extraClasses].join(' '),
-            [parameters.top.style, parameters.top.extraStyle].join(';')
+            ['fas', 'fa-' + parameters.top.icon,
+                parameters.top.classes, parameters.top.extraClasses].filter(Boolean).join(' '),
+            [parameters.top.style, parameters.top.extraStyle].filter(Boolean).join(';')
         );
 
         const html = BaseIconFactory.toHtml('span',
-            ['fa-stack', parameters.options.classes, parameters.options.extraClasses].join(' '),
-            [parameters.options.style, parameters.options.extraStyle].join(';'),
+            ['fa-stack', parameters.options.classes, parameters.options.extraClasses].filter(Boolean).join(' '),
+            [parameters.options.style, parameters.options.extraStyle].filter(Boolean).join(';'),
             [bottomHtml, topHtml].join('\n')
         );
 
