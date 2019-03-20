@@ -2,11 +2,23 @@
 
 class BaseIconFactory {
 
+    static toHtml(element, _class, style = '', body = '') {
+        let html = '<' + element + ' class="' + _class + '"';
+        if (style !== '')
+            html += ' style="' + style + '"';
+        html += '>';
+        if (body !== '')
+            html += body;
+        html += '</' + element + '>';
+        return html;
+    }
+
+
     constructor(bottom = {}, top = {}, options = {}) {
 
         this.bottom = Object.assign({}, {
             icon: 'map-marker',
-            size: 'fa-stack-2x',
+            classes: 'fa-stack-2x',
             extraClasses: '',
             style: '',
             extraStyle: '',
@@ -14,16 +26,17 @@ class BaseIconFactory {
 
         this.top = Object.assign({}, {
             icon: 'plus fa-inverse',
-            size: 'fa-stack-1x',
+            classes: 'fa-stack-1x',
             extraClasses: '',
             style: '',
             extraStyle: '',
         }, top);
 
         this.options = Object.assign({}, {
-            size: 'fa-2x fa-stack-marker-xs',
-            extraStyle: '',
+            classes: 'fa-2x fa-stack-marker-xs',
             extraClasses: '',
+            style: '',
+            extraStyle: '',
             popupAnchor: [0, 0],
             className: 'BaseDivIcon'
         }, options);
@@ -40,36 +53,25 @@ class BaseIconFactory {
         return {bottom: bottom, top: top, options: options};
     }
 
-    static toHtml(element, _class, style = '', body = '') {
-        let html = '<' + element + ' class="' + _class + '"';
-        if (style !== '')
-            html += ' style="' + style + '"';
-        html += '>';
-        if (body !== '')
-            html += body;
-        html += '</' + element + '>';
-        return html;
-    }
-
     createIcon(bottom = {}, top = {}, options = {}) {
         const parameters = this.getParameters(bottom, top, options);
 
         const bottomHtml = BaseIconFactory.toHtml(
             'i',
-            'fas fa-' + [parameters.bottom.icon, parameters.bottom.size, parameters.bottom.extraClasses].join(' '),
+            ['fas', 'fa-' + parameters.bottom.icon, parameters.bottom.classes, parameters.bottom.extraClasses].join(' '),
             [parameters.bottom.style, parameters.bottom.extraStyle].join(';')
         );
 
         const topHtml = BaseIconFactory.toHtml(
             'i',
-            'fas fa-' + [parameters.top.icon, parameters.top.size, parameters.top.extraClasses].join(' '),
+            ['fas', 'fa-' + parameters.top.icon, parameters.top.classes, parameters.top.extraClasses].join(' '),
             [parameters.top.style, parameters.top.extraStyle].join(';')
         );
 
         const html = BaseIconFactory.toHtml('span',
-            'fa-stack ' + parameters.options.size + ' ' + parameters.options.extraClasses,
-            parameters.option.extraStyle,
-            bottomHtml + topHtml
+            ['fa-stack', parameters.options.classes, parameters.options.extraClasses].join(' '),
+            [parameters.options.style, parameters.options.extraStyle].join(';'),
+            [bottomHtml, topHtml].join('\n')
         )
 
         return new L.divIcon({
@@ -88,7 +90,7 @@ class GoogleIconFactory extends BaseIconFactory {
         super(
             bottom,
             top,
-            Object.assign({}, {className: 'GoogleBoxDivIcon'}, options)
+            Object.assign({className: 'GoogleBoxDivIcon'}, options)
         );
     }
 
@@ -99,8 +101,8 @@ class MapBoxIconFactory extends BaseIconFactory {
     constructor(bottom = {}, top = {}, options = {}) {
         super(
             bottom,
-            Object.assign({}, {style: 'margin-top:0.2em'}, top),
-            Object.assign({}, {popupAnchor: [0, -15], className: 'MapBoxDivIcon'}, options)
+            Object.assign({style: 'margin-top:0.2em'}, top),
+            Object.assign({popupAnchor: [0, -15], className: 'MapBoxDivIcon'}, options)
         );
     }
 
@@ -115,7 +117,7 @@ class MapBoxIconFactory extends BaseIconFactory {
  * @param options
  * @returns {*}
  */
-export function iconFactory(map_provider, bottom = {}, top = {}, options = {}) {
+export function stackedIconFactory(map_provider, bottom = {}, top = {}, options = {}) {
 
     // default empty options
     options = options || {};
