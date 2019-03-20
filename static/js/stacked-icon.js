@@ -1,5 +1,3 @@
-
-
 class BaseIconFactory {
 
     static toHtml(element, _class, style = '', body = '') {
@@ -25,8 +23,8 @@ class BaseIconFactory {
         }, bottom);
 
         this.top = Object.assign({}, {
-            icon: 'plus fa-inverse',
-            classes: 'fa-stack-1x',
+            icon: 'plus',
+            classes: 'fa-stack-1x fa-inverse',
             extraClasses: '',
             style: '',
             extraStyle: '',
@@ -54,6 +52,34 @@ class BaseIconFactory {
     }
 
     createIcon(bottom = {}, top = {}, options = {}) {
+        throw new Error('Not implemented');
+    }
+
+}
+
+class GoogleIconFactory extends BaseIconFactory {
+
+    constructor(bottom = {}, top = {}, options = {}) {
+        super(
+            bottom,
+            top,
+            Object.assign({className: 'GoogleBoxDivIcon'}, options)
+        );
+    }
+
+}
+
+class LeafletIconFactory extends BaseIconFactory {
+
+    constructor(bottom = {}, top = {}, options = {}) {
+        super(
+            Object.assign({icon: 'map-marker'}, bottom),
+            Object.assign({style: 'margin-top:0.2em'}, top),
+            Object.assign({popupAnchor: [0, -15], className: 'LeafletDivIcon'}, options)
+        );
+    }
+
+    createIcon(bottom = {}, top = {}, options = {}) {
         const parameters = this.getParameters(bottom, top, options);
 
         const bottomHtml = BaseIconFactory.toHtml(
@@ -72,38 +98,14 @@ class BaseIconFactory {
             ['fa-stack', parameters.options.classes, parameters.options.extraClasses].join(' '),
             [parameters.options.style, parameters.options.extraStyle].join(';'),
             [bottomHtml, topHtml].join('\n')
-        )
+        );
 
-        return new L.divIcon({
+        return {
             html: html,
             popupAnchor: parameters.options.popupAnchor,
             className: parameters.options.className
-        });
+        };
 
-    }
-
-}
-
-class GoogleIconFactory extends BaseIconFactory {
-
-    constructor(bottom = {}, top = {}, options = {}) {
-        super(
-            bottom,
-            top,
-            Object.assign({className: 'GoogleBoxDivIcon'}, options)
-        );
-    }
-
-}
-
-class MapBoxIconFactory extends BaseIconFactory {
-
-    constructor(bottom = {}, top = {}, options = {}) {
-        super(
-            bottom,
-            Object.assign({style: 'margin-top:0.2em'}, top),
-            Object.assign({popupAnchor: [0, -15], className: 'MapBoxDivIcon'}, options)
-        );
     }
 
 }
@@ -117,15 +119,11 @@ class MapBoxIconFactory extends BaseIconFactory {
  * @param options
  * @returns {*}
  */
-export function stackedIconFactory(map_provider, bottom = {}, top = {}, options = {}) {
-
-    // default empty options
-    options = options || {};
+export function stackedIconFactory(provider, bottom = {}, top = {}, options = {}) {
 
     // Retrieve MapBox access_token
-    const provider = map_provider['provider'];
-    if (provider === 'mapbox') {
-        return new MapBoxIconFactory(bottom, top, options);
+    if (provider === 'leaflet') {
+        return new LeafletIconFactory(bottom, top, options);
     } else if (provider === 'google') {
         return new GoogleIconFactory(bottom, top, options);
     } else
