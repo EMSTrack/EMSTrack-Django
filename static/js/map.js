@@ -860,7 +860,7 @@ function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
             [location.location.latitude, location.location.longitude],
             {
                 icon: icon,
-                pane:  call.status + "|" + 'call_' + call.id
+                pane: call.status + "|" + 'call_' + call.id
             });
 
         // Add popup to the incident location
