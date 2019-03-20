@@ -103,9 +103,9 @@ class GoogleIconFactory extends LeafletIconFactory {
             Object.assign({style: 'margin-top:0.2em'}, top),
             Object.assign({
                     classes: 'fa-1x fa-stack-marker-xs',
-                    className: 'GoogleBoxDivIcon',
-                    popupAnchor: [0, 10],
-                    iconAnchor: [0,0],
+                    popupAnchor: [0, 0],
+                    iconAnchor: [0, 0],
+                    className: 'GoogleBoxDivIcon'
                 },
                 options)
         );
@@ -119,7 +119,10 @@ class MapBoxIconFactory extends LeafletIconFactory {
         super(
             Object.assign({icon: 'map-marker'}, bottom),
             Object.assign({style: 'margin-top:0.2em'}, top),
-            Object.assign({popupAnchor: [0, -15], className: 'LeafletDivIcon'}, options)
+            Object.assign({
+                popupAnchor: [0, -15],
+                className: 'LeafletDivIcon'
+            }, options)
         );
     }
 
