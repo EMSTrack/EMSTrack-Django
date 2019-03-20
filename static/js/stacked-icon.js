@@ -101,9 +101,12 @@ class GoogleIconFactory extends LeafletIconFactory {
         super(
             Object.assign({icon: 'map-marker'}, bottom),
             Object.assign({}, top),
-            Object.assign({extraClasses: 'font-size: 0.5em',
-                popupAnchor: [0, 0],
-                className: 'GoogleBoxDivIcon'},
+            Object.assign({
+                    classes: 'fa-1x fa-stack-marker-xs',
+                    extraClasses: 'font-size: 0.5em',
+                    popupAnchor: [0, 0],
+                    className: 'GoogleBoxDivIcon'
+                },
                 options)
         );
     }
