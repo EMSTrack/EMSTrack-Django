@@ -8,7 +8,7 @@ import { GeocoderFactory } from "./geocoder";
 
 import { logger } from './logger';
 
-import { stackedIconFactory } from '/.stacked-icon';
+import { stackedIconFactory } from './stacked-icon';
 
 // TODO: Import js-cookies library
 
