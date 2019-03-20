@@ -99,9 +99,12 @@ class GoogleIconFactory extends LeafletIconFactory {
 
     constructor(bottom = {}, top = {}, options = {}) {
         super(
-            bottom,
-            top,
-            Object.assign({className: 'GoogleBoxDivIcon'}, options)
+            Object.assign({icon: 'map-marker'}, bottom),
+            Object.assign({}, top),
+            Object.assign({extraClasses: 'font-size: 0.5em',
+                popupAnchor: [0, 0],
+                className: 'GoogleBoxDivIcon'},
+                options)
         );
     }
 
