@@ -40,7 +40,16 @@ class BaseIconFactory {
 
     }
 
-    getParameters(_bottom = {}, _top = {}, _options = {}) {
+    setProperties(bottom = {}, top = {}, options = {}) {
+        // clone and alter parameter user-provided options
+        this.bottom = Object.assign({}, this.bottom, bottom);
+        this.top = Object.assign({}, this.top, top);
+        this.options = Object.assign({}, this.options, options);
+
+        return this;
+    }
+
+    getProperties(_bottom = {}, _top = {}, _options = {}) {
 
         // clone and alter parameter user-provided options
         const bottom = Object.assign({}, this.bottom, _bottom);
@@ -63,7 +72,7 @@ class BaseIconFactory {
 class LeafletIconFactory extends BaseIconFactory {
 
     createIcon(bottom = {}, top = {}, options = {}) {
-        const parameters = this.getParameters(bottom, top, options);
+        const parameters = this.getProperties(bottom, top, options);
 
         const bottomHtml = BaseIconFactory.toHtml(
             'i',

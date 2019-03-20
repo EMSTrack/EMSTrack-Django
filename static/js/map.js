@@ -95,10 +95,11 @@ function callDate(call) {
 
 }
 
-const iconFactory = stackedIconFactory(mapProvider,
-    {extraClasses: 'marker-stacked-icon-bottom'},
-    {extraClasses: 'marker-stacked-icon-top'},
-    {extraClasses: 'marker-stacked-icon'});
+const iconFactory = stackedIconFactory(mapProvider);
+iconFactory.setProperties(
+    {classes: [iconFactory.bottom.classes, 'marker-stacked-icon-bottom'].join(' ')},
+    {classes: [iconFactory.top.classes, 'marker-stacked-icon-top'].join(' ')},
+    {classes: [iconFactory.options.classes, 'marker-stacked-icon'].join(' ')});
 
 function waypointIcon(waypoint) {
 
@@ -140,7 +141,7 @@ function waypointIcon(waypoint) {
     return new L.divIcon(
         iconFactory.createSimpleIcon(icon,
             {}, {},
-            {extraClasses: [iconFactory.options.class, color_class].join(' ')})
+            {extraClasses: color_class})
     );
 
 }
