@@ -119,7 +119,7 @@ class MapBoxIconFactory extends LeafletIconFactory {
             Object.assign({icon: 'map-marker'}, bottom),
             Object.assign({style: 'margin-top:0.2em'}, top),
             Object.assign({
-                classes: 'fa-2x fa-stack-marker-xs mapbox-stacked-icon',
+                classes: 'fa-1x fa-stack-marker-xs mapbox-stacked-icon',
                 popupAnchor: [0, -15],
                 className: 'LeafletDivIcon'
             }, options)
