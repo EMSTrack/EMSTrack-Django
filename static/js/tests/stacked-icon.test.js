@@ -1,3 +1,5 @@
+import { expect } from 'chai';
+
 import { stackedIconFactory } from "../stacked-icon";
 
 describe('stacked icon', () => {
