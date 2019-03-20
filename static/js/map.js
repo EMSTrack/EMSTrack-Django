@@ -137,7 +137,11 @@ function waypointIcon(waypoint) {
         extraClasses: 'fa-stack-marker-xs ' + color_class
     });
 */
-    return new L.divIcon(iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: color_class}));
+    return new L.divIcon(
+        iconFactory.createSimpleIcon(icon,
+            {}, {},
+            {extraClasses: [iconFactory.options.class, color_class].join(' ')})
+    );
 
 }
 
