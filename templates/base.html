@@ -1,5 +1,7 @@
 {% load static %}
 {% load i18n %}
+{% load render_bundle from webpack_loader %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,10 +11,9 @@
     <!-- favicon -->
     <link rel="shortcut icon" href="{%  static 'favicon.png' %}">
 
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
     <!-- Bootstrap CSS -->
-    <!--
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/btn-yellow.css' %}">
@@ -163,33 +164,29 @@
     {% endblock %}
 </footer>
 
+{% if request.user.is_authenticated and map_provider.provider == 'google' %}
+<script src="https://maps.googleapis.com/maps/api/js?key={{ map_provider.access_token }}" async defer></script>
+{% endif %}
+
+{% autoescape off %}
 <script>
-
-    // make current page active
-    var pathname = window.location.pathname;
-    console.log("pathname = '" + pathname + "'");
-
-    // exclude home page
-    if (!pathname.match(/\/[^\/]*\//)) {
-        // Make current page active
-        $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
-
-        if ((pathname === "{% url 'login:list-user' %}") ||
-            (pathname === "{% url 'login:list-group' %}") ||
-            (pathname === "{% url 'equipment:list' %}") ||
-            (pathname === "{% url 'equipment:list-set' %}") ||
-            (pathname === "{% url 'ambulance:location_list' %}") ||
-            (pathname === "{% url 'login:list-client' %}") ||
-            (pathname === "{% url 'login:restart' %}")) {
-
-            // Make admin menu active
-            $('#navitemDropdown').addClass('nav-item active');
-
-        }
-
-    }
-
+    const username = '{{ user.get_username }}';
+    const apiBaseUrl = '{% url 'index' %}api/';
+    {% if request.user.is_authenticated %}
+    const mqttBroker = {{ mqtt_broker }};
+    const clientId = '{{ client_id }}';
+    const mapProvider = {{ map_provider }};
+    {% if request.user.is_staff %}
+    const adminUrls = {{ admin_urls }};
+    {% endif %}
+    {% endif %}
 </script>
+{% endautoescape %}
+
+{% render_bundle 'main' 'js' 'BASE' %}
+
+{% block scripts %}
+{% endblock %}
 
 </body>
 </html>

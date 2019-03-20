@@ -69,6 +69,10 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+
 <script>
 
     // Ready function
@@ -79,7 +83,7 @@
         });
 
         // Should start up modal?
-        var pathname = window.location.pathname;
+        const pathname = window.location.pathname;
         // console.log('pathname = ' + pathname);
         if (pathname === "{% url 'login:login' %}") {
 
@@ -88,7 +92,7 @@
                 keyboard: false
             });
 
-        } else if (pathname == "{% url 'login:signup' %}") {
+        } else if (pathname === "{% url 'login:signup' %}") {
 
             // adjust modal
             $('#loginTitle').html('EMSTrack {% trans "Signup" %}');

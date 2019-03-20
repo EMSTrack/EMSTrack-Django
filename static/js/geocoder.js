@@ -1,248 +1,558 @@
-var Geocoder = function(options) {
+class BaseGeocoder {
 
-    this.options = {};
+    constructor(options) {
 
-    // Altering using user-provided options
-    for (var property in options) {
-        if (options.hasOwnProperty(property)) {
-            this.options[property] = options[property];
-        }
-    }
+        // initialize options
+        this.options = {};
 
-    // initialize parser configurations
-    this.parser_configurations = {
-
-        'US': {
-            regex: /^(\d+)?(\D+)((suite|ste|#)?\s*\d+)?$/i,
-            street_components: ['number', 'street', 'unit']
-        },
-
-        'MX': {
-            regex: /^(\D+)(\d+|s\/n)?(\D+\d*)?$/i,
-            street_components: ['street', 'number', 'unit']
-        }
-
-    }
-
-}
-
-Geocoder.prototype.parse_street_address = function(street_address, country, address) {
-
-    // initialize parameteres
-    address = address || {};
-
-    // parse street address
-    var street = street_address.split(',');
-
-    // load configuration based on country
-    var config = this.parser_configurations[country];
-
-    var matches = street[0].match(config['regex']);
-    if (matches) {
-        console.log(matches);
-        var street_components = config['street_components'];
-        // matches[0] is the entire matched string
-        for (var i = 1; i < matches.length; i++) {
-            if (matches[i] !== undefined)
-                address[street_components[i-1]] = matches[i].trim();
-        }
-    }
-
-    return address;
-}
-
-Geocoder.prototype.parse_feature = function(feature) {
-
-    // parse feature
-    if (feature['place_type'] == 'address') {
-
-        var address = {
-            street_address: "",
-            number: "",
-            street: "",
-            unit: undefined,
-            neighborhood: undefined,
-            city: "",
-            state: "",
-            zipcode: undefined,
-            country: "",
-            location: undefined
-        };
-
-        // set location
-        address['location'] = {
-            'latitude': feature['center'][1],
-            'longitude': feature['center'][0]
-        }
-
-        // parse context
-        var context = feature['context'];
-        for (var i = 0; i < context.length; i++) {
-            var item = context[i];
-            var id = item['id'];
-            if (id.startsWith('neighborhood'))
-                address['neighborhood'] = item['text'];
-            else if (id.startsWith('postcode'))
-                address['zipcode'] = item['text'];
-            else if (id.startsWith('place'))
-                address['city'] = item['text'];
-            else if (id.startsWith('region'))
-                address['state'] = item['short_code'].toUpperCase().substr(3);
-            else if (id.startsWith('country'))
-                address['country'] = item['short_code'].toUpperCase();
-        }
-
-        // set street_address
-        var street_address = feature['place_name'];
-        address['street_address'] = street_address;
-
-        // parse street address
-        return this.parse_street_address(street_address,
-            address['country'],
-            address);
-/*
-        var street = street_address.split(',');
-
-        // load configuration based on country
-        var config = this.parser_configurations[address['country']];
-
-        var matches = street[0].match(config['regex']);
-        if (matches) {
-            console.log(matches);
-            var street_components = config['street_components'];
-            // matches[0] is the entire matched string
-            for (var i = 1; i < matches.length; i++) {
-                if (matches[i] !== undefined)
-                    address[street_components[i-1]] = matches[i].trim();
+        // Altering using user-provided options
+        for (const property in options) {
+            if (options.hasOwnProperty(property)) {
+                this.options[property] = options[property];
             }
         }
-*/
+
+        // initialize parser configurations
+        this.parser_configurations = {
+
+            'US': {
+                regex: /^(\d+)?(\D+)((suite|ste|#)?\s*\d+)?$/i,
+                street_components: ['number', 'street', 'unit']
+            },
+
+            'MX': {
+                regex: /^(\D+)(\d+|s\/n)?(\D+\d*)?$/i,
+                street_components: ['street', 'number', 'unit']
+            }
+
+        }
+
+    }
+
+    // parse street address
+    parse_street_address(street_address, country, address) {
+
+        // initialize address
+        address = address || {};
+
+        // parse street address
+        const street = street_address.split(',');
+
+        // load configuration based on country
+        const config = this.parser_configurations[country];
+
+        const matches = street[0].match(config['regex']);
+        if (matches) {
+            // console.log(matches);
+            const street_components = config['street_components'];
+            // matches[0] is the entire matched string
+            for (let i = 1; i < matches.length; i++) {
+                if (matches[i] !== undefined)
+                    address[street_components[i - 1]] = matches[i].trim();
+            }
+        }
 
         return address;
     }
 
-    // log error
-    console.log("Does not know how to parse feature of type'" + feature['place_type'] + "'");
+    reverse(location, callback, options) {
+        throw new Error("Not implemented!");
+    }
+
+    geocode(location, callback, options) {
+        throw new Error("Not implemented!");
+    }
 
 }
 
-Geocoder.prototype.reverse = function(location, options, callback) {
+export class GeocoderMapBox extends BaseGeocoder {
 
-    var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+    constructor(options) {
 
-    var parameters = this.options;
+        // add query default parameters
+        options['types'] = 'address';
+        options['limit'] = 1;
 
-    // Start with class options
-    for (var property in this.options) {
-        if (this.options.hasOwnProperty(property)) {
-            parameters[property] = this.options[property];
-        }
+        // call super
+        super(options);
+
     }
 
-    // Altering using user-provided options
-    for (var property in options) {
-        if (options.hasOwnProperty(property)) {
-            parameters[property] = options[property];
+    parse_response(response) {
+
+        // retrieve features
+        const features = response.features;
+        if (features.length === 0)
+            return null;
+
+        // parse first feature
+        const feature = features[0];
+        if ('address' in feature['place_type']) {
+
+            let address = {
+                formatted_address: "",
+                number: "",
+                street: "",
+                unit: undefined,
+                neighborhood: undefined,
+                city: "",
+                state: "",
+                zipcode: undefined,
+                country: "",
+                location: undefined
+            };
+
+            // set location
+            address['location'] = {
+                'latitude': feature['center'][1],
+                'longitude': feature['center'][0]
+            };
+
+            // parse context
+            const context = feature['context'];
+            for (let i = 0; i < context.length; i++) {
+                const item = context[i];
+                const id = item['id'];
+                if (id.startsWith('neighborhood'))
+                    address['neighborhood'] = item['text'];
+                else if (id.startsWith('postcode'))
+                    address['zipcode'] = item['text'];
+                else if (id.startsWith('place'))
+                    address['city'] = item['text'];
+                else if (id.startsWith('region'))
+                    address['state'] = item['short_code'].toUpperCase().substr(3);
+                else if (id.startsWith('country'))
+                    address['country'] = item['short_code'].toUpperCase();
+            }
+
+            // set street_address
+            const formatted_address = feature['place_name'];
+            address['formatted_address'] = formatted_address;
+
+            // parse street address
+            return this.parse_street_address(formatted_address,
+                address['country'],
+                address);
+
         }
+
+        // log error
+        console.log("Does not know how to parse feature of type '" + feature['place_type'] + "'");
+
+        return null;
     }
 
-    // construct query
-    url += location.lng + ',' + location.lat + ".json";
+    reverse(location, callback, options) {
 
-    // add parameters
-    var prefix = '?';
+        options = options || {};
 
-    for (var option in parameters) {
-        if (parameters.hasOwnProperty(option)) {
+        let property;
+        let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
-            // add options
-            url += prefix
-                + encodeURIComponent(option)
-                + "="
-                + encodeURIComponent(parameters[option]);
-            prefix = '&';
+        const parameters = {};
 
+        // Start with class options
+        for (property in this.options) {
+            if (this.options.hasOwnProperty(property)) {
+                parameters[property] = this.options[property];
+            }
         }
+
+        // Altering using user-provided options
+        for (property in options) {
+            if (options.hasOwnProperty(property)) {
+                parameters[property] = options[property];
+            }
+        }
+
+        // construct query
+        url += location.lng + ',' + location.lat + ".json";
+
+        // add parameters
+        let prefix = '?';
+        for (const option in parameters) {
+            if (parameters.hasOwnProperty(option)) {
+
+                // add options
+                url += prefix
+                    + encodeURIComponent(option)
+                    + "="
+                    + encodeURIComponent(parameters[option]);
+                prefix = '&';
+
+            }
+        }
+
+        // console.log("geocode url = '" + url + "'");
+
+        // query mapbox
+        $.getJSON(url,
+            (response) => {
+
+                // parse results
+                const address = this.parse_response(response);
+
+                // console.log(response);
+                // console.log(address);
+
+                // callback
+                if (callback)
+                    callback(address, response);
+
+            })
+            .fail(
+                (jqxhr, textStatus, error) => {
+
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not reverse geocode:" +
+                            textStatus + "," + error + "\n");
+
+                });
+
     }
 
-    // query mapbox
-    $.getJSON(url, function (response) {
+    geocode(query, callback, options) {
 
-        console.log('JSON response = ' + response);
+        options = options || { autocomplete: 'true' };
 
-        // callback
-        if (callback)
-            callback(response.features, "success");
+        let property;
+        let url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
 
-    })
-        .fail(function (jqxhr, textStatus, error) {
+        const parameters = {};
 
-            if (callback)
-                callback({error: error}, textStatus);
-            else
-                alert("Could not geocode:" +
-                    textStatus + "," + error + "\n");
+        // Start with class options
+        for (property in this.options) {
+            if (this.options.hasOwnProperty(property)) {
+                parameters[property] = this.options[property];
+            }
+        }
 
-        });
+        // Altering using user-provided options
+        for (property in options) {
+            if (options.hasOwnProperty(property)) {
+                parameters[property] = options[property];
+            }
+        }
+
+        // construct query
+        url += encodeURIComponent(query) + ".json";
+
+        // add parameters
+        let prefix = '?';
+        for (const option in parameters) {
+            if (parameters.hasOwnProperty(option)) {
+
+                // add options
+                url += prefix
+                    + encodeURIComponent(option)
+                    + "="
+                    + encodeURIComponent(parameters[option]);
+                prefix = '&';
+
+            }
+        }
+
+        // console.log("geocode url = '" + url + "'");
+
+        // query mapbox
+        $.getJSON(url,
+            (response) =>  {
+
+                // parse results
+                const address = this.parse_response(response);
+
+                // console.log(response);
+                // console.log(address);
+
+                // callback
+                if (callback)
+                    callback(address, response);
+
+            })
+            .fail(
+                (jqxhr, textStatus, error) => {
+
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not forward geocode:" +
+                            textStatus + "," + error + "\n");
+
+                });
+
+    }
 
 }
 
+export class GeocoderGoogle extends BaseGeocoder {
 
-Geocoder.prototype.geocode = function(query, options, callback) {
+    constructor(options) {
 
-    var url = "https://api.mapbox.com/geocoding/v5/mapbox.places/";
+        // call super
+        super(options);
 
-    var parameters = this.options;
-
-    // Start with class options
-    for (var property in this.options) {
-        if (this.options.hasOwnProperty(property)) {
-            parameters[property] = this.options[property];
-        }
     }
 
-    // Altering using user-provided options
-    for (var property in options) {
-        if (options.hasOwnProperty(property)) {
-            parameters[property] = options[property];
+    parse_response(response, filter) {
+
+        filter = filter || [];
+
+        // retrieve features
+        const results = response['results'];
+        if (results.length === 0)
+            return null;
+        // console.log(results);
+
+        // parse first feature
+        for (let i = 0; i <  results.length; i++) {
+
+            const feature = results[i];
+            // console.log(feature);
+
+            // filter types
+            if (filter.length > 0) {
+
+                const types = feature['types'];
+                let j = 0;
+                for (; j < types.length; j++) {
+                    if ( filter.includes(types[j]) )
+                        break;
+                }
+
+                if (j === types.length)
+                    // could not find
+                    continue;
+            }
+
+            let address = {
+                formatted_address: "",
+                number: "",
+                street: "",
+                unit: undefined,
+                neighborhood: undefined,
+                city: "",
+                state: "",
+                zipcode: undefined,
+                country: "",
+                location: undefined
+            };
+
+            // set location
+            const location = feature['geometry']['location'];
+            address['location'] = {
+                'latitude': location['lat'],
+                'longitude': location['lng']
+            };
+
+            // set formated address
+            address['formatted_address'] = feature['formatted_address'];
+
+            // parse context
+            const context = feature['address_components'];
+            for (let i = 0; i < context.length; i++) {
+                const item = context[i];
+                const types = item['types'];
+                if (types.includes('sublocality_level_1'))
+                    address['neighborhood'] = item['short_name'];
+                else if (types.includes('street_number'))
+                    address['number'] = item['short_name'];
+                else if (types.includes('route'))
+                    address['street'] = item['short_name'];
+                else if (types.includes('locality'))
+                    address['city'] = item['long_name'];
+                else if (types.includes('administrative_area_level_1'))
+                    address['state'] = item['short_name'].replace('.', '');
+                else if (types.includes('postal_code'))
+                    address['zipcode'] = item['short_name'];
+                else if (types.includes('country'))
+                    address['country'] = item['short_name'].toUpperCase();
+            }
+
+            return address;
+
         }
+
+        // log error
+        console.log("Does not know how to parse address");
+
+        return null;
     }
 
-    // construct query
-    url += encodeURIComponent(query) + ".json";
+    reverse(location, callback, options) {
 
-    // add parameters
-    var prefix = '?';
+        options = options || {};
 
-    for (var option in parameters) {
-        if (parameters.hasOwnProperty(option)) {
+        let property;
+        let url = "https://maps.googleapis.com/maps/api/geocode/json";
 
-            // add options
-            url += prefix
-                + encodeURIComponent(option)
-                + "="
-                + encodeURIComponent(parameters[option]);
-            prefix = '&';
+        const parameters = {};
 
+        // Start with class options
+        for (property in this.options) {
+            if (this.options.hasOwnProperty(property)) {
+                parameters[property] = this.options[property];
+            }
         }
+
+        // Altering using user-provided options
+        for (property in options) {
+            if (options.hasOwnProperty(property)) {
+                parameters[property] = options[property];
+            }
+        }
+
+        // construct query
+        parameters['latlng'] = location.lat + ',' + location.lng;
+
+        // add parameters
+        let prefix = '?';
+        for (const option in parameters) {
+            if (parameters.hasOwnProperty(option)) {
+
+                // add options
+                url += prefix
+                    + encodeURIComponent(option)
+                    + "="
+                    + encodeURIComponent(parameters[option]);
+                prefix = '&';
+
+            }
+        }
+
+        // console.log("geocode url = '" + url + "'");
+
+        // query mapbox
+        $.getJSON(url,
+            (response) => {
+
+                // parse results
+                const address = this.parse_response(response, ['street_address', 'route', 'political']);
+
+                // console.log(response);
+                // console.log(address);
+
+                // callback
+                if (callback)
+                    callback(address, response);
+
+            })
+            .fail(
+                (jqxhr, textStatus, error) => {
+
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not reverse geocode:" +
+                            textStatus + "," + error + "\n");
+
+                });
+
     }
 
-    // query mapbox
-    $.getJSON(url, function (response) {
+    geocode(query, callback, options) {
 
-        // callback
-        if (callback)
-            callback(response.features, "success");
+        options = options || { autocomplete: 'true' };
 
-    })
-        .fail(function (jqxhr, textStatus, error) {
+        let property;
+        let url = "https://maps.googleapis.com/maps/api/geocode/json";
 
-            if (callback)
-                callback({error: error}, textStatus);
-            else
-                alert("Could not geocode:" +
-                    textStatus + "," + error + "\n");
+        const parameters = {};
 
-        });
+        // Start with class options
+        for (property in this.options) {
+            if (this.options.hasOwnProperty(property)) {
+                parameters[property] = this.options[property];
+            }
+        }
+
+        // Altering using user-provided options
+        for (property in options) {
+            if (options.hasOwnProperty(property)) {
+                parameters[property] = options[property];
+            }
+        }
+
+        // normalize query
+        const combining = /[\u0300-\u036F]/g;
+        query = query.normalize('NFKD').replace(combining, '');
+
+        // console.log("query = '" + query + "'");
+
+        // construct query
+        parameters['address'] = encodeURIComponent(query);
+
+        // add parameters
+        let prefix = '?';
+        for (const option in parameters) {
+            if (parameters.hasOwnProperty(option)) {
+
+                // add options
+                url += prefix
+                    + encodeURIComponent(option)
+                    + "="
+                    + encodeURIComponent(parameters[option]);
+                prefix = '&';
+
+            }
+        }
+
+        // console.log("geocode url = '" + url + "'");
+
+        // query mapbox
+        $.getJSON(url,
+            (response) =>  {
+
+                // parse results
+                const address = this.parse_response(response);
+
+                // console.log(response);
+                // console.log(address);
+
+                // callback
+                if (callback)
+                    callback(address, response);
+
+            })
+            .fail(
+                (jqxhr, textStatus, error) => {
+
+                    if (callback)
+                        callback(null, {error: error});
+                    else
+                        console.log("Could not forward geocode:" +
+                            textStatus + "," + error + "\n");
+
+                });
+
+    }
 
 }
+
+/**
+ *
+ * @param map_provider
+ * @param options
+ * @returns {*}
+ */
+export function GeocoderFactory(map_provider, options) {
+
+    // default empty options
+    options = options || {};
+
+    // Retrieve MapBox access_token
+    const provider = map_provider['provider'];
+    if (provider === 'mapbox') {
+        // add access token
+        options['access_token'] = map_provider['access_token'];
+        return new GeocoderMapBox(options);
+    } else if (provider === 'google') {
+        // add access token
+        options['key'] = map_provider['access_token'];
+        return new GeocoderGoogle(options);
+    } else
+        return null;
+
+}
+

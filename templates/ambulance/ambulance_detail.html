@@ -1,16 +1,7 @@
-{% extends "leaflet/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-
-{% block leaflethead %}
-    <script>
-        var ambulance_status = {{ ambulance_status|safe }};
-        var ambulance_id = {{ ambulance.id|safe }};
-        var APIBaseUrl = '{% url 'index' %}api/';
-        var page_size = {{ page_size }};
-        var access_token='{{ access_token }}';
-    </script>
-{% endblock %}
+{% load render_bundle from webpack_loader %}
 
 {% block content %}
 
@@ -213,8 +204,19 @@
     {% endif %}
 
 </div>
+{% endblock %}
 
-<script src="{% static 'leaflet/js/LeafletWidget.js' %}"></script>
-<script src="{% static 'js/ambulance_detail.js' %}"></script>
+{% block scripts %}
+
+{% autoescape off %}
+<script>
+    const ambulance_id = {{ ambulance.id }};
+    const ambulance_status = {{ ambulance_status }};
+    let page_size = {{ page_size }};
+</script>
+{% endautoescape %}
+
+{% render_bundle 'main' 'js' 'AMBULANCE' %}
 
 {% endblock %}
+

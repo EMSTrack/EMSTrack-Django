@@ -1,43 +1,47 @@
-function calculateDistanceHaversine(location1, location2, radius) {
+import L from "leaflet";
+import "leaflet-rotatedmarker";
+import "leaflet/dist/leaflet.css";
+
+export function calculateDistanceHaversine(location1, location2, radius) {
 
 	radius = radius || 6371e3;
 
 	// convert latitude and longitude to radians first
-    var lat1 = Math.PI * location1.latitude / 180;
-    var lat2 = Math.PI * location2.latitude / 180;
-    var d_phi = lat2 - lat1;
-    var d_lambda = Math.PI * (location2.longitude - location1.longitude) / 180;
+    const lat1 = Math.PI * location1.latitude / 180;
+    const lat2 = Math.PI * location2.latitude / 180;
+    const d_phi = lat2 - lat1;
+    const d_lambda = Math.PI * (location2.longitude - location1.longitude) / 180;
 
-    var a = Math.sin(d_phi / 2) * Math.sin(d_phi / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(d_lambda / 2) * Math.sin(d_lambda / 2);
-    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const a = Math.sin(d_phi / 2) * Math.sin(d_phi / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(d_lambda / 2) * Math.sin(d_lambda / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
     // console.log('|| {} - {} ||= {}'.format(location2, location1, earth_radius * c))
 
     return radius * c;
 }
 
-function breakSegments(data, byStatus, separationRadius, timeInterval) {
+export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
 	separationRadius = separationRadius || [100, 10000]; // 10m, 10km
 	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
     byStatus = byStatus || false; // split by status as well?
 
-	var segments = [];
+    const segments = [];
 
-	var currentSegment = [];
-	var lastPosition = null;
-	var n = data.length;
-	for (var i = 0; i < n; i++) {
+    let currentSegment = [];
+    let lastPosition = null;
+    const n = data.length;
+    for (let i = 0; i < n; i++) {
 
 		// current position
-		var currentPosition = data[i];
+        const currentPosition = data[i];
 
-		// distance?
+        // distance?
 		if (lastPosition != null) {
-			var distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
-			var interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
-			var newStatus = false;
-			if (byStatus && lastPosition.status != currentPosition.status) {
+            const distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
+            const interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
+            let newStatus = false;
+            if (byStatus && lastPosition.status != currentPosition.status) {
 			    newStatus = true;
 			    // will break segment, add current position first
                 var newCurrentPosition = Object.assign({}, currentPosition);
@@ -72,7 +76,7 @@ function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
 }
 
-function createMarker(call_or_update, icon) {
+export function createMarker(call_or_update, icon) {
 
     // default marker
     icon = icon || L.icon({
@@ -80,22 +84,22 @@ function createMarker(call_or_update, icon) {
         iconSize: [15, 30],
     });
 
-    var location = call_or_update.location;
+    const location = call_or_update.location;
     return L.marker(
         [location.latitude, location.longitude],
         {icon: icon});
 
 }
 
-function createSegmentLine(map, updates) {
+export function createSegmentLine(map, updates) {
 
 	// Store data in an array
-	var latlngs = [];
-	updates.forEach(function(update) {
+    const latlngs = [];
+    updates.forEach(function(update) {
 
 		// push location
-		var loc = update.location;
-		latlngs.push([loc.latitude, loc.longitude]);
+        const loc = update.location;
+        latlngs.push([loc.latitude, loc.longitude]);
 
     });
 
@@ -106,7 +110,7 @@ function createSegmentLine(map, updates) {
 }
 
 // Interact with widget to add an ambulance route
-function addAmbulanceRoute(map, data, byStatus) {
+export function addAmbulanceRoute(map, data, byStatus) {
 
     byStatus = byStatus || false;
 
@@ -116,25 +120,24 @@ function addAmbulanceRoute(map, data, byStatus) {
     }
 
     // short return
-    if (data.length == 0)
+    if (data.length === 0)
         return;
 
     // break segments
-    var segments = breakSegments(data, byStatus);
+    const segments = breakSegments(data, byStatus);
 
     // loop on segments
-    var n = segments.length;
-    var last_segment = null;
-	for (var i = 0; i < n; i++) {
+    const n = segments.length;
+    let last_segment = null;
+    for (let i = 0; i < n; i++) {
 
 	    // grab segment
-        var segment = segments[i];
+        const segment = segments[i];
 
         // initial point
-        var initialPoint = segment[0];
+        const initialPoint = segment[0];
 
-
-        if (i == 0) {
+        if (i === 0) {
 
             // add starting marker
             console.log("Adding initial '" + initialPoint.status + "' marker");
@@ -142,30 +145,30 @@ function addAmbulanceRoute(map, data, byStatus) {
                 .addTo(map.map)
                 .bindPopup('<strong>' + ambulance_status[initialPoint.status] + '</strong>')
                 .on('mouseover',
-                    function (e) {
+                    function () {
                         // open popup bubble
                         this.openPopup().on('mouseout',
-                            function (e) {
+                            function () {
                                 this.closePopup();
                             });
                     });
 
         } else if (byStatus) { // && i > 0
 
-            var status = initialPoint.status;
-            var last_status = last_segment[last_segment.length - 1].status;
+            const status = initialPoint.status;
+            const last_status = last_segment[last_segment.length - 1].status;
             console.log('status = ' + status + ', last_status = ' + last_status);
-            if (last_status != status) {
+            if (last_status !== status) {
                 // add status marker
                 console.log("Adding '" + status + "' marker");
                 createMarker(initialPoint)
                     .addTo(map.map)
                     .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
                     .on('mouseover',
-                        function (e) {
+                        function () {
                             // open popup bubble
                             this.openPopup().on('mouseout',
-                                function (e) {
+                                function () {
                                     this.closePopup();
                                 });
                         });
@@ -178,18 +181,18 @@ function addAmbulanceRoute(map, data, byStatus) {
             .addTo(map.map);
 
         // last segment?
-        if (i == n - 1 && segment.length > 0) {
+        if (i === n - 1 && segment.length > 0) {
             // add ending marker
-            var finalPoint = segment[segment.length - 1];
+            const finalPoint = segment[segment.length - 1];
             console.log("Adding final '" + finalPoint.status + "' marker");
             createMarker(finalPoint)
                 .addTo(map.map)
                 .bindPopup('<strong>' + ambulance_status[finalPoint.status] + '</strong>')
                 .on('mouseover',
-                    function (e) {
+                    function () {
                         // open popup bubble
                         this.openPopup().on('mouseout',
-                            function (e) {
+                            function () {
                                 this.closePopup();
                             });
                     });
@@ -207,18 +210,18 @@ function addAmbulanceRoute(map, data, byStatus) {
 
 }
 
-function createRouteFilter(map, segments) {
+export function createRouteFilter(map, segments) {
 
     // Add the checkbox on the top right corner for filtering.
-    var container = L.DomUtil.create('div', 'filter-options bg-light');
+    const container = L.DomUtil.create('div', 'filter-options bg-light');
 
     //Generate HTML code for checkboxes for each of the statuses.
-    var filterHtml = "";
+    let filterHtml = "";
 
     filterHtml += '<div class="border border-dark rounded px-1 pt-1 pb-0">';
     segments.forEach(function (segment, index) {
 
-        var date = new Date(Date.parse(segment[0].timestamp));
+        const date = new Date(Date.parse(segment[0].timestamp));
         filterHtml += '<div class="checkbox">'
             + '<label><input class="chk" data-status="layer_' + index + '" type="checkbox" value="" checked >'
             + date.toLocaleString()
@@ -232,13 +235,13 @@ function createRouteFilter(map, segments) {
     container.innerHTML = filterHtml;
 
     // Add the checkboxes.
-    var customControl = L.Control.extend({
+    const customControl = L.Control.extend({
 
         options: {
             position: 'topright'
         },
 
-        onAdd: function (map) {
+        onAdd: function () {
             return container;
         }
 
@@ -249,7 +252,7 @@ function createRouteFilter(map, segments) {
     $('.chk').change(function () {
 
         // Which layer?
-        var layer = map.getLayerPane(this.getAttribute('data-status'));
+        const layer = map.getLayerPane(this.getAttribute('data-status'));
 
         if (this.checked) {
             layer.style.display = 'block';

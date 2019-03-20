@@ -1,34 +1,7 @@
-{% extends "leaflet/base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load i18n %}
-
-{% block leaflethead %}
-
-    <script>
-        var ambulance_status = {{ ambulance_status|safe }};
-        var ambulance_status_order = {{ ambulance_status_order|safe }};
-        var ambulance_capability = {{ ambulance_capability|safe }};
-        var ambulance_capability_order = {{ ambulance_capability_order|safe }};
-        var location_type= {{ location_type|safe }};
-        var location_type_order= {{ location_type_order|safe }};
-        var call_status = {{ call_status|safe }};
-        var call_status_order = {{ call_status_order|safe }};
-        var call_priority = {{ call_priority|safe }};
-        var call_priority_order = {{ call_priority_order|safe }};
-        var ambulancecall_status = {{ ambulancecall_status|safe }};
-        var username = '{{ user.get_username|safe }}';
-        var APIBaseUrl = '{% url 'index' %}api/';
-        var MQTTBroker = {
-            host: '{{ broker_websockets_host|safe }}',
-            port: {{ broker_websockets_port|safe }}
-        };
-        var clientId = '{{ client_id|safe }}';
-        var ambulance_css = {{ ambulance_css|safe }};
-        var call_priority_css = {{ call_priority_css|safe }};
-        var accessToken = '{{ access_token }}';
-    </script>
-
-{% endblock %}
+{% load render_bundle from webpack_loader %}
 
 {% block content %}
 
@@ -45,15 +18,13 @@
                     id="dispatchBeginButton"
                     data-toggle="collapse"
                     data-target="#dispatchDiv" aria-controls="dispatchDiv"
-                    aria-expanded="false" aria-label="Toggle dispatching"
-                    onclick="beginDispatching()">
+                    aria-expanded="false" aria-label="Toggle dispatching">
                 {% trans "Dispatch Ambulances" %}
             </button>
 
             <button type="button"
                     id="dispatchSubmitButton"
                     class="btn btn-primary px-3 mx-1"
-                    onclick="submitDispatching()"
                     style="display: none;">
                 {% trans "Dispatch" %}
             </button>
@@ -356,36 +327,33 @@
         </div>
     </div>
 
-<!-- Load required libraries -->
+{% endblock %}
 
-<!-- MQTT -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+{% block scripts %}
+
+<!-- Load required libraries -->
 
 <!-- Cookies -->
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js" type="text/javascript"></script>
 
-<!-- Google Geocoder -->
-<!--
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmET7s-wnswMRMtrc8UaleEQ-8-zkgw_w&libraries=places&callback=dispatchInitAutocomplete"
-        async defer></script>
--->
+{% autoescape off %}
+<script>
+    const ambulance_status = {{ ambulance_status}};
+    const ambulance_status_order = {{ ambulance_status_order}};
+    const ambulance_capability = {{ ambulance_capability }};
+    const ambulance_capability_order = {{ ambulance_capability_order }};
+    const location_type= {{ location_type }};
+    const location_type_order= {{ location_type_order }};
+    const call_status = {{ call_status }};
+    const call_status_order = {{ call_status_order }};
+    const call_priority = {{ call_priority }};
+    const call_priority_order = {{ call_priority_order }};
+    const ambulancecall_status = {{ ambulancecall_status }};
+    const ambulance_css = {{ ambulance_css }};
+    const call_priority_css = {{ call_priority_css }};
+</script>
+{% endautoescape %}
 
-<!-- leaflet vector markers -->
-
-<script src="{% static 'leaflet/js/leaflet.awesome-stacked-markers.js' %}"></script>
-
-<link rel="stylesheet" href="{% static 'leaflet/css/leaflet.awesome-markers.css' %}">
-<script src="{% static 'leaflet/js/leaflet.awesome-markers.js' %}"></script>
-
-<link rel="stylesheet" href="{% static 'leaflet/css/leaflet-vector-markers.css' %}">
-<script src="{% static 'leaflet/js/leaflet-vector-markers.js' %}"></script>
-
-<link rel="stylesheet" href="{% static 'leaflet/css/leaflet.markers.custom.css' %}">
-
-<!-- Load javascript code -->
-<script src="{% static 'js/geocoder.js' %}"></script>
-<script src="{% static 'js/dispatch.js' %}"></script>
-<script src="{% static 'js/map.js' %}"></script>
-<script src="{% static 'leaflet/js/leaflet.rotatedMarker.js' %}"></script>
+{% render_bundle 'main' 'js' 'MAP' %}
 
 {% endblock %}
