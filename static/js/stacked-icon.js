@@ -99,7 +99,7 @@ class LeafletIconFactory extends BaseIconFactory {
         const html = BaseIconFactory.toHtml('span',
             ['fa-stack', parameters.options.classes, parameters.options.extraClasses].filter(Boolean).join(' '),
             [parameters.options.style, parameters.options.extraStyle].filter(Boolean).join(';'),
-            [bottomHtml, topHtml].join('\n')
+            [bottomHtml, topHtml].join('')
         );
 
         return {
