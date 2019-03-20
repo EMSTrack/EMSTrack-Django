@@ -6,7 +6,7 @@ describe('stacked icon', () => {
 
     it('default', function() {
 
-        const iconFactory = stackedIconFactory('leaflet');
+        const iconFactory = stackedIconFactory('mapbox');
 
         let json = iconFactory.createIcon();
         expect(json).to.eql({

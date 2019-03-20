@@ -69,7 +69,7 @@ class GoogleIconFactory extends BaseIconFactory {
 
 }
 
-class LeafletIconFactory extends BaseIconFactory {
+class MapBoxIconFactory extends BaseIconFactory {
 
     constructor(bottom = {}, top = {}, options = {}) {
         super(
@@ -125,11 +125,12 @@ class LeafletIconFactory extends BaseIconFactory {
  * @param options
  * @returns {*}
  */
-export function stackedIconFactory(provider, bottom = {}, top = {}, options = {}) {
+export function stackedIconFactory(mapProvider, bottom = {}, top = {}, options = {}) {
 
     // Retrieve MapBox access_token
-    if (provider === 'leaflet') {
-        return new LeafletIconFactory(bottom, top, options);
+    const provider = mapProvider['provider'];
+    if (provider === 'mapbox') {
+        return new MapBoxIconFactory(bottom, top, options);
     } else if (provider === 'google') {
         return new GoogleIconFactory(bottom, top, options);
     } else

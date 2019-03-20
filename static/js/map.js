@@ -8,6 +8,8 @@ import { GeocoderFactory } from "./geocoder";
 
 import { logger } from './logger';
 
+import { stackedIconFactory } from '/.stacked-icon';
+
 // TODO: Import js-cookies library
 
 // Dispatching data
@@ -93,6 +95,8 @@ function callDate(call) {
 
 }
 
+const iconFactory = stackedIconFactory(mapProvider);
+
 function waypointIcon(waypoint) {
 
     const location = waypoint['location'];
@@ -124,13 +128,15 @@ function waypointIcon(waypoint) {
         color_class = 'text-warning';
     }
 
+/*
     return newFontAwesomeStackedIcon({
         icon: icon,
         extraClasses: 'fa-stack-marker-xs ' + color_class
     });
+*/
+    return new L.divIcon(iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: color_class}));
 
 }
-
 
 const patientMarker = newFontAwesomeStackedIcon({
     icon: 'plus',
