@@ -99,8 +99,13 @@ class GoogleIconFactory extends LeafletIconFactory {
 
     constructor(bottom = {}, top = {}, options = {}) {
         super(
-            Object.assign({icon: 'map-marker'}, bottom),
-            Object.assign({style: 'margin-top:0.2em'}, top),
+            Object.assign({
+                icon: 'map-marker',
+                classes: 'fa-stack-2x google-stacked-icon-bottom',
+            }, bottom),
+            Object.assign({
+                classes: 'fa-stack-1x fa-inverse google-stacked-icon-top'
+            }, top),
             Object.assign({
                     classes: 'fa-1x fa-stack-marker-xs google-stacked-icon',
                     popupAnchor: [0, -15],
