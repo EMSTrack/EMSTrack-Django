@@ -18,7 +18,7 @@ class BaseIconFactory {
             classes: 'fa-stack-2x',
             extraClasses: '',
             style: '',
-            extraStyle: '',
+            extraStyle: ''
         }, bottom);
 
         this.top = Object.assign({}, {
@@ -26,15 +26,15 @@ class BaseIconFactory {
             classes: 'fa-stack-1x fa-inverse',
             extraClasses: '',
             style: '',
-            extraStyle: '',
+            extraStyle: ''
         }, top);
 
         this.options = Object.assign({}, {
-            classes: 'fa-2x fa-stack-marker-xs',
+            classes: 'fa-1x fa-stack-marker-xs',
             extraClasses: '',
             style: '',
             extraStyle: '',
-            popupAnchor: [0, 0],
+            popupAnchor: [0, -15],
             className: 'BaseDivIcon'
         }, options);
 
@@ -98,21 +98,7 @@ class LeafletIconFactory extends BaseIconFactory {
 class GoogleIconFactory extends LeafletIconFactory {
 
     constructor(bottom = {}, top = {}, options = {}) {
-        super(
-            Object.assign({
-                icon: 'map-marker',
-                classes: 'fa-stack-2x google-stacked-icon-bottom',
-            }, bottom),
-            Object.assign({
-                classes: 'fa-stack-1x fa-inverse google-stacked-icon-top'
-            }, top),
-            Object.assign({
-                    classes: 'fa-1x fa-stack-marker-xs google-stacked-icon',
-                    popupAnchor: [0, -15],
-                    className: 'GoogleBoxDivIcon'
-                },
-                options)
-        );
+        super(bottom, top, Object.assign({className: 'GoogleBoxDivIcon'}, options));
     }
 
 }
@@ -120,15 +106,7 @@ class GoogleIconFactory extends LeafletIconFactory {
 class MapBoxIconFactory extends LeafletIconFactory {
 
     constructor(bottom = {}, top = {}, options = {}) {
-        super(
-            Object.assign({icon: 'map-marker'}, bottom),
-            Object.assign({style: 'margin-top:0.2em'}, top),
-            Object.assign({
-                classes: 'fa-1x fa-stack-marker-xs mapbox-stacked-icon',
-                popupAnchor: [0, -15],
-                className: 'LeafletDivIcon'
-            }, options)
-        );
+        super(bottom, top, Object.assign({className: 'LeafletDivIcon'}, options));
     }
 
 }

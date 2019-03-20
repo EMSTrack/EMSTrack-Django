@@ -95,7 +95,10 @@ function callDate(call) {
 
 }
 
-const iconFactory = stackedIconFactory(mapProvider);
+const iconFactory = stackedIconFactory(mapProvider,
+    {extraClasses: 'marker-stacked-icon-bottom'},
+    {extraClasses: 'marker-stacked-icon-top'},
+    {extraClasses: 'marker-stacked-icon'});
 
 function waypointIcon(waypoint) {
 
