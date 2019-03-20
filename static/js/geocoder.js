@@ -531,7 +531,10 @@ export class GeocoderGoogle extends BaseGeocoder {
 }
 
 /**
- * @return {null}
+ *
+ * @param map_provider
+ * @param options
+ * @returns {*}
  */
 export function GeocoderFactory(map_provider, options) {
 
