@@ -119,11 +119,11 @@ class MapBoxIconFactory extends BaseIconFactory {
 
 /**
  *
- * @param map_provider
+ * @param mapProvider
  * @param bottom
  * @param top
  * @param options
- * @returns {*}
+ * @returns {BaseIconFactory}
  */
 export function stackedIconFactory(mapProvider, bottom = {}, top = {}, options = {}) {
 
@@ -134,6 +134,6 @@ export function stackedIconFactory(mapProvider, bottom = {}, top = {}, options =
     } else if (provider === 'google') {
         return new GoogleIconFactory(bottom, top, options);
     } else
-        return null;
+        throw new Error('Unknown map provider');
 
 }
