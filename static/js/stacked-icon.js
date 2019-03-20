@@ -103,7 +103,7 @@ class GoogleIconFactory extends LeafletIconFactory {
             Object.assign({style: 'margin-top:0.2em'}, top),
             Object.assign({
                     classes: 'fa-1x fa-stack-marker-xs google-stacked-icon',
-                    popupAnchor: [0, -100],
+                    popupAnchor: [0, -20],
                     className: 'GoogleBoxDivIcon'
                 },
                 options)
