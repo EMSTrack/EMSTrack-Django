@@ -11,7 +11,6 @@ class BaseIconFactory {
         return html;
     }
 
-
     constructor(bottom = {}, top = {}, options = {}) {
 
         this.bottom = Object.assign({}, {
@@ -51,37 +50,17 @@ class BaseIconFactory {
         return {bottom: bottom, top: top, options: options};
     }
 
+    createSimpleIcon(bottomIcon, bottom = {}, top = {}, options = {}) {
+        return this.createIcon(bottom, Object.assign({icon: bottomIcon}, top), options);
+    }
+
     createIcon(bottom = {}, top = {}, options = {}) {
         throw new Error('Not implemented');
     }
 
 }
 
-class GoogleIconFactory extends BaseIconFactory {
-
-    constructor(bottom = {}, top = {}, options = {}) {
-        super(
-            bottom,
-            top,
-            Object.assign({className: 'GoogleBoxDivIcon'}, options)
-        );
-    }
-
-}
-
-class MapBoxIconFactory extends BaseIconFactory {
-
-    constructor(bottom = {}, top = {}, options = {}) {
-        super(
-            Object.assign({icon: 'map-marker'}, bottom),
-            Object.assign({style: 'margin-top:0.2em'}, top),
-            Object.assign({popupAnchor: [0, -15], className: 'LeafletDivIcon'}, options)
-        );
-    }
-
-    createSimpleIcon(bottomIcon, bottom = {}, top = {}, options = {}) {
-        return this.createIcon(bottom, Object.assign({icon: bottomIcon}, top), options);
-    }
+class LeafletIconFactory extends BaseIconFactory {
 
     createIcon(bottom = {}, top = {}, options = {}) {
         const parameters = this.getParameters(bottom, top, options);
@@ -112,6 +91,30 @@ class MapBoxIconFactory extends BaseIconFactory {
             className: parameters.options.className
         };
 
+    }
+
+}
+
+class GoogleIconFactory extends LeafletIconFactory {
+
+    constructor(bottom = {}, top = {}, options = {}) {
+        super(
+            bottom,
+            top,
+            Object.assign({className: 'GoogleBoxDivIcon'}, options)
+        );
+    }
+
+}
+
+class MapBoxIconFactory extends LeafletIconFactory {
+
+    constructor(bottom = {}, top = {}, options = {}) {
+        super(
+            Object.assign({icon: 'map-marker'}, bottom),
+            Object.assign({style: 'margin-top:0.2em'}, top),
+            Object.assign({popupAnchor: [0, -15], className: 'LeafletDivIcon'}, options)
+        );
     }
 
 }
