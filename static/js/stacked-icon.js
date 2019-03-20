@@ -79,6 +79,10 @@ class LeafletIconFactory extends BaseIconFactory {
         );
     }
 
+    createSimpleIcon(bottomIcon, bottom = {}, top = {}, options = {}) {
+        return this.createIcon(bottom, Object.assign({icon: bottomIcon}, top), options);
+    }
+
     createIcon(bottom = {}, top = {}, options = {}) {
         const parameters = this.getParameters(bottom, top, options);
 
