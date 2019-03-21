@@ -62,7 +62,7 @@ export function waypointIcon(waypoint) {
         icon = 'question';
     }
 
-    let color = settings.waypoint.statusColor[location.status];
+    let color = settings.waypoint.statusColor[waypoint.status];
     if (typeof color === 'undefined') {
         logger.log('warn', "Unknown waypoint status '%s'.", waypoint.status);
         color = 'warning';

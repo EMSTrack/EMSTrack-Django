@@ -85,8 +85,6 @@ export function createMarker(call_or_update, icon) {
     // default marker
     icon = icon || new L.divIcon(ambulanceStatusIcon(call_or_update));
 
-    logger.log('debug', "icon = '%j'", icon);
-
     const location = call_or_update.location;
     return L.marker(
         [location.latitude, location.longitude],
@@ -118,7 +116,7 @@ export function addCallWaypoints(map, waypoints) {
     // loop through waypoints
     waypoints.forEach( (waypoint) => {
 
-        logger.log('debug', "Adding waypoint '%s'", waypoint);
+        logger.log('debug', "Adding waypoint type '%s', status '%s'", waypoint.location.type, waypoint.status);
 
         // waypoint icon
         const icon = new L.divIcon(waypointIcon(waypoint));
