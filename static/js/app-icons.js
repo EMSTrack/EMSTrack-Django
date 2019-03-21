@@ -89,6 +89,8 @@ export function ambulanceStatusIcon(ambulance) {
         color = 'warning';
     }
 
+    logger.log('debug', "icon='%s', color='%s", icon, color);
+
     return iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: 'text-' + color});
 
 }
