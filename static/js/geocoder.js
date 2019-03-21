@@ -193,7 +193,7 @@ export class GeocoderMapBox extends BaseGeocoder {
             .then( (response) => {
                 
                 // parse results
-                return this.parse_response(response);
+                return this.parse_response(response.data);
                 
             });
         
@@ -247,7 +247,7 @@ export class GeocoderMapBox extends BaseGeocoder {
             .then( (response) =>  {
                 
                 // parse results
-                return this.parse_response(response);
+                return this.parse_response(response.data);
                 
             });
 
@@ -267,8 +267,6 @@ export class GeocoderGoogle extends BaseGeocoder {
     parse_response(response, filter) {
 
         filter = filter || [];
-
-        logger.log('debug', "response: '%j", response);
 
         // retrieve features
         const results = response['results'];
@@ -394,7 +392,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             .then( (response) => {
                 
                 // parse results
-                return this.parse_response(response, ['street_address', 'route', 'political']);
+                return this.parse_response(response.data, ['street_address', 'route', 'political']);
                 
             });
         
@@ -452,7 +450,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             .then( (response) =>  {
                 
                 // parse results
-                return this.parse_response(response);
+                return this.parse_response(response.data);
                 
             });
         
