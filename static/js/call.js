@@ -1,12 +1,6 @@
-import L from "leaflet";
-import "leaflet-rotatedmarker";
-import "leaflet/dist/leaflet.css";
-
 import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
-import { addAmbulanceRoute, createMarker } from "./map-tools";
-
-import { waypointIcon } from './waypoint';
+import {addAmbulanceRoute, addCallWaypoints } from "./map-tools";
 
 import { logger } from './logger';
 
@@ -89,32 +83,8 @@ function addCallToMap(call, map, icon) {
 
         logger.log('debug', 'Adding ambulancecall');
 
-        // loop through waypoints
-        ambulancecall['waypoint_set'].forEach( (waypoint) => {
-
-            logger.log('debug', 'Adding waypoint');
-
-            // waypoint icon
-            const icon = new L.divIcon(waypointIcon(waypoint));
-
-            // waypoint label
-            let label = location_type[waypoint['location']['type']];
-            if (waypoint['location']['name'])
-                label += ": " + waypoint['location']['name'];
-
-            // add waypoint markers
-            createMarker(waypoint['location'], icon)
-                .addTo(map.map)
-                .bindPopup("<strong>" + label + "</strong>")
-                .on('mouseover',
-                    function () {
-                        // open popup bubble
-                        this.openPopup().on('mouseout',
-                            function () {
-                                this.closePopup();
-                            });
-                    });
-        });
+        // add waypoints
+        addCallWaypoints(ambulancecall['waypoint_set']);
 
         // add ambulance updates
         retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], call['id'], map);

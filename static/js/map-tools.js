@@ -2,6 +2,10 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+import {ambulanceStatusIcon} from "./app-icons";
+
+import { logger } from './logger';
+
 export function calculateDistanceHaversine(location1, location2, radius) {
 
 	radius = radius || 6371e3;
@@ -44,7 +48,7 @@ export function breakSegments(data, byStatus, separationRadius, timeInterval) {
             if (byStatus && lastPosition.status !== currentPosition.status) {
 			    newStatus = true;
 			    // will break segment, add current position first
-                var newCurrentPosition = Object.assign({}, currentPosition);
+                const newCurrentPosition = Object.assign({}, currentPosition);
                 newCurrentPosition.status = lastPosition.status;
                 currentSegment.push(newCurrentPosition);
             }
@@ -79,10 +83,7 @@ export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 export function createMarker(call_or_update, icon) {
 
     // default marker
-    icon = icon || L.icon({
-        iconUrl: '/static/icons/flag/blue.svg',
-        iconSize: [15, 30],
-    });
+    icon = icon || new L.divIcon(ambulanceStatusIcon(call_or_update.status));
 
     const location = call_or_update.location;
     return L.marker(
@@ -106,6 +107,38 @@ export function createSegmentLine(map, updates) {
 	// Add line to map
 	console.log('Adding segment');
 	return L.polyline(latlngs, {color: "red"});
+
+}
+
+// Add call waypoints
+export function addCallWaypoints(waypoints) {
+
+    // loop through waypoints
+    waypoints.forEach( (waypoint) => {
+
+        logger.log('debug', 'Adding waypoint');
+
+        // waypoint icon
+        const icon = new L.divIcon(waypointIcon(waypoint));
+
+        // waypoint label
+        let label = location_type[waypoint['location']['type']];
+        if (waypoint['location']['name'])
+            label += ": " + waypoint['location']['name'];
+
+        // add waypoint markers
+        createMarker(waypoint['location'], icon)
+            .addTo(map.map)
+            .bindPopup("<strong>" + label + "</strong>")
+            .on('mouseover',
+                function () {
+                    // open popup bubble
+                    this.openPopup().on('mouseout',
+                        function () {
+                            this.closePopup();
+                        });
+                });
+    });
 
 }
 

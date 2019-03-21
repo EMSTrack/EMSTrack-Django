@@ -8,7 +8,7 @@ import { GeocoderFactory } from "./geocoder";
 
 import { logger } from './logger';
 
-import { waypointIcon } from './waypoint';
+import { waypointIcon } from './app-icons';
 
 // TODO: Import js-cookies library
 
