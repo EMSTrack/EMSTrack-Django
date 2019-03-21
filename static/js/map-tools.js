@@ -111,7 +111,7 @@ export function createSegmentLine(map, updates) {
 }
 
 // Add call waypoints
-export function addCallWaypoints(waypoints) {
+export function addCallWaypoints(map, waypoints) {
 
     // loop through waypoints
     waypoints.forEach( (waypoint) => {

@@ -19,7 +19,7 @@ function init (client) {
     apiClient = client;
 
     // Retrieve call
-    retrieveCall(call_id, map);
+    retrieveCall(map, call_id);
 
 }
 
@@ -36,7 +36,7 @@ $(function () {
 
 });
 
-function retrieveCall(call_id, map) {
+function retrieveCall(map, call_id) {
 
     // Build url
     const url = 'call/' + call_id + '/?exclude=';
@@ -45,7 +45,7 @@ function retrieveCall(call_id, map) {
         .then( (response) => {
 
             logger.log('debug', "Got call data from API");
-            addCallToMap(response.data, map);
+            addCallToMap(map, response.data);
 
         })
         .catch( (error) => {
@@ -54,7 +54,7 @@ function retrieveCall(call_id, map) {
 
 }
 
-function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
+function retrieveAmbulanceUpdates(map, ambulance_id, call_id) {
 
     logger.log('info', "Retrieving ambulance '%d' updates from API", ambulance_id);
 
@@ -74,7 +74,7 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
 
 }
 
-function addCallToMap(call, map, icon) {
+function addCallToMap(map, call) {
 
     logger.log('info', 'Adding call to map');
 
@@ -84,10 +84,10 @@ function addCallToMap(call, map, icon) {
         logger.log('debug', 'Adding ambulancecall');
 
         // add waypoints
-        addCallWaypoints(ambulancecall['waypoint_set']);
+        addCallWaypoints(map, ambulancecall['waypoint_set']);
 
         // add ambulance updates
-        retrieveAmbulanceUpdates(ambulancecall['ambulance_id'], call['id'], map);
+        retrieveAmbulanceUpdates(map, ambulancecall['ambulance_id'], call['id']);
 
     });
 
