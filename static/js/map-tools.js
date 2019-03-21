@@ -85,7 +85,7 @@ export function createMarker(call_or_update, icon) {
     // default marker
     icon = icon || new L.divIcon(ambulanceStatusIcon(call_or_update.status));
 
-    logger.log('debug', "icon = '%s'", icon);
+    logger.log('debug', "icon = '%j'", icon);
 
     const location = call_or_update.location;
     return L.marker(
