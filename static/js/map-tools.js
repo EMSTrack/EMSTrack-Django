@@ -19,7 +19,7 @@ export function calculateDistanceHaversine(location1, location2, radius) {
     const a = Math.sin(d_phi / 2) * Math.sin(d_phi / 2) + Math.cos(lat1) * Math.cos(lat2) * Math.sin(d_lambda / 2) * Math.sin(d_lambda / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    // console.log('|| {} - {} ||= {}'.format(location2, location1, earth_radius * c))
+    // logger.log('info', ('|| {} - {} ||= {}'.format(location2, location1, earth_radius * c))
 
     return radius * c;
 }
@@ -85,6 +85,8 @@ export function createMarker(call_or_update, icon) {
     // default marker
     icon = icon || new L.divIcon(ambulanceStatusIcon(call_or_update.status));
 
+    logger.log('debug', "icon = '%s'", icon);
+
     const location = call_or_update.location;
     return L.marker(
         [location.latitude, location.longitude],
@@ -105,7 +107,7 @@ export function createSegmentLine(map, updates) {
     });
 
 	// Add line to map
-	console.log('Adding segment');
+	logger.log('debug', 'Adding line segment');
 	return L.polyline(latlngs, {color: "red"});
 
 }
@@ -116,7 +118,7 @@ export function addCallWaypoints(map, waypoints) {
     // loop through waypoints
     waypoints.forEach( (waypoint) => {
 
-        logger.log('debug', 'Adding waypoint');
+        logger.log('debug', "Adding waypoint '%s'", waypoint);
 
         // waypoint icon
         const icon = new L.divIcon(waypointIcon(waypoint));
@@ -173,7 +175,7 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
         if (i === 0) {
 
             // add starting marker
-            console.log("Adding initial '" + initialPoint.status + "' marker");
+            logger.log('debug', "Adding initial '%s' marker", initialPoint.status);
             createMarker(segment[0])
                 .addTo(map.map)
                 .bindPopup('<strong>' + ambulance_status[initialPoint.status] + '</strong>')
@@ -190,10 +192,10 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
 
             const status = initialPoint.status;
             const last_status = last_segment[last_segment.length - 1].status;
-            console.log('status = ' + status + ', last_status = ' + last_status);
+            logger.log('debug', "status = '%s', last_status = '%s'", status, last_status);
             if (last_status !== status) {
                 // add status marker
-                console.log("Adding '" + status + "' marker");
+                logger.log('debug', "Adding '%s' marker", status);
                 createMarker(initialPoint)
                     .addTo(map.map)
                     .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
@@ -217,7 +219,7 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
         if (i === n - 1 && segment.length > 0) {
             // add ending marker
             const finalPoint = segment[segment.length - 1];
-            console.log("Adding final '" + finalPoint.status + "' marker");
+            logger.log('debug', "Adding final '%s' marker", finalPoint.status);
             createMarker(finalPoint)
                 .addTo(map.map)
                 .bindPopup('<strong>' + ambulance_status[finalPoint.status] + '</strong>')
@@ -238,7 +240,7 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
     // create route filter
     //createRouteFilter(segments);
 
-    console.log('Centering map');
+    logger.log('debug', 'Centering map');
     map.center(data[0].location);
 
 }
