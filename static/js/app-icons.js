@@ -56,18 +56,14 @@ const settings = {
 export function waypointIcon(waypoint) {
 
     const location = waypoint['location'];
-    let icon;
-    try {
-        icon = settings.waypoint.locationTypeIcon[location.type];
-    } catch {
+    let icon = settings.waypoint.locationTypeIcon[location.type];
+    if (typeof icon === 'undefined') {
         logger.log('warn', "Unknown waypoint location type '%s'.", location.type);
         icon = 'question';
     }
 
-    let color;
-    try {
-        color = settings.waypoint.statusColor[location.status];
-    } catch {
+    let color = settings.waypoint.statusColor[location.status];
+    if (typeof color === 'undefined') {
         logger.log('warn', "Unknown waypoint status '%s'.", waypoint.status);
         color = 'warning';
     }
@@ -78,18 +74,13 @@ export function waypointIcon(waypoint) {
 
 export function ambulanceStatusIcon(ambulance) {
 
-    let icon;
-    let color;
-    try {
-        icon = settings.ambulance.statusIcon[ambulance.status];
-        color = settings.ambulance.statusColor[ambulance.status];
-    } catch {
+    let icon = settings.ambulance.statusIcon[ambulance.status];
+    let color = settings.ambulance.statusColor[ambulance.status];
+    if (typeof icon === 'undefined' || typeof color === 'undefined') {
         logger.log('warn', "Unknown ambulance status'%s'.", ambulance.status);
         icon = 'question';
         color = 'warning';
     }
-
-    logger.log('debug', "ambulance='%j', icon='%s', color='%s", ambulance, icon, color);
 
     return iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: 'text-' + color});
 

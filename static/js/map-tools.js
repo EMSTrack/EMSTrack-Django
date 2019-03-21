@@ -83,7 +83,7 @@ export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 export function createMarker(call_or_update, icon) {
 
     // default marker
-    icon = icon || new L.divIcon(ambulanceStatusIcon(call_or_update.status));
+    icon = icon || new L.divIcon(ambulanceStatusIcon(call_or_update));
 
     logger.log('debug', "icon = '%j'", icon);
 
