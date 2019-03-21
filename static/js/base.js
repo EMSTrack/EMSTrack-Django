@@ -2,6 +2,8 @@ import { MqttClient } from "./mqtt-client";
 
 import { AppClient } from "./app-client";
 
+import { logger } from './logger';
+
 const axios = require('axios');
 
 // initialization
@@ -40,8 +42,8 @@ $(function () {
     });
 
     // retrieve temporary password for mqttClient and connect to broker
-    // console.log('ApiBaseUrl: ' + apiBaseUrl);
-    console.log('Retrieving MQTT password');
+    // logger.log('info', 'ApiBaseUrl: ' + apiBaseUrl);
+    logger.log('info', 'Retrieving MQTT password');
     httpClient.get('user/' + username + '/password/')
         .then( (response) => {
 
@@ -49,7 +51,7 @@ $(function () {
             const password = response.data;
             mqttClient = new MqttClient(mqttBroker.host, mqttBroker.port, clientId, 2);
 
-            console.log('Connecting to MQTT broker');
+            logger.log('info', 'Connecting to MQTT broker');
             return mqttClient.connect({
                 userName: username,
                 password: password
@@ -62,27 +64,27 @@ $(function () {
             apiClient = new AppClient(mqttClient, httpClient);
 
             // retrieve ambulances
-            console.log('Retrieving ambulances');
+            logger.log('info', 'Retrieving ambulances');
             return apiClient.retrieveAmbulances();
 
         })
         .then( (ambulances) => {
-            console.log(Object.keys(ambulances).length + ' ambulances retrieved');
+            logger.log('info', Object.keys(ambulances).length + ' ambulances retrieved');
 
             // retrieve calls
-            console.log('Retrieving calls');
+            logger.log('info', 'Retrieving calls');
             return apiClient.retrieveCalls();
         })
         .then( (calls) => {
-            console.log(Object.keys(calls).length + ' calls retrieved');
+            logger.log('info', Object.keys(calls).length + ' calls retrieved');
 
             // calling initialization function
-            console.log('Calling initialization functions');
+            logger.log('info', 'Calling initialization functions');
             init_functions.forEach( (fn) => fn(apiClient) );
         })
         .catch( (error ) => {
-            console.log('Failed to initialize ApiClient');
-            console.log(error);
+            logger.log('info', 'Failed to initialize ApiClient');
+            logger.log('info', error);
         });
 
 });
