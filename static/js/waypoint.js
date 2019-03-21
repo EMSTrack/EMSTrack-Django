@@ -39,6 +39,6 @@ export function waypointIcon(waypoint) {
         color_class = 'text-warning';
     }
 
-    return new iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: color_class});
+    return iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: color_class});
 
 }

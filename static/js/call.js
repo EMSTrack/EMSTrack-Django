@@ -19,7 +19,7 @@ add_init_function(init);
 // initialization function
 function init (client) {
 
-    logger.log('info', '> ambulance.js');
+    logger.log('info', '> call.js');
 
     // set apiClient
     apiClient = client;
@@ -95,7 +95,7 @@ function addCallToMap(call, map, icon) {
             logger.log('debug', 'Adding waypoint');
 
             // waypoint icon
-            const icon = L.divIcon(waypointIcon(waypoint));
+            const icon = new L.divIcon(waypointIcon(waypoint));
 
             // waypoint label
             let label = location_type[waypoint['location']['type']];

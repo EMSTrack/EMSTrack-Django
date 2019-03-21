@@ -761,7 +761,7 @@ function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
 
         // get icon
         const location = waypoint.location;
-        const icon = L.divIcon(waypointIcon(waypoint));
+        const icon = new L.divIcon(waypointIcon(waypoint));
 
         // is it next?
         if (waypoint.status === 'C' || waypoint.status === 'V' &&
