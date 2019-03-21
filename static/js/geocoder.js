@@ -268,6 +268,8 @@ export class GeocoderGoogle extends BaseGeocoder {
 
         filter = filter || [];
 
+        logger.log('debug', "response: '%j", response);
+
         // retrieve features
         const results = response['results'];
         if (results.length === 0)
