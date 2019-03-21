@@ -1572,34 +1572,21 @@ function updateCurrentLocation(location) {
 
 function updateCurrentAddress(location) {
 
-    geocoder.reverse(location, function (address) {
+    geocoder.reverse(location)
+        .then( (address) => {
 
-        if (address == null) {
-            bsalert("Could not reverse geocode!");
-            return;
-        }
+            logger.log('debug', "address = '%j'", address);
 
-        // parse features into current address
-        currentAddress = address;
+            // parse features into current address
+            currentAddress = address;
 
-        logger.log('debug', 
-            'Setting currentAddress to:'
-            + '\nnumber: ' + currentAddress['number']
-            + '\nstreet: ' + currentAddress['street']
-            + '\nunit: ' + currentAddress['unit']
-            + '\nlocation: ' + currentAddress['location']['latitude']
-            + ',' + currentAddress['location']['longitude']
-            + '\nneighborhood: ' + currentAddress['neighborhood']
-            + '\nzipcode: ' + currentAddress['zipcode']
-            + '\ncity: ' + currentAddress['city']
-            + '\nstate: ' + currentAddress['state']
-            + '\ncountry: ' + currentAddress['country']
-        );
+            // set input text
+            $('#street').val(currentAddress['formatted_address']);
 
-        // set input text
-        $('#street').val(currentAddress['formatted_address']);
-
-    });
+        })
+        .catch( (error) => {
+            logger.log('warn', "Could not forward geocode. Error: '%s'", error);
+        });
 
 }
 
@@ -1613,34 +1600,21 @@ function updateCoordinates() {
         return;
 
     // otherwise geocode and update
-    geocoder.geocode(address, function (address) {
+    geocoder.geocode(address)
+        .then( (address) => {
 
-        if (address == null) {
-            bsalert("Could not forward geocode!");
-            return;
-        }
+            logger.log('debug', "address = '%j'", address);
 
-        logger.log('debug', 
-            'Setting currentLocation to:'
-            + '\nnumber: ' + address['number']
-            + '\nstreet: ' + address['street']
-            + '\nunit: ' + address['unit']
-            + '\nlocation: ' + address['location']['latitude']
-            + ',' + address['location']['longitude']
-            + '\nneighborhood: ' + address['neighborhood']
-            + '\nzipcode: ' + address['zipcode']
-            + '\ncity: ' + address['city']
-            + '\nstate: ' + address['state']
-            + '\ncountry: ' + address['country']
-        );
+            // set current location
+            updateCurrentLocation({
+                lat: address['location']['latitude'],
+                lng: address['location']['longitude']
+            });
 
-        // set current location
-        updateCurrentLocation({
-            lat: address['location']['latitude'],
-            lng: address['location']['longitude']
+        })
+        .catch( (error) => {
+            logger.log('warn', "Could not forward geocode. Error: '%s'", error);
         });
-
-    });
 
 }
 

@@ -1,3 +1,7 @@
+import { logger } from './logger';
+
+const axios = require('axios');
+
 class BaseGeocoder {
 
     constructor(options) {
@@ -43,7 +47,7 @@ class BaseGeocoder {
 
         const matches = street[0].match(config['regex']);
         if (matches) {
-            // console.log(matches);
+            // logger.log('debug', matches);
             const street_components = config['street_components'];
             // matches[0] is the entire matched string
             for (let i = 1; i < matches.length; i++) {
@@ -55,11 +59,11 @@ class BaseGeocoder {
         return address;
     }
 
-    reverse(location, callback, options) {
+    reverse(location, options) {
         throw new Error("Not implemented!");
     }
 
-    geocode(location, callback, options) {
+    geocode(location, options) {
         throw new Error("Not implemented!");
     }
 
@@ -83,7 +87,7 @@ export class GeocoderMapBox extends BaseGeocoder {
         // retrieve features
         const features = response.features;
         if (features.length === 0)
-            return null;
+            throw new Error("Empty results");
 
         // parse first feature
         const feature = features[0];
@@ -137,12 +141,11 @@ export class GeocoderMapBox extends BaseGeocoder {
         }
 
         // log error
-        console.log("Does not know how to parse feature of type '" + feature['place_type'] + "'");
+        throw new Error("Does not know how to parse feature of type '" + feature['place_type'] + "'");
 
-        return null;
     }
 
-    reverse(location, callback, options) {
+    reverse(location, options) {
 
         options = options || {};
 
@@ -183,37 +186,20 @@ export class GeocoderMapBox extends BaseGeocoder {
             }
         }
 
-        // console.log("geocode url = '" + url + "'");
-
+        // logger.log('debug', "geocode url = '" + url + "'");
+        
         // query mapbox
-        $.getJSON(url,
-            (response) => {
-
+        return axios.get(url)
+            .then( (response) => {
+                
                 // parse results
-                const address = this.parse_response(response);
-
-                // console.log(response);
-                // console.log(address);
-
-                // callback
-                if (callback)
-                    callback(address, response);
-
-            })
-            .fail(
-                (jqxhr, textStatus, error) => {
-
-                    if (callback)
-                        callback(null, {error: error});
-                    else
-                        console.log("Could not reverse geocode:" +
-                            textStatus + "," + error + "\n");
-
-                });
-
+                return this.parse_response(response);
+                
+            });
+        
     }
 
-    geocode(query, callback, options) {
+    geocode(query, options) {
 
         options = options || { autocomplete: 'true' };
 
@@ -254,33 +240,16 @@ export class GeocoderMapBox extends BaseGeocoder {
             }
         }
 
-        // console.log("geocode url = '" + url + "'");
+        // logger.log('debug', "geocode url = '" + url + "'");
 
         // query mapbox
-        $.getJSON(url,
-            (response) =>  {
-
+        return axios.get(url)
+            .then( (response) =>  {
+                
                 // parse results
-                const address = this.parse_response(response);
-
-                // console.log(response);
-                // console.log(address);
-
-                // callback
-                if (callback)
-                    callback(address, response);
-
-            })
-            .fail(
-                (jqxhr, textStatus, error) => {
-
-                    if (callback)
-                        callback(null, {error: error});
-                    else
-                        console.log("Could not forward geocode:" +
-                            textStatus + "," + error + "\n");
-
-                });
+                return this.parse_response(response);
+                
+            });
 
     }
 
@@ -302,14 +271,13 @@ export class GeocoderGoogle extends BaseGeocoder {
         // retrieve features
         const results = response['results'];
         if (results.length === 0)
-            return null;
-        // console.log(results);
+            throw new Error("Empty results");
 
         // parse first feature
         for (let i = 0; i <  results.length; i++) {
 
             const feature = results[i];
-            // console.log(feature);
+            // logger.log('debug', feature);
 
             // filter types
             if (filter.length > 0) {
@@ -374,13 +342,11 @@ export class GeocoderGoogle extends BaseGeocoder {
 
         }
 
-        // log error
-        console.log("Does not know how to parse address");
-
-        return null;
+        // throw error
+        throw new Error("Does not know how to parse address");
     }
 
-    reverse(location, callback, options) {
+    reverse(location, options) {
 
         options = options || {};
 
@@ -421,37 +387,18 @@ export class GeocoderGoogle extends BaseGeocoder {
             }
         }
 
-        // console.log("geocode url = '" + url + "'");
-
-        // query mapbox
-        $.getJSON(url,
-            (response) => {
-
+        // query google
+        return axios.get(url)
+            .then( (response) => {
+                
                 // parse results
-                const address = this.parse_response(response, ['street_address', 'route', 'political']);
-
-                // console.log(response);
-                // console.log(address);
-
-                // callback
-                if (callback)
-                    callback(address, response);
-
-            })
-            .fail(
-                (jqxhr, textStatus, error) => {
-
-                    if (callback)
-                        callback(null, {error: error});
-                    else
-                        console.log("Could not reverse geocode:" +
-                            textStatus + "," + error + "\n");
-
-                });
-
+                return this.parse_response(response, ['street_address', 'route', 'political']);
+                
+            });
+        
     }
 
-    geocode(query, callback, options) {
+    geocode(query, options) {
 
         options = options || { autocomplete: 'true' };
 
@@ -478,7 +425,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         const combining = /[\u0300-\u036F]/g;
         query = query.normalize('NFKD').replace(combining, '');
 
-        // console.log("query = '" + query + "'");
+        // logger.log('debug', "query = '" + query + "'");
 
         // construct query
         parameters['address'] = encodeURIComponent(query);
@@ -498,36 +445,17 @@ export class GeocoderGoogle extends BaseGeocoder {
             }
         }
 
-        // console.log("geocode url = '" + url + "'");
-
-        // query mapbox
-        $.getJSON(url,
-            (response) =>  {
-
+        // query google
+        return axios.get(url)
+            .then( (response) =>  {
+                
                 // parse results
-                const address = this.parse_response(response);
-
-                // console.log(response);
-                // console.log(address);
-
-                // callback
-                if (callback)
-                    callback(address, response);
-
-            })
-            .fail(
-                (jqxhr, textStatus, error) => {
-
-                    if (callback)
-                        callback(null, {error: error});
-                    else
-                        console.log("Could not forward geocode:" +
-                            textStatus + "," + error + "\n");
-
-                });
-
+                return this.parse_response(response);
+                
+            });
+        
     }
-
+    
 }
 
 /**
@@ -555,4 +483,3 @@ export function GeocoderFactory(map_provider, options) {
         return null;
 
 }
-
