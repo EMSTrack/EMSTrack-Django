@@ -8,7 +8,7 @@ import { GeocoderFactory } from "./geocoder";
 
 import { logger } from './logger';
 
-import { stackedIconFactory } from './stacked-icon';
+import { waypointIcon } from './waypoint';
 
 // TODO: Import js-cookies library
 
@@ -70,17 +70,6 @@ const ambulance_call_buttons = {
     C: 'btn-dark' // 'Completed'
 };
 
-function newFontAwesomeStackedIcon(options) {
-        return new L.divIcon({
-            html: '<span class="fa-stack fa-2x ' + options.extraClasses + '">' +
-                  '<i class="fas fa-map-marker fa-stack-2x"></i>' +
-                  '<i class="fas fa-' + options.icon + ' fa-stack-1x fa-inverse" style="margin-top:0.2em"></i>' +
-                  '</span>',
-            popupAnchor: [0, -15],
-            className: 'myDivIcon'
-        });
-    }
-
 function callDate(call) {
 
     // Get relevant date
@@ -94,79 +83,6 @@ function callDate(call) {
     return (new Date(Date.parse(date))).toLocaleTimeString();
 
 }
-
-const iconFactory = stackedIconFactory(mapProvider);
-iconFactory.setProperties(
-    {classes: [iconFactory.bottom.classes, 'marker-stacked-icon-bottom'].join(' ')},
-    {classes: [iconFactory.top.classes, 'marker-stacked-icon-top'].join(' ')},
-    {classes: [iconFactory.options.classes, 'marker-stacked-icon'].join(' ')});
-
-function waypointIcon(waypoint) {
-
-    const location = waypoint['location'];
-    let icon;
-    if (location.type === 'i') {
-        icon = 'plus';
-    } else if (location.type === 'h') {
-        icon = 'hospital';
-    } else if (location.type === 'w') {
-        icon = 'map';
-    } else if (location.type === 'b') {
-        icon = 'home';
-    } else {
-        console.log("Unknown waypoint location type '" + location.type + "'.");
-        icon = 'question';
-    }
-
-    let color_class;
-    if (waypoint.status === 'C') {
-        color_class = 'text-danger';
-    } else if (waypoint.status === 'V') {
-        color_class = 'text-primary';
-    } else if (waypoint.status === 'D') {
-        color_class = 'text-success';
-    } else if (waypoint.status === 'S') {
-        color_class = 'text-muted';
-    } else {
-        console.log("Unknown waypoint class '" + waypoint.status + "'.");
-        color_class = 'text-warning';
-    }
-
-/*
-    return newFontAwesomeStackedIcon({
-        icon: icon,
-        extraClasses: 'fa-stack-marker-xs ' + color_class
-    });
-*/
-    return new L.divIcon(iconFactory.createSimpleIcon(icon, {}, {}, {extraClasses: color_class}));
-
-}
-
-const patientMarker = newFontAwesomeStackedIcon({
-    icon: 'plus',
-    extraClasses: 'fa-stack-marker-xs text-danger'
-});
-
-const hospitalMarker = newFontAwesomeStackedIcon({
-    icon: 'hospital',
-    extraClasses: 'fa-stack-marker-xs text-warning'
-});
-
-const waypointMarker = newFontAwesomeStackedIcon({
-    icon: 'map',
-    extraClasses: 'fa-stack-marker-xs text-primary'
-});
-
-const baseMarker = newFontAwesomeStackedIcon({
-    icon: 'home',
-    extraClasses: 'fa-stack-marker-xs text-success'
-});
-
-
-const patientIcon = L.icon({
-    iconUrl: '/static/icons/maki/marker-15.svg',
-    iconSize: [15, 15]
-});
 
 const hospitalIcon = L.icon({
     iconUrl: '/static/icons/maki/hospital-15.svg',
@@ -186,13 +102,6 @@ const defibrillatorIcon = L.icon({
 const baseIcon = L.icon({
     iconUrl: '/static/icons/maki/home-15.svg',
     iconSize: [15, 15]
-});
-
-const otherIcon = L.icon({
-    iconUrl: '/static/icons/maki/marker-15.svg',
-    iconSize: [15, 15],
-    iconAnchor: [7, 15],
-    popupAnchor: [0, -15]
 });
 
 const locationIcon = L.icon({
@@ -852,7 +761,7 @@ function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
 
         // get icon
         const location = waypoint.location;
-        const icon = waypointIcon(waypoint);
+        const icon = L.divIcon(waypointIcon(waypoint));
 
         // is it next?
         if (waypoint.status === 'C' || waypoint.status === 'V' &&

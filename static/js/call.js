@@ -6,6 +6,8 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 import { addAmbulanceRoute, createMarker } from "./map-tools";
 
+import { waypointIcon } from './waypoint';
+
 import { logger } from './logger';
 
 let map;
@@ -81,23 +83,19 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
 function addCallToMap(call, map, icon) {
 
     logger.log('info', 'Adding call to map');
-    // logger.log('info', call);
-
-    // waypoint markers
-    icon = icon || L.icon({
-        iconUrl: '/static/icons/maki/marker-15.svg',
-        iconSize: [15, 30],
-    });
 
     // loop through ambulancecall records
-    call['ambulancecall_set'].forEach(function (ambulancecall) {
+    call['ambulancecall_set'].forEach( (ambulancecall)  => {
 
-        logger.log('info', 'Adding ambulancecall');
+        logger.log('debug', 'Adding ambulancecall');
 
         // loop through waypoints
-        ambulancecall['waypoint_set'].forEach(function (waypoint) {
+        ambulancecall['waypoint_set'].forEach( (waypoint) => {
 
-            logger.log('info', 'Adding waypoint');
+            logger.log('debug', 'Adding waypoint');
+
+            // waypoint icon
+            const icon = L.divIcon(waypointIcon(waypoint));
 
             // waypoint label
             let label = location_type[waypoint['location']['type']];
