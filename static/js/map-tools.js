@@ -41,7 +41,7 @@ export function breakSegments(data, byStatus, separationRadius, timeInterval) {
             const distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
             const interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
             let newStatus = false;
-            if (byStatus && lastPosition.status != currentPosition.status) {
+            if (byStatus && lastPosition.status !== currentPosition.status) {
 			    newStatus = true;
 			    // will break segment, add current position first
                 var newCurrentPosition = Object.assign({}, currentPosition);
@@ -110,7 +110,7 @@ export function createSegmentLine(map, updates) {
 }
 
 // Interact with widget to add an ambulance route
-export function addAmbulanceRoute(map, data, byStatus) {
+export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
 
     byStatus = byStatus || false;
 

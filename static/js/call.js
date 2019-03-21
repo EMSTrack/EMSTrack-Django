@@ -6,6 +6,8 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 import { addAmbulanceRoute, createMarker } from "./map-tools";
 
+import { logger } from './logger';
+
 let map;
 let apiClient;
 
@@ -15,7 +17,7 @@ add_init_function(init);
 // initialization function
 function init (client) {
 
-    console.log('> ambulance.js');
+    logger.log('info', '> ambulance.js');
 
     // set apiClient
     apiClient = client;
@@ -46,20 +48,19 @@ function retrieveCall(call_id, map) {
     apiClient.httpClient.get(url)
         .then( (response) => {
 
-            console.log("Got call data from API");
+            logger.log('debug', "Got call data from API");
             addCallToMap(response.data, map);
 
         })
         .catch( (error) => {
-            console.log('Failed to retrieve call data');
-            console.log(error);
+            logger.log('error', 'Failed to retrieve call data: %s', error);
         });
 
 }
 
 function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
 
-    console.log("Retrieving ambulance '" + ambulance_id + "' updates from API");
+    logger.log('info', "Retrieving ambulance '%d' updates from API", ambulance_id);
 
     // Build url
     const url = 'ambulance/' + ambulance_id + '/updates/?call_id=' + call_id;
@@ -67,21 +68,20 @@ function retrieveAmbulanceUpdates(ambulance_id, call_id, map) {
     apiClient.httpClient.get(url)
         .then( (response) => {
 
-            console.log("Got '" + response.data.length + "' ambulance '" + ambulance_id + "' updates from API");
-            addAmbulanceRoute(map, response.data, true);
+            logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulance_id);
+            addAmbulanceRoute(map, response.data, ambulance_status, true);
 
         })
         .catch( (error) => {
-            console.log("'Failed to retrieve ambulance '" + ambulance_id + "' updates");
-            console.log(error);
+            logger.log('error', "'Failed to retrieve ambulance '%d' updates: %s", ambulance_id, error);
         });
 
 }
 
 function addCallToMap(call, map, icon) {
 
-    console.log('Adding call to map');
-    // console.log(call);
+    logger.log('info', 'Adding call to map');
+    // logger.log('info', call);
 
     // waypoint markers
     icon = icon || L.icon({
@@ -92,14 +92,12 @@ function addCallToMap(call, map, icon) {
     // loop through ambulancecall records
     call['ambulancecall_set'].forEach(function (ambulancecall) {
 
-        console.log('Adding ambulancecall');
-        // console.log(ambulancecall);
+        logger.log('info', 'Adding ambulancecall');
 
         // loop through waypoints
         ambulancecall['waypoint_set'].forEach(function (waypoint) {
 
-            console.log('Adding waypoint');
-            // console.log(waypoint);
+            logger.log('info', 'Adding waypoint');
 
             // waypoint label
             let label = location_type[waypoint['location']['type']];
