@@ -2,7 +2,7 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
-import {ambulanceStatusIcon} from "./app-icons";
+import {ambulanceStatusIcon, waypointIcon} from "./app-icons";
 
 import { logger } from './logger';
 
