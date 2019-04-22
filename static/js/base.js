@@ -24,9 +24,14 @@ $(function () {
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
-        // Make admin menu active
-        if (adminUrls.includes(pathname))
-            $('#navitemDropdown').addClass('nav-item active');
+        if (typeof adminUrls === 'undefined' || variable === null) {
+             // variable is undefined or null
+            logger.log('info', 'User is not admin');
+        } else {
+            // Make admin menu active
+            if (adminUrls.includes(pathname))
+                $('#navitemDropdown').addClass('nav-item active');
+        }
 
     }
 
