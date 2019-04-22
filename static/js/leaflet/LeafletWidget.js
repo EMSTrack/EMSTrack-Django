@@ -100,7 +100,7 @@ export class LeafletWidget {
 
             L.control.layers({
                 Roadmap: roadMutant,
-                Aerial: satMutant,
+                Satellite: satMutant,
                 Hybrid: hybridMutant,
             }, {}, {
                 collapsed: false

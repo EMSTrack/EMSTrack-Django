@@ -24,7 +24,7 @@ $(function () {
         // Make current page active
         $('.nav-item a[href^="' + pathname + '"]').addClass('nav-item active');
 
-        if (typeof adminUrls === 'undefined' || variable === null) {
+        if (typeof adminUrls === 'undefined' || adminUrls === null) {
              // variable is undefined or null
             logger.log('info', 'User is not admin');
         } else {
