@@ -271,7 +271,7 @@ function createRouteFilter(segments) {
     const customControl = L.Control.extend({
 
         options: {
-            position: 'topright'
+            position: 'bottomright'
         },
 
         onAdd: function (map) {
