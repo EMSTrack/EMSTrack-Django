@@ -84,8 +84,27 @@ export class LeafletWidget {
         } else if (this.map_provider['provider'] === 'google') {
 
             // create google map title layer
-            L.gridLayer.googleMutant(this.options.options)
+            const roadMutant = L.gridLayer.googleMutant(this.options.options)
                 .addTo(this.map);
+
+            // Create satelite and hybrid layers
+            const satMutant = L.gridLayer.googleMutant({
+                maxZoom: 24,
+                type:'satellite'
+            });
+
+            const hybridMutant = L.gridLayer.googleMutant({
+                maxZoom: 24,
+                type:'hybrid'
+            });
+
+            L.control.layers({
+                Roadmap: roadMutant,
+                Aerial: satMutant,
+                Hybrid: hybridMutant,
+            }, {}, {
+                collapsed: false
+            }).addTo(this.map);
 
         }
 
