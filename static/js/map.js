@@ -1089,7 +1089,7 @@ function createCategoryPanesAndFilters() {
     ambulance_online_order.forEach(function (online) {
 
         $("#ambulance-status").append(
-            '<div class="d-inline-block form-group form-check mt-0 mb-1 pr-2">\n' +
+            '<div class="d-inline-block form-group form-check mt-0 mb-1 mr-2">\n' +
             '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
             '            type="checkbox" id="online-' + online + '" ' +
             (visibleCategory[online] ? 'checked' : '') + '>\n' +
