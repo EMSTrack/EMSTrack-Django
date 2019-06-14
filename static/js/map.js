@@ -46,7 +46,7 @@ const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
 
 // Initialize category panes
-const visibleCategory = {};
+let visibleCategory = {};
 
 // Initialize ambulance icons
 const ambulance_icons = {};
@@ -199,6 +199,9 @@ function init( client ) {
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve hospitals and bases from ApiClient: %j', error);
         });
+
+    // save visibleCategory when unloading
+    $( window ).unload( saveToLocalStorage );
 
 }
 
@@ -1030,6 +1033,9 @@ function createCategoryPanesAndFilters() {
         visibleCategory[type] = false;
     });
 
+    // load visibleCategory from local storage
+    Object.assign(visibleCategory, loadFromLocalStorage( 'visibleCategory' ));
+
     // Initialize panes
 
     // Create hospital category pane
@@ -1269,6 +1275,37 @@ function visibilityCheckbox(checkbox) {
     } else {
         mymap.getPane(layer).style.display = display;
     }
+
+}
+
+function saveToLocalStorage() {
+
+    logger.log('info', '> Saving state to local storage');
+
+    // save visibleCategory to localStorage
+    localStorage.setItem('visibleCategory', JSON.stringify(visibleCategory));
+
+}
+
+function loadFromLocalStorage(key) {
+
+    // load visibleCategory from localStorage
+    let value = {};
+    if (localStorage.hasOwnProperty(key)) {
+
+        // get the value from localStorage
+        value = localStorage.getItem(key);
+
+        // parse the localStorage string and setState
+        try {
+            // overload visibleCategory
+            value =  JSON.parse(value);
+            logger.log('info', "> Parsed '" + key + "' from local storage");
+        } catch (e) {
+            logger.log('error', "> Could not parse '" + key + "' from local storage");
+        }
+    }
+    return value;
 
 }
 
