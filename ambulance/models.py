@@ -67,6 +67,17 @@ def has_client(key):
 
 # Ambulance model
 
+class AmbulanceOnline(Enum):
+    online = _('Online')
+    offline = _('Offline')
+
+
+AmbulanceOnlineOrder = [
+    AmbulanceOnline.online,
+    AmbulanceOnline.offline
+]
+
+
 class AmbulanceStatus(Enum):
     UK = _('Unknown')
     AV = _('Available')

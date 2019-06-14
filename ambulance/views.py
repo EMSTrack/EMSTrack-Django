@@ -13,7 +13,8 @@ from django.views.generic.detail import BaseDetailView
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
-    CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder
+    CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
+    AmbulanceOnline, AmbulanceOnlineOrder
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -243,6 +244,9 @@ class AmbulanceMap(TemplateView):
         context['ambulance_capability'] = {m.name: m.value
                                            for m in AmbulanceCapability}
         context['ambulance_capability_order'] = [m.name for m in AmbulanceCapabilityOrder]
+        context['ambulance_online'] = {m.name: m.value
+                                           for m in AmbulanceOnline}
+        context['ambulance_online_order'] = [m.name for m in AmbulanceOnlineOrder]
         context['location_type'] = {m.name: m.value
                                     for m in LocationType}
         context['location_type_order'] = [m.name for m in LocationTypeOrder]

@@ -61,16 +61,6 @@ for (const key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
-const ambulance_online = {
-    online: 'Online',
-    offline: 'Offline'
-};
-
-const ambulance_online_order = [
-    'online',
-    'offline'
-];
-
 // Initialize ambulance call status
 const ambulance_call_buttons = {
     R: 'btn-danger', // 'Requested'
@@ -877,8 +867,6 @@ function addAmbulanceToMap(ambulance) {
     // store ambulance details in an array
     ambulances[ambulance.id] = ambulance;
     const online = (ambulance.client_id == null ? 'offline' : 'online');
-    logger.log('debug', "ambulance.client_id = '" + ambulance.client_id + "'");
-    logger.log('debug', "online = '" + online + "'");
 
     // Add marker
     // logger.log('debug', 'orientation = ' + ambulance.orientation);
