@@ -27,6 +27,15 @@ msgstr ""
 msgid "Location"
 msgstr "Ubicación"
 
+# AmbulanceOnline
+#: ambulance/models.py:65
+msgid "Online"
+msgstr "En servicio"
+
+#: ambulance/models.py:65
+msgid "Offline"
+msgstr "Fuera de servicio"
+
 # AmbulanceStatus
 #: ambulance/models.py:65
 msgid "Unknown"
