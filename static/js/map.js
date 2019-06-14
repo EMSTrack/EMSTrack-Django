@@ -1004,6 +1004,8 @@ function addLocationToMap(location) {
 /* Create category filter */
 function createCategoryPanesAndFilters() {
 
+    logger.log('info', 'Setting up category panes and filters');
+
     // Initialize visibleCategories
 
     // add status
@@ -1035,7 +1037,10 @@ function createCategoryPanesAndFilters() {
     });
 
     // load visibleCategory from local storage
-    Object.assign(visibleCategory, loadFromLocalStorage( 'visibleCategory' ));
+    const fromStorage = loadFromLocalStorage( 'visibleCategory' );
+    Object.assign(visibleCategory, fromStorage);
+
+    logger.log('info', 'Loaded from localStorage: ' + fromStorage);
 
     // Initialize panes
 
@@ -1281,7 +1286,7 @@ function visibilityCheckbox(checkbox) {
 
 function saveToLocalStorage() {
 
-    logger.log('info', '> Saving state to local storage');
+    logger.log('info', 'Saving state to local storage');
 
     // save visibleCategory to localStorage
     localStorage.setItem('visibleCategory', JSON.stringify(visibleCategory));
