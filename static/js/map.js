@@ -1054,19 +1054,6 @@ function createCategoryPanesAndFilters() {
         });
     });
 
-    // Create online options
-    ambulance_online_order.forEach(function (online) {
-
-        $("#ambulance-status").append(
-            '<div class="form-group form-check mt-0 mb-1">\n' +
-            '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
-            '            type="checkbox" id="online-' + online + '" ' +
-            (visibleCategory[online] ? 'checked' : '') + '>\n' +
-            '     <label class="form-check-label"\n' +
-            '            for="online-' + online + '">' + ambulance_online[online] + '</label>\n' +
-            '</div>');
-    });
-
     // Create call status grids
     call_status_order.forEach(function (status) {
 
@@ -1096,6 +1083,19 @@ function createCategoryPanesAndFilters() {
                 '    </div>\n' +
                 '</div>');
 
+    });
+
+    // Create online options
+    ambulance_online_order.forEach(function (online) {
+
+        $("#ambulance-status").append(
+            '<div class="form-group form-check mt-0 mb-1">\n' +
+            '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
+            '            type="checkbox" id="online-' + online + '" ' +
+            (visibleCategory[online] ? 'checked' : '') + '>\n' +
+            '     <label class="form-check-label"\n' +
+            '            for="online-' + online + '">' + ambulance_online[online] + '</label>\n' +
+            '</div>');
     });
 
     // Create ambulance status grids
