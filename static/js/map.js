@@ -1037,10 +1037,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // load visibleCategory from local storage
-    const fromStorage = loadFromLocalStorage( 'visibleCategory' );
-    Object.assign(visibleCategory, fromStorage);
-
-    logger.log('info', 'Loaded from localStorage: ' + fromStorage);
+    Object.assign(visibleCategory, loadFromLocalStorage( 'visibleCategory' ) );
 
     // Initialize panes
 
