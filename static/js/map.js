@@ -336,6 +336,7 @@ function updateAmbulance(ambulance) {
         ambulances[id].location.latitude = ambulance.location.latitude;
         ambulances[id].location.longitude = ambulance.location.longitude;
         ambulances[id].orientation = ambulance.orientation;
+        ambulances[id].client_id = ambulance.client_id;
 
         // Overwrite ambulance
         ambulance = ambulances[id];
