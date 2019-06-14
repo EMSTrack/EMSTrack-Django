@@ -1100,11 +1100,13 @@ function createCategoryPanesAndFilters() {
             '</div>');
         */
 
-        html += '<input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
+        html += '<span>' +
+            '<input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
             '            type="checkbox" id="online-' + online + '" ' +
             (visibleCategory[online] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
-            '            for="online-' + online + '">' + ambulance_online[online] + '</label>\n';
+            '            for="online-' + online + '">' + ambulance_online[online] + '</label>' +
+            '</span>\n';
 
     });
     html += '</div>';
