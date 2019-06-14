@@ -61,6 +61,11 @@ for (const key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
+const ambulance_online_order = [
+    'online',
+    'offline'
+];
+
 // Initialize ambulance call status
 const ambulance_call_buttons = {
     R: 'btn-danger', // 'Requested'
@@ -861,6 +866,7 @@ function addAmbulanceToMap(ambulance) {
 
     // store ambulance details in an array
     ambulances[ambulance.id] = ambulance;
+    const online = (ambulance.client_id == null ? 'offline' : 'online');
 
     // Add marker
     // logger.log('debug', 'orientation = ' + ambulance.orientation);
@@ -871,7 +877,7 @@ function addAmbulanceToMap(ambulance) {
             icon: ambulance_icons[ambulance.status],
             rotationAngle: ambulance.orientation % 360,
             rotationOrigin: 'center center',
-            pane: ambulance.status+"|"+ambulance.capability
+            pane: ambulance.status + "|" + ambulance.capability + "|" + online
         })
         .bindPopup(
             "<strong>" + ambulance.identifier + "</strong>" +
@@ -1001,6 +1007,11 @@ function createCategoryPanesAndFilters() {
         visibleCategory[capability] = true;
     });
 
+    // add online/offline
+    ambulance_online_order.forEach(function(online) {
+        visibleCategory[online] = true;
+    });
+
     // add hospital
     visibleCategory['hospital'] = true;
 
@@ -1027,10 +1038,14 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create ambulance status category panes
-    ambulance_status_order.forEach(function (status) {
-        ambulance_capability_order.forEach(function (capability) {
-            pane = mymap.createPane(status + "|" + capability);
-            pane.style.display = (visibleCategory[status] || visibleCategory[capability] ? 'block' : 'none');
+    ambulance_online_order.forEach(function(online) {
+        ambulance_status_order.forEach(function (status) {
+            ambulance_capability_order.forEach(function (capability) {
+                pane = mymap.createPane(status + "|" + capability + "|" + online);
+                pane.style.display = ((visibleCategory[status] ||
+                                       visibleCategory[capability] ||
+                                       visibleCategory[online]) ? 'block' : 'none');
+            });
         });
     });
 
@@ -1181,16 +1196,36 @@ function visibilityCheckbox(checkbox) {
     // Modify panes
     if (checkbox.value === 'status') {
         // Add to all visible capability panes
-        ambulance_capability_order.forEach(function (capability) {
-            if (visibleCategory[capability]) {
-                mymap.getPane(layer+"|"+capability).style.display = display;
+        ambulance_online_order.forEach(function(online) {
+            if (visibleCategory[online]) {
+                ambulance_capability_order.forEach(function (capability) {
+                    if (visibleCategory[capability]) {
+                        mymap.getPane(layer + "|" + capability + "|" + online).style.display = display;
+                    }
+                });
             }
         });
     } else if (checkbox.value === 'capability') {
         // Add to all visible status layers
+        ambulance_online_order.forEach(function(online) {
+            if (visibleCategory[online]) {
+                ambulance_status_order.forEach(function (status) {
+                    if (visibleCategory[status]) {
+                        mymap.getPane(status + "|" + layer + "|" + online).style.display = display;
+                    }
+                });
+            }
+        });
+    } else if (checkbox.value === 'online') {
+        // Add to all visible status layers
         ambulance_status_order.forEach(function (status) {
             if (visibleCategory[status]) {
-                mymap.getPane(status+"|"+layer).style.display = display;
+                // Add to all visible capability panes
+                ambulance_capability_order.forEach(function (capability) {
+                    if (visibleCategory[capability]) {
+                        mymap.getPane(status + "|" + capability + "|" + layer).style.display = display;
+                    }
+                });
             }
         });
     } else if (checkbox.value === 'call-status') {

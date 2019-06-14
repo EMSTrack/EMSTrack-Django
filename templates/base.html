@@ -173,12 +173,14 @@
     const username = '{{ user.get_username }}';
     const apiBaseUrl = '{% url 'index' %}api/';
     {% if request.user.is_authenticated %}
-    const mqttBroker = {{ mqtt_broker }};
-    const clientId = '{{ client_id }}';
-    const mapProvider = {{ map_provider }};
-    {% if request.user.is_staff %}
-    const adminUrls = {{ admin_urls }};
-    {% endif %}
+        const mqttBroker = {{ mqtt_broker }};
+        const clientId = '{{ client_id }}';
+        const mapProvider = {{ map_provider }};
+        {% if request.user.is_staff %}
+            const adminUrls = {{ admin_urls }};
+        {% else %}
+            const adminUrls = [];
+        {% endif %}
     {% endif %}
 </script>
 {% endautoescape %}
