@@ -1100,8 +1100,7 @@ function createCategoryPanesAndFilters() {
             '</div>');
         */
 
-        html += '<div class="form-group form-check mt-0 mb-1">\n' +
-            '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
+        html += '<input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
             '            type="checkbox" id="online-' + online + '" ' +
             (visibleCategory[online] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
