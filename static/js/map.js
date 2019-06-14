@@ -1057,7 +1057,7 @@ function createCategoryPanesAndFilters() {
     // Create online options
     ambulance_online_order.forEach(function (online) {
 
-        $("#ambulance-capability").append(
+        $("#ambulance-status").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
             '            type="checkbox" id="online-' + online + '" ' +
