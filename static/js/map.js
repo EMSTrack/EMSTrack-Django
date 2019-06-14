@@ -876,6 +876,8 @@ function addAmbulanceToMap(ambulance) {
     // store ambulance details in an array
     ambulances[ambulance.id] = ambulance;
     const online = (ambulance.client_id == null ? 'offline' : 'online');
+    logger.log('debug', "ambulance.client_id = '" + ambulance.client_id + "'");
+    logger.log('debug', "online = '" + online + "'");
 
     // Add marker
     // logger.log('debug', 'orientation = ' + ambulance.orientation);
