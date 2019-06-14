@@ -202,7 +202,7 @@ function init( client ) {
 
     // save visibleCategory when unloading
     logger.log('info', 'Setting up beforeunload method');
-    $( window ).on( 'beforeunload', saveToLocalStorage() );
+    $( window ).on( 'beforeunload', saveToLocalStorage );
 
 }
 
