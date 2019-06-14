@@ -88,8 +88,8 @@ $(function () {
             init_functions.forEach( (fn) => fn(apiClient) );
         })
         .catch( (error ) => {
-            logger.log('info', 'Failed to initialize ApiClient');
-            logger.log('info', error);
+            logger.log('error', 'Failed to initialize ApiClient');
+            logger.log('error', error);
         });
 
 });
