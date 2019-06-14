@@ -201,7 +201,7 @@ function init( client ) {
         });
 
     // save visibleCategory when unloading
-    $( window ).unload( function() { saveToLocalStorage(); } );
+    $( window ).on( 'unload', saveToLocalStorage() );
 
 }
 
