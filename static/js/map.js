@@ -1056,8 +1056,8 @@ function createCategoryPanesAndFilters() {
         ambulance_status_order.forEach(function (status) {
             ambulance_capability_order.forEach(function (capability) {
                 pane = mymap.createPane(status + "|" + capability + "|" + online);
-                pane.style.display = ((visibleCategory[status] ||
-                                       visibleCategory[capability] ||
+                pane.style.display = ((visibleCategory[status] &&
+                                       visibleCategory[capability] &&
                                        visibleCategory[online]) ? 'block' : 'none');
             });
         });
