@@ -61,6 +61,11 @@ for (const key in ambulance_css) {
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
 
+const ambulance_online = {
+    online: 'Online',
+    offline: 'Offline'
+};
+
 const ambulance_online_order = [
     'online',
     'offline'
@@ -1047,6 +1052,19 @@ function createCategoryPanesAndFilters() {
                                        visibleCategory[online]) ? 'block' : 'none');
             });
         });
+    });
+
+    // Create online options
+    ambulance_online_order.forEach(function (online) {
+
+        $("#ambulance-capability").append(
+            '<div class="form-group form-check mt-0 mb-1">\n' +
+            '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
+            '            type="checkbox" id="online-' + online + '" ' +
+            (visibleCategory[online] ? 'checked' : '') + '>\n' +
+            '     <label class="form-check-label"\n' +
+            '            for="online-' + online + '">' + ambulance_online[online] + '</label>\n' +
+            '</div>');
     });
 
     // Create call status grids
