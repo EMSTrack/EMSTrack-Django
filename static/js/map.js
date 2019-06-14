@@ -1086,31 +1086,18 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create online options
-    let html = '<div class="form-group form-check mt-0 mb-1">\n';
     ambulance_online_order.forEach(function (online) {
 
-        /*
-            $("#ambulance-status").append(
-            '<div class="form-group form-check mt-0 mb-1">\n' +
+        $("#ambulance-status").append(
+            '<div class="d-inline-block form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
             '            type="checkbox" id="online-' + online + '" ' +
             (visibleCategory[online] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
             '            for="online-' + online + '">' + ambulance_online[online] + '</label>\n' +
             '</div>');
-        */
-
-        html += '<span>' +
-            '<input class="form-check-input filter-checkbox" value="online" data-status="' + online + '"\n' +
-            '            type="checkbox" id="online-' + online + '" ' +
-            (visibleCategory[online] ? 'checked' : '') + '>\n' +
-            '     <label class="form-check-label"\n' +
-            '            for="online-' + online + '">' + ambulance_online[online] + '</label>' +
-            '</span>\n';
 
     });
-    html += '</div>';
-    $("#ambulance-status").append(html);
 
     // Create ambulance status grids
     ambulance_status_order.forEach(function (status) {
