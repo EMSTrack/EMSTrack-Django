@@ -360,6 +360,15 @@ CallStatusOrder = [
 ]
 
 
+class CallRadioCodes(models.Model):
+
+    # code
+    code = models.CharField(_('code'), max_length=10)
+
+    # label
+    label = models.CharField(_('label'), max_length=200)
+
+
 class Call(PublishMixin,
            UpdatedByModel):
 
@@ -375,6 +384,11 @@ class Call(PublishMixin,
     priority = models.CharField(_('priority'), max_length=1,
                                 choices=make_choices(CallPriority),
                                 default=CallPriority.E.name)
+
+    # radio code
+    radio_code = models.ForeignKey(CallRadioCodes,
+                                   on_delete=models.CASCADE,
+                                   verbose_name=_('radio_code'))
 
     # timestamps
     pending_at = models.DateTimeField(_('pending_at'), null=True, blank=True)

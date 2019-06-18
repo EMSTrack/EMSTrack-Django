@@ -1,0 +1,770 @@
+[
+ {
+   "code": "1",
+   "label": "Urgencia"
+ },
+ {
+   "code": "2",
+   "label": "Bomberos"
+ },
+ {
+   "code": "2-A",
+   "label": "Incendio"
+ },
+ {
+   "code": "2-B",
+   "label": "Explosion"
+ },
+ {
+   "code": "2-C",
+   "label": "Derrumbe"
+ },
+ {
+   "code": "2-F",
+   "label": "Fuga de Gas"
+ },
+ {
+   "code": "2-I",
+   "label": "Inundacion"
+ },
+ {
+   "code": "3",
+   "label": "Emergencia Mayor"
+ },
+ {
+   "code": "3-A",
+   "label": "Disturbio en el Lugar de el 1"
+ },
+ {
+   "code": "4",
+   "label": "Ambulancia"
+ },
+ {
+   "code": "4 de 2",
+   "label": "Ambulancia de Bomberos "
+ },
+ {
+   "code": "4 de 8",
+   "label": "Ambulancia de Policia"
+ },
+ {
+   "code": "4 de 8C",
+   "label": "Ambulancia de Caminos y Puentes"
+ },
+ {
+   "code": "4 de 13",
+   "label": "Ambulancia de Halcones "
+ },
+ {
+   "code": "4 de 14",
+   "label": "Semefo"
+ },
+ {
+   "code": "4 de 45",
+   "label": "Ambulancia de el Imss"
+ },
+ {
+   "code": "4 de 45I",
+   "label": "Ambulancia de el Issste"
+ },
+ {
+   "code": "4 de 45L",
+   "label": "Ambulancia de el Issstecali"
+ },
+ {
+   "code": "4 de 45P",
+   "label": "Ambulancia Particular"
+ },
+ {
+   "code": "4 de X",
+   "label": "Ambulancia Militar"
+ },
+ {
+   "code": "5",
+   "label": "Lesionado"
+ },
+ {
+   "code": "5-0",
+   "label": "Lesionado Leve"
+ },
+ {
+   "code": "5-G ",
+   "label": "Lesionado Grave "
+ },
+ {
+   "code": "5-A",
+   "label": "Lesionado Por Arma Blanca"
+ },
+ {
+   "code": "5-B",
+   "label": "Lesionado Por Arma de Fuego"
+ },
+ {
+   "code": "5-C",
+   "label": "Lesionado Por Caida"
+ },
+ {
+   "code": "5-E",
+   "label": "Lesionado Electrocutado"
+ },
+ {
+   "code": "5-F",
+   "label": "Lesionado Por Fractura"
+ },
+ {
+   "code": "5-I",
+   "label": "Intoxicacion"
+ },
+ {
+   "code": "5-M",
+   "label": "Lesionado Por Mutilacion"
+ },
+ {
+   "code": "5-P",
+   "label": "Lesionado Por Riña "
+ },
+ {
+   "code": "5-Q",
+   "label": "Lesionado Por Quemadura"
+ },
+ {
+   "code": "5-Z",
+   "label": "Cardiaco"
+ },
+ {
+   "code": "5-BLANCO",
+   "label": "Lesionado en La Via Publica"
+ },
+ {
+   "code": "5-NEGRO ",
+   "label": "Lesionado en Interior de Inmueble"
+ },
+ {
+   "code": "6",
+   "label": "Regresamos Libres "
+ },
+ {
+   "code": "6-A",
+   "label": "Dirijase al Lugar de el Incidente"
+ },
+ {
+   "code": "7",
+   "label": "En el Lugar / Ya Llegamos"
+ },
+ {
+   "code": "7-A",
+   "label": "Datos, Informe de La Situacion"
+ },
+ {
+   "code": "8",
+   "label": "Policia"
+ },
+ {
+   "code": "8-A",
+   "label": "Policia Preventivo"
+ },
+ {
+   "code": "8-B",
+   "label": "Policia de Transito"
+ },
+ {
+   "code": "8-C",
+   "label": "Policia Federal de Caminos "
+ },
+ {
+   "code": "8-J",
+   "label": "Policia Judicial / Ministerial"
+ },
+ {
+   "code": "8-F",
+   "label": "Policia (Afi) Federal"
+ },
+ {
+   "code": "8-SN",
+   "label": "Policia Seguridad Nacional"
+ },
+ {
+   "code": "8-PA ",
+   "label": "Policia Auxiliar "
+ },
+ {
+   "code": "8-P",
+   "label": "Seguridad Privada"
+ },
+ {
+   "code": "8-K",
+   "label": "Caseta de Policia "
+ },
+ {
+   "code": "8-MP",
+   "label": "Ministerio Publico"
+ },
+ {
+   "code": "9",
+   "label": "Detenido"
+ },
+ {
+   "code": "10",
+   "label": "Traslado"
+ },
+ {
+   "code": "11",
+   "label": "Prensa"
+ },
+ {
+   "code": "12",
+   "label": "Carretera"
+ },
+ {
+   "code": "12-C",
+   "label": "Carretera de Cuota"
+ },
+ {
+   "code": "12-L",
+   "label": "Carretera Libre"
+ },
+ {
+   "code": "13",
+   "label": "Rescate Halcones"
+ },
+ {
+   "code": "14",
+   "label": "Cadaver / Muerto / Desceso"
+ },
+ {
+   "code": "15",
+   "label": "Servicio Especial"
+ },
+ {
+   "code": "15-A",
+   "label": "Servicio Administrativo"
+ },
+ {
+   "code": "15-B",
+   "label": "Servicio Banco de Sangre"
+ },
+ {
+   "code": "15-C",
+   "label": "Servicio Correspondencia"
+ },
+ {
+   "code": "15-D",
+   "label": "Servicio Donativo "
+ },
+ {
+   "code": "15-F",
+   "label": "Servicio Colecta"
+ },
+ {
+   "code": "15-M",
+   "label": "Servicio de Mantenimiento"
+ },
+ {
+   "code": "15-R",
+   "label": "Servicio de Sorteo"
+ },
+ {
+   "code": "16",
+   "label": "Telefono / Llamada Telefonica"
+ },
+ {
+   "code": "16-A",
+   "label": "Telefono Familiar"
+ },
+ {
+   "code": "16-K",
+   "label": "Caseta Telefonica"
+ },
+ {
+   "code": "17",
+   "label": "Repita Mensaje"
+ },
+ {
+   "code": "18",
+   "label": "Enterado"
+ },
+ {
+   "code": "18-A",
+   "label": "Positivo"
+ },
+ {
+   "code": "19",
+   "label": "Ubicacion / Posicion / Lugar"
+ },
+ {
+   "code": "19-A",
+   "label": "Domicilio Particular"
+ },
+ {
+   "code": "20/20'S",
+   "label": "Persona / Personas"
+ },
+ {
+   "code": "21",
+   "label": "Agua"
+ },
+ {
+   "code": "21-A",
+   "label": "Alimentos"
+ },
+ {
+   "code": "21-D",
+   "label": "Diesel / Abastecer"
+ },
+ {
+   "code": "21-G",
+   "label": "Gasolina Abastecer"
+ },
+ {
+   "code": "22",
+   "label": "Falsa Alarma"
+ },
+ {
+   "code": "22-A",
+   "label": "No Amerita Traslado"
+ },
+ {
+   "code": "22-B",
+   "label": "No Se Localizo Lesionado,Herido"
+ },
+ {
+   "code": "22-C",
+   "label": "Niega Atencion-Traslado"
+ },
+ {
+   "code": "23",
+   "label": "Rescate "
+ },
+ {
+   "code": "23-A",
+   "label": "Rescate Acuatico"
+ },
+ {
+   "code": "23-B",
+   "label": "Rescate en Barranco"
+ },
+ {
+   "code": "23-M",
+   "label": "Rescate de Montaña"
+ },
+ {
+   "code": "23-P",
+   "label": "Rescate Paracaidismo"
+ },
+ {
+   "code": "23-E",
+   "label": "Rescate en Elevador"
+ },
+ {
+   "code": "24",
+   "label": "Ferrocarril"
+ },
+ {
+   "code": "24-B",
+   "label": "Estacion de Ferrocarril"
+ },
+ {
+   "code": "24-M",
+   "label": "Estacion del Metro"
+ },
+ {
+   "code": "25",
+   "label": "Accidente Aereo"
+ },
+ {
+   "code": "25-A",
+   "label": "Aeropuerto Internacional"
+ },
+ {
+   "code": "25-B",
+   "label": "Avion de Pasajeros "
+ },
+ {
+   "code": "25-C",
+   "label": "Avioneta"
+ },
+ {
+   "code": "25-X",
+   "label": "Base Aerea Militar"
+ },
+ {
+   "code": "26",
+   "label": "Vehiculo"
+ },
+ {
+   "code": "26-A",
+   "label": "Vehiculo Particular "
+ },
+ {
+   "code": "26-B",
+   "label": "Autobus de Pasajeros "
+ },
+ {
+   "code": "26-C",
+   "label": "Camion de Carga"
+ },
+ {
+   "code": "26-E",
+   "label": "Autobus Escolar"
+ },
+ {
+   "code": "26-G",
+   "label": "Grua"
+ },
+ {
+   "code": "26-L",
+   "label": "Trolebus"
+ },
+ {
+   "code": "26-M",
+   "label": "Motocicleta"
+ },
+ {
+   "code": "26-P",
+   "label": "Camion Sisterna / Pipa"
+ },
+ {
+   "code": "26-T",
+   "label": "Tractocamion / Trailer"
+ },
+ {
+   "code": "26-W",
+   "label": "Camioneta"
+ },
+ {
+   "code": "26-X",
+   "label": "Vehiculo Militar"
+ },
+ {
+   "code": "26-Y",
+   "label": "Bicicleta"
+ },
+ {
+   "code": "27",
+   "label": "Choque"
+ },
+ {
+   "code": "27-A",
+   "label": "Volcadura"
+ },
+ {
+   "code": "27-M",
+   "label": "Choque Multiple"
+ },
+ {
+   "code": "28/28'S",
+   "label": "Persona-S Prensada-S / Atrapada-S"
+ },
+ {
+   "code": "29",
+   "label": "Jefe de Servicio / Jefe De..."
+ },
+ {
+   "code": "29-A",
+   "label": "Oficial"
+ },
+ {
+   "code": "30",
+   "label": "Jefe de Transito"
+ },
+ {
+   "code": "31",
+   "label": "Pendiente / Listos"
+ },
+ {
+   "code": "32",
+   "label": "Convoy "
+ },
+ {
+   "code": "33",
+   "label": "Adelante / Transmita"
+ },
+ {
+   "code": "34",
+   "label": "Tum / Socorrista"
+ },
+ {
+   "code": "34-E",
+   "label": "Enfermera"
+ },
+ {
+   "code": "34-F",
+   "label": "Tum / Socorrista Femenil"
+ },
+ {
+   "code": "34-M",
+   "label": "Medico"
+ },
+ {
+   "code": "35",
+   "label": "Proximo al Hospital o Clinica"
+ },
+ {
+   "code": "36",
+   "label": "Datos del Servicio"
+ },
+ {
+   "code": "36-A",
+   "label": "Informe Y/O Proporcione Datos"
+ },
+ {
+   "code": "37",
+   "label": "Contacto o Reunion"
+ },
+ {
+   "code": "38",
+   "label": "Servicio Cancelado"
+ },
+ {
+   "code": "38-A",
+   "label": "Negativo "
+ },
+ {
+   "code": "39",
+   "label": "Orden"
+ },
+ {
+   "code": "40",
+   "label": "Atropellado"
+ },
+ {
+   "code": "41",
+   "label": "Helicoptero"
+ },
+ {
+   "code": "42",
+   "label": "Director General"
+ },
+ {
+   "code": "42-A",
+   "label": "Director Administrativo"
+ },
+ {
+   "code": "42-M",
+   "label": "Director Medico"
+ },
+ {
+   "code": "43",
+   "label": "Hay Otro Servicio Cerca"
+ },
+ {
+   "code": "44",
+   "label": "Persona Ebria "
+ },
+ {
+   "code": "44-D",
+   "label": "Persona Drogada"
+ },
+ {
+   "code": "44-E",
+   "label": "Persona Enferma"
+ },
+ {
+   "code": "44-H",
+   "label": "Persona Alcoholica"
+ },
+ {
+   "code": "44-I",
+   "label": "Persona Indigente"
+ },
+ {
+   "code": "44-N",
+   "label": "Persona con Crisis Nerviosa"
+ },
+ {
+   "code": "44-T",
+   "label": "Persona con Tuberculosis"
+ },
+ {
+   "code": "45",
+   "label": "Hospital"
+ },
+ {
+   "code": "45-N",
+   "label": "Hospital Naval"
+ },
+ {
+   "code": "45-P",
+   "label": "Hospital Privado"
+ },
+ {
+   "code": "45-X",
+   "label": "Hospital Militar "
+ },
+ {
+   "code": "46",
+   "label": "Sirena"
+ },
+ {
+   "code": "47",
+   "label": "Descompostura"
+ },
+ {
+   "code": "48",
+   "label": "Hospital Cerrado"
+ },
+ {
+   "code": "49",
+   "label": "Parto"
+ },
+ {
+   "code": "49-A",
+   "label": "Hemorragia / Aborto"
+ },
+ {
+   "code": "50",
+   "label": "Llamada General"
+ },
+ {
+   "code": "51",
+   "label": "Cambio de Canal"
+ },
+ {
+   "code": "51-R",
+   "label": "Radio / Revisando Radio"
+ },
+ {
+   "code": "52",
+   "label": "Investigar en el Lugar "
+ },
+ {
+   "code": "52-A",
+   "label": "Proporcione Datos del Lugar"
+ },
+ {
+   "code": "52-B",
+   "label": "Servicio Efectivo"
+ },
+ {
+   "code": "53",
+   "label": "Congestionamiento Vehicular"
+ },
+ {
+   "code": "54",
+   "label": "Manifestacion"
+ },
+ {
+   "code": "55",
+   "label": "Asalto"
+ },
+ {
+   "code": "55-B",
+   "label": "Balazos / Balacera"
+ },
+ {
+   "code": "55-R",
+   "label": "Robo"
+ },
+ {
+   "code": "55-S",
+   "label": "Secuestro"
+ },
+ {
+   "code": "56",
+   "label": "Acc. con Muertos y Heridos"
+ },
+ {
+   "code": "56-A",
+   "label": "Reportan Varios Lesionados"
+ },
+ {
+   "code": "57",
+   "label": "Choque Contra Ferrocarril"
+ },
+ {
+   "code": "58",
+   "label": "Hospital de CRM / Base De..."
+ },
+ {
+   "code": "59",
+   "label": "Relevo"
+ },
+ {
+   "code": "60",
+   "label": "Todas Las Ambulancias al Lugar"
+ },
+ {
+   "code": "61",
+   "label": "Todos los Heridos Traslado a 58"
+ },
+ {
+   "code": "62",
+   "label": "Urgencia en Silencio"
+ },
+ {
+   "code": "63",
+   "label": "Urgencia en Brevedad "
+ },
+ {
+   "code": "64",
+   "label": "Mas Ambulancias al Lugar "
+ },
+ {
+   "code": "65",
+   "label": "Helicoptero al Lugar del Acci."
+ },
+ {
+   "code": "66",
+   "label": "Va Ambulancia de Rescate "
+ },
+ {
+   "code": "66-A",
+   "label": "Radio de Policia"
+ },
+ {
+   "code": "66-B",
+   "label": "Acerquese al Lugar y 31"
+ },
+ {
+   "code": "67",
+   "label": "Fuera del Aire o Apagar Radio"
+ },
+ {
+   "code": "68",
+   "label": "Servicio Falso / No Acudir"
+ },
+ {
+   "code": "69",
+   "label": "Zona de Desastre"
+ },
+ {
+   "code": "70",
+   "label": "Derrumbe con Persona Atrapada"
+ },
+ {
+   "code": "80",
+   "label": "Conyugue "
+ },
+ {
+   "code": "71",
+   "label": "Lesiones y Signos Vitales "
+ },
+ {
+   "code": "72",
+   "label": "Cuarto Rojo"
+ },
+ {
+   "code": "73",
+   "label": "Ambulancia con Equipo de Rescate"
+ },
+ {
+   "code": "74",
+   "label": "Ambulancia Paramedica"
+ },
+ {
+   "code": "75",
+   "label": "Paramedico"
+ },
+ {
+   "code": "79",
+   "label": "Rescate Tijuana"
+ },
+ {
+   "code": "99",
+   "label": "Ayuda / Auxilio"
+ },
+ {
+   "code": "100",
+   "label": "Auxilio Urgente Ambulancia y/o Personal en Peligro."
+ },
+]
