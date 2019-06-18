@@ -212,10 +212,9 @@
                        name="radio-code" class="form-control"
                        placeholder="{% trans "Radio Code" %}">
                 <datalist id="radio-codes">
-                    <option value="1">1: Emergency</option>
-                    <option value="1.2"></option>
-                    <option value="2"></option>
-                    <option value="4"></option>
+                    {% for code in radio_code_list %}
+                    <option value="{{ code.code }}">{{ code.label }}</option>
+                    {% endfor %}
                 </datalist>
 
                 <h5>

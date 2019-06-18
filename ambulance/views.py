@@ -265,7 +265,7 @@ class AmbulanceMap(TemplateView):
         context['call_priority_css'] = CallPriorityCSS
         context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
-        context['radio_codes'] = CallRadioCode.objects.all()
+        context['radio_code_list'] = CallRadioCode.objects.all()
 
         return context
 
