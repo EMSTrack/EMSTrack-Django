@@ -206,6 +206,19 @@
                 </form>
 
                 <h5>
+                    {% trans "Radio Code" %}
+                </h5>
+                <input id="radio-code" list="radio-codes"
+                       name="radio-code" class="form-control"
+                       placeholder="{% trans "Radio Code" %}">
+                <datalist id="radio-codes">
+                    <option value="1"/>
+                    <option value="1.2"/>
+                    <option value="2"/>
+                    <option value="4"/>
+                </datalist>
+
+                <h5>
                     {% trans "Description" %}
                 </h5>
                 <textarea class="form-control" name="description"
@@ -218,6 +231,7 @@
                     {% trans "update coordinates" %}
                     <input id="update-coordinates" type="checkbox">
                 </div>
+
                 <h5>
                     {% trans "Street address" %}
                 </h5>
@@ -230,6 +244,7 @@
                     {% trans "update address" %}
                     <input id="update-address" type="checkbox" checked/>
                 </div>
+
                 <h5>
                     {% trans "Coordinates" %}
                 </h5>
