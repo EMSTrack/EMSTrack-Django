@@ -1,770 +1,1538 @@
 [
  {
-   "code": "1",
-   "label": "Urgencia"
+   "model": "ambulance.callradiocode",
+   "pk": 1,
+   "fields": {
+     "code": "1",
+     "label": "Urgencia"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 2,
+   "fields": {
+     "code": "2",
+     "label": "Bomberos"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 3,
+   "fields": {
+     "code": "2-A",
+     "label": "Incendio"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 4,
+   "fields": {
+     "code": "2-B",
+     "label": "Explosion"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 5,
+   "fields": {
+     "code": "2-C",
+     "label": "Derrumbe"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 6,
+   "fields": {
+     "code": "2-F",
+     "label": "Fuga de Gas"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 7,
+   "fields": {
+     "code": "2-I",
+     "label": "Inundacion"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 8,
+   "fields": {
+     "code": "3",
+     "label": "Emergencia Mayor"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 9,
+   "fields": {
+     "code": "3-A",
+     "label": "Disturbio en el Lugar de el 1"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 10,
+   "fields": {
+     "code": "4",
+     "label": "Ambulancia"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 11,
+   "fields": {
+     "code": "4 de 2",
+     "label": "Ambulancia de Bomberos "
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 12,
+   "fields": {
+     "code": "4 de 8",
+     "label": "Ambulancia de Policia"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 13,
+   "fields": {
+     "code": "4 de 8C",
+     "label": "Ambulancia de Caminos y Puentes"
+   }
  },
  {
-   "code": "2",
-   "label": "Bomberos"
+   "model": "ambulance.callradiocode",
+   "pk": 14,
+   "fields": {
+     "code": "4 de 13",
+     "label": "Ambulancia de Halcones "
+   }
  },
  {
-   "code": "2-A",
-   "label": "Incendio"
+   "model": "ambulance.callradiocode",
+   "pk": 15,
+   "fields": {
+     "code": "4 de 14",
+     "label": "Semefo"
+   }
  },
  {
-   "code": "2-B",
-   "label": "Explosion"
+   "model": "ambulance.callradiocode",
+   "pk": 16,
+   "fields": {
+     "code": "4 de 45",
+     "label": "Ambulancia de el Imss"
+   }
  },
  {
-   "code": "2-C",
-   "label": "Derrumbe"
+   "model": "ambulance.callradiocode",
+   "pk": 17,
+   "fields": {
+     "code": "4 de 45I",
+     "label": "Ambulancia de el Issste"
+   }
  },
  {
-   "code": "2-F",
-   "label": "Fuga de Gas"
+   "model": "ambulance.callradiocode",
+   "pk": 18,
+   "fields": {
+     "code": "4 de 45L",
+     "label": "Ambulancia de el Issstecali"
+   }
  },
  {
-   "code": "2-I",
-   "label": "Inundacion"
+   "model": "ambulance.callradiocode",
+   "pk": 19,
+   "fields": {
+     "code": "4 de 45P",
+     "label": "Ambulancia Particular"
+   }
  },
  {
-   "code": "3",
-   "label": "Emergencia Mayor"
+   "model": "ambulance.callradiocode",
+   "pk": 20,
+   "fields": {
+     "code": "4 de X",
+     "label": "Ambulancia Militar"
+   }
  },
  {
-   "code": "3-A",
-   "label": "Disturbio en el Lugar de el 1"
+   "model": "ambulance.callradiocode",
+   "pk": 21,
+   "fields": {
+     "code": "5",
+     "label": "Lesionado"
+   }
  },
  {
-   "code": "4",
-   "label": "Ambulancia"
+   "model": "ambulance.callradiocode",
+   "pk": 22,
+   "fields": {
+     "code": "5-0",
+     "label": "Lesionado Leve"
+   }
  },
  {
-   "code": "4 de 2",
-   "label": "Ambulancia de Bomberos "
+   "model": "ambulance.callradiocode",
+   "pk": 23,
+   "fields": {
+     "code": "5-G ",
+     "label": "Lesionado Grave "
+   }
  },
  {
-   "code": "4 de 8",
-   "label": "Ambulancia de Policia"
+   "model": "ambulance.callradiocode",
+   "pk": 24,
+   "fields": {
+     "code": "5-A",
+     "label": "Lesionado Por Arma Blanca"
+   }
  },
  {
-   "code": "4 de 8C",
-   "label": "Ambulancia de Caminos y Puentes"
+   "model": "ambulance.callradiocode",
+   "pk": 25,
+   "fields": {
+     "code": "5-B",
+     "label": "Lesionado Por Arma de Fuego"
+   }
  },
  {
-   "code": "4 de 13",
-   "label": "Ambulancia de Halcones "
+   "model": "ambulance.callradiocode",
+   "pk": 26,
+   "fields": {
+     "code": "5-C",
+     "label": "Lesionado Por Caida"
+   }
  },
  {
-   "code": "4 de 14",
-   "label": "Semefo"
+   "model": "ambulance.callradiocode",
+   "pk": 27,
+   "fields": {
+     "code": "5-E",
+     "label": "Lesionado Electrocutado"
+   }
  },
  {
-   "code": "4 de 45",
-   "label": "Ambulancia de el Imss"
+   "model": "ambulance.callradiocode",
+   "pk": 28,
+   "fields": {
+     "code": "5-F",
+     "label": "Lesionado Por Fractura"
+   }
  },
  {
-   "code": "4 de 45I",
-   "label": "Ambulancia de el Issste"
+   "model": "ambulance.callradiocode",
+   "pk": 29,
+   "fields": {
+     "code": "5-I",
+     "label": "Intoxicacion"
+   }
  },
  {
-   "code": "4 de 45L",
-   "label": "Ambulancia de el Issstecali"
+   "model": "ambulance.callradiocode",
+   "pk": 30,
+   "fields": {
+     "code": "5-M",
+     "label": "Lesionado Por Mutilacion"
+   }
  },
  {
-   "code": "4 de 45P",
-   "label": "Ambulancia Particular"
+   "model": "ambulance.callradiocode",
+   "pk": 31,
+   "fields": {
+     "code": "5-P",
+     "label": "Lesionado Por Riña "
+   }
  },
  {
-   "code": "4 de X",
-   "label": "Ambulancia Militar"
+   "model": "ambulance.callradiocode",
+   "pk": 32,
+   "fields": {
+     "code": "5-Q",
+     "label": "Lesionado Por Quemadura"
+   }
  },
  {
-   "code": "5",
-   "label": "Lesionado"
+   "model": "ambulance.callradiocode",
+   "pk": 33,
+   "fields": {
+     "code": "5-Z",
+     "label": "Cardiaco"
+   }
  },
  {
-   "code": "5-0",
-   "label": "Lesionado Leve"
+   "model": "ambulance.callradiocode",
+   "pk": 34,
+   "fields": {
+     "code": "5-BLANCO",
+     "label": "Lesionado en La Via Publica"
+   }
  },
  {
-   "code": "5-G ",
-   "label": "Lesionado Grave "
+   "model": "ambulance.callradiocode",
+   "pk": 35,
+   "fields": {
+     "code": "5-NEGRO ",
+     "label": "Lesionado en Interior de Inmueble"
+   }
  },
  {
-   "code": "5-A",
-   "label": "Lesionado Por Arma Blanca"
+   "model": "ambulance.callradiocode",
+   "pk": 36,
+   "fields": {
+     "code": "6",
+     "label": "Regresamos Libres "
+   }
  },
  {
-   "code": "5-B",
-   "label": "Lesionado Por Arma de Fuego"
+   "model": "ambulance.callradiocode",
+   "pk": 37,
+   "fields": {
+     "code": "6-A",
+     "label": "Dirijase al Lugar de el Incidente"
+   }
  },
  {
-   "code": "5-C",
-   "label": "Lesionado Por Caida"
+   "model": "ambulance.callradiocode",
+   "pk": 38,
+   "fields": {
+     "code": "7",
+     "label": "En el Lugar / Ya Llegamos"
+   }
  },
  {
-   "code": "5-E",
-   "label": "Lesionado Electrocutado"
+   "model": "ambulance.callradiocode",
+   "pk": 39,
+   "fields": {
+     "code": "7-A",
+     "label": "Datos, Informe de La Situacion"
+   }
  },
  {
-   "code": "5-F",
-   "label": "Lesionado Por Fractura"
+   "model": "ambulance.callradiocode",
+   "pk": 40,
+   "fields": {
+     "code": "8",
+     "label": "Policia"
+   }
  },
  {
-   "code": "5-I",
-   "label": "Intoxicacion"
+   "model": "ambulance.callradiocode",
+   "pk": 41,
+   "fields": {
+     "code": "8-A",
+     "label": "Policia Preventivo"
+   }
  },
  {
-   "code": "5-M",
-   "label": "Lesionado Por Mutilacion"
+   "model": "ambulance.callradiocode",
+   "pk": 42,
+   "fields": {
+     "code": "8-B",
+     "label": "Policia de Transito"
+   }
  },
  {
-   "code": "5-P",
-   "label": "Lesionado Por Riña "
+   "model": "ambulance.callradiocode",
+   "pk": 43,
+   "fields": {
+     "code": "8-C",
+     "label": "Policia Federal de Caminos "
+   }
  },
  {
-   "code": "5-Q",
-   "label": "Lesionado Por Quemadura"
+   "model": "ambulance.callradiocode",
+   "pk": 44,
+   "fields": {
+     "code": "8-J",
+     "label": "Policia Judicial / Ministerial"
+   }
  },
  {
-   "code": "5-Z",
-   "label": "Cardiaco"
+   "model": "ambulance.callradiocode",
+   "pk": 45,
+   "fields": {
+     "code": "8-F",
+     "label": "Policia (Afi) Federal"
+   }
  },
  {
-   "code": "5-BLANCO",
-   "label": "Lesionado en La Via Publica"
+   "model": "ambulance.callradiocode",
+   "pk": 46,
+   "fields": {
+     "code": "8-SN",
+     "label": "Policia Seguridad Nacional"
+   }
  },
  {
-   "code": "5-NEGRO ",
-   "label": "Lesionado en Interior de Inmueble"
+   "model": "ambulance.callradiocode",
+   "pk": 47,
+   "fields": {
+     "code": "8-PA ",
+     "label": "Policia Auxiliar "
+   }
  },
  {
-   "code": "6",
-   "label": "Regresamos Libres "
+   "model": "ambulance.callradiocode",
+   "pk": 48,
+   "fields": {
+     "code": "8-P",
+     "label": "Seguridad Privada"
+   }
  },
  {
-   "code": "6-A",
-   "label": "Dirijase al Lugar de el Incidente"
+   "model": "ambulance.callradiocode",
+   "pk": 49,
+   "fields": {
+     "code": "8-K",
+     "label": "Caseta de Policia "
+   }
  },
  {
-   "code": "7",
-   "label": "En el Lugar / Ya Llegamos"
+   "model": "ambulance.callradiocode",
+   "pk": 50,
+   "fields": {
+     "code": "8-MP",
+     "label": "Ministerio Publico"
+   }
  },
  {
-   "code": "7-A",
-   "label": "Datos, Informe de La Situacion"
+   "model": "ambulance.callradiocode",
+   "pk": 51,
+   "fields": {
+     "code": "9",
+     "label": "Detenido"
+   }
  },
  {
-   "code": "8",
-   "label": "Policia"
+   "model": "ambulance.callradiocode",
+   "pk": 52,
+   "fields": {
+     "code": "10",
+     "label": "Traslado"
+   }
  },
  {
-   "code": "8-A",
-   "label": "Policia Preventivo"
+   "model": "ambulance.callradiocode",
+   "pk": 53,
+   "fields": {
+     "code": "11",
+     "label": "Prensa"
+   }
  },
  {
-   "code": "8-B",
-   "label": "Policia de Transito"
+   "model": "ambulance.callradiocode",
+   "pk": 54,
+   "fields": {
+     "code": "12",
+     "label": "Carretera"
+   }
  },
  {
-   "code": "8-C",
-   "label": "Policia Federal de Caminos "
+   "model": "ambulance.callradiocode",
+   "pk": 55,
+   "fields": {
+     "code": "12-C",
+     "label": "Carretera de Cuota"
+   }
  },
  {
-   "code": "8-J",
-   "label": "Policia Judicial / Ministerial"
+   "model": "ambulance.callradiocode",
+   "pk": 56,
+   "fields": {
+     "code": "12-L",
+     "label": "Carretera Libre"
+   }
  },
  {
-   "code": "8-F",
-   "label": "Policia (Afi) Federal"
+   "model": "ambulance.callradiocode",
+   "pk": 57,
+   "fields": {
+     "code": "13",
+     "label": "Rescate Halcones"
+   }
  },
  {
-   "code": "8-SN",
-   "label": "Policia Seguridad Nacional"
+   "model": "ambulance.callradiocode",
+   "pk": 58,
+   "fields": {
+     "code": "14",
+     "label": "Cadaver / Muerto / Desceso"
+   }
  },
  {
-   "code": "8-PA ",
-   "label": "Policia Auxiliar "
+   "model": "ambulance.callradiocode",
+   "pk": 59,
+   "fields": {
+     "code": "15",
+     "label": "Servicio Especial"
+   }
  },
  {
-   "code": "8-P",
-   "label": "Seguridad Privada"
+   "model": "ambulance.callradiocode",
+   "pk": 60,
+   "fields": {
+     "code": "15-A",
+     "label": "Servicio Administrativo"
+   }
  },
  {
-   "code": "8-K",
-   "label": "Caseta de Policia "
+   "model": "ambulance.callradiocode",
+   "pk": 61,
+   "fields": {
+     "code": "15-B",
+     "label": "Servicio Banco de Sangre"
+   }
  },
  {
-   "code": "8-MP",
-   "label": "Ministerio Publico"
+   "model": "ambulance.callradiocode",
+   "pk": 62,
+   "fields": {
+     "code": "15-C",
+     "label": "Servicio Correspondencia"
+   }
  },
  {
-   "code": "9",
-   "label": "Detenido"
+   "model": "ambulance.callradiocode",
+   "pk": 63,
+   "fields": {
+     "code": "15-D",
+     "label": "Servicio Donativo "
+   }
  },
  {
-   "code": "10",
-   "label": "Traslado"
+   "model": "ambulance.callradiocode",
+   "pk": 64,
+   "fields": {
+     "code": "15-F",
+     "label": "Servicio Colecta"
+   }
  },
  {
-   "code": "11",
-   "label": "Prensa"
+   "model": "ambulance.callradiocode",
+   "pk": 65,
+   "fields": {
+     "code": "15-M",
+     "label": "Servicio de Mantenimiento"
+   }
  },
  {
-   "code": "12",
-   "label": "Carretera"
+   "model": "ambulance.callradiocode",
+   "pk": 66,
+   "fields": {
+     "code": "15-R",
+     "label": "Servicio de Sorteo"
+   }
  },
  {
-   "code": "12-C",
-   "label": "Carretera de Cuota"
+   "model": "ambulance.callradiocode",
+   "pk": 67,
+   "fields": {
+     "code": "16",
+     "label": "Telefono / Llamada Telefonica"
+   }
  },
  {
-   "code": "12-L",
-   "label": "Carretera Libre"
+   "model": "ambulance.callradiocode",
+   "pk": 68,
+   "fields": {
+     "code": "16-A",
+     "label": "Telefono Familiar"
+   }
  },
  {
-   "code": "13",
-   "label": "Rescate Halcones"
+   "model": "ambulance.callradiocode",
+   "pk": 69,
+   "fields": {
+     "code": "16-K",
+     "label": "Caseta Telefonica"
+   }
  },
  {
-   "code": "14",
-   "label": "Cadaver / Muerto / Desceso"
+   "model": "ambulance.callradiocode",
+   "pk": 70,
+   "fields": {
+     "code": "17",
+     "label": "Repita Mensaje"
+   }
  },
  {
-   "code": "15",
-   "label": "Servicio Especial"
+   "model": "ambulance.callradiocode",
+   "pk": 71,
+   "fields": {
+     "code": "18",
+     "label": "Enterado"
+   }
  },
  {
-   "code": "15-A",
-   "label": "Servicio Administrativo"
+   "model": "ambulance.callradiocode",
+   "pk": 72,
+   "fields": {
+     "code": "18-A",
+     "label": "Positivo"
+   }
  },
  {
-   "code": "15-B",
-   "label": "Servicio Banco de Sangre"
+   "model": "ambulance.callradiocode",
+   "pk": 73,
+   "fields": {
+     "code": "19",
+     "label": "Ubicacion / Posicion / Lugar"
+   }
  },
  {
-   "code": "15-C",
-   "label": "Servicio Correspondencia"
+   "model": "ambulance.callradiocode",
+   "pk": 74,
+   "fields": {
+     "code": "19-A",
+     "label": "Domicilio Particular"
+   }
  },
  {
-   "code": "15-D",
-   "label": "Servicio Donativo "
+   "model": "ambulance.callradiocode",
+   "pk": 75,
+   "fields": {
+     "code": "20/20'S",
+     "label": "Persona / Personas"
+   }
  },
  {
-   "code": "15-F",
-   "label": "Servicio Colecta"
+   "model": "ambulance.callradiocode",
+   "pk": 76,
+   "fields": {
+     "code": "21",
+     "label": "Agua"
+   }
  },
  {
-   "code": "15-M",
-   "label": "Servicio de Mantenimiento"
+   "model": "ambulance.callradiocode",
+   "pk": 77,
+   "fields": {
+     "code": "21-A",
+     "label": "Alimentos"
+   }
  },
  {
-   "code": "15-R",
-   "label": "Servicio de Sorteo"
+   "model": "ambulance.callradiocode",
+   "pk": 78,
+   "fields": {
+     "code": "21-D",
+     "label": "Diesel / Abastecer"
+   }
  },
  {
-   "code": "16",
-   "label": "Telefono / Llamada Telefonica"
+   "model": "ambulance.callradiocode",
+   "pk": 79,
+   "fields": {
+     "code": "21-G",
+     "label": "Gasolina Abastecer"
+   }
  },
  {
-   "code": "16-A",
-   "label": "Telefono Familiar"
+   "model": "ambulance.callradiocode",
+   "pk": 80,
+   "fields": {
+     "code": "22",
+     "label": "Falsa Alarma"
+   }
  },
  {
-   "code": "16-K",
-   "label": "Caseta Telefonica"
+   "model": "ambulance.callradiocode",
+   "pk": 81,
+   "fields": {
+     "code": "22-A",
+     "label": "No Amerita Traslado"
+   }
  },
  {
-   "code": "17",
-   "label": "Repita Mensaje"
+   "model": "ambulance.callradiocode",
+   "pk": 82,
+   "fields": {
+     "code": "22-B",
+     "label": "No Se Localizo Lesionado,Herido"
+   }
  },
  {
-   "code": "18",
-   "label": "Enterado"
+   "model": "ambulance.callradiocode",
+   "pk": 83,
+   "fields": {
+     "code": "22-C",
+     "label": "Niega Atencion-Traslado"
+   }
  },
  {
-   "code": "18-A",
-   "label": "Positivo"
+   "model": "ambulance.callradiocode",
+   "pk": 84,
+   "fields": {
+     "code": "23",
+     "label": "Rescate "
+   }
  },
  {
-   "code": "19",
-   "label": "Ubicacion / Posicion / Lugar"
+   "model": "ambulance.callradiocode",
+   "pk": 85,
+   "fields": {
+     "code": "23-A",
+     "label": "Rescate Acuatico"
+   }
  },
  {
-   "code": "19-A",
-   "label": "Domicilio Particular"
+   "model": "ambulance.callradiocode",
+   "pk": 86,
+   "fields": {
+     "code": "23-B",
+     "label": "Rescate en Barranco"
+   }
  },
  {
-   "code": "20/20'S",
-   "label": "Persona / Personas"
+   "model": "ambulance.callradiocode",
+   "pk": 87,
+   "fields": {
+     "code": "23-M",
+     "label": "Rescate de Montaña"
+   }
  },
  {
-   "code": "21",
-   "label": "Agua"
+   "model": "ambulance.callradiocode",
+   "pk": 88,
+   "fields": {
+     "code": "23-P",
+     "label": "Rescate Paracaidismo"
+   }
  },
  {
-   "code": "21-A",
-   "label": "Alimentos"
+   "model": "ambulance.callradiocode",
+   "pk": 89,
+   "fields": {
+     "code": "23-E",
+     "label": "Rescate en Elevador"
+   }
  },
  {
-   "code": "21-D",
-   "label": "Diesel / Abastecer"
+   "model": "ambulance.callradiocode",
+   "pk": 90,
+   "fields": {
+     "code": "24",
+     "label": "Ferrocarril"
+   }
  },
  {
-   "code": "21-G",
-   "label": "Gasolina Abastecer"
+   "model": "ambulance.callradiocode",
+   "pk": 91,
+   "fields": {
+     "code": "24-B",
+     "label": "Estacion de Ferrocarril"
+   }
  },
  {
-   "code": "22",
-   "label": "Falsa Alarma"
+   "model": "ambulance.callradiocode",
+   "pk": 92,
+   "fields": {
+     "code": "24-M",
+     "label": "Estacion del Metro"
+   }
  },
  {
-   "code": "22-A",
-   "label": "No Amerita Traslado"
+   "model": "ambulance.callradiocode",
+   "pk": 93,
+   "fields": {
+     "code": "25",
+     "label": "Accidente Aereo"
+   }
  },
  {
-   "code": "22-B",
-   "label": "No Se Localizo Lesionado,Herido"
+   "model": "ambulance.callradiocode",
+   "pk": 94,
+   "fields": {
+     "code": "25-A",
+     "label": "Aeropuerto Internacional"
+   }
  },
  {
-   "code": "22-C",
-   "label": "Niega Atencion-Traslado"
+   "model": "ambulance.callradiocode",
+   "pk": 95,
+   "fields": {
+     "code": "25-B",
+     "label": "Avion de Pasajeros "
+   }
  },
  {
-   "code": "23",
-   "label": "Rescate "
+   "model": "ambulance.callradiocode",
+   "pk": 96,
+   "fields": {
+     "code": "25-C",
+     "label": "Avioneta"
+   }
  },
  {
-   "code": "23-A",
-   "label": "Rescate Acuatico"
+   "model": "ambulance.callradiocode",
+   "pk": 97,
+   "fields": {
+     "code": "25-X",
+     "label": "Base Aerea Militar"
+   }
  },
  {
-   "code": "23-B",
-   "label": "Rescate en Barranco"
+   "model": "ambulance.callradiocode",
+   "pk": 98,
+   "fields": {
+     "code": "26",
+     "label": "Vehiculo"
+   }
  },
  {
-   "code": "23-M",
-   "label": "Rescate de Montaña"
+   "model": "ambulance.callradiocode",
+   "pk": 99,
+   "fields": {
+     "code": "26-A",
+     "label": "Vehiculo Particular "
+   }
  },
  {
-   "code": "23-P",
-   "label": "Rescate Paracaidismo"
+   "model": "ambulance.callradiocode",
+   "pk": 100,
+   "fields": {
+     "code": "26-B",
+     "label": "Autobus de Pasajeros "
+   }
  },
  {
-   "code": "23-E",
-   "label": "Rescate en Elevador"
+   "model": "ambulance.callradiocode",
+   "pk": 101,
+   "fields": {
+     "code": "26-C",
+     "label": "Camion de Carga"
+   }
  },
  {
-   "code": "24",
-   "label": "Ferrocarril"
+   "model": "ambulance.callradiocode",
+   "pk": 102,
+   "fields": {
+     "code": "26-E",
+     "label": "Autobus Escolar"
+   }
  },
  {
-   "code": "24-B",
-   "label": "Estacion de Ferrocarril"
+   "model": "ambulance.callradiocode",
+   "pk": 103,
+   "fields": {
+     "code": "26-G",
+     "label": "Grua"
+   }
  },
  {
-   "code": "24-M",
-   "label": "Estacion del Metro"
+   "model": "ambulance.callradiocode",
+   "pk": 104,
+   "fields": {
+     "code": "26-L",
+     "label": "Trolebus"
+   }
  },
  {
-   "code": "25",
-   "label": "Accidente Aereo"
+   "model": "ambulance.callradiocode",
+   "pk": 105,
+   "fields": {
+     "code": "26-M",
+     "label": "Motocicleta"
+   }
  },
  {
-   "code": "25-A",
-   "label": "Aeropuerto Internacional"
+   "model": "ambulance.callradiocode",
+   "pk": 106,
+   "fields": {
+     "code": "26-P",
+     "label": "Camion Sisterna / Pipa"
+   }
  },
  {
-   "code": "25-B",
-   "label": "Avion de Pasajeros "
+   "model": "ambulance.callradiocode",
+   "pk": 107,
+   "fields": {
+     "code": "26-T",
+     "label": "Tractocamion / Trailer"
+   }
  },
  {
-   "code": "25-C",
-   "label": "Avioneta"
+   "model": "ambulance.callradiocode",
+   "pk": 108,
+   "fields": {
+     "code": "26-W",
+     "label": "Camioneta"
+   }
  },
  {
-   "code": "25-X",
-   "label": "Base Aerea Militar"
+   "model": "ambulance.callradiocode",
+   "pk": 109,
+   "fields": {
+     "code": "26-X",
+     "label": "Vehiculo Militar"
+   }
  },
  {
-   "code": "26",
-   "label": "Vehiculo"
+   "model": "ambulance.callradiocode",
+   "pk": 110,
+   "fields": {
+     "code": "26-Y",
+     "label": "Bicicleta"
+   }
  },
  {
-   "code": "26-A",
-   "label": "Vehiculo Particular "
+   "model": "ambulance.callradiocode",
+   "pk": 111,
+   "fields": {
+     "code": "27",
+     "label": "Choque"
+   }
  },
  {
-   "code": "26-B",
-   "label": "Autobus de Pasajeros "
+   "model": "ambulance.callradiocode",
+   "pk": 112,
+   "fields": {
+     "code": "27-A",
+     "label": "Volcadura"
+   }
  },
  {
-   "code": "26-C",
-   "label": "Camion de Carga"
+   "model": "ambulance.callradiocode",
+   "pk": 113,
+   "fields": {
+     "code": "27-M",
+     "label": "Choque Multiple"
+   }
  },
  {
-   "code": "26-E",
-   "label": "Autobus Escolar"
+   "model": "ambulance.callradiocode",
+   "pk": 114,
+   "fields": {
+     "code": "28/28'S",
+     "label": "Persona-S Prensada-S / Atrapada-S"
+   }
  },
  {
-   "code": "26-G",
-   "label": "Grua"
+   "model": "ambulance.callradiocode",
+   "pk": 115,
+   "fields": {
+     "code": "29",
+     "label": "Jefe de Servicio / Jefe De..."
+   }
  },
  {
-   "code": "26-L",
-   "label": "Trolebus"
+   "model": "ambulance.callradiocode",
+   "pk": 116,
+   "fields": {
+     "code": "29-A",
+     "label": "Oficial"
+   }
  },
  {
-   "code": "26-M",
-   "label": "Motocicleta"
+   "model": "ambulance.callradiocode",
+   "pk": 117,
+   "fields": {
+     "code": "30",
+     "label": "Jefe de Transito"
+   }
  },
  {
-   "code": "26-P",
-   "label": "Camion Sisterna / Pipa"
+   "model": "ambulance.callradiocode",
+   "pk": 118,
+   "fields": {
+     "code": "31",
+     "label": "Pendiente / Listos"
+   }
  },
  {
-   "code": "26-T",
-   "label": "Tractocamion / Trailer"
+   "model": "ambulance.callradiocode",
+   "pk": 119,
+   "fields": {
+     "code": "32",
+     "label": "Convoy "
+   }
  },
  {
-   "code": "26-W",
-   "label": "Camioneta"
+   "model": "ambulance.callradiocode",
+   "pk": 120,
+   "fields": {
+     "code": "33",
+     "label": "Adelante / Transmita"
+   }
  },
  {
-   "code": "26-X",
-   "label": "Vehiculo Militar"
+   "model": "ambulance.callradiocode",
+   "pk": 121,
+   "fields": {
+     "code": "34",
+     "label": "Tum / Socorrista"
+   }
  },
  {
-   "code": "26-Y",
-   "label": "Bicicleta"
+   "model": "ambulance.callradiocode",
+   "pk": 122,
+   "fields": {
+     "code": "34-E",
+     "label": "Enfermera"
+   }
  },
  {
-   "code": "27",
-   "label": "Choque"
+   "model": "ambulance.callradiocode",
+   "pk": 123,
+   "fields": {
+     "code": "34-F",
+     "label": "Tum / Socorrista Femenil"
+   }
  },
  {
-   "code": "27-A",
-   "label": "Volcadura"
+   "model": "ambulance.callradiocode",
+   "pk": 124,
+   "fields": {
+     "code": "34-M",
+     "label": "Medico"
+   }
  },
  {
-   "code": "27-M",
-   "label": "Choque Multiple"
+   "model": "ambulance.callradiocode",
+   "pk": 125,
+   "fields": {
+     "code": "35",
+     "label": "Proximo al Hospital o Clinica"
+   }
  },
  {
-   "code": "28/28'S",
-   "label": "Persona-S Prensada-S / Atrapada-S"
+   "model": "ambulance.callradiocode",
+   "pk": 126,
+   "fields": {
+     "code": "36",
+     "label": "Datos del Servicio"
+   }
  },
  {
-   "code": "29",
-   "label": "Jefe de Servicio / Jefe De..."
+   "model": "ambulance.callradiocode",
+   "pk": 127,
+   "fields": {
+     "code": "36-A",
+     "label": "Informe Y/O Proporcione Datos"
+   }
  },
  {
-   "code": "29-A",
-   "label": "Oficial"
+   "model": "ambulance.callradiocode",
+   "pk": 128,
+   "fields": {
+     "code": "37",
+     "label": "Contacto o Reunion"
+   }
  },
  {
-   "code": "30",
-   "label": "Jefe de Transito"
+   "model": "ambulance.callradiocode",
+   "pk": 129,
+   "fields": {
+     "code": "38",
+     "label": "Servicio Cancelado"
+   }
  },
  {
-   "code": "31",
-   "label": "Pendiente / Listos"
+   "model": "ambulance.callradiocode",
+   "pk": 130,
+   "fields": {
+     "code": "38-A",
+     "label": "Negativo "
+   }
  },
  {
-   "code": "32",
-   "label": "Convoy "
+   "model": "ambulance.callradiocode",
+   "pk": 131,
+   "fields": {
+     "code": "39",
+     "label": "Orden"
+   }
  },
  {
-   "code": "33",
-   "label": "Adelante / Transmita"
+   "model": "ambulance.callradiocode",
+   "pk": 132,
+   "fields": {
+     "code": "40",
+     "label": "Atropellado"
+   }
  },
  {
-   "code": "34",
-   "label": "Tum / Socorrista"
+   "model": "ambulance.callradiocode",
+   "pk": 133,
+   "fields": {
+     "code": "41",
+     "label": "Helicoptero"
+   }
  },
  {
-   "code": "34-E",
-   "label": "Enfermera"
+   "model": "ambulance.callradiocode",
+   "pk": 134,
+   "fields": {
+     "code": "42",
+     "label": "Director General"
+   }
  },
  {
-   "code": "34-F",
-   "label": "Tum / Socorrista Femenil"
+   "model": "ambulance.callradiocode",
+   "pk": 135,
+   "fields": {
+     "code": "42-A",
+     "label": "Director Administrativo"
+   }
  },
  {
-   "code": "34-M",
-   "label": "Medico"
+   "model": "ambulance.callradiocode",
+   "pk": 136,
+   "fields": {
+     "code": "42-M",
+     "label": "Director Medico"
+   }
  },
  {
-   "code": "35",
-   "label": "Proximo al Hospital o Clinica"
+   "model": "ambulance.callradiocode",
+   "pk": 137,
+   "fields": {
+     "code": "43",
+     "label": "Hay Otro Servicio Cerca"
+   }
  },
  {
-   "code": "36",
-   "label": "Datos del Servicio"
+   "model": "ambulance.callradiocode",
+   "pk": 138,
+   "fields": {
+     "code": "44",
+     "label": "Persona Ebria "
+   }
  },
  {
-   "code": "36-A",
-   "label": "Informe Y/O Proporcione Datos"
+   "model": "ambulance.callradiocode",
+   "pk": 139,
+   "fields": {
+     "code": "44-D",
+     "label": "Persona Drogada"
+   }
  },
  {
-   "code": "37",
-   "label": "Contacto o Reunion"
+   "model": "ambulance.callradiocode",
+   "pk": 140,
+   "fields": {
+     "code": "44-E",
+     "label": "Persona Enferma"
+   }
  },
  {
-   "code": "38",
-   "label": "Servicio Cancelado"
+   "model": "ambulance.callradiocode",
+   "pk": 141,
+   "fields": {
+     "code": "44-H",
+     "label": "Persona Alcoholica"
+   }
  },
  {
-   "code": "38-A",
-   "label": "Negativo "
+   "model": "ambulance.callradiocode",
+   "pk": 142,
+   "fields": {
+     "code": "44-I",
+     "label": "Persona Indigente"
+   }
  },
  {
-   "code": "39",
-   "label": "Orden"
+   "model": "ambulance.callradiocode",
+   "pk": 143,
+   "fields": {
+     "code": "44-N",
+     "label": "Persona con Crisis Nerviosa"
+   }
  },
  {
-   "code": "40",
-   "label": "Atropellado"
+   "model": "ambulance.callradiocode",
+   "pk": 144,
+   "fields": {
+     "code": "44-T",
+     "label": "Persona con Tuberculosis"
+   }
  },
  {
-   "code": "41",
-   "label": "Helicoptero"
+   "model": "ambulance.callradiocode",
+   "pk": 145,
+   "fields": {
+     "code": "45",
+     "label": "Hospital"
+   }
  },
  {
-   "code": "42",
-   "label": "Director General"
+   "model": "ambulance.callradiocode",
+   "pk": 146,
+   "fields": {
+     "code": "45-N",
+     "label": "Hospital Naval"
+   }
  },
  {
-   "code": "42-A",
-   "label": "Director Administrativo"
+   "model": "ambulance.callradiocode",
+   "pk": 147,
+   "fields": {
+     "code": "45-P",
+     "label": "Hospital Privado"
+   }
  },
  {
-   "code": "42-M",
-   "label": "Director Medico"
+   "model": "ambulance.callradiocode",
+   "pk": 148,
+   "fields": {
+     "code": "45-X",
+     "label": "Hospital Militar "
+   }
  },
  {
-   "code": "43",
-   "label": "Hay Otro Servicio Cerca"
+   "model": "ambulance.callradiocode",
+   "pk": 149,
+   "fields": {
+     "code": "46",
+     "label": "Sirena"
+   }
  },
  {
-   "code": "44",
-   "label": "Persona Ebria "
+   "model": "ambulance.callradiocode",
+   "pk": 150,
+   "fields": {
+     "code": "47",
+     "label": "Descompostura"
+   }
  },
  {
-   "code": "44-D",
-   "label": "Persona Drogada"
+   "model": "ambulance.callradiocode",
+   "pk": 151,
+   "fields": {
+     "code": "48",
+     "label": "Hospital Cerrado"
+   }
  },
  {
-   "code": "44-E",
-   "label": "Persona Enferma"
+   "model": "ambulance.callradiocode",
+   "pk": 152,
+   "fields": {
+     "code": "49",
+     "label": "Parto"
+   }
  },
  {
-   "code": "44-H",
-   "label": "Persona Alcoholica"
+   "model": "ambulance.callradiocode",
+   "pk": 153,
+   "fields": {
+     "code": "49-A",
+     "label": "Hemorragia / Aborto"
+   }
  },
  {
-   "code": "44-I",
-   "label": "Persona Indigente"
+   "model": "ambulance.callradiocode",
+   "pk": 154,
+   "fields": {
+     "code": "50",
+     "label": "Llamada General"
+   }
  },
  {
-   "code": "44-N",
-   "label": "Persona con Crisis Nerviosa"
+   "model": "ambulance.callradiocode",
+   "pk": 155,
+   "fields": {
+     "code": "51",
+     "label": "Cambio de Canal"
+   }
  },
  {
-   "code": "44-T",
-   "label": "Persona con Tuberculosis"
+   "model": "ambulance.callradiocode",
+   "pk": 156,
+   "fields": {
+     "code": "51-R",
+     "label": "Radio / Revisando Radio"
+   }
  },
  {
-   "code": "45",
-   "label": "Hospital"
+   "model": "ambulance.callradiocode",
+   "pk": 157,
+   "fields": {
+     "code": "52",
+     "label": "Investigar en el Lugar "
+   }
  },
  {
-   "code": "45-N",
-   "label": "Hospital Naval"
+   "model": "ambulance.callradiocode",
+   "pk": 158,
+   "fields": {
+     "code": "52-A",
+     "label": "Proporcione Datos del Lugar"
+   }
  },
  {
-   "code": "45-P",
-   "label": "Hospital Privado"
+   "model": "ambulance.callradiocode",
+   "pk": 159,
+   "fields": {
+     "code": "52-B",
+     "label": "Servicio Efectivo"
+   }
  },
  {
-   "code": "45-X",
-   "label": "Hospital Militar "
+   "model": "ambulance.callradiocode",
+   "pk": 160,
+   "fields": {
+     "code": "53",
+     "label": "Congestionamiento Vehicular"
+   }
  },
  {
-   "code": "46",
-   "label": "Sirena"
+   "model": "ambulance.callradiocode",
+   "pk": 161,
+   "fields": {
+     "code": "54",
+     "label": "Manifestacion"
+   }
  },
  {
-   "code": "47",
-   "label": "Descompostura"
+   "model": "ambulance.callradiocode",
+   "pk": 162,
+   "fields": {
+     "code": "55",
+     "label": "Asalto"
+   }
  },
  {
-   "code": "48",
-   "label": "Hospital Cerrado"
+   "model": "ambulance.callradiocode",
+   "pk": 163,
+   "fields": {
+     "code": "55-B",
+     "label": "Balazos / Balacera"
+   }
  },
  {
-   "code": "49",
-   "label": "Parto"
+   "model": "ambulance.callradiocode",
+   "pk": 164,
+   "fields": {
+     "code": "55-R",
+     "label": "Robo"
+   }
  },
  {
-   "code": "49-A",
-   "label": "Hemorragia / Aborto"
+   "model": "ambulance.callradiocode",
+   "pk": 165,
+   "fields": {
+     "code": "55-S",
+     "label": "Secuestro"
+   }
  },
  {
-   "code": "50",
-   "label": "Llamada General"
+   "model": "ambulance.callradiocode",
+   "pk": 166,
+   "fields": {
+     "code": "56",
+     "label": "Acc. con Muertos y Heridos"
+   }
  },
  {
-   "code": "51",
-   "label": "Cambio de Canal"
+   "model": "ambulance.callradiocode",
+   "pk": 167,
+   "fields": {
+     "code": "56-A",
+     "label": "Reportan Varios Lesionados"
+   }
  },
  {
-   "code": "51-R",
-   "label": "Radio / Revisando Radio"
+   "model": "ambulance.callradiocode",
+   "pk": 168,
+   "fields": {
+     "code": "57",
+     "label": "Choque Contra Ferrocarril"
+   }
  },
  {
-   "code": "52",
-   "label": "Investigar en el Lugar "
+   "model": "ambulance.callradiocode",
+   "pk": 169,
+   "fields": {
+     "code": "58",
+     "label": "Hospital de CRM / Base De..."
+   }
  },
  {
-   "code": "52-A",
-   "label": "Proporcione Datos del Lugar"
+   "model": "ambulance.callradiocode",
+   "pk": 170,
+   "fields": {
+     "code": "59",
+     "label": "Relevo"
+   }
  },
  {
-   "code": "52-B",
-   "label": "Servicio Efectivo"
+   "model": "ambulance.callradiocode",
+   "pk": 171,
+   "fields": {
+     "code": "60",
+     "label": "Todas Las Ambulancias al Lugar"
+   }
  },
  {
-   "code": "53",
-   "label": "Congestionamiento Vehicular"
+   "model": "ambulance.callradiocode",
+   "pk": 172,
+   "fields": {
+     "code": "61",
+     "label": "Todos los Heridos Traslado a 58"
+   }
  },
  {
-   "code": "54",
-   "label": "Manifestacion"
+   "model": "ambulance.callradiocode",
+   "pk": 173,
+   "fields": {
+     "code": "62",
+     "label": "Urgencia en Silencio"
+   }
  },
  {
-   "code": "55",
-   "label": "Asalto"
+   "model": "ambulance.callradiocode",
+   "pk": 174,
+   "fields": {
+     "code": "63",
+     "label": "Urgencia en Brevedad "
+   }
  },
  {
-   "code": "55-B",
-   "label": "Balazos / Balacera"
+   "model": "ambulance.callradiocode",
+   "pk": 175,
+   "fields": {
+     "code": "64",
+     "label": "Mas Ambulancias al Lugar "
+   }
  },
  {
-   "code": "55-R",
-   "label": "Robo"
+   "model": "ambulance.callradiocode",
+   "pk": 176,
+   "fields": {
+     "code": "65",
+     "label": "Helicoptero al Lugar del Acci."
+   }
  },
  {
-   "code": "55-S",
-   "label": "Secuestro"
+   "model": "ambulance.callradiocode",
+   "pk": 177,
+   "fields": {
+     "code": "66",
+     "label": "Va Ambulancia de Rescate "
+   }
  },
  {
-   "code": "56",
-   "label": "Acc. con Muertos y Heridos"
+   "model": "ambulance.callradiocode",
+   "pk": 178,
+   "fields": {
+     "code": "66-A",
+     "label": "Radio de Policia"
+   }
  },
  {
-   "code": "56-A",
-   "label": "Reportan Varios Lesionados"
+   "model": "ambulance.callradiocode",
+   "pk": 179,
+   "fields": {
+     "code": "66-B",
+     "label": "Acerquese al Lugar y 31"
+   }
  },
  {
-   "code": "57",
-   "label": "Choque Contra Ferrocarril"
- },
- {
-   "code": "58",
-   "label": "Hospital de CRM / Base De..."
- },
- {
-   "code": "59",
-   "label": "Relevo"
- },
- {
-   "code": "60",
-   "label": "Todas Las Ambulancias al Lugar"
- },
- {
-   "code": "61",
-   "label": "Todos los Heridos Traslado a 58"
- },
- {
-   "code": "62",
-   "label": "Urgencia en Silencio"
- },
- {
-   "code": "63",
-   "label": "Urgencia en Brevedad "
- },
- {
-   "code": "64",
-   "label": "Mas Ambulancias al Lugar "
- },
- {
-   "code": "65",
-   "label": "Helicoptero al Lugar del Acci."
- },
- {
-   "code": "66",
-   "label": "Va Ambulancia de Rescate "
- },
- {
-   "code": "66-A",
-   "label": "Radio de Policia"
- },
- {
-   "code": "66-B",
-   "label": "Acerquese al Lugar y 31"
- },
- {
-   "code": "67",
-   "label": "Fuera del Aire o Apagar Radio"
- },
- {
-   "code": "68",
-   "label": "Servicio Falso / No Acudir"
- },
- {
-   "code": "69",
-   "label": "Zona de Desastre"
- },
- {
-   "code": "70",
-   "label": "Derrumbe con Persona Atrapada"
- },
- {
-   "code": "80",
-   "label": "Conyugue "
- },
- {
-   "code": "71",
-   "label": "Lesiones y Signos Vitales "
- },
- {
-   "code": "72",
-   "label": "Cuarto Rojo"
- },
- {
-   "code": "73",
-   "label": "Ambulancia con Equipo de Rescate"
- },
- {
-   "code": "74",
-   "label": "Ambulancia Paramedica"
- },
- {
-   "code": "75",
-   "label": "Paramedico"
- },
- {
-   "code": "79",
-   "label": "Rescate Tijuana"
- },
- {
-   "code": "99",
-   "label": "Ayuda / Auxilio"
- },
- {
-   "code": "100",
-   "label": "Auxilio Urgente Ambulancia y/o Personal en Peligro."
+   "model": "ambulance.callradiocode",
+   "pk": 180,
+   "fields": {
+     "code": "67",
+     "label": "Fuera del Aire o Apagar Radio"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 181,
+   "fields": {
+     "code": "68",
+     "label": "Servicio Falso / No Acudir"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 182,
+   "fields": {
+     "code": "69",
+     "label": "Zona de Desastre"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 183,
+   "fields": {
+     "code": "70",
+     "label": "Derrumbe con Persona Atrapada"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 184,
+   "fields": {
+     "code": "80",
+     "label": "Conyugue "
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 185,
+   "fields": {
+     "code": "71",
+     "label": "Lesiones y Signos Vitales "
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 186,
+   "fields": {
+     "code": "72",
+     "label": "Cuarto Rojo"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 187,
+   "fields": {
+     "code": "73",
+     "label": "Ambulancia con Equipo de Rescate"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 188,
+   "fields": {
+     "code": "74",
+     "label": "Ambulancia Paramedica"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 189,
+   "fields": {
+     "code": "75",
+     "label": "Paramedico"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 190,
+   "fields": {
+     "code": "79",
+     "label": "Rescate Tijuana"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 191,
+   "fields": {
+     "code": "99",
+     "label": "Ayuda / Auxilio"
+   }
+ },
+ {
+   "model": "ambulance.callradiocode",
+   "pk": 192,
+   "fields": {
+     "code": "100",
+     "label": "Auxilio Urgente Ambulancia y/o Personal en Peligro."
+   }
  },
 ]

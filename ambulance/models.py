@@ -360,7 +360,7 @@ CallStatusOrder = [
 ]
 
 
-class CallRadioCodes(models.Model):
+class CallRadioCode(models.Model):
 
     # code
     code = models.CharField(_('code'), max_length=10)
@@ -386,7 +386,8 @@ class Call(PublishMixin,
                                 default=CallPriority.E.name)
 
     # radio code
-    radio_code = models.ForeignKey(CallRadioCodes,
+    radio_code = models.ForeignKey(CallRadioCode,
+                                   null=True,
                                    on_delete=models.CASCADE,
                                    verbose_name=_('radio_code'))
 
