@@ -216,7 +216,7 @@
                        placeholder="{% trans "Radio Code" %}">
                 <datalist id="radio-code-list">
                     {% for code in radio_code_list %}
-                    <option value="{{ code.code }}">{{ code.label }}</option>
+                    <option id="radio-code-{{ code.id }}" value="{{ code.code }}">{{ code.label }}</option>
                     {% endfor %}
                 </datalist>
 
