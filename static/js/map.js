@@ -2059,6 +2059,14 @@ $(function() {
 
     });
 
+    $('#mpds-code-input').on('input', function() {
+        var option = $('option[value="'+$(this).val()+'"]');
+        if (option.length)
+            $('#mpds-code').html(option.html());
+        else
+            $('#mpds-code').html('');
+    })
+
     $('#radio-code-input').on('input', function() {
         var option = $('option[value="'+$(this).val()+'"]');
         if (option.length)
