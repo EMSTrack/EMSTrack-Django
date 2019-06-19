@@ -216,7 +216,7 @@
                        placeholder="{% trans "MPDS Code" %}">
                 <datalist id="mpds-code-list">
                     {% for code in mpds_code_list %}
-                    <option id="mpds-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
+                    <option id="mpds-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.prefix.label }}: {{ code.label }}</option>
                     {% endfor %}
                 </datalist>
 
