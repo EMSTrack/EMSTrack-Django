@@ -2061,7 +2061,10 @@ $(function() {
 
     $('#radio-code-input').on('input', function() {
         var option = $('option[value="'+$(this).val()+'"]');
-        $('#radio-code').html(option.html());
+        if (option.length)
+            $('#radio-code').html(option.html());
+        else
+            $('#radio-code').html('');
     })
 
 });
