@@ -31,7 +31,7 @@
         "pk": 5,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Dolor de espalda (no traum\u00c3\u00a1tico)"
+            "label": "Dolor de espalda (no traumático)"
         }
     },
     {
@@ -45,14 +45,14 @@
         "pk": 7,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Quemaduras / Explosi\u00c3\u00b3n"
+            "label": "Quemaduras / Explosión"
         }
     },
     {
         "pk": 8,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Mon\u00c3\u00b3xido de Carbono / Inhalaci\u00c3\u00b3n / Material peligroso / QBRN"
+            "label": "Monóxido de Carbono / Inhalación / Material peligroso / QBRN"
         }
     },
     {
@@ -66,7 +66,7 @@
         "pk": 10,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Dolor de pecho (no traum\u00c3\u00a1tico)"
+            "label": "Dolor de pecho (no traumático)"
         }
     },
     {
@@ -87,21 +87,21 @@
         "pk": 13,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Problemas diab\u00c3\u00a9ticos"
+            "label": "Problemas diabéticos"
         }
     },
     {
         "pk": 14,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Ahogo acu\u00c3\u00a1tico (casi) / accidente de zambullida / buceo (scuba)"
+            "label": "Ahogo acuático (casi) / accidente de zambullida / buceo (scuba)"
         }
     },
     {
         "pk": 15,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Electrocuci\u00c3\u00b3n / rayo"
+            "label": "Electrocución / rayo"
         }
     },
     {
@@ -115,7 +115,7 @@
         "pk": 17,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Ca\u00c3\u00addas"
+            "label": "Caídas"
         }
     },
     {
@@ -136,7 +136,7 @@
         "pk": 20,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Exposici\u00c3\u00b3n al calor / fr\u00c3\u00ado"
+            "label": "Exposición al calor / frío"
         }
     },
     {
@@ -157,35 +157,35 @@
         "pk": 23,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Sobredosis / Envenenamiento (ingesti\u00c3\u00b3n)"
+            "label": "Sobredosis / Envenenamiento (ingestión)"
         }
     },
     {
         "pk": 24,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Embarazo / parto / aborto espont\u00c3\u00a1neo"
+            "label": "Embarazo / parto / aborto espontáneo"
         }
     },
     {
         "pk": 25,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Problemas psiqui\u00c3\u00a1tricos / comportamiento anormal / intento de suicidio"
+            "label": "Problemas psiquiátricos / comportamiento anormal / intento de suicidio"
         }
     },
     {
         "pk": 26,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Persona enferma (diagn\u00c3\u00b3stico espec\u00c3\u00adfico)"
+            "label": "Persona enferma (diagnóstico específico)"
         }
     },
     {
         "pk": 27,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Pu\u00c3\u00b1alada / Heridas de bala / trauma penetrante"
+            "label": "Puñalada / Heridas de bala / trauma penetrante"
         }
     },
     {
@@ -199,14 +199,14 @@
         "pk": 29,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Incidentes de tr\u00c3\u00a1fico / transporte"
+            "label": "Incidentes de tráfico / transporte"
         }
     },
     {
         "pk": 30,
         "model": "ambulance.callmpdsclassification",
         "fields": {
-            "label": "Lesiones traum\u00c3\u00a1ticas (espec\u00c3\u00adficas)"
+            "label": "Lesiones traumáticas (específicas)"
         }
     },
     {
