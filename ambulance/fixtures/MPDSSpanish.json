@@ -1,0 +1,4152 @@
+[
+    {
+        "pk": 1,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "C",
+            "suffix": 1,
+            "label": "SOSPECHA de aneurisma a\u00c3\u00b3rtico (Dolor desgarrador /despedazador) >=50"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Aneurisma a\u00c3\u00b3rtico identificado"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Desmayo o casi desmayo >= 50 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Desmayo o casi desmayo en mujeres 12-50 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Hombres con dolor arriba de ombligo >= 35 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "C",
+            "suffix": 6,
+            "label": "Mujeres con dolor arriba del ombligo >= 45 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 1,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Dolor abdominal"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "E",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n ineficaz"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Dificultad para hablar entre respiraciones"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Ataque de enjambre (abeja, avispa, avispon) o alacran"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Morderura de serpiente"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Dificultad para respirar o tragar"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Historial de reacci\u00c3\u00b3n al\u00c3\u00a9rgica severa"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "A",
+            "suffix": 1,
+            "label": "No existe dificultad para respirar o tragar (posibilidad de sarpullido, ronchas o picazon)"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 2,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Picadura de ara\u00c3\u00b1a"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Lesi\u00c3\u00b3n de pecho o cuello (con dificultad para respirar)"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 4,
+            "label": "\u00c3\u0081rea corporal peligrosa"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Animal grande"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 6,
+            "label": "Animal ex\u00c3\u00b3tico"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "D",
+            "suffix": 7,
+            "label": "Ataque o varios animales"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "B",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "A",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Heridas (lesiones) NO RECIENTES (>= 6 Hrs) ( sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 31,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 3,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Mordeduras SUPERFICIALES"
+        }
+    },
+    {
+        "pk": 32,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Lesi\u00c3\u00b3n de pecho o cuello (con dificultad para respirar)"
+        }
+    },
+    {
+        "pk": 35,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Varias v\u00c3\u00adctimas"
+        }
+    },
+    {
+        "pk": 36,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "B",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+        }
+    },
+    {
+        "pk": 37,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 38,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 39,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "A",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+        }
+    },
+    {
+        "pk": 40,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 4,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Heridas (lesiones) NO RECIENTES (>= 6 Hrs) ( sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 41,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 5,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 42,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 5,
+            "priority": "C",
+            "suffix": 1,
+            "label": "SOSPECHA de aneurisma a\u00c3\u00b3rtico (Dolor desgarrador /despedazador) >=50"
+        }
+    },
+    {
+        "pk": 43,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 5,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Aneurisma a\u00c3\u00b3rtico identificado"
+        }
+    },
+    {
+        "pk": 44,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 5,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Desmayo o casi desmayo >= 50 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 45,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 5,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Dolor de espalda NO TRAUM\u00c3\u0081TICO"
+        }
+    },
+    {
+        "pk": 46,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 5,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Dolor de espalda NO RECIENTE  (>= 6 Hrs) ( sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 47,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 6,
+            "priority": "E",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n ineficaz"
+        }
+    },
+    {
+        "pk": 48,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 6,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 49,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 6,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Dificultad para hablar entre respiraciones"
+        }
+    },
+    {
+        "pk": 50,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 6,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Cambio de color"
+        }
+    },
+    {
+        "pk": 51,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 6,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Sudor Fr\u00c3\u00ado"
+        }
+    },
+    {
+        "pk": 52,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 6,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 53,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Varias v\u00c3\u00adctimas"
+        }
+    },
+    {
+        "pk": 54,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 55,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "D",
+            "suffix": 3,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 56,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Dificultad para hablar entre respiraciones"
+        }
+    },
+    {
+        "pk": 57,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Incendio de edificio con personas dentro"
+        }
+    },
+    {
+        "pk": 58,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Dificultad para repirar"
+        }
+    },
+    {
+        "pk": 59,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Quemaduras >=18% del area corporal"
+        }
+    },
+    {
+        "pk": 60,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Quemaduras faciales significativas"
+        }
+    },
+    {
+        "pk": 61,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Lesiones por explosi\u00c3\u00b3n (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 62,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 63,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Quemaduras <18% del area corporal"
+        }
+    },
+    {
+        "pk": 64,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Alarma de incendio (situacion desconocida)"
+        }
+    },
+    {
+        "pk": 65,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 7,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Quemaduras solares o leves (menor del tama\u00c3\u00b1o de una mano)"
+        }
+    },
+    {
+        "pk": 66,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 67,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 68,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Dificultad para hablar entre respiraciones"
+        }
+    },
+    {
+        "pk": 69,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Varias v\u00c3\u00adctimas"
+        }
+    },
+    {
+        "pk": 70,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 71,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Alerta CON dificultad respiratoria"
+        }
+    },
+    {
+        "pk": 72,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Alerta SIN dificultad respiratoria"
+        }
+    },
+    {
+        "pk": 73,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 8,
+            "priority": "O",
+            "suffix": 1,
+            "label": "Alarma detectora de mon\u00c3\u00b3xido (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 74,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "E",
+            "suffix": 1,
+            "label": "No respira en absoluto"
+        }
+    },
+    {
+        "pk": 75,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "E",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n incierta (ag\u00c3\u00b3nica)"
+        }
+    },
+    {
+        "pk": 76,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "E",
+            "suffix": 3,
+            "label": "Ahorcamiento"
+        }
+    },
+    {
+        "pk": 77,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "E",
+            "suffix": 4,
+            "label": "Estrangulamiento"
+        }
+    },
+    {
+        "pk": 78,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "E",
+            "suffix": 5,
+            "label": "Sofocaci\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 79,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "E",
+            "suffix": 6,
+            "label": "Bajo agua"
+        }
+    },
+    {
+        "pk": 80,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n ineficaz"
+        }
+    },
+    {
+        "pk": 81,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Muerte obvia o prevista incierta"
+        }
+    },
+    {
+        "pk": 82,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-a",
+            "label": "Muerte obvia: fr\u00c3\u00ado y r\u00c3\u00adgido en un ambiente calido"
+        }
+    },
+    {
+        "pk": 83,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-b",
+            "label": "Muerte obvia: Decapitaci\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 84,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-c",
+            "label": "Muerte obvia: Descomposici\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 85,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-d",
+            "label": "Muerte obvia: Incineraci\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 86,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-e",
+            "label": "Muerte obvia: Muerte NO RECIENTE"
+        }
+    },
+    {
+        "pk": 87,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-f",
+            "label": "Muerte obvia: Lesines severas incompatibles con vida"
+        }
+    },
+    {
+        "pk": 88,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "B",
+            "suffix": "1-g",
+            "label": "Muerte obvia: Inmersi\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 89,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "O",
+            "suffix": "1-x",
+            "label": "Muerte prevista: Enfermedad terminal"
+        }
+    },
+    {
+        "pk": 90,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 9,
+            "priority": "O",
+            "suffix": "1-y",
+            "label": "Muerte prevista: Orden de DNR (no resucitacion)"
+        }
+    },
+    {
+        "pk": 91,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 92,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Dificultad para hablar entre respiraciones"
+        }
+    },
+    {
+        "pk": 93,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Cambio de color"
+        }
+    },
+    {
+        "pk": 94,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Sudor Fr\u00c3\u00ado"
+        }
+    },
+    {
+        "pk": 95,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 96,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Historial de ataque cardiaco o angina de pecho"
+        }
+    },
+    {
+        "pk": 97,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Coca\u00c3\u00adna"
+        }
+    },
+    {
+        "pk": 98,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Respiraci\u00c3\u00b3n anormal >=35 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 99,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 10,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n anormal <=35 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 100,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 11,
+            "priority": "E",
+            "suffix": 1,
+            "label": "Obstrucci\u00c3\u00b3n completa / Respiraci\u00c3\u00b3n ineficaz"
+        }
+    },
+    {
+        "pk": 101,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 11,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n anormal (obstrucci\u00c3\u00b3n parcial)"
+        }
+    },
+    {
+        "pk": 102,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 11,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 103,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 11,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Ya no se ahoga (puede hablar o llorar, esta alerta y respira normalmente)"
+        }
+    },
+    {
+        "pk": 104,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No respira"
+        }
+    },
+    {
+        "pk": 105,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Convulsiones cont\u00c3\u00adnuas o m\u00c3\u00baltiples"
+        }
+    },
+    {
+        "pk": 106,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Respiraci\u00c3\u00b3n ag\u00c3\u00b3nica / ineficaz"
+        }
+    },
+    {
+        "pk": 107,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Respiraci\u00c3\u00b3n eficaz no verificada >=35"
+        }
+    },
+    {
+        "pk": 108,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Convulsion focal (no alerta)"
+        }
+    },
+    {
+        "pk": 109,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Embarazo"
+        }
+    },
+    {
+        "pk": 110,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Diab\u00c3\u00a9tico/a"
+        }
+    },
+    {
+        "pk": 111,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 4,
+            "label": "No esta convulsionando y se ha verificado respiracion efectiva (> 6 a\u00c3\u00b1os, se ha confirmado que no tiene epilepsia)"
+        }
+    },
+    {
+        "pk": 112,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Historia de accidente vascular cerrebral o tumor cerebral"
+        }
+    },
+    {
+        "pk": 113,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 6,
+            "label": "Sobredosis/envenenamiento (ingestion)"
+        }
+    },
+    {
+        "pk": 114,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "C",
+            "suffix": 7,
+            "label": "Convulsiones atipicas"
+        }
+    },
+    {
+        "pk": 115,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n eficaz no verificada <=35"
+        }
+    },
+    {
+        "pk": 116,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Ya no sufre convulsi\u00c3\u00b3n y respira eficazmente"
+        }
+    },
+    {
+        "pk": 117,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Convulsi\u00c3\u00b3n focal (alerta)"
+        }
+    },
+    {
+        "pk": 118,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 12,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Convulsi\u00c3\u00b3n inminente (aura)"
+        }
+    },
+    {
+        "pk": 119,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 13,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente"
+        }
+    },
+    {
+        "pk": 120,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 13,
+            "priority": "C",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 121,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 13,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Comportamiento anormal"
+        }
+    },
+    {
+        "pk": 122,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 13,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 123,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 13,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Alerta y se comporta normalmente"
+        }
+    },
+    {
+        "pk": 124,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 125,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 126,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Zambullida o se sospecha de herida de cuello"
+        }
+    },
+    {
+        "pk": 127,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Accidente de buceo (SCUBA)"
+        }
+    },
+    {
+        "pk": 128,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Alerta con respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 129,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Alerta y respiraci\u00c3\u00b3n normal (heridas o en el agua)"
+        }
+    },
+    {
+        "pk": 130,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 131,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 14,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Alerta y respiraci\u00c3\u00b3n normal (sin heridas y fuera del agua)"
+        }
+    },
+    {
+        "pk": 132,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "E",
+            "suffix": 1,
+            "label": "No respira / respiraci\u00c3\u00b3n ineficaz"
+        }
+    },
+    {
+        "pk": 133,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente"
+        }
+    },
+    {
+        "pk": 134,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No desconectado/a de la electricidad"
+        }
+    },
+    {
+        "pk": 135,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Electricidad sin desconectar o peligro presente"
+        }
+    },
+    {
+        "pk": 136,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Ca\u00c3\u00adda extrema >=10m/30 pies"
+        }
+    },
+    {
+        "pk": 137,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Ca\u00c3\u00adda de altura"
+        }
+    },
+    {
+        "pk": 138,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 6,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 139,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 7,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 140,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "D",
+            "suffix": 8,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 141,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 15,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Alerta y respiraci\u00c3\u00b3n normal"
+        }
+    },
+    {
+        "pk": 142,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 16,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 143,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 16,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Lesiones oculares graves"
+        }
+    },
+    {
+        "pk": 144,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 16,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Lesiones oculares moderadas"
+        }
+    },
+    {
+        "pk": 145,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 16,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Lesiones oculares leves"
+        }
+    },
+    {
+        "pk": 146,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 16,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Problemas oculares m\u00c3\u00a9dicos"
+        }
+    },
+    {
+        "pk": 147,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Ca\u00c3\u00adda extrema >=10m"
+        }
+    },
+    {
+        "pk": 148,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 149,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "D",
+            "suffix": 3,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 150,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Herida de pecho o cuello con dificultad para respirar"
+        }
+    },
+    {
+        "pk": 151,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Ca\u00c3\u00adda de altura"
+        }
+    },
+    {
+        "pk": 152,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "B",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+        }
+    },
+    {
+        "pk": 153,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 154,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 155,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "A",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+        }
+    },
+    {
+        "pk": 156,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Heridas (lesiones) NO RECIENTES (>= 6 Hrs) ( sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 157,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 17,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Asistencia p\u00c3\u00bablica (sin lesiones ni sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 158,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 159,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 160,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Problemas para hablar"
+        }
+    },
+    {
+        "pk": 161,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Dolor intenso repentino"
+        }
+    },
+    {
+        "pk": 162,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Adormecimiento"
+        }
+    },
+    {
+        "pk": 163,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 6,
+            "label": "Par\u00c3\u00a1lisis"
+        }
+    },
+    {
+        "pk": 164,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "C",
+            "suffix": 7,
+            "label": "Cambio en el comportamiento (<= 3hr)"
+        }
+    },
+    {
+        "pk": 165,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 166,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 18,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n normal"
+        }
+    },
+    {
+        "pk": 167,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 168,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Dificultad para hablar entre respiraciones"
+        }
+    },
+    {
+        "pk": 169,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Cambio de color"
+        }
+    },
+    {
+        "pk": 170,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Sudor Fr\u00c3\u00ado"
+        }
+    },
+    {
+        "pk": 171,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Acabado/a de resucitar y/o desfibrilar (externo)"
+        }
+    },
+    {
+        "pk": 172,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Descargas del desfibrilador implantado"
+        }
+    },
+    {
+        "pk": 173,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 174,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Dolor de pecho >= 35 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 175,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Historial de problemas cardiacos"
+        }
+    },
+    {
+        "pk": 176,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Coca\u00c3\u00adna"
+        }
+    },
+    {
+        "pk": 177,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 6,
+            "label": "FC <50 lpm o >= 130 lpm sin s\u00c3\u00adntomas de prioridad"
+        }
+    },
+    {
+        "pk": 178,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "C",
+            "suffix": 7,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 179,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Frecuencia cardiaca >=50 lpm y <=130 lpm (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 180,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 19,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Dolor de pecho <35  a\u00c3\u00b1os de edad (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 181,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 20,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 182,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 20,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Varias v\u00c3\u00adctimas (con sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 183,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 20,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Historial de ataque cardiaco o angina de pecho"
+        }
+    },
+    {
+        "pk": 184,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 20,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Cambio de color en la piel"
+        }
+    },
+    {
+        "pk": 185,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 20,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 186,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 20,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Alerta"
+        }
+    },
+    {
+        "pk": 187,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 188,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 189,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Hemorragia PELIGROSA"
+        }
+    },
+    {
+        "pk": 190,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 191,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Hemorragia a trav\u00c3\u00a9s de sondas"
+        }
+    },
+    {
+        "pk": 192,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Hemorragia de f\u00c3\u00adstula de di\u00c3\u00a1lisis"
+        }
+    },
+    {
+        "pk": 193,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Hemorragia POSIBLEMENTE peligrosa"
+        }
+    },
+    {
+        "pk": 194,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 195,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Trastorno sangu\u00c3\u00adneo"
+        }
+    },
+    {
+        "pk": 196,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "B",
+            "suffix": 4,
+            "label": "Anticoagulantes"
+        }
+    },
+    {
+        "pk": 197,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Hemorragia NO PELIGROSA"
+        }
+    },
+    {
+        "pk": 198,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 21,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Hemorragia LEVE"
+        }
+    },
+    {
+        "pk": 199,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Aprisionamiento mec\u00c3\u00a1nico / en maquinaria"
+        }
+    },
+    {
+        "pk": 200,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Derrumbamiento de trinchera"
+        }
+    },
+    {
+        "pk": 201,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Derrumbamiento de estructura"
+        }
+    },
+    {
+        "pk": 202,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Aprisionamiento en espacio confinado"
+        }
+    },
+    {
+        "pk": 203,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Situaci\u00c3\u00b3n de terreno inaccesible"
+        }
+    },
+    {
+        "pk": 204,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "D",
+            "suffix": 6,
+            "label": "Derrumbamento / avalancha"
+        }
+    },
+    {
+        "pk": 205,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Ya no est\u00c3\u00a1 aprisionado (heridas desconocidas)"
+        }
+    },
+    {
+        "pk": 206,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Aprisionamiento perif\u00c3\u00a9rico solo"
+        }
+    },
+    {
+        "pk": 207,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Estado desconocido (investigacion) / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 208,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 22,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Ya no est\u00c3\u00a1 aprisionado/a (sin heridas)"
+        }
+    },
+    {
+        "pk": 209,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente"
+        }
+    },
+    {
+        "pk": 210,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Cambio de color"
+        }
+    },
+    {
+        "pk": 211,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 212,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 213,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Antidepresivos (tric\u00c3\u00adclicos)"
+        }
+    },
+    {
+        "pk": 214,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Coca\u00c3\u00adna, metanfetamina (o derivados)"
+        }
+    },
+    {
+        "pk": 215,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Narc\u00c3\u00b3ticos (hero\u00c3\u00adna)"
+        }
+    },
+    {
+        "pk": 216,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 6,
+            "label": "\u00c3\u0081cido o alcali (lej\u00c3\u00ada - base fuerte)"
+        }
+    },
+    {
+        "pk": 217,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 7,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 218,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "C",
+            "suffix": 8,
+            "label": "Respuesta solicitada por el centro para el control de intoxicaciones o envenenamiento"
+        }
+    },
+    {
+        "pk": 219,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Sobredosis (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 220,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 23,
+            "priority": "O",
+            "suffix": 1,
+            "label": "Envenenamiento (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 221,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Presentaci\u00c3\u00b3n pod\u00c3\u00a1lica o cord\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 222,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Cabeza visible / afuera (coronaci\u00c3\u00b3n)"
+        }
+    },
+    {
+        "pk": 223,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Nacimiento INMINENTE (>=5meses/20semanas)"
+        }
+    },
+    {
+        "pk": 224,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Hemorragia en el 3er trimestre"
+        }
+    },
+    {
+        "pk": 225,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Complicaciones de alto riesgo"
+        }
+    },
+    {
+        "pk": 226,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 6,
+            "label": "Nacimiento (complicaciones con el beb\u00c3\u00a9)"
+        }
+    },
+    {
+        "pk": 227,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "D",
+            "suffix": 7,
+            "label": "Nacimiento (complicaciones con la madre)"
+        }
+    },
+    {
+        "pk": 228,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Hemorragia o Aborto ESPONT\u00c3\u0081NEO en el 2do trimestre"
+        }
+    },
+    {
+        "pk": 229,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Hemorragia grave en el 1er trimestre"
+        }
+    },
+    {
+        "pk": 230,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Nacimiento (sin complicaciones)"
+        }
+    },
+    {
+        "pk": 231,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Parto (nacimiento no inminente, >=5meses/20semanas)"
+        }
+    },
+    {
+        "pk": 232,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 233,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Hemorragia o Aborto ESPONT\u00c3\u0081NEO en el 1er trimestre"
+        }
+    },
+    {
+        "pk": 234,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 24,
+            "priority": "O",
+            "suffix": 1,
+            "label": "Ha roto aguas / fuente (sin contracciones y sin presentaci\u00c3\u00b3n de partes)"
+        }
+    },
+    {
+        "pk": 235,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 236,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Hemorragia PELIGROSA"
+        }
+    },
+    {
+        "pk": 237,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 238,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia no grave o leve"
+        }
+    },
+    {
+        "pk": 239,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Amenaza suicidio"
+        }
+    },
+    {
+        "pk": 240,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "B",
+            "suffix": 4,
+            "label": "Va a saltar (amenaza)"
+        }
+    },
+    {
+        "pk": 241,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "B",
+            "suffix": 5,
+            "label": "Casi ahorcamiento, estrangulamiento o sofocaci\u00c3\u00b3n (alerta)"
+        }
+    },
+    {
+        "pk": 242,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "B",
+            "suffix": 6,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 243,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Paciente no suicida y alerta"
+        }
+    },
+    {
+        "pk": 244,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 25,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Paciente suicida (sin amenaza) y alerta"
+        }
+    },
+    {
+        "pk": 245,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 246,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Nivel de consciencia alterado"
+        }
+    },
+    {
+        "pk": 247,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 248,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Crisis de c\u00c3\u00a9lulas falciformes / Talasemia"
+        }
+    },
+    {
+        "pk": 249,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 250,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Sin s\u00c3\u00adntomas de prioridad (No se identifican problemas prioritarios)"
+        }
+    },
+    {
+        "pk": 251,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Anomal\u00c3\u00ada de presi\u00c3\u00b3n sangu\u00c3\u00adnea (asintom\u00c3\u00a1tica)"
+        }
+    },
+    {
+        "pk": 252,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Mareo / v\u00c3\u00a9rtigo"
+        }
+    },
+    {
+        "pk": 253,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 4,
+            "label": "Fiebre / resfriado"
+        }
+    },
+    {
+        "pk": 254,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 5,
+            "label": "Debilidad general"
+        }
+    },
+    {
+        "pk": 255,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 6,
+            "label": "N\u00c3\u00a1usea"
+        }
+    },
+    {
+        "pk": 256,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 7,
+            "label": "Comienzo de un nuevo s\u00c3\u00adntoma de inmovilidad"
+        }
+    },
+    {
+        "pk": 257,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 8,
+            "label": "Otro dolor"
+        }
+    },
+    {
+        "pk": 258,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 9,
+            "label": "Traslado solamente"
+        }
+    },
+    {
+        "pk": 259,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 10,
+            "label": "Indispuesto / enfermo"
+        }
+    },
+    {
+        "pk": 260,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "A",
+            "suffix": 11,
+            "label": "Vomitando"
+        }
+    },
+    {
+        "pk": 261,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 2,
+            "label": "Divieso / For\u00c3\u00banculo"
+        }
+    },
+    {
+        "pk": 262,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 3,
+            "label": "Chichones (no traum\u00c3\u00a1ticos)"
+        }
+    },
+    {
+        "pk": 263,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 4,
+            "label": "Insomnio"
+        }
+    },
+    {
+        "pk": 264,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 5,
+            "label": "No puede orinar (sin dolor abdominal)"
+        }
+    },
+    {
+        "pk": 265,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 6,
+            "label": "Cat\u00c3\u00a9ter (dentro/fuera sin hemorragia)"
+        }
+    },
+    {
+        "pk": 266,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 7,
+            "label": "Estre\u00c3\u00b1imiento"
+        }
+    },
+    {
+        "pk": 267,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 8,
+            "label": "Calambres / espasmos / dolor de coyonturas"
+        }
+    },
+    {
+        "pk": 268,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 9,
+            "label": "Cortar un anillo"
+        }
+    },
+    {
+        "pk": 269,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 10,
+            "label": "Sordera"
+        }
+    },
+    {
+        "pk": 270,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 11,
+            "label": "Defecaci\u00c3\u00b3n / diarrea"
+        }
+    },
+    {
+        "pk": 271,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 12,
+            "label": "Dolor de o\u00c3\u00addos"
+        }
+    },
+    {
+        "pk": 272,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 13,
+            "label": "Enema"
+        }
+    },
+    {
+        "pk": 273,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 14,
+            "label": "Gota"
+        }
+    },
+    {
+        "pk": 274,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 15,
+            "label": "Hemorroides/almorranas"
+        }
+    },
+    {
+        "pk": 275,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 16,
+            "label": "Hepatitis"
+        }
+    },
+    {
+        "pk": 276,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 17,
+            "label": "Hipo"
+        }
+    },
+    {
+        "pk": 277,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 18,
+            "label": "Picaz\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 278,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 19,
+            "label": "Nervioso"
+        }
+    },
+    {
+        "pk": 279,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 20,
+            "label": "Cuerpo extra\u00c3\u00b1o (en nariz, oido, vagina, recto, pene)"
+        }
+    },
+    {
+        "pk": 280,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 21,
+            "label": "Objeto tragado (sin ahogo o dificultad para respirar o tragar)"
+        }
+    },
+    {
+        "pk": 281,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 22,
+            "label": "Orinando con dolor"
+        }
+    },
+    {
+        "pk": 282,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 23,
+            "label": "Dolores o problemas en el pene"
+        }
+    },
+    {
+        "pk": 283,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 24,
+            "label": "Sarpullido o alteraci\u00c3\u00b3n de la piel (sin dificultad para respirar o tragar)"
+        }
+    },
+    {
+        "pk": 284,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 25,
+            "label": "Enfermedad venerea"
+        }
+    },
+    {
+        "pk": 285,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 26,
+            "label": "Dolor de garganta (sin dificultad para resp\u00c3\u00adrar o tragar)"
+        }
+    },
+    {
+        "pk": 286,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 27,
+            "label": "Dolor de muelas (sin dolor de mandibula)"
+        }
+    },
+    {
+        "pk": 287,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 26,
+            "priority": "O",
+            "suffix": 28,
+            "label": "Herida infectada (focal o superficial)"
+        }
+    },
+    {
+        "pk": 288,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 289,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 290,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Heridas centrales"
+        }
+    },
+    {
+        "pk": 291,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Heridas m\u00c3\u00baltiples"
+        }
+    },
+    {
+        "pk": 292,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "D",
+            "suffix": 5,
+            "label": "Varias v\u00c3\u00adctimas"
+        }
+    },
+    {
+        "pk": 293,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Una sola herida CENTRAL, NO reciente (>= 6 Hrs)"
+        }
+    },
+    {
+        "pk": 294,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Una sola herida PERIF\u00c3\u0089RICA identificada"
+        }
+    },
+    {
+        "pk": 295,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 296,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "B",
+            "suffix": 4,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 297,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "B",
+            "suffix": 5,
+            "label": "Muerte obvia: herida bala explosiva en cabeza)"
+        }
+    },
+    {
+        "pk": 298,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 27,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Heridas perif\u00c3\u00a9ricas NO recientes (>= 6 Hrs) (sin s\u00c3\u00adntomas de prioridad)"
+        }
+    },
+    {
+        "pk": 299,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 1,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 300,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 301,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Problemas repentinos para hablar"
+        }
+    },
+    {
+        "pk": 302,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Debilidad o adormecimiento repentino (un solo lado)"
+        }
+    },
+    {
+        "pk": 303,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Par\u00c3\u00a1lisis o descenso facial repentino (un solo lado)"
+        }
+    },
+    {
+        "pk": 304,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 6,
+            "label": "P\u00c3\u00a9rdida repentina del equilibrio o de la coordinaci\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 305,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 7,
+            "label": "Problemas repentinos de la visi\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 306,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 8,
+            "label": "Comienzo repentino de dolor de cabeza intenso"
+        }
+    },
+    {
+        "pk": 307,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 9,
+            "label": "Historial de ataques cerebrales (embolias/derrames)"
+        }
+    },
+    {
+        "pk": 308,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 10,
+            "label": "Respiraci\u00c3\u00b3n normal >=35 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 309,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "C",
+            "suffix": 11,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 310,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 28,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n normal <35 a\u00c3\u00b1os de edad"
+        }
+    },
+    {
+        "pk": 311,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "1-a",
+            "label": "Incidente grave: avi\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 312,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "1-b",
+            "label": "Incidente grave: autob\u00c3\u00bas"
+        }
+    },
+    {
+        "pk": 313,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "1-c",
+            "label": "Incidente grave: metro"
+        }
+    },
+    {
+        "pk": 314,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "1-d",
+            "label": "Incidente grave: tren"
+        }
+    },
+    {
+        "pk": 315,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "1-e",
+            "label": "Incidente grave: barco"
+        }
+    },
+    {
+        "pk": 316,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "1-f",
+            "label": "Incidente grave: choque en cadena (>= 10) de varios vehiculos"
+        }
+    },
+    {
+        "pk": 317,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-k",
+            "label": "Mecanismo alto: veh\u00c3\u00adculo todo terreno / motonieve"
+        }
+    },
+    {
+        "pk": 318,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-l",
+            "label": "Mecanismo alto: auto-bicicleta / motocicleta"
+        }
+    },
+    {
+        "pk": 319,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-m",
+            "label": "Mecanismo alto: auto-peat\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 320,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-n",
+            "label": "Mecanismo alto: expulsi\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 321,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-o",
+            "label": "Mecanismo alto: nave acu\u00c3\u00a1tica privada"
+        }
+    },
+    {
+        "pk": 322,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-p",
+            "label": "Mecanismo alto: vuelta de campana"
+        }
+    },
+    {
+        "pk": 323,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-q",
+            "label": "Mecanismo alto: veh\u00c3\u00adculo ca\u00c3\u00addo de puente / altura"
+        }
+    },
+    {
+        "pk": 324,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-r",
+            "label": "Mecanismo alto: posible muerte en la escena"
+        }
+    },
+    {
+        "pk": 325,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": "2-s",
+            "label": "Mecanismo alto: veh\u00c3\u00adculo en hundimiento"
+        }
+    },
+    {
+        "pk": 326,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": 3,
+            "label": "MATERIAL PELIGROSO"
+        }
+    },
+    {
+        "pk": 327,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": 4,
+            "label": "V\u00c3\u00adctima aprisionada"
+        }
+    },
+    {
+        "pk": 328,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "D",
+            "suffix": 5,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 329,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Heridas (lesiones)"
+        }
+    },
+    {
+        "pk": 330,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 331,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Otros peligros"
+        }
+    },
+    {
+        "pk": 332,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "B",
+            "suffix": 4,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 333,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Llamada de 1ra persona con heridas (lesiones) en \u00c3\u00a1rea corporal NO peligrosa"
+        }
+    },
+    {
+        "pk": 334,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 29,
+            "priority": "O",
+            "suffix": 1,
+            "label": "No hay heridas (lesiones) confirmado"
+        }
+    },
+    {
+        "pk": 335,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente o Paro cardiaco"
+        }
+    },
+    {
+        "pk": 336,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "D",
+            "suffix": 2,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 337,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Lesi\u00c3\u00b3n de pecho o cuello (con dificultad para respirar)"
+        }
+    },
+    {
+        "pk": 338,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "B",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+        }
+    },
+    {
+        "pk": 339,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Hemorragia grave"
+        }
+    },
+    {
+        "pk": 340,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "A",
+            "suffix": 1,
+            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+        }
+    },
+    {
+        "pk": 341,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 30,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Heridas NO RECIENTES (>= 6 Hrs) (sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 342,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "E",
+            "suffix": 1,
+            "label": "Respiraci\u00c3\u00b3n ineficaz"
+        }
+    },
+    {
+        "pk": 343,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Inconsciente - Respiraci\u00c3\u00b3n ag\u00c3\u00b3nica/ineficaz"
+        }
+    },
+    {
+        "pk": 344,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Inconsciente - Respiraci\u00c3\u00b3n eficaz"
+        }
+    },
+    {
+        "pk": 345,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "D",
+            "suffix": 3,
+            "label": "No alerta"
+        }
+    },
+    {
+        "pk": 346,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Cambio de color"
+        }
+    },
+    {
+        "pk": 347,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Alerta con respiraci\u00c3\u00b3n anormal"
+        }
+    },
+    {
+        "pk": 348,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Episodio(s) de desmayo y alerta >35 a\u00c3\u00b1os de edad (con historial de problemas cardiacos)"
+        }
+    },
+    {
+        "pk": 349,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Mujeres 12-50 a\u00c3\u00b1os de edad con dolor abdominal"
+        }
+    },
+    {
+        "pk": 350,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Episodio(s) de desmayo y alerta >= 35 a\u00c3\u00b1os de edad (sin historial de problemas cardiacos)"
+        }
+    },
+    {
+        "pk": 351,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Episodio(s) de desmayo y alerta <= 35 a\u00c3\u00b1os de edad (con historial de problemas cardiacos)"
+        }
+    },
+    {
+        "pk": 352,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 31,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Episodio(s) de desmayo y alerta <= 35 a\u00c3\u00b1os de edad (sin historial de problemas cardiacos)"
+        }
+    },
+    {
+        "pk": 353,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 32,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Estado vital cuestionable"
+        }
+    },
+    {
+        "pk": 354,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 32,
+            "priority": "B",
+            "suffix": 1,
+            "label": "De pie, sentado/a, movi\u00c3\u00a9ndose o hablando"
+        }
+    },
+    {
+        "pk": 355,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 32,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Notificaciones de alarma (alerta) m\u00c3\u00a9dica (sin informacion del paciente)"
+        }
+    },
+    {
+        "pk": 356,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 32,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+        }
+    },
+    {
+        "pk": 357,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 32,
+            "priority": "B",
+            "suffix": 4,
+            "label": "No se entiende el idioma del llamante (no hay int\u00c3\u00a9rpretes en el centro de comunicaciones)"
+        }
+    },
+    {
+        "pk": 358,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Se sospecha paro cardiaco o respiratorio"
+        }
+    },
+    {
+        "pk": 359,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Acabado/a de resucitar y/o desfibrilar (externo)"
+        }
+    },
+    {
+        "pk": 360,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "C",
+            "suffix": 1,
+            "label": "No alerta (cambio repentino)"
+        }
+    },
+    {
+        "pk": 361,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiraci\u00c3\u00b3n anormal (comienzo repentino)"
+        }
+    },
+    {
+        "pk": 362,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Hemorragia importante o shock"
+        }
+    },
+    {
+        "pk": 363,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Posibles problemas cardiacos o infarto (ataque cardiaco) repentinos"
+        }
+    },
+    {
+        "pk": 364,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Dolor repentino e intenso"
+        }
+    },
+    {
+        "pk": 365,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "C",
+            "suffix": 6,
+            "label": "Respuesta de emergencia solicitada"
+        }
+    },
+    {
+        "pk": 366,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Agudeza I (sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 367,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Agudeza II (sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 368,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 33,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Agudeza III (sin sintomas de prioridad)"
+        }
+    },
+    {
+        "pk": 369,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-h",
+            "label": "Mecanismo intenso (auto-bicicleta)"
+        }
+    },
+    {
+        "pk": 370,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-i",
+            "label": "Mecanismo intenso (auto-motocicleta)"
+        }
+    },
+    {
+        "pk": 371,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-j",
+            "label": "Mecanismo intenso (auto-peaton)"
+        }
+    },
+    {
+        "pk": 372,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-k",
+            "label": "Mecanismo intenso (Expulsion)"
+        }
+    },
+    {
+        "pk": 373,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-l",
+            "label": "Mecanismo intenso (Imnovilizado/a)"
+        }
+    },
+    {
+        "pk": 374,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-m",
+            "label": "Mecanismo intenso (Vuelco)"
+        }
+    },
+    {
+        "pk": 375,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": "1-n",
+            "label": "Mecanismo intenso (Vehiculo caido de puente/altura)"
+        }
+    },
+    {
+        "pk": 376,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Inconciente o No alerta"
+        }
+    },
+    {
+        "pk": 377,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": 3,
+            "label": "No respira / respiracion ineficaz"
+        }
+    },
+    {
+        "pk": 378,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Estado vital cuestionable"
+        }
+    },
+    {
+        "pk": 379,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Heridas implicadas"
+        }
+    },
+    {
+        "pk": 380,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Varias victimas (una unidad)"
+        }
+    },
+    {
+        "pk": 381,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "B",
+            "suffix": 3,
+            "label": "Varias victimas (unidades adicionales)"
+        }
+    },
+    {
+        "pk": 382,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "B",
+            "suffix": 4,
+            "label": "Airbag/Otro sensor automatico (no hay voz)"
+        }
+    },
+    {
+        "pk": 383,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "B",
+            "suffix": 5,
+            "label": "Situacion desconocida/Otros codigos no aplicables"
+        }
+    },
+    {
+        "pk": 384,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Lesiones no peligrosas (1ra.persona y un solo ocupante)"
+        }
+    },
+    {
+        "pk": 385,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 34,
+            "priority": "O",
+            "suffix": 1,
+            "label": "No hay heridas (referir a la policia)"
+        }
+    },
+    {
+        "pk": 386,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "D",
+            "suffix": 1,
+            "label": "Respiracion ineficaz con sintomas de influenza"
+        }
+    },
+    {
+        "pk": 387,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Dificultad para hablar entre respiraciones con sintomas de influenza"
+        }
+    },
+    {
+        "pk": 388,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "D",
+            "suffix": 3,
+            "label": "No alerta con sintomas de influenza"
+        }
+    },
+    {
+        "pk": 389,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "D",
+            "suffix": 4,
+            "label": "Cambio de color con sintomas de influenza"
+        }
+    },
+    {
+        "pk": 390,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Respiracion anormal con un solo sintoma de influenza o Asma/EPOC"
+        }
+    },
+    {
+        "pk": 391,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Respiracion anormal con multiples sintomas de influenza"
+        }
+    },
+    {
+        "pk": 392,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Dolor de pecho >= 35 a\u00c3\u00b1os de edad con un solo sintoma de influeza"
+        }
+    },
+    {
+        "pk": 393,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Dolor de pecho >= 35 a\u00c3\u00b1os de edad con un multiples sintomas de influeza"
+        }
+    },
+    {
+        "pk": 394,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Condiciones de alto riesgo"
+        }
+    },
+    {
+        "pk": 395,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Dolor de pecho <= 35 a\u00c3\u00b1os de edad con un solo sintoma de influenza"
+        }
+    },
+    {
+        "pk": 396,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Dolor de pecho <= 35 a\u00c3\u00b1os de edad con un multiples sintomas de influenza"
+        }
+    },
+    {
+        "pk": 397,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 36,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Sintomas de influenza solamente (tos, fiebre, escalofrios, sudoracion, dolor de garganta, vomito, diarrea, dolores inusuales en todo el cuerpo, dolor de cabeza, etc.)"
+        }
+    },
+    {
+        "pk": 398,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "D",
+            "suffix": 1,
+            "label": "No respira / respiracion ineficaz"
+        }
+    },
+    {
+        "pk": 399,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "D",
+            "suffix": 2,
+            "label": "Evaluacion"
+        }
+    },
+    {
+        "pk": 400,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "D",
+            "suffix": 3,
+            "label": "Transferencia"
+        }
+    },
+    {
+        "pk": 401,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 1,
+            "label": "Comienzo repentino de sintoma(s) de prioridad"
+        }
+    },
+    {
+        "pk": 402,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 2,
+            "label": "Sospecha de problemas cardiacos repentinos o IM (ataque cardiaco)"
+        }
+    },
+    {
+        "pk": 403,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 3,
+            "label": "Sospecha de ataque cerebral"
+        }
+    },
+    {
+        "pk": 404,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 4,
+            "label": "Administracion de medicamentos requerida"
+        }
+    },
+    {
+        "pk": 405,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 5,
+            "label": "Respuesta d eemergencia requerida"
+        }
+    },
+    {
+        "pk": 406,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 6,
+            "label": "Evaluacion"
+        }
+    },
+    {
+        "pk": 407,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 7,
+            "label": "Transferencia nivel I"
+        }
+    },
+    {
+        "pk": 408,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 8,
+            "label": "Transferencia nivel II"
+        }
+    },
+    {
+        "pk": 409,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "C",
+            "suffix": 9,
+            "label": "Transferencia nivel III"
+        }
+    },
+    {
+        "pk": 410,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "B",
+            "suffix": 1,
+            "label": "Evaluacion"
+        }
+    },
+    {
+        "pk": 411,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "B",
+            "suffix": 2,
+            "label": "Transferencia"
+        }
+    },
+    {
+        "pk": 412,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "A",
+            "suffix": 1,
+            "label": "Evaluacion"
+        }
+    },
+    {
+        "pk": 413,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "A",
+            "suffix": 2,
+            "label": "Transferencia nivel I"
+        }
+    },
+    {
+        "pk": 414,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "A",
+            "suffix": 3,
+            "label": "Transferencia nivel II"
+        }
+    },
+    {
+        "pk": 415,
+        "model": "ambulance.callmpdscode",
+        "fields": {
+            "prefix": 37,
+            "priority": "A",
+            "suffix": 4,
+            "label": "Transferencia nivel III"
+        }
+    }
+]

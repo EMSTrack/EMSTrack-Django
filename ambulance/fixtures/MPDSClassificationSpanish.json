@@ -1,0 +1,254 @@
+[
+    {
+        "pk": 1,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Dolor abdominal / Problemas Abdominales"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Alergias (Reacciones) / Envenenamiento (picaduras, mordeduras)"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Mordeduras / Ataques de animal"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Asalto / Asalto sexual"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Dolor de espalda (no traum\u00c3\u00a1tico)"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Problemas respiratorios"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Quemaduras / Explosi\u00c3\u00b3n"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Mon\u00c3\u00b3xido de Carbono / Inhalaci\u00c3\u00b3n / Material peligroso / QBRN"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Paro cardiaco o respiratorio / Muerte"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Dolor de pecho (no traum\u00c3\u00a1tico)"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Atragantamiento / Ahogo"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Convulsiones"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Problemas diab\u00c3\u00a9ticos"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Ahogo acu\u00c3\u00a1tico (casi) / accidente de zambullida / buceo (scuba)"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Electrocuci\u00c3\u00b3n / rayo"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Problemas / Lesiones oculares"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Ca\u00c3\u00addas"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Dolor de cabeza"
+        }
+    },
+    {
+        "pk": 19,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Problemas cardiacos / DCAI"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Exposici\u00c3\u00b3n al calor / fr\u00c3\u00ado"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Hemorragia / Heridas"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Incidente inaccesible / otros aprisionamientos (No vehicular)"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Sobredosis / Envenenamiento (ingesti\u00c3\u00b3n)"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Embarazo / parto / aborto espont\u00c3\u00a1neo"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Problemas psiqui\u00c3\u00a1tricos / comportamiento anormal / intento de suicidio"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Persona enferma (diagn\u00c3\u00b3stico espec\u00c3\u00adfico)"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Pu\u00c3\u00b1alada / Heridas de bala / trauma penetrante"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Ataque cerebral (ACV)"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Incidentes de tr\u00c3\u00a1fico / transporte"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Lesiones traum\u00c3\u00a1ticas (espec\u00c3\u00adficas)"
+        }
+    },
+    {
+        "pk": 31,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Inconsciencia / Desmayo (mareo)"
+        }
+    },
+    {
+        "pk": 32,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Problema desconocido (persona en el suelo)"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Transferencia / Interinstitucional / cuidados paliativos"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "NAC (Notificacion Automatica de Choque)"
+        }
+    },
+    {
+        "pk": 36,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Pandemia/Epidemia/Brote (Vigilancia o Triage)"
+        }
+    },
+    {
+        "pk": 37,
+        "model": "ambulance.callmpdsclassification",
+        "fields": {
+            "label": "Evaluacion/Transferencia Interinstitucional"
+        }
+    }
+]

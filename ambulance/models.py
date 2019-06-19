@@ -360,6 +360,31 @@ CallStatusOrder = [
 ]
 
 
+class CallMPDSClassification(models.Model):
+
+    # label
+    label = models.CharField(_('label'), max_length=200)
+
+
+class CallMPDSCode(models.Model):
+
+    # prefix
+    prefix = models.ForeignKey(CallMPDSClassification,
+                               on_delete=models.CASCADE,
+                               verbose_name=_('prefix'))
+
+    # priority
+    priority = models.CharField(_('priority'), max_length=1,
+                                choices=make_choices(CallPriority),
+                                default=CallPriority.E.name)
+
+    # suffix
+    suffix = models.CharField(_('suffix'), max_length=10)
+
+    # label
+    label = models.CharField(_('label'), max_length=200)
+
+
 class CallRadioCode(models.Model):
 
     # code
