@@ -2063,6 +2063,7 @@ $(function() {
         var opt = $('option[value="'+$(this).val()+'"]');
 
         logger.log('debug', opt);
+        logger.log('debug', $(this).val());
         $('#radio-code').innerText = opt.innerText;
     })
 
