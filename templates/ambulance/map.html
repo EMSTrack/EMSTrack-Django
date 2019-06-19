@@ -208,10 +208,11 @@
                 <h5>
                     {% trans "Radio Code" %}
                 </h5>
-                <input id="radio-code" list="radio-codes"
-                       name="radio-code" class="form-control"
+                <input id="radio-code-input" list="radio-code-list"
+                       name="radio-code-input" class="form-control"
                        placeholder="{% trans "Radio Code" %}">
-                <datalist id="radio-codes">
+                <label id="radio-code" name="radio-code"></label>
+                <datalist id="radio-code-list">
                     {% for code in radio_code_list %}
                     <option value="{{ code.code }}">{{ code.label }}</option>
                     {% endfor %}

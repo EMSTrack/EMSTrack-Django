@@ -2059,6 +2059,10 @@ $(function() {
 
     });
 
+    $('#radio-code-input').on('input', function() {
+        $('#radio-code').innerText = $(this).html()
+    })
+
 });
 
 // CSRF functions
