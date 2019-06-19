@@ -2060,11 +2060,10 @@ $(function() {
     });
 
     $('#radio-code-input').on('input', function() {
-        logger.log('debug', $(this));
-        logger.log('debug', $(this).val());
-        logger.log('debug', $(this).innerText);
+        var opt = $('option[value="'+$(this).val()+'"]');
 
-        $('#radio-code').innerText = $(this).innerText;
+        logger.log('debug', opt);
+        $('#radio-code').innerText = opt.innerText;
     })
 
 });
