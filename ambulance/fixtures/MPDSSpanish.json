@@ -16,7 +16,7 @@
             "prefix": 1,
             "priority": "C",
             "suffix": 1,
-            "label": "SOSPECHA de aneurisma a\u00c3\u00b3rtico (Dolor desgarrador /despedazador) >=50"
+            "label": "SOSPECHA de aneurisma aórtico (Dolor desgarrador /despedazador) >=50"
         }
     },
     {
@@ -26,7 +26,7 @@
             "prefix": 1,
             "priority": "C",
             "suffix": 2,
-            "label": "Aneurisma a\u00c3\u00b3rtico identificado"
+            "label": "Aneurisma aórtico identificado"
         }
     },
     {
@@ -36,7 +36,7 @@
             "prefix": 1,
             "priority": "C",
             "suffix": 3,
-            "label": "Desmayo o casi desmayo >= 50 a\u00c3\u00b1os de edad"
+            "label": "Desmayo o casi desmayo >= 50 años de edad"
         }
     },
     {
@@ -46,7 +46,7 @@
             "prefix": 1,
             "priority": "C",
             "suffix": 4,
-            "label": "Desmayo o casi desmayo en mujeres 12-50 a\u00c3\u00b1os de edad"
+            "label": "Desmayo o casi desmayo en mujeres 12-50 años de edad"
         }
     },
     {
@@ -56,7 +56,7 @@
             "prefix": 1,
             "priority": "C",
             "suffix": 5,
-            "label": "Hombres con dolor arriba de ombligo >= 35 a\u00c3\u00b1os de edad"
+            "label": "Hombres con dolor arriba de ombligo >= 35 años de edad"
         }
     },
     {
@@ -66,7 +66,7 @@
             "prefix": 1,
             "priority": "C",
             "suffix": 6,
-            "label": "Mujeres con dolor arriba del ombligo >= 45 a\u00c3\u00b1os de edad"
+            "label": "Mujeres con dolor arriba del ombligo >= 45 años de edad"
         }
     },
     {
@@ -86,7 +86,7 @@
             "prefix": 2,
             "priority": "E",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n ineficaz"
+            "label": "Respiración ineficaz"
         }
     },
     {
@@ -146,7 +146,7 @@
             "prefix": 2,
             "priority": "C",
             "suffix": 2,
-            "label": "Historial de reacci\u00c3\u00b3n al\u00c3\u00a9rgica severa"
+            "label": "Historial de reacción alérgica severa"
         }
     },
     {
@@ -156,7 +156,7 @@
             "prefix": 2,
             "priority": "B",
             "suffix": 1,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -176,7 +176,7 @@
             "prefix": 2,
             "priority": "A",
             "suffix": 2,
-            "label": "Picadura de ara\u00c3\u00b1a"
+            "label": "Picadura de araña"
         }
     },
     {
@@ -206,7 +206,7 @@
             "prefix": 3,
             "priority": "D",
             "suffix": 3,
-            "label": "Lesi\u00c3\u00b3n de pecho o cuello (con dificultad para respirar)"
+            "label": "Lesión de pecho o cuello (con dificultad para respirar)"
         }
     },
     {
@@ -216,7 +216,7 @@
             "prefix": 3,
             "priority": "D",
             "suffix": 4,
-            "label": "\u00c3\u0081rea corporal peligrosa"
+            "label": "Área corporal peligrosa"
         }
     },
     {
@@ -236,7 +236,7 @@
             "prefix": 3,
             "priority": "D",
             "suffix": 6,
-            "label": "Animal ex\u00c3\u00b3tico"
+            "label": "Animal exótico"
         }
     },
     {
@@ -256,7 +256,7 @@
             "prefix": 3,
             "priority": "B",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+            "label": "Área corporal POSIBLEMENTE peligrosa"
         }
     },
     {
@@ -276,7 +276,7 @@
             "prefix": 3,
             "priority": "B",
             "suffix": 3,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -286,7 +286,7 @@
             "prefix": 3,
             "priority": "A",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+            "label": "Área corporal NO PELIGROSA"
         }
     },
     {
@@ -336,7 +336,7 @@
             "prefix": 4,
             "priority": "D",
             "suffix": 3,
-            "label": "Lesi\u00c3\u00b3n de pecho o cuello (con dificultad para respirar)"
+            "label": "Lesión de pecho o cuello (con dificultad para respirar)"
         }
     },
     {
@@ -346,7 +346,7 @@
             "prefix": 4,
             "priority": "D",
             "suffix": 4,
-            "label": "Varias v\u00c3\u00adctimas"
+            "label": "Varias víctimas"
         }
     },
     {
@@ -356,7 +356,7 @@
             "prefix": 4,
             "priority": "B",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+            "label": "Área corporal POSIBLEMENTE peligrosa"
         }
     },
     {
@@ -376,7 +376,7 @@
             "prefix": 4,
             "priority": "B",
             "suffix": 3,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -386,7 +386,7 @@
             "prefix": 4,
             "priority": "A",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+            "label": "Área corporal NO PELIGROSA"
         }
     },
     {
@@ -416,7 +416,7 @@
             "prefix": 5,
             "priority": "C",
             "suffix": 1,
-            "label": "SOSPECHA de aneurisma a\u00c3\u00b3rtico (Dolor desgarrador /despedazador) >=50"
+            "label": "SOSPECHA de aneurisma aórtico (Dolor desgarrador /despedazador) >=50"
         }
     },
     {
@@ -426,7 +426,7 @@
             "prefix": 5,
             "priority": "C",
             "suffix": 2,
-            "label": "Aneurisma a\u00c3\u00b3rtico identificado"
+            "label": "Aneurisma aórtico identificado"
         }
     },
     {
@@ -436,7 +436,7 @@
             "prefix": 5,
             "priority": "C",
             "suffix": 3,
-            "label": "Desmayo o casi desmayo >= 50 a\u00c3\u00b1os de edad"
+            "label": "Desmayo o casi desmayo >= 50 años de edad"
         }
     },
     {
@@ -446,7 +446,7 @@
             "prefix": 5,
             "priority": "A",
             "suffix": 1,
-            "label": "Dolor de espalda NO TRAUM\u00c3\u0081TICO"
+            "label": "Dolor de espalda NO TRAUMÁTICO"
         }
     },
     {
@@ -466,7 +466,7 @@
             "prefix": 6,
             "priority": "E",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n ineficaz"
+            "label": "Respiración ineficaz"
         }
     },
     {
@@ -506,7 +506,7 @@
             "prefix": 6,
             "priority": "D",
             "suffix": 4,
-            "label": "Sudor Fr\u00c3\u00ado"
+            "label": "Sudor Frío"
         }
     },
     {
@@ -516,7 +516,7 @@
             "prefix": 6,
             "priority": "C",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -526,7 +526,7 @@
             "prefix": 7,
             "priority": "D",
             "suffix": 1,
-            "label": "Varias v\u00c3\u00adctimas"
+            "label": "Varias víctimas"
         }
     },
     {
@@ -606,7 +606,7 @@
             "prefix": 7,
             "priority": "B",
             "suffix": 1,
-            "label": "Lesiones por explosi\u00c3\u00b3n (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Lesiones por explosión (sin síntomas de prioridad)"
         }
     },
     {
@@ -616,7 +616,7 @@
             "prefix": 7,
             "priority": "B",
             "suffix": 2,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -646,7 +646,7 @@
             "prefix": 7,
             "priority": "A",
             "suffix": 3,
-            "label": "Quemaduras solares o leves (menor del tama\u00c3\u00b1o de una mano)"
+            "label": "Quemaduras solares o leves (menor del tamaño de una mano)"
         }
     },
     {
@@ -686,7 +686,7 @@
             "prefix": 8,
             "priority": "D",
             "suffix": 4,
-            "label": "Varias v\u00c3\u00adctimas"
+            "label": "Varias víctimas"
         }
     },
     {
@@ -696,7 +696,7 @@
             "prefix": 8,
             "priority": "D",
             "suffix": 5,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -726,7 +726,7 @@
             "prefix": 8,
             "priority": "O",
             "suffix": 1,
-            "label": "Alarma detectora de mon\u00c3\u00b3xido (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Alarma detectora de monóxido (sin síntomas de prioridad)"
         }
     },
     {
@@ -746,7 +746,7 @@
             "prefix": 9,
             "priority": "E",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n incierta (ag\u00c3\u00b3nica)"
+            "label": "Respiración incierta (agónica)"
         }
     },
     {
@@ -776,7 +776,7 @@
             "prefix": 9,
             "priority": "E",
             "suffix": 5,
-            "label": "Sofocaci\u00c3\u00b3n"
+            "label": "Sofocación"
         }
     },
     {
@@ -796,7 +796,7 @@
             "prefix": 9,
             "priority": "D",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n ineficaz"
+            "label": "Respiración ineficaz"
         }
     },
     {
@@ -816,7 +816,7 @@
             "prefix": 9,
             "priority": "B",
             "suffix": "1-a",
-            "label": "Muerte obvia: fr\u00c3\u00ado y r\u00c3\u00adgido en un ambiente calido"
+            "label": "Muerte obvia: frío y rígido en un ambiente calido"
         }
     },
     {
@@ -826,7 +826,7 @@
             "prefix": 9,
             "priority": "B",
             "suffix": "1-b",
-            "label": "Muerte obvia: Decapitaci\u00c3\u00b3n"
+            "label": "Muerte obvia: Decapitación"
         }
     },
     {
@@ -836,7 +836,7 @@
             "prefix": 9,
             "priority": "B",
             "suffix": "1-c",
-            "label": "Muerte obvia: Descomposici\u00c3\u00b3n"
+            "label": "Muerte obvia: Descomposición"
         }
     },
     {
@@ -846,7 +846,7 @@
             "prefix": 9,
             "priority": "B",
             "suffix": "1-d",
-            "label": "Muerte obvia: Incineraci\u00c3\u00b3n"
+            "label": "Muerte obvia: Incineración"
         }
     },
     {
@@ -876,7 +876,7 @@
             "prefix": 9,
             "priority": "B",
             "suffix": "1-g",
-            "label": "Muerte obvia: Inmersi\u00c3\u00b3n"
+            "label": "Muerte obvia: Inmersión"
         }
     },
     {
@@ -936,7 +936,7 @@
             "prefix": 10,
             "priority": "D",
             "suffix": 4,
-            "label": "Sudor Fr\u00c3\u00ado"
+            "label": "Sudor Frío"
         }
     },
     {
@@ -946,7 +946,7 @@
             "prefix": 10,
             "priority": "C",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -966,7 +966,7 @@
             "prefix": 10,
             "priority": "C",
             "suffix": 3,
-            "label": "Coca\u00c3\u00adna"
+            "label": "Cocaína"
         }
     },
     {
@@ -976,7 +976,7 @@
             "prefix": 10,
             "priority": "C",
             "suffix": 4,
-            "label": "Respiraci\u00c3\u00b3n anormal >=35 a\u00c3\u00b1os de edad"
+            "label": "Respiración anormal >=35 años de edad"
         }
     },
     {
@@ -986,7 +986,7 @@
             "prefix": 10,
             "priority": "A",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n anormal <=35 a\u00c3\u00b1os de edad"
+            "label": "Respiración anormal <=35 años de edad"
         }
     },
     {
@@ -996,7 +996,7 @@
             "prefix": 11,
             "priority": "E",
             "suffix": 1,
-            "label": "Obstrucci\u00c3\u00b3n completa / Respiraci\u00c3\u00b3n ineficaz"
+            "label": "Obstrucción completa / Respiración ineficaz"
         }
     },
     {
@@ -1006,7 +1006,7 @@
             "prefix": 11,
             "priority": "D",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n anormal (obstrucci\u00c3\u00b3n parcial)"
+            "label": "Respiración anormal (obstrucción parcial)"
         }
     },
     {
@@ -1046,7 +1046,7 @@
             "prefix": 12,
             "priority": "D",
             "suffix": 2,
-            "label": "Convulsiones cont\u00c3\u00adnuas o m\u00c3\u00baltiples"
+            "label": "Convulsiones contínuas o múltiples"
         }
     },
     {
@@ -1056,7 +1056,7 @@
             "prefix": 12,
             "priority": "D",
             "suffix": 3,
-            "label": "Respiraci\u00c3\u00b3n ag\u00c3\u00b3nica / ineficaz"
+            "label": "Respiración agónica / ineficaz"
         }
     },
     {
@@ -1066,7 +1066,7 @@
             "prefix": 12,
             "priority": "D",
             "suffix": 4,
-            "label": "Respiraci\u00c3\u00b3n eficaz no verificada >=35"
+            "label": "Respiración eficaz no verificada >=35"
         }
     },
     {
@@ -1096,7 +1096,7 @@
             "prefix": 12,
             "priority": "C",
             "suffix": 3,
-            "label": "Diab\u00c3\u00a9tico/a"
+            "label": "Diabético/a"
         }
     },
     {
@@ -1106,7 +1106,7 @@
             "prefix": 12,
             "priority": "C",
             "suffix": 4,
-            "label": "No esta convulsionando y se ha verificado respiracion efectiva (> 6 a\u00c3\u00b1os, se ha confirmado que no tiene epilepsia)"
+            "label": "No esta convulsionando y se ha verificado respiracion efectiva (> 6 años, se ha confirmado que no tiene epilepsia)"
         }
     },
     {
@@ -1146,7 +1146,7 @@
             "prefix": 12,
             "priority": "B",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n eficaz no verificada <=35"
+            "label": "Respiración eficaz no verificada <=35"
         }
     },
     {
@@ -1156,7 +1156,7 @@
             "prefix": 12,
             "priority": "A",
             "suffix": 1,
-            "label": "Ya no sufre convulsi\u00c3\u00b3n y respira eficazmente"
+            "label": "Ya no sufre convulsión y respira eficazmente"
         }
     },
     {
@@ -1166,7 +1166,7 @@
             "prefix": 12,
             "priority": "A",
             "suffix": 2,
-            "label": "Convulsi\u00c3\u00b3n focal (alerta)"
+            "label": "Convulsión focal (alerta)"
         }
     },
     {
@@ -1176,7 +1176,7 @@
             "prefix": 12,
             "priority": "A",
             "suffix": 3,
-            "label": "Convulsi\u00c3\u00b3n inminente (aura)"
+            "label": "Convulsión inminente (aura)"
         }
     },
     {
@@ -1216,7 +1216,7 @@
             "prefix": 13,
             "priority": "C",
             "suffix": 3,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -1276,7 +1276,7 @@
             "prefix": 14,
             "priority": "C",
             "suffix": 1,
-            "label": "Alerta con respiraci\u00c3\u00b3n anormal"
+            "label": "Alerta con respiración anormal"
         }
     },
     {
@@ -1286,7 +1286,7 @@
             "prefix": 14,
             "priority": "B",
             "suffix": 1,
-            "label": "Alerta y respiraci\u00c3\u00b3n normal (heridas o en el agua)"
+            "label": "Alerta y respiración normal (heridas o en el agua)"
         }
     },
     {
@@ -1296,7 +1296,7 @@
             "prefix": 14,
             "priority": "B",
             "suffix": 2,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -1306,7 +1306,7 @@
             "prefix": 14,
             "priority": "A",
             "suffix": 1,
-            "label": "Alerta y respiraci\u00c3\u00b3n normal (sin heridas y fuera del agua)"
+            "label": "Alerta y respiración normal (sin heridas y fuera del agua)"
         }
     },
     {
@@ -1316,7 +1316,7 @@
             "prefix": 15,
             "priority": "E",
             "suffix": 1,
-            "label": "No respira / respiraci\u00c3\u00b3n ineficaz"
+            "label": "No respira / respiración ineficaz"
         }
     },
     {
@@ -1356,7 +1356,7 @@
             "prefix": 15,
             "priority": "D",
             "suffix": 4,
-            "label": "Ca\u00c3\u00adda extrema >=10m/30 pies"
+            "label": "Caída extrema >=10m/30 pies"
         }
     },
     {
@@ -1366,7 +1366,7 @@
             "prefix": 15,
             "priority": "D",
             "suffix": 5,
-            "label": "Ca\u00c3\u00adda de altura"
+            "label": "Caída de altura"
         }
     },
     {
@@ -1386,7 +1386,7 @@
             "prefix": 15,
             "priority": "D",
             "suffix": 7,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -1396,7 +1396,7 @@
             "prefix": 15,
             "priority": "D",
             "suffix": 8,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -1406,7 +1406,7 @@
             "prefix": 15,
             "priority": "C",
             "suffix": 1,
-            "label": "Alerta y respiraci\u00c3\u00b3n normal"
+            "label": "Alerta y respiración normal"
         }
     },
     {
@@ -1456,7 +1456,7 @@
             "prefix": 16,
             "priority": "A",
             "suffix": 3,
-            "label": "Problemas oculares m\u00c3\u00a9dicos"
+            "label": "Problemas oculares médicos"
         }
     },
     {
@@ -1466,7 +1466,7 @@
             "prefix": 17,
             "priority": "D",
             "suffix": 1,
-            "label": "Ca\u00c3\u00adda extrema >=10m"
+            "label": "Caída extrema >=10m"
         }
     },
     {
@@ -1506,7 +1506,7 @@
             "prefix": 17,
             "priority": "D",
             "suffix": 5,
-            "label": "Ca\u00c3\u00adda de altura"
+            "label": "Caída de altura"
         }
     },
     {
@@ -1516,7 +1516,7 @@
             "prefix": 17,
             "priority": "B",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+            "label": "Área corporal POSIBLEMENTE peligrosa"
         }
     },
     {
@@ -1536,7 +1536,7 @@
             "prefix": 17,
             "priority": "B",
             "suffix": 3,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -1546,7 +1546,7 @@
             "prefix": 17,
             "priority": "A",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+            "label": "Área corporal NO PELIGROSA"
         }
     },
     {
@@ -1566,7 +1566,7 @@
             "prefix": 17,
             "priority": "A",
             "suffix": 3,
-            "label": "Asistencia p\u00c3\u00bablica (sin lesiones ni sintomas de prioridad)"
+            "label": "Asistencia pública (sin lesiones ni sintomas de prioridad)"
         }
     },
     {
@@ -1586,7 +1586,7 @@
             "prefix": 18,
             "priority": "C",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -1626,7 +1626,7 @@
             "prefix": 18,
             "priority": "C",
             "suffix": 6,
-            "label": "Par\u00c3\u00a1lisis"
+            "label": "Parálisis"
         }
     },
     {
@@ -1646,7 +1646,7 @@
             "prefix": 18,
             "priority": "B",
             "suffix": 1,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -1656,7 +1656,7 @@
             "prefix": 18,
             "priority": "A",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n normal"
+            "label": "Respiración normal"
         }
     },
     {
@@ -1696,7 +1696,7 @@
             "prefix": 19,
             "priority": "D",
             "suffix": 4,
-            "label": "Sudor Fr\u00c3\u00ado"
+            "label": "Sudor Frío"
         }
     },
     {
@@ -1726,7 +1726,7 @@
             "prefix": 19,
             "priority": "C",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -1736,7 +1736,7 @@
             "prefix": 19,
             "priority": "C",
             "suffix": 3,
-            "label": "Dolor de pecho >= 35 a\u00c3\u00b1os de edad"
+            "label": "Dolor de pecho >= 35 años de edad"
         }
     },
     {
@@ -1756,7 +1756,7 @@
             "prefix": 19,
             "priority": "C",
             "suffix": 5,
-            "label": "Coca\u00c3\u00adna"
+            "label": "Cocaína"
         }
     },
     {
@@ -1766,7 +1766,7 @@
             "prefix": 19,
             "priority": "C",
             "suffix": 6,
-            "label": "FC <50 lpm o >= 130 lpm sin s\u00c3\u00adntomas de prioridad"
+            "label": "FC <50 lpm o >= 130 lpm sin síntomas de prioridad"
         }
     },
     {
@@ -1776,7 +1776,7 @@
             "prefix": 19,
             "priority": "C",
             "suffix": 7,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -1786,7 +1786,7 @@
             "prefix": 19,
             "priority": "A",
             "suffix": 1,
-            "label": "Frecuencia cardiaca >=50 lpm y <=130 lpm (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Frecuencia cardiaca >=50 lpm y <=130 lpm (sin síntomas de prioridad)"
         }
     },
     {
@@ -1796,7 +1796,7 @@
             "prefix": 19,
             "priority": "A",
             "suffix": 2,
-            "label": "Dolor de pecho <35  a\u00c3\u00b1os de edad (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Dolor de pecho <35  años de edad (sin síntomas de prioridad)"
         }
     },
     {
@@ -1816,7 +1816,7 @@
             "prefix": 20,
             "priority": "D",
             "suffix": 2,
-            "label": "Varias v\u00c3\u00adctimas (con sintomas de prioridad)"
+            "label": "Varias víctimas (con sintomas de prioridad)"
         }
     },
     {
@@ -1846,7 +1846,7 @@
             "prefix": 20,
             "priority": "B",
             "suffix": 2,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -1896,7 +1896,7 @@
             "prefix": 21,
             "priority": "D",
             "suffix": 4,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -1906,7 +1906,7 @@
             "prefix": 21,
             "priority": "C",
             "suffix": 1,
-            "label": "Hemorragia a trav\u00c3\u00a9s de sondas"
+            "label": "Hemorragia a través de sondas"
         }
     },
     {
@@ -1916,7 +1916,7 @@
             "prefix": 21,
             "priority": "C",
             "suffix": 2,
-            "label": "Hemorragia de f\u00c3\u00adstula de di\u00c3\u00a1lisis"
+            "label": "Hemorragia de fístula de diálisis"
         }
     },
     {
@@ -1946,7 +1946,7 @@
             "prefix": 21,
             "priority": "B",
             "suffix": 3,
-            "label": "Trastorno sangu\u00c3\u00adneo"
+            "label": "Trastorno sanguíneo"
         }
     },
     {
@@ -1986,7 +1986,7 @@
             "prefix": 22,
             "priority": "D",
             "suffix": 1,
-            "label": "Aprisionamiento mec\u00c3\u00a1nico / en maquinaria"
+            "label": "Aprisionamiento mecánico / en maquinaria"
         }
     },
     {
@@ -2026,7 +2026,7 @@
             "prefix": 22,
             "priority": "D",
             "suffix": 5,
-            "label": "Situaci\u00c3\u00b3n de terreno inaccesible"
+            "label": "Situación de terreno inaccesible"
         }
     },
     {
@@ -2046,7 +2046,7 @@
             "prefix": 22,
             "priority": "B",
             "suffix": 1,
-            "label": "Ya no est\u00c3\u00a1 aprisionado (heridas desconocidas)"
+            "label": "Ya no está aprisionado (heridas desconocidas)"
         }
     },
     {
@@ -2056,7 +2056,7 @@
             "prefix": 22,
             "priority": "B",
             "suffix": 2,
-            "label": "Aprisionamiento perif\u00c3\u00a9rico solo"
+            "label": "Aprisionamiento periférico solo"
         }
     },
     {
@@ -2066,7 +2066,7 @@
             "prefix": 22,
             "priority": "B",
             "suffix": 3,
-            "label": "Estado desconocido (investigacion) / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido (investigacion) / Otros códigos no aplicables"
         }
     },
     {
@@ -2076,7 +2076,7 @@
             "prefix": 22,
             "priority": "A",
             "suffix": 1,
-            "label": "Ya no est\u00c3\u00a1 aprisionado/a (sin heridas)"
+            "label": "Ya no está aprisionado/a (sin heridas)"
         }
     },
     {
@@ -2116,7 +2116,7 @@
             "prefix": 23,
             "priority": "C",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -2126,7 +2126,7 @@
             "prefix": 23,
             "priority": "C",
             "suffix": 3,
-            "label": "Antidepresivos (tric\u00c3\u00adclicos)"
+            "label": "Antidepresivos (tricíclicos)"
         }
     },
     {
@@ -2136,7 +2136,7 @@
             "prefix": 23,
             "priority": "C",
             "suffix": 4,
-            "label": "Coca\u00c3\u00adna, metanfetamina (o derivados)"
+            "label": "Cocaína, metanfetamina (o derivados)"
         }
     },
     {
@@ -2146,7 +2146,7 @@
             "prefix": 23,
             "priority": "C",
             "suffix": 5,
-            "label": "Narc\u00c3\u00b3ticos (hero\u00c3\u00adna)"
+            "label": "Narcóticos (heroína)"
         }
     },
     {
@@ -2156,7 +2156,7 @@
             "prefix": 23,
             "priority": "C",
             "suffix": 6,
-            "label": "\u00c3\u0081cido o alcali (lej\u00c3\u00ada - base fuerte)"
+            "label": "Ácido o alcali (lejía - base fuerte)"
         }
     },
     {
@@ -2166,7 +2166,7 @@
             "prefix": 23,
             "priority": "C",
             "suffix": 7,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -2186,7 +2186,7 @@
             "prefix": 23,
             "priority": "B",
             "suffix": 1,
-            "label": "Sobredosis (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Sobredosis (sin síntomas de prioridad)"
         }
     },
     {
@@ -2196,7 +2196,7 @@
             "prefix": 23,
             "priority": "O",
             "suffix": 1,
-            "label": "Envenenamiento (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Envenenamiento (sin síntomas de prioridad)"
         }
     },
     {
@@ -2206,7 +2206,7 @@
             "prefix": 24,
             "priority": "D",
             "suffix": 1,
-            "label": "Presentaci\u00c3\u00b3n pod\u00c3\u00a1lica o cord\u00c3\u00b3n"
+            "label": "Presentación podálica o cordón"
         }
     },
     {
@@ -2216,7 +2216,7 @@
             "prefix": 24,
             "priority": "D",
             "suffix": 2,
-            "label": "Cabeza visible / afuera (coronaci\u00c3\u00b3n)"
+            "label": "Cabeza visible / afuera (coronación)"
         }
     },
     {
@@ -2256,7 +2256,7 @@
             "prefix": 24,
             "priority": "D",
             "suffix": 6,
-            "label": "Nacimiento (complicaciones con el beb\u00c3\u00a9)"
+            "label": "Nacimiento (complicaciones con el bebé)"
         }
     },
     {
@@ -2276,7 +2276,7 @@
             "prefix": 24,
             "priority": "C",
             "suffix": 1,
-            "label": "Hemorragia o Aborto ESPONT\u00c3\u0081NEO en el 2do trimestre"
+            "label": "Hemorragia o Aborto ESPONTÁNEO en el 2do trimestre"
         }
     },
     {
@@ -2316,7 +2316,7 @@
             "prefix": 24,
             "priority": "B",
             "suffix": 2,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -2326,7 +2326,7 @@
             "prefix": 24,
             "priority": "A",
             "suffix": 1,
-            "label": "Hemorragia o Aborto ESPONT\u00c3\u0081NEO en el 1er trimestre"
+            "label": "Hemorragia o Aborto ESPONTÁNEO en el 1er trimestre"
         }
     },
     {
@@ -2336,7 +2336,7 @@
             "prefix": 24,
             "priority": "O",
             "suffix": 1,
-            "label": "Ha roto aguas / fuente (sin contracciones y sin presentaci\u00c3\u00b3n de partes)"
+            "label": "Ha roto aguas / fuente (sin contracciones y sin presentación de partes)"
         }
     },
     {
@@ -2406,7 +2406,7 @@
             "prefix": 25,
             "priority": "B",
             "suffix": 5,
-            "label": "Casi ahorcamiento, estrangulamiento o sofocaci\u00c3\u00b3n (alerta)"
+            "label": "Casi ahorcamiento, estrangulamiento o sofocación (alerta)"
         }
     },
     {
@@ -2416,7 +2416,7 @@
             "prefix": 25,
             "priority": "B",
             "suffix": 6,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -2466,7 +2466,7 @@
             "prefix": 26,
             "priority": "C",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -2476,7 +2476,7 @@
             "prefix": 26,
             "priority": "C",
             "suffix": 3,
-            "label": "Crisis de c\u00c3\u00a9lulas falciformes / Talasemia"
+            "label": "Crisis de células falciformes / Talasemia"
         }
     },
     {
@@ -2486,7 +2486,7 @@
             "prefix": 26,
             "priority": "B",
             "suffix": 1,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -2496,7 +2496,7 @@
             "prefix": 26,
             "priority": "A",
             "suffix": 1,
-            "label": "Sin s\u00c3\u00adntomas de prioridad (No se identifican problemas prioritarios)"
+            "label": "Sin síntomas de prioridad (No se identifican problemas prioritarios)"
         }
     },
     {
@@ -2506,7 +2506,7 @@
             "prefix": 26,
             "priority": "A",
             "suffix": 2,
-            "label": "Anomal\u00c3\u00ada de presi\u00c3\u00b3n sangu\u00c3\u00adnea (asintom\u00c3\u00a1tica)"
+            "label": "Anomalía de presión sanguínea (asintomática)"
         }
     },
     {
@@ -2516,7 +2516,7 @@
             "prefix": 26,
             "priority": "A",
             "suffix": 3,
-            "label": "Mareo / v\u00c3\u00a9rtigo"
+            "label": "Mareo / vértigo"
         }
     },
     {
@@ -2546,7 +2546,7 @@
             "prefix": 26,
             "priority": "A",
             "suffix": 6,
-            "label": "N\u00c3\u00a1usea"
+            "label": "Náusea"
         }
     },
     {
@@ -2556,7 +2556,7 @@
             "prefix": 26,
             "priority": "A",
             "suffix": 7,
-            "label": "Comienzo de un nuevo s\u00c3\u00adntoma de inmovilidad"
+            "label": "Comienzo de un nuevo síntoma de inmovilidad"
         }
     },
     {
@@ -2606,7 +2606,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 2,
-            "label": "Divieso / For\u00c3\u00banculo"
+            "label": "Divieso / Forúnculo"
         }
     },
     {
@@ -2616,7 +2616,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 3,
-            "label": "Chichones (no traum\u00c3\u00a1ticos)"
+            "label": "Chichones (no traumáticos)"
         }
     },
     {
@@ -2646,7 +2646,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 6,
-            "label": "Cat\u00c3\u00a9ter (dentro/fuera sin hemorragia)"
+            "label": "Catéter (dentro/fuera sin hemorragia)"
         }
     },
     {
@@ -2656,7 +2656,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 7,
-            "label": "Estre\u00c3\u00b1imiento"
+            "label": "Estreñimiento"
         }
     },
     {
@@ -2696,7 +2696,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 11,
-            "label": "Defecaci\u00c3\u00b3n / diarrea"
+            "label": "Defecación / diarrea"
         }
     },
     {
@@ -2706,7 +2706,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 12,
-            "label": "Dolor de o\u00c3\u00addos"
+            "label": "Dolor de oídos"
         }
     },
     {
@@ -2766,7 +2766,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 18,
-            "label": "Picaz\u00c3\u00b3n"
+            "label": "Picazón"
         }
     },
     {
@@ -2786,7 +2786,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 20,
-            "label": "Cuerpo extra\u00c3\u00b1o (en nariz, oido, vagina, recto, pene)"
+            "label": "Cuerpo extraño (en nariz, oido, vagina, recto, pene)"
         }
     },
     {
@@ -2826,7 +2826,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 24,
-            "label": "Sarpullido o alteraci\u00c3\u00b3n de la piel (sin dificultad para respirar o tragar)"
+            "label": "Sarpullido o alteración de la piel (sin dificultad para respirar o tragar)"
         }
     },
     {
@@ -2846,7 +2846,7 @@
             "prefix": 26,
             "priority": "O",
             "suffix": 26,
-            "label": "Dolor de garganta (sin dificultad para resp\u00c3\u00adrar o tragar)"
+            "label": "Dolor de garganta (sin dificultad para respírar o tragar)"
         }
     },
     {
@@ -2906,7 +2906,7 @@
             "prefix": 27,
             "priority": "D",
             "suffix": 4,
-            "label": "Heridas m\u00c3\u00baltiples"
+            "label": "Heridas múltiples"
         }
     },
     {
@@ -2916,7 +2916,7 @@
             "prefix": 27,
             "priority": "D",
             "suffix": 5,
-            "label": "Varias v\u00c3\u00adctimas"
+            "label": "Varias víctimas"
         }
     },
     {
@@ -2936,7 +2936,7 @@
             "prefix": 27,
             "priority": "B",
             "suffix": 2,
-            "label": "Una sola herida PERIF\u00c3\u0089RICA identificada"
+            "label": "Una sola herida PERIFÉRICA identificada"
         }
     },
     {
@@ -2956,7 +2956,7 @@
             "prefix": 27,
             "priority": "B",
             "suffix": 4,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -2976,7 +2976,7 @@
             "prefix": 27,
             "priority": "A",
             "suffix": 1,
-            "label": "Heridas perif\u00c3\u00a9ricas NO recientes (>= 6 Hrs) (sin s\u00c3\u00adntomas de prioridad)"
+            "label": "Heridas periféricas NO recientes (>= 6 Hrs) (sin síntomas de prioridad)"
         }
     },
     {
@@ -2996,7 +2996,7 @@
             "prefix": 28,
             "priority": "C",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n anormal"
+            "label": "Respiración anormal"
         }
     },
     {
@@ -3026,7 +3026,7 @@
             "prefix": 28,
             "priority": "C",
             "suffix": 5,
-            "label": "Par\u00c3\u00a1lisis o descenso facial repentino (un solo lado)"
+            "label": "Parálisis o descenso facial repentino (un solo lado)"
         }
     },
     {
@@ -3036,7 +3036,7 @@
             "prefix": 28,
             "priority": "C",
             "suffix": 6,
-            "label": "P\u00c3\u00a9rdida repentina del equilibrio o de la coordinaci\u00c3\u00b3n"
+            "label": "Pérdida repentina del equilibrio o de la coordinación"
         }
     },
     {
@@ -3046,7 +3046,7 @@
             "prefix": 28,
             "priority": "C",
             "suffix": 7,
-            "label": "Problemas repentinos de la visi\u00c3\u00b3n"
+            "label": "Problemas repentinos de la visión"
         }
     },
     {
@@ -3076,7 +3076,7 @@
             "prefix": 28,
             "priority": "C",
             "suffix": 10,
-            "label": "Respiraci\u00c3\u00b3n normal >=35 a\u00c3\u00b1os de edad"
+            "label": "Respiración normal >=35 años de edad"
         }
     },
     {
@@ -3086,7 +3086,7 @@
             "prefix": 28,
             "priority": "C",
             "suffix": 11,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -3096,7 +3096,7 @@
             "prefix": 28,
             "priority": "A",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n normal <35 a\u00c3\u00b1os de edad"
+            "label": "Respiración normal <35 años de edad"
         }
     },
     {
@@ -3106,7 +3106,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "1-a",
-            "label": "Incidente grave: avi\u00c3\u00b3n"
+            "label": "Incidente grave: avión"
         }
     },
     {
@@ -3116,7 +3116,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "1-b",
-            "label": "Incidente grave: autob\u00c3\u00bas"
+            "label": "Incidente grave: autobús"
         }
     },
     {
@@ -3166,7 +3166,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "2-k",
-            "label": "Mecanismo alto: veh\u00c3\u00adculo todo terreno / motonieve"
+            "label": "Mecanismo alto: vehículo todo terreno / motonieve"
         }
     },
     {
@@ -3186,7 +3186,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "2-m",
-            "label": "Mecanismo alto: auto-peat\u00c3\u00b3n"
+            "label": "Mecanismo alto: auto-peatón"
         }
     },
     {
@@ -3196,7 +3196,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "2-n",
-            "label": "Mecanismo alto: expulsi\u00c3\u00b3n"
+            "label": "Mecanismo alto: expulsión"
         }
     },
     {
@@ -3206,7 +3206,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "2-o",
-            "label": "Mecanismo alto: nave acu\u00c3\u00a1tica privada"
+            "label": "Mecanismo alto: nave acuática privada"
         }
     },
     {
@@ -3226,7 +3226,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "2-q",
-            "label": "Mecanismo alto: veh\u00c3\u00adculo ca\u00c3\u00addo de puente / altura"
+            "label": "Mecanismo alto: vehículo caído de puente / altura"
         }
     },
     {
@@ -3246,7 +3246,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": "2-s",
-            "label": "Mecanismo alto: veh\u00c3\u00adculo en hundimiento"
+            "label": "Mecanismo alto: vehículo en hundimiento"
         }
     },
     {
@@ -3266,7 +3266,7 @@
             "prefix": 29,
             "priority": "D",
             "suffix": 4,
-            "label": "V\u00c3\u00adctima aprisionada"
+            "label": "Víctima aprisionada"
         }
     },
     {
@@ -3316,7 +3316,7 @@
             "prefix": 29,
             "priority": "B",
             "suffix": 4,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -3326,7 +3326,7 @@
             "prefix": 29,
             "priority": "A",
             "suffix": 1,
-            "label": "Llamada de 1ra persona con heridas (lesiones) en \u00c3\u00a1rea corporal NO peligrosa"
+            "label": "Llamada de 1ra persona con heridas (lesiones) en área corporal NO peligrosa"
         }
     },
     {
@@ -3366,7 +3366,7 @@
             "prefix": 30,
             "priority": "D",
             "suffix": 3,
-            "label": "Lesi\u00c3\u00b3n de pecho o cuello (con dificultad para respirar)"
+            "label": "Lesión de pecho o cuello (con dificultad para respirar)"
         }
     },
     {
@@ -3376,7 +3376,7 @@
             "prefix": 30,
             "priority": "B",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal POSIBLEMENTE peligrosa"
+            "label": "Área corporal POSIBLEMENTE peligrosa"
         }
     },
     {
@@ -3396,7 +3396,7 @@
             "prefix": 30,
             "priority": "A",
             "suffix": 1,
-            "label": "\u00c3\u0081rea corporal NO PELIGROSA"
+            "label": "Área corporal NO PELIGROSA"
         }
     },
     {
@@ -3416,7 +3416,7 @@
             "prefix": 31,
             "priority": "E",
             "suffix": 1,
-            "label": "Respiraci\u00c3\u00b3n ineficaz"
+            "label": "Respiración ineficaz"
         }
     },
     {
@@ -3426,7 +3426,7 @@
             "prefix": 31,
             "priority": "D",
             "suffix": 1,
-            "label": "Inconsciente - Respiraci\u00c3\u00b3n ag\u00c3\u00b3nica/ineficaz"
+            "label": "Inconsciente - Respiración agónica/ineficaz"
         }
     },
     {
@@ -3436,7 +3436,7 @@
             "prefix": 31,
             "priority": "D",
             "suffix": 2,
-            "label": "Inconsciente - Respiraci\u00c3\u00b3n eficaz"
+            "label": "Inconsciente - Respiración eficaz"
         }
     },
     {
@@ -3466,7 +3466,7 @@
             "prefix": 31,
             "priority": "C",
             "suffix": 1,
-            "label": "Alerta con respiraci\u00c3\u00b3n anormal"
+            "label": "Alerta con respiración anormal"
         }
     },
     {
@@ -3476,7 +3476,7 @@
             "prefix": 31,
             "priority": "C",
             "suffix": 2,
-            "label": "Episodio(s) de desmayo y alerta >35 a\u00c3\u00b1os de edad (con historial de problemas cardiacos)"
+            "label": "Episodio(s) de desmayo y alerta >35 años de edad (con historial de problemas cardiacos)"
         }
     },
     {
@@ -3486,7 +3486,7 @@
             "prefix": 31,
             "priority": "C",
             "suffix": 3,
-            "label": "Mujeres 12-50 a\u00c3\u00b1os de edad con dolor abdominal"
+            "label": "Mujeres 12-50 años de edad con dolor abdominal"
         }
     },
     {
@@ -3496,7 +3496,7 @@
             "prefix": 31,
             "priority": "A",
             "suffix": 1,
-            "label": "Episodio(s) de desmayo y alerta >= 35 a\u00c3\u00b1os de edad (sin historial de problemas cardiacos)"
+            "label": "Episodio(s) de desmayo y alerta >= 35 años de edad (sin historial de problemas cardiacos)"
         }
     },
     {
@@ -3506,7 +3506,7 @@
             "prefix": 31,
             "priority": "A",
             "suffix": 2,
-            "label": "Episodio(s) de desmayo y alerta <= 35 a\u00c3\u00b1os de edad (con historial de problemas cardiacos)"
+            "label": "Episodio(s) de desmayo y alerta <= 35 años de edad (con historial de problemas cardiacos)"
         }
     },
     {
@@ -3516,7 +3516,7 @@
             "prefix": 31,
             "priority": "A",
             "suffix": 3,
-            "label": "Episodio(s) de desmayo y alerta <= 35 a\u00c3\u00b1os de edad (sin historial de problemas cardiacos)"
+            "label": "Episodio(s) de desmayo y alerta <= 35 años de edad (sin historial de problemas cardiacos)"
         }
     },
     {
@@ -3536,7 +3536,7 @@
             "prefix": 32,
             "priority": "B",
             "suffix": 1,
-            "label": "De pie, sentado/a, movi\u00c3\u00a9ndose o hablando"
+            "label": "De pie, sentado/a, moviéndose o hablando"
         }
     },
     {
@@ -3546,7 +3546,7 @@
             "prefix": 32,
             "priority": "B",
             "suffix": 2,
-            "label": "Notificaciones de alarma (alerta) m\u00c3\u00a9dica (sin informacion del paciente)"
+            "label": "Notificaciones de alarma (alerta) médica (sin informacion del paciente)"
         }
     },
     {
@@ -3556,7 +3556,7 @@
             "prefix": 32,
             "priority": "B",
             "suffix": 3,
-            "label": "Estado desconocido / Otros c\u00c3\u00b3digos no aplicables"
+            "label": "Estado desconocido / Otros códigos no aplicables"
         }
     },
     {
@@ -3566,7 +3566,7 @@
             "prefix": 32,
             "priority": "B",
             "suffix": 4,
-            "label": "No se entiende el idioma del llamante (no hay int\u00c3\u00a9rpretes en el centro de comunicaciones)"
+            "label": "No se entiende el idioma del llamante (no hay intérpretes en el centro de comunicaciones)"
         }
     },
     {
@@ -3606,7 +3606,7 @@
             "prefix": 33,
             "priority": "C",
             "suffix": 2,
-            "label": "Respiraci\u00c3\u00b3n anormal (comienzo repentino)"
+            "label": "Respiración anormal (comienzo repentino)"
         }
     },
     {
@@ -3916,7 +3916,7 @@
             "prefix": 36,
             "priority": "C",
             "suffix": 3,
-            "label": "Dolor de pecho >= 35 a\u00c3\u00b1os de edad con un solo sintoma de influeza"
+            "label": "Dolor de pecho >= 35 años de edad con un solo sintoma de influeza"
         }
     },
     {
@@ -3926,7 +3926,7 @@
             "prefix": 36,
             "priority": "C",
             "suffix": 4,
-            "label": "Dolor de pecho >= 35 a\u00c3\u00b1os de edad con un multiples sintomas de influeza"
+            "label": "Dolor de pecho >= 35 años de edad con un multiples sintomas de influeza"
         }
     },
     {
@@ -3946,7 +3946,7 @@
             "prefix": 36,
             "priority": "A",
             "suffix": 1,
-            "label": "Dolor de pecho <= 35 a\u00c3\u00b1os de edad con un solo sintoma de influenza"
+            "label": "Dolor de pecho <= 35 años de edad con un solo sintoma de influenza"
         }
     },
     {
@@ -3956,7 +3956,7 @@
             "prefix": 36,
             "priority": "A",
             "suffix": 2,
-            "label": "Dolor de pecho <= 35 a\u00c3\u00b1os de edad con un multiples sintomas de influenza"
+            "label": "Dolor de pecho <= 35 años de edad con un multiples sintomas de influenza"
         }
     },
     {
