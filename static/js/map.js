@@ -2061,7 +2061,7 @@ $(function() {
 
     $('#radio-code-input').on('input', function() {
         logger.log('debug', $(this));
-        logger.log('debug', $(this).val);
+        logger.log('debug', $(this).val());
         logger.log('debug', $(this).innerText);
 
         $('#radio-code').innerText = $(this).innerText;
