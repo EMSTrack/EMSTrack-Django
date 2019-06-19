@@ -206,6 +206,21 @@
                 </form>
 
                 <h5>
+                    {% trans "MPDS Code" %}
+                </h5>
+                <div class="text-right" style="min-height: 2em;">
+                    <label class="d-inline-block text-right" id="mpds-code" name="mpds-code"></label>
+                </div>
+                <input id="mpds-code-input" list="mpds-code-list"
+                       name="mpds-code-input" class="form-control"
+                       placeholder="{% trans "MPDS Code" %}">
+                <datalist id="mpds-code-list">
+                    {% for code in mpds_code_list %}
+                    <option id="mpds-code-{{ code.id }}" value="{{ code.prefix }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
+                    {% endfor %}
+                </datalist>
+
+                <h5>
                     {% trans "Radio Code" %}
                 </h5>
                 <div class="text-right" style="min-height: 2em;">

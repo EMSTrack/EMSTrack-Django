@@ -14,7 +14,7 @@ from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMi
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
-    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode
+    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallMPDSCode
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -266,6 +266,7 @@ class AmbulanceMap(TemplateView):
         context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
         context['radio_code_list'] = CallRadioCode.objects.all()
+        context['mpds_code_list'] = CallMPDSCode.objects.all()
 
         return context
 
