@@ -2014,11 +2014,17 @@ $(function() {
 
         $('#priority-buttons')
             .append(
-                '<label id="priority-button-' + priority + '" class="btn btn-outline-' + call_priority_css[priority].class + ' disabled">\n' +
+                '<label id="priority-button-' + priority + '" class="btn btn-outline-' + call_priority_css[priority].class + '">\n' +
                 '  <input type="radio" name="priority" autocomplete="off" value="' + priority + '">\n' +
                 '  ' + call_priority_css[priority].html + '\n' +
                 '</label>\n');
 
+    });
+
+    // Disable button clicking
+    $('#priority-buttons').on("click", "btn", function(event) {
+        event.preventDefault();
+        return false;
     });
 
     // Make ambulance-selection droppable
