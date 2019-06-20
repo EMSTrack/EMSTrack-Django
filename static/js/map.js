@@ -2073,11 +2073,15 @@ $(function() {
     });
 
     $('#mpds-code-input').on('input', function() {
-        var option = $('option[value="'+$(this).val()+'"]');
+        const value = $(this).val();
+        const option = $('option[value="' + value + '"]');
+        logger.log('debug', value);
+        logger.log('debug', mpds_classification[value]);
         if (option.length) {
-            $('#mpds-classification').html(mpds_classification[$(this).val()]);
+            $('#mpds-classification').html(mpds_classification[value]);
             $('#mpds-code').html(option.html());
         } else
+            $('#mpds-classification').html('');
             $('#mpds-code').html('');
     })
 
