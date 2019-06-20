@@ -171,9 +171,9 @@
 
                 <h5>
                 {% if mpds_code_list %}
-                    {% trans "Priority" %}
-                {% else  %}
                     {% trans "MPDS Code" %}
+                {% else  %}
+                    {% trans "Priority" %}
                 {% endif  %}
                 </h5>
                 {% if mpds_code_list %}
@@ -183,7 +183,7 @@
                 {% endif  %}
                 <form required>
                     <div id="priority-buttons"
-                         class="btn-group btn-group-toggle border rounded"
+                         class="btn-group btn-group-toggle border rounded text-right"
                          data-toggle="buttons">
                     </div>
                 </form>

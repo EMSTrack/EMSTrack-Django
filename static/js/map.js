@@ -112,6 +112,8 @@ const locationIcon = L.icon({
 
 });
 
+let mpds_classification = {};
+
 /**
  * Ambulance statuses
  */
@@ -188,6 +190,17 @@ function init( client ) {
         })
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve hospitals and bases from ApiClient: %j', error);
+        });
+
+    // retrieve mpds classification
+    logger.log('info', 'Retrieving MPDS classification');
+    apiClient.retrieveMPDSClassification()
+        .then( (value) => {
+            logger.log('info', '%d MPDS classifications retrieved', Object.keys(value).length);
+            mpds_classification = value;
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve MPDS classification from ApiClient: %j', error);
         });
 
     // save visibleCategory when unloading

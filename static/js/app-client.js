@@ -58,10 +58,33 @@ export class AppClient extends TopicObserver {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
+    retrieveMPDSClassification() {
+
+        // initialized if needed
+        const mpds_classification = {};
+
+        // retrieve mpds classification
+        return this.httpClient.get('mpds/classification/')
+            .then( (response) => {
+
+                // Update mpds classification
+                response.data.forEach( (classification) => {
+
+                    // update mpds_classification
+                    mpds_classification[classification.id] = classification.label;
+
+                });
+
+                // return mpds_classification
+                return mpds_classification;
+
+            })
+
+    }
 
     retrieveAmbulances() {
 
-        // initialized if needed
+        // initialize if needed
         if (typeof this.ambulances === 'undefined')
             this.ambulances = {};
 
@@ -93,11 +116,11 @@ export class AppClient extends TopicObserver {
     
     retrieveHospitals() {
         
-        // initialized if needed
+        // initialize if needed
         if (typeof this.hospitals === 'undefined')
             this.hospitals = {};
 
-        // retrieve ambulances
+        // retrieve hospitals
         return this.httpClient.get('hospital/')
             .then( (response) => {
                 
@@ -123,11 +146,11 @@ export class AppClient extends TopicObserver {
 
     retrieveCalls() {
         
-        // initialized if needed
+        // initialize if needed
         if (typeof this.calls === 'undefined')
             this.calls = {};
 
-        // retrieve ambulances
+        // retrieve calls
         return this.httpClient.get('call/')
             .then( (response) => {
                 
@@ -153,11 +176,11 @@ export class AppClient extends TopicObserver {
 
     retrieveBases() {
 
-        // initialized if needed
+        // initialize if needed
         if (typeof this.bases === 'undefined')
             this.bases = {};
 
-        // retrieve ambulances
+        // retrieve bases
         return this.httpClient.get('location/Base/')
             .then( (response) => {
 
