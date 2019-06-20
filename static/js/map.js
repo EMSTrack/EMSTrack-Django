@@ -2085,16 +2085,16 @@ $(function() {
     $('#mpds-code-input').on('input', function() {
         const value = $(this).val();
         const option = $('option[value="'+value+'"]');
-        const values = value.split('-', 2);
-        const classification = values[0];
-        const priority = values[1];
         if (option.length) {
+            const values = value.split('-', 2);
+            const classification = values[0];
+            const priority = values[1];
             $('#mpds-classification').html(mpds_classification[classification]);
             $('#mpds-code').html(option.html());
             $('#priority-button-'+priority).button('toggle');
         } else {
-            $('#mpds-classification').html('');
-            $('#mpds-code').html('');
+            $('#mpds-classification').html('<span class="text-muted">unknown</span>');
+            $('#mpds-code').html('<span class="text-muted">unknown</span>');
             $("#priority-buttons .btn").removeClass("active");
         }
     });
