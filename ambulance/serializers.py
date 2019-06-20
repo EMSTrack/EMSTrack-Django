@@ -7,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
-    LocationType
+    LocationType, CallMPDSClassification, CallMPDSCode
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -405,3 +405,21 @@ class CallSerializer(serializers.ModelSerializer):
                 (not ('ambulancecall_set' in data) or len(data['ambulancecall_set']) == 0):
             raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
         return data
+
+
+# CallMPDSClassification Serializer
+
+class CallMPDSClassificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallMPDSClassification
+        fields = ['id', 'label']
+
+
+# CallMPDSCode Serializer
+
+class CallMPDSCodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallMPDSCode
+        fields = ['id', 'prefix', 'priority', 'suffix', 'label']

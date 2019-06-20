@@ -10,7 +10,7 @@ from rest_framework_swagger.views import get_swagger_view
 from login.viewsets import ProfileViewSet, ClientViewSet
 from login.views import PasswordView, SettingsView, VersionView
 
-from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet
+from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet, CallMPDSViewSet
 
 from hospital.viewsets import HospitalViewSet
 from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
@@ -52,6 +52,10 @@ router.register(r'equipment',
 router.register(r'call',
                 CallViewSet,
                 base_name='api-call')
+
+router.register(r'mpds',
+                CallMPDSViewSet,
+                base_name='api-mpds')
 
 router.register(r'client',
                 ClientViewSet,

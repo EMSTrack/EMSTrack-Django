@@ -14,7 +14,7 @@ from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMi
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
-    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallMPDSCode
+    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallMPDSCode, CallMPDSClassification
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 

@@ -12,9 +12,10 @@ from emstrack.mixins import BasePermissionMixin, \
 from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus, CallStatus
+    AmbulanceCallStatus, CallStatus, CallMPDSClassification
 
-from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer
+from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
+    CallMPDSCodeSerializer, CallMPDSClassificationSerializer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -335,3 +336,25 @@ class CallViewSet(mixins.ListModelMixin,
             queryset = queryset.exclude(status=exclude)
 
         return queryset
+
+
+# CallMPDS ViewSet
+
+class CallMPDSViewSet(mixins.ListModelMixin,
+                      viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating MPDS codes.
+
+    list:
+    Retrieve list of MPDS codes.
+    """
+
+    serializer_class = CallMPDSCodeSerializer
+
+    @action(detail=False, methods=['get'])
+    def classification(self, request, **kwargs):
+        """Retrieve active calls for ambulance instance."""
+        classification = CallMPDSClassification.objects.all()
+
+        serializer = CallMPDSClassificationSerializer(classification, many=True)
+        return Response(serializer.data)
