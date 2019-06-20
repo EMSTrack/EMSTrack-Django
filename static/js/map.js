@@ -2106,11 +2106,11 @@ $(function() {
 
     $('#radio-code-input').on('input', function() {
 
-        const radio_code = $('#radio-code-list option :selected').val();
-        logger.log('debug', radio_code);
+        const radio_code_id = $('#radio-code-list option[value="'+$('#radio-code-input').val()+'"]').attr('id');
+        logger.log('debug', radio_code_id);
 
 
-        var option = $('option[value="'+$(this).val()+'"]');
+        var option = $('#radio-code-list option[value="'+$(this).val()+'"]');
         if (option.length)
             $('#radio-code').html(option.html());
         else
