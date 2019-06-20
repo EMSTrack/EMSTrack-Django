@@ -2105,6 +2105,11 @@ $(function() {
     });
 
     $('#radio-code-input').on('input', function() {
+
+        const radio_code = $('#radio-code-list option:selected');
+        logger.log('debug', "radio_code = '" + radio_code + "'");
+
+
         var option = $('option[value="'+$(this).val()+'"]');
         if (option.length)
             $('#radio-code').html(option.html());
