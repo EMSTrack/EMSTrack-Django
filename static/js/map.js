@@ -2093,8 +2093,8 @@ $(function() {
             $('#mpds-code').html(option.html());
             $('#priority-button-'+priority).button('toggle');
         } else {
-            $('#mpds-classification').html('<span class="text-muted">unknown</span>');
-            $('#mpds-code').html('<span class="text-muted">unknown</span>');
+            $('#mpds-classification').html('<span class="text-muted">MPDS Classification</span>');
+            $('#mpds-code').html('<span class="text-muted">MPDS Code</span>');
             $("#priority-buttons .btn").removeClass("active");
         }
     });
@@ -2104,7 +2104,7 @@ $(function() {
         if (option.length)
             $('#radio-code').html(option.html());
         else
-            $('#radio-code').html('');
+            $('#radio-code').html('<span class="text-muted">Radio Code</span>');
     });
 
 });
