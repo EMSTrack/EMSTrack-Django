@@ -2022,7 +2022,7 @@ $(function() {
     });
 
     // Disable button clicking
-    $('#priority-buttons').on("click", "btn", function(event) {
+    $('#priority-buttons').on("click", ".btn", function(event) {
         event.preventDefault();
         return false;
     });
