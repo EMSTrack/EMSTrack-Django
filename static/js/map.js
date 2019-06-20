@@ -2074,9 +2074,10 @@ $(function() {
 
     $('#mpds-code-input').on('input', function() {
         var option = $('option[value="'+$(this).val()+'"]');
-        if (option.length)
+        if (option.length) {
+            $('#mpds-classification').html(mpds_classification[$(this).val()]);
             $('#mpds-code').html(option.html());
-        else
+        } else
             $('#mpds-code').html('');
     })
 
