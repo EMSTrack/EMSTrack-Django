@@ -874,7 +874,7 @@ function addCallToMap(call) {
 
 function addAmbulanceToMap(ambulance) {
 
-    logger.log('info', "Adding ambulance '%s'[id:'%d, latlon:%f,%f] to map",
+    logger.log('info', "Adding ambulance '%s [id:%d, latlon:%f,%f] to map",
         ambulance.identifier, ambulance.id, ambulance.location.latitude, ambulance.location.longitude);
 
     // store ambulance details in an array
