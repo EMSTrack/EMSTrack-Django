@@ -170,44 +170,24 @@
                 {% csrf_token %}
 
                 <h5>
+                {% if mpds_code_list %}
                     {% trans "Priority" %}
+                {% else  %}
+                    {% trans "MPDS Code" %}
+                {% endif  %}
                 </h5>
+                {% if mpds_code_list %}
+                <div class="text-right" style="min-height: 2em;">
+                    <label class="d-inline-block text-right" id="mpds-classification" name="mpds-classification"></label>
+                </div>
+                {% endif  %}
                 <form required>
                     <div id="priority-buttons"
                          class="btn-group btn-group-toggle border rounded"
                          data-toggle="buttons">
-                        <!--
-                        <label class="btn btn-success">
-                            <input type="radio" name="priority" autocomplete="off" value="A">
-                            A
-                        </label>
-                        <label class="btn btn-yellow">
-                            <input type="radio" name="priority" autocomplete="off" value="B">
-                            B
-                        </label>
-                        <label class="btn btn-warning">
-                            <input type="radio" name="priority" autocomplete="off" value="C">
-                            C
-                        </label>
-                        <label class="btn btn-danger">
-                            <input type="radio" name="priority" autocomplete="off" value="D">
-                            D
-                        </label>
-                        <label class="btn btn-info">
-                            <input type="radio" name="priority" autocomplete="off" value="E">
-                            E
-                        </label>
-                        <label class="btn btn-secondary">
-                            <input type="radio" name="priority" autocomplete="off" value="O">
-                            &Omega;
-                        </label>
-                        -->
                     </div>
                 </form>
-
-                <h5>
-                    {% trans "MPDS Code" %}
-                </h5>
+                {% if mpds_code_list %}
                 <div class="text-right" style="min-height: 2em;">
                     <label class="d-inline-block text-right" id="mpds-code" name="mpds-code"></label>
                 </div>
@@ -219,7 +199,9 @@
                     <option id="mpds-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
                     {% endfor %}
                 </datalist>
+                {% endif  %}
 
+                {% if radio_code_list %}
                 <h5>
                     {% trans "Radio Code" %}
                 </h5>
@@ -234,6 +216,7 @@
                     <option id="radio-code-{{ code.id }}" value="{{ code.code }}">{{ code.label }}</option>
                     {% endfor %}
                 </datalist>
+                {% endif  %}
 
                 <h5>
                     {% trans "Description" %}

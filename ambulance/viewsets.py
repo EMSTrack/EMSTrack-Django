@@ -354,7 +354,7 @@ class CallMPDSViewSet(mixins.ListModelMixin,
 
     @action(detail=False, methods=['get'])
     def classification(self, request, **kwargs):
-        """Retrieve active calls for ambulance instance."""
+        """Retrieve MPDS classification labels."""
         classification = CallMPDSClassification.objects.all()
 
         serializer = CallMPDSClassificationSerializer(classification, many=True)
