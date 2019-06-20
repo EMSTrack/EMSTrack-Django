@@ -2086,10 +2086,11 @@ $(function() {
         if (option.length) {
             $('#mpds-classification').html(mpds_classification[classification]);
             $('#mpds-code').html(option.html());
-        } else
+        } else {
             $('#mpds-classification').html('');
             $('#mpds-code').html('');
-    })
+        }
+    });
 
     $('#radio-code-input').on('input', function() {
         var option = $('option[value="'+$(this).val()+'"]');
@@ -2097,7 +2098,7 @@ $(function() {
             $('#radio-code').html(option.html());
         else
             $('#radio-code').html('');
-    })
+    });
 
 });
 
