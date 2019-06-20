@@ -1736,21 +1736,29 @@ function dispatchCall() {
     form['details'] = $('#comment').val().trim();
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
-    let radio_code_id;
-    try {
-        radio_code_id = $('#radio-code-list option[value="'+$('#radio-code-input').val()+'"]').attr('id').split('-')[2];
-    } catch(err) {
-        logger.log(debug, err);
+    form['radio_code'] = null;
+    let selector = $('#radio-code-list option[value="'+$('#radio-code-input').val()+'"]');
+    if ( selector.length ) {
+        try {
+            form['radio_code']= selector.attr('id').split('-')[2];
+        } catch(err) {
+            logger.log('debug', err);
+            bsalert("Invalid radio code.");
+            return;
+        }
     }
-    logger.log('debug', radio_code_id);
 
-    let mpds_code_id;
-    try {
-        mpds_code_id = $('#mpds-code-list option[value="' + $('#mpds-code-input').val() + '"]').attr('id').split('-')[2];
-    } catch(err) {
-        logger.log(debug, err);
+    form['mpds_code'] = null;
+    selector = $('#mpds-code-list option[value="' + $('#mpds-code-input').val() + '"]');
+    if ( selector.length ) {
+        try {
+            form['mpds_code'] = selector.attr('id').split('-')[2];
+        } catch(err) {
+            logger.log('debug', err);
+            bsalert("Invalid MPDS code.");
+            return;
+        }
     }
-    logger.log('debug', mpds_code_id);
 
     // checks
     if (form["priority"] === undefined) {
