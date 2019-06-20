@@ -2014,7 +2014,7 @@ $(function() {
 
         $('#priority-buttons')
             .append(
-                '<label id="priority-button-' + priority + '" class="btn btn-outline-' + call_priority_css[priority].class + '">\n' +
+                '<label id="priority-button-' + priority + '" class="btn btn-outline-' + call_priority_css[priority].class + ' disabled">\n' +
                 '  <input type="radio" name="priority" autocomplete="off" value="' + priority + '">\n' +
                 '  ' + call_priority_css[priority].html + '\n' +
                 '</label>\n');
