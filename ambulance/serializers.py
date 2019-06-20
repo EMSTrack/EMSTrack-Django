@@ -323,7 +323,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
-    mpds_code = CallMPDSCodeSerializer(many=False, required=False)
+    # mpds_code = CallMPDSCodeSerializer(many=False, required=False)
 
     class Meta:
         model = Call

@@ -1736,6 +1736,11 @@ function dispatchCall() {
     form['details'] = $('#comment').val().trim();
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
+    const radio_code = $('radio-code-list').val();
+    const radio_code_id = $('option[value="'+radio_code+'"]').attr('id');
+    logger.log('debug', radio_code);
+    logger.log('debug', radio_code_id);
+
     // checks
     if (form["priority"] === undefined) {
         bsalert("Please select the priority level.");
