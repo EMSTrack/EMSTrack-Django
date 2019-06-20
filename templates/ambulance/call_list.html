@@ -58,6 +58,8 @@
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Details" %}</th>
                         <th>{% trans "Priority" %}</th>
+                        <th>{% trans "MPDS Code" %}</th>
+                        <th>{% trans "Radio Code" %}</th>
                         <th>{% trans "Ambulances" %}</th>
                     </tr>
                 </thead>
@@ -67,6 +69,8 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.started_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
+                            <td>{{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}</td>
+                            <td>{{ call.radio_code.id }}</td>
                             <td>{{ call.get_ambulances }}</td>
                         </tr>
 
@@ -109,6 +113,8 @@
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Details" %}</th>
                         <th>{% trans "Priority" %}</th>
+                        <th>{% trans "MPDS Code" %}</th>
+                        <th>{% trans "Radio Code" %}</th>
                         <th>{% trans "Ambulances" %}</th>
                     </tr>
                 </thead>
@@ -118,6 +124,8 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.ended_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
+                            <td>{{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}</td>
+                            <td>{{ call.radio_code.id }}</td>
                             <td>{{ call.get_ambulances }}</td>
                         </tr>
 
