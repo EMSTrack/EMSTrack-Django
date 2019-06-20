@@ -12,7 +12,7 @@ from emstrack.mixins import BasePermissionMixin, \
 from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus, CallStatus, CallMPDSClassification
+    AmbulanceCallStatus, CallStatus, CallMPDSClassification, CallMPDSCode
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
     CallMPDSCodeSerializer, CallMPDSClassificationSerializer
@@ -349,6 +349,7 @@ class CallMPDSViewSet(mixins.ListModelMixin,
     Retrieve list of MPDS codes.
     """
 
+    queryset = CallMPDSCode.objects.all()
     serializer_class = CallMPDSCodeSerializer
 
     @action(detail=False, methods=['get'])
