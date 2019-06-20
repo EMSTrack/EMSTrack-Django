@@ -29,10 +29,24 @@
                 <strong>{% trans "Details" %}:</strong>
                 {{ call.details }}
             </p>
+            {% if call.mpds_code %}
+            <p>
+                <strong>{% trans "MPDS Code" %}:</strong>
+                <em>{{ call.mpds_code.prefix }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix}}</em>:
+                {{ call.mpds_code.prefix.label }}: {{ call.mpds_code.label}}
+            </p>
+            {% else %}
             <p>
                 <strong>{% trans "Priority" %}:</strong>
                 {{ call.priority }}
             </p>
+            {% endif %}
+            {% if call.radio_code %}
+            <p>
+                <strong>{% trans "Radio Code" %}:</strong>
+                {{ call.radio_code.code }}: {{ call.radio_code.label}}
+            </p>
+            {% endif %}
             <div class="row">
                 <div class="col">
                     <strong>{% trans "Pending at" %}:</strong>
