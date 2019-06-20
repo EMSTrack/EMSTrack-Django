@@ -1736,10 +1736,21 @@ function dispatchCall() {
     form['details'] = $('#comment').val().trim();
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
-    const radio_code = $('#radio-code-list option:selected').val();
-    const radio_code_id = $('option[value="'+radio_code+'"]').attr('id');
-    logger.log('debug', radio_code);
+    let radio_code_id;
+    try {
+        radio_code_id = $('#radio-code-list option[value="'+$('#radio-code-input').val()+'"]').attr('id').split('-')[2];
+    } catch(err) {
+        logger.log(debug, err);
+    }
     logger.log('debug', radio_code_id);
+
+    let mpds_code_id;
+    try {
+        mpds_code_id = $('#mpds-code-list option[value="' + $('#mpds-code-input').val() + '"]').attr('id').split('-')[2];
+    } catch(err) {
+        logger.log(debug, err);
+    }
+    logger.log('debug', mpds_code_id);
 
     // checks
     if (form["priority"] === undefined) {
@@ -2105,11 +2116,6 @@ $(function() {
     });
 
     $('#radio-code-input').on('input', function() {
-
-        const radio_code_id = $('#radio-code-list option[value="'+$('#radio-code-input').val()+'"]').attr('id');
-        logger.log('debug', radio_code_id);
-
-
         var option = $('#radio-code-list option[value="'+$(this).val()+'"]');
         if (option.length)
             $('#radio-code').html(option.html());
