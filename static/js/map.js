@@ -203,6 +203,7 @@ function init( client ) {
             logger.log('error', 'Failed to retrieve MPDS classification from ApiClient: %j', error);
         })
         .then( () => {
+            logger.log('info', 'INFO');
             if (mpds_classification.length > 0) {
                 logger.log('info', 'Will disable priority buttons');
                 // Disable button clicking
