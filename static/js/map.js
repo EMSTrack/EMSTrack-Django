@@ -203,7 +203,6 @@ function init( client ) {
             logger.log('error', 'Failed to retrieve MPDS classification from ApiClient: %j', error);
         })
         .then( () => {
-            logger.log('info', 'INFO');
             if (Object.keys(mpds_classification).length > 0) {
                 logger.log('info', 'Will disable priority buttons');
                 // Disable button clicking
@@ -2089,10 +2088,6 @@ $(function() {
         const values = value.split('-', 2);
         const classification = values[0];
         const priority = values[1];
-        logger.log('debug', value);
-        logger.log('debug', classification);
-        logger.log('debug', priority);
-        logger.log('debug', mpds_classification[classification]);
         if (option.length) {
             $('#mpds-classification').html(mpds_classification[classification]);
             $('#mpds-code').html(option.html());
@@ -2100,6 +2095,7 @@ $(function() {
         } else {
             $('#mpds-classification').html('');
             $('#mpds-code').html('');
+            $("#priority-buttons .btn").removeClass("active");
         }
     });
 
