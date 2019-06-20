@@ -204,7 +204,7 @@ function init( client ) {
         })
         .then( () => {
             logger.log('info', 'INFO');
-            if (mpds_classification.length > 0) {
+            if (Object.keys(mpds_classification).length > 0) {
                 logger.log('info', 'Will disable priority buttons');
                 // Disable button clicking
                 $('#priority-buttons').on("click", ".btn", function (event) {
