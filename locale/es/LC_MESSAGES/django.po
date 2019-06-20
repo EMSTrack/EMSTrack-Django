@@ -616,6 +616,9 @@ msgstr "por"
 msgid "Name"
 msgstr "Nombre"
 
+msgid "Age"
+msgstr "Edad"
+
 #: templates/ambulance/ambulance_detail.html:90
 msgid "This ambulance has no equipment sets."
 msgstr "Esta ambulancia no tiene juegos de equipos."
@@ -731,6 +734,15 @@ msgstr "Terminada en"
 #: templates/ambulance/call_detail.html:73 templates/ambulance/map.html:281
 msgid "Patients"
 msgstr "Pacientes"
+
+msgid "MPDS Classification"
+msgstr "Clasificación MPDS"
+
+msgid "MPDS Code"
+msgstr "Código MPDS"
+
+msgid "Radio Code"
+msgstr "Código de Radio"
 
 #: templates/ambulance/call_detail.html:91
 msgid "No patient names are available."

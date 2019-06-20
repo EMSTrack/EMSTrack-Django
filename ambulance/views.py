@@ -10,6 +10,8 @@ from django.views.generic import TemplateView, ListView, \
     DetailView, CreateView, UpdateView
 from django.views.generic.detail import BaseDetailView
 
+from django.utils.translation import ugettext_lazy as _
+
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
@@ -267,6 +269,14 @@ class AmbulanceMap(TemplateView):
 
         context['radio_code_list'] = CallRadioCode.objects.all()
         context['mpds_code_list'] = CallMPDSCode.objects.all()
+
+        context['translation_table'] = {
+            "Age": _("Age"),
+            "Name": _("Name"),
+            "Radio Code": _("Radio Code"),
+            "MPDS Code": _("MPDS Code"),
+            "MPDS Classification": _("MPDS Classification"),
+        }
 
         return context
 

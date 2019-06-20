@@ -1972,13 +1972,13 @@ function newPatientForm(index, symbol) {
         '<input id="patient-' + index + '-name" ' +
         'type="text" ' +
         'class="form-control" ' +
-        'placeholder="Name">' +
+        'placeholder="' + translation_table['Name'] + '">' +
         '</div>' +
         '<div class="col-md-3 px-0">' +
         '<input id="patient-' + index + '-age" ' +
         'type="number" min="0" ' +
         'class="form-control" ' +
-        'placeholder="Age">' +
+        'placeholder="' + translation_table['Age'] + '">' +
         '</div>' +
         '<div class="col-md-2 pl-0">' +
         '<button class="btn btn-default btn-block btn-new-patient" ' +
@@ -2117,8 +2117,8 @@ $(function() {
             $('#mpds-code').html(option.html());
             $('#priority-button-'+priority).button('toggle');
         } else {
-            $('#mpds-classification').html('<span class="text-muted">MPDS Classification</span>');
-            $('#mpds-code').html('<span class="text-muted">MPDS Code</span>');
+            $('#mpds-classification').html('<span class="text-muted">' + translation_table["MPDS Classification"] + '</span>');
+            $('#mpds-code').html('<span class="text-muted">' + translation_table["MPDS Code"] + '</span>');
             $("#priority-buttons .btn").removeClass("active");
         }
     });
@@ -2128,7 +2128,7 @@ $(function() {
         if (option.length)
             $('#radio-code').html(option.html());
         else
-            $('#radio-code').html('<span class="text-muted">Radio Code</span>');
+            $('#radio-code').html('<span class="text-muted">' + translation_table["Radio Code"] + '</span>');
     });
 
 });
