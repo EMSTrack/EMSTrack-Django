@@ -32,8 +32,11 @@
             {% if call.mpds_code %}
             <p>
                 <strong>{% trans "MPDS Code" %}:</strong>
+                <br/>
                 {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix}}
-                ({{ call.mpds_code.prefix.label }}): {{ call.mpds_code.label}}
+                ({{ call.mpds_code.prefix.label }}):
+                <br/>
+                {{ call.mpds_code.label}}
             </p>
             {% else %}
             <p>
