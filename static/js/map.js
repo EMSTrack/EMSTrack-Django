@@ -2106,7 +2106,7 @@ $(function() {
 
     $('#radio-code-input').on('input', function() {
 
-        const radio_code = $('#radio-code-list option :selected');
+        const radio_code = $('#radio-code-list option :selected').val();
         logger.log('debug', radio_code);
 
 
