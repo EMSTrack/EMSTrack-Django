@@ -2089,7 +2089,7 @@ $(function() {
 
     $('#mpds-code-input').on('input', function() {
         const value = $(this).val();
-        const option = $('option[value="'+value+'"]');
+        const option = $('#mpds-code-list option[value="'+value+'"]');
         if (option.length) {
             const values = value.split('-', 2);
             const classification = values[0];
