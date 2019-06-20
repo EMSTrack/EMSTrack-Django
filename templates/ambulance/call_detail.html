@@ -33,8 +33,9 @@
             <p>
                 <strong>{% trans "MPDS Code" %}:</strong>
                 <br/>
-                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix}}
-                ({{ call.mpds_code.prefix.label }}):
+                <em>{{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix}}</em>
+                <br/>
+                {{ call.mpds_code.prefix.label }}
                 <br/>
                 {{ call.mpds_code.label}}
             </p>
