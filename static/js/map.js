@@ -2014,7 +2014,7 @@ $(function() {
 
         $('#priority-buttons')
             .append(
-                '<label class="btn btn-outline-' + call_priority_css[priority].class + '">\n' +
+                '<label id="priority-button-\' + priority + \'" class="btn btn-outline-' + call_priority_css[priority].class + '">\n' +
                 '  <input type="radio" name="priority" autocomplete="off" value="' + priority + '">\n' +
                 '  ' + call_priority_css[priority].html + '\n' +
                 '</label>\n');
@@ -2082,10 +2082,10 @@ $(function() {
         logger.log('debug', classification);
         logger.log('debug', priority);
         logger.log('debug', mpds_classification[classification]);
-        logger.log('debug', option);
         if (option.length) {
             $('#mpds-classification').html(mpds_classification[classification]);
             $('#mpds-code').html(option.html());
+            $('#priority-button-'+priority).button('toggle');
         } else {
             $('#mpds-classification').html('');
             $('#mpds-code').html('');
