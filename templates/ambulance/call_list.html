@@ -31,7 +31,11 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.pending_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
-                            <td>{{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}</td>
+                            <td>
+                                {% if call.mpds_code %}
+                                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}
+                                {% endif %}
+                            </td>
                             <td>{{ call.radio_code.id }}</td>
                             <td>{{ call.get_ambulances }}</td>
                         </tr>
@@ -69,7 +73,11 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.started_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
-                            <td>{{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}</td>
+                            <td>
+                                {% if call.mpds_code %}
+                                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}
+                                {% endif %}
+                            </td>
                             <td>{{ call.radio_code.id }}</td>
                             <td>{{ call.get_ambulances }}</td>
                         </tr>
@@ -124,7 +132,11 @@
                             <td><a href="{% url 'ambulance:call_detail' pk=call.id %}">{{ call.ended_at }}</a></td>
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
-                            <td>{{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}</td>
+                            <td>
+                                {% if call.mpds_code %}
+                                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}
+                                {% endif %}
+                            </td>
                             <td>{{ call.radio_code.id }}</td>
                             <td>{{ call.get_ambulances }}</td>
                         </tr>
