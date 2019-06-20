@@ -299,17 +299,37 @@ class PatientSerializer(serializers.ModelSerializer):
         read_only_fields = []
 
 
+# CallMPDSClassification Serializer
+
+class CallMPDSClassificationSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallMPDSClassification
+        fields = ['id', 'label']
+
+
+# CallMPDSCode Serializer
+
+class CallMPDSCodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallMPDSCode
+        fields = ['id', 'prefix', 'priority', 'suffix', 'label']
+
+
 # Call serializer
 
 class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
+    mpds_code = CallMPDSCodeSerializer(many=False, required=False)
 
     class Meta:
         model = Call
         fields = ['id',
                   'status', 'details', 'priority',
+                  'mpds_code', 'radio_code',
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
@@ -405,21 +425,3 @@ class CallSerializer(serializers.ModelSerializer):
                 (not ('ambulancecall_set' in data) or len(data['ambulancecall_set']) == 0):
             raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
         return data
-
-
-# CallMPDSClassification Serializer
-
-class CallMPDSClassificationSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CallMPDSClassification
-        fields = ['id', 'label']
-
-
-# CallMPDSCode Serializer
-
-class CallMPDSCodeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = CallMPDSCode
-        fields = ['id', 'prefix', 'priority', 'suffix', 'label']

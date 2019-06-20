@@ -410,6 +410,12 @@ class Call(PublishMixin,
                                 choices=make_choices(CallPriority),
                                 default=CallPriority.E.name)
 
+    # mpds code
+    mpds_code = models.ForeignKey(CallMPDSCode,
+                                  null=True,
+                                  on_delete=models.CASCADE,
+                                  verbose_name=_('mpds_code'))
+
     # radio code
     radio_code = models.ForeignKey(CallRadioCode,
                                    null=True,
