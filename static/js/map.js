@@ -201,6 +201,16 @@ function init( client ) {
         })
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve MPDS classification from ApiClient: %j', error);
+        })
+        .then( () => {
+            if (mpds_classification.length > 0) {
+                logger.log('info', 'Will disable priority buttons');
+                // Disable button clicking
+                $('#priority-buttons').on("click", ".btn", function (event) {
+                    event.preventDefault();
+                    return false;
+                });
+            }
         });
 
     // save visibleCategory when unloading
@@ -2019,12 +2029,6 @@ $(function() {
                 '  ' + call_priority_css[priority].html + '\n' +
                 '</label>\n');
 
-    });
-
-    // Disable button clicking
-    $('#priority-buttons').on("click", ".btn", function(event) {
-        event.preventDefault();
-        return false;
     });
 
     // Make ambulance-selection droppable
