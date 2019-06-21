@@ -284,9 +284,6 @@ function setupHospitals() {
     Object.entries(apiClient.hospitals).forEach((entry) => {
         const hospital = entry[1];
         updateHospital(hospital);
-        const location = hospital;
-        location.type = 'h';
-        addLocationToMap(location);
     });
 
 }
@@ -420,7 +417,9 @@ function updateHospital(hospital) {
     }
 
     // add hospital to map
-    addLocationToMap(hospital);
+    const location = hospital;
+    location.type = 'h';
+    addLocationToMap(location);
 
 }
 
