@@ -360,16 +360,16 @@ CallStatusOrder = [
 ]
 
 
-class CallMPDSClassification(models.Model):
+class CallPriorityClassification(models.Model):
 
     # label
     label = models.CharField(_('label'), max_length=200)
 
 
-class CallMPDSCode(models.Model):
+class CallPriorityCode(models.Model):
 
     # prefix
-    prefix = models.ForeignKey(CallMPDSClassification,
+    prefix = models.ForeignKey(CallPriorityClassification,
                                on_delete=models.CASCADE,
                                verbose_name=_('prefix'))
 
@@ -410,11 +410,11 @@ class Call(PublishMixin,
                                 choices=make_choices(CallPriority),
                                 default=CallPriority.E.name)
 
-    # mpds code
-    mpds_code = models.ForeignKey(CallMPDSCode,
-                                  null=True,
-                                  on_delete=models.CASCADE,
-                                  verbose_name=_('mpds_code'))
+    # priority code
+    priority_code = models.ForeignKey(CallPriorityCode,
+                                      null=True,
+                                      on_delete=models.CASCADE,
+                                      verbose_name=_('priority_code'))
 
     # radio code
     radio_code = models.ForeignKey(CallRadioCode,

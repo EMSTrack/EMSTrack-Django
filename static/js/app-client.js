@@ -58,25 +58,25 @@ export class AppClient extends TopicObserver {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
-    retrieveMPDSClassification() {
+    retrieveCallPriorityClassification() {
 
         // initialized if needed
-        const mpds_classification = {};
+        const priority_classification = {};
 
-        // retrieve mpds classification
-        return this.httpClient.get('mpds/classification/')
+        // retrieve priority classification
+        return this.httpClient.get('priority/classification/')
             .then( (response) => {
 
-                // Update mpds classification
+                // Update priority classification
                 response.data.forEach( (classification) => {
 
-                    // update mpds_classification
-                    mpds_classification[classification.id] = classification.label;
+                    // update priority_classification
+                    priority_classification[classification.id] = classification.label;
 
                 });
 
-                // return mpds_classification
-                return mpds_classification;
+                // return priority_classification
+                return priority_classification;
 
             })
 

@@ -170,16 +170,12 @@
                 {% csrf_token %}
 
                 <h5>
-                {% if mpds_code_list %}
-                    {% trans "MPDS Code" %}
-                {% else  %}
                     {% trans "Priority" %}
-                {% endif  %}
                 </h5>
-                {% if mpds_code_list %}
+                {% if priority_code_list %}
                 <div class="text-right" style="min-height: 2em;">
-                    <label class="d-inline-block text-right" id="mpds-classification" name="mpds-classification">
-                        <span class="text-muted">{% trans "MPDS Classification" %}</span>
+                    <label class="d-inline-block text-right" id="priority-classification" name="priority-classification">
+                        <span class="text-muted">{% trans "Priority Classification" %}</span>
                     </label>
                 </div>
                 {% endif  %}
@@ -191,18 +187,18 @@
                     </div>
                 </form>
                 </div>
-                {% if mpds_code_list %}
+                {% if priority_code_list %}
                 <div class="text-right" style="min-height: 2em;">
-                    <label class="d-inline-block text-right" id="mpds-code" name="mpds-code">
-                        <span class="text-muted">{% trans "MPDS Code" %}</span>
+                    <label class="d-inline-block text-right" id="priority-code" name="priority-code">
+                        <span class="text-muted">{% trans "Priority Code" %}</span>
                     </label>
                 </div>
-                <input id="mpds-code-input" list="mpds-code-list"
-                       name="mpds-code-input" class="form-control"
-                       placeholder="{% trans "MPDS Code" %}">
-                <datalist id="mpds-code-list">
-                    {% for code in mpds_code_list %}
-                    <option id="mpds-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
+                <input id="priority-code-input" list="priority-code-list"
+                       name="priority-code-input" class="form-control"
+                       placeholder="{% trans "Priority Code" %}">
+                <datalist id="priority-code-list">
+                    {% for code in priority_code_list %}
+                    <option id="priority-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
                     {% endfor %}
                 </datalist>
                 {% endif  %}

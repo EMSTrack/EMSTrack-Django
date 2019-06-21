@@ -735,11 +735,11 @@ msgstr "Terminada en"
 msgid "Patients"
 msgstr "Pacientes"
 
-msgid "MPDS Classification"
-msgstr "Clasificación MPDS"
+msgid "Priority Classification"
+msgstr "Clasificación de Prioridad"
 
-msgid "MPDS Code"
-msgstr "Código MPDS"
+msgid "Priority Code"
+msgstr "Código de Prioridad"
 
 msgid "Radio Code"
 msgstr "Código de Radio"

@@ -1,7 +1,7 @@
 [
     {
         "pk": 1,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "D",
@@ -11,7 +11,7 @@
     },
     {
         "pk": 2,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "C",
@@ -21,7 +21,7 @@
     },
     {
         "pk": 3,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "C",
@@ -31,7 +31,7 @@
     },
     {
         "pk": 4,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "C",
@@ -41,7 +41,7 @@
     },
     {
         "pk": 5,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "C",
@@ -51,7 +51,7 @@
     },
     {
         "pk": 6,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "C",
@@ -61,7 +61,7 @@
     },
     {
         "pk": 7,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "C",
@@ -71,7 +71,7 @@
     },
     {
         "pk": 8,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 1,
             "priority": "A",
@@ -81,7 +81,7 @@
     },
     {
         "pk": 9,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "E",
@@ -91,7 +91,7 @@
     },
     {
         "pk": 10,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "D",
@@ -101,7 +101,7 @@
     },
     {
         "pk": 11,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "D",
@@ -111,7 +111,7 @@
     },
     {
         "pk": 12,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "D",
@@ -121,7 +121,7 @@
     },
     {
         "pk": 13,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "D",
@@ -131,7 +131,7 @@
     },
     {
         "pk": 14,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "C",
@@ -141,7 +141,7 @@
     },
     {
         "pk": 15,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "C",
@@ -151,7 +151,7 @@
     },
     {
         "pk": 16,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "B",
@@ -161,7 +161,7 @@
     },
     {
         "pk": 17,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "A",
@@ -171,7 +171,7 @@
     },
     {
         "pk": 18,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 2,
             "priority": "A",
@@ -181,7 +181,7 @@
     },
     {
         "pk": 19,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -191,7 +191,7 @@
     },
     {
         "pk": 20,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -201,7 +201,7 @@
     },
     {
         "pk": 21,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -211,7 +211,7 @@
     },
     {
         "pk": 22,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -221,7 +221,7 @@
     },
     {
         "pk": 23,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -231,7 +231,7 @@
     },
     {
         "pk": 24,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -241,7 +241,7 @@
     },
     {
         "pk": 25,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "D",
@@ -251,7 +251,7 @@
     },
     {
         "pk": 26,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "B",
@@ -261,7 +261,7 @@
     },
     {
         "pk": 27,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "B",
@@ -271,7 +271,7 @@
     },
     {
         "pk": 28,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "B",
@@ -281,7 +281,7 @@
     },
     {
         "pk": 29,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "A",
@@ -291,7 +291,7 @@
     },
     {
         "pk": 30,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "A",
@@ -301,7 +301,7 @@
     },
     {
         "pk": 31,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 3,
             "priority": "A",
@@ -311,7 +311,7 @@
     },
     {
         "pk": 32,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "D",
@@ -321,7 +321,7 @@
     },
     {
         "pk": 33,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "D",
@@ -331,7 +331,7 @@
     },
     {
         "pk": 34,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "D",
@@ -341,7 +341,7 @@
     },
     {
         "pk": 35,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "D",
@@ -351,7 +351,7 @@
     },
     {
         "pk": 36,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "B",
@@ -361,7 +361,7 @@
     },
     {
         "pk": 37,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "B",
@@ -371,7 +371,7 @@
     },
     {
         "pk": 38,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "B",
@@ -381,7 +381,7 @@
     },
     {
         "pk": 39,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "A",
@@ -391,7 +391,7 @@
     },
     {
         "pk": 40,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 4,
             "priority": "A",
@@ -401,7 +401,7 @@
     },
     {
         "pk": 41,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 5,
             "priority": "D",
@@ -411,7 +411,7 @@
     },
     {
         "pk": 42,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 5,
             "priority": "C",
@@ -421,7 +421,7 @@
     },
     {
         "pk": 43,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 5,
             "priority": "C",
@@ -431,7 +431,7 @@
     },
     {
         "pk": 44,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 5,
             "priority": "C",
@@ -441,7 +441,7 @@
     },
     {
         "pk": 45,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 5,
             "priority": "A",
@@ -451,7 +451,7 @@
     },
     {
         "pk": 46,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 5,
             "priority": "A",
@@ -461,7 +461,7 @@
     },
     {
         "pk": 47,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 6,
             "priority": "E",
@@ -471,7 +471,7 @@
     },
     {
         "pk": 48,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 6,
             "priority": "D",
@@ -481,7 +481,7 @@
     },
     {
         "pk": 49,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 6,
             "priority": "D",
@@ -491,7 +491,7 @@
     },
     {
         "pk": 50,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 6,
             "priority": "D",
@@ -501,7 +501,7 @@
     },
     {
         "pk": 51,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 6,
             "priority": "D",
@@ -511,7 +511,7 @@
     },
     {
         "pk": 52,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 6,
             "priority": "C",
@@ -521,7 +521,7 @@
     },
     {
         "pk": 53,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "D",
@@ -531,7 +531,7 @@
     },
     {
         "pk": 54,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "D",
@@ -541,7 +541,7 @@
     },
     {
         "pk": 55,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "D",
@@ -551,7 +551,7 @@
     },
     {
         "pk": 56,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "D",
@@ -561,7 +561,7 @@
     },
     {
         "pk": 57,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "C",
@@ -571,7 +571,7 @@
     },
     {
         "pk": 58,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "C",
@@ -581,7 +581,7 @@
     },
     {
         "pk": 59,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "C",
@@ -591,7 +591,7 @@
     },
     {
         "pk": 60,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "C",
@@ -601,7 +601,7 @@
     },
     {
         "pk": 61,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "B",
@@ -611,7 +611,7 @@
     },
     {
         "pk": 62,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "B",
@@ -621,7 +621,7 @@
     },
     {
         "pk": 63,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "A",
@@ -631,7 +631,7 @@
     },
     {
         "pk": 64,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "A",
@@ -641,7 +641,7 @@
     },
     {
         "pk": 65,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 7,
             "priority": "A",
@@ -651,7 +651,7 @@
     },
     {
         "pk": 66,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "D",
@@ -661,7 +661,7 @@
     },
     {
         "pk": 67,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "D",
@@ -671,7 +671,7 @@
     },
     {
         "pk": 68,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "D",
@@ -681,7 +681,7 @@
     },
     {
         "pk": 69,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "D",
@@ -691,7 +691,7 @@
     },
     {
         "pk": 70,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "D",
@@ -701,7 +701,7 @@
     },
     {
         "pk": 71,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "C",
@@ -711,7 +711,7 @@
     },
     {
         "pk": 72,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "B",
@@ -721,7 +721,7 @@
     },
     {
         "pk": 73,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 8,
             "priority": "O",
@@ -731,7 +731,7 @@
     },
     {
         "pk": 74,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "E",
@@ -741,7 +741,7 @@
     },
     {
         "pk": 75,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "E",
@@ -751,7 +751,7 @@
     },
     {
         "pk": 76,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "E",
@@ -761,7 +761,7 @@
     },
     {
         "pk": 77,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "E",
@@ -771,7 +771,7 @@
     },
     {
         "pk": 78,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "E",
@@ -781,7 +781,7 @@
     },
     {
         "pk": 79,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "E",
@@ -791,7 +791,7 @@
     },
     {
         "pk": 80,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "D",
@@ -801,7 +801,7 @@
     },
     {
         "pk": 81,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "D",
@@ -811,7 +811,7 @@
     },
     {
         "pk": 82,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -821,7 +821,7 @@
     },
     {
         "pk": 83,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -831,7 +831,7 @@
     },
     {
         "pk": 84,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -841,7 +841,7 @@
     },
     {
         "pk": 85,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -851,7 +851,7 @@
     },
     {
         "pk": 86,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -861,7 +861,7 @@
     },
     {
         "pk": 87,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -871,7 +871,7 @@
     },
     {
         "pk": 88,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "B",
@@ -881,7 +881,7 @@
     },
     {
         "pk": 89,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "O",
@@ -891,7 +891,7 @@
     },
     {
         "pk": 90,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 9,
             "priority": "O",
@@ -901,7 +901,7 @@
     },
     {
         "pk": 91,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "D",
@@ -911,7 +911,7 @@
     },
     {
         "pk": 92,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "D",
@@ -921,7 +921,7 @@
     },
     {
         "pk": 93,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "D",
@@ -931,7 +931,7 @@
     },
     {
         "pk": 94,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "D",
@@ -941,7 +941,7 @@
     },
     {
         "pk": 95,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "C",
@@ -951,7 +951,7 @@
     },
     {
         "pk": 96,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "C",
@@ -961,7 +961,7 @@
     },
     {
         "pk": 97,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "C",
@@ -971,7 +971,7 @@
     },
     {
         "pk": 98,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "C",
@@ -981,7 +981,7 @@
     },
     {
         "pk": 99,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 10,
             "priority": "A",
@@ -991,7 +991,7 @@
     },
     {
         "pk": 100,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 11,
             "priority": "E",
@@ -1001,7 +1001,7 @@
     },
     {
         "pk": 101,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 11,
             "priority": "D",
@@ -1011,7 +1011,7 @@
     },
     {
         "pk": 102,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 11,
             "priority": "D",
@@ -1021,7 +1021,7 @@
     },
     {
         "pk": 103,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 11,
             "priority": "A",
@@ -1031,7 +1031,7 @@
     },
     {
         "pk": 104,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "D",
@@ -1041,7 +1041,7 @@
     },
     {
         "pk": 105,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "D",
@@ -1051,7 +1051,7 @@
     },
     {
         "pk": 106,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "D",
@@ -1061,7 +1061,7 @@
     },
     {
         "pk": 107,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "D",
@@ -1071,7 +1071,7 @@
     },
     {
         "pk": 108,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1081,7 +1081,7 @@
     },
     {
         "pk": 109,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1091,7 +1091,7 @@
     },
     {
         "pk": 110,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1101,7 +1101,7 @@
     },
     {
         "pk": 111,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1111,7 +1111,7 @@
     },
     {
         "pk": 112,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1121,7 +1121,7 @@
     },
     {
         "pk": 113,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1131,7 +1131,7 @@
     },
     {
         "pk": 114,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "C",
@@ -1141,7 +1141,7 @@
     },
     {
         "pk": 115,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "B",
@@ -1151,7 +1151,7 @@
     },
     {
         "pk": 116,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "A",
@@ -1161,7 +1161,7 @@
     },
     {
         "pk": 117,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "A",
@@ -1171,7 +1171,7 @@
     },
     {
         "pk": 118,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 12,
             "priority": "A",
@@ -1181,7 +1181,7 @@
     },
     {
         "pk": 119,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 13,
             "priority": "D",
@@ -1191,7 +1191,7 @@
     },
     {
         "pk": 120,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 13,
             "priority": "C",
@@ -1201,7 +1201,7 @@
     },
     {
         "pk": 121,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 13,
             "priority": "C",
@@ -1211,7 +1211,7 @@
     },
     {
         "pk": 122,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 13,
             "priority": "C",
@@ -1221,7 +1221,7 @@
     },
     {
         "pk": 123,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 13,
             "priority": "A",
@@ -1231,7 +1231,7 @@
     },
     {
         "pk": 124,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "D",
@@ -1241,7 +1241,7 @@
     },
     {
         "pk": 125,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "D",
@@ -1251,7 +1251,7 @@
     },
     {
         "pk": 126,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "D",
@@ -1261,7 +1261,7 @@
     },
     {
         "pk": 127,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "D",
@@ -1271,7 +1271,7 @@
     },
     {
         "pk": 128,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "C",
@@ -1281,7 +1281,7 @@
     },
     {
         "pk": 129,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "B",
@@ -1291,7 +1291,7 @@
     },
     {
         "pk": 130,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "B",
@@ -1301,7 +1301,7 @@
     },
     {
         "pk": 131,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 14,
             "priority": "A",
@@ -1311,7 +1311,7 @@
     },
     {
         "pk": 132,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "E",
@@ -1321,7 +1321,7 @@
     },
     {
         "pk": 133,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1331,7 +1331,7 @@
     },
     {
         "pk": 134,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1341,7 +1341,7 @@
     },
     {
         "pk": 135,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1351,7 +1351,7 @@
     },
     {
         "pk": 136,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1361,7 +1361,7 @@
     },
     {
         "pk": 137,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1371,7 +1371,7 @@
     },
     {
         "pk": 138,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1381,7 +1381,7 @@
     },
     {
         "pk": 139,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1391,7 +1391,7 @@
     },
     {
         "pk": 140,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "D",
@@ -1401,7 +1401,7 @@
     },
     {
         "pk": 141,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 15,
             "priority": "C",
@@ -1411,7 +1411,7 @@
     },
     {
         "pk": 142,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 16,
             "priority": "D",
@@ -1421,7 +1421,7 @@
     },
     {
         "pk": 143,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 16,
             "priority": "B",
@@ -1431,7 +1431,7 @@
     },
     {
         "pk": 144,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 16,
             "priority": "A",
@@ -1441,7 +1441,7 @@
     },
     {
         "pk": 145,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 16,
             "priority": "A",
@@ -1451,7 +1451,7 @@
     },
     {
         "pk": 146,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 16,
             "priority": "A",
@@ -1461,7 +1461,7 @@
     },
     {
         "pk": 147,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "D",
@@ -1471,7 +1471,7 @@
     },
     {
         "pk": 148,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "D",
@@ -1481,7 +1481,7 @@
     },
     {
         "pk": 149,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "D",
@@ -1491,7 +1491,7 @@
     },
     {
         "pk": 150,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "D",
@@ -1501,7 +1501,7 @@
     },
     {
         "pk": 151,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "D",
@@ -1511,7 +1511,7 @@
     },
     {
         "pk": 152,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "B",
@@ -1521,7 +1521,7 @@
     },
     {
         "pk": 153,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "B",
@@ -1531,7 +1531,7 @@
     },
     {
         "pk": 154,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "B",
@@ -1541,7 +1541,7 @@
     },
     {
         "pk": 155,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "A",
@@ -1551,7 +1551,7 @@
     },
     {
         "pk": 156,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "A",
@@ -1561,7 +1561,7 @@
     },
     {
         "pk": 157,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 17,
             "priority": "A",
@@ -1571,7 +1571,7 @@
     },
     {
         "pk": 158,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1581,7 +1581,7 @@
     },
     {
         "pk": 159,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1591,7 +1591,7 @@
     },
     {
         "pk": 160,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1601,7 +1601,7 @@
     },
     {
         "pk": 161,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1611,7 +1611,7 @@
     },
     {
         "pk": 162,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1621,7 +1621,7 @@
     },
     {
         "pk": 163,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1631,7 +1631,7 @@
     },
     {
         "pk": 164,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "C",
@@ -1641,7 +1641,7 @@
     },
     {
         "pk": 165,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "B",
@@ -1651,7 +1651,7 @@
     },
     {
         "pk": 166,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 18,
             "priority": "A",
@@ -1661,7 +1661,7 @@
     },
     {
         "pk": 167,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "D",
@@ -1671,7 +1671,7 @@
     },
     {
         "pk": 168,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "D",
@@ -1681,7 +1681,7 @@
     },
     {
         "pk": 169,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "D",
@@ -1691,7 +1691,7 @@
     },
     {
         "pk": 170,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "D",
@@ -1701,7 +1701,7 @@
     },
     {
         "pk": 171,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "D",
@@ -1711,7 +1711,7 @@
     },
     {
         "pk": 172,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1721,7 +1721,7 @@
     },
     {
         "pk": 173,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1731,7 +1731,7 @@
     },
     {
         "pk": 174,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1741,7 +1741,7 @@
     },
     {
         "pk": 175,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1751,7 +1751,7 @@
     },
     {
         "pk": 176,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1761,7 +1761,7 @@
     },
     {
         "pk": 177,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1771,7 +1771,7 @@
     },
     {
         "pk": 178,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "C",
@@ -1781,7 +1781,7 @@
     },
     {
         "pk": 179,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "A",
@@ -1791,7 +1791,7 @@
     },
     {
         "pk": 180,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 19,
             "priority": "A",
@@ -1801,7 +1801,7 @@
     },
     {
         "pk": 181,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 20,
             "priority": "D",
@@ -1811,7 +1811,7 @@
     },
     {
         "pk": 182,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 20,
             "priority": "D",
@@ -1821,7 +1821,7 @@
     },
     {
         "pk": 183,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 20,
             "priority": "C",
@@ -1831,7 +1831,7 @@
     },
     {
         "pk": 184,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 20,
             "priority": "B",
@@ -1841,7 +1841,7 @@
     },
     {
         "pk": 185,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 20,
             "priority": "B",
@@ -1851,7 +1851,7 @@
     },
     {
         "pk": 186,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 20,
             "priority": "A",
@@ -1861,7 +1861,7 @@
     },
     {
         "pk": 187,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "D",
@@ -1871,7 +1871,7 @@
     },
     {
         "pk": 188,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "D",
@@ -1881,7 +1881,7 @@
     },
     {
         "pk": 189,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "D",
@@ -1891,7 +1891,7 @@
     },
     {
         "pk": 190,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "D",
@@ -1901,7 +1901,7 @@
     },
     {
         "pk": 191,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "C",
@@ -1911,7 +1911,7 @@
     },
     {
         "pk": 192,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "C",
@@ -1921,7 +1921,7 @@
     },
     {
         "pk": 193,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "B",
@@ -1931,7 +1931,7 @@
     },
     {
         "pk": 194,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "B",
@@ -1941,7 +1941,7 @@
     },
     {
         "pk": 195,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "B",
@@ -1951,7 +1951,7 @@
     },
     {
         "pk": 196,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "B",
@@ -1961,7 +1961,7 @@
     },
     {
         "pk": 197,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "A",
@@ -1971,7 +1971,7 @@
     },
     {
         "pk": 198,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 21,
             "priority": "A",
@@ -1981,7 +1981,7 @@
     },
     {
         "pk": 199,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "D",
@@ -1991,7 +1991,7 @@
     },
     {
         "pk": 200,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "D",
@@ -2001,7 +2001,7 @@
     },
     {
         "pk": 201,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "D",
@@ -2011,7 +2011,7 @@
     },
     {
         "pk": 202,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "D",
@@ -2021,7 +2021,7 @@
     },
     {
         "pk": 203,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "D",
@@ -2031,7 +2031,7 @@
     },
     {
         "pk": 204,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "D",
@@ -2041,7 +2041,7 @@
     },
     {
         "pk": 205,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "B",
@@ -2051,7 +2051,7 @@
     },
     {
         "pk": 206,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "B",
@@ -2061,7 +2061,7 @@
     },
     {
         "pk": 207,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "B",
@@ -2071,7 +2071,7 @@
     },
     {
         "pk": 208,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 22,
             "priority": "A",
@@ -2081,7 +2081,7 @@
     },
     {
         "pk": 209,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "D",
@@ -2091,7 +2091,7 @@
     },
     {
         "pk": 210,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "D",
@@ -2101,7 +2101,7 @@
     },
     {
         "pk": 211,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2111,7 +2111,7 @@
     },
     {
         "pk": 212,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2121,7 +2121,7 @@
     },
     {
         "pk": 213,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2131,7 +2131,7 @@
     },
     {
         "pk": 214,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2141,7 +2141,7 @@
     },
     {
         "pk": 215,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2151,7 +2151,7 @@
     },
     {
         "pk": 216,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2161,7 +2161,7 @@
     },
     {
         "pk": 217,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2171,7 +2171,7 @@
     },
     {
         "pk": 218,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "C",
@@ -2181,7 +2181,7 @@
     },
     {
         "pk": 219,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "B",
@@ -2191,7 +2191,7 @@
     },
     {
         "pk": 220,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 23,
             "priority": "O",
@@ -2201,7 +2201,7 @@
     },
     {
         "pk": 221,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2211,7 +2211,7 @@
     },
     {
         "pk": 222,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2221,7 +2221,7 @@
     },
     {
         "pk": 223,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2231,7 +2231,7 @@
     },
     {
         "pk": 224,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2241,7 +2241,7 @@
     },
     {
         "pk": 225,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2251,7 +2251,7 @@
     },
     {
         "pk": 226,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2261,7 +2261,7 @@
     },
     {
         "pk": 227,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "D",
@@ -2271,7 +2271,7 @@
     },
     {
         "pk": 228,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "C",
@@ -2281,7 +2281,7 @@
     },
     {
         "pk": 229,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "C",
@@ -2291,7 +2291,7 @@
     },
     {
         "pk": 230,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "C",
@@ -2301,7 +2301,7 @@
     },
     {
         "pk": 231,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "B",
@@ -2311,7 +2311,7 @@
     },
     {
         "pk": 232,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "B",
@@ -2321,7 +2321,7 @@
     },
     {
         "pk": 233,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "A",
@@ -2331,7 +2331,7 @@
     },
     {
         "pk": 234,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 24,
             "priority": "O",
@@ -2341,7 +2341,7 @@
     },
     {
         "pk": 235,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "D",
@@ -2351,7 +2351,7 @@
     },
     {
         "pk": 236,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "D",
@@ -2361,7 +2361,7 @@
     },
     {
         "pk": 237,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "B",
@@ -2371,7 +2371,7 @@
     },
     {
         "pk": 238,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "B",
@@ -2381,7 +2381,7 @@
     },
     {
         "pk": 239,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "B",
@@ -2391,7 +2391,7 @@
     },
     {
         "pk": 240,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "B",
@@ -2401,7 +2401,7 @@
     },
     {
         "pk": 241,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "B",
@@ -2411,7 +2411,7 @@
     },
     {
         "pk": 242,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "B",
@@ -2421,7 +2421,7 @@
     },
     {
         "pk": 243,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "A",
@@ -2431,7 +2431,7 @@
     },
     {
         "pk": 244,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 25,
             "priority": "A",
@@ -2441,7 +2441,7 @@
     },
     {
         "pk": 245,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "D",
@@ -2451,7 +2451,7 @@
     },
     {
         "pk": 246,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "C",
@@ -2461,7 +2461,7 @@
     },
     {
         "pk": 247,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "C",
@@ -2471,7 +2471,7 @@
     },
     {
         "pk": 248,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "C",
@@ -2481,7 +2481,7 @@
     },
     {
         "pk": 249,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "B",
@@ -2491,7 +2491,7 @@
     },
     {
         "pk": 250,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2501,7 +2501,7 @@
     },
     {
         "pk": 251,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2511,7 +2511,7 @@
     },
     {
         "pk": 252,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2521,7 +2521,7 @@
     },
     {
         "pk": 253,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2531,7 +2531,7 @@
     },
     {
         "pk": 254,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2541,7 +2541,7 @@
     },
     {
         "pk": 255,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2551,7 +2551,7 @@
     },
     {
         "pk": 256,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2561,7 +2561,7 @@
     },
     {
         "pk": 257,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2571,7 +2571,7 @@
     },
     {
         "pk": 258,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2581,7 +2581,7 @@
     },
     {
         "pk": 259,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2591,7 +2591,7 @@
     },
     {
         "pk": 260,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "A",
@@ -2601,7 +2601,7 @@
     },
     {
         "pk": 261,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2611,7 +2611,7 @@
     },
     {
         "pk": 262,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2621,7 +2621,7 @@
     },
     {
         "pk": 263,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2631,7 +2631,7 @@
     },
     {
         "pk": 264,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2641,7 +2641,7 @@
     },
     {
         "pk": 265,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2651,7 +2651,7 @@
     },
     {
         "pk": 266,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2661,7 +2661,7 @@
     },
     {
         "pk": 267,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2671,7 +2671,7 @@
     },
     {
         "pk": 268,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2681,7 +2681,7 @@
     },
     {
         "pk": 269,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2691,7 +2691,7 @@
     },
     {
         "pk": 270,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2701,7 +2701,7 @@
     },
     {
         "pk": 271,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2711,7 +2711,7 @@
     },
     {
         "pk": 272,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2721,7 +2721,7 @@
     },
     {
         "pk": 273,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2731,7 +2731,7 @@
     },
     {
         "pk": 274,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2741,7 +2741,7 @@
     },
     {
         "pk": 275,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2751,7 +2751,7 @@
     },
     {
         "pk": 276,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2761,7 +2761,7 @@
     },
     {
         "pk": 277,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2771,7 +2771,7 @@
     },
     {
         "pk": 278,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2781,7 +2781,7 @@
     },
     {
         "pk": 279,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2791,7 +2791,7 @@
     },
     {
         "pk": 280,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2801,7 +2801,7 @@
     },
     {
         "pk": 281,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2811,7 +2811,7 @@
     },
     {
         "pk": 282,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2821,7 +2821,7 @@
     },
     {
         "pk": 283,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2831,7 +2831,7 @@
     },
     {
         "pk": 284,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2841,7 +2841,7 @@
     },
     {
         "pk": 285,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2851,7 +2851,7 @@
     },
     {
         "pk": 286,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2861,7 +2861,7 @@
     },
     {
         "pk": 287,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 26,
             "priority": "O",
@@ -2871,7 +2871,7 @@
     },
     {
         "pk": 288,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "D",
@@ -2881,7 +2881,7 @@
     },
     {
         "pk": 289,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "D",
@@ -2891,7 +2891,7 @@
     },
     {
         "pk": 290,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "D",
@@ -2901,7 +2901,7 @@
     },
     {
         "pk": 291,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "D",
@@ -2911,7 +2911,7 @@
     },
     {
         "pk": 292,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "D",
@@ -2921,7 +2921,7 @@
     },
     {
         "pk": 293,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "B",
@@ -2931,7 +2931,7 @@
     },
     {
         "pk": 294,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "B",
@@ -2941,7 +2941,7 @@
     },
     {
         "pk": 295,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "B",
@@ -2951,7 +2951,7 @@
     },
     {
         "pk": 296,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "B",
@@ -2961,7 +2961,7 @@
     },
     {
         "pk": 297,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "B",
@@ -2971,7 +2971,7 @@
     },
     {
         "pk": 298,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 27,
             "priority": "A",
@@ -2981,7 +2981,7 @@
     },
     {
         "pk": 299,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -2991,7 +2991,7 @@
     },
     {
         "pk": 300,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3001,7 +3001,7 @@
     },
     {
         "pk": 301,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3011,7 +3011,7 @@
     },
     {
         "pk": 302,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3021,7 +3021,7 @@
     },
     {
         "pk": 303,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3031,7 +3031,7 @@
     },
     {
         "pk": 304,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3041,7 +3041,7 @@
     },
     {
         "pk": 305,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3051,7 +3051,7 @@
     },
     {
         "pk": 306,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3061,7 +3061,7 @@
     },
     {
         "pk": 307,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3071,7 +3071,7 @@
     },
     {
         "pk": 308,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3081,7 +3081,7 @@
     },
     {
         "pk": 309,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "C",
@@ -3091,7 +3091,7 @@
     },
     {
         "pk": 310,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 28,
             "priority": "A",
@@ -3101,7 +3101,7 @@
     },
     {
         "pk": 311,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3111,7 +3111,7 @@
     },
     {
         "pk": 312,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3121,7 +3121,7 @@
     },
     {
         "pk": 313,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3131,7 +3131,7 @@
     },
     {
         "pk": 314,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3141,7 +3141,7 @@
     },
     {
         "pk": 315,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3151,7 +3151,7 @@
     },
     {
         "pk": 316,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3161,7 +3161,7 @@
     },
     {
         "pk": 317,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3171,7 +3171,7 @@
     },
     {
         "pk": 318,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3181,7 +3181,7 @@
     },
     {
         "pk": 319,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3191,7 +3191,7 @@
     },
     {
         "pk": 320,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3201,7 +3201,7 @@
     },
     {
         "pk": 321,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3211,7 +3211,7 @@
     },
     {
         "pk": 322,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3221,7 +3221,7 @@
     },
     {
         "pk": 323,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3231,7 +3231,7 @@
     },
     {
         "pk": 324,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3241,7 +3241,7 @@
     },
     {
         "pk": 325,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3251,7 +3251,7 @@
     },
     {
         "pk": 326,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3261,7 +3261,7 @@
     },
     {
         "pk": 327,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3271,7 +3271,7 @@
     },
     {
         "pk": 328,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "D",
@@ -3281,7 +3281,7 @@
     },
     {
         "pk": 329,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "B",
@@ -3291,7 +3291,7 @@
     },
     {
         "pk": 330,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "B",
@@ -3301,7 +3301,7 @@
     },
     {
         "pk": 331,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "B",
@@ -3311,7 +3311,7 @@
     },
     {
         "pk": 332,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "B",
@@ -3321,7 +3321,7 @@
     },
     {
         "pk": 333,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "A",
@@ -3331,7 +3331,7 @@
     },
     {
         "pk": 334,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 29,
             "priority": "O",
@@ -3341,7 +3341,7 @@
     },
     {
         "pk": 335,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "D",
@@ -3351,7 +3351,7 @@
     },
     {
         "pk": 336,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "D",
@@ -3361,7 +3361,7 @@
     },
     {
         "pk": 337,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "D",
@@ -3371,7 +3371,7 @@
     },
     {
         "pk": 338,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "B",
@@ -3381,7 +3381,7 @@
     },
     {
         "pk": 339,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "B",
@@ -3391,7 +3391,7 @@
     },
     {
         "pk": 340,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "A",
@@ -3401,7 +3401,7 @@
     },
     {
         "pk": 341,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 30,
             "priority": "A",
@@ -3411,7 +3411,7 @@
     },
     {
         "pk": 342,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "E",
@@ -3421,7 +3421,7 @@
     },
     {
         "pk": 343,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "D",
@@ -3431,7 +3431,7 @@
     },
     {
         "pk": 344,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "D",
@@ -3441,7 +3441,7 @@
     },
     {
         "pk": 345,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "D",
@@ -3451,7 +3451,7 @@
     },
     {
         "pk": 346,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "D",
@@ -3461,7 +3461,7 @@
     },
     {
         "pk": 347,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "C",
@@ -3471,7 +3471,7 @@
     },
     {
         "pk": 348,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "C",
@@ -3481,7 +3481,7 @@
     },
     {
         "pk": 349,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "C",
@@ -3491,7 +3491,7 @@
     },
     {
         "pk": 350,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "A",
@@ -3501,7 +3501,7 @@
     },
     {
         "pk": 351,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "A",
@@ -3511,7 +3511,7 @@
     },
     {
         "pk": 352,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 31,
             "priority": "A",
@@ -3521,7 +3521,7 @@
     },
     {
         "pk": 353,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 32,
             "priority": "D",
@@ -3531,7 +3531,7 @@
     },
     {
         "pk": 354,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 32,
             "priority": "B",
@@ -3541,7 +3541,7 @@
     },
     {
         "pk": 355,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 32,
             "priority": "B",
@@ -3551,7 +3551,7 @@
     },
     {
         "pk": 356,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 32,
             "priority": "B",
@@ -3561,7 +3561,7 @@
     },
     {
         "pk": 357,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 32,
             "priority": "B",
@@ -3571,7 +3571,7 @@
     },
     {
         "pk": 358,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "D",
@@ -3581,7 +3581,7 @@
     },
     {
         "pk": 359,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "D",
@@ -3591,7 +3591,7 @@
     },
     {
         "pk": 360,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "C",
@@ -3601,7 +3601,7 @@
     },
     {
         "pk": 361,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "C",
@@ -3611,7 +3611,7 @@
     },
     {
         "pk": 362,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "C",
@@ -3621,7 +3621,7 @@
     },
     {
         "pk": 363,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "C",
@@ -3631,7 +3631,7 @@
     },
     {
         "pk": 364,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "C",
@@ -3641,7 +3641,7 @@
     },
     {
         "pk": 365,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "C",
@@ -3651,7 +3651,7 @@
     },
     {
         "pk": 366,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "A",
@@ -3661,7 +3661,7 @@
     },
     {
         "pk": 367,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "A",
@@ -3671,7 +3671,7 @@
     },
     {
         "pk": 368,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 33,
             "priority": "A",
@@ -3681,7 +3681,7 @@
     },
     {
         "pk": 369,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3691,7 +3691,7 @@
     },
     {
         "pk": 370,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3701,7 +3701,7 @@
     },
     {
         "pk": 371,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3711,7 +3711,7 @@
     },
     {
         "pk": 372,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3721,7 +3721,7 @@
     },
     {
         "pk": 373,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3731,7 +3731,7 @@
     },
     {
         "pk": 374,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3741,7 +3741,7 @@
     },
     {
         "pk": 375,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3751,7 +3751,7 @@
     },
     {
         "pk": 376,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3761,7 +3761,7 @@
     },
     {
         "pk": 377,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3771,7 +3771,7 @@
     },
     {
         "pk": 378,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "D",
@@ -3781,7 +3781,7 @@
     },
     {
         "pk": 379,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "B",
@@ -3791,7 +3791,7 @@
     },
     {
         "pk": 380,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "B",
@@ -3801,7 +3801,7 @@
     },
     {
         "pk": 381,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "B",
@@ -3811,7 +3811,7 @@
     },
     {
         "pk": 382,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "B",
@@ -3821,7 +3821,7 @@
     },
     {
         "pk": 383,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "B",
@@ -3831,7 +3831,7 @@
     },
     {
         "pk": 384,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "A",
@@ -3841,7 +3841,7 @@
     },
     {
         "pk": 385,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 34,
             "priority": "O",
@@ -3851,7 +3851,7 @@
     },
     {
         "pk": 386,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "D",
@@ -3861,7 +3861,7 @@
     },
     {
         "pk": 387,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "D",
@@ -3871,7 +3871,7 @@
     },
     {
         "pk": 388,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "D",
@@ -3881,7 +3881,7 @@
     },
     {
         "pk": 389,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "D",
@@ -3891,7 +3891,7 @@
     },
     {
         "pk": 390,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "C",
@@ -3901,7 +3901,7 @@
     },
     {
         "pk": 391,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "C",
@@ -3911,7 +3911,7 @@
     },
     {
         "pk": 392,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "C",
@@ -3921,7 +3921,7 @@
     },
     {
         "pk": 393,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "C",
@@ -3931,7 +3931,7 @@
     },
     {
         "pk": 394,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "C",
@@ -3941,7 +3941,7 @@
     },
     {
         "pk": 395,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "A",
@@ -3951,7 +3951,7 @@
     },
     {
         "pk": 396,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "A",
@@ -3961,7 +3961,7 @@
     },
     {
         "pk": 397,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 36,
             "priority": "A",
@@ -3971,7 +3971,7 @@
     },
     {
         "pk": 398,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "D",
@@ -3981,7 +3981,7 @@
     },
     {
         "pk": 399,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "D",
@@ -3991,7 +3991,7 @@
     },
     {
         "pk": 400,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "D",
@@ -4001,7 +4001,7 @@
     },
     {
         "pk": 401,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4011,7 +4011,7 @@
     },
     {
         "pk": 402,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4021,7 +4021,7 @@
     },
     {
         "pk": 403,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4031,7 +4031,7 @@
     },
     {
         "pk": 404,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4041,7 +4041,7 @@
     },
     {
         "pk": 405,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4051,7 +4051,7 @@
     },
     {
         "pk": 406,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4061,7 +4061,7 @@
     },
     {
         "pk": 407,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4071,7 +4071,7 @@
     },
     {
         "pk": 408,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4081,7 +4081,7 @@
     },
     {
         "pk": 409,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "C",
@@ -4091,7 +4091,7 @@
     },
     {
         "pk": 410,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "B",
@@ -4101,7 +4101,7 @@
     },
     {
         "pk": 411,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "B",
@@ -4111,7 +4111,7 @@
     },
     {
         "pk": 412,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "A",
@@ -4121,7 +4121,7 @@
     },
     {
         "pk": 413,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "A",
@@ -4131,7 +4131,7 @@
     },
     {
         "pk": 414,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "A",
@@ -4141,7 +4141,7 @@
     },
     {
         "pk": 415,
-        "model": "ambulance.callmpdscode",
+        "model": "ambulance.callprioritycode",
         "fields": {
             "prefix": 37,
             "priority": "A",

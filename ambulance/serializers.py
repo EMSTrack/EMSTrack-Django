@@ -7,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
-    LocationType, CallMPDSClassification, CallMPDSCode
+    LocationType, CallPriorityClassification, CallPriorityCode
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -299,21 +299,21 @@ class PatientSerializer(serializers.ModelSerializer):
         read_only_fields = []
 
 
-# CallMPDSClassification Serializer
+# CallPriorityClassification Serializer
 
-class CallMPDSClassificationSerializer(serializers.ModelSerializer):
+class CallPriorityClassificationSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CallMPDSClassification
+        model = CallPriorityClassification
         fields = ['id', 'label']
 
 
-# CallMPDSCode Serializer
+# CallPriorityCode Serializer
 
-class CallMPDSCodeSerializer(serializers.ModelSerializer):
+class CallPriorityCodeSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CallMPDSCode
+        model = CallPriorityCode
         fields = ['id', 'prefix', 'priority', 'suffix', 'label']
 
 
@@ -323,13 +323,12 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
-    # mpds_code = CallMPDSCodeSerializer(many=False, required=False)
 
     class Meta:
         model = Call
         fields = ['id',
                   'status', 'details', 'priority',
-                  'mpds_code', 'radio_code',
+                  'priority_code', 'radio_code',
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',

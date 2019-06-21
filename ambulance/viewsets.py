@@ -12,10 +12,10 @@ from emstrack.mixins import BasePermissionMixin, \
 from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus, CallStatus, CallMPDSClassification, CallMPDSCode
+    AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
-    CallMPDSCodeSerializer, CallMPDSClassificationSerializer
+    CallPriorityCodeSerializer, CallPriorityClassificationSerializer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -338,24 +338,24 @@ class CallViewSet(mixins.ListModelMixin,
         return queryset
 
 
-# CallMPDS ViewSet
+# CallPriorityViewSet
 
-class CallMPDSViewSet(mixins.ListModelMixin,
-                      viewsets.GenericViewSet):
+class CallPriorityViewSet(mixins.ListModelMixin,
+                          viewsets.GenericViewSet):
     """
-    API endpoint for manipulating MPDS codes.
+    API endpoint for manipulating priority codes.
 
     list:
-    Retrieve list of MPDS codes.
+    Retrieve list of priority codes.
     """
 
-    queryset = CallMPDSCode.objects.all()
-    serializer_class = CallMPDSCodeSerializer
+    queryset = CallPriorityCode.objects.all()
+    serializer_class = CallPriorityCodeSerializer
 
     @action(detail=False, methods=['get'])
     def classification(self, request, **kwargs):
-        """Retrieve MPDS classification labels."""
-        classification = CallMPDSClassification.objects.all()
+        """Retrieve priority classification labels."""
+        classification = CallPriorityClassification.objects.all()
 
-        serializer = CallMPDSClassificationSerializer(classification, many=True)
+        serializer = CallPriorityClassificationSerializer(classification, many=True)
         return Response(serializer.data)

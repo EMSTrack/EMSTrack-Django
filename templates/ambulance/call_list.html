@@ -20,7 +20,7 @@
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Details" %}</th>
                         <th>{% trans "Priority" %}</th>
-                        <th>{% trans "MPDS Code" %}</th>
+                        <th>{% trans "Priority Code" %}</th>
                         <th>{% trans "Radio Code" %}</th>
                         <th>{% trans "Ambulances" %}</th>
                     </tr>
@@ -32,8 +32,8 @@
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
                             <td>
-                                {% if call.mpds_code %}
-                                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}
+                                {% if call.priority_code %}
+                                {{ call.priority_code.prefix.id }}-{{ call.priority_code.priority }}-{{ call.priority_code.suffix }}
                                 {% endif %}
                             </td>
                             <td>{{ call.radio_code.id }}</td>
@@ -62,7 +62,7 @@
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Details" %}</th>
                         <th>{% trans "Priority" %}</th>
-                        <th>{% trans "MPDS Code" %}</th>
+                        <th>{% trans "Priority Code" %}</th>
                         <th>{% trans "Radio Code" %}</th>
                         <th>{% trans "Ambulances" %}</th>
                     </tr>
@@ -74,8 +74,8 @@
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
                             <td>
-                                {% if call.mpds_code %}
-                                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}
+                                {% if call.priority_code %}
+                                {{ call.priority_code.prefix.id }}-{{ call.priority_code.priority }}-{{ call.priority_code.suffix }}
                                 {% endif %}
                             </td>
                             <td>{{ call.radio_code.id }}</td>
@@ -121,7 +121,7 @@
                         <th>{% trans "Time" %}</th>
                         <th>{% trans "Details" %}</th>
                         <th>{% trans "Priority" %}</th>
-                        <th>{% trans "MPDS Code" %}</th>
+                        <th>{% trans "Priority Code" %}</th>
                         <th>{% trans "Radio Code" %}</th>
                         <th>{% trans "Ambulances" %}</th>
                     </tr>
@@ -133,8 +133,8 @@
                             <td>{{ call.details }}</td>
                             <td>{{ call.priority }}</td>
                             <td>
-                                {% if call.mpds_code %}
-                                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix }}
+                                {% if call.priority_code %}
+                                {{ call.priority_code.prefix.id }}-{{ call.priority_code.priority }}-{{ call.priority_code.suffix }}
                                 {% endif %}
                             </td>
                             <td>{{ call.radio_code.id }}</td>

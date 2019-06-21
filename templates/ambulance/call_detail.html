@@ -29,15 +29,15 @@
                 <strong>{% trans "Details" %}:</strong>
                 {{ call.details }}
             </p>
-            {% if call.mpds_code %}
+            {% if call.priority_code %}
             <p>
-                <strong>{% trans "MPDS Code" %}:</strong>
+                <strong>{% trans "Priority Code" %}:</strong>
                 <br/>
-                {{ call.mpds_code.prefix.id }}-{{ call.mpds_code.priority }}-{{ call.mpds_code.suffix}}
+                {{ call.priority_code.prefix.id }}-{{ call.priority_code.priority }}-{{ call.priority_code.suffix}}
                 <br/>
-                <em>{{ call.mpds_code.prefix.label }}</em>
+                <em>{{ call.priority_code.prefix.label }}</em>
                 <br/>
-                {{ call.mpds_code.label}}
+                {{ call.priority_code.label}}
             </p>
             {% else %}
             <p>

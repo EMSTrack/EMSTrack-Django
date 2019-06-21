@@ -112,7 +112,7 @@ const locationIcon = L.icon({
 
 });
 
-let mpds_classification = {};
+let priority_classification = {};
 
 /**
  * Ambulance statuses
@@ -192,18 +192,18 @@ function init( client ) {
             logger.log('error', 'Failed to retrieve hospitals and bases from ApiClient: %j', error);
         });
 
-    // retrieve mpds classification
-    logger.log('info', 'Retrieving MPDS classification');
-    apiClient.retrieveMPDSClassification()
+    // retrieve priority classification
+    logger.log('info', 'Retrieving priority classification');
+    apiClient.retrieveCallPriorityClassification()
         .then( (value) => {
-            logger.log('info', '%d MPDS classifications retrieved', Object.keys(value).length);
-            mpds_classification = value;
+            logger.log('info', '%d priority classifications retrieved', Object.keys(value).length);
+            priority_classification = value;
         })
         .catch( (error) => {
-            logger.log('error', 'Failed to retrieve MPDS classification from ApiClient: %j', error);
+            logger.log('error', 'Failed to retrieve priority classification from ApiClient: %j', error);
         })
         .then( () => {
-            if (Object.keys(mpds_classification).length > 0) {
+            if (Object.keys(priority_classification).length > 0) {
                 logger.log('info', 'Will disable priority buttons');
                 // Disable button clicking
                 $('#priority-buttons').on("click", ".btn", function (event) {
@@ -1748,14 +1748,14 @@ function dispatchCall() {
         }
     }
 
-    form['mpds_code'] = null;
-    selector = $('#mpds-code-list option[value="' + $('#mpds-code-input').val() + '"]');
+    form['priority_code'] = null;
+    selector = $('#priority-code-list option[value="' + $('#priority-code-input').val() + '"]');
     if ( selector.length ) {
         try {
-            form['mpds_code'] = selector.attr('id').split('-')[2];
+            form['priority_code'] = selector.attr('id').split('-')[2];
         } catch(err) {
             logger.log('debug', err);
-            bsalert("Invalid MPDS code.");
+            bsalert("Invalid priority code.");
             return;
         }
     }
@@ -2106,19 +2106,19 @@ $(function() {
 
     });
 
-    $('#mpds-code-input').on('input', function() {
+    $('#priority-code-input').on('input', function() {
         const value = $(this).val();
-        const option = $('#mpds-code-list option[value="'+value+'"]');
+        const option = $('#priority-code-list option[value="'+value+'"]');
         if (option.length) {
             const values = value.split('-', 2);
             const classification = values[0];
             const priority = values[1];
-            $('#mpds-classification').html(mpds_classification[classification]);
-            $('#mpds-code').html(option.html());
+            $('#priority-classification').html(priority_classification[classification]);
+            $('#priority-code').html(option.html());
             $('#priority-button-'+priority).button('toggle');
         } else {
-            $('#mpds-classification').html('<span class="text-muted">' + translation_table["MPDS Classification"] + '</span>');
-            $('#mpds-code').html('<span class="text-muted">' + translation_table["MPDS Code"] + '</span>');
+            $('#priority-classification').html('<span class="text-muted">' + translation_table["Priority Classification"] + '</span>');
+            $('#priority-code').html('<span class="text-muted">' + translation_table["Priority Code"] + '</span>');
             $("#priority-buttons .btn").removeClass("active");
         }
     });
