@@ -204,10 +204,10 @@ export class AppClient extends TopicObserver {
 
         // initialize if needed
         if (typeof this.locations === 'undefined')
-            this.location = {};
+            this.locations = {};
 
         if (typeof this.locations[type] === 'undefined')
-            this.location[type] = {};
+            this.locations[type] = {};
 
         // retrieve bases
         return this.httpClient.get('location/' + type + '/')
