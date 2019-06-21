@@ -286,7 +286,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 
     def get_queryset(self):
         try:
-            location_type = _(self.kwargs['type'])
+            location_type = self.kwargs['type']
             location_type_name = LocationType(location_type).name
         except ValueError:
             raise APIException("Invalid location type '{}'".format(location_type))
