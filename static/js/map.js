@@ -420,7 +420,7 @@ function updateHospital(hospital) {
     }
 
     // add hospital to map
-    addHospitalToMap(hospital);
+    addLocationToMap(hospital);
 
 }
 
