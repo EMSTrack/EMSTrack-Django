@@ -436,14 +436,14 @@ function ambulanceVisibleClass(ambulance) {
     const online = ambulance.client_id != null;
     if (online) {
         if (visibleCategory['online'])
-            return 'd-block';
+            return 'd-block a-online';
         else
-            return 'd-none';
+            return 'd-none a-online';
     } else {
         if (visibleCategory['offline'])
-            return 'd-block';
+            return 'd-block a-offline';
         else
-            return 'd-none';
+            return 'd-none a-offline';
     }
 
 }
@@ -1274,6 +1274,10 @@ function visibilityCheckbox(checkbox) {
                 });
             }
         });
+
+        // toggle buttons visibility
+        $('.a-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
+
     } else if (checkbox.value === 'call-status') {
         // Add to all visible call layers
         let status = checkbox.getAttribute('data-status');
