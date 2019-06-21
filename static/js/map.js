@@ -12,9 +12,9 @@ import { waypointIcon } from './app-icons';
 
 // TODO: Import js-cookies library
 
-// Remove hospital and waypoints from location_type
-delete location_type_order[location_type_order.indexOf('h')];
+// Remove waypoints and incidents from location_type
 delete location_type_order[location_type_order.indexOf('w')];
+delete location_type_order[location_type_order.indexOf('i')];
 
 // Dispatching data
 
@@ -1050,7 +1050,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // add hospital
-    visibleCategory['hospital'] = true;
+    // visibleCategory['hospital'] = true;
 
     // add calls
     call_status_order.forEach(function (status) {
@@ -1068,8 +1068,8 @@ function createCategoryPanesAndFilters() {
     // Initialize panes
 
     // Create hospital category pane
-    let pane = mymap.createPane('hospital');
-    pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
+    // let pane = mymap.createPane('hospital');
+    // pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
 
     // Create location category panes
     location_type_order.forEach(function (type) {
@@ -1196,7 +1196,8 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create location options
-    
+
+    /*
     // add hospital
     $("#location-type").append(
         '<div class="form-group form-check mt-0 mb-1">\n' +
@@ -1205,6 +1206,7 @@ function createCategoryPanesAndFilters() {
         '     <label class="form-check-label"\n' +
         '            for="location-hospital">Hospital</label>\n' +
         '</div>');
+    */
 
     location_type_order.forEach(function (type) {
         $("#location-type").append(
