@@ -1073,7 +1073,7 @@ function createCategoryPanesAndFilters() {
 
     // Create location category panes
     location_type_order.forEach(function (type) {
-        pane = mymap.createPane(type);
+        const pane = mymap.createPane(type);
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
     });
 
@@ -1081,7 +1081,7 @@ function createCategoryPanesAndFilters() {
     ambulance_online_order.forEach(function(online) {
         ambulance_status_order.forEach(function (status) {
             ambulance_capability_order.forEach(function (capability) {
-                pane = mymap.createPane(status + "|" + capability + "|" + online);
+                const pane = mymap.createPane(status + "|" + capability + "|" + online);
                 pane.style.display = ((visibleCategory[status] &&
                                        visibleCategory[capability] &&
                                        visibleCategory[online]) ? 'block' : 'none');
