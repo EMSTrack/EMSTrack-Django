@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.exceptions import APIException
 
+from django.utils.translation import ugettext_lazy as _
+
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
@@ -285,7 +287,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
     def get_queryset(self):
         try:
             location_type = self.kwargs['type']
-            location_type_name = LocationType(location_type).name
+            location_type_name = LocationType(_(location_type)).name
         except ValueError:
             raise APIException("Invalid location type '{}'".format(location_type))
 
