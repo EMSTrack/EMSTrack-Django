@@ -581,7 +581,6 @@ function updateCall(call) {
 
 function updateAmbulanceCall(ambulance_id, call_id, status) {
 
-    let topicName;
     if (status !== 'C') {
 
         if (call_id in calls) {
@@ -946,43 +945,6 @@ function addAmbulanceToMap(ambulance) {
 
 }
 
-function addHospitalToMap(hospital) {
-
-    logger.log('info', "Adding hospital '%s'[id:'%d, latlon:%f,%f] to map",
-        hospital.name, hospital.id, hospital.location.latitude, hospital.location.longitude);
-
-    // store hospital details in an array
-    hospitals[hospital.id] = hospital;
-
-    // set icon by status
-    const coloredIcon = hospitalIcon;
-
-    // If hospital marker doesn't exist
-    hospitalMarkers[hospital.id] = L.marker([hospital.location.latitude,
-            hospital.location.longitude],
-        {
-            icon: coloredIcon,
-            pane: 'h'
-        })
-        .bindPopup("<strong>" + hospital.name + "</strong>")
-        .addTo(mymap);
-
-    // Bind id to icons
-    hospitalMarkers[hospital.id]._icon.id = hospital.id;
-
-    // Collapse panel on icon hover.
-    hospitalMarkers[hospital.id]
-        .on('mouseover',
-            function (e) {
-                // open popup bubble
-                this.openPopup().on('mouseout',
-                    function (e) {
-                        this.closePopup();
-                    });
-            });
-
-}
-
 function addLocationToMap(location) {
 
     logger.log('info', "Adding location '%s'[id:'%d, latlon:%f,%f] to map",
@@ -999,6 +961,8 @@ function addLocationToMap(location) {
         icon = baseIcon;
     else if (location.type === 'i')
         icon = incidentIcon;
+    else if (location.type === 'h')
+        icon = hospitalIcon;
 
     // If location marker doesn't exist
     locationMarkers[location.id] = L.marker([location.location.latitude,
