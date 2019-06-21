@@ -210,7 +210,7 @@ export class AppClient extends TopicObserver {
             this.locations[type] = {};
 
         // retrieve bases
-        return this.httpClient.get('location/' + type + '/')
+        return this.httpClient.get('/en/location/' + type + '/')
             .then( (response) => {
 
                 // Update bases
