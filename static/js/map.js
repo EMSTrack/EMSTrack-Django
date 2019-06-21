@@ -340,6 +340,9 @@ function updateAmbulance(ambulance) {
         const old_status = ambulances[id].status;
         const status = ambulance.status;
 
+        const old_online = ambulance[id].client_id != null
+        const online = ambulance.client_id != null
+
         let old_grid_length;
         let new_grid_length;
         if (old_status !== status) {
@@ -368,7 +371,8 @@ function updateAmbulance(ambulance) {
             // Move and update grid button
             const btnClass = 'btn btn-sm ' + ambulance_buttons[status]
                 + ' status-' + status
-                + ' capability-' + ambulance.capability;
+                + ' capability-' + ambulance.capability
+                + ambulanceVisibleClass(ambulance);
             $("#grid-button-" + id).attr("class", btnClass)
                 .detach()
                 .appendTo($('#ambulance-grid-' + status));
@@ -382,6 +386,11 @@ function updateAmbulance(ambulance) {
 
             // logger.log('debug', "> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
             // logger.log('debug', "> newstatus '" + status + "' count = '" + new_grid_length + "'");
+
+        } else if (old_online !== online) {
+
+            $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
+
         }
 
     } else {
@@ -423,6 +432,23 @@ function updateHospital(hospital) {
 
 }
 
+function ambulanceVisibleClass(ambulance) {
+    const online = ambulance.client_id != null;
+    if (online) {
+        if (visibleCategory['online'])
+            return 'd-block';
+        else
+            return 'd-none';
+    } else {
+        if (visibleCategory['offline'])
+            return 'd-block';
+        else
+            return 'd-none';
+    }
+
+}
+
+
 function addAmbulanceToGrid(ambulance) {
 
     logger.log('info', "Adding ambulance '%s' [id:'%d', status:'%s', btn='%s'] to grid", 
@@ -438,7 +464,8 @@ function addAmbulanceToGrid(ambulance) {
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
             + ' status-' + ambulance.status
-            + ' capability-' + ambulance.capability + '"'
+            + ' capability-' + ambulance.capability +
+            + ' ' + ambulanceVisibleClass(ambulance) + '"'
             + ' style="margin: 2px 2px;"'
             + ' draggable="true">'
             + ambulance.identifier
