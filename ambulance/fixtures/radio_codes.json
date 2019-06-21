@@ -124,7 +124,7 @@
    "pk": 16,
    "fields": {
      "code": "4 de 45",
-     "label": "Ambulancia de el Imss"
+     "label": "Ambulancia de el IMSS"
    }
  },
  {
@@ -132,7 +132,7 @@
    "pk": 17,
    "fields": {
      "code": "4 de 45I",
-     "label": "Ambulancia de el Issste"
+     "label": "Ambulancia de el ISSTE"
    }
  },
  {
@@ -140,7 +140,7 @@
    "pk": 18,
    "fields": {
      "code": "4 de 45L",
-     "label": "Ambulancia de el Issstecali"
+     "label": "Ambulancia de el ISSTECALI"
    }
  },
  {
