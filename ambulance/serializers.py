@@ -323,7 +323,7 @@ class CallRadioCodeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CallRadioCode
-        fields = ['id', 'label']
+        fields = ['id', 'code', 'label']
 
 
 # Call serializer
