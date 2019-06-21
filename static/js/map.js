@@ -180,13 +180,13 @@ function init( client ) {
             apiClient.observe('hospital/+/data', (message) => { updateHospital(message.payload) } );
 
             logger.log('info', 'Retrieving bases');
-            return apiClient.retrieveBases();
+            return apiClient.retrieveLocations('b');
         })
         .then( (bases) => {
             logger.log('info', '%d bases retrieved', Object.keys(bases).length);
 
             // Setup bases
-            setupLocations(apiClient.bases, 'base');
+            setupLocations(apiClient.locations['b'], 'base');
 
             logger.log('info', 'Retrieving other locations');
             return apiClient.retrieveLocations('o');

@@ -28,7 +28,6 @@ export class AppClient extends TopicObserver {
         // initialize
         this.ambulances = undefined;
         this.hospitals = undefined;
-        this.bases = undefined;
         this.locations = undefined;
         this.calls = undefined;
 
@@ -170,31 +169,6 @@ export class AppClient extends TopicObserver {
 
                 // return calls
                 return this.calls;
-
-            })
-
-    }
-
-    retrieveBases() {
-
-        // initialize if needed
-        if (typeof this.bases === 'undefined')
-            this.bases = {};
-
-        // retrieve bases
-        return this.httpClient.get('location/b/')
-            .then( (response) => {
-
-                // Update bases
-                response.data.forEach( (location) => {
-
-                    // update base
-                    this.bases[location.id] = location;
-
-                });
-
-                // return bases
-                return this.bases;
 
             })
 
