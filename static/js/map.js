@@ -963,7 +963,7 @@ function addHospitalToMap(hospital) {
             hospital.location.longitude],
         {
             icon: coloredIcon,
-            pane: 'hospital'
+            pane: 'h'
         })
         .bindPopup("<strong>" + hospital.name + "</strong>")
         .addTo(mymap);
