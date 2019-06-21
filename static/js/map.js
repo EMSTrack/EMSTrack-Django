@@ -464,7 +464,7 @@ function addAmbulanceToGrid(ambulance) {
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
             + ' status-' + ambulance.status
-            + ' capability-' + ambulance.capability +
+            + ' capability-' + ambulance.capability
             + ' ' + ambulanceVisibleClass(ambulance) + '"'
             + ' style="margin: 2px 2px;"'
             + ' draggable="true">'
