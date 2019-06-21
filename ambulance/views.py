@@ -298,6 +298,7 @@ class LocationAdminListView(ListView):
         
         # filter
         context['base_list'] = queryset.filter(type=LocationType.b.name).order_by('name')
+        context['otro_list'] = queryset.filter(type=LocationType.o.name).order_by('name')
         context['aed_list'] = queryset.filter(type=LocationType.a.name).order_by('name')
 
         # query ended and paginate

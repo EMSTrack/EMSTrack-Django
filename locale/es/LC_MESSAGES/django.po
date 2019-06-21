@@ -842,6 +842,13 @@ msgstr "Base"
 msgid "No bases have been created yet."
 msgstr "No se han creados bases."
 
+msgid "Others"
+msgstr "Otros"
+
+#: templates/ambulance/location_list.html:50
+msgid "No locations of type other have been created yet."
+msgstr "No se han creados ubicaciones de tipo otro."
+
 #: templates/ambulance/location_list.html:54
 msgid "AEDs"
 msgstr "AEDs"
