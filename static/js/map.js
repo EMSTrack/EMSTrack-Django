@@ -12,6 +12,10 @@ import { waypointIcon } from './app-icons';
 
 // TODO: Import js-cookies library
 
+// Remove hospital and waypoints from location_type
+delete location_type_order[location_type_order.indexOf('h')];
+delete location_type_order[location_type_order.indexOf('w')];
+
 // Dispatching data
 
 const markersGroup = new L.LayerGroup();
