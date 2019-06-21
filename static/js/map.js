@@ -186,10 +186,19 @@ function init( client ) {
             logger.log('info', '%d bases retrieved', Object.keys(bases).length);
 
             // Setup bases
-            setupBases();
+            setupLocations(apiClient.bases, 'base');
+
+            logger.log('info', 'Retrieving other locations');
+            return apiClient.retrieveLocations('Other');
+        })
+        .then( (locations) => {
+            logger.log('info', "%d locations of type 'other' retrieved", Object.keys(locations).length);
+
+            // Setup other locations
+            setupLocations(apiClient.locations['Other'], 'other');
         })
         .catch( (error) => {
-            logger.log('error', 'Failed to retrieve hospitals and bases from ApiClient: %j', error);
+            logger.log('error', 'Failed to retrieve hospitals, bases, and other locations from ApiClient: %j', error);
         });
 
     // retrieve priority classification
@@ -278,14 +287,13 @@ function setupHospitals() {
 
 }
 
-function setupBases() {
+function setupLocations(locations, type) {
 
     // Retrieve locations from ApiClient
-    logger.log('info', "Setup locations");
+    logger.log('info', "Setup locations of type '" + type + "'");
 
-    Object.entries(apiClient.bases).forEach((entry) => {
-        const base = entry[1];
-        addLocationToMap(base);
+    Object.entries(locations).forEach((entry) => {
+        addLocationToMap(entry[1]);
     });
 
 }
