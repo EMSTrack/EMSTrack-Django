@@ -189,13 +189,13 @@ function init( client ) {
             setupLocations(apiClient.bases, 'base');
 
             logger.log('info', 'Retrieving other locations');
-            return apiClient.retrieveLocations('Other');
+            return apiClient.retrieveLocations('o');
         })
         .then( (locations) => {
             logger.log('info', "%d locations of type 'other' retrieved", Object.keys(locations).length);
 
             // Setup other locations
-            setupLocations(apiClient.locations['Other'], 'other');
+            setupLocations(apiClient.locations['o'], 'other');
         })
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve hospitals, bases, and other locations from ApiClient: %j', error);
