@@ -7,7 +7,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from login.permissions import get_permissions
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
-    LocationType, CallPriorityClassification, CallPriorityCode
+    LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode
 from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
@@ -315,6 +315,15 @@ class CallPriorityCodeSerializer(serializers.ModelSerializer):
     class Meta:
         model = CallPriorityCode
         fields = ['id', 'prefix', 'priority', 'suffix', 'label']
+
+
+# CallRadioCode Serializer
+
+class CallRadioCodeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallRadioCode
+        fields = ['id', 'label']
 
 
 # Call serializer

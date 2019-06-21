@@ -12,10 +12,10 @@ from emstrack.mixins import BasePermissionMixin, \
 from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode
+    AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
-    CallPriorityCodeSerializer, CallPriorityClassificationSerializer
+    CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -359,3 +359,18 @@ class CallPriorityViewSet(mixins.ListModelMixin,
 
         serializer = CallPriorityClassificationSerializer(classification, many=True)
         return Response(serializer.data)
+
+
+# CallRadioViewSet
+
+class CallRadioViewSet(mixins.ListModelMixin,
+                       viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating radio codes.
+
+    list:
+    Retrieve list of radio codes.
+    """
+
+    queryset = CallRadioCode.objects.all()
+    serializer_class = CallRadioCodeSerializer
