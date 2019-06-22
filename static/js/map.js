@@ -733,7 +733,7 @@ function addCallToGrid(call) {
                 + ambulance.identifier
                 + '  </button>'
                 + '</div>'
-                + '<div class="col pl-0">'
+                + '<div class="col">'
                 + '  <span class="align-middle">'
                 + '    <div class="progress" style="height: 30px;">'
                 + '      <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"'
