@@ -119,8 +119,8 @@ const locationIcon = L.icon({
 });
 
 const notifications = {
-    'ambulance-status': true,
-    'ambulance-online': true,
+    'ambulance-status': { enabled: true, style: 'succes' },
+    'ambulance-online': { enabled: true, style: 'warning' }
 };
 
 let priority_classification = {};
@@ -422,15 +422,17 @@ function updateAmbulance(ambulance) {
             // logger.log('debug', "> newstatus '" + status + "' count = '" + new_grid_length + "'");
 
             // alert
-            if ( notifications['ambulance-status'])
-                alert(`Ambulance '${ ambulance.identifier }' is now '${ ambulance_status[ambulance.status] }'.`, 'success');
+            if ( notifications['ambulance-status'].enabled )
+                alert(`Ambulance '${ ambulance.identifier }' is now '${ ambulance_status[ambulance.status] }'.`,
+                    notifications['ambulance-status'].style );
 
         } else if (old_online !== online) {
 
             $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
 
-            if ( notifications['ambulance-online'])
-                alert(`Ambulance '${ ambulance.identifier }' is now '${ online ? 'online' : 'offline' }'.`, 'success');
+            if ( notifications['ambulance-online'].enabled )
+                alert(`Ambulance '${ ambulance.identifier }' is now '${ online ? 'online' : 'offline' }'.`,
+                    notifications['ambulance-online'].style );
 
         }
 
