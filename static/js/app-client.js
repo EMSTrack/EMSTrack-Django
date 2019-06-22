@@ -58,6 +58,54 @@ export class AppClient extends TopicObserver {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
+    retrieveCallRadioCode() {
+
+        // initialized if needed
+        const radio_code = {};
+
+        // retrieve radio code
+        return this.httpClient.get('radio/')
+            .then( (response) => {
+
+                // Update radio code
+                response.data.forEach( (code) => {
+
+                    // update radio_code
+                    radio_code[code.id] = code.label;
+
+                });
+
+                // return radio_code
+                return radio_code;
+
+            })
+
+    }
+
+    retrieveCallPriorityCode() {
+
+        // initialized if needed
+        const priority_code = {};
+
+        // retrieve priority code
+        return this.httpClient.get('priority/')
+            .then( (response) => {
+
+                // Update priority code
+                response.data.forEach( (code) => {
+
+                    // update priority_code
+                    priority_code[code.id] = code.label;
+
+                });
+
+                // return priority_code
+                return priority_code;
+
+            })
+
+    }
+
     retrieveCallPriorityClassification() {
 
         // initialized if needed

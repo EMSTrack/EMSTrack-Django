@@ -117,6 +117,8 @@ const locationIcon = L.icon({
 });
 
 let priority_classification = {};
+let priority_code = {};
+let radio_code = {};
 
 /**
  * Ambulance statuses
@@ -224,6 +226,28 @@ function init( client ) {
                     return false;
                 });
             }
+        });
+
+    // retrieve priority code
+    logger.log('info', 'Retrieving priority code');
+    apiClient.retrieveCallPriorityCode()
+        .then( (value) => {
+            logger.log('info', '%d priority codes retrieved', Object.keys(value).length);
+            priority_code = value;
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve priority code from ApiClient: %j', error);
+        });
+
+    // retrieve radio code
+    logger.log('info', 'Retrieving radio code');
+    apiClient.retrieveCallRadioCode()
+        .then( (value) => {
+            logger.log('info', '%d radio codes retrieved', Object.keys(value).length);
+            radio_code = value;
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve radio code from ApiClient: %j', error);
         });
 
     // save visibleCategory when unloading
@@ -731,12 +755,12 @@ function addCallToGrid(call) {
     pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
 
     // set priority
-    const priority_code = call.priority_code;
     let priority_prefix = '';
     let priority_suffix = '';
-    if (priority_code != null) {
-        priority_prefix = priority_code.prefix + '-';
-        priority_suffix = '-' + priority_code.suffix;
+    if (call.priority_code != null) {
+        const priority = priority_code[call.priority_code];
+        priority_prefix = priority.prefix + '-';
+        priority_suffix = '-' + priority.suffix;
     }
 
     // Add item to call grid
