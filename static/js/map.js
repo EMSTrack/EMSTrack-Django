@@ -676,7 +676,7 @@ function updateCallProgress(call, ambulance_call) {
 
     // waypoints
     const waypoint_set = ambulance_call['waypoint_set'];
-    
+
     // sort waypoints
     waypoint_set.sort(function(a,b) {return (a.order - b.order);});
 
@@ -684,8 +684,10 @@ function updateCallProgress(call, ambulance_call) {
     let order = 0;
     waypoint_set.forEach( (waypoint) => {
 
-        let color = waypointProgressColor[waypoint.status];
+        const color = waypointProgressColor[waypoint.status];
         const value = 100 * (waypoint.order - order)/ maxOrder;
+        logger.log('debug', color);
+        logger.log('debug', value);
         progress_bar.append(
             '<div class="progress-bar progress-bar-striped ' + color + '"'
             + '         role="progressbar" style="width: ' + value + '%"'
