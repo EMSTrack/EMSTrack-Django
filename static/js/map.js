@@ -734,7 +734,7 @@ function addCallToGrid(call) {
                 + '  </button>'
                 + '</div>'
                 + '<div class="col">'
-                + '  <div class="progress">'
+                + '  <div class="progress" style="height: 20px;">'
                 + '    <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"'
                 + '         class="progress-bar progress-bar-striped progress-bar-animated"'
                 + '         role="progressbar" style="width: 50%"'
