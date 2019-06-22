@@ -16,5 +16,5 @@ export function alert(message, type = 'warning', timeout = 3000, placeholder = '
 </div>`);
 
     if (timeout > 0)
-        setTimeout( () => { $(placeholder).remove('#alert-' + counter); }, timeout);
+        setTimeout( () => { $('#alert-' + counter).remove(); }, timeout};
 }
