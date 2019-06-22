@@ -777,7 +777,7 @@ function addCallToGrid(call) {
             '     <span class="font-weight-bold">' + priority_prefix + '</span>' +
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
-            '             class="btn btn-outline-' + call_priority_css[call.priority].class + ' m-0 p-0">' +
+            '             class="btn btn-outline-' + call_priority_css[call.priority].class + ' m-0 px-2">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
