@@ -119,7 +119,7 @@ const locationIcon = L.icon({
 });
 
 const notifications = {
-    'ambulance-status': { enabled: true, style: 'succes' },
+    'ambulance-status': { enabled: true, style: 'success' },
     'ambulance-online': { enabled: true, style: 'warning' }
 };
 
