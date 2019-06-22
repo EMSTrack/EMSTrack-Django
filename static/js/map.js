@@ -656,26 +656,38 @@ function updateCallCounter() {
 
 }
 
+const waypointProgressColor = {
+    'D': 'bg-success',
+    'S': 'bg-secondary',
+    'V': 'bg-warning',
+    'C': 'bg-light'
+};
+
 function updateCallProgress(call, ambulance_call) {
 
     // get ambulance
     const ambulance = ambulances[ambulance_call.ambulance_id];
+
+    const progress_bar = $('#call-progress-bar-' + call.id + '-' + ambulance.id);
+    progress_bar.empty();
 
     // waypoints
     const waypoint_set = ambulance_call['waypoint_set'];
     const n = waypoint_set.length;
     let m = 0;
     waypoint_set.forEach( (waypoint) => {
-        const status = waypoint.status;
-        if (status === 'D' || status === 'S')
-            m += 1;
+
+        let color = waypointProgressColor[waypoint.status];
+        const value = 100 * m / n;
+        progress_bar.append(
+            '<div class="progress-bar progress-bar-striped ' + color + '"'
+            + '         role="progressbar" style="width: ' + value + '%"'
+            + '         aria-valuenow="' + value '" aria-valuemin="0" aria-valuemax="100">'
+            + '</div>'
+        );
+        m += 1;
+
     });
-    m = 100 * m / n;
-
-    $('#call-progress-bar-' + call.id + '-' + ambulance.id)
-        .css('width', m + '%')
-        .attr('aria-valuenow', m);
-
 }
 
 function addCallToGrid(call) {
@@ -756,11 +768,8 @@ function addCallToGrid(call) {
                 + '  </button>'
                 + '</div>'
                 + '<div class="col pl-1">'
-                + '  <div class="progress" style="height: 20px;">'
-                + '    <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"'
-                + '         class="progress-bar progress-bar-striped progress-bar-animated"'
-                + '         role="progressbar" style="width: 50%"'
-                + '         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>'
+                + '  <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"'
+                + '       class="progress" style="height: 20px;">'
                 + '  </div>'
                 + '</div>'
                 + '</div>');
