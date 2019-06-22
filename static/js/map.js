@@ -762,8 +762,8 @@ function addCallToGrid(call) {
     let priority_suffix = '';
     if (call.priority_code != null) {
         const priority = priority_code[call.priority_code];
-        priority_prefix = priority.prefix + '-';
-        priority_suffix = '-' + priority.suffix;
+        priority_prefix = priority.prefix;
+        priority_suffix = priority.suffix;
     }
 
     // Add item to call grid
