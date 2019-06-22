@@ -8,7 +8,7 @@ export function alert(message, type = 'warning', timeout = 3000, placeholder = '
 
     // language=HTML
     $(placeholder).append(
-`<div class="alert alert-${ type } alert-dismissible fade show" id="alert-${ counter }" role="alert">
+        `<div class="alert alert-${ type } alert-dismissible fade show" id="alert-${ counter }" role="alert">
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
   <span aria-hidden="true">&times;</span>
   </button>
@@ -16,5 +16,8 @@ export function alert(message, type = 'warning', timeout = 3000, placeholder = '
 </div>`);
 
     if (timeout > 0)
-        setTimeout( () => { $('#alert-' + counter).remove(); }, timeout};
+        setTimeout(() => {
+            $('#alert-' + counter).remove();
+        }, timeout);
+    
 }
