@@ -276,6 +276,8 @@ class AmbulanceMap(TemplateView):
             "Radio Code": _("Radio Code"),
             "Priority Code": _("Priority Code"),
             "Priority Classification": _("Priority Classification"),
+            "Alert": _("Alert"),
+
         }
 
         return context

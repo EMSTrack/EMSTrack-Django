@@ -338,7 +338,7 @@ function bsalert(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
-    title = title || 'Alert';
+    title = title || translation_table['Alert'];
 
     $('.modal-title').html(title);
     $('.modal-body').html(message).addClass(alertClass);
@@ -423,7 +423,7 @@ function updateAmbulance(ambulance) {
 
             // alert
             if ( notifications['ambulance-status'].enabled )
-                alert(`Ambulance '${ ambulance.identifier }' is now '${ ambulance_status[ambulance.status] }'.`,
+                alert(`Ambulance '${ ambulance.identifier }' is now '${ ambulance_status[ambulance.status] }.'`,
                     notifications['ambulance-status'].style );
 
         } else if (old_online !== online) {
@@ -431,7 +431,7 @@ function updateAmbulance(ambulance) {
             $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
 
             if ( notifications['ambulance-online'].enabled )
-                alert(`Ambulance '${ ambulance.identifier }' is now '${ online ? 'online' : 'offline' }'.`,
+                alert(`Ambulance '${ ambulance.identifier }' is now '${ online ? 'online' : 'offline' }.'`,
                     notifications['ambulance-online'].style );
 
         }
@@ -1574,10 +1574,9 @@ function doUpdateAmbulanceStatus(ambulance, status) {
             // Log failure
             logger.log('error', "Failed to post ambulance status update: '%s'", jqXHR.responseText);
 
-            bsalert("Could not update ambulance status \"" +
-                textStatus + "," + errorThrown + "\"\n" +
-                "You likely have not enough rights to update this ambulance.");
-
+            bsalert(
+                `Could not update ambulance status '${ textStatus }':\n${ errorThrown }\nYou likely have not enough rights to update this ambulance.`
+            );
 
         }
     });
