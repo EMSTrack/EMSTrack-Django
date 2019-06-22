@@ -730,6 +730,15 @@ function addCallToGrid(call) {
     let pane = mymap.createPane(status + "|" + 'call_' + call.id);
     pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
 
+    // set priority
+    const priority_code = call.priority_code;
+    let priority_prefix = '';
+    let priority_suffix = '';
+    if (priority_code != null) {
+        priority_prefix = priority_code.prefix + '-';
+        priority_suffix = '-' + priority_code.suffix;
+    }
+
     // Add item to call grid
     $('#call-grid-' + status)
         .append(
@@ -738,12 +747,14 @@ function addCallToGrid(call) {
             '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
+            '     <span>' + priority_prefix + '</span>'
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
-            '             style="margin: 2px 2px;"\n' +
+            '             style="margin: 1px 1px;"\n' +
             '             class="btn btn-outline-' + call_priority_css[call.priority].class + '">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
+            '     <span>' + priority_suffix + '</span>'
             '     <div class="float-right" id="call-text-' + call.id + '">' + callToHtmlShort(call, date) + '</div>\n' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
