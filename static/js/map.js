@@ -160,6 +160,7 @@ function init( client ) {
             logger.log('error', 'Failed to retrieve priority classification from ApiClient: %j', error);
         })
         .then( () => {
+
             if (Object.keys(priority_classification).length > 0) {
                 logger.log('info', 'Will disable priority buttons');
                 // Disable button clicking
@@ -168,52 +169,54 @@ function init( client ) {
                     return false;
                 });
             }
-        });
 
-    // retrieve priority code
-    logger.log('info', 'Retrieving priority code');
-    apiClient.retrieveCallPriorityCode()
+            // retrieve priority code
+            logger.log('info', 'Retrieving priority code');
+            return apiClient.retrieveCallPriorityCode();
+        })
         .then( (value) => {
+
             logger.log('info', '%d priority codes retrieved', Object.keys(value).length);
             priority_code = value;
-        })
-        .catch( (error) => {
-            logger.log('error', 'Failed to retrieve priority code from ApiClient: %j', error);
-        });
 
-    // retrieve radio code
-    logger.log('info', 'Retrieving radio code');
-    apiClient.retrieveCallRadioCode()
+            // retrieve radio code
+            logger.log('info', 'Retrieving radio code');
+            return apiClient.retrieveCallRadioCode();
+        })
         .then( (value) => {
             logger.log('info', '%d radio codes retrieved', Object.keys(value).length);
             radio_code = value;
         })
         .catch( (error) => {
-            logger.log('error', 'Failed to retrieve radio code from ApiClient: %j', error);
+            logger.log('error', 'Failed to retrieve priority and radio codes from ApiClient: %j', error);
+        })
+        .then( () => {
+
+            // setup ambulances
+            setupAmbulances();
+
+            // signup for ambulance updates
+            logger.log('info', 'Signing up for ambulance updates');
+            apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
+
+            // signup for ambulance call status updates
+            logger.log('info', 'Signing up for ambulance call status updates');
+            apiClient.observe('ambulance/+/call/+/status', (message) => {
+                const topics = message.topic.split('/');
+                const ambulance_id = topics[1];
+                const call_id = topics[3];
+                updateAmbulanceCall(ambulance_id, call_id, message.payload);
+            });
+
+            // setup calls
+            setupCalls();
+
+            // signup for call updates
+            logger.log('info', 'Signing up for call updates');
+            apiClient.observe('call/+/data', (message) => { updateCall(message.payload) } );
+
         });
 
-    // setup ambulances
-    setupAmbulances();
-
-    // signup for ambulance updates
-    logger.log('info', 'Signing up for ambulance updates');
-    apiClient.observe('ambulance/+/data', (message) => { updateAmbulance(message.payload) } );
-
-    // signup for ambulance call status updates
-    logger.log('info', 'Signing up for ambulance call status updates');
-    apiClient.observe('ambulance/+/call/+/status', (message) => {
-        const topics = message.topic.split('/');
-        const ambulance_id = topics[1];
-        const call_id = topics[3];
-        updateAmbulanceCall(ambulance_id, call_id, message.payload);
-    });
-
-    // setup calls
-    setupCalls();
-
-    // signup for call updates
-    logger.log('info', 'Signing up for call updates');
-    apiClient.observe('call/+/data', (message) => { updateCall(message.payload) } );
 
     // Retrieve hospitals
     logger.log('info', 'Retrieving hospitals');
