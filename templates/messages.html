@@ -1,7 +1,7 @@
 <!-- Django messages using bootstrap
   -- From: https://simpleisbetterthancomplex.com/tips/2016/09/06/django-tip-14-messages-framework.html
   -->
-<div id="alert_placeholder" style="position:fixed; top: 20px; width: 70%; margin-left: 15%; z-index:9999; border-radius:0px">
+<div id="alert_placeholder" style="position:fixed; top: 20px; margin-left: 15%; margin-right: 15%; z-index:9999; border-radius:0px">
 </div>
 {% for message in messages %}
 <div class="alert {{ message.tags }} alert-dismissible" role="alert">
