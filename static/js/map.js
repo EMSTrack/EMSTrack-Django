@@ -118,6 +118,11 @@ const locationIcon = L.icon({
 
 });
 
+const notifications = {
+    'ambulance-status': true,
+    'ambulance-online': true,
+};
+
 let priority_classification = {};
 let priority_code = {};
 let radio_code = {};
@@ -417,11 +422,15 @@ function updateAmbulance(ambulance) {
             // logger.log('debug', "> newstatus '" + status + "' count = '" + new_grid_length + "'");
 
             // alert
-            alert(`Ambulance ${ ambulance.identifier } has become ${ ambulance_status[ambulance.status] }.`, 'success');
+            if ( notifications['ambulance-status'])
+                alert(`Ambulance '${ ambulance.identifier }' is now '${ ambulance_status[ambulance.status] }'.`, 'success');
 
         } else if (old_online !== online) {
 
             $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
+
+            if ( notifications['ambulance-online'])
+                alert(`Ambulance '${ ambulance.identifier }' is now '${ online ? 'online' : 'offline' }'.`, 'success');
 
         }
 
