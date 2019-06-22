@@ -680,6 +680,9 @@ function updateCallProgress(call, ambulance_call) {
     let m = 0;
     waypoint_set.forEach( (waypoint) => {
 
+        // update m
+        m += 1;
+
         let color = waypointProgressColor[waypoint.status];
         const value = 100 * m / n;
         progress_bar.append(
@@ -688,7 +691,6 @@ function updateCallProgress(call, ambulance_call) {
             + '         aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="100">'
             + '</div>'
         );
-        m += 1;
 
     });
 }
