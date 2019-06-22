@@ -677,26 +677,26 @@ function updateCallProgress(call, ambulance_call) {
     // waypoints
     const waypoint_set = ambulance_call['waypoint_set'];
 
-    // sort waypoints
-    waypoint_set.sort(function(a,b) {return (a.order - b.order);});
+    if (waypoint_set.length > 0) {
 
-    const maxOrder = waypoint_set[waypoint_set.length - 1].order;
-    let order = 0;
-    waypoint_set.forEach( (waypoint) => {
+        // sort waypoints
+        waypoint_set.sort(function (a, b) {
+            return (a.order - b.order);
+        });
 
-        const color = waypointProgressColor[waypoint.status];
-        const value = 100 * (waypoint.order - order)/ maxOrder;
-        logger.log('debug', color);
-        logger.log('debug', value);
-        progress_bar.append(
-            '<div class="progress-bar progress-bar-striped ' + color + '"'
-            + '         role="progressbar" style="width: ' + value + '%"'
-            + '         aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="100">'
-            + '</div>'
-        );
-        order = waypoint.order;
+        const value = 100 / waypoint_set.length;
+        waypoint_set.forEach((waypoint) => {
 
-    });
+            const color = waypointProgressColor[waypoint.status];
+            progress_bar.append(
+                '<div class="progress-bar progress-bar-striped ' + color + '"'
+                + '         role="progressbar" style="width: ' + value + '%"'
+                + '         aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="100">'
+                + '</div>'
+            );
+
+        });
+    }
 }
 
 function addCallToGrid(call) {
