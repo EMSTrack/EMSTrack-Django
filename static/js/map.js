@@ -774,14 +774,13 @@ function addCallToGrid(call) {
             '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
-            '     <span>' + priority_prefix + '</span>' +
+            '     <span class="font-weight-bold">' + priority_prefix + '</span>' +
             '     <button type="button"\n' +
             '             id="call-' + call.id + '-button"\n' +
-            '             style="margin: 1px 1px;"\n' +
-            '             class="btn btn-outline-' + call_priority_css[call.priority].class + '">' +
+            '             class="btn btn-outline-' + call_priority_css[call.priority].class + ' m-0 p-0">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
-            '     <span>' + priority_suffix + '</span>' +
+            '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">' + callToHtmlShort(call, date) + '</div>\n' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
