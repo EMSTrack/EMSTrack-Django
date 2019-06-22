@@ -619,10 +619,10 @@ function updateCall(call) {
                     // update progress bar
                     updateCallProgress(call, ambulance_call);
 
-                    // alert
-                    alert('something', 'primary');
-
                 }
+
+                // alert
+                alert('something', 'primary', );
 
             }
 
