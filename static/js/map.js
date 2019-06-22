@@ -589,7 +589,7 @@ function updateCall(call) {
 
                     // update progress bar
                     updateCallProgress(call, ambulance_call);
-                    
+
                 }
 
             }

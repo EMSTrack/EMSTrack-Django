@@ -15,6 +15,7 @@ const settings = {
             'h': 'hospital',
             'w': 'map',
             'b': 'home',
+            'o': 'globe-americas',
         },
         statusColor: {
             'C': 'danger',
