@@ -10,6 +10,8 @@ import { logger } from './logger';
 
 import { waypointIcon } from './app-icons';
 
+import { alert } from './alert';
+
 // TODO: Import js-cookies library
 
 // Remove waypoints and incidents from location_type
@@ -616,6 +618,9 @@ function updateCall(call) {
 
                     // update progress bar
                     updateCallProgress(call, ambulance_call);
+
+                    // alert
+                    alert('something', 'primary');
 
                 }
 
