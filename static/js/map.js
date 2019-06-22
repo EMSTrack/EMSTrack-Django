@@ -2,6 +2,8 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+import { sprintf } from 'sprintf';
+
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
