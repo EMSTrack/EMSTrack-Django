@@ -656,6 +656,28 @@ function updateCallCounter() {
 
 }
 
+function updateCallProgress(call, ambulance_call) {
+
+    // get ambulance
+    const ambulance = ambulances[ambulance_call.ambulance_id];
+
+    // waypoints
+    const waypoints = ambulance_call['waypoint_set'];
+    const n = waypoints.length;
+    let m = 0;
+    waypoint_set.forEach((waypoint) => {
+        const status = waypoint.status;
+        if (status === 'D' || status === 'S')
+            m += 1;
+    });
+    m = 100 * m / n;
+
+    $('#call-progress-bar-' + call.id + '-' + ambulance.id)
+        .css('width', m + '%')
+        .attr('aria-valuenow', m);
+
+}
+
 function addCallToGrid(call) {
 
     logger.log('info', "Adding call '%d'[status:'%s'] to grid", call.id, call.status);
@@ -748,6 +770,9 @@ function addCallToGrid(call) {
             .click(function (e) {
                 onGridAmbulanceButtonClick(ambulance);
             });
+
+        // update progress bar
+        updateCallProgress(call, ambulance_call);
 
     }
 
