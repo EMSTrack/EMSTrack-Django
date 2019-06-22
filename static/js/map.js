@@ -2,8 +2,6 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
-import { sprintf } from 'sprintf';
-
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
@@ -13,6 +11,8 @@ import { logger } from './logger';
 import { waypointIcon } from './app-icons';
 
 import { alert } from './alert';
+
+const sprintf = require('sprintf-js').sprintf;
 
 // TODO: Import js-cookies library
 
