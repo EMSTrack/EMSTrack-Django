@@ -682,7 +682,7 @@ function updateCallProgress(call, ambulance_call) {
         progress_bar.append(
             '<div class="progress-bar progress-bar-striped ' + color + '"'
             + '         role="progressbar" style="width: ' + value + '%"'
-            + '         aria-valuenow="' + value '" aria-valuemin="0" aria-valuemax="100">'
+            + '         aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="100">'
             + '</div>'
         );
         m += 1;
