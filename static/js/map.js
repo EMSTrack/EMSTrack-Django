@@ -676,21 +676,23 @@ function updateCallProgress(call, ambulance_call) {
 
     // waypoints
     const waypoint_set = ambulance_call['waypoint_set'];
-    const n = waypoint_set.length;
-    let m = 0;
+    
+    // sort waypoints
+    waypoint_set.sort(function(a,b) {return (a.order - b.order);});
+
+    const maxOrder = waypoint_set[waypoint_set.length - 1].order;
+    let order = 0;
     waypoint_set.forEach( (waypoint) => {
 
-        // update m
-        m += 1;
-
         let color = waypointProgressColor[waypoint.status];
-        const value = 100 * m / n;
+        const value = 100 * (waypoint.order - order)/ maxOrder;
         progress_bar.append(
             '<div class="progress-bar progress-bar-striped ' + color + '"'
             + '         role="progressbar" style="width: ' + value + '%"'
             + '         aria-valuenow="' + value + '" aria-valuemin="0" aria-valuemax="100">'
             + '</div>'
         );
+        order = waypoint.order;
 
     });
 }
