@@ -692,8 +692,7 @@ function updateCallProgress(call, ambulance_call) {
             let color = waypointProgressColor[waypoint.status];
 
             // is it next?
-            if (waypoint.status === 'C' || waypoint.status === 'V' &&
-                nextWaypoint === null) {
+            if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === null) {
                 nextWaypoint = waypoint;
                 if (waypoint.status === 'C')
                     color = 'bg-primary';
@@ -897,8 +896,7 @@ function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
         const icon = new L.divIcon(waypointIcon(waypoint));
 
         // is it next?
-        if (waypoint.status === 'C' || waypoint.status === 'V' &&
-            nextWaypoint === null)
+        if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === null)
             nextWaypoint = waypoint;
 
         // create marker
