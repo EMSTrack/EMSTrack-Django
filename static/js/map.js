@@ -340,7 +340,7 @@ function updateAmbulance(ambulance) {
         const old_status = ambulances[id].status;
         const status = ambulance.status;
 
-        const old_online = ambulance[id].client_id != null
+        const old_online = ambulances[id].client_id != null
         const online = ambulance.client_id != null
 
         let old_grid_length;
