@@ -587,6 +587,9 @@ function updateCall(call) {
                     // set next waypoint
                     ambulance_call['next_waypoint'] = nextWaypoint;
 
+                    // update progress bar
+                    updateCallProgress(call, ambulance_call);
+                    
                 }
 
             }
