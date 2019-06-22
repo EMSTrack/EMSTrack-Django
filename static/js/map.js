@@ -685,9 +685,21 @@ function updateCallProgress(call, ambulance_call) {
         });
 
         const value = 100 / waypoint_set.length;
+        let nextWaypoint = null;
         waypoint_set.forEach((waypoint) => {
 
-            const color = waypointProgressColor[waypoint.status];
+            // set color
+            let color = waypointProgressColor[waypoint.status];
+
+            // is it next?
+            if (waypoint.status === 'C' || waypoint.status === 'V' &&
+                nextWaypoint === null) {
+                nextWaypoint = waypoint;
+                if (waypoint.status === 'C')
+                    color = 'bg-primary';
+                color = 'progress-bar-animated ' + color;
+            }
+
             progress_bar.append(
                 '<div class="progress-bar progress-bar-striped ' + color + '"'
                 + '         role="progressbar" style="width: ' + value + '%"'
