@@ -722,7 +722,7 @@ function addCallToGrid(call) {
         $('#call-item-grid-' + call.id)
             .append(
                 '<div class="row">'
-                + '<div class="col">'
+                + '<div class="col-auto">'
                 + '  <button type="button"'
                 + '          id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
                 + '          class="btn btn-sm '
@@ -732,6 +732,8 @@ function addCallToGrid(call) {
                 + '          draggable="true">'
                 + ambulance.identifier
                 + '  </button>'
+                + '</div>'
+                + '<div class="col">'
                 + '  <span class="align-middle">'
                 + '    <div class="progress" style="height: 30px;">'
                 + '      <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"'
