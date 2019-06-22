@@ -662,10 +662,10 @@ function updateCallProgress(call, ambulance_call) {
     const ambulance = ambulances[ambulance_call.ambulance_id];
 
     // waypoints
-    const waypoints = ambulance_call['waypoint_set'];
-    const n = waypoints.length;
+    const waypoint_set = ambulance_call['waypoint_set'];
+    const n = waypoint_set.length;
     let m = 0;
-    waypoint_set.forEach((waypoint) => {
+    waypoint_set.forEach( (waypoint) => {
         const status = waypoint.status;
         if (status === 'D' || status === 'S')
             m += 1;
