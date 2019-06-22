@@ -720,7 +720,10 @@ function addCallToGrid(call) {
 
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
-            .append('<button type="button"'
+            .append(
+                '<div class="row">'
+                + '<div class="col-sm-2">'
+                + '<button type="button"'
                 + ' id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
                 + ' class="btn btn-sm '
                 + ambulance_call_buttons[ambulance_call.status]
@@ -728,7 +731,15 @@ function addCallToGrid(call) {
                 + ' style="margin: 2px 2px;"'
                 + ' draggable="true">'
                 + ambulance.identifier
-                + '</button>');
+                + '</button>'
+                + '</div>'
+                + '<div class="col-sm-6">'
+                + '  <div class="progress">'
+                + '    <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%"'
+                + '         aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>'
+                + '  </div>'
+                + '</div>'
+                + '</div>');
 
         // Make button clickable and draggable
         $('#call-grid-button-' + call.id + '-'+ ambulance.id)
