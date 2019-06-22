@@ -71,7 +71,7 @@ export class AppClient extends TopicObserver {
                 response.data.forEach( (code) => {
 
                     // update radio_code
-                    radio_code[code.id] = code.label;
+                    radio_code[code.id] = code;
 
                 });
 
@@ -95,7 +95,7 @@ export class AppClient extends TopicObserver {
                 response.data.forEach( (code) => {
 
                     // update priority_code
-                    priority_code[code.id] = code.label;
+                    priority_code[code.id] = code;
 
                 });
 

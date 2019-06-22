@@ -149,6 +149,49 @@ function init( client ) {
     // set apiClient
     apiClient = client;
 
+        // retrieve priority classification
+    logger.log('info', 'Retrieving priority classification');
+    apiClient.retrieveCallPriorityClassification()
+        .then( (value) => {
+            logger.log('info', '%d priority classifications retrieved', Object.keys(value).length);
+            priority_classification = value;
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve priority classification from ApiClient: %j', error);
+        })
+        .then( () => {
+            if (Object.keys(priority_classification).length > 0) {
+                logger.log('info', 'Will disable priority buttons');
+                // Disable button clicking
+                $('#priority-buttons').on("click", ".btn", function (event) {
+                    event.preventDefault();
+                    return false;
+                });
+            }
+        });
+
+    // retrieve priority code
+    logger.log('info', 'Retrieving priority code');
+    apiClient.retrieveCallPriorityCode()
+        .then( (value) => {
+            logger.log('info', '%d priority codes retrieved', Object.keys(value).length);
+            priority_code = value;
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve priority code from ApiClient: %j', error);
+        });
+
+    // retrieve radio code
+    logger.log('info', 'Retrieving radio code');
+    apiClient.retrieveCallRadioCode()
+        .then( (value) => {
+            logger.log('info', '%d radio codes retrieved', Object.keys(value).length);
+            radio_code = value;
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to retrieve radio code from ApiClient: %j', error);
+        });
+
     // setup ambulances
     setupAmbulances();
 
@@ -205,49 +248,6 @@ function init( client ) {
         })
         .catch( (error) => {
             logger.log('error', 'Failed to retrieve hospitals, bases, and other locations from ApiClient: %j', error);
-        });
-
-    // retrieve priority classification
-    logger.log('info', 'Retrieving priority classification');
-    apiClient.retrieveCallPriorityClassification()
-        .then( (value) => {
-            logger.log('info', '%d priority classifications retrieved', Object.keys(value).length);
-            priority_classification = value;
-        })
-        .catch( (error) => {
-            logger.log('error', 'Failed to retrieve priority classification from ApiClient: %j', error);
-        })
-        .then( () => {
-            if (Object.keys(priority_classification).length > 0) {
-                logger.log('info', 'Will disable priority buttons');
-                // Disable button clicking
-                $('#priority-buttons').on("click", ".btn", function (event) {
-                    event.preventDefault();
-                    return false;
-                });
-            }
-        });
-
-    // retrieve priority code
-    logger.log('info', 'Retrieving priority code');
-    apiClient.retrieveCallPriorityCode()
-        .then( (value) => {
-            logger.log('info', '%d priority codes retrieved', Object.keys(value).length);
-            priority_code = value;
-        })
-        .catch( (error) => {
-            logger.log('error', 'Failed to retrieve priority code from ApiClient: %j', error);
-        });
-
-    // retrieve radio code
-    logger.log('info', 'Retrieving radio code');
-    apiClient.retrieveCallRadioCode()
-        .then( (value) => {
-            logger.log('info', '%d radio codes retrieved', Object.keys(value).length);
-            radio_code = value;
-        })
-        .catch( (error) => {
-            logger.log('error', 'Failed to retrieve radio code from ApiClient: %j', error);
         });
 
     // save visibleCategory when unloading
