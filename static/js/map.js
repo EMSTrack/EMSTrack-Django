@@ -723,15 +723,15 @@ function addCallToGrid(call) {
             .append(
                 '<div class="row">'
                 + '<div class="col-sm-auto">'
-                + '<button type="button"'
-                + ' id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
-                + ' class="btn btn-sm '
+                + '  <button type="button"'
+                + '          id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
+                + '          class="btn btn-sm '
                 + ambulance_call_buttons[ambulance_call.status]
-                + ' status-' + ambulance_call.status + '"'
-                + ' style="margin: 2px 2px;"'
-                + ' draggable="true">'
+                + '                 status-' + ambulance_call.status + '"'
+                + '          style="margin: 2px 2px;"'
+                + '          draggable="true">'
                 + ambulance.identifier
-                + '</button>'
+                + '  </button>'
                 + '</div>'
                 + '<div class="col">'
                 + '  <div class="progress">'
