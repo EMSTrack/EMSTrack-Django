@@ -416,6 +416,9 @@ function updateAmbulance(ambulance) {
             // logger.log('debug', "> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
             // logger.log('debug', "> newstatus '" + status + "' count = '" + new_grid_length + "'");
 
+            // alert
+            alert(`Ambulance ${ ambulance.identifier } has become ${ ambulance_status[ambulance.status] }.`, 'success');
+
         } else if (old_online !== online) {
 
             $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
@@ -620,9 +623,6 @@ function updateCall(call) {
                     updateCallProgress(call, ambulance_call);
 
                 }
-
-                // alert
-                alert('something', 'primary', );
 
             }
 
