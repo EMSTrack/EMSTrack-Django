@@ -1442,6 +1442,14 @@ class TestCall(TestSetup):
         self.assertContains(response, 'nani')
         self.assertNotContains(response, 'suhmuh')
 
+        # add second ambulance to call
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a1, updated_by=self.u1)
+
+        response = client.get(reverse('ambulance:call_list'))
+        self.assertEquals(response.status_code, 200)
+        self.assertContains(response, 'nani')
+        self.assertNotContains(response, 'suhmuh')
+
         # logout
         client.logout()
 
