@@ -540,9 +540,9 @@ function addAmbulanceToGrid(ambulance) {
 
     // Update label
     const status = ambulance.status;
-    const new_count = $('.button .status-' + status + ':visible').children().length;
+    const new_count = $('.button .status-' + status + ':visible').length;
     const count = $('#ambulance-grid-' + status).children().length;
-    logger.log('debug', sprintf('%d -> %d', count, new_count);
+    logger.log('debug', sprintf('%d -> %d', count, new_count) );
     $('#ambulance-' + status + '-header-count')
         .html(count)
         .show();
@@ -1221,7 +1221,7 @@ function createCategoryPanesAndFilters() {
                 '             <input class="filter-checkbox" value="call-status" data-status="' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '" checked>\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
-                '             <span id="call-' + status + '-header-count" class="badge badge-info"></span>\n' +
+                '             <span id="call-' + status + '-header-count" class="badge badge-pill badge-info"></span>\n' +
                 '          </h6>\n' +
                 '    </div>\n' +
                 '    <div class="collapse"\n' +
@@ -1268,7 +1268,7 @@ function createCategoryPanesAndFilters() {
             '             <span id="ambulance-' + status + '-header" role="button">' +
             '                    ' + ambulance_status[status] + '\n' +
             '             </span>\n' +
-            '             <span id="ambulance-' + status + '-header-count" class="badge badge-info"></span>\n' +
+            '             <span id="ambulance-' + status + '-header-count" class="badge badge-pill badge-info"></span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse"\n' +
