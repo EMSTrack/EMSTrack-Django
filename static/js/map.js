@@ -427,7 +427,8 @@ function updateAmbulance(ambulance) {
 
             // alert
             if ( notifications['ambulance-status'].enabled )
-                alert(`Ambulance '${ ambulance.identifier }' is now '${ ambulance_status[ambulance.status] }.'`,
+                alert(sprintf(translation_table["Ambulance '%s' is now '%s'"],
+                              ambulance.identifier, ambulance_status[ambulance.status]),
                     notifications['ambulance-status'].style );
 
         } else if (old_online !== online) {
@@ -435,7 +436,8 @@ function updateAmbulance(ambulance) {
             $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
 
             if ( notifications['ambulance-online'].enabled )
-                alert(`Ambulance '${ ambulance.identifier }' is now '${ online ? 'online' : 'offline' }.'`,
+                alert(sprintf(translation_table["Ambulance '%s' is now '%s'"],
+                              ambulance.identifier, online ? 'online' : 'offline'),
                     notifications['ambulance-online'].style );
 
         }
