@@ -66,6 +66,7 @@ $(function () {
         .then( () => {
 
             // instantiate client
+            logger.log('info', 'Instantiating ApiClient');
             apiClient = new AppClient(mqttClient, httpClient);
 
             // retrieve ambulances
