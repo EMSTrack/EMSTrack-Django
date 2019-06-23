@@ -1402,6 +1402,9 @@ class TestCall(TestSetup):
 
         result = JSONParser().parse(BytesIO(response.content))
         answer = CallSerializer([c1], many=True).data
+        logger.debug(result)
+        logger.debug(answer)
+        self.assertEqual(len(result), len(answer))
         self.assertCountEqual(result, answer)
 
         # logout
