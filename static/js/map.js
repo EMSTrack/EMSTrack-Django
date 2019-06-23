@@ -1219,7 +1219,7 @@ function createCategoryPanesAndFilters() {
                 '             <input class="filter-checkbox" value="call-status" data-status="' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '" checked>\n' +
                 '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
-                '             <span id="call-' + status + '-header-count"></span>\n' +
+                '             <span id="call-' + status + '-header-count" class="badge badge-info"></span>\n' +
                 '          </h6>\n' +
                 '    </div>\n' +
                 '    <div class="collapse"\n' +
@@ -1266,7 +1266,7 @@ function createCategoryPanesAndFilters() {
             '             <span id="ambulance-' + status + '-header" role="button">' +
             '                    ' + ambulance_status[status] + '\n' +
             '             </span>\n' +
-            '             <span id="ambulance-' + status + '-header-count"></span>\n' +
+            '             <span id="ambulance-' + status + '-header-count" class="badge badge-info"></span>\n' +
             '          </h6>\n' +
             '    </div>\n' +
             '    <div class="collapse"\n' +
