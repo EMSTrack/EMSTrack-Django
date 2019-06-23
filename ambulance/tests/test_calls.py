@@ -1227,8 +1227,8 @@ class TestCall(TestSetup):
         expected_ambulancecall_set = AmbulanceCallSerializer(AmbulanceCall.objects.filter(call_id=c1.id), many=True).data
 
         self.assertEqual(len(expected_patient_set), 2)
-        self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set']), 2)
-        self.assertEqual(len(expected_ambulancecall_set[1]['waypoint_set']), 1)
+        self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set'])
+                         + len(expected_ambulancecall_set[1]['waypoint_set']), 3)
 
         expected = {
             'id': c1.id,
