@@ -1394,6 +1394,16 @@ class TestCall(TestSetup):
         answer = CallSerializer([c1], many=True).data
         self.assertCountEqual(result, answer)
 
+        # add second ambulance to call
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a1, updated_by=self.u1)
+
+        response = client.get('/en/api/call/', follow=True)
+        self.assertEquals(response.status_code, 200)
+
+        result = JSONParser().parse(BytesIO(response.content))
+        answer = CallSerializer([c1], many=True).data
+        self.assertCountEqual(result, answer)
+
         # logout
         client.logout()
 
