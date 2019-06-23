@@ -110,8 +110,7 @@ function abortCall(url) {
         .html(translation_table['Are you sure?'])
         .addClass('alert-danger');
     $("#modal-dialog")
-        .on('hide.bs.modal', () => {
-
+        .on('hide.bs.modal', function () {
             const $activeElement = $(document.activeElement);
             if ($activeElement.is('[data-toggle], [data-dismiss]')) {
                 if ($activeElement.attr('id') === 'modal-button-ok') {
