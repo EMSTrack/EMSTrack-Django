@@ -416,9 +416,9 @@ function updateAmbulance(ambulance) {
                 .appendTo($('#ambulance-grid-' + status));
 
             // update count labels
-            $('#ambulance-' + status + '-header-count').html('(' + new_grid_length + ')').show();
+            $('#ambulance-' + status + '-header-count').html(new_grid_length).show();
             if (old_grid_length)
-                $('#ambulance-' + old_status + '-header-count').html('(' + old_grid_length + ')').show();
+                $('#ambulance-' + old_status + '-header-count').html(old_grid_length).show();
             else
                 $('#ambulance-' + old_status + '-header-count').hide();
 
@@ -542,7 +542,7 @@ function addAmbulanceToGrid(ambulance) {
     const status = ambulance.status;
     const count = $('#ambulance-grid-' + status).children().length;
     $('#ambulance-' + status + '-header-count')
-        .html('(' + count + ')')
+        .html(count)
         .show();
 
     // logger.log('debug', "> status '" + status + "' count = '" + count + "'");
@@ -695,14 +695,14 @@ function updateCallCounter() {
             const count = $('#call-grid-' + status).children().length;
             total += count;
             if (count > 0)
-                $('#call-' + status + '-header-count').html('(' + count + ')').show();
+                $('#call-' + status + '-header-count').html(count).show();
             else
                 $('#call-' + status + '-header-count').hide();
         }
     });
 
     if (total > 0)
-        $('#call-header-count').html('(' + total+ ')').show();
+        $('#call-header-count').html(total).show();
     else
         $('#call-header-count').hide();
 
