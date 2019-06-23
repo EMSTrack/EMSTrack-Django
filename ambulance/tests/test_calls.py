@@ -1480,7 +1480,7 @@ class TestCall(TestSetup):
         response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
         self.assertEquals(response.status_code, 200)
         self.assertTemplateUsed(response, 'ambulance/call_detail.html')
-        self.assertNotContains(response, 'Test1')
+        self.assertContains(response, 'Test1')
 
         response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c2.id}))
         self.assertEquals(response.status_code, 200)
