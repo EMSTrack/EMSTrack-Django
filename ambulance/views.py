@@ -376,6 +376,9 @@ class CallPermissionMixin(BasePermissionMixin):
     profile_field = 'ambulances'
     queryset = Call.objects.all()
 
+    def get_queryset(self):
+        return super().get_queryset().distinct()
+
 
 # Call ListView
 class CallListView(LoginRequiredMixin,

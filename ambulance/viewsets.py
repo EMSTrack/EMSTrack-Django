@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.exceptions import APIException
 
+from ambulance.views import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
 from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
@@ -297,7 +298,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 class CallViewSet(mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
                   CreateModelUpdateByMixin,
-                  BasePermissionMixin,
+                  CallPermissionMixin,
                   viewsets.GenericViewSet):
     """
     API endpoint for manipulating Calls.
