@@ -12,10 +12,7 @@
             {% if call.status != "E" and user|is_dispatcher %}
             <div class="float-right mt-1">
                 <form action="" method="get">
-                    <input type="submit" class="btn btn-danger"
-                           value="{% trans "ABORT CALL" %}"
-                           onClick="abortCall('{% url 'ambulance:call_abort' pk=call.id %}')"
-                    >
+                    <input id="abort-button" type="submit" class="btn btn-danger" value="{% trans "ABORT CALL" %}">
                 </form>
             </div>
             {% endif %}
@@ -223,6 +220,7 @@
     const call_id = {{ call.id }};
     const ambulance_status = {{ ambulance_status }};
     const location_type = {{ location_type }};
+    const abort_url = '{% url 'ambulance:call_abort' pk=call.id %}';
     const translation_table = {{ translation_table }};
 </script>
 {% endautoescape %}

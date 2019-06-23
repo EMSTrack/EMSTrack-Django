@@ -18,7 +18,11 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
+    // translation table
     logger.log('debug', translation_table);
+
+    // assign abort button function
+    $('#abort-button').on('click', () => { abortCall(abort_url); } );
 
     // Retrieve call
     retrieveCall(map, call_id);
