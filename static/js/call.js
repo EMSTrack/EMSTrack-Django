@@ -20,9 +20,10 @@ function init (client) {
 
     // translation table
     logger.log('debug', translation_table);
+    logger.log('debug', abort_url);
 
     // assign abort button function
-    $('#abort-button').on('click', () => { abortCall(abort_url); } );
+    $('#abort-button').on('click', () => { abortCall(); } );
 
     // Retrieve call
     retrieveCall(map, call_id);
@@ -99,7 +100,7 @@ function addCallToMap(map, call) {
 
 }
 
-function abortCall(url) {
+function abortCall() {
 
     // Show modal
     $('#modal-button-ok').show();
@@ -115,7 +116,7 @@ function abortCall(url) {
             if ($activeElement.is('[data-toggle], [data-dismiss]')) {
                 if ($activeElement.attr('id') === 'modal-button-ok') {
                     // {% url 'ambulance:call_abort' pk=call.id %}
-                    window.location.href = url;
+                    window.location.href = abort_url;
                 }
             }
         })
