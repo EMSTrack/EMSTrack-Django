@@ -1237,3 +1237,9 @@ msgstr "No se pudo actualizar el estado de la ambulancia"
 
 msgid "'%s' is now '%s'"
 msgstr "'%s' está ahora '%s'"
+
+msgid "Abort Call"
+msgstr "Cancelar Llamada"
+
+msgid "Are you sure?"
+msgstr "¿Tienes certeza?"

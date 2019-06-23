@@ -441,6 +441,11 @@ class CallDetailView(LoginRequiredMixin,
                                        for m in AmbulanceStatus}
         context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
+        context['translation_table'] = {
+            "Abort Call": _("Abort Call"),
+            "Are you sure?": _("Are you sure?"),
+        }
+
         return context
 
     def get_success_url(self):

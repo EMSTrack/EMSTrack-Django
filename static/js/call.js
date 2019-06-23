@@ -99,9 +99,9 @@ function abortCall(url) {
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
     $('.modal-title')
-        .html(translation_table['ABORT CALL']);
+        .html(translation_table['Abort Call']);
     $('.modal-body')
-        .html('Are you sure?')
+        .html(translation_table['Are you sure?'])
         .addClass('alert-danger');
     $("#modal")
         .on('hide.bs.modal', () => {
