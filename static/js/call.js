@@ -18,6 +18,8 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
+    logger.log('debug', translation_table);
+
     // Retrieve call
     retrieveCall(map, call_id);
 
@@ -103,7 +105,7 @@ function abortCall(url) {
     $('.modal-body')
         .html(translation_table['Are you sure?'])
         .addClass('alert-danger');
-    $("#modal")
+    $("#modal-dialog")
         .on('hide.bs.modal', () => {
 
             const $activeElement = $(document.activeElement);
@@ -115,4 +117,5 @@ function abortCall(url) {
             }
         })
         .modal('show');
+
 }
