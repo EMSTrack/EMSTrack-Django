@@ -92,3 +92,27 @@ function addCallToMap(map, call) {
     });
 
 }
+
+function abortCall(url) {
+
+    // Show modal
+    $('#modal-button-ok').show();
+    $('#modal-button-cancel').show();
+    $('.modal-title')
+        .html(translation_table['ABORT CALL']);
+    $('.modal-body')
+        .html('Are you sure?')
+        .addClass('alert-danger');
+    $("#modal")
+        .on('hide.bs.modal', () => {
+
+            const $activeElement = $(document.activeElement);
+            if ($activeElement.is('[data-toggle], [data-dismiss]')) {
+                if ($activeElement.attr('id') === 'modal-button-ok') {
+                    // {% url 'ambulance:call_abort' pk=call.id %}
+                    window.location.href = url;
+                }
+            }
+        })
+        .modal('show');
+}
