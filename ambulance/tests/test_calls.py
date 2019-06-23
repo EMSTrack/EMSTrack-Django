@@ -1461,9 +1461,29 @@ class TestCall(TestSetup):
         c2 = Call.objects.create(details='suhmuh', updated_by=self.u1)
 
         response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c2.id}))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'ambulance/call_detail.html')
         self.assertContains(response, 'suhmuh')
 
-        # TODO: Tests for unprivileged user
+        # logout
+        client.logout()
+
+        # Tests for unprivileged user
+
+        # login as testuser2
+        client.login(username='testuser2', password='very_secret')
+
+        # add ambulances to calls, can only read a3
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a3, updated_by=self.u1)
+        AmbulanceCall.objects.create(call=c2, ambulance=self.a2, updated_by=self.u1)
+
+        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
+        self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'ambulance/call_detail.html')
+        self.assertNotContains(response, 'Test1')
+
+        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c2.id}))
+        self.assertEquals(response.status_code, 200)
 
         # logout
         client.logout()
