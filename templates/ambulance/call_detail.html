@@ -11,9 +11,7 @@
 
             {% if call.status != "E" and user|is_dispatcher %}
             <div class="float-right mt-1">
-                <form action="" method="get">
-                    <input id="abort-button" type="submit" class="btn btn-danger" value="{% trans "ABORT CALL" %}">
-                </form>
+                <input id="abort-button" type="button" class="btn btn-danger" value="{% trans "ABORT CALL" %}">
             </div>
             {% endif %}
 
