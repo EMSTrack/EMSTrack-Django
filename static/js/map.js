@@ -20,6 +20,8 @@ const sprintf = require('sprintf-js').sprintf;
 delete location_type_order[location_type_order.indexOf('w')];
 delete location_type_order[location_type_order.indexOf('i')];
 
+logger.log('debug', translation_table);
+
 // Dispatching data
 
 const markersGroup = new L.LayerGroup();
