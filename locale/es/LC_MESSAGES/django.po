@@ -1235,5 +1235,5 @@ msgstr "¡Solo se pueden despachar ambulancias disponibles!"
 msgid "Could not update ambulance status"
 msgstr "No se pudo actualizar el estado de la ambulancia"
 
-msgid "Ambulance '%s' is now '%s'"
-msgstr "Ambulancia '%s' es ahora '%s'"
+msgid "'%s' is now '%s'"
+msgstr "'%s' es ahora '%s'"

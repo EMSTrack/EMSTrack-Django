@@ -285,7 +285,7 @@ class AmbulanceMap(TemplateView):
             "Blank name": _("Blank name"),
             "Can only dispatch available ambulances!": _("Can only dispatch available ambulances!"),
             "Could not update ambulance status": _("Could not update ambulance status"),
-            "Ambulance '%s' is now '%s'": _("Ambulance '%s' is now '%s'")
+            "'%s' is now '%s'": _("'%s' is now '%s'")
         }
 
         return context
