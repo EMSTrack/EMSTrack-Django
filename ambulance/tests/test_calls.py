@@ -1405,7 +1405,7 @@ class TestCall(TestSetup):
         logger.debug(result)
         logger.debug(answer)
         self.assertEqual(len(result), 1)
-        self.assertCountEqual(result, answer+1)
+        self.assertCountEqual(result, answer)
 
         # logout
         client.logout()
