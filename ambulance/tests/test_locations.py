@@ -170,7 +170,7 @@ class TestLocationGetList(TestSetup):
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
         # retrieve locations
-        response = client.get('/en/api/location/AED/',
+        response = client.get('/en/api/location/a/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
@@ -178,14 +178,14 @@ class TestLocationGetList(TestSetup):
                   LocationSerializer(self.l3).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/en/api/location/Base/',
+        response = client.get('/en/api/location/b/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
         answer = [LocationSerializer(self.l2).data]
         self.assertCountEqual(result, answer)
 
-        response = client.get('/en/api/location/Other/',
+        response = client.get('/en/api/location/o/',
                               follow=True)
         self.assertEqual(response.status_code, 200)
         result = JSONParser().parse(BytesIO(response.content))
