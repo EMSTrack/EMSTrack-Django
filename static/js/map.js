@@ -540,7 +540,7 @@ function addAmbulanceToGrid(ambulance) {
 
     // Update label
     const status = ambulance.status;
-    const new_count = $('#ambulance-grid-' + status).find('.status-' + status + ':visible').length;
+    const new_count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
     const count = $('#ambulance-grid-' + status).children().length;
     logger.log('debug', sprintf('%d -> %d', count, new_count) );
     $('#ambulance-' + status + '-header-count')
