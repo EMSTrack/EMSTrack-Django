@@ -1458,11 +1458,10 @@ class TestCall(TestSetup):
         self.assertTemplateUsed(response, 'ambulance/call_detail.html')
 
         # test_call_detail_view_entry
+        c2 = Call.objects.create(details='suhmuh', updated_by=self.u1)
 
-        c1 = Call.objects.create(details="Test1", updated_by=self.u1)
-
-        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
-        self.assertContains(response, 'Test1')
+        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c2.id}))
+        self.assertContains(response, 'suhmuh')
 
         # TODO: Tests for unprivileged user
 
