@@ -1473,7 +1473,7 @@ class TestCall(TestSetup):
         # login as testuser2
         client.login(username='testuser2', password='very_secret')
 
-        # add ambulances to calls, can only read a3
+        # add ambulances to calls, can only read a3, only one per call
         AmbulanceCall.objects.create(call=c1, ambulance=self.a3, updated_by=self.u1)
         AmbulanceCall.objects.create(call=c2, ambulance=self.a2, updated_by=self.u1)
 
@@ -1483,7 +1483,15 @@ class TestCall(TestSetup):
         self.assertContains(response, 'Test1')
 
         response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c2.id}))
+        self.assertEquals(response.status_code, 404)
+
+        # add second ambulance to call
+        AmbulanceCall.objects.create(call=c1, ambulance=self.a1, updated_by=self.u1)
+
+        response = client.get(reverse('ambulance:call_detail', kwargs={'pk': c1.id}))
         self.assertEquals(response.status_code, 200)
+        self.assertTemplateUsed(response, 'ambulance/call_detail.html')
+        self.assertContains(response, 'Test1')
 
         # logout
         client.logout()
