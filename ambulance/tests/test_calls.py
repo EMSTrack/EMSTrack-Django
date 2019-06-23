@@ -1404,7 +1404,7 @@ class TestCall(TestSetup):
         answer = CallSerializer([c1], many=True).data
         logger.debug(result)
         logger.debug(answer)
-        self.assertEqual(len(result), len(answer))
+        self.assertEqual(len(result), 1)
         self.assertCountEqual(result, answer+1)
 
         # logout
