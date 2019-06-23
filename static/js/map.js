@@ -356,7 +356,7 @@ function bsdialog(message, alertClass, title) {
 
     // Show modal
     alertClass = alertClass || 'alert-danger';
-    title = title || 'Attention';
+    title = title || translation_table['Attention'];
 
     $('.modal-title').html(title);
     $('.modal-body').html(message).addClass(alertClass);
@@ -1576,9 +1576,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
             // Log failure
             logger.log('error', "Failed to post ambulance status update: '%s'", jqXHR.responseText);
 
-            bsalert(
-                `Could not update ambulance status '${ textStatus }':\n${ errorThrown }\nYou likely have not enough rights to update this ambulance.`
-            );
+            bsalert(translation_table["Could not update ambulance status"]);
 
         }
     });
@@ -1718,7 +1716,7 @@ function addToDispatchingList(ambulance) {
     // not available?
     if (ambulance.status !== STATUS_AVAILABLE) {
         logger.log('info', 'Ambulance is not available');
-        bsalert('Can only dispatch available ambulances!');
+        bsalert(translation_table["Can only dispatch available ambulances!"]);
         return;
     }
 
@@ -1870,7 +1868,7 @@ function dispatchCall() {
             form['radio_code']= selector.attr('id').split('-')[2];
         } catch(err) {
             logger.log('debug', err);
-            bsalert("Invalid radio code.");
+            bsalert(translation_table["Invalid radio code"]);
             return;
         }
     }
@@ -1882,18 +1880,18 @@ function dispatchCall() {
             form['priority_code'] = selector.attr('id').split('-')[2];
         } catch(err) {
             logger.log('debug', err);
-            bsalert("Invalid priority code.");
+            bsalert(translation_table["Invalid priority code"]);
             return;
         }
     }
 
     // checks
     if (form["priority"] === undefined) {
-        bsalert("Please select the priority level.");
+        bsalert(translation_table["Please select the priority"]);
         return;
     }
     if (numberOfDispatchingAmbulances === 0) {
-        bsalert("Please dispatch at least one ambulance.");
+        bsalert(translation_table["Please dispatch at least one ambulance"]);
         return;
     }
 
@@ -2039,7 +2037,7 @@ function addPatient(index) {
 
     // is name empty?
     if (!name) {
-        bsalert('Empty name');
+        bsalert(translation_table["Blank name"]);
         return;
     }
 

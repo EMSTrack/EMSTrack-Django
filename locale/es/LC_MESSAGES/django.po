@@ -1207,3 +1207,30 @@ msgstr "Este usuario no tiene permisión para accesar ningún hospital."
 #: templates/modal.html:64
 msgid "OK"
 msgstr "OK"
+
+msgid "Alert"
+msgstr "Alerta"
+
+msgid "Attention"
+msgstr "Atención"
+
+msgid "Invalid radio code"
+msgstr "Código de radio inválido"
+
+msgid "Invalid priority code"
+msgstr "Código de prioridad inválido"
+
+msgid "Please select the priority"
+msgstr "Por favor seleccione la prioridad"
+
+msgid "Please dispatch at least one ambulance"
+msgstr "Por favor despacha al menos una ambulancia"
+
+msgid "Blank name"
+msgstr "Nombre en blanco"
+
+msgid "Can only dispatch available ambulances!"
+msgstr "¡Solo se pueden despachar ambulancias disponibles!"
+
+msgid "Could not update ambulance status"
+msgstr "No se pudo actualizar el estado de la ambulancia"

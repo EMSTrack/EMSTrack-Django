@@ -276,8 +276,16 @@ class AmbulanceMap(TemplateView):
             "Radio Code": _("Radio Code"),
             "Priority Code": _("Priority Code"),
             "Priority Classification": _("Priority Classification"),
-            "Alert": _("Alert"),
 
+            "Alert": _("Alert"),
+            "Attention": _("Attention"),
+            "Invalid radio code.": _("Invalid radio code."),
+            "Invalid priority code.": _("Invalid priority code."),
+            "Please select the priority.": _("Please select the priority."),
+            "Please dispatch at least one ambulance.": _("Please dispatch at least one ambulance."),
+            "Empty name.": _("Empty name."),
+            "Can only dispatch available ambulances!": _("Can only dispatch available ambulances!"),
+            "Could not update ambulance status": _("Could not update ambulance status")
         }
 
         return context
