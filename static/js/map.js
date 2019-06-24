@@ -12,6 +12,8 @@ import { waypointIcon } from './app-icons';
 
 import { alert } from './alert';
 
+import { Patients } from './patients';
+
 const sprintf = require('sprintf-js').sprintf;
 
 // TODO: Import js-cookies library
@@ -854,25 +856,17 @@ function addCallToGrid(call) {
         });
 
     // Add popover to patient button
-    let patients = sprintf('<p>%s</p>', translation_table["No patient names are available."]);
-    if (call.patient_set.length > 0) {
-        patients = '<ul>'
-        call.patient_set.forEach( (patient) => {
-            if (patient.age === undefined)
-                patients += sprintf('<li>%s</li>', patient.name);
-            else
-                patients += sprintf('<li>%s (%d)</li>', patient.name, patient.age);
-        });
-        patients += '</ul>';
-    }
-
+    const placeholder = "call-' + call.id + '-patients";
     $('#call-' + call.id + '-patients')
         .popover({
             title: translation_table['Patients'],
-            content: patients,
+            content: '<div id="' + placeholder + '"></div>',
             html: true,
             placement: 'right'
         });
+
+    // create patient form
+    Patients(call.patient_set, call.id, placeholder).createForm();
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)
