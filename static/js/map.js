@@ -869,7 +869,8 @@ function addCallToGrid(call) {
     $('#call-' + call.id + '-patients')
         .popover({
             title: translation_table['Patients'],
-            html: patients,
+            content: patients,
+            html: true,
             placement: 'right'
         });
 
