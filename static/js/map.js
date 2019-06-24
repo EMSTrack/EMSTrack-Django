@@ -768,7 +768,7 @@ function abortCall(call) {
                 if ($activeElement.attr('id') === 'modal-button-ok') {
                     // Abort call
                     apiClient.abortCall(call)
-                        .then( (value) => {
+                        .then( (call) => {
                             logger.log('info', 'call %d successfully aborted', call.id);
                         })
                         .catch( (error) => {
