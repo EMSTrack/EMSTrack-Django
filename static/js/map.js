@@ -844,12 +844,12 @@ function addCallToGrid(call) {
                 ambulance.identifier +
                 '    </button>' +
                 '  </div>' +
-                '  <div class="col-sm-7">' +
+                '  <div class="col-sm-6">' +
                 '    <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"' +
                 '         class="progress" style="height: 20px;">' +
                 '    </div>' +
                 '  </div>' +
-                '  <div class="col-sm-1">' +
+                '  <div class="col-sm-2">' +
                 '    <span id="call-' + call.id + '-' + ambulance.id +'-waypoints" class="fas fa-map-marker"></span>' +
                 '    <button type="button" class="close" aria-label="Close">\n' +
                 '      <span aria-hidden="true">&times;</span>\n' +
