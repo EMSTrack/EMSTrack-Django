@@ -791,13 +791,14 @@ function addCallToGrid(call) {
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
             '     <span class="font-weight-bold">' + priority_prefix + '</span>' +
             '     <span id="call-' + call.id + '-button"\n' +
-            '           class="font-weight-bold bg-'+ call_priority_css[call.priority].class + ' pl-2 pr-1 pt-1 pb-1 m-1">' +
+            '           class="badge badge-'+ call_priority_css[call.priority].class + '">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </span>\n' +
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">\n' +
             '       ' + callToHtmlShort(call, date) +
-            '       <button type="button" class="close ml-3" aria-label="Close">\n' +
+            '       <span id="call-' + call.id + '-patients" class="fas fa-users"></span>' +
+            '       <button type="button" class="close ml-2" aria-label="Close">\n' +
             '         <span aria-hidden="true">&times;</span>\n' +
             '       </button>\n' +
             '     </div>\n' +
