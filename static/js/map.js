@@ -849,8 +849,8 @@ function addCallToGrid(call) {
                 '         class="progress" style="height: 20px;">' +
                 '    </div>' +
                 '  </div>' +
-                '  <div class="col-sm-1 mx-auto">' +
-                '    <span id="call-' + call.id + '-' + ambulance.id +'-waypoints" class="fas fa-map-marker text-center"></span>' +
+                '  <div class="col-sm-1">' +
+                '    <span id="call-' + call.id + '-' + ambulance.id +'-waypoints" class="fas fa-map-marker mx-auto"></span>' +
                 '  </div>' +
                 '  <div class="col-sm-1">' +
                 '    <button type="button" class="close" aria-label="Close">\n' +
