@@ -865,10 +865,10 @@ function addCallToGrid(call) {
             '<div>' +
             '  <div id="' + placeholder + '"></div>' +
             '  <div class="float-right my-2">\n' +
-            '    <button type="button" class="btn btn-secondary">' +
+            '    <button id="call-' + call.id + '-cancel-button" type="button" class="btn btn-secondary">' +
             '      Cancel' +
             '    </button>' +
-            '    <button type="button" class="btn btn-primary">' +
+            '    <button id="call-' + call.id + '-save-button" type="button" class="btn btn-primary">' +
             '      Save' +
             '    </button>' +
             '  </div>' +
@@ -877,9 +877,18 @@ function addCallToGrid(call) {
             placement: 'right'
         })
         .on('inserted.bs.popover', () => {
+
             // create patient form
             new Patients(call.patient_set, call.id, '#' + placeholder)
                 .createForm();
+
+            // toggle on cancel
+            $('#call-' + call.id + '-cancel-button').
+            on('click', function (event) => {
+                $('#call-' + call.id + '-patients-button')
+                    .popover('toggle');
+                event.stopPropagation();
+            });
 
         });
 
