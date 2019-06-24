@@ -864,7 +864,7 @@ function addCallToGrid(call) {
             content:
             '<div>' +
             '  <div id="' + placeholder + '"></div>' +
-            '  <div>\n' +
+            '  <div class="float-right mx-4 mt-2">\n' +
             '    <button type="button" class="btn btn-primary">' +
             '      Save' +
             '    </button>' +
