@@ -790,10 +790,10 @@ function addCallToGrid(call) {
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
             '     <span class="font-weight-bold">' + priority_prefix + '</span>' +
-            '     <span id="call-' + call.id + '-button"\n' +
-            '           class="badge badge-'+ call_priority_css[call.priority].class + '">' +
+            '     <button id="call-' + call.id + '-button"\n' +
+            '           class="btn btn-'+ call_priority_css[call.priority].class + ' btn-sm">' +
             '       ' + call_priority_css[call.priority].html + '\n' +
-            '     </span>\n' +
+            '     </button>\n' +
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">\n' +
             '       <span class="mr-1">' + date + '</span>' +
