@@ -1398,6 +1398,13 @@ function visibilityCheckbox(checkbox) {
         // toggle buttons visibility
         $('.capability-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
 
+        // update status header count
+        ambulance_status_order.forEach(function(status) {
+            // Update label
+            const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
+            $('#ambulance-' + status + '-header-count').html(count).show();
+        })
+
     } else if (checkbox.value === 'online') {
         // Add to all visible status layers
         ambulance_status_order.forEach(function (status) {
@@ -1413,6 +1420,13 @@ function visibilityCheckbox(checkbox) {
 
         // toggle buttons visibility
         $('.service-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
+
+        // update status header count
+        ambulance_status_order.forEach(function(status) {
+            // Update label
+            const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
+            $('#ambulance-' + status + '-header-count').html(count).show();
+        })
 
     } else if (checkbox.value === 'call-status') {
         // Add to all visible call layers
