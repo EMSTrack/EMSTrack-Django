@@ -832,24 +832,30 @@ function addCallToGrid(call) {
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append(
-                '<div class="row" style="display:flex; align-items:center;">'
-                + '<div class="col-auto pr-0">'
-                + '  <button type="button"'
-                + '          id="call-grid-button-' + call.id + '-' + ambulance.id + '"'
-                + '          class="btn btn-sm '
-                + ambulance_call_buttons[ambulance_call.status]
-                + '                 status-' + ambulance_call.status + '"'
-                + '          style="margin: 2px 2px;"'
-                + '          draggable="true">'
-                + ambulance.identifier
-                + '  </button>'
-                + '</div>'
-                + '<div class="col pl-1">'
-                + '  <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"'
-                + '       class="progress" style="height: 20px;">'
-                + '  </div>'
-                + '</div>'
-                + '</div>');
+                '<div class="row" style="display:flex; align-items:center;">' +
+                '  <div class="col-sm-4">' +
+                '    <button type="button"' +
+                '            id="call-grid-button-' + call.id + '-' + ambulance.id + '"' +
+                '            class="btn btn-sm ' +
+                ambulance_call_buttons[ambulance_call.status] +
+                '                   status-' + ambulance_call.status + '"' +
+                '            style="margin: 2px 2px;"' +
+                '            draggable="true">' +
+                ambulance.identifier +
+                '    </button>' +
+                '  </div>' +
+                '  <div class="col-sm-6">' +
+                '    <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"' +
+                '         class="progress" style="height: 20px;">' +
+                '    </div>' +
+                '  </div>' +
+                '  <div class="col-sm-2">' +
+                '    <button type="button" class="close ml-1" aria-label="Close">\n' +
+                '      <span aria-hidden="true">&times;</span>\n' +
+                '    </button>\n' +
+                '  </div>' +
+                '</div>'
+            );
 
         // Make button clickable and draggable
         $('#call-grid-button-' + call.id + '-'+ ambulance.id)
