@@ -861,7 +861,18 @@ function addCallToGrid(call) {
     $('#call-' + call.id + '-patients-button')
         .popover({
             title: translation_table['Patients'],
-            content: '<div id="' + placeholder + '"></div>',
+            content:
+            '<div>' +
+            '  <div id="' + placeholder + '"></div>' +
+            '  <div>\n' +
+            '    <button type="button" class="btn btn-primary">' +
+            '      Save' +
+            '    </button>' +
+            '    <button type="button" class="btn btn-secondary">' +
+            '      Cancel' +
+            '    </button>' +
+            '  </div>' +
+            '</div>',
             html: true,
             placement: 'right'
         })
