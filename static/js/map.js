@@ -1387,13 +1387,16 @@ function visibilityCheckbox(checkbox) {
                 ambulance_status_order.forEach(function (status) {
                     if (visibleCategory[status]) {
                         mymap.getPane(status + "|" + layer + "|" + online).style.display = display;
+
+                        // toggle buttons visibility
+                        $('.status-' + status + '.capability-' + layer + '.service-' + online)
+                            .removeClass('d-block d-none')
+                            .addClass('d-' + display);
+
                     }
                 });
             }
         });
-
-        // toggle buttons visibility
-        $('.capability-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
 
         // update status header count
         ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
@@ -1406,13 +1409,16 @@ function visibilityCheckbox(checkbox) {
                 ambulance_capability_order.forEach(function (capability) {
                     if (visibleCategory[capability]) {
                         mymap.getPane(status + "|" + capability + "|" + layer).style.display = display;
+
+                        // toggle buttons visibility
+                        $('.status-' + status + '.capability-' + capability + '.service-' + layer)
+                            .removeClass('d-block d-none')
+                            .addClass('d-' + display);
+
                     }
                 });
             }
         });
-
-        // toggle buttons visibility
-        $('.service-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
 
         // update status header count
         ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
