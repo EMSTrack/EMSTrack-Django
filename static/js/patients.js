@@ -71,17 +71,17 @@ export class Patients {
         // add existing patients
         let index = 0;
         this.patients.forEach( (patient) => {
-
-            this.addPatientForm(index, patient);
+            
             index += 1;
+            this.addPatientForm(index, patient);
 
         });
 
         if (index === 0) {
 
             // add blank form
-            this.addBlankPatientForm(index);
             index += 1;
+            this.addBlankPatientForm(index);
 
         }
 
