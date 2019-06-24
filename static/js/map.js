@@ -832,7 +832,7 @@ function addCallToGrid(call) {
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append(
-                '<div class="row" style="display:flex; align-items:center;">' +
+                '<div class="row no-gutters" style="display:flex; align-items:center;">' +
                 '  <div class="col-sm-4">' +
                 '    <button type="button"' +
                 '            id="call-grid-button-' + call.id + '-' + ambulance.id + '"' +
