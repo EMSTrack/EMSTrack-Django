@@ -25,8 +25,7 @@ function init (client) {
     // assign abort button function
     $('#abort-button')
         .on('click', () => { abortCall(); } )
-        .addClass("visible");
-
+        .removeClass("invisible");
 
     // Retrieve call
     retrieveCall(map, call_id);
