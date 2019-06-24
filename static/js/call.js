@@ -23,7 +23,10 @@ function init (client) {
     logger.log('debug', abort_url);
 
     // assign abort button function
-    $('#abort-button').on('click', () => { abortCall(); } );
+    $('#abort-button')
+        .on('click', () => { abortCall(); } )
+        .addClass("visible");
+
 
     // Retrieve call
     retrieveCall(map, call_id);
