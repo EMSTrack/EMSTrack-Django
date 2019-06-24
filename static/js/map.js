@@ -854,10 +854,22 @@ function addCallToGrid(call) {
         });
 
     // Add popover to patient button
+    let patients = sprintf('<p>%s</p>', translation_table["No patient names are available."]);
+    if (call.patient_set.length > 0) {
+        patients = '<ul>'
+        call.patient_set.forEach( (patient) => {
+            if (patient.age === undefined)
+                patients += sprintf('<li>%s</li>', patient.name);
+            else
+                patients += sprintf('<li>%s (%d)</li>', patient.name, patient.age);
+        });
+        patients += '</ul>';
+    }
+
     $('#call-' + call.id + '-patients')
         .popover({
-            title: 'Patients',
-            content: 'Some patients',
+            title: translation_table['Patients'],
+            html: patients,
             placement: 'right'
         });
 
@@ -1072,7 +1084,7 @@ function compilePatients(call) {
     // get patients
     let patients;
     if (call.patient_set.length === 0) {
-        patients = "No patient information";
+        patients = translation_table["No patient names are available."];
     } else
         patients = call.patient_set.join(', ');
 

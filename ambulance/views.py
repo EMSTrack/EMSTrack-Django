@@ -288,7 +288,9 @@ class AmbulanceMap(TemplateView):
             "'%s' is now '%s'": _("'%s' is now '%s'"),
             "Do you want to abort call %d?": _("Do you want to abort call %d?"),
             "Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?":
-                _("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?")
+                _("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"),
+            "Patients": _("Patients"),
+            "No patient names are available.": _("No patient names are available.")
         }
 
         return context
