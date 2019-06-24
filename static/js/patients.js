@@ -51,7 +51,7 @@ export class Patients {
         // remove from form
         this.placeholder
             .find('#patient-' + this.label + '-' + index + '-form')
-            .addClass('invisible');
+            .hide();
 
     }
 
@@ -71,7 +71,7 @@ export class Patients {
         // add existing patients
         let index = 0;
         this.patients.forEach( (patient) => {
-            
+
             index += 1;
             this.addPatientForm(index, patient);
 
@@ -86,12 +86,13 @@ export class Patients {
         }
 
         // change button symbol
-        $('#patient-' + this.label + '-' + index + '-symbol')
+        this.placeholder.find('#patient-' + this.label + '-' + index + '-symbol')
             .removeClass('fa-plus')
             .addClass('fa-minus');
 
         // bind addBlankPatientForm to click on last patient
         this.placeholder.find('#patient-' + this.label + '-' + index + '-button')
+            .off('click')
             .on('click', () => { this.addBlankPatientForm(index); });
 
     }
