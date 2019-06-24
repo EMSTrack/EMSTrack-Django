@@ -1,17 +1,17 @@
 /* generated with http://blog.koalite.com/bbg/ */
 
 .bg-yellow {
-  background-color: #F5E234;
+    background-color: #F5E234;
 }
 
 .badge-yellow {
-  background-color: #F5E234;
+    background-color: #F5E234;
 }
 
 .btn-yellow {
-  color: #000000;
-  background-color: #F5E234;
-  border-color: #F5E234;
+    color: #000000;
+    background-color: #F5E234;
+    border-color: #F5E234;
 }
 
 .btn-yellow:hover,
@@ -19,15 +19,15 @@
 .btn-yellow:active,
 .btn-yellow.active,
 .open .dropdown-toggle.btn-yellow {
-  color: #000000;
-  background-color: #CFBF2D;
-  border-color: #F5E234;
+    color: #000000;
+    background-color: #CFBF2D;
+    border-color: #F5E234;
 }
 
 .btn-yellow:active,
 .btn-yellow.active,
 .open .dropdown-toggle.btn-yellow {
-  background-image: none;
+    background-image: none;
 }
 
 .btn-yellow.disabled,
@@ -45,11 +45,11 @@ fieldset[disabled] .btn-yellow:active,
 .btn-yellow.disabled.active,
 .btn-yellow[disabled].active,
 fieldset[disabled] .btn-yellow.active {
-  background-color: #F5E234;
-  border-color: #F5E234;
+    background-color: #F5E234;
+    border-color: #F5E234;
 }
 
 .btn-yellow .badge {
-  color: #F5E234;
-  background-color: #000000;
+    color: #F5E234;
+    background-color: #000000;
 }
