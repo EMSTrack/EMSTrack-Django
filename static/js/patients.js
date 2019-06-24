@@ -43,7 +43,18 @@ export class Patients {
     }
 
     addBlankPatientForm(index) {
-        this.addPatientForm(index, { id: -1, name: '', age: '' });
+
+        this.addPatientForm(index, { id: -1, name: '', age: '' }, 'fa-plus');
+
+        // bind addBlankPatientForm to click
+        this.placeholder.find('#patient-' + this.label + '-' + index + '-button')
+            .off('click')
+            .on('click', () => {
+
+                this.addBlankPatientForm(index + 1);
+
+            });
+
     }
 
     removePatientForm(index) {
@@ -55,10 +66,10 @@ export class Patients {
 
     }
 
-    addPatientForm(index, patient) {
+    addPatientForm(index, patient, symbol = 'fa-minus') {
 
         // add to form
-        this.placeholder.append(Patients.patientForm(this.label + '-' + index, 'fa-minus', patient));
+        this.placeholder.append(Patients.patientForm(this.label + '-' + index, symbol, patient));
 
         // bind remove action
         this.placeholder.find('#patient-' + this.label + '-' + index + '-button')
@@ -77,23 +88,9 @@ export class Patients {
 
         });
 
-        if (index === 0) {
-
-            // add blank form
-            index += 1;
-            this.addBlankPatientForm(index);
-
-        }
-
-        // change button symbol
-        this.placeholder.find('#patient-' + this.label + '-' + index + '-symbol')
-            .removeClass('fa-plus')
-            .addClass('fa-minus');
-
-        // bind addBlankPatientForm to click on last patient
-        this.placeholder.find('#patient-' + this.label + '-' + index + '-button')
-            .off('click')
-            .on('click', () => { this.addBlankPatientForm(index); });
+        // add blank form
+        index += 1;
+        this.addBlankPatientForm(index);
 
     }
 
