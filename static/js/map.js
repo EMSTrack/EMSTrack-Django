@@ -797,7 +797,7 @@ function addCallToGrid(call) {
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">\n' +
             '       ' + callToHtmlShort(call, date) +
-            '       <button type="button" class="close" aria-label="Close">\n' +
+            '       <button type="button" class="close ml-3" aria-label="Close">\n' +
             '         <span aria-hidden="true">&times;</span>\n' +
             '       </button>\n' +
             '     </div>\n' +
