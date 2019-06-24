@@ -864,11 +864,13 @@ function addCallToGrid(call) {
             content: '<div id="' + placeholder + '"></div>',
             html: true,
             placement: 'right'
-        });
+        })
+        .on('inserted.bs.popover', () => {
+            // create patient form
+            new Patients(call.patient_set, call.id, '#' + placeholder)
+                .createForm();
 
-    // create patient form
-    new Patients(call.patient_set, call.id, '#' + placeholder)
-        .createForm();
+        });
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)
