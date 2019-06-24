@@ -796,6 +796,9 @@ function addCallToGrid(call) {
             '     </span>\n' +
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">' + callToHtmlShort(call, date) + '</div>\n' +
+            '     <button type="button" class="close" aria-label="Close">' +
+            '       <span aria-hidden="true">&times;</span>' +
+            '     </button>' +
             '  </div>\n' +
             '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
