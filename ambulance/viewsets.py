@@ -311,6 +311,9 @@ class CallViewSet(mixins.ListModelMixin,
 
     retrieve:
     Retrieve an existing call instance.
+
+    abort:
+    Abort an existing call instance.
     """
 
     permission_classes = (IsAuthenticated,
@@ -337,6 +340,24 @@ class CallViewSet(mixins.ListModelMixin,
             queryset = queryset.exclude(status=exclude)
 
         return queryset
+
+    @action(detail=True, methods=['get'])
+    def abort(self, request, pk=None, **kwargs):
+        """Abort call."""
+
+        # get call object
+        call = self.get_object()
+
+        # abort call
+        call.abort()
+
+        # serialize and return
+        serializer = CallSerializer(data=call)
+
+        if serializer.is_valid():
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # CallPriorityViewSet
