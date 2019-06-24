@@ -352,12 +352,8 @@ class CallViewSet(mixins.ListModelMixin,
         call.abort()
 
         # serialize and return
-        serializer = CallSerializer(data=call)
-
-        if serializer.is_valid():
-            return Response(serializer.data)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = CallSerializer(call)
+        return Response(serializer.data)
 
 
 # CallPriorityViewSet
