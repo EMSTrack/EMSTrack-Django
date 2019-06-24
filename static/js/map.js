@@ -831,7 +831,8 @@ function addCallToGrid(call) {
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">\n' +
             '       <span class="mr-1">' + date + '</span>' +
-            '       <button id="call-' + call.id + '-patients" type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
+            '       <button id="call-' + call.id + '-patients-button" ' +
+            '               type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
             '         <span class="fas fa-user fa-sm"></span>' +
             '       </button>\n' +
             '       <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
@@ -857,7 +858,7 @@ function addCallToGrid(call) {
 
     // Add popover to patient button
     const placeholder = 'call-' + call.id + '-patients';
-    $('#call-' + call.id + '-patients')
+    $('#call-' + call.id + '-patients-button')
         .popover({
             title: translation_table['Patients'],
             content: '<div id="' + placeholder + '"></div>',
