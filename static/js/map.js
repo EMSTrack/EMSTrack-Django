@@ -889,10 +889,11 @@ function addCallToGrid(call) {
                     $('#call-' + call.id + '-patients-button')
                         .popover('toggle');
                     event.stopPropagation();
+                    
                 });
 
         });
-    
+
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)
         .click(function (event) {
