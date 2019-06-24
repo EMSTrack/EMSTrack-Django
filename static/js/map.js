@@ -414,14 +414,8 @@ function updateAmbulance(ambulance) {
                 .appendTo($('#ambulance-grid-' + status));
 
             // update count labels
-            $('#ambulance-' + status + '-header-count').html(new_grid_length).show();
-            if (old_grid_length)
-                $('#ambulance-' + old_status + '-header-count').html(old_grid_length).show();
-            else
-                $('#ambulance-' + old_status + '-header-count').hide();
-
-            // logger.log('debug', "> oldstatus '" + old_status + "' count = '" + old_grid_length + "'");
-            // logger.log('debug', "> newstatus '" + status + "' count = '" + new_grid_length + "'");
+            updateStatusHeaderCount(old_status);
+            updateStatusHeaderCount(status);
 
             // alert
             if ( notifications['ambulance-status'].enabled )
@@ -432,6 +426,7 @@ function updateAmbulance(ambulance) {
         } else if (old_online !== online) {
 
             $("#grid-button-" + id).removeClass('d-none d-block').addClass(ambulanceVisibleClass(ambulance));
+            updateStatusHeaderCount(status);
 
             if ( notifications['ambulance-online'].enabled )
                 alert(sprintf(translation_table["'%s' is now '%s'"],
@@ -543,14 +538,7 @@ function addAmbulanceToGrid(ambulance) {
         });
 
     // Update label
-    const status = ambulance.status;
-    //const count = $('#ambulance-grid-' + status).children().length;
-    const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
-    $('#ambulance-' + status + '-header-count')
-        .html(count)
-        .show();
-
-    // logger.log('debug', "> status '" + status + "' count = '" + count + "'");
+    updateStatusHeaderCount(ambulance.status);
 
 }
 
@@ -1349,6 +1337,15 @@ function createCategoryPanesAndFilters() {
 
 }
 
+function updateStatusHeaderCount(status) {
+    // Update label
+    const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
+    if (count > 0)
+        $('#ambulance-' + status + '-header-count').html(count).show();
+    else
+        $('#ambulance-' + status + '-header-count').hide();
+}
+
 function visibilityCheckbox(checkbox) {
 
     // Which layer?
@@ -1399,14 +1396,7 @@ function visibilityCheckbox(checkbox) {
         $('.capability-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
 
         // update status header count
-        ambulance_status_order.forEach(function(status) {
-            // Update label
-            const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
-            if (count > 0)
-                $('#ambulance-' + status + '-header-count').html(count).show();
-            else
-                $('#ambulance-' + status + '-header-count').hide();
-        })
+        ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
 
     } else if (checkbox.value === 'online') {
         // Add to all visible status layers
@@ -1425,14 +1415,7 @@ function visibilityCheckbox(checkbox) {
         $('.service-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
 
         // update status header count
-        ambulance_status_order.forEach(function(status) {
-            // Update label
-            const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
-            if (count > 0)
-                $('#ambulance-' + status + '-header-count').html(count).show();
-            else
-                $('#ambulance-' + status + '-header-count').hide();
-        })
+        ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
 
     } else if (checkbox.value === 'call-status') {
         // Add to all visible call layers
