@@ -866,7 +866,8 @@ function addCallToGrid(call) {
         });
 
     // create patient form
-    Patients(call.patient_set, call.id, placeholder).createForm();
+    new Patients(call.patient_set, call.id, placeholder)
+        .createForm();
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)
