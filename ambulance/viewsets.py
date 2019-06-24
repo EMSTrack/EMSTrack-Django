@@ -10,7 +10,7 @@ from rest_framework.exceptions import APIException
 from ambulance.views import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.viewsets import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher
+from login.viewsets import IsCreateByAdminOrSuper, IsCreateOrAbortByAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
     AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode
@@ -317,7 +317,7 @@ class CallViewSet(mixins.ListModelMixin,
     """
 
     permission_classes = (IsAuthenticated,
-                          IsCreateByAdminOrSuperOrDispatcher)
+                          IsCreateOrAbortByAdminOrSuperOrDispatcher)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'

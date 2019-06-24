@@ -251,6 +251,12 @@ export class AppClient extends TopicObserver {
 
     }
 
+    abortCall(call) {
+
+        // abort call
+        return this.httpClient.get('call/' + call.id + '/abort/');
+
+    }
 
     // private methods
 

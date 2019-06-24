@@ -752,6 +752,37 @@ function updateCallProgress(call, ambulance_call) {
     }
 }
 
+function abortCall(call) {
+
+    // Show modal
+    $('#modal-button-ok').show();
+    $('#modal-button-cancel').show();
+    $('#modal-button-close').hide();
+    bsdialog(sprintf(translation_table["Do you want to abort call %d?"], call.id))
+        .on('hide.bs.modal', function(event) {
+
+            const $activeElement = $(document.activeElement);
+
+            if ($activeElement.is('[data-toggle], [data-dismiss]')) {
+
+                if ($activeElement.attr('id') === 'modal-button-ok') {
+                    // Abort call
+                    apiClient.abortCall(call)
+                        .then( (value) => {
+                            logger.log('info', 'call %d successfully aborted', call.id);
+                        })
+                        .catch( (error) => {
+                            logger.log('error', 'Failed to abort call %d: %j', call.id, error);
+                        })
+                }
+
+            }
+
+        })
+        .modal('show');
+
+}
+
 function addCallToGrid(call) {
 
     logger.log('info', "Adding call '%d'[status:'%s'] to grid", call.id, call.status);
@@ -800,7 +831,7 @@ function addCallToGrid(call) {
             '       <button type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
             '         <span id="call-' + call.id + '-patients" class="fas fa-user fa-sm"></span>' +
             '       </button>\n' +
-            '       <button type="button" class="close ml-1" aria-label="Close">\n' +
+            '       <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
             '         <span aria-hidden="true">&times;</span>\n' +
             '       </button>\n' +
             '     </div>\n' +
@@ -813,6 +844,12 @@ function addCallToGrid(call) {
     $('#call-' + call.id + '-button')
         .click(function (e) {
             onCallButtonClick(call);
+        });
+
+    // Make call abort button clickable
+    $('#call-' + call.id + '-abort')
+        .click(function (e) {
+            abortCall(call);
         });
 
     // Add listener to remove or add layer when filter checkbox is clicked
@@ -1556,11 +1593,8 @@ function updateAmbulanceStatus(ambulance, status) {
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
     $('#modal-button-close').hide();
-    bsdialog('Do you want to modify ambulance <strong>'
-        + ambulance.identifier
-        + '</strong> status to <strong>'
-        + ambulance_status[status]
-        + '</strong>?', 'alert-danger', 'Attention')
+    bsdialog(sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
+        ambulance.identifier, ambulance_status[status]))
         .on('hide.bs.modal', function(event) {
 
             const $activeElement = $(document.activeElement);

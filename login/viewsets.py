@@ -38,13 +38,13 @@ class IsCreateByAdminOrSuper(permissions.BasePermission):
             return True
 
 
-class IsCreateByAdminOrSuperOrDispatcher(permissions.BasePermission):
+class IsCreateOrAbortByAdminOrSuperOrDispatcher(permissions.BasePermission):
     """
-    Only superuser, staff, or dispatcher can create
+    Only superuser, staff, or dispatcher can create or abort
     """
 
     def has_permission(self, request, view):
-        if view.action == 'create':
+        if view.action == 'create' or view.action == 'abort':
             return request.user.is_staff or request.user.is_superuser or request.user.userprofile.is_dispatcher
         else:
             return True

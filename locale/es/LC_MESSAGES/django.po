@@ -1243,3 +1243,9 @@ msgstr "Cancelar Llamada"
 
 msgid "Are you sure?"
 msgstr "¿Tienes certeza?"
+
+msgid "Do you want to abort call %d?"
+msgstr "¿Quieres abortar la llamada %d?"
+
+msgid "Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"
+msgstr "¿Quieres modificar el estado de la ambulancia <strong>%s</strong> a <strong>%s</strong>?"
