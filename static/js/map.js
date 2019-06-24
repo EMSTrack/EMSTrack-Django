@@ -408,9 +408,7 @@ function updateAmbulance(ambulance) {
 
             // Move and update grid button
             const btnClass = 'btn btn-sm ' + ambulance_buttons[status]
-                + ' status-' + status
-                + ' capability-' + ambulance.capability
-                + ambulanceVisibleClass(ambulance);
+                + ' ' + ambulanceVisibleClass(ambulance);
             $("#grid-button-" + id).attr("class", btnClass)
                 .detach()
                 .appendTo($('#ambulance-grid-' + status));
@@ -482,7 +480,15 @@ function updateHospital(hospital) {
 }
 
 function ambulanceVisibleClass(ambulance) {
-    const online = ambulance.client_id != null;
+    const online = ambulance.client_id != null ? 'online' : 'offline';
+    const classNames = ['status-' + ambulance.status, 'capability-' + ambulance.capability, 'service-' + online];
+    if (visibleCategory[online] && visibleCategory[ambulance.status] && visibleCategory[ambulance.capability])
+        classNames.push('d-block');
+    else
+        classNames.push('d-none');
+    return classNames.join(' ');
+
+    /*
     if (online) {
         if (visibleCategory['online'])
             return 'd-block a-online';
@@ -494,7 +500,7 @@ function ambulanceVisibleClass(ambulance) {
         else
             return 'd-none a-offline';
     }
-
+    */
 }
 
 
@@ -512,8 +518,6 @@ function addAmbulanceToGrid(ambulance) {
         .append('<button type="button"'
             + ' id="grid-button-' + ambulance.id + '"'
             + ' class="btn btn-sm ' + ambulance_buttons[ambulance.status]
-            + ' status-' + ambulance.status
-            + ' capability-' + ambulance.capability
             + ' ' + ambulanceVisibleClass(ambulance) + '"'
             + ' style="margin: 2px 2px;"'
             + ' draggable="true">'
@@ -540,9 +544,8 @@ function addAmbulanceToGrid(ambulance) {
 
     // Update label
     const status = ambulance.status;
-    const new_count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
-    const count = $('#ambulance-grid-' + status).children().length;
-    logger.log('debug', sprintf('%d -> %d', count, new_count) );
+    //const count = $('#ambulance-grid-' + status).children().length;
+    const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
     $('#ambulance-' + status + '-header-count')
         .html(count)
         .show();
@@ -1367,6 +1370,7 @@ function visibilityCheckbox(checkbox) {
 
     // Modify panes
     if (checkbox.value === 'status') {
+
         // Add to all visible capability panes
         ambulance_online_order.forEach(function(online) {
             if (visibleCategory[online]) {
@@ -1377,7 +1381,9 @@ function visibilityCheckbox(checkbox) {
                 });
             }
         });
+
     } else if (checkbox.value === 'capability') {
+
         // Add to all visible status layers
         ambulance_online_order.forEach(function(online) {
             if (visibleCategory[online]) {
@@ -1388,6 +1394,10 @@ function visibilityCheckbox(checkbox) {
                 });
             }
         });
+
+        // toggle buttons visibility
+        $('.capability-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
+
     } else if (checkbox.value === 'online') {
         // Add to all visible status layers
         ambulance_status_order.forEach(function (status) {
@@ -1402,7 +1412,7 @@ function visibilityCheckbox(checkbox) {
         });
 
         // toggle buttons visibility
-        $('.a-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
+        $('.service-' + layer ).removeClass('d-block d-none').addClass('d-' + display);
 
     } else if (checkbox.value === 'call-status') {
         // Add to all visible call layers
