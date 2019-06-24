@@ -1402,7 +1402,10 @@ function visibilityCheckbox(checkbox) {
         ambulance_status_order.forEach(function(status) {
             // Update label
             const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
-            $('#ambulance-' + status + '-header-count').html(count).show();
+            if (count > 0)
+                $('#ambulance-' + status + '-header-count').html(count).show();
+            else
+                $('#ambulance-' + status + '-header-count').hide();
         })
 
     } else if (checkbox.value === 'online') {
@@ -1425,7 +1428,10 @@ function visibilityCheckbox(checkbox) {
         ambulance_status_order.forEach(function(status) {
             // Update label
             const count = $('#ambulance-grid-' + status).find('.status-' + status + '.d-block').length;
-            $('#ambulance-' + status + '-header-count').html(count).show();
+            if (count > 0)
+                $('#ambulance-' + status + '-header-count').html(count).show();
+            else
+                $('#ambulance-' + status + '-header-count').hide();
         })
 
     } else if (checkbox.value === 'call-status') {
