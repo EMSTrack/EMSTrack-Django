@@ -820,6 +820,7 @@ function addCallToGrid(call) {
             '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
+            '     <span>' + call.id + ':</span>' +
             '     <span class="font-weight-bold">' + priority_prefix + '</span>' +
             '     <button id="call-' + call.id + '-button"\n' +
             '           class="btn btn-'+ call_priority_css[call.priority].class + ' btn-sm">' +
@@ -828,8 +829,8 @@ function addCallToGrid(call) {
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">\n' +
             '       <span class="mr-1">' + date + '</span>' +
-            '       <button type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
-            '         <span id="call-' + call.id + '-patients" class="fas fa-user fa-sm"></span>' +
+            '       <button id="call-' + call.id + '-patients" type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
+            '         <span class="fas fa-user fa-sm"></span>' +
             '       </button>\n' +
             '       <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
             '         <span aria-hidden="true">&times;</span>\n' +
@@ -850,6 +851,14 @@ function addCallToGrid(call) {
     $('#call-' + call.id + '-abort')
         .click(function (e) {
             abortCall(call);
+        });
+
+    // Add popover to patient button
+    $('#call-' + call.id + '-patients')
+        .popover({
+            title: 'Patients',
+            content: 'Some patients',
+            placement: 'right'
         });
 
     // Add listener to remove or add layer when filter checkbox is clicked
