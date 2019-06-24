@@ -797,7 +797,7 @@ function addCallToGrid(call) {
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '     <div class="float-right" id="call-text-' + call.id + '">\n' +
             '       <span class="mr-1">' + date + '</span>' +
-            '       <span id="call-' + call.id + '-patients" class="fas fa-users mx-1"></span>' +
+            '       <span id="call-' + call.id + '-patients" class="fas fa-user mx-1"></span>' +
             '       <button type="button" class="close ml-1" aria-label="Close">\n' +
             '         <span aria-hidden="true">&times;</span>\n' +
             '       </button>\n' +
@@ -850,7 +850,8 @@ function addCallToGrid(call) {
                 '    </div>' +
                 '  </div>' +
                 '  <div class="col-sm-1">' +
-                '    <button type="button" class="close ml-1" aria-label="Close">\n' +
+                '    <span id="call-' + call.id + '-' + ambulance.id +'-waypoints" class="fas fa-map-marker"></span>' +
+                '    <button type="button" class="close" aria-label="Close">\n' +
                 '      <span aria-hidden="true">&times;</span>\n' +
                 '    </button>\n' +
                 '  </div>' +
