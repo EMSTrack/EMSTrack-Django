@@ -51,6 +51,17 @@ export class Patients {
             .off('click')
             .on('click', () => {
 
+                // change icon
+                this.placeholder.find('#patient-' + this.label + '-' + index + '-symbol')
+                    .removeClass('fa-plus')
+                    .addClass('fa-minus');
+
+                // bind remove action
+                this.placeholder.find('#patient-' + this.label + '-' + index + '-button')
+                    .off('click')
+                    .on('click', () => { this.removePatientForm(index); });
+
+                // add new blank form
                 this.addBlankPatientForm(index + 1);
 
             });
