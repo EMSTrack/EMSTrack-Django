@@ -856,7 +856,7 @@ function addCallToGrid(call) {
         });
 
     // Add popover to patient button
-    const placeholder = "call-' + call.id + '-patients";
+    const placeholder = 'call-' + call.id + '-patients';
     $('#call-' + call.id + '-patients')
         .popover({
             title: translation_table['Patients'],
