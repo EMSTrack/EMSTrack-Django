@@ -1790,7 +1790,7 @@ function endDispatching() {
     $('#dispatchCancelButton').hide();
 
     // close dispatch panel
-    $('#dispatchDiv').removeClass('show');
+    $('#newDispatchDiv').removeClass('show');
 
     if (!isFilterOpen) {
         // close filter panel
