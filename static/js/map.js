@@ -874,7 +874,12 @@ function addCallToGrid(call) {
             '  </div>' +
             '</div>',
             html: true,
-            placement: 'right'
+            placement: 'left',
+            trigger: 'manual'
+        })
+        .on('click', function(e) {
+            $(this).popover('toggle');
+            e.stopPropagation();
         })
         .on('inserted.bs.popover', () => {
 
