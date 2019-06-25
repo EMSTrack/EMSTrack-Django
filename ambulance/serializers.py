@@ -375,6 +375,7 @@ class CallSerializer(serializers.ModelSerializer):
 
                 # check permisssions in case of dispatcher
                 if not (user.is_superuser or user.is_staff):
+                    # this is the dispatcher_override
                     if not get_permissions(user).check_can_read(ambulance=ambulance.id):
                         raise PermissionDenied()
 
