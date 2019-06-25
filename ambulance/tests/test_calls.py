@@ -1138,7 +1138,7 @@ class TestCall(TestSetup):
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
-        self.assertNotEqual(call.started_at, started_at)
+        self.assertEqual(call.started_at, started_at)
 
         # partial update patient set with addition
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
@@ -1154,8 +1154,24 @@ class TestCall(TestSetup):
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
-        self.assertNotEqual(call.started_at, started_at)
+        self.assertEqual(call.started_at, started_at)
 
+        # partial update patient set with addition and removal
+        patient_set = PatientSerializer(call.patient_set.all(), many=True).data
+        del patient_set[0]
+        patient_set.push({'id': None, 'name': 'someone else', 'age': 17})
+        logger.debug(patient_set)
+
+        data = {
+            'patient_set': patient_set
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
+        self.assertEqual(call.started_at, started_at)
 
 
     def test_call_create_viewset(self):
