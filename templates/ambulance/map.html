@@ -29,7 +29,8 @@
              id="filtersDiv">
 
             <!-- Ambulance Online Filter -->
-            <h5 style="cursor: pointer;"
+            <h5 class="mt-2"
+                style="cursor: pointer;"
                 data-toggle="collapse"
                 data-target="#ambulance-online-status"
                 aria-expanded="true"
@@ -134,7 +135,7 @@
              id="dispatchDiv">
 
             {% if user|is_dispatcher %}
-                <button class="btn btn-primary px-3 mx-1"
+                <button class="btn btn-primary px-3 ml-auto"
                         id="dispatchBeginButton"
                         data-toggle="collapse"
                         data-target="#newDispatchDiv" aria-controls="newDispatchDiv"
@@ -144,7 +145,7 @@
 
                 <button type="button"
                         id="dispatchSubmitButton"
-                        class="btn btn-primary px-3 mx-1"
+                        class="btn btn-primary px-3 ml-auto"
                         style="display: none;">
                     {% trans "Dispatch" %}
                 </button>
@@ -161,6 +162,15 @@
                 </button>
 
                 <div class="collapse" id="newDispatchDiv">
+
+                    <!-- Calls Filter -->
+                    <h5 class="mt-2"
+                        aria-expanded="true" aria-controls="newcall">
+                        <span class="fas fa-shipping-fast"></span>
+                        <span id="newcall-header">
+                            {% trans "New Call" %}
+                        </span>
+                    </h5>
 
                     <!-- Dispatch -->
                     <form id="dispatch-form-collapse"
