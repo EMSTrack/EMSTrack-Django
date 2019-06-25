@@ -293,6 +293,7 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
 class PatientSerializer(serializers.ModelSerializer):
 
+    # see https://github.com/encode/django-rest-framework/issues/2320
     id = serializers.IntegerField(required=False)
 
     class Meta:
