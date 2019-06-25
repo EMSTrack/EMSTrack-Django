@@ -448,7 +448,7 @@ class CallSerializer(serializers.ModelSerializer):
             if patient_set:
 
                 # new patients
-                logger.log(patient_set)
+                logger.debug(patient_set)
                 new_existing_patients = [patient['id'] for patient in patient_set if patient['id'] is not None]
 
                 if new_existing_patients:
