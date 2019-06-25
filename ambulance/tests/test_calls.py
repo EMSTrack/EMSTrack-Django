@@ -1351,17 +1351,32 @@ class TestCall(TestSetup):
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        result = JSONParser().parse(BytesIO(response.content))
+        call = JSONParser().parse(BytesIO(response.content))
 
         # abort
-        response = client.get('/en/api/call/{}/abort/'.format(result['id']))
+        response = client.get('/en/api/call/{}/abort/'.format(call['id']))
         self.assertEqual(response.status_code, 200)
+
+        # Should not fail, is staff
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/en/api/call/', data, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+        call = JSONParser().parse(BytesIO(response.content))
 
         # logout
         client.logout()
 
         # login as dispatcher
         client.login(username='testuser2', password='very_secret')
+
+        # Should fail, dispatcher but not in authorized list of ambulances
+        response = client.get('/en/api/call/{}/abort/'.format(call['id']))
+        self.assertEqual(response.status_code, 200)
 
         # Should not fail, is dispatcher
         data = {
@@ -1372,10 +1387,10 @@ class TestCall(TestSetup):
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        result = JSONParser().parse(BytesIO(response.content))
+        call = JSONParser().parse(BytesIO(response.content))
 
         # abort
-        response = client.get('/en/api/call/{}/abort/'.format(result['id']))
+        response = client.get('/en/api/call/{}/abort/'.format(call['id']))
         self.assertEqual(response.status_code, 200)
 
         # logout
