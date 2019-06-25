@@ -112,11 +112,15 @@ export class Patients {
 
         // select all inputs
         const inputs = $(this.placeholderName + ' :input');
+        console.log(inputs);
+
         const values = {};
         inputs.each( function() {
             values[this.name] = $(this).val();
         });
         console.log(values);
+
+
 
     }
 }
