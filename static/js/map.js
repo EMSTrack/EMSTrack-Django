@@ -889,7 +889,7 @@ function addCallToGrid(call) {
                     $('#call-' + call.id + '-patients-button')
                         .popover('toggle');
                     event.stopPropagation();
-                    
+
                 });
 
         });

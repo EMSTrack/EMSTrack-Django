@@ -49,28 +49,6 @@
         <div class="col-md-3 border-top border-secondary collapse bg-light"
              id="filtersDiv">
 
-            <!-- Calls Filter -->
-            <h5 class="mt-2"
-                style="cursor: pointer;"
-                data-toggle="collapse"
-                data-target="#call-status"
-                aria-expanded="true" aria-controls="call-status">
-                <span class="fas fa-phone"></span>
-                <span id="call-header">
-                    {% trans "Calls" %}
-                </span>
-                <span id="call-header-count" class="badge badge-primary"></span>
-            </h5>
-            <div class="collapse ml-1"
-                 id="call-status">
-                <!--
-                <div class="form-group form-check mt-0 mb-1">
-                    <input type="checkbox" class="form-check-input" id="current-call-1">
-                    <label class="form-check-label" for="current-call-1">id</label>
-                </div>
-                -->
-            </div>
-
             <!-- Ambulance Online Filter -->
             <h5 style="cursor: pointer;"
                 data-toggle="collapse"
@@ -177,7 +155,6 @@
              id="dispatchDiv">
 
             <!-- Dispatch -->
-
             <form id="dispatch-form-collapse"
                   method="POST" action="">
                 {% csrf_token %}
@@ -332,6 +309,28 @@
                     -->
 
             </form>
+
+            <!-- Calls Filter -->
+            <h5 class="mt-2"
+                style="cursor: pointer;"
+                data-toggle="collapse"
+                data-target="#call-status"
+                aria-expanded="true" aria-controls="call-status">
+                <span class="fas fa-phone"></span>
+                <span id="call-header">
+                    {% trans "Calls" %}
+                </span>
+                <span id="call-header-count" class="badge badge-primary"></span>
+            </h5>
+            <div class="collapse ml-1"
+                 id="call-status">
+                <!--
+                <div class="form-group form-check mt-0 mb-1">
+                    <input type="checkbox" class="form-check-input" id="current-call-1">
+                    <label class="form-check-label" for="current-call-1">id</label>
+                </div>
+                -->
+            </div>
 
         </div>
 
