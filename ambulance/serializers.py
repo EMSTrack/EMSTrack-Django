@@ -297,7 +297,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ['id', 'name', 'age']
+        fields = ['name', 'age']
         read_only_fields = []
 
 
