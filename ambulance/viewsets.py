@@ -316,8 +316,11 @@ class CallViewSet(mixins.ListModelMixin,
     abort:
     Abort an existing call instance.
 
-    patients:
+    update:
+    Full updates are not supported.
 
+    partial_update:
+    Partially update existing call instance.
     """
 
     permission_classes = (IsAuthenticated,
