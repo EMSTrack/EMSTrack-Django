@@ -1354,7 +1354,7 @@ class TestCall(TestSetup):
         result = JSONParser().parse(BytesIO(response.content))
 
         # abort
-        response = client.get('/en/api/call/' + result['id'] + '/abort/')
+        response = client.get('/en/api/call/{}/abort/'.format(result['id']))
         self.assertEqual(response.status_code, 200)
 
         # logout
