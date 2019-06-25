@@ -135,6 +135,16 @@
              id="dispatchDiv">
 
             {% if user|is_dispatcher %}
+
+                <!-- Calls Filter -->
+                <h5 class="mt-2"
+                    aria-expanded="true" aria-controls="newcall">
+                    <span class="fas fa-shipping-fast"></span>
+                    <span id="newcall-header">
+                        {% trans "New Call" %}
+                    </span>
+                </h5>
+
                 <button class="btn btn-primary px-3 ml-auto"
                         id="dispatchBeginButton"
                         data-toggle="collapse"
@@ -164,15 +174,6 @@
                 </button>
 
                 <div class="collapse" id="newDispatchDiv">
-
-                    <!-- Calls Filter -->
-                    <h5 class="mt-2"
-                        aria-expanded="true" aria-controls="newcall">
-                        <span class="fas fa-shipping-fast"></span>
-                        <span id="newcall-header">
-                            {% trans "New Call" %}
-                        </span>
-                    </h5>
 
                     <!-- Dispatch -->
                     <form id="dispatch-form-collapse"
