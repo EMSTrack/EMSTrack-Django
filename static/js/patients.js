@@ -121,11 +121,13 @@ export class Patients {
         inputs.each( function() {
 
             // parse values
-            const value = $(this).val().trim();
+            let value = $(this).val().trim();
             if (this.name === 'name')
                 entry[this.name] = value;
-            else
-                entry[this.name] = parseInt(value);
+            else {
+                value = parseInt(value);
+                entry[this.name] = isNaN(value) ? '' : value;
+            }
 
             // is it the end of the structure?
             if (this.name === 'age') {
