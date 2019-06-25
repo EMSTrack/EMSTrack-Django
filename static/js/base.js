@@ -42,10 +42,10 @@ $(function () {
     // initialize ApiClient
     let mqttClient;
     let apiClient;
+    axios.default.xsrfCookieName = Cookies.get('csrftoken');
+    axios.default.xsrfHeaderName = 'X-CSRFToken';
     const httpClient = axios.create({
         baseURL: apiBaseUrl,
-        xsrfCookieName: Cookies.get('csrftoken'),
-        xsrfHeaderName: 'X-CSRFToken'
     });
 
     // retrieve temporary password for mqttClient and connect to broker
