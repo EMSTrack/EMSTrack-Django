@@ -145,7 +145,7 @@
                     </span>
                 </h5>
 
-                <button class="btn btn-primary px-3 ml-auto"
+                <button class="btn btn-primary btn-block"
                         id="dispatchBeginButton"
                         data-toggle="collapse"
                         data-target="#newDispatchDiv"
@@ -155,23 +155,25 @@
                     {% trans "Dispatch Ambulances" %}
                 </button>
 
-                <button type="button"
-                        id="dispatchSubmitButton"
-                        class="btn btn-primary px-3 ml-auto"
-                        style="display: none;">
-                    {% trans "Dispatch" %}
-                </button>
+                <div class="btn-group">
+                    <button type="button"
+                            id="dispatchSubmitButton"
+                            class="btn btn-primary px-3 ml-auto"
+                            style="display: none;">
+                        {% trans "Dispatch" %}
+                    </button>
 
-                <button type="button"
-                        id="dispatchCancelButton"
-                        class="btn btn-secondary px-3 mx-1"
-                        data-toggle="collapse"
-                        data-target="#newDispatchDiv"
-                        aria-expanded="true"
-                        aria-controls="newDispatchDiv"
-                        style="display: none;">
-                    {% trans "Cancel" %}
-                </button>
+                    <button type="button"
+                            id="dispatchCancelButton"
+                            class="btn btn-secondary px-3 mx-1"
+                            data-toggle="collapse"
+                            data-target="#newDispatchDiv"
+                            aria-expanded="true"
+                            aria-controls="newDispatchDiv"
+                            style="display: none;">
+                        {% trans "Cancel" %}
+                    </button>
+                </div>
 
                 <div class="collapse" id="newDispatchDiv">
 
