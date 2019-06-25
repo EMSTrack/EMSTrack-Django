@@ -120,10 +120,12 @@ export class Patients {
         let entry = {};
         const patients = [];
         inputs.each( function() {
-            entry[this.name] = $(this).val();
+            entry[this.name] = $(this).val().trim();
             if (this.name === 'age') {
                 console.log(entry);
-                patients.push(entry);
+                if (entry.name || entry.age)
+                    // skip if empty
+                    patients.push(entry);
                 entry = {};
             }
         });
