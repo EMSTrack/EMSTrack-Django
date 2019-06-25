@@ -162,7 +162,7 @@ function init( client ) {
     // set apiClient
     apiClient = client;
 
-        // retrieve priority classification
+    // retrieve priority classification
     logger.log('info', 'Retrieving priority classification');
     apiClient.retrieveCallPriorityClassification()
         .then( (value) => {
