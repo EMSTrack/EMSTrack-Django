@@ -1825,7 +1825,7 @@ function endDispatching() {
     // $('#dispatchSubmitButton').hide();
 
     // close dispatch panel
-    $('#newDispatchDiv').removeClass('show');
+    // $('#newDispatchDiv').removeClass('show');
 
     if (!isFilterOpen) {
         // close filter panel

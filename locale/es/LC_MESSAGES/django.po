@@ -716,7 +716,7 @@ msgid "Call"
 msgstr "Llamada"
 
 msgid "New Call"
-msgstr "Nueva LLamada"
+msgstr "Nueva Llamada"
 
 #: templates/ambulance/call_detail.html:41
 #: templates/ambulance/call_list.html:22 templates/ambulance/call_list.html:56
