@@ -819,7 +819,7 @@ function addCallToGrid(call) {
             '    <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
-            '    <div data-toggle="collapse"\n' +
+            '    <span data-toggle="collapse"\n' +
             '         data-target="#call-' + call.id + '-body"\n' +
             '         aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
             '      <span>' + call.id + ':</span>' +
@@ -834,7 +834,7 @@ function addCallToGrid(call) {
             '              type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
             '        <span class="fas fa-user fa-sm"></span>' +
             '      </button>\n' +
-            '    </div>\n' +
+            '    </span>\n' +
             '    <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
             '      <span aria-hidden="true">&times;</span>\n' +
             '    </button>\n' +
