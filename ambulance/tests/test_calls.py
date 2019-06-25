@@ -1360,9 +1360,6 @@ class TestCall(TestSetup):
         # logout
         client.logout()
 
-        # now abort
-        self.assertTrue(False)
-
         # login as dispatcher
         client.login(username='testuser2', password='very_secret')
 
@@ -1374,30 +1371,12 @@ class TestCall(TestSetup):
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
-        logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
+        result = JSONParser().parse(BytesIO(response.content))
 
-        # Should fail, dispatcher but not in authorized list of ambulances
-        data = {
-            'status': CallStatus.P.name,
-            'priority': CallPriority.B.name,
-            'ambulancecall_set': [{'ambulance_id': self.a1.id}],
-            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
-        }
-        response = client.post('/en/api/call/', data, content_type='application/json')
-        logger.debug(response.content)
-        self.assertEqual(response.status_code, 403)
-
-        # Should fail, dispatcher but not in authorized list of ambulances
-        data = {
-            'status': CallStatus.P.name,
-            'priority': CallPriority.B.name,
-            'ambulancecall_set': [{'ambulance_id': self.a3.id}, {'ambulance_id': self.a1.id}],
-            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
-        }
-        response = client.post('/en/api/call/', data, content_type='application/json')
-        logger.debug(response.content)
-        self.assertEqual(response.status_code, 403)
+        # abort
+        response = client.get('/en/api/call/{}/abort/'.format(result['id']))
+        self.assertEqual(response.status_code, 200)
 
         # logout
         client.logout()
