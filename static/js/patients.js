@@ -47,7 +47,7 @@ export class Patients {
 
     addBlankPatientForm(index) {
 
-        this.addPatientForm(index, { id: None, name: '', age: '' }, 'fa-plus');
+        this.addPatientForm(index, { id: undefined, name: '', age: '' }, 'fa-plus');
 
         // bind addBlankPatientForm to click
         this.placeholder.find('#patient-' + this.label + '-' + index + '-button')
