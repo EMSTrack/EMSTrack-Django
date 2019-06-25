@@ -781,6 +781,89 @@ function abortCall(call) {
 
 }
 
+function setCallPatientPopover(call) {
+
+    // create patient object
+    const placeholder = 'call-' + call.id + '-patients';
+    const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
+
+    // Add popover to patient button
+    $('#call-' + call.id + '-patients-button')
+        .popover({
+            title: translation_table['Patients'],
+            content:
+            '<div>' +
+            '  <div id="' + placeholder + '"></div>' +
+            '  <div class="float-right my-2">\n' +
+            '    <button id="call-' + call.id + '-cancel-button" type="button" class="btn btn-secondary">' +
+            '      Cancel' +
+            '    </button>' +
+            '    <button id="call-' + call.id + '-save-button" type="button" class="btn btn-primary">' +
+            '      Save' +
+            '    </button>' +
+            '  </div>' +
+            '</div>',
+            html: true,
+            placement: 'left',
+            trigger: 'manual'
+        })
+        .on('click', function(e) {
+            $(this).popover('show');
+            e.stopPropagation();
+        })
+        .on('inserted.bs.popover', () => {
+
+            // create patient form
+            patients.createForm();
+
+            // toggle on cancel
+            $('#call-' + call.id + '-cancel-button')
+                .on('click', function (event) {
+
+                    $('#call-' + call.id + '-patients-button')
+                        .popover('toggle');
+                    event.stopPropagation();
+
+                });
+
+            // toggle on save
+            $('#call-' + call.id + '-save-button')
+                .on('click', function (event) {
+
+                    // retrieve patents
+                    const newPatients = patients.getData();
+                    console.log(newPatients);
+                    console.log(call.patient_set);
+                    if ( patients.same(newPatients) ) {
+
+                        // no changes
+                        logger.log('info', 'No changes, no savings!');
+
+                    } else {
+
+                        // update call
+                        const data = { patient_set: newPatients };
+                        console.log(data);
+                        apiClient.patchCall(call, data)
+                            .then( (call) => {
+                                logger.log('info', "Successfully updated call");
+                            })
+                            .catch( (error) => {
+                                logger.log('error', "Could not update call: '%j'", error);
+                            });
+
+                    }
+
+                    $('#call-' + call.id + '-patients-button')
+                        .popover('toggle');
+                    event.stopPropagation();
+
+                });
+
+        });
+
+}
+
 function addCallToGrid(call) {
 
     logger.log('info', "Adding call '%d'[status:'%s'] to grid", call.id, call.status);
@@ -869,84 +952,8 @@ function addCallToGrid(call) {
             abortCall(call);
         });
 
-    // create patient object
-    const placeholder = 'call-' + call.id + '-patients';
-    const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
-
-    // Add popover to patient button
-    $('#call-' + call.id + '-patients-button')
-        .popover({
-            title: translation_table['Patients'],
-            content:
-            '<div>' +
-            '  <div id="' + placeholder + '"></div>' +
-            '  <div class="float-right my-2">\n' +
-            '    <button id="call-' + call.id + '-cancel-button" type="button" class="btn btn-secondary">' +
-            '      Cancel' +
-            '    </button>' +
-            '    <button id="call-' + call.id + '-save-button" type="button" class="btn btn-primary">' +
-            '      Save' +
-            '    </button>' +
-            '  </div>' +
-            '</div>',
-            html: true,
-            placement: 'left',
-            trigger: 'manual'
-        })
-        .on('click', function(e) {
-            $(this).popover('show');
-            e.stopPropagation();
-        })
-        .on('show.bs.popover', () => {
-
-            // create patient form
-            patients.createForm();
-
-            // toggle on cancel
-            $('#call-' + call.id + '-cancel-button')
-                .on('click', function (event) {
-
-                    $('#call-' + call.id + '-patients-button')
-                        .popover('toggle');
-                    event.stopPropagation();
-
-                });
-
-            // toggle on save
-            $('#call-' + call.id + '-save-button')
-                .on('click', function (event) {
-
-                    // retrieve patents
-                    const newPatients = patients.getData();
-                    console.log(newPatients);
-                    console.log(call.patient_set);
-                    if ( patients.same(newPatients) ) {
-
-                        // no changes
-                        logger.log('info', 'No changes, no savings!');
-
-                    } else {
-
-                        // update call
-                        const data = { patient_set: newPatients };
-                        console.log(data);
-                        apiClient.patchCall(call, data)
-                            .then( (call) => {
-                                logger.log('info', "Successfully updated call");
-                            })
-                            .catch( (error) => {
-                                logger.log('error', "Could not update call: '%j'", error);
-                            });
-
-                    }
-
-                    $('#call-' + call.id + '-patients-button')
-                        .popover('toggle');
-                    event.stopPropagation();
-
-                });
-
-        });
+    // set call patient popover
+    setCallPatientPopover(call);
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)
