@@ -715,6 +715,9 @@ msgstr "ABORTAR LLAMADA"
 msgid "Call"
 msgstr "Llamada"
 
+msgid "New Call"
+msgstr "Nueva LLamada"
+
 #: templates/ambulance/call_detail.html:41
 #: templates/ambulance/call_list.html:22 templates/ambulance/call_list.html:56
 #: templates/ambulance/call_list.html:107 templates/ambulance/map.html:194
