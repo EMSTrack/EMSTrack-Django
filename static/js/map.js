@@ -912,6 +912,7 @@ function addCallToGrid(call) {
 
                     // retrieve patents
                     const newPatients = patients.getData();
+                    console.log(newPatients);
                     if ( !patients.same(newPatients) ) {
                         // need to save it first
                         logger.log('debug', 'Will save!');
