@@ -1434,12 +1434,6 @@ class TestCall(TestSetup):
         self.assertEqual(call.ended_at, None)
         started_at = call.started_at
 
-        # logout
-        client.logout()
-
-    def ____test(self):
-
-
         # partial update patient set
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
         patient_set[0]['age'] = 5
@@ -1451,7 +1445,8 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
-        call = serializer.save(updated_by=self.u1)
+
+        call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
@@ -1468,7 +1463,8 @@ class TestCall(TestSetup):
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
         logger.debug(serializer.errors)
-        call = serializer.save(updated_by=self.u1)
+
+        call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
@@ -1484,7 +1480,8 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
-        call = serializer.save(updated_by=self.u1)
+
+        call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
@@ -1499,11 +1496,15 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
-        call = serializer.save(updated_by=self.u1)
+
+        call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
         self.assertEqual(call.started_at, started_at)
+
+        # logout
+        client.logout()
 
     def test_call_abort_viewset(self):
 
