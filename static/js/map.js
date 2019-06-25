@@ -913,6 +913,15 @@ function addCallToGrid(call) {
                     if ( !patients.same(newPatients) ) {
                         // need to save it first
                         logger.log('debug', 'Will save!');
+
+                        apiClient.updateCall(call, { patient_set: newPatients })
+                            .then( (response) => {
+                                logger.log('info', "Successfully updated call: '%j'", response.data);
+                            })
+                            .catch( (error) => {
+                                logger.log('error', "Could not update call: '%j'", error);
+                            });
+
                     }
 
                     $('#call-' + call.id + '-patients-button')
