@@ -469,7 +469,7 @@ class CallSerializer(serializers.ModelSerializer):
         # call super
         return instance
 
-    def validate(self, data):
+    def __validate(self, data):
 
         if 'status' in data and \
                 data['status'] != CallStatus.P.name and \
