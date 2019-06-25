@@ -822,7 +822,7 @@ function addCallToGrid(call) {
             '               type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
             '      </div>' +
-            '      <div class="flex-grow-1"' +
+            '      <div class="flex-fill"' +
             '           data-toggle="collapse"\n' +
             '           data-target="#call-' + call.id + '-body"\n' +
             '           aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
