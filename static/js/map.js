@@ -2260,6 +2260,11 @@ $(function() {
         resizeMap();
     }).trigger("resize");
 
+    // Hide new dispatch buttons
+    $('#dispatchButtonGroup').hide();
+    $('#dispatchCancelButton').hide();
+    $('#dispatchSubmitButton').hide();
+
     // Handle begin dispatching button
     $('#dispatchBeginButton').click(function(event) {
 
