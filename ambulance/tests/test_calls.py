@@ -1423,6 +1423,7 @@ class TestCall(TestSetup):
 
         # partial update call data
         response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
 
         # logout
