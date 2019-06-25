@@ -1120,6 +1120,7 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertNotEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
+        started_at = call.started_at
 
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
         patient_set[0]['age'] = 5
@@ -1135,6 +1136,7 @@ class TestCall(TestSetup):
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
+        self.assertNotEqual(call.started_at, started_at)
 
     def test_call_create_viewset(self):
 
