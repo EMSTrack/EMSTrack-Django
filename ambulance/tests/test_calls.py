@@ -1134,7 +1134,7 @@ class TestCall(TestSetup):
         call = serializer.save(updated_by=self.u1)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
-        self.assertCountEqual(call.patient_set, patient_set)
+        self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
 
     def test_call_create_viewset(self):
 
