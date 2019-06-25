@@ -1150,6 +1150,7 @@ class TestCall(TestSetup):
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
+        logger.debug(serializer.errors)
         call = serializer.save(updated_by=self.u1)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
