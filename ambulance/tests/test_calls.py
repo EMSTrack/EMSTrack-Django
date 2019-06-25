@@ -887,14 +887,15 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(serializer.data, result)
 
-        # # accepted Call without Ambulancecall_Set fails
-        # call = {
-        #     'status': CallStatus.S.name,
-        #     'priority': CallPriority.B.name,
-        #     'patient_set': []
-        # }
-        # serializer = CallSerializer(data=call)
-        # self.assertFalse(serializer.is_valid())
+        # accepted Call without Ambulancecall_Set fails
+        call = {
+            'status': CallStatus.S.name,
+            'priority': CallPriority.B.name,
+            'patient_set': []
+        }
+        serializer = CallSerializer(data=call)
+        self.assertTrue(serializer.is_valid())
+        self.assertRaises(serializers.ValidationError, serializer.save, updated_by=self.u1)
 
         # Pending Call with Ambulancecall_Set will create ambulancecalls
         call = {

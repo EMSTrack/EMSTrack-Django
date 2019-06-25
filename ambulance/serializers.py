@@ -369,6 +369,9 @@ class CallSerializer(serializers.ModelSerializer):
                 obj = Patient(call=call, **patient)
                 obj.save(publish=False)
 
+            if call.status != CallStatus.P.name and len(ambulancecall_set) == 0:
+                raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
+
             # then add ambulances, do not publish
             for ambulancecall in ambulancecall_set:
                 ambulance = ambulancecall.pop('ambulance_id')
