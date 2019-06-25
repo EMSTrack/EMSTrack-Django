@@ -833,7 +833,7 @@ function addCallToGrid(call) {
             '        </button>\n' +
             '        <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '      </div>' +
-            '      <div class="flex-grow-1"' +
+            '      <div class="ml-auto"' +
             '           data-toggle="collapse"\n' +
             '           data-target="#call-' + call.id + '-body"\n' +
             '           aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
@@ -897,7 +897,7 @@ function addCallToGrid(call) {
             $(this).popover('show');
             e.stopPropagation();
         })
-        .on('inserted.bs.popover', () => {
+        .on('show.bs.popover', () => {
 
             // create patient form
             patients.createForm();
