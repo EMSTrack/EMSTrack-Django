@@ -829,13 +829,11 @@ function addCallToGrid(call) {
             '         ' + call_priority_css[call.priority].html + '\n' +
             '      </button>\n' +
             '      <span class="font-weight-bold">' + priority_suffix + '</span>' +
-            '      <div class="float-right">\n' +
-            '        <span class="mr-1" id="call-date-' + call.id + '">' + date + '</span>' +
-            '        <button id="call-' + call.id + '-patients-button" ' +
-            '                type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
-            '          <span class="fas fa-user fa-sm"></span>' +
-            '        </button>\n' +
-            '      </div>\n' +
+            '      <span class="ml-auto" id="call-date-' + call.id + '">' + date + '</span>' +
+            '      <button id="call-' + call.id + '-patients-button" ' +
+            '              type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
+            '        <span class="fas fa-user fa-sm"></span>' +
+            '      </button>\n' +
             '    </div>\n' +
             '    <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
             '      <span aria-hidden="true">&times;</span>\n' +
