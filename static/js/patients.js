@@ -126,7 +126,8 @@ export class Patients {
                 entry[this.name] = value;
             else {
                 value = parseInt(value);
-                entry[this.name] = isNaN(value) ? null : value;
+                if ( !(this.name === 'id' && isNaN(value)) )
+                    entry[this.name] = isNaN(value) ? null : value;
             }
 
             // is it the end of the structure?
