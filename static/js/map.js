@@ -2299,7 +2299,7 @@ $(function() {
     // $('#dispatchSubmitButton').hide();
 
     // Handle begin dispatching button
-    $('#newcall-header').on('show.bs.collapse', function(event) {
+    $('#newDispatchDiv').on('show.bs.collapse', function(event) {
 
         // call end dispatching
         beginDispatching();
