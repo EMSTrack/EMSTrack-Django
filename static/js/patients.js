@@ -115,7 +115,6 @@ export class Patients {
 
         // select all inputs
         const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button)');
-        console.log(inputs);
 
         let entry = {};
         const patients = [];
@@ -130,7 +129,6 @@ export class Patients {
 
             // is it the end of the structure?
             if (this.name === 'age') {
-                console.log(entry);
                 if (entry.name || entry.age)
                     // skip if empty
                     patients.push(entry);

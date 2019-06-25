@@ -887,10 +887,6 @@ function addCallToGrid(call) {
             placement: 'left',
             trigger: 'manual'
         })
-        .on('click', function(e) {
-            $(this).popover('toggle');
-            e.stopPropagation();
-        })
         .on('inserted.bs.popover', () => {
 
             // create patient form
