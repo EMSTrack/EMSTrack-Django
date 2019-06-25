@@ -461,14 +461,14 @@ class CallSerializer(serializers.ModelSerializer):
 
                 # create or update patients
                 for patient in patient_set:
-                    id = patient.pop('id', None)
-                    if id is None:
+                    pk = patient.pop('id', None)
+                    if pk is None:
                         # create patient and do not publish
                         obj = Patient(call=instance, **patient)
                         obj.save(publish=False)
                     else:
                         # update patient, does not call save hence do not publish
-                        Patient.objects.filter(id=id).update(call=instance, **patient)
+                        Patient.objects.filter(id=pk).update(call=instance, **patient)
 
             # call super to update call, which will publish
             super().update(instance, validated_data)
