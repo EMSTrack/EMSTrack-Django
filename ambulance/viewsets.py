@@ -361,13 +361,7 @@ class CallViewSet(mixins.ListModelMixin,
         # serialize and return
         serializer = CallSerializer(call)
         return Response(serializer.data)
-
-    #def update(self, request, *args, **kwargs):
-    #    raise NotFound(detail="Full call instance updates are not supported.")
-
-    def partial_update(self, request, *args, **kwargs):
-        return super().partial_update(request, *args, **kwargs)
-
+    
 
 # CallPriorityViewSet
 
