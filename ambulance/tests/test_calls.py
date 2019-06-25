@@ -1116,7 +1116,7 @@ class TestCall(TestSetup):
         logger.debug(serializer.errors)
         call = serializer.save(updated_by=self.u1)
         self.assertEqual(call.status, CallStatus.S.name)
-        self.assertEqual(call.priority, CallStatus.D.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
         self.assertNotEqual(call.pending_at, None)
         self.assertNotEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
