@@ -1103,16 +1103,22 @@ class TestCall(TestSetup):
         serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
+        self.assertNotEqual(call.pending_at, None)
+        self.assertEqual(call.started_at, None)
+        self.assertEqual(call.ended_at, None)
 
         data = {
-            'status': CallStatus.P.name,
-            'priority': CallPriority.B.name
+            'status': CallStatus.S.name,
+            'priority': CallPriority.D.name
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
-        self.assertEqual(call.status, not CallStatus.P.name)
-        self.assertEqual(call.priority, not CallStatus.B.name)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallStatus.D.name)
+        self.assertNotEqual(call.pending_at, None)
+        self.assertNotEqual(call.started_at, None)
+        self.assertEqual(call.ended_at, None)
 
     def test_call_create_viewset(self):
 
