@@ -1426,7 +1426,7 @@ class TestCall(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
 
-        call = Call.object.get(id=call.id)
+        call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
         self.assertEqual(call.priority, CallPriority.D.name)
         self.assertNotEqual(call.pending_at, None)
