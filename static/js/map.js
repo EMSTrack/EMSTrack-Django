@@ -1029,7 +1029,7 @@ function callToHtml(call, date, number_of_waypoints, waypoint) {
         '<p class="my-0 py-0"><strong>Details:</strong>' +
         '<span class="float-right">' + call.details + '</span></p>' +
         '<p class="my-0 py-0"><strong>Patients:</strong>' +
-        '<span class="float-right">' + compilePatients(call.patient_set) + '</span></p>' +
+        '<span class="float-right">' + compilePatients(call) + '</span></p>' +
         '<p class="my-0 py-0"><strong>Number of waypoints:</strong>' +
         '<span class="float-right">' + number_of_waypoints + '</span></p>' +
         '<p class="my-0 py-0"><strong>Next waypoint:</strong></p>' +
