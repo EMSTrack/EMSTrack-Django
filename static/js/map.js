@@ -815,30 +815,31 @@ function addCallToGrid(call) {
         .append(
             '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
             '  <div class="card-header px-1 py-1"' +
-            '       data-toggle="collapse"\n' +
-            '       data-target="#call-' + call.id + '-body"\n' +
-            '       aria-expanded="true" aria-controls="call-' + call.id+ '-body"' +
             '       id="call-' + call.id + '">\n' +
-            '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
+            '    <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
-            '     <span>' + call.id + ':</span>' +
-            '     <span class="font-weight-bold">' + priority_prefix + '</span>' +
-            '     <button id="call-' + call.id + '-button"\n' +
-            '           class="btn btn-'+ call_priority_css[call.priority].class + ' btn-sm">' +
-            '       ' + call_priority_css[call.priority].html + '\n' +
-            '     </button>\n' +
-            '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
-            '     <div class="float-right">\n' +
-            '       <span class="mr-1" id="call-date-' + call.id + '">' + date + '</span>' +
-            '       <button id="call-' + call.id + '-patients-button" ' +
-            '               type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
-            '         <span class="fas fa-user fa-sm"></span>' +
-            '       </button>\n' +
-            '       <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
-            '         <span aria-hidden="true">&times;</span>\n' +
-            '       </button>\n' +
-            '     </div>\n' +
+            '    <div data-toggle="collapse"\n' +
+            '         data-target="#call-' + call.id + '-body"\n' +
+            '         aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
+            '      <span>' + call.id + ':</span>' +
+            '      <span class="font-weight-bold">' + priority_prefix + '</span>' +
+            '      <button id="call-' + call.id + '-button"\n' +
+            '             class="btn btn-'+ call_priority_css[call.priority].class + ' btn-sm">' +
+            '         ' + call_priority_css[call.priority].html + '\n' +
+            '      </button>\n' +
+            '      <span class="font-weight-bold">' + priority_suffix + '</span>' +
+            '      <div class="float-right">\n' +
+            '        <span class="mr-1" id="call-date-' + call.id + '">' + date + '</span>' +
+            '        <button id="call-' + call.id + '-patients-button" ' +
+            '                type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
+            '          <span class="fas fa-user fa-sm"></span>' +
+            '        </button>\n' +
+            '      </div>\n' +
+            '    </div>\n' +
+            '    <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
+            '      <span aria-hidden="true">&times;</span>\n' +
+            '    </button>\n' +
             '  </div>\n' +
             '  <div class="collapse"\n' +
             '       id="call-' + call.id + '-body"\n' +
