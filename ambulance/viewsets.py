@@ -319,8 +319,8 @@ class CallViewSet(mixins.ListModelMixin,
 
     """
 
-    permission_classes = (IsAuthenticated,
-                          IsCreateByAdminOrSuperOrDispatcher)
+    #permission_classes = (IsAuthenticated,
+    #                      IsCreateByAdminOrSuperOrDispatcher)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
@@ -344,7 +344,7 @@ class CallViewSet(mixins.ListModelMixin,
 
         return queryset
 
-    @action(detail=True, methods=['get'], permission_classes=[IsAdminOrSuperOrDispatcher])
+    @action(detail=True, methods=['get']) #, permission_classes=[IsAdminOrSuperOrDispatcher])
     def abort(self, request, pk=None, **kwargs):
         """Abort call."""
 

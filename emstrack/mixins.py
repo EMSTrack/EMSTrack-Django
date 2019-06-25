@@ -34,6 +34,7 @@ class BasePermissionMixin:
     filter_field = 'id'
     profile_field = 'ambulances'
     queryset = None
+    dispatcher_override = False
 
     def get_queryset(self):
 
@@ -54,7 +55,8 @@ class BasePermissionMixin:
         permissions = get_permissions(user)
 
         # otherwise only return objects that the user can read or write to
-        if self.request.method == 'GET':
+        # if dispatcher_override is True substitute read permissions for write permissions
+        if self.request.method == 'GET' or (self.dispatcher_override and user.userprofile.is_dispatcher):
             # objects that the user can read
             can_do = permissions.get_can_read(self.profile_field)
 

@@ -9,6 +9,7 @@ class CallPermissionMixin(BasePermissionMixin):
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
     queryset = Call.objects.all()
+    dispatcher_override = True
 
     def get_queryset(self):
         return super().get_queryset().distinct()
