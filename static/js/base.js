@@ -44,6 +44,7 @@ $(function () {
     let apiClient;
     axios.default.xsrfCookieName = Cookies.get('csrftoken');
     axios.default.xsrfHeaderName = 'X-CSRFToken';
+    axios.defaults.withCredentials = true;
     const httpClient = axios.create({
         baseURL: apiBaseUrl,
     });
