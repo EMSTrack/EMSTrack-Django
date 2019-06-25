@@ -1752,10 +1752,10 @@ function beginDispatching() {
     isFilterOpen = filtersDiv.hasClass('show');
     logger.log('info', 'Begin dispatching.');
 
-    $('#dispatchBeginButton').hide();
-    $('#dispatchButtonGroup').show();
-    $('#dispatchCancelButton').show();
-    $('#dispatchSubmitButton').show();
+    // $('#dispatchBeginButton').hide();
+    // $('#dispatchButtonGroup').show();
+    // $('#dispatchCancelButton').show();
+    // $('#dispatchSubmitButton').show();
 
     // open filter and available ambulances
     filtersDiv.addClass('show');
@@ -1819,10 +1819,10 @@ function endDispatching() {
         .empty();
 
     // show buttons
-    $('#dispatchBeginButton').show();
-    $('#dispatchButtonGroup').hide();
-    $('#dispatchCancelButton').hide();
-    $('#dispatchSubmitButton').hide();
+    // $('#dispatchBeginButton').show();
+    // $('#dispatchButtonGroup').hide();
+    // $('#dispatchCancelButton').hide();
+    // $('#dispatchSubmitButton').hide();
 
     // close dispatch panel
     $('#newDispatchDiv').removeClass('show');
@@ -2294,12 +2294,12 @@ $(function() {
     }).trigger("resize");
 
     // Hide new dispatch buttons
-    $('#dispatchButtonGroup').hide();
-    $('#dispatchCancelButton').hide();
-    $('#dispatchSubmitButton').hide();
+    // $('#dispatchButtonGroup').hide();
+    // $('#dispatchCancelButton').hide();
+    // $('#dispatchSubmitButton').hide();
 
     // Handle begin dispatching button
-    $('#dispatchBeginButton').click(function(event) {
+    $('#newcall-header').on('show.bs.collapse', function(event) {
 
         // call end dispatching
         beginDispatching();
