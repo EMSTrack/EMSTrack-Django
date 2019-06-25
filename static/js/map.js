@@ -2299,12 +2299,19 @@ $(function() {
     // $('#dispatchSubmitButton').hide();
 
     // Handle begin dispatching button
-    $('#newDispatchDiv').on('show.bs.collapse', function(event) {
+    $('#newDispatchDiv')
+        .on('show.bs.collapse', function(event) {
 
-        // call end dispatching
-        beginDispatching();
+            // call begin dispatching
+            beginDispatching();
 
-    });
+        })
+        .on('hide.bs.collapse', function(event) {
+
+            // call end dispatching
+            endDispatching();
+
+        });
 
     // Handle submit dispatching button
     $('#dispatchSubmitButton').click(function(event) {
