@@ -414,19 +414,41 @@ class CallSerializer(serializers.ModelSerializer):
 
         return call
 
-    def update(self, instance, data):
+    def update(self, instance, validated_data):
 
         # Get current user.
-        user = data['updated_by']
+        user = validated_data['updated_by']
 
-        # Make sure user is Super.
-        if not user.is_superuser:
-            # Serializer instance will always exist!
-            # TODO: This is fishy!
-            if not user.profile.calls.filter(can_write=True, call=instance.id):
-                raise PermissionDenied()
+        # Make sure ambulancecall_set is not present
+        if 'ambulancecall_set' in validated_data:
+            raise serializers.ValidationError('Cannot modify ambulancecall_set')
 
-        return super().update(instance, data)
+        # Check permissions
+        if not (user.is_superuser or user.is_staff):
+            # Get ambulances
+            for ambulancecall in instance.ambulancecall_set.all():
+                # dispatcher override
+                if user.userprofile.is_dispatcher:
+                    if not get_permissions(user).check_can_read(ambulance=ambulancecall.ambulance.id):
+                        raise PermissionDenied()
+                else:
+                    if not get_permissions(user).check_can_write(ambulance=ambulancecall.ambulance.id):
+                        raise PermissionDenied()
+
+        # Makes sure database rolls back in case of integrity or other errors
+        with transaction.atomic():
+
+            # Extract patient set
+            patient_set = validated_data.pop('patient_set', [])
+
+            # Update patients
+            if patient_set:
+
+                # existing patients
+                existing_patients = [patient[id] if patient[id] is not None for patient in patient_set]
+
+            # call super
+            return super().update(instance, validated_data)
 
     def validate(self, data):
 
