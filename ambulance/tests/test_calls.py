@@ -1334,6 +1334,70 @@ class TestCall(TestSetup):
         # logout
         client.logout()
 
+    def test_call_abort_viewset(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as staff
+        client.login(username='staff', password='so_secret')
+
+        # Should not fail, is staff
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/en/api/call/', data, content_type='application/json')
+        logger.debug(response.content)
+        self.assertEqual(response.status_code, 201)
+
+        # logout
+        client.logout()
+
+        # now abort
+        self.assertTrue(False)
+
+        # login as dispatcher
+        client.login(username='testuser2', password='very_secret')
+
+        # Should not fail, is dispatcher
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a3.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/en/api/call/', data, content_type='application/json')
+        logger.debug(response.content)
+        self.assertEqual(response.status_code, 201)
+
+        # Should fail, dispatcher but not in authorized list of ambulances
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a1.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/en/api/call/', data, content_type='application/json')
+        logger.debug(response.content)
+        self.assertEqual(response.status_code, 403)
+
+        # Should fail, dispatcher but not in authorized list of ambulances
+        data = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [{'ambulance_id': self.a3.id}, {'ambulance_id': self.a1.id}],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        response = client.post('/en/api/call/', data, content_type='application/json')
+        logger.debug(response.content)
+        self.assertEqual(response.status_code, 403)
+
+        # logout
+        client.logout()
+
     def test_call_list_viewset(self):
 
         # instantiate client
