@@ -110,8 +110,13 @@ export class Patients {
 
     getData() {
 
-        const array = this.placeholder.serializeArray();
-        console.log(array);
+        // select all inputs
+        const inputs = $(this.placeholderName + ' :input');
+        const values = {};
+        inputs.each( function() {
+            values[this.name] = $(this).val();
+        });
+        console.log(values);
 
     }
 }
