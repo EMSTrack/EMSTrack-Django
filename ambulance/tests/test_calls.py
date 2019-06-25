@@ -1124,6 +1124,7 @@ class TestCall(TestSetup):
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
         patient_set[0]['age'] = 5
         patient_set[1]['age'] = 12
+        logger.debug(patient_set)
 
         data = {
             'patient_set': patient_set
