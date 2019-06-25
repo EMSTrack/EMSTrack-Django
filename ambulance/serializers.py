@@ -445,7 +445,7 @@ class CallSerializer(serializers.ModelSerializer):
             if patient_set:
 
                 # existing patients
-                existing_patients = [patient[id] if patient[id] is not None for patient in patient_set]
+                existing_patients = [patient[id] for patient in patient_set if patient[id] is not None]
 
             # call super
             return super().update(instance, validated_data)
