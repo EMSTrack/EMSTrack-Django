@@ -361,7 +361,7 @@ class CallViewSet(mixins.ListModelMixin,
         # serialize and return
         serializer = CallSerializer(call)
         return Response(serializer.data)
-    
+
 
 # CallPriorityViewSet
 
