@@ -910,10 +910,14 @@ function addCallToGrid(call) {
                     const newPatients = patients.getData();
                     console.log(newPatients);
                     console.log(call.patient_set);
-                    if ( !patients.same(newPatients) ) {
-                        // need to save it first
-                        logger.log('debug', 'Will save!');
+                    if ( patients.same(newPatients) ) {
 
+                        // no changes
+                        logger.log('info', 'No changes, no savings!');
+
+                    } else {
+
+                        // update call
                         apiClient.updateCall(call, { patient_set: newPatients })
                             .then( (response) => {
                                 logger.log('info', "Successfully updated call: '%j'", response.data);
