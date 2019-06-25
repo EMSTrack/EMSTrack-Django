@@ -296,7 +296,7 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = ['id', 'name', 'age']
-        read_only_fields = []
+        read_only_fields = ['id']
 
 
 # CallPriorityClassification Serializer
