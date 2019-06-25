@@ -432,6 +432,8 @@ class Call(PublishMixin,
 
     def save(self, *args, **kwargs):
 
+        # Make sure status sets date at first time they are set
+        # TODO: throw exception when it is not a valid status change
         if self.status == CallStatus.E.name:
 
             # timestamp

@@ -1,16 +1,16 @@
 from django.http import Http404
-from rest_framework import status
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.exceptions import APIException, NotFound
+from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from ambulance.permissions import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.permissions import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher
+from login.permissions import IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
     AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode
@@ -256,7 +256,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
             serializer.save(ambulance=ambulance, updated_by=updated_by)
             return Response(serializer.data)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 # Location viewset
