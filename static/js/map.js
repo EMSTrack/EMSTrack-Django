@@ -818,8 +818,7 @@ function addCallToGrid(call) {
     $('#call-grid-' + status)
         .append(
             '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
-            '  <div class="card-header px-1 py-1"' +
-            '       id="call-' + call.id + '">\n' +
+            '  <div class="card-header px-1 py-1" id="call-' + call.id + '">\n' +
             '     <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
             '            type="checkbox" id="call-checkbox-' + call.id + '" ' +
             (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
@@ -841,7 +840,7 @@ function addCallToGrid(call) {
             '       </button>\n' +
             '     </div>\n' +
             '  </div>\n' +
-            '  <div class="card-body px-1 py-1 collapse" id="call-item-grid-' + call.id + '">\n' +
+            '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
             '  </div>\n' +
             '</div>\n');
 
