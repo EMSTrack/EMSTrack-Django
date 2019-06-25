@@ -293,11 +293,11 @@ class AmbulanceCallSerializer(serializers.ModelSerializer):
 
 class PatientSerializer(serializers.ModelSerializer):
 
-    id = serializers.ReadOnlyField()
+    id = serializers.IntegerField(required=False)
 
     class Meta:
         model = Patient
-        fields = ['name', 'age']
+        fields = ['id', 'name', 'age']
         read_only_fields = []
 
 
