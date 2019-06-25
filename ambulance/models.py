@@ -432,6 +432,9 @@ class Call(PublishMixin,
 
     def save(self, *args, **kwargs):
 
+        # TODO: Beware that overwriting these might reset the call times.
+        # Is that important?
+
         if self.status == CallStatus.E.name:
 
             # timestamp

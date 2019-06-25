@@ -421,6 +421,7 @@ class CallSerializer(serializers.ModelSerializer):
         # Make sure user is Super.
         if not user.is_superuser:
             # Serializer instance will always exist!
+            # TODO: This is fishy!
             if not user.profile.calls.filter(can_write=True, call=instance.id):
                 raise PermissionDenied()
 

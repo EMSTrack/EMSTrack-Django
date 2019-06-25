@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
-from rest_framework.exceptions import APIException
+from rest_framework.exceptions import APIException, NotFound
 
 from ambulance.permissions import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
@@ -297,6 +297,7 @@ class LocationTypeViewSet(mixins.ListModelMixin,
 
 class CallViewSet(mixins.ListModelMixin,
                   mixins.RetrieveModelMixin,
+                  UpdateModelUpdateByMixin,
                   CreateModelUpdateByMixin,
                   CallPermissionMixin,
                   viewsets.GenericViewSet):
@@ -319,8 +320,8 @@ class CallViewSet(mixins.ListModelMixin,
 
     """
 
-    #permission_classes = (IsAuthenticated,
-    #                      IsCreateByAdminOrSuperOrDispatcher)
+    permission_classes = (IsAuthenticated,
+                          IsCreateByAdminOrSuperOrDispatcher)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
@@ -344,7 +345,7 @@ class CallViewSet(mixins.ListModelMixin,
 
         return queryset
 
-    @action(detail=True, methods=['get']) #, permission_classes=[IsAdminOrSuperOrDispatcher])
+    @action(detail=True, methods=['get'], permission_classes=[IsAdminOrSuperOrDispatcher])
     def abort(self, request, pk=None, **kwargs):
         """Abort call."""
 
@@ -358,19 +359,11 @@ class CallViewSet(mixins.ListModelMixin,
         serializer = CallSerializer(call)
         return Response(serializer.data)
 
-    @action(detail=True, methods=['post'])
-    def patients(self, request, pk=None, **kwargs):
-        """Abort call."""
+    def update(self, request, *args, **kwargs):
+        return NotFound(detail="Full call updates are not supported.")
 
-        # get call object
-        call = self.get_object()
-
-        # abort call
-        call.abort()
-
-        # serialize and return
-        serializer = CallSerializer(call)
-        return Response(serializer.data)
+    def partial_update(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
 
 
 # CallPriorityViewSet
