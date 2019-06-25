@@ -1111,6 +1111,8 @@ class TestCall(TestSetup):
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, not CallStatus.P.name)
+        self.assertEqual(call.priority, not CallStatus.B.name)
 
     def test_call_create_viewset(self):
 
