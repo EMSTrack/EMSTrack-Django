@@ -150,23 +150,11 @@
 
                 <div class="collapse" id="newDispatchDiv">
 
-                    <div class="btn-group d-flex" role="group" id="dispatchButtonGroup">
-                        <button type="button"
-                                id="dispatchSubmitButton"
-                                class="btn btn-primary w-100">
-                            {% trans "Dispatch" %}
-                        </button>
-
-                        <button type="button"
-                                id="dispatchCancelButton"
-                                class="btn btn-secondary w-100"
-                                data-toggle="collapse"
-                                data-target="#newDispatchDiv"
-                                aria-expanded="true"
-                                aria-controls="newDispatchDiv">
-                            {% trans "Cancel" %}
-                        </button>
-                    </div>
+                    <button type="button"
+                            id="dispatchSubmitButton"
+                            class="btn btn-primary btn-block">
+                        {% trans "Dispatch" %}
+                    </button>
 
                     <!-- Dispatch -->
                     <form id="dispatch-form-collapse"

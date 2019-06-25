@@ -2321,17 +2321,6 @@ $(function() {
 
     });
 
-    // Handle cancel dispatching button
-    $('#dispatchCancelButton').click(function(event) {
-
-        // Stop propagation to avoid collapse
-        event.stopPropagation();
-
-        // call end dispatching
-        endDispatching();
-
-    });
-
     // Create category panes and filters
     createCategoryPanesAndFilters();
 
