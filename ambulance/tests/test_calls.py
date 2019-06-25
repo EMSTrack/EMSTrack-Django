@@ -1376,7 +1376,7 @@ class TestCall(TestSetup):
 
         # Should fail, dispatcher but not in authorized list of ambulances
         response = client.get('/en/api/call/{}/abort/'.format(call['id']))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
 
         # Should not fail, is dispatcher
         data = {
