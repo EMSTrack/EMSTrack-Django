@@ -1355,6 +1355,153 @@ class TestCall(TestSetup):
         # logout
         client.logout()
 
+    def test_call_viewset_update(self):
+
+        # Pending Call with Ambulancecall_Set will create ambulancecalls
+        call = {
+            'status': CallStatus.P.name,
+            'priority': CallPriority.B.name,
+            'ambulancecall_set': [
+                {
+                    'ambulance_id': self.a1.id,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'some street'
+                            }
+                        },
+                        {
+                            'order': 1,
+                            'status': WaypointStatus.D.name,
+                            'location': {
+                                'type': LocationType.w.name,
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    'ambulance_id': self.a2.id,
+                    'waypoint_set': [
+                        {
+                            'order': 0,
+                            'location': {
+                                'type': LocationType.i.name,
+                                'number': '321',
+                                'street': 'another street'
+                            }
+                        }
+                    ]
+                }
+            ],
+            'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
+        }
+        serializer = CallSerializer(data=call)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertNotEqual(call.pending_at, None)
+        self.assertEqual(call.started_at, None)
+        self.assertEqual(call.ended_at, None)
+
+        # instantiate client
+        client = Client()
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
+        # partial update call data
+        data = {
+            'status': CallStatus.S.name,
+            'priority': CallPriority.D.name
+        }
+        response = client.post('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        logger.debug(response.content)
+        self.assertEqual(response.status_code, 200)
+
+        # logout
+        client.logout()
+
+    def ____test(self):
+
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertNotEqual(call.pending_at, None)
+        self.assertNotEqual(call.started_at, None)
+        self.assertEqual(call.ended_at, None)
+        started_at = call.started_at
+
+        # partial update patient set
+        patient_set = PatientSerializer(call.patient_set.all(), many=True).data
+        patient_set[0]['age'] = 5
+        patient_set[1]['age'] = 12
+        logger.debug(patient_set)
+
+        data = {
+            'patient_set': patient_set
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertCountEqual(patient_set, PatientSerializer(call.patient_set.all(), many=True).data)
+        self.assertEqual(call.started_at, started_at)
+
+        # partial update patient set with addition
+        patient_set = PatientSerializer(call.patient_set.all(), many=True).data
+        patient_set.append({'name': 'someone', 'age': 14})
+        logger.debug(patient_set)
+
+        data = {
+            'patient_set': patient_set
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        logger.debug(serializer.errors)
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
+        self.assertEqual(call.started_at, started_at)
+
+        # partial update patient set with addition and removal
+        patient_set = PatientSerializer(call.patient_set.all(), many=True).data
+        del patient_set[0]
+        patient_set.append({'name': 'someone else', 'age': 17})
+
+        data = {
+            'patient_set': patient_set
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
+        self.assertEqual(call.started_at, started_at)
+
+        # partial update patient set with addition with null age
+        patient_set = PatientSerializer(call.patient_set.all(), many=True).data
+        patient_set.append({'name': 'someone else else'})
+
+        data = {
+            'patient_set': patient_set
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
+        self.assertEqual(call.started_at, started_at)
+
     def test_call_abort_viewset(self):
 
         # instantiate client

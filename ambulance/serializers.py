@@ -475,11 +475,3 @@ class CallSerializer(serializers.ModelSerializer):
 
         # call super
         return instance
-
-    def __validate(self, data):
-
-        if 'status' in data and \
-                data['status'] != CallStatus.P.name and \
-                (not ('ambulancecall_set' in data) or len(data['ambulancecall_set']) == 0):
-            raise serializers.ValidationError('Started call and ended call must have ambulancecall_set')
-        return data
