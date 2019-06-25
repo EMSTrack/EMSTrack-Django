@@ -1413,13 +1413,16 @@ class TestCall(TestSetup):
         client = Client()
         client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
 
-        # partial update call data
+        # post call data
         data = {
             'status': CallStatus.S.name,
             'priority': CallPriority.D.name
         }
+        response = client.post('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 405)
+
+        # partial update call data
         response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
-        logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
 
         # logout
