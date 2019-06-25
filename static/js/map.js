@@ -602,7 +602,7 @@ function updateCall(call) {
             $('#call-date-' + call.id).html( date );
 
             // update patients
-            setCallPatientPopover(call);
+            setCallPatientPopover(call, true);
 
             // Update waypoints
             if (status === 'E') {
@@ -784,11 +784,16 @@ function abortCall(call) {
 
 }
 
-function setCallPatientPopover(call) {
+function setCallPatientPopover(call, destroy = false) {
 
     // create patient object
     const placeholder = 'call-' + call.id + '-patients';
     const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
+
+    // destroy?
+    if (destroy)
+    $('#call-' + call.id + '-patients-button')
+        .popover('dispose');
 
     // Add popover to patient button
     $('#call-' + call.id + '-patients-button')
