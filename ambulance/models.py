@@ -432,23 +432,23 @@ class Call(PublishMixin,
 
     def save(self, *args, **kwargs):
 
-        # TODO: Beware that overwriting these might reset the call times.
-        # Is that important?
-
         if self.status == CallStatus.E.name:
 
             # timestamp
-            self.ended_at = timezone.now()
+            if self.ended_at is None:
+                self.ended_at = timezone.now()
 
         elif self.status == CallStatus.S.name:
 
             # timestamp
-            self.started_at = timezone.now()
+            if self.started_at is None:
+                self.started_at = timezone.now()
 
         elif self.status == CallStatus.P.name:
 
             # timestamp
-            self.pending_at = timezone.now()
+            if self.pending_at is None:
+                self.pending_at = timezone.now()
 
         # call super
         super().save(*args, **kwargs)

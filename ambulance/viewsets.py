@@ -317,7 +317,7 @@ class CallViewSet(mixins.ListModelMixin,
     Abort an existing call instance.
 
     update:
-    Full updates are not supported.
+    Full call instance updates are not supported.
 
     partial_update:
     Partially update existing call instance.
@@ -363,10 +363,10 @@ class CallViewSet(mixins.ListModelMixin,
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        raise NotFound(detail="Full call updates are not supported.")
+        raise NotFound(detail="Full call instance updates are not supported.")
 
     def partial_update(self, request, *args, **kwargs):
-        return self.partial_update(request, *args, **kwargs)
+        return super().partial_update(request, *args, **kwargs)
 
 
 # CallPriorityViewSet
