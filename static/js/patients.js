@@ -105,4 +105,10 @@ export class Patients {
 
     }
 
+    getData() {
+
+        const array = this.placeholder.serializeArray();
+        console.log(array);
+
+    }
 }

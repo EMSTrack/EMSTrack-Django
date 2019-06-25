@@ -863,6 +863,10 @@ function addCallToGrid(call) {
             abortCall(call);
         });
 
+
+    // create patient object
+    const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
+
     // Add popover to patient button
     const placeholder = 'call-' + call.id + '-patients';
     $('#call-' + call.id + '-patients-button')
@@ -891,12 +895,24 @@ function addCallToGrid(call) {
         .on('inserted.bs.popover', () => {
 
             // create patient form
-            new Patients(call.patient_set, call.id, '#' + placeholder)
-                .createForm();
+            patients.createForm();
 
             // toggle on cancel
             $('#call-' + call.id + '-cancel-button')
                 .on('click', function (event) {
+
+                    $('#call-' + call.id + '-patients-button')
+                        .popover('toggle');
+                    event.stopPropagation();
+
+                });
+
+            // toggle on save
+            $('#call-' + call.id + '-save-button')
+                .on('click', function (event) {
+
+                    // retrieve patents
+                    patients.getData();
 
                     $('#call-' + call.id + '-patients-button')
                         .popover('toggle');
