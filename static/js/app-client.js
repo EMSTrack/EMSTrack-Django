@@ -264,7 +264,7 @@ export class AppClient extends TopicObserver {
 
     }
 
-    updateCall(call, data) {
+    patchCall(call, data) {
 
         // retrieve bases
         return this.httpClient.patch('call/' + call.id + '/', data);
