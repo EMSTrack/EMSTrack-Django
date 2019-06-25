@@ -1443,8 +1443,8 @@ class TestCall(TestSetup):
         data = {
             'patient_set': patient_set
         }
-        serializer = CallSerializer(call, data=data)
-        serializer.is_valid()
+        response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
@@ -1460,9 +1460,8 @@ class TestCall(TestSetup):
         data = {
             'patient_set': patient_set
         }
-        serializer = CallSerializer(call, data=data)
-        serializer.is_valid()
-        logger.debug(serializer.errors)
+        response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
@@ -1478,8 +1477,8 @@ class TestCall(TestSetup):
         data = {
             'patient_set': patient_set
         }
-        serializer = CallSerializer(call, data=data)
-        serializer.is_valid()
+        response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
@@ -1494,8 +1493,8 @@ class TestCall(TestSetup):
         data = {
             'patient_set': patient_set
         }
-        serializer = CallSerializer(call, data=data)
-        serializer.is_valid()
+        response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
 
         call = Call.objects.get(id=call.id)
         self.assertEqual(call.status, CallStatus.S.name)
