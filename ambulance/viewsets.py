@@ -360,7 +360,7 @@ class CallViewSet(mixins.ListModelMixin,
         return Response(serializer.data)
 
     def update(self, request, *args, **kwargs):
-        return NotFound(detail="Full call updates are not supported.")
+        raise NotFound(detail="Full call updates are not supported.")
 
     def partial_update(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
