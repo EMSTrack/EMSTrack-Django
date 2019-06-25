@@ -598,9 +598,8 @@ function updateCall(call) {
             // Get call date
             const date = callDate(call);
 
-            // update label
-            $('#call-text-' + call.id)
-                .html( callToHtmlShort(call, date) );
+            // update date
+            $('#call-date-' + call.id).html( date );
 
             // Update waypoints
             if (status === 'E') {
@@ -615,9 +614,6 @@ function updateCall(call) {
 
             } else {
 
-                // get patients
-                const patients = compilePatients(call);
-
                 // update waypoints
                 for (const ambulance_call of call.ambulancecall_set) {
 
@@ -626,7 +622,7 @@ function updateCall(call) {
 
                     // add waypoints
                     let nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
-                        ambulance_call['waypoint_set'], date, patients);
+                        ambulance_call['waypoint_set'], date);
 
                     // set next waypoint
                     ambulance_call['next_waypoint'] = nextWaypoint;
@@ -833,8 +829,8 @@ function addCallToGrid(call) {
             '       ' + call_priority_css[call.priority].html + '\n' +
             '     </button>\n' +
             '     <span class="font-weight-bold">' + priority_suffix + '</span>' +
-            '     <div class="float-right" id="call-text-' + call.id + '">\n' +
-            '       <span class="mr-1">' + date + '</span>' +
+            '     <div class="float-right">\n' +
+            '       <span class="mr-1" id="call-date-' + call.id + '">' + date + '</span>' +
             '       <button id="call-' + call.id + '-patients-button" ' +
             '               type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
             '         <span class="fas fa-user fa-sm"></span>' +
@@ -1022,7 +1018,7 @@ function locationToHtml(location) {
 
 }
 
-function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
+function callToHtml(call, date, number_of_waypoints, waypoint) {
 
     return (
         '<div>' +
@@ -1033,7 +1029,7 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
         '<p class="my-0 py-0"><strong>Details:</strong>' +
         '<span class="float-right">' + call.details + '</span></p>' +
         '<p class="my-0 py-0"><strong>Patients:</strong>' +
-        '<span class="float-right">' + patients + '</span></p>' +
+        '<span class="float-right">' + compilePatients(call.patients) + '</span></p>' +
         '<p class="my-0 py-0"><strong>Number of waypoints:</strong>' +
         '<span class="float-right">' + number_of_waypoints + '</span></p>' +
         '<p class="my-0 py-0"><strong>Next waypoint:</strong></p>' +
@@ -1042,21 +1038,7 @@ function callToHtml(call, date, patients, number_of_waypoints, waypoint) {
     );
 }
 
-function callToHtmlShort(call, date) {
-
-    let patients;
-    if (call.patient_set.length === 0) {
-        patients = "no patients";
-    } else if (call.patient_set.length === 1) {
-        patients = '1 patient';
-    } else if (call.patient_set.length > 1) {
-        patients = call.patient_set.length + ' patients';
-    }
-
-    return (date + ', ' + patients);
-}
-
-function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
+function addWaypoints(call, ambulance_id, waypoint_set, date) {
 
     // sort waypoints
     waypoint_set.sort(function(a,b) {return (a.order - b.order);});
@@ -1093,8 +1075,7 @@ function addWaypoints(call, ambulance_id, waypoint_set, date, patients) {
         if (waypoint === nextWaypoint) {
 
             // bind popup to next waypoint
-            marker.bindPopup( callToHtml(call, date, patients,
-                waypoint_set.length, waypoint) );
+            marker.bindPopup( callToHtml(call, date, waypoint_set.length, waypoint) );
 
             // Collapse panel on icon hover.
             marker
@@ -1158,7 +1139,7 @@ function addCallToMap(call) {
 
         // add waypoints
         const nextWaypoint = addWaypoints(call, ambulance_call.ambulance_id,
-            ambulance_call['waypoint_set'], date, patients);
+            ambulance_call['waypoint_set'], date);
 
         // set next waypoint
         ambulance_call['next_waypoint'] = nextWaypoint;

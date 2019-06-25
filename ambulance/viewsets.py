@@ -7,10 +7,10 @@ from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
 from rest_framework.exceptions import APIException
 
-from ambulance.views import CallPermissionMixin
+from ambulance.permissions import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.viewsets import IsCreateByAdminOrSuper, IsCreateOrAbortByAdminOrSuperOrDispatcher
+from login.permissions import IsCreateByAdminOrSuper, IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
     AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode
@@ -314,10 +314,13 @@ class CallViewSet(mixins.ListModelMixin,
 
     abort:
     Abort an existing call instance.
+
+    patients:
+
     """
 
     permission_classes = (IsAuthenticated,
-                          IsCreateOrAbortByAdminOrSuperOrDispatcher)
+                          IsCreateByAdminOrSuperOrDispatcher)
 
     filter_field = 'ambulancecall__ambulance_id'
     profile_field = 'ambulances'
@@ -341,8 +344,22 @@ class CallViewSet(mixins.ListModelMixin,
 
         return queryset
 
-    @action(detail=True, methods=['get'])
+    @action(detail=True, methods=['get'], permission_classes=[IsAdminOrSuperOrDispatcher])
     def abort(self, request, pk=None, **kwargs):
+        """Abort call."""
+
+        # get call object
+        call = self.get_object()
+
+        # abort call
+        call.abort()
+
+        # serialize and return
+        serializer = CallSerializer(call)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'])
+    def patients(self, request, pk=None, **kwargs):
         """Abort call."""
 
         # get call object

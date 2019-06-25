@@ -2,6 +2,8 @@ import logging
 
 from functools import lru_cache
 
+from rest_framework import permissions
+
 from ambulance.models import Ambulance
 from hospital.models import Hospital
 
@@ -184,3 +186,47 @@ class Permissions:
 
     def get_can_write(self, profile_field):
         return self.can_write[profile_field]
+
+
+class IsUserOrAdminOrSuper(permissions.BasePermission):
+    """
+    Only user or staff can see or modify
+    """
+
+    def has_object_permission(self, request, view, obj):
+        return (request.user.is_superuser or
+                request.user.is_staff or
+                obj == request.user)
+
+
+class IsCreateByAdminOrSuper(permissions.BasePermission):
+    """
+    Only superuser or staff can create
+    """
+
+    def has_permission(self, request, view):
+        if view.action == 'create':
+            return request.user.is_staff or request.user.is_superuser
+        else:
+            return True
+
+
+class IsCreateByAdminOrSuperOrDispatcher(permissions.BasePermission):
+    """
+    Only superuser, staff, or dispatcher can create or abort
+    """
+
+    def has_permission(self, request, view):
+        if view.action == 'create' or view.action == 'abort':
+            return request.user.is_staff or request.user.is_superuser or request.user.userprofile.is_dispatcher
+        else:
+            return True
+
+
+class IsAdminOrSuperOrDispatcher(permissions.BasePermission):
+    """
+    Only superuser, staff, or dispatcher
+    """
+
+    def has_permission(self, request, view):
+        return request.user.is_staff or request.user.is_superuser or request.user.userprofile.is_dispatcher

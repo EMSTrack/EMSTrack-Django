@@ -12,11 +12,12 @@ from django.views.generic.detail import BaseDetailView
 
 from django.utils.translation import ugettext_lazy as _
 
+from ambulance.permissions import CallPermissionMixin
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
-    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallPriorityCode, CallPriorityClassification
+    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallPriorityCode
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -373,17 +374,6 @@ class LocationAdminUpdateView(SuccessMessageMixin,
 
 
 # Calls
-
-# Call permissions
-class CallPermissionMixin(BasePermissionMixin):
-
-    filter_field = 'ambulancecall__ambulance_id'
-    profile_field = 'ambulances'
-    queryset = Call.objects.all()
-
-    def get_queryset(self):
-        return super().get_queryset().distinct()
-
 
 # Call ListView
 class CallListView(LoginRequiredMixin,
