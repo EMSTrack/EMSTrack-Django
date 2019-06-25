@@ -840,7 +840,10 @@ function addCallToGrid(call) {
             '       </button>\n' +
             '     </div>\n' +
             '  </div>\n' +
-            '  <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '">\n' +
+            '  <div class="collapse"\n' +
+            '       id="call-' + call.id + '-body"\n' +
+            '       aria-labelledby="call-' + call.id + '">\n' +
+            '    <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '"></div>\n' +
             '  </div>\n' +
             '</div>\n');
 
