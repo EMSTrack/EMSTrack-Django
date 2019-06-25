@@ -1350,8 +1350,12 @@ class TestCall(TestSetup):
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
-        logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
+        result = JSONParser().parse(BytesIO(response.content))
+
+        # abort
+        response = client.get('/en/api/call/' + result['id'] + '/abort/')
+        self.assertEqual(response.status_code, 200)
 
         # logout
         client.logout()
