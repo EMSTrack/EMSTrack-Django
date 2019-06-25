@@ -114,7 +114,7 @@ export class Patients {
     getData() {
 
         // select all inputs
-        const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button):not([type=hidden])');
+        const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button)');
         console.log(inputs);
 
         let entry = {};
