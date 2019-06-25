@@ -601,6 +601,9 @@ function updateCall(call) {
             // update date
             $('#call-date-' + call.id).html( date );
 
+            // update patients
+            setCallPatientPopover(call);
+
             // Update waypoints
             if (status === 'E') {
 
