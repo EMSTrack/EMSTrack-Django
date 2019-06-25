@@ -863,12 +863,11 @@ function addCallToGrid(call) {
             abortCall(call);
         });
 
-
     // create patient object
+    const placeholder = 'call-' + call.id + '-patients';
     const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
 
     // Add popover to patient button
-    const placeholder = 'call-' + call.id + '-patients';
     $('#call-' + call.id + '-patients-button')
         .popover({
             title: translation_table['Patients'],
