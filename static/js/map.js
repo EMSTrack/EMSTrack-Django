@@ -921,8 +921,8 @@ function addCallToGrid(call) {
                         const data = { patient_set: newPatients };
                         console.log(data);
                         apiClient.patchCall(call, data)
-                            .then( (response) => {
-                                logger.log('info', "Successfully updated call: '%j'", response.data);
+                            .then( (call) => {
+                                logger.log('info', "Successfully updated call");
                             })
                             .catch( (error) => {
                                 logger.log('error', "Could not update call: '%j'", error);

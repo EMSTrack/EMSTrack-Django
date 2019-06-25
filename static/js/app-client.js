@@ -256,10 +256,8 @@ export class AppClient extends TopicObserver {
         // abort call
         return this.httpClient.get('call/' + call.id + '/abort/')
             .then( (response) => {
-
                 // return aborted call
                 return response.data;
-
             })
 
     }
@@ -267,8 +265,11 @@ export class AppClient extends TopicObserver {
     patchCall(call, data) {
 
         // retrieve bases
-        return this.httpClient.patch('call/' + call.id + '/', data);
-
+        return this.httpClient.patch('call/' + call.id + '/', data)
+            .then( (response) => {
+                // return modified call
+                return response.data;
+            })
     }
 
     // private methods
