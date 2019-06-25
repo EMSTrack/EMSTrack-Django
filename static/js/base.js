@@ -44,8 +44,8 @@ $(function () {
     let apiClient;
     const httpClient = axios.create({
         baseURL: apiBaseUrl,
-        xsrfCookieName: Cookies.get('csrftoken'),
-        xsrfHeaderName: 'X-CSRFToken',
+        xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFTOKEN',
         withCredentials: true
     });
 
