@@ -15,9 +15,11 @@ export class Patients {
             '<div class="form-row" id="patient-' + label + '-form">' +
             '  <div class="col-md-7 pr-0">' +
             '    <input id="patient-' + label + '-id" ' +
+            '           name="id"' +
             '           type="hidden" ' +
             '           value="' + patient.id + '">' +
             '    <input id="patient-' + label + '-name" ' +
+            '           name="name"' +
             '           type="text" ' +
             '           class="form-control" ' +
             '           value="' + patient.name + '" ' +
@@ -25,6 +27,7 @@ export class Patients {
             '  </div>' +
             '  <div class="col-md-3 px-0">' +
             '    <input id="patient-' + label + '-age" ' +
+            '           name="age"' +
             '           type="number" min="0" ' +
             '           class="form-control" ' +
             '           value="' + patient.age + '" ' +
@@ -111,16 +114,21 @@ export class Patients {
     getData() {
 
         // select all inputs
-        const inputs = $(this.placeholderName + ' :input');
+        const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button)');
         console.log(inputs);
 
-        const values = {};
+        let entry = {};
+        const patients = [];
         inputs.each( function() {
-            values[this.name] = $(this).val();
+            entry[this.name] = $(this).val();
+            if (this.name === 'age') {
+                console.log(entry);
+                patients.push(entry);
+                entry = {};
+            }
         });
-        console.log(values);
+        console.log(patients);
 
-
-
+        return patients;
     }
 }
