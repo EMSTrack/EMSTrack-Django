@@ -20,34 +20,6 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        {% if user|is_dispatcher %}
-            <button class="btn btn-primary px-3 mx-1"
-                    id="dispatchBeginButton"
-                    data-toggle="collapse"
-                    data-target="#dispatchDiv" aria-controls="dispatchDiv"
-                    aria-expanded="false" aria-label="Toggle dispatching">
-                {% trans "Dispatch Ambulances" %}
-            </button>
-
-            <button type="button"
-                    id="dispatchSubmitButton"
-                    class="btn btn-primary px-3 mx-1"
-                    style="display: none;">
-                {% trans "Dispatch" %}
-            </button>
-
-            <button type="button"
-                    id="dispatchCancelButton"
-                    class="btn btn-secondary px-3 mx-1"
-                    data-toggle="collapse"
-                    data-target="#dispatchDiv"
-                    aria-expanded="true"
-                    aria-controls="dispatchDiv"
-                    style="display: none;">
-                {% trans "Cancel" %}
-            </button>
-        {% endif %}
-
     </nav>
 
     <div class="row mx-1">
@@ -161,161 +133,194 @@
         <div class="col-md-3 border-top border-secondary collapse bg-light"
              id="dispatchDiv">
 
-            <!-- Dispatch -->
-            <form id="dispatch-form-collapse"
-                  method="POST" action="">
-                {% csrf_token %}
+            {% if user|is_dispatcher %}
+                <button class="btn btn-primary px-3 mx-1"
+                        id="dispatchBeginButton"
+                        data-toggle="collapse"
+                        data-target="#dispatchDiv" aria-controls="dispatchDiv"
+                        aria-expanded="false" aria-label="Toggle dispatching">
+                    {% trans "Dispatch Ambulances" %}
+                </button>
 
-                <h5>
-                    {% trans "Priority" %}
-                </h5>
-                {% if priority_code_list %}
-                <div class="text-right" style="min-height: 2em;">
-                    <label class="d-inline-block text-right" id="priority-classification" name="priority-classification">
-                        <span class="text-muted">{% trans "Priority Classification" %}</span>
-                    </label>
-                </div>
-                {% endif  %}
-                <div class="text-right">
-                <form required>
-                    <div id="priority-buttons"
-                         class="btn-group btn-group-toggle border rounded"
-                         data-toggle="buttons">
-                    </div>
-                </form>
-                </div>
-                {% if priority_code_list %}
-                <div class="text-right" style="min-height: 2em;">
-                    <label class="d-inline-block text-right" id="priority-code" name="priority-code">
-                        <span class="text-muted">{% trans "Priority Code" %}</span>
-                    </label>
-                </div>
-                <input id="priority-code-input" list="priority-code-list"
-                       name="priority-code-input" class="form-control"
-                       placeholder="{% trans "Priority Code" %}">
-                <datalist id="priority-code-list">
-                    {% for code in priority_code_list %}
-                    <option id="priority-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
-                    {% endfor %}
-                </datalist>
-                {% endif  %}
+                <button type="button"
+                        id="dispatchSubmitButton"
+                        class="btn btn-primary px-3 mx-1"
+                        style="display: none;">
+                    {% trans "Dispatch" %}
+                </button>
 
-                {% if radio_code_list %}
-                <h5>
-                    {% trans "Radio Code" %}
-                </h5>
-                <div class="text-right" style="min-height: 2em;">
-                    <label class="d-inline-block text-right" id="radio-code" name="radio-code">
-                        <span class="text-muted">{% trans "Radio Code" %}</span>
-                    </label>
-                </div>
-                <input id="radio-code-input" list="radio-code-list"
-                       name="radio-code-input" class="form-control"
-                       placeholder="{% trans "Radio Code" %}">
-                <datalist id="radio-code-list">
-                    {% for code in radio_code_list %}
-                    <option id="radio-code-{{ code.id }}" value="{{ code.code }}">{{ code.label }}</option>
-                    {% endfor %}
-                </datalist>
-                {% endif  %}
+                <button type="button"
+                        id="dispatchCancelButton"
+                        class="btn btn-secondary px-3 mx-1"
+                        data-toggle="collapse"
+                        data-target="#dispatchDiv"
+                        aria-expanded="true"
+                        aria-controls="dispatchDiv"
+                        style="display: none;">
+                    {% trans "Cancel" %}
+                </button>
 
-                <h5>
-                    {% trans "Description" %}
-                </h5>
-                <textarea class="form-control" name="description"
-                          rows="3" id="comment"
-                          placeholder="{% trans "Describe the incident" %}"
-                          required></textarea>
+                <div class="collapse" id="newDispatchDiv">
 
-                <div class="float-right"
-                     title="Click to automatically search for coordinates after changing the address">
-                    {% trans "update coordinates" %}
-                    <input id="update-coordinates" type="checkbox">
-                </div>
+                    <!-- Dispatch -->
+                    <form id="dispatch-form-collapse"
+                          method="POST" action="">
+                        {% csrf_token %}
 
-                <h5>
-                    {% trans "Street address" %}
-                </h5>
-                <input id="street" type="text"
-                       name="street" class="form-control"
-                       placeholder="{% trans "Address" %}" required autocomplete="street-address">
-
-                <div class="float-right"
-                     title="{% trans "Click to automatically search for address after changing the coordinates" %}">
-                    {% trans "update address" %}
-                    <input id="update-address" type="checkbox" checked/>
-                </div>
-
-                <h5>
-                    {% trans "Coordinates" %}
-                </h5>
-                <div class="card"
-                     title="Click on map to update coordinates">
-                    <div class="card-body py-1 px-3">
-                        <strong>{% trans "Lat" %}:</strong>
-                        <div id="curr-lat" style="display: inline-block;"></div>
-                        , &nbsp;
-                        <strong>{% trans "Lon" %}:</strong>
-                        <div id="curr-lng" style="display: inline-block;"></div>
-                    </div>
-                </div>
-
-                <h5>
-                    {% trans "Ambulances" %}
-                </h5>
-                <div class="card px-0 py-0">
-                    <div class="card-body py-1 px-2"
-                         id="ambulance-selection">
-                        <input id="ambulance-selection-message"
-                               class="border-0 w-100"
-                               placeholder="{% trans "Click on or drag ambulances here" %}"/>
-                    </div>
-                </div>
-
-                <h5>
-                    {% trans "Patients" %}
-                </h5>
-                <div id="patients">
-                    <!--
-                    <div class="form-row" id="patient-0">
-                        <div class="col-sm-8 p-0">
-                            <input id="patient-0-name" type="text"
-                                   class="form-control"
-                                   placeholder="Name">
+                        <h5>
+                            {% trans "Priority" %}
+                        </h5>
+                        {% if priority_code_list %}
+                        <div class="text-right" style="min-height: 2em;">
+                            <label class="d-inline-block text-right" id="priority-classification" name="priority-classification">
+                                <span class="text-muted">{% trans "Priority Classification" %}</span>
+                            </label>
                         </div>
-                        <div class="col-sm-2 p-0">
-                            <input id="patient-0-age" type="text"
-                                   class="form-control"
-                                   placeholder="Age"/>
+                        {% endif  %}
+                        <div class="text-right">
+                        <form required>
+                            <div id="priority-buttons"
+                                 class="btn-group btn-group-toggle border rounded"
+                                 data-toggle="buttons">
+                            </div>
+                        </form>
                         </div>
-                        <div class="col-sm-2 p-0">
-                            <button class="btn btn-default new-patient"
-                                    type="button"
-                                    id="patient-0-button">
-                                <span class="fas fa-plus"></span>
-                            </button>
+                        {% if priority_code_list %}
+                        <div class="text-right" style="min-height: 2em;">
+                            <label class="d-inline-block text-right" id="priority-code" name="priority-code">
+                                <span class="text-muted">{% trans "Priority Code" %}</span>
+                            </label>
                         </div>
-                    </div>
-                    -->
+                        <input id="priority-code-input" list="priority-code-list"
+                               name="priority-code-input" class="form-control"
+                               placeholder="{% trans "Priority Code" %}">
+                        <datalist id="priority-code-list">
+                            {% for code in priority_code_list %}
+                            <option id="priority-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
+                            {% endfor %}
+                        </datalist>
+                        {% endif  %}
+
+                        {% if radio_code_list %}
+                        <h5>
+                            {% trans "Radio Code" %}
+                        </h5>
+                        <div class="text-right" style="min-height: 2em;">
+                            <label class="d-inline-block text-right" id="radio-code" name="radio-code">
+                                <span class="text-muted">{% trans "Radio Code" %}</span>
+                            </label>
+                        </div>
+                        <input id="radio-code-input" list="radio-code-list"
+                               name="radio-code-input" class="form-control"
+                               placeholder="{% trans "Radio Code" %}">
+                        <datalist id="radio-code-list">
+                            {% for code in radio_code_list %}
+                            <option id="radio-code-{{ code.id }}" value="{{ code.code }}">{{ code.label }}</option>
+                            {% endfor %}
+                        </datalist>
+                        {% endif  %}
+
+                        <h5>
+                            {% trans "Description" %}
+                        </h5>
+                        <textarea class="form-control" name="description"
+                                  rows="3" id="comment"
+                                  placeholder="{% trans "Describe the incident" %}"
+                                  required></textarea>
+
+                        <div class="float-right"
+                             title="Click to automatically search for coordinates after changing the address">
+                            {% trans "update coordinates" %}
+                            <input id="update-coordinates" type="checkbox">
+                        </div>
+
+                        <h5>
+                            {% trans "Street address" %}
+                        </h5>
+                        <input id="street" type="text"
+                               name="street" class="form-control"
+                               placeholder="{% trans "Address" %}" required autocomplete="street-address">
+
+                        <div class="float-right"
+                             title="{% trans "Click to automatically search for address after changing the coordinates" %}">
+                            {% trans "update address" %}
+                            <input id="update-address" type="checkbox" checked/>
+                        </div>
+
+                        <h5>
+                            {% trans "Coordinates" %}
+                        </h5>
+                        <div class="card"
+                             title="Click on map to update coordinates">
+                            <div class="card-body py-1 px-3">
+                                <strong>{% trans "Lat" %}:</strong>
+                                <div id="curr-lat" style="display: inline-block;"></div>
+                                , &nbsp;
+                                <strong>{% trans "Lon" %}:</strong>
+                                <div id="curr-lng" style="display: inline-block;"></div>
+                            </div>
+                        </div>
+
+                        <h5>
+                            {% trans "Ambulances" %}
+                        </h5>
+                        <div class="card px-0 py-0">
+                            <div class="card-body py-1 px-2"
+                                 id="ambulance-selection">
+                                <input id="ambulance-selection-message"
+                                       class="border-0 w-100"
+                                       placeholder="{% trans "Click on or drag ambulances here" %}"/>
+                            </div>
+                        </div>
+
+                        <h5>
+                            {% trans "Patients" %}
+                        </h5>
+                        <div id="patients">
+                            <!--
+                            <div class="form-row" id="patient-0">
+                                <div class="col-sm-8 p-0">
+                                    <input id="patient-0-name" type="text"
+                                           class="form-control"
+                                           placeholder="Name">
+                                </div>
+                                <div class="col-sm-2 p-0">
+                                    <input id="patient-0-age" type="text"
+                                           class="form-control"
+                                           placeholder="Age"/>
+                                </div>
+                                <div class="col-sm-2 p-0">
+                                    <button class="btn btn-default new-patient"
+                                            type="button"
+                                            id="patient-0-button">
+                                        <span class="fas fa-plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            -->
+                        </div>
+
+                        <!--
+                            <div class="card-footer text-right">
+                                <button type="submit" class="btn btn-primary px-3">
+                                    Dispatch
+                                </button>
+                                <button type="button" class="btn btn-secondary px-3"
+                                        data-toggle="collapse"
+                                        data-target="#dispatch-form-collapse"
+                                        aria-expanded="true"
+                                        aria-controls="dispatch-form-collapse"
+                                        onclick="endDispatching()">
+                                    Cancel
+                                </button>
+                            </div>
+                            -->
+
+                    </form>
+
                 </div>
 
-                <!--
-                    <div class="card-footer text-right">
-                        <button type="submit" class="btn btn-primary px-3">
-                            Dispatch
-                        </button>
-                        <button type="button" class="btn btn-secondary px-3"
-                                data-toggle="collapse"
-                                data-target="#dispatch-form-collapse"
-                                aria-expanded="true"
-                                aria-controls="dispatch-form-collapse"
-                                onclick="endDispatching()">
-                            Cancel
-                        </button>
-                    </div>
-                    -->
-
-            </form>
+            {% endif %}
 
             <!-- Calls Filter -->
             <h5 class="mt-2"
