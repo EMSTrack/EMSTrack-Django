@@ -1418,7 +1418,7 @@ class TestCall(TestSetup):
             'status': CallStatus.S.name,
             'priority': CallPriority.D.name
         }
-        response = client.post('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
 
