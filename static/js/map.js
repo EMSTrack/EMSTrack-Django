@@ -833,7 +833,7 @@ function addCallToGrid(call) {
             '        </button>\n' +
             '        <span class="font-weight-bold">' + priority_suffix + '</span>' +
             '      </div>' +
-            '      <div class="ml-auto"' +
+            '      <div class="flex-grow-1"' +
             '           data-toggle="collapse"\n' +
             '           data-target="#call-' + call.id + '-body"\n' +
             '           aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
