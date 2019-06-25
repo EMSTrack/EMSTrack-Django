@@ -1721,6 +1721,8 @@ function beginDispatching() {
 
     $('#dispatchBeginButton').hide();
     $('#dispatchButtonGroup').show();
+    $('#dispatchCancelButton').show();
+    $('#dispatchSubmitButton').show();
 
     // open filter and available ambulances
     filtersDiv.addClass('show');
@@ -1786,6 +1788,8 @@ function endDispatching() {
     // show buttons
     $('#dispatchBeginButton').show();
     $('#dispatchButtonGroup').hide();
+    $('#dispatchCancelButton').hide();
+    $('#dispatchSubmitButton').hide();
 
     // close dispatch panel
     $('#newDispatchDiv').removeClass('show');
