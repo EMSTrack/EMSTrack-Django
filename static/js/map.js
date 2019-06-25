@@ -911,7 +911,11 @@ function addCallToGrid(call) {
                 .on('click', function (event) {
 
                     // retrieve patents
-                    patients.getData();
+                    const newPatients = patients.getData();
+                    if ( !patients.same(newPatients) ) {
+                        // need to save it first
+                        logger.log('debug', 'Will save!');
+                    }
 
                     $('#call-' + call.id + '-patients-button')
                         .popover('toggle');

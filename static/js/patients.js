@@ -120,7 +120,11 @@ export class Patients {
         let entry = {};
         const patients = [];
         inputs.each( function() {
+
+            // parse values
             entry[this.name] = $(this).val().trim();
+
+            // is it the end of the structure?
             if (this.name === 'age') {
                 console.log(entry);
                 if (entry.name || entry.age)
@@ -128,9 +132,13 @@ export class Patients {
                     patients.push(entry);
                 entry = {};
             }
+
         });
-        console.log(patients);
 
         return patients;
+    }
+
+    same(patients) {
+        return JSON.stringify(patients) === JSON.stringify(this.patients);
     }
 }
