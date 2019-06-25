@@ -138,42 +138,34 @@
 
                 <!-- Calls Filter -->
                 <h5 class="mt-2"
-                    aria-expanded="true" aria-controls="newcall">
+                    data-toggle="collapse"
+                    data-target="#newDispatchDiv"
+                    aria-expanded="false" aria-controls="newDispatchDiv">
                     <span class="fas fa-shipping-fast"></span>
                     <span id="newcall-header">
                         {% trans "New Call" %}
                     </span>
                 </h5>
 
-                <button class="btn btn-primary btn-block"
-                        id="dispatchBeginButton"
-                        data-toggle="collapse"
-                        data-target="#newDispatchDiv"
-                        aria-expanded="false"
-                        aria-controls="newDispatchDiv"
-                        aria-label="Toggle dispatching">
-                    {% trans "Dispatch Ambulances" %}
-                </button>
-
-                <div class="btn-group d-flex" role="group" id="dispatchButtonGroup">
-                    <button type="button"
-                            id="dispatchSubmitButton"
-                            class="btn btn-primary w-100">
-                        {% trans "Dispatch" %}
-                    </button>
-
-                    <button type="button"
-                            id="dispatchCancelButton"
-                            class="btn btn-secondary w-100"
-                            data-toggle="collapse"
-                            data-target="#newDispatchDiv"
-                            aria-expanded="true"
-                            aria-controls="newDispatchDiv">
-                        {% trans "Cancel" %}
-                    </button>
-                </div>
-
                 <div class="collapse" id="newDispatchDiv">
+
+                    <div class="btn-group d-flex" role="group" id="dispatchButtonGroup">
+                        <button type="button"
+                                id="dispatchSubmitButton"
+                                class="btn btn-primary w-100">
+                            {% trans "Dispatch" %}
+                        </button>
+
+                        <button type="button"
+                                id="dispatchCancelButton"
+                                class="btn btn-secondary w-100"
+                                data-toggle="collapse"
+                                data-target="#newDispatchDiv"
+                                aria-expanded="true"
+                                aria-controls="newDispatchDiv">
+                            {% trans "Cancel" %}
+                        </button>
+                    </div>
 
                     <!-- Dispatch -->
                     <form id="dispatch-form-collapse"
