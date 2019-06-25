@@ -6,7 +6,7 @@ export class Patients {
     constructor(patients = [], label = 'new', placeholder = '#patients') {
         this.patients= patients;
         this.label = label;
-        this.placeholder = $(placeholder);
+        this.placeholderName = placeholder;
     }
 
     static patientForm(label, symbol, patient) {
@@ -89,6 +89,9 @@ export class Patients {
     }
 
     createForm() {
+
+        // create placeholder selector
+        this.placeholder = $(this.placeholderName);
 
         // add existing patients
         let index = 0;
