@@ -139,6 +139,8 @@ export class Patients {
     }
 
     same(patients) {
+        console.log(JSON.stringify(patients));
+        console.log(JSON.stringify(this.patients));
         return JSON.stringify(patients) === JSON.stringify(this.patients);
     }
 }
