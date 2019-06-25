@@ -1142,7 +1142,7 @@ class TestCall(TestSetup):
 
         # partial update patient set with addition
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
-        patient_set.append({'id': None, 'name': 'someone', 'age': 14})
+        patient_set.append({'name': 'someone', 'age': 14})
         logger.debug(patient_set)
 
         data = {
