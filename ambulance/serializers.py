@@ -444,11 +444,11 @@ class CallSerializer(serializers.ModelSerializer):
         # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
 
-            # Extract patient set
-            patient_set = validated_data.pop('patient_set', [])
-
             # Update patients
-            if patient_set:
+            if 'patient_set' in validated_data:
+
+                # Extract patient set
+                patient_set = validated_data.pop('patient_set')
 
                 # new patients
                 logger.debug(patient_set)
