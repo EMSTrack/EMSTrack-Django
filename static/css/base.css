@@ -9,3 +9,10 @@
 .marker-stacked-icon-top {
     margin-top: 0.2em;
 }
+
+.btn-group > .btn, .btn-xs {
+  padding: .25rem .4rem;
+  font-size: .875rem;
+  line-height: .5;
+  border-radius: .2rem;
+}
