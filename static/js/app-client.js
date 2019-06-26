@@ -58,7 +58,9 @@ export class AppClient extends TopicObserver {
         this.mqttClient.publish(topic, payload, qos, retained);
     }
 
-    retrieveCallRadioCode() {
+    // GET methods
+
+    getCallRadioCode() {
 
         // initialized if needed
         const radio_code = {};
@@ -78,11 +80,10 @@ export class AppClient extends TopicObserver {
                 // return radio_code
                 return radio_code;
 
-            })
-
+            });
     }
 
-    retrieveCallPriorityCode() {
+    getCallPriorityCode() {
 
         // initialized if needed
         const priority_code = {};
@@ -102,11 +103,10 @@ export class AppClient extends TopicObserver {
                 // return priority_code
                 return priority_code;
 
-            })
-
+            });
     }
 
-    retrieveCallPriorityClassification() {
+    getCallPriorityClassification() {
 
         // initialized if needed
         const priority_classification = {};
@@ -126,11 +126,10 @@ export class AppClient extends TopicObserver {
                 // return priority_classification
                 return priority_classification;
 
-            })
-
+            });
     }
 
-    retrieveAmbulances() {
+    getAmbulances() {
 
         // initialize if needed
         if (typeof this.ambulances === 'undefined')
@@ -158,11 +157,10 @@ export class AppClient extends TopicObserver {
                 // return ambulances
                 return this.ambulances;
 
-            })
-
+            });
     }
     
-    retrieveHospitals() {
+    getHospitals() {
         
         // initialize if needed
         if (typeof this.hospitals === 'undefined')
@@ -188,11 +186,10 @@ export class AppClient extends TopicObserver {
                 // return hospitals
                 return this.hospitals;
 
-            })
-
+            });
     }
 
-    retrieveCalls() {
+    getCalls() {
         
         // initialize if needed
         if (typeof this.calls === 'undefined')
@@ -218,11 +215,10 @@ export class AppClient extends TopicObserver {
                 // return calls
                 return this.calls;
 
-            })
-
+            });
     }
 
-    retrieveLocations(type) {
+    getLocations(type) {
 
         // initialize if needed
         if (typeof this.locations === 'undefined')
@@ -247,8 +243,7 @@ export class AppClient extends TopicObserver {
                 // return bases
                 return this.locations[type];
 
-            })
-
+            });
     }
 
     abortCall(call) {
@@ -258,8 +253,19 @@ export class AppClient extends TopicObserver {
             .then( (response) => {
                 // return aborted call
                 return response.data;
-            })
+            });
+    }
 
+    // POST and PATCH methods
+
+    postCall(data) {
+
+        // retrieve bases
+        return this.httpClient.post('call/', data)
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
     }
 
     patchCall(call, data) {
@@ -269,7 +275,17 @@ export class AppClient extends TopicObserver {
             .then( (response) => {
                 // return modified call
                 return response.data;
-            })
+            });
+    }
+
+    patchAmbulance(ambulance, data) {
+
+        // retrieve bases
+        return this.httpClient.patch('ambulance/' + ambulance.id + '/', data)
+            .then( (response) => {
+                // return modified ambulance
+                return response.data;
+            });
     }
 
     // private methods

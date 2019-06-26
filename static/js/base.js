@@ -74,7 +74,7 @@ $(function () {
 
             // retrieve ambulances
             logger.log('info', 'Retrieving ambulances');
-            return apiClient.retrieveAmbulances();
+            return apiClient.getAmbulances();
 
         })
         .then( (ambulances) => {
@@ -82,7 +82,7 @@ $(function () {
 
             // retrieve calls
             logger.log('info', 'Retrieving calls');
-            return apiClient.retrieveCalls();
+            return apiClient.getCalls();
         })
         .then( (calls) => {
             logger.log('info', Object.keys(calls).length + ' calls retrieved');

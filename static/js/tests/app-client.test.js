@@ -168,7 +168,7 @@ describe('client connection', () => {
 
         // retrieve ambulances
         expect(client.ambulances).to.be.an('undefined');
-        client.retrieveAmbulances()
+        client.getAmbulances()
             .then( () => {
                 expect(client.ambulances).to.be.an('object');
                 done();
@@ -183,7 +183,7 @@ describe('client connection', () => {
 
         // retrieve hospitals
         expect(client.hospitals).to.be.an('undefined');
-        client.retrieveHospitals()
+        client.getHospitals()
             .then( () => {
                 expect(client.hospitals).to.be.an('object');
                 done();
@@ -198,7 +198,7 @@ describe('client connection', () => {
 
         // retrieve calls
         expect(client.calls).to.be.an('undefined');
-        client.retrieveCalls()
+        client.getCalls()
             .then( () => {
                 expect(client.calls).to.be.an('object');
                 done();

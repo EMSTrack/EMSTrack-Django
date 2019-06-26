@@ -164,7 +164,7 @@ function init( client ) {
 
     // retrieve priority classification
     logger.log('info', 'Retrieving priority classification');
-    apiClient.retrieveCallPriorityClassification()
+    apiClient.getCallPriorityClassification()
         .then( (value) => {
             logger.log('info', '%d priority classifications retrieved', Object.keys(value).length);
             priority_classification = value;
@@ -185,7 +185,7 @@ function init( client ) {
 
             // retrieve priority code
             logger.log('info', 'Retrieving priority code');
-            return apiClient.retrieveCallPriorityCode();
+            return apiClient.getCallPriorityCode();
         })
         .then( (value) => {
 
@@ -194,7 +194,7 @@ function init( client ) {
 
             // retrieve radio code
             logger.log('info', 'Retrieving radio code');
-            return apiClient.retrieveCallRadioCode();
+            return apiClient.getCallRadioCode();
         })
         .then( (value) => {
             logger.log('info', '%d radio codes retrieved', Object.keys(value).length);
@@ -233,7 +233,7 @@ function init( client ) {
 
     // Retrieve hospitals
     logger.log('info', 'Retrieving hospitals');
-    apiClient.retrieveHospitals()
+    apiClient.getHospitals()
         .then( (hospitals) => {
             logger.log('info', '%d hospitals retrieved', Object.keys(hospitals).length);
 
@@ -245,7 +245,7 @@ function init( client ) {
             apiClient.observe('hospital/+/data', (message) => { updateHospital(message.payload) } );
 
             logger.log('info', 'Retrieving bases');
-            return apiClient.retrieveLocations('b');
+            return apiClient.getLocations('b');
         })
         .then( (bases) => {
             logger.log('info', '%d bases retrieved', Object.keys(bases).length);
@@ -254,7 +254,7 @@ function init( client ) {
             setupLocations(apiClient.locations['b'], 'base');
 
             logger.log('info', 'Retrieving other locations');
-            return apiClient.retrieveLocations('o');
+            return apiClient.getLocations('o');
         })
         .then( (locations) => {
             logger.log('info', "%d locations of type 'other' retrieved", Object.keys(locations).length);
@@ -1709,8 +1709,28 @@ function updateAmbulanceStatus(ambulance, status) {
 
 function doUpdateAmbulanceStatus(ambulance, status) {
 
-    // form
-    const form = {status: status};
+    // patch ambulance
+    const data = JSON.stringify({ status: status });
+    apiClient.patchAmbulance(ambulance, data)
+        .then( (ambulance) => {
+
+            logger.log('info', 'Successfully patched ambulance');
+
+            // show target card
+            $('#ambulance-' + status).collapse('show');
+
+        })
+        .catch( (error) => {
+
+            logger.log('error', 'Failed to patch ambulance: %j', error);
+
+            // modal alert
+            bsalert(translation_table["Could not update ambulance status"]);
+
+        });
+}
+
+function $$trash() {
 
     // make json call
     const postJsonUrl = apiBaseUrl + 'ambulance/' + ambulance.id + '/';
@@ -2035,11 +2055,11 @@ function dispatchCall() {
     form['priority'] = $('input:radio[name=priority]:checked').val();
 
     form['radio_code'] = null;
-    let selector = $('#radio-code-list option[value="'+$('#radio-code-input').val()+'"]');
-    if ( selector.length ) {
+    let selector = $('#radio-code-list option[value="' + $('#radio-code-input').val() + '"]');
+    if (selector.length) {
         try {
-            form['radio_code']= selector.attr('id').split('-')[2];
-        } catch(err) {
+            form['radio_code'] = selector.attr('id').split('-')[2];
+        } catch (err) {
             logger.log('debug', err);
             bsalert(translation_table["Invalid radio code"]);
             return;
@@ -2048,10 +2068,10 @@ function dispatchCall() {
 
     form['priority_code'] = null;
     selector = $('#priority-code-list option[value="' + $('#priority-code-input').val() + '"]');
-    if ( selector.length ) {
+    if (selector.length) {
         try {
             form['priority_code'] = selector.attr('id').split('-')[2];
-        } catch(err) {
+        } catch (err) {
             logger.log('debug', err);
             bsalert(translation_table["Invalid priority code"]);
             return;
@@ -2119,8 +2139,8 @@ function dispatchCall() {
     const ambulances = [];
     for (const id in dispatchingAmbulances) {
         if (dispatchingAmbulances.hasOwnProperty(id))
-            ambulances.push({ 'ambulance_id': id, 'waypoint_set': waypoints });
-		}
+            ambulances.push({'ambulance_id': id, 'waypoint_set': waypoints});
+    }
     form['ambulancecall_set'] = ambulances;
 
     // patients
@@ -2128,9 +2148,9 @@ function dispatchCall() {
     for (const index in currentPatients)
         if (currentPatients.hasOwnProperty(index)) {
             const patient = currentPatients[index];
-            obj = { 'name': patient[0] };
+            obj = {'name': patient[0]};
             if (patient[1])
-                // add age
+            // add age
                 obj['age'] = parseInt(patient[1]);
             patients.push(obj);
         }
@@ -2142,13 +2162,31 @@ function dispatchCall() {
         obj = {'name': lastPatientName};
         const lastPatientAge = lastPatientForm.find('input[type="number"]').val().trim();
         if (lastPatientAge)
-            // add age
+        // add age
             obj['age'] = parseInt(lastPatientAge);
         patients.push(obj);
     }
 
     // add to patient set
     form['patient_set'] = patients;
+
+    // post new call
+    const data = JSON.stringify(form);
+    apiClient.postCall(data)
+        .then( (call) => {
+
+            logger.log('info', 'Successfully posted new call');
+
+            // End dispatching automatically calls endDispatching
+            $('#newDispatchDiv').collapse('hide');
+
+        })
+        .catch( (error) => {
+            logger.log('error', 'Failed to post new call: %j', error);
+        });
+}
+
+function $trash() {
 
     // make json call
     const postJsonUrl = apiBaseUrl + 'call/';
