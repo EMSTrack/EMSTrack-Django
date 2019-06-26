@@ -1188,6 +1188,20 @@ class TestCall(TestSetup):
         self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
         self.assertEqual(call.started_at, started_at)
 
+        # partial update remove all patients
+        patient_set = []
+
+        data = {
+            'patient_set': patient_set
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
+        self.assertEqual(call.started_at, started_at)
+
     def test_call_create_viewset(self):
 
         # instantiate client
@@ -1489,6 +1503,21 @@ class TestCall(TestSetup):
         # partial update patient set with addition with null age
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
         patient_set.append({'name': 'someone else else'})
+
+        data = {
+            'patient_set': patient_set
+        }
+        response = client.patch('/en/api/call/{}/'.format(call.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        call = Call.objects.get(id=call.id)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertEqual(len(patient_set), len(PatientSerializer(call.patient_set.all(), many=True).data))
+        self.assertEqual(call.started_at, started_at)
+
+        # partial update patient remove all patients
+        patient_set = []
 
         data = {
             'patient_set': patient_set
