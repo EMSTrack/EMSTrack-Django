@@ -1715,9 +1715,11 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         .then( (ambulance) => {
 
             logger.log('info', 'Successfully patched ambulance');
+            console.log(ambulance);
 
             // show target card
-            $('#ambulance-' + status).collapse('show');
+            $('#ambulance-' + status)
+                .collapse('show');
 
         })
         .catch( (error) => {
