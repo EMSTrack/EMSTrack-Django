@@ -1795,6 +1795,12 @@ function endDispatching() {
     $('#priority-buttons label.btn').removeClass('active');
     $('input:radio[name=priority]').prop('checked', false);
 
+    // clear priority code
+    $('#priority-code-input').val('');
+    
+    // clear radio code
+    $('#radio-code-input').val('');
+
     // clear description
     $('#comment').val('');
 
