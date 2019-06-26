@@ -789,14 +789,14 @@ function setCallPatientPopover(call, destroy = false) {
     // create patient object
     const placeholder = 'call-' + call.id + '-patients';
     const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
+    const selector = $('#call-' + call.id + '-patients-button');
 
     // destroy?
     if (destroy)
-    $('#call-' + call.id + '-patients-button')
-        .popover('dispose');
+        selector.popover('dispose');
 
     // Add popover to patient button
-    $('#call-' + call.id + '-patients-button')
+    selector
         .popover({
             title: translation_table['Patients'],
             content:
@@ -2339,6 +2339,15 @@ $(function() {
         submitDispatching();
 
     });
+
+    // Close popovers if dispatchDiv is hidden
+    $('#dispatchDiv')
+        .on('hide.bs.collapse', function(event) {
+
+            // hide all popovers
+            $('[data-original-title]').popover('hide');
+
+        });
 
     // Create category panes and filters
     createCategoryPanesAndFilters();
