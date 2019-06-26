@@ -223,7 +223,8 @@
                         <h5>
                             {% trans "Description" %}
                         </h5>
-                        <textarea class="form-control" name="description"
+                        <textarea class="form-control form-control-sm"
+                                  name="description"
                                   rows="2" id="comment"
                                   placeholder="{% trans "Describe the incident" %}"
                                   required></textarea>
@@ -237,7 +238,8 @@
                         <h5>
                             {% trans "Street address" %}
                         </h5>
-                        <input id="street" type="text"
+                        <input class="form-control form-control-sm"
+                               id="street" type="text"
                                name="street" class="form-control"
                                placeholder="{% trans "Address" %}" required autocomplete="street-address">
 
