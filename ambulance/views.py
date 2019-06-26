@@ -296,7 +296,8 @@ class AmbulanceMap(TemplateView):
             "Cancel": _("Cancel"),
             "Roads": _("Roads"),
             "Satellite": _("Satellite"),
-            "Hybrid": _("Hybrid")
+            "Hybrid": _("Hybrid"),
+            "Waypoints": _("Waypoints")
         }
 
         return context
