@@ -2240,20 +2240,20 @@ function newPatientForm(index, symbol) {
         '<div class="col-md-7 pr-0">' +
         '<input id="patient-' + index + '-name" ' +
         'type="text" ' +
-        'class="form-control" ' +
+        'class="form-control form-control-sm" ' +
         'placeholder="' + translation_table['Name'] + '">' +
         '</div>' +
         '<div class="col-md-3 px-0">' +
         '<input id="patient-' + index + '-age" ' +
         'type="number" min="0" ' +
-        'class="form-control" ' +
+        'class="form-control form-control-sm" ' +
         'placeholder="' + translation_table['Age'] + '">' +
         '</div>' +
         '<div class="col-md-2 pl-0">' +
         '<button class="btn btn-default btn-block btn-new-patient" ' +
         ' type="button" ' +
         ' id="patient-' + index + '-button">' +
-        '<span id="patient-' + index + '-symbol" class="fas ' + symbol + '"></span>' +
+        '<span id="patient-' + index + '-symbol" class="fas ' + symbol + ' fa-sm"></span>' +
         '</button>' +
         '</div>' +
         '</div>';
