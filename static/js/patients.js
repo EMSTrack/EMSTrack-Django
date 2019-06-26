@@ -73,6 +73,11 @@ export class Patients {
 
     removePatientForm(index) {
 
+        // mark as deleted
+        this.placeholder
+            .find('#patient-' + this.label + '-' + index + '-form input')
+            .addClass('deleted');
+
         // remove from form
         this.placeholder
             .find('#patient-' + this.label + '-' + index + '-form')
@@ -114,7 +119,7 @@ export class Patients {
     getData() {
 
         // select all inputs
-        const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button)');
+        const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button):not(.deleted)');
 
         let entry = {};
         const patients = [];

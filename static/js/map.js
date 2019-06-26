@@ -916,7 +916,7 @@ function addCallToGrid(call) {
             '      <div data-toggle="collapse"\n' +
             '           data-target="#call-' + call.id + '-body"\n' +
             '           aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
-            '        <span>' + call.id + ':</span>' +
+            '        <span class="ml-1">' + call.id + ':</span>' +
             '        <span class="font-weight-bold">' + priority_prefix + '</span>' +
             '        <button id="call-' + call.id + '-button"\n' +
             '               class="btn btn-'+ call_priority_css[call.priority].class + ' btn-sm">' +
