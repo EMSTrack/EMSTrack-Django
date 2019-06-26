@@ -16,8 +16,6 @@ import { Patients } from './patients';
 
 const sprintf = require('sprintf-js').sprintf;
 
-// TODO: Import js-cookies library
-
 // Remove waypoints and incidents from location_type
 delete location_type_order[location_type_order.indexOf('w')];
 delete location_type_order[location_type_order.indexOf('i')];
@@ -1730,56 +1728,10 @@ function doUpdateAmbulanceStatus(ambulance, status) {
         });
 }
 
-function $$trash() {
-
-    // make json call
-    const postJsonUrl = apiBaseUrl + 'ambulance/' + ambulance.id + '/';
-
-    const CSRFToken = Cookies.get('csrftoken');
-
-    // retrieve csrf token
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            if (!CSRFSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", CSRFToken);
-            }
-        }
-    });
-
-    // make ajax call
-    $.ajax({
-        url: postJsonUrl,
-        type: 'PATCH',
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(form),
-        success: function (data) {
-
-            // Log success
-            logger.log('debug', "Successfully posted ambulance status update: status='%s'", status);
-
-            // show target card
-            $('#ambulance-' + status).collapse('show');
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-
-            // Log failure
-            logger.log('error', "Failed to post ambulance status update: '%s'", jqXHR.responseText);
-
-            bsalert(translation_table["Could not update ambulance status"]);
-
-        }
-    });
-
-}
-
 // Dispatching
 
 function submitDispatching() {
 
-    // submit form
-    $('#dispatch-form-collapse').submit();
 
 }
 
@@ -2185,58 +2137,6 @@ function dispatchCall() {
         });
 }
 
-function $trash() {
-
-    // make json call
-    const postJsonUrl = apiBaseUrl + 'call/';
-    logger.log('debug', "Form: '%j'", form);
-
-    const CSRFToken = Cookies.get('csrftoken');
-    logger.log('debug', 'csrftoken = %s', CSRFToken);
-
-    // retrieve csrf token
-    $.ajaxSetup({
-        beforeSend: function (xhr, settings) {
-            if (!CSRFSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", CSRFToken);
-            }
-        }
-    });
-
-    // make ajax call
-    $.ajax({
-        url: postJsonUrl,
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        data: JSON.stringify(form),
-        success: function () {
-
-            // Log success
-            logger.log('info', "Succesfully posted new call.");
-
-            // End dispatching automatically calls endDispatching
-            $('#newDispatchDiv').collapse('hide');
-            // endDispatching();
-
-        },
-        error: function (jqXHR) {
-
-            // Log failure
-            logger.log('debug', "Failed to post new call.");
-            logger.log('debug', jqXHR.responseText);
-
-            // Show modal
-            bsalert(jqXHR.responseText, 'alert-danger', 'Failure');
-
-            // Do not end dispatching to give user chance to make changes
-            // endDispatching();
-
-        }
-    });
-}
-
-
 // patient functions
 
 function addPatient(index) {
@@ -2369,13 +2269,25 @@ $(function() {
 
         });
 
-    // Handle submit dispatching button
-    $('#dispatchSubmitButton').click(function(event) {
+    $('#dispatch-form-collapse').submit(function (e) {
 
-        // call end dispatching
-        submitDispatching();
+        // prevent normal form submission
+        e.preventDefault();
+
+        // dispatch call
+        dispatchCall();
 
     });
+
+    /*// Handle submit dispatching button
+    $('#dispatchSubmitButton').click(function(event) {
+
+
+        // submit form
+        $('#dispatch-form-collapse').submit();
+
+    });
+    */
 
     // Close popovers if dispatchDiv is hidden
     $('#dispatchDiv')
@@ -2439,16 +2351,6 @@ $(function() {
         // update address?
         if ($('#update-address').prop('checked'))
             updateCurrentAddress(currentLocation);
-
-    });
-
-    $('#dispatch-form-collapse').submit(function (e) {
-
-        // prevent normal form submission
-        e.preventDefault();
-
-        // dispatch call
-        dispatchCall();
 
     });
 

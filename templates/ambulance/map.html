@@ -153,16 +153,16 @@
 
                 <div class="collapse" id="newDispatchDiv">
 
-                    <button type="button"
-                            id="dispatchSubmitButton"
-                            class="btn btn-danger btn-block">
-                        {% trans "Dispatch" %}
-                    </button>
-
                     <!-- Dispatch -->
                     <form id="dispatch-form-collapse"
                           method="POST" action="">
                         {% csrf_token %}
+
+                        <button type="submit"
+                                id="dispatchSubmitButton"
+                                class="btn btn-danger btn-block">
+                            {% trans "Dispatch" %}
+                        </button>
 
                         <h5>
                             {% trans "Priority" %}
