@@ -1710,13 +1710,11 @@ function updateAmbulanceStatus(ambulance, status) {
 function doUpdateAmbulanceStatus(ambulance, status) {
 
     // patch ambulance
-    const data = JSON.stringify({ status: status });
-    console.log(data);
+    const data = { status: status };
     apiClient.patchAmbulance(ambulance, data)
         .then( (ambulance) => {
 
             logger.log('info', 'Successfully patched ambulance');
-            console.log(ambulance);
 
             // show target card
             $('#ambulance-' + status)

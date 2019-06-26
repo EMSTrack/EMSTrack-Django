@@ -283,8 +283,6 @@ export class AppClient extends TopicObserver {
         // retrieve bases
         return this.httpClient.patch('ambulance/' + ambulance.id + '/', data)
             .then( (response) => {
-                console.log(response);
-
                 // return modified ambulance
                 return response.data;
             });
