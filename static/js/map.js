@@ -2001,6 +2001,9 @@ function dispatchCall() {
     let obj;
     const form = {};
 
+    // disable dispatch button
+    $('#dispatchSubmitButton').attr("disabled", true);
+
     // call information
     const street_address = $('#street').val().trim();
     form['details'] = $('#comment').val().trim();
@@ -2014,6 +2017,9 @@ function dispatchCall() {
         } catch (err) {
             logger.log('debug', err);
             bsalert(translation_table["Invalid radio code"]);
+
+            // enable dispatch button
+            $('#dispatchSubmitButton').attr("disabled", false);
             return;
         }
     }
@@ -2026,6 +2032,9 @@ function dispatchCall() {
         } catch (err) {
             logger.log('debug', err);
             bsalert(translation_table["Invalid priority code"]);
+
+            // enable dispatch button
+            $('#dispatchSubmitButton').attr("disabled", false);
             return;
         }
     }
@@ -2033,10 +2042,16 @@ function dispatchCall() {
     // checks
     if (form["priority"] === undefined) {
         bsalert(translation_table["Please select the priority"]);
+
+        // enable dispatch button
+        $('#dispatchSubmitButton').attr("disabled", false);
         return;
     }
     if (numberOfDispatchingAmbulances === 0) {
         bsalert(translation_table["Please dispatch at least one ambulance"]);
+
+        // enable dispatch button
+        $('#dispatchSubmitButton').attr("disabled", false);
         return;
     }
 
@@ -2131,9 +2146,17 @@ function dispatchCall() {
             // End dispatching automatically calls endDispatching
             $('#newDispatchDiv').collapse('hide');
 
+            // enable dispatch button
+            $('#dispatchSubmitButton').attr("disabled", false);
+
         })
         .catch( (error) => {
+
             logger.log('error', 'Failed to post new call: %j', error);
+
+            // enable dispatch button
+            $('#dispatchSubmitButton').attr("disabled", false);
+
         });
 }
 
@@ -2249,10 +2272,15 @@ $(function() {
         resizeMap();
     }).trigger("resize");
 
-    // Hide new dispatch buttons
-    // $('#dispatchButtonGroup').hide();
-    // $('#dispatchCancelButton').hide();
-    // $('#dispatchSubmitButton').hide();
+    // Close popovers if dispatchDiv is hidden
+    $('#dispatchDiv')
+        .on('hide.bs.collapse', function(event) {
+
+            // hide all popovers
+            $('[data-original-title]')
+                .popover('hide');
+
+        });
 
     // Handle begin dispatching button
     $('#newDispatchDiv')
@@ -2269,7 +2297,8 @@ $(function() {
 
         });
 
-    $('#dispatch-form-collapse').submit(function (e) {
+    $('#dispatch-form-collapse')
+        .submit(function (e) {
 
         // prevent normal form submission
         e.preventDefault();
@@ -2278,25 +2307,6 @@ $(function() {
         dispatchCall();
 
     });
-
-    /*// Handle submit dispatching button
-    $('#dispatchSubmitButton').click(function(event) {
-
-
-        // submit form
-        $('#dispatch-form-collapse').submit();
-
-    });
-    */
-
-    // Close popovers if dispatchDiv is hidden
-    $('#dispatchDiv')
-        .on('hide.bs.collapse', function(event) {
-
-            // hide all popovers
-            $('[data-original-title]').popover('hide');
-
-        });
 
     // Create category panes and filters
     createCategoryPanesAndFilters();
