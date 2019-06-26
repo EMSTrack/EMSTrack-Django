@@ -688,7 +688,7 @@ msgid "Ambulances"
 msgstr "Ambulancias"
 
 msgid "Service"
-msgstr "Servicio"
+msgstr "Unidades en Servicio"
 
 #: templates/ambulance/ambulance_list.html:18
 msgctxt "feminine"
