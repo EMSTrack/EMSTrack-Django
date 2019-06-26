@@ -1843,7 +1843,7 @@ function endDispatching() {
     // $('#dispatchSubmitButton').hide();
 
     // close dispatch panel
-    $('#newDispatchDiv').collapse();
+    $('#newDispatchDiv').collapse('toggle');
 
     if (!isFilterOpen) {
         // close filter panel
