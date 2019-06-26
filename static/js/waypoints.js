@@ -63,7 +63,7 @@ export class Waypoints {
         </div>
         <div class="collapse" id="waypoint-${label}-body">
             <div class="card-body">
-                ${Location(waypoint.location).render()}
+                ${new Location(waypoint.location).render()}
             </div>
         </div>
     </div>
