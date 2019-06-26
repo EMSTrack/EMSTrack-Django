@@ -11,42 +11,42 @@ export class Waypoints {
 
     static waypointForm(label, waypoint) {
 
+        // language=HTML
         return (
-            '<div class="form-row" id="waypoint-' + label + '-form">' +
-            '  <div class="col-md-7 pr-0">' +
-            '    <input id="waypoint-' + label + '-id" ' +
-            '           name="id"' +
-            '           type="hidden" ' +
-            '           value="' + waypoint.id + '">' +
-            '    <input id="waypoint-' + label + '-order" ' +
-            '           name="order"' +
-            '           type="hidden" ' +
-            '           class="form-control" ' +
-            '           value="' + waypoint.order + '">' +
-            '  </div>' +
-            '  <div class="col-md-3 px-0">' +
-            '    <input id="waypoint-' + label + '-status" ' +
-            '           name="age"' +
-            '           type="number" min="0" ' +
-            '           class="form-control" ' +
-            '           value="' + waypoint.status + '" ' +
-            '           placeholder="' + translation_table['Age'] + '">' +
-            '  </div>' +
-            '  <div class="col-md-2 pl-0">' +
-            '    <div class="btn-group d-block">' +
-            '      <button class="btn btn-default btn-block btn-sm" ' +
-            '              type="button" ' +
-            '              id="waypoint-' + label + '-button-up">' +
-            '        <span class="fas fa-chevron-up fa-sm"></span>' +
-            '      </button>' +
-            '      <button class="btn btn-default btn-block btn-sm" ' +
-            '              type="button" ' +
-            '              id="waypoint-' + label + '-button-down">' +
-            '        <span class="fas fa-chevron-down fa-sm"></span>' +
-            '      </button>' +
-            '    </div>' +
-            '  </div>' +
-            '</div>'
+            `<div class="form-row" id="waypoint-${label}-form">  
+    <div class="col-md-7 pr-0">   
+        <input id="waypoint-${label}-id" 
+               name="id"           
+               type="hidden" 
+               value="${waypoint.id}">    
+        <input id="waypoint-${label}-order"
+               name="order"
+               type="hidden"
+               class="form-control"  
+               value="${waypoint.order}">
+    </div> 
+    <div class="col-md-3 px-0">  
+        <input id="waypoint-${label}-status"
+               name="status"
+               class="form-control"     
+               value="${waypoint.status}"   
+               placeholder="${translation_table['Age']}"> 
+    </div>  
+    <div class="col-md-2 pl-0">  
+        <div class="btn-group d-block">   
+            <button class="btn btn-default btn-block btn-sm"   
+                    type="button"  
+                    id="waypoint-${label}-button-up">
+                <span class="fas fa-chevron-up fa-xs"></span>
+            </button>  
+            <button class="btn btn-default btn-block btn-sm"   
+                    type="button"  
+                    id="waypoint-${label}-button-down">   
+                <span class="fas fa-chevron-down fa-xs"></span>  
+            </button>   
+        </div> 
+    </div>
+</div>`
         );
 
     }
