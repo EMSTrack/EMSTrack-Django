@@ -153,7 +153,7 @@
                     </span>
                 </h5>
 
-                <div class="collapse" id="newDispatchDiv">
+                <small class="collapse" id="newDispatchDiv">
 
                     <!-- Dispatch -->
                     <form id="dispatch-form-collapse"
@@ -229,7 +229,7 @@
                                   placeholder="{% trans "Describe the incident" %}"
                                   required></textarea>
 
-                        <div class="float-right"
+                        <div class="float-right small"
                              title="Click to automatically search for coordinates after changing the address">
                             {% trans "update coordinates" %}
                             <input id="update-coordinates" type="checkbox">
@@ -237,17 +237,17 @@
 
                         <h5>
                             {% trans "Street address" %}
-                        </h5>
+                            <small class="float-right"
+                                   title="{% trans "Click to automatically search for address after changing the coordinates" %}">
+                            {% <tran></tran>s "update address" %}
+                            </small>
+                            <input class="float-right" id="update-address" type="checkbox" checked>
+                         </h5>
                         <input class="form-control form-control-sm"
                                id="street" type="text"
-                               name="street" class="form-control"
+                               name="street"
                                placeholder="{% trans "Address" %}" required autocomplete="street-address">
 
-                        <div class="float-right small"
-                             title="{% trans "Click to automatically search for address after changing the coordinates" %}">
-                            {% trans "update address" %}
-                            <input id="update-address" type="checkbox" checked>
-                        </div>
 
                         <h5>
                             {% trans "Coordinates" %}
