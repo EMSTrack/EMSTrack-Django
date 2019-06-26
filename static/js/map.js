@@ -16,6 +16,8 @@ import { Patients } from './patients';
 
 import { Waypoints } from './waypoints';
 
+import { Location } from './location';
+
 const sprintf = require('sprintf-js').sprintf;
 
 // Remove waypoints and incidents from location_type

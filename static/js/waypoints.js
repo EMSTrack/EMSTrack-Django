@@ -1,6 +1,9 @@
 /**
  * Waypoint base class
  */
+
+import { Location } from './location';
+
 export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
@@ -60,7 +63,7 @@ export class Waypoints {
         </div>
         <div class="collapse" id="waypoint-${label}-body">
             <div class="card-body">
-                
+                ${Location(waypoint.location).render()}
             </div>
         </div>
     </div>
