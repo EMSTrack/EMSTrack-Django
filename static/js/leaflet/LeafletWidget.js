@@ -50,6 +50,8 @@ export class LeafletWidget {
             url: url,
             options: provider_options,
 
+            layer_names: ['Roads', 'Satellite', 'Hybrid'],
+
             lat: 32.53530431898372,
             lng: -116.9165934003241,
             zoom: 15,
@@ -98,13 +100,15 @@ export class LeafletWidget {
                 type:'hybrid'
             });
 
-            L.control.layers({
-                Roadmap: roadMutant,
-                Satellite: satMutant,
-                Hybrid: hybridMutant,
-            }, {}, {
-                collapsed: false
-            }).addTo(this.map);
+            const layers = {};
+            layers[this.options.layer_names[0]] = roadMutant;
+            layers[this.options.layer_names[1]] = satMutant;
+            layers[this.options.layer_names[2]] = hybridMutant;
+            L.control.layers(
+                layers,
+                {},
+                { collapsed: false }
+            ).addTo(this.map);
 
         }
 
