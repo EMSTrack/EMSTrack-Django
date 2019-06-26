@@ -2257,7 +2257,7 @@ $(function() {
  	let options = {
  		map_id: "live-map",
  		zoom: 12,
-        map_provider: mapProvider
+        map_provider: mapProvider,
         layer_names: [translation_table['Roads'], translation_table['Satellite'], translation_table['Hybrid']]
  	};
  	const map = new LeafletWidget(options);
