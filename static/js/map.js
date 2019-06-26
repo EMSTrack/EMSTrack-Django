@@ -1085,7 +1085,7 @@ function addCallToGrid(call) {
             });
 
         // set waypoint popover
-        setCallWaypointPopover(call.id, ambulance.id, ambulance_call.waypoint_set);
+        // setCallWaypointPopover(call.id, ambulance.id, ambulance_call.waypoint_set);
 
         // update progress bar
         updateCallProgress(call, ambulance_call);
