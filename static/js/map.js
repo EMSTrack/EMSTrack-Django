@@ -851,7 +851,6 @@ function setCallPatientPopover(call, destroy = false) {
 
                         // update call
                         const data = { patient_set: newPatients };
-                        console.log(data);
                         apiClient.patchCall(call, data)
                             .then( (call) => {
                                 logger.log('info', "Successfully updated call");
@@ -2172,8 +2171,7 @@ function dispatchCall() {
     form['patient_set'] = patients;
 
     // post new call
-    const data = JSON.stringify(form);
-    apiClient.postCall(data)
+    apiClient.postCall(form)
         .then( (call) => {
 
             logger.log('info', 'Successfully posted new call');
