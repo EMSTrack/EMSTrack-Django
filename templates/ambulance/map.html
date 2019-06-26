@@ -166,23 +166,21 @@
                             {% trans "Dispatch" %}
                         </button>
 
-                        <h5>
+                        <h5 class="mb-0">
                             {% trans "Priority" %}
                         </h5>
                         {% if priority_code_list %}
-                        <div class="text-right mt-0">
+                        <div class="text-right">
                             <label class="d-inline-block text-right" id="priority-classification" name="priority-classification">
                                 <span class="text-muted">{% trans "Priority Classification" %}</span>
                             </label>
                         </div>
                         {% endif  %}
                         <div class="text-right">
-                        <form required>
                             <div id="priority-buttons"
                                  class="btn-group btn-group-toggle border rounded"
                                  data-toggle="buttons">
                             </div>
-                        </form>
                         </div>
                         {% if priority_code_list %}
                         <div class="text-right">
@@ -201,10 +199,10 @@
                         {% endif  %}
 
                         {% if radio_code_list %}
-                        <h5>
+                        <h5 class="mb-0">
                             {% trans "Radio Code" %}
                         </h5>
-                        <div class="text-right mt-0">
+                        <div class="text-right">
                             <label class="d-inline-block text-right" id="radio-code" name="radio-code">
                                 <span class="text-muted">{% trans "Radio Code" %}</span>
                             </label>
@@ -243,7 +241,7 @@
                         <div class="float-right"
                              title="{% trans "Click to automatically search for address after changing the coordinates" %}">
                             {% trans "update address" %}
-                            <input id="update-address" type="checkbox" checked/>
+                            <input id="update-address" type="checkbox" checked>
                         </div>
 
                         <h5>
