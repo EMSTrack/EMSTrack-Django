@@ -172,7 +172,7 @@
                         {% if priority_code_list %}
                         <div class="text-right">
                             <label class="d-inline-block text-right" id="priority-classification" name="priority-classification">
-                                <span class="text-muted">{% trans "Priority Classification" %}</span>
+                                <span class="text-muted small">{% trans "Priority Classification" %}</span>
                             </label>
                         </div>
                         {% endif  %}
@@ -185,14 +185,14 @@
                         {% if priority_code_list %}
                         <div class="text-right">
                             <label class="d-inline-block text-right" id="priority-code" name="priority-code">
-                                <span class="text-muted">{% trans "Priority Code" %}</span>
+                                <span class="text-muted small">{% trans "Priority Code" %}</span>
                             </label>
                         </div>
                         <input class="form-control form-control-sm"
                                id="priority-code-input"
                                list="priority-code-list"
                                name="priority-code-input" class="form-control"
-                               placeholder="{% trans "Priority Code" %}">
+                               placeholder="{% trans 'Priority Code' %}">
                         <datalist id="priority-code-list">
                             {% for code in priority_code_list %}
                             <option id="priority-code-{{ code.id }}" value="{{ code.prefix.id }}-{{ code.priority }}-{{ code.suffix }}">{{ code.label }}</option>
@@ -206,7 +206,7 @@
                         </h5>
                         <div class="text-right">
                             <label class="d-inline-block text-right" id="radio-code" name="radio-code">
-                                <span class="text-muted">{% trans "Radio Code" %}</span>
+                                <span class="text-muted small">{% trans "Radio Code" %}</span>
                             </label>
                         </div>
                         <input class="form-control form-control-sm"
