@@ -24,12 +24,24 @@ export class Waypoints {
            class="form-control form-control-sm"  
            value="${waypoint.order}">
     <div class="card">
-        <div class="card-header" 
+        <div class="card-header py-0" 
              id="waypoint-${label}-header"
              data-toggle="collapse" 
              data-target="#waypoint-${label}-body" 
              aria-expanded="false" 
              aria-controls="waypoint-${label}-body">
+            <span>${translation_table['Type']}:</span>
+            <button class="btn btn-outline-dark btn-sm"
+                    type="button"  
+                    id="waypoint-${label}-button-location-type">
+                <span class="fas fa-user fa-xs"></span>
+            </button>
+            <span>${translation_table['Status']}:</span>
+            <button class="btn btn-outline-dark btn-sm"
+                    type="button"  
+                    id="waypoint-${label}-button-location-type">
+                <span class="fas fa-user fa-xs"></span>
+            </button>
             <div class="btn-group btn-group-xs d-block float-right">   
                 <button class="btn btn-default btn-block btn-xs m-0"
                         type="button"  
