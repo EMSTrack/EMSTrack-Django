@@ -24,12 +24,24 @@ export class Waypoints {
            class="form-control form-control-sm"  
            value="${waypoint.order}">
     <div class="card">
-        <div class="card-header py-0" 
+        <div class="card-header p-0" 
              id="waypoint-${label}-header"
              data-toggle="collapse" 
              data-target="#waypoint-${label}-body" 
              aria-expanded="false" 
              aria-controls="waypoint-${label}-body">
+            <div class="btn-group btn-group-xs d-block float-left">   
+                <button class="btn btn-default btn-block btn-xs m-0"
+                        type="button"  
+                        id="waypoint-${label}-button-up">
+                    <span class="fas fa-chevron-up fa-xs"></span>
+                </button>  
+                <button class="btn btn-default btn-block btn-xs m-0"   
+                        type="button"  
+                        id="waypoint-${label}-button-down">   
+                    <span class="fas fa-chevron-down fa-xs"></span>  
+                </button>   
+            </div> 
             <span>${translation_table['Type']}:</span>
             <button class="btn btn-outline-dark btn-sm"
                     type="button"  
@@ -42,18 +54,9 @@ export class Waypoints {
                     id="waypoint-${label}-button-location-type">
                 <span class="fas fa-user fa-xs"></span>
             </button>
-            <div class="btn-group btn-group-xs d-block float-right">   
-                <button class="btn btn-default btn-block btn-xs m-0"
-                        type="button"  
-                        id="waypoint-${label}-button-up">
-                    <span class="fas fa-chevron-up fa-xs"></span>
-                </button>  
-                <button class="btn btn-default btn-block btn-xs m-0"   
-                        type="button"  
-                        id="waypoint-${label}-button-down">   
-                    <span class="fas fa-chevron-down fa-xs"></span>  
-                </button>   
-            </div> 
+            <button type="button" class="close float-right" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="collapse" id="waypoint-${label}-body">
             <div class="card-body">
