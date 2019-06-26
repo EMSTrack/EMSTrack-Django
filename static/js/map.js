@@ -14,6 +14,8 @@ import { alert } from './alert';
 
 import { Patients } from './patients';
 
+import { Waypoints } from './waypoints';
+
 const sprintf = require('sprintf-js').sprintf;
 
 // Remove waypoints and incidents from location_type
@@ -600,7 +602,7 @@ function updateCall(call) {
             $('#call-date-' + call.id).html( date );
 
             // update patients
-            setCallPatientPopover(call, true);
+            setCallPatientPopover(call.id, call.patient_set, true);
 
             // Update waypoints
             if (status === 'E') {
@@ -782,12 +784,15 @@ function abortCall(call) {
 
 }
 
-function setCallPatientPopover(call, destroy = false) {
+function setCallWaypointPopover(waypoints, destroy = false) {
+}
+
+function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
     // create patient object
-    const placeholder = 'call-' + call.id + '-patients';
-    const patients = new Patients(call.patient_set, call.id, '#' + placeholder);
-    const selector = $('#call-' + call.id + '-patients-button');
+    const placeholder = 'call-' + call_id + '-patients';
+    const patients = new Patients(patient_set, call_id, '#' + placeholder);
+    const selector = $('#call-' + call_id + '-patients-button');
 
     // destroy?
     if (destroy)
@@ -797,18 +802,20 @@ function setCallPatientPopover(call, destroy = false) {
     selector
         .popover({
             title: translation_table['Patients'],
+            // language=HTML
             content:
-            '<div>' +
-            '  <div id="' + placeholder + '"></div>' +
-            '  <div class="float-right my-2">\n' +
-            '    <button id="call-' + call.id + '-cancel-button" type="button" class="btn btn-secondary">' +
-            '      ' + translation_table["Cancel"] +
-            '    </button>' +
-            '    <button id="call-' + call.id + '-save-button" type="button" class="btn btn-primary">' +
-            '      ' + translation_table["Save"] +
-            '    </button>' +
-            '  </div>' +
-            '</div>',
+            `<div>  
+    <div id="${placeholder}">
+    </div>
+    <div class="float-right my-2">
+        <button id="call-${call_id}-cancel-button" type="button" class="btn btn-secondary">
+            ${translation_table["Cancel"]}    
+        </button>
+        <button id="call-${call_id}-save-button" type="button" class="btn btn-primary">
+            ${translation_table["Save"]}
+        </button>
+    </div>
+</div>`,
             html: true,
             placement: 'left',
             trigger: 'manual'
@@ -820,26 +827,26 @@ function setCallPatientPopover(call, destroy = false) {
         .on('inserted.bs.popover', () => {
 
             // create patient form
-            patients.createForm();
+            patients.render();
 
             // toggle on cancel
-            $('#call-' + call.id + '-cancel-button')
+            $('#call-' + call_id + '-cancel-button')
                 .on('click', function (event) {
 
-                    $('#call-' + call.id + '-patients-button')
+                    $('#call-' + call_id + '-patients-button')
                         .popover('toggle');
                     event.stopPropagation();
 
                 });
 
             // toggle on save
-            $('#call-' + call.id + '-save-button')
+            $('#call-' + call_id + '-save-button')
                 .on('click', function (event) {
 
                     // retrieve patents
                     const newPatients = patients.getData();
                     console.log(newPatients);
-                    console.log(call.patient_set);
+                    console.log(patient_set);
                     if ( patients.same(newPatients) ) {
 
                         // no changes
@@ -859,7 +866,7 @@ function setCallPatientPopover(call, destroy = false) {
 
                     }
 
-                    $('#call-' + call.id + '-patients-button')
+                    $('#call-' + call_id + '-patients-button')
                         .popover('toggle');
                     event.stopPropagation();
 
@@ -958,7 +965,7 @@ function addCallToGrid(call) {
         });
 
     // set call patient popover
-    setCallPatientPopover(call);
+    setCallPatientPopover(call.id, call.patient_set);
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)

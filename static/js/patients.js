@@ -96,7 +96,7 @@ export class Patients {
 
     }
 
-    createForm() {
+    render() {
 
         // create placeholder selector
         this.placeholder = $(this.placeholderName);

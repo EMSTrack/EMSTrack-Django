@@ -9,7 +9,7 @@ export class Waypoints {
         this.placeholderName = placeholder;
     }
 
-    static waypointForm(label, symbol, waypoint) {
+    static waypointForm(label, waypoint) {
 
         return (
             '<div class="form-row" id="waypoint-' + label + '-form">' +
@@ -33,11 +33,18 @@ export class Waypoints {
             '           placeholder="' + translation_table['Age'] + '">' +
             '  </div>' +
             '  <div class="col-md-2 pl-0">' +
-            '    <button class="btn btn-default btn-block btn-new-waypoint" ' +
-            '            type="button" ' +
-            '            id="waypoint-' + label + '-button">' +
-            '      <span id="waypoint-' + label + '-symbol" class="fas ' + symbol + '"></span>' +
-            '    </button>' +
+            '    <div class="btn-group d-block">' +
+            '      <button class="btn btn-default btn-block btn-sm" ' +
+            '              type="button" ' +
+            '              id="waypoint-' + label + '-button-up">' +
+            '        <span class="fas fa-chevron-up fa-sm"></span>' +
+            '      </button>' +
+            '      <button class="btn btn-default btn-block btn-sm" ' +
+            '              type="button" ' +
+            '              id="waypoint-' + label + '-button-down">' +
+            '        <span class="fas fa-chevron-down fa-sm"></span>' +
+            '      </button>' +
+            '    </div>' +
             '  </div>' +
             '</div>'
         );
@@ -46,25 +53,12 @@ export class Waypoints {
 
     addBlankWaypointForm(index) {
 
-        this.addWaypointForm(index, { id: undefined, order: '', status: '', location: undefined }, 'fa-plus');
+        this.addWaypointForm(index, { id: undefined, order: '', status: '', location: undefined });
 
         // bind addBlankWaypointForm to click
         this.placeholder.find('#waypoint-' + this.label + '-' + index + '-button')
             .off('click')
             .on('click', () => {
-
-                // change icon
-                this.placeholder.find('#waypoint-' + this.label + '-' + index + '-symbol')
-                    .removeClass('fa-plus')
-                    .addClass('fa-minus');
-
-                // bind remove action
-                this.placeholder.find('#waypoint-' + this.label + '-' + index + '-button')
-                    .off('click')
-                    .on('click', () => { this.removeWaypointForm(index); });
-
-                // add new blank form
-                this.addBlankWaypointForm(index + 1);
 
             });
 
@@ -84,18 +78,14 @@ export class Waypoints {
 
     }
 
-    addWaypointForm(index, waypoint, symbol = 'fa-minus') {
+    addWaypointForm(index, waypoint) {
 
         // add to form
-        this.placeholder.append(Waypoints.waypointForm(this.label + '-' + index, symbol, waypoint));
-
-        // bind remove action
-        this.placeholder.find('#waypoint-' + this.label + '-' + index + '-button')
-            .on('click', () => { this.removeWaypointForm(index); });
+        this.placeholder.append(Waypoints.waypointForm(this.label + '-' + index, waypoint));
 
     }
 
-    createForm() {
+    render() {
 
         // create placeholder selector
         this.placeholder = $(this.placeholderName);

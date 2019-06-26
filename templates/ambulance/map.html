@@ -191,7 +191,7 @@
                         <input class="form-control form-control-sm"
                                id="priority-code-input"
                                list="priority-code-list"
-                               name="priority-code-input" class="form-control"
+                               name="priority-code-input"
                                placeholder="{% trans 'Priority Code' %}">
                         <datalist id="priority-code-list">
                             {% for code in priority_code_list %}
@@ -211,8 +211,8 @@
                         </div>
                         <input class="form-control form-control-sm"
                                id="radio-code-input" list="radio-code-list"
-                               name="radio-code-input" class="form-control"
-                               placeholder="{% trans "Radio Code" %}">
+                               name="radio-code-input"
+                               placeholder="{% trans 'Radio Code' %}">
                         <datalist id="radio-code-list">
                             {% for code in radio_code_list %}
                             <option id="radio-code-{{ code.id }}" value="{{ code.code }}">{{ code.label }}</option>
@@ -226,7 +226,7 @@
                         <textarea class="form-control form-control-sm"
                                   name="description"
                                   rows="2" id="comment"
-                                  placeholder="{% trans "Describe the incident" %}"
+                                  placeholder="{% trans 'Describe the incident' %}"
                                   required></textarea>
 
                         <h5>
@@ -240,7 +240,7 @@
                         <input class="form-control form-control-sm"
                                id="street" type="text"
                                name="street"
-                               placeholder="{% trans "Address" %}" required autocomplete="street-address">
+                               placeholder="{% trans 'Address' %}" required autocomplete="street-address">
 
                         <h5>
                             {% trans "Coordinates" %}
@@ -277,45 +277,7 @@
                             {% trans "Patients" %}
                         </h5>
                         <div id="patients">
-                            <!--
-                            <div class="form-row" id="patient-0">
-                                <div class="col-sm-8 p-0">
-                                    <input id="patient-0-name" type="text"
-                                           class="form-control"
-                                           placeholder="Name">
-                                </div>
-                                <div class="col-sm-2 p-0">
-                                    <input id="patient-0-age" type="text"
-                                           class="form-control"
-                                           placeholder="Age"/>
-                                </div>
-                                <div class="col-sm-2 p-0">
-                                    <button class="btn btn-default new-patient"
-                                            type="button"
-                                            id="patient-0-button">
-                                        <span class="fas fa-plus"></span>
-                                    </button>
-                                </div>
-                            </div>
-                            -->
                         </div>
-
-                        <!--
-                            <div class="card-footer text-right">
-                                <button type="submit" class="btn btn-primary px-3">
-                                    Dispatch
-                                </button>
-                                <button type="button" class="btn btn-secondary px-3"
-                                        data-toggle="collapse"
-                                        data-target="#dispatch-form-collapse"
-                                        aria-expanded="true"
-                                        aria-controls="dispatch-form-collapse"
-                                        onclick="endDispatching()">
-                                    Cancel
-                                </button>
-                            </div>
-                            -->
-
                     </form>
 
                 </div>
