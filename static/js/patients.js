@@ -21,7 +21,7 @@ export class Patients {
             '    <input id="patient-' + label + '-name" ' +
             '           name="name"' +
             '           type="text" ' +
-            '           class="form-control" ' +
+            '           class="form-control form-control-sm" ' +
             '           value="' + patient.name + '" ' +
             '           placeholder="' + translation_table['Name'] + '">' +
             '  </div>' +
@@ -29,15 +29,15 @@ export class Patients {
             '    <input id="patient-' + label + '-age" ' +
             '           name="age"' +
             '           type="number" min="0" ' +
-            '           class="form-control" ' +
+            '           class="form-control form-control-sm" ' +
             '           value="' + patient.age + '" ' +
             '           placeholder="' + translation_table['Age'] + '">' +
             '  </div>' +
             '  <div class="col-md-2 pl-0">' +
-            '    <button class="btn btn-default btn-block btn-new-patient" ' +
+            '    <button class="btn btn-default btn-block btn-sm btn-new-patient" ' +
             '            type="button" ' +
             '            id="patient-' + label + '-button">' +
-            '      <span id="patient-' + label + '-symbol" class="fas ' + symbol + '"></span>' +
+            '      <span id="patient-' + label + '-symbol" class="fas ' + symbol + ' fa-sm"></span>' +
             '    </button>' +
             '  </div>' +
             '</div>'
