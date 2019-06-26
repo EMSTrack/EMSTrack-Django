@@ -33,7 +33,7 @@ export class Waypoints {
                placeholder="${translation_table['Age']}"> 
     </div>  
     <div class="col-md-2 pl-0">  
-        <div class="btn-group btn-group-sm d-block">   
+        <div class="btn-group btn-group-xs d-block">   
             <button class="btn btn-default btn-block btn-xs m-0"   
                     type="button"  
                     id="waypoint-${label}-button-up">
