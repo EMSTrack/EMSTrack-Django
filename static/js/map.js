@@ -2250,7 +2250,7 @@ function newPatientForm(index, symbol) {
         'placeholder="' + translation_table['Age'] + '">' +
         '</div>' +
         '<div class="col-md-2 pl-0">' +
-        '<button class="btn btn-default btn-block btn-new-patient" ' +
+        '<button class="btn btn-default btn-block btn-new-patient btn-sm" ' +
         ' type="button" ' +
         ' id="patient-' + index + '-button">' +
         '<span id="patient-' + index + '-symbol" class="fas ' + symbol + ' fa-sm"></span>' +
