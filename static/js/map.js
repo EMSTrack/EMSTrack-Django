@@ -1843,7 +1843,7 @@ function endDispatching() {
     // $('#dispatchSubmitButton').hide();
 
     // close dispatch panel
-    $('#newDispatchDiv').collapse('toggle');
+    // $('#newDispatchDiv').collapse('toggle');
 
     if (!isFilterOpen) {
         // close filter panel
@@ -2178,8 +2178,9 @@ function dispatchCall() {
             // Log success
             logger.log('info', "Succesfully posted new call.");
 
-            // End dispatching
-            endDispatching();
+            // End dispatching automatically calls endDispatching
+            $('#newDispatchDiv').collapse('hide');
+            // endDispatching();
 
         },
         error: function (jqXHR) {
