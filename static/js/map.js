@@ -784,7 +784,69 @@ function abortCall(call) {
 
 }
 
-function setCallWaypointPopover(waypoints, destroy = false) {
+function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = false) {
+
+    // create waypoint object
+    const placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints';
+    const waypoints = new Waypoints(waypoint_set, call_id, '#' + placeholder);
+    const selector = $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button');
+
+    // destroy?
+    if (destroy)
+        selector.popover('dispose');
+
+        // Add popover to patient button
+    selector
+        .popover({
+            title: translation_table['Waypoints'],
+            // language=HTML
+            content:
+            `<div>  
+    <div id="${placeholder}">
+    </div>
+    <div class="float-right my-2">
+        <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" type="button" class="btn btn-secondary">
+            ${translation_table["Cancel"]}    
+        </button>
+        <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" type="button" class="btn btn-primary">
+            ${translation_table["Save"]}
+        </button>
+    </div>
+</div>`,
+            html: true,
+            placement: 'left',
+            trigger: 'manual'
+        })
+        .on('click', function(e) {
+            $(this).popover('show');
+            e.stopPropagation();
+        })
+        .on('inserted.bs.popover', () => {
+
+            // create patient form
+            waypoints.render();
+
+            // toggle on cancel
+            $('#call-' + call_id + '-' + ambulance_id + '-waypoints-cancel-button')
+                .on('click', function (event) {
+
+                    $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
+                        .popover('toggle');
+                    event.stopPropagation();
+
+                });
+
+            // toggle on save
+            $('#call-' + call_id + '-' + ambulance_id + '-waypoints-save-button')
+                .on('click', function (event) {
+
+                    $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
+                        .popover('toggle');
+                    event.stopPropagation();
+
+                });
+
+        });
 }
 
 function setCallPatientPopover(call_id, patient_set, destroy = false) {
@@ -808,10 +870,10 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
     <div id="${placeholder}">
     </div>
     <div class="float-right my-2">
-        <button id="call-${call_id}-cancel-button" type="button" class="btn btn-secondary">
+        <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
             ${translation_table["Cancel"]}    
         </button>
-        <button id="call-${call_id}-save-button" type="button" class="btn btn-primary">
+        <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">
             ${translation_table["Save"]}
         </button>
     </div>
@@ -830,7 +892,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
             patients.render();
 
             // toggle on cancel
-            $('#call-' + call_id + '-cancel-button')
+            $('#call-' + call_id + '-patients-cancel-button')
                 .on('click', function (event) {
 
                     $('#call-' + call_id + '-patients-button')
@@ -840,7 +902,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
                 });
 
             // toggle on save
-            $('#call-' + call_id + '-save-button')
+            $('#call-' + call_id + '-patients-save-button')
                 .on('click', function (event) {
 
                     // retrieve patents
@@ -906,51 +968,51 @@ function addCallToGrid(call) {
     }
 
     // Add item to call grid
+    // language=HTML
     $('#call-grid-' + status)
         .append(
-            '<div class="card status-' + status + '" id="call-item-' + call.id + '">\n' +
-            '  <div class="card-header px-1 py-1"' +
-            '       id="call-' + call.id + '">\n' +
-            '    <div class="d-flex">' +
-            '      <div>' +
-            '        <input class="filter-checkbox" value="call" data-status="' + status + '|call_' + call.id + '"\n' +
-            '               type="checkbox" id="call-checkbox-' + call.id + '" ' +
-            (visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : '') + '>\n' +
-            '      </div>' +
-            '      <div data-toggle="collapse"\n' +
-            '           data-target="#call-' + call.id + '-body"\n' +
-            '           aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
-            '        <span class="ml-1">' + call.id + ':</span>' +
-            '        <span class="font-weight-bold">' + priority_prefix + '</span>' +
-            '        <button id="call-' + call.id + '-button"\n' +
-            '               class="btn btn-'+ call_priority_css[call.priority].class + ' btn-sm">' +
-            '           ' + call_priority_css[call.priority].html + '\n' +
-            '        </button>\n' +
-            '        <span class="font-weight-bold">' + priority_suffix + '</span>' +
-            '      </div>' +
-            '      <div class="ml-auto"' +
-            '           data-toggle="collapse"\n' +
-            '           data-target="#call-' + call.id + '-body"\n' +
-            '           aria-expanded="true" aria-controls="call-' + call.id+ '-body">' +
-            '        <span id="call-date-' + call.id + '">' + date + '</span>' +
-            '        <button id="call-' + call.id + '-patients-button" ' +
-            '                type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">' +
-            '          <span class="fas fa-user fa-sm"></span>' +
-            '        </button>\n' +
-            '      </div>' +
-            '      <div>' +
-            '        <button id="call-' + call.id + '-abort" type="button" class="close ml-1" aria-label="Close">\n' +
-            '          <span aria-hidden="true">&times;</span>\n' +
-            '        </button>\n' +
-            '      </div>' +
-            '    </div>' +
-            '  </div>\n' +
-            '  <div class="collapse"\n' +
-            '       id="call-' + call.id + '-body"\n' +
-            '       aria-labelledby="call-' + call.id + '">\n' +
-            '    <div class="card-body px-1 py-1" id="call-item-grid-' + call.id + '"></div>\n' +
-            '  </div>\n' +
-            '</div>\n');
+            `<div class="card status-${status}" id="call-item-${call.id}">
+  <div class="card-header px-1 py-1" id="call-${call.id}">
+    <div class="d-flex">      
+        <div>
+            <input class="filter-checkbox" value="call" data-status="${status}|call_${call.id}"
+                   type="checkbox" id="call-checkbox-${call.id}" 
+                   ${visibleCategory[status + "|" + 'call_' + call.id] ? 'checked' : ''}>
+        </div>
+        <div data-toggle="collapse"
+             data-target="#call-${call.id}-body"
+             aria-expanded="true" aria-controls="call-${call.id}-body">        
+            <span class="ml-1">${call.id}:</span>        
+            <span class="font-weight-bold">${priority_prefix}</span>        
+            <button id="call-${call.id}-button"
+                    class="btn btn-${call_priority_css[call.priority].class} btn-sm">           
+                ${call_priority_css[call.priority].html}
+            </button>
+            <span class="font-weight-bold">${priority_suffix}</span>
+        </div>
+        <div class="ml-auto" data-toggle="collapse"
+             data-target="#call-${call.id}-body"
+             aria-expanded="true" aria-controls="call-${call.id}-body">
+            <span id="call-date-${call.id}">${date}</span>        
+            <button id="call-${call.id}-patients-button"                 
+                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">
+                <span class="fas fa-user fa-sm"></span> 
+            </button>
+        </div>
+        <div>
+            <button id="call-${call.id}-abort" type="button" class="close ml-1" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>    
+    </div>  
+  </div>
+    <div class="collapse"
+         id="call-${call.id}-body"
+         aria-labelledby="call-${call.id}">
+        <div class="card-body px-1 py-1" id="call-item-grid-${call.id}">
+        </div>
+    </div>
+</div>`);
 
     // Make call button clickable
     $('#call-' + call.id + '-button')
@@ -986,34 +1048,34 @@ function addCallToGrid(call) {
         // Add ambulance button to call item grid
         $('#call-item-grid-' + call.id)
             .append(
-                '<div class="row no-gutters" style="display:flex; align-items:center;">' +
-                '  <div class="col-sm-4">' +
-                '    <button type="button"' +
-                '            id="call-grid-button-' + call.id + '-' + ambulance.id + '"' +
-                '            class="btn btn-sm ' +
-                ambulance_call_buttons[ambulance_call.status] +
-                '                   status-' + ambulance_call.status + '"' +
-                '            style="margin: 2px 2px;"' +
-                '            draggable="true">' +
-                ambulance.identifier +
-                '    </button>' +
-                '  </div>' +
-                '  <div class="col-sm-6">' +
-                '    <div id="call-progress-bar-' + call.id + '-' + ambulance.id + '"' +
-                '         class="progress mr-1" style="height: 20px;">' +
-                '    </div>' +
-                '  </div>' +
-                '  <div class="col-sm-1">' +
-                '    <button type="button" class="btn btn-outline-dark btn-sm" aria-label="Waypoints">' +
-                '      <span id="call-' + call.id + '-' + ambulance.id +'-waypoints" class="fas fa-map-marker fa-sm"></span>' +
-                '    </button>\n' +
-                '  </div>' +
-                '  <div class="col-sm-1">' +
-                '    <button type="button" class="close" aria-label="Close">\n' +
-                '      <span aria-hidden="true">&times;</span>\n' +
-                '    </button>\n' +
-                '  </div>' +
-                '</div>'
+                `<div class="row no-gutters" style="display:flex; align-items:center;">  
+    <div class="col-sm-4">   
+        <button type="button"        
+                id="call-grid-button-${call.id}-${ambulance.id}"
+                class="btn btn-sm ${ambulance_call_buttons[ambulance_call.status]} status-${ambulance_call.status}" 
+                style="margin: 2px 2px;" 
+                draggable="true">
+            ${ambulance.identifier}
+        </button>  
+    </div> 
+    <div class="col-sm-6"> 
+        <div id="call-progress-bar-${call.id}-${ambulance.id}"   
+             class="progress mr-1" style="height: 20px;">
+        </div>  
+    </div>  
+    <div class="col-sm-1"> 
+        <button type="button" 
+                id="call-${call.id}-${ambulance.id}-waypoints-button" 
+                class="btn btn-outline-dark btn-sm" aria-label="Waypoints">  
+            <span class="fas fa-map-marker fa-sm"></span>  
+        </button>
+    </div> 
+    <div class="col-sm-1">  
+        <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+</div>`
             );
 
         // Make button clickable and draggable
@@ -1021,6 +1083,9 @@ function addCallToGrid(call) {
             .click(function (e) {
                 onGridAmbulanceButtonClick(ambulance);
             });
+
+        // set waypoint popover
+        setCallWaypointPopover(call.id, ambulance.id, ambulance_call.waypoint_set);
 
         // update progress bar
         updateCallProgress(call, ambulance_call);
@@ -1051,34 +1116,54 @@ function locationToHtml(location) {
     address_str = [address_str, location.zipcode].join(' ').trim();
     address_str = [address_str, location.country].join(', ').trim();
 
+    // language=HTML
     return (
-        '<div>' +
-        '<p class="my-0 py-0"><em>Address:</em></p>' +
-        '<p class="my-0 py-0"><span class="text-right">' + address_str + '</span></p>' +
-        '<p class="my-0 py-0"><em>Type:</em>' +
-        '<span class="float-right">' + location_type[location.type] + '</span></p>' +
-        '</div>'
+        `<div>
+    <p class="my-0 py-0">
+        <em>Address:</em>
+    </p>
+    <p class="my-0 py-0">
+        <span class="text-right">${address_str}</span>
+    </p>
+    <p class="my-0 py-0">
+        <em>Type:</em>
+        <span class="float-right">${location_type[location.type]}</span>
+    </p>
+</div>`
     );
 
 }
 
 function callToHtml(call, date, number_of_waypoints, waypoint) {
 
+    // language=HTML
     return (
-        '<div>' +
-        '<p class="my-0 py-0"><strong>Priority:</strong>' +
-        '<span class="float-right">' + call.priority + '</span></p>' +
-        '<p class="my-0 py-0"><strong>Date:</strong>' +
-        '<span class="float-right">' + date + '</span></p>' +
-        '<p class="my-0 py-0"><strong>Details:</strong>' +
-        '<span class="float-right">' + call.details + '</span></p>' +
-        '<p class="my-0 py-0"><strong>Patients:</strong>' +
-        '<span class="float-right">' + compilePatients(call) + '</span></p>' +
-        '<p class="my-0 py-0"><strong>Number of waypoints:</strong>' +
-        '<span class="float-right">' + number_of_waypoints + '</span></p>' +
-        '<p class="my-0 py-0"><strong>Next waypoint:</strong></p>' +
-        locationToHtml(waypoint.location) +
-        '</div>'
+        `<div>
+    <p class="my-0 py-0">
+        <strong>Priority:</strong>
+        <span class="float-right">${call.priority}</span>
+    </p>
+    <p class="my-0 py-0">
+        <strong>Date:</strong>
+        <span class="float-right">${date}</span>
+    </p>
+    <p class="my-0 py-0">
+        <strong>Details:</strong>
+        <span class="float-right">${call.details}</span>
+    </p>
+    <p class="my-0 py-0">
+        <strong>Patients:</strong>
+        <span class="float-right">${compilePatients(call)}</span>
+    </p>
+    <p class="my-0 py-0">
+        <strong>Number of waypoints:</strong>
+        <span class="float-right">${number_of_waypoints}</span>
+    </p>
+    <p class="my-0 py-0">
+        <strong>Next waypoint:</strong>
+    </p>
+    ${locationToHtml(waypoint.location)}
+</div>`
     );
 }
 
