@@ -243,7 +243,7 @@
                                name="street" class="form-control"
                                placeholder="{% trans "Address" %}" required autocomplete="street-address">
 
-                        <div class="float-right"
+                        <div class="float-right small"
                              title="{% trans "Click to automatically search for address after changing the coordinates" %}">
                             {% trans "update address" %}
                             <input id="update-address" type="checkbox" checked>
@@ -254,7 +254,7 @@
                         </h5>
                         <div class="card"
                              title="Click on map to update coordinates">
-                            <div class="card-body py-1 px-3">
+                            <div class="card-body py-1 px-3 small">
                                 <strong>{% trans "Lat" %}:</strong>
                                 <div id="curr-lat" style="display: inline-block;"></div>
                                 , &nbsp;
@@ -269,7 +269,8 @@
                         <div class="card px-0 py-0">
                             <div class="card-body py-1 px-2"
                                  id="ambulance-selection">
-                                <input id="ambulance-selection-message"
+                                <input class="form-control form-control-sm"
+                                       id="ambulance-selection-message"
                                        class="border-0 w-100"
                                        placeholder="{% trans "Click on or drag ambulances here" %}"/>
                             </div>
