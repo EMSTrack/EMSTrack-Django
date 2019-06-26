@@ -450,26 +450,33 @@ class CallSerializer(serializers.ModelSerializer):
                 # Extract patient set
                 patient_set = validated_data.pop('patient_set')
 
-                # new patients
-                logger.debug(patient_set)
-                new_existing_patients = [patient['id'] for patient in patient_set \
+                if patient_set:
+
+                    # existing patients
+                    logger.debug(patient_set)
+                    existing_patients = [patient['id'] for patient in patient_set
                                          if 'id' in patient and patient['id'] is not None]
+    
+                    if existing_patients:
 
-                if new_existing_patients:
+                        # delete if not in new patients
+                        instance.patient_set.exclude(id__in=existing_patients).delete()
 
-                    # delete if not in new patients
-                    instance.patient_set.exclude(id__in=new_existing_patients).delete()
+                    # create or update patients
+                    for patient in patient_set:
+                        pk = patient.pop('id', None)
+                        if pk is None:
+                            # create patient and do not publish
+                            obj = Patient(call=instance, **patient)
+                            obj.save(publish=False)
+                        else:
+                            # update patient, does not call save hence do not publish
+                            Patient.objects.filter(id=pk).update(call=instance, **patient)
 
-                # create or update patients
-                for patient in patient_set:
-                    pk = patient.pop('id', None)
-                    if pk is None:
-                        # create patient and do not publish
-                        obj = Patient(call=instance, **patient)
-                        obj.save(publish=False)
-                    else:
-                        # update patient, does not call save hence do not publish
-                        Patient.objects.filter(id=pk).update(call=instance, **patient)
+                else:
+
+                    # delete all patients
+                    instance.patient_set.all().delete()
 
             # call super to update call, which will publish
             super().update(instance, validated_data)
