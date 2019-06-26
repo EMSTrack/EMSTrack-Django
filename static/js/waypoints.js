@@ -52,8 +52,7 @@ export class Waypoints {
             </button>   
         </div> 
     </div>
-</div>`)
-}
+</div>`
         );
 
     }
