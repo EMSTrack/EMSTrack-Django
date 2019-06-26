@@ -804,10 +804,10 @@ function setCallPatientPopover(call, destroy = false) {
             '  <div id="' + placeholder + '"></div>' +
             '  <div class="float-right my-2">\n' +
             '    <button id="call-' + call.id + '-cancel-button" type="button" class="btn btn-secondary">' +
-            '      Cancel' +
+            '      ' + translation_table["Cancel"] +
             '    </button>' +
             '    <button id="call-' + call.id + '-save-button" type="button" class="btn btn-primary">' +
-            '      Save' +
+            '      ' + translation_table["Save"] +
             '    </button>' +
             '  </div>' +
             '</div>',
