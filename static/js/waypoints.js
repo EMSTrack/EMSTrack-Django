@@ -23,34 +23,31 @@ export class Waypoints {
            type="hidden"
            class="form-control form-control-sm"  
            value="${waypoint.order}">
-    <div class="col-md-10 pr-0">
-        <div class="card">
-            <div class="card-header" 
-                 id="waypoint-${label}-header"
-                 data-toggle="collapse" 
-                 data-target="#waypoint-${label}-body" 
-                 aria-expanded="false" 
-                 aria-controls="waypoint-${label}-body">
-            </div>
-            <div class="collapse" id="waypoint-${label}-body">
-                <div class="card-body">
+    <div class="card">
+        <div class="card-header" 
+             id="waypoint-${label}-header"
+             data-toggle="collapse" 
+             data-target="#waypoint-${label}-body" 
+             aria-expanded="false" 
+             aria-controls="waypoint-${label}-body">
+            <div class="btn-group btn-group-xs d-block float-right">   
+                <button class="btn btn-default btn-block btn-xs m-0"
+                        type="button"  
+                        id="waypoint-${label}-button-up">
+                    <span class="fas fa-chevron-up fa-xs"></span>
+                </button>  
+                <button class="btn btn-default btn-block btn-xs m-0"   
+                        type="button"  
+                        id="waypoint-${label}-button-down">   
+                    <span class="fas fa-chevron-down fa-xs"></span>  
+                </button>   
+            </div> 
+        </div>
+        <div class="collapse" id="waypoint-${label}-body">
+            <div class="card-body">
                 
             </div>
         </div>
-    </div>
-    <div class="col-md-2 pl-0">  
-        <div class="btn-group btn-group-xs d-block">   
-            <button class="btn btn-default btn-block btn-xs m-0"   
-                    type="button"  
-                    id="waypoint-${label}-button-up">
-                <span class="fas fa-chevron-up fa-xs"></span>
-            </button>  
-            <button class="btn btn-default btn-block btn-xs m-0"   
-                    type="button"  
-                    id="waypoint-${label}-button-down">   
-                <span class="fas fa-chevron-down fa-xs"></span>  
-            </button>   
-        </div> 
     </div>
 </div>`
         );
