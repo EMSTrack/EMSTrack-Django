@@ -22,18 +22,18 @@ export class Waypoints {
         <input id="waypoint-${label}-order"
                name="order"
                type="hidden"
-               class="form-control"  
+               class="form-control form-control-sm"  
                value="${waypoint.order}">
     </div> 
     <div class="col-md-3 px-0">  
         <input id="waypoint-${label}-status"
                name="status"
-               class="form-control"     
+               class="form-control form-control-sm"
                value="${waypoint.status}"   
                placeholder="${translation_table['Age']}"> 
     </div>  
     <div class="col-md-2 pl-0">  
-        <div class="btn-group d-block">   
+        <div class="btn-group btn-group-sm d-block">   
             <button class="btn btn-default btn-block btn-xs m-0"   
                     type="button"  
                     id="waypoint-${label}-button-up">
