@@ -1252,3 +1252,12 @@ msgstr "¿Quieres abortar la llamada %d?"
 
 msgid "Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"
 msgstr "¿Quieres modificar el estado de la ambulancia <strong>%s</strong> a <strong>%s</strong>?"
+
+msgid "Roads"
+msgstr "Calles"
+
+msgid "Satellite"
+msgstr "Satélite"
+
+msgid "Hybrid"
+msgstr "Híbrido"

@@ -293,7 +293,10 @@ class AmbulanceMap(TemplateView):
             "Patients": _("Patients"),
             "No patient names are available.": _("No patient names are available."),
             "Save": _("Save"),
-            "Cancel": _("Cancel")
+            "Cancel": _("Cancel"),
+            "Roads": _("Roads"),
+            "Satellite": _("Satellite"),
+            "Hybrid": _("Hybrid")
         }
 
         return context
