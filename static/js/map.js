@@ -1711,6 +1711,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
 
     // patch ambulance
     const data = JSON.stringify({ status: status });
+    console.log(data);
     apiClient.patchAmbulance(ambulance, data)
         .then( (ambulance) => {
 
