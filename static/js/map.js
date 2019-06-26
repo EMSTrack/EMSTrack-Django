@@ -1797,9 +1797,13 @@ function endDispatching() {
 
     // clear priority code
     $('#priority-code-input').val('');
-    
+    $('#priority-classification').html('<span class="text-muted">' + translation_table["Priority Classification"] + '</span>');
+    $('#priority-code').html('<span class="text-muted">' + translation_table["Priority Code"] + '</span>');
+    $("#priority-buttons .btn").removeClass("active");
+
     // clear radio code
     $('#radio-code-input').val('');
+    $('#radio-code').html('<span class="text-muted">' + translation_table["Radio Code"] + '</span>');
 
     // clear description
     $('#comment').val('');
