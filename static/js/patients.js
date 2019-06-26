@@ -11,36 +11,25 @@ export class Patients {
 
     static patientForm(label, symbol, patient) {
 
+        // language=HTML
         return (
-            '<div class="form-row" id="patient-' + label + '-form">' +
-            '  <div class="col-md-7 pr-0">' +
-            '    <input id="patient-' + label + '-id" ' +
-            '           name="id"' +
-            '           type="hidden" ' +
-            '           value="' + patient.id + '">' +
-            '    <input id="patient-' + label + '-name" ' +
-            '           name="name"' +
-            '           type="text" ' +
-            '           class="form-control form-control-sm" ' +
-            '           value="' + patient.name + '" ' +
-            '           placeholder="' + translation_table['Name'] + '">' +
-            '  </div>' +
-            '  <div class="col-md-3 px-0">' +
-            '    <input id="patient-' + label + '-age" ' +
-            '           name="age"' +
-            '           type="number" min="0" ' +
-            '           class="form-control form-control-sm" ' +
-            '           value="' + patient.age + '" ' +
-            '           placeholder="' + translation_table['Age'] + '">' +
-            '  </div>' +
-            '  <div class="col-md-2 pl-0">' +
-            '    <button class="btn btn-default btn-block btn-sm btn-new-patient" ' +
-            '            type="button" ' +
-            '            id="patient-' + label + '-button">' +
-            '      <span id="patient-' + label + '-symbol" class="fas ' + symbol + ' fa-sm"></span>' +
-            '    </button>' +
-            '  </div>' +
-            '</div>'
+            `<div class="form-row" id="patient-${label}-form"> 
+    <div class="col-md-7 pr-0">   
+        <input id="patient-${label}-id" name="id" type="hidden" value="${patient.id}"> 
+        <input id="patient-${label}-name" name="name" type="text" class="form-control form-control-sm"
+               value="${patient.name}" placeholder="${translation_table['Name']}"> 
+    </div> 
+    <div class="col-md-3 px-0">  
+        <input id="patient-${label}-age" name="age" type="number" min="0" class="form-control form-control-sm"      
+               value="${patient.age}" placeholder="${translation_table['Age']}"> 
+    </div> 
+    <div class="col-md-2 pl-0"> 
+        <button class="btn btn-default btn-block btn-sm btn-new-patient" 
+                type="button" id="patient-${label}-button">
+            <span id="patient-${label}-symbol" class="fas ${symbol} fa-sm"></span>   
+        </button>  
+    </div>
+</div>`
         );
 
     }

@@ -14,24 +14,30 @@ export class Waypoints {
         // language=HTML
         return (
             `<div class="form-row" id="waypoint-${label}-form">  
-    <div class="col-md-7 pr-0">   
-        <input id="waypoint-${label}-id" 
-               name="id"           
-               type="hidden" 
-               value="${waypoint.id}">    
-        <input id="waypoint-${label}-order"
-               name="order"
-               type="hidden"
-               class="form-control form-control-sm"  
-               value="${waypoint.order}">
-    </div> 
-    <div class="col-md-3 px-0">  
-        <input id="waypoint-${label}-status"
-               name="status"
-               class="form-control form-control-sm"
-               value="${waypoint.status}"   
-               placeholder="${translation_table['Age']}"> 
-    </div>  
+    <input id="waypoint-${label}-id" 
+           name="id"           
+           type="hidden" 
+           value="${waypoint.id}">    
+    <input id="waypoint-${label}-order"
+           name="order"
+           type="hidden"
+           class="form-control form-control-sm"  
+           value="${waypoint.order}">
+    <div class="col-md-10 pr-0">
+        <div class="card">
+            <div class="card-header" 
+                 id="waypoint-${label}-header"
+                 data-toggle="collapse" 
+                 data-target="#waypoint-${label}-body" 
+                 aria-expanded="false" 
+                 aria-controls="waypoint-${label}-body">
+            </div>
+            <div class="collapse" id="waypoint-${label}-body">
+                <div class="card-body">
+                
+            </div>
+        </div>
+    </div>
     <div class="col-md-2 pl-0">  
         <div class="btn-group btn-group-xs d-block">   
             <button class="btn btn-default btn-block btn-xs m-0"   
@@ -46,7 +52,8 @@ export class Waypoints {
             </button>   
         </div> 
     </div>
-</div>`
+</div>`)
+}
         );
 
     }
