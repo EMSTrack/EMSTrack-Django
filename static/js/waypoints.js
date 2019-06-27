@@ -161,13 +161,16 @@ export class Waypoints {
         }
 
         let forwardButtonDisable = true;
-        if ( this.activeIndex >= nextWaypointIndex && (waypoint.status === 'C' || waypoint.status === 'S')) {
-            // waypoint is next or beyond and is either created or skipped
+        if ( this.activeIndex >= nextWaypointIndex
+            && this.activeIndex < this.waypoints.length
+            && (waypoint.status === 'C' || waypoint.status === 'S')) {
+            // waypoint is next or beyond but not last and is either created or skipped
             forwardButtonDisable = false;
         }
 
         let backwardButtonDisable = true;
-        if ( this.activeIndex > nextWaypointIndex && (waypoint.status === 'C' || waypoint.status === 'S')) {
+        if ( this.activeIndex > nextWaypointIndex
+            && (waypoint.status === 'C' || waypoint.status === 'S')) {
             // waypoint is beyond next  and is either created or skipped
             backwardButtonDisable = false;
         }
@@ -218,7 +221,7 @@ export class Waypoints {
     </button>
     <button id="call-${this.label}-waypoints-backward-button" 
             type="button" class="btn btn-warning w-100"
-            title="Mark as visiting">
+            title="Move waypoint back">
         <span class="fas fa-backward"></span> 
     </button>
     <button id="call-${this.label}-waypoints-add-button" 
@@ -228,7 +231,7 @@ export class Waypoints {
     </button>
     <button id="call-${this.label}-waypoints-forward-button" 
             type="button" class="btn btn-warning w-100"
-            title="Mark as visiting">
+            title="Move waypoint forth">
         <span class="fas fa-forward"></span> 
     </button>
 </div>`
