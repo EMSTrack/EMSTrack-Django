@@ -2,6 +2,8 @@
  * Waypoint base class
  */
 
+import { logger } from "./logger";
+
 import { Location } from './location';
 
 export class Waypoint {
@@ -125,6 +127,8 @@ export class Waypoints {
 
     addBlankWaypointForm(index) {
 
+        logger.log('info', 'adding blank waypoint');
+
         const waypoint = new Waypoint();
         this.addWaypointForm(index, waypoint);
 
@@ -140,19 +144,19 @@ export class Waypoints {
         let forwardButtonDisable = true;
         let addButtonDisable = false;
 
-        if (waypoint.status == 'S' || waypoint.status == 'D') {
+        if (waypoint.status === 'S' || waypoint.status === 'D') {
             // waypoint has been skipped or visited already
             skipButtonDisabled = true;
             forwardButtonDisable = true;
         }
 
         if (this.activeIndex >= nextWaypointIndex ||
-            (nextWaypointIndex == -1 && this.activeIndex == this.waypoints.length)) {
+            (nextWaypointIndex === -1 && this.activeIndex === this.waypoints.length)) {
             // waypoint is either next or hasn't come yet
             addButtonDisable = false;
         }
 
-        if ( this.activeIndex == nextWaypointIndex ) {
+        if ( this.activeIndex === nextWaypointIndex ) {
             // waypoint is next
             forwardButtonDisable = false;
         }
@@ -240,13 +244,15 @@ export class Waypoints {
             })
             .on('slide.bs.carousel', (event) => {
 
-                console.log(event);
-
                 // set active waypoint and configure buttons
                 this.setActiveWaypoint(event.to);
                 this.configureEditorButtons();
 
+                logger.log('info', 'setting active waypoint %d', this.activeIndex);
+
             });
+
+        logger.log('info', 'rendering waypoint editor for call %s', this.label);
 
     }
 
