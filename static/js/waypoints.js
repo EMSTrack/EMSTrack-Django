@@ -44,7 +44,9 @@ export class Waypoints {
 
     addBlankWaypointForm(index) {
 
-        this.addWaypointForm(index, { id: undefined, order: 1, status: 'C', location: new Location() });
+        const waypoint = { id: undefined, order: 1, status: 'C', location: new Location() };
+        console.log(waypoint);
+        this.addWaypointForm(index, waypoint);
 
         // bind addBlankWaypointForm to click
         this.placeholder.find('#waypoint-' + this.label + '-' + index + '-button')
