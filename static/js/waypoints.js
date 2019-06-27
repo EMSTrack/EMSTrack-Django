@@ -48,7 +48,7 @@ export class Waypoint {
     render(label, options = ['status-span', 'type-dropdown', 'address-div']) {
 
         // language=HTML
-        let html = `<ul id="waypoint-${label}-${this.order}-form" class="list-group">  
+        let html = `<ul id="waypoint-${label}-form" class="list-group">  
     <input id="waypoint-${label}-id" 
            name="id"           
            type="hidden" 
@@ -277,8 +277,8 @@ export class Waypoints {
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item ${active ? ' active' : ''}"
-    id="call-${this.label}-carousel-waypoint-${waypoint.order}-item">
-        ${waypoint.render(this.label)}
+    id="call-${this.label}-${waypoint.order}-carousel-waypoint-item">
+        ${waypoint.render(this.label + '-' + waypoint.order)}
 </div>`
         );
 
@@ -289,7 +289,7 @@ export class Waypoints {
 </li>`
         );
 
-        waypoint.postRender(this.label);
+        waypoint.postRender(`${this.label}-${waypoint.order}`);
 
     }
 
