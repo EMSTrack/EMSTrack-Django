@@ -63,7 +63,7 @@ export class Waypoint {
     </li>
     <li id="waypoint-${label}-item-status" class="list-group-item px-10">
         <em>${translation_table['Status']}:</em>
-        ${this.renderStatusForm(label, "float-right")}
+        ${this.renderStatusForm(label, "dropleft float-right")}
     </li>
     <li id="waypoint-${label}-item-address" class="list-group-item px-10">
         ${new Location(this.location).render()}
