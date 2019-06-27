@@ -57,31 +57,36 @@ export class Waypoint {
            name="order"
            type="hidden"
            class="form-control form-control-sm"  
-           value="${this.order}">
-    <li id="waypoint-${label}-item-type" class="list-group-item px-10">
-        <em>${translation_table['Type']}:</em>`;
-
-        // type
-        if (options.includes('type-dropdown'))
-            html += this.location.render(label, "dropleft float-right", "type-dropdown");
-        else // if (options.includes('type-span'))
-            html += `<span class="float-right">${location_type[this.location.type]}</span>`;
-
-        html += `    </li>
-    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
-        <em>${translation_table['Status']}:</em>`;
+           value="${this.order}">`;
 
         // status
+        html += `    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
+        <em>${translation_table['Status']}:</em>`;
+
         if (options.includes('status-dropdown'))
             html += this.renderStatusForm(label, "dropleft float-right");
         else // if (options.includes('status-span'))
             html += `<span class="float-right">${waypoint_status[this.status]}</span>`;
 
-        html += `    </li>
-    <li id="waypoint-${label}-item-address" class="list-group-item px-10">
+        html += `    </li>`;
+
+        // type
+        html += `    <li id="waypoint-${label}-item-type" class="list-group-item px-10">
+        <em>${translation_table['Type']}:</em>`;
+
+        if (options.includes('type-dropdown'))
+            html += this.location.render(label, "dropleft float-right", "type-dropdown");
+        else // if (options.includes('type-span'))
+            html += `<span class="float-right">${location_type[this.location.type]}</span>`;
+
+        html += `    </li>`;
+
+        // address
+        html += `    <li id="waypoint-${label}-item-address" class="list-group-item px-10">
         ${this.location.render(label)}
-    </li>
-</ul>`
+    </li>`;
+
+        html += '</ul>';
 
         return html;
 
