@@ -218,8 +218,8 @@ export class Waypoints {
                 // swap items
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
-                $(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`)
-                    .after($(`#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`));
+                swap(`#call-${this.label}-${activeWaypoint.order}-container`,
+                    `#call-${this.label}--${previousWaypoint.order}-container`);
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
                     .addClass('active');
@@ -250,8 +250,8 @@ export class Waypoints {
                 // swap items
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
-                $(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`)
-                    .before($(`#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`));
+                swap(`#call-${this.label}-${activeWaypoint.order}-container`,
+                    `#call-${this.label}--${nextWaypoint.order}-container`);
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
                     .addClass('active');
@@ -289,8 +289,10 @@ export class Waypoints {
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item ${active ? ' active' : ''}"
-    id="call-${this.label}-${waypoint.order}-carousel-waypoint-item">
-        ${waypoint.render(this.label + '-' + waypoint.order)}
+    id="call-${this.label}-${index}-carousel-waypoint-item">
+        <div id="call-${this.label}-${waypoint.order}-container">
+            ${waypoint.render(this.label + '-' + waypoint.order)}
+        </div>
 </div>`
         );
 
