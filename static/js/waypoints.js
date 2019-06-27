@@ -47,15 +47,15 @@ export class Waypoints {
            type="hidden"
            class="form-control form-control-sm"  
            value="${waypoint.order}">
-    <li id="waypoint-${label}-item-type" class="list-group-item">
+    <li id="waypoint-${label}-item-type" class="list-group-item px-10">
         <em>${translation_table['Type']}:</em>
         <span class="float-right">${location_type[waypoint.location.type]}</span>
     </li>
-    <li id="waypoint-${label}-item-status" class="list-group-item">
+    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
         <em>${translation_table['Status']}:</em>
         <span class="float-right">${waypoint_status[waypoint.status]}</span>
     </li>
-    <li id="waypoint-${label}-item-address" class="list-group-item">
+    <li id="waypoint-${label}-item-address" class="list-group-item px-10">
         ${new Location(waypoint.location).render()}
     </li>
 </ul>`
@@ -126,9 +126,6 @@ export class Waypoints {
         // add existing waypoints
         let index = 0;
         this.waypoints.forEach( (waypoint) => {
-
-            this.addWaypointForm(index, waypoint, index === 0);
-            index += 1;
 
             this.addWaypointForm(index, waypoint, index === 0);
             index += 1;
