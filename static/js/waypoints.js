@@ -17,6 +17,62 @@ export class Waypoint {
         this.location = new Location(properties.location);
     }
 
+    renderTypeForm(label, classes) {
+
+        // language=HTML
+        const top = `<div class="dropdown ${classes}">
+    <button class="btn btn-secondary dropdown-toggle" type="button" 
+            id="waypoint-${label}-item-menu-button" 
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select type
+    </button>
+    <div class="dropdown-menu" aria-labelledby="waypoint-${label}-item-menu-button">`;
+
+        let middle = '';
+        waypoint_status_order.forEach( (status) => {
+            const active = status === this.status;
+            middle += `        <a class="waypoint-${label}-dropdown-status-${status}-item ${active ? 'active' : ''}" 
+        href="#">${waypoint_status[status]}</a>`;
+        });
+
+        // language=HTML
+        const bottom = `    </div>
+</div>`;
+
+        return top + middle + bottom;
+    }
+
+    render(label) {
+
+        // language=HTML
+        return (
+            `<ul id="waypoint-${label}-${this.order}-form" class="list-group">  
+    <input id="waypoint-${label}-id" 
+           name="id"           
+           type="hidden" 
+           value="${this.id}">    
+    <input id="waypoint-${label}-order"
+           name="order"
+           type="hidden"
+           class="form-control form-control-sm"  
+           value="${this.order}">
+    <li id="waypoint-${label}-item-type" class="list-group-item px-10">
+        <em>${translation_table['Type']}:</em>
+        <span class="float-right">${location_type[this.location.type]}</span>
+        ${this.renderTypeForm(label, "float-right")}
+    </li>
+    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
+        <em>${translation_table['Status']}:</em>
+        <span class="float-right">${waypoint_status[this.status]}</span>
+    </li>
+    <li id="waypoint-${label}-item-address" class="list-group-item px-10">
+        ${new Location(this.location).render()}
+    </li>
+</ul>`
+        );
+
+    }
+
 }
 
 Waypoint.default = {
@@ -74,62 +130,6 @@ export class Waypoints {
 
     }
 
-    static waypointTypeForm(label, waypoint, classes) {
-
-        // language=HTML
-        const top = `<div class="dropdown ${classes}">
-    <button class="btn btn-secondary dropdown-toggle" type="button" 
-            id="waypoint-${label}-item-menu-button" 
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select type
-    </button>
-    <div class="dropdown-menu" aria-labelledby="waypoint-${label}-item-menu-button">`;
-
-        let middle = '';
-        waypoint_status_order.forEach( (status) => {
-            const active = status === waypoint.status;
-            middle += `        <a class="waypoint-${label}-dropdown-status-${status}-item ${active ? 'active' : ''}" 
-        href="#">${waypoint_status[status]}</a>`;
-        });
-
-        // language=HTML
-        const bottom = `    </div>
-</div>`;
-
-        return top + middle + bottom;
-    }
-
-    static waypointForm(label, waypoint) {
-
-        // language=HTML
-        return (
-            `<ul id="waypoint-${label}-${waypoint.order}-form" class="list-group">  
-    <input id="waypoint-${label}-id" 
-           name="id"           
-           type="hidden" 
-           value="${waypoint.id}">    
-    <input id="waypoint-${label}-order"
-           name="order"
-           type="hidden"
-           class="form-control form-control-sm"  
-           value="${waypoint.order}">
-    <li id="waypoint-${label}-item-type" class="list-group-item px-10">
-        <em>${translation_table['Type']}:</em>
-        <span class="float-right">${location_type[waypoint.location.type]}</span>
-        ${waypointTypeForm(label, waypoint, "float-right")}
-    </li>
-    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
-        <em>${translation_table['Status']}:</em>
-        <span class="float-right">${waypoint_status[waypoint.status]}</span>
-    </li>
-    <li id="waypoint-${label}-item-address" class="list-group-item px-10">
-        ${new Location(waypoint.location).render()}
-    </li>
-</ul>`
-        );
-
-    }
-
     removeWaypointForm(index) {
 
         // mark as deleted
@@ -150,7 +150,7 @@ export class Waypoints {
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item${active ? ' active' : ''}">
-    ${Waypoints.waypointForm(this.label, waypoint)}
+    ${new Waypoint(waypoint).render(this.label)}
 </div>`
         );
         $(`#call-${this.label}-carousel-indicators`).append(
