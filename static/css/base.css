@@ -39,12 +39,11 @@
 }
 
 .carousel .carousel-indicators li {
-  background-color: #fff;
-  background-color: rgba(70, 70, 70, 0.25);
+  background-color: #777;
 }
 
 .carousel .carousel-indicators .active {
-  background-color: #444;
+  background-color: #111;
 }
 
 .carousel-indicators {
