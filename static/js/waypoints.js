@@ -6,6 +6,8 @@ import { logger } from "./logger";
 
 import { Location } from './location';
 
+import { swap } from './util';
+
 export class Waypoint {
 
     constructor(parameters) {
@@ -173,12 +175,16 @@ export class Waypoints {
 
         // add existing waypoints
         let index = 0;
-        this.waypoints.forEach( (waypoint) => {
+        this.waypoints.forEach((waypoint) => {
 
-            this.addWaypointForm( index, waypoint );
+            this.addWaypointForm(index, waypoint);
             index += 1;
 
         });
+
+    }
+
+    postRender() {
 
         // configure buttons
         this.configureEditorButtons();
@@ -199,6 +205,19 @@ export class Waypoints {
 
                 event.stopPropagation();
 
+                if (this.activeIndex === 0) {
+                    logger.log('error', 'At first index, cannot move back');
+                    return;
+                }
+
+                // get current active and previous waypoints
+                const activeWaypoint = this.getActiveWaypoint();
+                const previousWaypoint = this.waypoints[this.activeIndex - 1];
+
+                // swap items
+                swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
+                    `#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`);
+
             });
 
         // move forward
@@ -206,6 +225,19 @@ export class Waypoints {
             .on('click', (event) => {
 
                 event.stopPropagation();
+
+                if (this.activeIndex === this.waypoints.length - 1) {
+                    logger.log('error', 'At last index, cannot move forth');
+                    return;
+                }
+
+                // get current active and previous waypoints
+                const activeWaypoint = this.getActiveWaypoint();
+                const nextWaypoint = this.waypoints[this.activeIndex + 1];
+
+                // swap items
+                swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
+                    `#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`);
 
             });
 
@@ -234,8 +266,9 @@ export class Waypoints {
         const active = index === this.activeIndex;
 
         $(`#call-${this.label}-carousel-items`).append(
-            `<div class="carousel-item${active ? ' active' : ''}">
-    ${waypoint.render(this.label)}
+            `<div class="carousel-item ${active ? ' active' : ''}"
+    id="call-${this.label}-carousel-waypoint-${waypoint.order}-item">
+        ${waypoint.render(this.label)}
 </div>`
         );
 

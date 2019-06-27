@@ -838,6 +838,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
             // create patient form
             waypoints.render();
+            waypoints.postRender();
 
             // toggle on cancel
             $('#call-' + call_id + '-' + ambulance_id + '-waypoints-cancel-button')
