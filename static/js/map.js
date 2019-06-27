@@ -804,7 +804,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             // language=HTML
             content:
             `<div>  
-    <div id="${placeholder}" class="w-100">
+    <div id="${placeholder}">
     </div>
     <div class="float-right my-2">
         <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" type="button" class="btn btn-secondary">
@@ -819,7 +819,6 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             placement: 'left',
             trigger: 'manual'
         })
-        .css('maxWidth', "600px", 'width', "600px")
         .on('click', function(e) {
             $(this).popover('show');
             e.stopPropagation();
