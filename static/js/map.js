@@ -806,39 +806,17 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             `<div>  
     <div id="${placeholder}">
     </div>
-    <div class="btn-toolbar justify-content-between mt-2" role="toolbar">
-        <div class="btn-group">
-            <button id="call-${call_id}-${ambulance_id}-waypoints-skip-button" 
-                    type="button" class="btn btn-secondary px-2"
-                    title="Skip waypoint">
-                <span class="fas fa-stop"></span> 
-            </button>
-            <button id="call-${call_id}-${ambulance_id}-waypoints-back-button" 
-                    type="button" class="btn btn-danger px-2"
-                    title="Mark as visiting">
-                <span class="fas fa-undo"></span> 
-            </button>
-            <button id="call-${call_id}-${ambulance_id}-waypoints-forward-button" 
-                    type="button" class="btn btn-warning px-2"
-                    title="Mark as visiting">
-                <span class="fas fa-redo"></span> 
-            </button>
-            <button id="call-${call_id}-${ambulance_id}-waypoints-add-button" 
-                    type="button" class="btn btn-info px-2"
-                    title="Add waypoint">
-                <span class="fas fa-plus"></span> 
-            </button>
-        </div>
-        <div class="btn-group">
-            <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
-                    type="button" class="btn btn-secondary">
-                ${translation_table["Cancel"]}    
-            </button>
-            <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
-                    type="button" class="btn btn-primary">
-                ${translation_table["Save"]}
-            </button>
-        </div>
+    <div class="btn-group float-right">
+        <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
+                type="button" 
+                class="btn btn-secondary">
+            ${translation_table["Cancel"]}    
+        </button>
+        <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
+                type="button" 
+                class="btn btn-primary">
+            ${translation_table["Save"]}
+        </button>
     </div>
 </div>`,
             html: true,

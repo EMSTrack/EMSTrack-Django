@@ -108,18 +108,35 @@ export class Waypoints {
 
         this.placeholder.html(`
 <div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
-  <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
-  </ol>
-  <div id="call-${this.label}-carousel-items" class="carousel-inner">
-  </div>
-  <a class="carousel-control-prev" href="#call-${this.label}-carousel" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#call-${this.label}-carousel" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
+    <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
+    </ol>
+    <div id="call-${this.label}-carousel-items" class="carousel-inner">
+    </div>
+    <a class="carousel-control-prev" href="#call-${this.label}-carousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#call-${this.label}-carousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<div class="btn-group d-flex">
+    <button id="call-${this.label}-waypoints-skip-button" 
+            type="button" class="btn btn-secondary w-100"
+            title="Skip waypoint">
+        <span class="fas fa-stop"></span> 
+    </button>
+    <button id="call-${this.label}-waypoints-forward-button" 
+            type="button" class="btn btn-warning w-100"
+            title="Mark as visiting">
+        <span class="fas fa-forward"></span> 
+    </button>
+    <button id="call-${this.label}-waypoints-add-button" 
+            type="button" class="btn btn-info w-100"
+            title="Add waypoint">
+        <span class="fas fa-plus"></span> 
+    </button>
 </div>`
         );
 
@@ -137,6 +154,15 @@ export class Waypoints {
             .carousel({
                 interval: false,
                 wrap: false
+            })
+            .on('slide.bs.carousel', function (e) {
+
+                console.log(e);
+
+                // get current waypoint
+
+                // enable/disable buttons
+
             });
 
     }
