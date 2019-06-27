@@ -21,8 +21,9 @@ import { Location } from './location';
 const sprintf = require('sprintf-js').sprintf;
 
 // Remove waypoints and incidents from location_type
-delete location_type_order[location_type_order.indexOf('w')];
-delete location_type_order[location_type_order.indexOf('i')];
+const reduced_location_type_order = [...location_type_order];
+delete reduced_location_type_order[reduced_location_type_order.indexOf('w')];
+delete reduced_location_type_order[reduced_location_type_order.indexOf('i')];
 
 logger.log('debug', translation_table);
 
@@ -1415,7 +1416,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // add location_type
-    location_type_order.forEach(function(type) {
+    reduced_location_type_order.forEach(function(type) {
         visibleCategory[type] = false;
     });
 
@@ -1429,7 +1430,7 @@ function createCategoryPanesAndFilters() {
     // pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
 
     // Create location category panes
-    location_type_order.forEach(function (type) {
+    reduced_location_type_order.forEach(function (type) {
         const pane = mymap.createPane(type);
         pane.style.display = (visibleCategory[type] ? 'block' : 'none');
     });
@@ -1565,7 +1566,7 @@ function createCategoryPanesAndFilters() {
         '</div>');
     */
 
-    location_type_order.forEach(function (type) {
+    reduced_location_type_order.forEach(function (type) {
         $("#location-type").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
             '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
