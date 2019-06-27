@@ -24,7 +24,7 @@ export class Location {
 
     constructor(parameters) {
 
-        const properties = Object.assign(Object.assign({},Point.default), parameters);
+        const properties = Object.assign({...Point.default}, parameters);
 
         this.id = properties.id;
         this.name = properties.name;
@@ -37,7 +37,7 @@ export class Location {
         this.state = properties.state;
         this.zipcode = properties.zipcode;
         this.country = properties.country;
-        this.location = new Point(...properties.location);
+        this.location = new Point(properties.location);
     }
 
     static toText(location) {
