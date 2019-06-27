@@ -29,6 +29,7 @@ export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
         this.waypoints= waypoints;
+        this.active = 0;
         this.label = label;
         this.placeholderName = placeholder;
     }
@@ -96,7 +97,6 @@ export class Waypoints {
     addBlankWaypointForm(index) {
 
         const waypoint = new Waypoint();
-        console.log(waypoint);
         this.addWaypointForm(index, waypoint);
 
     }
@@ -144,7 +144,7 @@ export class Waypoints {
         let index = 0;
         this.waypoints.forEach( (waypoint) => {
 
-            this.addWaypointForm(index, waypoint, index === 0);
+            this.addWaypointForm(index, waypoint, index === this.active);
             index += 1;
 
         });
@@ -165,11 +165,12 @@ export class Waypoints {
                 interval: false,
                 wrap: false
             })
-            .on('slide.bs.carousel', function (e) {
+            .on('slide.bs.carousel', (e) => {
 
                 console.log(e);
 
                 // get current waypoint
+                this.active = e.to;
 
                 // enable/disable buttons
 
