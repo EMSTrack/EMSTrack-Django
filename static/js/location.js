@@ -24,7 +24,7 @@ export class Location {
 
     constructor(parameters) {
 
-        const properties = Object.assign({...Point.default}, parameters);
+        const properties = Object.assign(Object.assign({},Point.default), parameters);
 
         this.id = properties.id;
         this.name = properties.name;
