@@ -129,7 +129,10 @@ export class Waypoints {
 
         logger.log('info', 'adding blank waypoint');
 
+        // create blank waypoint and add to list
         const waypoint = new Waypoint();
+        this.waypoints.push(waypoint);
+
         this.addWaypointForm(index, waypoint);
 
     }
