@@ -134,7 +134,10 @@ export class Waypoints {
 
         // activate carousel
         $(`#call-${this.label}-carousel`)
-            .carousel();
+            .carousel({
+                interval: false,
+                wrap: false
+            });
 
     }
 
