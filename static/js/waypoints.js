@@ -9,9 +9,10 @@ export class Waypoint {
     constructor(parameters) {
         const properties = Object.assign({...Waypoint.default}, parameters);
 
-        this.latitude = properties.latitude;
-        this.longitude = properties.longitude;
-        this.srid = properties.srid;
+        this.id = properties.id;
+        this.order = properties.order;
+        this.status = properties.status;
+        this.location = new Location(properties.location);
     }
 
 }
