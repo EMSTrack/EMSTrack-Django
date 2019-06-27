@@ -218,6 +218,13 @@ export class Waypoints {
                 swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
                     `#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`);
 
+                // reset active indicator
+                $(`#call-${this.label}-carousel-indicators li`)
+                    .removeClass('active');
+
+                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex})`)
+                    .addClass('active');
+
             });
 
         // move forward
@@ -238,6 +245,13 @@ export class Waypoints {
                 // swap items
                 swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
                     `#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`);
+
+                // reset active indicator
+                $(`#call-${this.label}-carousel-indicators li`)
+                    .removeClass('active');
+
+                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex})`)
+                    .addClass('active');
 
             });
 
