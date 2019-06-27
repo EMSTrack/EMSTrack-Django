@@ -219,7 +219,7 @@ export class Waypoints {
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
                 swap(`#call-${this.label}-${activeWaypoint.order}-container`,
-                    `#call-${this.label}--${previousWaypoint.order}-container`);
+                    `#call-${this.label}-${previousWaypoint.order}-container`);
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
                     .addClass('active');
@@ -251,7 +251,7 @@ export class Waypoints {
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
                 swap(`#call-${this.label}-${activeWaypoint.order}-container`,
-                    `#call-${this.label}--${nextWaypoint.order}-container`);
+                    `#call-${this.label}-${nextWaypoint.order}-container`);
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
                     .addClass('active');
