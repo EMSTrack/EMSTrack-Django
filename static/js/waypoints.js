@@ -60,11 +60,10 @@ export class Waypoint {
     <li id="waypoint-${label}-item-type" class="list-group-item px-10">
         <em>${translation_table['Type']}:</em>
         <span class="float-right">${location_type[this.location.type]}</span>
-        ${this.renderStatusForm(label, "float-right")}
     </li>
     <li id="waypoint-${label}-item-status" class="list-group-item px-10">
         <em>${translation_table['Status']}:</em>
-        <span class="float-right">${waypoint_status[this.status]}</span>
+        ${this.renderStatusForm(label, "float-right")}
     </li>
     <li id="waypoint-${label}-item-address" class="list-group-item px-10">
         ${new Location(this.location).render()}
