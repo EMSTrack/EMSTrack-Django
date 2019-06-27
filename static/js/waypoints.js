@@ -118,7 +118,7 @@ export class Waypoints {
 
     }
 
-    addWaypointForm(waypoint, active = false) {
+    addWaypointForm(index, waypoint, active = false) {
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item${active ? ' active' : ''}">
@@ -134,7 +134,7 @@ export class Waypoints {
 
     }
 
-    addBlankWaypointForm() {
+    addBlankWaypointForm(index) {
 
         logger.log('info', 'adding blank waypoint');
 
@@ -144,7 +144,7 @@ export class Waypoints {
         waypoint.order = this.maxOrder;
         this.waypoints.push(waypoint);
 
-        this.addWaypointForm(waypoint);
+        this.addWaypointForm(index, waypoint);
 
     }
 
@@ -264,7 +264,7 @@ export class Waypoints {
 
                 event.stopPropagation();
 
-                this.addBlankWaypointForm();
+                this.addBlankWaypointForm( this.waypoints.length );
 
             });
 
