@@ -100,6 +100,7 @@ export class Location {
         ${Location.toText(this)}
     </p>
 </div>`
+        );
 
     }
 
