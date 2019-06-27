@@ -17,7 +17,7 @@
   border-radius: .1rem;
 }
 
-.popover-large {
-    max-width: 800px;
-    width: auto;
+.popover {
+    width: 500px;
+    max-width: none;
 }

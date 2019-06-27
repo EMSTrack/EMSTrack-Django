@@ -817,13 +817,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 </div>`,
             html: true,
             placement: 'left',
-            trigger: 'manual',
-            container: 'body',
-            template: `<div class="popover popover-large" role="tooltip">
-    <div class="arrow"></div>
-    <h3 class="popover-header"></h3>
-    <div class="popover-body"></div>
-</div>`
+            trigger: 'manual'
         })
         .on('click', function(e) {
             $(this).popover('show');
