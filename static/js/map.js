@@ -819,6 +819,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             placement: 'left',
             trigger: 'manual'
         })
+        .css('maxWidth', "600px")
         .on('click', function(e) {
             $(this).popover('show');
             e.stopPropagation();
