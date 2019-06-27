@@ -4,6 +4,26 @@
 
 import { Location } from './location';
 
+export class Waypoint {
+
+    constructor(parameters) {
+        const properties = Object.assign({...Waypoint.default}, parameters);
+
+        this.latitude = properties.latitude;
+        this.longitude = properties.longitude;
+        this.srid = properties.srid;
+    }
+
+}
+
+Waypoint.default = {
+    id: null,
+    order: -1,
+    status: 'C',
+    location: new Location()
+};
+
+
 export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
@@ -44,8 +64,7 @@ export class Waypoints {
 
     addBlankWaypointForm(index) {
 
-        const waypoint = { id: undefined, order: 1, status: 'C', location: new Location() };
-        console.log(waypoint);
+        const waypoint = new Waypoint();
         this.addWaypointForm(index, waypoint);
 
         // bind addBlankWaypointForm to click
@@ -111,6 +130,10 @@ export class Waypoints {
             index += 1;
 
         });
+
+        // activate carousel
+        $(`#call-${this.label}-carousel`)
+            .carousel();
 
     }
 

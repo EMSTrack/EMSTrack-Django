@@ -92,6 +92,6 @@ Location.default = {
     state: '',
     zipcode: '',
     country: '',
-    location: Point.default
+    location: new Point()
 };
 
