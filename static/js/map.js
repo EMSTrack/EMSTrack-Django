@@ -804,7 +804,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             // language=HTML
             content:
             `<div>  
-    <div id="${placeholder}">
+    <div id="${placeholder}" class="w-100">
     </div>
     <div class="float-right my-2">
         <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" type="button" class="btn btn-secondary">
