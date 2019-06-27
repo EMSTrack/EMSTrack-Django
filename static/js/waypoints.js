@@ -16,7 +16,7 @@ export class Waypoints {
 
         // language=HTML
         return (
-            `<div class="form-row" id="waypoint-${label}-form">  
+            `<div class="form-row" id="waypoint-${label}-form" style="width: 600px">  
     <input id="waypoint-${label}-id" 
            name="id"           
            type="hidden" 
