@@ -142,23 +142,23 @@ export class Waypoints {
         const waypoint = this.getActiveWaypoint();
         const nextWaypointIndex = this.getNextWaypointIndex();
 
+        logger.log('debug', 'activeWaypoint = %d, nextWaypoint = %d', this.activeIndex, nextWaypointIndex);
+
         // enable/disable buttons
         let skipButtonDisabled = false;
-        let forwardButtonDisable = true;
-        let addButtonDisable = false;
-
         if (waypoint.status === 'S' || waypoint.status === 'D') {
             // waypoint has been skipped or visited already
             skipButtonDisabled = true;
-            forwardButtonDisable = true;
         }
 
+        let addButtonDisable = true;
         if (this.activeIndex >= nextWaypointIndex ||
-            (nextWaypointIndex === -1 && this.activeIndex === this.waypoints.length)) {
-            // waypoint is either next or hasn't come yet
+            (this.activeIndex === this.waypoints.length - 1)) {
+            // waypoint is either next, hasn't come yet or it the last one
             addButtonDisable = false;
         }
 
+        let forwardButtonDisable = true;
         if ( this.activeIndex === nextWaypointIndex ) {
             // waypoint is next
             forwardButtonDisable = false;
@@ -200,7 +200,7 @@ export class Waypoints {
 </div>
 <div class="btn-group d-flex my-2">
     <button id="call-${this.label}-waypoints-skip-button" 
-            type="button" class="btn btn-secondary w-100"
+            type="button" class="btn btn-danger w-100"
             title="Skip waypoint">
         <span class="fas fa-stop"></span> 
     </button>
