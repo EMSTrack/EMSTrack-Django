@@ -362,6 +362,7 @@ export class Waypoints {
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
+        this.configureEditorButtons();
 
     }
 
