@@ -29,9 +29,38 @@ export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
         this.waypoints= waypoints;
-        this.active = 0;
+        this.active = (waypoints.length > 0 ? 0 : -1);
         this.label = label;
         this.placeholderName = placeholder;
+    }
+
+    setActiveWaypoint(index) {
+        this.active = index;
+    }
+
+    getActiveWaypoint() {
+        return this.waypoints[this.active];
+    }
+
+    getNextWaypointIndex() {
+
+        // next waypoint
+        let nextWaypoint = -1;
+
+        // loop over waypoints
+        let index = 0;
+        this.waypoints.forEach(function (waypoint) {
+
+            // is it next?
+            if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === -1)
+                nextWaypoint = index;
+
+            index += 1;
+
+        });
+
+        return index;
+
     }
 
     static waypointForm(label, waypoint) {
@@ -169,10 +198,41 @@ export class Waypoints {
 
                 console.log(event);
 
-                // get current waypoint
-                this.active = event.to;
+                // get active waypoint
+                const activeIndex = event.to;
+                this.setActiveWaypoint(activeIndex);
+                const waypoint = this.getActiveWaypoint();
+                const nextWaypointIndex = this.getNextWaypointIndex();
 
                 // enable/disable buttons
+                let skipButtonDisabled = false;
+                let forwardButtonDisable = true;
+                let addButtonDisable = false;
+
+                if (waypoint.status == 'S' || waypoint.status == 'D') {
+                    // waypoint has been skipped or visited already
+                    skipButtonDisabled = true;
+                    forwardButtonDisable = true;
+                } else if (activeIndex >= nextWaypointIndex) {
+                    // waypoint is either next or hasn't come yet
+                    addButtonDisable = false;
+                    if ( activeIndex == nextWaypointIndex ) {
+                        // waypoint is next
+                        forwardButtonDisable = false;
+                    }
+                }
+
+                // disable skip
+                $(`#call-${this.label}-waypoints-skip-button`)
+                    .attr('disabled', skipButtonDisabled);
+
+                // disable forward
+                $(`#call-${this.label}-waypoints-forward-button`)
+                    .attr('disabled', forwardButtonDisable);
+
+                // disable add
+                $(`#call-${this.label}-waypoints-add-button`)
+                    .attr('disabled', addButtonDisable);
 
             });
 
