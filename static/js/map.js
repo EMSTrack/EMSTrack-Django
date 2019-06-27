@@ -806,15 +806,15 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             `<div>  
     <div id="${placeholder}">
     </div>
-    <div class="btn-group float-right">
+    <div class="btn-group d-flex">
         <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
                 type="button" 
-                class="btn btn-secondary">
+                class="btn btn-secondary w-100">
             ${translation_table["Cancel"]}    
         </button>
         <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
                 type="button" 
-                class="btn btn-primary">
+                class="btn btn-primary w-100">
             ${translation_table["Save"]}
         </button>
     </div>
@@ -837,17 +837,6 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
             // create patient form
             waypoints.render();
-
-            // add waypoint point
-            $('#call-' + call_id + '-' + ambulance_id + '-waypoints-add-button')
-                .on('click', function (event) {
-
-                    event.stopPropagation();
-
-                    waypoints.addBlankWaypointForm();
-
-                });
-
 
             // toggle on cancel
             $('#call-' + call_id + '-' + ambulance_id + '-waypoints-cancel-button')

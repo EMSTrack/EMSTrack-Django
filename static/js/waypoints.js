@@ -121,7 +121,7 @@ export class Waypoints {
         <span class="sr-only">Next</span>
     </a>
 </div>
-<div class="btn-group d-flex">
+<div class="btn-group d-flex my-2">
     <button id="call-${this.label}-waypoints-skip-button" 
             type="button" class="btn btn-secondary w-100"
             title="Skip waypoint">
@@ -148,6 +148,16 @@ export class Waypoints {
             index += 1;
 
         });
+
+        // add waypoint point
+        $(`#call-${this.label}-waypoints-add-button`)
+            .on('click', function (event) {
+
+                event.stopPropagation();
+
+                this.addBlankWaypointForm();
+
+            });
 
         // activate carousel
         $(`#call-${this.label}-carousel`)
