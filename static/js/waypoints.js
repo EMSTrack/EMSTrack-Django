@@ -221,7 +221,7 @@ export class Waypoints {
                 // reset active indicator
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
                 indicators.removeClass('active');
-                indicators[this.activeIndex - 1].addClass('active');
+                indicators.eq(this.activeIndex - 1).addClass('active');
 
             });
 
@@ -247,7 +247,7 @@ export class Waypoints {
                 // reset active indicator
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
                 indicators.removeClass('active');
-                indicators[this.activeIndex + 1].addClass('active');
+                indicators.eq(this.activeIndex + 1).addClass('active');
 
             });
 
