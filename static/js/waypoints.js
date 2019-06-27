@@ -77,11 +77,18 @@ export class Waypoints {
 
     }
 
-    addWaypointForm(index, waypoint) {
+    addWaypointForm(index, waypoint, active = false) {
 
-        $(`#call-${this.label}-carousel-items`).append( Waypoints.waypointForm(this.label + '-' + index, waypoint) );
+        $(`#call-${this.label}-carousel-items`).append(
+            `<div class="carousel-item${active ? ' active' : ''}">
+    ${Waypoints.waypointForm(this.label + '-' + index, waypoint)}
+</div>`
+        );
         $(`#call-${this.label}-carousel-indicators`).append(
-            `<li data-target="#call-${this.label}-carousel" data-slide-to="${index}" class="active"></li>`
+            `<li data-target="#call-${this.label}-carousel" 
+    data-slide-to="${index}" 
+    ${active ? 'class="active"' : ''}>
+</li>`
         );
 
     }
@@ -120,10 +127,10 @@ export class Waypoints {
         let index = 0;
         this.waypoints.forEach( (waypoint) => {
 
-            this.addWaypointForm(index, waypoint);
+            this.addWaypointForm(index, waypoint, index === 0);
             index += 1;
 
-            this.addWaypointForm(index, waypoint);
+            this.addWaypointForm(index, waypoint, index === 0);
             index += 1;
 
         });
