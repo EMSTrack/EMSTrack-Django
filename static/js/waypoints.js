@@ -62,21 +62,6 @@ export class Waypoints {
 
     }
 
-    addBlankWaypointForm(index) {
-
-        const waypoint = new Waypoint();
-        console.log(waypoint);
-        this.addWaypointForm(index, waypoint);
-
-        // bind addBlankWaypointForm to click
-        this.placeholder.find('#waypoint-' + this.label + '-' + index + '-button')
-            .off('click')
-            .on('click', () => {
-
-            });
-
-    }
-
     removeWaypointForm(index) {
 
         // mark as deleted
@@ -93,8 +78,18 @@ export class Waypoints {
 
     addWaypointForm(index, waypoint) {
 
-        // add to form
-        this.placeholder.append(Waypoints.waypointForm(this.label + '-' + index, waypoint));
+        $(`#call-${this.label}-carousel-items`).append( Waypoints.waypointForm(this.label + '-' + index, waypoint) );
+        $(`#call-${this.label}-carousel-indicators`).append(
+            `<li data-target="#call-${this.label}-carousel" data-slide-to="${index}" class="active"></li>`
+        );
+
+    }
+
+    addBlankWaypointForm(index) {
+
+        const waypoint = new Waypoint();
+        console.log(waypoint);
+        this.addWaypointForm(index, waypoint);
 
     }
 
@@ -122,12 +117,9 @@ export class Waypoints {
 
         // add existing waypoints
         let index = 0;
-        const carousel_indicators = $(`#call-${this.label}-carousel-indicators`);
-        const carousel_items = $(`#call-${this.label}-carousel-items`);
         this.waypoints.forEach( (waypoint) => {
 
-            carousel_items.append( this.addWaypointForm(index, waypoint) );
-            carousel_indicators.append( `<li data-target="#call-${this.label}-carousel" data-slide-to="${index}" class="active"></li>` );
+            this.addWaypointForm(index, waypoint);
             index += 1;
 
         });
