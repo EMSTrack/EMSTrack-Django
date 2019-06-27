@@ -803,7 +803,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             title: translation_table['Waypoints'],
             // language=HTML
             content:
-            `<div>  
+            `<div style="width: 600px">  
     <div id="${placeholder}">
     </div>
     <div class="float-right my-2">
