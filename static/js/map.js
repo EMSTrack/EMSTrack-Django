@@ -806,30 +806,34 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             `<div>  
     <div id="${placeholder}">
     </div>
-    <div class="btn-group d-flex mt-2">
-        <button id="call-${call_id}-${ambulance_id}-waypoints-skip-button" 
-                type="button" class="btn btn-secondary w-100"
-                title="Skip waypoint">
-            <span class="fas fa-stop"></span> 
-        </button>
-        <button id="call-${call_id}-${ambulance_id}-waypoints-status-button" 
-                type="button" class="btn btn-primary w-100"
-                title="Mark as visiting">
-            <span class="fas fa-play"></span> 
-        </button>
-        <button id="call-${call_id}-${ambulance_id}-waypoints-add-button" 
-                type="button" class="btn btn-primary w-100"
-                title="Add waypoint">
-            <span class="fas fa-plus"></span> 
-        </button>
-    </div>
-    <div class="float-right my-2">
-        <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" type="button" class="btn btn-secondary">
-            ${translation_table["Cancel"]}    
-        </button>
-        <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" type="button" class="btn btn-primary">
-            ${translation_table["Save"]}
-        </button>
+    <div class="btn-toolbar mt-2" role="toolbar">
+        <div class="btn-group d-flex mr-2">
+            <button id="call-${call_id}-${ambulance_id}-waypoints-skip-button" 
+                    type="button" class="btn btn-secondary w-100"
+                    title="Skip waypoint">
+                <span class="fas fa-stop"></span> 
+            </button>
+            <button id="call-${call_id}-${ambulance_id}-waypoints-status-button" 
+                    type="button" class="btn btn-primary w-100"
+                    title="Mark as visiting">
+                <span class="fas fa-play"></span> 
+            </button>
+            <button id="call-${call_id}-${ambulance_id}-waypoints-add-button" 
+                    type="button" class="btn btn-primary w-100"
+                    title="Add waypoint">
+                <span class="fas fa-plus"></span> 
+            </button>
+        </div>
+        <div class="btn-group d-flex">
+            <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
+                    type="button" class="btn btn-secondary w-100">
+                ${translation_table["Cancel"]}    
+            </button>
+            <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
+                    type="button" class="btn btn-primary w-100">
+                ${translation_table["Save"]}
+            </button>
+        </div>
     </div>
 </div>`,
             html: true,
