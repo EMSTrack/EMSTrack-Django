@@ -222,7 +222,7 @@ export class Waypoints {
                 $(`#call-${this.label}-carousel-indicators li`)
                     .removeClass('active');
 
-                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex})`)
+                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex - 1})`)
                     .addClass('active');
 
             });
@@ -250,7 +250,7 @@ export class Waypoints {
                 $(`#call-${this.label}-carousel-indicators li`)
                     .removeClass('active');
 
-                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex})`)
+                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex + 1})`)
                     .addClass('active');
 
             });
