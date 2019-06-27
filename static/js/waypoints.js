@@ -26,7 +26,15 @@ export class Waypoints {
            type="hidden"
            class="form-control form-control-sm"  
            value="${waypoint.order}">
-    <li id="waypoint-${label}-item" class="list-group-item">
+    <li id="waypoint-${label}-item-type" class="list-group-item">
+        <em>${translation_table['Type']}:</em>
+        <span class="float-right">${location_type[waypoint.location.type]}</span>
+    </li>
+    <li id="waypoint-${label}-item-status" class="list-group-item">
+        <em>${translation_table['Status']}:</em>
+        <span class="float-right">${waypoint_status[waypoint.status]}</span>
+    </li>
+    <li id="waypoint-${label}-item-address" class="list-group-item">
         ${new Location(waypoint.location).render()}
     </li>
 </ul>`

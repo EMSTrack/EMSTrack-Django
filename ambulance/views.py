@@ -17,7 +17,7 @@ from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMi
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
-    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallPriorityCode
+    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallPriorityCode, WaypointStatus, WaypointStatusOrder
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -253,6 +253,9 @@ class AmbulanceMap(TemplateView):
         context['location_type'] = {m.name: m.value
                                     for m in LocationType}
         context['location_type_order'] = [m.name for m in LocationTypeOrder]
+        context['waypoint_status'] = {m.name: m.value
+                                      for m in WaypointStatus}
+        context['waypoint_status_order'] = [m.name for m in WaypointStatusOrder]
         context['call_status'] = {m.name: m.value
                                   for m in CallStatus}
         context['call_status_order'] = [m.name for m in CallStatusOrder]

@@ -677,6 +677,14 @@ class WaypointStatus(Enum):
     S = _('Skipped')
 
 
+WaypointStatusOrder = [
+    WaypointStatus.C,
+    WaypointStatus.V,
+    WaypointStatus.D,
+    WaypointStatus.S
+]
+
+
 class Waypoint(PublishMixin,
                UpdatedByModel):
     # call

@@ -40,10 +40,6 @@ export class Location {
     <p>
         ${Location.toText(this.location)}
     </p>
-    <p>
-        <em>${translation_table['Type']}:</em>
-        <span class="float-right">${location_type[this.location.type]}</span>
-    </p>
 </div>`
         );
 
