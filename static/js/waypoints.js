@@ -34,6 +34,13 @@ export class Waypoints {
         this.activeIndex = (waypoints.length > 0 ? 0 : -1);
         this.label = label;
         this.placeholderName = placeholder;
+
+        // calculate maxOrder
+        this.maxOrder = 0;
+        for (const waypoint of this.waypoints) {
+            this.maxOrder = ( this.maxOrder > waypoint.order ? this.maxOrder : waypoint.order );
+        }
+
     }
 
     setActiveWaypoint(index) {
@@ -71,7 +78,7 @@ export class Waypoints {
 
         // language=HTML
         return (
-            `<ul id="waypoint-${label}-form" class="list-group">  
+            `<ul id="waypoint-${label}-${waypoint.order}-form" class="list-group">  
     <input id="waypoint-${label}-id" 
            name="id"           
            type="hidden" 
@@ -111,11 +118,11 @@ export class Waypoints {
 
     }
 
-    addWaypointForm(index, waypoint, active = false) {
+    addWaypointForm(waypoint, active = false) {
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item${active ? ' active' : ''}">
-    ${Waypoints.waypointForm(this.label + '-' + index, waypoint)}
+    ${Waypoints.waypointForm(this.label, waypoint)}
 </div>`
         );
         $(`#call-${this.label}-carousel-indicators`).append(
@@ -127,15 +134,17 @@ export class Waypoints {
 
     }
 
-    addBlankWaypointForm(index) {
+    addBlankWaypointForm() {
 
         logger.log('info', 'adding blank waypoint');
 
-        // create blank waypoint and add to list
+        // create blank waypoint, update maxOrder and add to list
         const waypoint = new Waypoint();
+        this.maxOrder += 1;
+        waypoint.order = this.maxOrder;
         this.waypoints.push(waypoint);
 
-        this.addWaypointForm(index, waypoint);
+        this.addWaypointForm(waypoint);
 
     }
 
@@ -241,7 +250,7 @@ export class Waypoints {
         let index = 0;
         this.waypoints.forEach( (waypoint) => {
 
-            this.addWaypointForm(index, waypoint, index === this.activeIndex);
+            this.addWaypointForm(waypoint, index === this.activeIndex);
             index += 1;
 
         });
@@ -249,13 +258,29 @@ export class Waypoints {
         // configure buttons
         this.configureEditorButtons();
 
-        // add waypoint point
+        // add waypoint
         $(`#call-${this.label}-waypoints-add-button`)
             .on('click', (event) => {
 
                 event.stopPropagation();
 
                 this.addBlankWaypointForm();
+
+            });
+
+        // move back
+        $(`#call-${this.label}-waypoints-backward-button`)
+            .on('click', (event) => {
+
+                event.stopPropagation();
+
+            });
+
+        // move forward
+        $(`#call-${this.label}-waypoints-forward-button`)
+            .on('click', (event) => {
+
+                event.stopPropagation();
 
             });
 
