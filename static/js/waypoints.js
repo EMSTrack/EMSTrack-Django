@@ -130,6 +130,43 @@ export class Waypoints {
 
     }
 
+    configureEditorButtons() {
+
+        const waypoint = this.getActiveWaypoint();
+        const nextWaypointIndex = this.getNextWaypointIndex();
+
+        // enable/disable buttons
+        let skipButtonDisabled = false;
+        let forwardButtonDisable = true;
+        let addButtonDisable = false;
+
+        if (waypoint.status == 'S' || waypoint.status == 'D') {
+            // waypoint has been skipped or visited already
+            skipButtonDisabled = true;
+            forwardButtonDisable = true;
+        } else if (activeIndex >= nextWaypointIndex) {
+            // waypoint is either next or hasn't come yet
+            addButtonDisable = false;
+            if ( activeIndex == nextWaypointIndex ) {
+                // waypoint is next
+                forwardButtonDisable = false;
+            }
+        }
+
+        // disable skip
+        $(`#call-${this.label}-waypoints-skip-button`)
+            .attr('disabled', skipButtonDisabled);
+
+        // disable forward
+        $(`#call-${this.label}-waypoints-forward-button`)
+            .attr('disabled', forwardButtonDisable);
+
+        // disable add
+        $(`#call-${this.label}-waypoints-add-button`)
+            .attr('disabled', addButtonDisable);
+
+    }
+
     render() {
 
         // create placeholder selector
@@ -178,6 +215,9 @@ export class Waypoints {
 
         });
 
+        // configure buttons
+        this.configureEditorButtons();
+
         // add waypoint point
         $(`#call-${this.label}-waypoints-add-button`)
             .on('click', (event) => {
@@ -200,39 +240,10 @@ export class Waypoints {
 
                 // get active waypoint
                 const activeIndex = event.to;
+
+                // set active and configure buttons
                 this.setActiveWaypoint(activeIndex);
-                const waypoint = this.getActiveWaypoint();
-                const nextWaypointIndex = this.getNextWaypointIndex();
-
-                // enable/disable buttons
-                let skipButtonDisabled = false;
-                let forwardButtonDisable = true;
-                let addButtonDisable = false;
-
-                if (waypoint.status == 'S' || waypoint.status == 'D') {
-                    // waypoint has been skipped or visited already
-                    skipButtonDisabled = true;
-                    forwardButtonDisable = true;
-                } else if (activeIndex >= nextWaypointIndex) {
-                    // waypoint is either next or hasn't come yet
-                    addButtonDisable = false;
-                    if ( activeIndex == nextWaypointIndex ) {
-                        // waypoint is next
-                        forwardButtonDisable = false;
-                    }
-                }
-
-                // disable skip
-                $(`#call-${this.label}-waypoints-skip-button`)
-                    .attr('disabled', skipButtonDisabled);
-
-                // disable forward
-                $(`#call-${this.label}-waypoints-forward-button`)
-                    .attr('disabled', forwardButtonDisable);
-
-                // disable add
-                $(`#call-${this.label}-waypoints-add-button`)
-                    .attr('disabled', addButtonDisable);
+                this.configureEditorButtons();
 
             });
 
