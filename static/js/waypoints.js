@@ -123,6 +123,9 @@ export class Waypoints {
             this.addWaypointForm(index, waypoint);
             index += 1;
 
+            this.addWaypointForm(index, waypoint);
+            index += 1;
+
         });
 
         // activate carousel
