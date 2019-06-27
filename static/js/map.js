@@ -963,7 +963,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
                         // update call
                         const data = { patient_set: newPatients };
-                        apiClient.patchCall(call, data)
+                        apiClient.patchCall(call_id, data)
                             .then( (call) => {
                                 logger.log('info', "Successfully updated call");
                             })
@@ -1845,7 +1845,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
 
     // patch ambulance
     const data = { status: status };
-    apiClient.patchAmbulance(ambulance, data)
+    apiClient.patchAmbulance(ambulance_id, data)
         .then( (ambulance) => {
 
             logger.log('info', 'Successfully patched ambulance');

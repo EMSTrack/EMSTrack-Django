@@ -268,20 +268,20 @@ export class AppClient extends TopicObserver {
             });
     }
 
-    patchCall(call, data) {
+    patchCall(call_id, data) {
 
         // retrieve bases
-        return this.httpClient.patch('call/' + call.id + '/', data)
+        return this.httpClient.patch('call/' + call_id + '/', data)
             .then( (response) => {
                 // return modified call
                 return response.data;
             });
     }
 
-    patchAmbulance(ambulance, data) {
+    patchAmbulance(ambulance_id, data) {
 
         // retrieve bases
-        return this.httpClient.patch('ambulance/' + ambulance.id + '/', data)
+        return this.httpClient.patch('ambulance/' + ambulance_id + '/', data)
             .then( (response) => {
                 // return modified ambulance
                 return response.data;
