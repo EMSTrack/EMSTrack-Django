@@ -806,7 +806,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             `<div>  
     <div id="${placeholder}">
     </div>
-    <div class="btn-group d-flex">
+    <div class="btn-group d-flex mt-2">
         <button id="call-${call_id}-${ambulance_id}-waypoints-skip-button" type="button" class="btn btn-secondary w-100">
             <span class="fas fa-stop"></span> 
         </button>
