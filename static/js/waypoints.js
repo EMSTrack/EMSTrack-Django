@@ -173,7 +173,7 @@ export class Waypoints {
 
         let forwardButtonDisable = true;
         if ( this.activeIndex >= nextWaypointIndex
-            && this.activeIndex < this.waypoints.length
+            && this.activeIndex < this.waypoints.length - 1
             && (waypoint.status === 'C' || waypoint.status === 'S')) {
             // waypoint is next or beyond but not last and is either created or skipped
             forwardButtonDisable = false;
