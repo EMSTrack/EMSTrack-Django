@@ -803,7 +803,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             title: translation_table['Waypoints'],
             // language=HTML
             content:
-            `<div style="width: 600px; max-width: 600px">  
+            `<div>  
     <div id="${placeholder}">
     </div>
     <div class="float-right my-2">
@@ -817,7 +817,12 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 </div>`,
             html: true,
             placement: 'left',
-            trigger: 'manual'
+            trigger: 'manual',
+            template: `<div class="popover popover-large" role="tooltip">
+    <div class="arrow"></div>
+    <h3 class="popover-header"></h3>
+    <div class="popover-body"></div>
+</div>`
         })
         .on('click', function(e) {
             $(this).popover('show');

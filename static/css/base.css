@@ -16,3 +16,7 @@
   line-height: .5;
   border-radius: .1rem;
 }
+
+.popover-large {
+    max-width: 500px;
+}
