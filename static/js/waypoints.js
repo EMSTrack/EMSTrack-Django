@@ -151,7 +151,7 @@ export class Waypoints {
 
         // add waypoint point
         $(`#call-${this.label}-waypoints-add-button`)
-            .on('click', function (event) {
+            .on('click', (event) => {
 
                 event.stopPropagation();
 
@@ -165,12 +165,12 @@ export class Waypoints {
                 interval: false,
                 wrap: false
             })
-            .on('slide.bs.carousel', (e) => {
+            .on('slide.bs.carousel', (event) => {
 
-                console.log(e);
+                console.log(event);
 
                 // get current waypoint
-                this.active = e.to;
+                this.active = event.to;
 
                 // enable/disable buttons
 
