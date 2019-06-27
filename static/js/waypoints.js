@@ -111,12 +111,32 @@ export class Waypoints {
         // create placeholder selector
         this.placeholder = $(this.placeholderName);
 
+        this.placeholder.html(`
+<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
+  <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
+  </ol>
+  <div id="call-${this.label}-carousel-items" class="carousel-inner">
+  </div>
+  <a class="carousel-control-prev" href="#call-${this.label}-carousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#call-${this.label}-carousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>`
+        );
+
         // add existing waypoints
         let index = 0;
+        const carousel_indicators = $(`#call-${this.label}-carousel-indicators`);
+        const carousel_items = $(`#call-${this.label}-carousel-items`);
         this.waypoints.forEach( (waypoint) => {
 
+            carousel_items.append( this.addWaypointForm(index, waypoint) );
+            carousel_indicators.append( `<li data-target="#call-${this.label}-carousel" data-slide-to="${index}" class="active"></li>` );
             index += 1;
-            this.addWaypointForm(index, waypoint);
 
         });
 
