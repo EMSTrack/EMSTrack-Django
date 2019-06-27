@@ -118,7 +118,9 @@ export class Waypoints {
 
     }
 
-    addWaypointForm(index, waypoint, active = false) {
+    addWaypointForm(index, waypoint) {
+
+        const active = index === this.activeIndex;
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item${active ? ' active' : ''}">
@@ -250,7 +252,7 @@ export class Waypoints {
         let index = 0;
         this.waypoints.forEach( (waypoint) => {
 
-            this.addWaypointForm(waypoint, index === this.activeIndex);
+            this.addWaypointForm( index, waypoint );
             index += 1;
 
         });
