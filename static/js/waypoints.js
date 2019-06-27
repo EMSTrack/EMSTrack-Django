@@ -29,17 +29,17 @@ export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
         this.waypoints= waypoints;
-        this.active = (waypoints.length > 0 ? 0 : -1);
+        this.activeIndex = (waypoints.length > 0 ? 0 : -1);
         this.label = label;
         this.placeholderName = placeholder;
     }
 
     setActiveWaypoint(index) {
-        this.active = index;
+        this.activeIndex = index;
     }
 
     getActiveWaypoint() {
-        return this.waypoints[this.active];
+        return this.waypoints[this.activeIndex];
     }
 
     getNextWaypointIndex() {
@@ -144,13 +144,17 @@ export class Waypoints {
             // waypoint has been skipped or visited already
             skipButtonDisabled = true;
             forwardButtonDisable = true;
-        } else if (activeIndex >= nextWaypointIndex) {
+        }
+
+        if (this.activeIndex >= nextWaypointIndex ||
+            (nextWaypointIndex == -1 && this.activeIndex == this.waypoints.length)) {
             // waypoint is either next or hasn't come yet
             addButtonDisable = false;
-            if ( activeIndex == nextWaypointIndex ) {
-                // waypoint is next
-                forwardButtonDisable = false;
-            }
+        }
+
+        if ( this.activeIndex == nextWaypointIndex ) {
+            // waypoint is next
+            forwardButtonDisable = false;
         }
 
         // disable skip
@@ -210,7 +214,7 @@ export class Waypoints {
         let index = 0;
         this.waypoints.forEach( (waypoint) => {
 
-            this.addWaypointForm(index, waypoint, index === this.active);
+            this.addWaypointForm(index, waypoint, index === this.activeIndex);
             index += 1;
 
         });
@@ -238,11 +242,8 @@ export class Waypoints {
 
                 console.log(event);
 
-                // get active waypoint
-                const activeIndex = event.to;
-
-                // set active and configure buttons
-                this.setActiveWaypoint(activeIndex);
+                // set active waypoint and configure buttons
+                this.setActiveWaypoint(event.to);
                 this.configureEditorButtons();
 
             });
