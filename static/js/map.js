@@ -807,24 +807,24 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
     <div id="${placeholder}">
     </div>
     <div class="btn-toolbar justify-content-between mt-2" role="toolbar">
-        <div class="btn-group px-3">
+        <div class="btn-group">
             <button id="call-${call_id}-${ambulance_id}-waypoints-skip-button" 
-                    type="button" class="btn btn-secondary"
+                    type="button" class="btn btn-secondary px-2"
                     title="Skip waypoint">
                 <span class="fas fa-stop"></span> 
             </button>
             <button id="call-${call_id}-${ambulance_id}-waypoints-back-button" 
-                    type="button" class="btn btn-danger"
+                    type="button" class="btn btn-danger px-2"
                     title="Mark as visiting">
                 <span class="fas fa-undo"></span> 
             </button>
             <button id="call-${call_id}-${ambulance_id}-waypoints-forward-button" 
-                    type="button" class="btn btn-warning"
+                    type="button" class="btn btn-warning px-2"
                     title="Mark as visiting">
                 <span class="fas fa-redo"></span> 
             </button>
             <button id="call-${call_id}-${ambulance_id}-waypoints-add-button" 
-                    type="button" class="btn btn-info"
+                    type="button" class="btn btn-info px-2"
                     title="Add waypoint">
                 <span class="fas fa-plus"></span> 
             </button>
