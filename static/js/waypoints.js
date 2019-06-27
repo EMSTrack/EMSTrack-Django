@@ -235,6 +235,9 @@ export class Waypoints {
                 indicators.removeClass('active');
                 indicators.eq(this.activeIndex).addClass('active');
 
+                // configure buttons
+                this.configureEditorButtons();
+
             });
 
         // move forward
@@ -272,6 +275,9 @@ export class Waypoints {
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
                 indicators.removeClass('active');
                 indicators.eq(this.activeIndex).addClass('active');
+
+                // configure buttons
+                this.configureEditorButtons();
 
             });
 
