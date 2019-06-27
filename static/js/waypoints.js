@@ -31,7 +31,7 @@ export class Waypoint {
 
         let middle = '';
         waypoint_status_order.forEach( (status) => {
-            middle += `        <a class="dropdown-item"
+            middle += `        <a class="dropdown-item small"
         id="waypoint-${label}-status-${status}-menu-item" 
         href="#">${waypoint_status[status]}</a>`;
         });
