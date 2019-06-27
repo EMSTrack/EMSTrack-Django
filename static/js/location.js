@@ -4,12 +4,6 @@
 
 export class Point {
 
-    default = {
-        latitude: 32.5149,
-        longitude: -117.0382,
-        srid: 4326
-    };
-
     constructor(parameters) {
         const properties = Object.assign({...Point.default}, parameters);
 
@@ -20,22 +14,13 @@ export class Point {
 
 }
 
-export class Location {
+Point.default = {
+    latitude: 32.5149,
+    longitude: -117.0382,
+    srid: 4326
+};
 
-    default = {
-        id: null,
-        name: '',
-        type: 'w',
-        number: '',
-        street: '',
-        unit: '',
-        neighborhood: '',
-        city: '',
-        state: '',
-        zipcode: '',
-        country: '',
-        location: Point.default
-    };
+export class Location {
 
     constructor(parameters) {
 
@@ -94,3 +79,19 @@ export class Location {
     }
 
 }
+
+Location.default = {
+    id: null,
+    name: '',
+    type: 'w',
+    number: '',
+    street: '',
+    unit: '',
+    neighborhood: '',
+    city: '',
+    state: '',
+    zipcode: '',
+    country: '',
+    location: Point.default
+};
+
