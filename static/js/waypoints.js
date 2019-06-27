@@ -51,15 +51,17 @@ export class Waypoints {
 
         // loop over waypoints
         let index = 0;
-        this.waypoints.forEach(function (waypoint) {
+        for (const waypoint of this.waypoints) {
 
             // is it next?
-            if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === -1)
+            if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === -1) {
                 nextWaypoint = index;
+                break;
+            }
 
             index += 1;
 
-        });
+        }
 
         return nextWaypoint;
 
