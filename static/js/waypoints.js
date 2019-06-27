@@ -119,7 +119,7 @@ export class Waypoints {
             this.addWaypointForm(index, waypoint);
 
         });
-        
+
     }
 
     getData() {

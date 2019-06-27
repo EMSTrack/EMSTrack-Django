@@ -299,7 +299,8 @@ class AmbulanceMap(TemplateView):
             "Hybrid": _("Hybrid"),
             "Waypoints": _("Waypoints"),
             "Type": _("Type"),
-            "Status": _("Status")
+            "Status": _("Status"),
+            "Address": _("Address")
         }
 
         return context
