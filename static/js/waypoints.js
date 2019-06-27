@@ -218,8 +218,8 @@ export class Waypoints {
                 // swap items
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
-                swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
-                    `#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`);
+                $(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`)
+                    .after($(`#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`));
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
                     .addClass('active');
@@ -250,8 +250,8 @@ export class Waypoints {
                 // swap items
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
-                swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
-                    `#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`);
+                $(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`)
+                    .before($(`#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`));
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
                     .addClass('active');
