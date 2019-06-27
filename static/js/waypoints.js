@@ -213,6 +213,12 @@ export class Waypoints {
                 // get current active and previous waypoints
                 const activeWaypoint = this.getActiveWaypoint();
                 const previousWaypoint = this.waypoints[this.activeIndex - 1];
+
+                // swap array elements
+                [this.waypoints[this.activeIndex], this.waypoints[this.activeIndex - 1]] =
+                    [this.waypoints[this.activeIndex - 1], this.waypoints[this.activeIndex]]
+
+                // update active index
                 this.activeIndex -= 1;
 
                 // swap items
@@ -245,6 +251,12 @@ export class Waypoints {
                 // get current active and previous waypoints
                 const activeWaypoint = this.getActiveWaypoint();
                 const nextWaypoint = this.waypoints[this.activeIndex + 1];
+
+                // swap array elements
+                [this.waypoints[this.activeIndex], this.waypoints[this.activeIndex + 1]] =
+                    [this.waypoints[this.activeIndex + 1], this.waypoints[this.activeIndex]]
+
+                // update active index
                 this.activeIndex += 1;
 
                 // swap items
