@@ -62,11 +62,37 @@ export class Location {
         return address;
     }
 
-    render() {
+    renderTypeForm(label, classes = "") {
+
+        // language=HTML
+        const top = `<div class="dropdown ${classes}"
+    id="location-${label}-type-menu">
+    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
+            id="location-${label}-type-menu-button" 
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span id="location-${label}-type-menu-button-label">${location_type[this.type]}</span>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="location-${label}-type-menu-button">`;
+
+        let middle = '';
+        location_type_order.forEach( (type) => {
+            middle += `        <a class="dropdown-item small"
+        id="location-${label}-type-${type}-menu-item" 
+        href="#">${location_type[type]}</a>`;
+        });
+
+        // language=HTML
+        const bottom = `    </div>
+</div>`;
+
+        return top + middle + bottom;
+    }
+
+    renderAddress(label, classes = "") {
 
         // language=HTML
         return (
-            `<div class="my-0 py-0">
+            `<div class="my-0 py-0 ${classes}" id="location-${label}-address-div">
     <p>
         <em>${translation_table['Address']}:</em>
     </p>
@@ -74,10 +100,32 @@ export class Location {
         ${Location.toText(this)}
     </p>
 </div>`
-        );
 
     }
 
+    render(label, classes = "", options = ['address-div']) {
+
+        if (options.include('type-dropdown'))
+            return this.renderTypeForm(label, classes);
+        else // if (options.include('address-div'))
+            return this.renderAddress(label, classes);;
+    }
+
+    postRender(label, options = ['address-div']) {
+
+        if (options.include('type-dropdown')) {
+            $(`#location-${label}-type-menu a`)
+                .click(function () {
+
+                    // copy to label
+                    $(`#location-${label}-type-menu-button-label`)
+                        .text($(this).text());
+
+                });
+        }
+
+    }
+    
 }
 
 Location.default = {

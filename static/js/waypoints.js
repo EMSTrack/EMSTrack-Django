@@ -25,7 +25,7 @@ export class Waypoint {
     <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
             id="waypoint-${label}-status-menu-button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span id="waypoint-${label}-status-menu-button-label">${waypoint_status[status]}</span>
+        <span id="waypoint-${label}-status-menu-button-label">${waypoint_status[this.status]}</span>
     </button>
     <div class="dropdown-menu" aria-labelledby="waypoint-${label}-status-menu-button">`;
 
@@ -43,11 +43,10 @@ export class Waypoint {
         return top + middle + bottom;
     }
 
-    render(label) {
+    render(label, options = ['status-span', 'type-dropdown', 'address-div']) {
 
         // language=HTML
-        return (
-            `<ul id="waypoint-${label}-${this.order}-form" class="list-group">  
+        let html = `<ul id="waypoint-${label}-${this.order}-form" class="list-group">  
     <input id="waypoint-${label}-id" 
            name="id"           
            type="hidden" 
@@ -58,31 +57,47 @@ export class Waypoint {
            class="form-control form-control-sm"  
            value="${this.order}">
     <li id="waypoint-${label}-item-type" class="list-group-item px-10">
-        <em>${translation_table['Type']}:</em>
-        <span class="float-right">${location_type[this.location.type]}</span>
-    </li>
+        <em>${translation_table['Type']}:</em>`;
+
+        // status
+        if (options.include('status-dropdown'))
+            html += this.renderStatusForm(label, "dropleft float-right");
+        else // if (options.include('status-span'))
+            html += `<span class="float-right">${waypoint_status[this.status]}</span>`;
+
+        html += `    </li>
     <li id="waypoint-${label}-item-status" class="list-group-item px-10">
-        <em>${translation_table['Status']}:</em>
-        ${this.renderStatusForm(label, "dropleft float-right")}
-    </li>
+        <em>${translation_table['Status']}:</em>`;
+
+        // type
+        if (options.include('type-dropdown'))
+            this.location.render(label, "dropleft float-right", "type-dropdown");
+        else // if (options.include('type-span'))
+            html += `<span class="float-right">${location_type[this.location.type]}</span>`;
+
+        html += `    </li>
     <li id="waypoint-${label}-item-address" class="list-group-item px-10">
-        ${new Location(this.location).render()}
+        ${this.location.render(label)}
     </li>
 </ul>`
-        );
+
+        return html;
 
     }
 
-    postRender(label) {
+    postRender(label, options = ['status-span', 'type-dropdown', 'address-div']) {
 
-        $(`#waypoint-${label}-status-menu a`)
-            .click( function() {
+        if (options.include('status-dropdown'))
+            $(`#waypoint-${label}-status-menu a`)
+                .click( function() {
 
-                // copy to label
-                $(`#waypoint-${label}-status-menu-button-label`)
-                    .text($(this).text());
+                    // copy to label
+                    $(`#waypoint-${label}-status-menu-button-label`)
+                        .text($(this).text());
 
-            });
+                });
+
+        this.location.postRender(label, options);
 
     }
 
