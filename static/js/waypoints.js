@@ -203,7 +203,7 @@ export class Waypoints {
 
         // swap array elements
         [this.waypoints[i], this.waypoints[j]] =
-            [this.waypoints[i], this.waypoints[j]]
+            [this.waypoints[j], this.waypoints[i]]
 
         // swap active index
         if (this.activeIndex === i || this.activeIndex === j) {
