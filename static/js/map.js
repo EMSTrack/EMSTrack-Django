@@ -790,7 +790,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
     // create waypoint object
     const placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints';
-    const waypoints = new Waypoints(waypoint_set, call_id, '#' + placeholder);
+    const waypoints = new Waypoints(waypoint_set, call_id + '-' + ambulance_id, '#' + placeholder);
     const selector = $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button');
 
     // destroy?
