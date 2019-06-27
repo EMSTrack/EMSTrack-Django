@@ -356,7 +356,7 @@ export class Waypoints {
 
         // create blank waypoint, update maxOrder and add to list
         this.maxOrder += 1;
-        const waypoint = new Waypoint({maxOrder: this.maxOrder});
+        const waypoint = new Waypoint({order: this.maxOrder});
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
