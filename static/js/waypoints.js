@@ -65,6 +65,7 @@ export class Waypoints {
     addBlankWaypointForm(index) {
 
         const waypoint = new Waypoint();
+        console.log(waypoint);
         this.addWaypointForm(index, waypoint);
 
         // bind addBlankWaypointForm to click
