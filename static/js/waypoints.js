@@ -215,8 +215,11 @@ export class Waypoints {
                 const previousWaypoint = this.waypoints[this.activeIndex - 1];
 
                 // swap items
+                const items = $(`#call-${this.label}-carousel-items`);
+                items.removeClass('active');
                 swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
                     `#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`);
+                items.eq(this.activeIndex - 1).addClass('active');
 
                 // reset active indicator
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
@@ -241,8 +244,11 @@ export class Waypoints {
                 const nextWaypoint = this.waypoints[this.activeIndex + 1];
 
                 // swap items
+                const items = $(`#call-${this.label}-carousel-items`);
+                items.removeClass('active');
                 swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
                     `#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`);
+                items.eq(this.activeIndex + 1).addClass('active');
 
                 // reset active indicator
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
