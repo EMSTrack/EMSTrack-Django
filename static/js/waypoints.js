@@ -60,9 +60,9 @@ export class Waypoint {
         <em>${translation_table['Type']}:</em>`;
 
         // status
-        if (options.include('status-dropdown'))
+        if (options.includes('status-dropdown'))
             html += this.renderStatusForm(label, "dropleft float-right");
-        else // if (options.include('status-span'))
+        else // if (options.includes('status-span'))
             html += `<span class="float-right">${waypoint_status[this.status]}</span>`;
 
         html += `    </li>
@@ -70,9 +70,9 @@ export class Waypoint {
         <em>${translation_table['Status']}:</em>`;
 
         // type
-        if (options.include('type-dropdown'))
+        if (options.includes('type-dropdown'))
             this.location.render(label, "dropleft float-right", "type-dropdown");
-        else // if (options.include('type-span'))
+        else // if (options.includes('type-span'))
             html += `<span class="float-right">${location_type[this.location.type]}</span>`;
 
         html += `    </li>
@@ -87,7 +87,7 @@ export class Waypoint {
 
     postRender(label, options = ['status-span', 'type-dropdown', 'address-div']) {
 
-        if (options.include('status-dropdown'))
+        if (options.includes('status-dropdown'))
             $(`#waypoint-${label}-status-menu a`)
                 .click( function() {
 

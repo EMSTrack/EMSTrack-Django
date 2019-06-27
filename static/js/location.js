@@ -106,7 +106,7 @@ export class Location {
 
     render(label, classes = "", options = ['address-div']) {
 
-        if (options.include('type-dropdown'))
+        if (options.includes('type-dropdown'))
             return this.renderTypeForm(label, classes);
         else // if (options.include('address-div'))
             return this.renderAddress(label, classes);;
@@ -114,7 +114,7 @@ export class Location {
 
     postRender(label, options = ['address-div']) {
 
-        if (options.include('type-dropdown')) {
+        if (options.includes('type-dropdown')) {
             $(`#location-${label}-type-menu a`)
                 .click(function () {
 
