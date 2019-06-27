@@ -25,14 +25,13 @@ export class Waypoint {
     <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
             id="waypoint-${label}-status-menu-button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span id="waypoint-${label}-status-menu-button-label">Select status</span>
+        <span id="waypoint-${label}-status-menu-button-label">${waypoint_status[status]}</span>
     </button>
     <div class="dropdown-menu" aria-labelledby="waypoint-${label}-status-menu-button">`;
 
         let middle = '';
         waypoint_status_order.forEach( (status) => {
-            const active = status === this.status;
-            middle += `        <a class="dropdown-item ${active ? 'active' : ''}"
+            middle += `        <a class="dropdown-item"
         id="waypoint-${label}-status-${status}-menu-item" 
         href="#">${waypoint_status[status]}</a>`;
         });
@@ -76,20 +75,14 @@ export class Waypoint {
 
     postRender(label) {
 
-        const selector = $(`#waypoint-${label}-status-menu a`);
-        selector.click( function() {
+        $(`#waypoint-${label}-status-menu a`)
+            .click( function() {
 
-            // copy to label
-            $(`#waypoint-${label}-status-menu-button-label`)
-                .text($(this).text());
+                // copy to label
+                $(`#waypoint-${label}-status-menu-button-label`)
+                    .text($(this).text());
 
-            // clear active state
-            selector.removeClass('active');
-
-            // set current as active
-            $(this).addClass('active');
-
-        });
+            });
 
     }
 
