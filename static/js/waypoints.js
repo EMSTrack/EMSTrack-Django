@@ -213,20 +213,21 @@ export class Waypoints {
                 // get current active and previous waypoints
                 const activeWaypoint = this.getActiveWaypoint();
                 const previousWaypoint = this.waypoints[this.activeIndex - 1];
+                this.activeIndex -= 1;
 
                 // swap items
-                $(`#call-${this.label}-carousel-items`)
+                $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
                 swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
                     `#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`);
-                $(`#call-${this.label}-carousel-items`)
-                    .eq(this.activeIndex - 1)
+                $(`#call-${this.label}-carousel-items .carousel-item`)
+                    .eq(this.activeIndex)
                     .addClass('active');
 
                 // reset active indicator
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
                 indicators.removeClass('active');
-                indicators.eq(this.activeIndex - 1).addClass('active');
+                indicators.eq(this.activeIndex).addClass('active');
 
             });
 
@@ -244,20 +245,21 @@ export class Waypoints {
                 // get current active and previous waypoints
                 const activeWaypoint = this.getActiveWaypoint();
                 const nextWaypoint = this.waypoints[this.activeIndex + 1];
+                this.activeIndex += 1;
 
                 // swap items
-                $(`#call-${this.label}-carousel-items`)
+                $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
                 swap(`#call-${this.label}-carousel-waypoint-${activeWaypoint.order}-item`,
                     `#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`);
-                $(`#call-${this.label}-carousel-items`)
-                    .eq(this.activeIndex + 1)
+                $(`#call-${this.label}-carousel-items .carousel-item`)
+                    .eq(this.activeIndex)
                     .addClass('active');
 
                 // reset active indicator
                 const indicators = $(`#call-${this.label}-carousel-indicators li`);
                 indicators.removeClass('active');
-                indicators.eq(this.activeIndex + 1).addClass('active');
+                indicators.eq(this.activeIndex).addClass('active');
 
             });
 
