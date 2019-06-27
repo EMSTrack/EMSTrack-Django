@@ -1,10 +1,58 @@
 /**
  * Location base class
  */
+
+export class Point {
+
+    default = {
+        latitude: 32.5149,
+        longitude: -117.0382,
+        srid: 4326
+    };
+
+    constructor(parameters) {
+        const properties = Object.assign({...Point.default}, parameters);
+
+        this.latitude = properties.latitude;
+        this.longitude = properties.longitude;
+        this.srid = properties.srid;
+    }
+
+}
+
 export class Location {
 
-    constructor(location) {
-        this.location = location;
+    default = {
+        id: null,
+        name: '',
+        type: 'w',
+        number: '',
+        street: '',
+        unit: '',
+        neighborhood: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        country: '',
+        location: Point.default
+    };
+
+    constructor(parameters) {
+
+        const properties = Object.assign({...Point.default}, parameters);
+
+        this.id = properties.id;
+        this.name = properties.name;
+        this.type = properties.type;
+        this.number = properties.number;
+        this.street = properties.street;
+        this.unit = properties.unit;
+        this.neighborhood = properties.neighborhood;
+        this.city = properties.city;
+        this.state = properties.state;
+        this.zipcode = properties.zipcode;
+        this.country = properties.country;
+        this.location = new Point(...properties.location);
     }
 
     static toText(location) {
@@ -38,7 +86,7 @@ export class Location {
         <em>${translation_table['Address']}:</em>
     </p>
     <p>
-        ${Location.toText(this.location)}
+        ${Location.toText(this)}
     </p>
 </div>`
         );

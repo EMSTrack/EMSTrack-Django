@@ -851,6 +851,17 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             // create patient form
             waypoints.render();
 
+            // add waypoint point
+            $('#call-' + call_id + '-' + ambulance_id + '-waypoints-add-button')
+                .on('click', function (event) {
+
+                    event.stopPropagation();
+
+                    waypoints.addBlankWaypointForm();
+
+                });
+
+
             // toggle on cancel
             $('#call-' + call_id + '-' + ambulance_id + '-waypoints-cancel-button')
                 .on('click', function (event) {
