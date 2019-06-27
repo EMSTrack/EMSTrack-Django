@@ -184,6 +184,54 @@ export class Waypoints {
 
     }
 
+    swap(i, j) {
+
+        // check arguments
+        if (i < 0 || i >= this.waypoints.length) {
+            logger.log('error', 'Invalid swap(i,j) index i = %d', i);
+            return;
+        }
+
+        if (j < 0 || j >= this.waypoints.length) {
+            logger.log('error', 'Invalid swap(i,j) index j = %d', i);
+            return;
+        }
+
+        // get waypoints
+        const iWaypoint = this.waypoints[i];
+        const jWaypoint = this.waypoints[j];
+
+        // swap array elements
+        [this.waypoints[i], this.waypoints[j]] =
+            [this.waypoints[i], this.waypoints[j]]
+
+        // swap active index
+        if (this.activeIndex === i || this.activeIndex === j) {
+            if (this.activeIndex === i)
+                this.activeIndex = j;
+            else
+                this.activeIndex = i;
+        }
+
+        // swap items
+        $(`#call-${this.label}-carousel-items .carousel-item`)
+            .removeClass('active');
+        swap(`#call-${this.label}-${iWaypoint.order}-container`,
+            `#call-${this.label}-${jWaypoint.order}-container`);
+        $(`#call-${this.label}-carousel-items .carousel-item`)
+            .eq(this.activeIndex)
+            .addClass('active');
+
+        // reset active indicator
+        const indicators = $(`#call-${this.label}-carousel-indicators li`);
+        indicators.removeClass('active');
+        indicators.eq(this.activeIndex).addClass('active');
+
+        // configure buttons
+        this.configureEditorButtons();
+
+    }
+
     postRender() {
 
         // configure buttons
@@ -195,7 +243,12 @@ export class Waypoints {
 
                 event.stopPropagation();
 
-                this.addBlankWaypointForm( this.waypoints.length );
+                const index = this.waypoints.length;
+                this.addBlankWaypointForm( index );
+
+                // Do we need to move added form?
+                if (index != this.activeIndex + 1) {
+                }
 
             });
 
@@ -204,6 +257,9 @@ export class Waypoints {
             .on('click', (event) => {
 
                 event.stopPropagation();
+
+                this.swap(this.activeIndex, this.activeIndex - 1);
+                return;
 
                 if (this.activeIndex === 0) {
                     logger.log('error', 'At first index, cannot move back');
@@ -245,6 +301,9 @@ export class Waypoints {
             .on('click', (event) => {
 
                 event.stopPropagation();
+
+                this.swap(this.activeIndex, this.activeIndex + 1);
+                return;
 
                 if (this.activeIndex === this.waypoints.length - 1) {
                     logger.log('error', 'At last index, cannot move forth');
