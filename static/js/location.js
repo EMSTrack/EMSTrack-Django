@@ -33,14 +33,14 @@ export class Location {
 
         // language=HTML
         return (
-            `<div>
-    <p class="my-0 py-0">
+            `<div class="my-0 py-0">
+    <p>
         <em>${translation_table['Address']}:</em>
     </p>
-    <p class="my-0 py-0 text-right">
+    <p>
         ${Location.toText(this.location)}
     </p>
-    <p class="my-0 py-0">
+    <p>
         <em>${translation_table['Type']}:</em>
         <span class="float-right">${location_type[this.location.type]}</span>
     </p>
