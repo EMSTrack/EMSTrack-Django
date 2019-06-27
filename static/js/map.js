@@ -813,13 +813,18 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
                     title="Skip waypoint">
                 <span class="fas fa-stop"></span> 
             </button>
-            <button id="call-${call_id}-${ambulance_id}-waypoints-status-button" 
-                    type="button" class="btn btn-primary"
+            <button id="call-${call_id}-${ambulance_id}-waypoints-back-button" 
+                    type="button" class="btn btn-danger"
                     title="Mark as visiting">
-                <span class="fas fa-play"></span> 
+                <span class="fas fa-undo"></span> 
+            </button>
+            <button id="call-${call_id}-${ambulance_id}-waypoints-forward-button" 
+                    type="button" class="btn btn-warning"
+                    title="Mark as visiting">
+                <span class="fas fa-redo"></span> 
             </button>
             <button id="call-${call_id}-${ambulance_id}-waypoints-add-button" 
-                    type="button" class="btn btn-primary"
+                    type="button" class="btn btn-info"
                     title="Add waypoint">
                 <span class="fas fa-plus"></span> 
             </button>
