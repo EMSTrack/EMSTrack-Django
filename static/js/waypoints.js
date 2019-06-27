@@ -74,6 +74,31 @@ export class Waypoints {
 
     }
 
+    static waypointTypeForm(label, waypoint, classes) {
+
+        // language=HTML
+        const top = `<div class="dropdown ${classes}">
+    <button class="btn btn-secondary dropdown-toggle" type="button" 
+            id="waypoint-${label}-item-menu-button" 
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Select type
+    </button>
+    <div class="dropdown-menu" aria-labelledby="waypoint-${label}-item-menu-button">`;
+
+        let middle = '';
+        waypoint_status_order.forEach( (status) => {
+            const active = status === waypoint.status;
+            middle += `        <a class="waypoint-${label}-dropdown-status-${status}-item ${active ? 'active' : ''}" 
+        href="#">${waypoint_status[status]}</a>`;
+        });
+
+        // language=HTML
+        const bottom = `    </div>
+</div>`;
+
+        return top + middle + bottom;
+    }
+
     static waypointForm(label, waypoint) {
 
         // language=HTML
@@ -91,6 +116,7 @@ export class Waypoints {
     <li id="waypoint-${label}-item-type" class="list-group-item px-10">
         <em>${translation_table['Type']}:</em>
         <span class="float-right">${location_type[waypoint.location.type]}</span>
+        ${waypointTypeForm(label, waypoint, "float-right")}
     </li>
     <li id="waypoint-${label}-item-status" class="list-group-item px-10">
         <em>${translation_table['Status']}:</em>
