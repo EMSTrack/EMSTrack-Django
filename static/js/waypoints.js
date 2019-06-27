@@ -16,7 +16,7 @@ export class Waypoints {
 
         // language=HTML
         return (
-            `<div id="waypoint-${label}-form">  
+            `<ul id="waypoint-${label}-form" class="list-group">  
     <input id="waypoint-${label}-id" 
            name="id"           
            type="hidden" 
@@ -26,42 +26,10 @@ export class Waypoints {
            type="hidden"
            class="form-control form-control-sm"  
            value="${waypoint.order}">
-    <div class="card">
-        <div class="card-header p-0" 
-             id="waypoint-${label}-header">
-            <div class="btn-group btn-group-xs d-block float-left">   
-                <button class="btn btn-default btn-block btn-xs m-0"
-                        type="button"  
-                        id="waypoint-${label}-button-up">
-                    <span class="fas fa-chevron-up fa-xs"></span>
-                </button>  
-                <button class="btn btn-default btn-block btn-xs m-0"   
-                        type="button"  
-                        id="waypoint-${label}-button-down">   
-                    <span class="fas fa-chevron-down fa-xs"></span>  
-                </button>   
-            </div> 
-            <span>${translation_table['Type']}:</span>
-            <button class="btn btn-outline-dark btn-sm"
-                    type="button"  
-                    id="waypoint-${label}-button-location-type">
-                <span class="fas fa-user fa-xs"></span>
-            </button>
-            <span>${translation_table['Status']}:</span>
-            <button class="btn btn-outline-dark btn-sm"
-                    type="button"  
-                    id="waypoint-${label}-button-location-type">
-                <span class="fas fa-user fa-xs"></span>
-            </button>
-            <button type="button" class="close float-right" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="card-body" id="waypoint-${label}-body">
-            ${new Location(waypoint.location).render()}
-        </div>
-    </div>
-</div>`
+    <li id="waypoint-${label}-item" class="list-group-item">
+        ${new Location(waypoint.location).render()}
+    </li>
+</ul>`
         );
 
     }
