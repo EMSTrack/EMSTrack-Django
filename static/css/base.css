@@ -46,3 +46,7 @@
 .carousel .carousel-indicators .active {
   background-color: #444;
 }
+
+.carousel-indicators {
+    bottom: 20px;
+}
