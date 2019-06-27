@@ -17,21 +17,22 @@ export class Waypoint {
         this.location = new Location(properties.location);
     }
 
-    renderTypeForm(label, classes) {
+    renderStatusForm(label, classes) {
 
         // language=HTML
         const top = `<div class="dropdown ${classes}">
     <button class="btn btn-secondary dropdown-toggle" type="button" 
-            id="waypoint-${label}-item-menu-button" 
+            id="waypoint-${label}-status-menu-button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select type
+        Select status
     </button>
-    <div class="dropdown-menu" aria-labelledby="waypoint-${label}-item-menu-button">`;
+    <div class="dropdown-menu" aria-labelledby="waypoint-${label}-status-menu-button">`;
 
         let middle = '';
         waypoint_status_order.forEach( (status) => {
             const active = status === this.status;
-            middle += `        <a class="waypoint-${label}-dropdown-status-${status}-item ${active ? 'active' : ''}" 
+            middle += `        <a class="dropdown-item ${active ? 'active' : ''}"
+        id="waypoint-${label}-status-${status}-menu-item" 
         href="#">${waypoint_status[status]}</a>`;
         });
 
@@ -59,7 +60,7 @@ export class Waypoint {
     <li id="waypoint-${label}-item-type" class="list-group-item px-10">
         <em>${translation_table['Type']}:</em>
         <span class="float-right">${location_type[this.location.type]}</span>
-        ${this.renderTypeForm(label, "float-right")}
+        ${this.renderStatusForm(label, "float-right")}
     </li>
     <li id="waypoint-${label}-item-status" class="list-group-item px-10">
         <em>${translation_table['Status']}:</em>
