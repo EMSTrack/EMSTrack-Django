@@ -16,7 +16,7 @@ export class Waypoints {
 
         // language=HTML
         return (
-            `<div class="form-row" id="waypoint-${label}-form" style="width: 600px">  
+            `<div id="waypoint-${label}-form">  
     <input id="waypoint-${label}-id" 
            name="id"           
            type="hidden" 
@@ -28,11 +28,7 @@ export class Waypoints {
            value="${waypoint.order}">
     <div class="card">
         <div class="card-header p-0" 
-             id="waypoint-${label}-header"
-             data-toggle="collapse" 
-             data-target="#waypoint-${label}-body" 
-             aria-expanded="false" 
-             aria-controls="waypoint-${label}-body">
+             id="waypoint-${label}-header">
             <div class="btn-group btn-group-xs d-block float-left">   
                 <button class="btn btn-default btn-block btn-xs m-0"
                         type="button"  
@@ -61,10 +57,8 @@ export class Waypoints {
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
-        <div class="collapse" id="waypoint-${label}-body">
-            <div class="card-body">
-                ${new Location(waypoint.location).render()}
-            </div>
+        <div class="card-body" id="waypoint-${label}-body">
+            ${new Location(waypoint.location).render()}
         </div>
     </div>
 </div>`
