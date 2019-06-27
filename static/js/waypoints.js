@@ -70,21 +70,8 @@ export class Waypoint {
 
         html += `    </li>`;
 
-        // type
-        html += `    <li id="waypoint-${label}-item-type" class="list-group-item px-10">
-        <em>${translation_table['Type']}:</em>`;
-
-        if (options.includes('type-dropdown'))
-            html += this.location.render(label, "dropleft float-right", "type-dropdown");
-        else // if (options.includes('type-span'))
-            html += `<span class="float-right">${location_type[this.location.type]}</span>`;
-
-        html += `    </li>`;
-
-        // address
-        html += `    <li id="waypoint-${label}-item-address" class="list-group-item px-10">
-        ${this.location.render(label)}
-    </li>`;
+        // render location
+        html += this.location.render(label, 'list-group-item px-10', ['type-dropdown', 'address-div']);
 
         html += '</ul>';
 

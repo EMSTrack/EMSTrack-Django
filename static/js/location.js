@@ -88,7 +88,7 @@ export class Location {
         return top + middle + bottom;
     }
 
-    renderAddress(label, classes = "") {
+    renderAddressDiv(label, classes = "") {
 
         // language=HTML
         return (
@@ -104,12 +104,32 @@ export class Location {
 
     }
 
-    render(label, classes = "", options = ['address-div']) {
+    render(label, classes = "", options = ['type-dropdown', 'address-div']) {
+
+        let html = '';
+
+        // type
+        html += `<li id="location-${label}-item-type" class="${classes}">
+    <em>${translation_table['Type']}:</em>`;
 
         if (options.includes('type-dropdown'))
-            return this.renderTypeForm(label, classes);
-        else // if (options.include('address-div'))
-            return this.renderAddress(label, classes);;
+            html += this.renderTypeForm(label, "dropleft float-right");
+        else // if (options.includes('type-span'))
+            html += `<span class="float-right">${location_type[this.location.type]}</span>`;
+
+        html += '</li>';
+
+        // address
+        html += `<li id="location-${label}-item-address" class="${classes}">`;
+
+        if (options.includes('address-map')) {
+
+        } else // if (options.includes('address-div'))
+            html += this.renderAddressDiv(label);
+
+        html += '</li>';
+
+        return html;
     }
 
     postRender(label, options = ['address-div']) {
