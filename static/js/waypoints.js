@@ -61,7 +61,7 @@ export class Waypoint {
 
         // type
         if (options.includes('type-dropdown'))
-            this.location.render(label, "dropleft float-right", "type-dropdown");
+            html += this.location.render(label, "dropleft float-right", "type-dropdown");
         else // if (options.includes('type-span'))
             html += `<span class="float-right">${location_type[this.location.type]}</span>`;
 
