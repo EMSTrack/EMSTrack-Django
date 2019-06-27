@@ -219,11 +219,9 @@ export class Waypoints {
                     `#call-${this.label}-carousel-waypoint-${previousWaypoint.order}-item`);
 
                 // reset active indicator
-                $(`#call-${this.label}-carousel-indicators li`)
-                    .removeClass('active');
-
-                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex - 1})`)
-                    .addClass('active');
+                const indicators = $(`#call-${this.label}-carousel-indicators li`);
+                indicators.removeClass('active');
+                indicators[this.activeIndex - 1].addClass('active');
 
             });
 
@@ -247,11 +245,9 @@ export class Waypoints {
                     `#call-${this.label}-carousel-waypoint-${nextWaypoint.order}-item`);
 
                 // reset active indicator
-                $(`#call-${this.label}-carousel-indicators li`)
-                    .removeClass('active');
-
-                $(`#call-${this.label}-carousel-indicators li:nth-child(${this.activeIndex + 1})`)
-                    .addClass('active');
+                const indicators = $(`#call-${this.label}-carousel-indicators li`);
+                indicators.removeClass('active');
+                indicators[this.activeIndex + 1].addClass('active');
 
             });
 
