@@ -161,9 +161,15 @@ export class Waypoints {
         }
 
         let forwardButtonDisable = true;
-        if ( this.activeIndex === nextWaypointIndex ) {
-            // waypoint is next
+        if ( this.activeIndex >= nextWaypointIndex && (waypoint.status === 'C' || waypoint.status === 'S')) {
+            // waypoint is next or beyond and is either created or skipped
             forwardButtonDisable = false;
+        }
+
+        let backwardButtonDisable = true;
+        if ( this.activeIndex > nextWaypointIndex && (waypoint.status === 'C' || waypoint.status === 'S')) {
+            // waypoint is beyond next  and is either created or skipped
+            backwardButtonDisable = false;
         }
 
         // disable skip
@@ -173,6 +179,10 @@ export class Waypoints {
         // disable forward
         $(`#call-${this.label}-waypoints-forward-button`)
             .attr('disabled', forwardButtonDisable);
+
+        // disable backward
+        $(`#call-${this.label}-waypoints-backward-button`)
+            .attr('disabled', backwardButtonDisable);
 
         // disable add
         $(`#call-${this.label}-waypoints-add-button`)
@@ -206,15 +216,20 @@ export class Waypoints {
             title="Skip waypoint">
         <span class="fas fa-stop"></span> 
     </button>
-    <button id="call-${this.label}-waypoints-forward-button" 
+    <button id="call-${this.label}-waypoints-backward-button" 
             type="button" class="btn btn-warning w-100"
             title="Mark as visiting">
-        <span class="fas fa-forward"></span> 
+        <span class="fas fa-backward"></span> 
     </button>
     <button id="call-${this.label}-waypoints-add-button" 
             type="button" class="btn btn-info w-100"
             title="Add waypoint">
         <span class="fas fa-plus"></span> 
+    </button>
+    <button id="call-${this.label}-waypoints-forward-button" 
+            type="button" class="btn btn-warning w-100"
+            title="Mark as visiting">
+        <span class="fas fa-forward"></span> 
     </button>
 </div>`
         );
