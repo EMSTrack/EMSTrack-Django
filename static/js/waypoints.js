@@ -6,7 +6,7 @@ import { logger } from "./logger";
 
 import { Location } from './location';
 
-import { swap } from './util';
+import { swapElements } from './util';
 
 export class Waypoint {
 
@@ -216,7 +216,7 @@ export class Waypoints {
         // swap items
         $(`#call-${this.label}-carousel-items .carousel-item`)
             .removeClass('active');
-        swap(`#call-${this.label}-${iWaypoint.order}-container`,
+        swapElements(`#call-${this.label}-${iWaypoint.order}-container`,
             `#call-${this.label}-${jWaypoint.order}-container`);
         $(`#call-${this.label}-carousel-items .carousel-item`)
             .eq(this.activeIndex)
@@ -247,7 +247,8 @@ export class Waypoints {
                 this.addBlankWaypointForm( index );
 
                 // Do we need to move added form?
-                if (index != this.activeIndex + 1) {
+                for (let i = index; i > this.activeIndex + 1; i--) {
+                    this.swap(i, i - 1);
                 }
 
             });
@@ -280,7 +281,7 @@ export class Waypoints {
                 // swap items
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
-                swap(`#call-${this.label}-${activeWaypoint.order}-container`,
+                swapElements(`#call-${this.label}-${activeWaypoint.order}-container`,
                     `#call-${this.label}-${previousWaypoint.order}-container`);
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)
@@ -324,7 +325,7 @@ export class Waypoints {
                 // swap items
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .removeClass('active');
-                swap(`#call-${this.label}-${activeWaypoint.order}-container`,
+                swapElements(`#call-${this.label}-${activeWaypoint.order}-container`,
                     `#call-${this.label}-${nextWaypoint.order}-container`);
                 $(`#call-${this.label}-carousel-items .carousel-item`)
                     .eq(this.activeIndex)

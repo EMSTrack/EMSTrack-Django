@@ -1,4 +1,4 @@
-export function swap(a, b) {
+export function swapElements(a, b) {
     a = $(a); b = $(b);
     var tmp = $('<span>').hide();
     a.before(tmp);
