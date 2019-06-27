@@ -76,9 +76,19 @@ export class Waypoint {
 
     postRender(label) {
 
-        $(`#waypoint-${label}-status-menu a`).click( function() {
+        const selector = $(`#waypoint-${label}-status-menu a`);
+        selector.click( function() {
+
+            // copy to label
             $(`#waypoint-${label}-status-menu-button-label`)
                 .text($(this).text());
+
+            // clear active state
+            selector.removeClass('active');
+
+            // set current as active
+            $(this).addClass('active');
+
         });
 
     }
