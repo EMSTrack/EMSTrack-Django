@@ -96,7 +96,7 @@ Waypoint.default = {
 export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
-        this.waypoints = waypoints.map(obj => Waypoint(obj));
+        this.waypoints = waypoints.map(obj => new Waypoint(obj));
         this.activeIndex = (waypoints.length > 0 ? 0 : -1);
         this.label = label;
         this.placeholderName = placeholder;
