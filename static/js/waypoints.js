@@ -20,11 +20,12 @@ export class Waypoint {
     renderStatusForm(label, classes) {
 
         // language=HTML
-        const top = `<div class="dropdown ${classes}">
-    <button class="btn btn-secondary dropdown-toggle" type="button" 
+        const top = `<div class="dropdown ${classes}"
+    id="waypoint-${label}-status-menu">
+    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
             id="waypoint-${label}-status-menu-button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select status
+        <span id="waypoint-${label}-status-menu-button-label">Select status</span>
     </button>
     <div class="dropdown-menu" aria-labelledby="waypoint-${label}-status-menu-button">`;
 
@@ -73,6 +74,15 @@ export class Waypoint {
 
     }
 
+    postRender(label) {
+
+        $(`#waypoint-${label}-status-menu a`).click( function() {
+            $(`#waypoint-${label}-status-menu-button-label`)
+                .text($(this).text());
+        });
+
+    }
+
 }
 
 Waypoint.default = {
@@ -86,12 +96,12 @@ Waypoint.default = {
 export class Waypoints {
     
     constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
-        this.waypoints= waypoints;
+        this.waypoints = waypoints.map(obj => Waypoint(obj));
         this.activeIndex = (waypoints.length > 0 ? 0 : -1);
         this.label = label;
         this.placeholderName = placeholder;
 
-        // calculate maxOrder
+        // convert to waypoint and calculate maxOrder
         this.maxOrder = 0;
         for (const waypoint of this.waypoints) {
             this.maxOrder = ( this.maxOrder > waypoint.order ? this.maxOrder : waypoint.order );
@@ -150,15 +160,18 @@ export class Waypoints {
 
         $(`#call-${this.label}-carousel-items`).append(
             `<div class="carousel-item${active ? ' active' : ''}">
-    ${new Waypoint(waypoint).render(this.label)}
+    ${waypoint.render(this.label)}
 </div>`
         );
+
         $(`#call-${this.label}-carousel-indicators`).append(
             `<li data-target="#call-${this.label}-carousel" 
     data-slide-to="${index}" 
     ${active ? 'class="active"' : ''}>
 </li>`
         );
+
+        waypoint.postRender(this.label);
 
     }
 
@@ -167,9 +180,8 @@ export class Waypoints {
         logger.log('info', 'adding blank waypoint');
 
         // create blank waypoint, update maxOrder and add to list
-        const waypoint = new Waypoint();
         this.maxOrder += 1;
-        waypoint.order = this.maxOrder;
+        const waypoint = new Waypoint({maxOrder: this.maxOrder});
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
