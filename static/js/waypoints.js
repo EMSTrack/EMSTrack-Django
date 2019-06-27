@@ -59,21 +59,21 @@ export class Waypoint {
     <li id="waypoint-${label}-item-type" class="list-group-item px-10">
         <em>${translation_table['Type']}:</em>`;
 
-        // status
-        if (options.includes('status-dropdown'))
-            html += this.renderStatusForm(label, "dropleft float-right");
-        else // if (options.includes('status-span'))
-            html += `<span class="float-right">${waypoint_status[this.status]}</span>`;
-
-        html += `    </li>
-    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
-        <em>${translation_table['Status']}:</em>`;
-
         // type
         if (options.includes('type-dropdown'))
             this.location.render(label, "dropleft float-right", "type-dropdown");
         else // if (options.includes('type-span'))
             html += `<span class="float-right">${location_type[this.location.type]}</span>`;
+
+        html += `    </li>
+    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
+        <em>${translation_table['Status']}:</em>`;
+
+        // status
+        if (options.includes('status-dropdown'))
+            html += this.renderStatusForm(label, "dropleft float-right");
+        else // if (options.includes('status-span'))
+            html += `<span class="float-right">${waypoint_status[this.status]}</span>`;
 
         html += `    </li>
     <li id="waypoint-${label}-item-address" class="list-group-item px-10">
@@ -124,139 +124,6 @@ export class Waypoints {
         for (const waypoint of this.waypoints) {
             this.maxOrder = ( this.maxOrder > waypoint.order ? this.maxOrder : waypoint.order );
         }
-
-    }
-
-    setActiveWaypoint(index) {
-        this.activeIndex = index;
-    }
-
-    getActiveWaypoint() {
-        return this.waypoints[this.activeIndex];
-    }
-
-    getNextWaypointIndex() {
-
-        // next waypoint
-        let nextWaypoint = -1;
-
-        // loop over waypoints
-        let index = 0;
-        for (const waypoint of this.waypoints) {
-
-            // is it next?
-            if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === -1) {
-                nextWaypoint = index;
-                break;
-            }
-
-            index += 1;
-
-        }
-
-        return nextWaypoint;
-
-    }
-
-    removeWaypointForm(index) {
-
-        // mark as deleted
-        this.placeholder
-            .find('#waypoint-' + this.label + '-' + index + '-form input')
-            .addClass('deleted');
-
-        // remove from form
-        this.placeholder
-            .find('#waypoint-' + this.label + '-' + index + '-form')
-            .hide();
-
-    }
-
-    addWaypointForm(index, waypoint) {
-
-        const active = index === this.activeIndex;
-
-        $(`#call-${this.label}-carousel-items`).append(
-            `<div class="carousel-item${active ? ' active' : ''}">
-    ${waypoint.render(this.label)}
-</div>`
-        );
-
-        $(`#call-${this.label}-carousel-indicators`).append(
-            `<li data-target="#call-${this.label}-carousel" 
-    data-slide-to="${index}" 
-    ${active ? 'class="active"' : ''}>
-</li>`
-        );
-
-        waypoint.postRender(this.label);
-
-    }
-
-    addBlankWaypointForm(index) {
-
-        logger.log('info', 'adding blank waypoint');
-
-        // create blank waypoint, update maxOrder and add to list
-        this.maxOrder += 1;
-        const waypoint = new Waypoint({maxOrder: this.maxOrder});
-        this.waypoints.push(waypoint);
-
-        this.addWaypointForm(index, waypoint);
-
-    }
-
-    configureEditorButtons() {
-
-        const waypoint = this.getActiveWaypoint();
-        const nextWaypointIndex = this.getNextWaypointIndex();
-
-        logger.log('debug', 'activeWaypoint = %d, nextWaypoint = %d', this.activeIndex, nextWaypointIndex);
-
-        // enable/disable buttons
-        let skipButtonDisabled = false;
-        if (waypoint.status === 'S' || waypoint.status === 'D') {
-            // waypoint has been skipped or visited already
-            skipButtonDisabled = true;
-        }
-
-        let addButtonDisable = true;
-        if (this.activeIndex >= nextWaypointIndex ||
-            (this.activeIndex === this.waypoints.length - 1)) {
-            // waypoint is either next, hasn't come yet or it the last one
-            addButtonDisable = false;
-        }
-
-        let forwardButtonDisable = true;
-        if ( this.activeIndex >= nextWaypointIndex
-            && this.activeIndex < this.waypoints.length - 1
-            && (waypoint.status === 'C' || waypoint.status === 'S')) {
-            // waypoint is next or beyond but not last and is either created or skipped
-            forwardButtonDisable = false;
-        }
-
-        let backwardButtonDisable = true;
-        if ( this.activeIndex > nextWaypointIndex
-            && (waypoint.status === 'C' || waypoint.status === 'S')) {
-            // waypoint is beyond next  and is either created or skipped
-            backwardButtonDisable = false;
-        }
-
-        // disable skip
-        $(`#call-${this.label}-waypoints-skip-button`)
-            .attr('disabled', skipButtonDisabled);
-
-        // disable forward
-        $(`#call-${this.label}-waypoints-forward-button`)
-            .attr('disabled', forwardButtonDisable);
-
-        // disable backward
-        $(`#call-${this.label}-waypoints-backward-button`)
-            .attr('disabled', backwardButtonDisable);
-
-        // disable add
-        $(`#call-${this.label}-waypoints-add-button`)
-            .attr('disabled', addButtonDisable);
 
     }
 
@@ -359,6 +226,139 @@ export class Waypoints {
             });
 
         logger.log('info', 'rendering waypoint editor for call %s', this.label);
+
+    }
+
+    addWaypointForm(index, waypoint) {
+
+        const active = index === this.activeIndex;
+
+        $(`#call-${this.label}-carousel-items`).append(
+            `<div class="carousel-item${active ? ' active' : ''}">
+    ${waypoint.render(this.label)}
+</div>`
+        );
+
+        $(`#call-${this.label}-carousel-indicators`).append(
+            `<li data-target="#call-${this.label}-carousel" 
+    data-slide-to="${index}" 
+    ${active ? 'class="active"' : ''}>
+</li>`
+        );
+
+        waypoint.postRender(this.label);
+
+    }
+
+    setActiveWaypoint(index) {
+        this.activeIndex = index;
+    }
+
+    getActiveWaypoint() {
+        return this.waypoints[this.activeIndex];
+    }
+
+    getNextWaypointIndex() {
+
+        // next waypoint
+        let nextWaypoint = -1;
+
+        // loop over waypoints
+        let index = 0;
+        for (const waypoint of this.waypoints) {
+
+            // is it next?
+            if ((waypoint.status === 'C' || waypoint.status === 'V') && nextWaypoint === -1) {
+                nextWaypoint = index;
+                break;
+            }
+
+            index += 1;
+
+        }
+
+        return nextWaypoint;
+
+    }
+
+    removeWaypointForm(index) {
+
+        // mark as deleted
+        this.placeholder
+            .find('#waypoint-' + this.label + '-' + index + '-form input')
+            .addClass('deleted');
+
+        // remove from form
+        this.placeholder
+            .find('#waypoint-' + this.label + '-' + index + '-form')
+            .hide();
+
+    }
+
+    addBlankWaypointForm(index) {
+
+        logger.log('info', 'adding blank waypoint');
+
+        // create blank waypoint, update maxOrder and add to list
+        this.maxOrder += 1;
+        const waypoint = new Waypoint({maxOrder: this.maxOrder});
+        this.waypoints.push(waypoint);
+
+        this.addWaypointForm(index, waypoint);
+
+    }
+
+    configureEditorButtons() {
+
+        const waypoint = this.getActiveWaypoint();
+        const nextWaypointIndex = this.getNextWaypointIndex();
+
+        logger.log('debug', 'activeWaypoint = %d, nextWaypoint = %d', this.activeIndex, nextWaypointIndex);
+
+        // enable/disable buttons
+        let skipButtonDisabled = false;
+        if (waypoint.status === 'S' || waypoint.status === 'D') {
+            // waypoint has been skipped or visited already
+            skipButtonDisabled = true;
+        }
+
+        let addButtonDisable = true;
+        if (this.activeIndex >= nextWaypointIndex ||
+            (this.activeIndex === this.waypoints.length - 1)) {
+            // waypoint is either next, hasn't come yet or it the last one
+            addButtonDisable = false;
+        }
+
+        let forwardButtonDisable = true;
+        if ( this.activeIndex >= nextWaypointIndex
+            && this.activeIndex < this.waypoints.length - 1
+            && (waypoint.status === 'C' || waypoint.status === 'S')) {
+            // waypoint is next or beyond but not last and is either created or skipped
+            forwardButtonDisable = false;
+        }
+
+        let backwardButtonDisable = true;
+        if ( this.activeIndex > nextWaypointIndex
+            && (waypoint.status === 'C' || waypoint.status === 'S')) {
+            // waypoint is beyond next  and is either created or skipped
+            backwardButtonDisable = false;
+        }
+
+        // disable skip
+        $(`#call-${this.label}-waypoints-skip-button`)
+            .attr('disabled', skipButtonDisabled);
+
+        // disable forward
+        $(`#call-${this.label}-waypoints-forward-button`)
+            .attr('disabled', forwardButtonDisable);
+
+        // disable backward
+        $(`#call-${this.label}-waypoints-backward-button`)
+            .attr('disabled', backwardButtonDisable);
+
+        // disable add
+        $(`#call-${this.label}-waypoints-add-button`)
+            .attr('disabled', addButtonDisable);
 
     }
 
