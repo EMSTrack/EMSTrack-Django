@@ -50,7 +50,7 @@ class MapAddress {
 
     select(label, location, force = false) {
 
-        if (!force && location !== undefined && location !== this.location)
+        if (!force && location !== undefined && location === this.location)
             // no changes, quick return
             return;
 
