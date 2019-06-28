@@ -50,7 +50,7 @@ class MapAddress {
 
     select(label, location, force = false) {
 
-        if (!force && location !== undefined)
+        if (!force && location !== undefined && location !== this.location)
             // no changes, quick return
             return;
 
@@ -103,10 +103,6 @@ class MapAddress {
 
     postRender(label) {
 
-        // initial select type
-        if (this.location !== undefined)
-            this.select(label, this.location, true);
-
         // Set up map widget
         const options = {
             map_id: `address-${label}-map`,
@@ -120,6 +116,10 @@ class MapAddress {
         };
 
         this.map = new LeafletSimplePointWidget(options);
+
+        // initial select type
+        if (this.location !== undefined)
+            this.select(label, this.location, true);
 
     }
 
