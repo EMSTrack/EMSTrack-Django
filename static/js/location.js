@@ -65,8 +65,8 @@ class ChoiceAddress {
 
         // dropdown
         let options;
-        if (settings.locations.hasOwnProperty(type))
-            options = settings.locations[type];
+        if (settings.locations.hasOwnProperty(this.type))
+            options = settings.locations[this.type];
         else
             options = {};
 
