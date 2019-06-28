@@ -1,6 +1,6 @@
 import {logger} from "./logger";
 
-import {LeafletPolylineWidget} from "./leaflet/LeafletWidget";
+import {LeafletPointWidget} from "./leaflet/LeafletWidget";
 
 import {Dropdown} from "./dropdown";
 
@@ -121,7 +121,7 @@ class ChoiceAddress {
             map_provider: mapProvider
         };
 
-        this.map = new LeafletPolylineWidget(options);
+        this.map = new LeafletPointWidget(options);
 
     }
 
