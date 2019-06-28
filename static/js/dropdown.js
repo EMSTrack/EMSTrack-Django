@@ -106,6 +106,6 @@ Dropdown.default = {
     value: null,
     prefix: "dropdown",
     label: "Select:",
-    onClick: (value, option) => { logger.log('dropdown click: %s, %s',  value, option); }
+    onClick: (value, option) => { logger.log('info', 'click: %s, %s',  value, option); }
 };
 
