@@ -46,7 +46,7 @@ class ChoiceAddress {
 
     select(label, key, force = false) {
 
-        if (!force && this.location !== 'undefined' && this.location.id === key)
+        if (!force && this.location !== undefined && this.location.id === key)
             // no changes, quick return
             return;
 
