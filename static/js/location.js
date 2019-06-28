@@ -44,7 +44,7 @@ class ChoiceAddress {
         this.dropdown = null;
     }
 
-    select(key, force = false) {
+    select(label, key, force = false) {
 
         if (!force && this.location !== 'undefined' && this.location.id === key)
             // no changes, quick return
@@ -52,6 +52,11 @@ class ChoiceAddress {
 
         // setting location
         this.location = settings.locations[this.type][key];
+
+        // setting address
+        $(`#address-${label}-address`)
+            .empty()
+            .append(this.location.toText());
 
         // call onSelect
         this.onClick(key);
@@ -74,16 +79,21 @@ class ChoiceAddress {
             options: options,
             prefix: `address-${label}`,
             onClick: (value) => {
-                this.select(value);
+                this.select(label, value);
             }
         });
 
         html += `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
     <p>`;
 
+        html += `<p>
+    <em>${settings.translation_table['Address']}:</em>`;
+
         html += this.dropdown.render("float-right");
 
         html += `</p>
+    <p id="address-${label}-address">
+    </p>
 </div>`;
 
         return html;
