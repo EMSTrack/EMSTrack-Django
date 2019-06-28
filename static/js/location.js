@@ -63,6 +63,12 @@ class ChoiceAddress {
             .empty()
             .append(this.location.toText());
 
+        // set point in the map
+        this.map.setPoint({
+            lat: this.location.location.latitude,
+            lng: this.location.location.longitude}
+        );
+
         // call onSelect
         this.onClick(this.location);
     }
@@ -97,7 +103,7 @@ class ChoiceAddress {
             ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
         </p>
         <p>
-            <div id="address-${label}-map" style="height: 200px"></div>
+            <div id="address-${label}-map" style="height: 300px"></div>
         </p>
     </div>
 </div>`;
