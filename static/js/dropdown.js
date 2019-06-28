@@ -20,7 +20,7 @@ export class Dropdown {
             id="${this.prefix}-type-menu-button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span id="${this.prefix}-type-menu-button-label">
-            ${this.value < 0 ? this.label : this.options[this.value]}
+            ${this.value === null ? this.label : this.options[this.value]}
         </span>
     </button>
     <div class="dropdown-menu"
@@ -31,8 +31,8 @@ export class Dropdown {
         for (const option of this.options) {
 
             html += `        <a class="dropdown-item small "
-        id="${this.prefix}-menu-item-value-${index}" 
-        href="#">${option['label']}</a>`;
+        id="${this.prefix}-menu-item-value-${option}" 
+        href="#">${this.options[option]}</a>`;
 
             index += 1;
         }
@@ -66,7 +66,7 @@ export class Dropdown {
                 const values = $(this).prop("id").split('-');
                 const value = values[value.length - 1];
 
-                self.onClick(value, options[value]);
+                self.onClick(value, self.options[value]);
 
             });
 
@@ -100,8 +100,8 @@ export class Dropdown {
 }
 
 Dropdown.default = {
-    options: [],
-    initial: -1,
+    options: {},
+    value: null,
     prefix: "dropdown",
     label: "Select:",
     onClick: () => {}
