@@ -26,29 +26,80 @@ Point.default = {
 
 class ChoiceAddress {
 
-    constructor(location) {
-        this.location = location;
+    constructor(parameters) {
+
+        const properties = Object.assign({...ChoiceAddress.default}, parameters);
+
+        this.type = properties.type;
+        this.location = properties.location;
+        this.onClick = properties.onClick;
+
+        this.dropdown = null;
+    }
+
+    select(key, force = false) {
+
+        if (!force && this.location !== 'undefined' && this.location.id === key)
+            // no changes, quick return
+            return;
+
+        // setting location
+        this.location = location[this.type][key];
+
+        // call onSelect
+        this.onClick(key);
     }
 
     render(label, classes = "") {
 
         // language=HTML
-        return `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
-    <p>
-        <em>${translation_table['Address']}:</em>
-    </p>
-    <p>
-        ${this.location.toText()}
-    </p>
+        let html = `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
+    <p>`;
+
+        // dropdown
+        let options;
+        if (location.hasOwnProperty(type))
+            options = location[type];
+        else
+            options = {};
+
+        this.dropdown = new Dropdown({
+            options: options,
+            prefix: `address-${label}`,
+            onClick: (value) => {
+                this.select(value);
+            }
+        });
+
+        html += `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
+    <p>`;
+
+        html += this.dropdown.render("float-right");
+
+        html += `</p>
 </div>`;
 
+        return html;
     }
 
-    postRender() {
+    postRender(label) {
+
+        if (this.dropdown !== null)
+            this.dropdown.postRender();
+
+        // initial select type
+        if (this.location !== 'undefined')
+            this.select(label, this.location.id, true);
 
     }
 
 }
+
+ChoiceAddress.default = {
+    type: '',
+    location: undefined,
+    onClick: (key) => { logger.log('debug', 'key = %s', key)}
+};
 
 class SimpleAddress {
 
@@ -132,7 +183,16 @@ export class Location {
         this.type = type;
 
         // reinitialize address component
-        this.addressComponent = new SimpleAddress(this);
+        if (type === 'b' || type === 'o')
+            this.addressComponent = new ChoiceAddress({
+                    type: type,
+                    onClick: (key) => {
+                        logger.log('debug', 'Setting location to %s', key);
+                        this.location = location[this.type][key];
+                    }
+                });
+        else
+            this.addressComponent = new SimpleAddress(this);
 
         $(`#location-${label}-item-address`)
             .empty()
