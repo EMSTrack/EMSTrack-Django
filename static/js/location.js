@@ -160,7 +160,7 @@ export class Location {
                 $('body')
                     .append(
                         selector.css({
-                            position: 'fixed',
+                            position: 'absolute',
                             left: offset.left,
                             top: offset.top
                         }).detach());
