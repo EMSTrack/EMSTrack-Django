@@ -113,7 +113,7 @@ export class Location {
     <em>${translation_table['Type']}:</em>`;
 
         if (options.includes('type-dropdown'))
-            html += this.renderTypeForm(label, "dropleft float-right");
+            html += this.renderTypeForm(label, "float-right");
         else // if (options.includes('type-span'))
             html += `<span class="float-right">${location_type[this.location.type]}</span>`;
 
@@ -135,6 +135,13 @@ export class Location {
     postRender(label, options = ['address-div']) {
 
         if (options.includes('type-dropdown')) {
+
+            // initialize dropdown
+            $(`#location-${label}-type-menu .dropdown-toggle`)
+                .dropdown({
+                    boundary: 'window'
+                });
+
             $(`#location-${label}-type-menu a`)
                 .click(function () {
 
