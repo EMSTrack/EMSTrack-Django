@@ -51,7 +51,8 @@ class ChoiceAddress {
             return;
 
         // setting location
-        this.location = settings.locations[this.type][key];
+        this.location = new Location(settings.locations[this.type][key]);
+        console.log(this.location);
 
         // setting address
         $(`#address-${label}-address`)
