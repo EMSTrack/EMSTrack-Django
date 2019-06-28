@@ -10,6 +10,7 @@ export class Dropdown {
         this.value = properties.value;
         this.prefix = properties.prefix;
         this.label = properties.label;
+        this.clickOnInitialValue = properties.clickOnInitialValue;
         this.onClick = properties.onClick;
     }
 
@@ -64,11 +65,12 @@ export class Dropdown {
                 $(`#${self.prefix}-type-menu-button-label`)
                     .text($(this).text());
 
-                // get index
-                const values = $(this).prop("id").split('-');
-                const value = values[values.length - 1];
+                // set value
+                const keys = $(this).prop("id").split('-');
+                this.value = keys[keys.length - 1];
 
-                self.onClick(value, self.options[value]);
+                // call onClick
+                self.onClick();
 
             });
 
@@ -97,8 +99,16 @@ export class Dropdown {
                 }).detach());
         });
 
+        if (this.clickOnInitialValue)
+            this.click( this.value );
+
     }
 
+    click(key) {
+
+        $(`${this.prefix}-menu-item-value-${key}`).click();
+
+    }
 }
 
 Dropdown.default = {
@@ -106,6 +116,7 @@ Dropdown.default = {
     value: null,
     prefix: "dropdown",
     label: "Select:",
-    onClick: (value, option) => { logger.log('info', 'click: %s, %s',  value, option); }
+    clickOnInitialValue: false,
+    onClick: () => { logger.log('info', 'click: %s', this.value); }
 };
 

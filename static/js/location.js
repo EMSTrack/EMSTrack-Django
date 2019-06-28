@@ -22,6 +22,32 @@ Point.default = {
     srid: 4326
 };
 
+class SimpleAddress {
+
+    constructor(location) {
+        this.location = location;
+    }
+
+    render(label, classes = "") {
+
+        // language=HTML
+        return `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
+    <p>
+        <em>${translation_table['Address']}:</em>
+    </p>
+    <p>
+        ${this.location.toText()}
+    </p>
+</div>`;
+
+    }
+
+    postRender() {
+
+    }
+
+}
+
 export class Location {
 
     constructor(parameters) {
@@ -42,91 +68,65 @@ export class Location {
         this.location = new Point(properties.location);
 
         this.typeDropdown = null;
+        this.addressCompoenent = null;
+
     }
 
-    static toText(location) {
+    toText() {
 
         // format address
-        let address = [location.number, location.street, location.unit].join(' ').trim();
+        let address = [this.number, this.street, this.unit].join(' ').trim();
 
         if (address !== "") {
-            if (location.neighborhood !== "")
-                address = [address, location.neighborhood].join(', ').trim();
+            if (this.neighborhood !== "")
+                address = [address, this.neighborhood].join(', ').trim();
         } else
-            address += location.neighborhood.trim()
+            address += this.neighborhood.trim()
 
         if (address !== "")
-            address = [address, location.city, location.state].join(', ').trim();
+            address = [address, this.city, this.state].join(', ').trim();
         else
-            address = [location.city, location.state].join(', ').trim();
+            address = [this.city, this.state].join(', ').trim();
 
-        address = [address, location.zipcode].join(' ').trim();
-        address = [address, location.country].join(', ').trim();
+        address = [address, this.zipcode].join(' ').trim();
+        address = [address, this.country].join(', ').trim();
 
         return address;
     }
 
-    renderTypeForm(label, classes = "") {
+    selectType(label, type) {
 
-        // language=HTML
-        const top = `<div class="dropdown ${classes}"
-    id="location-${label}-type-menu">
-    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
-            id="location-${label}-type-menu-button" 
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span id="location-${label}-type-menu-button-label">${location_type[this.type]}</span>
-    </button>
-    <div class="dropdown-menu"
-         id="location-${label}-dropdown-menu" 
-         aria-labelledby="location-${label}-type-menu-button">`;
+        if (this.type === type)
+            // no changes, quick return
+            return
 
-        let middle = '';
-        location_type_order.forEach( (type) => {
-            middle += `        <a class="dropdown-item small value-${type}"
-        id="location-${label}-type-${type}-menu-item" 
-        href="#">${location_type[type]}</a>`;
-        });
+        // otherwise reinitialize address component
+        this.addressCompoenent = new SimpleAddress(this.location);
 
-        // language=HTML
-        const bottom = `    </div>
-</div>`;
+        $(`#location-${label}-item-address`)
+            .empty()
+            .append(
+                this.addressCompoenent.render(`location-${label}`)
+            );
 
-        return top + middle + bottom;
-    }
-
-    renderAddressDiv(label, classes = "") {
-
-        // language=HTML
-        return `<div class="my-0 py-0 ${classes}" id="location-${label}-address-div">
-    <p>
-        <em>${translation_table['Address']}:</em>
-    </p>
-    <p>
-        ${Location.toText(this)}
-    </p>
-</div>`;
+        this.addressCompoenent.postRender();
 
     }
 
-    render(label, classes = "", options = ['type-dropdown', 'address-div']) {
+    render(label, classes = "", options = ['address-div']) {
 
         let html = '';
 
-        /*
         // type
-        html += `<li id="location-${label}-item-type" class="${classes}">
-    <em>${translation_table['Type']}:</em>`;
-
-        if (options.includes('type-dropdown'))
-            html += this.renderTypeForm(label, "float-right");
-        else // if (options.includes('type-span'))
-            html += `<span class="float-right">${location_type[this.location.type]}</span>`;
-
-        html += '</li>';
-        */
-
-        // type
-        this.typeDropdown = new Dropdown( {options: location_type, value: this.type, prefix: `location-${label}`});
+        this.typeDropdown = new Dropdown({
+            options: location_type,
+            value: this.type,
+            prefix: `location-${label}`,
+            clickOnInitialValue: true,
+            onClick: (key) => {
+                this.selectType(label, key);
+            }
+        });
 
         html += `<li id="location-${label}-item-type" class="${classes}">
     <em>${translation_table['Type']}:</em>`;
@@ -138,61 +138,12 @@ export class Location {
         // address
         html += `<li id="location-${label}-item-address" class="${classes}">`;
 
-        if (options.includes('address-map')) {
-
-        } else // if (options.includes('address-div'))
-            html += this.renderAddressDiv(label);
-
         html += '</li>';
 
         return html;
     }
 
     postRender(label, options = ['address-div']) {
-
-        if (options.includes('type-dropdown')) {
-
-            // initialize dropdown
-            $(`#location-${label}-type-menu .dropdown-toggle`)
-                .dropdown({
-                    boundary: 'viewport'
-                });
-
-            $(`#location-${label}-type-menu a`)
-                .click(function () {
-
-                    // copy to label
-                    $(`#location-${label}-type-menu-button-label`)
-                        .text($(this).text());
-
-                });
-
-            // dropdown clipping issue
-            // see https://stackoverflow.com/questions/31829312/bootstrap-dropdown-clipped-by-overflowhidden-container-how-to-change-the-conta
-            $(`#location-${label}-type-menu`).on('show.bs.dropdown', function() {
-                const selector = $(`#location-${label}-dropdown-menu`);
-                const offset = selector.offset();
-                $('body')
-                    .append(
-                        selector.css({
-                            position: 'absolute',
-                            left: offset.left,
-                            top: offset.top,
-                            'z-index': 1100
-                        }).detach());
-            });
-
-            $(`#location-${label}-type-menu`).on('hidden.bs.dropdown', function() {
-                const selector = $(`#location-${label}-dropdown-menu`);
-                $(`#location-${label}-item-type`)
-                    .append(selector.css({
-                        position: false,
-                        left: false,
-                        top: false
-                    }).detach());
-            });
-
-        }
 
         if (this.typeDropdown !== null)
             this.typeDropdown.postRender();
