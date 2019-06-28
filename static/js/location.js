@@ -112,6 +112,7 @@ export class Location {
 
         let html = '';
 
+        /*
         // type
         html += `<li id="location-${label}-item-type" class="${classes}">
     <em>${translation_table['Type']}:</em>`;
@@ -122,9 +123,10 @@ export class Location {
             html += `<span class="float-right">${location_type[this.location.type]}</span>`;
 
         html += '</li>';
+        */
 
         // type
-        this.typeDropdown = new Dropdown( {options: location_type, prefix: `location-${label}`});
+        this.typeDropdown = new Dropdown( {options: location_type, value: this.type, prefix: `location-${label}`});
 
         html += `<li id="location-${label}-item-type" class="${classes}">
     <em>${translation_table['Type']}:</em>`;
