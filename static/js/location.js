@@ -64,11 +64,11 @@ class ChoiceAddress {
     <p>`;
 
         // dropdown
-        let options;
-        if (settings.locations.hasOwnProperty(this.type))
-            options = settings.locations[this.type];
-        else
-            options = {};
+        let options = {};
+        if (settings.locations.hasOwnProperty(this.type)) {
+            for (const [id, location] in Object.entries(settings.locations[this.type]))
+                options[id] = location.name;
+        }
 
         this.dropdown = new Dropdown({
             options: options,
@@ -95,8 +95,7 @@ class ChoiceAddress {
             this.dropdown.postRender();
 
         // initial select type
-        console.log(this.location);
-        if (this.location !== 'undefined')
+        if (this.location !== undefined)
             this.select(label, this.location.id, true);
 
     }
