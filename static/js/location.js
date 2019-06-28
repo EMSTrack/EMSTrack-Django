@@ -162,7 +162,8 @@ export class Location {
                         selector.css({
                             position: 'absolute',
                             left: offset.left,
-                            top: offset.top
+                            top: offset.top,
+                            z-index: 100
                         }).detach());
             });
 
