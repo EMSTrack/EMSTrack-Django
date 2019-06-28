@@ -153,6 +153,9 @@ export class Location {
 
             // dropdown clipping issue
             // see https://stackoverflow.com/questions/31829312/bootstrap-dropdown-clipped-by-overflowhidden-container-how-to-change-the-conta
+            $(`#location-${label}-type-menu`).css({position: 'absolute'});
+
+            /*
             $(`#location-${label}-type-menu`).on('show.bs.dropdown', function() {
                 const selector = $(`#location-${label}-type-menu`);
                 const offset = selector.offset();
@@ -175,6 +178,7 @@ export class Location {
                         top: false
                     }).detach());
             });
+            */
 
         }
 
