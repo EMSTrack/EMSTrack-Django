@@ -20,6 +20,104 @@ Point.default = {
     srid: 4326
 };
 
+
+export class Dropdown {
+
+    constructor(parameters) {
+
+        const properties = Object.assign({...Dropdown.default}, parameters);
+
+        this.options = properties.options;
+        this.value = properties.value;
+        this.prefix = properties.label;
+        this.label = properties.label;
+    }
+
+    render(classes = "") {
+
+        // language=HTML
+        let html = `<div class="dropdown ${classes}"
+    id="${this.prefix}-type-menu">
+    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
+            id="${label}-type-menu-button" 
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <span id="${this.prefix}-type-menu-button-label">
+            ${this.value < 0 ? this.label : this.options[this.value]}
+        </span>
+    </button>
+    <div class="dropdown-menu"
+         id="${this.prefix}-dropdown-menu" 
+         aria-labelledby="${this.prefix}-type-menu-button">`;
+
+        this.options.forEach( (option) => {
+            html += `        <a class="dropdown-item small"
+        id="${this.prefix}-type-${option['value']}-menu-item" 
+        href="#">${option['label']}</a>`;
+        });
+
+        // language=HTML
+        html += `    </div>
+</div>`;
+
+        return html;
+    }
+
+    postRender() {
+
+        // reference to this to be used inside method
+        const self = this;
+
+        // initialize dropdown
+        $(`#${this.prefix}-type-menu .dropdown-toggle`)
+            .dropdown({
+                boundary: 'viewport'
+            });
+
+        $(`#${this.prefix}-type-menu a`)
+            .click(function () {
+
+                // copy to label
+                $(`#${self.prefix}-type-menu-button-label`)
+                    .text($(this).text());
+
+            });
+
+        // dropdown clipping issue
+        // see https://stackoverflow.com/questions/31829312/bootstrap-dropdown-clipped-by-overflowhidden-container-how-to-change-the-conta
+        $(`#${this.prefix}-type-menu`).on('show.bs.dropdown', function() {
+            const selector = $(`#${self.label}-dropdown-menu`);
+            const offset = selector.offset();
+            $('body')
+                .append(
+                    selector.css({
+                        position: 'absolute',
+                        left: offset.left,
+                        top: offset.top,
+                        'z-index': 1100
+                    }).detach());
+        });
+
+        $(`#${this.prefix}-type-menu`).on('hidden.bs.dropdown', function() {
+            const selector = $(`#${self.label}-dropdown-menu`);
+            $(`#${self.label}-item-type`)
+                .append(selector.css({
+                    position: false,
+                    left: false,
+                    top: false
+                }).detach());
+        });
+
+    }
+
+}
+
+Dropdown.default = {
+    options: [],
+    initial: -1,
+    prefix: "dropdown",
+    label: "Select:"
+};
+
 export class Location {
 
     constructor(parameters) {
@@ -93,16 +191,34 @@ export class Location {
     renderAddressDiv(label, classes = "") {
 
         // language=HTML
-        return (
-            `<div class="my-0 py-0 ${classes}" id="location-${label}-address-div">
+        let html = '';
+
+        if (this.type === 'h') {
+
+            this.address_dropdown = new Dropdown({
+                options: [
+                    { label: 'Hospital 1', value: 1 },
+                    { label: 'Hospital 2', value: 2 }
+                ],
+                prefix: `location-hospital-${label}`
+            });
+
+            html += this.address_dropdown.render();
+
+        } else {
+
+            html += `<div class="my-0 py-0 ${classes}" id="location-${label}-address-div">
     <p>
         <em>${translation_table['Address']}:</em>
     </p>
     <p>
         ${Location.toText(this)}
     </p>
-</div>`
-        );
+</div>`;
+
+        }
+
+        return html;
 
     }
 
@@ -158,7 +274,6 @@ export class Location {
             $(`#location-${label}-type-menu`).on('show.bs.dropdown', function() {
                 const selector = $(`#location-${label}-dropdown-menu`);
                 const offset = selector.offset();
-                console.log(offset);
                 $('body')
                     .append(
                         selector.css({
@@ -178,6 +293,12 @@ export class Location {
                         top: false
                     }).detach());
             });
+
+        }
+
+        if (this.type === 'h') {
+
+            this.address_dropdown.postRender();
 
         }
 
