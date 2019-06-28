@@ -1,3 +1,5 @@
+import {logger} from "./logger";
+
 import {Dropdown} from "./dropdown";
 
 /**
@@ -94,11 +96,13 @@ export class Location {
         return address;
     }
 
-    selectType(label, type) {
+    selectType(label, type, force = false) {
 
-        if (this.type === type)
+        if (!force && this.type === type)
             // no changes, quick return
             return
+
+        logger.log('debug', 'Resetting address component.');
 
         // otherwise reinitialize address component
         this.addressComponent = new SimpleAddress(this);
@@ -122,7 +126,6 @@ export class Location {
             options: location_type,
             value: this.type,
             prefix: `location-${label}`,
-            clickOnInitialValue: true,
             onClick: (value) => {
                 this.selectType(label, value);
             }
@@ -147,6 +150,9 @@ export class Location {
 
         if (this.typeDropdown !== null)
             this.typeDropdown.postRender();
+
+        // initial select type
+        this.selectType(label, this.type, true);
 
     }
     

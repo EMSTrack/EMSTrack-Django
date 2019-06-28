@@ -10,7 +10,6 @@ export class Dropdown {
         this.value = properties.value;
         this.prefix = properties.prefix;
         this.label = properties.label;
-        this.clickOnInitialValue = properties.clickOnInitialValue;
         this.onClick = properties.onClick;
     }
 
@@ -99,9 +98,6 @@ export class Dropdown {
                 }).detach());
         });
 
-        if (this.clickOnInitialValue)
-            this.click( this.value );
-
     }
 
     click(key) {
@@ -116,7 +112,6 @@ Dropdown.default = {
     value: null,
     prefix: "dropdown",
     label: "Select:",
-    clickOnInitialValue: false,
     onClick: (value) => { logger.log('info', 'click: %s', value); }
 };
 
