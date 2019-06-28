@@ -150,6 +150,29 @@ export class Location {
                         .text($(this).text());
 
                 });
+
+            // see https://stackoverflow.com/questions/31829312/bootstrap-dropdown-clipped-by-overflowhidden-container-how-to-change-the-conta
+            $(`#location-${label}-type-menu`).on('show.bs.dropdown', function() {
+                const selector = $(`#location-${label}-type-menu`);
+                $('body')
+                    .append(
+                        selector.css({
+                            position: 'absolute',
+                            left: selector.offset().left,
+                            top: selector.offset().top
+                        }).detach());
+            });
+
+            $(`#location-${label}-type-menu`).on('hidden.bs.dropdown', function() {
+                const selector = $(`#location-${label}-type-menu`);
+                $(`#location-${label}-item-type`)
+                    .append(selector.css({
+                        position: false,
+                        left: false,
+                        top: false
+                    }).detach());
+            });
+
         }
 
     }
