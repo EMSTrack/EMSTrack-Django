@@ -68,7 +68,7 @@ export class Location {
         this.location = new Point(properties.location);
 
         this.typeDropdown = null;
-        this.addressCompoenent = null;
+        this.addressComponent = null;
 
     }
 
@@ -101,15 +101,15 @@ export class Location {
             return
 
         // otherwise reinitialize address component
-        this.addressCompoenent = new SimpleAddress(this.location);
+        this.addressComponent = new SimpleAddress(this);
 
         $(`#location-${label}-item-address`)
             .empty()
             .append(
-                this.addressCompoenent.render(`location-${label}`)
+                this.addressComponent.render(`location-${label}`)
             );
 
-        this.addressCompoenent.postRender();
+        this.addressComponent.postRender();
 
     }
 
