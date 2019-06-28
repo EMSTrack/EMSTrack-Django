@@ -139,7 +139,7 @@ export class Location {
             // initialize dropdown
             $(`#location-${label}-type-menu .dropdown-toggle`)
                 .dropdown({
-                    boundary: 'window'
+                    boundary: 'viewport'
                 });
 
             $(`#location-${label}-type-menu a`)
