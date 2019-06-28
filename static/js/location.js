@@ -102,7 +102,7 @@ class ChoiceAddress {
         <p>
             <input type="hidden" id="address-${label}-lat" name="lat">
             <input type="hidden" id="address-${label}-lng" name="lng">
-            <input type="hidden" id="address-${label}-point" name="point">
+            <input type="hidden" id="address-${label}-pnt" name="point">
             <div id="address-${label}-map" style="height: 300px"></div>
         </p>
     </div>
@@ -123,9 +123,9 @@ class ChoiceAddress {
         // Set up map widget
         const options = {
             map_id: `address-${label}-map`,
-            id: `address-${label}-point`,
-            id_lat: `address-${label}-point-lat`,
-            id_lng: `address-${label}-point-lng`,
+            id: `address-${label}-pnt`,
+            id_lat: `address-${label}-lat`,
+            id_lng: `address-${label}-lng`,
             zoom: 12,
             map_provider: mapProvider
         };
