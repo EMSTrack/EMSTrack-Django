@@ -40,6 +40,8 @@ export class Location {
         this.zipcode = properties.zipcode;
         this.country = properties.country;
         this.location = new Point(properties.location);
+
+        this.typeDropdown = null;
     }
 
     static toText(location) {
@@ -121,10 +123,15 @@ export class Location {
 
         html += '</li>';
 
+        // type
         this.typeDropdown = new Dropdown( {options: location_type, prefix: `location-${label}`});
-        console.log(this.typeDropdown);
 
-        html += this.typeDropdown.render(classes);
+        html += `<li id="location-${label}-item-type" class="${classes}">
+    <em>${translation_table['Type']}:</em>`;
+
+        html += this.typeDropdown.render("float-right");
+
+        html += '</li>';
 
         // address
         html += `<li id="location-${label}-item-address" class="${classes}">`;
@@ -185,11 +192,8 @@ export class Location {
 
         }
 
-        if (this.type === 'h') {
-
-            this.address_dropdown.postRender();
-
-        }
+        if (this.typeDropdown !== null)
+            this.typeDropdown.postRender();
 
     }
     
