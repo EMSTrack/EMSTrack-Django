@@ -72,7 +72,9 @@ export class Location {
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span id="location-${label}-type-menu-button-label">${location_type[this.type]}</span>
     </button>
-    <div class="dropdown-menu" aria-labelledby="location-${label}-type-menu-button">`;
+    <div class="dropdown-menu"
+         id="location-${label}-dropdown-menu" 
+         aria-labelledby="location-${label}-type-menu-button">`;
 
         let middle = '';
         location_type_order.forEach( (type) => {
@@ -154,7 +156,7 @@ export class Location {
             // dropdown clipping issue
             // see https://stackoverflow.com/questions/31829312/bootstrap-dropdown-clipped-by-overflowhidden-container-how-to-change-the-conta
             $(`#location-${label}-type-menu`).on('show.bs.dropdown', function() {
-                const selector = $(`#location-${label}-type-menu .dropdown-menu`);
+                const selector = $(`#location-${label}-dropdown-menu`);
                 const offset = selector.offset();
                 console.log(offset);
                 $('body')
@@ -168,7 +170,7 @@ export class Location {
             });
 
             $(`#location-${label}-type-menu`).on('hidden.bs.dropdown', function() {
-                const selector = $(`#location-${label}-type-menu .dropdown-menu`);
+                const selector = $(`#location-${label}-dropdown-menu`);
                 $(`#location-${label}-item-type`)
                     .append(selector.css({
                         position: false,
