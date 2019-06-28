@@ -1,6 +1,6 @@
 import {logger} from "./logger";
 
-import {LeafletPointWidget} from "./leaflet/LeafletWidget";
+import {LeafletSimplePointWidget} from "./leaflet/LeafletWidget";
 
 import {Dropdown} from "./dropdown";
 
@@ -64,10 +64,7 @@ class ChoiceAddress {
             .append(this.location.toText());
 
         // set point in the map
-        this.map.setPoint({
-            lat: this.location.location.latitude,
-            lng: this.location.location.longitude}
-        );
+        this.map.setPoint(this.location.location.latitude,this.location.location.longitude);
 
         // call onSelect
         this.onClick(this.location);
@@ -103,6 +100,9 @@ class ChoiceAddress {
             ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
         </p>
         <p>
+            <input type="hidden" id="address-${label}-lat" name="lat">
+            <input type="hidden" id="address-${label}-lng" name="lng">
+            <input type="hidden" id="address-${label}-point" name="point">
             <div id="address-${label}-map" style="height: 300px"></div>
         </p>
     </div>
@@ -123,11 +123,14 @@ class ChoiceAddress {
         // Set up map widget
         const options = {
             map_id: `address-${label}-map`,
+            id: `address-${label}-point`,
+            id_lat: `address-${label}-point-lat`,
+            id_lng: `address-${label}-point-lng`,
             zoom: 12,
             map_provider: mapProvider
         };
 
-        this.map = new LeafletPointWidget(options);
+        this.map = new LeafletSimplePointWidget(options);
 
     }
 

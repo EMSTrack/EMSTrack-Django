@@ -375,6 +375,78 @@ export class LeafletPointWidget extends LeafletWidget {
 
 }
 
+// LeafletSimplePointWidget
+
+export class LeafletSimplePointWidget extends LeafletWidget {
+
+    constructor(options) {
+
+        // Call parent
+        super(options);
+
+        // has point?
+        let coordinates = null;
+        if (options.hasOwnProperty('lat') && options.hasOwnProperty('lng'))
+             coordinates = [options.lat, options.lng];
+
+        // initialize point
+        this.point = null;
+        if (coordinates !== null) {
+            this.setPoint(coordinates[0], coordinates[1]);
+        }
+
+        // set coordinates when map is click
+        this.map.on('click',
+            function (e) {
+                e.target.parent.setPoint(e.latlng);
+            });
+
+    }
+
+    // MEMBER FUNCTIONS
+
+    // update point
+    setPoint(lat, lng) {
+
+        // Does point exist?
+        if (this.point === null) {
+
+            // create first
+
+            // add marker
+            this.point = L.marker(L.latLng([lat, lng]), {draggable: true});
+            this.point.addTo(this.map);
+
+            // add reference to parent object
+            this.point.parent = this;
+
+            // set coordinates when dragged
+            this.point.on('dragend', function (e) {
+                e.target.parent.setPoint(e.target.getLatLng());
+            });
+
+        } else {
+
+            // just update coordinates
+            this.point.setLatLng(L.latLng([lat, lng]));
+
+        }
+
+        // update fields
+        if (this.options.id) {
+            document.getElementById(this.options.id).value = 'POINT(' + lng + ' ' + lat + ')';
+        }
+        if (this.options.id_lat) {
+            document.getElementById(this.options.id_lat).value = lat;
+        }
+        if (this.options.id_lng) {
+            document.getElementById(this.options.id_lng).value = lng;
+        }
+
+    }
+
+}
+
 // Polyline Widget
 
 export class LeafletPolylineWidget extends LeafletWidget {
