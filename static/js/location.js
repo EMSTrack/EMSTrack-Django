@@ -326,7 +326,7 @@ export class Location {
         if (type === 'b' || type === 'o' || type === 'h' || type === 'a')
             this.addressComponent = new ChoiceAddress({
                 type: type,
-                location: location,
+                location: this,
                 onClick: (location) => {
                     logger.log('debug', 'Setting location to %d:%s', location.id, location.name);
                     Object.assign(this, location);
@@ -335,7 +335,7 @@ export class Location {
         else if (type === 'w' || type === 'i')
             this.addressComponent = new MapAddress({
                 type: type,
-                location: location,
+                location: this,
                 onClick: (location) => {
                     logger.log('debug', 'Setting location to %d:%s', location.id, location.name);
                     Object.assign(this, location);
