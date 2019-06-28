@@ -100,11 +100,12 @@ export class Location {
 
         if (!force && this.type === type)
             // no changes, quick return
-            return
+            return;
 
-        logger.log('debug', 'Resetting address component.');
+        // setting type
+        this.type = type;
 
-        // otherwise reinitialize address component
+        // reinitialize address component
         this.addressComponent = new SimpleAddress(this);
 
         $(`#location-${label}-item-address`)
