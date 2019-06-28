@@ -1,3 +1,5 @@
+import { logger } from "./logger";
+
 export class Dropdown {
 
     constructor(parameters) {
@@ -64,7 +66,7 @@ export class Dropdown {
 
                 // get index
                 const values = $(this).prop("id").split('-');
-                const value = values[value.length - 1];
+                const value = values[values.length - 1];
 
                 self.onClick(value, self.options[value]);
 
@@ -104,6 +106,6 @@ Dropdown.default = {
     value: null,
     prefix: "dropdown",
     label: "Select:",
-    onClick: () => {}
+    onClick: (value, option) => { logger.log('dropdown click: %s, %s',  value, option); }
 };
 
