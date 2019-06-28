@@ -442,7 +442,7 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         }
 
         // center map
-        this.center(this.point);
+        this.center({ latitude: lat, longitude: lng });
 
         // update fields
         if (this.options.id) {
