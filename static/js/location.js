@@ -54,6 +54,8 @@ class MapAddress {
             // no changes, quick return
             return;
 
+        console.log(location);
+
         // setting location
         this.location = new Location(location);
 
