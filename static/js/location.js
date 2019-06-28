@@ -87,10 +87,12 @@ class ChoiceAddress {
 
         html += this.dropdown.render("float-right");
 
-        html += `</div>
-    <p id="address-${label}-address">
-        ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
-    </p>
+        html += `    </div>
+    <div>
+        <p id="address-${label}-address">
+            ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
+        </p>
+    </div>
 </div>`;
 
         return html;
@@ -197,7 +199,7 @@ export class Location {
         this.type = type;
 
         // reinitialize address component
-        if (type === 'b' || type === 'o')
+        if (type === 'b' || type === 'o' || type === 'h' || type === 'a')
             this.addressComponent = new ChoiceAddress({
                     type: type,
                     onClick: (location) => {
