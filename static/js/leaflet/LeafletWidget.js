@@ -406,7 +406,8 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         if (this.options.clickable)
             this.map.on('click',
                 function (e) {
-                    e.target.parent.setPoint(e.latlng);
+                    const latlng = e.latlng;
+                    e.target.parent.setPoint(latlng.lat, latlng.lng);
                 });
 
     }
@@ -431,7 +432,8 @@ export class LeafletSimplePointWidget extends LeafletWidget {
             // set coordinates when dragged
             if (this.options.draggable)
                 this.point.on('dragend', function (e) {
-                    e.target.parent.setPoint(e.target.getLatLng());
+                    const latlng = e.target.getLatLng();
+                    e.target.parent.setPoint(latlng.lat, latlng.lng);
                 });
 
         } else {
