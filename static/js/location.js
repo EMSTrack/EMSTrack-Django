@@ -35,6 +35,104 @@ Point.default = {
     srid: 4326
 };
 
+class MapAddress {
+
+    constructor(parameters) {
+
+        const properties = Object.assign({...MapAddress.default}, parameters);
+
+        this.type = properties.type;
+        this.location = properties.location;
+        this.onClick = properties.onClick;
+
+        this.map = null;
+    }
+
+    select(label, location, force = false) {
+
+        if (!force && location !== undefined)
+            // no changes, quick return
+            return;
+
+        // setting location
+        this.location = new Location(location);
+
+        // setting address
+        $(`#address-${label}-address`)
+            .empty()
+            .append(this.location.toText());
+
+        // set point on the map
+        this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
+
+        // call onSelect
+        this.onClick(this.location);
+
+    }
+
+    render(label, classes = "") {
+
+        // language=HTML
+        let html = `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
+    <div>
+        <p>
+            <em>${settings.translation_table['Address']}:</em>
+        </p>
+        <p>
+            <input class="form-control form-control-sm"
+                   id="address-${label}-street" type="text"
+                   name="street"
+                   placeholder="${settings.translation_table['Address']}">
+            
+        </p>
+    </div>`;
+
+        html += `    <div>
+        <p id="address-${label}-address">
+            ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
+        </p>
+        <p>
+            <input type="hidden" id="address-${label}-lat" name="lat">
+            <input type="hidden" id="address-${label}-lng" name="lng">
+            <input type="hidden" id="address-${label}-pnt" name="point">
+            <div id="address-${label}-map" style="height: 250px"></div>
+        </p>
+    </div>
+</div>`;
+
+        return html;
+    }
+
+    postRender(label) {
+
+        // initial select type
+        if (this.location !== undefined)
+            this.select(label, this.location, true);
+
+        // Set up map widget
+        const options = {
+            map_id: `address-${label}-map`,
+            id: `address-${label}-pnt`,
+            id_lat: `address-${label}-lat`,
+            id_lng: `address-${label}-lng`,
+            zoom: 12,
+            map_provider: mapProvider,
+            clickable: true,
+            draggable: true
+        };
+
+        this.map = new LeafletSimplePointWidget(options);
+
+    }
+
+}
+
+MapAddress.default = {
+    type: '',
+    location: undefined,
+    onClick: (key) => { logger.log('debug', 'key = %s', key)}
+};
+
 class ChoiceAddress {
 
     constructor(parameters) {
@@ -63,7 +161,7 @@ class ChoiceAddress {
             .empty()
             .append(this.location.toText());
 
-        // set point in the map
+        // set point on the map
         console.log(this.location);
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
 
@@ -91,11 +189,13 @@ class ChoiceAddress {
         // language=HTML
         let html = `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
     <div>
-    <em>${settings.translation_table['Address']}:</em>`;
+        <p>
+            <em>${settings.translation_table['Address']}:</em>`;
 
         html += this.dropdown.render("float-right");
 
-        html += `    </div>
+        html += `        </p>
+    </div>
     <div>
         <p id="address-${label}-address">
             ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
@@ -104,7 +204,7 @@ class ChoiceAddress {
             <input type="hidden" id="address-${label}-lat" name="lat">
             <input type="hidden" id="address-${label}-lng" name="lng">
             <input type="hidden" id="address-${label}-pnt" name="point">
-            <div id="address-${label}-map" style="height: 300px"></div>
+            <div id="address-${label}-map" style="height: 250px"></div>
         </p>
     </div>
 </div>`;
@@ -229,14 +329,20 @@ export class Location {
         // reinitialize address component
         if (type === 'b' || type === 'o' || type === 'h' || type === 'a')
             this.addressComponent = new ChoiceAddress({
-                    type: type,
-                    onClick: (location) => {
-                        logger.log('debug', 'Setting location to %d:%s', location.id, location.name);
-                        Object.assign(this, location);
-                    }
-                });
-        else
-            this.addressComponent = new SimpleAddress(this);
+                type: type,
+                onClick: (location) => {
+                    logger.log('debug', 'Setting location to %d:%s', location.id, location.name);
+                    Object.assign(this, location);
+                }
+            });
+        else if (type === 'w' || type === 'i')
+            this.addressComponent = new MapAddress({
+                type: type,
+                onClick: (location) => {
+                    logger.log('debug', 'Setting location to %d:%s', location.id, location.name);
+                    Object.assign(this, location);
+                }
+            });
 
         $(`#location-${label}-item-address`)
             .empty()
