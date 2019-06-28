@@ -389,17 +389,25 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         if (options.hasOwnProperty('lat') && options.hasOwnProperty('lng'))
              coordinates = [options.lat, options.lng];
 
+        // draggable
+        if (!this.options.hasOwnProperty('draggable'))
+            this.options['draggable'] = true;
+
+        // clickable
+        if (!this.options.hasOwnProperty('clickable'))
+            this.options['clickable'] = true;
+
         // initialize point
         this.point = null;
-        if (coordinates !== null) {
+        if (coordinates !== null)
             this.setPoint(coordinates[0], coordinates[1]);
-        }
 
-        // set coordinates when map is click
-        this.map.on('click',
-            function (e) {
-                e.target.parent.setPoint(e.latlng);
-            });
+        // set coordinates when map is clicked
+        if (this.options.clickable)
+            this.map.on('click',
+                function (e) {
+                    e.target.parent.setPoint(e.latlng);
+                });
 
     }
 
@@ -421,9 +429,10 @@ export class LeafletSimplePointWidget extends LeafletWidget {
             this.point.parent = this;
 
             // set coordinates when dragged
-            this.point.on('dragend', function (e) {
-                e.target.parent.setPoint(e.target.getLatLng());
-            });
+            if (this.options.draggable)
+                this.point.on('dragend', function (e) {
+                    e.target.parent.setPoint(e.target.getLatLng());
+                });
 
         } else {
 

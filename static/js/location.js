@@ -127,7 +127,9 @@ class ChoiceAddress {
             id_lat: `address-${label}-lat`,
             id_lng: `address-${label}-lng`,
             zoom: 12,
-            map_provider: mapProvider
+            map_provider: mapProvider,
+            clickable: false,
+            draggable: false
         };
 
         this.map = new LeafletSimplePointWidget(options);
