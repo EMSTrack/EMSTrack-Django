@@ -28,11 +28,11 @@ export class Dropdown {
          aria-labelledby="${this.prefix}-type-menu-button">`;
 
         let index = 0;
-        for (const option of this.options) {
+        for (const [key, value] of Object.entries(this.options)) {
 
             html += `        <a class="dropdown-item small "
-        id="${this.prefix}-menu-item-value-${option}" 
-        href="#">${this.options[option]}</a>`;
+        id="${this.prefix}-menu-item-value-${key}" 
+        href="#">${value}</a>`;
 
             index += 1;
         }
