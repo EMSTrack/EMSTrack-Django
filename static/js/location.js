@@ -66,10 +66,6 @@ class ChoiceAddress {
 
     render(label, classes = "") {
 
-        // language=HTML
-        let html = `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
-    <p>`;
-
         // dropdown
         let options = {};
         if (settings.locations.hasOwnProperty(this.type)) {
@@ -85,10 +81,9 @@ class ChoiceAddress {
             }
         });
 
-        html += `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
-    <p>`;
-
-        html += `<p>
+        // language=HTML
+        let html = `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
+    <p>
     <em>${settings.translation_table['Address']}:</em>`;
 
         html += this.dropdown.render("float-right");
