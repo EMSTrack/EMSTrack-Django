@@ -153,7 +153,7 @@ class SimpleAddress {
 
     }
 
-    postRender() {
+    postRender(label) {
 
     }
 
@@ -232,7 +232,7 @@ export class Location {
                 this.addressComponent.render(`location-${label}`)
             );
 
-        this.addressComponent.postRender();
+        this.addressComponent.postRender(`location-${label}`);
 
     }
 
