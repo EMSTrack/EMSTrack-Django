@@ -66,7 +66,7 @@ class ChoiceAddress {
         // dropdown
         let options = {};
         if (settings.locations.hasOwnProperty(this.type)) {
-            for (const [id, location] in Object.entries(settings.locations[this.type]))
+            for (const [id, location] of Object.entries(settings.locations[this.type]))
                 options[id] = location.name;
         }
 
