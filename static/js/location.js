@@ -59,8 +59,7 @@ class MapAddress {
 
         // setting address
         $(`#address-${label}-address`)
-            .empty()
-            .append(this.location.toText());
+            .val(this.location.toText());
 
         // set point on the map
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
@@ -80,7 +79,7 @@ class MapAddress {
         </p>
         <p>
             <input class="form-control form-control-sm"
-                   id="address-${label}-street" type="text"
+                   id="address-${label}-address" type="text"
                    name="street"
                    placeholder="${settings.translation_table['Address']}">
             
@@ -88,9 +87,6 @@ class MapAddress {
     </div>`;
 
         html += `    <div>
-        <p id="address-${label}-address">
-            ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
-        </p>
         <p>
             <input type="hidden" id="address-${label}-lat" name="lat">
             <input type="hidden" id="address-${label}-lng" name="lng">
