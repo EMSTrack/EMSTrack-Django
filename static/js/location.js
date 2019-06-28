@@ -163,7 +163,7 @@ export class Location {
                             position: 'absolute',
                             left: offset.left,
                             top: offset.top,
-                            z-index: 100
+                            'z-index': 100
                         }).detach());
             });
 
