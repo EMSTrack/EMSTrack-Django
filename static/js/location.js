@@ -53,7 +53,6 @@ class ChoiceAddress {
 
         // setting location
         this.location = new Location(settings.locations[this.type][key]);
-        console.log(this.location);
 
         // setting address
         $(`#address-${label}-address`)
@@ -61,7 +60,7 @@ class ChoiceAddress {
             .append(this.location.toText());
 
         // call onSelect
-        this.onClick(key);
+        this.onClick(this.location);
     }
 
     render(label, classes = "") {
@@ -201,9 +200,9 @@ export class Location {
         if (type === 'b' || type === 'o')
             this.addressComponent = new ChoiceAddress({
                     type: type,
-                    onClick: (key) => {
-                        logger.log('debug', 'Setting location to %s', key);
-                        this.location = settings.locations[this.type][key];
+                    onClick: (location) => {
+                        logger.log('debug', 'Setting location to %d:%s', location.id, location.name);
+                        Object.assign(this, location);
                     }
                 });
         else
