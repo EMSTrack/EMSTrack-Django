@@ -58,8 +58,8 @@ class ChoiceAddress {
 
         // dropdown
         let options;
-        if (location.hasOwnProperty(type))
-            options = location[type];
+        if (locations.hasOwnProperty(type))
+            options = locations[type];
         else
             options = {};
 
@@ -188,7 +188,7 @@ export class Location {
                     type: type,
                     onClick: (key) => {
                         logger.log('debug', 'Setting location to %s', key);
-                        this.location = location[this.type][key];
+                        this.location = locations[this.type][key];
                     }
                 });
         else
