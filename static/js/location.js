@@ -82,12 +82,12 @@ class ChoiceAddress {
 
         // language=HTML
         let html = `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
-    <p>
+    <div>
     <em>${settings.translation_table['Address']}:</em>`;
 
         html += this.dropdown.render("float-right");
 
-        html += `</p>
+        html += `</div>
     <p id="address-${label}-address">
         ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
     </p>
