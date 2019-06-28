@@ -95,6 +95,7 @@ class ChoiceAddress {
             this.dropdown.postRender();
 
         // initial select type
+        console.log(this.location);
         if (this.location !== 'undefined')
             this.select(label, this.location.id, true);
 
