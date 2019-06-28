@@ -16,7 +16,7 @@ import { Patients } from './patients';
 
 import { Waypoints } from './waypoints';
 
-import { Location } from './location';
+import LocationSettings, { Location } from './location';
 
 const sprintf = require('sprintf-js').sprintf;
 
@@ -59,6 +59,11 @@ const locations = {};	      // Store location details
 
 const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
+
+
+// Initialize locations
+LocationSettings.locations = locations;
+LocationSettings.translation_table = translation_table;
 
 // Initialize category panes
 let visibleCategory = {};

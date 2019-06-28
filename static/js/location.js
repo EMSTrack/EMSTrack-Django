@@ -6,6 +6,13 @@ import {Dropdown} from "./dropdown";
  * Location base class
  */
 
+// settings are exported as default
+const settings = {
+    locations: {},
+    translation_table: {},
+};
+export default settings;
+
 export class Point {
 
     constructor(parameters) {
@@ -44,7 +51,7 @@ class ChoiceAddress {
             return;
 
         // setting location
-        this.location = location[this.type][key];
+        this.location = settings.locations[this.type][key];
 
         // call onSelect
         this.onClick(key);
@@ -58,8 +65,8 @@ class ChoiceAddress {
 
         // dropdown
         let options;
-        if (locations.hasOwnProperty(type))
-            options = locations[type];
+        if (settings.locations.hasOwnProperty(type))
+            options = settings.locations[type];
         else
             options = {};
 
@@ -112,7 +119,7 @@ class SimpleAddress {
         // language=HTML
         return `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
     <p>
-        <em>${translation_table['Address']}:</em>
+        <em>${settings.translation_table['Address']}:</em>
     </p>
     <p>
         ${this.location.toText()}
@@ -188,7 +195,7 @@ export class Location {
                     type: type,
                     onClick: (key) => {
                         logger.log('debug', 'Setting location to %s', key);
-                        this.location = locations[this.type][key];
+                        this.location = settings.locations[this.type][key];
                     }
                 });
         else
@@ -219,7 +226,7 @@ export class Location {
         });
 
         html += `<li id="location-${label}-item-type" class="${classes}">
-    <em>${translation_table['Type']}:</em>`;
+    <em>${settings.translation_table['Type']}:</em>`;
 
         html += this.typeDropdown.render("float-right");
 
