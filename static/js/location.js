@@ -24,6 +24,32 @@ Point.default = {
     srid: 4326
 };
 
+class ChoiceAddress {
+
+    constructor(location) {
+        this.location = location;
+    }
+
+    render(label, classes = "") {
+
+        // language=HTML
+        return `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
+    <p>
+        <em>${translation_table['Address']}:</em>
+    </p>
+    <p>
+        ${this.location.toText()}
+    </p>
+</div>`;
+
+    }
+
+    postRender() {
+
+    }
+
+}
+
 class SimpleAddress {
 
     constructor(location) {

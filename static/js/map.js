@@ -52,10 +52,10 @@ const ambulanceMarkers = {};  // Store ambulance markers
 const ambulances = {};        // Store ambulance details
 
 const hospitalMarkers = {};   // Store hospital markers
-const hospitals = {};	        // Store hospital details
+const hospitals = {};	      // Store hospital details
 
 const locationMarkers = {};   // Store location markers
-const locations = {};	        // Store location details
+const locations = {};	      // Store location details
 
 const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
@@ -1346,8 +1346,11 @@ function addLocationToMap(location) {
     logger.log('info', "Adding location '%s'[id:'%d, latlon:%f,%f] to map",
         location.name, location.id, location.location.latitude, location.location.longitude);
 
-    // store location details in an array
-    locations[location.id] = location;
+    // store location details in an object, create first if needed
+    if (!locations.hasOwnProperty(location.type))
+        locations[location.type] = {};
+
+    locations[location.type][location.id] = location;
 
     // set icon by status
     let icon = locationIcon;
