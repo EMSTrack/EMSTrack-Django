@@ -70,7 +70,7 @@ export class Dropdown {
                 this.value = keys[keys.length - 1];
 
                 // call onClick
-                self.onClick();
+                self.onClick(this.value);
 
             });
 
@@ -117,6 +117,6 @@ Dropdown.default = {
     prefix: "dropdown",
     label: "Select:",
     clickOnInitialValue: false,
-    onClick: () => { logger.log('info', 'click: %s', this.value); }
+    onClick: (value) => { logger.log('info', 'click: %s', value); }
 };
 

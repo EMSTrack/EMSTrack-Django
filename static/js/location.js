@@ -123,8 +123,8 @@ export class Location {
             value: this.type,
             prefix: `location-${label}`,
             clickOnInitialValue: true,
-            onClick: (key) => {
-                this.selectType(label, key);
+            onClick: (value) => {
+                this.selectType(label, value);
             }
         });
 
