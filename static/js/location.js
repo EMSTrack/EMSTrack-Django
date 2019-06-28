@@ -168,7 +168,7 @@ export class Location {
             });
 
             $(`#location-${label}-type-menu`).on('hidden.bs.dropdown', function() {
-                const selector = $(`#location-${label}-type-menu`);
+                const selector = $(`#location-${label}-type-menu .dropdown-menu`);
                 $(`#location-${label}-item-type`)
                     .append(selector.css({
                         position: false,
