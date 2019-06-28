@@ -64,7 +64,8 @@ class ChoiceAddress {
             .append(this.location.toText());
 
         // set point in the map
-        this.map.setPoint(this.location.location.latitude,this.location.location.longitude);
+        console.log(this.location);
+        this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
 
         // call onSelect
         this.onClick(this.location);
