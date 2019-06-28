@@ -9,6 +9,7 @@ import {Dropdown} from "./dropdown";
 // settings are exported as default
 const settings = {
     locations: {},
+    location_type: {},
     translation_table: {},
 };
 export default settings;
@@ -94,6 +95,7 @@ class ChoiceAddress {
 
         html += `</p>
     <p id="address-${label}-address">
+        ${settings.translation_table['Please select']} ${settings.location_type[this.type]}  
     </p>
 </div>`;
 

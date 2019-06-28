@@ -63,6 +63,7 @@ const patientMarkers = {};    // Store hospital markers
 
 // Initialize locations
 LocationSettings.locations = locations;
+LocationSettings.location_type = location_type;
 LocationSettings.translation_table = translation_table;
 
 // Initialize category panes

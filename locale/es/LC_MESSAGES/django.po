@@ -1261,3 +1261,6 @@ msgstr "Satélite"
 
 msgid "Hybrid"
 msgstr "Híbrido"
+
+msgid "Please select"
+msgstr "Por favor seleccione"

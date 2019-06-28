@@ -303,7 +303,8 @@ class AmbulanceMap(TemplateView):
             "Waypoints": _("Waypoints"),
             "Type": _("Type"),
             "Status": _("Status"),
-            "Address": _("Address")
+            "Address": _("Address"),
+            "Please select": _("Please select")
         }
 
         return context
