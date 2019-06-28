@@ -90,7 +90,7 @@ export class Dropdown {
 
         $(`#${this.prefix}-type-menu`).on('hidden.bs.dropdown', function () {
             const selector = $(`#${self.prefix}-dropdown-menu`);
-            $(`#${self.prefix}-item-type`)
+            $(`#${self.prefix}-type-menu`)
                 .append(selector.css({
                     position: false,
                     left: false,
