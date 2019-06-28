@@ -28,14 +28,14 @@ export class Dropdown {
          aria-labelledby="${this.prefix}-type-menu-button">`;
 
         let index = 0;
-        this.options.forEach((option) => {
+        for (const option of this.options) {
 
             html += `        <a class="dropdown-item small "
         id="${this.prefix}-menu-item-value-${index}" 
         href="#">${option['label']}</a>`;
 
             index += 1;
-        });
+        }
 
         // language=HTML
         html += `    </div>
