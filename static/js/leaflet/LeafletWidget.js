@@ -432,6 +432,9 @@ export class LeafletSimplePointWidget extends LeafletWidget {
 
         }
 
+        // center map
+        this.center(this.point);
+
         // update fields
         if (this.options.id) {
             document.getElementById(this.options.id).value = 'POINT(' + lng + ' ' + lat + ')';
