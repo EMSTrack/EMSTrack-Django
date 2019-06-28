@@ -122,6 +122,7 @@ export class Location {
         html += '</li>';
 
         this.typeDropdown = new Dropdown( {options: location_type, prefix: `location-${label}`});
+        console.log(this.typeDropdown);
 
         html += this.typeDropdown.render(classes);
 
