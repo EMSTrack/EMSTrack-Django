@@ -1,5 +1,7 @@
 import {logger} from "./logger";
 
+import {LeafletPolylineWidget} from "./leaflet/LeafletWidget";
+
 import {Dropdown} from "./dropdown";
 
 /**
@@ -11,6 +13,7 @@ const settings = {
     locations: {},
     location_type: {},
     translation_table: {},
+    map_provider: undefined,
 };
 export default settings;
 
@@ -43,6 +46,7 @@ class ChoiceAddress {
         this.onClick = properties.onClick;
 
         this.dropdown = null;
+        this.map = null;
     }
 
     select(label, key, force = false) {
@@ -92,6 +96,9 @@ class ChoiceAddress {
         <p id="address-${label}-address">
             ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
         </p>
+        <p>
+            <div id="address-${label}-map" style="height: 200px"></div>
+        </p>
     </div>
 </div>`;
 
@@ -106,6 +113,15 @@ class ChoiceAddress {
         // initial select type
         if (this.location !== undefined)
             this.select(label, this.location.id, true);
+
+        // Set up map widget
+        const options = {
+            map_id: `address-${label}-map`,
+            zoom: 12,
+            map_provider: mapProvider
+        };
+
+        this.map = new LeafletPolylineWidget(options);
 
     }
 
