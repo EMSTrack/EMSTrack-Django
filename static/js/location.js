@@ -90,7 +90,7 @@ class ChoiceAddress {
 
         html += `</p>
     <p id="address-${label}-address">
-        ${settings.translation_table['Please select']} ${settings.location_type[this.type]}  
+        ${settings.translation_table['Please select']} ${settings.location_type[this.type].toLowerCase()}  
     </p>
 </div>`;
 
