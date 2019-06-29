@@ -449,7 +449,7 @@ export class Waypoints {
         waypoint.status = 'S';
 
         // change status label
-        $(`waypoint-${this.label + '-' + waypoint.order}-item-status-label`)
+        $(`#waypoint-${this.label + '-' + waypoint.order}-item-status-label`)
             .text(waypoint_status[waypoint.status]);
 
         this.configureEditorButtons();
