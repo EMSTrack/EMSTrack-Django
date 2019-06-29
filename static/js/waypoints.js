@@ -438,6 +438,8 @@ export class Waypoints {
 
     skipActiveWaypoint() {
 
+        logger.log('debug', 'Will skip active waypoint');
+
         const waypoint = this.getActiveWaypoint();
 
         // quick return
