@@ -43,21 +43,29 @@ class MapAddress {
 
         this.type = properties.type;
         this.location = properties.location;
-        this.onClick = properties.onClick;
+        this.onChangeCoordinates = properties.onChangeCoordinates;
+        this.onChangeAddress = properties.onChangeAddress;
 
         this.map = null;
     }
 
-    select(label, location, force = false) {
+    updateCoordinates(label, lat, lng) {
 
-        if (!force && location !== undefined && location === this.location)
-            // no changes, quick return
-            return;
+        logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
-        console.log(location);
+        this.onChangeCoordinates(this.location);
 
-        // setting location
-        this.location = new Location(location);
+    }
+
+    updateAddress(label, address, force = false) {
+
+        logger.log('debug', 'Address updated to %s', address);
+
+        this.onChangeAddress(this.location);
+
+    }
+
+    refresh() {
 
         // setting address
         $(`#address-${label}-address`)
@@ -65,9 +73,6 @@ class MapAddress {
 
         // set point on the map
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
-
-        // call onSelect
-        this.onClick(this.location);
 
     }
 
@@ -112,14 +117,18 @@ class MapAddress {
             zoom: 12,
             map_provider: mapProvider,
             clickable: true,
-            draggable: true
+            draggable: true,
+            onChange: (lat, lng) => { this.updateCoordinates(label, lat, lng); }
         };
 
         this.map = new LeafletSimplePointWidget(options);
+        this.refresh();
 
-        // initial select type
-        if (this.location !== undefined)
-            this.select(label, this.location, true);
+        // bind on change
+        const self = this;
+        $(`#address-${label}-address`).on('change', function () {
+            self.updateAddress(label, $(this).val());
+        });
 
     }
 
@@ -128,7 +137,8 @@ class MapAddress {
 MapAddress.default = {
     type: '',
     location: undefined,
-    onClick: (key) => { logger.log('debug', 'key = %s', key)}
+    onChangeCoordinates: (location) => { logger.log('debug', 'key = %s', location)},
+    onChangeAddress: (location) => { logger.log('debug', 'key = %s', location)}
 };
 
 class ChoiceAddress {
@@ -215,10 +225,6 @@ class ChoiceAddress {
         if (this.dropdown !== null)
             this.dropdown.postRender();
 
-        // initial select type
-        if (this.location !== undefined && this.location.id !== null)
-            this.select(label, this.location.id, true);
-
         // Set up map widget
         const options = {
             map_id: `address-${label}-map`,
@@ -232,6 +238,10 @@ class ChoiceAddress {
         };
 
         this.map = new LeafletSimplePointWidget(options);
+
+        // initial select type
+        if (this.location !== undefined && this.location.id !== null)
+            this.select(label, this.location.id, true);
 
     }
 

@@ -397,6 +397,10 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         if (!this.options.hasOwnProperty('clickable'))
             this.options['clickable'] = true;
 
+        // onChange
+        if (!this.options.hasOwnProperty('onChange'))
+            this.options['onChange'] = null;
+
         // initialize point
         this.point = null;
         if (coordinates !== null)
@@ -405,9 +409,11 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         // set coordinates when map is clicked
         if (this.options.clickable)
             this.map.on('click',
-                function (e) {
+                (e) => {
                     const latlng = e.latlng;
                     e.target.parent.setPoint(latlng.lat, latlng.lng);
+                    if (this.options.onChange != null)
+                        this.options.onChange(latlng.lat, latlng.lng);
                 });
 
     }
@@ -434,6 +440,8 @@ export class LeafletSimplePointWidget extends LeafletWidget {
                 this.point.on('dragend', function (e) {
                     const latlng = e.target.getLatLng();
                     e.target.parent.setPoint(latlng.lat, latlng.lng);
+                    if (this.options.onChange != null)
+                        this.options.onChange(latlng.lat, latlng.lng);
                 });
 
         } else {
