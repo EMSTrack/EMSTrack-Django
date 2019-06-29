@@ -80,6 +80,8 @@ export class Waypoints {
             this.maxOrder = ( this.maxOrder > waypoint.order ? this.maxOrder : waypoint.order );
         }
 
+        this.dialog = new Dialog();
+
     }
 
     render() {
@@ -87,7 +89,7 @@ export class Waypoints {
         // create placeholder selector
         this.placeholder = $(this.placeholderName);
 
-        let html = new Dialog(this.label).render();
+        let html = this.dialog.render(this.label);
 
         html += `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
     <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
@@ -198,7 +200,23 @@ export class Waypoints {
 
                 event.stopPropagation();
 
-                this.skipActiveWaypoint();
+                // dialog
+                this.dialog.show(this.label, {
+                    okButtonShow: true,
+                    cancelButtonShow: true,
+                    closeButtonShow: false,
+                    onSelect: (retval) => {
+
+                        logger.log('debug', 'dialog return = %s', retval);
+
+                        if (retval === Dialog.OK )
+                            this.skipActiveWaypoint();
+
+                    }
+                })
+
+
+
 
             });
 
