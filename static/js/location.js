@@ -56,7 +56,7 @@ class MapAddress {
 
     }
 
-    updateAddress(label, address, force = false) {
+    updateAddress(label, address) {
 
         logger.log('debug', 'Address updated to %s', address);
 
