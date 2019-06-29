@@ -12,11 +12,11 @@ import { waypointIcon } from './app-icons';
 
 import { alert } from './alert';
 
-import { Patients } from './patients';
+import { Patients } from './components/patients';
 
-import { Waypoints } from './waypoints';
+import { Waypoints } from './components/waypoints';
 
-import LocationSettings, { Location } from './location';
+import LocationSettings, { Location } from './components/location';
 
 const sprintf = require('sprintf-js').sprintf;
 

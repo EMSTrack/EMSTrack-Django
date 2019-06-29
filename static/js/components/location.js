@@ -1,6 +1,6 @@
-import {logger} from "./logger";
+import {logger} from "../logger";
 
-import {LeafletSimplePointWidget} from "./leaflet/LeafletWidget";
+import {LeafletSimplePointWidget} from "../leaflet/LeafletWidget";
 
 import {Dropdown} from "./dropdown";
 
@@ -366,7 +366,7 @@ export class Location {
 
     }
 
-    render(label, classes = "", options = ['address-div']) {
+    render(label, classes = "") {
 
         let html = '';
 
@@ -395,7 +395,7 @@ export class Location {
         return html;
     }
 
-    postRender(label, options = ['address-div']) {
+    postRender(label) {
 
         if (this.typeDropdown !== null)
             this.typeDropdown.postRender();

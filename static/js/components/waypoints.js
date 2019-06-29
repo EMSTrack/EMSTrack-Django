@@ -2,11 +2,13 @@
  * Waypoint base class
  */
 
-import { logger } from "./logger";
+import { logger } from "../logger";
 
 import { Location } from './location';
 
-import { swapElements } from './util';
+import { Dialog } from "./dialog";
+
+import { swapElements } from '../util';
 
 export class Waypoint {
 
@@ -19,33 +21,7 @@ export class Waypoint {
         this.location = new Location(properties.location);
     }
 
-    renderStatusForm(label, classes) {
-
-        // language=HTML
-        const top = `<div class="dropdown ${classes}"
-    id="waypoint-${label}-status-menu">
-    <button class="btn btn-outline-dark btn-sm dropdown-toggle" type="button" 
-            id="waypoint-${label}-status-menu-button" 
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span id="waypoint-${label}-status-menu-button-label">${waypoint_status[this.status]}</span>
-    </button>
-    <div class="dropdown-menu" aria-labelledby="waypoint-${label}-status-menu-button">`;
-
-        let middle = '';
-        waypoint_status_order.forEach( (status) => {
-            middle += `        <a class="dropdown-item small"
-        id="waypoint-${label}-status-${status}-menu-item" 
-        href="#">${waypoint_status[status]}</a>`;
-        });
-
-        // language=HTML
-        const bottom = `    </div>
-</div>`;
-
-        return top + middle + bottom;
-    }
-
-    render(label, options = ['status-span', 'type-dropdown', 'address-div']) {
+    render(label) {
 
         // language=HTML
         let html = `<ul id="waypoint-${label}-form" class="list-group">  
@@ -60,16 +36,10 @@ export class Waypoint {
            value="${this.order}">`;
 
         // status
-        html += `    <li id="waypoint-${label}-item-status" class="list-group-item px-10">
-        <em>${translation_table['Status']}:</em>`;
-
-        if (options.includes('status-dropdown'))
-            html += this.renderStatusForm(label, "dropleft float-right");
-        else // if (options.includes('status-span'))
-            html += `<span id="waypoint-${label}-item-status-label" 
-        class="float-right">${waypoint_status[this.status]}</span>`;
-
-        html += `    </li>`;
+        html += `<li id="waypoint-${label}-item-status" class="list-group-item px-10">
+    <em>${translation_table['Status']}:</em>
+    <span id="waypoint-${label}-item-status-label" class="float-right">${waypoint_status[this.status]}</span>
+</li>`;
 
         // render location
         html += this.location.render(label, 'list-group-item px-10', ['type-dropdown', 'address-div']);
@@ -80,17 +50,7 @@ export class Waypoint {
 
     }
 
-    postRender(label, options = ['status-span', 'type-dropdown', 'address-div']) {
-
-        if (options.includes('status-dropdown'))
-            $(`#waypoint-${label}-status-menu a`)
-                .click( function() {
-
-                    // copy to label
-                    $(`#waypoint-${label}-status-menu-button-label`)
-                        .text($(this).text());
-
-                });
+    postRender(label) {
 
         this.location.postRender(label, options);
 
@@ -127,26 +87,9 @@ export class Waypoints {
         // create placeholder selector
         this.placeholder = $(this.placeholderName);
 
-        this.placeholder.html(`<div class="modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog" id="call-${this.label}-modal" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Ok</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
+        let html = new Dialog(this.label).render();
+
+        html += `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
     <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
     </ol>
     <div id="call-${this.label}-carousel-items" class="carousel-inner">
@@ -182,7 +125,8 @@ export class Waypoints {
         <span class="fas fa-forward"></span> 
     </button>
 </div>`
-        );
+
+        this.placeholder.html(html);
 
         // add existing waypoints
         let index = 0;
