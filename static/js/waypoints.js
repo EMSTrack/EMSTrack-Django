@@ -66,7 +66,8 @@ export class Waypoint {
         if (options.includes('status-dropdown'))
             html += this.renderStatusForm(label, "dropleft float-right");
         else // if (options.includes('status-span'))
-            html += `<span class="float-right">${waypoint_status[this.status]}</span>`;
+            html += `<span id="waypoint-${label}-item-status-label" 
+        class="float-right">${waypoint_status[this.status]}</span>`;
 
         html += `    </li>`;
 
@@ -447,8 +448,8 @@ export class Waypoints {
         // set as skipped
         waypoint.status = 'S';
 
-        // change status
-        $(`waypoint-${this.label + '-' + waypoint.order}-status-menu-button-label`)
+        // change status label
+        $(`waypoint-${this.label + '-' + waypoint.order}-item-status-label`)
             .text(waypoint_status[waypoint.status]);
 
         this.configureEditorButtons();
