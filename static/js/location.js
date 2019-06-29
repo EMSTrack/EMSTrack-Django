@@ -48,7 +48,7 @@ class MapAddress {
         this.map = null;
     }
 
-    updateCoordinates(label, lat, lng) {
+    onUpdateCoordinates(label, lat, lng) {
 
         logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
@@ -56,7 +56,7 @@ class MapAddress {
 
     }
 
-    updateAddress(label, address) {
+    onUpdateAddress(label, address) {
 
         logger.log('debug', 'Address updated to %s', address);
 
@@ -64,7 +64,7 @@ class MapAddress {
 
     }
 
-    refresh() {
+    refresh(label) {
 
         // setting address
         $(`#address-${label}-address`)
@@ -117,16 +117,16 @@ class MapAddress {
             map_provider: mapProvider,
             clickable: true,
             draggable: true,
-            onChange: (lat, lng) => { this.updateCoordinates(label, lat, lng); }
+            onChange: (lat, lng) => { this.onUpdateCoordinates(label, lat, lng); }
         };
 
         this.map = new LeafletSimplePointWidget(options);
-        this.refresh();
+        this.refresh(label);
 
         // bind on change
         const self = this;
         $(`#address-${label}-address`).on('change', function () {
-            self.updateAddress(label, $(this).val());
+            self.onUpdateAddress(label, $(this).val());
         });
 
     }
@@ -153,14 +153,23 @@ class ChoiceAddress {
         this.map = null;
     }
 
-    select(label, key, force = false) {
+    onClick(label, id) {
 
-        if (!force && this.location !== undefined && this.location.id === key)
+        if (this.location !== undefined && this.location.id === id)
             // no changes, quick return
             return;
 
         // setting location
-        this.location = new Location(settings.locations[this.type][key]);
+        this.location = new Location(settings.locations[this.type][id]);
+
+        // refresh
+        this.refresh(label);
+
+        // call onSelect
+        this.onChange(this.location);
+    }
+
+    refresh(label) {
 
         // setting address
         $(`#address-${label}-address`)
@@ -168,11 +177,8 @@ class ChoiceAddress {
             .append(this.location.toText());
 
         // set point on the map
-        console.log(this.location);
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
 
-        // call onSelect
-        this.onChange(this.location);
     }
 
     render(label, classes = "") {
@@ -188,7 +194,7 @@ class ChoiceAddress {
             options: options,
             prefix: `address-${label}`,
             onClick: (value) => {
-                this.select(label, value);
+                this.onClick(label, value);
             }
         });
 
@@ -239,7 +245,7 @@ class ChoiceAddress {
 
         // initial select type
         if (this.location !== undefined && this.location.id !== null)
-            this.select(label, this.location.id, true);
+            this.refresh(label);
 
     }
 
