@@ -230,7 +230,7 @@ export class Waypoints {
         this.configureEditorButtons();
 
         // skip waypoint
-        $(`#call-${this.label}-waypoints-add-button`)
+        $(`#call-${this.label}-waypoints-skip-button`)
             .on('click', (event) => {
 
                 event.stopPropagation();
@@ -437,8 +437,6 @@ export class Waypoints {
     }
 
     skipActiveWaypoint() {
-
-        logger.log('debug', 'Will skip active waypoint');
 
         const waypoint = this.getActiveWaypoint();
 
