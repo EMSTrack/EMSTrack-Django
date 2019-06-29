@@ -142,15 +142,15 @@ export class Waypoints {
     </a>
 </div>
 <div class="btn-group d-flex my-2">
-    <button id="call-${this.label}-waypoints-skip-button" 
-            type="button" class="btn btn-danger w-100"
-            title="Skip waypoint">
-        <span class="fas fa-stop"></span> 
-    </button>
     <button id="call-${this.label}-waypoints-backward-button" 
             type="button" class="btn btn-warning w-100"
             title="Move waypoint back">
         <span class="fas fa-backward"></span> 
+    </button>
+    <button id="call-${this.label}-waypoints-skip-button" 
+            type="button" class="btn btn-danger w-100"
+            title="Skip waypoint">
+        <span class="fas fa-stop"></span> 
     </button>
     <button id="call-${this.label}-waypoints-add-button" 
             type="button" class="btn btn-info w-100"
@@ -229,6 +229,16 @@ export class Waypoints {
         // configure buttons
         this.configureEditorButtons();
 
+        // skip waypoint
+        $(`#call-${this.label}-waypoints-add-button`)
+            .on('click', (event) => {
+
+                event.stopPropagation();
+
+                this.skipActiveWaypoint();
+
+            });
+
         // add waypoint
         $(`#call-${this.label}-waypoints-add-button`)
             .on('click', (event) => {
@@ -242,6 +252,10 @@ export class Waypoints {
                 for (let i = index; i > this.activeIndex + 1; i--) {
                     this.swap(i, i - 1);
                 }
+
+                // move forward
+                $(`#call-${this.label}-carousel`)
+                    .carousel('next');
 
             });
 
@@ -419,6 +433,25 @@ export class Waypoints {
         this.placeholder
             .find('#waypoint-' + this.label + '-' + index + '-form')
             .hide();
+
+    }
+
+    skipActiveWaypoint() {
+
+        const waypoint = this.getActiveWaypoint();
+
+        // quick return
+        if ( waypoint.status === 'S' )
+            return;
+
+        // set as skipped
+        waypoint.status = 'S';
+
+        // change status
+        $(`waypoint-${this.label + '-' + waypoint.order}-status-menu-button-label`)
+            .text(waypoint_status[waypoint.status]);
+
+        this.configureEditorButtons();
 
     }
 

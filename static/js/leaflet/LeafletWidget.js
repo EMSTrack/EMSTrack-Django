@@ -429,7 +429,7 @@ export class LeafletSimplePointWidget extends LeafletWidget {
             // create first
 
             // add marker
-            this.point = L.marker(L.latLng([lat, lng]), {draggable: true});
+            this.point = L.marker(L.latLng([lat, lng]), { draggable: this.options['draggable']} );
             this.point.addTo(this.map);
 
             // add reference to parent object
@@ -437,7 +437,7 @@ export class LeafletSimplePointWidget extends LeafletWidget {
 
             // set coordinates when dragged
             if (this.options.draggable)
-                this.point.on('dragend', function (e) {
+                this.point.on('dragend', (e) => {
                     const latlng = e.target.getLatLng();
                     e.target.parent.setPoint(latlng.lat, latlng.lng);
                     if (this.options.onChange != null)
