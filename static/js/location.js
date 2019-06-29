@@ -43,8 +43,7 @@ class MapAddress {
 
         this.type = properties.type;
         this.location = properties.location;
-        this.onChangeCoordinates = properties.onChangeCoordinates;
-        this.onChangeAddress = properties.onChangeAddress;
+        this.onChange = properties.onChange;
 
         this.map = null;
     }
@@ -53,7 +52,7 @@ class MapAddress {
 
         logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
-        this.onChangeCoordinates(this.location);
+        this.onChange(this.location);
 
     }
 
@@ -61,7 +60,7 @@ class MapAddress {
 
         logger.log('debug', 'Address updated to %s', address);
 
-        this.onChangeAddress(this.location);
+        this.onChange(this.location);
 
     }
 
@@ -137,8 +136,7 @@ class MapAddress {
 MapAddress.default = {
     type: '',
     location: undefined,
-    onChangeCoordinates: (location) => { logger.log('debug', 'key = %s', location)},
-    onChangeAddress: (location) => { logger.log('debug', 'key = %s', location)}
+    onChange: (location) => { logger.log('debug', 'location = %s', location); },
 };
 
 class ChoiceAddress {
@@ -149,7 +147,7 @@ class ChoiceAddress {
 
         this.type = properties.type;
         this.location = properties.location;
-        this.onClick = properties.onClick;
+        this.onChange= properties.onChange;
 
         this.dropdown = null;
         this.map = null;
@@ -174,7 +172,7 @@ class ChoiceAddress {
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
 
         // call onSelect
-        this.onClick(this.location);
+        this.onChange(this.location);
     }
 
     render(label, classes = "") {
@@ -250,7 +248,7 @@ class ChoiceAddress {
 ChoiceAddress.default = {
     type: '',
     location: undefined,
-    onClick: (key) => { logger.log('debug', 'key = %s', key)}
+    onChange: (location) => { logger.log('debug', 'location = %s', location); }
 };
 
 class SimpleAddress {
