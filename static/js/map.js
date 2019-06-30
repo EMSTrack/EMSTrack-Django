@@ -353,19 +353,6 @@ function setupLocations(locations, type) {
 
 }
 
-// alert using bootstrap modal
-function bsdialog(message, alertClass, title) {
-
-    // Show modal
-    alertClass = alertClass || 'alert-danger';
-    title = title || translation_table['Attention'];
-
-    $('.modal-title').html(title);
-    $('.modal-body').html(message).addClass(alertClass);
-    return $("#dispatchModal");
-
-}
-
 function updateAmbulance(ambulance) {
 
     // retrieve id
@@ -752,35 +739,6 @@ function updateCallProgress(call, ambulance_call) {
 }
 
 function abortCall(call) {
-
-    /*
-    // Show modal
-    $('#modal-button-ok').show();
-    $('#modal-button-cancel').show();
-    $('#modal-button-close').hide();
-    bsdialog(sprintf(translation_table["Do you want to abort call %d?"], call.id))
-        .on('hide.bs.modal', function(event) {
-
-            const $activeElement = $(document.activeElement);
-
-            if ($activeElement.is('[data-toggle], [data-dismiss]')) {
-
-                if ($activeElement.attr('id') === 'modal-button-ok') {
-                    // Abort call
-                    apiClient.abortCall(call)
-                        .then( (call) => {
-                            logger.log('info', 'call %d successfully aborted', call.id);
-                        })
-                        .catch( (error) => {
-                            logger.log('error', 'Failed to abort call %d: %j', call.id, error);
-                        })
-                }
-
-            }
-
-        })
-        .modal('show');
-         */
 
     dialog.dialog(
         sprintf(translation_table["Do you want to abort call %d?"], call.id),
@@ -1802,31 +1760,6 @@ function updateAmbulanceStatus(ambulance, status) {
     // return in case of no change
     if (ambulance.status === status)
         return;
-
-    /*
-    // Show modal
-    $('#modal-button-ok').show();
-    $('#modal-button-cancel').show();
-    $('#modal-button-close').hide();
-    bsdialog(sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
-        ambulance.identifier, ambulance_status[status]))
-        .on('hide.bs.modal', function(event) {
-
-            const $activeElement = $(document.activeElement);
-
-            if ($activeElement.is('[data-toggle], [data-dismiss]')) {
-
-                if ($activeElement.attr('id') === 'modal-button-ok') {
-                    // Do something with the button that closed the modal
-                    // Update status
-                    doUpdateAmbulanceStatus(ambulance, status);
-                }
-
-            }
-
-        })
-        .modal('show');
-    */
 
     dialog.dialog(
         sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
