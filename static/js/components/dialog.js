@@ -14,8 +14,8 @@ export class Dialog {
 
     render(classes="") {
 
-        return `<div id="${this.label}-modal" class="modal fade ${classes}" role="dialog">
-    <div class="modal-dialog">
+        return `<div id="${this.label}-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog ${classes}">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">

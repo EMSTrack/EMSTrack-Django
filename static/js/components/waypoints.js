@@ -92,7 +92,7 @@ export class Waypoints {
         let html = '';
         if (this.dialog === null) {
             this.dialog = new Dialog({label: this.label});
-            html += this.dialog.render("popover-large-dialog");
+            html += this.dialog.render("modal-sm");
         }
 
         html += `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
