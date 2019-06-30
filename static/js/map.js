@@ -356,6 +356,7 @@ function setupLocations(locations, type) {
 // alert using bootstrap modal
 function bsalert(message, alertClass, title) {
 
+    /*
     // Show modal
     alertClass = alertClass || 'alert-danger';
     title = title || translation_table['Alert'];
@@ -366,6 +367,9 @@ function bsalert(message, alertClass, title) {
     $('#modal-button-cancel').hide();
     $('#modal-button-close').show();
     $("#dispatchModal").modal('show');
+    */
+
+    dialog.alert( message, alertClass, title );
 
 }
 
