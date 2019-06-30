@@ -63,7 +63,7 @@ export class Dialog {
         if (options.closeButtonShow)
             $(`#${this.label}-modal-button-close`).show();
         else
-            $(`#${this.label}-modal-button-close`).show();
+            $(`#${this.label}-modal-button-close`).hide();
 
         $(`#${this.label}-modal`)
             .off('hide.bs.modal')
