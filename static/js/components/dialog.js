@@ -45,9 +45,7 @@ export class Dialog {
 
     show(options) {
 
-        console.log(options);
-        options = Object.assign(options, this);
-        console.log(options);
+        options = Object.assign(Object.assign({}, this), options);
 
         // Show modal
         if (options.okButtonShow)
