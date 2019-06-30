@@ -511,10 +511,10 @@ export class Waypoints {
 
         if (waypoint.status === 'S')
             $(`#call-${this.label}-carousel`)
-                .prop( "disabled", true );
+                .attr( "disabled", true );
         else
             $(`#call-${this.label}-carousel`)
-                .prop( "disabled", false );
+                .attr( "disabled", false );
 
     }
 
