@@ -91,7 +91,7 @@ export class Waypoints {
 
         let html = '';
         if (this.dialog === null) {
-            this.dialog = new Dialog(this.label);
+            this.dialog = new Dialog({label: this.label});
             html += this.dialog.render("popover-large-dialog");
         }
 

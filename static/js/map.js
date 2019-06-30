@@ -63,7 +63,7 @@ const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
 
 // Dialog
-const dialog = new Dialog("messages");
+const dialog = new Dialog({label: "messages"});
 
 // Initialize locations
 LocationSettings.locations = locations;
