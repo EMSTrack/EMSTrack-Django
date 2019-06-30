@@ -18,6 +18,8 @@ import { Waypoints } from './components/waypoints';
 
 import LocationSettings, { Location } from './components/location';
 
+import { Dialog } from "./components/dialog";
+
 const sprintf = require('sprintf-js').sprintf;
 
 // Remove waypoints and incidents from location_type
@@ -60,6 +62,8 @@ const locations = {};	      // Store location details
 const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
 
+// Dialog
+const dialog = new Dialog("messages");
 
 // Initialize locations
 LocationSettings.locations = locations;
@@ -798,7 +802,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
     // create waypoint object
     const placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints';
-    const waypoints = new Waypoints(waypoint_set, call_id + '-' + ambulance_id, '#' + placeholder);
+    const waypoints = new Waypoints(waypoint_set, call_id + '-' + ambulance_id, '#' + placeholder, dialog);
     const selector = $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button');
 
     // destroy?
@@ -2378,6 +2382,10 @@ function newPatientForm(index, symbol) {
 
 // Ready function
 $(function() {
+
+    // Set up dialog
+    $('#messages')
+        .append(dialog.render());
 
     // Set up map widget options
  	let options = {

@@ -304,7 +304,9 @@ class AmbulanceMap(TemplateView):
             "Type": _("Type"),
             "Status": _("Status"),
             "Address": _("Address"),
-            "Please select": _("Please select")
+            "Please select": _("Please select"),
+            "Ok": _("Ok"),
+            "Close": _("Close")
         }
 
         return context

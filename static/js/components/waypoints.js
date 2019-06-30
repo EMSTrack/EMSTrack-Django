@@ -68,7 +68,7 @@ Waypoint.default = {
 
 export class Waypoints {
     
-    constructor(waypoints = [], label = 'new', placeholder = '#waypoints') {
+    constructor(waypoints = [], label = 'new', placeholder = '#waypoints', dialog = null) {
         this.waypoints = waypoints.map(obj => new Waypoint(obj));
         this.activeIndex = (waypoints.length > 0 ? 0 : -1);
         this.label = label;
@@ -80,7 +80,10 @@ export class Waypoints {
             this.maxOrder = ( this.maxOrder > waypoint.order ? this.maxOrder : waypoint.order );
         }
 
-        this.dialog = new Dialog();
+        if (dialog !== null)
+            this.dialog = dialog;
+        else
+            this.dialog = new Dialog(this.label);
 
     }
 
@@ -89,9 +92,7 @@ export class Waypoints {
         // create placeholder selector
         this.placeholder = $(this.placeholderName);
 
-        let html = this.dialog.render(this.label);
-
-        html += `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
+        let html = `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
     <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
     </ol>
     <div id="call-${this.label}-carousel-items" class="carousel-inner">
@@ -201,7 +202,7 @@ export class Waypoints {
                 event.stopPropagation();
 
                 // dialog
-                this.dialog.show(this.label, {
+                this.dialog.show({
                     okButtonShow: true,
                     cancelButtonShow: true,
                     closeButtonShow: false,
