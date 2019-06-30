@@ -80,10 +80,7 @@ export class Waypoints {
             this.maxOrder = ( this.maxOrder > waypoint.order ? this.maxOrder : waypoint.order );
         }
 
-        if (dialog !== null)
-            this.dialog = dialog;
-        else
-            this.dialog = null;
+        this.dialog = dialog;
 
     }
 
@@ -145,54 +142,6 @@ export class Waypoints {
             index += 1;
 
         });
-
-    }
-
-    swap(i, j) {
-
-        // check arguments
-        if (i < 0 || i >= this.waypoints.length) {
-            logger.log('error', 'Invalid swap(i,j) index i = %d', i);
-            return;
-        }
-
-        if (j < 0 || j >= this.waypoints.length) {
-            logger.log('error', 'Invalid swap(i,j) index j = %d', i);
-            return;
-        }
-
-        // get waypoints
-        const iWaypoint = this.waypoints[i];
-        const jWaypoint = this.waypoints[j];
-
-        // swap array elements
-        [this.waypoints[i], this.waypoints[j]] =
-            [this.waypoints[j], this.waypoints[i]]
-
-        // swap active index
-        if (this.activeIndex === i || this.activeIndex === j) {
-            if (this.activeIndex === i)
-                this.activeIndex = j;
-            else
-                this.activeIndex = i;
-        }
-
-        // swap items
-        $(`#call-${this.label}-carousel-items .carousel-item`)
-            .removeClass('active');
-        swapElements(`#call-${this.label}-${iWaypoint.order}-container`,
-            `#call-${this.label}-${jWaypoint.order}-container`);
-        $(`#call-${this.label}-carousel-items .carousel-item`)
-            .eq(this.activeIndex)
-            .addClass('active');
-
-        // reset active indicator
-        const indicators = $(`#call-${this.label}-carousel-indicators li`);
-        indicators.removeClass('active');
-        indicators.eq(this.activeIndex).addClass('active');
-
-        // configure buttons
-        this.configureEditorButtons();
 
     }
 
@@ -352,6 +301,54 @@ export class Waypoints {
             });
 
         logger.log('info', 'rendering waypoint editor for call %s', this.label);
+
+    }
+
+        swap(i, j) {
+
+        // check arguments
+        if (i < 0 || i >= this.waypoints.length) {
+            logger.log('error', 'Invalid swap(i,j) index i = %d', i);
+            return;
+        }
+
+        if (j < 0 || j >= this.waypoints.length) {
+            logger.log('error', 'Invalid swap(i,j) index j = %d', i);
+            return;
+        }
+
+        // get waypoints
+        const iWaypoint = this.waypoints[i];
+        const jWaypoint = this.waypoints[j];
+
+        // swap array elements
+        [this.waypoints[i], this.waypoints[j]] =
+            [this.waypoints[j], this.waypoints[i]]
+
+        // swap active index
+        if (this.activeIndex === i || this.activeIndex === j) {
+            if (this.activeIndex === i)
+                this.activeIndex = j;
+            else
+                this.activeIndex = i;
+        }
+
+        // swap items
+        $(`#call-${this.label}-carousel-items .carousel-item`)
+            .removeClass('active');
+        swapElements(`#call-${this.label}-${iWaypoint.order}-container`,
+            `#call-${this.label}-${jWaypoint.order}-container`);
+        $(`#call-${this.label}-carousel-items .carousel-item`)
+            .eq(this.activeIndex)
+            .addClass('active');
+
+        // reset active indicator
+        const indicators = $(`#call-${this.label}-carousel-indicators li`);
+        indicators.removeClass('active');
+        indicators.eq(this.activeIndex).addClass('active');
+
+        // configure buttons
+        this.configureEditorButtons();
 
     }
 

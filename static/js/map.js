@@ -809,7 +809,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
     if (destroy)
         selector.popover('dispose');
 
-        // Add popover to patient button
+    // Add popover to waypoint button
     selector
         .popover({
             title: translation_table['Waypoints'],
