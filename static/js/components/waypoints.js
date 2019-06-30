@@ -174,10 +174,7 @@ export class Waypoints {
                             this.skipActiveWaypoint();
 
                     }
-                })
-
-
-
+                });
 
             });
 

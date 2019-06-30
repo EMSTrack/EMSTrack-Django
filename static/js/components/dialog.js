@@ -8,6 +8,7 @@ export class Dialog {
         this.label = properties.label;
         this.title = properties.title;
         this.body = properties.body;
+        this.bodyClasses = properties.bodyClasses;
         this.okButtonShow = properties.okButtonShow;
         this.cancelButtonShow = properties.cancelButtonShow;
         this.closeButtonShow = properties.closeButtonShow;
@@ -74,6 +75,13 @@ export class Dialog {
             .empty()
             .append(options.body);
 
+        // set classes
+        $(`#${this.label}-modal-body`)
+            .attr( "class", "modal-body" );
+        if (options.bodyClasses.trim() !== '')
+            $(`#${this.label}-modal-body`)
+                .addClass(options.bodyClasses);
+
         $(`#${this.label}-modal`)
             .off('hide.bs.modal')
             .on('hide.bs.modal', () => {
@@ -95,12 +103,33 @@ export class Dialog {
 
     }
 
+    alert(message, alertClass = 'alert-danger', title) {
+
+        // Show modal
+        title = title || translation_table['Alert'];
+
+        // dialog
+        this.show({
+            modalOptions: {
+                backdrop: 'static'
+            },
+            title: title,
+            body: message,
+            bodyClasses: alertClass,
+            okButtonShow: false,
+            cancelButtonShow: false,
+            closeButtonShow: true,
+        });
+
+    }
+
 }
 
 Dialog.default = {
     label: '',
     title: 'Modal Title',
     body: 'Modal Body',
+    bodyClasses: '',
     modalOptions: { show: true },
     okButtonShow: true,
     cancelButtonShow: true,
