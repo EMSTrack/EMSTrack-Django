@@ -20,6 +20,8 @@ import LocationSettings, { Location } from './components/location';
 
 import { Dialog } from "./components/dialog";
 
+import { Settings } from "./settings";
+
 const sprintf = require('sprintf-js').sprintf;
 
 // Remove waypoints and incidents from location_type
