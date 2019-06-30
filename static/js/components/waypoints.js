@@ -493,6 +493,10 @@ export class Waypoints {
             backwardButtonDisable = false;
         }
 
+        let formDisable = false;
+        if (waypoint.status === 'S')
+            formDisable = true;
+
         // disable skip
         $(`#call-${this.label}-waypoints-skip-button`)
             .attr('disabled', skipButtonDisabled);
@@ -509,12 +513,9 @@ export class Waypoints {
         $(`#call-${this.label}-waypoints-add-button`)
             .attr('disabled', addButtonDisable);
 
-        if (waypoint.status === 'S')
-            $(`#call-${this.label}-carousel`)
-                .attr( "disabled", true );
-        else
-            $(`#call-${this.label}-carousel`)
-                .attr( "disabled", false );
+        // form element disabled
+        $(`#call-${this.label}-carousel-items :input`)
+                .attr( "disabled", formDisable );
 
     }
 
