@@ -354,26 +354,6 @@ function setupLocations(locations, type) {
 }
 
 // alert using bootstrap modal
-function bsalert(message, alertClass, title) {
-
-    /*
-    // Show modal
-    alertClass = alertClass || 'alert-danger';
-    title = title || translation_table['Alert'];
-
-    $('.modal-title').html(title);
-    $('.modal-body').html(message).addClass(alertClass);
-    $('#modal-button-ok').hide();
-    $('#modal-button-cancel').hide();
-    $('#modal-button-close').show();
-    $("#dispatchModal").modal('show');
-    */
-
-    dialog.alert( message, alertClass, title );
-
-}
-
-// alert using bootstrap modal
 function bsdialog(message, alertClass, title) {
 
     // Show modal
@@ -1847,7 +1827,7 @@ function doUpdateAmbulanceStatus(ambulance, status) {
             logger.log('error', 'Failed to patch ambulance: %j', error);
 
             // modal alert
-            bsalert(translation_table["Could not update ambulance status"]);
+            dialog.alert(translation_table["Could not update ambulance status"]);
 
         });
 }
@@ -1995,7 +1975,7 @@ function addToDispatchingList(ambulance) {
     // not available?
     if (ambulance.status !== STATUS_AVAILABLE) {
         logger.log('info', 'Ambulance is not available');
-        bsalert(translation_table["Can only dispatch available ambulances!"]);
+        dialog.alert(translation_table["Can only dispatch available ambulances!"]);
         return;
     }
 
@@ -2150,7 +2130,7 @@ function dispatchCall() {
             form['radio_code'] = selector.attr('id').split('-')[2];
         } catch (err) {
             logger.log('debug', err);
-            bsalert(translation_table["Invalid radio code"]);
+            dialog.alert(translation_table["Invalid radio code"]);
 
             // enable dispatch button
             $('#dispatchSubmitButton').attr("disabled", false);
@@ -2165,7 +2145,7 @@ function dispatchCall() {
             form['priority_code'] = selector.attr('id').split('-')[2];
         } catch (err) {
             logger.log('debug', err);
-            bsalert(translation_table["Invalid priority code"]);
+            dialog.alert(translation_table["Invalid priority code"]);
 
             // enable dispatch button
             $('#dispatchSubmitButton').attr("disabled", false);
@@ -2175,14 +2155,14 @@ function dispatchCall() {
 
     // checks
     if (form["priority"] === undefined) {
-        bsalert(translation_table["Please select the priority"]);
+        dialog.alert(translation_table["Please select the priority"]);
 
         // enable dispatch button
         $('#dispatchSubmitButton').attr("disabled", false);
         return;
     }
     if (numberOfDispatchingAmbulances === 0) {
-        bsalert(translation_table["Please dispatch at least one ambulance"]);
+        dialog.alert(translation_table["Please dispatch at least one ambulance"]);
 
         // enable dispatch button
         $('#dispatchSubmitButton').attr("disabled", false);
@@ -2305,7 +2285,7 @@ function addPatient(index) {
 
     // is name empty?
     if (!name) {
-        bsalert(translation_table["Blank name"]);
+        dialog.alert(translation_table["Blank name"]);
         return;
     }
 
