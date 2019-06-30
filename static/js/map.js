@@ -753,6 +753,7 @@ function updateCallProgress(call, ambulance_call) {
 
 function abortCall(call) {
 
+    /*
     // Show modal
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
@@ -779,7 +780,26 @@ function abortCall(call) {
 
         })
         .modal('show');
+         */
 
+    this.dialog.dialog(
+        sprintf(translation_table["Do you want to abort call %d?"], call.id),
+        (retval) => {
+
+            if (retval === Dialog.OK) {
+
+                // Abort call
+                apiClient.abortCall(call)
+                    .then( (call) => {
+                        logger.log('info', 'call %d successfully aborted', call.id);
+                    })
+                    .catch( (error) => {
+                        logger.log('error', 'Failed to abort call %d: %j', call.id, error);
+                    });
+
+            }
+        }
+    );
 }
 
 function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = false) {
@@ -1783,6 +1803,7 @@ function updateAmbulanceStatus(ambulance, status) {
     if (ambulance.status === status)
         return;
 
+    /*
     // Show modal
     $('#modal-button-ok').show();
     $('#modal-button-cancel').show();
@@ -1805,6 +1826,22 @@ function updateAmbulanceStatus(ambulance, status) {
 
         })
         .modal('show');
+    */
+
+
+    this.dialog.dialog(
+        sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
+            ambulance.identifier, ambulance_status[status]),
+        (retval) => {
+
+            if (retval === Dialog.OK) {
+
+                // Update status
+                doUpdateAmbulanceStatus(ambulance, status);
+
+            }
+        }
+    )
 
 }
 

@@ -123,6 +123,27 @@ export class Dialog {
 
     }
 
+    dialog(message, onSelect, alertClass = 'alert-danger', title) {
+
+        // Show modal
+        title = title || translation_table['Attention'];
+
+        // dialog
+        this.show({
+            modalOptions: {
+                backdrop: 'static'
+            },
+            title: title,
+            body: message,
+            bodyClasses: alertClass,
+            okButtonShow: true,
+            cancelButtonShow: true,
+            closeButtonShow: false,
+            onSelect: onSelect
+        });
+
+    }
+
 }
 
 Dialog.default = {
