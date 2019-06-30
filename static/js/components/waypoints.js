@@ -510,9 +510,11 @@ export class Waypoints {
             .attr('disabled', addButtonDisable);
 
         if (waypoint.status === 'S')
-            $(`#call-${this.label}-carousel`).disable();
+            $(`#call-${this.label}-carousel`)
+                .prop( "disabled", true );
         else
-            $(`#call-${this.label}-carousel`).enable();
+            $(`#call-${this.label}-carousel`)
+                .prop( "disabled", false );
 
     }
 
