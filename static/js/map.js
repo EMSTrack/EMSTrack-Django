@@ -1836,7 +1836,7 @@ function updateAmbulanceStatus(ambulance, status) {
             if (retval === Dialog.OK) {
 
                 // Update status
-                doUpdateAmbulanceStatus(ambulance, status);
+                doUpdateAmbulanceStatus(ambulance.id, status);
 
             }
         }
@@ -1844,7 +1844,7 @@ function updateAmbulanceStatus(ambulance, status) {
 
 }
 
-function doUpdateAmbulanceStatus(ambulance, status) {
+function doUpdateAmbulanceStatus(ambulance_id, status) {
 
     // patch ambulance
     const data = { status: status };
