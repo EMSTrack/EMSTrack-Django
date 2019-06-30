@@ -487,7 +487,7 @@ export class Waypoints {
         }
 
         let backwardButtonDisable = true;
-        if ( this.activeIndex > nextWaypointIndex
+        if ( ( this.activeIndex > nextWaypointIndex && nextWaypoint !== -1 )
             && (waypoint.status === 'C' || waypoint.status === 'S')) {
             // waypoint is beyond next  and is either created or skipped
             backwardButtonDisable = false;
@@ -508,6 +508,11 @@ export class Waypoints {
         // disable add
         $(`#call-${this.label}-waypoints-add-button`)
             .attr('disabled', addButtonDisable);
+
+        if (waypoint.status === 'S')
+            $(`#call-${this.label}-carousel`).disable();
+        else
+            $(`#call-${this.label}-carousel`).enable();
 
     }
 
