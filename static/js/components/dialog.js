@@ -65,10 +65,9 @@ export class Dialog {
 
         $(`#${this.label}-modal`)
             .off('hide.bs.modal')
-            .on('hide.bs.modal', function(event) {
+            .on('hide.bs.modal', () => {
 
                 const $activeElement = $(document.activeElement);
-                console.log('HIIIIIIII');
                 if ($activeElement.is('[data-toggle], [data-dismiss]')) {
 
                     if ($activeElement.attr('id') === `${this.label}-modal-button-ok`)
