@@ -158,6 +158,9 @@ export class Waypoints {
 
                 // dialog
                 this.dialog.show({
+                    modalOptions: {
+                        backdrop: 'static'
+                    },
                     okButtonShow: true,
                     cancelButtonShow: true,
                     closeButtonShow: false,

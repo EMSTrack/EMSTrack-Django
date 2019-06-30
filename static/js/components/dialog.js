@@ -81,13 +81,15 @@ export class Dialog {
                 }
 
             })
-            .modal('show');
+            .modal(options.modalOptions);
+
     }
 
 }
 
 Dialog.default = {
     label: '',
+    modalOptions: { show: true },
     okButtonShow: true,
     cancelButtonShow: true,
     closeButtonShow: true,
