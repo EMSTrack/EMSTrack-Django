@@ -52,7 +52,7 @@ export class Waypoint {
 
     postRender(label) {
 
-        this.location.postRender(label, options);
+        this.location.postRender(label);
 
     }
 
