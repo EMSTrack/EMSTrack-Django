@@ -20,5 +20,5 @@ Settings.default  = {
     map_provider: undefined,
 };
 
-Settings.instance = new Settings(Settings.default);
-Object.freeze(Settings.instance);
+new Settings(Settings.default);
+// Object.freeze(Settings.instance);
