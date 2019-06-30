@@ -83,7 +83,7 @@ export class Waypoints {
         if (dialog !== null)
             this.dialog = dialog;
         else
-            this.dialog = new Dialog(this.label);
+            this.dialog = null;
 
     }
 
@@ -92,7 +92,13 @@ export class Waypoints {
         // create placeholder selector
         this.placeholder = $(this.placeholderName);
 
-        let html = `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
+        let html = '';
+        if (this.dialog === null) {
+            this.dialog = new Dialog(this.label);
+            html += this.dialog.render("popover-large-dialog");
+        }
+
+        html += `<div id="call-${this.label}-carousel" class="carousel slide" data-ride="carousel">
     <ol id="call-${this.label}-carousel-indicators" class="carousel-indicators">
     </ol>
     <div id="call-${this.label}-carousel-items" class="carousel-inner">
