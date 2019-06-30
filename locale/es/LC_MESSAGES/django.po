@@ -1264,3 +1264,6 @@ msgstr "Híbrido"
 
 msgid "Please select"
 msgstr "Por favor seleccione"
+
+msgid "Please confirm that you want to skip the current waypoint."
+msgstr "Por favor, confirme que desea saltar el punto de ruta actual."

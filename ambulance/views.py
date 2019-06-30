@@ -306,7 +306,8 @@ class AmbulanceMap(TemplateView):
             "Address": _("Address"),
             "Please select": _("Please select"),
             "Ok": _("Ok"),
-            "Close": _("Close")
+            "Close": _("Close"),
+            "Please confirm that you want to skip the current waypoint.": _("Please confirm that you want to skip the current waypoint.")
         }
 
         return context

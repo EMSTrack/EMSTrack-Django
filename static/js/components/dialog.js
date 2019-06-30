@@ -6,6 +6,8 @@ export class Dialog {
         const properties = Object.assign({...Dialog.default}, parameters);
 
         this.label = properties.label;
+        this.title = properties.title;
+        this.body = properties.body;
         this.okButtonShow = properties.okButtonShow;
         this.cancelButtonShow = properties.cancelButtonShow;
         this.closeButtonShow = properties.closeButtonShow;
@@ -63,6 +65,15 @@ export class Dialog {
         else
             $(`#${this.label}-modal-button-close`).hide();
 
+        // set title
+        $(`#${this.label}-modal-title`)
+            .text(options.title);
+
+        // set body
+        $(`#${this.label}-modal-body`)
+            .empty()
+            .append(options.body);
+
         $(`#${this.label}-modal`)
             .off('hide.bs.modal')
             .on('hide.bs.modal', () => {
@@ -88,6 +99,8 @@ export class Dialog {
 
 Dialog.default = {
     label: '',
+    title: 'Modal Title',
+    body: 'Modal Body',
     modalOptions: { show: true },
     okButtonShow: true,
     cancelButtonShow: true,

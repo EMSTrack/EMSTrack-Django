@@ -161,6 +161,8 @@ export class Waypoints {
                     modalOptions: {
                         backdrop: 'static'
                     },
+                    title: translation_table['Attention'],
+                    body: translation_table['Please confirm that you want to skip the current waypoint.'],
                     okButtonShow: true,
                     cancelButtonShow: true,
                     closeButtonShow: false,
