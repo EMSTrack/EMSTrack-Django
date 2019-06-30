@@ -782,7 +782,7 @@ function abortCall(call) {
         .modal('show');
          */
 
-    this.dialog.dialog(
+    dialog.dialog(
         sprintf(translation_table["Do you want to abort call %d?"], call.id),
         (retval) => {
 
@@ -1828,8 +1828,7 @@ function updateAmbulanceStatus(ambulance, status) {
         .modal('show');
     */
 
-
-    this.dialog.dialog(
+    dialog.dialog(
         sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
             ambulance.identifier, ambulance_status[status]),
         (retval) => {
