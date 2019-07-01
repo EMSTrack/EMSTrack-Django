@@ -336,10 +336,10 @@ export class Location {
     toText() {
 
         // format address
-        let address = append('', [this.number, this.street, this.unit]);
-        address = append(address, [this.neighborhood, this.city, this.state], ', ');
-        address = [address, this.zipcode].join(' ').trim();
-        address = append(address, [this.country], ', ');
+        let address = Location.append('', [this.number, this.street, this.unit]);
+        address = Location.append(address, [this.neighborhood, this.city, this.state], ', ');
+        address = Location.append(address, [this.zipcode]);
+        address = Location.append(address, [this.country], ', ');
 
         return address;
     }
