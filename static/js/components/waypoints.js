@@ -396,6 +396,8 @@ export class Waypoints {
         this.addWaypointForm(index, waypoint);
         this.refresh();
 
+        waypoint.location.selectType(`${this.label}-${waypoint.order}`, 'w');
+
     }
 
     refresh() {
