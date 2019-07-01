@@ -25,6 +25,7 @@ const settings = {
 const settings = new Settings();
 
 const geocoder = GeocoderFactory(settings.map_provider);
+console.log(geocoder);
 
 export class Point {
 
