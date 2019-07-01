@@ -203,11 +203,13 @@ export class LeafletWidget {
     }
 
     disable() {
+        console.log('LeafletWidget disabled');
         this.map.dragging.disable();
         this.enabled = false;
     }
 
     enable() {
+        console.log('LeafletWidget enabled');
         this.map.dragging.enable();
         this.enabled = true;
     }
