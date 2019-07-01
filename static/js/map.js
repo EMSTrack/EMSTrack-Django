@@ -16,20 +16,19 @@ import { Patients } from './components/patients';
 
 import { Waypoints } from './components/waypoints';
 
-// import { Location } from './components/location';
-
 import { Dialog } from "./components/dialog";
 
 import { Settings } from "./settings";
 
 const sprintf = require('sprintf-js').sprintf;
 
+// Initialize settings
+const settings = new Settings(html_settings);
+
 // Remove waypoints and incidents from location_type
-const reduced_location_type_order = [...location_type_order];
+const reduced_location_type_order = [...settings.location_type_order];
 delete reduced_location_type_order[reduced_location_type_order.indexOf('w')];
 delete reduced_location_type_order[reduced_location_type_order.indexOf('i')];
-
-logger.log('debug', translation_table);
 
 // Dispatching data
 
@@ -67,16 +66,6 @@ const patientMarkers = {};    // Store hospital markers
 // Dialog
 const dialog = new Dialog({label: "messages"});
 
-// Initialize locations
-/*
-LocationSettings.locations = locations;
-LocationSettings.location_type = location_type;
-LocationSettings.translation_table = translation_table;
-LocationSettings.map_provider = mapProvider;
-*/
-
-// Initialize settings
-const settings = new Settings(html_settings);
 
 // Initialize category panes
 let visibleCategory = {};
@@ -84,12 +73,12 @@ let visibleCategory = {};
 // Initialize ambulance icons
 const ambulance_icons = {};
 const ambulance_buttons = {};
-for (const key in ambulance_css) {
+for (const key in settings.ambulance_css) {
     // skip loop if the property is from prototype
-    if (!ambulance_css.hasOwnProperty(key))
+    if (!settings.ambulance_css.hasOwnProperty(key))
         continue;
 
-    const settings = ambulance_css[key];
+    const settings = settings.ambulance_css[key];
     ambulance_icons[key] = L.icon(settings['icon']);
     ambulance_buttons[key] = 'btn-' + settings['class'];
 }
@@ -170,7 +159,7 @@ const geocoder = GeocoderFactory(mapProvider);
 function resizeMap() {
     $("#live-map").height($(window).height() - $('#base-navbar').outerHeight() - $('#map-navbar').outerHeight() - 5);
     mymap.invalidateSize();
-};
+}
 
 // add initialization hook
 add_init_function(init);
@@ -372,17 +361,8 @@ function updateAmbulance(ambulance) {
         const old_status = ambulances[id].status;
         const status = ambulance.status;
 
-        const old_online = ambulances[id].client_id != null
-        const online = ambulance.client_id != null
-
-        let old_grid_length;
-        let new_grid_length;
-        if (old_status !== status) {
-            old_grid_length = $('#ambulance-grid-' + old_status).children().length - 1;
-            new_grid_length = $('#ambulance-grid-' + status).children().length + 1;
-        } else {
-            old_grid_length = new_grid_length = $('#ambulance-grid-' + status).children().length ;
-        }
+        const old_online = (ambulances[id].client_id != null);
+        const online = (ambulance.client_id != null);
 
         // Remove existing marker
         mymap.removeLayer(ambulanceMarkers[id]);
@@ -413,8 +393,8 @@ function updateAmbulance(ambulance) {
 
             // alert
             if ( notifications['ambulance-status'].enabled )
-                alert(sprintf(translation_table["'%s' is now '%s'"],
-                              ambulance.identifier, ambulance_status[ambulance.status]),
+                alert(sprintf(settings.translation_table["'%s' is now '%s'"],
+                              ambulance.identifier, settings.ambulance_status[ambulance.status]),
                     notifications['ambulance-status'].style );
 
         } else if (old_online !== online) {
@@ -423,7 +403,7 @@ function updateAmbulance(ambulance) {
             updateStatusHeaderCount(status);
 
             if ( notifications['ambulance-online'].enabled )
-                alert(sprintf(translation_table["'%s' is now '%s'"],
+                alert(sprintf(settings.translation_table["'%s' is now '%s'"],
                               ambulance.identifier, online ? 'online' : 'offline'),
                     notifications['ambulance-online'].style );
 
@@ -476,20 +456,6 @@ function ambulanceVisibleClass(ambulance) {
     else
         classNames.push('d-none');
     return classNames.join(' ');
-
-    /*
-    if (online) {
-        if (visibleCategory['online'])
-            return 'd-block a-online';
-        else
-            return 'd-none a-online';
-    } else {
-        if (visibleCategory['offline'])
-            return 'd-block a-offline';
-        else
-            return 'd-none a-offline';
-    }
-    */
 }
 
 
@@ -546,7 +512,9 @@ function updateCall(call) {
     if (id in calls) {
 
         // retrieve old status
-        const matches = $('#call-item-' + id).attr('class').match(/status-(\w)/);
+        const matches = $('#call-item-' + id)
+            .attr('class')
+            .match(/status-(\w)/);
         let old_status = null;
         if (matches.length > 1) {
 
@@ -561,8 +529,8 @@ function updateCall(call) {
                 let pane = mymap.createPane(status + "|" + 'call_' + call.id);
                 pane.style.display = (visibleCategory[status + "|" + 'call_' + call.id] ? 'block' : 'none');
 
-                // remove old visibile category
-                delete visibleCategory[old_status + "|" + 'call_' + id]
+                // remove old visible category
+                delete visibleCategory[old_status + "|" + 'call_' + id];
 
                 // status changed
                 if (status !== 'E') {
@@ -676,7 +644,7 @@ function updateAmbulanceCall(ambulance_id, call_id, status) {
 function updateCallCounter() {
 
     let total = 0;
-    call_status_order.forEach(function(status) {
+    settings.call_status_order.forEach(function(status) {
         if (status !== 'E') {
             const count = $('#call-grid-' + status).children().length;
             total += count;
@@ -748,7 +716,7 @@ function updateCallProgress(call, ambulance_call) {
 function abortCall(call) {
 
     dialog.dialog(
-        sprintf(translation_table["Do you want to abort call %d?"], call.id),
+        sprintf(settings.translation_table["Do you want to abort call %d?"], call.id),
         (retval) => {
 
             if (retval === Dialog.OK) {
@@ -781,7 +749,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
     // Add popover to waypoint button
     selector
         .popover({
-            title: translation_table['Waypoints'],
+            title: settings.translation_table['Waypoints'],
             // language=HTML
             content:
             `<div>  
@@ -791,12 +759,12 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
         <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
                 type="button" 
                 class="btn btn-secondary w-100">
-            ${translation_table["Cancel"]}    
+            ${settings.translation_table["Cancel"]}    
         </button>
         <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
                 type="button" 
                 class="btn btn-primary w-100">
-            ${translation_table["Save"]}
+            ${settings.translation_table["Save"]}
         </button>
     </div>
 </div>`,
@@ -857,7 +825,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
     // Add popover to patient button
     selector
         .popover({
-            title: translation_table['Patients'],
+            title: settings.translation_table['Patients'],
             // language=HTML
             content:
             `<div>  
@@ -865,10 +833,10 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
     </div>
     <div class="float-right my-2">
         <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
-            ${translation_table["Cancel"]}    
+            ${settings.translation_table["Cancel"]}    
         </button>
         <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">
-            ${translation_table["Save"]}
+            ${settings.translation_table["Save"]}
         </button>
     </div>
 </div>`,
@@ -979,8 +947,8 @@ function addCallToGrid(call) {
             <span class="ml-1">${call.id}:</span>        
             <span class="font-weight-bold">${priority_prefix}</span>        
             <button id="call-${call.id}-button"
-                    class="btn btn-${call_priority_css[call.priority].class} btn-sm">           
-                ${call_priority_css[call.priority].html}
+                    class="btn btn-${settings.call_priority_css[call.priority].class} btn-sm">           
+                ${settings.call_priority_css[call.priority].html}
             </button>
             <span class="font-weight-bold">${priority_suffix}</span>
         </div>
@@ -1100,7 +1068,7 @@ function locationToHtml(location) {
         if (location.neighborhood !== "")
             address_str = [address_str, location.neighborhood].join(', ').trim();
     } else
-        address_str += location.neighborhood.trim()
+        address_str += location.neighborhood.trim();
 
     if (address_str !== "")
         address_str = [address_str, location.city, location.state].join(', ').trim();
@@ -1121,7 +1089,7 @@ function locationToHtml(location) {
     </p>
     <p class="my-0 py-0">
         <em>Type:</em>
-        <span class="float-right">${location_type[location.type]}</span>
+        <span class="float-right">${settings.location_type[location.type]}</span>
     </p>
 </div>`
     );
@@ -1242,7 +1210,7 @@ function compilePatients(call) {
     // get patients
     let patients;
     if (call.patient_set.length === 0) {
-        patients = translation_table["No patient names are available."];
+        patients = settings.translation_table["No patient names are available."];
     } else
         patients = call.patient_set.join(', ');
 
@@ -1291,9 +1259,9 @@ function addAmbulanceToMap(ambulance) {
         .bindPopup(
             "<strong>" + ambulance.identifier + "</strong>" +
             "<br/>" +
-            ambulance_status[ambulance.status] +
+            settings.ambulance_status[ambulance.status] +
             "<br/>" +
-            ambulance_capability[ambulance.capability] +
+            settings.ambulance_capability[ambulance.capability] +
             "<br/>" +
             (new Date(Date.parse(ambulance.updated_on))).toLocaleString()
         ).addTo(mymap);
@@ -1377,17 +1345,17 @@ function createCategoryPanesAndFilters() {
     // Initialize visibleCategories
 
     // add status
-    ambulance_status_order.forEach(function(status) {
+    settings.ambulance_status_order.forEach(function(status) {
         visibleCategory[status] = true;
     });
 
     // add capability
-    ambulance_capability_order.forEach(function(capability) {
+    settings.ambulance_capability_order.forEach(function(capability) {
         visibleCategory[capability] = true;
     });
 
     // add online/offline
-    ambulance_online_order.forEach(function(online) {
+    settings.ambulance_online_order.forEach(function(online) {
         visibleCategory[online] = true;
     });
 
@@ -1395,7 +1363,7 @@ function createCategoryPanesAndFilters() {
     // visibleCategory['hospital'] = true;
 
     // add calls
-    call_status_order.forEach(function (status) {
+    settings.call_status_order.forEach(function (status) {
         visibleCategory['call_' + status] = true;
     });
 
@@ -1420,9 +1388,9 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create ambulance status category panes
-    ambulance_online_order.forEach(function(online) {
-        ambulance_status_order.forEach(function (status) {
-            ambulance_capability_order.forEach(function (capability) {
+    settings.ambulance_online_order.forEach(function(online) {
+        settings.ambulance_status_order.forEach(function (status) {
+            settings.ambulance_capability_order.forEach(function (capability) {
                 const pane = mymap.createPane(status + "|" + capability + "|" + online);
                 pane.style.display = ((visibleCategory[status] &&
                                        visibleCategory[capability] &&
@@ -1432,7 +1400,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create call status grids
-    call_status_order.forEach(function (status) {
+    settings.call_status_order.forEach(function (status) {
 
         // ignore ended calls
         if (status != 'E')
@@ -1446,7 +1414,7 @@ function createCategoryPanesAndFilters() {
                 '             aria-expanded="true" aria-controls="call-' + status + '">\n' +
                 '             <input class="filter-checkbox" value="call-status" data-status="' + status + '"\n' +
                 '                    type="checkbox" id="call-checkbox-' + status + '" checked>\n' +
-                '             <span id="call-' + status + '-header" role="button">' + call_status[status] + '</span>\n' +
+                '             <span id="call-' + status + '-header" role="button">' + settings.call_status[status] + '</span>\n' +
                 '             <span id="call-' + status + '-header-count" class="badge badge-primary"></span>\n' +
                 '          </h6>\n' +
                 '    </div>\n' +
@@ -1463,7 +1431,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create online options
-    ambulance_online_order.forEach(function (online) {
+    settings.ambulance_online_order.forEach(function (online) {
 
         $("#ambulance-online-status").append(
             '<div class="d-inline-block form-group form-check mt-0 mb-1 mr-2">\n' +
@@ -1471,13 +1439,13 @@ function createCategoryPanesAndFilters() {
             '            type="checkbox" id="online-' + online + '" ' +
             (visibleCategory[online] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
-            '            for="online-' + online + '">' + ambulance_online[online] + '</label>\n' +
+            '            for="online-' + online + '">' + settings.ambulance_online[online] + '</label>\n' +
             '</div>');
 
     });
 
     // Create ambulance status grids
-    ambulance_status_order.forEach(function (status) {
+    settings.ambulance_status_order.forEach(function (status) {
 
         // Create grid
         $("#ambulance-status").append(
@@ -1492,7 +1460,7 @@ function createCategoryPanesAndFilters() {
             '                    type="checkbox" id="ambulance-checkbox-' + status + '" ' +
             (visibleCategory[status] ? 'checked' : '') + '>\n' +
             '             <span id="ambulance-' + status + '-header" role="button">' +
-            '                    ' + ambulance_status[status] + '\n' +
+            '                    ' + settings.ambulance_status[status] + '\n' +
             '             </span>\n' +
             '             <span id="ambulance-' + status + '-header-count" class="badge badge-primary"></span>\n' +
             '          </h6>\n' +
@@ -1525,7 +1493,7 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create capability options
-    ambulance_capability_order.forEach(function (capability) {
+    settings.ambulance_capability_order.forEach(function (capability) {
 
         $("#ambulance-capability").append(
             '<div class="form-group form-check mt-0 mb-1">\n' +
@@ -1533,7 +1501,7 @@ function createCategoryPanesAndFilters() {
             '            type="checkbox" id="capability-' + capability + '" ' +
             (visibleCategory[capability] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
-            '            for="capability-' + capability + '">' + ambulance_capability[capability] + '</label>\n' +
+            '            for="capability-' + capability + '">' + settings.ambulance_capability[capability] + '</label>\n' +
             '</div>');
     });
 
@@ -1556,7 +1524,7 @@ function createCategoryPanesAndFilters() {
             '     <input class="form-check-input filter-checkbox" value="location" data-status="' + type + '"\n' +
             '            type="checkbox" id="location-' + type + '" ' + (visibleCategory[type] ? 'checked' : '') + '>\n' +
             '     <label class="form-check-label"\n' +
-            '            for="location-' + type + '">' + location_type[type] + '</label>\n' +
+            '            for="location-' + type + '">' + settings.location_type[type] + '</label>\n' +
             '</div>');
     });
 
@@ -1604,9 +1572,9 @@ function visibilityCheckbox(checkbox) {
     if (checkbox.value === 'status') {
 
         // Add to all visible capability panes
-        ambulance_online_order.forEach(function(online) {
+        settings.ambulance_online_order.forEach(function(online) {
             if (visibleCategory[online]) {
-                ambulance_capability_order.forEach(function (capability) {
+                settings.ambulance_capability_order.forEach(function (capability) {
                     if (visibleCategory[capability]) {
                         mymap.getPane(layer + "|" + capability + "|" + online).style.display = display;
                     }
@@ -1617,9 +1585,9 @@ function visibilityCheckbox(checkbox) {
     } else if (checkbox.value === 'capability') {
 
         // Add to all visible status layers
-        ambulance_online_order.forEach(function(online) {
+        settings.ambulance_online_order.forEach(function(online) {
             if (visibleCategory[online]) {
-                ambulance_status_order.forEach(function (status) {
+                settings.ambulance_status_order.forEach(function (status) {
                     if (visibleCategory[status]) {
                         mymap.getPane(status + "|" + layer + "|" + online).style.display = display;
 
@@ -1634,14 +1602,14 @@ function visibilityCheckbox(checkbox) {
         });
 
         // update status header count
-        ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
+        settings.ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
 
     } else if (checkbox.value === 'online') {
         // Add to all visible status layers
-        ambulance_status_order.forEach(function (status) {
+        settings.ambulance_status_order.forEach(function (status) {
             if (visibleCategory[status]) {
                 // Add to all visible capability panes
-                ambulance_capability_order.forEach(function (capability) {
+                settings.ambulance_capability_order.forEach(function (capability) {
                     if (visibleCategory[capability]) {
                         mymap.getPane(status + "|" + capability + "|" + layer).style.display = display;
 
@@ -1656,7 +1624,7 @@ function visibilityCheckbox(checkbox) {
         });
 
         // update status header count
-        ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
+        settings.ambulance_status_order.forEach( (status) => { updateStatusHeaderCount(status); } );
 
     } else if (checkbox.value === 'call-status') {
         // Add to all visible call layers
@@ -1770,7 +1738,7 @@ function updateAmbulanceStatus(ambulance, status) {
 
     dialog.dialog(
         sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
-            ambulance.identifier, ambulance_status[status]),
+            ambulance.identifier, settings.ambulance_status[status]),
         (retval) => {
 
             if (retval === Dialog.OK) {
@@ -1803,7 +1771,7 @@ function doUpdateAmbulanceStatus(ambulance_id, status) {
             logger.log('error', 'Failed to patch ambulance: %j', error);
 
             // modal alert
-            dialog.alert(translation_table["Could not update ambulance status"]);
+            dialog.alert(settings.translation_table["Could not update ambulance status"]);
 
         });
 }
@@ -1877,13 +1845,13 @@ function endDispatching() {
 
     // clear priority code
     $('#priority-code-input').val('');
-    $('#priority-classification').html('<span class="text-muted">' + translation_table["Priority Classification"] + '</span>');
-    $('#priority-code').html('<span class="text-muted">' + translation_table["Priority Code"] + '</span>');
+    $('#priority-classification').html('<span class="text-muted">' + settings.translation_table["Priority Classification"] + '</span>');
+    $('#priority-code').html('<span class="text-muted">' + settings.translation_table["Priority Code"] + '</span>');
     $("#priority-buttons .btn").removeClass("active");
 
     // clear radio code
     $('#radio-code-input').val('');
-    $('#radio-code').html('<span class="text-muted">' + translation_table["Radio Code"] + '</span>');
+    $('#radio-code').html('<span class="text-muted">' + settings.translation_table["Radio Code"] + '</span>');
 
     // clear description
     $('#comment').val('');
@@ -1951,7 +1919,7 @@ function addToDispatchingList(ambulance) {
     // not available?
     if (ambulance.status !== STATUS_AVAILABLE) {
         logger.log('info', 'Ambulance is not available');
-        dialog.alert(translation_table["Can only dispatch available ambulances!"]);
+        dialog.alert(settings.translation_table["Can only dispatch available ambulances!"]);
         return;
     }
 
@@ -2106,7 +2074,7 @@ function dispatchCall() {
             form['radio_code'] = selector.attr('id').split('-')[2];
         } catch (err) {
             logger.log('debug', err);
-            dialog.alert(translation_table["Invalid radio code"]);
+            dialog.alert(settings.translation_table["Invalid radio code"]);
 
             // enable dispatch button
             $('#dispatchSubmitButton').attr("disabled", false);
@@ -2121,7 +2089,7 @@ function dispatchCall() {
             form['priority_code'] = selector.attr('id').split('-')[2];
         } catch (err) {
             logger.log('debug', err);
-            dialog.alert(translation_table["Invalid priority code"]);
+            dialog.alert(settings.translation_table["Invalid priority code"]);
 
             // enable dispatch button
             $('#dispatchSubmitButton').attr("disabled", false);
@@ -2131,14 +2099,14 @@ function dispatchCall() {
 
     // checks
     if (form["priority"] === undefined) {
-        dialog.alert(translation_table["Please select the priority"]);
+        dialog.alert(settings.translation_table["Please select the priority"]);
 
         // enable dispatch button
         $('#dispatchSubmitButton').attr("disabled", false);
         return;
     }
     if (numberOfDispatchingAmbulances === 0) {
-        dialog.alert(translation_table["Please dispatch at least one ambulance"]);
+        dialog.alert(settings.translation_table["Please dispatch at least one ambulance"]);
 
         // enable dispatch button
         $('#dispatchSubmitButton').attr("disabled", false);
@@ -2261,7 +2229,7 @@ function addPatient(index) {
 
     // is name empty?
     if (!name) {
-        dialog.alert(translation_table["Blank name"]);
+        dialog.alert(settings.translation_table["Blank name"]);
         return;
     }
 
@@ -2304,7 +2272,7 @@ function addPatientForm(index) {
     const patients = $('#patients');
 
     // add new patient form entry
-    patients.append(newPatientForm(index, 'fa-plus'))
+    patients.append(newPatientForm(index, 'fa-plus'));
 
     // bind addPatient to click
     patients.find('#patient-' + index + '-button')
@@ -2321,13 +2289,13 @@ function newPatientForm(index, symbol) {
         '<input id="patient-' + index + '-name" ' +
         'type="text" ' +
         'class="form-control form-control-sm" ' +
-        'placeholder="' + translation_table['Name'] + '">' +
+        'placeholder="' + settings.translation_table['Name'] + '">' +
         '</div>' +
         '<div class="col-md-3 px-0">' +
         '<input id="patient-' + index + '-age" ' +
         'type="number" min="0" ' +
         'class="form-control form-control-sm" ' +
-        'placeholder="' + translation_table['Age'] + '">' +
+        'placeholder="' + settings.translation_table['Age'] + '">' +
         '</div>' +
         '<div class="col-md-2 pl-0">' +
         '<button class="btn btn-default btn-block btn-new-patient btn-sm" ' +
@@ -2352,7 +2320,7 @@ $(function() {
  		map_id: "live-map",
  		zoom: 12,
         map_provider: mapProvider,
-        layer_names: [translation_table['Roads'], translation_table['Satellite'], translation_table['Hybrid']]
+        layer_names: [settings.translation_table['Roads'], settings.translation_table['Satellite'], settings.translation_table['Hybrid']]
  	};
  	const map = new LeafletWidget(options);
 
@@ -2407,13 +2375,13 @@ $(function() {
     createCategoryPanesAndFilters();
 
     // Add call priority buttons
-    call_priority_order.forEach(function(priority){
+    settings.call_priority_order.forEach(function(priority){
 
         $('#priority-buttons')
             .append(
-                '<label id="priority-button-' + priority + '" class="btn btn-outline-' + call_priority_css[priority].class + ' btn-sm">\n' +
+                '<label id="priority-button-' + priority + '" class="btn btn-outline-' + settings.call_priority_css[priority].class + ' btn-sm">\n' +
                 '  <input type="radio" name="priority" autocomplete="off" value="' + priority + '">\n' +
-                '  ' + call_priority_css[priority].html + '\n' +
+                '  ' + settings.call_priority_css[priority].html + '\n' +
                 '</label>\n');
 
     });
@@ -2470,23 +2438,18 @@ $(function() {
             $('#priority-code').html(option.html());
             $('#priority-button-'+priority).button('toggle');
         } else {
-            $('#priority-classification').html('<span class="text-muted">' + translation_table["Priority Classification"] + '</span>');
-            $('#priority-code').html('<span class="text-muted">' + translation_table["Priority Code"] + '</span>');
+            $('#priority-classification').html('<span class="text-muted">' + settings.translation_table["Priority Classification"] + '</span>');
+            $('#priority-code').html('<span class="text-muted">' + settings.translation_table["Priority Code"] + '</span>');
             $("#priority-buttons .btn").removeClass("active");
         }
     });
 
     $('#radio-code-input').on('input', function() {
-        var option = $('#radio-code-list option[value="'+$(this).val()+'"]');
+        const option = $('#radio-code-list option[value="'+$(this).val()+'"]');
         if (option.length)
             $('#radio-code').html(option.html());
         else
-            $('#radio-code').html('<span class="text-muted">' + translation_table["Radio Code"] + '</span>');
+            $('#radio-code').html('<span class="text-muted">' + settings.translation_table["Radio Code"] + '</span>');
     });
 
 });
-
-// CSRF functions
-function CSRFSafeMethod(method) {
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}

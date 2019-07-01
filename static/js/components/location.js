@@ -320,7 +320,7 @@ export class Location {
             if (this.neighborhood !== "")
                 address = [address, this.neighborhood].join(', ').trim();
         } else
-            address += this.neighborhood.trim()
+            address += this.neighborhood.trim();
 
         if (address !== "")
             address = [address, this.city, this.state].join(', ').trim();

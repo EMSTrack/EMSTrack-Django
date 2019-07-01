@@ -1,5 +1,9 @@
 import {logger} from "../logger";
 
+import { Settings } from "../settings";
+
+const settings = new Settings();
+
 export class Dialog {
 
     constructor(parameters) {
@@ -31,13 +35,13 @@ export class Dialog {
             </div>
             <div class="modal-footer">
                 <button id="${this.label}-modal-button-ok" type="button" class="btn btn-primary" data-dismiss="modal">
-                    ${translation_table['Ok']}
+                    ${settings.translation_table['Ok']}
                 </button>
                 <button id="${this.label}-modal-button-cancel" type="button" class="btn btn-secondary" data-dismiss="modal">
-                    ${translation_table['Cancel']}
+                    ${settings.translation_table['Cancel']}
                 </button>
                 <button id="${this.label}-modal-button-close" type="button" class="btn btn-secondary" data-dismiss="modal">
-                    ${translation_table['Close']}
+                    ${settings.translation_table['Close']}
                 </button>
             </div>
         </div>
@@ -73,11 +77,10 @@ export class Dialog {
         // set body
         $(`#${this.label}-modal-body`)
             .empty()
-            .append(options.body);
+            .append(options.body)
+            .attr( "class", "modal-body" );
 
         // set classes
-        $(`#${this.label}-modal-body`)
-            .attr( "class", "modal-body" );
         if (options.bodyClasses.trim() !== '')
             $(`#${this.label}-modal-body`)
                 .addClass(options.bodyClasses);
@@ -103,10 +106,7 @@ export class Dialog {
 
     }
 
-    alert(message, alertClass = 'alert-danger', title) {
-
-        // Show modal
-        title = title || translation_table['Alert'];
+    alert(message, alertClass = 'alert-danger', title = settings.translation_table['Alert']) {
 
         // dialog
         this.show({
@@ -123,10 +123,7 @@ export class Dialog {
 
     }
 
-    dialog(message, onSelect, alertClass = 'alert-danger', title) {
-
-        // Show modal
-        title = title || translation_table['Attention'];
+    dialog(message, onSelect, alertClass = 'alert-danger', title = settings.translation_table['Attention']) {
 
         // dialog
         this.show({

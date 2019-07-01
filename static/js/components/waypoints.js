@@ -10,6 +10,10 @@ import { Dialog } from "./dialog";
 
 import { swapElements } from '../util';
 
+import { Settings } from "../settings";
+
+const settings = new Settings();
+
 export class Waypoint {
 
     constructor(parameters) {
@@ -37,8 +41,8 @@ export class Waypoint {
 
         // status
         html += `<li id="waypoint-${label}-item-status" class="list-group-item px-10">
-    <em>${translation_table['Status']}:</em>
-    <span id="waypoint-${label}-item-status-label" class="float-right">${waypoint_status[this.status]}</span>
+    <em>${settings.translation_table['Status']}:</em>
+    <span id="waypoint-${label}-item-status-label" class="float-right">${settings.waypoint_status[this.status]}</span>
 </li>`;
 
         // render location
@@ -130,7 +134,7 @@ export class Waypoints {
             title="Move waypoint forth">
         <span class="fas fa-forward"></span> 
     </button>
-</div>`
+</div>`;
 
         this.placeholder.html(html);
 
@@ -161,8 +165,8 @@ export class Waypoints {
                     modalOptions: {
                         backdrop: 'static'
                     },
-                    title: translation_table['Attention'],
-                    body: translation_table['Please confirm that you want to skip the current waypoint.'],
+                    title: settings.translation_table['Attention'],
+                    body: settings.translation_table['Please confirm that you want to skip the current waypoint.'],
                     okButtonShow: true,
                     cancelButtonShow: true,
                     closeButtonShow: false,
@@ -205,40 +209,6 @@ export class Waypoints {
                 event.stopPropagation();
 
                 this.swap(this.activeIndex, this.activeIndex - 1);
-                return;
-
-                if (this.activeIndex === 0) {
-                    logger.log('error', 'At first index, cannot move back');
-                    return;
-                }
-
-                // get current active and previous waypoints
-                const activeWaypoint = this.getActiveWaypoint();
-                const previousWaypoint = this.waypoints[this.activeIndex - 1];
-
-                // swap array elements
-                [this.waypoints[this.activeIndex], this.waypoints[this.activeIndex - 1]] =
-                    [this.waypoints[this.activeIndex - 1], this.waypoints[this.activeIndex]]
-
-                // update active index
-                this.activeIndex -= 1;
-
-                // swap items
-                $(`#call-${this.label}-carousel-items .carousel-item`)
-                    .removeClass('active');
-                swapElements(`#call-${this.label}-${activeWaypoint.order}-container`,
-                    `#call-${this.label}-${previousWaypoint.order}-container`);
-                $(`#call-${this.label}-carousel-items .carousel-item`)
-                    .eq(this.activeIndex)
-                    .addClass('active');
-
-                // reset active indicator
-                const indicators = $(`#call-${this.label}-carousel-indicators li`);
-                indicators.removeClass('active');
-                indicators.eq(this.activeIndex).addClass('active');
-
-                // configure buttons
-                this.configureEditorButtons();
 
             });
 
@@ -249,40 +219,6 @@ export class Waypoints {
                 event.stopPropagation();
 
                 this.swap(this.activeIndex, this.activeIndex + 1);
-                return;
-
-                if (this.activeIndex === this.waypoints.length - 1) {
-                    logger.log('error', 'At last index, cannot move forth');
-                    return;
-                }
-
-                // get current active and previous waypoints
-                const activeWaypoint = this.getActiveWaypoint();
-                const nextWaypoint = this.waypoints[this.activeIndex + 1];
-
-                // swap array elements
-                [this.waypoints[this.activeIndex], this.waypoints[this.activeIndex + 1]] =
-                    [this.waypoints[this.activeIndex + 1], this.waypoints[this.activeIndex]]
-
-                // update active index
-                this.activeIndex += 1;
-
-                // swap items
-                $(`#call-${this.label}-carousel-items .carousel-item`)
-                    .removeClass('active');
-                swapElements(`#call-${this.label}-${activeWaypoint.order}-container`,
-                    `#call-${this.label}-${nextWaypoint.order}-container`);
-                $(`#call-${this.label}-carousel-items .carousel-item`)
-                    .eq(this.activeIndex)
-                    .addClass('active');
-
-                // reset active indicator
-                const indicators = $(`#call-${this.label}-carousel-indicators li`);
-                indicators.removeClass('active');
-                indicators.eq(this.activeIndex).addClass('active');
-
-                // configure buttons
-                this.configureEditorButtons();
 
             });
 
@@ -325,7 +261,7 @@ export class Waypoints {
 
         // swap array elements
         [this.waypoints[i], this.waypoints[j]] =
-            [this.waypoints[j], this.waypoints[i]]
+            [this.waypoints[j], this.waypoints[i]];
 
         // swap active index
         if (this.activeIndex === i || this.activeIndex === j) {
@@ -436,7 +372,7 @@ export class Waypoints {
 
         // change status label
         $(`#waypoint-${this.label + '-' + waypoint.order}-item-status-label`)
-            .text(waypoint_status[waypoint.status]);
+            .text(settings.waypoint_status[waypoint.status]);
 
         this.configureEditorButtons();
 
