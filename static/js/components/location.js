@@ -150,6 +150,7 @@ class MapAddress {
             id_lng: `address-${label}-lng`,
             zoom: 12,
             map_provider: mapProvider,
+            layer_names: [settings.translation_table['Roads'], settings.translation_table['Satellite'], settings.translation_table['Hybrid']],
             clickable: true,
             draggable: true,
             onChange: (lat, lng) => { this.onUpdateCoordinates(label, lat, lng); }
@@ -271,6 +272,7 @@ class ChoiceAddress {
             id_lng: `address-${label}-lng`,
             zoom: 12,
             map_provider: mapProvider,
+            layer_names: [settings.translation_table['Roads'], settings.translation_table['Satellite'], settings.translation_table['Hybrid']],
             clickable: false,
             draggable: false
         };
@@ -315,24 +317,29 @@ export class Location {
 
     }
 
+    static append(address, items, separator=' ') {
+
+        for (const item of items) {
+
+            const titem = item.trim();
+
+            if (titem === '')
+                continue;
+
+            address = [address, titem].join(separator);
+
+        }
+
+        return address;
+    }
+
     toText() {
 
         // format address
-        let address = [this.number, this.street, this.unit].join(' ').trim();
-
-        if (address !== "") {
-            if (this.neighborhood !== "")
-                address = [address, this.neighborhood].join(', ').trim();
-        } else
-            address += this.neighborhood.trim();
-
-        if (address !== "")
-            address = [address, this.city, this.state].join(', ').trim();
-        else
-            address = [this.city, this.state].join(', ').trim();
-
+        let address = append('', [this.number, this.street, this.unit]);
+        address = append(address, [this.neighborhood, this.city, this.state], ', ');
         address = [address, this.zipcode].join(' ').trim();
-        address = [address, this.country].join(', ').trim();
+        address = append(address, [this.country], ', ');
 
         return address;
     }

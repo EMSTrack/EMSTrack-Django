@@ -1372,10 +1372,6 @@ function createCategoryPanesAndFilters() {
 
     // Initialize panes
 
-    // Create hospital category pane
-    // let pane = mymap.createPane('hospital');
-    // pane.style.display = (visibleCategory['hospital'] ? 'block' : 'none');
-
     // Create location category panes
     reduced_location_type_order.forEach(function (type) {
         const pane = mymap.createPane(type);
@@ -1501,17 +1497,6 @@ function createCategoryPanesAndFilters() {
     });
 
     // Create location options
-
-    /*
-    // add hospital
-    $("#location-type").append(
-        '<div class="form-group form-check mt-0 mb-1">\n' +
-        '     <input class="form-check-input filter-checkbox" value="location" data-status="hospital"\n' +
-        '            type="checkbox" id="location-hospital" ' + (visibleCategory['hospital'] ? 'checked' : '') + '>\n' +
-        '     <label class="form-check-label"\n' +
-        '            for="location-hospital">Hospital</label>\n' +
-        '</div>');
-    */
 
     reduced_location_type_order.forEach(function (type) {
         $("#location-type").append(
@@ -1773,22 +1758,12 @@ function doUpdateAmbulanceStatus(ambulance_id, status) {
 
 // Dispatching
 
-function submitDispatching() {
-
-
-}
-
 function beginDispatching() {
 
     isDispatching = true;
     const filtersDiv = $('#filtersDiv');
     isFilterOpen = filtersDiv.hasClass('show');
     logger.log('info', 'Begin dispatching.');
-
-    // $('#dispatchBeginButton').hide();
-    // $('#dispatchButtonGroup').show();
-    // $('#dispatchCancelButton').show();
-    // $('#dispatchSubmitButton').show();
 
     // open filter and available ambulances
     filtersDiv.addClass('show');
@@ -1860,15 +1835,6 @@ function endDispatching() {
         .find('.btn-new-patient')
         .off('click')
         .empty();
-
-    // show buttons
-    // $('#dispatchBeginButton').show();
-    // $('#dispatchButtonGroup').hide();
-    // $('#dispatchCancelButton').hide();
-    // $('#dispatchSubmitButton').hide();
-
-    // close dispatch panel
-    // $('#newDispatchDiv').collapse('toggle');
 
     if (!isFilterOpen) {
         // close filter panel
