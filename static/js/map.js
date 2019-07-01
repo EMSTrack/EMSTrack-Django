@@ -24,7 +24,6 @@ const sprintf = require('sprintf-js').sprintf;
 
 // Initialize settings
 const settings = new Settings(html_settings);
-console.log(settings);
 
 // Remove waypoints and incidents from location_type
 const reduced_location_type_order = [...settings.location_type_order];
@@ -74,6 +73,8 @@ let visibleCategory = {};
 // Initialize ambulance icons
 const ambulance_icons = {};
 const ambulance_buttons = {};
+
+/*
 for (const key in settings.ambulance_css) {
     // skip loop if the property is from prototype
     if (!settings.ambulance_css.hasOwnProperty(key))
@@ -82,6 +83,11 @@ for (const key in settings.ambulance_css) {
     const settings = settings.ambulance_css[key];
     ambulance_icons[key] = L.icon(settings['icon']);
     ambulance_buttons[key] = 'btn-' + settings['class'];
+}
+*/
+for (const [key, value] of Object.entries(settings.ambulance_css)) {
+    ambulance_icons[key] = L.icon(value['icon']);
+    ambulance_buttons[key] = 'btn-' + value['class'];
 }
 
 // Initialize ambulance call status
