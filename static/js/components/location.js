@@ -431,7 +431,7 @@ export class Location {
 
     refresh(label) {
 
-        this.location.refresh(`location-${label}`);
+        this.addressComponent.refresh(`location-${label}`);
 
     }
 
