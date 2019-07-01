@@ -16,7 +16,7 @@ import { Patients } from './components/patients';
 
 import { Waypoints } from './components/waypoints';
 
-// import LocationSettings, { Location } from './components/location';
+// import { Location } from './components/location';
 
 import { Dialog } from "./components/dialog";
 
