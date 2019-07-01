@@ -103,6 +103,9 @@ class MapAddress {
 
     refresh(label) {
 
+        logger.log('debug', 'refresh');
+        console.log(this.location);
+
         // setting address
         $(`#address-${label}-address`)
             .val(this.location.toText());
@@ -439,10 +442,10 @@ Location.default = {
     street: '',
     unit: '',
     neighborhood: '',
-    city: '',
-    state: '',
+    city: settings.defaults.city,
+    state: settings.defaults.state,
     zipcode: '',
-    country: '',
+    country: settings.defaults.country,
     location: {...settings.defaults.location}
 };
 
