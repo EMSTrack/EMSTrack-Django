@@ -4,6 +4,8 @@ import {LeafletSimplePointWidget} from "../leaflet/LeafletWidget";
 
 import {Dropdown} from "./dropdown";
 
+import {GeocoderFactory} from "../geocoder";
+
 import { Settings } from "../settings";
 
 /**
@@ -21,7 +23,8 @@ const settings = {
  */
 
 const settings = new Settings();
-export default settings;
+
+const geocoder = GeocoderFactory(settings.map_provider);
 
 export class Point {
 
@@ -58,8 +61,27 @@ class MapAddress {
 
         logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
-        this.onChange(this.location);
+        geocoder.reverse({lat: lat, lng: lng})
+            .then( (address) => {
 
+                logger.log('debug', "address = '%j'", address);
+
+                // parse features into current address
+                Object.assign(this.location, address);
+
+                $(`#address-${label}-address`)
+                    .text(address.formatted_address);
+
+                this.onChange(this.location);
+
+            })
+            .catch( (error) => {
+                logger.log('warn', "Could not forward geocode. Error: '%s'", error);
+
+                this.onChange(this.location);
+
+            });
+        
     }
 
     onUpdateAddress(label, address) {
