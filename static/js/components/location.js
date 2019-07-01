@@ -321,12 +321,9 @@ export class Location {
 
         for (const item of items) {
 
-            const titem = item.trim();
-
-            if (titem === '')
-                continue;
-
-            address = [address, titem].join(separator);
+            if (item)
+                address = [address, item.trim()].join(separator);
+            
 
         }
 
