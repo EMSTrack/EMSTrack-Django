@@ -15,7 +15,7 @@ export class Settings {
 
 Settings.default  = {
     locations: {},
-    map_provider: undefined,
+    map_provider: {},
     ambulance_status: {},
     ambulance_status_order: {},
     ambulance_capability: {},

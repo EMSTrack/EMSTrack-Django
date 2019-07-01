@@ -2,6 +2,11 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+// Initialize settings
+import { Settings } from "./settings";
+
+const settings = new Settings(html_settings);
+
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
@@ -18,12 +23,8 @@ import { Waypoints } from './components/waypoints';
 
 import { Dialog } from "./components/dialog";
 
-import { Settings } from "./settings";
-
 const sprintf = require('sprintf-js').sprintf;
 
-// Initialize settings
-const settings = new Settings(html_settings);
 
 // Remove waypoints and incidents from location_type
 const reduced_location_type_order = [...settings.location_type_order];
