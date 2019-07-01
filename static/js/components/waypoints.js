@@ -394,7 +394,7 @@ export class Waypoints {
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
-        setTimeout(() => { console.log('on timeout'); this.refresh();}, 100);
+        setTimeout(() => { console.log('on timeout'); this.refresh();}, 1000);
 
     }
 
