@@ -152,7 +152,7 @@ export class Waypoints {
     postRender() {
 
         // configure buttons
-        this.configureEditorButtons();
+        this.refresh();
 
         // skip waypoint
         $(`#call-${this.label}-waypoints-skip-button`)
@@ -232,7 +232,7 @@ export class Waypoints {
 
                 // set active waypoint and configure buttons
                 this.setActiveWaypoint(event.to);
-                this.configureEditorButtons();
+                this.refresh();
 
                 logger.log('info', 'setting active waypoint %d', this.activeIndex);
 
@@ -286,7 +286,7 @@ export class Waypoints {
         indicators.eq(this.activeIndex).addClass('active');
 
         // configure buttons
-        this.configureEditorButtons();
+        this.refresh();
 
     }
 
@@ -374,7 +374,7 @@ export class Waypoints {
         $(`#waypoint-${this.label + '-' + waypoint.order}-item-status-label`)
             .text(settings.waypoint_status[waypoint.status]);
 
-        this.configureEditorButtons();
+        this.refresh();
 
     }
 
@@ -388,11 +388,11 @@ export class Waypoints {
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
-        this.configureEditorButtons();
+        this.refresh();
 
     }
 
-    configureEditorButtons() {
+    refresh() {
 
         const waypoint = this.getActiveWaypoint();
         const nextWaypointIndex = this.getNextWaypointIndex();
@@ -414,7 +414,7 @@ export class Waypoints {
         }
 
         let forwardButtonDisable = true;
-        if ( this.activeIndex >= nextWaypointIndex
+        if (this.activeIndex >= nextWaypointIndex
             && this.activeIndex < this.waypoints.length - 1
             && (waypoint.status === 'C' || waypoint.status === 'S')) {
             // waypoint is next or beyond but not last and is either created or skipped
@@ -422,15 +422,17 @@ export class Waypoints {
         }
 
         let backwardButtonDisable = true;
-        if ( ( this.activeIndex > nextWaypointIndex && nextWaypointIndex !== -1 )
+        if ((this.activeIndex > nextWaypointIndex && nextWaypointIndex !== -1)
             && (waypoint.status === 'C' || waypoint.status === 'S')) {
             // waypoint is beyond next  and is either created or skipped
             backwardButtonDisable = false;
         }
 
         let formDisable = false;
-        if (waypoint.status === 'S')
+        if (waypoint.status === 'S') {
             formDisable = true;
+            waypoint.location.disable();
+        }
 
         // disable skip
         $(`#call-${this.label}-waypoints-skip-button`)
@@ -450,7 +452,7 @@ export class Waypoints {
 
         // form element disabled
         $(`#call-${this.label}-carousel-items :input`)
-                .attr( "disabled", formDisable );
+            .attr( "disabled", formDisable );
 
     }
 

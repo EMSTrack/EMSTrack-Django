@@ -58,14 +58,12 @@ const hospitalMarkers = {};   // Store hospital markers
 const hospitals = {};	      // Store hospital details
 
 const locationMarkers = {};   // Store location markers
-// const locations = {};	      // Store location details
 
 const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
 
 // Dialog
 const dialog = new Dialog({label: "messages"});
-
 
 // Initialize category panes
 let visibleCategory = {};
@@ -74,17 +72,6 @@ let visibleCategory = {};
 const ambulance_icons = {};
 const ambulance_buttons = {};
 
-/*
-for (const key in settings.ambulance_css) {
-    // skip loop if the property is from prototype
-    if (!settings.ambulance_css.hasOwnProperty(key))
-        continue;
-
-    const settings = settings.ambulance_css[key];
-    ambulance_icons[key] = L.icon(settings['icon']);
-    ambulance_buttons[key] = 'btn-' + settings['class'];
-}
-*/
 for (const [key, value] of Object.entries(settings.ambulance_css)) {
     ambulance_icons[key] = L.icon(value['icon']);
     ambulance_buttons[key] = 'btn-' + value['class'];

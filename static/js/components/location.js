@@ -261,32 +261,6 @@ ChoiceAddress.default = {
     onChange: (location) => { logger.log('debug', 'location = %s', location); }
 };
 
-class SimpleAddress {
-
-    constructor(location) {
-        this.location = location;
-    }
-
-    render(label, classes = "") {
-
-        // language=HTML
-        return `<div class="my-0 py-0 ${classes}" id="${label}-address-div">
-    <p>
-        <em>${settings.translation_table['Address']}:</em>
-    </p>
-    <p>
-        ${this.location.toText()}
-    </p>
-</div>`;
-
-    }
-
-    postRender(label) {
-
-    }
-
-}
-
 export class Location {
 
     constructor(parameters) {
@@ -408,6 +382,18 @@ export class Location {
 
         // initial select type
         this.selectType(label, this.type, true);
+
+    }
+
+    disable() {
+
+        this.addressComponent.map.disable();
+
+    }
+
+    enable() {
+
+        this.addressComponent.map.enable();
 
     }
     

@@ -21,6 +21,9 @@ export class LeafletWidget {
 
     constructor(options) {
 
+        // enabled flag
+        this.enabled = true;
+
         // Retrieve map provider
         this.map_provider = options['map_provider'];
         delete options['map_provider'];
@@ -199,6 +202,16 @@ export class LeafletWidget {
 
     }
 
+    disable() {
+        this.map.dragging.disable();
+        this.enabled = false;
+    }
+
+    enable() {
+        this.map.dragging.enable();
+        this.enabled = true;
+    }
+
 }
 
 // LeafletMultiPointWidget
@@ -208,7 +221,7 @@ export class LeafletMultiPointWidget extends LeafletWidget {
     constructor(options) {
 
         // Call parent
-        super(options)
+        super(options);
 
         // store all marker id's
         this.markerIdMap = {};
@@ -257,13 +270,7 @@ export class LeafletMultiPointWidget extends LeafletWidget {
                         .addListener(map.parent.addControlCheckbox,
                             'click',
                             function (e) {
-                                if (e.target.checked) {
-                                    // enable click to add point
-                                    e.target.map._map.parent.clickToAddPoint = true;
-                                } else {
-                                    // disable click to add point
-                                    e.target.map._map.parent.clickToAddPoint = false;
-                                }
+                                e.target.map._map.parent.clickToAddPoint = !!e.target.checked;
                             });
 
                     return container;
@@ -410,10 +417,12 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         if (this.options.clickable)
             this.map.on('click',
                 (e) => {
-                    const latlng = e.latlng;
-                    e.target.parent.setPoint(latlng.lat, latlng.lng);
-                    if (this.options.onChange != null)
-                        this.options.onChange(latlng.lat, latlng.lng);
+                    if (this.enabled) {
+                        const latlng = e.latlng;
+                        e.target.parent.setPoint(latlng.lat, latlng.lng);
+                        if (this.options.onChange != null)
+                            this.options.onChange(latlng.lat, latlng.lng);
+                    }
                 });
 
     }
@@ -438,10 +447,12 @@ export class LeafletSimplePointWidget extends LeafletWidget {
             // set coordinates when dragged
             if (this.options.draggable)
                 this.point.on('dragend', (e) => {
-                    const latlng = e.target.getLatLng();
-                    e.target.parent.setPoint(latlng.lat, latlng.lng);
-                    if (this.options.onChange != null)
-                        this.options.onChange(latlng.lat, latlng.lng);
+                    if (this.enabled) {
+                        const latlng = e.target.getLatLng();
+                        e.target.parent.setPoint(latlng.lat, latlng.lng);
+                        if (this.options.onChange != null)
+                            this.options.onChange(latlng.lat, latlng.lng);
+                    }
                 });
 
         } else {
@@ -479,7 +490,7 @@ export class LeafletPolylineWidget extends LeafletWidget {
         super(options);
 
         // store all markers and lines id's
-        this.polylineIdMap = {}
+        this.polylineIdMap = {};
         this.markerIdMap = {};
         this.pointIdMap = {};
 
@@ -489,17 +500,11 @@ export class LeafletPolylineWidget extends LeafletWidget {
         // create default layer
         this.createLayer('default');
 
-        //this.map.createPane('defaultLeafletPolylineWidgetPane');
-        //this.layers['default'] = {
-        //        'markers': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'}),
-        //        'lines': L.layerGroup({'pane': 'defaultLeafletPolylineWidget'})
-        //    };
-
     }
 
     createLayer(layer) {
 
-        var layerName = layer + 'LeafletPolylineWidgetPane';
+        const layerName = layer + 'LeafletPolylineWidgetPane';
         this.map.createPane(layerName);
         this.layers[layer] = {
             'markers': L.layerGroup({'pane': layerName}),
@@ -510,7 +515,7 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     getLayerPane(layer) {
 
-        var layerName = layer + 'LeafletPolylineWidgetPane';
+        const layerName = layer + 'LeafletPolylineWidgetPane';
         return this.map.getPane(layerName);
 
     }
@@ -521,8 +526,8 @@ export class LeafletPolylineWidget extends LeafletWidget {
         layer = layer || 'default';
 
         // Create polyline
-        var layerName = layer + 'LeafletPolylineWidgetPane';
-        var polyline = L.polyline(points, {color: color, pane: layerName})
+        const layerName = layer + 'LeafletPolylineWidgetPane';
+        const polyline = L.polyline(points, {color: color, pane: layerName})
             .addTo(this.map);
 
         // Add click callback
@@ -549,10 +554,10 @@ export class LeafletPolylineWidget extends LeafletWidget {
         layer = layer || 'default';
 
         // Create marker without a shaddow
-        var icon = new L.Icon.Default();
+        const icon = new L.Icon.Default();
         icon.options.shadowSize = [0, 0];
-        var layerName = layer + 'LeafletPolylineWidgetPane';
-        var marker = L.marker([lat, lng], {icon: icon, pane: layerName})
+        const layerName = layer + 'LeafletPolylineWidgetPane';
+        const marker = L.marker([lat, lng], {icon: icon, pane: layerName})
             .addTo(this.map);
 
         // Add click callback
@@ -574,4 +579,3 @@ export class LeafletPolylineWidget extends LeafletWidget {
     }
 
 }
-
