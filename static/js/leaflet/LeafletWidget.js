@@ -8,6 +8,8 @@ import iconUrl from 'leaflet/dist/images/marker-icon.png';
 import icon2xUrl from 'leaflet/dist/images/marker-icon-2x.png';
 import iconShadowUrl from 'leaflet/dist/images/marker-shadow.png';
 
+import { logger } from "../logger";
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: icon2xUrl,
@@ -445,6 +447,8 @@ export class LeafletSimplePointWidget extends LeafletWidget {
 
     // update point
     setPoint(lat, lng) {
+
+        logger.log('info', 'setPoint (%f, %f)', lat, lng);
 
         // Does point exist?
         if (this.point === null) {
