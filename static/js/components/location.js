@@ -103,14 +103,9 @@ class MapAddress {
 
     refresh(label) {
 
-        logger.log('debug', 'refresh');
-        console.log(this.location);
-
         // setting address
         $(`#address-${label}-address`)
             .val(this.location.toText());
-
-        logger.log('debug', 'refresh');
 
         // set point on the map
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);

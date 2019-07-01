@@ -423,8 +423,6 @@ export class LeafletSimplePointWidget extends LeafletWidget {
             this.options['onChange'] = null;
 
         // initialize point
-        console.log(this);
-
         this.point = null;
         if (coordinates !== null)
             this.setPoint(coordinates[0], coordinates[1]);
@@ -441,9 +439,6 @@ export class LeafletSimplePointWidget extends LeafletWidget {
                     }
                 });
 
-        console.log(coordinates);
-        console.log(this);
-
     }
 
     // MEMBER FUNCTIONS
@@ -451,14 +446,10 @@ export class LeafletSimplePointWidget extends LeafletWidget {
     // update point
     setPoint(lat, lng) {
 
-        console.log('setPoint');
-        console.log(this);
-
         // Does point exist?
         if (this.point === null) {
 
             // create first
-            console.log('creating point');
 
             // add marker
             this.point = L.marker(L.latLng([lat, lng]), { draggable: this.options['draggable']} );
