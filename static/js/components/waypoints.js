@@ -394,7 +394,10 @@ export class Waypoints {
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
-        setTimeout(() => { console.log('on timeout'); this.refresh();}, 1000);
+        setTimeout(() => {
+            console.log('on timeout');
+            waypoint.location.selectType(`${this.label}-${waypoint.order}`, 'w');
+        }, 1000);
 
     }
 
@@ -459,9 +462,6 @@ export class Waypoints {
         // form element disabled
         $(`#call-${this.label}-carousel-items :input`)
             .attr( "disabled", formDisable );
-
-        if (waypoint.location)
-            waypoint.refresh(`${this.label}-${waypoint.order}`);
 
     }
 
