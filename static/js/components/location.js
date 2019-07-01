@@ -110,6 +110,8 @@ class MapAddress {
         $(`#address-${label}-address`)
             .val(this.location.toText());
 
+        logger.log('debug', 'refresh');
+
         // set point on the map
         this.map.setPoint(this.location.location.latitude, this.location.location.longitude);
 
