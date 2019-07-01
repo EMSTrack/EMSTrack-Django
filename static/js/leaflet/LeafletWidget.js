@@ -207,7 +207,7 @@ export class LeafletWidget {
         this.map.doubleClickZoom.disable();
         this.map.dragging.disable();
         this.map.keyboard.disable();
-        this.map.scrollWhellZoom.disable();
+        this.map.scrollWheelZoom.disable();
         this.map.tap.disable();
         this.map.touchZoom.disable();
         this.enabled = false;
@@ -218,7 +218,7 @@ export class LeafletWidget {
         this.map.doubleClickZoom.enable();
         this.map.dragging.enable();
         this.map.keyboard.enable();
-        this.map.scrollWhellZoom.enable();
+        this.map.scrollWheelZoom.enable();
         this.map.tap.enable();
         this.map.touchZoom.enable();
         this.enabled = true;
