@@ -60,6 +60,12 @@ export class Waypoint {
 
     }
 
+    refresh(label) {
+
+        this.location.refresh(label);
+
+    }
+
 }
 
 Waypoint.default = {
@@ -455,7 +461,7 @@ export class Waypoints {
             .attr( "disabled", formDisable );
 
         if (waypoint.location)
-            waypoint.refresh();
+            waypoint.refresh(`${this.label}-${waypoint.order}`);
 
     }
 

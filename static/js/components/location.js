@@ -429,7 +429,7 @@ export class Location {
 
     }
 
-    refresh() {
+    refresh(label) {
 
         this.location.refresh(`location-${label}`);
 
