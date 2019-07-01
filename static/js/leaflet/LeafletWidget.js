@@ -446,6 +446,8 @@ export class LeafletSimplePointWidget extends LeafletWidget {
     // update point
     setPoint(lat, lng) {
 
+        console.log(this);
+
         // Does point exist?
         if (this.point === null) {
 
