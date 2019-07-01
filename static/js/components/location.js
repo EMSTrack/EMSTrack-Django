@@ -56,7 +56,7 @@ class MapAddress {
                 Object.assign(this.location, address);
 
                 $(`#address-${label}-address`)
-                    .text(address.formatted_address);
+                    .val(address.formatted_address);
 
                 this.onChange(this.location);
 
@@ -139,9 +139,10 @@ class MapAddress {
 
         // bind on change
         const self = this;
-        $(`#address-${label}-address`).on('change', function () {
-            self.onUpdateAddress(label, $(this).val());
-        });
+        $(`#address-${label}-address`)
+            .on('change', function () {
+                self.onUpdateAddress(label, $(this).val());
+            });
 
     }
 
