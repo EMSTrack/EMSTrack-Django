@@ -55,8 +55,8 @@ class MapAddress {
                 // parse features into current address
                 Object.assign(this.location, address);
 
-                $(`#address-${label}-address`)
-                    .val(address.formatted_address);
+                // refresh
+                this.refresh(label);
 
                 this.onChange(this.location);
 
