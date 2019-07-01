@@ -208,7 +208,8 @@ export class LeafletWidget {
         this.map.dragging.disable();
         this.map.keyboard.disable();
         this.map.scrollWheelZoom.disable();
-        this.map.tap.disable();
+        // TODO: Check for updates, gives error on console
+        // this.map.tap.disable();
         this.map.touchZoom.disable();
         this.enabled = false;
     }
@@ -219,7 +220,8 @@ export class LeafletWidget {
         this.map.dragging.enable();
         this.map.keyboard.enable();
         this.map.scrollWheelZoom.enable();
-        this.map.tap.enable();
+        // TODO: Check for updates, gives error on console
+        // this.map.tap.enable();
         this.map.touchZoom.enable();
         this.enabled = true;
     }
