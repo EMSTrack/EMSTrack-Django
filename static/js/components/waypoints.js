@@ -396,6 +396,7 @@ export class Waypoints {
         this.addWaypointForm(index, waypoint);
         setTimeout(() => {
             console.log('on timeout');
+            waypoint.location.selectType(`${this.label}-${waypoint.order}`, 'w');
             waypoint.location.typeDropdown.click('w');
         }, 500);
 
