@@ -36,6 +36,7 @@ Settings.default  = {
     ambulance_css: {},
     call_priority_css: {},
     translation_table: {},
+    defaults: {},
 };
 
 const settings = new Settings(Settings.default);

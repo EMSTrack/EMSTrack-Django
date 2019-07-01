@@ -48,7 +48,8 @@ class MapAddress {
         logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
         // geocode coordinates
-        settings.geocoder.reverse({lat: lat, lng: lng})
+        settings.geocoder
+            .reverse({lat: lat, lng: lng})
             .then( (address) => {
 
                 logger.log('debug', "address = '%j'", address);
@@ -76,7 +77,8 @@ class MapAddress {
         logger.log('debug', 'Address updated to %s', address);
 
         // geocode address
-        settings.geocoder.geocode(address)
+        settings.geocoder
+            .geocode(address)
             .then( (address) => {
 
                 logger.log('debug', "address = '%j'", address);
@@ -319,13 +321,9 @@ export class Location {
 
     static append(address, items, separator=' ') {
 
-        for (const item of items) {
-
+        for (const item of items)
             if (item)
-                address = [address, item.trim()].join(separator);
-            
-
-        }
+                address = [address, item.trim()].join(separator).trim();
 
         return address;
     }
@@ -445,6 +443,6 @@ Location.default = {
     state: '',
     zipcode: '',
     country: '',
-    location: new Point()
+    location: {...settings.defaults.location}
 };
 

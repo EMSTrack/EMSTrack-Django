@@ -12,7 +12,10 @@ from django.views.generic.detail import BaseDetailView
 
 from django.utils.translation import ugettext_lazy as _
 
+from drf_extra_fields.geo_fields import PointField
+
 from ambulance.permissions import CallPermissionMixin
+from emstrack.models import defaults
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
@@ -273,6 +276,10 @@ class AmbulanceMap(TemplateView):
 
         context['radio_code_list'] = CallRadioCode.objects.all()
         context['priority_code_list'] = CallPriorityCode.objects.all()
+
+        default_values = defaults.copy()
+        default_values['location'] = PointField().to_representation(defaults['location'])
+        context['defaults'] = default_values
 
         context['translation_table'] = {
             "Age": _("Age"),
