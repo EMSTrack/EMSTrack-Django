@@ -81,7 +81,7 @@ class MapAddress {
                 this.onChange(this.location);
 
             });
-        
+
     }
 
     onUpdateAddress(label, address) {
