@@ -4,17 +4,23 @@ import {LeafletSimplePointWidget} from "../leaflet/LeafletWidget";
 
 import {Dropdown} from "./dropdown";
 
+import { Settings } from "../settings";
+
 /**
  * Location base class
  */
 
 // settings are exported as default
+/*
 const settings = {
     locations: {},
     location_type: {},
     translation_table: {},
     map_provider: undefined,
 };
+ */
+
+const settings = new Settings();
 export default settings;
 
 export class Point {
