@@ -16,6 +16,8 @@ export class Settings {
 Settings.default  = {
     locations: {},
     map_provider: {},
+    geocoder: {},
+
     ambulance_status: {},
     ambulance_status_order: {},
     ambulance_capability: {},
@@ -36,5 +38,7 @@ Settings.default  = {
     translation_table: {},
 };
 
-new Settings(Settings.default);
+const settings = new Settings(Settings.default);
 // Object.freeze(Settings.instance);
+
+export default settings;

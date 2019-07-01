@@ -2,11 +2,6 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
-// Initialize settings
-import { Settings } from "./settings";
-
-const settings = new Settings(html_settings);
-
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
@@ -21,10 +16,14 @@ import { Patients } from './components/patients';
 
 import { Waypoints } from './components/waypoints';
 
+import { Settings } from "./settings";
+
 import { Dialog } from "./components/dialog";
 
 const sprintf = require('sprintf-js').sprintf;
 
+// Initialize settings
+const settings = new Settings(html_settings);
 
 // Remove waypoints and incidents from location_type
 const reduced_location_type_order = [...settings.location_type_order];
@@ -149,6 +148,7 @@ const STATUS_AVAILABLE = "AV";
 let mymap;
 let apiClient;
 const geocoder = GeocoderFactory(mapProvider);
+settings.geocoder = geocoder;
 
 // resize map
 function resizeMap() {

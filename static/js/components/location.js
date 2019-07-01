@@ -4,29 +4,13 @@ import {LeafletSimplePointWidget} from "../leaflet/LeafletWidget";
 
 import {Dropdown} from "./dropdown";
 
-import {GeocoderFactory} from "../geocoder";
-
 import { Settings } from "../settings";
 
 /**
  * Location base class
  */
 
-// settings are exported as default
-/*
-const settings = {
-    locations: {},
-    location_type: {},
-    translation_table: {},
-    map_provider: undefined,
-};
- */
-
 const settings = new Settings();
-
-const geocoder = GeocoderFactory(settings.map_provider);
-console.log(settings);
-console.log(geocoder);
 
 export class Point {
 
@@ -63,7 +47,7 @@ class MapAddress {
 
         logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
-        geocoder.reverse({lat: lat, lng: lng})
+        settings.geocoder.reverse({lat: lat, lng: lng})
             .then( (address) => {
 
                 logger.log('debug', "address = '%j'", address);
