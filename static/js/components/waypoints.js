@@ -394,9 +394,7 @@ export class Waypoints {
         this.waypoints.push(waypoint);
 
         this.addWaypointForm(index, waypoint);
-        this.refresh();
-
-        waypoint.location.selectType(`${this.label}-${waypoint.order}`, 'w');
+        setTimeout(() => { console.log('on timeout'); this.refresh();}, 100);
 
     }
 
