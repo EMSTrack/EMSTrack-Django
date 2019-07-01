@@ -424,7 +424,7 @@ export class LeafletSimplePointWidget extends LeafletWidget {
 
         // initialize point
         console.log(this);
-        
+
         this.point = null;
         if (coordinates !== null)
             this.setPoint(coordinates[0], coordinates[1]);
@@ -458,6 +458,7 @@ export class LeafletSimplePointWidget extends LeafletWidget {
         if (this.point === null) {
 
             // create first
+            console.log('creating point');
 
             // add marker
             this.point = L.marker(L.latLng([lat, lng]), { draggable: this.options['draggable']} );
