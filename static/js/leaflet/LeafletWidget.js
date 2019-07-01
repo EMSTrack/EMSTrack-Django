@@ -203,13 +203,11 @@ export class LeafletWidget {
     }
 
     disable() {
-        console.log('LeafletWidget disabled');
         this.map.dragging.disable();
         this.enabled = false;
     }
 
     enable() {
-        console.log('LeafletWidget enabled');
         this.map.dragging.enable();
         this.enabled = true;
     }
@@ -478,6 +476,16 @@ export class LeafletSimplePointWidget extends LeafletWidget {
             document.getElementById(this.options.id_lng).value = lng;
         }
 
+    }
+
+    disable() {
+        super.disable();
+        this.point.dragging.disable();
+    }
+
+    enable() {
+        super.enable();
+        this.point.dragging.enable();
     }
 
 }
