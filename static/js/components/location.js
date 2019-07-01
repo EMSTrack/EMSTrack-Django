@@ -47,6 +47,7 @@ class MapAddress {
 
         logger.log('debug', 'Coordinates updated to %f, %f', lat, lng);
 
+        // geocode coordinates
         settings.geocoder.reverse({lat: lat, lng: lng})
             .then( (address) => {
 
@@ -74,7 +75,27 @@ class MapAddress {
 
         logger.log('debug', 'Address updated to %s', address);
 
-        this.onChange(this.location);
+        // geocode address
+        settings.geocoder.geocode(address)
+            .then( (address) => {
+
+                logger.log('debug', "address = '%j'", address);
+
+                // parse features into current address
+                Object.assign(this.location, address);
+
+                // refresh
+                this.refresh(label);
+
+                this.onChange(this.location);
+
+        })
+        .catch( (error) => {
+            logger.log('warn', "Could not forward geocode. Error: '%s'", error);
+
+            this.onChange(this.location);
+
+        });
 
     }
 
