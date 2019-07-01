@@ -428,7 +428,13 @@ export class Location {
         this.addressComponent.map.enable();
 
     }
-    
+
+    refresh() {
+
+        this.location.refresh(`location-${label}`);
+
+    }
+
 }
 
 Location.default = {

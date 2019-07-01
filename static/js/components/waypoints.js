@@ -454,6 +454,9 @@ export class Waypoints {
         $(`#call-${this.label}-carousel-items :input`)
             .attr( "disabled", formDisable );
 
+        if (waypoint.location)
+            waypoint.refresh();
+
     }
 
     getData() {
