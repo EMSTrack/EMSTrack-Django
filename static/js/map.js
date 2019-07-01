@@ -24,6 +24,7 @@ const sprintf = require('sprintf-js').sprintf;
 
 // Initialize settings
 const settings = new Settings(html_settings);
+console.log(settings);
 
 // Remove waypoints and incidents from location_type
 const reduced_location_type_order = [...settings.location_type_order];
