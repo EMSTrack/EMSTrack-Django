@@ -439,6 +439,9 @@ export class LeafletSimplePointWidget extends LeafletWidget {
                     }
                 });
 
+        console.log(coordinates);
+        console.log(this);
+
     }
 
     // MEMBER FUNCTIONS
