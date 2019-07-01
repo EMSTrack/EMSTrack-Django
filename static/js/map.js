@@ -74,12 +74,7 @@ LocationSettings.translation_table = translation_table;
 LocationSettings.map_provider = mapProvider;
 
 // Initialize settings
-const settings = new Settings({
-    locations: locations,
-    location_type: location_type,
-    translation_table: translation_table,
-    map_provider: mapProvider
-});
+const settings = new Settings(html_settings);
 
 // Initialize category panes
 let visibleCategory = {};
