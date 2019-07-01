@@ -16,7 +16,7 @@ import { Patients } from './components/patients';
 
 import { Waypoints } from './components/waypoints';
 
-import LocationSettings, { Location } from './components/location';
+// import LocationSettings, { Location } from './components/location';
 
 import { Dialog } from "./components/dialog";
 
@@ -59,7 +59,7 @@ const hospitalMarkers = {};   // Store hospital markers
 const hospitals = {};	      // Store hospital details
 
 const locationMarkers = {};   // Store location markers
-const locations = {};	      // Store location details
+// const locations = {};	      // Store location details
 
 const calls = {};             // Store call details
 const patientMarkers = {};    // Store hospital markers
@@ -1327,10 +1327,10 @@ function addLocationToMap(location) {
         location.name, location.id, location.location.latitude, location.location.longitude);
 
     // store location details in an object, create first if needed
-    if (!locations.hasOwnProperty(location.type))
-        locations[location.type] = {};
+    if (!settings.locations.hasOwnProperty(location.type))
+        settings.locations[location.type] = {};
 
-    locations[location.type][location.id] = location;
+    settings.locations[location.type][location.id] = location;
 
     // set icon by status
     let icon = locationIcon;
