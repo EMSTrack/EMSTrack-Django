@@ -159,7 +159,7 @@ class MapAddress {
         };
 
         this.map = new LeafletSimplePointWidget(options);
-        this.refresh(label);
+        this.map.on('load', () => { this.refresh(label); } );
 
         // bind on change
         const self = this;
@@ -283,7 +283,7 @@ class ChoiceAddress {
 
         // initial select type
         if (this.location !== undefined && this.location.id !== null)
-            this.refresh(label);
+            this.map.on('load', () => { this.refresh(label); } );
 
     }
 
@@ -414,6 +414,7 @@ export class Location {
 
         // initial select type
         this.selectType(label, this.type, true);
+
 
     }
 
