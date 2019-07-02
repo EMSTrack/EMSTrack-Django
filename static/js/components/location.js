@@ -285,11 +285,10 @@ class ChoiceAddress {
         this.map = new LeafletSimplePointWidget(options);
 
         // initial select type
-        if (this.location !== undefined && this.location.id !== null)
-            this.map.map.on('load', () => {
-                console.log('on load');
-                this.refresh(label);
-            } );
+        this.map.map.on('load', () => {
+            console.log('on load');
+            this.refresh(label);
+        } );
 
     }
 
