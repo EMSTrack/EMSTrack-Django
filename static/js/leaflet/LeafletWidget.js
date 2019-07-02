@@ -64,6 +64,7 @@ export class LeafletWidget {
             location_icon_size: [32, 32],
             add_location_control: false,
             add_marker_control: false,
+            onLoad: (e) => { console.log('LeafletWidget loaded'); }
         };
 
         // Altering using user-provided options
@@ -75,6 +76,7 @@ export class LeafletWidget {
 
         // create map
         this.map = L.map(this.options.map_id)
+            .on('load', this.options.onLoad )
             .setView(L.latLng(this.options.lat,
                 this.options.lng),
                 this.options.zoom);
