@@ -76,10 +76,7 @@ export class LeafletWidget {
 
         // create map
         this.map = L.map(this.options.map_id)
-            .on('load', this.options.onLoad )
-            .setView(L.latLng(this.options.lat,
-                this.options.lng),
-                this.options.zoom);
+            .on('load', this.options.onLoad );
         // add reference to parent object
         this.map.parent = this;
 
@@ -118,6 +115,10 @@ export class LeafletWidget {
             ).addTo(this.map);
 
         }
+
+        this.map.setView(L.latLng(this.options.lat,
+            this.options.lng),
+            this.options.zoom);
 
         if (this.add_location_control) {
 
