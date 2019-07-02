@@ -155,7 +155,7 @@ class MapAddress {
             layer_names: [settings.translation_table['Roads'], settings.translation_table['Satellite'], settings.translation_table['Hybrid']],
             clickable: true,
             draggable: true,
-            onChange: (lat, lng) => { this.onUpdateCoordinates(label, lat, lng); }
+            onChange: (lat, lng) => { this.onUpdateCoordinates(label, lat, lng); },
             onLoad: () => { console.log('on load'); this.refresh(label); }
         };
 
