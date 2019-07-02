@@ -441,7 +441,7 @@ export class Location {
 Location.default = {
     id: null,
     name: '',
-    type: 'b',
+    type: 'w',
     number: '',
     street: '',
     unit: '',
