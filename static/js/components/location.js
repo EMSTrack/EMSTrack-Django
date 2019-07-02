@@ -155,11 +155,11 @@ class MapAddress {
             layer_names: [settings.translation_table['Roads'], settings.translation_table['Satellite'], settings.translation_table['Hybrid']],
             clickable: true,
             draggable: true,
-            onChange: (lat, lng) => { this.onUpdateCoordinates(label, lat, lng); },
-            onLoad: () => { console.log('on load'); this.refresh(label); }
+            onChange: (lat, lng) => { this.onUpdateCoordinates(label, lat, lng); }
         };
 
         this.map = new LeafletSimplePointWidget(options);
+        this.refresh(label);
 
         // bind on change
         const self = this;
@@ -276,11 +276,11 @@ class ChoiceAddress {
             map_provider: mapProvider,
             layer_names: [settings.translation_table['Roads'], settings.translation_table['Satellite'], settings.translation_table['Hybrid']],
             clickable: false,
-            draggable: false,
-            onLoad: () => { console.log('on load'); this.refresh(label); }
+            draggable: false
         };
 
         this.map = new LeafletSimplePointWidget(options);
+        this.refresh(label);
 
     }
 
