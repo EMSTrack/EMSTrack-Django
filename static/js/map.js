@@ -2,6 +2,8 @@ import L from "leaflet";
 import "leaflet-rotatedmarker";
 import "leaflet/dist/leaflet.css";
 
+import { Settings } from "./settings";
+
 import { LeafletWidget } from "./leaflet/LeafletWidget";
 
 import { GeocoderFactory } from "./geocoder";
@@ -15,8 +17,6 @@ import { alert } from './alert';
 import { Patients } from './components/patients';
 
 import { Waypoints } from './components/waypoints';
-
-import { Settings } from "./settings";
 
 import { Dialog } from "./components/dialog";
 
