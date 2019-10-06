@@ -659,7 +659,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
         #self.assertEqual(obj[2].status, ClientStatus.D.name)
-        self.assertEqual(obj[3].status, ClientStatus.F.name)
+        self.assertEqual(obj[2].status, ClientStatus.F.name)
 
         # wait for disconnect
         test_client.wait()
