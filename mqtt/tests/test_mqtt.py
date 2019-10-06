@@ -649,6 +649,9 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         # process messages
         self.loop(test_client, subscribe_client)
 
+        # process messages again
+        self.loop(test_client, subscribe_client)
+
         # check record
         clnt = Client.objects.get(client_id=client_id)
         self.assertEqual(clnt.status, ClientStatus.F.name)
