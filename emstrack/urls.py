@@ -105,6 +105,9 @@ urlpatterns += i18n_patterns(*[
     # equipment
     url(r'^equipment/', include('equipment.urls')),
 
+    # report
+    url(r'^report/', include('report.urls')),
+
     # admin
     url(r'^admin/', admin.site.urls),
 
