@@ -1,5 +1,6 @@
 django
 django-braces
+environs
 psycopg2-binary
 djangorestframework
 markdown

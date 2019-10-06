@@ -96,7 +96,7 @@ ENV/
 *~
 
 # Migrations and static
-emstrack/settings.py
+# emstrack/settings.py
 ambulance/migrations
 hospital/migrations
 login/migrations
