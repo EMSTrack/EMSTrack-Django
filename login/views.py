@@ -329,8 +329,28 @@ class ClientDetailView(DetailView):
         # call super to retrieve object
         context = super().get_context_data(**kwargs)
 
+        # query
+        clientlog_query = self.object.clientlog_set.all().order_by('-updated_on')
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
+
+        # paginate
+        paginator = Paginator(clientlog_query, page_size)
+        try:
+            clientlog = paginator.page(page)
+        except PageNotAnInteger:
+            clientlog = paginator.page(1)
+        except EmptyPage:
+            clientlog = paginator.page(paginator.num_pages)
+
         # retrieve log
-        context['clientlog_list'] = self.object.clientlog_set.all().order_by('-updated_on')
+        context['clientlog_list'] = clientlog
+        context['page_links'] = get_page_links(self.request, clientlog)
+        context['page_size_links'] = get_page_size_links(self.request, clientlog, page_sizes)
+        context['page_size'] = int(page_size)
 
         return context
 
