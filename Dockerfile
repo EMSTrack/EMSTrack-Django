@@ -101,12 +101,16 @@ RUN npm install
 # link migration directories into persistent volume
 RUN mkdir -p /etc/emstrack/migrations
 RUN mkdir -p /etc/emstrack/migrations/ambulance
+RUN mkdir ambulance
 RUN ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations
 RUN mkdir -p /etc/emstrack/migrations/login
+RUN mkdir login
 RUN ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations
 RUN mkdir -p /etc/emstrack/migrations/hospital
+RUN mkdir hospital
 RUN ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations
 RUN mkdir -p /etc/emstrack/migrations/equipment
+RUN mkdir equipment
 RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 
 # Clone application
