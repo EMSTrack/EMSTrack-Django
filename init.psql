@@ -1,0 +1,12 @@
+DROP DATABASE [database];
+DROP USER [username];
+
+ALTER USER postgres WITH PASSWORD '[password]';
+CREATE USER [username] WITH PASSWORD '[password]';
+-- CREATE EXTENSION adminpack;
+CREATE DATABASE [database];
+GRANT ALL PRIVILEGES ON DATABASE [database] TO [username];
+ALTER USER [username] CREATEDB;
+ALTER USER [username] Superuser;
+\connect [database];
+CREATE EXTENSION postgis;

@@ -1,0 +1,102 @@
+#!/bin/bash
+
+INIT_FILE=/etc/emstrack/emstrack.initialized
+if [ -f $INIT_FILE ]; then
+    echo "> Container is already initialized"
+
+    echo "> Creating webpackage bundles"
+    ./node_modules/.bin/webpack --config webpack-map-config.js
+    ./node_modules/.bin/webpack --config webpack-ambulance-config.js
+    ./node_modules/.bin/webpack --config webpack-point-widget-config.js
+    ./node_modules/.bin/webpack --config webpack-call-config.js
+    ./node_modules/.bin/webpack --config webpack-base-config.js
+
+    echo "> Recovering static files"
+    python manage.py collectstatic --no-input
+    python manage.py compilemessages
+
+    # exit
+    exit 1
+fi
+
+echo "> Initializing container..."
+
+# Wait for postgres
+timer="5"
+until pg_isready -d postgres://postgres:$DB_PASSWORD@db; do
+  >&2 echo "Postgres is unavailable - sleeping for $timer seconds"
+  sleep $timer
+done
+
+# Setup Postgres
+sed -i'' \
+    -e 's/\[username\]/'"$DB_USERNAME"'/g' \
+    -e 's/\[password\]/'"$DB_PASSWORD"'/g' \
+    -e 's/\[database\]/'"$DB_DATABASE"'/g' \
+    init.psql
+psql -f init.psql -d postgres://postgres:$DB_PASSWORD@$DB_HOST
+
+# Setup Django
+python manage.py makemigrations ambulance login hospital equipment
+python manage.py migrate
+
+# Has backup?
+if [ -e "/etc/emstrack/fixtures/backup.json" ] ;
+then
+    echo "Fixtures found"
+    python manage.py loaddata /etc/emstrack/fixtures/backup.json
+else
+    echo "Fixtures not found, bootstraping"
+    python manage.py bootstrap
+fi
+python manage.py mqttpwfile
+cp pwfile /etc/mosquitto/passwd
+cp pwfile /etc/mosquitto/test/passwd
+./node_modules/.bin/webpack --config webpack-map-config.js
+./node_modules/.bin/webpack --config webpack-ambulance-config.js
+./node_modules/.bin/webpack --config webpack-point-widget-config.js
+./node_modules/.bin/webpack --config webpack-call-config.js
+./node_modules/.bin/webpack --config webpack-base-config.js
+python manage.py collectstatic --no-input
+python manage.py compilemessages
+
+# Mark as initialized
+DATE=$(date +%Y-%m-%d)
+cat << EOF > /etc/emstrack/emstrack.initialized
+# Container initialized on $DATE
+PORT=$PORT
+SSL_PORT=$SSL_PORT
+HOSTNAME=$HOSTNAME
+
+DB_USERNAME=$DB_USERNAME
+DB_PASSWORD=$DB_PASSWORD
+DB_DATABASE=$DB_DATABASE
+DB_HOST=$DB_HOST
+
+DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+DJANGO_HOSTNAMES=$DJANGO_HOSTNAMES
+DJANGO_DEBUG=$DJANGO_DEBUG
+
+MQTT_USERNAME=$MQTT_USERNAME
+MQTT_PASSWORD=$MQTT_PASSWORD
+MQTT_EMAIL=$MQTT_EMAIL
+MQTT_CLIENTID=$MQTT_CLIENTID
+
+MQTT_BROKER_HTTP_IP=$MQTT_BROKER_HTTP_IP
+MQTT_BROKER_HTTP_PORT=$MQTT_BROKER_HTTP_PORT
+MQTT_BROKER_HTTP_WITH_TLS=$MQTT_BROKER_HTTP_WITH_TLS
+MQTT_BROKER_HTTP_HOSTNAME=$MQTT_BROKER_HTTP_HOSTNAME
+
+MQTT_BROKER_HOST=$MQTT_BROKER_HOST
+MQTT_BROKER_PORT=$MQTT_BROKER_PORT
+MQTT_BROKER_SSL_HOST=$MQTT_BROKER_SSL_HOST
+MQTT_BROKER_SSL_PORT=$MQTT_BROKER_SSL_PORT
+MQTT_BROKER_WEBSOCKETS_HOST=$MQTT_BROKER_WEBSOCKETS_HOST
+MQTT_BROKER_WEBSOCKETS_PORT=$MQTT_BROKER_WEBSOCKETS_PORT
+MQTT_BROKER_TEST_HOST=$MQTT_BROKER_TEST_HOST
+
+MAP_PROVIDER=$MAP_PROVIDER
+MAP_PROVIDER_TOKEN=$MAP_PROVIDER_TOKEN
+EOF
+
+exit 0
