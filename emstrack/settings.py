@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import os
+import os, sys
 
 from django.contrib.messages import constants as messages
 from socket import gethostname, gethostbyname
@@ -189,7 +189,8 @@ MQTT = {
     'BROKER_SSL_HOST': env.str('MQTT_BROKER_SSL_HOST'),
     'BROKER_SSL_PORT': env.str('MQTT_BROKER_SSL_PORT'),
     'BROKER_WEBSOCKETS_HOST': env.str('MQTT_BROKER_WEBSOCKETS_HOST'),
-    'BROKER_WEBSOCKETS_PORT': env.str('MQTT_BROKER_WEBSOCKETS_PORT')
+    'BROKER_WEBSOCKETS_PORT': env.str('MQTT_BROKER_WEBSOCKETS_PORT'),
+    'BROKER_TEST_HOST': env.str('MQTT_BROKER_TEST_HOST'),
 }
 
 # REST Framework
@@ -259,3 +260,7 @@ LOGGING = {
     #     },
     # },
 }
+
+# Testing
+# https://stackoverflow.com/questions/6957016/detect-django-testing-mode
+TESTING = sys.argv[1:2] == ['test']

@@ -196,7 +196,7 @@ class SingletonPublishClient(PublishClient):
         from django.conf import settings
 
         broker = {
-            'HOST': 'localhost',
+            'HOST': 'localhost' if not settings.TESTING else settings.MQTT['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True

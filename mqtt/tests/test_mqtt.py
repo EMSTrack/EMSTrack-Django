@@ -23,7 +23,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
     def test(self):
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -92,7 +92,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # Start client as testuser1
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -146,7 +146,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # Start client as testuser2
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -222,7 +222,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -440,7 +440,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
 
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -494,7 +494,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
     def test(self):
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -575,7 +575,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
     def test(self):
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.TESTING['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
