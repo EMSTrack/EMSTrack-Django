@@ -69,10 +69,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
-        # use a fixed port
-        cls.port = 8001
-        super(MQTTTestCase, cls).setUpClass()
-
         try:
 
             # can get user?
@@ -88,7 +84,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
                 is_superuser=True)
         
         # call super to create server
-        super().setUpClass()
+        # super().setUpClass()
+        cls.port = 8001
+        super(MQTTTestCase, cls).setUpClass()
 
         # determine server and port
         protocol, host, port = cls.live_server_url.split(':')
@@ -96,83 +94,83 @@ class MQTTTestCase(StaticLiveServerTestCase):
         
         print('\n>> Starting django server at {}'.format(cls.live_server_url))
         
-        print('>> Stoping mosquitto')
-        
-        # stop mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "stop"])
-
-        # print('>> Stoping mqttclient')
-        
-        # # stop mqttclient
-        # retval = subprocess.run(["supervisorctl",
-        #                          "stop",
-        #                          "mqttclient"])
-        
-        # # Wait for shutdown
-        # cls.run_until_fail(["service",
-        #                     "mosquitto",
-        #                     "status"])
-
-        time.sleep(2)
-        
-        try:
-
-            # saving persistence file
-            os.rename("/var/lib/mosquitto/mosquitto.db",
-                      "/var/lib/mosquitto/mosquitto.db.bak")
-
-        except:
-            print("* * * CAN'T BACKUP MOSQUITTO PERSISTENCE FILE * * *")
-
-        # Does configuration exist?
-        config = Path("/etc/mosquitto/conf.d/default.conf")
-        if not config.is_file():
-
-            # Can't find configuration, can we recover from backup?
-            try:
-
-                # move current configuration file
-                os.rename("/etc/mosquitto/conf.d/default.conf.bak",
-                          "/etc/mosquitto/conf.d/default.conf")
-
-                print('* * * MOSQUITTO/DEFAULT.CONF RECOVERED * * *')
-                
-            except:
-                raise Exception("Can't find /etc/mosquitto/conf.d/default.conf.")
-        
-        # create test configuration file
-        with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
-            
-            # change default host and port
-            cat = subprocess.Popen(["cat",
-                                    "/etc/mosquitto/conf.d/default.conf"],
-                                   stdout= subprocess.PIPE)
-            sed = subprocess.run(["sed",
-                                  "s/8000/{}/".format(port)],
-                                 stdin=cat.stdout,
-                                 stdout=outfile)
-            cat.wait()
-
-        # move current configuration file
-        os.rename("/etc/mosquitto/conf.d/default.conf",
-                  "/etc/mosquitto/conf.d/default.conf.bak")
-
-        print('>> Start mosquitto with test settings')
-
-        # start mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "start"])
-
-        # Wait for start
-        cls.run_until_success(["service",
-                               "mosquitto",
-                               "status"])
-
-
-        time.sleep(2)
+        # print('>> Stoping mosquitto')
+        #
+        # # stop mosquito server
+        # retval = subprocess.run(["service",
+        #                          "mosquitto",
+        #                          "stop"])
+        #
+        # # print('>> Stoping mqttclient')
+        #
+        # # # stop mqttclient
+        # # retval = subprocess.run(["supervisorctl",
+        # #                          "stop",
+        # #                          "mqttclient"])
+        #
+        # # # Wait for shutdown
+        # # cls.run_until_fail(["service",
+        # #                     "mosquitto",
+        # #                     "status"])
+        #
+        # time.sleep(2)
+        #
+        # try:
+        #
+        #     # saving persistence file
+        #     os.rename("/var/lib/mosquitto/mosquitto.db",
+        #               "/var/lib/mosquitto/mosquitto.db.bak")
+        #
+        # except:
+        #     print("* * * CAN'T BACKUP MOSQUITTO PERSISTENCE FILE * * *")
+        #
+        # # Does configuration exist?
+        # config = Path("/etc/mosquitto/conf.d/default.conf")
+        # if not config.is_file():
+        #
+        #     # Can't find configuration, can we recover from backup?
+        #     try:
+        #
+        #         # move current configuration file
+        #         os.rename("/etc/mosquitto/conf.d/default.conf.bak",
+        #                   "/etc/mosquitto/conf.d/default.conf")
+        #
+        #         print('* * * MOSQUITTO/DEFAULT.CONF RECOVERED * * *')
+        #
+        #     except:
+        #         raise Exception("Can't find /etc/mosquitto/conf.d/default.conf.")
+        #
+        # # create test configuration file
+        # with open('/etc/mosquitto/conf.d/test.conf', "w") as outfile:
+        #
+        #     # change default host and port
+        #     cat = subprocess.Popen(["cat",
+        #                             "/etc/mosquitto/conf.d/default.conf"],
+        #                            stdout= subprocess.PIPE)
+        #     sed = subprocess.run(["sed",
+        #                           "s/8000/{}/".format(port)],
+        #                          stdin=cat.stdout,
+        #                          stdout=outfile)
+        #     cat.wait()
+        #
+        # # move current configuration file
+        # os.rename("/etc/mosquitto/conf.d/default.conf",
+        #           "/etc/mosquitto/conf.d/default.conf.bak")
+        #
+        # print('>> Start mosquitto with test settings')
+        #
+        # # start mosquito server
+        # retval = subprocess.run(["service",
+        #                          "mosquitto",
+        #                          "start"])
+        #
+        # # Wait for start
+        # cls.run_until_success(["service",
+        #                        "mosquitto",
+        #                        "status"])
+        #
+        #
+        # time.sleep(2)
         
         cls.setUpTestData()
 
@@ -182,56 +180,56 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # call super to shutdown server
         super().tearDownClass()
         
-        print('>> Stopping mosquitto with test settings')
-        
-        # stop mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "stop"])
-        
-        # # Wait for shutdown
-        # cls.run_until_fail(["service",
-        #                      "mosquitto",
-        #                      "status"])
-        
-        time.sleep(2)
-        
-        # remove test configuration file
-        os.rename("/etc/mosquitto/conf.d/test.conf",
-                  "/etc/mosquitto/conf.d/test.conf.bak")
-        
-        # restore current configuration file
-        os.rename("/etc/mosquitto/conf.d/default.conf.bak",
-                  "/etc/mosquitto/conf.d/default.conf")
-
-        try:
-            
-            # restore persistence file
-            os.rename("/var/lib/mosquitto/mosquitto.db.bak",
-                      "/var/lib/mosquitto/mosquitto.db")
-        except:
-            print("* * * CAN'T RECOVER MOSQUITTO PERSISTENCE FILE * * *")
-            
-        print('>> Starting mosquitto')
-        
-        # start mosquito server
-        retval = subprocess.run(["service",
-                                 "mosquitto",
-                                 "start"])
-        
-        # Wait for start
-        cls.run_until_success(["service",
-                               "mosquitto",
-                               "status"])
-        
-        # print('>> Starting mqttclient')
-        
-        # # start mqttclient
-        # retval = subprocess.run(["supervisorctl",
-        #                          "start",
-        #                          "mqttclient"])
-
-        time.sleep(2)
+        # print('>> Stopping mosquitto with test settings')
+        #
+        # # stop mosquito server
+        # retval = subprocess.run(["service",
+        #                          "mosquitto",
+        #                          "stop"])
+        #
+        # # # Wait for shutdown
+        # # cls.run_until_fail(["service",
+        # #                      "mosquitto",
+        # #                      "status"])
+        #
+        # time.sleep(2)
+        #
+        # # remove test configuration file
+        # os.rename("/etc/mosquitto/conf.d/test.conf",
+        #           "/etc/mosquitto/conf.d/test.conf.bak")
+        #
+        # # restore current configuration file
+        # os.rename("/etc/mosquitto/conf.d/default.conf.bak",
+        #           "/etc/mosquitto/conf.d/default.conf")
+        #
+        # try:
+        #
+        #     # restore persistence file
+        #     os.rename("/var/lib/mosquitto/mosquitto.db.bak",
+        #               "/var/lib/mosquitto/mosquitto.db")
+        # except:
+        #     print("* * * CAN'T RECOVER MOSQUITTO PERSISTENCE FILE * * *")
+        #
+        # print('>> Starting mosquitto')
+        #
+        # # start mosquito server
+        # retval = subprocess.run(["service",
+        #                          "mosquitto",
+        #                          "start"])
+        #
+        # # Wait for start
+        # cls.run_until_success(["service",
+        #                        "mosquitto",
+        #                        "status"])
+        #
+        # # print('>> Starting mqttclient')
+        #
+        # # # start mqttclient
+        # # retval = subprocess.run(["supervisorctl",
+        # #                          "start",
+        # #                          "mqttclient"])
+        #
+        # time.sleep(2)
         
         # from django.db import connections
 
