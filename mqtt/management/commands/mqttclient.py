@@ -14,7 +14,7 @@ class Command(BaseCommand):
         broker = {
             'USERNAME': '',
             'PASSWORD': '',
-            'HOST': 'localhost',
+            'HOST': settings.MQTT['BROKER_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLIENT_ID': 'django',
