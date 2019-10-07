@@ -12,7 +12,7 @@ RUN apt-get install -y apt-utils git
 RUN apt-get install -y python3-pip python3-dev 
 
 # Install postgres and postgis
-RUN apt-get install -y postgresql-client-11
+RUN apt-get install -y postgresql-client
 RUN apt-get install -y gdal-bin libgdal-dev python3-gdal
 
 # Install opensll
