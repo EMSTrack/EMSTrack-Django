@@ -69,12 +69,12 @@ RUN mkdir -p /etc/mosquitto
 RUN chown -R worker:worker /etc/mosquitto
 
 # Setup mqttclient
-COPY supervisor/mqttclient.conf /etc/supervisor/conf.d/mqttclient.conf
+COPY init/supervisor /etc/supervisor/conf.d/mqttclient.conf
 
 # switch to unprivileged worker
 USER worker
 WORKDIR /home/worker
-RUN mkdir app
+RUN mkdir -p app/deploy
 RUN mkdir src
 RUN chown -R worker:worker /home/worker
 
