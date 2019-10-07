@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 
 from django.contrib.messages import constants as messages
+from socket import gethostname, gethostbyname
 
 from environs import Env
 env = Env()
@@ -40,7 +41,7 @@ SWAGGER_SETTINGS = {
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG', default=False)
-ALLOWED_HOSTS = env.list('DJANGO_HOSTNAMES')
+ALLOWED_HOSTS = env.list('DJANGO_HOSTNAMES') + [gethostbyname(gethostname())]
 
 # Application definition
 
