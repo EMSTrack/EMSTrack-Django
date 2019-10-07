@@ -33,8 +33,8 @@ sed -i'' \
     -e 's/\[username\]/'"$DB_USERNAME"'/g' \
     -e 's/\[password\]/'"$DB_PASSWORD"'/g' \
     -e 's/\[database\]/'"$DB_DATABASE"'/g' \
-    init.psql
-psql -f init.psql -d postgres://postgres:$DB_PASSWORD@$DB_HOST
+    init/init.psql
+psql -f init/init.psql -d postgres://postgres:$DB_PASSWORD@$DB_HOST
 
 # Setup Django
 python manage.py makemigrations ambulance login hospital equipment
