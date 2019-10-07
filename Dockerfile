@@ -99,13 +99,17 @@ ENV APP_HOME=$BUILD_APP_HOME
 
 # link migration directories into persistent volume
 RUN mkdir -p /etc/emstrack/migrations
-RUN mkdir /etc/emstrack/migrations/ambulance
+RUN mkdir -p /etc/emstrack/migrations/ambulance
+RUN mkdir -p $APP_HOME/ambulance/migrations
 RUN ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations
-RUN mkdir /etc/emstrack/migrations/login
+RUN mkdir -p /etc/emstrack/migrations/login
+RUN mkdir -p $APP_HOME/login/migrations
 RUN ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations
-RUN mkdir /etc/emstrack/migrations/hospital
+RUN mkdir -p /etc/emstrack/migrations/hospital
+RUN mkdir -p $APP_HOME/hospital/migrations
 RUN ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations
-RUN mkdir /etc/emstrack/migrations/equipment
+RUN mkdir -p /etc/emstrack/migrations/equipment
+RUN mkdir -p $APP_HOME/equipment/migrations
 RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 
 # Clone application
