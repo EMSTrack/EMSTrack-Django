@@ -69,6 +69,10 @@ class MQTTTestCase(StaticLiveServerTestCase):
     @classmethod
     def setUpClass(cls):
 
+        # use a fixed port
+        cls.port = 8001
+        super(MQTTTestCase, cls).setUpClass()
+
         try:
 
             # can get user?
