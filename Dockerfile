@@ -91,8 +91,11 @@ RUN pip install --user -r requirements.txt
 COPY --chown=worker:worker package.json package.json
 
 # NPM packages
-RUN echo "1"
 RUN npm install
+
+# APP_HOME environment variable
+ARG BUILD_APP_HOME=/home/worker/app
+ENV APP_HOME=$BUILD_APP_HOME
 
 # link migration directories into persistent volume
 RUN mkdir -p /etc/emstrack/migrations
@@ -106,12 +109,8 @@ RUN mkdir /etc/emstrack/migrations/equipment
 RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 
 # Clone application
-ARG BUILD_APP_HOME=/home/worker/app
-ENV APP_HOME=$BUILD_APP_HOME
-
 WORKDIR /home/worker/app
 COPY --chown=worker:worker . .
-
 # Init scripts
 COPY --chown=worker:worker scripts/. /home/worker/.local/bin/.
 RUN chmod +x /home/worker/.local/bin/*
