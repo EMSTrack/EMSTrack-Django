@@ -64,6 +64,10 @@ RUN mkdir -p /etc/emstrack/migrations
 RUN mkdir -p /etc/emstrack/log/mqttclient
 RUN chown -R worker:worker /etc/emstrack
 
+# /etc/mosquitto
+RUN mkdir -p /etc/mosquitto
+RUN chown -R worker:worker /etc/mosquitto
+
 # Setup mqttclient
 COPY supervisor/mqttclient.conf /etc/supervisor/conf.d/mqttclient.conf
 
