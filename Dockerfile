@@ -87,6 +87,12 @@ RUN pip install --user uwsgi
 COPY --chown=worker:worker requirements.txt requirements.txt
 RUN pip install --user -r requirements.txt
 
+# install javascript
+COPY --chown=worker:worker package.json package.json
+
+# NPM packages
+RUN npm install
+
 # Clone application
 ARG BUILD_APP_HOME=/home/worker/app
 ENV APP_HOME=$BUILD_APP_HOME
@@ -104,9 +110,6 @@ RUN mkdir /etc/emstrack/migrations/hospital
 RUN ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations
 RUN mkdir /etc/emstrack/migrations/equipment
 RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
-
-# NPM packages
-RUN npm install
 
 # Init scripts
 
