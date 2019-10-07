@@ -83,15 +83,16 @@ ENV PATH="/home/worker/.local/bin:${PATH}"
 # Install uwsgi
 RUN pip install --user uwsgi
 
+# install requirements
+COPY --chown=worker:worker requirements.txt requirements.txt
+RUN pip install --user -r requirements.txt
+
 # Clone application
 ARG BUILD_APP_HOME=/home/worker/app
 ENV APP_HOME=$BUILD_APP_HOME
 
 WORKDIR /home/worker/app
 COPY --chown=worker:worker . .
-
-# install requirements
-RUN pip install --user -r requirements.txt
 
 # link migration directories into persistent volume
 RUN mkdir -p /etc/emstrack/migrations
