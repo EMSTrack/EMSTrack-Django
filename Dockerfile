@@ -74,7 +74,7 @@ COPY init/supervisor /etc/supervisor/conf.d/mqttclient.conf
 # switch to unprivileged worker
 USER worker
 WORKDIR /home/worker
-RUN mkdir -p app/deploy
+RUN mkdir -p app/deploy/static
 RUN mkdir src
 RUN chown -R worker:worker /home/worker
 
