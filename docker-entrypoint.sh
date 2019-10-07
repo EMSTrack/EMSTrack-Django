@@ -50,8 +50,9 @@ if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]
     done
 
     echo "> Starting uWSGI"
-    touch /home/worker/app/reload
-    nohup bash -c "uwsgi --touch-reload=/home/worker/app/reload --http :8000 --module emstrack.wsgi > uwsgi.log 2>&1 &"
+    #touch /home/worker/app/reload
+    #nohup bash -c "uwsgi --touch-reload=/home/worker/app/reload --http :8000 --module emstrack.wsgi > uwsgi.log 2>&1 &"
+    nohup bash -c "python manage.py runserver 0.0.0.0:8000 > uwsgi.log 2>&1 &"
 
     echo "> Basic services up"
 
@@ -60,7 +61,7 @@ if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]
 	echo "> Starting all services"
 	
 	echo "> Starting mqttclient"
-	service supervisor start
+	# service supervisor start
 
 	echo "> All services up"
 
