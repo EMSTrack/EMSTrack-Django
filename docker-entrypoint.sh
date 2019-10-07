@@ -8,16 +8,13 @@ cleanup() {
     echo "Container stopped, cleaning up..."
 
     # stop supervisor
-    service supervisor stop
-
-    # stop postgres
-    service postgresql stop
+    # service supervisor stop
 
     echo "Exiting..."
 
     if [ $pid -ne 0 ]; then
-	kill -SIGTERM "$pid"
-	wait "$pid"
+        kill -SIGTERM "$pid"
+      	wait "$pid"
     fi
     exit 143; # 128 + 15 -- SIGTERM
 
@@ -44,9 +41,9 @@ if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]
 
     echo "> Waiting for postgres"
     timer="5"
-    until pg_isready -U postgres -h db --quiet; do
-	>&2 echo "Postgres is unavailable - sleeping for $timer seconds"
-	sleep $timer
+    until pg_isready -U postgres -h $DB_HOST --quiet; do
+        >&2 echo "Postgres is unavailable - sleeping for $timer seconds"
+        sleep $timer
     done
 
     echo "> Starting uWSGI"
@@ -58,12 +55,12 @@ if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]
 
     if [ "$COMMAND" = 'all' ]; then
 
-	echo "> Starting all services"
-	
-	echo "> Starting mqttclient"
-	# service supervisor start
+        echo "> Starting all services"
 
-	echo "> All services up"
+        echo "> Starting mqttclient"
+	      # service supervisor start
+
+	      echo "> All services up"
 
     fi
 
@@ -72,7 +69,7 @@ if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]
     # Wait forever
     while true
     do
-	tail -f /dev/null & wait ${!}
+        tail -f /dev/null & wait ${!}
     done
     
     # Call cleanup

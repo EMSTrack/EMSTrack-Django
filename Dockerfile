@@ -78,7 +78,7 @@ RUN mkdir app
 RUN mkdir src
 RUN chown -R worker:worker /home/worker
 
-ENV PATH="/home/worker/.local/bin:${PATH}"
+ENV PATH="/home/worker/.local/bin:/home/worker/app/node_modules/.bin:${PATH}"
 
 # Install uwsgi
 RUN pip install --user uwsgi

@@ -5,11 +5,11 @@ if [ -f $INIT_FILE ]; then
     echo "> Container is already initialized"
 
     echo "> Creating webpackage bundles"
-    ./node_modules/.bin/webpack --config webpack-map-config.js
-    ./node_modules/.bin/webpack --config webpack-ambulance-config.js
-    ./node_modules/.bin/webpack --config webpack-point-widget-config.js
-    ./node_modules/.bin/webpack --config webpack-call-config.js
-    ./node_modules/.bin/webpack --config webpack-base-config.js
+    webpack --config webpack-map-config.js
+    webpack --config webpack-ambulance-config.js
+    webpack --config webpack-point-widget-config.js
+    webpack --config webpack-call-config.js
+    webpack --config webpack-base-config.js
 
     echo "> Recovering static files"
     python manage.py collectstatic --no-input
@@ -23,9 +23,9 @@ echo "> Initializing container..."
 
 # Wait for postgres
 timer="5"
-until pg_isready -d postgres://postgres:$DB_PASSWORD@db; do
-  >&2 echo "Postgres is unavailable - sleeping for $timer seconds"
-  sleep $timer
+until pg_isready -d postgres://postgres:$DB_PASSWORD@$DB_HOST; do
+    >&2 echo "Postgres is unavailable - sleeping for $timer seconds"
+    sleep $timer
 done
 
 # Setup Postgres
@@ -52,11 +52,11 @@ fi
 python manage.py mqttpwfile
 cp pwfile /etc/mosquitto/passwd
 cp pwfile /etc/mosquitto/test/passwd
-./node_modules/.bin/webpack --config webpack-map-config.js
-./node_modules/.bin/webpack --config webpack-ambulance-config.js
-./node_modules/.bin/webpack --config webpack-point-widget-config.js
-./node_modules/.bin/webpack --config webpack-call-config.js
-./node_modules/.bin/webpack --config webpack-base-config.js
+webpack --config webpack-map-config.js
+webpack --config webpack-ambulance-config.js
+webpack --config webpack-point-widget-config.js
+webpack --config webpack-call-config.js
+webpack --config webpack-base-config.js
 python manage.py collectstatic --no-input
 python manage.py compilemessages
 
