@@ -83,6 +83,11 @@ ENV PATH="/home/worker/.local/bin:${PATH}"
 # Install uwsgi
 RUN pip install --user uwsgi
 
+# app home
+ARG BUILD_APP_HOME=/home/worker/app
+ENV APP_HOME=$BUILD_APP_HOME
+WORKDIR $APP_HOME
+
 # install requirements
 COPY --chown=worker:worker requirements.txt requirements.txt
 RUN pip install --user -r requirements.txt
@@ -93,28 +98,20 @@ COPY --chown=worker:worker package.json package.json
 # NPM packages
 RUN npm install
 
-# APP_HOME environment variable
-ARG BUILD_APP_HOME=/home/worker/app
-ENV APP_HOME=$BUILD_APP_HOME
-
 # link migration directories into persistent volume
 RUN mkdir -p /etc/emstrack/migrations
 RUN mkdir -p /etc/emstrack/migrations/ambulance
-RUN mkdir -p $APP_HOME/ambulance/migrations
 RUN ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations
 RUN mkdir -p /etc/emstrack/migrations/login
-RUN mkdir -p $APP_HOME/login/migrations
 RUN ln -s /etc/emstrack/migrations/login     $APP_HOME/login/migrations
 RUN mkdir -p /etc/emstrack/migrations/hospital
-RUN mkdir -p $APP_HOME/hospital/migrations
 RUN ln -s /etc/emstrack/migrations/hospital  $APP_HOME/hospital/migrations
 RUN mkdir -p /etc/emstrack/migrations/equipment
-RUN mkdir -p $APP_HOME/equipment/migrations
 RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 
 # Clone application
-WORKDIR /home/worker/app
 COPY --chown=worker:worker . .
+
 # Init scripts
 COPY --chown=worker:worker scripts/. /home/worker/.local/bin/.
 RUN chmod +x /home/worker/.local/bin/*
