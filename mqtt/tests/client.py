@@ -92,7 +92,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
         
-        print('\n>> Starting django server at {}'.format(cls.live_server_url))
+        logging.debug('\n>> Starting django server at {}'.format(cls.live_server_url))
         
         # print('>> Stoping mosquitto')
         #
