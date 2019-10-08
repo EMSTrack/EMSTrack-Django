@@ -22,7 +22,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.MQTT['BROKER_TEST_HOST'],
             'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
@@ -174,7 +174,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         # Start client as admin
         broker = {
-            'HOST': 'localhost',
+            'HOST': settings.MQTT['BROKER_TEST_HOST'],
             'PORT': 8884,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
