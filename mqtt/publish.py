@@ -237,11 +237,11 @@ class SingletonPublishClient(PublishClient):
         logger.info('<< Disconnecting from MQTT brocker')
 
         # disconnect
-        if self.is_connected():
-            super().disconnect()
+        self.loop_stop()
+        super().disconnect()
 
         # clear dict
-        self.__dict__ = {}
+        self._shared_state = {}
 
 # mqtt_cache_clear
 
