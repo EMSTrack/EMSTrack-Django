@@ -101,7 +101,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_mqtt_publish_non_admin'
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
 
