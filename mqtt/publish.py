@@ -231,6 +231,17 @@ class SingletonPublishClient(PublishClient):
             logger.info('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
             logger.info('>> Generated exception: {}'.format(e))
 
+    def disconnect(self):
+
+        # try to connect
+        logger.info('<< Disconnecting from MQTT brocker')
+
+        # disconnect
+        if self.is_connected():
+            super().disconnect()
+
+        # clear dict
+        self.__dict__ = {}
 
 # mqtt_cache_clear
 

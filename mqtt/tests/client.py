@@ -16,6 +16,7 @@ from equipment.models import EquipmentType, Equipment, EquipmentItem
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, \
     UserAmbulancePermission, UserHospitalPermission
 from mqtt.client import BaseClient
+from mqtt.publish import SingletonPublishClient
 from mqtt.subscribe import SubscribeClient
 
 logger = logging.getLogger(__name__)
@@ -176,6 +177,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
     @classmethod
     def tearDownClass(cls):
+
+        # disconnect singleton publish client
+        SingletonPublishClient().disconnect()
 
         # call super to shutdown server
         super().tearDownClass()
