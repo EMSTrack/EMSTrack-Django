@@ -156,8 +156,9 @@ class BaseClient:
                 # increment counter
                 self.number_of_unsuccessful_attempts += 1
 
-                # set up timer for retrying
-                threading.Timer(RETRY_TIMER_SECONDS, self.send_buffer).start()
+                if self.number_of_unsuccessful_attempts <= RETRY_MAX_ATTEMPTS:
+                    # set up timer for retrying
+                    threading.Timer(RETRY_TIMER_SECONDS, self.send_buffer).start()
 
                 # break from loop
                 break
