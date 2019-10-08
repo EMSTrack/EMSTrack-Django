@@ -105,6 +105,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
 
+        logger.debug(broker)
         client = MQTTTestClient(broker,
                                 check_payload=False,
                                 debug=False)
