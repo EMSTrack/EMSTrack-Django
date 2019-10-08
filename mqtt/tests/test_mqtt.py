@@ -108,7 +108,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         logger.debug(broker)
         client = MQTTTestClient(broker,
                                 check_payload=False,
-                                debug=False)
+                                debug=True)
         self.is_connected(client)
 
         # subscribe to ambulance/+/data
