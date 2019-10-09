@@ -63,6 +63,8 @@ RUN adduser worker sudo
 RUN mkdir -p /etc/emstrack/migrations
 RUN mkdir -p /etc/emstrack/log/mqttclient
 RUN mkdir -p /etc/emstrack/log/django
+RUN touch /etc/emstrack/log/django/debug.log
+RUN touch /etc/emstrack/log/django/emstrack.log
 RUN chown -R worker:worker /etc/emstrack
 
 # /etc/mosquitto
