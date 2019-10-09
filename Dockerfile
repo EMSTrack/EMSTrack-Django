@@ -59,6 +59,9 @@ RUN pip install --upgrade pip
 RUN useradd -ms /bin/bash worker
 RUN adduser worker sudo
 
+RUN mkdir -p /var/log/django
+RUN chown -R worker:worker /var/log/django
+
 # /etc/emstrack
 RUN mkdir -p /etc/emstrack/migrations
 RUN mkdir -p /etc/emstrack/log/mqttclient
