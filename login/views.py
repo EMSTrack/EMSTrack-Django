@@ -421,6 +421,15 @@ class MQTTLoginView(CsrfExemptMixin,
     def form_valid(self, form):
         return HttpResponse('OK')
 
+    def post(self, request, *args, **kwargs):
+        data = {}
+        if hasattr(request, 'POST'):
+            data = request.POST
+        elif hasattr(request, 'DATA'):
+            data = request.DATA
+        logger.info("MQTT login: username='{}'".format(data.get('username', 'unknown')))
+        super().post(request, *args, **kwargs)
+
 
 class MQTTSuperuserView(CsrfExemptMixin,
                         View):
@@ -436,8 +445,12 @@ class MQTTSuperuserView(CsrfExemptMixin,
             data = request.POST
         elif hasattr(request, 'DATA'):
             data = request.DATA
+
+        username = data.get('username')
+        logger.info("MQTT superuser: username='{}'".format(username))
+
         try:
-            user = User.objects.get(username=data.get('username'),
+            user = User.objects.get(username=username,
                                     is_active=True)
             if user.is_superuser or user.is_staff:
                 return HttpResponse('OK')
@@ -445,6 +458,7 @@ class MQTTSuperuserView(CsrfExemptMixin,
         except User.DoesNotExist:
             pass
 
+        logger.info("MQTT superuser: username='{}' is not super".format(username))
         return HttpResponseForbidden()
 
 
@@ -473,6 +487,8 @@ class MQTTAclView(CsrfExemptMixin,
         topic = data.get('topic').split('/')
         if len(topic) > 0 and topic[0] == '':
             del topic[0]
+
+        logger.info("MQTT acc: username='{}', acc='{}', topic='{}'".format(username, acc, topic))
 
         try:
 
@@ -686,6 +702,7 @@ class MQTTAclView(CsrfExemptMixin,
         except User.DoesNotExist:
             pass
 
+        logger.info("MQTT acc: FORBIDDEN: username='{}', acc='{}', topic='{}'".format(username, acc, topic))
         return HttpResponseForbidden()
 
 
