@@ -76,6 +76,9 @@ class PublishClient(BaseClient):
         # set as active
         self.active = True
 
+        # set retry
+        self.retry = False
+
     def on_disconnect(self, client, userdata, rc):
         # Exception is generated only if never connected
         if not self.connected and rc:
@@ -188,7 +191,7 @@ class SingletonPublishClient(PublishClient):
         self.__dict__ = self._shared_state
 
         # Do not initialize if already initialized
-        if not self.__dict__ == {}:
+        if not self.__dict__ == {} and not self.retry:
             # skip initialization
             return
 
@@ -224,11 +227,14 @@ class SingletonPublishClient(PublishClient):
             # register atexit handler to make sure it disconnects at exit
             atexit.register(self.disconnect)
 
+            logger.info(">> Succesfully connected to MQTT brocker '{}'".format(broker))
+
         except (MQTTException, OSError) as e:
 
             self.active = False
+            self.retry = True
 
-            logger.info('>> Failed to connect to MQTT brocker. Will not publish updates to MQTT...')
+            logger.info(">> Failed to connect to MQTT brocker '{}'. Will retry later...".format(broker))
             logger.info('>> Generated exception: {}'.format(e))
 
     def disconnect(self):
