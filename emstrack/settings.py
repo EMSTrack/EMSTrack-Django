@@ -246,16 +246,36 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'djangofile': {
+        'debug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
             'filename': '/etc/emstrack/log/django/debug.log',
         },
+        'emstrack': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/etc/emstrack/log/django/emstrack.log',
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['djangofile'],
-            'level': 'DEBUG',
+            'handlers': ['debug'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+        'ambulance': {
+            'handlers': ['emstrack'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+        'login': {
+            'handlers': ['emstrack'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
+        'mqtt': {
+            'handlers': ['emstrack'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
     },
