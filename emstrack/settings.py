@@ -246,15 +246,15 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
+        'djangofile': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/django/debug.log',
+            'filename': '/etc/emstrack/log/django/debug.log',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['djangofile'],
             'level': 'DEBUG',
             'propagate': True,
         },
