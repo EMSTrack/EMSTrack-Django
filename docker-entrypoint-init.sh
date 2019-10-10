@@ -51,7 +51,7 @@ else
 fi
 python manage.py mqttpwfile
 cp pwfile /etc/mosquitto/passwd
-cp pwfile /etc/mosquitto/test/passwd
+cp pwfile /etc/mosquitto-test/passwd
 webpack --config webpack-map-config.js
 webpack --config webpack-ambulance-config.js
 webpack --config webpack-point-widget-config.js
