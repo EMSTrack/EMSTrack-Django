@@ -71,6 +71,10 @@ RUN chown -R worker:worker /etc/emstrack
 RUN mkdir -p /etc/mosquitto
 RUN chown -R worker:worker /etc/mosquitto
 
+# /etc/mosquitto-test
+RUN mkdir -p /etc/mosquitto-test
+RUN chown -R worker:worker /etc/mosquitto-test
+
 # Setup mqttclient
 COPY init/supervisor /etc/supervisor/conf.d/mqttclient.conf
 
