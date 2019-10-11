@@ -60,6 +60,10 @@ webpack --config webpack-base-config.js
 python manage.py collectstatic --no-input
 python manage.py compilemessages
 
+# reload mqtt
+touch /etc/mosquitto/reload
+touch /etc/mosquitto-test/reload
+
 # Mark as initialized
 DATE=$(date +%Y-%m-%d)
 cat << EOF > /etc/emstrack/emstrack.initialized

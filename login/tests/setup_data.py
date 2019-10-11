@@ -18,6 +18,7 @@ class TestSetupData:
 
     @classmethod
     def setUpTestData(cls):
+
         # Add users
         cls.u1 = User.objects.create_user(
             username=settings.MQTT['USERNAME'],

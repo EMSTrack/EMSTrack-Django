@@ -26,6 +26,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
 
+        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "False"
+
         # call super
         super().__init__(*args, **kwargs)
 
@@ -174,6 +176,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # time.sleep(2)
         
         cls.setUpTestData()
+
+        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "True"
 
     @classmethod
     def tearDownClass(cls):
