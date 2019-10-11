@@ -1,4 +1,5 @@
 import logging
+import os
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -138,5 +139,5 @@ class PublishMixin:
         # save to Call
         super().save(*args, **kwargs)
 
-        if publish:
+        if publish and os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
             self.publish()
