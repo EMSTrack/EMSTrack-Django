@@ -1,15 +1,9 @@
 import logging
-from io import BytesIO
 
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.test import Client, RequestFactory
 from django.urls import reverse
 from django.utils.translation import activate
-from rest_framework.parsers import JSONParser
 
-from ambulance.models import Ambulance
-from ambulance.serializers import AmbulanceSerializer
 from login.tests.setup_data import TestSetup
 
 logger = logging.getLogger(__name__)

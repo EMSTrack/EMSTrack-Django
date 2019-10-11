@@ -23,9 +23,11 @@ logger = logging.getLogger(__name__)
 
 class MQTTTestCase(StaticLiveServerTestCase):
 
+    mqtt_status = True
+
     def __init__(self, *args, **kwargs):
 
-        self.mqtt_status = os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True")
+        MQTTTestCase.mqtt_status = os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True")
         os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "False"
         logger.info('Disabling MQTT before testing')
 
