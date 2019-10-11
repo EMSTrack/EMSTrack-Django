@@ -217,7 +217,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
 
-#class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
+class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
     def test_subscribe(self):
 
