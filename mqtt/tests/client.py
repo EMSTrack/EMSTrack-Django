@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import time
+import socket
 
 from django.conf import settings
 from django.contrib.auth.models import User, Group
@@ -92,15 +93,14 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # call super to create server
         # super().setUpClass()
         cls.port = 8001
-        cls.allowed_hosts = 'mqtt-test'
+        cls.host = socket.gethostbyname(socket.gethostname())
+        # cls.allowed_host = 'emstrack'
         super(MQTTTestCase, cls).setUpClass()
 
         # determine server and port
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
 
-        logging.info(cls._live_server_modified_settings)
-        
         logging.info('\n>> Starting django server at {}'.format(cls.live_server_url))
         
         # set up test data
