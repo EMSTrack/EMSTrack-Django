@@ -1,4 +1,3 @@
-import os
 from enum import Enum
 
 from django.contrib.gis.db import models
@@ -8,6 +7,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from emstrack.models import UpdatedByModel
 from emstrack.util import make_choices
+from environs import Env
+
+env = Env()
 
 
 @register.filter
@@ -135,7 +137,7 @@ class EquipmentItem(UpdatedByModel):
         # save to EquipmentItem
         super().save(*args, **kwargs)
 
-        if os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
+        if env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
 
             from mqtt.publish import SingletonPublishClient
 

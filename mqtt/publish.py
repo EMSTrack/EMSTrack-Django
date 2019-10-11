@@ -1,6 +1,5 @@
 import atexit
 import logging
-import os
 
 from ambulance.serializers import AmbulanceSerializer
 from ambulance.serializers import CallSerializer
@@ -11,6 +10,9 @@ from login.serializers import UserProfileSerializer
 from login.views import SettingsView
 from .client import BaseClient, MQTTException
 
+from environs import Env
+
+env = Env()
 logger = logging.getLogger(__name__)
 
 
@@ -193,6 +195,14 @@ class SingletonPublishClient(PublishClient):
         # Do not initialize if already initialized
         if not self.__dict__ == {} and not self.retry:
             # skip initialization
+            return
+
+        if not env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
+
+            self.active = False
+            self.retry = True
+
+            logger.info(">> No connection to MQTT brocker '{}'. Will retry later...".format(broker))
             return
 
         # initialization

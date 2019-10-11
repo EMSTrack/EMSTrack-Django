@@ -1,11 +1,13 @@
 import logging
-import os
 
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
 
+from environs import Env
+
+env = Env()
 logger = logging.getLogger(__name__)
 
 
@@ -139,5 +141,5 @@ class PublishMixin:
         # save to Call
         super().save(*args, **kwargs)
 
-        if publish and os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
+        if publish and env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
             self.publish()

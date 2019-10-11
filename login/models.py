@@ -1,5 +1,4 @@
 import logging
-import os
 from enum import Enum
 
 from django.contrib.auth.models import Group
@@ -16,6 +15,9 @@ from emstrack.util import make_choices
 from login.mixins import ClearPermissionCacheMixin
 from login.permissions import get_permissions
 
+from environs import Env
+
+env = Env()
 logger = logging.getLogger(__name__)
 
 
@@ -411,7 +413,7 @@ class Client(models.Model):
             # logger.debug(entry)
             ClientLog.objects.create(**entry)
 
-        if os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
+        if env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
 
             # publish to mqtt
             # logger.debug('publish_ambulance = {}'.format(publish_ambulance))
