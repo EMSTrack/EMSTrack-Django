@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
-    def test(self):
+    def test_publish(self):
         # Start client as admin
         broker = {
             'HOST': settings.MQTT['BROKER_TEST_HOST'],
@@ -217,9 +217,9 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         self.assertEqual(obj.value, 'False')
 
 
-class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
+#class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
-    def test(self):
+    def test_subscribe(self):
 
         # Start client as admin
         broker = {
