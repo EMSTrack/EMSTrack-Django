@@ -428,7 +428,7 @@ class MQTTLoginView(CsrfExemptMixin,
         elif hasattr(request, 'DATA'):
             data = request.DATA
         logger.info("MQTT login: username='{}'".format(data.get('username', 'unknown')))
-        super().post(request, *args, **kwargs)
+        return super().post(request, *args, **kwargs)
 
 
 class MQTTSuperuserView(CsrfExemptMixin,
