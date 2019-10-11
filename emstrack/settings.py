@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
-import os, sys
+import os
+import sys
 
 from django.contrib.messages import constants as messages
 from socket import gethostname, gethostbyname
