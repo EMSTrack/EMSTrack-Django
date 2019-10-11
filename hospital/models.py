@@ -1,3 +1,4 @@
+import os
 from django.contrib.gis.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
@@ -35,9 +36,11 @@ class Hospital(Location):
         # save to Hospital
         super().save(*args, **kwargs)
 
-        # publish to mqtt
-        from mqtt.publish import SingletonPublishClient
-        SingletonPublishClient().publish_hospital(self)
+        if os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
+
+            # publish to mqtt
+            from mqtt.publish import SingletonPublishClient
+            SingletonPublishClient().publish_hospital(self)
 
         # just created?
         if created:

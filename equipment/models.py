@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 from django.contrib.gis.db import models
@@ -133,11 +134,14 @@ class EquipmentItem(UpdatedByModel):
 
         # save to EquipmentItem
         super().save(*args, **kwargs)
-        from mqtt.publish import SingletonPublishClient
 
-        # publish to mqtt
-        client = SingletonPublishClient()
-        client.publish_equipment_item(self)
+        if os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
+
+            from mqtt.publish import SingletonPublishClient
+
+            # publish to mqtt
+            client = SingletonPublishClient()
+            client.publish_equipment_item(self)
 
     class Meta:
         unique_together = ('equipmentholder', 'equipment',)

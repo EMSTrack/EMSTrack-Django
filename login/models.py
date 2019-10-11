@@ -1,4 +1,5 @@
 import logging
+import os
 from enum import Enum
 
 from django.contrib.auth.models import Group
@@ -410,16 +411,18 @@ class Client(models.Model):
             # logger.debug(entry)
             ClientLog.objects.create(**entry)
 
-        # publish to mqtt
-        # logger.debug('publish_ambulance = {}'.format(publish_ambulance))
-        # logger.debug('publish_hospital = {}'.format(publish_hospital))
-        from mqtt.publish import SingletonPublishClient
+        if os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True"):
 
-        for ambulance in publish_ambulance:
-            SingletonPublishClient().publish_ambulance(ambulance)
+            # publish to mqtt
+            # logger.debug('publish_ambulance = {}'.format(publish_ambulance))
+            # logger.debug('publish_hospital = {}'.format(publish_hospital))
+            from mqtt.publish import SingletonPublishClient
 
-        for hospital in publish_hospital:
-            SingletonPublishClient().publish_hospital(hospital)
+            for ambulance in publish_ambulance:
+                SingletonPublishClient().publish_ambulance(ambulance)
+
+            for hospital in publish_hospital:
+                SingletonPublishClient().publish_hospital(hospital)
 
 
 # Client activity
