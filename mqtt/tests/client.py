@@ -98,8 +98,10 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # determine server and port
         protocol, host, port = cls.live_server_url.split(':')
         host = host[2:]
+
+        logging.info(cls._live_server_modified_settings)
         
-        logging.debug('\n>> Starting django server at {}'.format(cls.live_server_url))
+        logging.info('\n>> Starting django server at {}'.format(cls.live_server_url))
         
         # set up test data
         cls.setUpTestData()
