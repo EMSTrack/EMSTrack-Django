@@ -92,6 +92,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # call super to create server
         # super().setUpClass()
         cls.port = 8001
+        cls.allowed_hosts = 'mqtt-test'
         super(MQTTTestCase, cls).setUpClass()
 
         # determine server and port
