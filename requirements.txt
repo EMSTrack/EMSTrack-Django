@@ -12,3 +12,4 @@ django-nose
 paho-mqtt
 django-formset-js
 django-webpack-loader
+uwsgi

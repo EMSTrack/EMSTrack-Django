@@ -7,16 +7,13 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 RUN set -x && \
     apt-get update -y && \
-    apt-get install -y dumb-init git \
+    apt-get install -y dumb-init git gettext \
             gdal-bin libgdal-dev python3-gdal \
-            gettext nodejs \
-            postgresql-client mosquitto-clients && \
-    curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh
+            postgresql-client mosquitto-clients
 
-# upgrade pip, install uwsgi
-RUN pip install --upgrade pip && \
-    pip install uwsgi
+# Install node
+RUN curl -sL https://deb.nodesource.com/setup_10.x | bash - && \
+    apt-get install -y nodejs
 
 # Build variables
 ARG BUILD_APP_HOME=/app
