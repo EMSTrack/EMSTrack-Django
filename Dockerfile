@@ -7,6 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 RUN set -x && \
     apt-get update -y && \
+    apt-get install -y apt-utils && \
     apt-get install -y dumb-init git gettext \
             gdal-bin libgdal-dev python3-gdal \
             postgresql-client mosquitto-clients
