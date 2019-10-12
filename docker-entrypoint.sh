@@ -41,7 +41,7 @@ elif [ "$COMMAND" = 'test' ];
 then
 
     echo "> Running tests..."
-    python manage.py runserver 0.0.0.0:8000
+    DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2
 
 else
 
