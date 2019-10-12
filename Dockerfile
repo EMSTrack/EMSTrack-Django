@@ -9,9 +9,9 @@ RUN set -x && \
     apt-get update -y && \
     apt-get install -y dumb-init apt-utils git \
             python3-pip python3-dev \
-            postgresql-client \
             gdal-bin libgdal-dev python3-gdal \
-            cron gettext mosquitto-clients nodejs && \
+            cron gettext nodejs \
+            postgresql-client mosquitto-clients && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     ln -s /usr/bin/pip3 /usr/bin/pip && \
     curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
