@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 COMMAND=$1
 
 # Initialized?
