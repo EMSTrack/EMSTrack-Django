@@ -56,52 +56,63 @@ RUN apt-get -y install sudo
 RUN pip install --upgrade pip
 
 # create non-privileged user
-RUN useradd -ms /bin/bash worker
-RUN adduser worker sudo
+#RUN useradd -ms /bin/bash worker
+#RUN adduser worker sudo
 
 # /etc/emstrack
-RUN mkdir -p /etc/emstrack/migrations
-RUN mkdir -p /etc/emstrack/log/mqttclient
-RUN mkdir -p /etc/emstrack/log/mosquitto
-RUN mkdir -p /etc/emstrack/log/django
-RUN touch /etc/emstrack/log/django/debug.log
-RUN touch /etc/emstrack/log/django/emstrack.log
-RUN chown -R worker:worker /etc/emstrack
+#RUN mkdir -p /etc/emstrack/migrations
+#RUN mkdir -p /etc/emstrack/log/mqttclient
+#RUN mkdir -p /etc/emstrack/log/mosquitto
+#RUN mkdir -p /etc/emstrack/log/django
+#RUN touch /etc/emstrack/log/django/debug.log
+#RUN touch /etc/emstrack/log/django/emstrack.log
+#RUN chown -R worker:worker /etc/emstrack
 
 # /etc/mosquitto
-RUN mkdir -p /etc/mosquitto
-RUN chown -R worker:worker /etc/mosquitto
+#RUN mkdir -p /mosquitto
+#RUN chown -R worker:worker /etc/mosquitto
 
 # /etc/mosquitto-test
-RUN mkdir -p /etc/mosquitto-test
-RUN chown -R worker:worker /etc/mosquitto-test
+#RUN mkdir -p /mosquitto-test
+#RUN chown -R worker:worker /etc/mosquitto-test
 
 # Setup mqttclient
 COPY init/supervisor /etc/supervisor/conf.d/mqttclient.conf
 
-# switch to unprivileged worker
-USER worker
-WORKDIR /home/worker
-RUN mkdir -p app/deploy/static
-RUN mkdir src
-RUN chown -R worker:worker /home/worker
+## switch to unprivileged worker
+#USER worker
+#WORKDIR /home/worker
+#RUN mkdir -p app/deploy/static
+#RUN mkdir src
+#RUN chown -R worker:worker /home/worker
 
-ENV PATH="/home/worker/.local/bin:/home/worker/app/node_modules/.bin:${PATH}"
+#ENV PATH="/home/worker/.local/bin:/home/worker/app/node_modules/.bin:${PATH}"
 
 # Install uwsgi
-RUN pip install --user uwsgi
+#RUN pip install --user uwsgi
+RUN pip install uwsgi
 
-# app home
-ARG BUILD_APP_HOME=/home/worker/app
+# Build variables
+#ARG BUILD_APP_HOME=/home/worker
+#ARG BUILD_SCRIPT_HOME=/home/worker/.local/bin
+ARG BUILD_APP_HOME=/app
+ARG BUILD_SCRIPT_HOME=/usr/local/bin
+
 ENV APP_HOME=$BUILD_APP_HOME
+ENV SCRIPT_HOME=$BUILD_SCRIPT_HOME
 WORKDIR $APP_HOME
 
+ENV PATH="$APP_HOME/node_modules/.bin:${PATH}"
+
 # install requirements
-COPY --chown=worker:worker requirements.txt requirements.txt
-RUN pip install --user -r requirements.txt
+#COPY --chown=worker:worker requirements.txt requirements.txt
+#RUN pip install --user -r requirements.txt
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
 # install javascript
-COPY --chown=worker:worker package.json package.json
+#COPY --chown=worker:worker package.json package.json
+COPY package.json package.json
 
 # NPM packages
 RUN npm install
@@ -121,19 +132,30 @@ RUN mkdir -p /etc/emstrack/migrations/equipment
 RUN mkdir equipment
 RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 
+# mosquitto directories
+RUN mkdir -p /mosquitto/data
+RUN mkdir -p /mosquitto-test/data
+
 # Clone application
-COPY --chown=worker:worker . .
+#COPY --chown=worker:worker . .
+COPY . .
 
 # Init scripts
-COPY --chown=worker:worker scripts/. /home/worker/.local/bin/.
-RUN chmod +x /home/worker/.local/bin/*
+#COPY --chown=worker:worker scripts/. /home/worker/.local/bin/.
+#RUN chmod +x /home/worker/.local/bin/*
+COPY scripts/. $SCRIPT_HOME
 
 # Entrypoint script
-COPY --chown=worker:worker docker-entrypoint.sh /home/worker/.local/bin/docker-entrypoint.sh
-RUN chmod +x /home/worker/.local/bin/docker-entrypoint.sh
+#COPY --chown=worker:worker docker-entrypoint.sh /home/worker/.local/bin/docker-entrypoint.sh
+#RUN chmod +x /home/worker/.local/bin/docker-entrypoint.sh
+COPY docker-entrypoint.sh $SCRIPT_HOME/docker-entrypoint.sh
+RUN chmod +x $SCRIPT_HOME/docker-entrypoint.sh
 
-COPY --chown=worker:worker docker-entrypoint-init.sh /home/worker/.local/bin/docker-entrypoint-init.sh
-RUN chmod +x /home/worker/.local/bin/docker-entrypoint-init.sh
+#COPY --chown=worker:worker docker-entrypoint-init.sh /home/worker/.local/bin/docker-entrypoint-init.sh
+#RUN chmod +x /home/worker/.local/bin/docker-entrypoint-init.sh
+
+COPY docker-entrypoint-init.sh $SCRIPT_HOME/docker-entrypoint-init.sh
+RUN chmod +x $SCRIPT_HOME/docker-entrypoint-init.sh
 
 # Add VOLUME to allow backup of config, logs and databases
 ENTRYPOINT ["docker-entrypoint.sh"]
