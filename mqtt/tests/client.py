@@ -102,7 +102,7 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # set up test data
         cls.setUpTestData()
 
-        if os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] == "False":
+        if os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True") == "False":
             os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "True"
             logger.info('> Enabling MQTT')
 
