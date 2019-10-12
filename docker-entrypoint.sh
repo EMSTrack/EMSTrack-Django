@@ -40,8 +40,11 @@ then
 elif [ "$COMMAND" = 'test' ];
 then
 
-    echo "> Running tests..."
-    DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2
+    echo "> Running basic tests..."
+    DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2 ambulance emstrack equipment hospital login
+
+    echo "> Running mqtt tests..."
+    DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2 mqtt
 
 else
 
