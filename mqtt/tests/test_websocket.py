@@ -175,31 +175,36 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start client as admin
         broker = {
             'HOST': settings.MQTT['BROKER_TEST_HOST'],
-            'PORT': 8884,
+            'PORT': 1883,
             'KEEPALIVE': 60,
             'CLEAN_SESSION': True
         }
 
-        # Start test client
+        # Start subscribe client
 
         broker.update(settings.MQTT)
         broker['CLIENT_ID'] = 'test_websocket_3'
-
-        client = MQTTTestClient(broker,
-                                transport='websockets',
-                                #tls_set={'ca_certs': None,
-                                #         'cert_reqs': ssl.CERT_NONE},
-                                check_payload=False,
-                                debug=False)
-        self.is_connected(client)
-
-        broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_websocket_4'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
         self.is_connected(subscribe_client)
         self.is_subscribed(subscribe_client)
+
+        # Start test client over websockets
+        broker.update(settings.MQTT)
+        client_id = 'test_websocket_4'
+        username = broker['USERNAME']
+
+        broker['CLIENT_ID'] = client_id
+        broker['PORT'] = 8884
+
+        client = MQTTTestClient(broker,
+                                     transport='websockets',
+                                     #tls_set={'ca_certs': None,
+                                     #         'cert_reqs': ssl.CERT_NONE},
+                                     check_payload=False,
+                                     debug=True)
+        self.is_connected(client)
 
         # subscribe to ambulance/+/data
         topics = ('ambulance/{}/data'.format(self.a1.id),
