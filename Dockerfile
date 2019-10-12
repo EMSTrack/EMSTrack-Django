@@ -73,5 +73,5 @@ COPY docker-entrypoint-init.sh $SCRIPT_HOME/docker-entrypoint-init.sh
 RUN chmod +x $SCRIPT_HOME/docker-entrypoint-init.sh
 
 # Add VOLUME to allow backup of config, logs and databases
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["all"]
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
+CMD["docker-entrypoint.sh", "all"]
