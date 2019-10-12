@@ -15,7 +15,7 @@ RUN set -x && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 1 && \
     ln -s /usr/bin/pip3 /usr/bin/pip && \
     curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh && \
-    bash nodesource_setup.sh && \
+    bash nodesource_setup.sh
 
 # upgrade pip, install uwsgi
 RUN pip install --upgrade pip && \
@@ -54,7 +54,7 @@ RUN set -x && \
     mkdir -p /etc/emstrack/migrations/equipment && \
     mkdir equipment && \
     ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations && \
-    # mosquitto directories
+    # mosquitto directories \
     mkdir -p /mosquitto/data && \
     touch /mosquitto/data/passwd && \
     mkdir -p /mosquitto-test/data && \
