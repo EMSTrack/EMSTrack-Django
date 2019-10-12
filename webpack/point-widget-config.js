@@ -7,7 +7,7 @@ module.exports = {
     entry: '../static/js/point-widget',
     mode: 'development',
     output: {
-        path: path.resolve('../static/bundles/point-widget'),
+        path: path.resolve('./static/bundles/point-widget'),
         filename: "[name]-[hash].js"
     },
     node: {

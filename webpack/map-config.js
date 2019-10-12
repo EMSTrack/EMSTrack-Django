@@ -7,7 +7,7 @@ module.exports = {
     entry: '../static/js/map',
     mode: 'development',
     output: {
-        path: path.resolve('../static/bundles/map'),
+        path: path.resolve('./static/bundles/map'),
         filename: "[name]-[hash].js"
     },
     node: {
