@@ -4,6 +4,11 @@ INIT_FILE=/etc/emstrack/emstrack.initialized
 if [ -f $INIT_FILE ]; then
     echo "> Container is already initialized"
 
+    echo "> Rebuild MQTT password files"
+    python manage.py mqttpwfile
+    cp pwfile /mosquitto/data/passwd
+    cp pwfile /mosquitto-test/data/passwd
+
     echo "> Creating webpackage bundles"
     webpack --config webpack-map-config.js
     webpack --config webpack-ambulance-config.js
@@ -50,8 +55,8 @@ else
     python manage.py bootstrap
 fi
 python manage.py mqttpwfile
-cp pwfile /etc/mosquitto/passwd
-cp pwfile /etc/mosquitto-test/passwd
+cp pwfile /mosquitto/data/passwd
+cp pwfile /mosquitto-test/data/passwd
 webpack --config webpack-map-config.js
 webpack --config webpack-ambulance-config.js
 webpack --config webpack-point-widget-config.js
@@ -61,8 +66,8 @@ python manage.py collectstatic --no-input
 python manage.py compilemessages
 
 # reload mqtt
-touch /etc/mosquitto/reload
-touch /etc/mosquitto-test/reload
+touch /mosquitto/data/reload
+touch /mosquitto-test/data/reload
 
 # Mark as initialized
 DATE=$(date +%Y-%m-%d)
