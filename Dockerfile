@@ -5,7 +5,8 @@ FROM ubuntu:18.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies
-RUN apt-get update -y && \
+RUN set -x && \
+    apt-get update -y && \
     apt-get install -y dumb-init apt-utils git \
             python3-pip python3-dev \
             postgresql-client \
@@ -39,7 +40,8 @@ COPY package.json package.json
 RUN npm install
 
 # link migration directories into persistent volume
-RUN mkdir -p /etc/emstrack/migrations && \
+RUN set -x && \
+    mkdir -p /etc/emstrack/migrations && \
     mkdir -p /etc/emstrack/migrations/ambulance && \
     mkdir ambulance && \
     ln -s /etc/emstrack/migrations/ambulance $APP_HOME/ambulance/migrations && \
