@@ -236,13 +236,13 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')
         objs = [obj[0].status, obj[1].status, obj[2].status, obj[3].status]
-        logger.info(objs)
+        logger.debug(objs)
         self.assertCountEqual(
             objs,
             [ClientStatus.F.name, ClientStatus.O.name, ClientStatus.O.name, ClientStatus.D.name]
         )
-        logger.info(len(obj))
-        logger.info(nrecords)
+        logger.debug(len(obj))
+        logger.debug(nrecords)
         self.assertTrue(len(obj) - nrecords >= 3)
 
         # wait for disconnect

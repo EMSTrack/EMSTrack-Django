@@ -48,8 +48,8 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         test_client = MQTTTestClient(broker,
                                      transport='websockets',
-                                     tls_set={'ca_certs': None,
-                                              'cert_reqs': ssl.CERT_NONE},
+                                     #tls_set={'ca_certs': None,
+                                     #         'cert_reqs': ssl.CERT_NONE},
                                      check_payload=False,
                                      debug=True)
         self.is_connected(test_client)
@@ -187,8 +187,8 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
 
         client = MQTTTestClient(broker,
                                 transport='websockets',
-                                tls_set={'ca_certs': None,
-                                         'cert_reqs': ssl.CERT_NONE},
+                                #tls_set={'ca_certs': None,
+                                #         'cert_reqs': ssl.CERT_NONE},
                                 check_payload=False,
                                 debug=False)
         self.is_connected(client)
