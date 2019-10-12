@@ -450,7 +450,7 @@ class TestMQTTWill(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_will_admin'
+        broker['CLIENT_ID'] = 'test_will_1'
         broker['WILL'] = {
             'topic': 'user/{}/client/{}/status'.format(broker['USERNAME'],
                                                        broker['CLIENT_ID']),
@@ -504,7 +504,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = 'test_handshake_disconnet_1'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -514,7 +514,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_handshake_disconnet_2'
         username = broker['USERNAME']
         broker['CLIENT_ID'] = client_id
         broker['WILL'] = {
@@ -585,7 +585,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = 'test_reconnect_1'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -595,7 +595,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_reconnect_2'
         username = broker['USERNAME']
         broker['CLIENT_ID'] = client_id
         broker['WILL'] = {
