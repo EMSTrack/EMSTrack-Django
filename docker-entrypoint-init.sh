@@ -12,11 +12,11 @@ if [ -f $INIT_FILE ]; then
     chown -R 1883:1883 /mosquitto-test/data
 
     echo "> Creating webpackage bundles"
-    webpack --config webpack-map-config.js
-    webpack --config webpack-ambulance-config.js
-    webpack --config webpack-point-widget-config.js
-    webpack --config webpack-call-config.js
-    webpack --config webpack-base-config.js
+    webpack --config webpack/map-config.js
+    webpack --config webpack/ambulance-config.js
+    webpack --config webpack/point-widget-config.js
+    webpack --config webpack/call-config.js
+    webpack --config webpack/base-config.js
 
     echo "> Recovering static files"
     python manage.py collectstatic --no-input
@@ -65,11 +65,11 @@ chown -R 1883:1883 /mosquitto/data
 chown -R 1883:1883 /mosquitto-test/data
 
 # deploy webpack
-webpack --config webpack-map-config.js
-webpack --config webpack-ambulance-config.js
-webpack --config webpack-point-widget-config.js
-webpack --config webpack-call-config.js
-webpack --config webpack-base-config.js
+webpack --config webpack/map-config.js
+webpack --config webpack/ambulance-config.js
+webpack --config webpack/point-widget-config.js
+webpack --config webpack/call-config.js
+webpack --config webpack/base-config.js
 python manage.py collectstatic --no-input
 python manage.py compilemessages
 
