@@ -4,7 +4,7 @@ from ambulance.models import Ambulance, AmbulanceStatus
 from equipment.models import EquipmentItem
 from hospital.models import Hospital
 from mqtt.tests.client import TestMQTT, MQTTTestCase, MQTTTestClient
-from mqtt.tests.test_mqtt import logger
+from mqtt.tests.test_mqtt_3 import logger
 
 
 class TestMQTTPublish(TestMQTT, MQTTTestCase):
