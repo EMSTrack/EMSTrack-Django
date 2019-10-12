@@ -243,7 +243,7 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         )
         logger.info(len(obj))
         logger.info(nrecords)
-        self.assertTrue(len(obj) - nrecords >= 4)
+        self.assertTrue(len(obj) - nrecords >= 3)
 
         # wait for disconnect
         test_client.wait()
