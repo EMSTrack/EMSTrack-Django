@@ -4,10 +4,10 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     context: __dirname,
-    entry: './static/js/map',
+    entry: '../static/js/map',
     mode: 'development',
     output: {
-        path: path.resolve('./static/bundles/map'),
+        path: path.resolve('../static/bundles/map'),
         filename: "[name]-[hash].js"
     },
     node: {
@@ -15,7 +15,7 @@ module.exports = {
     },
 
     plugins: [
-        new BundleTracker({filename: './webpack-map-stats.json'})
+        new BundleTracker({filename: './map-stats.json'})
     ],
     module: {
         rules: [

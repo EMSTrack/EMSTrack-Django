@@ -4,10 +4,10 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     context: __dirname,
-    entry: './static/js/point-widget',
+    entry: '../static/js/point-widget',
     mode: 'development',
     output: {
-        path: path.resolve('./static/bundles/point-widget'),
+        path: path.resolve('../static/bundles/point-widget'),
         filename: "[name]-[hash].js"
     },
     node: {
@@ -15,7 +15,7 @@ module.exports = {
     },
 
     plugins: [
-        new BundleTracker({filename: './webpack-point-widget-stats.json'})
+        new BundleTracker({filename: './point-widget-stats.json'})
     ],
     module: {
         rules: [
