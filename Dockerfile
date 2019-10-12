@@ -64,6 +64,7 @@ COPY . .
 
 # Init scripts
 COPY scripts/. $SCRIPT_HOME
+RUN chmod +x $SCRIPT_HOME/emstrack-*.sh
 
 # Entrypoint script
 COPY docker-entrypoint.sh $SCRIPT_HOME/docker-entrypoint.sh
