@@ -111,8 +111,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # disconnect singleton publish client
         SingletonPublishClient().disconnect()
 
-        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "False"
-        logger.info('Disabling MQTT after testing')
+        # os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "False"
+        # logger.info('Disabling MQTT after testing')
 
         # call super to shutdown server
         super().tearDownClass()

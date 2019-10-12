@@ -196,6 +196,7 @@ class SingletonPublishClient(PublishClient):
         # Do not initialize if already initialized
         if not self.__dict__ == {} and not self.retry:
             # skip initialization
+            logger.info(">> Already connected to MQTT, skipping initialization.")
             return
 
         if not env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
