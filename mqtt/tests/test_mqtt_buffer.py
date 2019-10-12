@@ -13,7 +13,7 @@ from mqtt.client import RETRY_TIMER_SECONDS
 logger = logging.getLogger(__name__)
 
 
-class TestMQTTPublish(TestMQTT, MQTTTestCase):
+class TestMQTTBuffer(TestMQTT, MQTTTestCase):
 
     def test(self):
         # Start client as admin
@@ -27,7 +27,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_buffer_1'
 
         client = MQTTTestClient(broker,
                                 check_payload=False,

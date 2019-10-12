@@ -18,7 +18,7 @@ class TestMQTTConnect(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_connect_admin'
+        broker['CLIENT_ID'] = 'test_login_1'
 
         self.is_connected(MQTTTestClient(broker))
 
@@ -61,7 +61,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
             'CLEAN_SESSION': True
         }
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_subscribe_admin'
+        broker['CLIENT_ID'] = 'test_login_2'
 
         client = MQTTTestClient(broker,
                                 check_payload=False)

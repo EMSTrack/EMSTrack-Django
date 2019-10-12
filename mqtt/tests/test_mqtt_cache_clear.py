@@ -48,7 +48,7 @@ class TestMQTTTestCache(TestMQTT, MQTTTestCase):
         self.assertEqual(info.currsize, 0)
 
 
-class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
+class TestMQTTCacheClear(TestMQTT, MQTTTestCase):
 
     def test(self):
 
@@ -63,7 +63,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start subscribe client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = 'test_cache_clear_1'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -73,7 +73,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_cache_clear_2'
         username = broker['USERNAME']
         broker['CLIENT_ID'] = client_id
 

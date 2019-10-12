@@ -133,7 +133,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_call_1'
         test_client = self.start_mqtt_client(client_id, username, password)
 
         # start django client
@@ -331,7 +331,7 @@ class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_call_2'
         test_client = self.start_mqtt_client(client_id, username, password)
 
         # start django client
@@ -408,7 +408,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_call_3'
         test_client = self.start_mqtt_client(client_id, username, password)
 
         # start django client
@@ -547,7 +547,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTTCallBase, MQTTTestCase):
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_call_4'
         test_client = self.start_mqtt_client(client_id, username, password)
 
         # start django client
@@ -662,7 +662,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTTCallBase, MQTTTestCase):
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-        client_id1 = 'test_mqtt1'
+        client_id1 = 'test_call_5'
         test_client1 = self.start_mqtt_client(client_id1, username, password)
 
         # start django client
@@ -815,7 +815,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTTCallBase, MQTTTestCase):
         test_client1.wait()
 
         # Start second test client
-        client_id2 = 'test_mqtt2'
+        client_id2 = 'test_call_6'
         username2 = 'testuser2'
         password2 = 'very_secret'
         test_client2 = self.start_mqtt_client(client_id2, username2, password2)
@@ -942,7 +942,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.start_subscribe_client('test_mqtt_subscribe_client')
 
         # Start test client
-        client_id1 = 'test_mqtt1'
+        client_id1 = 'test_call_7'
         test_client1 = self.start_mqtt_client(client_id1, username, password)
 
         # start django client
@@ -952,7 +952,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         self.set_django_client(django_client1, client_id1, ambulance_id1, None)
 
         # Start second test client
-        client_id2 = 'test_mqtt2'
+        client_id2 = 'test_call_8'
         username2 = 'testuser2'
         password2 = 'very_secret'
         test_client2 = self.start_mqtt_client(client_id2, username2, password2)
