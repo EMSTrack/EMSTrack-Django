@@ -1,5 +1,5 @@
 # Using ubuntu as a base image
-FROM ubuntu:18.04
+FROM python:3.7
 
 # Getting rid of debconf messages
 ARG DEBIAN_FRONTEND=noninteractive
@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 # Install dependencies
 RUN set -x && \
     apt-get update -y && \
-    apt-get install -y dumb-init apt-utils git \
+    apt-get install -y dumb-init git \
             python3-pip python3-dev \
             gdal-bin libgdal-dev python3-gdal \
             cron gettext nodejs \
