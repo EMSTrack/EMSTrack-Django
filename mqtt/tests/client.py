@@ -102,8 +102,9 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # set up test data
         cls.setUpTestData()
 
-        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "True"
-        logger.info('Enabling MQTT after initializing database')
+        if os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] == "False":
+            os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "True"
+            logger.info('> Enabling MQTT')
 
     @classmethod
     def tearDownClass(cls):
