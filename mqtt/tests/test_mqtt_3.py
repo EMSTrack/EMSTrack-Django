@@ -113,7 +113,7 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
-        obj = ClientLog.objects.get(client=clnt)
+        obj = ClientLog.objects.filter(client=clnt).last()
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Client handshake: force disconnected to trigger will
