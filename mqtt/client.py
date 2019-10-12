@@ -98,12 +98,15 @@ class BaseClient:
     def on_connect(self, client, userdata, flags, rc):
 
         if rc:
-            raise MQTTException('Could not connect to brocker (rc = {})'.format(rc),
-                                rc)
+            logger.debug('>> Could not connect to brocker (rc = {})'.format(rc))
+            raise MQTTException('Could not connect to brocker (rc = {})'.format(rc), rc)
 
         self.connected = True
 
         # success!
+        logger.info(">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'],
+                                                                      self.broker['PORT']))
+
         if self.verbosity > 0:
             self.stdout.write(self.style.SUCCESS(
                 ">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'], 
