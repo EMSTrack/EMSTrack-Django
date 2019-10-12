@@ -222,23 +222,23 @@ MAP_PROVIDER_TOKEN = env.str('MAP_PROVIDER_TOKEN')
 WEBPACK_LOADER = {
     'BASE': {
         'BUNDLE_DIR_NAME': 'bundles/base/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-base-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/base-stats.json'),
     },
     'MAP': {
         'BUNDLE_DIR_NAME': 'bundles/map/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-map-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/map-stats.json'),
     },
     'AMBULANCE': {
         'BUNDLE_DIR_NAME': 'bundles/ambulance/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-ambulance-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/ambulance-stats.json'),
     },
     'POINT_WIDGET': {
         'BUNDLE_DIR_NAME': 'bundles/point-widget/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-point-widget-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/point-widget-stats.json'),
     },
     'CALL': {
         'BUNDLE_DIR_NAME': 'bundles/call/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack-call-stats.json'),
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/call-stats.json'),
     },
 }
 

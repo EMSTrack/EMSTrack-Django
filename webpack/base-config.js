@@ -15,7 +15,7 @@ module.exports = {
     },
 
     plugins: [
-        new BundleTracker({filename: './base-stats.json'})
+        new BundleTracker({filename: './webpack/base-stats.json'})
     ],
     module: {
         rules: [

@@ -15,7 +15,7 @@ module.exports = {
     },
 
     plugins: [
-        new BundleTracker({filename: './point-widget-stats.json'})
+        new BundleTracker({filename: './webpack/point-widget-stats.json'})
     ],
     module: {
         rules: [
