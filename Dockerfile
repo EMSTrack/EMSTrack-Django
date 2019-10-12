@@ -136,6 +136,10 @@ RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 RUN mkdir -p /mosquitto/data
 RUN mkdir -p /mosquitto-test/data
 
+# log directories
+RUN touch /etc/emstrack/log/django/django.log
+RUN touch /etc/emstrack/log/django/emstrack.log
+
 # Clone application
 #COPY --chown=worker:worker . .
 COPY . .

@@ -250,7 +250,7 @@ LOGGING = {
         'debug': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/etc/emstrack/log/django/debug.log',
+            'filename': '/etc/emstrack/log/django/django.log',
         },
         'emstrack': {
             'level': 'DEBUG',
