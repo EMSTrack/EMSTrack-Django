@@ -235,8 +235,9 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
 
         # check record log
         obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')
+        logger.info(obj)
         self.assertEqual(obj[0].status, ClientStatus.F.name)
-        self.assertEqual(obj[1].status, ClientStatus.D.name)
+        self.assertEqual(obj[1].status, ClientStatus.O.name)
         self.assertEqual(obj[2].status, ClientStatus.O.name)
         self.assertEqual(obj[3].status, ClientStatus.O.name)
         self.assertEqual(len(obj), nrecords + 6)
