@@ -13,7 +13,8 @@ if docker-entrypoint-init.sh; then
 fi
 
 # Run commands
-if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]; then
+if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ];
+then
 
     echo "> Starting basic services"
     
@@ -27,13 +28,19 @@ if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ] || [ "$COMMAND" = 'test' ]
     if [ "$COMMAND" = 'all' ]; then
 
         echo "> Starting mqttclient"
-	    python -u /app/manage.py mqttclient > /etc/emstrack/log/mqttclient.log 2>&1 &
+	    python manage.py mqttclient > /etc/emstrack/log/mqttclient.log 2>&1 &
 
     fi
 
     echo "> Starting uWSGI"
     #touch /home/worker/app/reload
     #nohup bash -c "uwsgi --touch-reload=/home/worker/app/reload --http :8000 --module emstrack.wsgi > uwsgi.log 2>&1 &"
+    python manage.py runserver 0.0.0.0:8000
+
+elif [ "$COMMAND" = 'test' ];
+then
+
+    echo "> Running tests..."
     python manage.py runserver 0.0.0.0:8000
 
 else
