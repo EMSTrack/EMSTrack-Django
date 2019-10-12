@@ -2,11 +2,8 @@
 
 echo "> Starting test..."
 
-# stop mqttclient
-supervisorctl stop mqttclient
+echo "> Running basic tests..."
+DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2 ambulance emstrack equipment hospital login
 
-# run tests
-python manage.py test $*
-
-# start mqttclient
-supervisorctl start mqttclient
+echo "> Running mqtt tests..."
+DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2 mqtt

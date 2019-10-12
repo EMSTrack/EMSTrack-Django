@@ -37,15 +37,6 @@ then
     #nohup bash -c "uwsgi --touch-reload=/home/worker/app/reload --http :8000 --module emstrack.wsgi > uwsgi.log 2>&1 &"
     python manage.py runserver 0.0.0.0:8000
 
-elif [ "$COMMAND" = 'test' ];
-then
-
-    echo "> Running basic tests..."
-    DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2 ambulance emstrack equipment hospital login
-
-    echo "> Running mqtt tests..."
-    DJANGO_LOG_LEVEL=DEBUG python manage.py test --verbosity=2 mqtt
-
 else
 
     echo "> No services started" 
