@@ -134,7 +134,9 @@ RUN ln -s /etc/emstrack/migrations/equipment $APP_HOME/equipment/migrations
 
 # mosquitto directories
 RUN mkdir -p /mosquitto/data
+RUN touch /mosquitto/data/passwd
 RUN mkdir -p /mosquitto-test/data
+RUN touch /mosquitto-test/data/passwd
 
 # log directories
 RUN mkdir -p /etc/emstrack/log/
