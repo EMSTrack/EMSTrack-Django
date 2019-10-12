@@ -32,7 +32,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_publish_1'
 
         client = MQTTTestClient(broker,
                                 check_payload=False,
@@ -101,7 +101,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_non_admin'
+        broker['CLIENT_ID'] = 'test_publish_2'
         broker['USERNAME'] = 'testuser1'
         broker['PASSWORD'] = 'top_secret'
 
@@ -156,7 +156,7 @@ class TestMQTTPublish(TestMQTT, MQTTTestCase):
         # Start test client
 
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqtt_publish_admin'
+        broker['CLIENT_ID'] = 'test_publish_3'
         broker['USERNAME'] = 'testuser2'
         broker['PASSWORD'] = 'very_secret'
 
@@ -231,7 +231,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start subscribe client
         broker.update(settings.MQTT)
-        broker['CLIENT_ID'] = 'test_mqttclient'
+        broker['CLIENT_ID'] = 'test_subscribe_1'
 
         subscribe_client = SubscribeClient(broker,
                                            debug=True)
@@ -240,7 +240,7 @@ class TestMQTTSubscribe(TestMQTT, MQTTTestCase):
 
         # Start test client
         broker.update(settings.MQTT)
-        client_id = 'test_mqtt_subscribe_admin'
+        client_id = 'test_subscribe_2'
         username = broker['USERNAME']
         broker['CLIENT_ID'] = client_id
 
