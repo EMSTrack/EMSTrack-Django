@@ -282,6 +282,7 @@ class SubscribeClient(BaseClient):
 
             # updates must match client
             if client.ambulance != ambulance:
+                logger.info("client.ambulance != ambulance ('{}')\nclient = '{}'".format(ambulance, client))
                 # send error message to user
                 self.send_error_message(user, client, msg.topic, msg.payload,
                                         "Client '{}' is not currently authorized to update ambulance '{}'"

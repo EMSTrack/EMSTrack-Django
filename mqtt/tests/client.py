@@ -28,10 +28,6 @@ class MQTTTestCase(StaticLiveServerTestCase):
 
     def __init__(self, *args, **kwargs):
 
-        MQTTTestCase.mqtt_status = os.environ.get("DJANGO_ENABLE_MQTT_PUBLISH", "True")
-        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "False"
-        logger.info('Disabling MQTT before testing')
-
         # call super
         super().__init__(*args, **kwargs)
 
@@ -115,8 +111,8 @@ class MQTTTestCase(StaticLiveServerTestCase):
         # disconnect singleton publish client
         SingletonPublishClient().disconnect()
 
-        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = cls.mqtt_status
-        logger.info('Restoring MQTT status after testing')
+        os.environ["DJANGO_ENABLE_MQTT_PUBLISH"] = "False"
+        logger.info('Disabling MQTT after testing')
 
         # call super to shutdown server
         super().tearDownClass()
