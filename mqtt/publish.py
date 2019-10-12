@@ -258,8 +258,8 @@ class SingletonPublishClient(PublishClient):
         self.loop_stop()
         super().disconnect()
 
-        # clear dict
-        self._shared_state = {}
+        self.active = False
+        self.retry = True
 
 # mqtt_cache_clear
 
