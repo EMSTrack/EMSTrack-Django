@@ -8,6 +8,8 @@ if [ -f $INIT_FILE ]; then
     python manage.py mqttpwfile
     cp pwfile /mosquitto/data/passwd
     cp pwfile /mosquitto-test/data/passwd
+    chown -R 1883:1883 /mosquitto/data
+    chown -R 1883:1883 /mosquitto-test/data
 
     echo "> Creating webpackage bundles"
     webpack --config webpack-map-config.js
@@ -54,9 +56,15 @@ else
     echo "Fixtures not found, bootstraping"
     python manage.py bootstrap
 fi
+
+# password file
 python manage.py mqttpwfile
 cp pwfile /mosquitto/data/passwd
 cp pwfile /mosquitto-test/data/passwd
+chown -R 1883:1883 /mosquitto/data
+chown -R 1883:1883 /mosquitto-test/data
+
+# deploy webpack
 webpack --config webpack-map-config.js
 webpack --config webpack-ambulance-config.js
 webpack --config webpack-point-widget-config.js
