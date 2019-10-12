@@ -3,18 +3,18 @@
 set -e
 COMMAND=$1
 
-# Initialized?
-if [ "$COMMAND" = 'init' ]; then
-    rm /etc/emstrack/emstrack.initialized
-fi
-
-if docker-entrypoint-init.sh; then
-    echo "> Initialization complete"
-fi
-
 # Run commands
 if [ "$COMMAND" = 'basic' ] || [ "$COMMAND" = 'all' ];
 then
+
+    # Initialized?
+    if [ "$COMMAND" = 'init' ]; then
+        rm /etc/emstrack/emstrack.initialized
+    fi
+
+    if docker-entrypoint-init.sh; then
+        echo "> Initialization complete"
+    fi
 
     echo "> Starting basic services"
     
