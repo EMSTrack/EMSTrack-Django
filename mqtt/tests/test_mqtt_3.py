@@ -241,6 +241,8 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
             objs,
             [ClientStatus.F.name, ClientStatus.O.name, ClientStatus.O.name, ClientStatus.D.name]
         )
+        logger.info(len(obj))
+        logger.info(nrecords)
         self.assertTrue(len(obj) - nrecords >= 4)
 
         # wait for disconnect
