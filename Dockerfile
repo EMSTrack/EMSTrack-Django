@@ -137,8 +137,9 @@ RUN mkdir -p /mosquitto/data
 RUN mkdir -p /mosquitto-test/data
 
 # log directories
-RUN touch /etc/emstrack/log/django/django.log
-RUN touch /etc/emstrack/log/django/emstrack.log
+RUN mkdir -p /etc/emstrack/log/
+RUN touch /etc/emstrack/log/django.log
+RUN touch /etc/emstrack/log/emstrack.log
 
 # Clone application
 #COPY --chown=worker:worker . .
