@@ -203,7 +203,7 @@ class SingletonPublishClient(PublishClient):
             self.active = False
             self.retry = True
 
-            logger.info(">> No connection to MQTT brocker '{}'. Will retry later...".format(broker))
+            logger.info(">> No connection to MQTT. Will retry later...")
             return
 
         # initialization
