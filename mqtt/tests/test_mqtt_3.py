@@ -115,7 +115,8 @@ class TestMQTTHandshakeDisconnect(TestMQTT, MQTTTestCase):
         # check record log
         obj = ClientLog.objects.filter(client=clnt)
         nrecords = len(obj) - 1
-        self.assertEqual(obj.last().status, ClientStatus.O.name)
+        obj = obj.last()
+        self.assertEqual(obj.status, ClientStatus.O.name)
 
         # Client handshake: force disconnected to trigger will
         test_client.client._sock.close()
@@ -195,7 +196,9 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
-        obj = ClientLog.objects.get(client=clnt)
+        obj = ClientLog.objects.filter(client=clnt)
+        nrecords = len(obj) - 1
+        obj = obj.last()
         self.assertEqual(obj.status, ClientStatus.O.name)
 
         # reconnecting with same client-id, forces a disconnect
@@ -215,8 +218,8 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.O.name)
 
         # check record log
-        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 2)
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')
+        self.assertEqual(len(obj), nrecords + 2)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
 
@@ -231,8 +234,8 @@ class TestMQTTHandshakeReconnect(TestMQTT, MQTTTestCase):
         self.assertEqual(clnt.status, ClientStatus.F.name)
 
         # check record log
-        obj = ClientLog.objects.filter(client=clnt).order_by('updated_on')
-        self.assertEqual(len(obj), 4)
+        obj = ClientLog.objects.filter(client=clnt).order_by('-updated_on')
+        self.assertEqual(len(obj), nrecords + 4)
         self.assertEqual(obj[0].status, ClientStatus.O.name)
         self.assertEqual(obj[1].status, ClientStatus.O.name)
         self.assertEqual(obj[2].status, ClientStatus.D.name)
