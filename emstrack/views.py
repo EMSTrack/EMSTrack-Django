@@ -7,7 +7,8 @@ from rest_framework.pagination import _get_displayed_page_numbers, _get_page_lin
 
 def get_page_links(request, page, page_query_param='page'):
 
-    base_url = request.build_absolute_uri()
+    # base_url = request.build_absolute_uri()
+    base_url = request.get_full_path()
 
     def page_number_to_url(page_number):
         if page_number == 1:
@@ -23,7 +24,8 @@ def get_page_links(request, page, page_query_param='page'):
 
 def get_page_size_links(request, page, page_sizes, page_query_param='page', page_size_query_param='page_size'):
 
-    base_url = request.build_absolute_uri()
+    # base_url = request.build_absolute_uri()
+    base_url = request.get_full_path()
 
     def page_size_to_url(page_size, page_number):
 
