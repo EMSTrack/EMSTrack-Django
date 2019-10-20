@@ -255,7 +255,7 @@ LOGGING = {
         'emstrack': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-'filename': '/etc/emstrack/log/emstrack.log',
+            'filename': '/etc/emstrack/log/emstrack.log',
         },
     },
     'loggers': {
