@@ -34,8 +34,8 @@ then
 
     echo "> Starting uWSGI"
     #touch /home/worker/app/reload
-    #nohup bash -c "uwsgi --touch-reload=/home/worker/app/reload --http :8000 --module emstrack.wsgi > uwsgi.log 2>&1 &"
-    python manage.py runserver 0.0.0.0:8000
+    nohup bash -c "uwsgi --touch-reload=/home/worker/app/reload --http 0.0.0.0:8000 --module emstrack.wsgi > /etc/emstrack/log/uwsgi.log 2>&1 &"
+    # python manage.py runserver 0.0.0.0:8000
 
 else
 

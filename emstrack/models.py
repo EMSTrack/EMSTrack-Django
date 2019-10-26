@@ -52,7 +52,7 @@ class AddressModel(models.Model):
     unit = models.CharField(_('unit'), max_length=30, blank=True)
     neighborhood = models.CharField(_('neighborhood'), max_length=100, blank=True)
     city = models.CharField(_('city'), max_length=100, default=defaults['city'])
-    state = models.CharField(_('state'), max_length=3, default=defaults['state'])
+    state = models.CharField(_('state'), max_length=4, default=defaults['state'])
     zipcode = models.CharField(_('zipcode'), max_length=12, blank=True)
     country = models.CharField(_('country'), max_length=2, default=defaults['country'])
 
