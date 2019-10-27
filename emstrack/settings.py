@@ -257,6 +257,11 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': '/etc/emstrack/log/emstrack.log',
         },
+        'mqtt': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/etc/emstrack/log/mqtt.log',
+        },
     },
     'loggers': {
         'django': {
@@ -275,7 +280,7 @@ LOGGING = {
             'propagate': True,
         },
         'mqtt': {
-            'handlers': ['emstrack'],
+            'handlers': ['mqtt'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
