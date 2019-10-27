@@ -2305,11 +2305,13 @@ $(function() {
     $('#dispatchDiv')
         .on('hide.bs.collapse', function(event) {
 
+            /*
             // End dispatching automatically calls endDispatching
             $('#newDispatchDiv').collapse('hide');
 
             // enable dispatch button
             $('#dispatchSubmitButton').attr("disabled", false);
+            */
 
             // hide all popovers
             $('[data-original-title]')
