@@ -2429,7 +2429,7 @@ $(function() {
             logger.log('debug', "place = %j", place);
 
             // parse address
-            const address = GeocoderGoogle.parse_feature(place);
+            const address = geocoder.parse_feature(place);
             logger.log('debug', "address = '%j'", address);
 
             // set current location
