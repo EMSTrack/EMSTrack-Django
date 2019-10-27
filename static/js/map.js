@@ -1761,6 +1761,10 @@ function doUpdateAmbulanceStatus(ambulance_id, status) {
 
 function beginDispatching() {
 
+    // quick return if not dispatching
+    if (isDispatching)
+        return;
+
     isDispatching = true;
     const filtersDiv = $('#filtersDiv');
     isFilterOpen = filtersDiv.hasClass('show');
