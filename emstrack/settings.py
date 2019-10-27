@@ -48,6 +48,8 @@ if allowed_hosts == "*":
 else:
     ALLOWED_HOSTS = env.list('DJANGO_HOSTNAMES') + [gethostbyname(gethostname())]
 
+USE_X_FORWARDED_HOST = True
+
 # Application definition
 
 INSTALLED_APPS = [
