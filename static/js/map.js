@@ -2509,10 +2509,8 @@ $(function() {
             const place = autocomplete.getPlace();
             const location = place['geometry']['location'];
             logger.log('debug', place);
-            updateCurrentLocation({
-                lat: location['lat'],
-                lng: location['lng']
-            });
+            logger.log('debug', location);
+            updateCurrentLocation(location);
 
         });
     }
