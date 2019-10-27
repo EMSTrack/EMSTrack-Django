@@ -6,8 +6,8 @@ from . import views
 app_name = 'report'
 urlpatterns = [
 
-    url(r'^list/$',
-        login_required(views.ReportListView.as_view()),
-        name="list"),
+    url(r'^/$',
+        login_required(views.ReportIndexView.as_view()),
+        name="index"),
 
 ]

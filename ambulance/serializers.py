@@ -483,3 +483,49 @@ class CallSerializer(serializers.ModelSerializer):
 
         # call super
         return instance
+
+
+class CallAmbulanceHistorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AmbulanceCall
+        fields = ['status',
+                  'comment', 'updated_by', 'updated_on']
+
+
+class CallAmbulanceSummarySerializer(serializers.ModelSerializer):
+
+    history = CallAmbulanceHistorySerializer(source='ambulancecallhistory_set', many=True, required=False)
+    waypoint_set = WaypointSerializer(many=True, required=False)
+
+    class Meta:
+        model = AmbulanceCall
+        fields = ['id',
+                  'ambulance',
+                  'ambulance_identifier',
+                  'status',
+                  'comment', 'updated_by', 'updated_on',
+                  'history',
+                  'waypoint_set']
+        read_only_fields = ('id', 'updated_by')
+
+
+class CallSummarySerializer(serializers.ModelSerializer):
+
+    priority_code = CallPriorityCodeSerializer()
+    radio_code = CallRadioCodeSerializer()
+
+    patient_set = PatientSerializer(many=True, required=False)
+    ambulancecall_set = CallAmbulanceSummarySerializer(many=True, required=False)
+
+    class Meta:
+        model = Call
+        fields = ['id',
+                  'status', 'details', 'priority',
+                  'priority_code', 'radio_code',
+                  'created_at',
+                  'pending_at', 'started_at', 'ended_at',
+                  'comment', 'updated_by', 'updated_on',
+                  'ambulancecall_set',
+                  'patient_set']
+        read_only_fields = ['created_at', 'updated_by']

@@ -10,7 +10,7 @@ from login.permissions import IsUserOrAdminOrSuper
 logger = logging.getLogger(__name__)
 
 
-class ReportListView(TemplateView):
+class ReportIndexView(TemplateView):
     template_name = 'report/index.html'
 
 

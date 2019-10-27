@@ -16,7 +16,8 @@ from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, Am
     AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
-    CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer
+    CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer, \
+    CallAmbulanceSummarySerializer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -360,6 +361,17 @@ class CallViewSet(mixins.ListModelMixin,
 
         # serialize and return
         serializer = CallSerializer(call)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def summary(self, request, pk=None, **kwargs):
+        """Summarize call."""
+
+        # get call object
+        call = self.get_object()
+
+        # serialize and return
+        serializer = CallAmbulanceSummarySerializer(call)
         return Response(serializer.data)
 
 
