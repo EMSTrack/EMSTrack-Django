@@ -2414,10 +2414,11 @@ $(function() {
             $('#radio-code').html('<span class="text-muted">' + settings.translation_table["Radio Code"] + '</span>');
     });
 
-
-    // Autocomplete address
-    const streetField = $('#street')[0];
-    const autocompleteOptions = {};
-    const autocomplete = new google.maps.places.Autocomplete(streetField, autocompleteOptions);
+    if (mapProvider['provider'] === 'google') {
+        // Autocomplete address
+        const streetField = $('#street')[0];
+        const autocompleteOptions = {};
+        new google.maps.places.Autocomplete(streetField, autocompleteOptions);
+    }
 
 });
