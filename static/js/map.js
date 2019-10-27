@@ -2301,6 +2301,9 @@ $(function() {
     $('#dispatchDiv')
         .on('hide.bs.collapse', function(event) {
 
+            // hide new dispatch
+            $('#newDispatchDiv').collapse('hide');
+
             // hide all popovers
             $('[data-original-title]')
                 .popover('hide');
