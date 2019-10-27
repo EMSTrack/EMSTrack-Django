@@ -285,8 +285,8 @@ export class GeocoderGoogle extends BaseGeocoder {
         // set location
         const location = feature['geometry']['location'];
         address['location'] = {
-            'latitude': Number.parseFloat(location['lat']),
-            'longitude': Number.parseFloat(location['lng'])
+            'latitude': location['lat'],
+            'longitude': location['lng']
         };
         logger.log('debug', "location = %j", location);
         logger.log('debug', "address = %j", address);
