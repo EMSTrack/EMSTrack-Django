@@ -2416,70 +2416,17 @@ $(function() {
 
     if (mapProvider['provider'] === 'google') {
         // Autocomplete address
-        const streetField = $('#street')[0];
+        const autocompleteFormField = document.getElementById('street');
         const autocompleteOptions = {
-            types: ['geocode'],
+            types: ['address'],
         };
-        const autocomplete = new google.maps.places.Autocomplete(streetField, autocompleteOptions);
+        const autocomplete = new google.maps.places.Autocomplete(autocompleteFormField, autocompleteOptions);
         autocomplete.setFields(['address_components', 'formatted_address', 'geometry']);
-        google.maps.event.clearInstanceListeners(streetField);
+        google.maps.event.clearInstanceListeners(autocompleteFormField);
         google.maps.event.addListener(autocomplete, 'place_changed', () => {
-            /*
-            {
-                "address_components":
-                    [
-                        {
-                            "long_name":"2300",
-                            "short_name":"2300",
-                            "types":["street_number"]},
-                        {
-                            "long_name":"Expedition Way",
-                            "short_name":"Expedition Way",
-                            "types":["route"]
-                        },
-                        {
-                            "long_name": "La Jolla",
-                            "short_name":"La Jolla",
-                            "types":["neighborhood","political"]
-                        },
-                        {
-                            "long_name":"San Diego",
-                            "short_name":"San Diego",
-                            "types":["locality","political"]
-                        },
-                        {
-                            "long_name":"San Diego County","short_name":"San Diego County",
-                            "types":["administrative_area_level_2","political"]
-                        },
-                        {
-                            "long_name":"California","short_name":"CA",
-                            "types":["administrative_area_level_1","political"]
-                        },
-                        {
-                            "long_name":"United States","short_name":"US",
-                            "types":["country","political"]
-                        },
-                        {
-                            "long_name":"92037","short_name":"92037",
-                            "types":["postal_code"]
-                        }
-                        ],
-                "geometry":
-                    {
-                        "location": {
-                            "lat":32.8656131,"lng":-117.25048800000002
-                        },
-                        "viewport": {
-                            "south":32.8645033697085,"west":-117.25161473029152,
-                            "north":32.8672013302915,"east":-117.2489167697085}
-                            },
-                "html_attributions":[]
-            }
-            */
-
             // get current location
             const place = autocomplete.getPlace();
-            logger.log('debug', place);
+            logger.log('debug', "place = %j", place);
 
             // parse address
             const address = GeocoderGoogle.parse_feature(place);
