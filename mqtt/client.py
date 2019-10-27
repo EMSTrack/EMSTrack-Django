@@ -47,6 +47,8 @@ class BaseClient:
                                       transport=self.transport)
         else:
             self.client = mqtt.Client()
+        # WARNING: get client id from private paho's client id property
+        self.client_id = self.client._client_id
 
         # tls_set?
         if self.tls_set:
@@ -211,7 +213,7 @@ class BaseClient:
         pass
 
     def on_disconnect(self, client, userdata, rc):
-        logger.debug("Disconnecting client '%s', reason '%d'", client.client_id, rc)
+        logger.debug("Disconnecting client '%s', reason '%d'", self.client_id, rc)
         self.connected = False
 
     # disconnect
