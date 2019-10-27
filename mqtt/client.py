@@ -211,7 +211,7 @@ class BaseClient:
         pass
 
     def on_disconnect(self, client, userdata, rc):
-        # logger.debug('disconnecting reason {}'.format(rc))
+        logger.debug("Disconnecting client '%s', reason '%d'", client.client_id, rc)
         self.connected = False
 
     # disconnect
