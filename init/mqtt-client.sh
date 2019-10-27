@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ### BEGIN INIT INFO
 # Provides:          mqtt-client
@@ -11,8 +11,7 @@
 ### END INIT INFO
 
 # Change the next 3 lines to suit where you install your script and what you want to call it
-DIR=$APP_HOME
-DAEMON=$DIR/manage.py
+DAEMON=/app/manage.py
 DAEMON_NAME=mqtt-client
 
 # Add any command line options for your daemon here

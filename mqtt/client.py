@@ -107,11 +107,6 @@ class BaseClient:
         logger.info(">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'],
                                                                       self.broker['PORT']))
 
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(
-                ">> Connected to the MQTT brocker '{}:{}'".format(self.broker['HOST'], 
-                                                                  self.broker['PORT'])))
-
         return True
 
     def on_message(self, client, userdata, msg):

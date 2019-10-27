@@ -93,8 +93,6 @@ class SubscribeClient(BaseClient):
         self.subscribe('user/+/client/+/ambulance/+/call/+/waypoint/+/data', 2)
 
         logger.info(">> Listening to MQTT messages...")
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(">> Listening to MQTT messages..."))
 
         return True
 
@@ -104,12 +102,6 @@ class SubscribeClient(BaseClient):
                                                                      topic,
                                                                      payload,
                                                                      error))
-
-        if self.verbosity > 0:
-            self.stdout.write(self.style.ERROR("*> Error {}, '{}:{}': {}".format(username,
-                                                                                 topic,
-                                                                                 payload,
-                                                                                 error)))
 
         try:
 
@@ -138,9 +130,7 @@ class SubscribeClient(BaseClient):
             raise ParseException('Empty payload')
 
         logger.info(" > Parsing message '{}:{}'".format(msg.topic, msg.payload))
-        if self.verbosity > 0:
-            self.stdout.write(self.style.SUCCESS(" > Parsing message '{}:{}'".format(msg.topic,
-                                                                                     msg.payload)))
+
         # empty topic?
         if not msg.topic:
             raise ParseException('Empty topic')
@@ -755,9 +745,6 @@ class SubscribeClient(BaseClient):
 
             logger.info("on_message: msg = '{}'".format(msg.topic, msg.payload))
             logger.info(" > Parsing message '{}:{}'".format(msg.topic, msg.payload))
-            if self.verbosity > 0:
-                self.stdout.write(self.style.SUCCESS(" > Parsing message '{}:{}'".format(msg.topic,
-                                                                                         msg.payload)))
 
             # Parse message
             data = msg.payload.decode()
@@ -772,8 +759,6 @@ class SubscribeClient(BaseClient):
             if data == '"cache_clear"':
 
                 logger.info(" > Clearing cache")
-                if self.verbosity > 0:
-                    self.stdout.write(self.style.SUCCESS(" > Clearing cache"))
 
                 # call cache clear
                 cache_clear()

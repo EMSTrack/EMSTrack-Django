@@ -1,7 +1,10 @@
+import logging
 from django.core.management.base import BaseCommand
 from django.conf import settings
 
 from mqtt.subscribe import SubscribeClient
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -28,10 +31,9 @@ class Command(BaseCommand):
                                  style=self.style,
                                  verbosity=options['verbosity'])
 
-        self.stdout.write(
-            self.style.SUCCESS("""* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-* * *                    M Q T T   C L I E N T                    * * *
-* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *"""))
+        logger.info("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        logger.info("* * *                    M Q T T   C L I E N T                    * * *")
+        logger.info("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
 
         try:
             client.loop_forever()
