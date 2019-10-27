@@ -6,7 +6,6 @@ if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "emstrack.settings")
     if len(sys.argv) > 1 and (sys.argv[1] == 'flush' or
                               sys.argv[1] == 'loaddata' or
-                              sys.argv[1] == 'mqttclient' or
                               sys.argv[1] == 'bootstrap' or
                               sys.argv[1] == 'mqttseed'):
         os.environ.setdefault("DJANGO_ENABLE_MQTT_PUBLISH", "False")

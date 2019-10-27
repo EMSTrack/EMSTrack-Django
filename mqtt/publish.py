@@ -199,7 +199,8 @@ class SingletonPublishClient(PublishClient):
             logger.debug(">> Already connected to MQTT, skipping initialization.")
             return
 
-        if not env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True):
+        mqtt_publish = env.bool("DJANGO_ENABLE_MQTT_PUBLISH", default=True)
+        if not mqtt_publish:
 
             self.active = False
             self.retry = True
