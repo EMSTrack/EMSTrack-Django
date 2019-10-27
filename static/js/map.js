@@ -2449,7 +2449,7 @@ $(function() {
             types: ['geocode'],
         };
         const autocomplete = new google.maps.places.Autocomplete(streetField, autocompleteOptions);
-        autocomplete.setFields(['address_components', 'geometry']);
+        autocomplete.setFields(['address_components', 'formatted_address', 'geometry']);
         google.maps.event.clearInstanceListeners(streetField);
         google.maps.event.addListener(autocomplete, 'place_changed', () => {
             /*
@@ -2505,12 +2505,19 @@ $(function() {
             }
             */
 
-            // set current location
+            // get current location
             const place = autocomplete.getPlace();
-            const location = place['geometry']['location'];
             logger.log('debug', place);
-            logger.log('debug', location);
-            updateCurrentLocation(location);
+
+            // parse address
+            const address = geocoder.parse_response(place);
+            logger.log('debug', "address = '%j'", address);
+
+            // set current location
+            updateCurrentLocation({
+                lat: address['location']['latitude'],
+                lng: address['location']['longitude']
+            });
 
         });
     }
