@@ -264,7 +264,7 @@ export class GeocoderGoogle extends BaseGeocoder {
 
     }
 
-    parse_feature(feature) {
+    static parse_feature(feature) {
 
         let address = {
             formatted_address: "",
@@ -285,9 +285,12 @@ export class GeocoderGoogle extends BaseGeocoder {
             'latitude': location['lat'],
             'longitude': location['lng']
         };
+        logger.log('debug', location);
+        logger.log('debug', address);
 
         // set formated address
         address['formatted_address'] = feature['formatted_address'];
+        logger.log('debug', address);
 
         // parse context
         const context = feature['address_components'];
@@ -309,6 +312,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             else if (types.includes('country'))
                 address['country'] = item['short_name'].toUpperCase();
         }
+        logger.log('debug', address);
 
         return address;
 
