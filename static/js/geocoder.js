@@ -266,6 +266,9 @@ export class GeocoderGoogle extends BaseGeocoder {
 
     parse_feature(feature) {
 
+        logger.log('debug', "feature = %j", feature);
+        logger.log('debug', "feature['geometry'] = %j", feature['geometry']);
+
         let address = {
             formatted_address: "",
             number: "",
@@ -285,12 +288,12 @@ export class GeocoderGoogle extends BaseGeocoder {
             'latitude': Number.parseFloat(location['lat']),
             'longitude': Number.parseFloat(location['lng'])
         };
-        logger.log('debug', location);
-        logger.log('debug', address);
+        logger.log('debug', "location = %j", location);
+        logger.log('debug', "address = %j", address);
 
         // set formated address
         address['formatted_address'] = feature['formatted_address'];
-        logger.log('debug', address);
+        logger.log('debug', "address = %j", address);
 
         // parse context
         const context = feature['address_components'];
@@ -312,7 +315,7 @@ export class GeocoderGoogle extends BaseGeocoder {
             else if (types.includes('country'))
                 address['country'] = item['short_name'].toUpperCase();
         }
-        logger.log('debug', address);
+        logger.log('debug', "address = %j", address);
 
         return address;
 
