@@ -279,16 +279,14 @@ export class GeocoderGoogle extends BaseGeocoder {
             state: "",
             zipcode: undefined,
             country: "",
-            location: undefined
+            location: {}
         };
 
         // set location
         const location = feature['geometry']['location'];
         logger.log('debug', "location = %j", location);
-        address['location'] = {
-            'latitude': location['lat'],
-            'longitude': location['lng']
-        };
+        address['location']['latitude'] = location['lat']
+        address['location']['longitude'] = location['lng']
         logger.log('debug', "address = %j", address);
 
         // set formated address
