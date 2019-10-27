@@ -2016,6 +2016,34 @@ function updateCoordinates() {
 
 }
 
+function updateCoordinatesAutocomplete() {
+
+    // when the user changes the street address
+    const address = $('#street').val();
+
+    // quick return if no address
+    if (!address)
+        return;
+
+    // otherwise geocode and update
+    geocoder.geocode(address)
+        .then( (address) => {
+
+            logger.log('debug', "address = '%j'", address);
+
+            // set current location
+            updateCurrentLocation({
+                lat: address['location']['latitude'],
+                lng: address['location']['longitude']
+            });
+
+        })
+        .catch( (error) => {
+            logger.log('warn', "Could not forward geocode. Error: '%s'", error);
+        });
+
+}
+
 function dispatchCall() {
 
     let obj;
@@ -2417,8 +2445,16 @@ $(function() {
     if (mapProvider['provider'] === 'google') {
         // Autocomplete address
         const streetField = $('#street')[0];
-        const autocompleteOptions = {};
-        new google.maps.places.Autocomplete(streetField, autocompleteOptions);
+        const autocompleteOptions = {
+            types: ['geocode'],
+        };
+        const autocomplete = new google.maps.places.Autocomplete(streetField, autocompleteOptions);
+        autocomplete.setFields(['address_components', 'geometry']);
+        google.maps.event.clearInstanceListeners(streetField);
+        google.maps.event.addListener(autocomplete, 'place_changed', () => {
+            const place = autocomplete.getPlace();
+            logger.log('debug', place);
+        });
     }
 
 });
