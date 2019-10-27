@@ -2414,4 +2414,10 @@ $(function() {
             $('#radio-code').html('<span class="text-muted">' + settings.translation_table["Radio Code"] + '</span>');
     });
 
+
+    // Autocomplete address
+    const streetField = $('#street');
+    const autocompleteOptions = {};
+    const autocomplete = new google.maps.places.Autocomplete(streetField, autocompleteOptions);
+
 });

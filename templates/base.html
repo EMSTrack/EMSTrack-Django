@@ -167,7 +167,7 @@
 </footer>
 
 {% if request.user.is_authenticated and map_provider.provider == 'google' %}
-<script src="https://maps.googleapis.com/maps/api/js?key={{ map_provider.access_token }}" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ map_provider.access_token }}&libraries=places" async defer></script>
 {% endif %}
 
 {% autoescape off %}
