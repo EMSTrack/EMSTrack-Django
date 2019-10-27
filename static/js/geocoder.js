@@ -269,7 +269,7 @@ export class GeocoderGoogle extends BaseGeocoder {
         logger.log('debug', "feature = %j", feature);
         logger.log('debug', "feature['geometry'] = %j", feature['geometry']);
 
-        let address = {
+        const address = {
             formatted_address: "",
             number: "",
             street: "",
@@ -284,11 +284,11 @@ export class GeocoderGoogle extends BaseGeocoder {
 
         // set location
         const location = feature['geometry']['location'];
+        logger.log('debug', "location = %j", location);
         address['location'] = {
             'latitude': location['lat'],
             'longitude': location['lng']
         };
-        logger.log('debug', "location = %j", location);
         logger.log('debug', "address = %j", address);
 
         // set formated address
