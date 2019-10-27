@@ -1803,6 +1803,10 @@ function beginDispatching() {
 
 function endDispatching() {
 
+    // quick return if not dispatching
+    if (!isDispatching)
+        return;
+    
     isDispatching = false;
     dispatchingAmbulances = {};
     logger.log('info', 'End dispatching.');
@@ -2301,8 +2305,8 @@ $(function() {
     $('#dispatchDiv')
         .on('hide.bs.collapse', function(event) {
 
-            // hide new dispatch
-            $('#newDispatchDiv').collapse('hide');
+            // call end dispatching
+            endDispatching();
 
             // hide all popovers
             $('[data-original-title]')
