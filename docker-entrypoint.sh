@@ -28,7 +28,8 @@ then
     if [ "$COMMAND" = 'all' ]; then
 
         echo "> Starting mqttclient"
-	    python manage.py mqttclient > /etc/emstrack/log/mqttclient.log 2>&1 &
+	    # python manage.py mqttclient > /etc/emstrack/log/mqttclient.log 2>&1 &
+	    /etc/init.d/mqtt-client.sh start
 
     fi
 
