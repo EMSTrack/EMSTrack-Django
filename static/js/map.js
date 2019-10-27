@@ -2416,7 +2416,7 @@ $(function() {
 
 
     // Autocomplete address
-    const streetField = $('#street');
+    const streetField = $('#street')[0];
     const autocompleteOptions = {};
     const autocomplete = new google.maps.places.Autocomplete(streetField, autocompleteOptions);
 
