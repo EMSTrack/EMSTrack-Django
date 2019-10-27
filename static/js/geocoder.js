@@ -264,7 +264,7 @@ export class GeocoderGoogle extends BaseGeocoder {
 
     }
 
-    static parse_feature(feature) {
+    parse_feature(feature) {
 
         let address = {
             formatted_address: "",
