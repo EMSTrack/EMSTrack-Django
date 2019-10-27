@@ -66,6 +66,11 @@ COPY . .
 COPY scripts/. $SCRIPT_HOME
 RUN chmod +x $SCRIPT_HOME/emstrack-*.sh
 
+# Init mqttclient
+COPY init/mqtt-client.sh /etc/init.d
+RUN chmod /etc/init.d/mqtt-client.sh
+RUN update-rc.d mqtt-client defaults
+
 # Entrypoint script
 COPY docker-entrypoint.sh $SCRIPT_HOME/docker-entrypoint.sh
 RUN chmod +x $SCRIPT_HOME/docker-entrypoint.sh
