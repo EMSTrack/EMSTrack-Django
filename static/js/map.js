@@ -2309,6 +2309,9 @@ $(function() {
             $('[data-original-title]')
                 .popover('hide');
 
+            // end dispatching
+            endDispatching();
+
             // End dispatching automatically calls endDispatching
             $('#newDispatchDiv').collapse('hide');
 
