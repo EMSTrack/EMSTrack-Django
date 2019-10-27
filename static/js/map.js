@@ -2452,8 +2452,68 @@ $(function() {
         autocomplete.setFields(['address_components', 'geometry']);
         google.maps.event.clearInstanceListeners(streetField);
         google.maps.event.addListener(autocomplete, 'place_changed', () => {
+            /*
+            {
+                "address_components":
+                    [
+                        {
+                            "long_name":"2300",
+                            "short_name":"2300",
+                            "types":["street_number"]},
+                        {
+                            "long_name":"Expedition Way",
+                            "short_name":"Expedition Way",
+                            "types":["route"]
+                        },
+                        {
+                            "long_name": "La Jolla",
+                            "short_name":"La Jolla",
+                            "types":["neighborhood","political"]
+                        },
+                        {
+                            "long_name":"San Diego",
+                            "short_name":"San Diego",
+                            "types":["locality","political"]
+                        },
+                        {
+                            "long_name":"San Diego County","short_name":"San Diego County",
+                            "types":["administrative_area_level_2","political"]
+                        },
+                        {
+                            "long_name":"California","short_name":"CA",
+                            "types":["administrative_area_level_1","political"]
+                        },
+                        {
+                            "long_name":"United States","short_name":"US",
+                            "types":["country","political"]
+                        },
+                        {
+                            "long_name":"92037","short_name":"92037",
+                            "types":["postal_code"]
+                        }
+                        ],
+                "geometry":
+                    {
+                        "location": {
+                            "lat":32.8656131,"lng":-117.25048800000002
+                        },
+                        "viewport": {
+                            "south":32.8645033697085,"west":-117.25161473029152,
+                            "north":32.8672013302915,"east":-117.2489167697085}
+                            },
+                "html_attributions":[]
+            }
+            */
+
+            // set current location
             const place = autocomplete.getPlace();
+            const location = place['geometry']['location'];
             logger.log('debug', place);
+            updateCurrentLocation({
+                lat: location['lat'],
+                lng: location['lng']
+            });
+
         });
     }
 
