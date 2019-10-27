@@ -16,7 +16,8 @@ import json
 from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
     AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType, WaypointStatus, AmbulanceCallStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
-    AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer
+    AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer, CallSummarySerializer, \
+    CallAmbulanceSummarySerializer
 from emstrack.tests.util import date2iso, point2str
 
 from login.tests.setup_data import TestSetup
@@ -799,6 +800,34 @@ class TestCall(TestSetup):
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['patient_set'],
+                              [patient_serializer_2.data, patient_serializer_1.data])
+        result = serializer.data
+        result['ambulancecall_set'] = []
+        result['patient_set'] = []
+        self.assertDictEqual(result, expected)
+
+        serializer = CallSummarySerializer(c1)
+
+        expected = {
+            'id': c1.id,
+            'status': c1.status,
+            'details': c1.details,
+            'priority': c1.priority,
+            'priority_code': c1.priority_code,
+            'radio_code': c1.radio_code,
+            'created_at': date2iso(c1.created_at),
+            'pending_at': date2iso(c1.pending_at),
+            'started_at': date2iso(c1.started_at),
+            'ended_at': date2iso(c1.ended_at),
+            'comment': c1.comment,
+            'updated_by': c1.updated_by.id,
+            'updated_on': date2iso(c1.updated_on),
+            'ambulancecall_set': [],
+            'patient_set': []
+        }
+        self.assertCountEqual(serializer.data['ambulancecall_set'],
+                              CallAmbulanceSummarySerializer(c1.ambulancecall_set, many=True))
         self.assertCountEqual(serializer.data['patient_set'],
                               [patient_serializer_2.data, patient_serializer_1.data])
         result = serializer.data

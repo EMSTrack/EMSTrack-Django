@@ -495,6 +495,7 @@ class CallAmbulanceHistorySerializer(serializers.ModelSerializer):
 
 class CallAmbulanceSummarySerializer(serializers.ModelSerializer):
 
+    ambulance_identifier = serializers.CharField(source='ambulance.identifier')
     history = CallAmbulanceHistorySerializer(source='ambulancecallhistory_set', many=True, required=False)
     waypoint_set = WaypointSerializer(many=True, required=False)
 

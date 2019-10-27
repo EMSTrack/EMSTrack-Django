@@ -35,7 +35,7 @@ SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='CHANG3M3')
 
 SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
-    'DOC_EXPANSION': 'list',
+    'DOC_EXPANSION': 'full',
     'LOGIN_URL': 'rest_framework:login',
     'LOGOUT_URL': 'rest_framework:logout'
 }
