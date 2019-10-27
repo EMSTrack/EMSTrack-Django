@@ -68,7 +68,7 @@ RUN chmod +x $SCRIPT_HOME/emstrack-*.sh
 
 # Init mqttclient
 COPY init/mqtt-client.sh /etc/init.d
-RUN chmod /etc/init.d/mqtt-client.sh
+RUN chmod 755 /etc/init.d/mqtt-client.sh
 RUN update-rc.d mqtt-client defaults
 
 # Entrypoint script
