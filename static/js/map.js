@@ -2313,7 +2313,7 @@ $(function() {
             endDispatching();
 
             // End dispatching automatically calls endDispatching
-            $('#newDispatchDiv').collapse('hide');
+            // $('#newDispatchDiv').collapse('hide');
 
             /*
             // enable dispatch button
