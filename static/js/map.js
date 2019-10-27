@@ -2312,14 +2312,24 @@ $(function() {
             // end dispatching
             endDispatching();
 
-            // End dispatching automatically calls endDispatching
-            // $('#newDispatchDiv').collapse('hide');
-
             /*
             // enable dispatch button
             $('#dispatchSubmitButton').attr("disabled", false);
             */
 
+
+        })
+        .on('show.bs.collapse', function(event) {
+
+            if (isDispatching)
+                $('#newDispatchDiv').collapse('show');
+            else
+                $('#newDispatchDiv').collapse('hide');
+
+            /*
+            // enable dispatch button
+            $('#dispatchSubmitButton').attr("disabled", false);
+            */
 
         });
 
