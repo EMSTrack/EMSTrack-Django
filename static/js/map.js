@@ -2016,34 +2016,6 @@ function updateCoordinates() {
 
 }
 
-function updateCoordinatesAutocomplete() {
-
-    // when the user changes the street address
-    const address = $('#street').val();
-
-    // quick return if no address
-    if (!address)
-        return;
-
-    // otherwise geocode and update
-    geocoder.geocode(address)
-        .then( (address) => {
-
-            logger.log('debug', "address = '%j'", address);
-
-            // set current location
-            updateCurrentLocation({
-                lat: address['location']['latitude'],
-                lng: address['location']['longitude']
-            });
-
-        })
-        .catch( (error) => {
-            logger.log('warn', "Could not forward geocode. Error: '%s'", error);
-        });
-
-}
-
 function dispatchCall() {
 
     let obj;
@@ -2510,7 +2482,7 @@ $(function() {
             logger.log('debug', place);
 
             // parse address
-            const address = geocoder.parse_response(place);
+            const address = geocoder.parse_feature(place);
             logger.log('debug', "address = '%j'", address);
 
             // set current location
