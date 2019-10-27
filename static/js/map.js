@@ -2310,7 +2310,7 @@ $(function() {
                 .popover('hide');
 
             // end dispatching
-            //endDispatching();
+            endDispatching();
 
             // End dispatching automatically calls endDispatching
             // $('#newDispatchDiv').collapse('hide');
