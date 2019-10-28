@@ -29,7 +29,8 @@ function init (client) {
     logger.log('debug', 'range = %j', range)
 
     // set date
-    $('#date').text(today);
+    $('#beginDate').text(today);
+    $('#endDate').text(tomorrow);
 
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
