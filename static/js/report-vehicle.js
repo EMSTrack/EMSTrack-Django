@@ -49,6 +49,7 @@ function init (client) {
 
             });
 
+            logger.log('debug', "request = %j", requests);
             return Promise.all(requests);
 
         })
