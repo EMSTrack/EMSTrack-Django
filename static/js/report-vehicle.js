@@ -24,11 +24,11 @@ function init (client) {
 
     // set beginDate
     let beginDate = urlParams.get('beginDate');
-    if (beginDate == null) {
+    if (beginDate === null) {
         beginDate = new Date();
         beginDate.setHours(0,0,0,0);
     } else {
-        new Date(beginDate);
+        beginDate = new Date(beginDate);
     }
 
     /// set minDate
@@ -37,12 +37,12 @@ function init (client) {
 
     // set endDate
     let endDate = urlParams.get('endDate');
-    if (endDate == null) {
+    if (endDate === null) {
         endDate = minDate;
     } else {
         endDate = new Date(endDate);
         if (endDate < beginDate) {
-            endDate = minDate;
+            endDate = new Date(minDate);
         } else {
             endDate.setHours(0,0,0,0);
         }
