@@ -25,14 +25,10 @@ function init (client) {
     // set beginDate
     let beginDate = urlParams.get('beginDate');
     beginDate = beginDate === null ? new Date() : new Date(beginDate);
-    beginDate.setHours(0,0,0,0);
-    logger.log('debug', 'beginDate = %s', beginDate);
 
     /// set minDate
     let minDate = new Date();
     minDate.setDate(beginDate.getDate()+1);
-    minDate.setHours(0,0,0,0);
-    logger.log('debug', 'minDate = %s', minDate);
 
     // set endDate
     let endDate = urlParams.get('endDate');
@@ -41,8 +37,12 @@ function init (client) {
     if (endDate < beginDate) {
         endDate = minDate;
     }
+
+    // set at beginning of the day
+    beginDate.setHours(0,0,0,0);
+    minDate.setHours(0,0,0,0);
     endDate.setHours(0,0,0,0);
-    logger.log('debug', 'endDate = %s', endDate);
+    logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
 
     // set datepickers
     $('#beginDate')
