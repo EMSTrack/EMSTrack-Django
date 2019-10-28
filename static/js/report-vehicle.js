@@ -59,10 +59,12 @@ function init (client) {
         .then( responses => responses.forEach(
             response => {
 
+                logger.log('debug', 'IN PROMISE');
+
                 // save updates
                 const updates = response.data;
-                if (updates.lenght) {
-                    id = updates[0]['ambulance_id'];
+                if (updates.length) {
+                    const id = updates[0]['ambulance_id'];
                     vehicles[id]['history'] = updates;
 
                     // add to map
