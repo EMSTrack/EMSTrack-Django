@@ -39,7 +39,7 @@ export function calculateLenghtAndSpeed(segment) {
             const currentPosition = segment[i].location;
             const currentTimestamp = Date.parse(segment[i].timestamp);
 
-            const distance = calculateDistanceHaversine(lastPosition, currentPosition);
+            const distance = calculateDistanceHaversine(lastPosition, currentPosition); // meters
             const duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
 
             length[i] = distance;

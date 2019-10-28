@@ -86,7 +86,7 @@ function init (client) {
                 let totalTime = .0;
                 const length = [];
                 const maxSegmentSpeed = [];
-                const avgSegmentSpeed = [];
+                // const avgSegmentSpeed = [];
 
                 let maxSpeed = undefined;
                 let avgSpeed = undefined;
@@ -101,18 +101,21 @@ function init (client) {
                             calculateLenghtAndSpeed(segment);
 
                         // calculate max and avg
-                        maxSegmentSpeed.push(3.6 * Math.max(...segmentSpeed));
-                        avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
+                        maxSegmentSpeed.push(Math.max(...segmentSpeed));
+                        // avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
                         length.push(segmentTotalLength);
                         totalLength += segmentTotalLength;
                         totalTime += segmentTotalTime;
 
                     });
 
-                    maxSpeed = Math.max(...maxSegmentSpeed);
-                    avgSpeed = totalLength / totalTime;
+                    maxSpeed = 3.6 * Math.max(...maxSegmentSpeed);
+                    avgSpeed = 3.6 * totalLength / totalTime;
 
                 }
+
+                // length in km
+                totalLength /= 1000;
 
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
