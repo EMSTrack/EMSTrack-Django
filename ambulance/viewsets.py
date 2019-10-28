@@ -254,7 +254,7 @@ class AmbulanceViewSet(mixins.ListModelMixin,
             order_by = '-timestamp'
 
         # filter history
-        self.filter_history(ambulance_updates, filter_range, order_by)
+        ambulance_updates = self.filter_history(ambulance_updates, filter_range, order_by)
 
         # for entry in ambulance_updates:
         #     logger.debug(entry.timestamp)
