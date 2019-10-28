@@ -117,7 +117,7 @@ function init (client) {
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
                     '  <td>' + vehicle['identifier'] + '</td>\n' +
-                    '  <td>' + totalLength + ' </td>\n' +
+                    '  <td>' + totalLength.toFixed(2) + ' </td>\n' +
                     '  <td>' + (typeof avgSpeed === 'undefined' ? '&mdash;' : avgSpeed.toFixed(2)) + ' </td>\n' +
                     '  <td>' + (typeof maxSpeed === 'undefined' ? '&mdash;' : maxSpeed.toFixed(2)) + ' </td>\n' +
                     '  <td></td>\n' +
