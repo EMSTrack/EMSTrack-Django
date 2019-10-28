@@ -38,11 +38,15 @@ export function calculateLenghtAndSpeed(segment) {
         for (let i = 1; i < segment.length; i++) {
             const currentPosition = segment[i].location;
             const currentTimestamp = Date.parse(segment[i].timestamp);
-            length[i] = calculateDistanceHaversine(lastPosition, currentPosition);
+
+            const distance = calculateDistanceHaversine(lastPosition, currentPosition);
             const duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
-            speed[i] = length[i] / duration; // m/s
+
+            length[i] = distance;
+            totalLength += distance;
+
+            speed[i] = distance / duration; // m/s
             totalTime += duration;
-            totalLength += length[i];
         }
     }
     return [totalLength, totalTime, length, speed];

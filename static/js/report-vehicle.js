@@ -82,37 +82,47 @@ function init (client) {
             // add vehicles to table
             for (const vehicle of Object.values(vehicles)) {
 
-                // break segments
-                const segments = breakSegments(vehicle['history']);
+                // get history
+                const history = vehicle['history'];
+
                 let totalLength = .0;
                 let totalTime = .0;
                 const length = [];
                 const maxSegmentSpeed = [];
                 const avgSegmentSpeed = [];
-                segments.map( (segment) => {
 
-                    // calculate length, speed and total length
-                    const [segmentTotalLength, segmentTotalTime, segmentLength, segmentSpeed] =
-                        calculateLenghtAndSpeed(segment);
+                let maxSpeed = undefined;
+                let avgSpeed = undefined;
+                if (history.length) {
 
-                    // calculate max and avg
-                    maxSegmentSpeed.push(3.6 * Math.max(...segmentSpeed));
-                    avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
-                    length.push(segmentTotalLength);
-                    totalLength += segmentTotalLength;
-                    totalTime += segmentTotalTime;
+                    // break segments
+                    const segments = breakSegments(history);
+                    segments.map((segment) => {
 
-                });
+                        // calculate length, speed and total length
+                        const [segmentTotalLength, segmentTotalTime, segmentLength, segmentSpeed] =
+                            calculateLenghtAndSpeed(segment);
 
-                const maxSpeed = Math.max(...maxSegmentSpeed);
-                const avgSpeed = totalLength / totalTime;
+                        // calculate max and avg
+                        maxSegmentSpeed.push(3.6 * Math.max(...segmentSpeed));
+                        avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
+                        length.push(segmentTotalLength);
+                        totalLength += segmentTotalLength;
+                        totalTime += segmentTotalTime;
+
+                    });
+
+                    maxSpeed = Math.max(...maxSegmentSpeed);
+                    avgSpeed = totalLength / totalTime;
+
+                }
 
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
                     '  <td>' + vehicle['idenfifier'] + '</td>\n' +
                     '  <td>' + totalLength + ' </td>\n' +
-                    '  <td>' + avgSpeed + ' </td>\n' +
-                    '  <td>' + maxSpeed + ' </td>\n' +
+                    '  <td>' + (typeof avgSpeed === 'undefined' ? '&edash;' : avgSpeed) + ' </td>\n' +
+                    '  <td>' + (typeof maxSpeed === 'undefined' ? '&edash;' : maxSpeed) + ' </td>\n' +
                     '  <td></td>\n' +
                     '</tr>');
             }
