@@ -19,19 +19,26 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
-    // Set range
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const tomorrow = new Date();
-    tomorrow.setDate(today.getDate()+1);
-    tomorrow.setHours(0,0,0,0);
+    // get parameters
+    const urlParams = new URLSearchParams(window.location.search);
 
-    const range = today.toISOString() + "," + tomorrow.toISOString();
+    // set beginDate
+    let beginDate = urlParams.get('beginDate');
+    beginDate = beginDate === null ? new Date() : new Date(beginDate);
+    beginDate.setHours(0,0,0,0);
+
+    // set endDate
+    let endDate = urlParams.get('endDate');
+    endDate = endDate === null ? new Date(beginDate.getDate()+1) : new Date(endDate);
+    endDate.setHours(0,0,0,0);
+
+    // set range
+    const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
 
     // set date
-    $('#beginDate').text(today);
-    $('#endDate').text(tomorrow);
+    $('#beginDate').text(beginDate);
+    $('#endDate').text(endDate);
 
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')

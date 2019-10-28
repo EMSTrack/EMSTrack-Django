@@ -14,15 +14,23 @@
 
             <h2>{% trans "Dates" %}</h2>
             <form action="{% url 'report:vehicle' %}" method="get">
-                <table>
-                    <tr>
-                        <td><b>{% trans "begin" %}:</b></td>
-                        <td><input type="date" name="beginDate" id="beginDate"></td>
-                        <td><b>{% trans "end" %}:</b></td>
-                        <td><input type="date" name="endDate" id="endDate"></td>
-                    </tr>
-                </table>
-                <p><input type="submit">Submit</input></p>
+                <div class="row">
+                    <div class="col-1">
+                        <span>{% trans "begin" %}:</span>
+                    </div>
+                    <div class="col-4">
+                        <input type="date" name="beginDate" id="beginDate">
+                    </div>
+                    <div class="col-1">
+                        <span>{% trans "end" %}:</span>
+                    </div>
+                    <div class="col-4">
+                        <input type="date" name="endDate" id="endDate">
+                    </div>
+                    <div class="col-2">
+                        <input type="submit">Submit</input>
+                    </div>
+                </div>
             </form>
 
             <h2>{% trans "Vehicles" %}</h2>
