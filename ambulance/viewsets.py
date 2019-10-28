@@ -244,7 +244,9 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         else:
 
-            filter_range = request.query_params.get('filter', '').split(',')
+            filter_range = request.query_params.get('filter', '')
+            if filter_range:
+                filter_range = filter_range.split(',')
             logger.debug(filter_range)
 
             # order records in descending order
