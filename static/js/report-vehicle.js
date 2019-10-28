@@ -32,6 +32,7 @@ function init (client) {
     apiClient.httpClient.get('ambulance/')
         .then( response => {
 
+            // retrieve vehicles
             logger.log('debug', "Got ambulance data from API");
 
             // loop through vehicle records
@@ -54,26 +55,38 @@ function init (client) {
             return Promise.all(requests);
 
         })
-        .then( responses => responses.forEach(
-            response => {
+        .then( responses =>
+            responses.forEach(
+                response => {
 
-                logger.log('debug', 'IN PROMISE');
+                    // retrieve updates
+                    const updates = response.data;
+                    if (updates.length) {
+                        const id = updates[0]['ambulance_id'];
+                        vehicles[id]['history'] = updates;
 
-                // save updates
-                const updates = response.data;
-                if (updates.length) {
-                    const id = updates[0]['ambulance_id'];
-                    vehicles[id]['history'] = updates;
+                        // add to map
+                        logger.log('debug', "Got '%s' vehicle '%s' updates from API",
+                                   updates.length, vehicles[id]['identifier']);
+                        addAmbulanceRoute(map, updates, ambulance_status, false);
 
-                    // add to map
-                    logger.log('debug', "Got '%s' vehicle '%d' updates from API", updates.length, id);
-                    addAmbulanceRoute(map, updates, ambulance_status, false);
+                    }
 
                 }
+        ))
+        .then( () => {
 
+            // add vehicles to table
+            for (const vehicle of Object.values(vehicles)) {
+                $('#vehiclesTable> tbody:last-child').append(
+                    '<tr>\n' +
+                    '  <td>' + vehicle['idenfifier'] + '</td>\n' +
+                    '  <td></td>\n' +
+                    '  <td></td>\n' +
+                    '</tr>');
             }
 
-        ))
+        })
         .catch( (error) => {
             logger.log('error', "'Failed to retrieve vehicles: %s ", error);
         });
