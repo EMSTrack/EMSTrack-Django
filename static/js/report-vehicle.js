@@ -85,9 +85,6 @@ function init (client) {
 
                 let totalLength = .0;
                 let totalTime = .0;
-                const length = [];
-                const maxSegmentSpeed = [];
-                // const avgSegmentSpeed = [];
 
                 let maxSpeed = undefined;
                 let avgSpeed = undefined;
@@ -95,6 +92,9 @@ function init (client) {
 
                     // break segments
                     const segments = breakSegments(history);
+                    const maxSegmentSpeed = [];
+                    // const length = [];
+                    // const avgSegmentSpeed = [];
                     segments.map((segment) => {
 
                         // calculate length, speed and total length
@@ -104,7 +104,7 @@ function init (client) {
                         // calculate max and avg
                         maxSegmentSpeed.push(Math.max(...segmentSpeed));
                         // avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
-                        length.push(segmentTotalLength);
+                        //length.push(segmentTotalLength);
                         totalLength += segmentTotalLength;
                         totalTime += segmentTotalTime;
 
