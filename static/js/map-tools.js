@@ -24,14 +24,19 @@ export function calculateDistanceHaversine(location1, location2, radius) {
     return radius * c;
 }
 
-export function calculateLenghtAndSpeed(segment) {
+export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold) {
 
-    let totalLength = 0.0;
+	movingSpeedThreshold = movingSpeedThreshold || (10/3.6);    // m/s
+
+    let totalDistance = 0.0;
     let totalTime= 0.0;
-    const length = new Array(segment.length);
+    let totalMovingDistance = 0.0;
+    let totalMovingTime= 0.0;
+    let maxSpeed = 0.0;
+    const distance = new Array(segment.length);
     const speed = new Array(segment.length);
     if (segment.length) {
-        length[0] = .0;
+        distance[0] = .0;
         speed[0] = .0;
         const lastPosition = segment[0].location;
         const lastTimestamp = Date.parse(segment[0].timestamp);
@@ -39,17 +44,56 @@ export function calculateLenghtAndSpeed(segment) {
             const currentPosition = segment[i].location;
             const currentTimestamp = Date.parse(segment[i].timestamp);
 
-            const distance = calculateDistanceHaversine(lastPosition, currentPosition); // meters
-            const duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
+            const _distance = calculateDistanceHaversine(lastPosition, currentPosition); // meters
+            const _duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
+            const _speed = distance / duration; // m/s
 
-            length[i] = distance;
-            totalLength += distance;
+            distance[i] = _distance;
+            speed[i] = _speed;
 
-            speed[i] = distance / duration; // m/s
-            totalTime += duration;
+            totalDistance += _distance;
+            totalTime += _duration;
+
+            maxSpeed = maxSpeed ? maxSpeed >= _speed : _speed;
+
+            if (speed[i] > movingSpeedThreshold) {
+                totalMovingDistance += _distance;
+                totalMovingTime += _duration;
+            }
+            
         }
     }
-    return [totalLength, totalTime, length, speed];
+    return [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed];
+}
+
+export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
+
+    let totalDistance = .0;
+    let totalTime = .0;
+    let totalMovingDistance = 0.0;
+    let totalMovingTime= 0.0;
+    let maxSpeed = 0.0;
+
+    for (let i = 0; i < segments.length; i++) {
+
+        // calculate length, speed and total length
+        const [_totalDistance, _totalTime, _totalMovingDistance, _totalMovingTime,
+            _maxSpeed, _distance, _speed] =
+            calculateSegmentDistanceAndSpeed(segments[i], movingSpeedThreshold);
+
+        // calculate max speed
+        maxSpeed = maxSpeed ? maxSpeed >= _maxSpeed: _maxSpeed;
+
+        // accumulate
+        totalDistance += _totalDistance;
+        totalTime += _totalTime;
+
+        totalMovingDistance += _totalMovingDistance;
+        totalMovingTime += _totalMovingTime;
+
+    }
+
+    return [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed];
 }
 
 export function breakSegments(data, byStatus, separationRadius, timeInterval) {

@@ -1,6 +1,6 @@
 import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
-import {addAmbulanceRoute, breakSegments, calculateLenghtAndSpeed} from "./map-tools";
+import {addAmbulanceRoute, breakSegments, calculateMotionStatistics} from "./map-tools";
 
 import { logger } from './logger';
 
@@ -38,7 +38,7 @@ function init (client) {
         .then( response => {
 
             // retrieve vehicles
-            logger.log('debug', "Got ambulance data from API");
+            logger.log('debug', "Got vehicle data from API");
 
             // loop through vehicle records
             const requests = response.data.map( vehicle  => {
@@ -84,48 +84,30 @@ function init (client) {
                 // get history
                 const history = vehicle['history'];
 
-                let totalLength = .0;
-                let totalTime = .0;
+                // calculate statistics
+                let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
+                    = calculateMotionStatistics(10/3.6, history);
+                let avgSpeed = totalDistance / totalTime;
+                let avgMovingSpeed = totalMovingDistance / totalMovingTime;
 
-                let maxSpeed = undefined;
-                let avgSpeed = undefined;
-                if (history.length) {
+                // convert to proper units
+                totalDistance /= 1000;         // km
+                totalMovingDistance /= 1000;   // km
 
-                    // break segments
-                    const segments = breakSegments(history);
-                    const maxSegmentSpeed = [];
-                    // const length = [];
-                    // const avgSegmentSpeed = [];
-                    segments.map((segment) => {
-
-                        // calculate length, speed and total length
-                        const [segmentTotalLength, segmentTotalTime, segmentLength, segmentSpeed] =
-                            calculateLenghtAndSpeed(segment);
-
-                        // calculate max and avg
-                        maxSegmentSpeed.push(Math.max(...segmentSpeed));
-                        // avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
-                        //length.push(segmentTotalLength);
-                        totalLength += segmentTotalLength;
-                        totalTime += segmentTotalTime;
-
-                    });
-
-                    maxSpeed = 3.6 * Math.max(...maxSegmentSpeed);
-                    avgSpeed = 3.6 * totalLength / totalTime;
-
-                }
-
-                // length in km
-                totalLength /= 1000;
+                maxSpeed *= 3.6;               // km/h
+                avgSpeed *= 3.6;               // km/h
+                avgMovingSpeed *= 3.6;         // km/h
 
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
                     '  <td>' + vehicle['identifier'] + '</td>\n' +
-                    '  <td>' + totalLength.toFixed(2) + ' </td>\n' +
-                    '  <td>' + (typeof avgSpeed === 'undefined' ? '&mdash;' : avgSpeed.toFixed(2)) + ' </td>\n' +
-                    '  <td>' + (typeof maxSpeed === 'undefined' ? '&mdash;' : maxSpeed.toFixed(2)) + ' </td>\n' +
-                    '  <td></td>\n' +
+                    '  <td>' + totalDistance.toFixed(0) + ' </td>\n' +
+                    '  <td>' + totalTime.toFixed(1) + ' </td>\n' +
+                    '  <td>' + avgSpeed.toFixed(1) + ' </td>\n' +
+                    '  <td>' + totalMovingDistance.toFixed(0) + ' </td>\n' +
+                    '  <td>' + totalMovingTime.toFixed(1) + ' </td>\n' +
+                    '  <td>' + avgMovingSpeed.toFixed(1) + ' </td>\n' +
+                    '  <td>' + maxSpeed.toFixed(1) + ' </td>\n' +
                     '</tr>');
             }
 
