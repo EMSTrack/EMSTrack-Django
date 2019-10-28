@@ -35,9 +35,7 @@ function init (client) {
             logger.log('debug', "Got ambulance data from API");
 
             // loop through vehicle records
-            const requests = []
-
-            response.data.forEach( (vehicle)  => {
+            const requests = response.data.map( vehicle  => {
 
                 logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
 
@@ -46,12 +44,14 @@ function init (client) {
                 vehicles[vehicle['id']]['history'] = [];
 
                 const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
-                requests.push(apiClient.httpClient.get(url));
+                const promise = apiClient.httpClient.get(url);
+                logger.log('debug', "promise = %s", promise);
+                return promise;
 
             });
 
-            logger.log('debug', "requests = %j", requests);
-            return Promise.all(requests);
+            logger.log('debug', "requests = %s", requests);
+            return apiClient.httpClient.all(requests);
 
         })
         .then( responses => responses.forEach(
