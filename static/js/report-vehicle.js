@@ -84,9 +84,12 @@ function init (client) {
                 // get history
                 const history = vehicle['history'];
 
+                // break segments
+                const segments = breakSegments(history);
+
                 // calculate statistics
                 let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
-                    = calculateMotionStatistics(10/3.6, history);
+                    = calculateMotionStatistics(10/3.6, ...segments);
                 let avgSpeed = totalDistance / totalTime;
                 let avgMovingSpeed = totalMovingDistance / totalMovingTime;
 
