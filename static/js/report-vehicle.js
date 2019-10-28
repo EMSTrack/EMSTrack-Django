@@ -65,7 +65,7 @@ function init (client) {
             logger.log('debug', 'beginDate has changed!');
 
             const endDateElement = $('#endDate');
-            const endDate = endDateElement.val();
+            const endDate = new Date(endDateElement.val());
             const beginDate = $( this ).val();
             logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, minDate, endDate);
 
