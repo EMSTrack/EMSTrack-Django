@@ -35,7 +35,7 @@ function init (client) {
             logger.log('debug', "Got ambulance data from API");
 
             // loop through vehicle records
-            const requests = response.data.forEach( (vehicle)  => {
+            const requests = response.data.map( (vehicle)  => {
 
                 logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
 
