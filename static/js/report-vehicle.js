@@ -48,13 +48,10 @@ function init (client) {
                 vehicles[vehicle['id']]['history'] = [];
 
                 const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
-                const promise = apiClient.httpClient.get(url);
-                logger.log('debug', "promise = %s", promise);
-                return promise;
+                return apiClient.httpClient.get(url);
 
             });
 
-            logger.log('debug', "requests = %s", requests);
             return Promise.all(requests);
 
         })
@@ -119,10 +116,10 @@ function init (client) {
 
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
-                    '  <td>' + vehicle['idenfifier'] + '</td>\n' +
+                    '  <td>' + vehicle['identifier'] + '</td>\n' +
                     '  <td>' + totalLength + ' </td>\n' +
-                    '  <td>' + (typeof avgSpeed === 'undefined' ? '&edash;' : avgSpeed) + ' </td>\n' +
-                    '  <td>' + (typeof maxSpeed === 'undefined' ? '&edash;' : maxSpeed) + ' </td>\n' +
+                    '  <td>' + (typeof avgSpeed === 'undefined' ? '&mdash;' : avgSpeed.toFixed(2)) + ' </td>\n' +
+                    '  <td>' + (typeof maxSpeed === 'undefined' ? '&mdash;' : maxSpeed.toFixed(2)) + ' </td>\n' +
                     '  <td></td>\n' +
                     '</tr>');
             }
