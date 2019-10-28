@@ -24,15 +24,22 @@ function init (client) {
 
     // set beginDate
     let beginDate = urlParams.get('beginDate');
+    logger.log('debug', 'beginDate = %s', beginDate);
     beginDate = beginDate === null ? new Date() : new Date(beginDate);
     beginDate.setHours(0,0,0,0);
     logger.log('debug', 'beginDate = %s', beginDate);
 
+    /// set minDate
+    let minDate = new Date(beginDate.getDate()+1);
+    minDate.setHours(0,0,0,0);
+    logger.log('debug', 'minDate = %s', minnDate);
+
     // set endDate
     let endDate = urlParams.get('endDate');
-    endDate = endDate === null ? new Date(beginDate.getDate()+1) : new Date(endDate);
+    logger.log('debug', 'endDate = %s', endDate);
+    endDate = endDate === null ? minDate : new Date(endDate);
     if (endDate < beginDate) {
-        endDate = new Date(beginDate.getDate()+1);
+        endDate = minDate;
     }
     endDate.setHours(0,0,0,0);
     logger.log('debug', 'endDate = %s', endDate);
@@ -43,7 +50,7 @@ function init (client) {
 
     $('#endDate')
         .attr('value', endDate.toISOString().substr(0, 10))
-        .attr('min', (new Date(beginDate.getDate()+1)).toISOString().substr(0, 10));
+        .attr('min', minDate.toISOString().substr(0, 10));
 
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
