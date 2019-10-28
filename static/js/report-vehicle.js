@@ -52,6 +52,7 @@ function retrieveVehicles(map, range) {
         .then( (response) => {
 
             logger.log('debug', "Got ambulance data from API");
+            logger.log('debug', "response = %j", response.data);
 
             // loop through ambulancecall records
             response.data.forEach( (vehicle)  => {
