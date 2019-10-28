@@ -24,6 +24,7 @@ function init (client) {
     today.setHours(0,0,0,0);
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate()+1);
+    tomorrow.setHours(0,0,0,0);
 
     const range = today.toISOString() + "," + tomorrow.toISOString();
     logger.log('debug', 'range = %j', range)
