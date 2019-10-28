@@ -73,13 +73,13 @@ function init (client) {
             logger.log('debug', '_beginDate = %s, _minDate = %s, _endDate = %s', _beginDate, _minDate, _endDate);
 
             // replace endDate if necessary
-            if (endDate < _endDate)
+            if (_endDate > endDate)
                 endDateElement
-                    .prop('value', endDate.toISOString().substr(0, 10));
+                    .prop('value', _endDate.toISOString().substr(0, 10));
 
             // replace min on endDateElement
             endDateElement
-                .prop('min', minDate.toISOString().substr(0, 10));
+                .prop('min', _minDate.toISOString().substr(0, 10));
 
         });
 
