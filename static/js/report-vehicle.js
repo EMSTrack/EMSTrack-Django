@@ -11,6 +11,37 @@ const vehicles = {};
 // add initialization hook
 add_init_function(init);
 
+// setdates
+function setDates(beginDate, endDate) {
+
+    // beginDate
+    if (beginDate === null) {
+        beginDate = new Date();
+        beginDate.setHours(0, 0, 0, 0);
+    } else
+        beginDate = new Date(beginDate);
+
+    // minDate
+    let minDate = new Date();
+    minDate.setDate(beginDate.getDate()+1);
+
+    // endDate
+    if (endDate === null) {
+        endDate = minDate;
+    } else {
+        endDate = new Date(endDate);
+    }
+
+    // make sure endDate > beginDate
+    if (endDate <= beginDate) {
+        endDate = new Date(minDate);
+    }
+
+    logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
+
+    return [beginDate, minDate, endDate];
+}
+
 // initialization function
 function init (client) {
 
@@ -23,35 +54,34 @@ function init (client) {
     const urlParams = new URLSearchParams(window.location.search);
 
     // set beginDate
-    let beginDate = urlParams.get('beginDate');
-    if (beginDate === null) {
-        beginDate = new Date();
-        beginDate.setHours(0,0,0,0);
-    } else {
-        beginDate = new Date(beginDate);
-    }
-
-    /// set minDate
-    let minDate = new Date();
-    minDate.setDate(beginDate.getDate()+1);
-
-    // set endDate
-    let endDate = urlParams.get('endDate');
-    if (endDate === null) {
-        endDate = minDate;
-    } else {
-        endDate = new Date(endDate);
-        if (endDate < beginDate) {
-            endDate = new Date(minDate);
-        } else {
-            endDate.setHours(0,0,0,0);
-        }
-    }
+    const [beginDate, minDate, endDate] = setDates(urlParams.get('beginDate'), urlParams.get('endDate'));
     logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
 
     // set datepickers
     $('#beginDate')
-        .prop('value', beginDate.toISOString().substr(0, 10));
+        .prop('value', beginDate.toISOString().substr(0, 10))
+        .change(() => {
+
+            logger.log('debug', 'beginDate has changed!');
+
+            const endDateElement = $('#endDate');
+            const endDate = endDateElement .value();
+            const beginDate = $( this ).value();
+            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, minDate, endDate);
+
+            const [_beginDate, _minDate, _endDate] = setDates(beginDate, endDate);
+            logger.log('debug', '_beginDate = %s, _minDate = %s, _endDate = %s', _beginDate, _minDate, _endDate);
+
+            // replace endDate if necessary
+            if (endDate < _endDate)
+                endDateElement
+                    .prop('value', endDate.toISOString().substr(0, 10));
+
+            // replace min on endDateElement
+            endDateElement
+                .prop('min', minDate.toISOString().substr(0, 10));
+
+        });
 
     $('#endDate')
         .prop('value', endDate.toISOString().substr(0, 10))
