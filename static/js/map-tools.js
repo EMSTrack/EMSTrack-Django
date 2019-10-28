@@ -46,7 +46,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold) 
 
             const _distance = calculateDistanceHaversine(lastPosition, currentPosition); // meters
             const _duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
-            const _speed = distance / duration; // m/s
+            const _speed = _distance / _duration; // m/s
 
             distance[i] = _distance;
             speed[i] = _speed;

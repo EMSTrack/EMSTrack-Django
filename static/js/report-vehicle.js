@@ -32,7 +32,6 @@ function init (client) {
 
     // set endDate
     let endDate = urlParams.get('endDate');
-    logger.log('debug', 'endDate = %s', endDate);
     endDate = endDate === null ? minDate : new Date(endDate);
     if (endDate < beginDate) {
         endDate = minDate;
