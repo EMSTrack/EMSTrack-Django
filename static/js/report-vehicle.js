@@ -60,7 +60,7 @@ function init (client) {
     // set datepickers
     $('#beginDate')
         .prop('value', beginDate.toISOString().substr(0, 10))
-        .change(() => {
+        .change(function() {
 
             logger.log('debug', 'beginDate has changed!');
 
