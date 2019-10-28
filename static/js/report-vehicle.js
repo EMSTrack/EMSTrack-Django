@@ -32,7 +32,7 @@ function init (client) {
     /// set minDate
     let minDate = new Date(beginDate.getDate()+1);
     minDate.setHours(0,0,0,0);
-    logger.log('debug', 'minDate = %s', minnDate);
+    logger.log('debug', 'minDate = %s', minDate);
 
     // set endDate
     let endDate = urlParams.get('endDate');
