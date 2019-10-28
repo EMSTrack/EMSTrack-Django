@@ -26,6 +26,7 @@ function init (client) {
     let beginDate = urlParams.get('beginDate');
     beginDate = beginDate === null ? new Date() : new Date(beginDate);
     beginDate.setHours(0,0,0,0);
+    logger.log('debug', 'beginDate = %s', beginDate);
 
     // set endDate
     let endDate = urlParams.get('endDate');
@@ -34,10 +35,12 @@ function init (client) {
         endDate = new Date(beginDate.getDate()+1);
     }
     endDate.setHours(0,0,0,0);
+    logger.log('debug', 'endDate = %s', endDate);
 
     // set datepickers
     $('#beginDate')
         .attr('value', beginDate.toISOString().substr(0, 10));
+
     $('#endDate')
         .attr('value', endDate.toISOString().substr(0, 10))
         .attr('min', (new Date(beginDate.getDate()+1)).toISOString().substr(0, 10));
@@ -103,8 +106,8 @@ function init (client) {
                 // calculate statistics
                 let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
                     = calculateMotionStatistics(10/3.6, ...segments);
-                let avgSpeed = totalDistance / totalTime;
-                let avgMovingSpeed = totalMovingDistance / totalMovingTime;
+                let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
+                let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
 
                 // convert to proper units
                 totalDistance /= 1000;         // km
