@@ -30,15 +30,21 @@ function init (client) {
     // set endDate
     let endDate = urlParams.get('endDate');
     endDate = endDate === null ? new Date(beginDate.getDate()+1) : new Date(endDate);
+    if (endDate < beginDate) {
+        endDate = new Date(beginDate.getDate()+1);
+    }
     endDate.setHours(0,0,0,0);
+
+    // set datepickers
+    $('#beginDate')
+        .attr('value', beginDate.toISOString().substr(0, 10));
+    $('#endDate')
+        .attr('value', endDate.toISOString().substr(0, 10))
+        .attr('min', (new Date(beginDate.getDate()+1)).toISOString().substr(0, 10));
 
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
-
-    // set date
-    $('#beginDate').text(beginDate);
-    $('#endDate').text(endDate);
 
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
