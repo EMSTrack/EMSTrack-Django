@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.views.generic.base import TemplateView
+from django.utils.translation import ugettext_lazy as _
 
 from ambulance.models import LocationType, AmbulanceStatus
 
