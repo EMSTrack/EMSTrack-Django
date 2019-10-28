@@ -24,6 +24,30 @@ export function calculateDistanceHaversine(location1, location2, radius) {
     return radius * c;
 }
 
+export function calculateLenghtAndSpeed(segment) {
+
+    let totalLength = 0.0;
+    let totalTime= 0.0;
+    const length = new Array(segment.length);
+    const speed = new Array(segment.length);
+    if (segment.length) {
+        length[i] = .0;
+        speed[i] = .0;
+        const lastPosition = segment[0].location;
+        const lastTimestamp = Date.parse(segment[0].timestamp);
+        for (let i = 1; i < segment.length; i++) {
+            const currentPosition = segment[i].location;
+            const currentTimestamp = Date.parse(segment[i].timestamp);
+            length[i] = calculateDistanceHaversine(lastPosition, currentPosition);
+            const duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
+            speed[i] = length[i] / duration; // m/s
+            totalTime += duration;
+            totalLength += length[i];
+        }
+    }
+    return [totalLength, totalTime, length, speed];
+}
+
 export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
 	separationRadius = separationRadius || [100, 10000]; // 10m, 10km

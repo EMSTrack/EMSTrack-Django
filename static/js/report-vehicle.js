@@ -1,6 +1,6 @@
 import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
-import {addAmbulanceRoute, addCallWaypoints } from "./map-tools";
+import {addAmbulanceRoute, breakSegments, calculateLenghtAndSpeed} from "./map-tools";
 
 import { logger } from './logger';
 
@@ -78,10 +78,38 @@ function init (client) {
 
             // add vehicles to table
             for (const vehicle of Object.values(vehicles)) {
+
+                // break segments
+                const segments = breakSegments(vehicle['history']);
+                let totalLength = .0;
+                let totalTime = .0;
+                const length = [];
+                const maxSegmentSpeed = [];
+                const avgSegmentSpeed = [];
+                segments.map( (segment) => {
+
+                    // calculate length, speed and total length
+                    const [segmentTotalLength, segmentTotalTime, segmentLength, segmentSpeed] =
+                        calculateLenghtAndSpeed(segment);
+
+                    // calculate max and avg
+                    maxSegmentSpeed.push(3.6 * Math.max(...segmentSpeed));
+                    avgSegmentSpeed.push(3.6 * (segmentSpeed.reduce((a, b) => a + b, 0) / segmentSpeed.length));
+                    length.push(segmentTotalLength);
+                    totalLength += segmentTotalLength;
+                    totalTime += segmentTotalTime;
+
+                });
+
+                const maxSpeed = Math.max(...maxSegmentSpeed);
+                const avgSpeed = totalLength / totalTime;
+
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
                     '  <td>' + vehicle['idenfifier'] + '</td>\n' +
-                    '  <td></td>\n' +
+                    '  <td>' + totalLength + ' </td>\n' +
+                    '  <td>' + avgSpeed + ' </td>\n' +
+                    '  <td>' + maxSpeed + ' </td>\n' +
                     '  <td></td>\n' +
                     '</tr>');
             }
