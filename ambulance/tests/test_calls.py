@@ -827,7 +827,7 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
-                              CallAmbulanceSummarySerializer(c1.ambulancecall_set, many=True))
+                              CallAmbulanceSummarySerializer(c1.ambulancecall_set, many=True).data)
         self.assertCountEqual(serializer.data['patient_set'],
                               [patient_serializer_2.data, patient_serializer_1.data])
         result = serializer.data

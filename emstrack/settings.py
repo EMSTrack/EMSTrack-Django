@@ -243,6 +243,10 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': 'bundles/call/',
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/call-stats.json'),
     },
+    'REPORT_VEHICLE': {
+        'BUNDLE_DIR_NAME': 'bundles/report-vehicle/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-stats.json'),
+    },
 }
 
 # Logging

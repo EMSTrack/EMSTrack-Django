@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+
+            <h1>{% trans "Vehicle Report" %}</h1>
+
+            <ul>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>{% trans "Routes" %}:</h3>
+
+            <div id="map" class="my-2" style="height: 600px"></div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% render_bundle 'main' 'js' 'REPORT_VEHICLE' %}
+
+{% endblock %}
