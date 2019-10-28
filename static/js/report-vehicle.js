@@ -4,6 +4,8 @@ import {addAmbulanceRoute, addCallWaypoints } from "./map-tools";
 
 import { logger } from './logger';
 
+const axios = require('axios');
+
 let map;
 let apiClient;
 const vehicles = {};
@@ -51,7 +53,7 @@ function init (client) {
             });
 
             logger.log('debug', "requests = %s", requests);
-            return apiClient.httpClient.all(requests);
+            return axios.all(requests);
 
         })
         .then( responses => responses.forEach(
