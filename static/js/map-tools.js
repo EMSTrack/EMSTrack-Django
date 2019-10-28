@@ -31,8 +31,8 @@ export function calculateLenghtAndSpeed(segment) {
     const length = new Array(segment.length);
     const speed = new Array(segment.length);
     if (segment.length) {
-        length[i] = .0;
-        speed[i] = .0;
+        length[0] = .0;
+        speed[0] = .0;
         const lastPosition = segment[0].location;
         const lastTimestamp = Date.parse(segment[0].timestamp);
         for (let i = 1; i < segment.length; i++) {
