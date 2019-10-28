@@ -24,13 +24,13 @@ function init (client) {
 
     // set beginDate
     let beginDate = urlParams.get('beginDate');
-    logger.log('debug', 'beginDate = %s', beginDate);
     beginDate = beginDate === null ? new Date() : new Date(beginDate);
     beginDate.setHours(0,0,0,0);
     logger.log('debug', 'beginDate = %s', beginDate);
 
     /// set minDate
-    let minDate = new Date(beginDate.getDate()+1);
+    let minDate = new Date();
+    minDate.setDate(beginDate.getDate()+1);
     minDate.setHours(0,0,0,0);
     logger.log('debug', 'minDate = %s', minDate);
 
@@ -46,11 +46,11 @@ function init (client) {
 
     // set datepickers
     $('#beginDate')
-        .attr('value', beginDate.toISOString().substr(0, 10));
+        .prop('value', beginDate.toISOString().substr(0, 10));
 
     $('#endDate')
-        .attr('value', endDate.toISOString().substr(0, 10))
-        .attr('min', minDate.toISOString().substr(0, 10));
+        .prop('value', endDate.toISOString().substr(0, 10))
+        .prop('min', minDate.toISOString().substr(0, 10));
 
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
@@ -136,6 +136,10 @@ function init (client) {
                     '  <td>' + maxSpeed.toFixed(1) + ' </td>\n' +
                     '</tr>');
             }
+
+            // enable geneate report button
+            $('#submitButton')
+                .prop('disabled', false);
 
         })
         .catch( (error) => {
