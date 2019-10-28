@@ -19,7 +19,14 @@ function init (client) {
     apiClient = client;
 
     // Retrieve vehicles
-    // retrieveVehicles(map, call_id);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const tomorrow = new Date();
+    tomorrow.setDate(today.getDate()+1);
+
+    const range = today.toISOString() + "," + tomorrow.toISOString();
+    logger.log('debug', 'range = %j', range)
+    retrieveVehicles(map, range);
 
 }
 
@@ -36,83 +43,49 @@ $(function () {
 
 });
 
-function retrieveCall(map, call_id) {
+function retrieveVehicles(map, range) {
 
     // Build url
-    const url = 'call/' + call_id + '/?exclude=';
+    const url = 'ambulance/';
 
     apiClient.httpClient.get(url)
         .then( (response) => {
 
-            logger.log('debug', "Got call data from API");
-            addCallToMap(map, response.data);
+            logger.log('debug', "Got ambulance data from API");
+
+            // loop through ambulancecall records
+            response.data.forEach( (vehicle)  => {
+
+                logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
+
+                // add ambulance updates
+                retrieveVehicleUpdates(map, vehicle['id'], range);
+
+            });
 
         })
         .catch( (error) => {
-            logger.log('error', 'Failed to retrieve call data: %s', error);
+            logger.log('error', 'Failed to retrieve ambulance data: %s', error);
         });
 
 }
 
-function retrieveAmbulanceUpdates(map, ambulance_id, call_id) {
+function retrieveVehicleUpdates(map, ambulance_id, range) {
 
     logger.log('info', "Retrieving ambulance '%d' updates from API", ambulance_id);
 
     // Build url
-    const url = 'ambulance/' + ambulance_id + '/updates/?call_id=' + call_id;
+    const url = 'ambulance/' + ambulance_id + '/updates/?filter=' + range;
 
     apiClient.httpClient.get(url)
         .then( (response) => {
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulance_id);
-            addAmbulanceRoute(map, response.data, ambulance_status, true);
+            addAmbulanceRoute(map, response.data, ambulance_status, false);
 
         })
         .catch( (error) => {
             logger.log('error', "'Failed to retrieve ambulance '%d' updates: %s", ambulance_id, error);
         });
-
-}
-
-function addCallToMap(map, call) {
-
-    logger.log('info', 'Adding call to map');
-
-    // loop through ambulancecall records
-    call['ambulancecall_set'].forEach( (ambulancecall)  => {
-
-        logger.log('debug', 'Adding ambulancecall');
-
-        // add waypoints
-        addCallWaypoints(map, ambulancecall['waypoint_set']);
-
-        // add ambulance updates
-        retrieveAmbulanceUpdates(map, ambulancecall['ambulance_id'], call['id']);
-
-    });
-
-}
-
-function abortCall() {
-
-    // Show modal
-    $('#modal-button-ok').show();
-    $('#modal-button-cancel').show();
-    $('.modal-title')
-        .html(translation_table['Abort Call']);
-    $('.modal-body')
-        .html(translation_table['Are you sure?'])
-        .addClass('alert-danger');
-    $("#modal-dialog")
-        .on('hide.bs.modal', function () {
-            const $activeElement = $(document.activeElement);
-            if ($activeElement.is('[data-toggle], [data-dismiss]')) {
-                if ($activeElement.attr('id') === 'modal-button-ok') {
-                    // {% url 'ambulance:call_abort' pk=call.id %}
-                    window.location.href = abort_url;
-                }
-            }
-        })
-        .modal('show');
 
 }

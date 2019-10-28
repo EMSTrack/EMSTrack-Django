@@ -34,6 +34,14 @@
 
 {% block scripts %}
 
+{% autoescape off %}
+<script>
+    const ambulance_status = {{ ambulance_status }};
+    const location_type = {{ location_type }};
+    const translation_table = {{ translation_table }};
+</script>
+{% endautoescape %}
+
 {% render_bundle 'main' 'js' 'REPORT_VEHICLE' %}
 
 {% endblock %}
