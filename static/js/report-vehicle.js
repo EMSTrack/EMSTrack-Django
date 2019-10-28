@@ -24,7 +24,12 @@ function init (client) {
 
     // set beginDate
     let beginDate = urlParams.get('beginDate');
-    beginDate = beginDate === null ? new Date() : new Date(beginDate);
+    if (beginDate == null) {
+        beginDate = new Date();
+        beginDate.setHours(0,0,0,0);
+    } else {
+        new Date(beginDate);
+    }
 
     /// set minDate
     let minDate = new Date();
@@ -32,15 +37,16 @@ function init (client) {
 
     // set endDate
     let endDate = urlParams.get('endDate');
-    endDate = endDate === null ? minDate : new Date(endDate);
-    if (endDate < beginDate) {
+    if (endDate == null) {
         endDate = minDate;
+    } else {
+        endDate = new Date(endDate);
+        if (endDate < beginDate) {
+            endDate = minDate;
+        } else {
+            endDate.setHours(0,0,0,0);
+        }
     }
-
-    // set at beginning of the day
-    beginDate.setHours(0,0,0,0);
-    minDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
     logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
 
     // set datepickers
@@ -116,6 +122,9 @@ function init (client) {
                 let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
 
                 // convert to proper units
+                totalTime /= 3600;             // h
+                totalMovingTime /= 3600;       // h
+
                 totalDistance /= 1000;         // km
                 totalMovingDistance /= 1000;   // km
 
@@ -127,7 +136,7 @@ function init (client) {
                     '<tr>\n' +
                     '  <td>' + vehicle['identifier'] + '</td>\n' +
                     '  <td>' + totalDistance.toFixed(0) + ' </td>\n' +
-                    '  <td>' + totalTime.toFixed(1) + ' </td>\n' +
+                    '  <td>' + totalTime.toFixed(2) + ' </td>\n' +
                     '  <td>' + avgSpeed.toFixed(1) + ' </td>\n' +
                     '  <td>' + totalMovingDistance.toFixed(0) + ' </td>\n' +
                     '  <td>' + totalMovingTime.toFixed(1) + ' </td>\n' +

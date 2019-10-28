@@ -15,13 +15,13 @@
             <h2>{% trans "Dates" %}</h2>
             <form action="{% url 'report:vehicle' %}" method="get">
                 <div class="row">
-                    <div class="col-1">
+                    <div class="col-1 text-right">
                         <span>{% trans "begin" %}:</span>
                     </div>
                     <div class="col-4">
                         <input type="date" name="beginDate" id="beginDate">
                     </div>
-                    <div class="col-1">
+                    <div class="col-1 text-right">
                         <span>{% trans "end" %}:</span>
                     </div>
                     <div class="col-4">
