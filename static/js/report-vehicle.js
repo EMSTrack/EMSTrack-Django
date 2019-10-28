@@ -12,7 +12,7 @@ const vehicles = {};
 add_init_function(init);
 
 // setdates
-function setDates(beginDate, endDate) {
+function validateDateRange(beginDate, endDate) {
 
     // beginDate
     if (beginDate === null) {
@@ -54,7 +54,7 @@ function init (client) {
     const urlParams = new URLSearchParams(window.location.search);
 
     // set beginDate
-    const [beginDate, minDate, endDate] = setDates(urlParams.get('beginDate'), urlParams.get('endDate'));
+    const [beginDate, minDate, endDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
     logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
 
     // set datepickers
@@ -69,7 +69,7 @@ function init (client) {
             const beginDate = $( this ).val();
             logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, minDate, endDate);
 
-            const [_beginDate, _minDate, _endDate] = setDates(beginDate, endDate);
+            const [_beginDate, _minDate, _endDate] = validateDateRange(beginDate, endDate);
             logger.log('debug', '_beginDate = %s, _minDate = %s, _endDate = %s', _beginDate, _minDate, _endDate);
 
             // replace endDate if necessary
