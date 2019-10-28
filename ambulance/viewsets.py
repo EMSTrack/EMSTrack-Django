@@ -140,6 +140,40 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
         return available_zone
 
+    @staticmethod
+    def filter_history(history, filter_range, order_by):
+
+        # set filter
+        if filter_range:
+            # create filter to include only active times
+            if len(filter_range) % 2 == 1:
+                filter_range.append(None)
+            logger.debug(filter_range)
+            if filter_range:
+                ranges = []
+                for (t1, t2) in zip(*[iter(filter_range)] * 2):
+                    logger.debug((t1, t2))
+                    if t2 is None:
+                        ranges.append(history.filter(timestamp__gte=t1))
+                    else:
+                        ranges.append(history.filter(timestamp__range=(t1, t2)))
+
+                # calculate union of the active intervals
+                if len(ranges) == 1:
+                    history = ranges[0]
+                elif len(ranges) > 1:
+                    history = ranges[0].union(*ranges[1:])
+
+            else:
+                # no active time yet, return nothing!
+                history = history.none()
+
+        # order records in descending order
+        history = history.order_by(order_by)
+        logger.debug(history)
+
+        return history
+
     def updates_get(self, request, pk=None, **kwargs):
         """
         Retrieve and paginate ambulance updates.
@@ -176,28 +210,12 @@ class AmbulanceViewSet(mixins.ListModelMixin,
                 # If there is available history, filter call based on active intervals
 
                 # parse active times
-                available_times = self.extract_available_zone(ambulance_history)
+                filter_range = self.extract_available_zone(ambulance_history)
                 # logger.debug(available_times)
                 # for entry in ambulance_updates:
                 #     logger.debug(entry.timestamp)
 
-                if available_times:
-                    # create filter to include only active times
-                    ranges = []
-                    for (t1, t2) in zip(*[iter(available_times)] * 2):
-                        if t2 is None:
-                            ranges.append(ambulance_updates.filter(timestamp__gte=t1))
-                        else:
-                            ranges.append(ambulance_updates.filter(timestamp__range=(t1, t2)))
-
-                    # calculate union of the active intervals
-                    if len(ranges) == 1:
-                        ambulance_updates = ranges[0]
-                    elif len(ranges) > 1:
-                        ambulance_updates = ranges[0].union(*ranges[1:])
-                    # logger.debug(ambulance_updates)
-
-                else:
+                if not filter_range:
                     # no active time yet, return nothing!
                     ambulance_updates = AmbulanceUpdate.objects.none()
 
@@ -207,23 +225,34 @@ class AmbulanceViewSet(mixins.ListModelMixin,
 
                 # if the call is ended
                 if call.ended_at is not None:
-                    ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
+                    # ambulance_updates = ambulance_updates.filter(timestamp__range=(call.started_at, call.ended_at))
+                    filter_range = (call.started_at, call.ended_at)
 
                 # iff the call is still active
                 elif call.started_at is not None:
-                    ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
+                    # ambulance_updates = ambulance_updates.filter(timestamp__gte=call.started_at)
+                    filter_range = (call.started_at, None)
 
                 # call hasn't started yet, return none
                 else:
                     ambulance_updates = AmbulanceUpdate.objects.none()
+                    filter_range = ()
 
             # order records in ascending order
-            ambulance_updates = ambulance_updates.order_by('timestamp')
+            # ambulance_updates = ambulance_updates.order_by('timestamp')
+            order_by = 'timestamp'
 
         else:
 
+            filter_range = request.query_params.get('filter', '').split(',')
+            logger.debug(filter_range)
+
             # order records in descending order
-            ambulance_updates = ambulance_updates.order_by('-timestamp')
+            # ambulance_updates = ambulance_updates.order_by('-timestamp')
+            order_by = '-timestamp'
+
+        # filter history
+        self.filter_history(ambulance_updates, filter_range, order_by)
 
         # for entry in ambulance_updates:
         #     logger.debug(entry.timestamp)
