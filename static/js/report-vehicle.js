@@ -28,6 +28,9 @@ function init (client) {
     const range = today.toISOString() + "," + tomorrow.toISOString();
     logger.log('debug', 'range = %j', range)
 
+    // set date
+    $('#date').text(today);
+
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
         .then( response => {
