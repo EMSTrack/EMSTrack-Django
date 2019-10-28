@@ -12,9 +12,17 @@
 
             <h1>{% trans "Vehicle Report" %}</h1>
 
-            <h2>{% trans "Date" %}</h2>
-            <p><b>{% trans "begin" %}:</b><span id="beginDate"></span></p>
-            <p><b>{% trans "end" %}:</b><span id="endDate"></span></p>
+            <h2>{% trans "Dates" %}</h2>
+            <table>
+                <tr>
+                    <td><b>{% trans "begin" %}:</b></td>
+                    <td><span id="beginDate"></span></td>
+                </tr>
+                <tr>
+                    <td><b>{% trans "end" %}:</b></td>
+                    <td><span id="endDate"></span></td>
+                </tr>
+            </table>
 
             <h2>{% trans "Vehicles" %}</h2>
 
