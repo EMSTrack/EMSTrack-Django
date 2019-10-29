@@ -270,6 +270,8 @@ $(function () {
 
     noUiSlider.create(slider, {
         start: [0, 24],
+        step: 1/4,
+        margin: 1,
         range: {
             'min': [0],
             'max': [24]
@@ -277,7 +279,7 @@ $(function () {
         pips: {
             mode: 'count',
             values: 25,
-            density: 0.96,
+            density: 4*24/100,
         }
     });
 
