@@ -5,6 +5,7 @@ from django.views.generic.base import TemplateView
 from django.utils.translation import ugettext_lazy as _
 
 from ambulance.models import LocationType, AmbulanceStatus
+from ambulance.views import AmbulanceCSS
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ class VehicleStatusReportView(TemplateView):
                                        for m in AmbulanceStatus}
         context['map_provider'] = {'provider': settings.MAP_PROVIDER,
                                    'access_token': settings.MAP_PROVIDER_TOKEN}
+        context['ambulance_css'] = AmbulanceCSS
 
         context['translation_table'] = {
             "Abort Call": _("Abort Call"),
