@@ -1,6 +1,6 @@
 import {logger} from './logger';
 
-import {timeSplit, timeMerge} from "./util";
+import {timeSplit, timeMerge, splitTimeToMillis} from "./util";
 
 let map;
 let apiClient;
@@ -23,6 +23,12 @@ function validateDateRange(beginDate, beginTime, endTime) {
 
     // endTime
     endTime = timeSplit(endTime, [23, 59, 59, 999]);
+
+    // endTime < beginTime => endTime = beginTime + 1 hour
+    if (splitTimeToMillis(...endTime) < splitTimeToMillis(...beginTime)) {
+        endTime = [...beginTime];
+        endTime[0] += 1;
+    }
 
     // set dates
     beginDate.setHours(...beginTime);
@@ -125,40 +131,37 @@ function init (client) {
         urlParams.get('beginDate'), urlParams.get('beginTime'), urlParams.get('endTime'));
     logger.log('debug', 'beginDate = %s, endDate = %s, minTime = %s', beginDate, endDate,  minTime);
 
-    logger.log('debug', 'beginTime = %s, endTime = %s',
-        beginDate.toTimeString().substr(0, 8), endDate.toTimeString().substr(0, 8));
+    const beginTime = beginDate.toTimeString().substr(0, 8);
+    const endTime = endDate.toTimeString().substr(0, 8);
+    logger.log('debug', 'beginTime = %s, endTime = %s', beginTime, endTime);
 
     // set datepickers
     $('#beginDate')
         .prop('value', beginDate.toISOString().substr(0, 10));
 
     $('#beginTime')
-        .prop('value', beginDate.toTimeString().substr(0, 8))
+        .prop('value', beginTime)
         .change(function() {
 
             logger.log('debug', 'beginDate has changed!');
 
-            const endDateElement = $('#endTime');
-            const endDate = new Date(endDateElement.val());
-            const beginDate = $( this ).val();
-            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, minDate, endDate);
+            const endTimeElement = $('#endTime');
+            const endTime = endTimeElement.val();
+            const beginTime = $( this ).val();
+            logger.log('debug', 'beginDate = %s, beginTime = %s, endTime = %s', beginDate, beginTime, endTime);
 
-            const [_beginDate, _minDate, _endDate] = validateDateRange(beginDate, endDate);
-            logger.log('debug', '_beginDate = %s, _minDate = %s, _endDate = %s', _beginDate, _minDate, _endDate);
+            const [_beginDate, _endDate, _minTime] = validateDateRange(beginDate, beginTime, endTime);
+            logger.log('debug', '_beginDate = %s, _endDate = %s, _minTime = %s', _beginDate, _endDate, _minTime);
 
-            // replace endDate if necessary
-            if (_endDate > endDate)
-                endDateElement
-                    .prop('value', _endDate.toISOString().substr(0, 10));
-
-            // replace min on endDateElement
-            endDateElement
-                .prop('min', _minDate.toISOString().substr(0, 10));
+            // replace endTime
+            endTimeElement
+                .prop('min', _minTime)
+                .prop('value', _endDate.toTimeString().substr(0, 8));
 
         });
 
     $('#endTime')
-        .prop('value', endDate.toTimeString().substr(0, 8))
+        .prop('value', endTime)
         .prop('min', minTime);
 
     // set range
@@ -209,6 +212,8 @@ function init (client) {
             let cursor = 0;
             let progress = '<div class="progress" style="height: 20px;">\n';
             const totalTime = endDate.getTime() - beginDate.getTime();
+            const startTime = beginDate.toTimeString().substr(0, 8)
+
             const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
             const delta = 100 * (1000 * 60 * 60 / totalTime);
             const labels = ['secondary', 'light'];

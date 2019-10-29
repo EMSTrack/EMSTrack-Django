@@ -38,9 +38,9 @@ function validateDateRange(beginDate, endDate) {
         endDate = new Date(minDate);
     }
 
-    logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
+    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
-    return [beginDate, minDate, endDate];
+    return [beginDate, endDate, minDate];
 }
 
 // initialization function
@@ -55,8 +55,8 @@ function init (client) {
     const urlParams = new URLSearchParams(window.location.search);
 
     // set beginDate
-    const [beginDate, minDate, endDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
-    logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
+    const [beginDate, endDate, minDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
+    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     // set datepickers
     $('#beginDate')
@@ -68,19 +68,15 @@ function init (client) {
             const endDateElement = $('#endDate');
             const endDate = new Date(endDateElement.val());
             const beginDate = $( this ).val();
-            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, minDate, endDate);
+            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
-            const [_beginDate, _minDate, _endDate] = validateDateRange(beginDate, endDate);
-            logger.log('debug', '_beginDate = %s, _minDate = %s, _endDate = %s', _beginDate, _minDate, _endDate);
+            const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
+            logger.log('debug', '_beginDate = %s, _endDate = %s, _minDate = %s', _beginDate, _endDate, _minDate);
 
             // replace endDate if necessary
-            if (_endDate > endDate)
-                endDateElement
-                    .prop('value', _endDate.toISOString().substr(0, 10));
-
-            // replace min on endDateElement
             endDateElement
-                .prop('min', _minDate.toISOString().substr(0, 10));
+                .prop('min', _minDate.toISOString().substr(0, 10))
+                .prop('value', _endDate.toISOString().substr(0, 10));
 
         });
 

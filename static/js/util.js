@@ -33,3 +33,7 @@ export function timeToMillis(time, defaultTime = [0,0,0,0]) {
     const [hours, minutes, seconds, milliseconds] = timeSplit(time, defaultTime);
     return 1000 * (60 * (60 * hours + minutes) + seconds) + milliseconds;
 }
+
+export function splitTimeToMillis(hours, minutes, seconds, milliseconds) {
+    return 1000 * (60 * (60 * hours + minutes) + seconds) + milliseconds;
+}
