@@ -244,21 +244,23 @@ function init (client) {
                 console.log(offsets);
 
                 let cursor = 0;
-                let progress = '<div class="progress">';
+                let progress = '<div class="progress">\n';
                 for (let i = n - 1; i >= 0; i--) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
-                    logger.log('debug', 'start = %f', start);
+                    logger.log('debug', 'start', start);
                     if (start > cursor) {
-                        progress += `<div class="progress-bar" role="progressbar" style="width: ${start-cursor}%" aria-valuenow="${start-cursor}" aria-valuemin="0" aria-valuemax="100"></div>`;
+                        const delta = (start - cursor).toFixed(0);
+                        progress += `<div class="progress-bar" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">-</div>\n`;
                         cursor = start;
+                        logger.log('debug', 'delta', delta);
                     }
                     // fill barr with fraction
-                    const fraction = 100 * (durations[i] / totalTime);
-                    progress += `<div class="progress-bar bg-primary" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>`;
+                    const fraction = (100 * (durations[i] / totalTime)).toFixed(0);
+                    progress += `<div class="progress-bar bg-primary" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100">${fraction}</div>\n`;
                     cursor += fraction;
-                    logger.log('debug', 'fraction = %f', fraction);
-                    logger.log('debug', 'cursor = %f', cursor);
+                    logger.log('debug', 'fraction', fraction);
+                    logger.log('debug', 'cursor', cursor);
                 }
                 progress += '</div>';
                 logger.log('debug', 'progress = %s', progress);
