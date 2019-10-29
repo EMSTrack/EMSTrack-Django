@@ -232,11 +232,15 @@ function init (client) {
                 }
                 progress += '</div>';
 
-                $('#vehiclesTable> tbody:last-child').append(
-`<tr>
-   <td>${vehicle['identifier']}</td>
-   <td>${progress}</td>
- </tr>`);
+                $('#vehiclesTable>').append(
+`<div class="row">
+  <div class="col-1">
+    ${vehicle['identifier']}
+  </div>
+  <div class="col-11">
+    ${progress}
+  </div>
+ </div>`);
             }
 
             // enable geneate report button
@@ -251,14 +255,5 @@ function init (client) {
 }
 
 $(function () {
-
-    // Set up map widget
-    const options = {
-        map_id: "map",
-        zoom: 12,
-        map_provider: mapProvider
-    };
-
-    map = new LeafletPolylineWidget(options);
 
 });
