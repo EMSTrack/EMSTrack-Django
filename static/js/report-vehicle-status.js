@@ -213,7 +213,7 @@ function init (client) {
             const delta = 100 * (1000 * 60 * 60 / totalTime);
             const labels = ['secondary', 'light'];
             for (let i = 0; i < numberOfHours; i++) {
-                progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i+1}</div>\n`;
+                progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i}</div>\n`;
             }
             progress += '</div>';
             logger.log('debug', 'progress = %s', progress);
