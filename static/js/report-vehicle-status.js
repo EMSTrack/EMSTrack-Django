@@ -259,6 +259,8 @@ function init (client) {
                     offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
                 }
 
+                logger.log('debug', 'ambulance_css = %s', ambulance_css);
+
                 let cursor = 0;
                 let progress = '<div class="progress" style="height: 20px;">\n';
                 for (let i = n - 1; i >= 0; i--) {
@@ -273,7 +275,8 @@ function init (client) {
                     }
                     // fill barr with fraction
                     const fraction = (100 * (durations[i] / totalTime)).toFixed(0);
-                    progress += `<div class="progress-bar bg-${ambulance_css[status[i]]['class']}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+                    const status_class = ambulance_css[status[i]]['class'];
+                    progress += `<div class="progress-bar bg-${status_class}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
                     cursor += fraction;
                     logger.log('debug', 'fraction', fraction);
                     logger.log('debug', 'cursor', cursor);
