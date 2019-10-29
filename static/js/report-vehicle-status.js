@@ -259,6 +259,7 @@ function init (client) {
                     offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
                 }
 
+                console.log(ambulance_css);
                 logger.log('debug', 'ambulance_css = %s', ambulance_css);
 
                 let cursor = 0;
