@@ -223,8 +223,11 @@ function init (client) {
                 const totalTime = endDate.getTime() - beginDate.getTime();
                 for (let i = 0; i <= n; i++) {
                     const segment = segments[i];
-                    offsets[i] = new Date(segment[segment.length-1].timestamp) - beginDate.getTime();
+                    console.log(segment);
+                    offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
                 }
+
+                console.log(offsets);
 
                 let cursor = 0;
                 let progress = '<div class="progress">';
