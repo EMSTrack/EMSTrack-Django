@@ -214,10 +214,10 @@ function init (client) {
                     // add empty row
                     $('#vehiclesTable').append(
 `<div class="row">
-  <div class="col-1">
+  <div class="col-2">
     ${vehicle['identifier']}
   </div>
-  <div class="col-11">
+  <div class="col-10">
   </div>
  </div>`);
                     continue;
@@ -245,7 +245,7 @@ function init (client) {
 
                 let cursor = 0;
                 let progress = '<div class="progress">';
-                for (let i = 0; i < n; i++) {
+                for (let i = n - 1; i >= 0; i--) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
                     if (start > cursor) {
@@ -261,10 +261,10 @@ function init (client) {
 
                 $('#vehiclesTable').append(
 `<div class="row">
-  <div class="col-1">
+  <div class="col-2">
     ${vehicle['identifier']}
   </div>
-  <div class="col-11">
+  <div class="col-10">
     ${progress}
   </div>
  </div>`);
