@@ -251,7 +251,7 @@ function init (client) {
                     logger.log('debug', 'start', start);
                     if (start > cursor) {
                         const delta = (start - cursor).toFixed(0);
-                        progress += `<div class="progress-bar" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">-</div>\n`;
+                        progress += `<div class="progress-bar" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
                         cursor = start;
                         logger.log('debug', 'delta', delta);
                     }
