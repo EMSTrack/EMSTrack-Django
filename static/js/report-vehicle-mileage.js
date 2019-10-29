@@ -1,8 +1,9 @@
-import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
+import {LeafletPolylineWidget} from "./leaflet/LeafletWidget";
 
 import {addAmbulanceRoute, breakSegments, calculateMotionStatistics} from "./map-tools";
 
-import { logger } from './logger';
+import {logger} from './logger';
+import {validateDateRange} from "./util";
 
 let map;
 let apiClient;
@@ -12,36 +13,6 @@ const vehicles = {};
 add_init_function(init);
 
 // setdates
-function validateDateRange(beginDate, endDate) {
-
-    // beginDate
-    if (beginDate === null) {
-        beginDate = new Date();
-        beginDate.setHours(0, 0, 0, 0);
-    } else
-        beginDate = new Date(beginDate);
-
-    // minDate
-    let minDate = new Date();
-    minDate.setDate(beginDate.getDate()+1);
-    minDate.setHours(0, 0, 0, 0);
-
-    // endDate
-    if (endDate === null) {
-        endDate = minDate;
-    } else {
-        endDate = new Date(endDate);
-    }
-
-    // make sure endDate > beginDate
-    if (endDate <= beginDate) {
-        endDate = new Date(minDate);
-    }
-
-    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
-
-    return [beginDate, endDate, minDate];
-}
 
 // initialization function
 function init (client) {
