@@ -282,7 +282,7 @@ function init (client) {
                         logger.log('debug', 'delta = %s', delta);
                     }
                     // fill barr with fraction
-                    const fraction = (100 * (durations[i] / totalTime)).toFixed(0);
+                    const fraction = (100 * (durations[i] / totalTime));
                     const status_class = ambulance_css[status[i]]['class'];
                     progress += `<div class="progress-bar bg-${status_class}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
                     cursor += fraction;
