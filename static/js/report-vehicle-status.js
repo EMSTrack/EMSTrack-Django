@@ -55,7 +55,7 @@ function segmentHistory(history, byStatus, byUser) {
     let currentSegment = [];
     let lastPosition = null;
     const n = history.length;
-    for (let i = 0; i < n; i++) {
+    for (let i = n - 1; i >= 0; i--) {
 
 		// current position
         const currentPosition = history[i];
@@ -79,10 +79,10 @@ function segmentHistory(history, byStatus, byUser) {
             }
 
 			if (newUser || newStatus) {
-                // terminate current segment, sorted in reverse order!
+                // terminate current segment
                 durations.push(
-                    new Date(currentSegment[0].timestamp) -
-                    new Date(currentSegment[currentSegment.length-1].timestamp)
+                    new Date(currentSegment[currentSegment.length-1].timestamp) -
+                    new Date(currentSegment[0].timestamp)
                 );  // in miliseconds
                 segments.push(currentSegment);
                 status.push(lastPosition.status);
@@ -103,8 +103,8 @@ function segmentHistory(history, byStatus, byUser) {
 	if (currentSegment.length > 0) {
         // terminate last segment
         durations.push(
-            new Date(currentSegment[0].timestamp) -
-            new Date(currentSegment[currentSegment.length-1].timestamp)
+            new Date(currentSegment[currentSegment.length-1].timestamp) -
+            new Date(currentSegment[0].timestamp)
         );  // in miliseconds
         segments.push(currentSegment);
         status.push(lastPosition.status);
