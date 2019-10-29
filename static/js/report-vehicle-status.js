@@ -210,6 +210,20 @@ function init (client) {
                 // get history
                 const history = vehicle['history'];
 
+                if (history.length === 0) {
+                    // add empty row
+                    $('#vehiclesTable').append(
+`<div class="row">
+  <div class="col-1">
+    ${vehicle['identifier']}
+  </div>
+  <div class="col-11">
+  </div>
+ </div>`);
+                    continue;
+
+                }
+
                 // segment by status
                 const [segments, durations, status, user] = segmentHistory(history, true, false);
                 console.log(segments);
@@ -245,7 +259,7 @@ function init (client) {
                 }
                 progress += '</div>';
 
-                $('#vehiclesTable>').append(
+                $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-1">
     ${vehicle['identifier']}
@@ -254,6 +268,7 @@ function init (client) {
     ${progress}
   </div>
  </div>`);
+
             }
 
             // enable geneate report button
