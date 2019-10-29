@@ -261,6 +261,8 @@ function init (client) {
 
 $(function () {
 
+    logger.log('info', 'beginning of ready function');
+
     // setup slider
     const slider = document.getElementById('slider-range');
     noUiSlider.create(slider, {
@@ -270,5 +272,7 @@ $(function () {
             'max': [24]
         }
     });
+
+    logger.log('info', 'end of ready function');
 
 });
