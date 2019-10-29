@@ -195,10 +195,12 @@ function init (client) {
                 // segment by status
                 const [segments, durations, status, user] = segmentHistory(history, true, false);
 
+                /*
                 console.log(segments);
                 console.log(durations);
                 console.log(status);
                 console.log(user);
+                */
 
                 // calculate offsets
                 const n = status.length;
