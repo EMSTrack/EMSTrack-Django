@@ -55,7 +55,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold) 
             totalDistance += _distance;
             totalTime += _duration;
 
-            maxSpeed = maxSpeed ? maxSpeed >= _speed : _speed;
+            maxSpeed = maxSpeed >= _speed ? maxSpeed : _speed;
 
             if (speed[i] > movingSpeedThreshold) {
                 totalMovingDistance += _distance;
@@ -85,7 +85,7 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
             calculateSegmentDistanceAndSpeed(segments[i], movingSpeedThreshold);
 
         // calculate max speed
-        maxSpeed = maxSpeed ? maxSpeed >= _maxSpeed: _maxSpeed;
+        maxSpeed = maxSpeed >= _maxSpeed ? maxSpeed : _maxSpeed;
 
         // accumulate
         totalDistance += _totalDistance;
