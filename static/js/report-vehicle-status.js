@@ -212,7 +212,7 @@ function init (client) {
                 const totalTime = endDate.getTime() - beginDate.getTime();
                 for (let i = 0; i <= n; i++) {
                     const segment = segments[i];
-                    offset[i] = new Date(segment[0].updated_on) - beginDate.getTime();
+                    offsets[i] = new Date(segment[0].updated_on) - beginDate.getTime();
                 }
 
                 let progress = '<div class="progress">';
