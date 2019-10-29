@@ -211,13 +211,13 @@ function init (client) {
             const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
             const delta = 100 * (1000 * 60 * 60 / totalTime);
             for (let i = 1; i <= numberOfHours; i++) {
-                progress += `<div class="progress-bar bg-dark" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
+                progress += `<div class="progress-bar bg-dark" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
                 i++;
-                progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
+                progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
             }
             progress += '</div>';
             logger.log('debug', 'progress = %s', progress);
-            
+
             $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-2">
@@ -284,7 +284,7 @@ function init (client) {
                 $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-2">
-    ${vehicle['identifier']}
+    <strong>${vehicle['identifier']}</strong>
   </div>
   <div class="col-10">
     ${progress}
