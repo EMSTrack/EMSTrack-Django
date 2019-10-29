@@ -91,6 +91,9 @@ function init (client) {
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
 
+    // display please wait...
+    $('#pleaseWaitDialog').modal('show');
+
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
         .then( response => {
