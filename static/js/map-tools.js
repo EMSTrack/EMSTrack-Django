@@ -101,7 +101,7 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
 
 export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
-	separationRadius = separationRadius || [100, 10000]; // 10m, 10km
+	separationRadius = separationRadius || [0.01, 10]; // 10m, 10km
 	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
     byStatus = byStatus || false; // split by status as well?
 
@@ -117,8 +117,10 @@ export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
         // distance?
 		if (lastPosition != null) {
+
             const distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);
             const interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp));
+
             let newStatus = false;
             if (byStatus && lastPosition.status !== currentPosition.status) {
 			    newStatus = true;
@@ -127,6 +129,7 @@ export function breakSegments(data, byStatus, separationRadius, timeInterval) {
                 newCurrentPosition.status = lastPosition.status;
                 currentSegment.push(newCurrentPosition);
             }
+
 			if (newStatus ||
                 distance > separationRadius[1] ||
                 interval > timeInterval[1] ||
