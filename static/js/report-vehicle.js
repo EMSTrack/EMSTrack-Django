@@ -91,9 +91,6 @@ function init (client) {
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
 
-    // display please wait...
-    $('#pleaseWaitDialog').modal('show');
-
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
         .then( response => {
@@ -168,11 +165,11 @@ function init (client) {
                 $('#vehiclesTable> tbody:last-child').append(
                     '<tr>\n' +
                     '  <td>' + vehicle['identifier'] + '</td>\n' +
-                    '  <td>' + totalDistance.toFixed(0) + ' </td>\n' +
+                    '  <td>' + totalDistance.toFixed(2) + ' </td>\n' +
                     '  <td>' + totalTime.toFixed(2) + ' </td>\n' +
                     '  <td>' + avgSpeed.toFixed(1) + ' </td>\n' +
                     '  <td>' + totalMovingDistance.toFixed(0) + ' </td>\n' +
-                    '  <td>' + totalMovingTime.toFixed(1) + ' </td>\n' +
+                    '  <td>' + totalMovingTime.toFixed(2) + ' </td>\n' +
                     '  <td>' + avgMovingSpeed.toFixed(1) + ' </td>\n' +
                     '  <td>' + maxSpeed.toFixed(1) + ' </td>\n' +
                     '</tr>');
