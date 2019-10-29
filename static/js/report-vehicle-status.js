@@ -275,8 +275,8 @@ $(function () {
             'max': [24]
         },
         pips: {
-            mode: 'range',
-            density: 4,
+            mode: 'steps',
+            density: 0.96,
         }
     });
 
