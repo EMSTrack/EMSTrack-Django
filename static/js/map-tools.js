@@ -101,7 +101,7 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
 
 export function breakSegments(data, byStatus, separationRadius, timeInterval) {
 
-	separationRadius = separationRadius || [0.01, 10]; // 10m, 10km
+	separationRadius = separationRadius || [0.01, 1]; // 10m, 1km
 	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
     byStatus = byStatus || false; // split by status as well?
 
