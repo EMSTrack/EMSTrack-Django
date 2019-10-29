@@ -12,8 +12,15 @@ export function timeSplit(time, defaultTime = [0,0,0,0]) {
     const terms = time.split(':');
     const hours = Number.parseInt(terms[0]);
     const minutes = terms.length > 1 ? Number.parseInt(terms[1]) : defaultTime[1];
-    const seconds = terms.length > 2 ? Number.parseInt(terms[2]) : defaultTime[2];
-    const milliseconds = terms.length > 3 ? Number.parseInt(terms[3]) : defaultTime[3];
+    let seconds = defaultTime[2];
+    let milliseconds = defaultTime[3];
+    if (terms.length > 2) {
+        const seconds_terms = time.split('.');
+        seconds = Number.parseInt(seconds_terms[0]);
+        if (seconds_terms.length > 1)
+            milliseconds = Number.parseInt(seconds_terms[1]);
+    }
+
     return [hours, minutes, seconds, milliseconds];
 }
 

@@ -126,14 +126,14 @@ function init (client) {
     logger.log('debug', 'beginDate = %s, endDate = %s, minTime = %s', beginDate, endDate,  minTime);
 
     logger.log('debug', 'beginTime = %s, endTime = %s',
-        beginDate.toISOString().substr(11, 12), endDate.toISOString().substr(11, 12));
+        beginDate.toTimeString().substr(0, 8), endDate.toTimeString().substr(0, 8));
 
     // set datepickers
     $('#beginDate')
         .prop('value', beginDate.toISOString().substr(0, 10));
 
     $('#beginTime')
-        .prop('value', beginDate.toISOString().substr(11, 12))
+        .prop('value', beginDate.toTimeString().substr(0, 8))
         .change(function() {
 
             logger.log('debug', 'beginDate has changed!');
@@ -158,7 +158,7 @@ function init (client) {
         });
 
     $('#endTime')
-        .prop('value', endDate.toISOString().substr(11, 12))
+        .prop('value', endDate.toTimeString().substr(0, 8))
         .prop('min', minTime);
 
     // set range
