@@ -265,6 +265,8 @@ $(function () {
 
     // setup slider
     const slider = document.getElementById('slider-range');
+    console.log(slider);
+
     noUiSlider.create(slider, {
         start: [0, 24],
         range: {
