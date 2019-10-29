@@ -211,10 +211,9 @@ function init (client) {
             const totalTime = endDate.getTime() - beginDate.getTime();
             const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
             const delta = 100 * (1000 * 60 * 60 / totalTime);
+            const labels = ['secondary', 'light'];
             for (let i = 1; i <= numberOfHours; i++) {
-                progress += `<div class="progress-bar bg-dark" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
-                i++;
-                progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+                progress += `<div class="progress-bar bg-${labels[i % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i+1}</div>\n`;
             }
             progress += '</div>';
             logger.log('debug', 'progress = %s', progress);
