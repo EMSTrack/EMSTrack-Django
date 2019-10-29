@@ -1,5 +1,7 @@
 import {logger} from './logger';
 
+import 'nouislider';
+
 import {validateDateRange} from "./util";
 
 let apiClient;
@@ -107,6 +109,16 @@ function init (client) {
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
+
+    // setup slider
+    const slider = document.getElementById('slider-range');
+    noUiSlider.create(slider, {
+        start: [0, 24],
+        range: {
+            'min': [0],
+            'max': [24]
+        }
+    });
 
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
