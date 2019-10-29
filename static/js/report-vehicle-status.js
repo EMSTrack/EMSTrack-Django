@@ -259,31 +259,29 @@ function init (client) {
                     offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
                 }
 
-                console.log(ambulance_css);
-                logger.log('debug', 'ambulance_css = %s', ambulance_css);
-
                 let cursor = 0;
                 let progress = '<div class="progress" style="height: 20px;">\n';
                 for (let i = n - 1; i >= 0; i--) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
-                    logger.log('debug', 'start', start);
+                    logger.log('debug', 'start = %s', start);
                     if (start > cursor) {
                         const delta = (start - cursor).toFixed(0);
                         progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
                         cursor = start;
-                        logger.log('debug', 'delta', delta);
+                        logger.log('debug', 'delta = %s', delta);
                     }
                     // fill barr with fraction
                     const fraction = (100 * (durations[i] / totalTime)).toFixed(0);
                     const status_class = ambulance_css[status[i]]['class'];
                     progress += `<div class="progress-bar bg-${status_class}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
                     cursor += fraction;
-                    logger.log('debug', 'fraction', fraction);
-                    logger.log('debug', 'cursor', cursor);
+                    logger.log('debug', 'status = %s', status[i]);
+                    logger.log('debug', 'fraction = %s', fraction);
+                    logger.log('debug', 'cursor = %s', cursor);
                 }
                 progress += '</div>';
-                logger.log('debug', 'progress = %s', progress);
+                // logger.log('debug', 'progress = %s', progress);
 
                 $('#vehiclesTable').append(
 `<div class="row">
