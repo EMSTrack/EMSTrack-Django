@@ -205,6 +205,10 @@ function init (client) {
 
                 // segment by status
                 const [segments, durations, status, user] = segmentHistory(history, true, false);
+                console.log(segments);
+                console.log(durations);
+                console.log(status);
+                console.log(user);
 
                 // calculate offsets
                 const n = status.length;
@@ -215,9 +219,8 @@ function init (client) {
                     offsets[i] = new Date(segment[0].updated_on) - beginDate.getTime();
                 }
 
-                let progress = '<div class="progress">';
-
                 let cursor = 0;
+                let progress = '<div class="progress">';
                 for (let i = 0; i <= n; i++) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
@@ -227,7 +230,7 @@ function init (client) {
                     }
                     // fill barr with fraction
                     const fraction = 100 * (durations[i] / totalTime);
-                    progress += `<div class="progress-bar bg-primary" role="progressbar" style="width: ${fraction}%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>`;
+                    progress += `<div class="progress-bar bg-primary" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>`;
                     cursor += fraction;
                 }
                 progress += '</div>';
