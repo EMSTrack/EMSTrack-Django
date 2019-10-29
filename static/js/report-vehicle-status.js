@@ -221,7 +221,7 @@ function init (client) {
                 const n = status.length;
                 const offsets = new Array(n);
                 const totalTime = endDate.getTime() - beginDate.getTime();
-                for (let i = 0; i <= n; i++) {
+                for (let i = 0; i < n; i++) {
                     const segment = segments[i];
                     console.log(segment);
                     offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
@@ -231,7 +231,7 @@ function init (client) {
 
                 let cursor = 0;
                 let progress = '<div class="progress">';
-                for (let i = 0; i <= n; i++) {
+                for (let i = 0; i < n; i++) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
                     if (start > cursor) {
