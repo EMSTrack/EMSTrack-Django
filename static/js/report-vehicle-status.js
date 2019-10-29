@@ -204,6 +204,30 @@ function init (client) {
         ))
         .then( () => {
 
+            // add time scale to table
+            let cursor = 0;
+            let progress = '<div class="progress">\n';
+            const totalTime = endDate.getTime() - beginDate.getTime();
+            const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
+            const delta = 100 * (1000 * 60 * 60 / totalTime);
+            for (let i = 1; i <= numberOfHours; i++) {
+                progress += `<div class="progress-bar bg-dark" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
+                i++;
+                progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
+            }
+            progress += '</div>';
+            logger.log('debug', 'progress = %s', progress);
+            
+            $('#vehiclesTable').append(
+`<div class="row">
+  <div class="col-2">
+    <strong>Time</strong>
+  </div>
+  <div class="col-10">
+    ${progress}
+  </div>
+ </div>`);
+
             // add vehicles to table
             for (const vehicle of Object.values(vehicles)) {
 
@@ -215,7 +239,7 @@ function init (client) {
                     $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-2">
-    ${vehicle['identifier']}
+    <strong>${vehicle['identifier']}</strong>
   </div>
   <div class="col-10">
   </div>
@@ -226,22 +250,14 @@ function init (client) {
 
                 // segment by status
                 const [segments, durations, status, user] = segmentHistory(history, true, false);
-                console.log(segments);
-                console.log(durations);
-                console.log(status);
-                console.log(user);
 
                 // calculate offsets, sorted in reverse order!
                 const n = status.length;
                 const offsets = new Array(n);
-                const totalTime = endDate.getTime() - beginDate.getTime();
                 for (let i = 0; i < n; i++) {
                     const segment = segments[i];
-                    console.log(segment);
                     offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
                 }
-
-                console.log(offsets);
 
                 let cursor = 0;
                 let progress = '<div class="progress">\n';
