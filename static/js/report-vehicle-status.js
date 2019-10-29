@@ -275,7 +275,8 @@ $(function () {
             'max': [24]
         },
         pips: {
-            mode: 'steps',
+            mode: 'count',
+            values: 25,
             density: 0.96,
         }
     });
