@@ -248,6 +248,7 @@ function init (client) {
                 for (let i = n - 1; i >= 0; i--) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
+                    logger.log('debug', 'start = %f', start);
                     if (start > cursor) {
                         progress += `<div class="progress-bar" role="progressbar" style="width: ${start-cursor}%" aria-valuenow="${start-cursor}" aria-valuemin="0" aria-valuemax="100"></div>`;
                         cursor = start;
@@ -256,8 +257,11 @@ function init (client) {
                     const fraction = 100 * (durations[i] / totalTime);
                     progress += `<div class="progress-bar bg-primary" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>`;
                     cursor += fraction;
+                    logger.log('debug', 'fraction = %f', fraction);
+                    logger.log('debug', 'cursor = %f', cursor);
                 }
                 progress += '</div>';
+                logger.log('debug', 'progress = %s', progress);
 
                 $('#vehiclesTable').append(
 `<div class="row">
