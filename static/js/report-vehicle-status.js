@@ -256,17 +256,17 @@ function init (client) {
                 // segment by status
                 const [segments, durations, status, user] = segmentHistory(history, true, false);
 
-                // calculate offsets, sorted in reverse order!
+                // calculate offsets
                 const n = status.length;
                 const offsets = new Array(n);
                 for (let i = 0; i < n; i++) {
                     const segment = segments[i];
-                    offsets[i] = (new Date(segment[segment.length-1].timestamp)).getTime() - beginDate.getTime();
+                    offsets[i] = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
                 }
 
                 let cursor = 0;
                 let progress = '<div class="progress" style="height: 20px;">\n';
-                for (let i = n - 1; i >= 0; i--) {
+                for (let i = 0; i < n; i++) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
                     logger.log('debug', 'start = %s', start);
