@@ -4,10 +4,10 @@ var BundleTracker = require('webpack-bundle-tracker');
 
 module.exports = {
     context: __dirname,
-    entry: '../static/js/report-vehicle',
+    entry: '../static/js/report-vehicle-mileage',
     mode: 'development',
     output: {
-        path: path.resolve('./static/bundles/report-vehicle'),
+        path: path.resolve('./static/bundles/report-vehicle-mileage'),
         filename: "[name]-[hash].js"
     },
     node: {
@@ -15,7 +15,7 @@ module.exports = {
     },
 
     plugins: [
-        new BundleTracker({filename: './webpack/report-vehicle-stats.json'})
+        new BundleTracker({filename: './webpack/report-vehicle-mileage-stats.json'})
     ],
     module: {
         rules: [

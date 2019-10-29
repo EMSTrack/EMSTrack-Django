@@ -45,7 +45,7 @@ function validateDateRange(beginDate, endDate) {
 // initialization function
 function init (client) {
 
-    logger.log('info', '> report-vehicle.js');
+    logger.log('info', '> report-vehicle-mileage.js');
 
     // set apiClient
     apiClient = client;

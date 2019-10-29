@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col">
 
-            <h1>{% trans "Vehicle Report" %}</h1>
+            <h1>{% trans "Vehicle Status Report" %}</h1>
 
             <h2>{% trans "Dates" %}</h2>
             <form action="{% url 'report:vehicle' %}" method="get">
@@ -46,13 +46,13 @@
                     </tr>
                     <tr>
                         <th>{% trans "Vehicle" %}</th>
-                        <th>{% trans "Distance" %}(km)</th>
-                        <th>{% trans "Time" %}(h)</th>
-                        <th>{% trans "Avg Speed" %}(km/h)</th>
-                        <th>{% trans "Distance" %}(km)</th>
-                        <th>{% trans "Time" %}(h)</th>
-                        <th>{% trans "Avg Speed" %}(km/h)</th>
-                        <th>{% trans "Max Speed" %}(km/h)</th>
+                        <th>{% trans "Distance" %} (km)</th>
+                        <th>{% trans "Time" %} (h)</th>
+                        <th>{% trans "Avg Speed" %} (km/h)</th>
+                        <th>{% trans "Distance" %} (km)</th>
+                        <th>{% trans "Time" %} (h)</th>
+                        <th>{% trans "Avg Speed" %} (km/h)</th>
+                        <th>{% trans "Max Speed" %} (km/h)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -86,6 +86,6 @@
 </script>
 {% endautoescape %}
 
-{% render_bundle 'main' 'js' 'REPORT_VEHICLE' %}
+{% render_bundle 'main' 'js' 'REPORT_VEHICLE_STATUS' %}
 
 {% endblock %}

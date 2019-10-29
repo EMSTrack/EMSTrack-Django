@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+
+            <h1>{% trans "Vehicle Mileage Report" %}</h1>
+
+            <h2>{% trans "Dates" %}</h2>
+            <form action="{% url 'report:vehicle' %}" method="get">
+                <div class="row">
+                    <div class="col-1 text-right">
+                        <span>{% trans "begin" %}:</span>
+                    </div>
+                    <div class="col-4">
+                        <input type="date" name="beginDate" id="beginDate">
+                    </div>
+                    <div class="col-1 text-right">
+                        <span>{% trans "end" %}:</span>
+                    </div>
+                    <div class="col-4">
+                        <input type="date" name="endDate" id="endDate">
+                    </div>
+                    <div class="col-2">
+                        <input id="submitButton" class="btn btn-primary"
+                               type="submit" value="{% trans 'Generate Report' %}"
+                               disabled>
+                    </div>
+                </div>
+            </form>
+
+            <h2>{% trans "Vehicles" %}</h2>
+
+            <table class="table table-striped table-sm" id="vehiclesTable">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th colspan="3">{% trans "Total" %}</th>
+                        <th colspan="4">{% trans "Moving" %}</th>
+                    </tr>
+                    <tr>
+                        <th>{% trans "Vehicle" %}</th>
+                        <th>{% trans "Distance" %} (km)</th>
+                        <th>{% trans "Time" %} (h)</th>
+                        <th>{% trans "Avg Speed" %} (km/h)</th>
+                        <th>{% trans "Distance" %} (km)</th>
+                        <th>{% trans "Time" %} (h)</th>
+                        <th>{% trans "Avg Speed" %} (km/h)</th>
+                        <th>{% trans "Max Speed" %} (km/h)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h2>{% trans "Routes" %}</h2>
+
+            <div id="map" class="my-2" style="height: 600px"></div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% autoescape off %}
+<script>
+    const ambulance_status = {{ ambulance_status }};
+    const location_type = {{ location_type }};
+    const translation_table = {{ translation_table }};
+</script>
+{% endautoescape %}
+
+{% render_bundle 'main' 'js' 'REPORT_VEHICLE_MILEAGE' %}
+
+{% endblock %}

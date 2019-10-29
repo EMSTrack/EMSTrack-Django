@@ -10,8 +10,12 @@ urlpatterns = [
         login_required(views.ReportIndexView.as_view()),
         name="index"),
 
-    url(r'^vehicle$',
-        login_required(views.VehicleReportView.as_view()),
-        name="vehicle"),
+    url(r'^vehicle-mileage$',
+        login_required(views.VehicleMileageReportView.as_view()),
+        name="vehicle-mileage"),
+
+    url(r'^vehicle-status$',
+        login_required(views.VehicleStatusReportView.as_view()),
+        name="vehicle-status"),
 
 ]

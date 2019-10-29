@@ -17,7 +17,8 @@ if [ -f $INIT_FILE ]; then
     webpack --config webpack/point-widget-config.js
     webpack --config webpack/call-config.js
     webpack --config webpack/base-config.js
-    webpack --config webpack/report-vehicle-config.js
+    webpack --config webpack/report-vehicle-mileage-config.js
+    webpack --config webpack/report-vehicle-status-config.js
 
     echo "> Recovering static files"
     python manage.py collectstatic --no-input
@@ -71,7 +72,9 @@ webpack --config webpack/ambulance-config.js
 webpack --config webpack/point-widget-config.js
 webpack --config webpack/call-config.js
 webpack --config webpack/base-config.js
-webpack --config webpack/report-vehicle-config.js
+webpack --config webpack/report-vehicle-mileage-config.js
+webpack --config webpack/report-vehicle-status-config.js
+
 python manage.py collectstatic --no-input
 python manage.py compilemessages
 
