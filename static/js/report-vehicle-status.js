@@ -1,6 +1,7 @@
 import {logger} from './logger';
 
 import noUiSlider from 'nouislider';
+import 'nouislider/distribute/nouislider.css';
 
 import {validateDateRange} from "./util";
 
@@ -268,7 +269,7 @@ $(function () {
     console.log(slider);
 
     noUiSlider.create(slider, {
-        start: [0, 24],
+        start: [10, 20],
         range: {
             'min': [0],
             'max': [24]
