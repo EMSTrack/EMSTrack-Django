@@ -42,10 +42,76 @@ function validateDateRange(beginDate, endDate) {
     return [beginDate, minDate, endDate];
 }
 
+function segmentHistory(history, byStatus, byUser) {
+
+    byStatus = byStatus || true; // split by status
+    byUser = byUser || false;     // split by user
+
+    const segments = [];
+    const durations = [];
+    const status = [];
+    const user = [];
+
+    let currentSegment = [];
+    let lastPosition = null;
+    const n = history.length;
+    for (let i = 0; i < n; i++) {
+
+		// current position
+        const currentPosition = history[i];
+
+        // distance?
+		if (lastPosition != null) {
+
+            let newUser = false;
+            let newStatus = false;
+
+            if (byUser && lastPosition.updated_by !== currentPosition.updated_by) {
+			    newUser = true;
+            }
+
+            if (!newUser && byStatus && lastPosition.status !== currentPosition.status) {
+			    newStatus = true;
+			    // will break segment, add current position first
+                const newCurrentPosition = Object.assign({}, currentPosition);
+                newCurrentPosition.status = lastPosition.status;
+                currentSegment.push(newCurrentPosition);
+            }
+
+			if (newUser || newStatus) {
+                // terminate current segment
+                durations.push(
+                    new Date(currentSegment[currentSegment.length-1].updated_on) -
+                        new Date(currentSegment[0].updated_on));  // in miliseconds
+                segments.push(currentSegment);
+                status.push(lastPosition.status);
+                user.push(lastPosition.updated_by);
+                currentSegment = [];
+            }
+		}
+
+		// add position to segment
+		currentSegment.push(currentPosition);
+
+		// update lastPosition
+		lastPosition = currentPosition;
+
+	}
+
+	// anything left?
+	if (currentSegment.length > 0) {
+        // terminate last segment
+        segments.push(currentSegment);
+    }
+
+	return [segments, durations, status, user];
+
+}
+
 // initialization function
 function init (client) {
 
-    logger.log('info', '> report-vehicle-mileage.js');
+    logger.log('info', '> report-vehicle-status.js');
 
     // set apiClient
     apiClient = client;
@@ -125,11 +191,6 @@ function init (client) {
                         const id = updates[0]['ambulance_id'];
                         vehicles[id]['history'] = updates;
 
-                        // add to map
-                        logger.log('debug', "Got '%s' vehicle '%s' updates from API",
-                                   updates.length, vehicles[id]['identifier']);
-                        addAmbulanceRoute(map, updates, ambulance_status, false);
-
                     }
 
                 }
@@ -142,45 +203,45 @@ function init (client) {
                 // get history
                 const history = vehicle['history'];
 
-                // break segments
-                const segments = breakSegments(history);
+                // segment by status
+                const [segments, durations, status, user] = segmentHistory(history, true, false);
 
-                // calculate statistics
-                let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
-                    = calculateMotionStatistics(10/3.6, ...segments);
-                let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
-                let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
+                // calculate offsets
+                const n = status.length;
+                const offsets = new Array(n);
+                const totalTime = endDate.getTime() - beginDate.getTime();
+                for (let i = 0; i <= n; i++) {
+                    const segment = segments[i];
+                    offset[i] = new Date(segment[0].updated_on) - beginDate.getTime();
+                }
 
-                // convert to proper units
-                totalTime /= 3600;             // h
-                totalMovingTime /= 3600;       // h
+                let progress = '<div class="progress">';
 
-                totalDistance /= 1000;         // km
-                totalMovingDistance /= 1000;   // km
-
-                maxSpeed *= 3.6;               // km/h
-                avgSpeed *= 3.6;               // km/h
-                avgMovingSpeed *= 3.6;         // km/h
+                let cursor = 0;
+                for (let i = 0; i <= n; i++) {
+                    // advance bar until start
+                    const start = 100 * (offsets[i] / totalTime);
+                    if (start > cursor) {
+                        progress += `<div class="progress-bar" role="progressbar" style="width: ${start-cursor}%" aria-valuenow="${start-cursor}" aria-valuemin="0" aria-valuemax="100"></div>`;
+                        cursor = start;
+                    }
+                    // fill barr with fraction
+                    const fraction = 100 * (durations[i] / totalTime);
+                    progress += `<div class="progress-bar bg-primary" role="progressbar" style="width: ${fraction}%" aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>`;
+                    cursor += fraction;
+                }
+                progress += '</div>';
 
                 $('#vehiclesTable> tbody:last-child').append(
-                    '<tr>\n' +
-                    '  <td>' + vehicle['identifier'] + '</td>\n' +
-                    '  <td>' + totalDistance.toFixed(2) + ' </td>\n' +
-                    '  <td>' + totalTime.toFixed(2) + ' </td>\n' +
-                    '  <td>' + avgSpeed.toFixed(1) + ' </td>\n' +
-                    '  <td>' + totalMovingDistance.toFixed(2) + ' </td>\n' +
-                    '  <td>' + totalMovingTime.toFixed(2) + ' </td>\n' +
-                    '  <td>' + avgMovingSpeed.toFixed(1) + ' </td>\n' +
-                    '  <td>' + maxSpeed.toFixed(1) + ' </td>\n' +
-                    '</tr>');
+`<tr>
+   <td>${vehicle['identifier']}</td>
+   <td>${progress}</td>
+ </tr>`);
             }
 
             // enable geneate report button
             $('#submitButton')
                 .prop('disabled', false);
-
-            // hide please wait...
-            $('#pleaseWaitDialog').modal('hide');
 
         })
         .catch( (error) => {

@@ -179,9 +179,6 @@ function init (client) {
             $('#submitButton')
                 .prop('disabled', false);
 
-            // hide please wait...
-            $('#pleaseWaitDialog').modal('hide');
-
         })
         .catch( (error) => {
             logger.log('error', "'Failed to retrieve vehicles: %s ", error);
