@@ -43,7 +43,7 @@ export function splitTimeToMillis(hours, minutes, seconds, milliseconds) {
 export function validateDateRange(beginDate, endDate) {
 
     // beginDate
-    if (beginDate === null) {
+    if (beginDate === null || typeof beginDate === 'undefined') {
         beginDate = new Date();
         beginDate.setHours(0, 0, 0, 0);
     } else
@@ -55,7 +55,7 @@ export function validateDateRange(beginDate, endDate) {
     minDate.setHours(0, 0, 0, 0);
 
     // endDate
-    if (endDate === null) {
+    if (endDate === null || typeof endDate === 'undefined') {
         endDate = minDate;
     } else {
         endDate = new Date(endDate);
