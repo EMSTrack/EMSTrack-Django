@@ -8,7 +8,7 @@ import { logger } from './logger';
 
 export function calculateDistanceHaversine(location1, location2, radius) {
 
-	radius = radius || 6371e3;
+	radius = radius || 6371e3; // m
 
 	// convert latitude and longitude to radians first
     const lat1 = Math.PI * location1.latitude / 180;
@@ -38,14 +38,15 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold) 
     if (segment.length) {
         distance[0] = .0;
         speed[0] = .0;
-        const lastPosition = segment[0].location;
-        const lastTimestamp = Date.parse(segment[0].timestamp);
+        let lastPosition = segment[0].location;
+        let lastTimestamp = Date.parse(segment[0].timestamp);
         for (let i = 1; i < segment.length; i++) {
+
             const currentPosition = segment[i].location;
             const currentTimestamp = Date.parse(segment[i].timestamp);
 
             const _distance = calculateDistanceHaversine(lastPosition, currentPosition); // meters
-            const _duration = Math.abs(currentTimestamp - lastTimestamp) / 1000; // seconds
+            const _duration = Math.abs(currentTimestamp - lastTimestamp) / 1000;         // seconds
             const _speed = _distance / _duration; // m/s
 
             distance[i] = _distance;
@@ -60,7 +61,9 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold) 
                 totalMovingDistance += _distance;
                 totalMovingTime += _duration;
             }
-            
+
+            lastPosition = currentPosition;
+            lastTimestamp = currentTimestamp;
         }
     }
     return [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed];
