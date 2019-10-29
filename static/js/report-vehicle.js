@@ -168,7 +168,7 @@ function init (client) {
                     '  <td>' + totalDistance.toFixed(2) + ' </td>\n' +
                     '  <td>' + totalTime.toFixed(2) + ' </td>\n' +
                     '  <td>' + avgSpeed.toFixed(1) + ' </td>\n' +
-                    '  <td>' + totalMovingDistance.toFixed(0) + ' </td>\n' +
+                    '  <td>' + totalMovingDistance.toFixed(2) + ' </td>\n' +
                     '  <td>' + totalMovingTime.toFixed(2) + ' </td>\n' +
                     '  <td>' + avgMovingSpeed.toFixed(1) + ' </td>\n' +
                     '  <td>' + maxSpeed.toFixed(1) + ' </td>\n' +
