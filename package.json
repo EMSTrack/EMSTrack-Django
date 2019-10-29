@@ -40,5 +40,8 @@
     "webpack-cli": "^3.2.3",
     "websocket": "^1.0.28",
     "winston": "^3.2.1"
+  },
+  "dependencies": {
+    "nouislider": "^14.0.3"
   }
 }
