@@ -207,7 +207,7 @@ function init (client) {
 
             // add time scale to table
             let cursor = 0;
-            let progress = '<div class="progress">\n';
+            let progress = '<div class="progress" style="height: 20px;">\n';
             const totalTime = endDate.getTime() - beginDate.getTime();
             const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
             const delta = 100 * (1000 * 60 * 60 / totalTime);
@@ -260,7 +260,7 @@ function init (client) {
                 }
 
                 let cursor = 0;
-                let progress = '<div class="progress">\n';
+                let progress = '<div class="progress" style="height: 20px;">\n';
                 for (let i = n - 1; i >= 0; i--) {
                     // advance bar until start
                     const start = 100 * (offsets[i] / totalTime);
