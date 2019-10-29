@@ -16,22 +16,22 @@
             <form action="{% url 'report:vehicle-status' %}" method="get">
                 <div class="row">
                     <div class="col-1 text-right">
-                        <span>{% trans "begin" %}:</span>
+                        <span>{% trans "date" %}:</span>
                     </div>
                     <div class="col-2">
                         <input type="date" name="beginDate" id="beginDate">
                     </div>
                     <div class="col-1 text-right">
-                        <span>{% trans "end" %}:</span>
+                        <span>{% trans "begin" %}:</span>
                     </div>
                     <div class="col-2">
-                        <input type="date" name="endDate" id="endDate">
+                        <input type="date" name="beginTime" id="beginTime">
                     </div>
                     <div class="col-1 text-right">
                         <span>{% trans "end" %}:</span>
                     </div>
                     <div class="col-2">
-                        <input type="time" name="endDate" id="endTime">
+                        <input type="time" name="endTime" id="endTime">
                     </div>
                     <div class="col-3">
                         <input id="submitButton" class="btn btn-primary"

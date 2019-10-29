@@ -1,8 +1,6 @@
-import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
+import {logger} from './logger';
 
-import {addAmbulanceRoute, breakSegments, calculateMotionStatistics} from "./map-tools";
-
-import { logger } from './logger';
+import {timeSplit, timeMerge} from "./util";
 
 let map;
 let apiClient;
@@ -12,35 +10,30 @@ const vehicles = {};
 add_init_function(init);
 
 // setdates
-function validateDateRange(beginDate, endDate) {
+function validateDateRange(beginDate, beginTime, endTime) {
 
     // beginDate
     if (beginDate === null) {
         beginDate = new Date();
-        beginDate.setHours(0, 0, 0, 0);
     } else
         beginDate = new Date(beginDate);
 
-    // minDate
-    let minDate = new Date();
-    minDate.setDate(beginDate.getDate()+1);
-    minDate.setHours(0, 0, 0, 0);
+    // beginTime
+    beginTime = timeSplit(beginTime);
 
-    // endDate
-    if (endDate === null) {
-        endDate = minDate;
-    } else {
-        endDate = new Date(endDate);
-    }
+    // endTime
+    endTime = timeSplit(endTime, [23, 59, 59, 999]);
 
-    // make sure endDate > beginDate
-    if (endDate <= beginDate) {
-        endDate = new Date(minDate);
-    }
+    // set dates
+    beginDate.setHours(...beginTime);
+    const endDate = new Date(beginDate);
+    endDate.setHours(...endTime);
 
-    logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
+    const minTime = timeMerge(...beginTime);
 
-    return [beginDate, minDate, endDate];
+    logger.log('debug', 'beginDate = %s, endDate = %s, minTime = %s', beginDate, endDate, minTime);
+
+    return [beginDate, endDate, minTime];
 }
 
 function segmentHistory(history, byStatus, byUser) {
@@ -128,17 +121,24 @@ function init (client) {
     const urlParams = new URLSearchParams(window.location.search);
 
     // set beginDate
-    const [beginDate, minDate, endDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
-    logger.log('debug', 'beginDate = %s, minDate = %s, endDate = %s', beginDate, minDate, endDate);
+    const [beginDate, endDate, minTime] = validateDateRange(
+        urlParams.get('beginDate'), urlParams.get('beginTime'), urlParams.get('endTime'));
+    logger.log('debug', 'beginDate = %s, endDate = %s, minTime = %s', beginDate, endDate,  minTime);
+
+    logger.log('debug', 'beginTime = %s, endTime = %s',
+        beginDate.toISOString().substr(11, 12), endDate.toISOString().substr(11, 12));
 
     // set datepickers
     $('#beginDate')
-        .prop('value', beginDate.toISOString().substr(0, 10))
+        .prop('value', beginDate.toISOString().substr(0, 10));
+
+    $('#beginTime')
+        .prop('value', beginDate.toISOString().substr(11, 12))
         .change(function() {
 
             logger.log('debug', 'beginDate has changed!');
 
-            const endDateElement = $('#endDate');
+            const endDateElement = $('#endTime');
             const endDate = new Date(endDateElement.val());
             const beginDate = $( this ).val();
             logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, minDate, endDate);
@@ -157,9 +157,9 @@ function init (client) {
 
         });
 
-    $('#endDate')
-        .prop('value', endDate.toISOString().substr(0, 10))
-        .prop('min', minDate.toISOString().substr(0, 10));
+    $('#endTime')
+        .prop('value', endDate.toISOString().substr(11, 12))
+        .prop('min', minTime);
 
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
