@@ -66,7 +66,7 @@ function segmentHistory(history, byStatus, byUser) {
             let newUser = false;
             let newStatus = false;
 
-            if (byUser && lastPosition.updated_by !== currentPosition.updated_by) {
+            if (byUser && lastPosition.updated_by_username !== currentPosition.updated_by_username) {
 			    newUser = true;
             }
 
@@ -79,13 +79,14 @@ function segmentHistory(history, byStatus, byUser) {
             }
 
 			if (newUser || newStatus) {
-                // terminate current segment
+                // terminate current segment, sorted in reverse order!
                 durations.push(
-                    new Date(currentSegment[currentSegment.length-1].updated_on) -
-                        new Date(currentSegment[0].updated_on));  // in miliseconds
+                    new Date(currentSegment[0].timestamp) -
+                    new Date(currentSegment[currentSegment.length-1].timestamp)
+                );  // in miliseconds
                 segments.push(currentSegment);
                 status.push(lastPosition.status);
-                user.push(lastPosition.updated_by);
+                user.push(lastPosition.updated_by_username);
                 currentSegment = [];
             }
 		}
@@ -101,7 +102,13 @@ function segmentHistory(history, byStatus, byUser) {
 	// anything left?
 	if (currentSegment.length > 0) {
         // terminate last segment
+        durations.push(
+            new Date(currentSegment[0].timestamp) -
+            new Date(currentSegment[currentSegment.length-1].timestamp)
+        );  // in miliseconds
         segments.push(currentSegment);
+        status.push(lastPosition.status);
+        user.push(lastPosition.updated_by_username);
     }
 
 	return [segments, durations, status, user];
@@ -210,13 +217,13 @@ function init (client) {
                 console.log(status);
                 console.log(user);
 
-                // calculate offsets
+                // calculate offsets, sorted in reverse order!
                 const n = status.length;
                 const offsets = new Array(n);
                 const totalTime = endDate.getTime() - beginDate.getTime();
                 for (let i = 0; i <= n; i++) {
                     const segment = segments[i];
-                    offsets[i] = new Date(segment[0].updated_on) - beginDate.getTime();
+                    offsets[i] = new Date(segment[segment.length-1].timestamp) - beginDate.getTime();
                 }
 
                 let cursor = 0;
