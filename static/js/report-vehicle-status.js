@@ -269,10 +269,14 @@ $(function () {
     console.log(slider);
 
     noUiSlider.create(slider, {
-        start: [10, 20],
+        start: [0, 24],
         range: {
             'min': [0],
             'max': [24]
+        },
+        pips: {
+            mode: 'range',
+            density: 4,
         }
     });
 
