@@ -276,7 +276,7 @@ function init (client) {
                     const start = 100 * (offsets[i] / totalTime);
                     logger.log('debug', 'start = %s', start);
                     if (start > cursor) {
-                        const delta = (start - cursor).toFixed(0);
+                        const delta = (start - cursor);
                         progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${delta}</div>\n`;
                         cursor = start;
                         logger.log('debug', 'delta = %s', delta);
