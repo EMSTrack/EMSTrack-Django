@@ -91,6 +91,9 @@ function init (client) {
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
 
+    // display please wait...
+    $('#pleaseWaitDialog').modal();
+
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
         .then( response => {
@@ -178,6 +181,9 @@ function init (client) {
             // enable geneate report button
             $('#submitButton')
                 .prop('disabled', false);
+
+            // hide please wait...
+            $('#pleaseWaitDialog').modal('hide');
 
         })
         .catch( (error) => {
