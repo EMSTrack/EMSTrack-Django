@@ -24,6 +24,7 @@ function validateDateRange(beginDate, endDate) {
     // minDate
     let minDate = new Date();
     minDate.setDate(beginDate.getDate()+1);
+    minDate.setHours(0, 0, 0, 0);
 
     // endDate
     if (endDate === null) {
