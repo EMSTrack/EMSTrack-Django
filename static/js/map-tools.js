@@ -319,7 +319,8 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
         return;
 
     // break segments
-    const segments = breakSegments(data, byStatus);
+    //const segments = breakSegments(data, byStatus);
+    const [segments, durations, status, user] = segmentHistory(data, byStatus, false);
 
     // loop on segments
     const n = segments.length;
