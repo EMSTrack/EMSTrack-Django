@@ -5,13 +5,18 @@ import 'nouislider/distribute/nouislider.css';
 
 import {validateDateRange, millisToTime, millisToSplitTime, splitTimeToMillis} from "./util";
 
+import {calculateDistanceHaversine} from "./map-tools";
+
 let apiClient;
 const vehicles = {};
 
 // add initialization hook
 add_init_function(init);
 
-function segmentHistory(history, byStatus, byUser) {
+function segmentHistory(history, byStatus, byUser, separationRadius, timeInterval) {
+
+	separationRadius = separationRadius || [10, 1000];              // 10m, 1km
+	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
 
     byStatus = byStatus || true; // split by status
     byUser = byUser || false;     // split by user
@@ -32,27 +37,34 @@ function segmentHistory(history, byStatus, byUser) {
         // distance?
 		if (lastPosition != null) {
 
-            let newUser = false;
-            let newStatus = false;
+            const distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);                 // meters
+            const interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp)) / 1000; // milliseconds
 
-            if (byUser && lastPosition.updated_by_username !== currentPosition.updated_by_username) {
-			    newUser = true;
-            }
+            // new segment?
+            const newSegment =
+                distance > separationRadius[1] ||
+                interval > timeInterval[1] ||
+                (interval > timeInterval[0] && distance > separationRadius[0]);
 
-            if (!newUser && byStatus && lastPosition.status !== currentPosition.status) {
-			    newStatus = true;
-			    // will break segment, add current position first
+            // new user?
+            const newUser = byUser && lastPosition.updated_by_username !== currentPosition.updated_by_username;
+
+            // new status?
+            const newStatus = byStatus && lastPosition.status !== currentPosition.status;
+
+            if ((newUser || newStatus) && !newSegment) {
+                // will break in the middle of segment, duplicate current position first
                 const newCurrentPosition = Object.assign({}, currentPosition);
                 newCurrentPosition.status = lastPosition.status;
                 currentSegment.push(newCurrentPosition);
             }
 
-			if (newUser || newStatus) {
+			if (newSegment || newUser || newStatus) {
                 // terminate current segment
                 durations.push(
                     new Date(currentSegment[currentSegment.length-1].timestamp) -
                     new Date(currentSegment[0].timestamp)
-                );  // in miliseconds
+                );  // in milliseconds
                 segments.push(currentSegment);
                 status.push(lastPosition.status);
                 user.push(lastPosition.updated_by_username);
