@@ -231,14 +231,15 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // const [hours, minutes, seconds, milliseconds] = millisToSplitTime(offsetMillis);
     const nextHourMillis = splitTimeToMillis(Math.ceil(offsetMillis / 1000 / 60 / 60), 0, 0, 0);
-    const [hours, minutes, seconds, milliseconds] = millisToSplitTime(nextHourMillis);
+    const [offsetHour, minutes, seconds, milliseconds] = millisToSplitTime(nextHourMillis);
 
-    logger.log('debug', 'offsetHour = %s:%s:%s.%s, nextHourMillis = %s', hours, minutes, seconds, milliseconds, nextHourMillis);
+    logger.log('debug', 'offsetHour = %s:%s:%s.%s, nextHourMillis = %s',
+        offsetHour, minutes, seconds, milliseconds, nextHourMillis);
 
     const labels = ['secondary', 'light'];
 
-    const offsetHour = hours;
-    const offsetDelta = 100 * ((nextHourMillis - offsetMillis) / totalTime);
+    // left edge
+    let offsetDelta = 100 * ((nextHourMillis - offsetMillis) / totalTime);
     progress += `<div class="progress-bar bg-${labels[(offsetHour - 1)% 2]}" role="progressbar" style="width: ${offsetDelta}%" aria-valuenow="${offsetDelta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
 
     const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
@@ -246,6 +247,11 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
     for (let i = offsetHour; i < offsetHour + numberOfHours; i++) {
         progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i}</div>\n`;
     }
+
+    // right edge
+    offsetDelta = 100 * ((totalTime - offsetDelta - numberOfHours * delta) / totalTime);
+    progress += `<div class="progress-bar bg-${labels[(offsetHour + numberOfHours)% 2]}" role="progressbar" style="width: ${offsetDelta}%" aria-valuenow="${offsetDelta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+
     progress += '</div>';
     logger.log('debug', 'progress = %s', progress);
 
