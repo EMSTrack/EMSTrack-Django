@@ -181,6 +181,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     // get element
     let element = $(`#vehicles_${vehicle['id']}`);
     if (element.length === 0) {
+
         // create element first
         element = $(
 `<div class="row">
@@ -191,6 +192,9 @@ function renderVehicle(vehicle, beginDate, endDate) {
   </div>
 </div>`);
         $('#vehiclesTable').append(element);
+
+        // assign created element
+        element = $(`#vehicles_${vehicle['id']}`);
     }
 
     // nothing to do?
