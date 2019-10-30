@@ -108,3 +108,4 @@ nohup.out
 
 .vscode/
 .vs/
+node_modules/
