@@ -82,6 +82,9 @@ function reportDetail(id) {
 
     logger.log('info', "Generating detail report for id '%d'", id);
 
+    const vehicle = vehicles[id];
+    console.log(vehicle);
+
     // get detail element information
     const detailElement = $('#detail');
     const isDetailVisible = detailElement.is( ":visible" );
@@ -93,7 +96,7 @@ function reportDetail(id) {
 
         logger.log('info', "detail is visible, current id is '%s'", currentId);
 
-        if (currentId === vehicles['id']['identifier']) {
+        if (currentId === vehicle['identifier']) {
 
             logger.log('info', "hiding");
 
@@ -117,7 +120,7 @@ function reportDetail(id) {
     logger.log('info', "setting up");
 
     // set new detail title
-    idElement.text(vehicles['id']['identifier']);
+    idElement.text(vehicle['identifier']);
 
     const newCurrentId = idElement.text();
     logger.log('info', "current id is '%s'", newCurrentId);
