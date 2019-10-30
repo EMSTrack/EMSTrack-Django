@@ -3,7 +3,7 @@ import {logger} from './logger';
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
 
-import {validateDateRange} from "./util";
+import {validateDateRange, millisToTime} from "./util";
 
 let apiClient;
 const vehicles = {};
@@ -288,10 +288,18 @@ function init (client) {
 
         // offset beginDate
         const offsetBeginDate = new Date(beginDate)
-        offsetBeginDate.setTime(offsetBeginDate.getTime() + Number.parseFloat(begin) * 60 * 60 * 1000);
+        const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000;
+        offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
+
         const offsetEndDate = new Date(beginDate);
-        offsetEndDate.setTime(offsetEndDate.getTime() + Number.parseFloat(end) * 60 * 60 * 1000);
+        const endMillis = Number.parseFloat(end) * 60 * 60 * 1000;
+        offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
+
         logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
+
+        // set times inputs
+        $('#beginTime').val(millisToTime(beginMillis));
+        $('#endTime').val(millisToTime(endMillis));
 
         // add vehicles to page
         for (const vehicle of Object.values(vehicles)) {

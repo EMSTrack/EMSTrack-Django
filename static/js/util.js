@@ -40,6 +40,24 @@ export function splitTimeToMillis(hours, minutes, seconds, milliseconds) {
     return 1000 * (60 * (60 * hours + minutes) + seconds) + milliseconds;
 }
 
+export function millisToTime(millis) {
+
+    const milliseconds = millis % 1000;
+    millis = (millis - milliseconds) / 1000;
+    const seconds = millis % 60;
+    millis = (millis - seconds) / 60;
+    const minutes = millis % 60;
+    const hours = (millis - minutes) / 60;
+
+    if (milliseconds > 0)
+        return hours + ':' + minutes + ':' + seconds + '.' + milliseconds;
+    else if (seconds > 0)
+        return hours + ':' + minutes + ':' + seconds;
+    else
+        return hours + ':' + minutes;
+
+}
+
 export function validateDateRange(beginDate, endDate) {
 
     // beginDate
