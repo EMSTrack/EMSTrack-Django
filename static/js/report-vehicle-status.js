@@ -352,6 +352,9 @@ function init (client) {
 
     });
 
+    // set connect color
+    slider.querySelectorAll('.noUi-connect')[0].classList.add('bg-primary');
+
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
