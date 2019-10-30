@@ -129,7 +129,7 @@ function reportSummary() {
         });
 
         element.html(`
-<td><a href="#" onClick="reportDetail(${vehicle['id']}); return false;">${vehicle['identifier']}</a></td>
+<td><a href="#" id="detail_${vehicle['id']}">${vehicle['identifier']}</a></td>
 <td>${totalDistance.toFixed(2)}</td>
 <td>${totalTime.toFixed(2)}</td>
 <td>${avgSpeed.toFixed(1)}</td>
@@ -137,6 +137,9 @@ function reportSummary() {
 <td>${totalMovingTime.toFixed(2)}</td>
 <td>${avgMovingSpeed.toFixed(1)}</td>
 <td>${maxSpeed.toFixed(1)}</td>`);
+
+        // attach detail handler
+        $(`#detail_${vehicle['id']}`).click(function(){ reportDetail(vehicle['id']); return false; });
 
     }
 
