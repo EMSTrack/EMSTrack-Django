@@ -77,14 +77,21 @@ function init (client) {
 
 }
 
+// report detail
+function reportDetail(id) {
+
+    logger.log('info', "Generating detail report for id '%d'", id);
+
+}
+
 // report summary
 function reportSummary() {
 
-    // add vehicles to table
-    let noActivities = true;
-    for (const vehicle of Object.values(vehicles)) {
+    logger.log('info', 'Generating summary report');
 
-        logger.log('info', 'Generating summary report');
+    // add vehicles to table
+    let noActivities = false;
+    for (const vehicle of Object.values(vehicles)) {
 
         // get history
         const history = vehicle['history'];
@@ -122,7 +129,7 @@ function reportSummary() {
         });
 
         element.html(`
-<td><a href="${window.location.pathname}/${vehicle['id']}">${vehicle['identifier']}</a></td>
+<td><a href="#" onClick="reportDetail(${vehicle['id']}); return false;">${vehicle['identifier']}</a></td>
 <td>${totalDistance.toFixed(2)}</td>
 <td>${totalTime.toFixed(2)}</td>
 <td>${avgSpeed.toFixed(1)}</td>
