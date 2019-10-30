@@ -297,9 +297,13 @@ function init (client) {
 
         logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
-        // set times inputs
-        $('#beginTime').val(millisToTime(beginMillis));
-        $('#endTime').val(millisToTime(endMillis));
+        // set time inputs
+        const beginTime = millisToTime(beginMillis);
+        const endTime = millisToTime(endMillis)
+        logger.log('debug', 'beginTime = %s, endTime = %s', beginTime, endTime);
+
+        $('#beginTime').val(beginTime);
+        $('#endTime').val(endTime);
 
         // add vehicles to page
         for (const vehicle of Object.values(vehicles)) {
