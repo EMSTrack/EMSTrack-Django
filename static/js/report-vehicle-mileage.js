@@ -7,10 +7,75 @@ import {validateDateRange, getOrCreateElement} from "./util";
 let map;
 let apiClient;
 const vehicles = {};
-let detail = None;
+let detail = null;
 
 // add initialization hook
 add_init_function(init);
+
+// initialization function
+function init (client) {
+
+    logger.log('info', '> report-vehicle-mileage.js');
+
+    // set apiClient
+    apiClient = client;
+
+    // get parameters
+    const urlParams = new URLSearchParams(window.location.search);
+
+    // set beginDate
+    const [beginDate, endDate, minDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
+    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
+
+    // set datepickers
+    $('#beginDate')
+        .prop('value', beginDate.toISOString().substr(0, 10))
+        .change(function () {
+
+            logger.log('debug', 'beginDate has changed!');
+
+            const endDateElement = $('#endDate');
+            const endDate = new Date(endDateElement.val());
+            const beginDate = $(this).val();
+            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
+
+            const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
+            logger.log('debug', '_beginDate = %s, _endDate = %s, _minDate = %s', _beginDate, _endDate, _minDate);
+
+            // replace endDate if necessary
+            endDateElement
+                .prop('min', _minDate.toISOString().substr(0, 10));
+
+            if (endDate < _minDate)
+                endDateElement.prop('value', _endDate.toISOString().substr(0, 10));
+
+        });
+
+    $('#endDate')
+        .prop('value', endDate.toISOString().substr(0, 10))
+        .prop('min', minDate.toISOString().substr(0, 10));
+
+    // set range
+    const range = beginDate.toISOString() + "," + endDate.toISOString();
+    logger.log('debug', 'range = %j', range);
+
+    // retrieve data
+    retrieveData(range)
+        .then(() => {
+
+            // report summary
+            reportSummary();
+
+            // enable generate report button
+            $('#submitButton')
+                .prop('disabled', false);
+
+        })
+        .catch((error) => {
+            logger.log('error', "'Failed to retrieve vehicles: %s ", error);
+        })
+
+}
 
 // report summary
 function reportSummary() {
@@ -62,55 +127,10 @@ function reportSummary() {
 
 }
 
-// initialization function
-function init (client) {
-
-    logger.log('info', '> report-vehicle-mileage.js');
-
-    // set apiClient
-    apiClient = client;
-
-    // get parameters
-    const urlParams = new URLSearchParams(window.location.search);
-
-    // set beginDate
-    const [beginDate, endDate, minDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
-    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
-
-    // set datepickers
-    $('#beginDate')
-        .prop('value', beginDate.toISOString().substr(0, 10))
-        .change(function () {
-
-            logger.log('debug', 'beginDate has changed!');
-
-            const endDateElement = $('#endDate');
-            const endDate = new Date(endDateElement.val());
-            const beginDate = $(this).val();
-            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
-
-            const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
-            logger.log('debug', '_beginDate = %s, _endDate = %s, _minDate = %s', _beginDate, _endDate, _minDate);
-
-            // replace endDate if necessary
-            endDateElement
-                .prop('min', _minDate.toISOString().substr(0, 10));
-
-            if (endDate < _minDate)
-                endDateElement.prop('value', _endDate.toISOString().substr(0, 10));
-
-        });
-
-    $('#endDate')
-        .prop('value', endDate.toISOString().substr(0, 10))
-        .prop('min', minDate.toISOString().substr(0, 10));
-
-    // set range
-    const range = beginDate.toISOString() + "," + endDate.toISOString();
-    logger.log('debug', 'range = %j', range);
+function retrieveData(range) {
 
     // Retrieve vehicles
-    apiClient.httpClient.get('ambulance/')
+    return apiClient.httpClient.get('ambulance/')
         .then(response => {
 
             // retrieve vehicles
@@ -151,20 +171,7 @@ function init (client) {
                     }
 
                 }
-            ))
-        .then(() => {
-
-            // report summary
-            reportSummary();
-
-            // enable geneate report button
-            $('#submitButton')
-                .prop('disabled', false);
-
-        })
-        .catch((error) => {
-            logger.log('error', "'Failed to retrieve vehicles: %s ", error);
-        });
+            ));
 
 }
 
