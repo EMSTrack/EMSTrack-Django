@@ -9,23 +9,30 @@ import {segmentHistory} from "./map-tools";
 
 let apiClient;
 const vehicles = {};
+let mode = 'status';
 
 // add initialization hook
 add_init_function(init);
 
-function renderProgress(data, beginDate, endDate) {
+function renderProgress(data, beginDate, endDate, mode) {
 
     // clone durations
     const segments = data['segments'];
     const durations = [...data['durations']];
-    const status = data['status'];
+    let values;
+    if (mode === 'status')
+        values = data['status'];
+    else if (mode === 'user')
+        values = data['user'];
+    else
+        throw "Unknown mode '" + mode + "'";
 
     // console.log(segments);
     // console.log(durations);
     // console.log(status);
 
     // calculate offsets
-    const n = status.length;
+    const n = values.length;
     const offsets = new Array(n);
     let beforeRange = true;
     const totalTime = endDate.getTime() - beginDate.getTime();
@@ -83,11 +90,17 @@ function renderProgress(data, beginDate, endDate) {
 
         // fill bar with duration fraction
         const fraction = (100 * (durations[i] / totalTime));
-        const status_class = ambulance_css[status[i]]['class'];
-        progress += `<div class="progress-bar bg-${status_class}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+
+        let bgclass;
+        if (mode === 'status') {
+            bgclass = ambulance_css[values[i]]['class'];
+        } else { // mode === 'user'
+            bgclass = 'primary';
+        }
+        progress += `<div class="progress-bar bg-${bgclass}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
         cursor += fraction;
 
-        logger.log('debug', 'status = %s', status[i]);
+        logger.log('debug', 'status = %s', values[i]);
         logger.log('debug', 'fraction = %s', fraction);
         logger.log('debug', 'cursor = %s', cursor);
 
@@ -183,6 +196,86 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
 }
 
+function retrieveData(range) {
+
+    // Retrieve vehicles
+    return apiClient.httpClient.get('ambulance/')
+        .then( response => {
+
+            // retrieve vehicles
+            logger.log('debug', "Got vehicle data from API");
+
+            // loop through vehicle records
+            const requests = response.data.map( vehicle  => {
+
+                logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
+
+                // save vehicle
+                vehicles[vehicle['id']] = vehicle;
+                vehicles[vehicle['id']]['history'] = {};
+
+                const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
+                return apiClient.httpClient.get(url);
+
+            });
+
+            return Promise.all(requests);
+
+        })
+        .then( responses =>
+            responses.forEach(
+                response => {
+
+                    // retrieve updates
+                    const history = response.data;
+                    if (history.length) {
+
+                        // get id
+                        const id = history[0]['ambulance_id'];
+
+                        // store history
+                        vehicles[id]['history'] = {
+                            'history': history
+                        };
+
+                    }
+
+                }
+        ))
+
+}
+
+function segmentHistoryByMode(mode) {
+
+    logger.log('info', 'Segmenting history by %s', mode);
+
+    // add vehicles to table
+    for (const vehicle of Object.values(vehicles)) {
+
+        // get history
+        const history = vehicle['history'];
+
+        if (history.length) {
+
+            // segment and store
+            const [segments, durations, status, user] = segmentHistory(history,
+                {
+                    'byStatus': mode === 'status',
+                    'byUser': mode === 'user'
+                }
+            );
+            const storage = vehicles[id]['history'];
+            storage['mode'] = mode;
+            storage['segments'] = segments;
+            storage['durations'] = durations;
+            storage['status'] = status;
+            storage['user'] = user;
+        }
+
+    }
+
+}
+
 // initialization function
 function init (client) {
 
@@ -266,55 +359,14 @@ function init (client) {
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
 
-    // Retrieve vehicles
-    apiClient.httpClient.get('ambulance/')
-        .then( response => {
+    // retrieve data
+    retrieveData(range)
+        .then( () => {
 
-            // retrieve vehicles
-            logger.log('debug', "Got vehicle data from API");
-
-            // loop through vehicle records
-            const requests = response.data.map( vehicle  => {
-
-                logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
-
-                // save vehicle
-                vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['history'] = {};
-
-                const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
-                return apiClient.httpClient.get(url);
-
-            });
-
-            return Promise.all(requests);
+            // segment history
+            segmentHistoryByMode(mode);
 
         })
-        .then( responses =>
-            responses.forEach(
-                response => {
-
-                    // retrieve updates
-                    const history = response.data;
-                    if (history.length) {
-
-                        // get id
-                        const id = history[0]['ambulance_id'];
-
-                        // segment by status and store
-                        const [segments, durations, status, user] = segmentHistory(history, {'byStatus': true});
-                        vehicles[id]['history'] = {
-                            'history': history,
-                            'segments': segments,
-                            'durations': durations,
-                            'status': status,
-                            'user': user
-                        };
-
-                    }
-
-                }
-        ))
         .then( () => {
 
             // render ruler
@@ -322,7 +374,7 @@ function init (client) {
 
             // add vehicles to page
             for (const vehicle of Object.values(vehicles)) {
-                renderVehicle(vehicle, beginDate, endDate);
+                renderVehicle(vehicle, beginDate, endDate, mode);
             }
 
             // enable generate report button
@@ -337,9 +389,5 @@ function init (client) {
 }
 
 $(function () {
-
-    logger.log('info', 'beginning of ready function');
-
-    logger.log('info', 'end of ready function');
 
 });
