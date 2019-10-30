@@ -86,17 +86,16 @@ function segmentHistory(history, byStatus, byUser) {
 
 function renderProgress(data, beginDate, endDate) {
 
+    console.log(data);
+
      // clone durations
     const segments = data['segments'];
     const durations = [...data['durations']];
     const status = data['status'];
 
-    /*
     console.log(segments);
     console.log(durations);
     console.log(status);
-    console.log(user);
-    */
 
     // calculate offsets
     const n = status.length;
@@ -201,6 +200,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
 
     // render progress
     const progress = renderProgress(history, beginDate, endDate);
+    logger.log('debug', 'progress = %s', progress);
 
     // replace element content
     element.html(progress);
