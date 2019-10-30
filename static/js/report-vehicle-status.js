@@ -266,6 +266,38 @@ function init (client) {
     $('#beginDate')
         .prop('value', beginDate.toISOString().substr(0, 10));
 
+    // setup slider
+    const slider = document.getElementById('slider-range');
+    noUiSlider.create(slider, {
+        start: [0, 24],
+        step: 1/4,
+        margin: 1,
+        range: {
+            'min': [0],
+            'max': [24]
+        },
+        pips: {
+            mode: 'count',
+            values: 25,
+            density: 4*24/100,
+        }
+    }).on('change', function(e) {
+
+        const [begin, end] = slider.noUiSlider.get();
+        logger.log('info', 'begin = %s, end = %s', begin, end);
+
+        // offset beginDate
+        const offsetBeginDate = new Date(beginDate + Number.parseFloat(begin)/24);
+        const offsetEndDate = new Date(beginDate + Number.parseFloat(end)/24);
+        logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
+
+        // add vehicles to page
+        for (const vehicle of Object.values(vehicles)) {
+            renderVehicle(vehicle, offsetBeginDate, offsetEndDate);
+        }
+
+    });
+
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range)
@@ -343,28 +375,6 @@ function init (client) {
 $(function () {
 
     logger.log('info', 'beginning of ready function');
-
-    // setup slider
-    const slider = document.getElementById('slider-range');
-    noUiSlider.create(slider, {
-        start: [0, 24],
-        step: 1/4,
-        margin: 1,
-        range: {
-            'min': [0],
-            'max': [24]
-        },
-        pips: {
-            mode: 'count',
-            values: 25,
-            density: 4*24/100,
-        }
-    }).on('change', function(e) {
-
-        const [begin, end] = slider.noUiSlider.get();
-        logger.log('info', 'begin = %s, end = %s', begin, end);
-
-    });
 
     logger.log('info', 'end of ready function');
 
