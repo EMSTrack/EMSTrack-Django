@@ -316,7 +316,7 @@ function init (client) {
         $('#endTime').val(endTime);
 
         // modify ruler
-        renderRuler(beginDate, endDate, beginMillis);
+        renderRuler(offsetBeginDate, offsetEndDate, beginMillis);
 
         // add vehicles to page
         for (const vehicle of Object.values(vehicles)) {
