@@ -259,6 +259,7 @@ function segmentHistoryByMode(mode) {
         // get history
         const history = vehicle['history'];
 
+        console.log(history);
         if (history.length) {
 
             logger.log('info', 'Got history');
