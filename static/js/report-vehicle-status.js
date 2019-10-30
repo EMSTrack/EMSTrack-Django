@@ -264,7 +264,7 @@ function segmentHistoryByMode(mode) {
                     'byUser': mode === 'user'
                 }
             );
-            const storage = vehicles[id]['history'];
+            const storage = vehicle['history'];
             storage['mode'] = mode;
             storage['segments'] = segments;
             storage['durations'] = durations;
