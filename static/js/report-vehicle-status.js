@@ -133,15 +133,15 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
     // get history
     const data = vehicle['data'];
 
-    // get element
-    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
-        createElement(id, vehicle['identifier'], "background-color: #F9F9F9");
-    });
-
     // nothing to do?
     if (Object.entries(data).length === 0) {
         return;
     }
+
+    // get element
+    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
+        createElement(id, vehicle['identifier'], "background-color: #F9F9F9");
+    });
 
     // render progress
     const progress = renderProgress(data, beginDate, endDate, mode);
