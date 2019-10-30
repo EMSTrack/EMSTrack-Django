@@ -131,16 +131,16 @@ function init (client) {
                 avgMovingSpeed *= 3.6;         // km/h
 
                 $('#vehiclesTable> tbody:last-child').append(
-                    '<tr>\n' +
-                    '  <td>' + vehicle['identifier'] + '</td>\n' +
-                    '  <td>' + totalDistance.toFixed(2) + ' </td>\n' +
-                    '  <td>' + totalTime.toFixed(2) + ' </td>\n' +
-                    '  <td>' + avgSpeed.toFixed(1) + ' </td>\n' +
-                    '  <td>' + totalMovingDistance.toFixed(2) + ' </td>\n' +
-                    '  <td>' + totalMovingTime.toFixed(2) + ' </td>\n' +
-                    '  <td>' + avgMovingSpeed.toFixed(1) + ' </td>\n' +
-                    '  <td>' + maxSpeed.toFixed(1) + ' </td>\n' +
-                    '</tr>');
+`<tr>
+  <td><a href="${window.location.pathname}/${vehicle['id']}">${vehicle['identifier']}</a></td>
+  <td>${totalDistance.toFixed(2)}</td>
+  <td>${totalTime.toFixed(2)}</td>
+  <td>${avgSpeed.toFixed(1)}</td>
+  <td>${totalMovingDistance.toFixed(2)}</td>
+  <td>${totalMovingTime.toFixed(2)}</td>
+  <td>${avgMovingSpeed.toFixed(1)}</td>
+  <td>${maxSpeed.toFixed(1)}</td>
+</tr>`);
             }
 
             // enable geneate report button
