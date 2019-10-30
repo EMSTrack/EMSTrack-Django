@@ -176,8 +176,6 @@ function renderProgress(data, beginDate, endDate) {
 
 function renderVehicle(vehicle, beginDate, endDate) {
 
-    console.log(vehicle);
-
     // get history
     const history = vehicle['history'];
 
@@ -197,7 +195,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     }
 
     // nothing to do?
-    if (history.length === 0) {
+    if (Object.entries(history).length === 0) {
         return;
     }
 
@@ -250,7 +248,7 @@ function init (client) {
 
                 // save vehicle
                 vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['history'] = [];
+                vehicles[vehicle['id']]['history'] = {};
 
                 const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
                 return apiClient.httpClient.get(url);
@@ -270,14 +268,16 @@ function init (client) {
 
                         // get id
                         const id = history[0]['ambulance_id'];
-                        vehicles[id]['history'] = history;
 
-                        // segment by status
+                        // segment by status and store
                         const [segments, durations, status, user] = segmentHistory(history, true, false);
-                        vehicles[id]['segments'] = segments;
-                        vehicles[id]['durations'] = durations;
-                        vehicles[id]['status'] = status;
-                        vehicles[id]['user'] = user;
+                        vehicles[id]['history'] = {
+                            'history': history,
+                            'segments': segments,
+                            'durations': durations,
+                            'status': status,
+                            'user': user
+                        };
 
                     }
 
