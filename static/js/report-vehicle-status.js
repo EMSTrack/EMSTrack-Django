@@ -84,6 +84,129 @@ function segmentHistory(history, byStatus, byUser) {
 
 }
 
+function renderProgress(data, beginDate, endDate) {
+
+     // clone durations
+    const segments = data['segments'];
+    const durations = [...data['durations']];
+    const status = data['status'];
+
+    /*
+    console.log(segments);
+    console.log(durations);
+    console.log(status);
+    console.log(user);
+    */
+
+    // calculate offsets
+    const n = status.length;
+    const offsets = new Array(n);
+    let beforeRange = true;
+    const totalTime = endDate.getTime() - beginDate.getTime();
+    for (let i = 0; i < n; i++) {
+
+        const segment = segments[i];
+        const offset = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
+        offset[i] = offset;
+
+        if (beforeRange && offset >= 0) {
+            // this is the first element in range
+            beforeRange = false;
+            if (i > 0 && offset[i - 1] + duration[i - 1] >= 0) {
+                // previous status extends in range, shift to zero to ensure continuity
+                duration[i - 1] -= offset[i - 1];
+                offset[i - 1] = 0;
+            }
+        }
+
+        if (offset > totalTime) {
+            // simply break, out of range
+            break;
+        }
+
+        if (offset + duration[i] > totalTime) {
+            // match end and break
+            duration[i] -= (offset + duration[i] - totalTime);
+            break;
+        }
+
+    }
+
+    // build progress bar
+    let cursor = 0;
+    let progress = '<div class="progress" style="height: 20px;">\n';
+    for (let i = 0; i < n; i++) {
+
+        // not in range yet
+        if (offsets[i] < 0)
+            continue;
+
+        // out of range, break
+        if (offsets[i] > totalTime)
+            break;
+
+        // in range, advance bar until start
+        const start = 100 * (offsets[i] / totalTime);
+        logger.log('debug', 'start = %s', start);
+        if (start > cursor) {
+            const delta = (start - cursor);
+            progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+            cursor = start;
+            logger.log('debug', 'delta = %s', delta);
+        }
+
+        // fill bar with duration fraction
+        const fraction = (100 * (durations[i] / totalTime));
+        const status_class = ambulance_css[status[i]]['class'];
+        progress += `<div class="progress-bar bg-${status_class}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+        cursor += fraction;
+
+        logger.log('debug', 'status = %s', status[i]);
+        logger.log('debug', 'fraction = %s', fraction);
+        logger.log('debug', 'cursor = %s', cursor);
+
+    }
+
+    progress += '</div>';
+    // logger.log('debug', 'progress = %s', progress);
+
+    return progress;
+
+}
+
+function renderVehicle(vehicle, beginDate, endDate) {
+
+    // get history
+    const history = vehicle['history'];
+
+    // get element
+    let element = $(`#vehicles_${vehicle['id']}`);
+    if (element.length === 0) {
+        // create element first
+        element = $(
+`<div class="row">
+  <div class="col-2">
+    <strong>${vehicle['identifier']}</strong>
+  </div>
+  <div class="col-10" id="vehicle_${vehicle['id']}">
+  </div>
+</div>`);
+        $('#vehiclesTable').append(element);
+    }
+
+    // nothing to do?
+    if (history.length === 0) {
+        return;
+    }
+
+    // render progress
+    const progress = renderProgress(history, beginDate, endDate);
+
+    // replace element content
+    element.html(progress);
+
+}
+
 // initialization function
 function init (client) {
 
@@ -140,11 +263,20 @@ function init (client) {
                 response => {
 
                     // retrieve updates
-                    const updates = response.data;
-                    if (updates.length) {
-                        const id = updates[0]['ambulance_id'];
-                        vehicles[id]['history'] = updates;
+                    const history = response.data;
+                    if (history.length) {
+                        const id = history[0]['ambulance_id'];
+                        vehicles[id]['history'] = history;
+                    }
 
+                    // segment history
+                    if (history.length > 0) {
+                        // segment by status
+                        const [segments, durations, status, user] = segmentHistory(history, true, false);
+                        vehicles[id]['segments'] = segments;
+                        vehicles[id]['durations'] = durations;
+                        vehicles[id]['status'] = status;
+                        vehicles[id]['user'] = user;
                     }
 
                 }
@@ -175,81 +307,12 @@ function init (client) {
   </div>
  </div>`);
 
-            // add vehicles to table
+            // add vehicles to page
             for (const vehicle of Object.values(vehicles)) {
-
-                // get history
-                const history = vehicle['history'];
-
-                if (history.length === 0) {
-                    // add empty row
-                    $('#vehiclesTable').append(
-`<div class="row">
-  <div class="col-2">
-    <strong>${vehicle['identifier']}</strong>
-  </div>
-  <div class="col-10">
-  </div>
- </div>`);
-                    continue;
-
-                }
-
-                // segment by status
-                const [segments, durations, status, user] = segmentHistory(history, true, false);
-
-                /*
-                console.log(segments);
-                console.log(durations);
-                console.log(status);
-                console.log(user);
-                */
-
-                // calculate offsets
-                const n = status.length;
-                const offsets = new Array(n);
-                for (let i = 0; i < n; i++) {
-                    const segment = segments[i];
-                    offsets[i] = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
-                }
-
-                let cursor = 0;
-                let progress = '<div class="progress" style="height: 20px;">\n';
-                for (let i = 0; i < n; i++) {
-                    // advance bar until start
-                    const start = 100 * (offsets[i] / totalTime);
-                    logger.log('debug', 'start = %s', start);
-                    if (start > cursor) {
-                        const delta = (start - cursor);
-                        progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
-                        cursor = start;
-                        logger.log('debug', 'delta = %s', delta);
-                    }
-                    // fill barr with fraction
-                    const fraction = (100 * (durations[i] / totalTime));
-                    const status_class = ambulance_css[status[i]]['class'];
-                    progress += `<div class="progress-bar bg-${status_class}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
-                    cursor += fraction;
-                    logger.log('debug', 'status = %s', status[i]);
-                    logger.log('debug', 'fraction = %s', fraction);
-                    logger.log('debug', 'cursor = %s', cursor);
-                }
-                progress += '</div>';
-                // logger.log('debug', 'progress = %s', progress);
-
-                $('#vehiclesTable').append(
-`<div class="row">
-  <div class="col-2">
-    <strong>${vehicle['identifier']}</strong>
-  </div>
-  <div class="col-10">
-    ${progress}
-  </div>
- </div>`);
-
+                renderVehicle(vehicle, beginDate, endDate);
             }
 
-            // enable geneate report button
+            // enable generate report button
             $('#submitButton')
                 .prop('disabled', false);
 
