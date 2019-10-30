@@ -41,7 +41,7 @@ function reportSummary() {
         avgSpeed *= 3.6;               // km/h
         avgMovingSpeed *= 3.6;         // km/h
 
-        const element = getOrCreateElement(id, (id) => {
+        const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
             $('#vehiclesTable> tbody:last-child').append(`<tr id="${id}"></tr>`);
         });
 
