@@ -72,16 +72,19 @@ function renderProgress(data, beginDate, endDate, mode) {
     let progress = '<div class="progress" style="height: 20px;">\n';
     for (let i = 0; i < n; i++) {
 
+        const currentOffset = offsets[i];
+        const currentValue = values[i];
+
         // not in range yet
-        if (offsets[i] < 0)
+        if (currentOffset < 0)
             continue;
 
         // out of range, break
-        if (offsets[i] > totalTime)
+        if (currentOffset > totalTime)
             break;
 
         // in range, advance bar until start
-        const start = 100 * (offsets[i] / totalTime);
+        const start = 100 * (currentOffset / totalTime);
         logger.log('debug', 'start = %s', start);
         if (start > cursor) {
             const delta = (start - cursor);
@@ -93,18 +96,26 @@ function renderProgress(data, beginDate, endDate, mode) {
         // fill bar with duration fraction
         const fraction = (100 * (durations[i] / totalTime));
 
+        console.log(ambulance_status);
+        console.log(currentOffset);
+        console.log(currentValue);
+
         let bgclass, label;
         if (mode === 'status') {
-            bgclass = ambulance_css[values[i]]['class'];
-            label = ambulance_status[values[i]];
+            bgclass = ambulance_css[currentValue]['class'];
+            label = ambulance_status[currentValue];
         } else { // mode === 'user'
             bgclass = 'primary';
-            label = values[i];
+            label = currentValue;
         }
+
+        console.log(bgclass);
+        console.log(label);
+
         progress += `<div class="progress-bar bg-${bgclass}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100">${label}</div>\n`;
         cursor += fraction;
 
-        logger.log('debug', 'status = %s', values[i]);
+        logger.log('debug', 'status = %s', currentValue);
         logger.log('debug', 'fraction = %s', fraction);
         logger.log('debug', 'cursor = %s', cursor);
 
