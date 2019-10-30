@@ -18,6 +18,8 @@ function reportSummary() {
     // add vehicles to table
     for (const vehicle of Object.values(vehicles)) {
 
+        logger.log('info', 'Generating summary report');
+
         // get history
         const history = vehicle['history'];
 
@@ -78,13 +80,13 @@ function init (client) {
     // set datepickers
     $('#beginDate')
         .prop('value', beginDate.toISOString().substr(0, 10))
-        .change(function() {
+        .change(function () {
 
             logger.log('debug', 'beginDate has changed!');
 
             const endDateElement = $('#endDate');
             const endDate = new Date(endDateElement.val());
-            const beginDate = $( this ).val();
+            const beginDate = $(this).val();
             logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
             const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
@@ -105,17 +107,17 @@ function init (client) {
 
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
-    logger.log('debug', 'range = %j', range)
+    logger.log('debug', 'range = %j', range);
 
     // Retrieve vehicles
     apiClient.httpClient.get('ambulance/')
-        .then( response => {
+        .then(response => {
 
             // retrieve vehicles
             logger.log('debug', "Got vehicle data from API");
 
             // loop through vehicle records
-            const requests = response.data.map( vehicle  => {
+            const requests = response.data.map(vehicle => {
 
                 logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
 
@@ -131,7 +133,7 @@ function init (client) {
             return Promise.all(requests);
 
         })
-        .then( responses =>
+        .then(responses =>
             responses.forEach(
                 response => {
 
@@ -143,14 +145,14 @@ function init (client) {
 
                         // add to map
                         logger.log('debug', "Got '%s' vehicle '%s' updates from API",
-                                   updates.length, vehicles[id]['identifier']);
+                            updates.length, vehicles[id]['identifier']);
                         addAmbulanceRoute(map, updates, ambulance_status, false);
 
                     }
 
                 }
-        ))
-        .then( () => {
+            ))
+        .then(() => {
 
             // report summary
             reportSummary();
@@ -160,7 +162,7 @@ function init (client) {
                 .prop('disabled', false);
 
         })
-        .catch( (error) => {
+        .catch((error) => {
             logger.log('error', "'Failed to retrieve vehicles: %s ", error);
         });
 
