@@ -251,7 +251,7 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
     }
 
     // right edge
-    offsetDelta = 100 * ((totalTime - offsetDelta - numberOfHours * delta / 100) / totalTime);
+    offsetDelta = 100 - offsetDelta - numberOfHours * delta;
     progress += `<div class="progress-bar bg-${labels[(offsetHour + numberOfHours)% 2]}" role="progressbar" style="width: ${offsetDelta}%" aria-valuenow="${offsetDelta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
 
     logger.log('debug', 'offsetDelta = %s', offsetDelta);
