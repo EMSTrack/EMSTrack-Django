@@ -1,6 +1,6 @@
 import {LeafletPolylineWidget} from "./leaflet/LeafletWidget";
 
-import {addAmbulanceRoute, breakSegments, calculateMotionStatistics} from "./map-tools";
+import {addAmbulanceRoute, segmentHistory, calculateMotionStatistics} from "./map-tools";
 
 import {logger} from './logger';
 import {validateDateRange} from "./util";
@@ -111,7 +111,7 @@ function init (client) {
                 const history = vehicle['history'];
 
                 // break segments
-                const segments = breakSegments(history);
+                const segments = segmentHistory(history, false, false);
 
                 // calculate statistics
                 let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
