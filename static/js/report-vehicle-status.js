@@ -305,6 +305,7 @@ function init (client) {
         start: [0, 24],
         step: 1/4,
         margin: 1,
+        connect: [false, true, false],
         range: {
             'min': [0],
             'max': [24]
