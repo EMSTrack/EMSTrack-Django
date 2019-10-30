@@ -161,6 +161,9 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
     // replace element content
     element.html(progress);
 
+    // activate tooltips
+    $('[data-toggle="tooltip"]').tooltip();
+
 }
 
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
