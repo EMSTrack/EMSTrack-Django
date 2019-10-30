@@ -97,7 +97,7 @@ function renderProgress(data, beginDate, endDate, mode) {
         if (mode === 'status') {
             bgclass = ambulance_css[values[i]]['class'];
             label = ambulance_status[values[i]];
-a        } else { // mode === 'user'
+        } else { // mode === 'user'
             bgclass = 'primary';
             label = values[i];
         }
