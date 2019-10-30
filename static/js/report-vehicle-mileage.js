@@ -94,9 +94,13 @@ function reportDetail(id) {
         logger.log('info', "detail is visible, current id is '%s'", currentId);
 
         if (currentId === vehicles['id']['identifier']) {
+
+            logger.log('info', "hiding");
+
             // same vehicle, collapse and return
             detailElement.collapse('hide');
-            return false;
+            return;
+
         }
 
         // otherwise, this is another element, go ahead
@@ -106,11 +110,11 @@ function reportDetail(id) {
         // not visible, set it up and display
 
         logger.log('info', "detail is not visible, current id is '%s'", currentId);
-        detailElement.collapse('show');
 
     }
 
     // setup detail
+    logger.log('info', "setting up");
 
     // set new detail title
     idElement.text(vehicles['id']['identifier']);
@@ -118,7 +122,8 @@ function reportDetail(id) {
     const newCurrentId = idElement.text();
     logger.log('info', "current id is '%s'", newCurrentId);
 
-    return false;
+    logger.log('info', "showing...");
+    detailElement.collapse('show');
 }
 
 // report summary
