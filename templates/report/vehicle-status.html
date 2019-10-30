@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-4">
                     </div>
-                    <div class="col-4">
+                    <div class="col-4 text-right">
                         <input id="submitButton" class="btn btn-primary"
                                type="submit" value="{% trans 'Generate Report' %}"
                                disabled>
@@ -42,18 +42,12 @@
                 <div class="col-1 text-right">
                     <span>{% trans "range" %}:</span>
                 </div>
-                <div class="col-1 text-right">
-                    <span>{% trans "begin" %}:</span>
-                </div>
-                <div class="col-3">
+                <div class="col-4">
                     <input type="time" name="beginTime" id="beginTime">
                 </div>
                 <div class="col-3">
                 </div>
-                <div class="col-1 text-right">
-                    <span>{% trans "end" %}:</span>
-                </div>
-                <div class="col-3">
+                <div class="col-4 text-right">
                     <input type="time" name="endTime" id="endTime">
                 </div>
             </div>
@@ -61,7 +55,7 @@
             <div class="row">
                 <div class="col-1">
                 </div>
-                <div class="col">
+                <div class="col-11">
                     <div id="slider-range"></div>
                 </div>
             </div>
