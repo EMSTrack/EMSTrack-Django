@@ -202,6 +202,8 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const progress = renderProgress(history, beginDate, endDate);
     logger.log('debug', 'progress = %s', progress);
 
+    console.log(element);
+
     // replace element content
     element.html(progress);
 
