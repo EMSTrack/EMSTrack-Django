@@ -88,17 +88,15 @@ function renderProgress(data, beginDate, endDate, mode) {
         logger.log('debug', 'start = %s', start);
         if (start > cursor) {
             const delta = (start - cursor);
-            progress += `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+            progress +=
+                `<div class="progress-bar bg-light" role="progressbar" style="width: ${delta}%" 
+aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100"></div>`;
             cursor = start;
             logger.log('debug', 'delta = %s', delta);
         }
 
         // fill bar with duration fraction
         const fraction = (100 * (durations[i] / totalTime));
-
-        console.log(ambulance_status);
-        console.log(currentOffset);
-        console.log(currentValue);
 
         let bgclass, label;
         if (mode === 'status') {
@@ -108,11 +106,9 @@ function renderProgress(data, beginDate, endDate, mode) {
             bgclass = 'primary';
             label = currentValue;
         }
-
-        console.log(bgclass);
-        console.log(label);
-
-        progress += `<div class="progress-bar bg-${bgclass}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100">${label}</div>\n`;
+        progress += `<div class="progress-bar bg-${bgclass}" role="progressbar" style="width: ${fraction}%"
+aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"
+data-toggle="tooltip" data-placement="top" title="${label}"></div>`;
         cursor += fraction;
 
         logger.log('debug', 'status = %s', currentValue);
