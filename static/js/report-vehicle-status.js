@@ -93,13 +93,15 @@ function renderProgress(data, beginDate, endDate, mode) {
         // fill bar with duration fraction
         const fraction = (100 * (durations[i] / totalTime));
 
-        let bgclass;
+        let bgclass, label;
         if (mode === 'status') {
             bgclass = ambulance_css[values[i]]['class'];
-        } else { // mode === 'user'
+            label = ambulance_status[values[i]];
+a        } else { // mode === 'user'
             bgclass = 'primary';
+            label = values[i];
         }
-        progress += `<div class="progress-bar bg-${bgclass}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
+        progress += `<div class="progress-bar bg-${bgclass}" role="progressbar" style="width: ${fraction}%" aria-valuenow="${fraction}" aria-valuemin="0" aria-valuemax="100">${label}</div>\n`;
         cursor += fraction;
 
         logger.log('debug', 'status = %s', values[i]);
@@ -139,9 +141,11 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
     }
 
     // get element
-    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
-        createElement(id, vehicle['identifier'], "background-color: #F9F9F9");
-    });
+    const element = getOrCreateElement(
+        `vehicle_${vehicle['id']}`,
+        (id) => {
+            createElement(id, vehicle['identifier'], "background-color: #F9F9F9");
+        });
 
     // render progress
     const progress = renderProgress(data, beginDate, endDate, mode);
