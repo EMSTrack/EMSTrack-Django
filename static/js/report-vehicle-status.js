@@ -244,7 +244,7 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
     const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
     const delta = 100 * (1000 * 60 * 60 / totalTime);
     for (let i = offsetHour; i < offsetHour + numberOfHours; i++) {
-        progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i + offsetHour}</div>\n`;
+        progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i}</div>\n`;
     }
     progress += '</div>';
     logger.log('debug', 'progress = %s', progress);
