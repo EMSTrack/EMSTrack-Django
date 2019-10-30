@@ -312,7 +312,7 @@ function init (client) {
                         const id = history[0]['ambulance_id'];
 
                         // segment by status and store
-                        const [segments, durations, status, user] = segmentHistory(history, true, false);
+                        const [segments, durations, status, user] = segmentHistory(history, {'byStatus': true});
                         vehicles[id]['history'] = {
                             'history': history,
                             'segments': segments,

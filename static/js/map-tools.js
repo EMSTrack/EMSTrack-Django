@@ -99,14 +99,17 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
     return [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed];
 }
 
-export function segmentHistory(history, byStatus, byUser, reverse, separationRadius, timeInterval) {
+export function segmentHistory(history, _options = {}) {
 
-	separationRadius = separationRadius || [10, 1000];              // 10m, 1km
-	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
-
-    byStatus = byStatus || true;  // split by status
-    byUser = byUser || false;     // split by user
-    reverse = reverse || true;    // sort history in descending order
+    const options =
+        Object.assign({
+                'separationRadius' :[10, 1000],                  // 10m, 1km
+                'timeInterval': [2 * 60 * 1000, 60 * 60 * 1000], // 2 minutes, 1 hour
+                'byStatus': false,                               // split by status
+                'byUser': false,                                 // split by user
+                'reverse': true                                  // traverse in reverse order
+            },
+            _options);
 
     const segments = [];
     const durations = [];
@@ -119,7 +122,7 @@ export function segmentHistory(history, byStatus, byUser, reverse, separationRad
     for (let i = 0; i < n; i++) {
 
 		// current position
-        const currentPosition = history[reverse ? n - i - 1: i];
+        const currentPosition = history[options.reverse ? n - i - 1: i];
 
         // distance?
 		if (lastPosition != null) {
@@ -129,15 +132,15 @@ export function segmentHistory(history, byStatus, byUser, reverse, separationRad
 
             // new segment?
             const newSegment =
-                distance > separationRadius[1] ||
-                interval > timeInterval[1] ||
-                (interval > timeInterval[0] && distance > separationRadius[0]);
+                distance > options.separationRadius[1] ||
+                interval > options.timeInterval[1] ||
+                (interval > options.timeInterval[0] && distance > options.separationRadius[0]);
 
             // new user?
-            const newUser = byUser && lastPosition.updated_by_username !== currentPosition.updated_by_username;
+            const newUser = options.byUser && lastPosition.updated_by_username !== currentPosition.updated_by_username;
 
             // new status?
-            const newStatus = byStatus && lastPosition.status !== currentPosition.status;
+            const newStatus = options.byStatus && lastPosition.status !== currentPosition.status;
 
             if ((newUser || newStatus) && !newSegment) {
                 // will break in the middle of segment, duplicate current position first
@@ -320,7 +323,7 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
 
     // break segments
     //const segments = breakSegments(data, byStatus);
-    const [segments, durations, status, user] = segmentHistory(data, byStatus, false);
+    const [segments, durations, status, user] = segmentHistory(data, {'byStatus': byStatus});
 
     // loop on segments
     const n = segments.length;

@@ -111,7 +111,7 @@ function init (client) {
                 const history = vehicle['history'];
 
                 // break segments
-                const [segments, durations, status, user] = segmentHistory(history, false, false);
+                const [segments, durations, status, user] = segmentHistory(history);
 
                 // calculate statistics
                 let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
