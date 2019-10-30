@@ -303,9 +303,9 @@ function init (client) {
     const slider = document.getElementById('slider-range');
     noUiSlider.create(slider, {
         start: [0, 24],
+        connect: true,
         step: 1/4,
         margin: 1,
-        connect: [false, true, false],
         range: {
             'min': [0],
             'max': [24]
