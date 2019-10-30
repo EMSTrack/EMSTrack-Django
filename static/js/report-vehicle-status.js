@@ -144,7 +144,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     }
 
     // render progress
-    const progress = renderProgress(data, beginDate, endDate);
+    const progress = renderProgress(data, beginDate, endDate, mode);
     // logger.log('debug', 'progress = %s', progress);
 
     // replace element content
