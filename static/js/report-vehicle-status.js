@@ -185,7 +185,7 @@ function renderProgress(data, beginDate, endDate) {
 
 }
 
-function getOrCreateElement(id, label) {
+function getOrCreateElement(id, label, style = "background-color: #F4F6F6") {
 
     // get element
     const selector = `#${id}`;
@@ -196,9 +196,9 @@ function getOrCreateElement(id, label) {
         element = $(
 `<div class="row">
   <div class="col-2">
-    <strong>${label}</strong>
+    ${label}
   </div>
-  <div class="col-10" id="${id}">
+  <div class="col-10" id="${id}" style="${style}">
   </div>
 </div>`);
         $('#vehiclesTable').append(element);
@@ -235,7 +235,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // get element
-    const element = getOrCreateElement('ruler', 'Time');
+    const element = getOrCreateElement('ruler', '<strong>Time</strong>');
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';
