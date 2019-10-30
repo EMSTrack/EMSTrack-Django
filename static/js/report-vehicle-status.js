@@ -111,9 +111,9 @@ function renderProgress(data, beginDate, endDate) {
         if (beforeRange && currentOffset >= 0) {
             // this is the first element in range
             beforeRange = false;
-            if (i > 0 && currentOffset[i - 1] + duration[i - 1] >= 0) {
+            if (i > 0 && currentOffset[i - 1] + durations[i - 1] >= 0) {
                 // previous status extends in range, shift to zero to ensure continuity
-                duration[i - 1] -= currentOffset[i - 1];
+                durations[i - 1] -= currentOffset[i - 1];
                 currentOffset[i - 1] = 0;
             }
         }
@@ -123,9 +123,9 @@ function renderProgress(data, beginDate, endDate) {
             break;
         }
 
-        if (currentOffset + duration[i] > totalTime) {
+        if (currentOffset + durations[i] > totalTime) {
             // match end and break
-            duration[i] -= (currentOffset + duration[i] - totalTime);
+            durations[i] -= (currentOffset + durations[i] - totalTime);
             break;
         }
 
