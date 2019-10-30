@@ -128,7 +128,7 @@ function createElement(id, label, style = "", extraColClasses = "") {
 
 }
 
-function renderVehicle(vehicle, beginDate, endDate) {
+function renderVehicle(vehicle, beginDate, endDate, mode) {
 
     // get history
     const data = vehicle['data'];
@@ -355,7 +355,7 @@ function init (client) {
 
         // add vehicles to page
         for (const vehicle of Object.values(vehicles)) {
-            renderVehicle(vehicle, offsetBeginDate, offsetEndDate);
+            renderVehicle(vehicle, offsetBeginDate, offsetEndDate, mode);
         }
 
     });
