@@ -70,6 +70,7 @@ class VehicleMileageDetailReportView(TemplateView):
         context['map_provider'] = {'provider': settings.MAP_PROVIDER,
                                    'access_token': settings.MAP_PROVIDER_TOKEN}
         context['ambulance_css'] = AmbulanceCSS
+        context['pk'] = self.kwargs['pk']
 
         context['translation_table'] = {
             "Abort Call": _("Abort Call"),
