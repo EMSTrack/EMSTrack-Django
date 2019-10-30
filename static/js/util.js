@@ -40,15 +40,18 @@ export function splitTimeToMillis(hours, minutes, seconds, milliseconds) {
     return 1000 * (60 * (60 * hours + minutes) + seconds) + milliseconds;
 }
 
-export function millisToTime(millis) {
-
+export function millisToSplitTime(millis) {
     const milliseconds = millis % 1000;
     millis = (millis - milliseconds) / 1000;
     const seconds = millis % 60;
     millis = (millis - seconds) / 60;
     const minutes = millis % 60;
     const hours = (millis - minutes) / 60;
+    return [hours, minutes, seconds, milliseconds];
+}
 
+export function millisToTime(millis) {
+    const [hours, minutes, seconds, milliseconds] = millisToSplitTime(millis);
     if (milliseconds > 0)
         return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' +
             String(seconds).padStart(2, '0') + '.' + String(milliseconds).padStart(3, '0');
