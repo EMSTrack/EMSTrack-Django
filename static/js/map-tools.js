@@ -124,8 +124,8 @@ export function segmentHistory(history, byStatus, byUser, reverse, separationRad
         // distance?
 		if (lastPosition != null) {
 
-            const distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);                 // meters
-            const interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp)) / 1000; // milliseconds
+            const distance = calculateDistanceHaversine(lastPosition.location, currentPosition.location);          // meters
+            const interval = Math.abs(Date.parse(lastPosition.timestamp) - Date.parse(currentPosition.timestamp)); // milliseconds
 
             // new segment?
             const newSegment =
