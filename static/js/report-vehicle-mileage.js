@@ -89,6 +89,8 @@ function reportDetail(id) {
     const detailIdElement = $('#detail_id');
     if (isDetailVisible) {
 
+        logger.log('info', "detail is visible");
+
         if (detailIdElement.text() === vehicles['id']['identifier']) {
             // same vehicle, collapse and return
             detailElement.collapse('hide');
@@ -100,6 +102,8 @@ function reportDetail(id) {
     } else {
 
         // not visible, set it up and display
+
+        logger.log('info', "detail is not visible");
 
     }
 
