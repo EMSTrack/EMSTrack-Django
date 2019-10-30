@@ -287,8 +287,10 @@ function init (client) {
         logger.log('info', 'begin = %s, end = %s', begin, end);
 
         // offset beginDate
-        const offsetBeginDate = new Date(beginDate + Number.parseFloat(begin)/24);
-        const offsetEndDate = new Date(beginDate + Number.parseFloat(end)/24);
+        const offsetBeginDate = new Date(beginDate)
+        offsetBeginDate.setTime(offsetBeginDate.getTime() + Number.parseFloat(begin)/24 * 60 * 60 * 1000);
+        const offsetEndDate = new Date(beginDate);
+        offsetEndDate.setTime(offsetEndDate.getTime() + Number.parseFloat(end)/24 * 60 * 60 * 1000);
         logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
         // add vehicles to page
