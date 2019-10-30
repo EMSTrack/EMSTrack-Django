@@ -176,6 +176,8 @@ function renderProgress(data, beginDate, endDate) {
 
 function renderVehicle(vehicle, beginDate, endDate) {
 
+    console.log(vehicle);
+
     // get history
     const history = vehicle['history'];
 
@@ -284,7 +286,6 @@ function init (client) {
         .then( () => {
 
             // add time scale to table
-            let cursor = 0;
             let progress = '<div class="progress" style="height: 20px;">\n';
             const totalTime = endDate.getTime() - beginDate.getTime();
 
