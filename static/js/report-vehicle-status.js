@@ -173,9 +173,10 @@ function renderProgress(data, beginDate, endDate) {
 
 }
 
-function getOrCreateElement(selector, label) {
+function getOrCreateElement(id, label) {
 
     // get element
+    const selector = `#${id}`;
     let element = $(selector);
     if (element.length === 0) {
 
@@ -185,7 +186,7 @@ function getOrCreateElement(selector, label) {
   <div class="col-2">
     <strong>${label}</strong>
   </div>
-  <div class="col-10" id="${selector}">
+  <div class="col-10" id="${id}">
   </div>
 </div>`);
         $('#vehiclesTable').append(element);
@@ -203,7 +204,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const history = vehicle['history'];
 
     // get element
-    const element = getOrCreateElement(`#vehicle_${vehicle['id']}`, vehicle['identifier']);
+    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, vehicle['identifier']);
 
     // nothing to do?
     if (Object.entries(history).length === 0) {
@@ -222,7 +223,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
 function renderRuler(beginDate, endDate) {
 
     // get element
-    const element = getOrCreateElement('#ruler', 'Time');
+    const element = getOrCreateElement('ruler', 'Time');
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';
@@ -358,7 +359,7 @@ $(function () {
             values: 25,
             density: 4*24/100,
         }
-    }).on('change', function(e){
+    }).on('change', function(e) {
 
         const [begin, end] = slider.noUiSlider.get();
         logger.log('info', 'begin = %s, end = %s', begin, end);
