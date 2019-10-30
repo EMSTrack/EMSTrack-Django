@@ -3,7 +3,7 @@ import {logger} from './logger';
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
 
-import {validateDateRange, millisToTime, millisToSplitTime, splitTimeToMillis} from "./util";
+import {getOrCreateElement, millisToSplitTime, millisToTime, splitTimeToMillis, validateDateRange} from "./util";
 
 import {segmentHistory} from "./map-tools";
 
@@ -102,29 +102,17 @@ function renderProgress(data, beginDate, endDate) {
 
 }
 
-function getOrCreateElement(id, label, extraClasses = "", style = "background-color: #F9F9F9") {
+function createElement(id, label, style = "", extraColClasses = "") {
 
-    // get element
-    const selector = `#${id}`;
-    let element = $(selector);
-    if (element.length === 0) {
-
-        // create element first
-        element = $(
-`<div class="row no-gutters">
+    $('#vehiclesTable').append(
+`<div class="row">
   <div class="col-2">
     ${label}
   </div>
-  <div class="col-10 ${extraClasses}" id="${id}" style="${style}">
+  <div class="col-10 ${extraColClasses}" id="${id}" style="${style}">
   </div>
 </div>`);
-        $('#vehiclesTable').append(element);
 
-        // assign created element
-        element = $(selector);
-    }
-
-    return element;
 }
 
 function renderVehicle(vehicle, beginDate, endDate) {
@@ -133,7 +121,9 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const history = vehicle['history'];
 
     // get element
-    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, vehicle['identifier']);
+    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
+        createElement(id, vehicle['identifier'], "background-color: #F9F9F9");
+    });
 
     // nothing to do?
     if (Object.entries(history).length === 0) {
@@ -152,7 +142,9 @@ function renderVehicle(vehicle, beginDate, endDate) {
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // get element
-    const element = getOrCreateElement('ruler', '', "pb-2");
+    const element = getOrCreateElement('ruler', (id) => {
+        createElement(id, "", "", "pb-2");
+    });
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';

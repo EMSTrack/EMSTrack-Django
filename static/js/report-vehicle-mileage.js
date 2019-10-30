@@ -1,18 +1,64 @@
 import {LeafletPolylineWidget} from "./leaflet/LeafletWidget";
 
-import {addAmbulanceRoute, segmentHistory, calculateMotionStatistics} from "./map-tools";
-
 import {logger} from './logger';
-import {validateDateRange} from "./util";
+import {addAmbulanceRoute, segmentHistory, calculateMotionStatistics} from "./map-tools";
+import {validateDateRange, getOrCreateElement} from "./util";
 
 let map;
 let apiClient;
 const vehicles = {};
+let detail = None;
 
 // add initialization hook
 add_init_function(init);
 
-// setdates
+// report summary
+function reportSummary() {
+
+    // add vehicles to table
+    for (const vehicle of Object.values(vehicles)) {
+
+        // get history
+        const history = vehicle['history'];
+
+        // break segments
+        const [segments, durations, status, user] = segmentHistory(history);
+
+        // calculate statistics
+        let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
+            = calculateMotionStatistics(10 / 3.6, ...segments);
+        let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
+        let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
+
+        // convert to proper units
+        totalTime /= 3600;             // h
+        totalMovingTime /= 3600;       // h
+
+        totalDistance /= 1000;         // km
+        totalMovingDistance /= 1000;   // km
+
+        maxSpeed *= 3.6;               // km/h
+        avgSpeed *= 3.6;               // km/h
+        avgMovingSpeed *= 3.6;         // km/h
+
+        const element = getOrCreateElement(id, (id) => {
+            $('#vehiclesTable> tbody:last-child').append(`<tr id="${id}"></tr>`);
+        });
+
+        element.html(`
+<td><a href="${window.location.pathname}/${vehicle['id']}">${vehicle['identifier']}</a></td>
+  <td>${totalDistance.toFixed(2)}</td>
+  <td>${totalTime.toFixed(2)}</td>
+  <td>${avgSpeed.toFixed(1)}</td>
+  <td>${totalMovingDistance.toFixed(2)}</td>
+  <td>${totalMovingTime.toFixed(2)}</td>
+  <td>${avgMovingSpeed.toFixed(1)}</td>
+  <td>${maxSpeed.toFixed(1)}
+</td>`);
+
+    }
+
+}
 
 // initialization function
 function init (client) {
@@ -106,44 +152,8 @@ function init (client) {
         ))
         .then( () => {
 
-            // add vehicles to table
-            for (const vehicle of Object.values(vehicles)) {
-
-                // get history
-                const history = vehicle['history'];
-
-                // break segments
-                const [segments, durations, status, user] = segmentHistory(history);
-
-                // calculate statistics
-                let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
-                    = calculateMotionStatistics(10/3.6, ...segments);
-                let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
-                let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
-
-                // convert to proper units
-                totalTime /= 3600;             // h
-                totalMovingTime /= 3600;       // h
-
-                totalDistance /= 1000;         // km
-                totalMovingDistance /= 1000;   // km
-
-                maxSpeed *= 3.6;               // km/h
-                avgSpeed *= 3.6;               // km/h
-                avgMovingSpeed *= 3.6;         // km/h
-
-                $('#vehiclesTable> tbody:last-child').append(
-`<tr>
-  <td><a href="${window.location.pathname}/${vehicle['id']}">${vehicle['identifier']}</a></td>
-  <td>${totalDistance.toFixed(2)}</td>
-  <td>${totalTime.toFixed(2)}</td>
-  <td>${avgSpeed.toFixed(1)}</td>
-  <td>${totalMovingDistance.toFixed(2)}</td>
-  <td>${totalMovingTime.toFixed(2)}</td>
-  <td>${avgMovingSpeed.toFixed(1)}</td>
-  <td>${maxSpeed.toFixed(1)}</td>
-</tr>`);
-            }
+            // report summary
+            reportSummary();
 
             // enable geneate report button
             $('#submitButton')

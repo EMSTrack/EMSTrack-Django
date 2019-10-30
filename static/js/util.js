@@ -100,3 +100,29 @@ export function validateDateRange(beginDate, endDate) {
 
     return [beginDate, endDate, minDate];
 }
+
+export function getOrCreateElement(id, create) {
+
+    // get element
+    const selector = `#${id}`;
+    let element = $(selector);
+    if (element.length === 0) {
+
+        try {
+            // create element first
+            create(id);
+
+        } catch(error) {
+            throw "Could not create element! Error: " + error;
+        }
+
+        // assign created element
+        element = $(selector);
+
+        if (element.length === 0) {
+            throw "Could not retrieve created element!";
+        }
+    }
+
+    return element;
+}
