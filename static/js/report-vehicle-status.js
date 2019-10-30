@@ -213,7 +213,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
 
     // render progress
     const progress = renderProgress(history, beginDate, endDate);
-    logger.log('debug', 'progress = %s', progress);
+    // logger.log('debug', 'progress = %s', progress);
 
     // replace element content
     element.html(progress);
@@ -242,6 +242,8 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
     let offsetDelta = 100 * ((nextHourMillis - offsetMillis) / totalTime);
     progress += `<div class="progress-bar bg-${labels[(offsetHour - 1)% 2]}" role="progressbar" style="width: ${offsetDelta}%" aria-valuenow="${offsetDelta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
 
+    logger.log('debug', 'offsetDelta = %s', offsetDelta);
+
     const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
     const delta = 100 * (1000 * 60 * 60 / totalTime);
     for (let i = offsetHour; i < offsetHour + numberOfHours; i++) {
@@ -252,8 +254,10 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
     offsetDelta = 100 * ((totalTime - offsetDelta - numberOfHours * delta) / totalTime);
     progress += `<div class="progress-bar bg-${labels[(offsetHour + numberOfHours)% 2]}" role="progressbar" style="width: ${offsetDelta}%" aria-valuenow="${offsetDelta}" aria-valuemin="0" aria-valuemax="100"></div>\n`;
 
+    logger.log('debug', 'offsetDelta = %s', offsetDelta);
+
     progress += '</div>';
-    logger.log('debug', 'progress = %s', progress);
+    // logger.log('debug', 'progress = %s', progress);
 
     // replace element content
     element.html(progress);
