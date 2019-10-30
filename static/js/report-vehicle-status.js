@@ -13,7 +13,7 @@ const vehicles = {};
 // add initialization hook
 add_init_function(init);
 
-function segmentHistory(history, byStatus, byUser, separationRadius, timeInterval) {
+function segmentHistory(history, byStatus, byUser, reverse = true, separationRadius, timeInterval) {
 
 	separationRadius = separationRadius || [10, 1000];              // 10m, 1km
 	timeInterval = timeInterval || [2 * 60 * 1000, 60 * 60 * 1000]; // 2 minutes, 1 hour
@@ -29,10 +29,10 @@ function segmentHistory(history, byStatus, byUser, separationRadius, timeInterva
     let currentSegment = [];
     let lastPosition = null;
     const n = history.length;
-    for (let i = n - 1; i >= 0; i--) {
+    for (let i = 0; i < n; i++) {
 
 		// current position
-        const currentPosition = history[i];
+        const currentPosition = history[reverse ? n - i - 1: i];
 
         // distance?
 		if (lastPosition != null) {
