@@ -46,8 +46,10 @@ function init (client) {
 
             // replace endDate if necessary
             endDateElement
-                .prop('min', _minDate.toISOString().substr(0, 10))
-                .prop('value', _endDate.toISOString().substr(0, 10));
+                .prop('min', _minDate.toISOString().substr(0, 10));
+
+            if (endDate < _minDate)
+                endDateElement.prop('value', _endDate.toISOString().substr(0, 10));
 
         });
 
