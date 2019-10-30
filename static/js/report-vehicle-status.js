@@ -267,18 +267,18 @@ function init (client) {
                     // retrieve updates
                     const history = response.data;
                     if (history.length) {
+
+                        // get id
                         const id = history[0]['ambulance_id'];
                         vehicles[id]['history'] = history;
-                    }
 
-                    // segment history
-                    if (history.length > 0) {
                         // segment by status
                         const [segments, durations, status, user] = segmentHistory(history, true, false);
                         vehicles[id]['segments'] = segments;
                         vehicles[id]['durations'] = durations;
                         vehicles[id]['status'] = status;
                         vehicles[id]['user'] = user;
+
                     }
 
                 }
@@ -330,8 +330,6 @@ $(function () {
 
     // setup slider
     const slider = document.getElementById('slider-range');
-    console.log(slider);
-
     noUiSlider.create(slider, {
         start: [0, 24],
         step: 1/4,
