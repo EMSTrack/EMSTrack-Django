@@ -106,6 +106,7 @@ function reportDetail(id) {
         // not visible, set it up and display
 
         logger.log('info', "detail is not visible, current id is '%s'", currentId);
+        detailElement.collapse('show');
 
     }
 
@@ -113,10 +114,7 @@ function reportDetail(id) {
 
     // set new detail title
     detailIdElement.text(vehicles['id']['identifier']);
-
-    // show detail
-    detailElement.collapse('show');
-
+    
     return false;
 }
 
