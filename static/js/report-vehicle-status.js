@@ -131,7 +131,7 @@ function createElement(id, label, style = "", extraColClasses = "") {
 function renderVehicle(vehicle, beginDate, endDate) {
 
     // get history
-    const history = vehicle['data'];
+    const data = vehicle['data'];
 
     // get element
     const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
@@ -139,12 +139,12 @@ function renderVehicle(vehicle, beginDate, endDate) {
     });
 
     // nothing to do?
-    if (Object.entries(history).length === 0) {
+    if (Object.entries(data).length === 0) {
         return;
     }
 
     // render progress
-    const progress = renderProgress(history, beginDate, endDate);
+    const progress = renderProgress(data, beginDate, endDate);
     // logger.log('debug', 'progress = %s', progress);
 
     // replace element content
