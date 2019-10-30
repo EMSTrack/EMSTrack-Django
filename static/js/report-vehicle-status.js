@@ -105,27 +105,27 @@ function renderProgress(data, beginDate, endDate) {
     for (let i = 0; i < n; i++) {
 
         const segment = segments[i];
-        const offset = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
-        offset[i] = offset;
+        const currentOffset = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
+        offsets[i] = currentOffset;
 
-        if (beforeRange && offset >= 0) {
+        if (beforeRange && currentOffset >= 0) {
             // this is the first element in range
             beforeRange = false;
-            if (i > 0 && offset[i - 1] + duration[i - 1] >= 0) {
+            if (i > 0 && currentOffset[i - 1] + duration[i - 1] >= 0) {
                 // previous status extends in range, shift to zero to ensure continuity
-                duration[i - 1] -= offset[i - 1];
-                offset[i - 1] = 0;
+                duration[i - 1] -= currentOffset[i - 1];
+                currentOffset[i - 1] = 0;
             }
         }
 
-        if (offset > totalTime) {
+        if (currentOffset > totalTime) {
             // simply break, out of range
             break;
         }
 
-        if (offset + duration[i] > totalTime) {
+        if (currentOffset + duration[i] > totalTime) {
             // match end and break
-            duration[i] -= (offset + duration[i] - totalTime);
+            duration[i] -= (currentOffset + duration[i] - totalTime);
             break;
         }
 
