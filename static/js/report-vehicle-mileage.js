@@ -89,9 +89,10 @@ function reportDetail(id) {
     const detailIdElement = $('#detail_id');
     if (isDetailVisible) {
 
-        logger.log('info', "detail is visible");
+        const currentId = detailIdElement.text();
+        logger.log('info', "detail is visible, current id is '%s'", currentId);
 
-        if (detailIdElement.text() === vehicles['id']['identifier']) {
+        if (currentId === vehicles['id']['identifier']) {
             // same vehicle, collapse and return
             detailElement.collapse('hide');
             return false;
@@ -99,20 +100,23 @@ function reportDetail(id) {
 
         // otherwise, this is another element, go ahead
 
+        // set new detail title
+        detailIdElement.text(vehicles['id']['identifier']);
+
     } else {
 
         // not visible, set it up and display
 
         logger.log('info', "detail is not visible");
 
+        // show detail
+        detailElement.collapse('show');
+
     }
 
-    // set detail title
-    detailIdElement.text(vehicles['id']['identifier']);
+    // setup detail
 
-    // show detail
-    detailElement.collapse('show');
-
+    return false;
 }
 
 // report summary
