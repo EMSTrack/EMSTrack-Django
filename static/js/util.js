@@ -81,12 +81,13 @@ export function validateDateRange(beginDate, endDate) {
         endDate = new Date(minDate);
     } else {
         endDate = new Date(endDate);
-        endDate.setHours(0, 0, 0, 0);
     }
+    endDate.setHours(0, 0, 0, 0);
 
     // make sure endDate > beginDate
     if (endDate <= beginDate) {
         endDate = new Date(minDate);
+        endDate.setHours(0, 0, 0, 0);
     }
 
     logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
