@@ -185,7 +185,7 @@ function renderProgress(data, beginDate, endDate) {
 
 }
 
-function getOrCreateElement(id, label, style = "background-color: #F4F6F6") {
+function getOrCreateElement(id, label, extraClasses = "", style = "background-color: #F9F9F9") {
 
     // get element
     const selector = `#${id}`;
@@ -198,7 +198,7 @@ function getOrCreateElement(id, label, style = "background-color: #F4F6F6") {
   <div class="col-2">
     ${label}
   </div>
-  <div class="col-10" id="${id}" style="${style}">
+  <div class="col-10 ${extraClasses}" id="${id}" style="${style}">
   </div>
 </div>`);
         $('#vehiclesTable').append(element);
@@ -216,7 +216,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const history = vehicle['history'];
 
     // get element
-    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, vehicle['identifier']);
+    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, vehicle['identifier'], "mt-2");
 
     // nothing to do?
     if (Object.entries(history).length === 0) {
