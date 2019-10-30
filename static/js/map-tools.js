@@ -49,6 +49,8 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold) 
             const _duration = Math.abs(currentTimestamp - lastTimestamp) / 1000;         // seconds
             const _speed = _distance / _duration; // m/s
 
+            logger.log('debug', '_speed = %s', _speed);
+
             distance[i] = _distance;
             speed[i] = _speed;
 
