@@ -131,7 +131,7 @@ function createElement(id, label, style = "", extraColClasses = "") {
 function renderVehicle(vehicle, beginDate, endDate) {
 
     // get history
-    const history = vehicle['history'];
+    const history = vehicle['data'];
 
     // get element
     const element = getOrCreateElement(`vehicle_${vehicle['id']}`, (id) => {
@@ -214,7 +214,7 @@ function retrieveData(range) {
 
                 // save vehicle
                 vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['history'] = {};
+                vehicles[vehicle['id']]['data'] = {};
 
                 const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
                 return apiClient.httpClient.get(url);
@@ -236,7 +236,7 @@ function retrieveData(range) {
                         const id = history[0]['ambulance_id'];
 
                         // store history
-                        vehicles[id]['history'] = {
+                        vehicles[id]['data'] = {
                             'history': history
                         };
 
@@ -257,26 +257,26 @@ function segmentHistoryByMode(mode) {
         logger.log('info', 'Segmenting history for vehicel %s', vehicle['identifier']);
 
         // get history
-        const history = vehicle['history'];
+        const data = vehicle['data'];
 
-        console.log(history);
-        if (history.length) {
+        console.log(data);
+        if (Object.entries(data).length) {
 
             logger.log('info', 'Got history');
 
             // segment and store
             const [segments, durations, status, user] = segmentHistory(
-                history['history'],
+                data['history'],
                 {
                     'byStatus': mode === 'status',
                     'byUser': mode === 'user'
                 }
             );
-            vehicle['history']['mode'] = mode;
-            vehicle['history']['segments'] = segments;
-            vehicle['history']['durations'] = durations;
-            vehicle['history']['status'] = status;
-            vehicle['history']['user'] = user;
+            vehicle['data']['mode'] = mode;
+            vehicle['data']['segments'] = segments;
+            vehicle['data']['durations'] = durations;
+            vehicle['data']['status'] = status;
+            vehicle['data']['user'] = user;
 
         }
 
