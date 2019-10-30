@@ -254,13 +254,18 @@ function segmentHistoryByMode(mode) {
     // add vehicles to table
     for (const vehicle of Object.values(vehicles)) {
 
+        logger.log('info', 'Segmenting history for vehicel %s', vehicle['identifier']);
+
         // get history
         const history = vehicle['history'];
 
         if (history.length) {
 
+            logger.log('info', 'Got history');
+
             // segment and store
-            const [segments, durations, status, user] = segmentHistory(history,
+            const [segments, durations, status, user] = segmentHistory(
+                history['history'],
                 {
                     'byStatus': mode === 'status',
                     'byUser': mode === 'user'
@@ -271,6 +276,7 @@ function segmentHistoryByMode(mode) {
             vehicle['history']['durations'] = durations;
             vehicle['history']['status'] = status;
             vehicle['history']['user'] = user;
+
         }
 
     }
