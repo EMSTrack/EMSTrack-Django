@@ -179,7 +179,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const history = vehicle['history'];
 
     // get element
-    let element = $(`#vehicles_${vehicle['id']}`);
+    let element = $(`#vehicle_${vehicle['id']}`);
     if (element.length === 0) {
 
         // create element first
@@ -194,7 +194,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
         $('#vehiclesTable').append(element);
 
         // assign created element
-        element = $(`#vehicles_${vehicle['id']}`);
+        element = $(`#vehicle_${vehicle['id']}`);
     }
 
     // nothing to do?
