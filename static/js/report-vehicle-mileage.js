@@ -115,6 +115,9 @@ function reportDetail(id) {
     // set new detail title
     idElement.text(vehicles['id']['identifier']);
 
+    const newCurrentId = idElement.text();
+    logger.log('info', "current id is '%s'", newCurrentId);
+
     return false;
 }
 
