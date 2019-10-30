@@ -266,12 +266,11 @@ function segmentHistoryByMode(mode) {
                     'byUser': mode === 'user'
                 }
             );
-            const storage = vehicle['history'];
-            storage['mode'] = mode;
-            storage['segments'] = segments;
-            storage['durations'] = durations;
-            storage['status'] = status;
-            storage['user'] = user;
+            vehicle['history']['mode'] = mode;
+            vehicle['history']['segments'] = segments;
+            vehicle['history']['durations'] = durations;
+            vehicle['history']['status'] = status;
+            vehicle['history']['user'] = user;
         }
 
     }
