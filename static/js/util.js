@@ -50,12 +50,13 @@ export function millisToTime(millis) {
     const hours = (millis - minutes) / 60;
 
     if (milliseconds > 0)
-        return hours + ':' + minutes + ':' + seconds + '.' + milliseconds;
+        return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' +
+            String(seconds).padStart(2, '0') + '.' + String(milliseconds).padStart(3, '0');
     else if (seconds > 0)
-        return hours + ':' + minutes + ':' + seconds;
+        return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0') + ':' +
+            String(seconds).padStart(2, '0');
     else
-        return hours + ':' + minutes;
-
+        return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
 }
 
 export function validateDateRange(beginDate, endDate) {
