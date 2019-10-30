@@ -194,7 +194,7 @@ function getOrCreateElement(id, label, extraClasses = "", style = "background-co
 
         // create element first
         element = $(
-`<div class="row">
+`<div class="row no-gutters">
   <div class="col-2">
     ${label}
   </div>
@@ -216,7 +216,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const history = vehicle['history'];
 
     // get element
-    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, vehicle['identifier'], "mt-2");
+    const element = getOrCreateElement(`vehicle_${vehicle['id']}`, vehicle['identifier']);
 
     // nothing to do?
     if (Object.entries(history).length === 0) {
@@ -235,7 +235,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // get element
-    const element = getOrCreateElement('ruler', '<strong>Time</strong>');
+    const element = getOrCreateElement('ruler', '', "pt-2");
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';
