@@ -14,7 +14,7 @@ urlpatterns = [
         login_required(views.VehicleMileageReportView.as_view()),
         name="vehicle-mileage"),
 
-    url(r'^vehicle-mileage-detail/(?P<pk>[0-9]+)$',
+    url(r'^vehicle-mileage/(?P<pk>[0-9]+)$',
         login_required(views.VehicleMileageDetailReportView.as_view()),
         name="vehicle-mileage-detail"),
 
