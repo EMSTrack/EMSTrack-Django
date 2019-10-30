@@ -299,7 +299,10 @@ function init (client) {
 
         // set time inputs
         const beginTime = millisToTime(beginMillis);
-        const endTime = millisToTime(endMillis)
+        let endTime = millisToTime(endMillis);
+        if (endTime === "24:00") {
+            endTime = "00:00";
+        }
         logger.log('debug', 'beginTime = %s, endTime = %s', beginTime, endTime);
 
         $('#beginTime').val(beginTime);
