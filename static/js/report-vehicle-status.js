@@ -16,6 +16,8 @@ add_init_function(init);
 
 function renderProgress(data, beginDate, endDate, mode) {
 
+    console.log(data);
+
     // clone durations
     const segments = data['segments'];
     const durations = [...data['durations']];
