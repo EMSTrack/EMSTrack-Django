@@ -86,8 +86,8 @@ function reportDetail(id) {
     const detailElement = $('#detail');
     const isDetailVisible = detailElement.is( ":visible" );
 
-    const detailIdElement = $('#detail_id');
-    const currentId = detailIdElement.text();
+    const idElement = $('#detail_id');
+    const currentId = idElement.text();
 
     if (isDetailVisible) {
 
@@ -113,8 +113,8 @@ function reportDetail(id) {
     // setup detail
 
     // set new detail title
-    detailIdElement.text(vehicles['id']['identifier']);
-    
+    idElement.text(vehicles['id']['identifier']);
+
     return false;
 }
 
