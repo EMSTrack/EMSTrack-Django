@@ -67,9 +67,9 @@ export function validateDateRange(beginDate, endDate) {
     // beginDate
     if (beginDate === null || typeof beginDate === 'undefined') {
         beginDate = new Date();
-        beginDate.setHours(0, 0, 0, 0);
     } else
         beginDate = new Date(beginDate);
+    beginDate.setHours(0, 0, 0, 0);
 
     // minDate
     let minDate = new Date();
