@@ -82,6 +82,33 @@ function reportDetail(id) {
 
     logger.log('info', "Generating detail report for id '%d'", id);
 
+    // get detail element information
+    const detailElement = $('#detail');
+    const isDetailVisible = detailElement.is( ":visible" );
+
+    const detailIdElement = $('#detail_id');
+    if (isDetailVisible) {
+
+        if (detailIdElement.text() === vehicles['id']['identifier']) {
+            // same vehicle, collapse and return
+            detailElement.collapse('hide');
+            return false;
+        }
+
+        // otherwise, this is another element, go ahead
+
+    } else {
+
+        // not visible, set it up and display
+
+    }
+
+    // set detail title
+    detailIdElement.text(vehicles['id']['identifier']);
+
+    // show detail
+    detailElement.collapse('show');
+
 }
 
 // report summary
