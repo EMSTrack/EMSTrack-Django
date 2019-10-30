@@ -173,29 +173,37 @@ function renderProgress(data, beginDate, endDate) {
 
 }
 
-function renderVehicle(vehicle, beginDate, endDate) {
-
-    // get history
-    const history = vehicle['history'];
+function getOrCreateElement(selector, label) {
 
     // get element
-    let element = $(`#vehicle_${vehicle['id']}`);
+    let element = $(selector);
     if (element.length === 0) {
 
         // create element first
         element = $(
 `<div class="row">
   <div class="col-2">
-    <strong>${vehicle['identifier']}</strong>
+    <strong>${label}</strong>
   </div>
-  <div class="col-10" id="vehicle_${vehicle['id']}">
+  <div class="col-10" id="${selector}">
   </div>
 </div>`);
         $('#vehiclesTable').append(element);
 
         // assign created element
-        element = $(`#vehicle_${vehicle['id']}`);
+        element = $(selector);
     }
+
+    return element;
+}
+
+function renderVehicle(vehicle, beginDate, endDate) {
+
+    // get history
+    const history = vehicle['history'];
+
+    // get element
+    const element = getOrCreateElement(`#vehicle_${vehicle['id']}`, vehicle['identifier']);
 
     // nothing to do?
     if (Object.entries(history).length === 0) {
@@ -206,7 +214,28 @@ function renderVehicle(vehicle, beginDate, endDate) {
     const progress = renderProgress(history, beginDate, endDate);
     logger.log('debug', 'progress = %s', progress);
 
-    console.log(element);
+    // replace element content
+    element.html(progress);
+
+}
+
+function renderRuler(beginDate, endDate) {
+
+    // get element
+    const element = getOrCreateElement('#ruler', 'Time');
+
+    // add time scale to table
+    let progress = '<div class="progress" style="height: 20px;">\n';
+    const totalTime = endDate.getTime() - beginDate.getTime();
+
+    const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
+    const delta = 100 * (1000 * 60 * 60 / totalTime);
+    const labels = ['secondary', 'light'];
+    for (let i = 0; i < numberOfHours; i++) {
+        progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i}</div>\n`;
+    }
+    progress += '</div>';
+    logger.log('debug', 'progress = %s', progress);
 
     // replace element content
     element.html(progress);
@@ -291,28 +320,8 @@ function init (client) {
         ))
         .then( () => {
 
-            // add time scale to table
-            let progress = '<div class="progress" style="height: 20px;">\n';
-            const totalTime = endDate.getTime() - beginDate.getTime();
-
-            const numberOfHours = Math.floor(totalTime / 1000 / 60 / 60);
-            const delta = 100 * (1000 * 60 * 60 / totalTime);
-            const labels = ['secondary', 'light'];
-            for (let i = 0; i < numberOfHours; i++) {
-                progress += `<div class="progress-bar bg-${labels[i % 2]} text-${labels[(i + 1) % 2]}" role="progressbar" style="width: ${delta}%" aria-valuenow="${delta}" aria-valuemin="0" aria-valuemax="100">${i}</div>\n`;
-            }
-            progress += '</div>';
-            logger.log('debug', 'progress = %s', progress);
-
-            $('#vehiclesTable').append(
-`<div class="row">
-  <div class="col-2">
-    <strong>Time</strong>
-  </div>
-  <div class="col-10">
-    ${progress}
-  </div>
- </div>`);
+            // render ruler
+            renderRuler(beginDate, endDate);
 
             // add vehicles to page
             for (const vehicle of Object.values(vehicles)) {
@@ -349,6 +358,11 @@ $(function () {
             values: 25,
             density: 4*24/100,
         }
+    }).on('change', function(e){
+
+        const [begin, end] = slider.noUiSlider.get();
+        logger.log('info', 'begin = %s, end = %s', begin, end);
+
     });
 
     logger.log('info', 'end of ready function');
