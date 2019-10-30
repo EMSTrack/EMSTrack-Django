@@ -81,6 +81,7 @@ function init (client) {
 function reportSummary() {
 
     // add vehicles to table
+    let noActivities = true;
     for (const vehicle of Object.values(vehicles)) {
 
         logger.log('info', 'Generating summary report');
@@ -88,8 +89,16 @@ function reportSummary() {
         // get history
         const history = vehicle['history'];
 
-        // break segments
-        const [segments, durations, status, user] = segmentHistory(history);
+        // nothing to do?
+        if (Object.entries(history).length === 0) {
+            continue;
+        }
+
+        // set no activities to false
+        noActivities = false;
+
+        // retrieve segments
+        const segments = history['segments'];
 
         // calculate statistics
         let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
@@ -114,15 +123,19 @@ function reportSummary() {
 
         element.html(`
 <td><a href="${window.location.pathname}/${vehicle['id']}">${vehicle['identifier']}</a></td>
-  <td>${totalDistance.toFixed(2)}</td>
-  <td>${totalTime.toFixed(2)}</td>
-  <td>${avgSpeed.toFixed(1)}</td>
-  <td>${totalMovingDistance.toFixed(2)}</td>
-  <td>${totalMovingTime.toFixed(2)}</td>
-  <td>${avgMovingSpeed.toFixed(1)}</td>
-  <td>${maxSpeed.toFixed(1)}
-</td>`);
+<td>${totalDistance.toFixed(2)}</td>
+<td>${totalTime.toFixed(2)}</td>
+<td>${avgSpeed.toFixed(1)}</td>
+<td>${totalMovingDistance.toFixed(2)}</td>
+<td>${totalMovingTime.toFixed(2)}</td>
+<td>${avgMovingSpeed.toFixed(1)}</td>
+<td>${maxSpeed.toFixed(1)}</td>`);
 
+    }
+
+    if (noActivities) {
+        // say no activities
+        $('#vehiclesTable> tbody:last-child').append(`<tr><td colspan="8">No activities were recorded in this period.</td></tr>`);
     }
 
 }
@@ -143,7 +156,7 @@ function retrieveData(range) {
 
                 // save vehicle
                 vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['history'] = [];
+                vehicles[vehicle['id']]['history'] = {};
 
                 const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
                 return apiClient.httpClient.get(url);
@@ -158,15 +171,27 @@ function retrieveData(range) {
                 response => {
 
                     // retrieve updates
-                    const updates = response.data;
-                    if (updates.length) {
-                        const id = updates[0]['ambulance_id'];
-                        vehicles[id]['history'] = updates;
+                    const history = response.data;
+                    if (history.length) {
+
+                        // get id
+                        const id = history[0]['ambulance_id'];
+                        vehicles[id]['history'] = history;
+
+                        // segment and store
+                        const [segments, durations, status, user] = segmentHistory(history);
+                        vehicles[id]['history'] = {
+                            'history': history,
+                            'segments': segments,
+                            'durations': durations,
+                            'status': status,
+                            'user': user
+                        };
 
                         // add to map
                         logger.log('debug', "Got '%s' vehicle '%s' updates from API",
-                            updates.length, vehicles[id]['identifier']);
-                        addAmbulanceRoute(map, updates, ambulance_status, false);
+                            history.length, vehicles[id]['identifier']);
+                        addAmbulanceRoute(map, history, ambulance_status, false);
 
                     }
 

@@ -15,16 +15,14 @@ add_init_function(init);
 
 function renderProgress(data, beginDate, endDate) {
 
-    console.log(data);
-
-     // clone durations
+    // clone durations
     const segments = data['segments'];
     const durations = [...data['durations']];
     const status = data['status'];
 
-    console.log(segments);
-    console.log(durations);
-    console.log(status);
+    // console.log(segments);
+    // console.log(durations);
+    // console.log(status);
 
     // calculate offsets
     const n = status.length;
