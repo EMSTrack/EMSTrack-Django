@@ -235,7 +235,7 @@ function renderVehicle(vehicle, beginDate, endDate) {
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // get element
-    const element = getOrCreateElement('ruler', '', "pt-2");
+    const element = getOrCreateElement('ruler', '', "pb-2");
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';
