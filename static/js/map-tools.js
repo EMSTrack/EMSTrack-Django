@@ -87,6 +87,8 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
         // calculate max speed
         maxSpeed = maxSpeed >= _maxSpeed ? maxSpeed : _maxSpeed;
 
+        logger.log('debug', 'maxSpeed = %s', maxSpeed);
+
         // accumulate
         totalDistance += _totalDistance;
         totalTime += _totalTime;
