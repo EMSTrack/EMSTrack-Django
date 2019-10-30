@@ -83,7 +83,6 @@ function reportDetail(id) {
     logger.log('info', "Generating detail report for id '%d'", id);
 
     const vehicle = vehicles[id];
-    console.log(vehicle);
 
     // get detail element information
     const detailElement = $('#detail');
@@ -122,11 +121,9 @@ function reportDetail(id) {
     // set new detail title
     idElement.text(vehicle['identifier']);
 
-    const newCurrentId = idElement.text();
-    logger.log('info', "current id is '%s'", newCurrentId);
-
     logger.log('info', "showing...");
     detailElement.collapse('show');
+
 }
 
 // report summary
