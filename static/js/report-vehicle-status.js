@@ -400,8 +400,10 @@ function init (client) {
     mode = urlParams.get('mode') ? urlParams.get('mode') : $('input[name="mode"]:checked').val();
     logger.log('debug', 'mode = %s', mode);
 
-    $('input[type="radio"][name="mode"]')
+    $('input[type=radio][name=mode]')
         .change( function() {
+
+            logger.log('info', 'mode change');
             if (this.value === mode)
                 return;
 
