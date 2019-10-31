@@ -192,8 +192,9 @@ function renderDetailReport(vehicle, beginDate) {
     // get times
     const [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
 
-    const segments = data['segments'];
-    const durations = data['durations'];
+    // trim to range
+    const [durations, offsets, totalTime] = trimDataToRange(data, offsetBeginDate, offsetEndDate);
+
     let values;
     if (mode === 'status')
         values = data['status'];
@@ -203,12 +204,54 @@ function renderDetailReport(vehicle, beginDate) {
         throw "Unknown mode '" + mode + "'";
 
     // summarize
-    const numberOfSegments = segments.length;
-    const totalDuration = durations.reduce((accumulator, duration) => { return accumulator + duration });
-    const activeRatio =
+    const n = durations.length;
+    let numberOfSegments = 0;
+    let totalDuration = 0;
+    for (let i = 0; i < n; i++) {
+
+        const currentOffset = offsets[i];
+
+        // not in range yet
+        if (currentOffset < 0)
+            continue;
+
+        // out of range, break
+        if (currentOffset > totalTime)
+            break;
+
+        numberOfSegments ++;
+        totalDuration += durations[i];
+
+    }
+    const activeRatio = totalTime / totalTime;
 
     $('detail_summary')
-        .html();
+        .html(`
+<div class="row">
+  <div class="col col-2 text-right">
+     Number of Segments:
+  </div>
+  <div class="col col">
+     ${numberOfSegments}
+  </div>
+</div>
+<div class="row">
+  <div class="col col-2 text-right">
+     Time interval:
+  </div>
+  <div class="col col">
+     ${(totalTime / 1000 / 60 / 60).toFixed(1)} hours
+  </div>
+</div>
+<div class="row">
+  <div class="col col-2 text-right">
+     Total active time:
+  </div>
+  <div class="col col">
+     ${(totalDuration / 1000 / 60 / 60).toFixed(1)} (${(100*totalDuration/totalTime).toFixed(1)}%)
+  </div>
+</div>
+`);
 
 }
 
