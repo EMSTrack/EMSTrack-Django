@@ -59,7 +59,7 @@ function trimDataToRange(data, beginDate, endDate) {
 
     }
 
-    return [durations, offsets];
+    return [durations, offsets, totalTime];
 }
 
 function renderProgress(data, beginDate, endDate, mode) {
@@ -74,7 +74,7 @@ function renderProgress(data, beginDate, endDate, mode) {
     else
         throw "Unknown mode '" + mode + "'";
 
-    const [durations, offsets] = trimDataToRange(data, beginDate, endDate);
+    const [durations, offsets, totalTime] = trimDataToRange(data, beginDate, endDate);
 
     /*
     // clone durations
