@@ -418,7 +418,7 @@ function init (client) {
             const beginTime = $('#beginTime').val();
             const endTime = $('#endTime').val();
 
-            logger.info('info', 'radio mode: %s, beginTime: %s, endTime: %s', mode, beginTime, endTime);
+            logger.info('info', 'radio mode = %s, beginTime = %s, endTime = %s', mode, beginTime, endTime);
 
             // offset beginDate
             const offsetBeginDate = new Date(beginDate);
@@ -431,7 +431,7 @@ function init (client) {
 
             logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
-            render(mode, beginDate, endDate);
+            render(mode, offsetBeginDate, offsetEndDate);
 
         });
 
