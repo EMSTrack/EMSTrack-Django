@@ -8,7 +8,6 @@ import {
     millisToSplitTime,
     millisToTime,
     splitTimeToMillis,
-    timeToMillis,
     validateDateRange
 } from "./util";
 
@@ -320,6 +319,26 @@ function render(mode, beginDate, endDate) {
 
 }
 
+function getTimes(slider, beginDate) {
+
+    const [begin, end] = slider.noUiSlider.get();
+    logger.log('info', 'begin = %s, end = %s', begin, end);
+
+    // offset beginDate
+    const offsetBeginDate = new Date(beginDate);
+    const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000;
+    offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
+
+    const offsetEndDate = new Date(beginDate);
+    const endMillis = Number.parseFloat(end) * 60 * 60 * 1000;
+    offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
+
+    logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
+
+    return [offsetBeginDate, offsetEndDate, beginMillis, endMillis];
+}
+
+
 // initialization function
 function init (client) {
 
@@ -361,19 +380,8 @@ function init (client) {
         }
     }).on('change', function() {
 
-        const [begin, end] = slider.noUiSlider.get();
-        logger.log('info', 'begin = %s, end = %s', begin, end);
-
-        // offset beginDate
-        const offsetBeginDate = new Date(beginDate);
-        const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000;
-        offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
-
-        const offsetEndDate = new Date(beginDate);
-        const endMillis = Number.parseFloat(end) * 60 * 60 * 1000;
-        offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
-
-        logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
+        // get times
+        [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
 
         // set time inputs
         const beginTime = millisToTime(beginMillis);
@@ -407,34 +415,20 @@ function init (client) {
     mode = urlParams.get('mode') ? urlParams.get('mode') : $('input[name="mode"]:checked').val();
     logger.log('debug', 'mode = %s', mode);
 
-    $('input[type=radio][name=mode]')
+    $('input[type="radio"][name="mode"]')
         .change( function() {
+
             // return if no change
             if (this.value === mode)
                 return;
 
             // render
             mode = this.value;
-            const beginTime = $('#beginTime').val();
-            const endTime = $('#endTime').val();
-            console.log(beginTime);
-            console.log(endTime);
 
-            logger.info('info', 'radio mode = %s, beginTime = %s, endTime = %s', mode, beginTime, endTime);
+            // get times
+            [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
 
-            // offset beginDate
-            const offsetBeginDate = new Date(beginDate);
-            const beginMillis = timeToMillis(beginTime);
-            offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
-
-            const offsetEndDate = new Date(beginDate);
-            const endMillis = timeToMillis(endTime);
-            offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
-
-            logger.log('debug', 'beginMillis= %s, endMillis= %s', beginMillis, endMillis);
-
-            logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
-
+            // render
             render(mode, offsetBeginDate, offsetEndDate);
 
         });
