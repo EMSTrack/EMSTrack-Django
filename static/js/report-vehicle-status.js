@@ -76,57 +76,6 @@ function renderProgress(data, beginDate, endDate, mode) {
 
     const [durations, offsets, totalTime] = trimDataToRange(data, beginDate, endDate);
 
-    /*
-    // clone durations
-    const segments = data['segments'];
-    const durations = [...data['durations']];
-    let values;
-    if (mode === 'status')
-        values = data['status'];
-    else if (mode === 'user')
-        values = data['user'];
-    else
-        throw "Unknown mode '" + mode + "'";
-
-    // console.log(segments);
-    // console.log(durations);
-    // console.log(status);
-
-    // calculate offsets
-    const n = values.length;
-    const offsets = new Array(n);
-    let beforeRange = true;
-    const totalTime = endDate.getTime() - beginDate.getTime();
-    for (let i = 0; i < n; i++) {
-
-        const segment = segments[i];
-        const currentOffset = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
-        offsets[i] = currentOffset;
-
-        if (beforeRange && currentOffset >= 0) {
-            // this is the first element in range
-            beforeRange = false;
-            if (i > 0 && currentOffset[i - 1] + durations[i - 1] >= 0) {
-                // previous status extends in range, shift to zero to ensure continuity
-                durations[i - 1] -= currentOffset[i - 1];
-                currentOffset[i - 1] = 0;
-            }
-        }
-
-        if (currentOffset > totalTime) {
-            // simply break, out of range
-            break;
-        }
-
-        if (currentOffset + durations[i] > totalTime) {
-            // match end and break
-            durations[i] -= (currentOffset + durations[i] - totalTime);
-            break;
-        }
-
-    }
-    */
-
     // build progress bar
     let cursor = 0;
     let progress = '<div class="progress" style="height: 20px;">\n';
@@ -224,7 +173,6 @@ function renderDetailReport(vehicle, beginDate) {
         totalDuration += durations[i];
 
     }
-    const activeRatio = totalTime / totalTime;
 
     $('detail_summary')
         .html(`
