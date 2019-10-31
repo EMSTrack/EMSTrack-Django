@@ -130,6 +130,7 @@ function renderProgress(data, beginDate, endDate, mode) {
     // build progress bar
     let cursor = 0;
     let progress = '<div class="progress" style="height: 20px;">\n';
+    const n = durations.length;
     for (let i = 0; i < n; i++) {
 
         const currentOffset = offsets[i];
