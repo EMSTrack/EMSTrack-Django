@@ -3,7 +3,14 @@ import {logger} from './logger';
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
 
-import {getOrCreateElement, millisToSplitTime, millisToTime, splitTimeToMillis, validateDateRange} from "./util";
+import {
+    getOrCreateElement,
+    millisToSplitTime,
+    millisToTime,
+    splitTimeToMillis,
+    timeToMillis,
+    validateDateRange
+} from "./util";
 
 import {segmentHistory} from "./map-tools";
 
@@ -402,19 +409,28 @@ function init (client) {
 
     $('input[type=radio][name=mode]')
         .change( function() {
-
-            logger.log('info', 'mode change = %s <> %s', this.value, mode);
+            // return if no change
             if (this.value === mode)
                 return;
 
-            if (this.value === 'status') {
-                logger.log('info', 'got *status* mode');
-            } else if (this.value === 'user') {
-                logger.log('info', 'got *user* mode');
-            }
-
             // render
             mode = this.value;
+            const beginTime = $('#beginTime').val();
+            const endTime = $('#endTime').val();
+
+            logger.info('info', 'radio mode: %s, beginTime: %s, endTime: %s', mode, beginTime, endTime);
+
+            // offset beginDate
+            const offsetBeginDate = new Date(beginDate);
+            const beginMillis = timeToMillis(beginTime);
+            offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
+
+            const offsetEndDate = new Date(beginDate);
+            const endMillis = timeToMillis(endTime);
+            offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
+
+            logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
+
             render(mode, beginDate, endDate);
 
         });
