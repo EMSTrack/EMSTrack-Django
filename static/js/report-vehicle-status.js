@@ -181,6 +181,8 @@ function reportDetail(id) {
 
 function createElement(id, label, style = "", extraColClasses = "") {
 
+    logger.log('debug', 'creating element with id = %d, label = %s', id, label);
+
     $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-2">
