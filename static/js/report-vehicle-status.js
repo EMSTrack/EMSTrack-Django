@@ -142,16 +142,12 @@ function renderDetailReport(vehicle, beginDate) {
     // get times
     const [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
 
+    logger.log('debug', 'got times data');
+
     // trim to range
     const [durations, offsets, totalTime] = trimDataToRange(data, offsetBeginDate, offsetEndDate);
 
-    let values;
-    if (mode === 'status')
-        values = data['status'];
-    else if (mode === 'user')
-        values = data['user'];
-    else
-        throw "Unknown mode '" + mode + "'";
+    logger.log('debug', 'got trimmed data');
 
     // summarize
     const n = durations.length;
@@ -173,6 +169,8 @@ function renderDetailReport(vehicle, beginDate) {
         totalDuration += durations[i];
 
     }
+
+    logger.log('debug', 'will render summary');
 
     $('detail_summary')
         .html(`
