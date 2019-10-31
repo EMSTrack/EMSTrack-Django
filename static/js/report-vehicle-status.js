@@ -172,7 +172,7 @@ function renderDetailReport(vehicle, beginDate) {
 
     logger.log('debug', 'will render summary');
 
-    $('detail_summary')
+    $('#detail_summary')
         .html(`
 <div class="row">
   <div class="col col-2 text-right">
