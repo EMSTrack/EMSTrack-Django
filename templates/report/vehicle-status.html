@@ -10,14 +10,14 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'report:index' %}">{% trans "Reports" %}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Status Report</li>
+            <li class="breadcrumb-item active" aria-current="page">Activity Report</li>
         </ol>
     </nav>
 
     <div class="row">
         <div class="col">
 
-            <h1>{% trans "Vehicle Report" %}</h1>
+            <h1>{% trans "Activity Report" %}</h1>
 
             <form action="{% url 'report:vehicle-status' %}" method="get">
                 <div class="row">
