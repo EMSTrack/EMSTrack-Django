@@ -336,6 +336,7 @@ function getTimes(slider, beginDate) {
     logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
     return [offsetBeginDate, offsetEndDate, beginMillis, endMillis];
+
 }
 
 
@@ -381,7 +382,7 @@ function init (client) {
     }).on('change', function() {
 
         // get times
-        [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
+        const [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
 
         // set time inputs
         const beginTime = millisToTime(beginMillis);
@@ -426,7 +427,7 @@ function init (client) {
             mode = this.value;
 
             // get times
-            [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
+            const [offsetBeginDate, offsetEndDate] = getTimes(slider, beginDate);
 
             // render
             render(mode, offsetBeginDate, offsetEndDate);
