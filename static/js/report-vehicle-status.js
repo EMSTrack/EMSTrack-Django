@@ -304,13 +304,10 @@ function segmentHistoryByMode(mode) {
 
 }
 
-function render(mode, beginDate, endDate) {
-
-    // segment history
-    segmentHistoryByMode(mode);
+function render(mode, beginDate, endDate, offsetMillis = 0) {
 
     // render ruler
-    renderRuler(beginDate, endDate);
+    renderRuler(beginDate, endDate, offsetMillis);
 
     // add vehicles to page
     for (const vehicle of Object.values(vehicles)) {
@@ -395,13 +392,8 @@ function init (client) {
         $('#beginTime').val(beginTime);
         $('#endTime').val(endTime);
 
-        // modify ruler
-        renderRuler(offsetBeginDate, offsetEndDate, beginMillis);
-
-        // add vehicles to page
-        for (const vehicle of Object.values(vehicles)) {
-            renderVehicle(vehicle, offsetBeginDate, offsetEndDate, mode);
-        }
+        // render
+        render(mode, offsetBeginDate, offsetEndDate, beginMillis);
 
     });
 
@@ -427,16 +419,22 @@ function init (client) {
             mode = this.value;
 
             // get times
-            const [offsetBeginDate, offsetEndDate] = getTimes(slider, beginDate);
+            const [offsetBeginDate, offsetEndDate, beginMillis] = getTimes(slider, beginDate);
+
+            // segment history
+            segmentHistoryByMode(mode);
 
             // render
-            render(mode, offsetBeginDate, offsetEndDate);
+            render(mode, offsetBeginDate, offsetEndDate, beginMillis);
 
         });
 
     // retrieve data
     retrieveData(range)
         .then( () => {
+
+            // segment history
+            segmentHistoryByMode(mode);
 
             // render
             render(mode, beginDate, endDate);
