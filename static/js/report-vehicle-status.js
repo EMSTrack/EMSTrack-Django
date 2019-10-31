@@ -130,16 +130,68 @@ data-toggle="tooltip" data-placement="top" title="${label}"></div>`;
 
 }
 
+// report detail
+function reportDetail(id) {
+
+    logger.log('info', "Generating detail report for id '%d'", id);
+
+    const vehicle = vehicles[id];
+
+    // get detail element information
+    const detailElement = $('#detail');
+    const isDetailVisible = detailElement.is( ":visible" );
+
+    const idElement = $('#detail_id');
+    const currentId = idElement.text();
+
+    if (isDetailVisible) {
+
+        logger.log('info', "detail is visible, current id is '%s'", currentId);
+
+        if (currentId === vehicle['identifier']) {
+
+            logger.log('info', "hiding");
+
+            // same vehicle, collapse and return
+            detailElement.collapse('hide');
+            return;
+
+        }
+
+        // otherwise, this is another element, go ahead
+
+    } else {
+
+        // not visible, set it up and display
+
+        logger.log('info', "detail is not visible, current id is '%s'", currentId);
+
+    }
+
+    // setup detail
+    logger.log('info', "setting up");
+
+    // set new detail title
+    idElement.text(vehicle['identifier']);
+
+    logger.log('info', "showing...");
+    detailElement.collapse('show');
+
+}
+
 function createElement(id, label, style = "", extraColClasses = "") {
 
     $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-2">
-    ${label}
+    <a href="#" id="detail_${id}">${label}</a>
   </div>
   <div class="col-10 ${extraColClasses}" id="${id}" style="${style}">
   </div>
 </div>`);
+
+     // attach detail handler
+    $(`#detail_${id}`).click(function(){ reportDetail(id); return false; });
 
 }
 
