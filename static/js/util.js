@@ -101,16 +101,16 @@ export function validateDateRange(beginDate, endDate) {
     return [beginDate, endDate, minDate];
 }
 
-export function getOrCreateElement(id, create) {
+export function getOrCreateElement(elementId, create) {
 
     // get element
-    const selector = `#${id}`;
+    const selector = `#${elementId}`;
     let element = $(selector);
     if (element.length === 0) {
 
         try {
             // create element first
-            create(id);
+            create(elementId);
 
         } catch(error) {
             throw "Could not create element! Error: " + error;

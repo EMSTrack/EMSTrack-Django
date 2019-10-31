@@ -133,7 +133,7 @@ data-toggle="tooltip" data-placement="top" title="${label}"></div>`;
 // report detail
 function reportDetail(id) {
 
-    logger.log('info', "Generating detail report for id '%d'", id);
+    logger.log('info', "Generating detail report for id '%s'", id);
 
     const vehicle = vehicles[id];
 
@@ -179,21 +179,26 @@ function reportDetail(id) {
 
 }
 
-function createElement(id, label, style = "", extraColClasses = "") {
+function createElement(elementId, id, label, style = "", extraColClasses = "") {
 
-    logger.log('debug', 'creating element with id = %d, label = %s', id, label);
+    logger.log('debug', 'creating element with id = %d, label = %s', elementId, label);
 
     $('#vehiclesTable').append(
 `<div class="row">
   <div class="col-2">
-    <a href="#" id="detail_${id}">${label}</a>
+    <a href="#" id="detail_${elementId}">${label}</a>
   </div>
-  <div class="col-10 ${extraColClasses}" id="${id}" style="${style}">
+  <div class="col-10 ${extraColClasses}" id="${elementId}" style="${style}">
   </div>
 </div>`);
 
-     // attach detail handler
-    $(`#detail_${id}`).click(function(){ reportDetail(id); return false; });
+    if (id >= 0) {
+        // attach detail handler
+        $(`#detail_${elementId}`).click(function () {
+            reportDetail(id);
+            return false;
+        });
+    }
 
 }
 
@@ -208,10 +213,11 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
     }
 
     // get element
+    const id = vehicle['id'];
     const element = getOrCreateElement(
-        `vehicle_${vehicle['id']}`,
-        (id) => {
-            createElement(id, vehicle['identifier'], "background-color: #F9F9F9");
+        `vehicle_${id}`,
+        (elementId) => {
+            createElement(elementId, id, vehicle['identifier'], "background-color: #F9F9F9");
         });
 
     // render progress
@@ -229,8 +235,8 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // get element
-    const element = getOrCreateElement('ruler', (id) => {
-        createElement(id, "", "", "pb-2");
+    const element = getOrCreateElement('ruler', (elementId) => {
+        createElement(elementId, -1, "", "", "pb-2");
     });
 
     // add time scale to table
