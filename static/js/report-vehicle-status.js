@@ -9,7 +9,7 @@ import {segmentHistory} from "./map-tools";
 
 let apiClient;
 const vehicles = {};
-let mode = 'status';
+let mode = 'user';
 
 // add initialization hook
 add_init_function(init);
