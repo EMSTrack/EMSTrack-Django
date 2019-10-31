@@ -17,9 +17,8 @@
     <div class="row">
         <div class="col">
 
-            <h1>{% trans "Vehicle Status Report" %}</h1>
+            <h1>{% trans "Vehicle Report" %}</h1>
 
-            <h2>{% trans "Date" %}</h2>
             <form action="{% url 'report:vehicle-status' %}" method="get">
                 <div class="row">
                     <div class="col-1 text-right">
@@ -36,29 +35,51 @@
                                disabled>
                     </div>
                 </div>
+
+                <div class="row mt-2">
+                    <div class="col-1 text-right">
+                        <span>{% trans "time" %}:</span>
+                    </div>
+                    <div class="col-4">
+                        <input type="time" name="beginTime" id="beginTime" value="00:00" step="60">
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    <div class="col-4 text-right">
+                        <input type="time" name="endTime" id="endTime" value="23:59" step="60">
+                    </div>
+                </div>
+
+                <div class="row mt-2" style="height: 4em;">
+                    <div class="col-1">
+                    </div>
+                    <div class="col-11">
+                        <div id="slider-range"></div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col-1 text-right">
+                        <span>{% trans "category" %}:</span>
+                    </div>
+                    <div class="col-4">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Select
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Status</a>
+                                <a class="dropdown-item" href="#">Users</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    <div class="col-4 text-right">
+                    </div>
+                </div>
+
             </form>
-
-            <div class="row mt-2">
-                <div class="col-1 text-right">
-                    <span>{% trans "range" %}:</span>
-                </div>
-                <div class="col-4">
-                    <input type="time" name="beginTime" id="beginTime" value="00:00" step="60">
-                </div>
-                <div class="col-3">
-                </div>
-                <div class="col-4 text-right">
-                    <input type="time" name="endTime" id="endTime" value="23:59" step="60">
-                </div>
-            </div>
-
-            <div class="row mt-2" style="height: 4em;">
-                <div class="col-1">
-                </div>
-                <div class="col-11">
-                    <div id="slider-range"></div>
-                </div>
-            </div>
 
             <h2>{% trans "Vehicles" %}</h2>
 
