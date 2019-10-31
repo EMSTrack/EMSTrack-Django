@@ -62,18 +62,15 @@
                     <div class="col-1 text-right">
                         <span>{% trans "category" %}:</span>
                     </div>
-                    <div class="col-4">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Select
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#">Status</a>
-                                <a class="dropdown-item" href="#">Users</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-3">
+                    <div class="col-6">
+                        <label class="radio-inline">
+                            <input type="radio" name="mode" value="status" checked>
+                            Status
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="mode" value="status">
+                            Users
+                        </label>
                     </div>
                     <div class="col-4 text-right">
                     </div>

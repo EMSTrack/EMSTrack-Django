@@ -9,7 +9,7 @@ import {segmentHistory} from "./map-tools";
 
 let apiClient;
 const vehicles = {};
-let mode = 'user';
+let mode;
 
 // add initialization hook
 add_init_function(init);
@@ -298,6 +298,21 @@ function segmentHistoryByMode(mode) {
 
 }
 
+function render(mode, beginDate, endDate) {
+
+    // segment history
+    segmentHistoryByMode(mode);
+
+    // render ruler
+    renderRuler(beginDate, endDate);
+
+    // add vehicles to page
+    for (const vehicle of Object.values(vehicles)) {
+        renderVehicle(vehicle, beginDate, endDate, mode);
+    }
+
+}
+
 // initialization function
 function init (client) {
 
@@ -310,7 +325,7 @@ function init (client) {
     const urlParams = new URLSearchParams(window.location.search);
 
     // set beginDate
-    const [beginDate, endDate, minTime] = validateDateRange(urlParams.get('beginDate'));
+    const [beginDate, endDate] = validateDateRange(urlParams.get('beginDate'));
     logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
     const beginTime = beginDate.toTimeString().substr(0, 8);
@@ -337,7 +352,7 @@ function init (client) {
             values: 25,
             density: 4*24/100,
         }
-    }).on('change', function(e) {
+    }).on('change', function() {
 
         const [begin, end] = slider.noUiSlider.get();
         logger.log('info', 'begin = %s, end = %s', begin, end);
@@ -379,25 +394,36 @@ function init (client) {
 
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
-    logger.log('debug', 'range = %j', range)
+    logger.log('debug', 'range = %j', range);
+
+    // mode
+    mode = urlParams.get('mode') ? urlParams.get('mode') : $('input[name="mode"]:checked').val();
+    logger.log('debug', 'mode = %s', mode);
+
+    $('input[type="radio"][name="mode"]')
+        .change( function() {
+            if (this.value === mode)
+                return;
+
+            if (this.value === 'status') {
+                logger.log('info', 'got *status* mode');
+            }
+            else if (this.value === 'user') {
+                logger.log('info', 'got *user* mode');
+            }
+
+            // render
+            mode = this.value;
+            render(mode, beginDate, endDate);
+
+        });
 
     // retrieve data
     retrieveData(range)
         .then( () => {
 
-            // segment history
-            segmentHistoryByMode(mode);
-
-        })
-        .then( () => {
-
-            // render ruler
-            renderRuler(beginDate, endDate);
-
-            // add vehicles to page
-            for (const vehicle of Object.values(vehicles)) {
-                renderVehicle(vehicle, beginDate, endDate, mode);
-            }
+            // render
+            render(mode, beginDate, endDate);
 
             // enable generate report button
             $('#submitButton')
