@@ -493,6 +493,10 @@ function init (client) {
     retrieveData(range)
         .then( () => {
 
+            // Update please wait message
+            const pleaseWait = $('#pleaseWait');
+            pleaseWait.text("Generating report...");
+
             // segment history
             segmentHistoryByMode(mode);
 
@@ -504,8 +508,7 @@ function init (client) {
                 .prop('disabled', false);
 
             // hide please wait sign
-            $('#pleaseWait')
-                .hide();
+            pleaseWait.hide();
 
         })
         .catch( (error) => {
