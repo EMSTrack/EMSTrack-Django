@@ -503,6 +503,10 @@ function init (client) {
             $('#submitButton')
                 .prop('disabled', false);
 
+            // hide please wait sign
+            $('#plaseWait')
+                .hide();
+
         })
         .catch( (error) => {
             logger.log('error', "'Failed to retrieve vehicles: %s ", error);
