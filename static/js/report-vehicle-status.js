@@ -504,7 +504,7 @@ function init (client) {
                 .prop('disabled', false);
 
             // hide please wait sign
-            $('#plaseWait')
+            $('#pleaseWait')
                 .hide();
 
         })
