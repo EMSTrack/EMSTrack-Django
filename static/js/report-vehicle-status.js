@@ -13,17 +13,70 @@ import {
 
 import {segmentHistory} from "./map-tools";
 
-let apiClient;
+let apiClient, mode, slider;
 const vehicles = {};
-let mode;
 
 // add initialization hook
 add_init_function(init);
+
+function trimDataToRange(data, beginDate, endDate) {
+
+    // clone durations
+    const segments = data['segments'];
+    const durations = [...data['durations']];
+
+    // calculate offsets
+    const n = durations.length;
+    const offsets = new Array(n);
+    let beforeRange = true;
+    const totalTime = endDate.getTime() - beginDate.getTime();
+    for (let i = 0; i < n; i++) {
+
+        const segment = segments[i];
+        const currentOffset = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
+        offsets[i] = currentOffset;
+
+        if (beforeRange && currentOffset >= 0) {
+            // this is the first segment in range
+            beforeRange = false;
+            if (i > 0 && currentOffset[i - 1] + durations[i - 1] >= 0) {
+                // previous status extends in range, shift to zero to ensure continuity
+                durations[i - 1] -= currentOffset[i - 1];
+                currentOffset[i - 1] = 0;
+            }
+        }
+
+        if (currentOffset > totalTime) {
+            // simply break, out of range
+            break;
+        }
+
+        if (currentOffset + durations[i] > totalTime) {
+            // match end and break
+            durations[i] -= (currentOffset + durations[i] - totalTime);
+            break;
+        }
+
+    }
+
+    return [durations, offsets];
+}
 
 function renderProgress(data, beginDate, endDate, mode) {
 
     console.log(data);
 
+    let values;
+    if (mode === 'status')
+        values = data['status'];
+    else if (mode === 'user')
+        values = data['user'];
+    else
+        throw "Unknown mode '" + mode + "'";
+
+    const [durations, offsets] = trimDataToRange(data, beginDate, endDate);
+
+    /*
     // clone durations
     const segments = data['segments'];
     const durations = [...data['durations']];
@@ -72,6 +125,7 @@ function renderProgress(data, beginDate, endDate, mode) {
         }
 
     }
+    */
 
     // build progress bar
     let cursor = 0;
@@ -130,8 +184,36 @@ data-toggle="tooltip" data-placement="top" title="${label}"></div>`;
 
 }
 
+// render detail
+function renderDetailReport(vehicle, beginDate) {
+
+    const data = vehicle['data'];
+
+    // get times
+    const [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
+
+    const segments = data['segments'];
+    const durations = data['durations'];
+    let values;
+    if (mode === 'status')
+        values = data['status'];
+    else if (mode === 'user')
+        values = data['user'];
+    else
+        throw "Unknown mode '" + mode + "'";
+
+    // summarize
+    const numberOfSegments = segments.length;
+    const totalDuration = durations.reduce((accumulator, duration) => { return accumulator + duration });
+    const activeRatio =
+
+    $('detail_summary')
+        .html();
+
+}
+
 // report detail
-function reportDetail(id) {
+function reportDetail(id, beginDate) {
 
     logger.log('info', "Generating detail report for id '%s'", id);
 
@@ -146,11 +228,11 @@ function reportDetail(id) {
 
     if (isDetailVisible) {
 
-        logger.log('info', "detail is visible, current id is '%s'", currentId);
+        logger.log('debug', "detail is visible, current id is '%s'", currentId);
 
         if (currentId === vehicle['identifier']) {
 
-            logger.log('info', "hiding");
+            logger.log('debug', "hiding detail");
 
             // same vehicle, collapse and return
             detailElement.collapse('hide');
@@ -164,22 +246,25 @@ function reportDetail(id) {
 
         // not visible, set it up and display
 
-        logger.log('info', "detail is not visible, current id is '%s'", currentId);
+        logger.log('debug', "detail is not visible, current id is '%s'", currentId);
 
     }
 
     // setup detail
-    logger.log('info', "setting up");
+    logger.log('debug', "setting up detail");
 
     // set new detail title
     idElement.text(vehicle['identifier']);
 
-    logger.log('info', "showing...");
+    // render detail report
+    renderDetailReport(vehicle, beginDate);
+
+    logger.log('debug', "showing...");
     detailElement.collapse('show');
 
 }
 
-function createElement(elementId, id, label, style = "", extraColClasses = "") {
+function createElement(elementId, id, beginDate, label, style = "", extraColClasses = "") {
 
     logger.log('debug', 'creating element with id = %d, label = %s', elementId, label);
 
@@ -195,7 +280,7 @@ function createElement(elementId, id, label, style = "", extraColClasses = "") {
     if (id >= 0) {
         // attach detail handler
         $(`#detail_${elementId}`).click(function () {
-            reportDetail(id);
+            reportDetail(id, beginDate);
             return false;
         });
     }
@@ -217,7 +302,7 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
     const element = getOrCreateElement(
         `vehicle_${id}`,
         (elementId) => {
-            createElement(elementId, id, vehicle['identifier'], "background-color: #F9F9F9");
+            createElement(elementId, id, beginDate, vehicle['identifier'], "background-color: #F9F9F9");
         });
 
     // render progress
@@ -236,7 +321,7 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // get element
     const element = getOrCreateElement('ruler', (elementId) => {
-        createElement(elementId, -1, "", "", "pb-2");
+        createElement(elementId, -1, beginDate, "", "", "pb-2");
     });
 
     // add time scale to table
@@ -421,7 +506,7 @@ function init (client) {
         .prop('value', beginDate.toISOString().substr(0, 10));
 
     // setup slider
-    const slider = document.getElementById('slider-range');
+    slider = document.getElementById('slider-range');
     noUiSlider.create(slider, {
         start: [0, 24],
         connect: true,
