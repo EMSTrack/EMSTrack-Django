@@ -403,14 +403,13 @@ function init (client) {
     $('input[type=radio][name=mode]')
         .change( function() {
 
-            logger.log('info', 'mode change');
+            logger.log('info', 'mode change = %s <> %s', this.value, mode);
             if (this.value === mode)
                 return;
 
             if (this.value === 'status') {
                 logger.log('info', 'got *status* mode');
-            }
-            else if (this.value === 'user') {
+            } else if (this.value === 'user') {
                 logger.log('info', 'got *user* mode');
             }
 
