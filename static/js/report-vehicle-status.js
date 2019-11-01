@@ -222,6 +222,8 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
   </tbody>
 </table>`;
 
+    console.log(reportByActivity);
+
     $('#detail_summary')
         .html(`
 <h2>Summary</h2>
