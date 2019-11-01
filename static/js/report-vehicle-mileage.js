@@ -96,7 +96,7 @@ function reportDetail(id) {
     const ctx = $('#speedChart');
     new Chart(ctx, {
         type: 'line',
-        data: plotDataSets,
+        datasets: plotDataSets,
         options: plotOptions
     });
 
