@@ -199,7 +199,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
 <h2>Summary</h2>
 <div class="row">
   <div class="col col-2 text-right">
-     Number of Segments:
+     Number of segments:
   </div>
   <div class="col col">
      ${numberOfSegments}
@@ -207,7 +207,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
 </div>
 <div class="row">
   <div class="col col-2 text-right">
-     Time interval:
+     Total time:
   </div>
   <div class="col col">
      ${(totalTime / 1000 / 60 / 60).toFixed(2)} hours
@@ -235,17 +235,27 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
   </thead>
   <tbody>`;
 
-    for (let [key, value] of Object.entries(typesOfValues)) {
-        summaryHtml += `
+    if (Object.entries(typesOfValues).length === 0) {
+
+            summaryHtml += `
+    <tr>
+      <td colspan="6">No activity recorded in this period</td>
+    </tr>`;
+
+    } else {
+
+        for (let [key, value] of Object.entries(typesOfValues)) {
+            summaryHtml += `
     <tr>
       <td>${mode === 'status' ? ambulance_status[key] : key}</td>
       <td>${value['count']}</td>
       <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
-      <td>${(100*value['duration']/totalDuration).toFixed(1)}%</td>
-      <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
+      <td>${(100 * value['duration'] / totalDuration).toFixed(1)}%</td>
+      <td>${(100 * value['duration'] / totalTime).toFixed(1)}%</td>
       <td class="bg-${mode === 'status' ? ambulance_css[key]['class'] : 'primary'}"></td>
     </tr>`;
-    };
+        };
+    }
 
     summaryHtml += `    
   </tbody>
