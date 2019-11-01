@@ -196,7 +196,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
     logger.log('debug', 'will render summary');
 
     let reportByActivity = `
-<table class="table table-striped table-sm>
+<table class="table table-striped table-sm">
   <thead>
     <tr>
       <th></th>
