@@ -202,8 +202,11 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
   <div class="col col-2">
     ${key}:
   </div>  
+  <div class="col col-2">
+    ${value['count']},
+  </div>  
   <div class="col">
-    ${(value / 1000 / 60 / 60).toFixed(2)} hours (${(100*value/totalTime).toFixed(1)}%)
+    ${(value['duration'] / 1000 / 60 / 60).toFixed(2)} hours (${(100*value['duration']/totalTime).toFixed(1)}%),
   </div>  
 </div>`;
     }
