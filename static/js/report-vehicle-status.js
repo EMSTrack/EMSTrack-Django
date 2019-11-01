@@ -218,7 +218,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
     </tr>>`;
     };
 
-    reportByActivity = `    
+    reportByActivity += `    
   </tbody>
 </table>`;
 
