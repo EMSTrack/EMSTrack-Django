@@ -195,21 +195,32 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
 
     logger.log('debug', 'will render summary');
 
-    let reportByActivity = '';
+    let reportByActivity = `
+<table class="table table-striped table-sm>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Segments</th>
+      <th>Duration (hours)</th>
+      <th>Percentage (%)</th>
+    </tr>
+  </thead>
+  <tbody>
+`;
+
     for (let [key, value] of Object.entries(typesOfValues)) {
         reportByActivity += `
-<div class="row">
-  <div class="col col-2">
-    ${key}:
-  </div>  
-  <div class="col col-2">
-    ${value['count']},
-  </div>  
-  <div class="col">
-    ${(value['duration'] / 1000 / 60 / 60).toFixed(2)} hours (${(100*value['duration']/totalTime).toFixed(1)}%),
-  </div>  
-</div>`;
-    }
+    <tr>
+      <td>${key}</td>
+      <td>${value['count']}</td>
+      <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
+      <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
+    </tr>>`;
+    };
+
+    reportByActivity = `    
+  </tbody>
+</table>`;
 
     $('#detail_summary')
         .html(`
