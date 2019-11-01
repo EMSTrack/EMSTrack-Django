@@ -96,6 +96,9 @@ function reportDetail(id) {
             enabled: false
         },
         elements: {
+            point:{
+                radius: 0
+            },
             line: {
                 tension: 0 // disables bezier curves
             },
