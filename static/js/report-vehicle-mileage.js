@@ -93,12 +93,15 @@ function reportDetail(id) {
         }
     };
 
+    console.log(plotDataSets);
+
     const ctx = $('#speedChart');
     new Chart(ctx, {
         type: 'line',
         datasets: plotDataSets,
         options: plotOptions
     });
+    ctx.height = 400;
 
     logger.log('info', "showing...");
     detailElement.collapse('show');
