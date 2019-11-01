@@ -196,7 +196,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
     logger.log('debug', 'will render summary');
 
     let summaryHtml = `
-<h2>Summary</h2>
+<h3>Summary</h3>
 <div class="row">
   <div class="col col-2 text-right">
      Number of segments:
@@ -221,7 +221,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
      ${(totalDuration / 1000 / 60 / 60).toFixed(2)} hours (${(100*totalDuration/totalTime).toFixed(1)}%)
   </div>
 </div>
-<h2>By ${mode === 'status' ? 'Status' : 'User'}</h2>
+<h3>By ${mode === 'status' ? 'Status' : 'User'}</h3>
 <table class="table table-striped table-sm">
   <thead>
     <tr>
