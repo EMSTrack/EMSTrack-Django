@@ -248,8 +248,8 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-mileage-stats.json'),
     },
     'REPORT_VEHICLE_STATUS': {
-        'BUNDLE_DIR_NAME': 'bundles/report-vehicle-status/',
-        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-status-stats.json'),
+        'BUNDLE_DIR_NAME': 'bundles/report-vehicle-activity/',
+        'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-activity-stats.json'),
     },
 }
 

@@ -14,8 +14,8 @@ urlpatterns = [
         login_required(views.VehicleMileageReportView.as_view()),
         name="vehicle-mileage"),
 
-    url(r'^vehicle-status$',
+    url(r'^vehicle-activity$',
         login_required(views.VehicleStatusReportView.as_view()),
-        name="vehicle-status"),
+        name="vehicle-activity"),
 
 ]

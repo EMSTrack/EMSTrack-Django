@@ -37,7 +37,7 @@ class VehicleMileageReportView(TemplateView):
 
 # Vehicle Status Report
 class VehicleStatusReportView(TemplateView):
-    template_name = 'report/vehicle-status.html'
+    template_name = 'report/vehicle-activity.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

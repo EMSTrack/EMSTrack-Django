@@ -538,7 +538,7 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
 // initialization function
 function init (client) {
 
-    logger.log('info', '> report-vehicle-status.js');
+    logger.log('info', '> report-vehicle-activity.js');
 
     // set apiClient
     apiClient = client;
