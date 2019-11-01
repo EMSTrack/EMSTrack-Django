@@ -135,12 +135,12 @@ data-toggle="tooltip" data-placement="top" title="${label}"></div>`;
 }
 
 // render detail
-function renderDetailReport(vehicle, beginDate) {
+function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
 
     const data = vehicle['data'];
 
     // get times
-    const [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
+    const [offsetBeginDate, offsetEndDate] = getTimes(slider, beginDate, offsetMillis);
 
     logger.log('debug', 'got times data');
 
@@ -459,23 +459,23 @@ function render(mode, beginDate, endDate, offsetMillis = 0) {
 
     // has detail?
     if (detailVehicleId >=0) {
-        renderDetailReport(vehicles[detailVehicleId], beginDate);
+        renderDetailReport(vehicles[detailVehicleId], beginDate, offsetMillis);
     }
 
 }
 
-function getTimes(slider, beginDate) {
+function getTimes(slider, beginDate, offsetMillis = 0) {
 
     const [begin, end] = slider.noUiSlider.get();
     logger.log('info', 'begin = %s, end = %s', begin, end);
 
     // offset beginDate
     const offsetBeginDate = new Date(beginDate);
-    const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000;
+    const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
     offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
 
     const offsetEndDate = new Date(beginDate);
-    const endMillis = Number.parseFloat(end) * 60 * 60 * 1000;
+    const endMillis = Number.parseFloat(end) * 60 * 60 * 1000 - offsetMillis;
     offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
 
     logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
