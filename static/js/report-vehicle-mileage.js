@@ -110,7 +110,6 @@ function reportDetail(id) {
         },
         options: plotOptions
     });
-    ctx.height = 400;
 
     logger.log('info', "showing...");
     detailElement.collapse('show');
