@@ -187,7 +187,7 @@ function renderDetailReport(vehicle, beginDate) {
      Time interval:
   </div>
   <div class="col col">
-     ${(totalTime / 1000 / 60 / 60).toFixed(1)} hours
+     ${(totalTime / 1000 / 60 / 60).toFixed(2)} hours
   </div>
 </div>
 <div class="row">
@@ -195,7 +195,7 @@ function renderDetailReport(vehicle, beginDate) {
      Total active time:
   </div>
   <div class="col col">
-     ${(totalDuration / 1000 / 60 / 60).toFixed(1)} (${(100*totalDuration/totalTime).toFixed(1)}%)
+     ${(totalDuration / 1000 / 60 / 60).toFixed(2)} (${(100*totalDuration/totalTime).toFixed(2)}%)
   </div>
 </div>
 `);
