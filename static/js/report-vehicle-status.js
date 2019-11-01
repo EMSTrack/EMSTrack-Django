@@ -234,7 +234,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
         // total footer
         summaryHtml += `
     <tfoot>
-      <td>Totals</td>
+      <th>Totals</th>
       <td>${numberOfSegments}</td>
       <td>${(totalDuration / 1000 / 60 / 60).toFixed(2)}</td>
       <td>100.0%</td>
