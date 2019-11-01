@@ -196,32 +196,6 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
     logger.log('debug', 'will render summary');
 
     let summaryHtml = `
-<h3>Summary</h3>
-<div class="row">
-  <div class="col col-2 text-right">
-     Number of segments:
-  </div>
-  <div class="col col">
-     ${numberOfSegments}
-  </div>
-</div>
-<div class="row">
-  <div class="col col-2 text-right">
-     Total time:
-  </div>
-  <div class="col col">
-     ${(totalTime / 1000 / 60 / 60).toFixed(2)} hours
-  </div>
-</div>
-<div class="row">
-  <div class="col col-2 text-right">
-     Total active time:
-  </div>
-  <div class="col col">
-     ${(totalDuration / 1000 / 60 / 60).toFixed(2)} hours (${(100*totalDuration/totalTime).toFixed(1)}%)
-  </div>
-</div>
-<h3>By ${mode === 'status' ? 'Status' : 'User'}</h3>
 <table class="table table-striped table-sm">
   <thead>
     <tr>
@@ -235,17 +209,8 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
   </thead>
   <tbody>`;
 
-    if (Object.entries(typesOfValues).length === 0) {
-
-            summaryHtml += `
-    <tr>
-      <td colspan="6">No activity recorded in this period</td>
-    </tr>`;
-
-    } else {
-
-        for (let [key, value] of Object.entries(typesOfValues)) {
-            summaryHtml += `
+    for (let [key, value] of Object.entries(typesOfValues)) {
+        summaryHtml += `
     <tr>
       <td>${mode === 'status' ? ambulance_status[key] : key}</td>
       <td>${value['count']}</td>
@@ -254,7 +219,29 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
       <td>${(100 * value['duration'] / totalTime).toFixed(1)}%</td>
       <td class="bg-${mode === 'status' ? ambulance_css[key]['class'] : 'primary'}"></td>
     </tr>`;
-        };
+    };
+
+    if (Object.entries(typesOfValues).length === 0) {
+
+        // no activity message
+        summaryHtml += `
+    <tr>
+      <td colspan="6">No activity recorded in this period</td>
+    </tr>`;
+
+    } else {
+
+        // total footer
+        summaryHtml += `
+    <tfoot>
+      <td>Totals</td>
+      <td>${numberOfSegments}</td>
+      <td>${(totalDuration / 1000 / 60 / 60).toFixed(2)}</td>
+      <td>100.0%</td>
+      <td>${(100 * totalDuration / totalTime).toFixed(1)}%</td>
+      <td></td>
+    </tfoot>`;
+
     }
 
     summaryHtml += `    
