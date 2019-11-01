@@ -88,6 +88,12 @@ function reportDetail(id) {
                 distribution: 'linear'
             }]
         },
+        legend: {
+            display: false
+        },
+        tooltips: {
+            enabled: false
+        },
         elements: {
             line: {
                 tension: 0 // disables bezier curves
