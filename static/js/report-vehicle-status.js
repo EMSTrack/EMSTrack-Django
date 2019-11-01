@@ -149,6 +149,9 @@ function renderDetailReport(vehicle, beginDate) {
 
     logger.log('debug', 'got trimmed data');
 
+    console.log(durations);
+    console.log(offsets);
+
     // summarize
     const n = durations.length;
     let numberOfSegments = 0;
