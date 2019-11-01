@@ -13,7 +13,7 @@ import {
 
 import {segmentHistory} from "./map-tools";
 
-let apiClient, mode, slider;
+let apiClient, mode, slider, detailVehicleId;
 const vehicles = {};
 
 // add initialization hook
@@ -226,6 +226,8 @@ function reportDetail(id, beginDate) {
 
             // same vehicle, collapse and return
             detailElement.collapse('hide');
+            detailVehicleId = -1;
+
             return;
 
         }
@@ -242,6 +244,9 @@ function reportDetail(id, beginDate) {
 
     // setup detail
     logger.log('debug', "setting up detail");
+
+    // set detailVehicle
+    detailVehicleId = vehicle['id'];
 
     // set new detail title
     idElement.text(vehicle['identifier']);
@@ -447,6 +452,11 @@ function render(mode, beginDate, endDate, offsetMillis = 0) {
     // add vehicles to page
     for (const vehicle of Object.values(vehicles)) {
         renderVehicle(vehicle, beginDate, endDate, mode);
+    }
+
+    // has detail?
+    if (detailVehicleId >=0) {
+        renderDetailReport(vehicles[detailVehicleId], beginDate);
     }
 
 }
