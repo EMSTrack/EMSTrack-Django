@@ -186,8 +186,8 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
             typesOfValues[currentValue]['duration'] += currentDuration;
         } else {
             typesOfValues[currentValue] = {
-                count: 0,
-                duration: 0
+                count: 1,
+                duration: currentDuration
             };
         }
 
@@ -228,6 +228,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
       <th></th>
       <th>Segments</th>
       <th>Duration (hours)</th>
+      <th>Active Percentage (%)</th>
       <th>Percentage (%)</th>
       <th>Color</th>
     </tr>
@@ -240,7 +241,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
       <td>${mode === 'status' ? ambulance_status[key] : key}</td>
       <td>${value['count']}</td>
       <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
-      <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
+      <td>${(100*value['duration']/totalDuration).toFixed(1)}%</td>
       <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
       <td class="bg-${mode === 'status' ? ambulance_css[key]['class'] : 'primary'}"></td>
     </tr>`;
