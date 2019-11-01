@@ -195,37 +195,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
 
     logger.log('debug', 'will render summary');
 
-    let reportByActivity = `
-<table class="table table-striped table-sm">
-  <thead>
-    <tr>
-      <th></th>
-      <th>Segments</th>
-      <th>Duration (hours)</th>
-      <th>Percentage (%)</th>
-    </tr>
-  </thead>
-  <tbody>
-`;
-
-    for (let [key, value] of Object.entries(typesOfValues)) {
-        reportByActivity += `
-    <tr>
-      <td>${key}</td>
-      <td>${value['count']}</td>
-      <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
-      <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
-    </tr>`;
-    };
-
-    reportByActivity += `    
-  </tbody>
-</table>`;
-
-    console.log(reportByActivity);
-
-    $('#detail_summary')
-        .html(`
+    let summaryHtml = `
 <h2>Summary</h2>
 <div class="row">
   <div class="col col-2 text-right">
@@ -251,9 +221,36 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
      ${(totalDuration / 1000 / 60 / 60).toFixed(2)} hours (${(100*totalDuration/totalTime).toFixed(1)}%)
   </div>
 </div>
-<h2>By ${mode === 'status' ? 'Status' : 'User' }</h2>
-${reportByActivity}
-`);
+<h2>By ${mode === 'status' ? 'Status' : 'User'}</h2>
+<table class="table table-striped table-sm">
+  <thead>
+    <tr>
+      <th></th>
+      <th>Segments</th>
+      <th>Duration (hours)</th>
+      <th>Percentage (%)</th>
+    </tr>
+  </thead>
+  <tbody>`;
+
+    for (let [key, value] of Object.entries(typesOfValues)) {
+        summaryHtml += `
+    <tr>
+      <td>${key}</td>
+      <td>${value['count']}</td>
+      <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
+      <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
+    </tr>`;
+    };
+
+    summaryHtml += `    
+  </tbody>
+</table>`;
+
+    console.log(summaryHtml);
+
+    $('#detail_summary')
+        .html(summaryHtml);
 
 }
 
