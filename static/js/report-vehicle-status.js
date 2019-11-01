@@ -229,6 +229,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
       <th>Segments</th>
       <th>Duration (hours)</th>
       <th>Percentage (%)</th>
+      <th>Color</th>
     </tr>
   </thead>
   <tbody>`;
@@ -236,10 +237,12 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
     for (let [key, value] of Object.entries(typesOfValues)) {
         summaryHtml += `
     <tr>
-      <td>${key}</td>
+      <td>${mode === 'status' ? ambulance_status[key] : key}</td>
       <td>${value['count']}</td>
       <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
       <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
+      <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
+      <td class="bg-${mode === 'status' ? ambulance_css[key]['class'] : 'primary'}"></td>
     </tr>`;
     };
 
