@@ -75,7 +75,10 @@ function reportDetail(id) {
         for (let j = 0; j < m; j++) {
             plotData[j] = { t: new Date(currentSegment[j]['timestamp']), y: currentSpeed[j] }
         }
-        plotDataSets[i] = {data: plotData};
+        plotDataSets[i] = {
+            data: plotData,
+            fill: false,
+        };
     }
 
     const plotOptions = {
