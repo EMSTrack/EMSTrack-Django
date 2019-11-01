@@ -105,7 +105,9 @@ function reportDetail(id) {
     const ctx = $('#speedChart');
     new Chart(ctx, {
         type: 'line',
-        datasets: plotDataSets,
+        data: {
+            datasets: plotDataSets
+        },
         options: plotOptions
     });
     ctx.height = 400;
