@@ -215,7 +215,7 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
       <td>${value['count']}</td>
       <td>${(value['duration'] / 1000 / 60 / 60).toFixed(2)}</td>
       <td>${(100*value['duration']/totalTime).toFixed(1)}%</td>
-    </tr>>`;
+    </tr>`;
     };
 
     reportByActivity += `    
