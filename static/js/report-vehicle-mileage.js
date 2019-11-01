@@ -21,6 +21,8 @@ function reportDetail(id) {
 
     const vehicle = vehicles[id];
 
+    console.log(vehicle);
+
     // get detail element information
     const detailElement = $('#detail');
     const isDetailVisible = detailElement.is( ":visible" );
