@@ -78,6 +78,7 @@ function reportDetail(id) {
         plotDataSets[i] = {
             data: plotData,
             fill: false,
+            borderColor: "#3e95cd"
         };
     }
 
