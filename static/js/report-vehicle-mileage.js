@@ -79,13 +79,6 @@ function reportDetail(id) {
     }
 
     const plotOptions = {
-        scales: {
-            xAxes: [{
-                type: 'time',
-                distribution: 'linear'
-            }]
-        },
-        maintainAspectRatio: false,
         elements: {
             line: {
                 tension: 0 // disables bezier curves
