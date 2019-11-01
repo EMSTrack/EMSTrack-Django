@@ -149,13 +149,20 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
 
     logger.log('debug', 'got trimmed data');
 
-    console.log(durations);
-    console.log(offsets);
+    // get values
+    let values;
+    if (mode === 'status')
+        values = data['status'];
+    else if (mode === 'user')
+        values = data['user'];
+    else
+        throw "Unknown mode '" + mode + "'";
 
     // summarize
     const n = durations.length;
     let numberOfSegments = 0;
     let totalDuration = 0;
+    const typesOfValues = {};
     for (let i = 0; i < n; i++) {
 
         const currentOffset = offsets[i];
@@ -168,15 +175,42 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
         if (currentOffset > totalTime)
             break;
 
-        numberOfSegments ++;
-        totalDuration += durations[i];
+        const currentValue = values[i];
+        const currentDuration= durations[i];
+
+        numberOfSegments++;
+        totalDuration += currentDuration;
+
+        if (currentValue in typesOfValues) {
+            typesOfValues[currentValue]['count']++;
+            typesOfValues[currentValue]['duration'] += currentDuration;
+        } else {
+            typesOfValues[currentValue] = {
+                count: 0,
+                duration: 0
+            };
+        }
 
     }
 
     logger.log('debug', 'will render summary');
 
+    let reportByActivity = '';
+    for (let [key, value] of Object.entries(typesOfValues)) {
+        reportByActivity += `
+<div class="row">
+  <div class="col col-2">
+    ${key}:
+  </div>  
+  <div class="col">
+    ${(value / 1000 / 60 / 60).toFixed(2)} hours (${(100*value/totalTime).toFixed(1)}%)
+  </div>  
+</div>`;
+    }
+
     $('#detail_summary')
         .html(`
+<h2>Summary</h2>
 <div class="row">
   <div class="col col-2 text-right">
      Number of Segments:
@@ -198,9 +232,11 @@ function renderDetailReport(vehicle, beginDate, offsetMillis = 0) {
      Total active time:
   </div>
   <div class="col col">
-     ${(totalDuration / 1000 / 60 / 60).toFixed(2)} (${(100*totalDuration/totalTime).toFixed(2)}%)
+     ${(totalDuration / 1000 / 60 / 60).toFixed(2)} hours (${(100*totalDuration/totalTime).toFixed(1)}%)
   </div>
 </div>
+<h2>By ${mode === 'status' ? 'Status' : 'User' }</h2>
+${reportByActivity}
 `);
 
 }
