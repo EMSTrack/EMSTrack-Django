@@ -65,7 +65,7 @@ function reportDetail(id) {
     const distance = data['distance'];
     const speed = data['speed'];
     const n = segments.length;
-    const plotDataSets = = new Array(n);
+    const plotDataSets = new Array(n);
     for (let i = 0; i < n; i++) {
         const currentSegment = segments[i];
         const currentDistance = distance[i];
