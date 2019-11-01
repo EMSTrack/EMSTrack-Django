@@ -65,7 +65,7 @@ function reportDetail(id) {
     const distance = data['distance'];
     const speed = data['speed'];
     const n = segments.length;
-    const plotDataSets = [];
+    const plotDataSets = = new Array(n);
     for (let i = 0; i < n; i++) {
         const currentSegment = segments[i];
         const currentDistance = distance[i];
@@ -75,9 +75,7 @@ function reportDetail(id) {
         for (let j = 0; j < m; j++) {
             plotData[j] = { t: new Date(currentSegment[j]['timestamp']), y: currentSpeed[j] }
         }
-        plotDataSets.push({
-            data: plotData
-        });
+        plotDataSets[i] = {data: plotData};
     }
 
     const plotOptions = {
@@ -98,7 +96,7 @@ function reportDetail(id) {
     const ctx = $('#speedChart');
     new Chart(ctx, {
         type: 'line',
-        data: plotData,
+        data: plotDataSets,
         options: plotOptions
     });
 
