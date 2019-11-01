@@ -58,42 +58,46 @@ function reportDetail(id) {
     // set new detail title
     idElement.text(vehicle['identifier']);
 
-    const ctx = $('#speedChart');
-    const myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
+    const data = vehicle['data'];
+    const segments = data['segments'];
+    const distance = data['distance'];
+    const speed = data['speed'];
+    const n = segments.length;
+    const plotDataSets = [];
+    for (let i = 0; i < n; i++) {
+        const currentSegment = segments[i];
+        const currentDistance = distance[i];
+        const currentSpeed = speed[i];
+        const m = currentSegment.length;
+        const plotData = new Array(m);
+        for (let j = 0; j < m; j++) {
+            plotData[j] = { t: new Date(currentSegment[j]['timestamp']), y: currentSpeed[j] }
         }
+        plotDataSets.push({
+            data: plotData
+        });
+    }
+
+    const plotOptions = {
+        elements: {
+            line: {
+                tension: 0 // disables bezier curves
+            },
+            animation: {
+                duration: 0 // general animation time
+            },
+            hover: {
+                animationDuration: 0 // duration of animations when hovering an item
+            },
+            responsiveAnimationDuration: 0 // animation duration after a resize
+        }
+    };
+
+    const ctx = $('#speedChart');
+    new Chart(ctx, {
+        type: 'line',
+        data: plotData,
+        options: plotOptions
     });
 
     logger.log('info', "showing...");
@@ -111,10 +115,10 @@ function reportSummary() {
     for (const vehicle of Object.values(vehicles)) {
 
         // get history
-        const history = vehicle['history'];
+        const data = vehicle['data'];
 
         // nothing to do?
-        if (Object.entries(history).length === 0) {
+        if (Object.entries(data).length === 0) {
             continue;
         }
 
@@ -122,13 +126,17 @@ function reportSummary() {
         noActivities = false;
 
         // retrieve segments
-        const segments = history['segments'];
+        const segments = data['segments'];
 
         // calculate statistics
-        let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed]
+        let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed]
             = calculateMotionStatistics(10 / 3.6, ...segments);
         let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
         let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
+
+        // store distance and speed
+        vehicle['data']['distance'] = distance;
+        vehicle['data']['speed'] = speed;
 
         // convert to proper units
         totalTime /= 3600;             // h
@@ -183,7 +191,7 @@ function retrieveData(range) {
 
                 // save vehicle
                 vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['history'] = {};
+                vehicles[vehicle['id']]['data'] = {};
 
                 const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
                 return apiClient.httpClient.get(url);
@@ -203,11 +211,10 @@ function retrieveData(range) {
 
                         // get id
                         const id = history[0]['ambulance_id'];
-                        vehicles[id]['history'] = history;
 
                         // segment and store
                         const [segments, durations, status, user] = segmentHistory(history);
-                        vehicles[id]['history'] = {
+                        vehicles[id]['data'] = {
                             'history': history,
                             'segments': segments,
                             'durations': durations,

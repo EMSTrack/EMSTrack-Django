@@ -82,6 +82,8 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
     let totalMovingDistance = 0.0;
     let totalMovingTime= 0.0;
     let maxSpeed = 0.0;
+    const distance = [];
+    const speed = [];
 
     for (let i = 0; i < segments.length; i++) {
 
@@ -89,6 +91,10 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
         const [_totalDistance, _totalTime, _totalMovingDistance, _totalMovingTime,
             _maxSpeed, _distance, _speed] =
             calculateSegmentDistanceAndSpeed(segments[i], movingSpeedThreshold);
+
+        // concatenate speed and distance
+        distance.push(_distance);
+        speed.push(_speed);
 
         // calculate max speed
         maxSpeed = maxSpeed >= _maxSpeed ? maxSpeed : _maxSpeed;
@@ -104,7 +110,7 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
 
     }
 
-    return [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed];
+    return [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed];
 }
 
 export function segmentHistory(history, _options = {}) {
