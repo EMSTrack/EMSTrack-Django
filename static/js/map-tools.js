@@ -36,14 +36,13 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
     let totalMovingDistance = 0.0;
     let totalMovingTime= 0.0;
     let maxSpeed = 0.0;
-    const distance = new Array(segment.length);
-    const speed = new Array(segment.length);
+    const distance = [];
+    const speed = [];
     if (segment.length) {
         distance[0] = .0;
         speed[0] = .0;
         let lastPosition = segment[0].location;
         let lastTimestamp = Date.parse(segment[0].timestamp);
-        let k = 0;
         for (let i = 1; i < segment.length; i++) {
 
             const currentPosition = segment[i].location;
@@ -56,16 +55,16 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
                 // not enough movement
                 continue;
 
+            totalDistance += _distance;
+            totalTime += _duration;
+
             // regularized velocity to avoid singularities
             const _speed = (_distance * _duration) / (_duration * _duration + eps);      // m/s
 
             // logger.log('debug', '_speed = %s', _speed);
 
-            distance[k] = _distance;
-            speed[k] = _speed;
-
-            totalDistance += _distance;
-            totalTime += _duration;
+            distance.push(_distance);
+            speed.push(_speed);
 
             maxSpeed = maxSpeed >= _speed ? maxSpeed : _speed;
 
