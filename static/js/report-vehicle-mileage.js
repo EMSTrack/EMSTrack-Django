@@ -80,7 +80,7 @@ function renderDetail(vehicle, xAxesMode) {
         xAxes = [{
             type: 'linear',
              ticks: {
-                 max: totalDistance,
+                 max: totalDistance / 1000,
                 min: 0,
             }
         }];

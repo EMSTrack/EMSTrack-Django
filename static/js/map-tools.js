@@ -42,7 +42,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
     if (segment.length) {
 
         distance[0] = .0;
-        speed[0] = .0;
+        speed[0] = movingSpeedThreshold;
         time[0] = new Date(segment[0].timestamp);
 
         let lastPosition = segment[0].location;
