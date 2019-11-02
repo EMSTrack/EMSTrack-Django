@@ -68,7 +68,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
             // set pagination
             const pagination = new Pagination(response.data.previous, response.data.next, response.data.count,
                 page_size, page);
-            $('pagination')
+            $('#pagination')
                 .html(pagination.render());
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
