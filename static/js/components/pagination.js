@@ -54,7 +54,7 @@ export class Pagination {
 
             html += `
   <li class="page-item">
-    <a class="page-link" href="${linkUrl}">${page}</a>
+    <a class="page-link" href="${linkUrl}">1</a>
   </li>`;
 
             if (first_page !== 2) {
@@ -94,7 +94,7 @@ export class Pagination {
 
             html += `
   <li class="page-item">
-    <a class="page-link" href="${linkUrl}">${page}</a>
+    <a class="page-link" href="${linkUrl}">${number_of_pages}</a>
   </li>`;
 
         }
@@ -103,7 +103,7 @@ export class Pagination {
 
             html += `
   <li class="page-item">
-    <a class="page-link" href="{{ next_url }}" aria-label="Next">
+    <a class="page-link" href="${this.next}" aria-label="Next">
       <span aria-hidden="true">&raquo;</span>
     </a>
   </li>`;
