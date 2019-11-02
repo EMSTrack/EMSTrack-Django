@@ -24,6 +24,16 @@ export class Pagination {
 
     render() {
 
+        const number_of_pages = (this.count/this.page_size|0);
+        logger.log('debug', 'number_of_pages = %d', number_of_pages);
+
+        const linkUrl = this.previous != null ? this.previous : this.next;
+        logger.log('debug', 'link = %s', linkUrl);
+
+        // calculate pages
+        const first_page = Math.max(this.page_number - this.number_of_surrounding_pages, 1);
+        const last_page = Math.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
+
         let html = `
 <ul class="pagination">`;
 
@@ -46,16 +56,6 @@ export class Pagination {
   </li>`;
 
         }
-
-        const number_of_pages = (this.count/this.page_size|0);
-        logger.log('debug', 'number_of_pages = %d', number_of_pages);
-
-        let linkUrl = this.previous != null ? this.previous : this.next;
-        logger.log('debug', 'link = %s', linkUrl);
-
-        // calculate pages
-        const first_page = Math.max(this.page_number - this.number_of_surrounding_pages, 1);
-        const last_page = Math.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
 
         if (first_page !== 1) {
 
