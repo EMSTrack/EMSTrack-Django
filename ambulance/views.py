@@ -51,27 +51,27 @@ class AmbulanceDetailView(LoginRequiredMixin,
         # call supper
         context = super().get_context_data(**kwargs)
 
-        # query
-        updates_query = self.object.ambulanceupdate_set.order_by('-timestamp')
-
-        # get current page
-        page = self.request.GET.get('page', 1)
-        page_size = self.request.GET.get('page_size', 250)
-        page_sizes = [250, 500, 1000]
-
-        # paginate
-        paginator = Paginator(updates_query, page_size)
-        try:
-            updates = paginator.page(page)
-        except PageNotAnInteger:
-            updates = paginator.page(1)
-        except EmptyPage:
-            updates = paginator.page(paginator.num_pages)
-
-        context['updates'] = updates
-        context['page_links'] = get_page_links(self.request, updates)
-        context['page_size_links'] = get_page_size_links(self.request, updates, page_sizes)
-        context['page_size'] = int(page_size)
+        # # query
+        # updates_query = self.object.ambulanceupdate_set.order_by('-timestamp')
+        #
+        # # get current page
+        # page = self.request.GET.get('page', 1)
+        # page_size = self.request.GET.get('page_size', 250)
+        # page_sizes = [250, 500, 1000]
+        #
+        # # paginate
+        # paginator = Paginator(updates_query, page_size)
+        # try:
+        #     updates = paginator.page(page)
+        # except PageNotAnInteger:
+        #     updates = paginator.page(1)
+        # except EmptyPage:
+        #     updates = paginator.page(paginator.num_pages)
+        #
+        # context['updates'] = updates
+        # context['page_links'] = get_page_links(self.request, updates)
+        # context['page_size_links'] = get_page_size_links(self.request, updates, page_sizes)
+        # context['page_size'] = int(page_size)
 
         # add ambulance_status
         context['ambulance_status'] = {m.name: m.value
