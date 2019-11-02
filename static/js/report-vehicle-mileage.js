@@ -20,7 +20,9 @@ function renderDetail(vehicle, xAxesMode) {
 
     const data = vehicle['data'];
 
-    console.log(data);
+    logger.log('info', "Rendering detail report for vehicle '%s'", vehicle['identifier']);
+
+    // console.log(data);
 
     const segments = data['segments'];
 
@@ -132,7 +134,7 @@ function renderDetail(vehicle, xAxesMode) {
 
     };
 
-    console.log(plotDataSets);
+    // console.log(plotDataSets);
 
     const ctx = $('#speedChart');
     const chart = new Chart(ctx, {
@@ -157,7 +159,7 @@ function reportDetail(id) {
 
     const vehicle = vehicles[id];
 
-    console.log(vehicle);
+    // console.log(vehicle);
 
     // get detail element information
     const detailElement = $('#detail');

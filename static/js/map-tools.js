@@ -26,8 +26,8 @@ export function calculateDistanceHaversine(location1, location2, radius) {
 
 export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, movingDistanceThreshold) {
 
-	movingSpeedThreshold = movingSpeedThreshold || (10/3.6);    // m/s
-	movingDistanceThreshold = movingDistanceThreshold || 10;    // m
+	movingSpeedThreshold = movingSpeedThreshold || (5/3.6);    // m/s
+	movingDistanceThreshold = movingDistanceThreshold || 5;    // m
 
     const eps = 1e-4;
 
