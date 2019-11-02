@@ -2,7 +2,7 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 import { logger } from './logger';
 
-import { Settings } from "./settings";
+import { Settings } from './settings';
 
 import {addAmbulanceRoute} from "./map-tools";
 
