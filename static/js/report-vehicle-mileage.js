@@ -116,13 +116,11 @@ function reportDetail(id) {
             },
             responsiveAnimationDuration: 0 // animation duration after a resize
         },
-        // Container for pan options
+        responsive: true,
         pan: {
             enabled: true,
             mode: 'x',
         },
-
-        // Container for zoom options
         zoom: {
             enabled: true,
             drag: true,
