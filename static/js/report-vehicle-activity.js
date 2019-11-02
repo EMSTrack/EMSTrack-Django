@@ -312,7 +312,7 @@ function reportDetail(id, beginDate) {
 
 }
 
-function createElement(elementId, id, beginDate, label, style = "", extraColClasses = "") {
+function createElement(elementId, id, beginDate = new Date(), label = "", style = "", extraColClasses = "") {
 
     logger.log('debug', 'creating element with id = %d, label = %s', elementId, label);
 
@@ -342,7 +342,7 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
 
     // nothing to do?
     if (Object.entries(data).length === 0) {
-        return;
+        return false;
     }
 
     // get element
@@ -363,6 +363,7 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
     // activate tooltips
     $('[data-toggle="tooltip"]').tooltip();
 
+    return true;
 }
 
 function renderRuler(beginDate, endDate, offsetMillis = 0) {
@@ -503,8 +504,17 @@ function render(mode, beginDate, endDate, offsetMillis = 0) {
     renderRuler(beginDate, endDate, offsetMillis);
 
     // add vehicles to page
+    let someVehicle = false;
     for (const vehicle of Object.values(vehicles)) {
-        renderVehicle(vehicle, beginDate, endDate, mode);
+        someVehicle = someVehicle || renderVehicle(vehicle, beginDate, endDate, mode);
+    }
+
+    if (!someVehicle) {
+        // no activity message
+        const element = getOrCreateElement('no_activity', (elementId) => {
+            createElement(elementId, -1);
+        });
+        element.html('<p>No activity recorded in this period</p>');
     }
 
     // has detail?
