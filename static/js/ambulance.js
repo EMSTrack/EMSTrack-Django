@@ -66,7 +66,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
             console.log(response.data);
 
             // set pagination
-            const pagination = Pagination(response.data.previous, response.data.next, response.data.count,
+            const pagination = new Pagination(response.data.previous, response.data.next, response.data.count,
                 page_size, page);
             $('pagination')
                 .html(pagination.render());
