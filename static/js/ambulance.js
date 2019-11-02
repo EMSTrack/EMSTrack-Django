@@ -61,6 +61,8 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
     apiClient.httpClient.get(url)
         .then( (response) => {
 
+            console.log(response.data);
+
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, settings.ambulance_status, true);
             // addAmbulanceRoute(response.data);
