@@ -18,13 +18,21 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
+    // get ambulance_id
+    const url = window.location.pathname.split('/');
+    const ambulanceId = url[url.length - 1];
+
+    logger.log('debug', 'ambulance_id = %s', ambulanceId);
+
  	// get page and page_size parameters
     const searchParams = new URLSearchParams(window.location.search);
     const page = searchParams.has('page') ? searchParams.get('page') : 1;
 	const page_size = searchParams.has('page_size') ? searchParams.get('page_size') : 500;
 
+    logger.log('debug', 'page = %s, page_size = %s', page, page_size);
+
  	// Retrieve ambulances via AJAX
-    retrieveAmbulanceData(ambulance_id, page, page_size);
+    retrieveAmbulanceData(ambulanceId, page, page_size);
 
 }
 
@@ -41,15 +49,15 @@ $(function() {
 
 });
 
-function retrieveAmbulanceData(ambulance_id, page, page_size) {
+function retrieveAmbulanceData(ambulanceId, page, page_size) {
 
     // Build url
-    const url = `ambulance/${ambulance_id}/updates?page=${page}&page_size=${page_size}`;
+    const url = `ambulance/${ambulanceId}/updates?page=${page}&page_size=${page_size}`;
 
     apiClient.httpClient.get(url)
         .then( (response) => {
 
-            logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulance_id);
+            logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, ambulance_status, true);
             // addAmbulanceRoute(response.data);
 
