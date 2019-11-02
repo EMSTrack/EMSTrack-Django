@@ -2,7 +2,11 @@ import { LeafletPolylineWidget } from "./leaflet/LeafletWidget";
 
 import { logger } from './logger';
 
+import { Settings } from "../settings";
+
 import {addAmbulanceRoute} from "./map-tools";
+
+const settings = new Settings();
 
 let map;
 let apiClient;
@@ -58,7 +62,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
         .then( (response) => {
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
-            addAmbulanceRoute(map, response.data, ambulance_status, true);
+            addAmbulanceRoute(map, response.data, settings.ambulance_status, true);
             // addAmbulanceRoute(response.data);
 
         })
