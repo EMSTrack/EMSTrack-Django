@@ -77,7 +77,26 @@
 
             <h2 id="detail_id">Detail</h2>
 
-            <h3>Speed</h3>
+            <div class="row mt-2">
+                <div class="col-2 text-right">
+                    <span>{% trans "x-axis" %}:</span>
+                </div>
+                <div class="col-5">
+                    <label class="radio-inline">
+                        <input type="radio" name="x-axis" value="time" checked>
+                        {% trans "Time" %}
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="x-axis" value="distance">
+                        {% trans "Distance" %}
+                    </label>
+                </div>
+                <div class="col-5">
+                    <input id="resetZoomButton" class="btn btn-primary"
+                           type="submit" value="{% trans 'Reset Zoom' %}">
+                </div>
+            </div>
+
             <div>
                 <canvas id="speedChart" width="600" height="400"></canvas>
             </div>

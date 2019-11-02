@@ -134,7 +134,7 @@ function reportDetail(id) {
     console.log(plotDataSets);
 
     const ctx = $('#speedChart');
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
         type: 'line',
         data: {
             datasets: plotDataSets
@@ -142,6 +142,11 @@ function reportDetail(id) {
         options: plotOptions
     });
 
+    $('#resetZoomButton')
+        .click( function () {
+            chart.resetZoom();
+        });
+    
     logger.log('info', "showing...");
     detailElement.collapse('show');
 
