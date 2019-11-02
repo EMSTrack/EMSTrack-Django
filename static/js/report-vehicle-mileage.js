@@ -87,6 +87,12 @@ function reportDetail(id) {
             xAxes: [{
                 type: 'time',
                 distribution: 'linear'
+            }],
+            yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: 'speed (km/h)'
+                }
             }]
         },
         legend: {
