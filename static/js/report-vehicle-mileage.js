@@ -19,6 +19,9 @@ add_init_function(init);
 function renderDetail(vehicle, xAxesMode) {
 
     const data = vehicle['data'];
+
+    console.log(data);
+
     const segments = data['segments'];
     const distance = data['distance'];
     const speed = data['speed'];
