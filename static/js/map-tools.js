@@ -72,7 +72,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
 
             // filter speed
             if (filterCoefficient > 0) {
-                _speed = filterCoefficient * lastSpeed + (1 - filterCoefficient) * _speed;
+                _speed = (1 - filterCoefficient) * lastSpeed + filterCoefficient * _speed;
             }
 
             maxSpeed = maxSpeed >= _speed ? maxSpeed : _speed;
