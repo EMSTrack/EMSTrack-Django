@@ -70,7 +70,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
 
                 distance.push(_distance);
                 speed.push(_speed);
-                time.push(currentTimestamp);
+                time.push(new Date(segment[i].timestamp));
 
                 totalMovingDistance += _distance;
                 totalMovingTime += _duration;
