@@ -4,6 +4,8 @@ import { logger } from './logger';
 
 import { Settings } from './settings';
 
+import { Pagination } from './components/pagination';
+
 import {addAmbulanceRoute} from "./map-tools";
 
 const settings = new Settings();
@@ -62,6 +64,12 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
         .then( (response) => {
 
             console.log(response.data);
+
+            // set pagination
+            const pagination = Pagination(response.data.previous, response.data.next, response.data.count,
+                page_size, page);
+            $('pagination')
+                .html(pagination.render());
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, settings.ambulance_status, true);
