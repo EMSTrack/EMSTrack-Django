@@ -10,13 +10,13 @@ import 'chartjs-plugin-zoom';
 let map;
 let apiClient;
 const vehicles = {};
-let xAxis, detailVehicleId = -1;
+let xAxesMode, detailVehicleId = -1;
 
 // add initialization hook
 add_init_function(init);
 
 // render detail
-function renderDetail(vehicle, mode) {
+function renderDetail(vehicle, xAxesMode) {
 
     const data = vehicle['data'];
     const segments = data['segments'];
@@ -26,7 +26,7 @@ function renderDetail(vehicle, mode) {
     const plotDataSets = new Array(n);
 
     let xAxes;
-    if (mode === 'time') {
+    if (xAxesMode === 'time') {
 
         for (let i = 0; i < n; i++) {
             const currentSegment = segments[i];
@@ -42,12 +42,13 @@ function renderDetail(vehicle, mode) {
                 borderColor: "#3e95cd"
             };
         }
+
         xAxes = [{
             type: 'time',
             distribution: 'linear'
         }];
 
-    } else { // mode === 'distance'
+    } else { // xAxesMode === 'distance'
 
         for (let i = 0; i < n; i++) {
             const currentDistance = distance[i];
@@ -63,6 +64,7 @@ function renderDetail(vehicle, mode) {
                 borderColor: "#3e95cd"
             };
         }
+
         xAxes = [{
             type: 'linear'
         }];
@@ -184,7 +186,7 @@ function reportDetail(id) {
     idElement.text(vehicle['identifier']);
 
     // render detail
-    renderDetail(vehicle, xAxis);
+    renderDetail(vehicle, xAxesMode);
 
     logger.log('info', "showing...");
     detailElement.collapse('show');
@@ -368,22 +370,22 @@ function init (client) {
     logger.log('debug', 'range = %j', range);
 
     // mode
-    xAxis = $('input[name="x-axis"]:checked').val();
-    logger.log('debug', 'x-axis= %s', xAxis);
+    xAxesMode = $('input[name="x-axis"]:checked').val();
+    logger.log('debug', 'x-axis= %s', xAxesMode);
 
     // set radio input
     $('input[type="radio"][name="x-axis"]')
         .change( function() {
 
             // return if no change
-            if (this.value === xAxis)
+            if (this.value === xAxesMode)
                 return;
 
             // render
-            xAxis = this.value;
+            xAxesMode = this.value;
 
             // segment history
-            renderDetail(vehicles[detailVehicleId], xAxis);
+            renderDetail(vehicles[detailVehicleId], xAxesMode);
 
         });
 
