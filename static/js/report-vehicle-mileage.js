@@ -53,13 +53,15 @@ function renderDetail(vehicle, xAxesMode) {
 
     } else { // xAxesMode === 'distance'
 
+        let totalDistance = 0;
         for (let i = 0; i < n; i++) {
             const currentDistance = distance[i];
             const currentSpeed = speed[i];
             const m = currentDistance.length;
             const plotData = new Array(m);
             for (let j = 0; j < m; j++) {
-                plotData[j] = { x: currentDistance[j] / 1000, y: 3.6 * currentSpeed[j] }
+                totalDistance += currentDistance[j];
+                plotData[j] = { x: totalDistance / 1000, y: 3.6 * currentSpeed[j] }
             }
             plotDataSets[i] = {
                 data: plotData,
