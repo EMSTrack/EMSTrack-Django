@@ -5,7 +5,6 @@ import { logger } from './logger';
 import {addAmbulanceRoute} from "./map-tools";
 
 let map;
-let page;
 let apiClient;
 
 // add initialization hook
@@ -19,8 +18,13 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
+ 	// get page and page_size parameters
+    const searchParams = new URLSearchParams(window.location.search);
+    const page = searchParams.has('page') ? searchParams.get('page') : 1;
+	const page_size = searchParams.has('page_size') ? searchParams.get('page_size') : 500;
+
  	// Retrieve ambulances via AJAX
-    retrieveAmbulanceData(ambulance_id);
+    retrieveAmbulanceData(ambulance_id, page, page_size);
 
 }
 
@@ -35,25 +39,12 @@ $(function() {
  	};
  	map = new LeafletPolylineWidget(options);
 
- 	// get page and page_size parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    if (searchParams.has('page'))
-        page = searchParams.get('page');
-	if (searchParams.has('page_size'))
-        page_size = searchParams.get('page_size');
-
 });
 
-function retrieveAmbulanceData(ambulance_id) {
+function retrieveAmbulanceData(ambulance_id, page, page_size) {
 
     // Build url
-    let url = 'ambulance/' + ambulance_id + '/updates';
-    if (page != null) {
-        url += "?page=" + page;
-        if (page_size != null)
-            url += "&page_size=" + page_size;
-    } else if (page_size != null)
-            url += "?page_size=" + page_size;
+    const url = `ambulance/${ambulance_id}/updates?page=${page}&page_size=${page_size}`;
 
     apiClient.httpClient.get(url)
         .then( (response) => {
@@ -64,8 +55,7 @@ function retrieveAmbulanceData(ambulance_id) {
 
         })
         .catch( (error) => {
-            console.log('Failed to retrieve ambulance data');
-            console.log(error);
+            logger.log('info', 'Failed to retrieve ambulance data: %s', error);
         });
 
 }
