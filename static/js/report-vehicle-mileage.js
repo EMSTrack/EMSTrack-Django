@@ -5,6 +5,7 @@ import {addAmbulanceRoute, segmentHistory, calculateMotionStatistics} from "./ma
 import {validateDateRange, getOrCreateElement} from "./util";
 
 import {Chart} from 'chart.js';
+import 'chartjs-plugin-zoom';
 
 let map;
 let apiClient;
@@ -114,7 +115,7 @@ function reportDetail(id) {
             hover: {
                 animationDuration: 0 // duration of animations when hovering an item
             },
-            responsiveAnimationDuration: 0 // animation duration after a resize
+            //responsiveAnimationDuration: 0 // animation duration after a resize
         },
         responsive: true,
         pan: {
