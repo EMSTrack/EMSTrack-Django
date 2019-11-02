@@ -55,6 +55,10 @@ $(function() {
 
 });
 
+function render_page_callback(ambulanceId, page, page_size) {
+    return `<a href="#" onclick="retrieveAmbulanceData(${ambulanceId}, ${page}, ${page_size})">${page}</a>`
+}
+
 function retrieveAmbulanceData(ambulanceId, page, page_size) {
 
     // Build url
@@ -69,7 +73,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
             const pagination = new Pagination(response.data.previous, response.data.next, response.data.count,
                 page_size, page);
             $('#pagination')
-                .html(pagination.render());
+                .html(pagination.render((pg) => render_page_callback(ambulanceId, pg, page_size)));
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, settings.ambulance_status, true);
