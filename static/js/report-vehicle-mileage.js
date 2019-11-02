@@ -78,7 +78,8 @@ function renderDetail(vehicle, xAxesMode) {
         }
 
         xAxes = [{
-            type: 'linear'
+            type: 'linear',
+            max: totalDistance
         }];
 
     }
