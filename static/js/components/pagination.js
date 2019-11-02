@@ -44,8 +44,8 @@ export class Pagination {
         const regex = /page=\d+/;
 
         // calculate pages
-        const first_page = Number.max(this.page_number - this.number_of_surrounding_pages, 1);
-        const last_page = Number.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
+        const first_page = Math.max(this.page_number - this.number_of_surrounding_pages, 1);
+        const last_page = Math.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
 
         if (first_page !== 1) {
 
