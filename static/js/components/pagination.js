@@ -8,6 +8,7 @@ export class Pagination {
         this.count = count;
         this.page_size = page_size;
         this.page_number = page_number;
+        this.number_of_surrounding_pages = 2;
     }
 
     render() {
@@ -35,23 +36,41 @@ export class Pagination {
 
         }
 
-        let linkUrl = this.previous != null ? this.previous : this.next;
-        const regex =  /page=\d/;
         const number_of_pages = (this.count/this.page_size|0);
-        for (let page = 1; page <= number_of_pages; page++) {
+        logger.log('debug', 'number_of_pages = %d', number_of_pages);
+
+        let linkUrl = this.previous != null ? this.previous : this.next;
+        logger.log('debug', 'link = %s', linkUrl);
+        const regex = /page=\d+/;
+
+        // calculate pages
+        const first_page = Number.max(this.page_number - this.number_of_surrounding_pages, 1);
+        const last_page = Number.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
+
+        if (first_page !== 1) {
+            html += `
+  <li class="page-item disabled">
+    <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
+  </li>`;
+        }
+
+        for (let page = first_page; page <= last_page; page++) {
 
             linkUrl.replace(regex, `page=${page}`);
             logger.log('debug', 'link = %s', linkUrl);
-
-            //    <li class="page-item disabled">
-            //      <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
-            //      </li>
 
             html += `
   <li class="page-item ${page == this.page_number ? 'active' : ''}">
     <a class="page-link" href="${linkUrl}">${page}</a>
   </li>`;
 
+        }
+
+        if (last_page !== number_of_pages) {
+            html += `
+  <li class="page-item disabled">
+    <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
+  </li>`;
         }
 
         if (this.next!= null) {
