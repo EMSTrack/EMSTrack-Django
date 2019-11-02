@@ -45,7 +45,7 @@ function renderDetail(vehicle, mode) {
         xAxes = [{
             type: 'time',
             distribution: 'linear'
-        }]
+        }];
 
     } else { // mode === 'distance'
 
@@ -65,7 +65,7 @@ function renderDetail(vehicle, mode) {
         }
         xAxes = [{
             type: 'linear'
-        }]
+        }];
 
     }
 
