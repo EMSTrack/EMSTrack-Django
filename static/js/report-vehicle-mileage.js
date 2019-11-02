@@ -223,7 +223,7 @@ function reportSummary() {
     logger.log('info', 'Generating summary report');
 
     // add vehicles to table
-    let noActivities = false;
+    let noActivities = true;
     for (const vehicle of Object.values(vehicles)) {
 
         // get history
