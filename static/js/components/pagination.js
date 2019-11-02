@@ -11,6 +11,17 @@ export class Pagination {
         this.number_of_surrounding_pages = 2;
     }
 
+    render_link(linkUrl, page) {
+
+        linkUrl.replace(/page=\d+/, `page=${page}`);
+        logger.log('debug', 'link = %s', linkUrl);
+
+        return `
+  <li class="page-item ${page == this.page_number ? 'active' : ''}">
+    <a class="page-link" href="${linkUrl}">${page}</a>
+  </li>`;
+    }
+
     render() {
 
         let html = `
@@ -41,7 +52,6 @@ export class Pagination {
 
         let linkUrl = this.previous != null ? this.previous : this.next;
         logger.log('debug', 'link = %s', linkUrl);
-        const regex = /page=\d+/;
 
         // calculate pages
         const first_page = Math.max(this.page_number - this.number_of_surrounding_pages, 1);
@@ -49,13 +59,7 @@ export class Pagination {
 
         if (first_page !== 1) {
 
-            linkUrl.replace(regex, 'page=1');
-            logger.log('debug', 'link = %s', linkUrl);
-
-            html += `
-  <li class="page-item">
-    <a class="page-link" href="${linkUrl}">1</a>
-  </li>`;
+            html += this.render_link(linkUrl, 1);
 
             if (first_page !== 2) {
                 html += `
@@ -69,13 +73,7 @@ export class Pagination {
 
         for (let page = first_page; page <= last_page; page++) {
 
-            linkUrl.replace(regex, `page=${page}`);
-            logger.log('debug', 'link = %s', linkUrl);
-
-            html += `
-  <li class="page-item ${page == this.page_number ? 'active' : ''}">
-    <a class="page-link" href="${linkUrl}">${page}</a>
-  </li>`;
+            html += this.render_link(linkUrl, page);
 
         }
 
@@ -89,13 +87,7 @@ export class Pagination {
   </li>`;
             }
 
-            linkUrl.replace(regex, `page=${number_of_pages}`);
-            logger.log('debug', 'link = %s', linkUrl);
-
-            html += `
-  <li class="page-item">
-    <a class="page-link" href="${linkUrl}">${number_of_pages}</a>
-  </li>`;
+            html += this.render_link(linkUrl, number_of_pages);
 
         }
 
