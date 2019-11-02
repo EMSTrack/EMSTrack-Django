@@ -11,18 +11,26 @@ export class Pagination {
         this.number_of_surrounding_pages = 2;
     }
 
-    render_link(linkUrl, page) {
+    render_link(linkUrl, page, render_page_callback) {
 
         linkUrl.replace(/page=\d+/, `page=${page}`);
         logger.log('debug', 'link = %s', linkUrl);
 
-        return `
+        if (render_page_callback)
+            return `
+  <li class="page-item ${page == this.page_number ? 'active' : ''}">
+    ${render_page_callback(page)}
+  </li>`;
+
+        else
+            return `
   <li class="page-item ${page == this.page_number ? 'active' : ''}">
     <a class="page-link" href="${linkUrl}">${page}</a>
   </li>`;
+
     }
 
-    render() {
+    render(render_page_callback) {
 
         const number_of_pages = (this.count/this.page_size|0);
         logger.log('debug', 'number_of_pages = %d', number_of_pages);
@@ -59,7 +67,7 @@ export class Pagination {
 
         if (first_page !== 1) {
 
-            html += this.render_link(linkUrl, 1);
+            html += this.render_link(linkUrl, 1, render_page_callback);
 
             if (first_page !== 2) {
                 html += `
@@ -73,7 +81,7 @@ export class Pagination {
 
         for (let page = first_page; page <= last_page; page++) {
 
-            html += this.render_link(linkUrl, page);
+            html += this.render_link(linkUrl, page, render_page_callback);
 
         }
 
@@ -87,7 +95,7 @@ export class Pagination {
   </li>`;
             }
 
-            html += this.render_link(linkUrl, number_of_pages);
+            html += this.render_link(linkUrl, number_of_pages, render_page_callback);
 
         }
 
