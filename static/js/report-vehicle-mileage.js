@@ -236,7 +236,7 @@ function reportSummary() {
 
         // calculate statistics
         let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed, time]
-            = calculateMotionStatistics(10 / 3.6, ...segments);
+            = calculateMotionStatistics(5 / 3.6, 5, ...segments);
         let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
         let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
 
