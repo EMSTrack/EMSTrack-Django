@@ -12,7 +12,7 @@ let apiClient;
 const vehicles = {};
 let xAxesMode, detailVehicleId = -1;
 
-let movingSpeedThreshold = 5 / 3.6; // (km/h)
+let movingSpeedThreshold = 5 / 3.6; // (m/s)
 let movingDistanceThreshold = 5;    // m
 
 // add initialization hook
@@ -101,7 +101,7 @@ function renderDetail(vehicle, xAxesMode) {
                     labelString: 'speed (km/h)'
                 },
                 ticks: {
-                    min: movingSpeedThreshold
+                    min: 3.6 * movingSpeedThreshold
                 }
             }]
         },
