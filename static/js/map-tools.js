@@ -40,8 +40,11 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
     const speed = [];
     const time = [];
     if (segment.length) {
+
         distance[0] = .0;
         speed[0] = .0;
+        time[0] = new Date(segment[0].timestamp);
+
         let lastPosition = segment[0].location;
         let lastTimestamp = Date.parse(segment[0].timestamp);
         for (let i = 1; i < segment.length; i++) {
@@ -49,6 +52,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
             const currentPosition = segment[i].location;
             const currentTimestamp = Date.parse(segment[i].timestamp);
 
+            const _time = new Date(segment[i].timestamp);
             const _distance = calculateDistanceHaversine(lastPosition, currentPosition); // meters
             const _duration = Math.abs(currentTimestamp - lastTimestamp) / 1000;         // seconds
 
@@ -70,7 +74,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
 
                 distance.push(_distance);
                 speed.push(_speed);
-                time.push(new Date(segment[i].timestamp));
+                time.push(_time);
 
                 totalMovingDistance += _distance;
                 totalMovingTime += _duration;
@@ -90,6 +94,7 @@ export function calculateMotionStatistics(movingSpeedThreshold, ...segments) {
     let totalMovingDistance = 0.0;
     let totalMovingTime= 0.0;
     let maxSpeed = 0.0;
+
     const distance = [];
     const speed = [];
     const time = [];
