@@ -48,10 +48,23 @@ export class Pagination {
         const last_page = Number.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
 
         if (first_page !== 1) {
+
+            linkUrl.replace(regex, 'page=1');
+            logger.log('debug', 'link = %s', linkUrl);
+
             html += `
+  <li class="page-item">
+    <a class="page-link" href="${linkUrl}">${page}</a>
+  </li>`;
+
+            if (first_page !== 2) {
+                html += `
   <li class="page-item disabled">
     <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
   </li>`;
+
+            }
+
         }
 
         for (let page = first_page; page <= last_page; page++) {
@@ -67,10 +80,23 @@ export class Pagination {
         }
 
         if (last_page !== number_of_pages) {
-            html += `
+
+            if (last_page !== number_of_pages - 1) {
+
+                html += `
   <li class="page-item disabled">
     <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
   </li>`;
+            }
+
+            linkUrl.replace(regex, `page=${number_of_pages}`);
+            logger.log('debug', 'link = %s', linkUrl);
+
+            html += `
+  <li class="page-item">
+    <a class="page-link" href="${linkUrl}">${page}</a>
+  </li>`;
+
         }
 
         if (this.next!= null) {
