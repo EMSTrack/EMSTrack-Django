@@ -12,6 +12,9 @@ let apiClient;
 const vehicles = {};
 let xAxesMode, detailVehicleId = -1;
 
+let movingSpeedThreshold = 5 / 3.6; // (km/h)
+let movingDistanceThreshold = 5;    // m
+
 // add initialization hook
 add_init_function(init);
 
@@ -81,9 +84,9 @@ function renderDetail(vehicle, xAxesMode) {
 
         xAxes = [{
             type: 'linear',
-             ticks: {
-                 max: totalDistance / 1000,
-                min: 0,
+            ticks: {
+                max: totalDistance / 1000,
+                min: 0
             }
         }];
 
@@ -96,6 +99,9 @@ function renderDetail(vehicle, xAxesMode) {
                 scaleLabel: {
                     display: true,
                     labelString: 'speed (km/h)'
+                },
+                ticks: {
+                    min: movingSpeedThreshold
                 }
             }]
         },
@@ -236,7 +242,7 @@ function reportSummary() {
 
         // calculate statistics
         let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed, time]
-            = calculateMotionStatistics(5 / 3.6, 5, ...segments);
+            = calculateMotionStatistics(movingSpeedThreshold, movingDistanceThreshold, ...segments);
         let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
         let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
 
