@@ -23,8 +23,11 @@ function renderDetail(vehicle, xAxesMode) {
     console.log(data);
 
     const segments = data['segments'];
+
     const distance = data['distance'];
     const speed = data['speed'];
+    const time = data['time'];
+
     const n = segments.length;
     const plotDataSets = new Array(n);
 
@@ -32,12 +35,14 @@ function renderDetail(vehicle, xAxesMode) {
     if (xAxesMode === 'time') {
 
         for (let i = 0; i < n; i++) {
-            const currentSegment = segments[i];
+
+            const currentTime = time[i];
             const currentSpeed = speed[i];
+
             const m = currentSpeed.length;
             const plotData = new Array(m);
             for (let j = 0; j < m; j++) {
-                plotData[j] = { t: new Date(currentSegment[j]['timestamp']), y: 3.6 * currentSpeed[j] }
+                plotData[j] = { t: currentTime[j], y: 3.6 * currentSpeed[j] }
             }
             plotDataSets[i] = {
                 data: plotData,
@@ -55,8 +60,10 @@ function renderDetail(vehicle, xAxesMode) {
 
         let totalDistance = 0;
         for (let i = 0; i < n; i++) {
+
             const currentDistance = distance[i];
             const currentSpeed = speed[i];
+
             const m = currentDistance.length;
             const plotData = new Array(m);
             for (let j = 0; j < m; j++) {
@@ -222,7 +229,7 @@ function reportSummary() {
         const segments = data['segments'];
 
         // calculate statistics
-        let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed]
+        let [totalDistance, totalTime, totalMovingDistance, totalMovingTime, maxSpeed, distance, speed, time]
             = calculateMotionStatistics(10 / 3.6, ...segments);
         let avgSpeed = totalTime > 0 ? totalDistance / totalTime : 0.0;
         let avgMovingSpeed = totalMovingTime > 0 ? totalMovingDistance / totalMovingTime : 0.0;
@@ -230,6 +237,7 @@ function reportSummary() {
         // store distance and speed
         vehicle['data']['distance'] = distance;
         vehicle['data']['speed'] = speed;
+        vehicle['data']['time'] = time;
 
         // convert to proper units
         totalTime /= 3600;             // h
