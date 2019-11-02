@@ -28,7 +28,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
 
 	movingSpeedThreshold = movingSpeedThreshold || (5/3.6);    // m/s
 	movingDistanceThreshold = movingDistanceThreshold || 5;    // m
-    const filterCoefficient = 0.5;
+    const filterCoefficient = 0.25;
 
     const eps = 1e-4;
 
