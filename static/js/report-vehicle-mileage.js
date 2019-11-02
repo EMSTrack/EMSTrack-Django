@@ -10,56 +10,13 @@ import 'chartjs-plugin-zoom';
 let map;
 let apiClient;
 const vehicles = {};
-let detail = null;
+let xAxis, detailVehicleId = -1;
 
 // add initialization hook
 add_init_function(init);
 
-// report detail
-function reportDetail(id) {
-
-    logger.log('info', "Generating detail report for id '%d'", id);
-
-    const vehicle = vehicles[id];
-
-    console.log(vehicle);
-
-    // get detail element information
-    const detailElement = $('#detail');
-    const isDetailVisible = detailElement.is( ":visible" );
-
-    const idElement = $('#detail_id');
-    const currentId = idElement.text();
-
-    if (isDetailVisible) {
-
-        logger.log('info', "detail is visible, current id is '%s'", currentId);
-
-        if (currentId === vehicle['identifier']) {
-
-            logger.log('info', "hiding");
-
-            // same vehicle, collapse and return
-            detailElement.collapse('hide');
-            return;
-
-        }
-
-        // otherwise, this is another element, go ahead
-
-    } else {
-
-        // not visible, set it up and display
-
-        logger.log('info', "detail is not visible, current id is '%s'", currentId);
-
-    }
-
-    // setup detail
-    logger.log('info', "setting up");
-
-    // set new detail title
-    idElement.text(vehicle['identifier']);
+// render detail
+function renderDetail(vehicle, mode) {
 
     const data = vehicle['data'];
     const segments = data['segments'];
@@ -67,28 +24,54 @@ function reportDetail(id) {
     const speed = data['speed'];
     const n = segments.length;
     const plotDataSets = new Array(n);
-    for (let i = 0; i < n; i++) {
-        const currentSegment = segments[i];
-        const currentDistance = distance[i];
-        const currentSpeed = speed[i];
-        const m = currentSegment.length;
-        const plotData = new Array(m);
-        for (let j = 0; j < m; j++) {
-            plotData[j] = { t: new Date(currentSegment[j]['timestamp']), y: 3.6 * currentSpeed[j] }
+
+    let xAxes;
+    if (mode === 'time') {
+
+        for (let i = 0; i < n; i++) {
+            const currentSegment = segments[i];
+            const currentSpeed = speed[i];
+            const m = currentSpeed.length;
+            const plotData = new Array(m);
+            for (let j = 0; j < m; j++) {
+                plotData[j] = { t: new Date(currentSegment[j]['timestamp']), y: 3.6 * currentSpeed[j] }
+            }
+            plotDataSets[i] = {
+                data: plotData,
+                fill: false,
+                borderColor: "#3e95cd"
+            };
         }
-        plotDataSets[i] = {
-            data: plotData,
-            fill: false,
-            borderColor: "#3e95cd"
-        };
+        xAxes = [{
+            type: 'time',
+            distribution: 'linear'
+        }]
+
+    } else { // mode === 'distance'
+
+        for (let i = 0; i < n; i++) {
+            const currentDistance = distance[i];
+            const currentSpeed = speed[i];
+            const m = currentDistance.length;
+            const plotData = new Array(m);
+            for (let j = 0; j < m; j++) {
+                plotData[j] = { x: currentDistance / 1000, y: 3.6 * currentSpeed[j] }
+            }
+            plotDataSets[i] = {
+                data: plotData,
+                fill: false,
+                borderColor: "#3e95cd"
+            };
+        }
+        xAxes = [{
+            type: 'linear'
+        }]
+
     }
 
     const plotOptions = {
         scales: {
-            xAxes: [{
-                type: 'time',
-                distribution: 'linear'
-            }],
+            xAxes: xAxes,
             yAxes: [{
                 scaleLabel: {
                     display: true,
@@ -146,7 +129,63 @@ function reportDetail(id) {
         .click( function () {
             chart.resetZoom();
         });
-    
+
+}
+
+// report detail
+function reportDetail(id) {
+
+    logger.log('info', "Generating detail report for id '%d'", id);
+
+    const vehicle = vehicles[id];
+
+    console.log(vehicle);
+
+    // get detail element information
+    const detailElement = $('#detail');
+    const isDetailVisible = detailElement.is( ":visible" );
+
+    const idElement = $('#detail_id');
+    const currentId = idElement.text();
+
+    if (isDetailVisible) {
+
+        logger.log('info', "detail is visible, current id is '%s'", currentId);
+
+        if (currentId === vehicle['identifier']) {
+
+            logger.log('info', "hiding");
+
+            // same vehicle, collapse and return
+            detailElement.collapse('hide');
+            detailVehicleId = -1;
+
+            return;
+
+        }
+
+        // otherwise, this is another element, go ahead
+
+    } else {
+
+        // not visible, set it up and display
+
+        logger.log('info', "detail is not visible, current id is '%s'", currentId);
+
+    }
+
+    // setup detail
+    logger.log('info', "setting up");
+
+    // set detailVehicle
+    detailVehicleId = vehicle['id'];
+
+    // set new detail title
+    idElement.text(vehicle['identifier']);
+
+    // render detail
+    renderDetail(vehicle, xAxis);
+
     logger.log('info', "showing...");
     detailElement.collapse('show');
 
@@ -327,6 +366,26 @@ function init (client) {
     // set range
     const range = beginDate.toISOString() + "," + endDate.toISOString();
     logger.log('debug', 'range = %j', range);
+
+    // mode
+    xAxis = $('input[name="x-axis"]:checked').val();
+    logger.log('debug', 'x-axis= %s', xAxis);
+
+    // set radio input
+    $('input[type="radio"][name="x-axis"]')
+        .change( function() {
+
+            // return if no change
+            if (this.value === xAxis)
+                return;
+
+            // render
+            xAxis = this.value;
+
+            // segment history
+            renderDetail(vehicles[detailVehicleId], xAxis);
+
+        });
 
     // retrieve data
     retrieveData(range)

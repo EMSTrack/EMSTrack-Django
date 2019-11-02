@@ -13,7 +13,7 @@ import {
 
 import {segmentHistory} from "./map-tools";
 
-let apiClient, mode, slider, detailVehicleId;
+let apiClient, mode, slider, detailVehicleId = -1;
 const vehicles = {};
 
 // add initialization hook
