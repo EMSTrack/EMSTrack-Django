@@ -12,7 +12,6 @@ const settings = new Settings();
 
 let map;
 let apiClient;
-let overlap = false;
 
 // add initialization hook
 add_init_function(init);
@@ -54,11 +53,6 @@ $(function() {
  	};
  	map = new LeafletPolylineWidget(options);
 
-    $('#overlap')
-        .click(function(){
-            overlap = !!$(this).is(':checked');
-        });
-
 });
 
 function render_page_callback(page, options, ambulanceId, page_size) {
@@ -66,7 +60,7 @@ function render_page_callback(page, options, ambulanceId, page_size) {
     element.click( function () {
 
         // clear map first
-        if (overlap)
+        if ( !$('#overlap').is(':checked') )
             map.clearLayers();
 
         // then retrieve new updates
