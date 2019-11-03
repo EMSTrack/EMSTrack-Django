@@ -236,6 +236,13 @@ export class LeafletWidget {
             this.map.removeLayer(layer);
         });
     }
+
+    removeLayers(...layers) {
+        layers.map( (layer) => {
+            this.map.removeLayer(layer);
+        });
+    }
+
 }
 
 // LeafletMultiPointWidget

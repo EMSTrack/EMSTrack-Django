@@ -61,7 +61,8 @@ function render_page_callback(ambulanceId, page, page_size) {
 
         // clear map first
         try {
-            map.clearLayers();
+            //map.clearLayers();
+            map.removeLayers('default');
         } catch (error) {
             console.log(error);
         }
