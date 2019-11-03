@@ -60,12 +60,7 @@ function render_page_callback(page, options, ambulanceId, page_size) {
     element.click( function () {
 
         // clear map first
-        try {
-            //map.clearLayers();
-            map.clearLayers();
-        } catch (error) {
-            console.log(error);
-        }
+        map.clearLayers();
 
         // then retrieve new updates
         retrieveAmbulanceData(ambulanceId, page, page_size);
