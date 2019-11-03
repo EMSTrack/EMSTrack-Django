@@ -39,8 +39,12 @@ function init (client) {
 
     logger.log('debug', 'page = %s, page_size = %s', page, page_size);
 
+    // set page sizes
+    $('#page_sizes')
+        .html(pages.render());
+
  	// Retrieve ambulances via AJAX
-    retrieveAmbulanceData(ambulanceId, page, page_size);
+    retrieveAmbulanceData(ambulanceId, pages.page, pages.page_size);
 
 }
 
