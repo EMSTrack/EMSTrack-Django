@@ -55,8 +55,8 @@ $(function() {
 
 });
 
-function render_page_callback(ambulanceId, page, page_size) {
-    const element = $(`<a class="page-link" href="#" >${page}</a>`);
+function render_page_callback(page, options, ambulanceId, page_size) {
+    const element = $(`<a class="page-link" href="#" >${options.label}</a>`);
     element.click( function () {
 
         // clear map first
@@ -89,7 +89,7 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
             const pagination = new Pagination(response.data.previous, response.data.next, response.data.count,
                 page_size, page);
             $('#pagination')
-                .html(pagination.render((pg) => render_page_callback(ambulanceId, pg, page_size)));
+                .html(pagination.render((pg, options) => render_page_callback(pg, options, ambulanceId, page_size)));
 
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, settings.ambulance_status, true);

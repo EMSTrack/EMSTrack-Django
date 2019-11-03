@@ -8,28 +8,44 @@ export class Pagination {
         this.count = count;
         this.page_size = page_size;
         this.page_number = page_number;
-        this.number_of_surrounding_pages = 2;
+        this.number_of_surrounding_pages = 1;
     }
 
-    static render_page_item(href, value, ariaLabel, extraClasses = "", callback) {
+    static render_page_item(page, _options) {
 
-        const linkElement = $(`<li class="page-item ${extraClasses}"></li>`);
+        const options = Object.assign({
+            href: '#',
+            label: page,
+            ariaLabel: '',
+            extraClasses: '',
+            callback: null
+        }, _options);
 
-        if (callback)
-            linkElement.append(callback(value));
+        logger.log('debug', 'options = %j', options);
+
+        const linkElement = $(`<li class="page-item ${options.extraClasses}"></li>`);
+
+        if (options.callback)
+            linkElement.append(callback(page, options));
         else
-            linkElement.append(`<a class="page-link" href="${href}" aria-label="${ariaLabel}">${value}</a>`);
+            linkElement.append(`<a class="page-link" href="${options.href}" aria-label="${options.ariaLabel}">${options.label}</a>`);
 
         return linkElement;
     }
 
-    render_link(linkUrl, page, callback) {
+    render_link(page, _options) {
 
-        linkUrl.replace(/page=\d+/, `page=${page}`);
-        logger.log('debug', 'link = %s', linkUrl);
+        const options = Object.assign({
+            href: '#',
+            label: page,
+            ariaLabel: `page-${page}`,
+            extraClasses: '',
+            callback: null
+        }, _options);
 
-        const extraClasses = page === this.page_number ? 'active' : '';
-        return Pagination.render_page_item(linkUrl, page, `page-${page}`, extraClasses, callback);
+        options.href.replace(/page=\d+/, `page=${page}`);
+        options.extraClasses += (page === this.page_number ? ' active' : '');
+        return Pagination.render_page_item(page, options);
 
     }
 
@@ -48,32 +64,42 @@ export class Pagination {
         const paginationElement = $(`<ul class="pagination"></ul>`);
 
         let extraClasses = this.previous === null ? "disabled" : "";
-        paginationElement.append(Pagination.render_page_item(this.previous, '&laquo;', "Previous", extraClasses));
+        paginationElement.append(
+            this.render_link(-1, {label: '&laquo;', ariaLabel: 'Previous', extraClasses: extraClasses})
+        );
 
         if (first_page !== 1) {
 
-            paginationElement.append(this.render_link(linkUrl, 1, render_page_callback));
+            paginationElement.append(
+                this.render_link(1, {href: linkUrl, callback: render_page_callback})
+            );
 
-            if (first_page !== 2) {
-                paginationElement.append(Pagination.render_page_item("#", '&hellip;', "", "disabled"));
-
-            }
+            paginationElement.append(
+                Pagination.render_page_item(-1, {label: '&hellip;', extraClasses: 'disabled'})
+            );
         }
 
         for (let page = first_page; page <= last_page; page++)
-            paginationElement.append(this.render_link(linkUrl, page, render_page_callback));
+            paginationElement.append(
+                this.render_link(page, {href: linkUrl, callback: render_page_callback})
+            );
 
         if (last_page !== number_of_pages) {
 
-            if (last_page !== number_of_pages - 1)
-                paginationElement.append(Pagination.render_page_item("#", '&hellip;', "", "disabled"));
+            paginationElement.append(
+                Pagination.render_page_item(-1, {label: '&hellip;', extraClasses: 'disabled'})
+            );
 
-            paginationElement.append(this.render_link(linkUrl, number_of_pages, render_page_callback));
+            paginationElement.append(
+                this.render_link(last_page, {href: linkUrl, callback: render_page_callback})
+            );
 
         }
 
         extraClasses = this.next === null ? "disabled" : "";
-        paginationElement.append(Pagination.render_page_item(this.next, '&raquo;', "Next", extraClasses));
+        paginationElement.append(
+            this.render_link(-1, {label: '&raquo;', ariaLabel: 'Next', extraClasses: extraClasses})
+        );
 
         return paginationElement;
 
