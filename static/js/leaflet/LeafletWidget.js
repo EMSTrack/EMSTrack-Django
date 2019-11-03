@@ -560,6 +560,7 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     }
 
+    // add Polyline
     addPolyline(polyline, id, layer, fun) {
 
         id = id || -1;
@@ -590,6 +591,7 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     }
 
+    // add line
     addLine(points, id, color, layer, fun) {
 
         id = id || -1;
@@ -598,43 +600,24 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
         // Create polyline
         const pane = this.getPaneName(layer);
-        //const polyline = L.polyline(points, {color: color, pane: layerName})
-        //  .addTo(this.map);
         const polyline = L.polyline(points, {color: color, pane: pane});
 
-        return this.addPolyLine(polyline);
+        return this.addPolyline(polyline, id, layer, fun);
 
-        /*
-        // Add click callback
-        if (fun) {
-            polyline.on('click', fun);
-        }
-
-        // Add marker
-        L.stamp(polyline);
-        this.layers[layer]['lines'].addLayer(polyline);
-
-        // Track ids
-        if (id >= 0) {
-            this.polylineIdMap[polyline._leaflet_id] = id;
-        }
-
-        return polyline;
-        */
     }
 
-    // add point
-    addPoint(lat, lng, id, fun, layer) {
+    // add marker
+    addMarker(marker, id, layer, fun) {
 
-        fun = fun || null;
+        id = id || -1;
         layer = layer || 'default';
+        fun = fun || null;
 
-        // Create marker without a shaddow
-        const icon = new L.Icon.Default();
-        icon.options.shadowSize = [0, 0];
         const pane = this.getPaneName(layer);
-        const marker = L.marker([lat, lng], {icon: icon, pane: pane})
-            .addTo(this.map);
+        marker.setStyle({pane: pane});
+
+        // add to map
+        marker.addTo(this.map);
 
         // Add click callback
         if (fun) {
@@ -652,6 +635,23 @@ export class LeafletPolylineWidget extends LeafletWidget {
         }
 
         return marker;
+
+    }
+
+    // add point
+    addPoint(lat, lng, id, fun, layer) {
+
+        fun = fun || null;
+        layer = layer || 'default';
+
+        // Create marker without a shaddow
+        const icon = new L.Icon.Default();
+        icon.options.shadowSize = [0, 0];
+        const pane = this.getPaneName(layer);
+        const marker = L.marker([lat, lng], {icon: icon, pane: pane});
+
+        return this.addMarker(marker, id, layer, fun);
+
     }
 
     clearLayers() {
