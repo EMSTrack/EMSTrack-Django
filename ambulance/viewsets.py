@@ -28,12 +28,12 @@ logger = logging.getLogger(__name__)
 class AmbulancePageNumberPagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     # page_size = 25
-    max_page_size = 1000
+    max_page_size = 5000
 
 
 class AmbulanceLimitOffsetPagination(LimitOffsetPagination):
     default_limit = 100
-    max_limit = 1000
+    max_limit = 5000
 
 
 # Ambulance viewset
