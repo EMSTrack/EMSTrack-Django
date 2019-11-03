@@ -49,7 +49,7 @@ export class Pagination {
 
     render(callback) {
 
-        const number_of_pages = (this.count / this.page_size | 0);
+        const number_of_pages = Math.ceil(this.count / this.page_size);
         logger.log('debug', 'number_of_pages = %d', number_of_pages);
 
         // calculate pages
