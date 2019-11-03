@@ -17,11 +17,11 @@ export class Pages {
 
     render() {
 
-        const element = $(`<ul class="list-group list-group-horizontal list-group-flush"></ul>`);
+        const element = $(`<div class="row"></div>`);
 
         for (let i = 0; i < this.sizes.length; i++) {
 
-            const listItem = $('<li class="list-group-item"></li>');
+            const listItem = $('<li class="col"></li>');
 
             const currentSize = this.sizes[i];
             if (this.page_size === currentSize) {
