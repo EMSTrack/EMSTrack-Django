@@ -76,6 +76,10 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
     // Build url
     const url = `ambulance/${ambulanceId}/updates?page=${page}&page_size=${page_size}`;
 
+    // set message
+    $('#pleaseWait')
+        .show();
+
     apiClient.httpClient.get(url)
         .then( (response) => {
 
@@ -90,6 +94,9 @@ function retrieveAmbulanceData(ambulanceId, page, page_size) {
             logger.log('debug', "Got '%s' ambulance '%d' updates from API", response.data.length, ambulanceId);
             addAmbulanceRoute(map, response.data, settings.ambulance_status, true);
             // addAmbulanceRoute(response.data);
+
+            $('#pleaseWait')
+                .hide();
 
         })
         .catch( (error) => {
