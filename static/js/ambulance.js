@@ -56,9 +56,12 @@ $(function() {
 });
 
 function render_page_callback(ambulanceId, page, page_size) {
-    return `
-  <a class="page-link" href="#" 
-     onclick="retrieveAmbulanceData(${ambulanceId}, ${page}, ${page_size}); return false;">${page}</a>`;
+    const element = $(`<a class="page-link" href="#" >${page}</a>`);
+    element.click( function () {
+        retrieveAmbulanceData(ambulanceId, page, page_size);
+        return false;
+    });
+    return element;
 }
 
 function retrieveAmbulanceData(ambulanceId, page, page_size) {

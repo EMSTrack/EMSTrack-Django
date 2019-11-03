@@ -11,28 +11,31 @@ export class Pagination {
         this.number_of_surrounding_pages = 2;
     }
 
-    render_link(linkUrl, page, render_page_callback) {
+    static render_page_item(href, value, ariaLabel, extraClasses = "", callback) {
+
+        const linkElement = $(`<li class="page-item ${extraClasses}"></li>`);
+
+        if (callback)
+            linkElement.append(callback(page));
+        else
+            linkElement.append(`<a class="page-link" href="${href}" aria-label="${label}">${value}</a>`);
+
+        return linkElement;
+    }
+
+    render_link(linkUrl, page, callback) {
 
         linkUrl.replace(/page=\d+/, `page=${page}`);
         logger.log('debug', 'link = %s', linkUrl);
 
-        if (render_page_callback)
-            return `
-  <li class="page-item ${page == this.page_number ? 'active' : ''}">
-    ${render_page_callback(page)}
-  </li>`;
-
-        else
-            return `
-  <li class="page-item ${page == this.page_number ? 'active' : ''}">
-    <a class="page-link" href="${linkUrl}">${page}</a>
-  </li>`;
+        const extraClasses = page === this.page_number ? 'active' : '';
+        return Pagination.render_page_item(linkUrl, page, `page-${page}`, extraClasses, callback);
 
     }
 
     render(render_page_callback) {
 
-        const number_of_pages = (this.count/this.page_size|0);
+        const number_of_pages = (this.count / this.page_size | 0);
         logger.log('debug', 'number_of_pages = %d', number_of_pages);
 
         const linkUrl = this.previous != null ? this.previous : this.next;
@@ -42,87 +45,37 @@ export class Pagination {
         const first_page = Math.max(this.page_number - this.number_of_surrounding_pages, 1);
         const last_page = Math.min(this.page_number + this.number_of_surrounding_pages, number_of_pages);
 
-        let html = `
-<ul class="pagination">`;
+        const paginationElement = $(`<ul class="pagination"></ul>`);
 
-        if (this.previous != null) {
-
-            html += `
-  <li class="page-item">
-    <a class="page-link" href="${this.previous}" aria-label="Previous">
-      <span aria-hidden="true">&laquo;</span>
-    </a>
-  </li>`;
-
-        } else {
-
-            html += `
-  <li class="page-item disabled">
-    <a class="page-link" href="#" aria-label="Previous">
-      <span aria-hidden="true">&laquo;</span>
-    </a>
-  </li>`;
-
-        }
+        let extraClasses = this.previous === null ? "disabled" : "";
+        paginationElement.append(Pagination.render_page_item(this.previous, '&laquo;', "Previous", extraClasses));
 
         if (first_page !== 1) {
 
-            html += this.render_link(linkUrl, 1, render_page_callback);
+            paginationElement.append(this.render_link(linkUrl, 1, "", "", render_page_callback));
 
             if (first_page !== 2) {
-                html += `
-  <li class="page-item disabled">
-    <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
-  </li>`;
+                paginationElement.append(Pagination.render_page_item("#", '&hellip;', "", "disabled"));
 
             }
-
         }
 
-        for (let page = first_page; page <= last_page; page++) {
-
-            html += this.render_link(linkUrl, page, render_page_callback);
-
-        }
+        for (let page = first_page; page <= last_page; page++)
+            paginationElement.append(this.render_link(linkUrl, page, "", "", render_page_callback));
 
         if (last_page !== number_of_pages) {
 
-            if (last_page !== number_of_pages - 1) {
+            if (last_page !== number_of_pages - 1)
+                paginationElement.append(Pagination.render_page_item("#", '&hellip;', "", "disabled"));
 
-                html += `
-  <li class="page-item disabled">
-    <a class="page-link" href="#"><span aria-hidden="true">&hellip;</span></a>
-  </li>`;
-            }
-
-            html += this.render_link(linkUrl, number_of_pages, render_page_callback);
+            paginationElement.append(this.render_link(linkUrl, number_of_pages, render_page_callback));
 
         }
 
-        if (this.next!= null) {
+        extraClasses = this.next === null ? "disabled" : "";
+        paginationElement.append(Pagination.render_page_item(this.next, '&raquo;', "Next", extraClasses));
 
-            html += `
-  <li class="page-item">
-    <a class="page-link" href="${this.next}" aria-label="Next">
-      <span aria-hidden="true">&raquo;</span>
-    </a>
-  </li>`;
-
-        } else {
-
-            html += `
-  <li class="page-item disabled">
-    <a class="page-link" href="#" aria-label="Next">
-      <span aria-hidden="true">&raquo;</span>
-    </a>
-  </li>`;
-
-        }
-
-        html += `
-</ul>`;
-
-        return html;
+        return paginationElement;
 
     }
 
