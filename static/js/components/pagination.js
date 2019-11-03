@@ -21,7 +21,7 @@ export class Pages {
 
         for (let i = 0; i < this.sizes.length; i++) {
 
-            const listItem = $('<li class="float-left align-middle ml-2"></li>');
+            const listItem = $('<li class="float-right align-middle ml-2"></li>');
 
             const currentSize = this.sizes[i];
             if (this.page_size === currentSize) {
