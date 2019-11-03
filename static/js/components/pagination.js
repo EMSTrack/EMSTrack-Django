@@ -18,7 +18,7 @@ export class Pagination {
         if (callback)
             linkElement.append(callback(page));
         else
-            linkElement.append(`<a class="page-link" href="${href}" aria-label="${label}">${value}</a>`);
+            linkElement.append(`<a class="page-link" href="${href}" aria-label="${ariaLabel}">${value}</a>`);
 
         return linkElement;
     }
