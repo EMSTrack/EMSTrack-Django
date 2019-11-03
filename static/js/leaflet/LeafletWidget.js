@@ -237,12 +237,6 @@ export class LeafletWidget {
         });
     }
 
-    removeLayers(...layers) {
-        layers.map( (layer) => {
-            this.map.removeLayer(layer);
-        });
-    }
-
 }
 
 // LeafletMultiPointWidget
@@ -545,21 +539,24 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     }
 
+    getPaneName(layer) {
+        return layer + 'LeafletPolylineWidgetPane';
+    }
+
     createLayer(layer) {
 
-        const layerName = layer + 'LeafletPolylineWidgetPane';
-        this.map.createPane(layerName);
+        const pane = this.getPaneName(layer);
+        this.map.createPane(pane);
         this.layers[layer] = {
-            'markers': L.layerGroup({'pane': layerName}),
-            'lines': L.layerGroup({'pane': layerName})
+            'markers': L.layerGroup({'pane': pane}),
+            'lines': L.layerGroup({'pane': pane})
         };
 
     }
 
     getLayerPane(layer) {
 
-        const layerName = layer + 'LeafletPolylineWidgetPane';
-        return this.map.getPane(layerName);
+        return this.map.getPane(this.getPaneName(layer));
 
     }
 
@@ -568,6 +565,9 @@ export class LeafletPolylineWidget extends LeafletWidget {
         id = id || -1;
         layer = layer || 'default';
         fun = fun || null;
+
+        const pane = this.getPaneName(layer);
+        polyline.setStyle({pane: pane});
 
         // add to map
         polyline.addTo(this.map);
@@ -597,10 +597,10 @@ export class LeafletPolylineWidget extends LeafletWidget {
         fun = fun || null;
 
         // Create polyline
-        const layerName = layer + 'LeafletPolylineWidgetPane';
+        const pane = this.getPaneName(layer);
         //const polyline = L.polyline(points, {color: color, pane: layerName})
         //  .addTo(this.map);
-        const polyline = L.polyline(points, {color: color, pane: layerName});
+        const polyline = L.polyline(points, {color: color, pane: pane});
 
         return this.addPolyLine(polyline);
 
@@ -632,8 +632,8 @@ export class LeafletPolylineWidget extends LeafletWidget {
         // Create marker without a shaddow
         const icon = new L.Icon.Default();
         icon.options.shadowSize = [0, 0];
-        const layerName = layer + 'LeafletPolylineWidgetPane';
-        const marker = L.marker([lat, lng], {icon: icon, pane: layerName})
+        const pane = this.getPaneName(layer);
+        const marker = L.marker([lat, lng], {icon: icon, pane: pane})
             .addTo(this.map);
 
         // Add click callback
@@ -652,6 +652,13 @@ export class LeafletPolylineWidget extends LeafletWidget {
         }
 
         return marker;
+    }
+
+    clearLayers() {
+        this.layers.map((layer) => {
+            this.map.removeLayer(layer);
+            delete this.layers['layer'];
+        });
     }
 
 }
