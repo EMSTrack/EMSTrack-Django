@@ -17,7 +17,7 @@ export class Pages {
 
     render() {
 
-        const element = $(`<ul class="list-group list-group-horizontal"></ul>`);
+        const element = $(`<ul class="list-group list-group-horizontal list-group-flush"></ul>`);
 
         for (let i = 0; i < this.sizes.length; i++) {
 
