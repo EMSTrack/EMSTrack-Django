@@ -17,11 +17,11 @@ export class Pages {
 
     render() {
 
-        const element = $(`<ul class="list-unstyled"></ul>`);
+        const element = $(`<ul class="list-group list-group-horizontal"></ul>`);
 
         for (let i = 0; i < this.sizes.length; i++) {
 
-            const listItem = $('<li class="float-right align-middle ml-2"></li>');
+            const listItem = $('<li class="list-group-item"></li>');
 
             const currentSize = this.sizes[i];
             if (this.page_size === currentSize) {
