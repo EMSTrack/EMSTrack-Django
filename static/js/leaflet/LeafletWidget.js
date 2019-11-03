@@ -232,7 +232,7 @@ export class LeafletWidget {
     }
 
     clearLayers() {
-        this.map.eachLayer(function (layer) {
+        this.map.eachLayer((layer) => {
             this.map.removeLayer(layer);
         });
     }
