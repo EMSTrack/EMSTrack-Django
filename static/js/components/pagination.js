@@ -28,7 +28,7 @@ export class Pages {
                 listItem.html(`<span>${currentSize}</span>`);
             } else {
                 this.searchParams.set('page_size', currentSize);
-                const url = this.url + this.searchParams;
+                const url = this.url + '?' + this.searchParams;
                 console.log(url);
                 listItem.html(`<a href="${url}">${currentSize}</a>`);
             }
