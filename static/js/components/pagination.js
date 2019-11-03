@@ -2,7 +2,7 @@ import { logger } from '../logger';
 
 export class Pages {
 
-    constructor(location, sizes = [100, 500, 1000], defaultPageSize=500) {
+    constructor(location, sizes = [500, 1000, 5000], defaultPageSize=1000) {
         this.sizes = sizes;
 
         // get page and page_size parameters
