@@ -52,7 +52,7 @@ export class Pagination {
 
         if (first_page !== 1) {
 
-            paginationElement.append(this.render_link(linkUrl, 1, "", "", render_page_callback));
+            paginationElement.append(this.render_link(linkUrl, 1, render_page_callback));
 
             if (first_page !== 2) {
                 paginationElement.append(Pagination.render_page_item("#", '&hellip;', "", "disabled"));
@@ -61,7 +61,7 @@ export class Pagination {
         }
 
         for (let page = first_page; page <= last_page; page++)
-            paginationElement.append(this.render_link(linkUrl, page, "", "", render_page_callback));
+            paginationElement.append(this.render_link(linkUrl, page, render_page_callback));
 
         if (last_page !== number_of_pages) {
 
