@@ -96,7 +96,7 @@ export class Pagination {
                 );
 
             paginationElement.append(
-                this.render_link(last_page, callback)
+                this.render_link(number_of_pages, callback)
             );
 
         }
