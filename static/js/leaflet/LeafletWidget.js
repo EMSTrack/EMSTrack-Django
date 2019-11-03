@@ -231,6 +231,11 @@ export class LeafletWidget {
         this.enabled = true;
     }
 
+    clearLayers() {
+        this.map.eachLayer(function (layer) {
+            this.map.removeLayer(layer);
+        });
+    }
 }
 
 // LeafletMultiPointWidget
