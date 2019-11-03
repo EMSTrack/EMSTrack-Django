@@ -655,9 +655,9 @@ export class LeafletPolylineWidget extends LeafletWidget {
     }
 
     clearLayers() {
-        for (const layer of Object.values(this.layers)) {
-            layer.clearLayers();
-        }
+        for (const layer of Object.values(this.layers))
+            for (const l of Object.values(layer))
+                l.clearLayers();
     }
 
 }
