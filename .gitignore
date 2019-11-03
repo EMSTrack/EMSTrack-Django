@@ -109,3 +109,4 @@ nohup.out
 .vscode/
 .vs/
 node_modules/
+package-lock.json
