@@ -535,29 +535,28 @@ export class LeafletPolylineWidget extends LeafletWidget {
         this.layers = {};
 
         // create default layer
-        this.createLayer('default');
+        this.createLayer();
 
     }
 
     getPaneName(layer) {
+        layer = layer || 'default';
         return layer + 'LeafletPolylineWidgetPane';
     }
 
     createLayer(layer) {
-
+        layer = layer || 'default';
         const pane = this.getPaneName(layer);
         this.map.createPane(pane);
         this.layers[layer] = {
             'markers': L.layerGroup({'pane': pane}),
             'lines': L.layerGroup({'pane': pane})
         };
-
     }
 
     getLayerPane(layer) {
-
+        layer = layer || 'default';
         return this.map.getPane(this.getPaneName(layer));
-
     }
 
     // add Polyline
