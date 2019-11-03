@@ -69,35 +69,40 @@ export function validateDateRange(beginDate, endDate) {
 
     logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
-    // beginDate
-    if (beginDate === null || typeof beginDate === 'undefined') {
-        beginDate = moment(beginDate);
-    } else {
-        beginDate = moment('00:00');
+    try {
+        // beginDate
+        if (beginDate === null || typeof beginDate === 'undefined') {
+            beginDate = moment(beginDate);
+        } else {
+            beginDate = moment('00:00');
+        }
+
+        // minDate
+        let minDate = moment(beginDate).add(1, 'days');
+
+        logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
+
+        // endDate
+        if (endDate === null || typeof endDate === 'undefined') {
+            logger.log('debug', 'no enddate');
+            endDate = moment(minDate);
+        } else {
+            logger.log('debug', 'got enddate');
+            endDate = moment(endDate);
+        }
+
+        logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
+
+        // make sure endDate > beginDate
+        if (endDate <= beginDate) {
+            endDate = moment(minDate);
+        }
+
+        logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
+
+    } catch (error) {
+        console.log(error);
     }
-
-    // minDate
-    let minDate = moment(beginDate).add(1, 'days');
-
-    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
-
-    // endDate
-    if (endDate === null || typeof endDate === 'undefined') {
-        logger.log('debug', 'no enddate');
-        endDate = moment(minDate);
-    } else {
-        logger.log('debug', 'got enddate');
-        endDate = moment(endDate);
-    }
-
-    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
-
-    // make sure endDate > beginDate
-    if (endDate <= beginDate) {
-        endDate = moment(minDate);
-    }
-
-    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     return [beginDate, endDate, minDate];
 }
