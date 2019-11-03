@@ -64,14 +64,14 @@ export function millisToTime(millis) {
 
 export function validateDateRange(beginDate, endDate) {
 
+    logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
+
     // beginDate
     if (beginDate === null || typeof beginDate === 'undefined') {
         beginDate = new Date();
     } else
         beginDate = new Date(beginDate);
     beginDate.setHours(0, 0, 0, 0);
-
-    // logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
     // minDate
     let minDate = new Date();
