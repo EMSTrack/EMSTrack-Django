@@ -148,15 +148,15 @@
             </h3>
 
             <div class="row">
-                <div class="col-2 text-right">
-                    <span>{% trans "number of records" %}:</span>
-                </div>
-                <div class="col-3" id="page_sizes"></div>
+                <div class="col-5" id="pagination"></div>
                 <div class="col-2">
                     <label for="overlap">{% trans "overlap" %}</label>
                     <input type="checkbox" id="overlap">
                 </div>
-                <div class="col-5 text-right" id="pagination"></div>
+                <div class="col-5 text-right">
+                    <span>{% trans "number of records" %}:</span>
+                    <div id="page_sizes"></div>
+                </div>
             </div>
 
             <div id="pleaseWait" class="alert alert-primary" role="alert">
