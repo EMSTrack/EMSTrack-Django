@@ -556,7 +556,7 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     }
 
-    addPolyLine(polyline, id, layer, fun) {
+    addPolyline(polyline, id, layer, fun) {
 
         id = id || -1;
         layer = layer || 'default';
