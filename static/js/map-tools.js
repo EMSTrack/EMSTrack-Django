@@ -329,18 +329,16 @@ export function addCallWaypoints(map, waypoints) {
             label += ": " + waypoint['location']['name'];
 
         // add waypoint markers
-        map.addMarker(
-            createMarker(waypoint['location'], icon)
-                .bindPopup("<strong>" + label + "</strong>")
-                .on('mouseover',
-                    function () {
-                        // open popup bubble
-                        this.openPopup().on('mouseout',
-                            function () {
-                                this.closePopup();
-                            });
-                    })
-        );
+        map.addMarker(createMarker(waypoint['location'], icon))
+            .bindPopup("<strong>" + label + "</strong>")
+            .on('mouseover',
+                function () {
+                    // open popup bubble
+                    this.openPopup().on('mouseout',
+                        function () {
+                            this.closePopup();
+                        });
+                });
     });
 
 }
@@ -378,18 +376,16 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
 
             // add starting marker
             logger.log('debug', "Adding initial '%s' marker", initialPoint.status);
-            map.addMarker(
-                createMarker(segment[0])
-                    .bindPopup('<strong>' + ambulance_status[initialPoint.status] + '</strong>')
-                    .on('mouseover',
-                        function () {
-                            // open popup bubble
-                            this.openPopup().on('mouseout',
-                                function () {
-                                    this.closePopup();
-                                });
-                        })
-            );
+            map.addMarker(createMarker(segment[0]))
+                .bindPopup('<strong>' + ambulance_status[initialPoint.status] + '</strong>')
+                .on('mouseover',
+                    function () {
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function () {
+                                this.closePopup();
+                            });
+                    });
 
         } else if (byStatus) { // && i > 0
 
@@ -399,18 +395,16 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
             if (last_status !== status) {
                 // add status marker
                 logger.log('debug', "Adding '%s' marker", status);
-                map.addMarker(
-                    createMarker(initialPoint)
-                        .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
-                        .on('mouseover',
-                            function () {
-                                // open popup bubble
-                                this.openPopup().on('mouseout',
-                                    function () {
-                                        this.closePopup();
-                                    });
-                            })
-                );
+                map.addMarker(createMarker(initialPoint))
+                    .bindPopup('<strong>' + ambulance_status[status] + '</strong>')
+                    .on('mouseover',
+                        function () {
+                            // open popup bubble
+                            this.openPopup().on('mouseout',
+                                function () {
+                                    this.closePopup();
+                                });
+                        });
             }
 
         }
@@ -423,18 +417,16 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
             // add ending marker
             const finalPoint = segment[segment.length - 1];
             logger.log('debug', "Adding final '%s' marker", finalPoint.status);
-            map.addMarker(
-                createMarker(finalPoint)
-                    .bindPopup('<strong>' + ambulance_status[finalPoint.status] + '</strong>')
-                    .on('mouseover',
-                        function () {
-                            // open popup bubble
-                            this.openPopup().on('mouseout',
-                                function () {
-                                    this.closePopup();
-                                });
-                        })
-            );
+            map.addMarker(createMarker(finalPoint))
+                .bindPopup('<strong>' + ambulance_status[finalPoint.status] + '</strong>')
+                .on('mouseover',
+                    function () {
+                        // open popup bubble
+                        this.openPopup().on('mouseout',
+                            function () {
+                                this.closePopup();
+                            });
+                    });
         }
 
         last_segment = segment;

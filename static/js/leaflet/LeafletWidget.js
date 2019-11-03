@@ -613,8 +613,9 @@ export class LeafletPolylineWidget extends LeafletWidget {
         layer = layer || 'default';
         fun = fun || null;
 
+        // set pane (not sure this will work)
         const pane = this.getPaneName(layer);
-        marker.setStyle({pane: pane});
+        marker.pane = pane;
 
         // add to map
         marker.addTo(this.map);
