@@ -23,39 +23,34 @@ export class Pagination {
 
         logger.log('debug', 'options = %j', options);
 
-        const linkElement = $(`<li class="page-item ${options.extraClasses}"></li>`);
+        const element = $(`<li class="page-item ${options.extraClasses}"></li>`);
 
-        if (options.callback)
-            linkElement.append(options.callback(page, options));
+        if (options.callback !== null)
+            element.append(options.callback(page, options));
         else
-            linkElement.append(`<a class="page-link" href="${options.href}" aria-label="${options.ariaLabel}">${options.label}</a>`);
+            element.append(`<a class="page-link" href="${options.href}" aria-label="${options.ariaLabel}">${options.label}</a>`);
 
-        return linkElement;
+        return element;
     }
 
-    render_link(page, _options) {
+    render_link(page, callback, _options) {
 
         const options = Object.assign({
-            href: '#',
             label: page,
             ariaLabel: `page-${page}`,
             extraClasses: '',
-            callback: null
+            callback: callback
         }, _options);
 
-        options.href.replace(/page=\d+/, `page=${page}`);
         options.extraClasses += (page === this.page_number ? ' active' : '');
         return Pagination.render_page_item(page, options);
 
     }
 
-    render(render_page_callback) {
+    render(callback) {
 
         const number_of_pages = (this.count / this.page_size | 0);
         logger.log('debug', 'number_of_pages = %d', number_of_pages);
-
-        const linkUrl = this.previous != null ? this.previous : this.next;
-        logger.log('debug', 'link = %s', linkUrl);
 
         // calculate pages
         const first_page = Math.max(this.page_number - this.number_of_surrounding_pages, 1);
@@ -63,43 +58,58 @@ export class Pagination {
 
         const paginationElement = $(`<ul class="pagination"></ul>`);
 
-        let extraClasses = this.previous === null ? "disabled" : "";
-        paginationElement.append(
-            this.render_link(-1, {label: '&laquo;', ariaLabel: 'Previous', extraClasses: extraClasses})
-        );
+        // add previous
+        if (this.previous === null)
+            paginationElement.append(
+                Pagination.render_page_item(-1, {label: '&laquo;', ariaLabel: 'Previous', extraClasses: 'disabled'})
+            );
+        else
+            paginationElement.append(
+                this.render_link(this.page_number - 1, callback, {label: '&laquo;', ariaLabel: 'Previous'})
+            );
 
+        // add first page and ellipses if needed
         if (first_page !== 1) {
 
             paginationElement.append(
-                this.render_link(1, {href: linkUrl, callback: render_page_callback})
+                this.render_link(1, callback)
             );
 
-            paginationElement.append(
-                Pagination.render_page_item(-1, {label: '&hellip;', extraClasses: 'disabled'})
-            );
+            if (first_page !== 2)
+                paginationElement.append(
+                    Pagination.render_page_item(-1, {label: '&hellip;', extraClasses: 'disabled'})
+                );
         }
 
+        // add pages
         for (let page = first_page; page <= last_page; page++)
             paginationElement.append(
-                this.render_link(page, {href: linkUrl, callback: render_page_callback})
+                this.render_link(page, callback)
             );
 
+        // add last page and ellipses if needed
         if (last_page !== number_of_pages) {
 
-            paginationElement.append(
-                Pagination.render_page_item(-1, {label: '&hellip;', extraClasses: 'disabled'})
-            );
+            if (last_page !== number_of_pages - 1)
+                paginationElement.append(
+                    Pagination.render_page_item(-1, {label: '&hellip;', extraClasses: 'disabled'})
+                );
 
             paginationElement.append(
-                this.render_link(last_page, {href: linkUrl, callback: render_page_callback})
+                this.render_link(last_page, callback)
             );
 
         }
 
-        extraClasses = this.next === null ? "disabled" : "";
-        paginationElement.append(
-            this.render_link(-1, {label: '&raquo;', ariaLabel: 'Next', extraClasses: extraClasses})
-        );
+        // add next
+        if (this.next === null)
+            paginationElement.append(
+                Pagination.render_page_item(-1, {label: '&raquo;', ariaLabel: 'Next', extraClasses: 'disabled'})
+            );
+        else
+            paginationElement.append(
+                this.render_link(this.page_number + 1, callback, {label: '&raquo;', ariaLabel: 'Next'})
+            );
 
         return paginationElement;
 
