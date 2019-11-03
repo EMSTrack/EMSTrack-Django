@@ -72,7 +72,7 @@ export function validateDateRange(beginDate, endDate) {
     try {
         // beginDate
         if (beginDate === null || typeof beginDate === 'undefined') {
-            beginDate = moment(beginDate);
+            beginDate = moment(beginDate, 'YYYY-MM-DD');
         } else {
             beginDate = moment('00:00');
         }
@@ -88,7 +88,7 @@ export function validateDateRange(beginDate, endDate) {
             endDate = moment(minDate);
         } else {
             logger.log('debug', 'got enddate');
-            endDate = moment(endDate);
+            endDate = moment(endDate, 'YYYY-MM-DD');
         }
 
         logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
