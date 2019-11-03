@@ -144,67 +144,15 @@
         <div class="col">
 
             <h3>
-                {% trans "Past Locations" %}:
+                {% trans "Activity" %}:
             </h3>
 
-            <div id="pagination"></div>
+            <div id="pagination" class="text-right"></div>
+
             <div id="map" class="my-2" style="height: 600px"></div>
 
         </div>
     </div>
-
-    {% if updates.has_other_pages %}
-    <div class="row">
-        <div class="col">
-            {% include "pagination/numbers.html" %}
-        </div>
-        <div class="col float-right">
-            {% include "pagination/sizes.html" %}
-        </div>
-    </div>
-    {% endif %}
-
-    {% if 0 == 1 %}
-    <div class="row">
-        <div class="col">
-            <table class="table table-striped table-sm">
-                <thead>
-                <tr>
-                    <th>{% trans "Status" %}</th>
-                    <th>{% trans "Location" %}</th>
-                    <th>{% trans "Comment" %}</th>
-                    <th>{% trans "Timestamp" %}</th>
-                    <th>{% trans "Updated on" %}</th>
-                    <th>{% trans "by" %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for update in updates %}
-                <tr>
-                    <td>{{ update.status|get_ambulance_status }}</td>
-                    <td>{{ update.location }}</td>
-                    <td>{{ update.comment }}</td>
-                    <td>{{ update.timestamp }}</td>
-                    <td>{{ update.updated_on }}</td>
-                    <td>{{ update.updated_by }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-    {% endif %}
-
-    {% if updates.has_other_pages %}
-    <div class="row">
-        <div class="col">
-            {% include "pagination/numbers.html" %}
-        </div>
-        <div class="col float-right">
-            {% include "pagination/sizes.html" %}
-        </div>
-    </div>
-    {% endif %}
 
 </div>
 {% endblock %}

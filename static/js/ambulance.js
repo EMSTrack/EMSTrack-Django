@@ -60,11 +60,11 @@ function render_page_callback(ambulanceId, page, page_size) {
     element.click( function () {
 
         // clear map first
-        map.clearLayers();
+        //map.clearLayers();
 
         // then retrieve new updates
         retrieveAmbulanceData(ambulanceId, page, page_size);
-        
+
         return false;
     });
     return element;
