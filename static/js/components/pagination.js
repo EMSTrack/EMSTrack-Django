@@ -9,8 +9,8 @@ export class Pages {
         this.url = window.location.href.split('?')[0];;
 
         this.searchParams = new URLSearchParams(location.search);
-        this.page = this.searchParams.has('page') ? this.searchParams.get('page') : 1;
-        this.page_size = this.searchParams.has('page_size') ? this.searchParams.get('page_size') : defaultPageSize;
+        this.page = this.searchParams.has('page') ? Number.parseInt(this.searchParams.get('page')) : 1;
+        this.page_size = this.searchParams.has('page_size') ? Number.parseInt(this.searchParams.get('page_size')) : defaultPageSize;
 
         console.log(this);
     }
