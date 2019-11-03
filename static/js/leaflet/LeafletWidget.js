@@ -556,15 +556,14 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     }
 
-    addLine(points, id, color, fun, layer) {
+    addPolyLine(polyline, id, layer, fun) {
 
-        fun = fun || null;
+        id = id || -1;
         layer = layer || 'default';
+        fun = fun || null;
 
-        // Create polyline
-        const layerName = layer + 'LeafletPolylineWidgetPane';
-        const polyline = L.polyline(points, {color: color, pane: layerName})
-            .addTo(this.map);
+        // add to map
+        polyline.addTo(this.map);
 
         // Add click callback
         if (fun) {
@@ -581,6 +580,40 @@ export class LeafletPolylineWidget extends LeafletWidget {
         }
 
         return polyline;
+
+    }
+
+    addLine(points, id, color, layer, fun) {
+
+        id = id || -1;
+        layer = layer || 'default';
+        fun = fun || null;
+
+        // Create polyline
+        const layerName = layer + 'LeafletPolylineWidgetPane';
+        //const polyline = L.polyline(points, {color: color, pane: layerName})
+        //  .addTo(this.map);
+        const polyline = L.polyline(points, {color: color, pane: layerName});
+
+        return this.addPolyLine(polyline);
+
+        /*
+        // Add click callback
+        if (fun) {
+            polyline.on('click', fun);
+        }
+
+        // Add marker
+        L.stamp(polyline);
+        this.layers[layer]['lines'].addLayer(polyline);
+
+        // Track ids
+        if (id >= 0) {
+            this.polylineIdMap[polyline._leaflet_id] = id;
+        }
+
+        return polyline;
+        */
     }
 
     // add point

@@ -294,7 +294,7 @@ export function createMarker(call_or_update, icon) {
 
 }
 
-export function createSegmentLine(map, updates) {
+export function createSegmentLine(map, updates, color = "red") {
 
 	// Store data in an array
     const latlngs = [];
@@ -308,7 +308,7 @@ export function createSegmentLine(map, updates) {
 
 	// Add line to map
 	logger.log('debug', 'Adding line segment');
-	return L.polyline(latlngs, {color: "red"});
+	return L.polyline(latlngs, {color: color});
 
 }
 
@@ -413,8 +413,9 @@ export function addAmbulanceRoute(map, data, ambulance_status, byStatus) {
         }
 
         // add segment to map
-        createSegmentLine(map, segment)
-            .addTo(map.map);
+        //createSegmentLine(map, segment)
+        //  .addTo(map.map);
+        map.addPolyline(createSegmentLine(map, segment));
 
         // last segment?
         if (i === n - 1 && segment.length > 0) {
