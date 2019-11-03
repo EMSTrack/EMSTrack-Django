@@ -656,8 +656,7 @@ export class LeafletPolylineWidget extends LeafletWidget {
 
     clearLayers() {
         this.layers.map((layer) => {
-            this.map.removeLayer(layer);
-            delete this.layers['layer'];
+            this.map.clearLayers(layer);
         });
     }
 
