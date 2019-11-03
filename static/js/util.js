@@ -74,7 +74,7 @@ export function validateDateRange(beginDate, endDate) {
         if (beginDate === null || typeof beginDate === 'undefined') {
             beginDate = moment(beginDate, 'YYYY-MM-DD');
         } else {
-            beginDate = moment('00:00');
+            beginDate = moment('00:00', 'HH:MM');
         }
 
         // minDate
