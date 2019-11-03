@@ -148,7 +148,13 @@
             </h3>
 
             <div class="clearfix">
-                <div class="float-left" id="page_sizes"></div>
+                <div class="float-left">
+                    <div id="page_sizes"></div><span>{% trans "records" %}</span>
+                </div>
+                <div class="float-right">
+                    <label for="overlap">{% trans "overlap" %}</label>
+                    <input type="checkbox" id="overlap">
+                </div>
                 <div class="float-right" id="pagination"></div>
             </div>
 
