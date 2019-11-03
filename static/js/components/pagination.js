@@ -1,5 +1,46 @@
 import { logger } from '../logger';
 
+export class Pages {
+
+    constructor(location, sizes = [100, 500, 1000], defaultPageSize=500) {
+        this.sizes = sizes;
+
+        // get page and page_size parameters
+        this.url = window.location.href.split('?')[0];;
+
+        this.searchParams = new URLSearchParams(location.search);
+        this.page = this.searchParams.has('page') ? this.searchParams.get('page') : 1;
+        this.page_size = this.searchParams.has('page_size') ? this.searchParams.get('page_size') : defaultPageSize;
+
+        console.log(this);
+    }
+
+    render() {
+
+        const element = $(`<ul class="list-unstyled"></ul>`);
+
+        for (let i = 0; i < this.sizes.length; i++) {
+
+            const listItem = $('<li class="float-right align-middle ml-1"></li>');
+
+            const currentSize = this.sizes[i];
+            if (this.page_size === currentSize) {
+                listItem.html(`<span>${currentSize}</span>`);
+            } else {
+                this.searchParams.set('page_size', currentSize);
+                const url = this.url + this.searchParams;
+                console.log(url);
+                listItem.html(`<a href="${url}">${currentSize}</a>`);
+            }
+
+            element.append(listItem);
+        }
+
+        return element;
+    }
+
+}
+
 export class Pagination {
 
     constructor(previous, next, count, page_size, page_number) {

@@ -4,7 +4,7 @@ import { logger } from './logger';
 
 import { Settings } from './settings';
 
-import { Pagination } from './components/pagination';
+import { Pagination, Pages } from './components/pagination';
 
 import {addAmbulanceRoute} from "./map-tools";
 
@@ -29,6 +29,8 @@ function init (client) {
     const ambulanceId = url[url.length - 1];
 
     logger.log('debug', 'ambulance_id = %s', ambulanceId);
+
+    const pages = new Pages(window.location);
 
  	// get page and page_size parameters
     const searchParams = new URLSearchParams(window.location.search);
