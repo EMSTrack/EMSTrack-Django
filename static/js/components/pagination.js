@@ -15,9 +15,9 @@ export class Pages {
         console.log(this);
     }
 
-    render() {
+    render(extraClasses='') {
 
-        const element = $(`<div class="row"></div>`);
+        const element = $(`<div class="row ${extraClasses}"></div>`);
 
         for (let i = 0; i < this.sizes.length; i++) {
 

@@ -35,7 +35,7 @@ function init (client) {
 
     // set page sizes
     $('#page_sizes')
-        .html(pages.render());
+        .html(pages.render("justify-content-end"));
 
  	// Retrieve ambulances via AJAX
     retrieveAmbulanceData(ambulanceId, pages.page, pages.page_size);
