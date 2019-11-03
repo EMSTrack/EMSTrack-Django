@@ -30,14 +30,8 @@ function init (client) {
 
     logger.log('debug', 'ambulance_id = %s', ambulanceId);
 
-    const pages = new Pages(window.location);
-
  	// get page and page_size parameters
-    const searchParams = new URLSearchParams(window.location.search);
-    const page = searchParams.has('page') ? searchParams.get('page') : 1;
-	const page_size = searchParams.has('page_size') ? searchParams.get('page_size') : 500;
-
-    logger.log('debug', 'page = %s, page_size = %s', page, page_size);
+    const pages = new Pages(window.location);
 
     // set page sizes
     $('#page_sizes')
