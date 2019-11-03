@@ -21,7 +21,7 @@ export class Pages {
 
         for (let i = 0; i < this.sizes.length; i++) {
 
-            const listItem = $('<div class="col"></div>');
+            const listItem = $('<div class="col col-1"></div>');
 
             const currentSize = this.sizes[i];
             if (this.page_size === currentSize) {
