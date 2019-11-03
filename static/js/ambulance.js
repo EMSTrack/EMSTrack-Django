@@ -12,7 +12,7 @@ const settings = new Settings();
 
 let map;
 let apiClient;
-let overlap = False;
+let overlap = false;
 
 // add initialization hook
 add_init_function(init);
