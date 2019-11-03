@@ -16,7 +16,7 @@ export class Pagination {
         const linkElement = $(`<li class="page-item ${extraClasses}"></li>`);
 
         if (callback)
-            linkElement.append(callback(page));
+            linkElement.append(callback(value));
         else
             linkElement.append(`<a class="page-link" href="${href}" aria-label="${ariaLabel}">${value}</a>`);
 
