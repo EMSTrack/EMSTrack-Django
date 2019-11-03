@@ -76,7 +76,7 @@ export function validateDateRange(beginDate, endDate) {
     // minDate
     let minDate = new Date();
     minDate.setTime(beginDate.getTime() + 24 * 60 * 60 * 1000);
-    
+
     logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     // endDate
@@ -87,7 +87,7 @@ export function validateDateRange(beginDate, endDate) {
     }
     endDate.setHours(0, 0, 0, 0);
 
-    // logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
+    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     // make sure endDate > beginDate
     if (endDate <= beginDate) {
