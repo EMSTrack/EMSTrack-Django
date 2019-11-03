@@ -1,4 +1,7 @@
+import {moment} from 'moment';
+
 import {logger} from "./logger";
+
 
 export function swapElements(a, b) {
     a = $(a); b = $(b);
@@ -68,34 +71,30 @@ export function validateDateRange(beginDate, endDate) {
 
     // beginDate
     if (beginDate === null || typeof beginDate === 'undefined') {
-        beginDate = new Date();
-        beginDate.setHours(0, 0, 0, 0);
+        beginDate = moment(beginDate);
     } else {
-        beginDate = new Date(beginDate);
+        beginDate = moment('00:00');
     }
 
     // minDate
-    let minDate = new Date();
-    minDate.setTime(beginDate.getTime() + 24 * 60 * 60 * 1000);
+    let minDate = moment(beginDate).add(1, 'days');
 
     logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     // endDate
     if (endDate === null || typeof endDate === 'undefined') {
         logger.log('debug', 'no enddate');
-        endDate = new Date(minDate);
+        endDate = moment(minDate);
     } else {
         logger.log('debug', 'got enddate');
-        endDate = new Date(endDate);
-        endDate.setHours(0, 0, 0, 0);
+        endDate = moment(endDate);
     }
 
     logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     // make sure endDate > beginDate
     if (endDate <= beginDate) {
-        endDate = new Date(minDate);
-        endDate.setHours(0, 0, 0, 0);
+        endDate = moment(minDate);
     }
 
     logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
