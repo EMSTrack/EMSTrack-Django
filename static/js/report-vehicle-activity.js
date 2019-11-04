@@ -560,8 +560,8 @@ function init (client) {
     const [beginDate, endDate] = validateDateRange(urlParams.get('beginDate'));
     logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
-    const beginTime = beginDate.toTimeString().substr(0, 8);
-    const endTime = endDate.toTimeString().substr(0, 8);
+    const beginTime = beginDate.format('HH:mm:ss');
+    const endTime = endDate.format('HH:mm:ss');
     logger.log('debug', 'beginTime = %s, endTime = %s', beginTime, endTime);
 
     // set datepickers
