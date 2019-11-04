@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_swagger',
     'rest_framework.authtoken',
+    'import_export',
     'django_nose',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -252,6 +253,9 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack/report-vehicle-activity-stats.json'),
     },
 }
+
+# Import-export settings
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # Logging
 LOGGING = {

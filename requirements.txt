@@ -8,6 +8,7 @@ django-filter
 django-rest-swagger
 django-extra-fields
 django-extra-views
+django-import-export
 django-nose
 paho-mqtt
 django-formset-js

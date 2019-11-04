@@ -72,7 +72,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
             // logger.log('debug', '_speed = %s', _speed);
 
             if (_speed > maximumMovingSpeedThreshold) {
-                logger.log('debug', 'Outlier speed discarded; speed = %s', _speed);
+                logger.log('info', 'Outlier speed discarded; speed = %s', _speed);
                 continue;
             }
 
