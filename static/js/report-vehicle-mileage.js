@@ -360,7 +360,7 @@ function init (client) {
 
     // set beginDate
     const [beginDate, endDate, minDate] = validateDateRange(urlParams.get('beginDate'), urlParams.get('endDate'));
-    logger.log('debug', 'beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
+    logger.log('debug', '> beginDate = %s, endDate = %s, minDate = %s', beginDate, endDate, minDate);
 
     // set datepickers
     $('#beginDate')
