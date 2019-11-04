@@ -531,6 +531,8 @@ function render(mode, beginDate, endDate, offsetMillis = 0) {
 
 function getTimes(slider, beginDate, offsetMillis = 0) {
 
+    logger.log('debug', 'beginDate = %s, offsetMillis = %s', beginDate, offsetMillis);
+
     const [begin, end] = slider.noUiSlider.get();
     logger.log('info', 'begin = %s, end = %s', begin, end);
 
