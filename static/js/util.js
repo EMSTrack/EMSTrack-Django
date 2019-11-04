@@ -72,10 +72,12 @@ export function validateDateRange(beginDate, endDate) {
     try {
         // beginDate
         if (beginDate === null || typeof beginDate === 'undefined') {
-            beginDate = moment(beginDate, 'YYYY-MM-DD');
+            beginDate = moment('00:00', 'HH:mm');
         } else {
-            beginDate = moment('00:00', 'HH:MM');
+            beginDate = moment(beginDate, 'YYYY-MM-DD');
         }
+
+        console.log(beginDate);
 
         // minDate
         let minDate = moment(beginDate).add(1, 'days');
