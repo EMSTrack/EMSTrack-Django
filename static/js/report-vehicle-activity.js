@@ -530,7 +530,7 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
     logger.log('info', 'begin = %s, end = %s', begin, end);
 
     // offset beginDate
-    const offsetBeginDate = new Date(beginDate);
+    const offsetBeginDate = moment(beginDate);
     const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
     offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
 
