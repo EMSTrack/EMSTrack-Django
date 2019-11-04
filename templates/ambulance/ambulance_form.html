@@ -14,10 +14,10 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'ambulance:list' %}">{% trans "Ambulances" %}</a></li>
             {% if ambulance %}
-              <li class="breadcrumb-item"><a href="{% url 'ambulance:detail' pk=ambulance.id %}">{{ ambulance.identifier }}</a></li>
-              <li class="breadcrumb-item active" aria-current="page">{% trans "Update" %}</li>
+                <li class="breadcrumb-item"><a href="{% url 'ambulance:detail' pk=ambulance.id %}">{{ ambulance.identifier }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Update" %}</li>
             {% else %}
-              <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
             {% endif %}
         </ol>
     </nav>

@@ -6,6 +6,14 @@
 {% block content %}
 
 <div class="container">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'ambulance:call_list' %}">{% trans "Calls" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ call.id}}</li>
+        </ol>
+    </nav>
+
     <div class="row">
         <div class="col">
 

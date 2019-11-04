@@ -9,6 +9,24 @@
 {% block content %}
 
 <div class="container">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'ambulance:location_list' %}">{% trans "Locations" %}</a></li>
+            {% if location %}
+                {% if location.name %}
+                    <li class="breadcrumb-item"><a href="{% url 'ambulance:location_detail' pk=location.id %}">{{ location.name }}</a></li>
+                {% else %}
+                    <li class="breadcrumb-item"><a href="{% url 'ambulance:location_detail' pk=location.id %}">{{ location.id }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Update" %}</li>
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+
     <div class="row">
         <div class="col">
 
