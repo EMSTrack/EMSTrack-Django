@@ -31,11 +31,11 @@ function trimDataToRange(data, beginDate, endDate) {
     const n = durations.length;
     const offsets = new Array(n);
     let beforeRange = true;
-    const totalTime = endDate.getTime() - beginDate.getTime();
+    const totalTime = endDate.millisecond() - beginDate.millisecond();
     for (let i = 0; i < n; i++) {
 
         const segment = segments[i];
-        const currentOffset = (new Date(segment[0].timestamp)).getTime() - beginDate.getTime();
+        const currentOffset = (moment(segment[0].timestamp).millisecond() - beginDate.millisecond());
         offsets[i] = currentOffset;
 
         if (beforeRange && currentOffset >= 0) {
@@ -377,7 +377,7 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';
-    const totalTime = endDate.getTime() - beginDate.getTime();
+    const totalTime = endDate.millisecond() - beginDate.millisecond();
 
     // const [hours, minutes, seconds, milliseconds] = millisToSplitTime(offsetMillis);
     const nextHourMillis = splitTimeToMillis(Math.ceil(offsetMillis / 1000 / 60 / 60), 0, 0, 0);
@@ -534,11 +534,11 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
     // offset beginDate
     const offsetBeginDate = moment(beginDate);
     const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
-    offsetBeginDate.add(offsetBeginDate.getTime() + beginMillis, 'milliseconds');
+    offsetBeginDate.add(offsetBeginDate.millisecond() + beginMillis, 'milliseconds');
 
     const offsetEndDate = new Date(beginDate);
     const endMillis = Number.parseFloat(end) * 60 * 60 * 1000 - offsetMillis;
-    offsetEndDate.add(offsetEndDate.getTime() + endMillis, 'milliseconds');
+    offsetEndDate.add(offsetEndDate.millisecond() + endMillis, 'milliseconds');
 
     logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
