@@ -316,7 +316,7 @@ function reportDetail(id, beginDate) {
 
 function createElement(elementId, id, beginDate = new Date(), label = "", style = "", extraColClasses = "") {
 
-    logger.log('debug', 'creating element with id = %d, label = %s', elementId, label);
+    logger.log('debug', "creating element with id = %s, label = '%s'", elementId, label);
 
     $('#vehiclesTable').append(
 `<div class="row">
