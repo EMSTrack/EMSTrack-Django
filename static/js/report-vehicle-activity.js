@@ -314,8 +314,7 @@ function reportDetail(id, beginDate) {
 
 }
 
-function createElement(elementId, id, beginDate = new Date(), label = "", style = "", extraColClasses = "") {
-
+function createElement(elementId, id, beginDate = moment(), label = "", style = "", extraColClasses = "") {
     logger.log('debug', "creating element with id = %s, label = '%s'", elementId, label);
 
     $('#vehiclesTable').append(
@@ -539,11 +538,11 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
     // offset beginDate
     const offsetBeginDate = moment(beginDate);
     const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
-    offsetBeginDate.add(offsetBeginDate.valueOf() + beginMillis, 'milliseconds');
+    offsetBeginDate.add(beginMillis, 'milliseconds');
 
     const offsetEndDate = moment(beginDate);
     const endMillis = Number.parseFloat(end) * 60 * 60 * 1000 - offsetMillis;
-    offsetEndDate.add(offsetEndDate.valueOf() + endMillis, 'milliseconds');
+    offsetEndDate.add(endMillis, 'milliseconds');
 
     logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
