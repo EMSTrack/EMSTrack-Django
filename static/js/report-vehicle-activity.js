@@ -502,6 +502,9 @@ function segmentHistoryByMode(mode) {
 
 function render(mode, beginDate, endDate, offsetMillis = 0) {
 
+    logger.log('debug', 'mode = %s, beginDate = %s, endDate = %s, offesetMillis = %d',
+        mode, beginDate, endDate, offsetMillis);
+
     // render ruler
     renderRuler(beginDate, endDate, offsetMillis);
 
