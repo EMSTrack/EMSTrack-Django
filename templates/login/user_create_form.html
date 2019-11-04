@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'login:list-user' %}">{% trans "Users" %}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <div class="col">
+
+            <h1>{% trans "User" %}</h1>
+
+            <form method="POST" class="post-form">
+                {% csrf_token %}
+
+                <h3>{% trans "Details" %}:</h3>
+
+                <table>
+                    {{ form }}
+                    {% for form in inlines|slice:":1" %}
+                    {{ form }}
+                    {% endfor %}
+                </table>
+
+                <h3>{% trans "Permissions" %}:</h3>
+
+                {% for form in inlines|slice:"1:" %}
+                <table>
+                    {{ form }}
+                </table>
+                {% endfor %}
+
+                <p>
+                    <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

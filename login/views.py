@@ -232,7 +232,7 @@ class UserHospitalPermissionAdminInline(InlineFormSet):
 class UserAdminCreateView(SuccessMessageWithInlinesMixin,
                           CreateWithInlinesView):
     model = User
-    template_name = 'login/user_form.html'
+    template_name = 'login/user_create_form.html'
     form_class = UserAdminCreateForm
     inlines = [UserProfileAdminInline,
                UserAmbulancePermissionAdminInline,
