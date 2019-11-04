@@ -6,6 +6,19 @@
 
 
 <div class="container">
+    
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'login:list-group' %}">{% trans "Groups" %}</a></li>
+            {% if group %}
+                <li class="breadcrumb-item"><a href="{% url 'login:detail-group' pk=group.id %}">{{ group.name }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Update" %}</li>
+            {% else %}
+                <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
     <div class="row">
         <div class="col">
 
