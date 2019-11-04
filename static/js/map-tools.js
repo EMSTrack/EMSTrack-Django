@@ -28,6 +28,7 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
 
 	movingSpeedThreshold = movingSpeedThreshold || (5/3.6);    // m/s
 	movingDistanceThreshold = movingDistanceThreshold || 5;    // m
+	const maximumMovingSpeedThreshold = (180/3.6);             // m/s
     const filterCoefficient = 0.25;
 
     const eps = 1e-4;
@@ -69,6 +70,11 @@ export function calculateSegmentDistanceAndSpeed(segment, movingSpeedThreshold, 
             let _speed = (_distance * _duration) / (_duration * _duration + eps);      // m/s
 
             // logger.log('debug', '_speed = %s', _speed);
+
+            if (_speed > maximumMovingSpeedThreshold) {
+                logger.log('debug', 'Outlier speed discarded; speed = %s', _speed);
+                continue;
+            }
 
             // filter speed
             if (filterCoefficient !== 0.) {
