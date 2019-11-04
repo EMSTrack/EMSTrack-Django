@@ -1,7 +1,9 @@
-import {logger} from './logger';
+import moment from 'moment';
 
 import noUiSlider from 'nouislider';
 import 'nouislider/distribute/nouislider.css';
+
+import {logger} from './logger';
 
 import {
     getOrCreateElement,
@@ -532,11 +534,11 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
     // offset beginDate
     const offsetBeginDate = moment(beginDate);
     const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
-    offsetBeginDate.setTime(offsetBeginDate.getTime() + beginMillis);
+    offsetBeginDate.add(offsetBeginDate.getTime() + beginMillis, 'milliseconds');
 
     const offsetEndDate = new Date(beginDate);
     const endMillis = Number.parseFloat(end) * 60 * 60 * 1000 - offsetMillis;
-    offsetEndDate.setTime(offsetEndDate.getTime() + endMillis);
+    offsetEndDate.add(offsetEndDate.getTime() + endMillis, 'milliseconds');
 
     logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
