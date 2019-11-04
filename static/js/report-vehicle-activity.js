@@ -31,11 +31,11 @@ function trimDataToRange(data, beginDate, endDate) {
     const n = durations.length;
     const offsets = new Array(n);
     let beforeRange = true;
-    const totalTime = endDate.millisecond() - beginDate.millisecond();
+    const totalTime = endDate.valueOf() - beginDate.valueOf();
     for (let i = 0; i < n; i++) {
 
         const segment = segments[i];
-        const currentOffset = (moment(segment[0].timestamp).millisecond() - beginDate.millisecond());
+        const currentOffset = (moment(segment[0].timestamp).valueOf() - beginDate.valueOf());
         offsets[i] = currentOffset;
 
         if (beforeRange && currentOffset >= 0) {
@@ -377,14 +377,14 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
     // add time scale to table
     let progress = '<div class="progress" style="height: 20px;">\n';
-    const totalTime = endDate.millisecond() - beginDate.millisecond();
+    const totalTime = endDate.valueOf() - beginDate.valueOf();
 
     // const [hours, minutes, seconds, milliseconds] = millisToSplitTime(offsetMillis);
     const nextHourMillis = splitTimeToMillis(Math.ceil(offsetMillis / 1000 / 60 / 60), 0, 0, 0);
     const [offsetHour, minutes, seconds, milliseconds] = millisToSplitTime(nextHourMillis);
 
-    logger.log('debug', 'offsetHour = %s:%s:%s.%s, nextHourMillis = %s',
-        offsetHour, minutes, seconds, milliseconds, nextHourMillis);
+    logger.log('debug', 'totalTime = %s, offsetHour = %s:%s:%s.%s, nextHourMillis = %s',
+        totalTime, offsetHour, minutes, seconds, milliseconds, nextHourMillis);
 
     const labels = ['secondary', 'light'];
 
@@ -537,11 +537,11 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
     // offset beginDate
     const offsetBeginDate = moment(beginDate);
     const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
-    offsetBeginDate.add(offsetBeginDate.millisecond() + beginMillis, 'milliseconds');
+    offsetBeginDate.add(offsetBeginDate.valueOf() + beginMillis, 'milliseconds');
 
     const offsetEndDate = new Date(beginDate);
     const endMillis = Number.parseFloat(end) * 60 * 60 * 1000 - offsetMillis;
-    offsetEndDate.add(offsetEndDate.millisecond() + endMillis, 'milliseconds');
+    offsetEndDate.add(offsetEndDate.valueOf() + endMillis, 'milliseconds');
 
     logger.log('debug', 'offsetBeginDate = %s, offsetEndDate = %s', offsetBeginDate, offsetEndDate);
 
