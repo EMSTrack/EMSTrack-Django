@@ -541,7 +541,7 @@ function getTimes(slider, beginDate, offsetMillis = 0) {
     const beginMillis = Number.parseFloat(begin) * 60 * 60 * 1000 - offsetMillis;
     offsetBeginDate.add(offsetBeginDate.valueOf() + beginMillis, 'milliseconds');
 
-    const offsetEndDate = new Date(beginDate);
+    const offsetEndDate = moment(beginDate);
     const endMillis = Number.parseFloat(end) * 60 * 60 * 1000 - offsetMillis;
     offsetEndDate.add(offsetEndDate.valueOf() + endMillis, 'milliseconds');
 
