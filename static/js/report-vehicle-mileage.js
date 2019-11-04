@@ -84,6 +84,10 @@ function renderDetail(vehicle, xAxesMode) {
 
         xAxes = [{
             type: 'linear',
+            scaleLabel: {
+                display: true,
+                labelString: 'distance (km)'
+            },
             ticks: {
                 max: totalDistance / 1000,
                 min: 0
