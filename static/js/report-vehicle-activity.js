@@ -343,6 +343,7 @@ function renderVehicle(vehicle, beginDate, endDate, mode) {
 
     // nothing to do?
     if (Object.entries(data).length === 0) {
+        logger.log('info', "vehicle '%s' has no activity", vehicle['id']);
         return false;
     }
 
