@@ -201,7 +201,7 @@ class ExportModelMixin(BaseImportExportMixin):
         resource = self.get_export_resource_class()()
         dataset = resource.export()
         response = HttpResponse(dataset.csv, content_type="csv")
-        response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+        response['Content-Disposition'] = 'attachment; filename={}'.format(self.filename)
         return response
 
 
