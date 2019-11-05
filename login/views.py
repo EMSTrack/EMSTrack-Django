@@ -44,6 +44,7 @@ from .models import TemporaryPassword, \
     GroupProfile, GroupAmbulancePermission, \
     GroupHospitalPermission, Client, ClientStatus, UserProfile
 from .permissions import get_permissions
+from .resources import UserResource
 
 logger = logging.getLogger(__name__)
 
@@ -878,3 +879,11 @@ class ClientLogoutView(LoginRequiredMixin,
         client.save()
 
         return redirect(client)
+
+
+def user_export(request):
+    user_resource = UserResource()
+    dataset = user_resource.export()
+    response = HttpResponse(dataset.csv, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    return response

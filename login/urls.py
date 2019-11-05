@@ -38,6 +38,10 @@ urlpatterns = [
         staff_member_required(views.UserAdminUpdateView.as_view()),
         name='update-user'),
 
+    url(r'^user/export/$',
+        staff_member_required(views.user_export()),
+        name='export-user'),
+
     # Group Admin
 
     url(r'^group/$',
