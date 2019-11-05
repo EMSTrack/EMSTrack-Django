@@ -12,8 +12,8 @@
 
             <p>
                 <a href="{% url 'login:create-user' %}">{% trans "new" context "masculine" %}</a>
-                <a href="{% url 'login:export-user' %}">{% trans "export" %}</a>
-                <a href="{% url 'login:import-user' %}">{% trans "import" %}</a>
+                <a href="{% url 'login:export-user' %}" class="ml-2">{% trans "export" %}</a>
+                <a href="{% url 'login:import-user' %}" class="ml-2">{% trans "import" %}</a>
             </p>
             <table class="table table-striped table-sm">
                 <thead>
