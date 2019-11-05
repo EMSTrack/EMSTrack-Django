@@ -904,9 +904,10 @@ class UserImportView(ImportModelMixin,
 
 
 class UserProcessImportView(ProcessImportModelMixin,
-                            BaseFormView):
+                            FormView):
     model = User
     resource_class = UserResource
+    template_name = 'import.html'
 
     success_message = _('Import finished')
     success_url = reverse_lazy('login:list-user')
