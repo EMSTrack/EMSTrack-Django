@@ -898,7 +898,7 @@ class UserImportView(ImportModelMixin,
                      View):
     model = User
     resource_class = UserResource
-    process_import_url = 'process-import-user'
+    process_import_url = 'login:process-import-user'
 
 
 class UserProcessImportView(SuccessMessageMixin,
