@@ -895,7 +895,7 @@ def user_export(request):
     return response
 
 
-class FileFieldView(FormView):
+class UploadFiledView(FormView):
     form_class = UploadFileForm
     template_name = 'upload.html'
     success_url = reverse_lazy('login:list')

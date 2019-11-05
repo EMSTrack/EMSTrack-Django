@@ -43,7 +43,7 @@ urlpatterns = [
         name='export-user'),
 
     url(r'^user/import/$',
-        staff_member_required(views.UploadFileForm.as_view()),
+        staff_member_required(views.UploadFiledView.as_view()),
         name='import-user'),
 
     # Group Admin

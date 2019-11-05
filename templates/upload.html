@@ -3,7 +3,9 @@
 {% block content %}
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        <input type="file" name="import">
-        <button type="submit">{% trans "Upload" %}</button>
+        <table>
+            {{ form }}
+        </table>
+        <button type="submit" class="btn btn-primary">{% trans "Upload" %}</button>
     </form>
 {% endblock %}
