@@ -17,7 +17,7 @@
                     {% trans "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
                 </p>
                 <div class="submit-row">
-                    <input type="submit" class="btn" name="confirm" value="{% trans "Confirm import" %}">
+                    <input type="submit" class="btn" name="confirm" value="{% trans 'Confirm import' %}">
                 </div>
             </form>
 
@@ -37,7 +37,7 @@
 
                 <fieldset class="module aligned">
                     {% for field in form %}
-                    <div class="form-row">
+                    <div class="form-group">
                         {{ field.errors }}
 
                         {{ field.label_tag }}
@@ -45,14 +45,14 @@
                         {{ field }}
 
                         {% if field.field.help_text %}
-                        <p class="help">{{ field.field.help_text|safe }}</p>
+                            <p class="help">{{ field.field.help_text|safe }}</p>
                         {% endif %}
                     </div>
                     {% endfor %}
                 </fieldset>
 
                 <div class="submit-row">
-                    <input type="submit" class="btn" value="{% trans 'Submit' %}">
+                    <input type="submit" class="btn btn-primary" value="{% trans 'Submit' %}">
                 </div>
             </form>
             {% endif %}
