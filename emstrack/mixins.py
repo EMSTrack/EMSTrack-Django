@@ -356,4 +356,4 @@ class ProcessImportModelMixin(BaseImportExportMixin):
             # success message
             messages.success(self.request, self.success_message)
 
-            return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(self.get_success_url())
