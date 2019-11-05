@@ -66,8 +66,6 @@ function trimDataToRange(data, beginDate, endDate) {
 
 function renderProgress(data, beginDate, endDate, mode) {
 
-    console.log(data);
-
     let values;
     if (mode === 'status')
         values = data['status'];
@@ -130,7 +128,8 @@ data-toggle="tooltip" data-placement="top" title="${label}"></div>`;
     }
 
     progress += '</div>';
-    // logger.log('debug', 'progress = %s', progress);
+
+    logger.log('debug', 'done progress for vehicle');
 
     return progress;
 
@@ -511,6 +510,7 @@ function render(mode, beginDate, endDate, offsetMillis = 0) {
     // add vehicles to page
     let someVehicle = false;
     for (const vehicle of Object.values(vehicles)) {
+        logger.log('debug', 'will render vehicle %s', vehicle['id']);
         someVehicle = someVehicle || renderVehicle(vehicle, beginDate, endDate, mode);
     }
 
