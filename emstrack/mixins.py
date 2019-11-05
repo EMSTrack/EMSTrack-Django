@@ -13,6 +13,7 @@ from rest_framework.exceptions import PermissionDenied
 
 from import_export.forms import ImportForm, ConfirmImportForm
 from import_export.resources import modelresource_factory
+
 from import_export.formats.base_formats import DEFAULT_FORMATS
 
 from environs import Env
@@ -351,5 +352,8 @@ class ProcessImportModelMixin(BaseImportExportMixin):
 
             # close import file
             import_file.close()
+
+            # success message
+            messages.success(self.request, self.success_message)
 
             return HttpResponseRedirect(self.get_success_url())
