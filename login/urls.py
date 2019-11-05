@@ -39,12 +39,16 @@ urlpatterns = [
         name='update-user'),
 
     url(r'^user/export/$',
-        staff_member_required(views.user_export),
+        staff_member_required(views.UserExportView.as_view()),
         name='export-user'),
 
     url(r'^user/import/$',
-        staff_member_required(views.UploadFiledView.as_view()),
+        staff_member_required(views.UserImportView.as_view()),
         name='import-user'),
+
+    url(r'^user/process_import/$',
+        staff_member_required(views.UserProcessImportView.as_view()),
+        name='process-import-user'),
 
     # Group Admin
 

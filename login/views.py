@@ -34,7 +34,8 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType,
     AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallPriority, CallPriorityOrder, CallStatusOrder, LocationTypeOrder, \
     WaypointStatus
 from emstrack import CURRENT_VERSION, MINIMUM_VERSION
-from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByMixin
+from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
+    ProcessImportModelMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
 from equipment.models import EquipmentType, EquipmentTypeDefaults
@@ -887,40 +888,22 @@ class ClientLogoutView(LoginRequiredMixin,
         return redirect(client)
 
 
-def user_export(request):
-    user_resource = UserResource()
-    dataset = user_resource.export()
-    response = HttpResponse(dataset.csv, content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="users.csv"'
-    return response
+class UserExportView(ExportModelMixin,
+                     View):
+    resource_class = UserResource
 
 
-class UploadFiledView(SuccessMessageMixin,
-                      FormView):
-    form_class = UploadFileForm
-    template_name = 'upload.html'
+class UserImportView(ImportModelMixin,
+                     View):
+    resource_class = UserResource
+    process_import_url = 'process-import-user'
+
+
+class UserProcessImportView(SuccessMessageMixin,
+                            ProcessImportModelMixin,
+                            View):
+    resource_class = UserResource
     success_url = reverse_lazy('login:list-user')
 
     def get_success_message(self, cleaned_data):
         return "Successfully imported file"
-
-    def post(self, request, *args, **kwargs):
-        form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        if form.is_valid():
-
-            file = request.FILES['file']
-            dataset = Dataset()
-            dataset.load(file.read().decode("utf-8"), format='csv')
-
-            # Test the data import
-            user_resource = UserResource()
-            result = user_resource.import_data(dataset, dry_run=True)
-
-            if not result.has_errors():
-                # Import data
-                user_resource.import_data(dataset, dry_run=False)
-
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
