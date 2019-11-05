@@ -6,7 +6,6 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
@@ -319,41 +318,32 @@ class ImportModelMixin(BaseImportExportMixin):
 
 
 class ProcessImportModelMixin(BaseImportExportMixin):
-    success_message = _('Import finished')
 
-    def post(self, *args, **kwargs ):
-        """
-        Perform the actual import action (after the user has confirmed he/she wishes to import)
-        """
-        opts = self.model._meta
+    def form_valid(self, form):
+
         resource = self.get_import_resource_class()()
 
-        confirm_form = ConfirmImportForm(self.request.POST)
-        if confirm_form.is_valid():
-            import_formats = self.get_import_formats()
-            input_format = import_formats[
-                int(confirm_form.cleaned_data['input_format'])
-            ]()
-            import_file_name = os.path.join(
-                tempfile.gettempdir(),
-                confirm_form.cleaned_data['import_file_name']
-            )
+        import_formats = self.get_import_formats()
+        input_format = import_formats[
+            int(form.cleaned_data['input_format'])
+        ]()
+        import_file_name = os.path.join(
+            tempfile.gettempdir(),
+            form.cleaned_data['import_file_name']
+        )
 
-            # open and import file
-            import_file = open(import_file_name, input_format.get_read_mode())
-            data = import_file.read()
+        # open and import file
+        import_file = open(import_file_name, input_format.get_read_mode())
+        data = import_file.read()
 
-            if not input_format.is_binary() and self.from_encoding:
-                data = force_text(data, self.from_encoding)
-            dataset = input_format.create_dataset(data)
+        if not input_format.is_binary() and self.from_encoding:
+            data = force_text(data, self.from_encoding)
+        dataset = input_format.create_dataset(data)
 
-            result = resource.import_data(dataset, dry_run=False,
-                                          raise_errors=True)
+        result = resource.import_data(dataset, dry_run=False,
+                                      raise_errors=True)
 
-            # close import file
-            import_file.close()
+        # close import file
+        import_file.close()
 
-            # success message
-            messages.success(self.request, self.success_message)
-
-        return HttpResponseRedirect(self.get_success_url())
+        return super().form_valid(form)

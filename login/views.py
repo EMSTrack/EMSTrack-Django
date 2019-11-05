@@ -24,7 +24,7 @@ from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.views.generic.detail import BaseDetailView
-from django.views.generic.edit import FormView, CreateView
+from django.views.generic.edit import FormView, CreateView, BaseFormView
 from drf_extra_fields.geo_fields import PointField
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from rest_framework.response import Response
@@ -902,9 +902,11 @@ class UserImportView(ImportModelMixin,
 
 
 class UserProcessImportView(ProcessImportModelMixin,
-                            View):
+                            BaseFormView):
     model = User
     resource_class = UserResource
+
+    success_message = _('Import finished')
     success_url = reverse_lazy('login:list-user')
 
     def get_success_message(self, cleaned_data):
