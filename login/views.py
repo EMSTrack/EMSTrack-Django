@@ -890,11 +890,13 @@ class ClientLogoutView(LoginRequiredMixin,
 
 class UserExportView(ExportModelMixin,
                      View):
+    model = User
     resource_class = UserResource
 
 
 class UserImportView(ImportModelMixin,
                      View):
+    model = User
     resource_class = UserResource
     process_import_url = 'process-import-user'
 
@@ -902,6 +904,7 @@ class UserImportView(ImportModelMixin,
 class UserProcessImportView(SuccessMessageMixin,
                             ProcessImportModelMixin,
                             View):
+    model = User
     resource_class = UserResource
     success_url = reverse_lazy('login:list-user')
 
