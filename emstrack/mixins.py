@@ -333,18 +333,21 @@ class ProcessImportModelMixin(BaseImportExportMixin):
             form.cleaned_data['import_file_name']
         )
 
-        # open and import file
-        import_file = open(import_file_name, input_format.get_read_mode())
-        data = import_file.read()
+        # open import file
+        with open(import_file_name, input_format.get_read_mode()) as import_file:
 
-        if not input_format.is_binary() and self.from_encoding:
-            data = force_text(data, self.from_encoding)
-        dataset = input_format.create_dataset(data)
+            # read file
+            data = import_file.read()
 
-        result = resource.import_data(dataset, dry_run=False,
-                                      raise_errors=True)
+            # handle encoding
+            if not input_format.is_binary() and self.from_encoding:
+                data = force_text(data, self.from_encoding)
 
-        # close import file
-        import_file.close()
+            # create dataset
+            dataset = input_format.create_dataset(data)
+
+            # import data, raise error if necessary
+            result = resource.import_data(dataset, dry_run=False,
+                                          raise_errors=True)
 
         return super().form_valid(form)
