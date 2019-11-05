@@ -273,3 +273,7 @@ class UserAdminUpdateForm(forms.ModelForm):
 
 class RestartForm(forms.Form):
     pass
+
+
+class UploadFileForm(forms.Form):
+    file = forms.FileField()

@@ -1,7 +1,13 @@
 import logging
 import random
 import string
+
 from datetime import timedelta
+
+from django.conf import settings
+from django.urls import reverse_lazy
+from django.utils.http import is_safe_url
+from tablib import Dataset
 
 from braces.views import CsrfExemptMixin
 from django.contrib import messages
@@ -13,7 +19,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http.response import HttpResponse, HttpResponseForbidden
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
@@ -38,7 +44,7 @@ from .forms import MQTTAuthenticationForm, AuthenticationForm, SignupForm, \
     GroupAdminUpdateForm, \
     GroupProfileAdminForm, GroupAmbulancePermissionAdminForm, GroupHospitalPermissionAdminForm, \
     UserAmbulancePermissionAdminForm, \
-    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm
+    UserHospitalPermissionAdminForm, RestartForm, UserProfileAdminForm, UploadFileForm
 from .models import TemporaryPassword, \
     UserAmbulancePermission, UserHospitalPermission, \
     GroupProfile, GroupAmbulancePermission, \
@@ -887,3 +893,30 @@ def user_export(request):
     response = HttpResponse(dataset.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="users.csv"'
     return response
+
+
+class FileFieldView(FormView):
+    form_class = UploadFileForm
+    template_name = 'upload.html'
+    success_url = reverse_lazy('login:list')
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+
+            file = request.FILES['file']
+            dataset = Dataset()
+            dataset.load(file.read())
+
+            # Test the data import
+            user_resource = UserResource()
+            result = user_resource.import_data(dataset, dry_run=True)
+
+            if not result.has_errors():
+                # Import data
+                user_resource.import_data(dataset, dry_run=False)
+
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
