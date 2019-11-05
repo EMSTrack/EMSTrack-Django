@@ -318,6 +318,7 @@ class ImportModelMixin(BaseImportExportMixin):
 
 
 class ProcessImportModelMixin(BaseImportExportMixin):
+    form_class = ConfirmImportForm
 
     def form_valid(self, form):
 
