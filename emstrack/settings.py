@@ -289,6 +289,11 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
             'propagate': True,
         },
+        'emstrack': {
+            'handlers': ['emstrack'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': True,
+        },
         'login': {
             'handlers': ['emstrack'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
