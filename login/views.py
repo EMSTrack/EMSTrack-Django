@@ -907,7 +907,7 @@ class UploadFiledView(FormView):
 
             file = request.FILES['file']
             dataset = Dataset()
-            dataset.load(file.read())
+            dataset.load(file.read(), format='csv')
 
             # Test the data import
             user_resource = UserResource()
