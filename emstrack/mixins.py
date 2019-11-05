@@ -165,8 +165,6 @@ class BaseImportExportMixin:
 
     #: import / export formats
     formats = DEFAULT_FORMATS
-    #: template for import view
-    import_template_name = 'import.html'
     resource_class = None
 
     def get_import_formats(self):
@@ -208,6 +206,8 @@ class ExportModelMixin(BaseImportExportMixin):
 
 # ImportModelMixin
 class ImportModelMixin(BaseImportExportMixin):
+    #: template for import view
+    import_template_name = 'import.html'
     process_import_url = 'process_import'
 
     def get(self, *args, **kwargs ):
