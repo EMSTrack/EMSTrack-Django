@@ -10,7 +10,7 @@ class UserResource(resources.ModelResource):
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email',
+        fields = ('id', 'username', 'first_name', 'last_name', 'email',
                   'is_staff', 'is_dispatcher', 'is_active')
-        export_order = ('username', 'first_name', 'last_name', 'email',
+        export_order = ('id', 'username', 'first_name', 'last_name', 'email',
                         'is_staff', 'is_dispatcher', 'is_active')
