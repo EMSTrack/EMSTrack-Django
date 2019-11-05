@@ -510,8 +510,8 @@ function render(mode, beginDate, endDate, offsetMillis = 0) {
     // add vehicles to page
     let someVehicle = false;
     for (const vehicle of Object.values(vehicles)) {
-        logger.log('debug', 'will render vehicle %s', vehicle['id']);
-        someVehicle = someVehicle || renderVehicle(vehicle, beginDate, endDate, mode);
+        logger.log('debug', 'will render vehicle %s', vehicle['identifier']);
+        someVehicle = renderVehicle(vehicle, beginDate, endDate, mode) || someVehicle;
     }
 
     if (!someVehicle) {
