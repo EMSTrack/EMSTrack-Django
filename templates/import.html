@@ -14,7 +14,10 @@
                 {% csrf_token %}
                 {{ confirm_form.as_p }}
                 <p>
-                    {% trans "Below is a preview of data to be imported. If you are satisfied with the results, click 'Confirm import'" %}
+                    {% trans "Below is a preview of data to be imported." %}
+                </p>
+                <p>
+                    {% trans "If you are satisfied with the results, click 'Confirm import'." %}
                 </p>
                 <div class="submit-row">
                     <input type="submit" class="btn btn-primary" name="confirm" value="{% trans 'Confirm import' %}">
@@ -86,7 +89,7 @@
                     <table class="table table-striped table-sm">
                         <thead>
                         <tr>
-                            <th></th>
+                            <th>{% trans "Action" %}</th>
                             {% for field in fields %}
                             <th>{{ field }}</th>
                             {% endfor %}

@@ -320,7 +320,15 @@ class ImportModelMixin(BaseImportExportMixin):
 class ProcessImportModelMixin(BaseImportExportMixin):
     form_class = ConfirmImportForm
 
+    def form_invalid(self, form):
+
+        logger.debug('IN FORM INVALID')
+
+        return super().form_invalid(self, form)
+
     def form_valid(self, form):
+
+        logger.debug('IN FORM VALID')
 
         resource = self.get_import_resource_class()()
 
