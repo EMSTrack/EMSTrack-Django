@@ -911,7 +911,7 @@ class UploadFiledView(SuccessMessageMixin,
 
             file = request.FILES['file']
             dataset = Dataset()
-            dataset.load(file.read(), format='csv')
+            dataset.load(file.read().decode("utf-8"), format='csv')
 
             # Test the data import
             user_resource = UserResource()
