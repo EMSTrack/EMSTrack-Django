@@ -5,13 +5,14 @@ import tempfile
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.response import TemplateResponse
-from django.urls import reverse
 from django.utils.encoding import force_text
-from import_export.forms import ImportForm, ConfirmImportForm
-from import_export.resources import modelresource_factory
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
 
+from import_export.forms import ImportForm, ConfirmImportForm
+from import_export.resources import modelresource_factory
 from import_export.formats.base_formats import DEFAULT_FORMATS
 
 from environs import Env
@@ -317,6 +318,7 @@ class ImportModelMixin(BaseImportExportMixin):
 
 
 class ProcessImportModelMixin(BaseImportExportMixin):
+    success_message = _('Import finished')
 
     def post(self, *args, **kwargs ):
         """
@@ -335,8 +337,11 @@ class ProcessImportModelMixin(BaseImportExportMixin):
                 tempfile.gettempdir(),
                 confirm_form.cleaned_data['import_file_name']
             )
+
+            # open and import file
             import_file = open(import_file_name, input_format.get_read_mode())
             data = import_file.read()
+
             if not input_format.is_binary() and self.from_encoding:
                 data = force_text(data, self.from_encoding)
             dataset = input_format.create_dataset(data)
@@ -344,9 +349,7 @@ class ProcessImportModelMixin(BaseImportExportMixin):
             result = resource.import_data(dataset, dry_run=False,
                                           raise_errors=True)
 
-            success_message = _('Import finished')
-            messages.success(self.request, success_message)
+            # close import file
             import_file.close()
 
-            url = reverse('%s_list' % (str(opts.app_label).lower()))
-            return HttpResponseRedirect(url)
+            return HttpResponseRedirect(self.get_success_url())
