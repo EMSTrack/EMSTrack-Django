@@ -899,7 +899,7 @@ class UploadFiledView(SuccessMessageMixin,
                       FormView):
     form_class = UploadFileForm
     template_name = 'upload.html'
-    success_url = reverse_lazy('login:list')
+    success_url = reverse_lazy('login:list-user')
 
     def get_success_message(self, cleaned_data):
         return "Successfully imported file"
