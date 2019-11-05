@@ -25,6 +25,8 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import FormView, CreateView, BaseFormView
+from django.utils.translation import ugettext_lazy as _
+
 from drf_extra_fields.geo_fields import PointField
 from extra_views import InlineFormSet, CreateWithInlinesView, UpdateWithInlinesView
 from rest_framework.response import Response
