@@ -895,10 +895,14 @@ def user_export(request):
     return response
 
 
-class UploadFiledView(FormView):
+class UploadFiledView(SuccessMessageMixin,
+                      FormView):
     form_class = UploadFileForm
     template_name = 'upload.html'
     success_url = reverse_lazy('login:list')
+
+    def get_success_message(self, cleaned_data):
+        return "Successfully imported file"
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
