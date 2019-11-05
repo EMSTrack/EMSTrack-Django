@@ -2,11 +2,24 @@
 {% load i18n %}
 
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <table>
-            {{ form }}
-        </table>
-        <button type="submit" class="btn btn-primary">{% trans "Upload" %}</button>
-    </form>
+<div class="container">
+
+    <div class="row">
+        <div class="col">
+
+            <h1>{% trans "File Upload" %}</h1>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <table>
+                    {{ form }}
+                </table>
+                <button type="submit" class="btn btn-primary">{% trans "Upload" %}</button>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}
