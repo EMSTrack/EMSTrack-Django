@@ -42,6 +42,10 @@ urlpatterns = [
         staff_member_required(views.user_export),
         name='export-user'),
 
+    url(r'^user/import/$',
+        staff_member_required(views.UploadFileForm.as_view()),
+        name='import-user'),
+
     # Group Admin
 
     url(r'^group/$',
