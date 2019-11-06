@@ -22,7 +22,7 @@ from django.http.response import HttpResponse, HttpResponseForbidden
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django.views.generic.detail import BaseDetailView
 from django.views.generic.edit import FormView, CreateView, BaseFormView
 from django.utils.translation import ugettext_lazy as _
@@ -897,9 +897,10 @@ class UserExportView(ExportModelMixin,
 
 
 class UserImportView(ImportModelMixin,
-                     View):
+                     TemplateView):
     model = User
     resource_class = UserResource
+
     process_import_url = 'login:process-import-user'
     import_breadcrumbs = {'login:list-user': _("Users")}
 
@@ -908,7 +909,6 @@ class UserProcessImportView(ProcessImportModelMixin,
                             FormView):
     model = User
     resource_class = UserResource
-    template_name = 'import.html'
 
     success_message = _('Import finished')
     success_url = reverse_lazy('login:list-user')

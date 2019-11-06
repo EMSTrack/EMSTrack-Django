@@ -211,7 +211,7 @@ class ExportModelMixin(BaseImportExportMixin):
 # ImportModelMixin
 class ImportModelMixin(BaseImportExportMixin):
     #: template for import view
-    import_template_name = 'import.html'
+    template_name = 'import.html'
     process_import_url = 'process_import'
 
     def get_import_data_kwargs(self, request, *args, **kwargs):
@@ -286,6 +286,7 @@ class ImportModelMixin(BaseImportExportMixin):
         else:
             resource = self.get_import_resource_class()()
 
+        # set up context
         context['title'] = _("Import")
         context['form'] = form
         context['opts'] = self.model._meta
@@ -294,10 +295,11 @@ class ImportModelMixin(BaseImportExportMixin):
         context['process_import_url'] = self.process_import_url
         context['import_breadcrumbs'] = self.import_breadcrumbs
 
-        return TemplateResponse(self.request, [self.import_template_name], context)
+        return super().render_to_response(context)
 
 
 class ProcessImportModelMixin(BaseImportExportMixin):
+    template_name = 'import.html'
     form_class = ConfirmImportForm
 
     def form_invalid(self, form):
