@@ -13,6 +13,7 @@
             <p>
                 <a href="{% url 'login:create-group' %}">{% trans "new" context "masculine" %}</a>
                 <a href="{% url 'login:export-group' %}" class="ml-2">{% trans "export" %}</a>
+                <a href="{% url 'login:import-group' %}" class="ml-2">{% trans "import" %}</a>
             </p>
 
            {% if group_list %}

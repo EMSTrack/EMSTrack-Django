@@ -72,6 +72,14 @@ urlpatterns = [
         staff_member_required(views.GroupExportView.as_view()),
         name='export-group'),
 
+    url(r'^group/import/$',
+        staff_member_required(views.GroupImportView.as_view()),
+        name='import-group'),
+
+    url(r'^group/process_import/$',
+        staff_member_required(views.GroupProcessImportView.as_view()),
+        name='process-import-group'),
+
     # client admin
     url(r'^client/$',
         staff_member_required(views.ClientListView.as_view()),

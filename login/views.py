@@ -890,6 +890,8 @@ class ClientLogoutView(LoginRequiredMixin,
         return redirect(client)
 
 
+# User import and export
+
 class UserExportView(ExportModelMixin,
                      View):
     model = User
@@ -917,7 +919,30 @@ class UserProcessImportView(SuccessMessageMixin,
     import_breadcrumbs = {'login:list-user': _("Users")}
 
 
+# Group import and export
+
 class GroupExportView(ExportModelMixin,
                       View):
     model = Group
     resource_class = GroupResource
+
+
+class GroupImportView(ImportModelMixin,
+                      TemplateView):
+    model = Group
+    resource_class = GroupResource
+
+    process_import_url = 'login:process-import-group'
+    import_breadcrumbs = {'login:list-group': _("Groups")}
+
+
+class GroupProcessImportView(SuccessMessageMixin,
+                             ProcessImportModelMixin,
+                             FormView):
+    model = Group
+    resource_class = GroupResource
+
+    success_message = _('Successfully imported groups')
+    success_url = reverse_lazy('login:list-group')
+
+    import_breadcrumbs = {'login:list-group': _("Groups")}

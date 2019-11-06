@@ -35,7 +35,7 @@ class GroupResource(resources.ModelResource):
                             readonly=False)
 
     user_set = fields.Field(attribute='user_set',
-                            widget=widgets.ManyToManyWidget(User, field='username', separator='|'))
+                            widget=widgets.ManyToManyWidget(User, field='username', separator=','))
 
     class Meta:
         model = Group
