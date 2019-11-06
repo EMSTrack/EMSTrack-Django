@@ -5,20 +5,20 @@ from import_export import resources, fields, widgets
 
 from emstrack.import_export import OneToOneField
 
-from login.models import GroupAmbulancePermission, GroupHospitalPermission
+from login.models import GroupAmbulancePermission, GroupHospitalPermission, GroupProfile
 
 
 class UserResource(resources.ModelResource):
-    # is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
-    #                              widget=widgets.BooleanWidget(),
-    #                              readonly=False)
+    is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
+                                 widget=widgets.BooleanWidget(),
+                                 readonly=False)
 
-    is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
-                                  parent='userprofile',
-                                  child='id_dispatcher',
-                                  column_name='is_dispatcher',
-                                  widget=widgets.BooleanWidget(),
-                                  readonly=False)
+    # is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
+    #                               parent='userprofile',
+    #                               child='id_dispatcher',
+    #                               column_name='is_dispatcher',
+    #                               widget=widgets.BooleanWidget(),
+    #                               readonly=False)
 
     class Meta:
         model = User
@@ -26,6 +26,11 @@ class UserResource(resources.ModelResource):
                   'is_staff', 'is_dispatcher', 'is_active')
         export_order = ('id', 'username', 'first_name', 'last_name', 'email',
                         'is_staff', 'is_dispatcher', 'is_active')
+
+    # create userprofile if new instance
+    def after_import_instance(self, instance, new, **kwargs):
+        if new:
+            instance.userprofile = GroupProfile(group=instance)
 
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
