@@ -15,3 +15,12 @@ class UserResource(resources.ModelResource):
                   'is_staff', 'is_dispatcher', 'is_active')
         export_order = ('id', 'username', 'first_name', 'last_name', 'email',
                         'is_staff', 'is_dispatcher', 'is_active')
+
+    # save userprofile related fields
+    def after_save_instance(self, instance, using_transactions, dry_run):
+        if not using_transactions and dry_run:
+            # we don't have transactions and we want to do a dry_run
+            pass
+        else:
+            instance.userprofile.save()
+
