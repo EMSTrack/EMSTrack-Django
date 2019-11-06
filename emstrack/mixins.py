@@ -328,14 +328,14 @@ class ProcessImportModelMixin(BaseImportExportMixin):
     def form_invalid(self, form):
 
         logger.info('IN FORM INVALID')
-        logger.info(form)
+        logger.info(form.__dict__)
 
         return super().form_invalid(form)
 
     def form_valid(self, form):
 
         logger.info('IN FORM VALID')
-        logger.info(form)
+        logger.info(form.__dict__)
 
         resource = self.get_import_resource_class()()
 
