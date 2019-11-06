@@ -53,7 +53,7 @@ from .models import TemporaryPassword, \
     GroupProfile, GroupAmbulancePermission, \
     GroupHospitalPermission, Client, ClientStatus, UserProfile
 from .permissions import get_permissions
-from .resources import UserResource, GroupResource, UserGroupResource
+from .resources import UserResource, GroupResource
 
 logger = logging.getLogger(__name__)
 
