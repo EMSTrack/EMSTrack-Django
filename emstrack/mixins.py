@@ -273,6 +273,7 @@ class ImportModelMixin(BaseImportExportMixin):
                                               user=self.request.user,
                                               **imp_kwargs)
 
+            logger.info(result)
             context['result'] = result
 
             if not result.has_errors() and not result.has_validation_errors():
