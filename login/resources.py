@@ -34,12 +34,15 @@ class GroupResource(resources.ModelResource):
                             widget=widgets.IntegerWidget(),
                             readonly=False)
 
+    users = fields.Field(attribute='users',
+                         widget=widgets.ManyToManyWidget(User, field='username', separator=','))
+
     class Meta:
         model = Group
         fields = ('id', 'name',
-                  'description', 'priority')
+                  'description', 'priority', 'users')
         export_order = ('id', 'name',
-                        'description', 'priority')
+                        'description', 'priority', 'users')
 
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
@@ -48,13 +51,3 @@ class GroupResource(resources.ModelResource):
             pass
         else:
             instance.groupprofile.save()
-
-
-class UserGroupResource(resources.ModelResource):
-    users = fields.Field(attribute='users',
-                         widget=widgets.ManyToManyWidget(User, field='username', separator=','))
-
-    class Meta:
-        model = Group
-        fields = ('id', 'name', 'users')
-        export_order = ('id', 'name', 'users')

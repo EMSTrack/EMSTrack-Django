@@ -72,10 +72,6 @@ urlpatterns = [
         staff_member_required(views.GroupExportView.as_view()),
         name='export-group'),
 
-    url(r'^group/export/users/$',
-        staff_member_required(views.UserGroupExportView.as_view()),
-        name='export-group-users'),
-
     # client admin
     url(r'^client/$',
         staff_member_required(views.ClientListView.as_view()),

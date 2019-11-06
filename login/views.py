@@ -921,10 +921,3 @@ class GroupExportView(ExportModelMixin,
                       View):
     model = Group
     resource_class = GroupResource
-
-
-class UserGroupExportView(ExportModelMixin,
-                          View):
-    model = Group
-    resource_class = UserGroupResource
-
