@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 from import_export import resources, fields, widgets
 
+from login.models import GroupAmbulancePermission
+
 
 class UserResource(resources.ModelResource):
     is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
@@ -51,3 +53,29 @@ class GroupResource(resources.ModelResource):
             pass
         else:
             instance.groupprofile.save()
+
+
+class GroupAmbulancePermissionResource(resources.ModelResource):
+    ambulance_identifier = fields.Field(attribute='ambulance__identifier',
+                                        widget=widgets.CharWidget(),
+                                        readonly=True)
+
+    class Meta:
+        model = GroupAmbulancePermission
+        fields = ('id', 'ambulance_identifier',
+                  'can_read', 'can_write')
+        export_order = ('id', 'ambulance_identifier',
+                        'can_read', 'can_write')
+
+
+class GroupHospitalPermissionResource(resources.ModelResource):
+    hospital_name = fields.Field(attribute='hospital__name',
+                                 widget=widgets.CharWidget(),
+                                 readonly=True)
+
+    class Meta:
+        model = GroupAmbulancePermission
+        fields = ('id', 'hospital_name',
+                  'can_read', 'can_write')
+        export_order = ('id', 'hospital_name',
+                        'can_read', 'can_write')

@@ -80,6 +80,30 @@ urlpatterns = [
         staff_member_required(views.GroupProcessImportView.as_view()),
         name='process-import-group'),
 
+    url(r'^group/export_ambulance_permissions/$',
+        staff_member_required(views.GroupAmbulancePermissionExportView.as_view()),
+        name='export-group-ambulance-permissions'),
+
+    url(r'^group/export_hospital_permissions/$',
+        staff_member_required(views.GroupHospitalPermissionExportView.as_view()),
+        name='export-group-hospital-permissions'),
+
+    url(r'^group/import_ambulance_permissions/$',
+        staff_member_required(views.GroupAmbulancePermissionImportView.as_view()),
+        name='import-group-ambulance-permissions'),
+
+    url(r'^group/process_import_ambulance_permissions/$',
+        staff_member_required(views.GroupAmbulancePermissionProcessImportView.as_view()),
+        name='process-import-group-ambulance-permissions'),
+
+    url(r'^group/import_hospital_permissions/$',
+        staff_member_required(views.GroupHospitalPermissionImportView.as_view()),
+        name='import-group-hospital-permissions'),
+
+    url(r'^group/process_import_hospital_permissions/$',
+        staff_member_required(views.GroupHospitalPermissionProcessImportView.as_view()),
+        name='process-import-group-hospital-permissions'),
+
     # client admin
     url(r'^client/$',
         staff_member_required(views.ClientListView.as_view()),

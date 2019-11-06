@@ -53,7 +53,7 @@ from .models import TemporaryPassword, \
     GroupProfile, GroupAmbulancePermission, \
     GroupHospitalPermission, Client, ClientStatus, UserProfile
 from .permissions import get_permissions
-from .resources import UserResource, GroupResource
+from .resources import UserResource, GroupResource, GroupAmbulancePermissionResource, GroupHospitalPermissionResource
 
 logger = logging.getLogger(__name__)
 
@@ -927,6 +927,18 @@ class GroupExportView(ExportModelMixin,
     resource_class = GroupResource
 
 
+class GroupAmbulancePermissionExportView(ExportModelMixin,
+                                         View):
+    model = GroupAmbulancePermission
+    resource_class = GroupAmbulancePermissionResource
+
+
+class GroupHospitalPermissionExportView(ExportModelMixin,
+                                        View):
+    model = GroupHospitalPermission
+    resource_class = GroupHospitalPermissionResource
+
+
 class GroupImportView(ImportModelMixin,
                       TemplateView):
     model = Group
@@ -946,3 +958,46 @@ class GroupProcessImportView(SuccessMessageMixin,
     success_url = reverse_lazy('login:list-group')
 
     import_breadcrumbs = {'login:list-group': _("Groups")}
+
+
+class GroupAmbulancePermissionImportView(ImportModelMixin,
+                                         TemplateView):
+    model = GroupAmbulancePermission
+    resource_class = GroupAmbulancePermissionResource
+
+    process_import_url = 'login:process-import-group-ambulance-permissions'
+    import_breadcrumbs = {'login:list-group': _("Groups")}
+
+
+class GroupAmbulancePermissionProcessImportView(SuccessMessageMixin,
+                                                ProcessImportModelMixin,
+                                                FormView):
+    model = GroupAmbulancePermission
+    resource_class = GroupAmbulancePermissionResource
+
+    success_message = _('Successfully imported group permissions')
+    success_url = reverse_lazy('login:list-group')
+
+    import_breadcrumbs = {'login:list-group': _("Groups")}
+
+
+class GroupHospitalPermissionImportView(ImportModelMixin,
+                                        TemplateView):
+    model = GroupHospitalPermission
+    resource_class = GroupHospitalPermissionResource
+
+    process_import_url = 'login:process-import-group-hospital-permissions'
+    import_breadcrumbs = {'login:list-group': _("Groups")}
+
+
+class GroupHospitalPermissionProcessImportView(SuccessMessageMixin,
+                                               ProcessImportModelMixin,
+                                               FormView):
+    model = GroupHospitalPermission
+    resource_class = GroupHospitalPermissionResource
+
+    success_message = _('Successfully imported group permissions')
+    success_url = reverse_lazy('login:list-group')
+
+    import_breadcrumbs = {'login:list-group': _("Groups")}
+

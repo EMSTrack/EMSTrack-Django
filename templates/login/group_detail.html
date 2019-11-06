@@ -88,6 +88,13 @@
 
             <h3>{% trans "Permissions" %}:</h3>
 
+            <h4>{% trans "Ambulances" %}:</h4>
+            
+            <p>
+                <a href="{% url 'login:export-group-ambulance-permissions' %}">{% trans "export" %}</a>
+                <a href="{% url 'login:import-group-ambulance-permissions' %}" class="ml-2">{% trans "import" %}</a>
+            </p>
+
             {% if ambulance_list %}
 
             <table class="table table-striped table-sm">
@@ -115,6 +122,13 @@
             <p>{% trans "This group does not have access to any ambulances." %}</p>
 
             {% endif %}
+
+            <h4>{% trans "Hospitals" %}:</h4>
+
+            <p>
+                <a href="{% url 'login:export-group-hospital-permissions' %}">{% trans "export" %}</a>
+                <a href="{% url 'login:import-group-hospital-permissions' %}" class="ml-2">{% trans "import" %}</a>
+            </p>
 
             {% if hospital_list %}
 
