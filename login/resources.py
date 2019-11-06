@@ -24,3 +24,41 @@ class UserResource(resources.ModelResource):
         else:
             instance.userprofile.save()
 
+
+class GroupResource(resources.ModelResource):
+    description = fields.Field(attribute='groupprofile__description',
+                               widget=widgets.CharWidget(),
+                               readonly=False)
+
+    priority = fields.Field(attribute='groupprofile__priority',
+                            widget=widgets.IntegerWidget(),
+                            readonly=False)
+
+    class Meta:
+        model = Group
+        fields = ('id', 'name',
+                  'description', 'priority')
+        export_order = ('id', 'name',
+                        'description', 'priority')
+
+    # save userprofile related fields
+    def after_save_instance(self, instance, using_transactions, dry_run):
+        if not using_transactions and dry_run:
+            # we don't have transactions and we want to do a dry_run
+            pass
+        else:
+            instance.groupprofile.save()
+
+
+class UserGroupResource(resources.ModelResource):
+    groups = fields.Field(attribute='user_set',
+                          widget=widgets.ManyToManyWidget(Group, field='name', separator=','))
+
+    username = fields.Field(attribute='username',
+                            widget=widgets.CharWidget(),
+                            readonly=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'groups')
+        export_order = ('id', 'username', 'groups')

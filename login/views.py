@@ -53,7 +53,7 @@ from .models import TemporaryPassword, \
     GroupProfile, GroupAmbulancePermission, \
     GroupHospitalPermission, Client, ClientStatus, UserProfile
 from .permissions import get_permissions
-from .resources import UserResource
+from .resources import UserResource, GroupResource, UserGroupResource
 
 logger = logging.getLogger(__name__)
 
@@ -915,3 +915,16 @@ class UserProcessImportView(SuccessMessageMixin,
     success_url = reverse_lazy('login:list-user')
 
     import_breadcrumbs = {'login:list-user': _("Users")}
+
+
+class GroupExportView(ExportModelMixin,
+                      View):
+    model = Group
+    resource_class = GroupResource
+
+
+class UserGroupExportView(ExportModelMixin,
+                          View):
+    model = Group
+    resource_class = UserGroupResource
+
