@@ -51,14 +51,10 @@ class GroupResource(resources.ModelResource):
 
 
 class UserGroupResource(resources.ModelResource):
-    groups = fields.Field(attribute='user_set',
-                          widget=widgets.ManyToManyWidget(Group, field='name', separator=','))
-
-    username = fields.Field(attribute='username',
-                            widget=widgets.CharWidget(),
-                            readonly=True)
+    users = fields.Field(attribute='users',
+                         widget=widgets.ManyToManyWidget(User, field='username', separator=','))
 
     class Meta:
-        model = User
-        fields = ('id', 'username', 'groups')
-        export_order = ('id', 'username', 'groups')
+        model = Group
+        fields = ('id', 'name', 'users')
+        export_order = ('id', 'name', 'users')
