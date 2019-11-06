@@ -5,7 +5,7 @@ from import_export import resources, fields, widgets
 
 from emstrack.import_export import OneToOneField
 
-from login.models import GroupAmbulancePermission, GroupHospitalPermission, GroupProfile
+from login.models import GroupAmbulancePermission, GroupHospitalPermission, GroupProfile, UserProfile
 
 
 class UserResource(resources.ModelResource):
@@ -30,7 +30,7 @@ class UserResource(resources.ModelResource):
     # create userprofile if new instance
     def after_import_instance(self, instance, new, **kwargs):
         if new:
-            instance.userprofile = GroupProfile(group=instance)
+            instance.userprofile = UserProfile(user=instance)
 
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
