@@ -6,7 +6,8 @@ from import_export import resources, fields, widgets
 
 class UserResource(resources.ModelResource):
     is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
-                                 widget=widgets.BooleanWidget())
+                                 widget=widgets.BooleanWidget(),
+                                 readonly=False)
 
     class Meta:
         model = User
