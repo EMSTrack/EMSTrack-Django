@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import mixins
 from rest_framework.exceptions import PermissionDenied
@@ -213,21 +214,37 @@ class ImportModelMixin(BaseImportExportMixin):
     import_template_name = 'import.html'
     process_import_url = 'process_import'
 
-    def get(self, *args, **kwargs ):
+    def get_import_data_kwargs(self, request, *args, **kwargs):
+        """
+        Prepare kwargs for import_data.
+        """
+        form = kwargs.get('form')
+        if form:
+            kwargs.pop('form')
+            return kwargs
+        return {}
+
+    def get(self, *args, **kwargs):
+        return self.get_or_post(*args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        return self.get_or_post(*args, **kwargs)
+
+    def get_or_post(self, *args, **kwargs ):
         """
         Perform a dry_run of the import to make sure the import will not
         result in errors.  If there where no error, save the user
         uploaded file to a local temp file that will be used by
         'process_import' for the actual import.
         """
-        resource = self.get_import_resource_class()()
-
-        context = {}
+        context = self.get_context_data(**kwargs)
 
         import_formats = self.get_import_formats()
+        form_kwargs = kwargs
         form = ImportForm(import_formats,
                           self.request.POST or None,
-                          self.request.FILES or None)
+                          self.request.FILES or None,
+                          **form_kwargs)
 
         if self.request.POST and form.is_valid():
             input_format = import_formats[
@@ -248,74 +265,32 @@ class ImportModelMixin(BaseImportExportMixin):
                 if not input_format.is_binary() and self.from_encoding:
                     data = force_text(data, self.from_encoding)
                 dataset = input_format.create_dataset(data)
+
+                resource = self.get_import_resource_class()()
+                imp_kwargs = self.get_import_data_kwargs(self.request, form=form, *args, **kwargs)
                 result = resource.import_data(dataset, dry_run=True,
-                                              raise_errors=False)
+                                              raise_errors=False,
+                                              user=self.request.user,
+                                              **imp_kwargs)
 
             context['result'] = result
 
-            if not result.has_errors():
-                context['confirm_form'] = ConfirmImportForm(initial={
+            if not result.has_errors() and not result.has_validation_errors():
+                initial = {
                     'import_file_name': os.path.basename(uploaded_file.name),
+                    'original_file_name': import_file.name,
                     'input_format': form.cleaned_data['input_format'],
-                })
+                }
+                context['confirm_form'] = ConfirmImportForm(initial=initial)
 
+        else:
+            resource = self.get_import_resource_class()()
+
+        context['title'] = _("Import")
         context['form'] = form
         context['opts'] = self.model._meta
         context['fields'] = [f.column_name for f in resource.get_fields()]
-        context['process_import_url'] = self.process_import_url
-        context['import_breadcrumbs'] = self.import_breadcrumbs
 
-        return TemplateResponse(self.request, [self.import_template_name], context)
-
-    def post(self, *args, **kwargs ):
-        """
-        Perform a dry_run of the import to make sure the import will not
-        result in errors.  If there where no error, save the user
-        uploaded file to a local temp file that will be used by
-        'process_import' for the actual import.
-        """
-        resource = self.get_import_resource_class()()
-
-        context = {}
-
-        import_formats = self.get_import_formats()
-        form = ImportForm(import_formats,
-                          self.request.POST or None,
-                          self.request.FILES or None)
-
-        if self.request.POST and form.is_valid():
-            input_format = import_formats[
-                int(form.cleaned_data['input_format'])
-            ]()
-            import_file = form.cleaned_data['import_file']
-            # first always write the uploaded file to disk as it may be a
-            # memory file or else based on settings upload handlers
-            with tempfile.NamedTemporaryFile(delete=False) as uploaded_file:
-                for chunk in import_file.chunks():
-                    uploaded_file.write(chunk)
-
-            # then read the file, using the proper format-specific mode
-            with open(uploaded_file.name,
-                      input_format.get_read_mode()) as uploaded_import_file:
-                # warning, big files may exceed memory
-                data = uploaded_import_file.read()
-                if not input_format.is_binary() and self.from_encoding:
-                    data = force_text(data, self.from_encoding)
-                dataset = input_format.create_dataset(data)
-                result = resource.import_data(dataset, dry_run=True,
-                                              raise_errors=False)
-
-            context['result'] = result
-
-            if not result.has_errors():
-                context['confirm_form'] = ConfirmImportForm(initial={
-                    'import_file_name': os.path.basename(uploaded_file.name),
-                    'input_format': form.cleaned_data['input_format'],
-                })
-
-        context['form'] = form
-        context['opts'] = self.model._meta
-        context['fields'] = [f.column_name for f in resource.get_fields()]
         context['process_import_url'] = self.process_import_url
         context['import_breadcrumbs'] = self.import_breadcrumbs
 

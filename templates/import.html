@@ -17,7 +17,7 @@
     <div class="row">
         <div class="col">
 
-            <h1>{% trans "Import" %} {{ opts.app_label }}</h1>
+            <h1>{{ title }} {{ opts.app_label }}</h1>
 
             {% if confirm_form %}
             <form action="{% url process_import_url %}" method="POST">
