@@ -135,6 +135,9 @@ class GroupAmbulancePermission(ClearPermissionCacheMixin,
     class Meta:
         unique_together = ('group', 'ambulance')
 
+    def get_absolute_url(self):
+        return reverse('login:detail-group', kwargs={'pk': self.group.id})
+
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,
                                                          self.ambulance.identifier,
@@ -154,6 +157,9 @@ class GroupHospitalPermission(ClearPermissionCacheMixin,
 
     class Meta:
         unique_together = ('group', 'hospital')
+
+    def get_absolute_url(self):
+        return reverse('login:detail-group', kwargs={'pk': self.group.id})
 
     def __str__(self):
         return '{}/{}(id={}): read[{}] write[{}]'.format(self.group,

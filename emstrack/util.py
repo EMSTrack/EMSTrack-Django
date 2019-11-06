@@ -14,3 +14,4 @@ def make_choices_and_translate(choices):
     Uses lazy translation for choices names.
     """
     return [(m.name, _(m.value)) for m in choices]
+

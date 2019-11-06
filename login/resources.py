@@ -3,13 +3,22 @@ from django.contrib.auth.models import User
 
 from import_export import resources, fields, widgets
 
+from emstrack.import_export import OneToOneField
+
 from login.models import GroupAmbulancePermission, GroupHospitalPermission
 
 
 class UserResource(resources.ModelResource):
-    is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
-                                 widget=widgets.BooleanWidget(),
-                                 readonly=False)
+    # is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
+    #                              widget=widgets.BooleanWidget(),
+    #                              readonly=False)
+
+    is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
+                                  parent='userprofile',
+                                  child='id_dispatcher',
+                                  column_name='is_dispatcher',
+                                  widget=widgets.BooleanWidget(),
+                                  readonly=False)
 
     class Meta:
         model = User

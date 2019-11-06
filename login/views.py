@@ -975,7 +975,7 @@ class GroupAmbulancePermissionProcessImportView(SuccessMessageMixin,
     model = GroupAmbulancePermission
     resource_class = GroupAmbulancePermissionResource
 
-    success_message = _('Successfully imported group permissions')
+    success_message = _('Successfully imported group ambulance permissions')
     success_url = reverse_lazy('login:list-group')
 
     import_breadcrumbs = {'login:list-group': _("Groups")}
@@ -996,7 +996,7 @@ class GroupHospitalPermissionProcessImportView(SuccessMessageMixin,
     model = GroupHospitalPermission
     resource_class = GroupHospitalPermissionResource
 
-    success_message = _('Successfully imported group permissions')
+    success_message = _('Successfully imported group hospital permissions')
     success_url = reverse_lazy('login:list-group')
 
     import_breadcrumbs = {'login:list-group': _("Groups")}
