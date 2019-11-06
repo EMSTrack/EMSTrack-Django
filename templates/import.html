@@ -4,6 +4,16 @@
 {% block content %}
 <div class="container">
 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            {% for key, values in import_breadcrumbs %}
+                <li class="breadcrumb-item"><a href="{% url key %}">{{ values }}</a></li>
+            {% endfor %}
+            <li class="breadcrumb-item active" aria-current="page">{% trans "Import" %}</li>
+        </ol>
+    </nav>
+
+
     <div class="row">
         <div class="col">
 
@@ -30,7 +40,7 @@
 
                 <p>
                     {% trans "This importer will import the following fields: " %}
-                    {% for f in fields  %}
+                    {% for f in fields %}
                         {% if forloop.counter0 %}
                         ,
                         {% endif %}

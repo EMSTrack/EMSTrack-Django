@@ -163,9 +163,12 @@ class BaseImportExportMixin:
     model = None
     from_encoding = "utf-8"
 
-    #: import / export formats
+    # import / export formats
     formats = DEFAULT_FORMATS
     resource_class = None
+
+    # import breadcrumbs
+    import_breadcrumbs = {}
 
     def get_import_formats(self):
         """
@@ -260,6 +263,7 @@ class ImportModelMixin(BaseImportExportMixin):
         context['opts'] = self.model._meta
         context['fields'] = [f.column_name for f in resource.get_fields()]
         context['process_import_url'] = self.process_import_url
+        context['import_breadcrumbs'] = self.import_breadcrumbs
 
         return TemplateResponse(self.request, [self.import_template_name], context)
 
@@ -313,6 +317,7 @@ class ImportModelMixin(BaseImportExportMixin):
         context['opts'] = self.model._meta
         context['fields'] = [f.column_name for f in resource.get_fields()]
         context['process_import_url'] = self.process_import_url
+        context['import_breadcrumbs'] = self.import_breadcrumbs
 
         return TemplateResponse(self.request, [self.import_template_name], context)
 

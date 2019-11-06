@@ -901,6 +901,7 @@ class UserImportView(ImportModelMixin,
     model = User
     resource_class = UserResource
     process_import_url = 'login:process-import-user'
+    import_breadcrumbs = {'login:list-user': _("Users")}
 
 
 class UserProcessImportView(ProcessImportModelMixin,
@@ -911,6 +912,8 @@ class UserProcessImportView(ProcessImportModelMixin,
 
     success_message = _('Import finished')
     success_url = reverse_lazy('login:list-user')
+
+    import_breadcrumbs = {'login:list-user': _("Users")}
 
     def get_success_message(self, cleaned_data):
         return "Successfully imported file"
