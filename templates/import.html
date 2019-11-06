@@ -6,7 +6,7 @@
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            {% for key, values in import_breadcrumbs %}
+            {% for key, values in import_breadcrumbs.items %}
                 <li class="breadcrumb-item"><a href="{% url key %}">{{ values }}</a></li>
             {% endfor %}
             <li class="breadcrumb-item active" aria-current="page">{% trans "Import" %}</li>
