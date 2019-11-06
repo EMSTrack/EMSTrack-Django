@@ -274,8 +274,10 @@ class ImportModelMixin(BaseImportExportMixin):
                                               **imp_kwargs)
 
             logger.info(result.__dict__)
-            logger.info(result.rows)
-            logger.info(result.invalid_rows)
+            for row in result.rows:
+                logger.info(row.__dict__)
+            for row in result.invalid_rows:
+                logger.info(row.__dict__)
             context['result'] = result
 
             if not result.has_errors() and not result.has_validation_errors():
