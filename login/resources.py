@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 from import_export import resources, fields, widgets
 
-from login.models import GroupAmbulancePermission
+from login.models import GroupAmbulancePermission, GroupHospitalPermission
 
 
 class UserResource(resources.ModelResource):
@@ -82,7 +82,7 @@ class GroupHospitalPermissionResource(resources.ModelResource):
                                  readonly=True)
 
     class Meta:
-        model = GroupAmbulancePermission
+        model = GroupHospitalPermission
         fields = ('id', 'group_name', 'hospital_name',
                   'can_read', 'can_write')
         export_order = ('id', 'group_name', 'hospital_name',
