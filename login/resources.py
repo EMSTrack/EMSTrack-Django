@@ -56,26 +56,34 @@ class GroupResource(resources.ModelResource):
 
 
 class GroupAmbulancePermissionResource(resources.ModelResource):
+    group_name = fields.Field(attribute='group__name',
+                              widget=widgets.CharWidget(),
+                              readonly=True)
+
     ambulance_identifier = fields.Field(attribute='ambulance__identifier',
                                         widget=widgets.CharWidget(),
                                         readonly=True)
 
     class Meta:
         model = GroupAmbulancePermission
-        fields = ('id', 'ambulance_identifier',
+        fields = ('id', 'group_name', 'ambulance_identifier',
                   'can_read', 'can_write')
-        export_order = ('id', 'ambulance_identifier',
+        export_order = ('id', 'group_name', 'ambulance_identifier',
                         'can_read', 'can_write')
 
 
 class GroupHospitalPermissionResource(resources.ModelResource):
+    group_name = fields.Field(attribute='group__name',
+                              widget=widgets.CharWidget(),
+                              readonly=True)
+
     hospital_name = fields.Field(attribute='hospital__name',
                                  widget=widgets.CharWidget(),
                                  readonly=True)
 
     class Meta:
         model = GroupAmbulancePermission
-        fields = ('id', 'hospital_name',
+        fields = ('id', 'group_name', 'hospital_name',
                   'can_read', 'can_write')
-        export_order = ('id', 'hospital_name',
+        export_order = ('id', 'group_name', 'hospital_name',
                         'can_read', 'can_write')
