@@ -40,9 +40,9 @@ class GroupResource(resources.ModelResource):
     class Meta:
         model = Group
         fields = ('id', 'name',
-                  'description', 'priority', 'users')
+                  'description', 'priority', 'user_set')
         export_order = ('id', 'name',
-                        'description', 'priority', 'users')
+                        'description', 'priority', 'user_set')
 
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
