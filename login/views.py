@@ -905,7 +905,8 @@ class UserImportView(ImportModelMixin,
     import_breadcrumbs = {'login:list-user': _("Users")}
 
 
-class UserProcessImportView(ProcessImportModelMixin,
+class UserProcessImportView(SuccessMessageMixin,
+                            ProcessImportModelMixin,
                             FormView):
     model = User
     resource_class = UserResource
