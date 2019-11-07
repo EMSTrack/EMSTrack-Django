@@ -11,21 +11,9 @@ from import_export import fields, widgets
 #     )
 
 class OneToOneField(fields.Field):
-    parent = ''
-    child = ''
-
-    def __init__(self, parent, child, *args, **kwargs):
-        self.parent = parent
-        self.child = child
-        super().__init__(*args, **kwargs)
 
     def save(self, obj, data, is_m2m=False):
-        if not self.readonly:
-            child_obj = getattr(obj, self.parent, None)
-            if not child_obj:
-                raise ValueError('Unable to find %s on %s' % (self.parent, obj))
-            setattr(child_obj, self.child, self.clean(data))
-            child_obj.save()
+        super().save(obj, data, False)
 
 
 class DeferredSaveWidget(widgets.ManyToManyWidget):

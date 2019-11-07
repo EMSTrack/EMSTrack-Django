@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 from import_export import resources, fields, widgets
 
-from emstrack.import_export import DeferredSaveWidget
+from emstrack.import_export import OneToOneField, DeferredSaveWidget
 
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, GroupProfile, UserProfile
 
@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class UserResource(resources.ModelResource):
-    is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
-                                 widget=DeferredSaveWidget(widgets.BooleanWidget()),
-                                 readonly=False)
+    is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
+                                  widget=DeferredSaveWidget(widgets.BooleanWidget()),
+                                  readonly=False)
 
     # is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
     #                               parent='userprofile',
