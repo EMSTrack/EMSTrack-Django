@@ -13,16 +13,16 @@ logger = logging.getLogger(__name__)
 
 
 class UserResource(resources.ModelResource):
-    is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
-                                 widget=widgets.BooleanWidget(),
-                                 readonly=False)
+    # is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
+    #                            widget=widgets.BooleanWidget(),
+    #                            readonly=False)
 
-    # is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
-    #                               parent='userprofile',
-    #                               child='id_dispatcher',
-    #                               column_name='is_dispatcher',
-    #                               widget=widgets.BooleanWidget(),
-    #                               readonly=False)
+    is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
+                                  parent='userprofile',
+                                  child='id_dispatcher',
+                                  column_name='is_dispatcher',
+                                  widget=widgets.BooleanWidget(),
+                                  readonly=False)
 
     class Meta:
         model = User
