@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class OneToOneField(fields.Field):
 
     def save(self, obj, data, is_m2m=False):
-        logger.debug('> In OneToOneField save')
+        logger.info('> In OneToOneField save')
         super().save(obj, data, False)
 
 
@@ -28,7 +28,7 @@ class DeferredSaveWidget(widgets.ManyToManyWidget):
         self.widget = widget
 
     def clean(self, value, row=None, *args, **kwargs):
-        logger.debug('> In DeferredSaveWidgdet clean')
+        logger.info('> In DeferredSaveWidgdet clean')
         return self.widget.clean(value, row, *args, **kwargs)
 
     def render(self, value, obj=None):
