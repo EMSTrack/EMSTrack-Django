@@ -265,6 +265,7 @@ class ImportModelMixin(BaseImportExportMixin):
                 if not input_format.is_binary() and self.from_encoding:
                     data = force_text(data, self.from_encoding)
                 dataset = input_format.create_dataset(data)
+                logger.info(dataset)
 
                 resource = self.get_import_resource_class()()
                 imp_kwargs = self.get_import_data_kwargs(self.request, form=form, *args, **kwargs)
@@ -309,8 +310,6 @@ class ProcessImportModelMixin(BaseImportExportMixin):
 
     def form_valid(self, form):
 
-        resource = self.get_import_resource_class()()
-
         import_formats = self.get_import_formats()
         input_format = import_formats[
             int(form.cleaned_data['input_format'])
@@ -332,8 +331,10 @@ class ProcessImportModelMixin(BaseImportExportMixin):
 
             # create dataset
             dataset = input_format.create_dataset(data)
+            logger.info(dataset)
 
             # import data, raise error if necessary
+            resource = self.get_import_resource_class()()
             result = resource.import_data(dataset, dry_run=False,
                                           raise_errors=True,
                                           user=self.request.user)
