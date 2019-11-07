@@ -28,7 +28,8 @@ class DeferredSaveWidget(widgets.ManyToManyWidget):
         self.widget = widget
 
     def clean(self, value, row=None, *args, **kwargs):
-        logger.info('> In DeferredSaveWidgdet clean')
+        logger.info('> In DeferredSaveWidgdet clean: row = ')
+        logger.info(row)
         return self.widget.clean(value, row, *args, **kwargs)
 
     def render(self, value, obj=None):
