@@ -308,6 +308,16 @@ class ProcessImportModelMixin(BaseImportExportMixin):
     template_name = 'import.html'
     form_class = ConfirmImportForm
 
+    def get_import_data_kwargs(self, request, *args, **kwargs):
+        """
+        Prepare kwargs for import_data.
+        """
+        form = kwargs.get('form')
+        if form:
+            kwargs.pop('form')
+            return kwargs
+        return {}
+
     def form_valid(self, form):
 
         import_formats = self.get_import_formats()
