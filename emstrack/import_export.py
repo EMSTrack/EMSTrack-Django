@@ -1,4 +1,8 @@
+import logging
+
 from import_export import fields, widgets
+
+logger = logging.getLogger(__name__)
 
 
 # https://github.com/django-import-export/django-import-export/issues/293
@@ -6,6 +10,7 @@ from import_export import fields, widgets
 class OneToOneField(fields.Field):
 
     def save(self, obj, data, is_m2m=False):
+        logger.debug('In OneToOneField save')
         super().save(obj, data, False)
 
 
@@ -23,6 +28,7 @@ class DeferredSaveWidget(widgets.ManyToManyWidget):
         self.widget = widget
 
     def clean(self, value, row=None, *args, **kwargs):
+        logger.debug('In DeferredSaveWidgdet clean')
         return self.widget.clean(value, row, *args, **kwargs)
 
     def render(self, value, obj=None):
