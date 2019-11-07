@@ -31,40 +31,13 @@ class UserResource(resources.ModelResource):
         export_order = ('id', 'username', 'first_name', 'last_name', 'email',
                         'is_staff', 'is_dispatcher', 'is_active')
 
-    # create userprofile if new instance
-    def after_import_instance(self, instance, new, **kwargs):
-        logger.info(instance.__dict__)
-
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
-        logger.info(instance.__dict__)
-        logger.info(instance.userprofile.__dict__)
-
-
-class Trash:
-
-    # create userprofile if new instance
-    def after_import_instance(self, instance, new, **kwargs):
-        if new:
-            logger.info(instance.__dict__)
-            instance.userprofile = UserProfile(user=instance)
-
-    # save userprofile related fields
-    def after_save_instance(self, instance, using_transactions, dry_run):
-        logger.info('instance')
-        logger.info(instance.__dict__)
-        logger.info(instance.userprofile.__dict__)
         if not using_transactions and dry_run:
             # we don't have transactions and we want to do a dry_run
             pass
         else:
-            logger.info('will save')
             instance.userprofile.save()
-
-    def after_import_row(self, row, row_result, **kwargs):
-        logger.info('after_import_row')
-        logger.info(row.__dict__)
-        logger.info(row_result.__dict__)
 
 
 class GroupResource(resources.ModelResource):
