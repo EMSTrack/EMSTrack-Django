@@ -11,7 +11,9 @@ class OneToOneField(fields.Field):
 
     def save(self, obj, data, is_m2m=False):
         logger.info('> In OneToOneField save')
+        logger.info('obj = %s', obj.__dict__)
         super().save(obj, data, False)
+        logger.info('obj = %s', obj.__dict__)
 
 
 class DeferredSaveWidget(widgets.ManyToManyWidget):
