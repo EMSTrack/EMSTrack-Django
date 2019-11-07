@@ -9,8 +9,8 @@ from emstrack.import_export import OneToOneField
 
 from login.models import GroupAmbulancePermission, GroupHospitalPermission, GroupProfile, UserProfile
 
-
 logger = logging.getLogger(__name__)
+
 
 class UserResource(resources.ModelResource):
     is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
@@ -40,6 +40,7 @@ class UserResource(resources.ModelResource):
     def after_save_instance(self, instance, using_transactions, dry_run):
         logger.info('instance')
         logger.info(instance)
+        logger.info(instance.__dict__)
         if not using_transactions and dry_run:
             # we don't have transactions and we want to do a dry_run
             pass
