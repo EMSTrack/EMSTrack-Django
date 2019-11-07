@@ -38,7 +38,8 @@ class UserResource(resources.ModelResource):
 
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
-        logger.info('instance = %', instance)
+        logger.info('instance')
+        logger.info(instance)
         if not using_transactions and dry_run:
             # we don't have transactions and we want to do a dry_run
             pass
