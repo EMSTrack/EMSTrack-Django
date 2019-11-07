@@ -2,13 +2,6 @@ from import_export import fields, widgets
 
 
 # https://github.com/django-import-export/django-import-export/issues/293
-#
-# address = OneToOneField(
-#         attribute='address__freeform',
-#         parent='address',
-#         child='freeform',
-#         column_name='address',
-#     )
 
 class OneToOneField(fields.Field):
 

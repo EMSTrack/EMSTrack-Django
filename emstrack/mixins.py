@@ -335,6 +335,7 @@ class ProcessImportModelMixin(BaseImportExportMixin):
 
             # import data, raise error if necessary
             result = resource.import_data(dataset, dry_run=False,
-                                          raise_errors=True)
+                                          raise_errors=True,
+                                          user=self.request.user)
 
         return super().form_valid(form)
