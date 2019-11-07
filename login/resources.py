@@ -34,13 +34,14 @@ class UserResource(resources.ModelResource):
     # create userprofile if new instance
     def after_import_instance(self, instance, new, **kwargs):
         if new:
+            logger.info(instance.__dict__)
             instance.userprofile = UserProfile(user=instance)
 
     # save userprofile related fields
     def after_save_instance(self, instance, using_transactions, dry_run):
         logger.info('instance')
-        logger.info(instance)
         logger.info(instance.__dict__)
+        logger.info(instance.userprofile.__dict__)
         if not using_transactions and dry_run:
             # we don't have transactions and we want to do a dry_run
             pass
