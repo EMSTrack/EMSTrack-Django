@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 
 
 class UserResource(resources.ModelResource):
-    is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
-                                  widget=DeferredSaveWidget(widgets.BooleanWidget()),
-                                  readonly=False)
+    is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
+                                 widget=widgets.PostSaveWidget(widgets.BooleanWidget()),
+                                 readonly=False)
 
     # is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
     #                               parent='userprofile',
@@ -32,16 +32,12 @@ class UserResource(resources.ModelResource):
                         'is_staff', 'is_dispatcher', 'is_active')
 
     # save userprofile related fields
-    def after_save_instance(self, instance, using_transactions, dry_run):
+    def after_post_save_instance(self, instance, row, using_transactions, dry_run):
         logger.info('instance')
         logger.info(instance.__dict__)
-        if not using_transactions and dry_run:
-            # we don't have transactions and we want to do a dry_run
-            pass
-        else:
-            logger.info('instance.userprofile')
-            logger.info(instance.userprofile.__dict__)
-            instance.userprofile.save()
+        logger.info('instance.userprofile')
+        logger.info(instance.userprofile.__dict__)
+        instance.userprofile.save()
 
 
 class GroupResource(resources.ModelResource):
