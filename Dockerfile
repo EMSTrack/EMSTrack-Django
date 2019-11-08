@@ -36,7 +36,7 @@ RUN npm install
 
 # install custom django-import-export
 WORKDIR /tmp
-RUN pip uninstall django-import-export
+RUN pip uninstall -y django-import-export
 RUN git clone https://github.com/mcdeoliveira/django-import-export
 WORKDIR /tmp/django-import-export
 RUN pip install .
