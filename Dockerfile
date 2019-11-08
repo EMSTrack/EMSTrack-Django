@@ -41,6 +41,7 @@ RUN git clone https://github.com/mcdeoliveira/django-import-export
 WORKDIR /tmp/django-import-export
 RUN pip install .
 
+
 WORKDIR $APP_HOME
 
 # link migration directories into persistent volume
