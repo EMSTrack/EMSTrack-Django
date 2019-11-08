@@ -33,20 +33,16 @@ class UserResource(resources.ModelResource):
 
     # save userprofile related fields
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
-        logger.info('instance')
-        logger.info(instance.__dict__)
-        logger.info('instance.userprofile')
-        logger.info(instance.userprofile.__dict__)
         instance.userprofile.save()
 
 
 class GroupResource(resources.ModelResource):
     description = fields.Field(attribute='groupprofile__description',
-                               widget=widgets.CharWidget(),
+                               widget=widgets.PostSaveWidget(widgets.CharWidget()),
                                readonly=False)
 
     priority = fields.Field(attribute='groupprofile__priority',
-                            widget=widgets.IntegerWidget(),
+                            widget=widgets.PostSaveWidget(widgets.IntegerWidget()),
                             readonly=False)
 
     user_set = fields.Field(attribute='user_set',
@@ -60,12 +56,8 @@ class GroupResource(resources.ModelResource):
                         'description', 'priority', 'user_set')
 
     # save userprofile related fields
-    def after_save_instance(self, instance, using_transactions, dry_run):
-        if not using_transactions and dry_run:
-            # we don't have transactions and we want to do a dry_run
-            pass
-        else:
-            instance.groupprofile.save()
+    def after_post_save_instance(self, instance, row, using_transactions, dry_run):
+        instance.groupprofile.save()
 
 
 class GroupAmbulancePermissionResource(resources.ModelResource):
