@@ -5,9 +5,7 @@ from django.contrib.auth.models import User
 
 from import_export import resources, fields, widgets
 
-from emstrack.import_export import OneToOneField, DeferredSaveWidget
-
-from login.models import GroupAmbulancePermission, GroupHospitalPermission, GroupProfile, UserProfile
+from login.models import GroupAmbulancePermission, GroupHospitalPermission
 
 logger = logging.getLogger(__name__)
 
