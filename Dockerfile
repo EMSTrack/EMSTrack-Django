@@ -34,6 +34,15 @@ RUN pip install -r requirements.txt
 COPY package.json package.json
 RUN npm install
 
+# install custom django-import-export
+WORKDIR /tmp
+RUN pip uninstall django-import-export
+RUN git clone https://github.com/mcdeoliveira/django-import-export
+WORKDIR /tmp/django-import-export
+RUN pip install .
+
+WORKDIR $APP_HOME
+
 # link migration directories into persistent volume
 RUN set -x && \
     mkdir -p /etc/emstrack/migrations && \
