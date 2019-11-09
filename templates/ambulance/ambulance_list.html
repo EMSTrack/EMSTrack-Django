@@ -14,9 +14,9 @@
 
             {% if user.is_staff %}
             <p>
-                <a href="{% url 'ambulance:create' %}">
-                    {% trans "new" context "feminine" %}
-                </a>
+                <a href="{% url 'ambulance:create' %}">{% trans "new" context "feminine" %}</a>
+                <a href="{% url 'ambulance:export-ambulance' %}" class="ml-2">{% trans "export" %}</a>
+                <a href="{% url 'ambulance:import-ambulance' %}" class="ml-2">{% trans "import" %}</a>
             </p>
             {% endif %}
 

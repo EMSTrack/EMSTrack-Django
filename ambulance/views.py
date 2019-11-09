@@ -6,8 +6,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseForbidden
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, ListView, \
-    DetailView, CreateView, UpdateView
+    DetailView, CreateView, UpdateView, FormView
 from django.views.generic.detail import BaseDetailView
 
 from django.utils.translation import ugettext_lazy as _
@@ -15,6 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from drf_extra_fields.geo_fields import PointField
 
 from ambulance.permissions import CallPermissionMixin
+from ambulance.resources import AmbulanceResource
 from emstrack.models import defaults
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
@@ -24,7 +27,8 @@ from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
+    ProcessImportModelMixin
 
 from emstrack.views import get_page_links, get_page_size_links
 
@@ -458,3 +462,32 @@ class CallAbortView(LoginRequiredMixin,
         self.object.abort()
 
         return redirect('ambulance:call_list')
+
+
+# Ambulance import and export
+
+class AmbulanceExportView(ExportModelMixin,
+                          View):
+    model = Ambulance
+    resource_class = AmbulanceResource
+
+
+class AmbulanceImportView(ImportModelMixin,
+                          TemplateView):
+    model = Ambulance
+    resource_class = AmbulanceResource
+
+    process_import_url = 'ambulance:process-import-ambulance'
+    import_breadcrumbs = {'ambulance:list': _("Ambulances")}
+
+
+class AmbulanceProcessImportView(SuccessMessageMixin,
+                                 ProcessImportModelMixin,
+                                 FormView):
+    model = Ambulance
+    resource_class = AmbulanceResource
+
+    success_message = _('Successfully imported ambulances')
+    success_url = reverse_lazy('ambulance:list')
+
+    import_breadcrumbs = {'ambulance:list': _("Ambulances")}

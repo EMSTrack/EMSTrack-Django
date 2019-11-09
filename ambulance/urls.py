@@ -28,6 +28,18 @@ urlpatterns = [
         login_required(views.AmbulanceUpdateView.as_view()),
         name='update'),
 
+    url(r'^export/$',
+        staff_member_required(views.AmbulanceExportView.as_view()),
+        name='export-ambulance'),
+
+    url(r'^import/$',
+        staff_member_required(views.AmbulanceImportView.as_view()),
+        name='import-ambulance'),
+
+    url(r'^process_import/$',
+        staff_member_required(views.AmbulanceProcessImportView.as_view()),
+        name='process-import-ambulance'),
+
     # Admin
 
     url(r'^location/list/$',
