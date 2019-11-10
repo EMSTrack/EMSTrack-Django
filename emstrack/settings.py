@@ -34,7 +34,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='CHANG3M3')
 
 # django login
-LOGIN_URL: 'login:login'
+LOGIN_URL = 'login:login'
 
 # swagger settings
 SWAGGER_SETTINGS = {
