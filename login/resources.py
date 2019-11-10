@@ -47,6 +47,7 @@ class UserImportResource(UserResource):
         # reset password
         logger.info(instance.__dict__)
         logger.info(row.__dict__)
+        logger.info(self.reset_password.__dict__)
 
 
 class GroupResource(resources.ModelResource):
