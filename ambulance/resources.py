@@ -12,6 +12,6 @@ class AmbulanceResource(resources.ModelResource):
     class Meta:
         model = Ambulance
         fields = ('id', 'identifier', 'capability', 'status',
-                  'orientation', 'location', 'active')
+                  'orientation', 'location', 'comment', 'active')
         export_order = ('id', 'identifier', 'capability', 'status',
-                        'orientation', 'location', 'active')
+                        'orientation', 'location', 'comment', 'active')
