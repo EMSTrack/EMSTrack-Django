@@ -33,6 +33,10 @@ SESSION_SAVE_EVERY_REQUEST = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='CHANG3M3')
 
+# django login
+LOGIN_URL: 'login:login'
+
+# swagger settings
 SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
     'DOC_EXPANSION': 'list',
