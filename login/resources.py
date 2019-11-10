@@ -40,7 +40,8 @@ class UserImportResource(UserResource):
                         'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
 
     def before_save_instance(self, instance, using_transactions, dry_run):
-        # reset password
+        # reset password?
+        self.reset_password = self.reset_password.get_value()
         logger.info(instance.__dict__)
 
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
@@ -51,7 +52,6 @@ class UserImportResource(UserResource):
         # reset password
         logger.info(instance.__dict__)
         logger.info(row.__dict__)
-        logger.info(self.reset_password)
 
 
 class GroupResource(resources.ModelResource):
