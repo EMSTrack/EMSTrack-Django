@@ -15,13 +15,6 @@ class UserResource(resources.ModelResource):
                                  widget=widgets.PostSaveWidget(widgets.BooleanWidget()),
                                  readonly=False)
 
-    # is_dispatcher = OneToOneField(attribute='userprofile__is_dispatcher',
-    #                               parent='userprofile',
-    #                               child='id_dispatcher',
-    #                               column_name='is_dispatcher',
-    #                               widget=widgets.BooleanWidget(),
-    #                               readonly=False)
-
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email',
@@ -32,6 +25,28 @@ class UserResource(resources.ModelResource):
     # save userprofile related fields
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
         instance.userprofile.save()
+
+
+class UserImportResource(UserResource):
+    reset_password = fields.Field(column_name='reset_password',
+                                  widget=widgets.BooleanWidget(),
+                                  readonly=False)
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email',
+                  'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
+        export_order = ('id', 'username', 'first_name', 'last_name', 'email',
+                        'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
+
+    def after_post_save_instance(self, instance, row, using_transactions, dry_run):
+
+        # save userprofile related fields
+        super().after_post_save_instance(instance, row, using_transactions, dry_run)
+
+        # reset password
+        logger.info(instance.__dict__)
+        logger.info(row.__dict__)
 
 
 class GroupResource(resources.ModelResource):
