@@ -33,9 +33,6 @@ SESSION_SAVE_EVERY_REQUEST = True
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='CHANG3M3')
 
-# django login
-LOGIN_URL = 'login:login'
-
 # swagger settings
 SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
@@ -180,7 +177,7 @@ STATICFILES_DIRS = [
 
 # login redirect
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/auth/login'
+LOGIN_URL = 'login:login'
 
 # email settings
 EMAIL_BACKEND = env.str('EMAIL_BACKEND')
