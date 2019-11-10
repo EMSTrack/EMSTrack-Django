@@ -265,7 +265,7 @@ class ImportModelMixin(BaseImportExportMixin):
                 if not input_format.is_binary() and self.from_encoding:
                     data = force_text(data, self.from_encoding)
                 dataset = input_format.create_dataset(data)
-                logger.info(dataset)
+                # logger.info(dataset)
 
                 resource = self.get_import_resource_class()()
                 imp_kwargs = self.get_import_data_kwargs(self.request, form=form, *args, **kwargs)
@@ -274,11 +274,12 @@ class ImportModelMixin(BaseImportExportMixin):
                                               user=self.request.user,
                                               **imp_kwargs)
 
-            logger.info(result.__dict__)
-            for row in result.rows:
-                logger.info(row.__dict__)
-            for row in result.invalid_rows:
-                logger.info(row.__dict__)
+            # logger.info(result.__dict__)
+            # for row in result.rows:
+            #     logger.info(row.__dict__)
+            # for row in result.invalid_rows:
+            #     logger.info(row.__dict__)
+
             context['result'] = result
 
             if not result.has_errors() and not result.has_validation_errors():
