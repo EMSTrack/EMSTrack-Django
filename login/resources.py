@@ -39,6 +39,10 @@ class UserImportResource(UserResource):
         export_order = ('id', 'username', 'first_name', 'last_name', 'email',
                         'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
 
+    def before_save_instance(self, instance, using_transactions, dry_run):
+        # reset password
+        logger.info(instance.__dict__)
+
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
 
         # save userprofile related fields
@@ -47,7 +51,7 @@ class UserImportResource(UserResource):
         # reset password
         logger.info(instance.__dict__)
         logger.info(row.__dict__)
-        logger.info(self.reset_password.__dict__)
+        logger.info(self.reset_password)
 
 
 class GroupResource(resources.ModelResource):
