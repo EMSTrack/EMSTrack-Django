@@ -36,6 +36,12 @@
             <p>
                 <strong>{% trans "Email" %}:</strong>
                 {{ user.email}}
+                {% if request.user.is_staff %}
+                    <form class="form-inline float-right" action="{% url 'password_reset' %}" method="post">
+                        <input type="hidden" name="email" value="{{ user.email }}">>
+                        <input type="submit" class="btn btn-danger btn-sm py-1" value="{% trans 'Reset password' %}">
+                    </form>
+                {% endif %}
             </p>
             <p>
                 <strong>{% trans "Staff" %}:</strong>
