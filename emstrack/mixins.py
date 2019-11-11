@@ -343,7 +343,7 @@ class ProcessImportModelMixin(BaseImportExportMixin):
 
             # create dataset
             dataset = input_format.create_dataset(data)
-            logger.info(dataset)
+            # logger.info(dataset)
 
             # import data, raise error if necessary
             resource = self.get_import_resource_class()()
