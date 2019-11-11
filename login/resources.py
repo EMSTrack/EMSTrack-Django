@@ -37,6 +37,7 @@ class UserImportResource(UserResource):
         super().__init__()
         self.is_new = False
         self.request = None
+        self.reset_password = False
 
     class Meta:
         model = User
@@ -57,21 +58,19 @@ class UserImportResource(UserResource):
         super().after_post_save_instance(instance, row, using_transactions, dry_run)
 
         # reset_password
-        reset_password = self.fields['reset_password'].clean(row)
+        self.reset_password = self.fields['reset_password'].clean(row)
 
         # is new?
-        if reset_password is None:
-            reset_password = self.is_new
+        if self.reset_password is None:
+            self.reset_password = self.is_new
 
-        # set instance
-        instance.reset_password = reset_password
-
-        if reset_password and not dry_run:
+        if self.reset_password and not dry_run:
             # reset password
             PasswordReset(instance.email, self.request).send_reset()
 
     def after_import_row(self, row, row_result, **kwargs):
         logger.info('after_import_row')
+        row_result.diff[8] = '<span>{}</span>'.format(1 if self.reset_password else 0)
         logger.info(row)
         logger.info(row_result.__dict__)
 
