@@ -70,7 +70,7 @@ class UserImportResource(UserResource):
 
     def after_import_row(self, row, row_result, **kwargs):
         logger.info('after_import_row')
-        row_result.diff[8] = '<span>{}</span>'.format(1 if self.reset_password else 0)
+        row_result.diff[8] = '{}'.format(1 if self.reset_password else 0)
         logger.info(row)
         logger.info(row_result.__dict__)
 
