@@ -46,9 +46,7 @@ class UserImportResource(UserResource):
                         'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
-        logger.info('kwargs= %s', kwargs)
         self.request = kwargs.get('request', None)
-        logger.info('request = %s', self.request)
 
     def before_save_instance(self, instance, using_transactions, dry_run):
         self.is_new = not instance.id
@@ -65,9 +63,11 @@ class UserImportResource(UserResource):
         if reset_password is None:
             reset_password = self.is_new
 
-        if reset_password:
+        # set instance
+        instance.reset_password = reset_password
+
+        if reset_password and not dry_run:
             # reset password
-            logger.info('will reset password')
             PasswordReset(instance.email, self.request).send_reset()
 
 
