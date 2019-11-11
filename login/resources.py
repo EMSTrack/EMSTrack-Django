@@ -46,6 +46,7 @@ class UserImportResource(UserResource):
                         'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+        logger.info('kwargs= %s', kwargs)
         self.request = kwargs.get('request', None)
         logger.info('request = %s', self.request)
 
