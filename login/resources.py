@@ -42,6 +42,7 @@ class UserImportResource(UserResource):
     def before_save_instance(self, instance, using_transactions, dry_run):
         # reset password?
         logger.info(self.__dict__)
+        logger.info(self.fields['reset_password'].__dict__)
         logger.info(instance.__dict__)
 
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
