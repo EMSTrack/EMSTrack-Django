@@ -1,0 +1,1 @@
+pg_dump -h $DB_HOST -U $DB_USERNAME -Fc $DB_DATABASE > backup.dump

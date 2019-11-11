@@ -63,6 +63,9 @@ class PasswordReset:
         user.
         """
         email = self.email
+        if not email:
+            return
+
         for user in self.get_users(email):
             if not domain_override:
                 site_name = self.site_name

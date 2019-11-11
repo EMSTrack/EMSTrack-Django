@@ -94,28 +94,28 @@
         {% endif %}
         <ul class="navbar-nav ml-auto">
             {% if request.user.is_authenticated %}
-            {% if request.user.is_staff %}
-            <li class="nav-item dropdown" id="navitemDropdown">
-                <a class="nav-link dropdown-toggle"
-                   id="navbarDropdown"
-                   role="button" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false"
-                   href="#">
-                    <span class="fas fa-wrench"></span>
-                    {% trans "Admin" %}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{% url 'login:list-user' %}">{% trans "Users" %}</a>
-                    <a class="dropdown-item" href="{% url 'login:list-group' %}">{% trans "Groups" %}</a>
-                    <a class="dropdown-item" href="{% url 'equipment:list' %}">{% trans "Equipment" %}</a>
-                    <a class="dropdown-item" href="{% url 'equipment:list-set' %}">{% trans "Equipment Sets" %}</a>
-                    <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">{% trans "Locations" %}</a>
-                    <a class="dropdown-item" href="{% url 'login:list-client' %}">{% trans "Clients" %}</a>
-                    <a class="dropdown-item" href="{% url 'report:index' %}">{% trans "Reports" %}</a>
-                    <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">{% trans "Reinitialize" %}</a>
-                </div>
-            </li>
-            {% endif %}
+                {% if request.user.is_staff %}
+                <li class="nav-item dropdown" id="navitemDropdown">
+                    <a class="nav-link dropdown-toggle"
+                       id="navbarDropdown"
+                       role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false"
+                       href="#">
+                        <span class="fas fa-wrench"></span>
+                        {% trans "Admin" %}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'login:list-user' %}">{% trans "Users" %}</a>
+                        <a class="dropdown-item" href="{% url 'login:list-group' %}">{% trans "Groups" %}</a>
+                        <a class="dropdown-item" href="{% url 'equipment:list' %}">{% trans "Equipment" %}</a>
+                        <a class="dropdown-item" href="{% url 'equipment:list-set' %}">{% trans "Equipment Sets" %}</a>
+                        <a class="dropdown-item" href="{% url 'ambulance:location_list' %}">{% trans "Locations" %}</a>
+                        <a class="dropdown-item" href="{% url 'login:list-client' %}">{% trans "Clients" %}</a>
+                        <a class="dropdown-item" href="{% url 'report:index' %}">{% trans "Reports" %}</a>
+                        <a class="dropdown-item" href="{% url 'login:restart' %}?next={{ request.path }}">{% trans "Reinitialize" %}</a>
+                    </div>
+                </li>
+                {% endif %}
             <li class="nav-item dropdown" id="navitemAccountDropdown">
                 <a class="nav-link dropdown-toggle"
                    id="navbarAccountDropdown"
@@ -136,12 +136,14 @@
                 </a>
             </li>
             {% else %}
+            <!--
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:signup' %}">
                     <span class="fas fa-user-plus"></span>&nbsp;
                     {% trans "Sign Up" %}
                 </a>
             </li>
+            -->
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'login:login' %}"
                    href="#">
