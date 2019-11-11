@@ -30,6 +30,7 @@ class UserResource(resources.ModelResource):
 class ResetPasswordField(fields.Field):
 
     def clean(self, data):
+        logger.info('CLEAN')
         logger.info(data)
         return False
 
