@@ -70,6 +70,11 @@ class UserImportResource(UserResource):
             # reset password
             PasswordReset(instance.email, self.request).send_reset()
 
+    def after_import_row(self, row, row_result, **kwargs):
+        logger.info('after_import_row')
+        logger.info(row)
+        logger.info(row_result)
+        
 
 class GroupResource(resources.ModelResource):
     description = fields.Field(attribute='groupprofile__description',
