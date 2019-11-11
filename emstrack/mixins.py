@@ -230,7 +230,7 @@ class ImportModelMixin(BaseImportExportMixin):
     def post(self, *args, **kwargs):
         return self.get_or_post(*args, **kwargs)
 
-    def get_or_post(self, *args, **kwargs ):
+    def get_or_post(self, *args, **kwargs):
         """
         Perform a dry_run of the import to make sure the import will not
         result in errors.  If there where no error, save the user
@@ -272,6 +272,7 @@ class ImportModelMixin(BaseImportExportMixin):
                 result = resource.import_data(dataset, dry_run=True,
                                               raise_errors=False,
                                               user=self.request.user,
+                                              request=self.request,
                                               **imp_kwargs)
 
             # logger.info(result.__dict__)

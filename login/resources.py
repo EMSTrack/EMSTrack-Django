@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from import_export import resources, fields, widgets
 
 from login.models import GroupAmbulancePermission, GroupHospitalPermission
+from login.util import PasswordReset
 
 logger = logging.getLogger(__name__)
 
@@ -32,12 +33,24 @@ class UserImportResource(UserResource):
                                   widget=widgets.BooleanWidget(),
                                   readonly=False)
 
+    def __init__(self):
+        super().__init__()
+        self.is_new = False
+        self.request = None
+
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email',
                   'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
         export_order = ('id', 'username', 'first_name', 'last_name', 'email',
                         'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
+
+    def before_import(self, dataset, using_transactions, dry_run, **kwargs):
+        self.request = kwargs.get('request', None)
+        logger.info('request = %s', self.request)
+
+    def before_save_instance(self, instance, using_transactions, dry_run):
+        self.is_new = not instance.id
 
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
 
@@ -47,10 +60,14 @@ class UserImportResource(UserResource):
         # reset_password
         reset_password = self.fields['reset_password'].clean(row)
 
-        # reset password
-        logger.info(instance.__dict__)
-        logger.info(row.__dict__)
-        logger.info(reset_password)
+        # is new?
+        if reset_password is None:
+            reset_password = self.is_new
+
+        if reset_password:
+            # reset password
+            logger.info('will reset password')
+            PasswordReset(instance.email, self.request).send_reset()
 
 
 class GroupResource(resources.ModelResource):
