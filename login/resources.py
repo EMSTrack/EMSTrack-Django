@@ -73,8 +73,8 @@ class UserImportResource(UserResource):
     def after_import_row(self, row, row_result, **kwargs):
         logger.info('after_import_row')
         logger.info(row)
-        logger.info(row_result)
-        
+        logger.info(row_result.__dict__)
+
 
 class GroupResource(resources.ModelResource):
     description = fields.Field(attribute='groupprofile__description',
