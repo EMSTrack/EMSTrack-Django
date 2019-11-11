@@ -27,10 +27,17 @@ class UserResource(resources.ModelResource):
         instance.userprofile.save()
 
 
+class ResetPasswordField(fields.Field):
+
+    def clean(self, data):
+        logger.info(data)
+        return False
+
+
 class UserImportResource(UserResource):
-    reset_password = fields.Field(column_name='reset_password',
-                                  widget=widgets.BooleanWidget(),
-                                  readonly=False)
+    reset_password = ResetPasswordField(column_name='reset_password',
+                                        widget=widgets.BooleanWidget(),
+                                        readonly=False)
 
     class Meta:
         model = User
@@ -42,7 +49,6 @@ class UserImportResource(UserResource):
     def before_save_instance(self, instance, using_transactions, dry_run):
         # reset password?
         logger.info(self.__dict__)
-        logger.info(self.fields['reset_password'].__dict__)
         logger.info(instance.__dict__)
 
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
