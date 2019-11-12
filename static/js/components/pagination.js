@@ -168,7 +168,10 @@ export class ReadPages {
         this.url = urlParts[0];
         this.searchParams = new URLSearchParams(urlParts.length > 1 ? urlParts[1] : '');
         this.page = this.searchParams.has('page') ? Number.parseInt(this.searchParams.get('page')) : 1;
+
         this.page_size = this.searchParams.has('page_size') ? Number.parseInt(this.searchParams.get('page_size')) : page_size;
+        this.searchParams.set('page_size', this.page_size.toString());
+
         this.totalPages = -1;
 
         this.results = [];
