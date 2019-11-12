@@ -436,8 +436,8 @@ function retrieveVehicles(data, range, index = 0) {
         logger.log('debug', 'Generating report...');
 
         // Update please wait message
-        const pleaseWait = $('#pleaseWait');
-        pleaseWait.text("Generating report...");
+        $('#pleaseWaitMessage')
+            .text("Generating report...");
 
         // report summary
         reportSummary();
@@ -447,7 +447,8 @@ function retrieveVehicles(data, range, index = 0) {
             .prop('disabled', false);
 
         // hide please wait sign
-        pleaseWait.hide();
+        $('#pleaseWait')
+            .hide();
 
         // and return
         return
