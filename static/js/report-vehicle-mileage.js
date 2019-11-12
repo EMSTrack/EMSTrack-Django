@@ -292,6 +292,31 @@ function reportSummary() {
 
 }
 
+function retrieveVehicleHistory(vehicle, range, page_size=100, page=1) {
+
+    logger.log('debug', 'Retrieving vehicle %s page %d...', vehicle['identifier'], page);
+
+    const url = `ambulance/${vehicle['id']}/updates/?page=${page}&page_size=${page_size}&filter=${range}`;
+    return apiClient.httpClient.get(url)
+        .then( response => {
+
+            logger.log('debug', 'Processing vehicle %s data, page %d...', vehicle['identifier'], page);
+
+            // retrieve updates
+            const data = response.data;
+            const history = data.results;
+
+            // has next page?
+            if (data.next !== null)
+                // retrieve next page
+                history.concat(retrieveVehicleHistory(vehicle, range, page_size, page + 1));
+
+            // and return history
+            return history;
+
+        });
+}
+
 function retrieveVehicle(vehicle, range) {
 
     logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
@@ -302,18 +327,15 @@ function retrieveVehicle(vehicle, range) {
 
     $('#pleaseWaitVehicle').text(vehicle['identifier']);
 
-    const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
-    return apiClient.httpClient.get(url)
-        .then( response => {
-
-            logger.log('debug', 'Processing vehicle %s data...', vehicle['identifier']);
-
-            // retrieve updates
-            const history = response.data;
+    return retrieveVehicleHistory(vehicle, range)
+        .then( history => {
             if (history.length) {
 
                 // get id
-                const id = history[0]['ambulance_id'];
+                const id = vehicle['id'];
+
+                logger.log('debug', "Got '%s' updates for vehicle '%s' from API",
+                    history.length, vehicle['identifier']);
 
                 // segment and store
                 const [segments, durations, status, user] = segmentHistory(history);
@@ -326,8 +348,6 @@ function retrieveVehicle(vehicle, range) {
                 };
 
                 // add to map
-                logger.log('debug', "Got '%s' updates for vehicle '%s' from API",
-                    history.length, vehicles[id]['identifier']);
                 addAmbulanceRoute(map, history, ambulance_status, false);
 
             }
