@@ -180,7 +180,7 @@ export class ReadPages {
         logger.log('debug', 'Retrieving page %d...', page);
 
         // build url
-        this.searchParams.set('page', str(page));
+        this.searchParams.set('page', page.toString());
         const url = this.url + '?' + this.searchParams;
 
         logger.log('debug', 'url: %s', url);
