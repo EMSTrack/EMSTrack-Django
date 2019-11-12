@@ -329,12 +329,13 @@ function retrieveVehicleHistory(data, range, index, page_size=1000, page=1, hist
     return apiClient.httpClient.get(url)
         .then( response => {
 
-            logger.log('debug', 'Processing vehicle %s data, page %d...', vehicle['identifier'], page);
-
             // retrieve updates and add to history
             const pageData = response.data;
             history = history.concat(pageData.results);
             const totalPages = Math.ceil(pageData.count / page_size);
+
+            logger.log('debug', 'Processing vehicle %s data, page %d of %d...',
+                vehicle['identifier'], page, totalPages);
 
             // update message
             $('#pleaseWaitVehicle').text(`${vehicle['identifier']}, page ${page} of ${totalPages}`);
