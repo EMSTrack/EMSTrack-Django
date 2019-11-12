@@ -349,11 +349,11 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
 
             else {
 
-                // retrieve next vehicle is async
-                retrieveVehicles(vehicles, range, index + 1);
-
                 // process vehicle history
                 processVehicleHistory(vehicle, history);
+
+                // retrieve next vehicle
+                retrieveVehicles(vehicles, range, index + 1);
 
             }
 
