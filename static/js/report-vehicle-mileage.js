@@ -292,6 +292,47 @@ function reportSummary() {
 
 }
 
+function retrieveVehicle(vehicle, range) {
+
+    logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
+
+    // save vehicle
+    vehicles[vehicle['id']] = vehicle;
+    vehicles[vehicle['id']]['data'] = {};
+
+    $('#pleaseWaitVehicle').text(vehicle['identifier']);
+
+    const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
+    return apiClient.httpClient.get(url)
+        .then( response => {
+
+            // retrieve updates
+            const history = response.data;
+            if (history.length) {
+
+                // get id
+                const id = history[0]['ambulance_id'];
+
+                // segment and store
+                const [segments, durations, status, user] = segmentHistory(history);
+                vehicles[id]['data'] = {
+                    'history': history,
+                    'segments': segments,
+                    'durations': durations,
+                    'status': status,
+                    'user': user
+                };
+
+                // add to map
+                logger.log('debug', "Got '%s' vehicle '%s' updates from API",
+                    history.length, vehicles[id]['identifier']);
+                addAmbulanceRoute(map, history, ambulance_status, false);
+
+            }
+        });
+
+}
+
 function retrieveData(range) {
 
     // Retrieve vehicles
@@ -302,52 +343,11 @@ function retrieveData(range) {
             logger.log('debug', "Got vehicle data from API");
 
             // loop through vehicle records
-            const requests = response.data.map(vehicle => {
-
-                logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
-
-                // save vehicle
-                vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['data'] = {};
-
-                const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
-                return apiClient.httpClient.get(url);
-
-            });
-
-            return Promise.all(requests);
+            return response.data.reduce(
+                (promise, vehicle) => promise.then(retrieveVehicle(vehicle, range)), Promise.resolve()
+            );
 
         })
-        .then(responses =>
-            responses.forEach(
-                response => {
-
-                    // retrieve updates
-                    const history = response.data;
-                    if (history.length) {
-
-                        // get id
-                        const id = history[0]['ambulance_id'];
-
-                        // segment and store
-                        const [segments, durations, status, user] = segmentHistory(history);
-                        vehicles[id]['data'] = {
-                            'history': history,
-                            'segments': segments,
-                            'durations': durations,
-                            'status': status,
-                            'user': user
-                        };
-
-                        // add to map
-                        logger.log('debug', "Got '%s' vehicle '%s' updates from API",
-                            history.length, vehicles[id]['identifier']);
-                        addAmbulanceRoute(map, history, ambulance_status, false);
-
-                    }
-
-                }
-            ));
 
 }
 
