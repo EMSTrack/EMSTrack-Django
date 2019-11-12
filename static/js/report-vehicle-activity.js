@@ -413,7 +413,130 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
 }
 
-function retrieveData(range) {
+function processVehicleHistory(vehicle, history) {
+
+    logger.log('debug', "Got '%s' updates for vehicle '%s' from API", history.length, vehicle['identifier']);
+
+    if (history.length) {
+
+        // get id
+        const id = vehicle['id'];
+
+        // store history
+        vehicles[id]['data'] = {
+            'history': history
+        };
+
+    }
+
+}
+
+function retrieveVehicleHistory(data, range, beginDate, endDate, index, page_size=1000, page=1, history=[]) {
+
+    // get current vehicle
+    const vehicle = data[index];
+
+    logger.log('debug', 'Retrieving vehicle %s page %d...', vehicle['identifier'], page);
+
+    const url = `ambulance/${vehicle['id']}/updates/?page=${page}&page_size=${page_size}&filter=${range}`;
+    return apiClient.httpClient.get(url)
+        .then( response => {
+
+            // retrieve updates and add to history
+            const pageData = response.data;
+            history = history.concat(pageData.results);
+            const totalPages = Math.ceil(pageData.count / page_size);
+
+            logger.log('debug', 'Processing vehicle %s data, page %d of %d...',
+                vehicle['identifier'], page, totalPages);
+
+            // update message
+            $('#pleaseWaitVehicle').text(`${vehicle['identifier']}, page ${page} of ${totalPages}`);
+
+            logger.log('debug', 'page %d: vehicle %s history has %d records, next=%s',
+                page, vehicle['identifier'], history.length, pageData.next);
+
+            // has next page?
+            if (pageData.next !== null)
+
+                // retrieve next page
+                retrieveVehicleHistory(data, range, beginDate, endDate, index, page_size, page+1, history);
+
+            else {
+
+                try {
+
+                    // process vehicle history
+                    processVehicleHistory(vehicle, history);
+
+                } catch(error) {
+                    console.log(error);
+                }
+
+                // retrieve next vehicle
+                retrieveVehicles(data, range, beginDate, endDate, index + 1);
+
+            }
+
+        })
+        .catch((error) => {
+            logger.log('error', "'Failed to retrieve vehicle %s, page %d, error: %s",
+                vehicle['identifier'], page, error);
+
+            // retrieve next vehicle
+            retrieveVehicles(data, range, beginDate, endDate, index + 1);
+        });
+
+}
+
+function retrieveVehicles(data, range, beginDate, endDate, index=0) {
+
+    if (index === data.length) {
+
+        // no more vehicles, produce report
+        logger.log('debug', 'Generating report...');
+
+
+        // Update please wait message
+        const pleaseWait = $('#pleaseWait');
+        pleaseWait.text("Generating report...");
+
+        // segment history
+        segmentHistoryByMode(mode);
+
+        // render
+        render(mode, beginDate, endDate);
+
+        // enable generate report button
+        $('#submitButton')
+            .prop('disabled', false);
+
+        // hide please wait sign
+        pleaseWait.hide();
+
+        // and return
+        return
+
+    }
+
+    // get current vehicle
+    const vehicle = data[index];
+
+    logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
+
+    // save vehicle in global variable vehicles
+    vehicles[vehicle['id']] = vehicle;
+    vehicles[vehicle['id']]['data'] = {};
+
+    $('#pleaseWaitVehicle').text(vehicle['identifier']);
+
+    // retrieve updates
+    return retrieveVehicleHistory(data, range, beginDate, endDate, index);
+
+}
+
+
+function retrieveData(range, beginDate, endDate) {
 
     // Retrieve vehicles
     return apiClient.httpClient.get('ambulance/')
@@ -423,42 +546,9 @@ function retrieveData(range) {
             logger.log('debug', "Got vehicle data from API");
 
             // loop through vehicle records
-            const requests = response.data.map( vehicle  => {
+            retrieveVehicles(response.data, range, beginDate, endDate);
 
-                logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
-
-                // save vehicle
-                vehicles[vehicle['id']] = vehicle;
-                vehicles[vehicle['id']]['data'] = {};
-
-                const url = 'ambulance/' + vehicle['id'] + '/updates/?filter=' + range;
-                return apiClient.httpClient.get(url);
-
-            });
-
-            return Promise.all(requests);
-
-        })
-        .then( responses =>
-            responses.forEach(
-                response => {
-
-                    // retrieve updates
-                    const history = response.data;
-                    if (history.length) {
-
-                        // get id
-                        const id = history[0]['ambulance_id'];
-
-                        // store history
-                        vehicles[id]['data'] = {
-                            'history': history
-                        };
-
-                    }
-
-                }
-        ))
+        });
 
 }
 
@@ -645,30 +735,10 @@ function init (client) {
         });
 
     // retrieve data
-    retrieveData(range)
-        .then( () => {
-
-            // Update please wait message
-            const pleaseWait = $('#pleaseWait');
-            pleaseWait.text("Generating report...");
-
-            // segment history
-            segmentHistoryByMode(mode);
-
-            // render
-            render(mode, beginDate, endDate);
-
-            // enable generate report button
-            $('#submitButton')
-                .prop('disabled', false);
-
-            // hide please wait sign
-            pleaseWait.hide();
-
-        })
-        .catch( (error) => {
+    retrieveData(range, beginDate, endDate)
+        .catch((error) => {
             logger.log('error', "'Failed to retrieve vehicles: %s ", error);
-        });
+        })
 
 }
 
