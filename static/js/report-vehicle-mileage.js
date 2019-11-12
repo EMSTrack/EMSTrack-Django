@@ -306,6 +306,8 @@ function retrieveVehicle(vehicle, range) {
     return apiClient.httpClient.get(url)
         .then( response => {
 
+            logger.log('debug', 'Processing vehicle %s data...', vehicle['identifier']);
+
             // retrieve updates
             const history = response.data;
             if (history.length) {
