@@ -334,6 +334,10 @@ function retrieveVehicleHistory(data, range, index, page_size=1000, page=1, hist
             // retrieve updates and add to history
             const pageData = response.data;
             history = history.concat(pageData.results);
+            const totalPages = Math.ceil(pageData.count / page_size);
+
+            // update message
+            $('#pleaseWaitVehicle').text(`${vehicle['identifier']}, page ${page} of ${totalPages}`);
 
             logger.log('debug', 'page %d: vehicle %s history has %d records, next=%s',
                 page, vehicle['identifier'], history.length, pageData.next);
