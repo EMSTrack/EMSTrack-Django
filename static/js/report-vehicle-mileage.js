@@ -292,7 +292,61 @@ function reportSummary() {
 
 }
 
-function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1) {
+function processVehicleHistory(vehicle, history) {
+
+    logger.log('debug', "Got '%s' updates for vehicle '%s' from API", history.length, vehicle['identifier']);
+
+    if (history.length) {
+
+        // get id
+        const id = vehicle['id'];
+
+        // segment and store
+        const [segments, durations, status, user] = segmentHistory(history);
+        vehicles[id]['data'] = {
+            'history': history,
+            'segments': segments,
+            'durations': durations,
+            'status': status,
+            'user': user
+        };
+
+        // add to map
+        addAmbulanceRoute(map, history, ambulance_status, false);
+
+    }
+
+    // remove from pending updates
+    pendingUpdates--;
+
+    logger.log('debug', 'PENDING UPDATES = %d', pendingUpdates);
+
+    // if no more pending updates
+    if (pendingUpdates === 0) {
+
+        logger.log('debug', 'Generating report...');
+
+        // Update please wait message
+        const pleaseWait = $('#pleaseWait');
+        pleaseWait.text("Generating report...");
+
+        // report summary
+        reportSummary();
+
+        // enable generate report button
+        $('#submitButton')
+            .prop('disabled', false);
+
+        // hide please wait sign
+        pleaseWait.hide();
+
+    }
+
+}
+
+let pendingUpdates;
+
+function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1, history=[]) {
 
     logger.log('debug', 'Retrieving vehicle %s page %d...', vehicle['identifier'], page);
 
@@ -302,9 +356,9 @@ function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1) {
 
             logger.log('debug', 'Processing vehicle %s data, page %d...', vehicle['identifier'], page);
 
-            // retrieve updates
+            // retrieve updates and add to history
             const data = response.data;
-            let history = data.results;
+            history = history.concat(data.results);
 
             logger.log('debug', 'page %d: vehicle %s history has %d records, next=%s',
                 page, vehicle['identifier'], history.length, data.next);
@@ -312,13 +366,11 @@ function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1) {
             // has next page?
             if (data.next !== null)
                 // retrieve next page
-                history = history.concat(retrieveVehicleHistory(vehicle, range, page_size, page + 1));
+                retrieveVehicleHistory(vehicle, range, page_size, page + 1, history);
 
-            logger.log('debug', 'page: %d: vehicle %s history has %d records',
-                page, vehicle['identifier'], history.length);
-
-            // and return history
-            return history;
+            else
+                // process vehicle history
+                processVehicleHistory(vehicle, history);
 
         });
 }
@@ -333,37 +385,18 @@ function retrieveVehicle(vehicle, range) {
 
     $('#pleaseWaitVehicle').text(vehicle['identifier']);
 
-    return retrieveVehicleHistory(vehicle, range)
-        .then( history => {
+    // add to pending updates
+    pendingUpdates ++;
 
-            logger.log('debug', "Got '%s' updates for vehicle '%s' from API", history.length, vehicle['identifier']);
-
-            if (history.length) {
-
-                // get id
-                const id = vehicle['id'];
-
-                // segment and store
-                const [segments, durations, status, user] = segmentHistory(history);
-                vehicles[id]['data'] = {
-                    'history': history,
-                    'segments': segments,
-                    'durations': durations,
-                    'status': status,
-                    'user': user
-                };
-
-                // add to map
-                addAmbulanceRoute(map, history, ambulance_status, false);
-
-            }
-        });
+    // increment updates
+    return retrieveVehicleHistory(vehicle, range);
 
 }
 
 function retrieveData(range) {
 
     // Retrieve vehicles
+    pendingUpdates = 0;
     return apiClient.httpClient.get('ambulance/')
         .then(response => {
 
@@ -448,25 +481,6 @@ function init (client) {
 
     // retrieve data
     retrieveData(range)
-        .then(() => {
-
-            logger.log('debug', 'Generating report...');
-
-            // Update please wait message
-            const pleaseWait = $('#pleaseWait');
-            pleaseWait.text("Generating report...");
-
-            // report summary
-            reportSummary();
-
-            // enable generate report button
-            $('#submitButton')
-                .prop('disabled', false);
-
-            // hide please wait sign
-            pleaseWait.hide();
-
-        })
         .catch((error) => {
             logger.log('error', "'Failed to retrieve vehicles: %s ", error);
         })
