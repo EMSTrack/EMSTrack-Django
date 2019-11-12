@@ -360,7 +360,15 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
 
             }
 
+        })
+        .catch((error) => {
+            logger.log('error', "'Failed to retrieve vehicle %s, page %d, error: %s",
+                vehicle['identifier'], page, error);
+
+            // retrieve next vehicle
+            retrieveVehicles(vehicles, range, index + 1);
         });
+
 }
 
 function retrieveVehicles(vehicles, range, index = 0) {
