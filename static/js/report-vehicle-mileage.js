@@ -477,6 +477,18 @@ function retrieveVehicles(data, range, index = 0) {
 
 function retrieveData(range) {
 
+    // disable generate report button
+    $('#submitButton')
+        .prop('disabled', true);
+
+    // show please wait sign
+    $('#pleaseWaitVehicle')
+        .show();
+
+    // clear vehicles table body
+    $('#vehiclesTable > tbody')
+        .empty();
+
     // Retrieve vehicles
     return apiClient.httpClient.get('ambulance/')
         .then(response => {
@@ -534,10 +546,6 @@ function init (client) {
         .prop('value', endDate.toISOString().substr(0, 10))
         .prop('min', minDate.toISOString().substr(0, 10));
 
-    // set range
-    const range = beginDate.toISOString() + "," + endDate.toISOString();
-    logger.log('debug', 'range = %j', range);
-
     // mode
     xAxesMode = $('input[name="x-axis"]:checked').val();
     logger.log('debug', 'x-axis= %s', xAxesMode);
@@ -558,11 +566,29 @@ function init (client) {
 
         });
 
-    // retrieve data
-    retrieveData(range)
-        .catch((error) => {
-            logger.log('error', "'Failed to retrieve vehicles: %s ", error);
-        })
+    $('#submitButton')
+        .click(() => {
+
+            const endDateElement = $('#endDate');
+            const endDate = new Date(endDateElement.val());
+            const beginDateElement = $('#beginDate');
+            const beginDate = new Date(beginDateElement.val());
+            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
+
+            const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
+            logger.log('debug', '_beginDate = %s, _endDate = %s, _minDate = %s', _beginDate, _endDate, _minDate);
+
+            // set range
+            const range = _beginDate.toISOString() + "," + _endDate.toISOString();
+            logger.log('debug', 'range = %j', range);
+
+            // retrieve data and generate report
+            retrieveData(range)
+                .catch((error) => {
+                    logger.log('error', "'Failed to retrieve vehicles: %s ", error);
+                });
+
+        });
 
 }
 

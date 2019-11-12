@@ -508,6 +508,18 @@ function retrieveVehicles(data, range, beginDate, endDate, index=0) {
 
 function retrieveData(range, beginDate, endDate) {
 
+    // disable generate report button
+    $('#submitButton')
+        .prop('disabled', true);
+
+    // show please wait sign
+    $('#pleaseWaitVehicle')
+        .show();
+
+    // clear vehicles table
+    $('#vehiclesTable')
+        .empty();
+
     // Retrieve vehicles
     return apiClient.httpClient.get('ambulance/')
         .then( response => {
@@ -675,10 +687,6 @@ function init (client) {
     // set connect color
     slider.querySelectorAll('.noUi-connect')[0].classList.add('bg-primary');
 
-    // set range
-    const range = beginDate.toISOString() + "," + endDate.toISOString();
-    logger.log('debug', 'range = %j', range);
-
     // mode
     mode = urlParams.get('mode') ? urlParams.get('mode') : $('input[name="mode"]:checked').val();
     logger.log('debug', 'mode = %s', mode);
@@ -704,11 +712,27 @@ function init (client) {
 
         });
 
-    // retrieve data
-    retrieveData(range, beginDate, endDate)
-        .catch((error) => {
-            logger.log('error', "'Failed to retrieve vehicles: %s ", error);
-        })
+    $('#submitButton')
+        .click(() => {
+
+            const beginDateElement = $('#beginDate');
+            const beginDate = new Date(beginDateElement.val());
+            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
+
+            const [_beginDate, _endDate] = validateDateRange(beginDate);
+            logger.log('debug', 'beginDate = %s, endDate = %s', _beginDate, _endDate);
+
+            // set range
+            const range = _beginDate.toISOString() + "," + _endDate.toISOString();
+            logger.log('debug', 'range = %j', range);
+
+            // retrieve data
+            retrieveData(range, _beginDate, _endDate)
+                .catch((error) => {
+                    logger.log('error', "'Failed to retrieve vehicles: %s ", error);
+                })
+
+        });
 
 }
 
