@@ -4,6 +4,8 @@ import {logger} from './logger';
 import {addAmbulanceRoute, segmentHistory, calculateMotionStatistics} from "./map-tools";
 import {validateDateRange, getOrCreateElement} from "./util";
 
+import {ReadPages} from "./components/pagination";
+
 import {Chart} from 'chart.js';
 import 'chartjs-plugin-zoom';
 
@@ -376,6 +378,55 @@ function retrieveVehicleHistory(data, range, index, page_size=1000, page=1, hist
 
 }
 
+class ReadVehiclePages extends ReadPages {
+
+    constructor(vehicle, callback, apiClient, url, page_size = 1000) {
+        // call super
+        super(apiClient, url, page_size);
+
+        this.vehicle = vehicle;
+        this.callback = callback;
+    }
+
+    afterPage(result) {
+
+        // update message
+        $('#pleaseWaitVehicle').text(`${this.vehicle['identifier']}, page ${this.page} of ${this.totalPages}`);
+
+    }
+
+    afterAllPages() {
+
+        logger.log('debug', "Got '%s' updates for vehicle '%s' from API",
+            this.results.length, this.vehicle['identifier']);
+
+        if (this.results.length) {
+
+            // get id
+            const id = this.vehicle['id'];
+
+            // segment and store
+            const [segments, durations, status, user] = segmentHistory(history);
+            vehicles[id]['data'] = {
+                'history': history,
+                'segments': segments,
+                'durations': durations,
+                'status': status,
+                'user': user
+            };
+
+            // add to map
+            addAmbulanceRoute(map, history, ambulance_status, false);
+
+        }
+
+        if (this.callback)
+            this.callback();
+
+    }
+
+}
+
 function retrieveVehicles(data, range, index = 0) {
 
     if (index === data.length) {
@@ -414,7 +465,12 @@ function retrieveVehicles(data, range, index = 0) {
     $('#pleaseWaitVehicle').text(vehicle['identifier']);
 
     // retrieve updates
-    return retrieveVehicleHistory(data, range, index);
+    const url = `ambulance/${vehicle['id']}/updates/?filter=${range}`;
+    new ReadVehiclePages(vehicle, function() {
+            retrieveVehicles(data, range, index+1)
+        },
+        apiClient, url)
+        .getPages();
 
 }
 
