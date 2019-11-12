@@ -191,7 +191,7 @@ export class ReadPages {
                 const pageResults = pageData.results;
                 this.results = this.results.concat(pageResults);
                 if (this.totalPages < 0)
-                    this.totalPages =  Math.ceil(pageData.count / page_size);
+                    this.totalPages =  Math.ceil(pageData.count / this.page_size);
 
                 logger.log('debug', 'Page %d of %d: %d records, next=%s...',
                     page, this.totalPages, this.results.length, pageData.next);
