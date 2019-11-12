@@ -304,7 +304,7 @@ function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1) {
 
             // retrieve updates
             const data = response.data;
-            const history = data.results;
+            let history = data.results;
 
             logger.log('debug', 'page %d: vehicle %s history has %d records, next=%s',
                 page, vehicle['identifier'], history.length, data.next);
@@ -312,7 +312,7 @@ function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1) {
             // has next page?
             if (data.next !== null)
                 // retrieve next page
-                history.concat(retrieveVehicleHistory(vehicle, range, page_size, page + 1));
+                history = history.concat(retrieveVehicleHistory(vehicle, range, page_size, page + 1));
 
             logger.log('debug', 'page: %d: vehicle %s history has %d records',
                 page, vehicle['identifier'], history.length);
