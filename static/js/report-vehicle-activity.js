@@ -512,8 +512,12 @@ function retrieveData(range, beginDate, endDate) {
     $('#submitButton')
         .prop('disabled', true);
 
+    // show retrieving data message
+    $('#pleaseWaitMessage')
+        .text('Retrieving data...');
+
     // show please wait sign
-    $('#pleaseWaitVehicle')
+    $('#pleaseWait')
         .show();
 
     // clear vehicles table
