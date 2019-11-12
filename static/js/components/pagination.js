@@ -158,3 +158,88 @@ export class Pagination {
 
 }
 
+class ReadPages {
+
+    constructor(apiClient, url, page_size = 1000) {
+        this.apiClient = apiClient;
+
+        // get page and page_size parameters
+        const urlParts = url.split('?');
+        this.url = urlParts[0];
+        this.searchParams = new URLSearchParams(urlParts.length > 1 ? urlParts[1] : '');
+        this.page = this.searchParams.has('page') ? Number.parseInt(this.searchParams.get('page')) : 1;
+        this.page_size = this.searchParams.has('page_size') ? Number.parseInt(this.searchParams.get('page_size')) : page_size;
+        this.totalPages = -1;
+
+        this.results = [];
+        this.numberOfErrors = 0;
+    }
+
+    getPages(page=1) {
+
+        logger.log('debug', 'Retrieving page %d...', page);
+
+        // build url
+        this.searchParams.set('page', page);
+        const url = this.url + '?' + this.searchParams;
+
+        return this.apiClient.httpClient.get(url)
+            .then( response => {
+
+                // retrieve updates and add to history
+                const pageData = response.data;
+                const pageResults = pageData.results;
+                this.results = this.results.concat(pageResults);
+                if (this.totalPages < 0)
+                    this.totalPages =  Math.ceil(pageData.count / page_size);
+
+                logger.log('debug', 'Page %d of %d: %d records, next=%s...',
+                    page, this.totalPages, this.results.length, pageData.next);
+
+                try {
+
+                    // process page
+                    this.afterPage(pageResults);
+
+                } catch(error) {
+                    logger.log('debug', 'Failed processing page %d, error: %s', page, error);
+                    this.numberOfErrors++;
+                }
+
+                // has next page?
+                if (pageData.next !== null)
+
+                    // retrieve next page
+                    this.getPages(page+1);
+
+                else {
+
+                    try {
+
+                        // process vehicle history
+                        this.afterAllPages();
+
+                    } catch(error) {
+                        logger.log('debug', 'Failed processing pages, error: %s', error);
+                        this.numberOfErrors++;
+                    }
+
+                }
+
+            })
+            .catch((error) => {
+                logger.log('error', "'Failed to retrieve page %d, error: %s", page, error);
+                this.numberOfErrors++;
+
+                // process vehicle history
+                this.afterAllPages();
+
+            });
+
+    }
+
+    afterPage(result) { }
+
+    afterAllPages() { }
+
+}

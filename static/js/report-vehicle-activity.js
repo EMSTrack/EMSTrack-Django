@@ -5,6 +5,8 @@ import 'nouislider/distribute/nouislider.css';
 
 import {logger} from './logger';
 
+import {ReadPages} from '/components/pagination';
+
 import {
     getOrCreateElement,
     millisToSplitTime,
@@ -413,6 +415,96 @@ function renderRuler(beginDate, endDate, offsetMillis = 0) {
 
 }
 
+class ReadVehiclePages extends ReadPages {
+
+    constructor(vehicle, callback, apiClient, url, page_size = 1000) {
+        // call super
+        super(apiClient, url, page_size);
+
+        this.vehicle = vehicle;
+        this.callback = callback;
+    }
+
+    afterPage(result) {
+
+        // update message
+        $('#pleaseWaitVehicle').text(`${this.vehicle['identifier']}, page ${this.page} of ${this.totalPages}`);
+
+    }
+
+    afterAllPages() {
+
+        logger.log('debug', "Got '%s' updates for vehicle '%s' from API",
+            this.results.length, this.vehicle['identifier']);
+
+        if (this.results.length) {
+
+            // get id
+            const id = this.vehicle['id'];
+
+            // store history
+            vehicles[id]['data'] = {
+                'history': this.results
+            };
+
+        }
+
+        if (this.callback)
+            this.callback();
+
+    }
+
+}
+
+function newRetrieveVehicles(data, range, beginDate, endDate, index=0) {
+
+    if (index === data.length) {
+
+        // no more vehicles, produce report
+        logger.log('debug', 'Generating report...');
+
+        // Update please wait message
+        const pleaseWait = $('#pleaseWait');
+        pleaseWait.text("Generating report...");
+
+        // segment history
+        segmentHistoryByMode(mode);
+
+        // render
+        render(mode, beginDate, endDate);
+
+        // enable generate report button
+        $('#submitButton')
+            .prop('disabled', false);
+
+        // hide please wait sign
+        pleaseWait.hide();
+
+        // and return
+        return
+
+    }
+
+    // get current vehicle
+    const vehicle = data[index];
+
+    logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
+
+    // save vehicle in global variable vehicles
+    vehicles[vehicle['id']] = vehicle;
+    vehicles[vehicle['id']]['data'] = {};
+
+    $('#pleaseWaitVehicle').text(vehicle['identifier']);
+
+    url = `ambulance/${vehicle['id']}/updates/?filter=${range}`;
+    new ReadVehiclePages(vehicle, function() {
+            newRetrieveVehicles(data, range, beginDate, endDate, index+1)
+        },
+        apiClient, url)
+        .getPages();
+
+}
+
 function processVehicleHistory(vehicle, history) {
 
     logger.log('debug', "Got '%s' updates for vehicle '%s' from API", history.length, vehicle['identifier']);
@@ -546,7 +638,7 @@ function retrieveData(range, beginDate, endDate) {
             logger.log('debug', "Got vehicle data from API");
 
             // loop through vehicle records
-            retrieveVehicles(response.data, range, beginDate, endDate);
+            newRetrieveVehicles(response.data, range, beginDate, endDate);
 
         });
 
