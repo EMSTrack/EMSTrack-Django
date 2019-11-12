@@ -318,10 +318,10 @@ function processVehicleHistory(vehicle, history) {
 
 }
 
-function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, history=[]) {
+function retrieveVehicleHistory(data, range, index, page_size=1000, page=1, history=[]) {
 
     // get current vehicle
-    const vehicle = vehicles[index];
+    const vehicle = data[index];
 
     logger.log('debug', 'Retrieving vehicle %s page %d...', vehicle['identifier'], page);
 
@@ -342,7 +342,7 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
             if (data.next !== null)
 
                 // retrieve next page
-                retrieveVehicleHistory(vehicles, range, index, page_size, page+1, history);
+                retrieveVehicleHistory(data, range, index, page_size, page+1, history);
 
             else {
 
@@ -356,7 +356,7 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
                 }
 
                 // retrieve next vehicle
-                retrieveVehicles(vehicles, range, index + 1);
+                retrieveVehicles(data, range, index + 1);
 
             }
 
@@ -366,14 +366,14 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
                 vehicle['identifier'], page, error);
 
             // retrieve next vehicle
-            retrieveVehicles(vehicles, range, index + 1);
+            retrieveVehicles(data, range, index + 1);
         });
 
 }
 
-function retrieveVehicles(vehicles, range, index = 0) {
+function retrieveVehicles(data, range, index = 0) {
 
-    if (index === vehicles.length) {
+    if (index === data.length) {
 
         // no more vehicles, produce report
         logger.log('debug', 'Generating report...');
@@ -398,18 +398,18 @@ function retrieveVehicles(vehicles, range, index = 0) {
     }
 
     // get current vehicle
-    const vehicle = vehicles[index];
+    const vehicle = data[index];
 
     logger.log('debug', 'Adding vehicle %s', vehicle['identifier']);
 
-    // save vehicle
+    // save vehicle in global variable vehicles
     vehicles[vehicle['id']] = vehicle;
     vehicles[vehicle['id']]['data'] = {};
 
     $('#pleaseWaitVehicle').text(vehicle['identifier']);
 
     // retrieve updates
-    return retrieveVehicleHistory(vehicles, range, index);
+    return retrieveVehicleHistory(data, range, index);
 
 }
 
