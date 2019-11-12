@@ -320,10 +320,6 @@ function processVehicleHistory(vehicle, history) {
 
 function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, history=[]) {
 
-    if (index >= vehicles.length)
-        // no more vehicles, return
-        return;
-
     // get current vehicle
     const vehicle = vehicles[index];
 
@@ -344,8 +340,9 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
 
             // has next page?
             if (data.next !== null)
+
                 // retrieve next page
-                retrieveVehicleHistory(vehicles, range, index, page_size, page + 1, history);
+                retrieveVehicleHistory(vehicles, range, index, page_size, page+1, history);
 
             else {
 
@@ -362,7 +359,8 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
 
 function retrieveVehicles(vehicles, range, index = 0) {
 
-    if (index >= vehicles.length) {
+    if (index === vehicles.length) {
+
         // no more vehicles, produce report
         logger.log('debug', 'Generating report...');
 
@@ -382,6 +380,7 @@ function retrieveVehicles(vehicles, range, index = 0) {
 
         // and return
         return
+
     }
 
     // get current vehicle
