@@ -324,7 +324,7 @@ function retrieveVehicle(vehicle, range) {
                 };
 
                 // add to map
-                logger.log('debug', "Got '%s' vehicle '%s' updates from API",
+                logger.log('debug', "Got '%s' updates for vehicle '%s' from API",
                     history.length, vehicles[id]['identifier']);
                 addAmbulanceRoute(map, history, ambulance_status, false);
 
@@ -421,6 +421,8 @@ function init (client) {
     // retrieve data
     retrieveData(range)
         .then(() => {
+
+            logger.log('debug', 'Generating report...');
 
             // Update please wait message
             const pleaseWait = $('#pleaseWait');
