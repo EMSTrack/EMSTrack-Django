@@ -346,8 +346,14 @@ function retrieveVehicleHistory(vehicles, range, index, page_size=1000, page=1, 
 
             else {
 
-                // process vehicle history
-                processVehicleHistory(vehicle, history);
+                try {
+
+                    // process vehicle history
+                    processVehicleHistory(vehicle, history);
+
+                } catch(error) {
+                    console.log(error);
+                }
 
                 // retrieve next vehicle
                 retrieveVehicles(vehicles, range, index + 1);
