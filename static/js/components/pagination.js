@@ -169,7 +169,9 @@ export class ReadPages {
         this.searchParams = new URLSearchParams(urlParts.length > 1 ? urlParts[1] : '');
         this.page = this.searchParams.has('page') ? Number.parseInt(this.searchParams.get('page')) : 1;
 
-        this.page_size = this.searchParams.has('page_size') ? Number.parseInt(this.searchParams.get('page_size')) : page_size;
+        this.page_size = this.searchParams.has('page_size')
+            ? Number.parseInt(this.searchParams.get('page_size'))
+            : page_size;
         this.searchParams.set('page_size', this.page_size.toString());
 
         this.totalPages = -1;
@@ -178,12 +180,12 @@ export class ReadPages {
         this.numberOfErrors = 0;
     }
 
-    getPages(page=1) {
+    getPages() {
 
-        logger.log('debug', 'Retrieving page %d...', page);
+        logger.log('debug', 'Retrieving page %d...', this.page);
 
         // build url
-        this.searchParams.set('page', page.toString());
+        this.searchParams.set('page', this.page.toString());
         const url = this.url + '?' + this.searchParams;
 
         logger.log('debug', 'url: %s', url);
@@ -199,7 +201,7 @@ export class ReadPages {
                     this.totalPages =  Math.ceil(pageData.count / this.page_size);
 
                 logger.log('debug', 'Page %d of %d: %d records, next=%s...',
-                    page, this.totalPages, this.results.length, pageData.next);
+                    this.page, this.totalPages, this.results.length, pageData.next);
 
                 try {
 
@@ -207,17 +209,18 @@ export class ReadPages {
                     this.afterPage(pageResults);
 
                 } catch(error) {
-                    logger.log('debug', 'Failed processing page %d, error: %s', page, error);
+                    logger.log('debug', 'Failed processing page %d, error: %s', this.page, error);
                     this.numberOfErrors++;
                 }
 
                 // has next page?
-                if (pageData.next !== null)
+                if (pageData.next !== null) {
 
                     // retrieve next page
-                    this.getPages(page+1);
+                    this.page++;
+                    this.getPages();
 
-                else {
+                } else {
 
                     try {
 
@@ -233,7 +236,7 @@ export class ReadPages {
 
             })
             .catch((error) => {
-                logger.log('error', "'Failed to retrieve page %d, error: %s", page, error);
+                logger.log('error', "'Failed to retrieve page %d, error: %s", this.page, error);
                 this.numberOfErrors++;
 
                 // process vehicle history
