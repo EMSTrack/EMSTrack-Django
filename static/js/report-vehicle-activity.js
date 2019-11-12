@@ -5,7 +5,7 @@ import 'nouislider/distribute/nouislider.css';
 
 import {logger} from './logger';
 
-import {ReadPages} from '/components/pagination';
+import {ReadPages} from './components/pagination';
 
 import {
     getOrCreateElement,

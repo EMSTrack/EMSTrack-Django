@@ -158,7 +158,7 @@ export class Pagination {
 
 }
 
-class ReadPages {
+export class ReadPages {
 
     constructor(apiClient, url, page_size = 1000) {
         this.apiClient = apiClient;
