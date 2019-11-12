@@ -329,13 +329,13 @@ function retrieveVehicle(vehicle, range) {
 
     return retrieveVehicleHistory(vehicle, range)
         .then( history => {
+
+            logger.log('debug', "Got '%s' updates for vehicle '%s' from API", history.length, vehicle['identifier']);
+
             if (history.length) {
 
                 // get id
                 const id = vehicle['id'];
-
-                logger.log('debug', "Got '%s' updates for vehicle '%s' from API",
-                    history.length, vehicle['identifier']);
 
                 // segment and store
                 const [segments, durations, status, user] = segmentHistory(history);
