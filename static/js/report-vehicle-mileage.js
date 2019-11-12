@@ -406,6 +406,7 @@ class ReadVehiclePages extends ReadPages {
             const id = this.vehicle['id'];
 
             // segment and store
+            const history = this.results;
             const [segments, durations, status, user] = segmentHistory(history);
             vehicles[id]['data'] = {
                 'history': history,
