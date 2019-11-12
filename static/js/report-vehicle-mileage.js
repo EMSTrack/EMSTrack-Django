@@ -292,7 +292,7 @@ function reportSummary() {
 
 }
 
-function retrieveVehicleHistory(vehicle, range, page_size=100, page=1) {
+function retrieveVehicleHistory(vehicle, range, page_size=1000, page=1) {
 
     logger.log('debug', 'Retrieving vehicle %s page %d...', vehicle['identifier'], page);
 
