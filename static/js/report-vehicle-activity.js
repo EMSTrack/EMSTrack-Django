@@ -496,7 +496,7 @@ function newRetrieveVehicles(data, range, beginDate, endDate, index=0) {
 
     $('#pleaseWaitVehicle').text(vehicle['identifier']);
 
-    url = `ambulance/${vehicle['id']}/updates/?filter=${range}`;
+    const url = `ambulance/${vehicle['id']}/updates/?filter=${range}`;
     new ReadVehiclePages(vehicle, function() {
             newRetrieveVehicles(data, range, beginDate, endDate, index+1)
         },
