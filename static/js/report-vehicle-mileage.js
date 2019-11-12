@@ -332,14 +332,14 @@ function retrieveVehicleHistory(data, range, index, page_size=1000, page=1, hist
             logger.log('debug', 'Processing vehicle %s data, page %d...', vehicle['identifier'], page);
 
             // retrieve updates and add to history
-            const data = response.data;
-            history = history.concat(data.results);
+            const pageData = response.data;
+            history = history.concat(pageData.results);
 
             logger.log('debug', 'page %d: vehicle %s history has %d records, next=%s',
-                page, vehicle['identifier'], history.length, data.next);
+                page, vehicle['identifier'], history.length, pageData.next);
 
             // has next page?
-            if (data.next !== null)
+            if (pageData.next !== null)
 
                 // retrieve next page
                 retrieveVehicleHistory(data, range, index, page_size, page+1, history);
