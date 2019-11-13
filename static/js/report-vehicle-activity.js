@@ -671,7 +671,7 @@ function init (client) {
     }).on('change', function() {
 
         const beginDateElement = $('#beginDate');
-        const beginDate = new Date(beginDateElement.val());
+        const beginDate = moment(beginDateElement.val(), 'YYYY-MM-DD');
         logger.log('debug', 'beginDate = %s', beginDate);
 
         // get times
@@ -725,7 +725,7 @@ function init (client) {
         .click(() => {
 
             const beginDateElement = $('#beginDate');
-            const beginDate = new Date(beginDateElement.val());
+            const beginDate = moment(beginDateElement.val(), 'YYYY-MM-DD');
             logger.log('debug', 'beginDate = %s', beginDate);
 
             const [_beginDate, _endDate] = validateDateRange(beginDate);

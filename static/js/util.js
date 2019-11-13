@@ -6,11 +6,11 @@ import {logger} from "./logger";
 
 export function swapElements(a, b) {
     a = $(a); b = $(b);
-    var tmp = $('<span>').hide();
+    const tmp = $('<span>').hide();
     a.before(tmp);
     b.before(a);
     tmp.replaceWith(b);
-};
+}
 
 export function timeSplit(time, defaultTime = [0,0,0,0]) {
     if (time == null || typeof time === 'undefined' || time === "")
