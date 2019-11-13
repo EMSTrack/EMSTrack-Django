@@ -670,6 +670,10 @@ function init (client) {
         }
     }).on('change', function() {
 
+        const beginDateElement = $('#beginDate');
+        const beginDate = new Date(beginDateElement.val());
+        logger.log('debug', 'beginDate = %s', beginDate);
+
         // get times
         const [offsetBeginDate, offsetEndDate, beginMillis, endMillis] = getTimes(slider, beginDate);
 
@@ -722,7 +726,7 @@ function init (client) {
 
             const beginDateElement = $('#beginDate');
             const beginDate = new Date(beginDateElement.val());
-            logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
+            logger.log('debug', 'beginDate = %s', beginDate);
 
             const [_beginDate, _endDate] = validateDateRange(beginDate);
             logger.log('debug', 'beginDate = %s, endDate = %s', _beginDate, _endDate);
