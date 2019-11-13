@@ -597,6 +597,9 @@ $(function () {
             const range = _beginDate.toISOString() + "," + _endDate.toISOString();
             logger.log('debug', 'range = %j', range);
 
+            // clear map
+            map.clearLayers();
+            
             // retrieve data and generate report
             retrieveData(range)
                 .catch((error) => {
