@@ -518,6 +518,14 @@ function init (client) {
     // set apiClient
     apiClient = client;
 
+    // enable generate report button
+    $('#submitButton')
+        .prop('disabled', false);
+
+}
+
+$(function () {
+
     // get parameters
     const urlParams = new URLSearchParams(window.location.search);
 
@@ -596,10 +604,6 @@ function init (client) {
                 });
 
         });
-
-}
-
-$(function () {
 
     // Set up map widget
     const options = {
