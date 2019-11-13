@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import {LeafletPolylineWidget} from "./leaflet/LeafletWidget";
 
 import {logger} from './logger';
@@ -531,8 +533,8 @@ function init (client) {
             logger.log('debug', 'beginDate has changed!');
 
             const endDateElement = $('#endDate');
-            const endDate = new Date(endDateElement.val());
-            const beginDate = $(this).val();
+            const endDate = moment(endDateElement.val(), 'YYYY-MM-DD');
+            const beginDate = moment($(this).val(), 'YYYY-MM-DD');
             logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
             const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
@@ -575,9 +577,9 @@ function init (client) {
         .click(() => {
 
             const endDateElement = $('#endDate');
-            const endDate = new Date(endDateElement.val());
+            const endDate = moment(endDateElement.val(), 'YYYY-MM-DD');
             const beginDateElement = $('#beginDate');
-            const beginDate = new Date(beginDateElement.val());
+            const beginDate = moment(beginDateElement.val(), 'YYYY-MM-DD');
             logger.log('debug', 'beginDate = %s, endDate = %s', beginDate, endDate);
 
             const [_beginDate, _endDate, _minDate] = validateDateRange(beginDate, endDate);
