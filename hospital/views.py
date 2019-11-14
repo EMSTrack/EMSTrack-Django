@@ -7,7 +7,7 @@ from .models import Hospital
 
 from .forms import HospitalCreateForm, HospitalUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, UpdatedByMixin
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, PaginationViewMixin
 
 
 # Django views
@@ -56,7 +56,8 @@ class HospitalDetailView(LoginRequiredMixin,
     model = Hospital
 
 
-class HospitalListView(LoginRequiredMixin,
+class HospitalListView(PaginationViewMixin,
+                       LoginRequiredMixin,
                        HospitalPermissionMixin,
                        ListView):
     model = Hospital

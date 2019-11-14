@@ -16,34 +16,56 @@
 			</p>
             {% endif %}
 
-            {% if hospital_list %}
+            {% if page_list %}
 
-			<table class="table table-striped table-sm">
-				<thead>
-				<tr>
-					<th>{% trans "Name" %}</th>
-					<th>{% trans "Address" %}</th>
-					<th>{% trans "Comments" %}</th>
-					<th>{% trans "Updated on" %}</th>
-					<th>{% trans "by" %}</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% for hospital in hospital_list %}
-				<tr>
-					<td>
-						<a href="{% url 'hospital:detail' pk=hospital.id %}">{{ hospital.name }}</a>
-					</td>
-					<td>
-						{{ hospital.get_address }}
-					</td>
-					<td>{{ hospital.comment }}</td>
-					<td>{{ hospital.updated_on }}</td>
-					<td>{{ hospital.updated_by.username }}</td>
-				</tr>
-				{% endfor %}
-				</tbody>
-			</table>
+                {% if page_list.has_other_pages %}
+                <div class="row">
+                    <div class="col">
+                        {% include "pagination/numbers.html" %}
+                    </div>
+                    <div class="col float-right">
+                        {% include "pagination/sizes.html" %}
+                    </div>
+                </div>
+                {% endif %}
+
+				<table class="table table-striped table-sm">
+					<thead>
+					<tr>
+						<th>{% trans "Name" %}</th>
+						<th>{% trans "Address" %}</th>
+						<th>{% trans "Comments" %}</th>
+						<th>{% trans "Updated on" %}</th>
+						<th>{% trans "by" %}</th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for hospital in page_list %}
+					<tr>
+						<td>
+							<a href="{% url 'hospital:detail' pk=hospital.id %}">{{ hospital.name }}</a>
+						</td>
+						<td>
+							{{ hospital.get_address }}
+						</td>
+						<td>{{ hospital.comment }}</td>
+						<td>{{ hospital.updated_on }}</td>
+						<td>{{ hospital.updated_by.username }}</td>
+					</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+
+                {% if page_list.has_other_pages %}
+                <div class="row">
+                    <div class="col">
+                        {% include "pagination/numbers.html" %}
+                    </div>
+                    <div class="col float-right">
+                        {% include "pagination/sizes.html" %}
+                    </div>
+                </div>
+                {% endif %}
 
             {% else %}
 
