@@ -17,7 +17,7 @@ from django.utils.translation import ugettext_lazy as _
 from drf_extra_fields.geo_fields import PointField
 
 from ambulance.permissions import CallPermissionMixin
-from ambulance.resources import AmbulanceResource
+from ambulance.resources import AmbulanceResource, CallRadioCodeResource
 from emstrack.models import defaults
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
@@ -510,3 +510,32 @@ class AmbulanceProcessImportView(SuccessMessageMixin,
     success_url = reverse_lazy('ambulance:list')
 
     import_breadcrumbs = {'ambulance:list': _("Ambulances")}
+
+
+# CallRadioCode import and export
+
+class CallRadioCodeExportView(ExportModelMixin,
+                              View):
+    model = CallRadioCode
+    resource_class = CallRadioCodeResource
+
+
+class CallRadioCodeImportView(ImportModelMixin,
+                              TemplateView):
+    model = CallRadioCode
+    resource_class = CallRadioCodeResource
+
+    process_import_url = 'ambulance:process-import-radio-code'
+    import_breadcrumbs = {'ambulance:radio-code-list': _("Radio Codes")}
+
+
+class CallRadioCodeProcessImportView(SuccessMessageMixin,
+                                     ProcessImportModelMixin,
+                                     FormView):
+    model = CallRadioCode
+    resource_class = CallRadioCodeResource
+
+    success_message = _('Successfully imported callRadioCodes')
+    success_url = reverse_lazy('ambulance:radio-code-list')
+
+    import_breadcrumbs = {'ambulancs:radio-code-list': _("Radio Codes")}

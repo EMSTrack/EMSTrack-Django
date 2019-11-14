@@ -2,7 +2,7 @@ import logging
 
 from import_export import resources
 
-from ambulance.models import Ambulance
+from ambulance.models import Ambulance, CallRadioCode
 
 logger = logging.getLogger(__name__)
 
@@ -15,3 +15,11 @@ class AmbulanceResource(resources.ModelResource):
                   'orientation', 'location', 'comment', 'active')
         export_order = ('id', 'identifier', 'capability', 'status',
                         'orientation', 'location', 'comment', 'active')
+
+
+class CallRadioCodeResource(resources.ModelResource):
+
+    class Meta:
+        model = CallRadioCode
+        fields = ('id', 'code', 'label')
+        export_order = ('id', 'code', 'label')

@@ -7,11 +7,13 @@
 <div class="container">
 
 	<div class="row">
-		<div class="col">
+		<div class="col col-md-6">
 
 			<h1>{% trans "Radio Codes" %}</h1>
 
 			<p>
+                <a href="{% url 'ambulance:export-radio-code' %}">{% trans "export" %}</a>
+                <a href="{% url 'ambulance:import-radio-code' %}" class="ml-2">{% trans "import" %}</a>
 			</p>
 
 			{% if page_list %}
