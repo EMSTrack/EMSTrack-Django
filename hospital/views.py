@@ -3,6 +3,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, TemplateView, FormView
+from django.utils.translation import ugettext_lazy as _
 
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from hospital.resources import HospitalResource
