@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from extra_views import InlineFormSet, UpdateWithInlinesView, CreateWithInlinesView
 
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByWithInlinesMixin, BasePermissionMixin, \
-    UpdatedByMixin
+    UpdatedByMixin, PaginationViewMixin
 from equipment.forms import EquipmentHolderUpdateForm, EquipmentItemForm, EquipmentSetItemForm, EquipmentSetCreateForm, \
     EquipmentSetUpdateForm
 from .models import EquipmentItem, Equipment, EquipmentHolder, EquipmentSet, EquipmentSetItem
@@ -36,7 +36,8 @@ class EquipmentHolderInline(InlineFormSet):
 
 # Equipments
 
-class EquipmentAdminListView(ListView):
+class EquipmentAdminListView(PaginationViewMixin,
+                             ListView):
     model = Equipment
     ordering = ['name']
 
@@ -71,7 +72,8 @@ class EquipmentAdminUpdateView(SuccessMessageMixin,
 
 # Equipment sets
 
-class EquipmentSetAdminListView(ListView):
+class EquipmentSetAdminListView(PaginationViewMixin,
+                                ListView):
     model = EquipmentSet
     ordering = ['name']
 

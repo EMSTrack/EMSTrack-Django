@@ -15,36 +15,58 @@
                 <a href="{% url 'equipment:create' %}">{% trans "new" context "masculine" %}</a>
             </p>
 
-            {% if equipment_list %}
+            {% if page_list %}
 
-            <table class="table table-striped table-sm">
-                <thead>
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                    <th>{% trans "Type" %}</th>
-                    <th>{% trans "Default" %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for equipment in equipment_list %}
-                <tr>
-                    <td>
-                        <a href="{% url 'equipment:detail' pk=equipment.id %}">{{ equipment.name }}</a>
-                    </td>
-                    <td>
-                        {{ equipment.type|get_equipment_type }}
-                    </td>
-                    <td>
-                        {{ equipment.default }}
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                {% if page_list.has_other_pages %}
+                <div class="row">
+                    <div class="col">
+                        {% include "pagination/numbers.html" %}
+                    </div>
+                    <div class="col float-right">
+                        {% include "pagination/sizes.html" %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Default" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for equipment in page_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'equipment:detail' pk=equipment.id %}">{{ equipment.name }}</a>
+                        </td>
+                        <td>
+                            {{ equipment.type|get_equipment_type }}
+                        </td>
+                        <td>
+                            {{ equipment.default }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if page_list.has_other_pages %}
+                <div class="row">
+                    <div class="col">
+                        {% include "pagination/numbers.html" %}
+                    </div>
+                    <div class="col float-right">
+                        {% include "pagination/sizes.html" %}
+                    </div>
+                </div>
+                {% endif %}
 
             {% else %}
 
-            <p>{% trans "No equipments have been created yet." %}</p>
+                <p>{% trans "No equipments have been created yet." %}</p>
 
             {% endif %}
 

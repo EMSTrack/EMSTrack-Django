@@ -14,24 +14,46 @@
                 <a href="{% url 'equipment:create-set' %}">{% trans "new" context "masculine" %}</a>
             </p>
 
-            {% if equipmentset_list %}
+            {% if page_list %}
 
-            <table class="table table-striped table-sm">
-                <thead>
-                <tr>
-                    <th>{% trans "Name" %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for equipmentset in equipmentset_list %}
-                <tr>
-                    <td>
-                        <a href="{% url 'equipment:detail-set' pk=equipmentset.id %}">{{ equipmentset.name }}</a>
-                    </td>
-                </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                {% if page_list.has_other_pages %}
+                <div class="row">
+                    <div class="col">
+                        {% include "pagination/numbers.html" %}
+                    </div>
+                    <div class="col float-right">
+                        {% include "pagination/sizes.html" %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for equipmentset in page_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'equipment:detail-set' pk=equipmentset.id %}">{{ equipmentset.name }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                {% if page_list.has_other_pages %}
+                <div class="row">
+                    <div class="col">
+                        {% include "pagination/numbers.html" %}
+                    </div>
+                    <div class="col float-right">
+                        {% include "pagination/sizes.html" %}
+                    </div>
+                </div>
+                {% endif %}
 
             {% else %}
 
