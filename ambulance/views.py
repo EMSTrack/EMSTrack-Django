@@ -23,7 +23,8 @@ from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMi
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
-    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallPriorityCode, WaypointStatus, WaypointStatusOrder
+    AmbulanceOnline, AmbulanceOnlineOrder, CallRadioCode, CallPriorityCode, WaypointStatus, WaypointStatusOrder, \
+    CallPriorityClassification
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
@@ -463,6 +464,23 @@ class CallAbortView(LoginRequiredMixin,
         self.object.abort()
 
         return redirect('ambulance:call_list')
+
+
+# RadioCode and PriorityCode views
+
+class CallRadioCodeListView(PaginationViewMixin,
+                            ListView):
+    model = CallRadioCode
+
+
+class CallPriorityCodeListView(PaginationViewMixin,
+                               ListView):
+    model = CallPriorityCode
+
+
+class CallPriorityClassificationListView(PaginationViewMixin,
+                                         ListView):
+    model = CallPriorityClassification
 
 
 # Ambulance import and export

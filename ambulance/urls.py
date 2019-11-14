@@ -72,6 +72,14 @@ urlpatterns = [
         login_required(views.CallAbortView.as_view()),
         name='call_abort'),
 
+    url(r'^radio-code/list/$',
+        staff_member_required(views.CallRadioCodeListView.as_view()),
+        name="radio-code-list"),
+
+    url(r'^priority-code/list/$',
+        staff_member_required(views.CallPriorityCodeListView.as_view()),
+        name="priority-code-list"),
+
     # url(r'^admin/$',
     #    login_required(views.AdminView.as_view()),
     #    name="admin"),
