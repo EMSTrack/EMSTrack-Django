@@ -3,6 +3,7 @@ import os
 import tempfile
 
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template.response import TemplateResponse
 from django.utils.encoding import force_text
@@ -17,6 +18,8 @@ from import_export.resources import modelresource_factory
 from import_export.formats.base_formats import DEFAULT_FORMATS
 
 from environs import Env
+
+from emstrack.views import get_page_links, get_page_size_links
 
 env = Env()
 logger = logging.getLogger(__name__)
@@ -355,3 +358,37 @@ class ProcessImportModelMixin(BaseImportExportMixin):
                                           **imp_kwargs)
 
         return super().form_valid(form)
+
+
+class PaginationViewMixin:
+
+    def get_context_data(self, **kwargs):
+
+        # add pagination to context
+
+        # call supper
+        context = super().get_context_data(**kwargs)
+
+        # query all calls
+        queryset = self.get_queryset()
+
+        # get current page
+        page = self.request.GET.get('page', 1)
+        page_size = self.request.GET.get('page_size', 25)
+        page_sizes = [25, 50, 100]
+
+        # paginate
+        paginator = Paginator(queryset, page_size)
+        try:
+            page_list = paginator.page(page)
+        except PageNotAnInteger:
+            page_list = paginator.page(1)
+        except EmptyPage:
+            page_list = paginator.page(paginator.num_pages)
+
+        context['page_list'] = page_list
+        context['page_links'] = get_page_links(self.request, page_list)
+        context['page_size_links'] = get_page_size_links(self.request, page_list, page_sizes)
+        context['page_size'] = int(page_size)
+
+        return context

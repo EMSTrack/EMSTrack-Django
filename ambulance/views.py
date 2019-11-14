@@ -28,7 +28,7 @@ from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
 from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
-    ProcessImportModelMixin
+    ProcessImportModelMixin, PaginationViewMixin
 
 from emstrack.views import get_page_links, get_page_size_links
 
@@ -49,7 +49,8 @@ class AmbulanceDetailView(LoginRequiredMixin,
     model = Ambulance
 
 
-class AmbulanceListView(LoginRequiredMixin,
+class AmbulanceListView(PaginationViewMixin,
+                        LoginRequiredMixin,
                         AmbulancePermissionMixin,
                         ListView):
     
