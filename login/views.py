@@ -37,7 +37,7 @@ from ambulance.models import AmbulanceStatus, AmbulanceCapability, LocationType,
     WaypointStatus
 from emstrack import CURRENT_VERSION, MINIMUM_VERSION
 from emstrack.mixins import SuccessMessageWithInlinesMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
-    ProcessImportModelMixin
+    ProcessImportModelMixin, PaginationViewMixin
 from emstrack.models import defaults
 from emstrack.views import get_page_links, get_page_size_links
 from equipment.models import EquipmentType, EquipmentTypeDefaults
@@ -103,7 +103,8 @@ class LogoutView(auth_views.LogoutView):
 
 # Groups
 
-class GroupAdminListView(ListView):
+class GroupAdminListView(PaginationViewMixin,
+                         ListView):
     model = Group
     template_name = 'login/group_list.html'
     ordering = ['-groupprofile__priority', 'name']
@@ -198,7 +199,8 @@ class UserProfileAdminInline(InlineFormSet):
     }
 
 
-class UserAdminListView(ListView):
+class UserAdminListView(PaginationViewMixin,
+                        ListView):
     model = User
     template_name = 'login/user_list.html'
     ordering = ['username']
