@@ -12,6 +12,8 @@
 
             <p>
                 <a href="{% url 'equipment:create-set' %}">{% trans "new" context "masculine" %}</a>
+                <a href="{% url 'equipment:export-equipment-set' %}" class="ml-2">{% trans "export" %}</a>
+                <a href="{% url 'equipment:import-equipment-set' %}" class="ml-2">{% trans "import" %}</a>
             </p>
 
             {% if page_list %}
