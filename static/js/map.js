@@ -834,7 +834,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
             `<div>  
     <div id="${placeholder}">
     </div>
-    <div class="float-right my-2">
+    <div class="my-2">
         <input type="button" class="btn btn-secondary" value="TEST">
         <p>something</p>
     </div>
