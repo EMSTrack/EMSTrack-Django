@@ -735,6 +735,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
     // create waypoint object
     const placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints';
+    const buttons_placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints-buttons';
     const waypoints = new Waypoints(waypoint_set, call_id + '-' + ambulance_id, '#' + placeholder);
     const selector = $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button');
 
@@ -751,17 +752,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             `<div>  
     <div id="${placeholder}">
     </div>
-    <div class="btn-group d-flex">
-        <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
-                type="button" 
-                class="btn btn-secondary w-100">
-            ${settings.translation_table["Cancel"]}    
-        </button>
-        <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
-                type="button" 
-                class="btn btn-primary w-100">
-            ${settings.translation_table["Save"]}
-        </button>
+    <div id="${buttons_placeholder}" class="btn-group d-flex">
     </div>
 </div>`,
             html: true,
@@ -783,6 +774,20 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             // create waypoint form
             waypoints.render();
             waypoints.postRender();
+
+            // add buttons
+            $(`#${buttons_placeholder}`)
+                .html(`
+        <button id="call-${call_id}-${ambulance_id}-waypoints-cancel-button" 
+                type="button" 
+                class="btn btn-secondary w-100">
+            ${settings.translation_table["Cancel"]}    
+        </button>
+        <button id="call-${call_id}-${ambulance_id}-waypoints-save-button" 
+                type="button" 
+                class="btn btn-primary w-100">
+            ${settings.translation_table["Save"]}
+        </button>`);
 
             // toggle on cancel
             $('#call-' + call_id + '-' + ambulance_id + '-waypoints-cancel-button')
