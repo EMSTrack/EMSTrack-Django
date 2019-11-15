@@ -824,18 +824,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
             title: settings.translation_table['Patients'],
             // language=HTML
             content:
-            `<div>  
-    <div id="${placeholder}">
-    </div>
-    <div>
-        <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
-            ${settings.translation_table["Cancel"]}
-        </button>
-        <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">
-            ${settings.translation_table["Save"]}
-        </button>
-    </div>
-</div>`,
+            `<div>  \n    <div id="${placeholder}">\n    </div>\n    <div>\n        <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">\n            ${settings.translation_table["Cancel"]}\n        </button>\n        <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">\n            ${settings.translation_table["Save"]}\n        </button>\n    </div>\n</div>`,
             html: true,
             placement: 'left',
             trigger: 'manual'
