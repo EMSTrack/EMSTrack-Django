@@ -86,9 +86,9 @@ urlpatterns = [
         staff_member_required(views.CallRadioCodeImportView.as_view()),
         name='import-radio-code'),
 
-    url(r'^process_import/$',
+    url(r'^radio-code/process_import/$',
         staff_member_required(views.AmbulanceProcessImportView.as_view()),
-        name='process-import-ambulance'),
+        name='process-import-radio-code'),
 
     url(r'^priority-code/list/$',
         staff_member_required(views.CallPriorityCodeListView.as_view()),
