@@ -39,7 +39,7 @@
 					<tbody>
 					{% for prioritycode in page_list %}
 					<tr>
-						<td>{{ prioritycode.prefix}}-{{ prioritycode.priority.value}}-{{ prioritycode.suffix}}</td>
+						<td>{{ prioritycode.prefix.id}}-{{ prioritycode.priority}}-{{ prioritycode.suffix}}</td>
 						<td>{{ prioritycode.label }}</td>
 					</tr>
 					{% endfor %}
