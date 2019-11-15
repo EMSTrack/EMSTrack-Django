@@ -286,6 +286,7 @@ class UserAdminUpdateView(SuccessMessageWithInlinesMixin,
     model = User
     template_name = 'login/user_form.html'
     form_class = UserAdminUpdateForm
+    context_object_name = 'view_user'
     inlines = [UserProfileAdminInline,
                UserAmbulancePermissionAdminInline,
                UserHospitalPermissionAdminInline]
