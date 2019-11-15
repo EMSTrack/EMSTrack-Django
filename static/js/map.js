@@ -818,6 +818,13 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
     if (destroy)
         selector.popover('dispose');
 
+//<button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
+  //          ${settings.translation_table["Cancel"]}
+    //    </button>
+      //  <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">
+        //    ${settings.translation_table["Save"]}
+        // </button>
+
     // Add popover to patient button
     selector
         .popover({
@@ -831,12 +838,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
         <button type="button" class="btn btn-secondary">
             TEST
         </button>
-        <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
-            ${settings.translation_table["Cancel"]}    
-        </button>
-        <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">
-            ${settings.translation_table["Save"]}
-        </button>
+        <p>something</p>
     </div>
 </div>`,
             html: true,
