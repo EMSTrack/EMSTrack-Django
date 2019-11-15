@@ -94,6 +94,34 @@ urlpatterns = [
         staff_member_required(views.CallPriorityCodeListView.as_view()),
         name="priority-code-list"),
 
+    url(r'^priority-code/export/$',
+        staff_member_required(views.CallPriorityCodeExportView.as_view()),
+        name='export-priority-code'),
+
+    url(r'^priority-code/import/$',
+        staff_member_required(views.CallPriorityCodeImportView.as_view()),
+        name='import-priority-code'),
+
+    url(r'^priority-code/process_import/$',
+        staff_member_required(views.AmbulanceProcessImportView.as_view()),
+        name='process-import-priority-code'),
+
+    url(r'^priority-classification/list/$',
+        staff_member_required(views.CallPriorityClassificationListView.as_view()),
+        name="priority-classification-list"),
+
+    url(r'^priority-classification/export/$',
+        staff_member_required(views.CallPriorityClassificationExportView.as_view()),
+        name='export-priority-classification'),
+
+    url(r'^priority-classification/import/$',
+        staff_member_required(views.CallPriorityClassificationImportView.as_view()),
+        name='import-priority-classification'),
+
+    url(r'^priority-classification/process_import/$',
+        staff_member_required(views.AmbulanceProcessImportView.as_view()),
+        name='process-import-priority-classification'),
+
     # url(r'^admin/$',
     #    login_required(views.AdminView.as_view()),
     #    name="admin"),

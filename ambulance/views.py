@@ -17,7 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 from drf_extra_fields.geo_fields import PointField
 
 from ambulance.permissions import CallPermissionMixin
-from ambulance.resources import AmbulanceResource, CallRadioCodeResource
+from ambulance.resources import AmbulanceResource, CallRadioCodeResource, CallPriorityCodeResource, \
+    CallPriorityClassificationResource
 from emstrack.models import defaults
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
@@ -539,3 +540,61 @@ class CallRadioCodeProcessImportView(SuccessMessageMixin,
     success_url = reverse_lazy('ambulance:radio-code-list')
 
     import_breadcrumbs = {'ambulancs:radio-code-list': _("Radio Codes")}
+
+
+# CallPriorityCode import and export
+
+class CallPriorityCodeExportView(ExportModelMixin,
+                                 View):
+    model = CallPriorityCode
+    resource_class = CallPriorityCodeResource
+
+
+class CallPriorityCodeImportView(ImportModelMixin,
+                                 TemplateView):
+    model = CallPriorityCode
+    resource_class = CallPriorityCodeResource
+
+    process_import_url = 'ambulance:process-import-priority-code'
+    import_breadcrumbs = {'ambulance:priority-code-list': _("Priority Codes")}
+
+
+class CallPriorityCodeProcessImportView(SuccessMessageMixin,
+                                        ProcessImportModelMixin,
+                                        FormView):
+    model = CallPriorityCode
+    resource_class = CallPriorityCodeResource
+
+    success_message = _('Successfully imported callPriorityCodes')
+    success_url = reverse_lazy('ambulance:priority-code-list')
+
+    import_breadcrumbs = {'ambulancs:priority-code-list': _("Priority Codes")}
+
+
+# CallPriorityClassification import and export
+
+class CallPriorityClassificationExportView(ExportModelMixin,
+                                           View):
+    model = CallPriorityClassification
+    resource_class = CallPriorityClassificationResource
+
+
+class CallPriorityClassificationImportView(ImportModelMixin,
+                                           TemplateView):
+    model = CallPriorityClassification
+    resource_class = CallPriorityClassificationResource
+
+    process_import_url = 'ambulance:process-import-priority-classification'
+    import_breadcrumbs = {'ambulance:priority-classification-list': _("Priority Classifications")}
+
+
+class CallPriorityClassificationProcessImportView(SuccessMessageMixin,
+                                                  ProcessImportModelMixin,
+                                                  FormView):
+    model = CallPriorityClassification
+    resource_class = CallPriorityClassificationResource
+
+    success_message = _('Successfully imported callPriorityClassifications')
+    success_url = reverse_lazy('ambulance:priority-classification-list')
+
+    import_breadcrumbs = {'ambulancs:priority-classification-list': _("Priority Classifications")}
