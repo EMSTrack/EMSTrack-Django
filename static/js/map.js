@@ -828,6 +828,9 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
     <div id="${placeholder}">
     </div>
     <div class="float-right my-2">
+        <button type="button" class="btn btn-secondary">
+            TEST
+        </button>
         <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
             ${settings.translation_table["Cancel"]}    
         </button>
@@ -847,7 +850,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
         .on('inserted.bs.popover', () => {
 
             // create patient form
-            //patients.render();
+            patients.render();
 
             // toggle on cancel
             $('#call-' + call_id + '-patients-cancel-button')
