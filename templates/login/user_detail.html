@@ -9,7 +9,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'login:list-user' %}">{% trans "Users" %}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ user.username }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ view_user.username }}</li>
         </ol>
     </nav>
 
@@ -23,38 +23,38 @@
 
             <p>
                 <strong>{% trans "Username" %}:</strong>
-                <a href="{% url 'login:update-user' pk=user.id %}">{{ user.username }}</a>
+                <a href="{% url 'login:update-user' pk=view_user.id %}">{{ view_user.username }}</a>
             </p>
             <p>
                 <strong>{% trans "First" %}:</strong>
-                {{ user.first_name }}
+                {{ view_user.first_name }}
             </p>
             <p>
                 <strong>{% trans "Last" %}:</strong>
-                {{ user.last_name }}
+                {{ view_user.last_name }}
             </p>
-            {% if user.email and request.user.is_staff %}
+            {% if view_user.email and request.user.is_staff %}
             <form class="form-inline float-right" action="{% url 'password_reset' %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="email" value="{{ user.email }}">
+                <input type="hidden" name="email" value="{{ view_user.email }}">
                 <input type="submit" class="btn btn-danger btn-sm py-1" value="{% trans 'Reset password' %}">
             </form>
             {% endif %}
             <p>
                 <strong>{% trans "Email" %}:</strong>
-                {{ user.email }}
+                {{ view_user.email }}
             </p>
             <p>
                 <strong>{% trans "Staff" %}:</strong>
-                {{ user.is_staff }}
+                {{ view_user.is_staff }}
             </p>
             <p>
                 <strong>{% trans "Active" %}:</strong>
-                {{ user.is_active }}
+                {{ view_user.is_active }}
             </p>
             <p>
                 <strong>{% trans "Dispatcher" %}:</strong>
-                {{ user.userprofile.is_dispatcher }}
+                {{ view_user.userprofile.is_dispatcher }}
             </p>
         </div>
     </div>
@@ -124,7 +124,7 @@
 
             {% else %}
 
-                {% if user.is_staff %}
+                {% if view_user.is_staff %}
                     <p>{% trans "This user is staff and does not need permission to access any ambulances." %}</p>
                 {% else %}
                     <p>{% trans "This user does not have access to any ambulances." %}</p>
@@ -155,7 +155,7 @@
 
             {% else %}
 
-                {% if user.is_staff %}
+                {% if view_user.is_staff %}
                     <p>{% trans "This user is staff and does not need permission to access any hospitals." %}</p>
                 {% else %}
                     <p>{% trans "This user does not have access to any hospitals." %}</p>

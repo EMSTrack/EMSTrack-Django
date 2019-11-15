@@ -1,3 +1,4 @@
+import datetime
 import logging
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -34,6 +35,7 @@ class Command(BaseCommand):
         logger.info("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
         logger.info("* * *                    M Q T T   C L I E N T                    * * *")
         logger.info("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *")
+        logger.info(datetime.datetime.now())
 
         try:
             client.loop_forever()

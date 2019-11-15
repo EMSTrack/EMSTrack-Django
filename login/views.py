@@ -209,6 +209,7 @@ class UserAdminListView(PaginationViewMixin,
 class UserAdminDetailView(DetailView):
     model = User
     template_name = 'login/user_detail.html'
+    context_object_name = 'view_user'
     fields = ['username', 'first_name', 'last_name', 'email', 'is_staff', 'is_active']
 
     def get_context_data(self, **kwargs):
@@ -246,6 +247,7 @@ class UserAdminCreateView(SuccessMessageWithInlinesMixin,
                           CreateWithInlinesView):
     model = User
     template_name = 'login/user_create_form.html'
+    context_object_name = 'view_user'
     form_class = UserAdminCreateForm
     inlines = [UserProfileAdminInline,
                UserAmbulancePermissionAdminInline,

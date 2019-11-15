@@ -10,7 +10,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'login:list-user' %}">{% trans "Users" %}</a></li>
             {% if user %}
-                <li class="breadcrumb-item"><a href="{% url 'login:detail-user' pk=user.id %}">{{ user.username }}</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'login:detail-user' pk=view_user.id %}">{{ view_user.username }}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{% trans "Update" %}</li>
             {% else %}
                 <li class="breadcrumb-item active" aria-current="page">{% trans "Create" %}</li>
