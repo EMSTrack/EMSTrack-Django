@@ -811,6 +811,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
     // create patient object
     const placeholder = 'call-' + call_id + '-patients';
+    const buttons_placeholder = 'call-' + call_id + '-patients-buttons';
     const patients = new Patients(patient_set, call_id, '#' + placeholder);
     const selector = $('#call-' + call_id + '-patients-button');
 
@@ -824,7 +825,12 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
             title: settings.translation_table['Patients'],
             // language=HTML
             content:
-            `<div>  \n    <div id="${placeholder}">\n    </div>\n    <div>\n        <button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">\n            ${settings.translation_table["Cancel"]}\n        </button>\n        <button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">\n            ${settings.translation_table["Save"]}\n        </button>\n    </div>\n</div>`,
+            `<div>  
+    <div id="${placeholder}">
+    </div>
+    <div id="${buttons_placeholder}">
+    </div>
+</div>`,
             html: true,
             placement: 'left',
             trigger: 'manual'
@@ -837,6 +843,16 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
             // create patient form
             patients.render();
+
+            // add buttons
+            $(`#${buttons_placeholder}`)
+                .html(`
+<button id="call-${call_id}-patients-cancel-button" type="button" class="btn btn-secondary">
+    ${settings.translation_table["Cancel"]}
+</button>
+<button id="call-${call_id}-patients-save-button" type="button" class="btn btn-primary">
+    ${settings.translation_table["Save"]}
+</button>`);
 
             // toggle on cancel
             $('#call-' + call_id + '-patients-cancel-button')
