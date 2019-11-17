@@ -1,5 +1,5 @@
 from django.http import Http404
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, exceptions
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,11 +13,11 @@ from emstrack.mixins import BasePermissionMixin, \
 from login.permissions import IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode
+    AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode, Waypoint
 
 from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
     CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer, \
-    CallAmbulanceSummarySerializer
+    CallAmbulanceSummarySerializer, WaypointSerializer
 
 import logging
 logger = logging.getLogger(__name__)
@@ -404,6 +404,116 @@ class CallViewSet(mixins.ListModelMixin,
         # serialize and return
         serializer = CallAmbulanceSummarySerializer(call)
         return Response(serializer.data)
+
+
+class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
+                                   mixins.RetrieveModelMixin,
+                                   CreateModelUpdateByMixin,
+                                   UpdateModelUpdateByMixin,
+                                   BasePermissionMixin,
+                                   viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating waypoints in Calls.
+
+    list:
+    Retrieve list of waypoints.
+
+    create:
+    Create new waypoint instance.
+
+    retrieve:
+    Retrieve an existing waypoint instance.
+
+    update:
+    Updates existing waypoint instance in call.
+
+    partial_update:
+    Partially update existing waypoint instance in call.
+    """
+
+    filter_field = 'ambulancecall__ambulance_id'
+    profile_field = 'ambulances'
+    queryset = Waypoint.objects.all()
+    
+    serializer_class = WaypointSerializer
+    # permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        """
+        Restricts the waypoints to ambulanceCall.
+        """
+        # retrieve call_id
+        call_id = int(self.kwargs['call_id'])
+
+        # retrieve ambulance_id
+        ambulance_id = int(self.kwargs['ambulance_id'])
+
+        # does ambulancecall exist?
+        try:
+            ambulance_call = AmbulanceCall.objects.get(call_id=call_id, ambulance_id=ambulance_id)
+            self.queryset = ambulance_call.callwaypoint_set.all()
+        except AmbulanceCall.DoesNotExist:
+            raise exceptions.NotFound()
+
+        # call super only after filtering the queryset
+        return super().get_queryset()
+
+    def perform_create(self, serializer):
+
+        # retrieve call_id
+        call_id = int(self.kwargs['call_id'])
+
+        # retrieve ambulance_id
+        ambulance_id = int(self.kwargs['ambulance_id'])
+
+        # does ambulancecall exist?
+        try:
+            ambulance_call = AmbulanceCall.objects.get(call_id=call_id, ambulance_id=ambulance_id)
+        except AmbulanceCall.DoesNotExist:
+            raise exceptions.NotFound()
+
+        # check permission, create does not invoke queryset
+        user = self.request.user
+        if not user.is_superuser or user.is_staff:
+
+            # return nothing if anonymous
+            if user.is_anonymous:
+                raise exceptions.PermissionDenied()
+
+            # get permissions
+            permissions = get_permissions(self.model, user)
+            can_do = set()
+            if self.include_writer:
+                can_do.update(permissions.get_can_write())
+            if self.include_dispatcher:
+                can_do.update(permissions.get_can_dispatch())
+
+            # query ambulances
+            if ambulance_call.ambulance.id not in can_do:
+
+                logger.info("call waypoint create: '%s' is not super, staff, authorized user, or dispatcher", user)
+                raise exceptions.PermissionDenied()
+
+        # create
+        super().perform_create(serializer, ambulanceCall=ambulance_call)
+
+    def perform_update(self, serializer):
+
+        # retrieve call_id
+        call_id = int(self.kwargs['call_id'])
+
+        # retrieve ambulance_id
+        ambulance_id = int(self.kwargs['ambulance_id'])
+
+        # does ambulancecall exist?
+        try:
+            ambulanceCall = AmbulanceCall.objects.get(call_id=call_id, ambulance_id=ambulance_id)
+        except AmbulanceCall.DoesNotExist:
+            raise exceptions.NotFound()
+
+        # create
+        super().perform_update(serializer, ambulanceCall=ambulanceCall)
+
 
 
 # CallPriorityViewSet

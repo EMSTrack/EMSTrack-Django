@@ -207,16 +207,17 @@ class LocationSerializer(serializers.ModelSerializer):
 # Waypoint Serializers
 
 class WaypointSerializer(serializers.ModelSerializer):
-
     location = LocationSerializer(required=False)
+    location_id = serializers.IntegerField(required=False, write_only=True)
+    order = serializers.IntegerField(default=-1)
 
     class Meta:
         model = Waypoint
         fields = ['id', 'ambulance_call_id',
                   'order', 'status',
-                  'location',
+                  'location', 'location_id',
                   'comment', 'updated_by', 'updated_on']
-        read_only_fields = ('id', 'ambulance_call_id', 'location', 'updated_by')
+        read_only_fields = ('id', 'ambulance_call_id', 'updated_by')
 
     def create(self, validated_data):
 
@@ -228,48 +229,106 @@ class WaypointSerializer(serializers.ModelSerializer):
 
         # retrieve location
         location = validated_data.pop('location', None)
-        if location is None:
-            raise serializers.ValidationError('Waypoint must have a location')
+        location_id = validated_data.pop('location_id', None)
+        if not location and not location_id:
+            raise serializers.ValidationError('Location or location_id has not been defined')
+        elif location and location_id:
+            raise serializers.ValidationError('Only one of location or location_id should be set')
 
-        # retrieve initial location
-        # location id is not present in validated_data
-        initial_location = self.initial_data['location']
+        with transaction.atomic():
 
-        # retrieve or create?
-        if 'id' not in initial_location or initial_location['id'] is None:
-            logger.debug('will create waypoint location')
-            if location['type'] in (LocationType.i.name, LocationType.w.name):
-                location = Location.objects.create(**location, updated_by=user)
+            if location_id:
+
+                # retrieve existing location
+                try:
+                    location = Location.objects.get(id=location_id)
+
+                except Location.DoesNotExist:
+                    raise serializers.ValidationError("Location with id '{}' could not be found".format(location_id))
+
             else:
-                raise serializers.ValidationError('Users can only create incident and waypoint locations')
-        else:
-            logger.debug('will retrieve waypoint location')
-            location = Location.objects.get(id=initial_location['id'])
 
-        # create waypoint and publish
-        validated_data['location'] = location
-        waypoint = super().create(validated_data)
-        if publish:
-            waypoint.publish()
+                # create location
+                if location['type'] in (LocationType.i.name, LocationType.w.name):
+                    location = Location.objects.create(**location, updated_by=user, publish=False)
 
-        return waypoint
+                else:
+                    raise serializers.ValidationError("Cannot create location of type '{}'".format(location['type']))
+
+            # # retrieve initial location
+            # # location id is not present in validated_data
+            # initial_location = self.initial_data['location']
+            #
+            # # retrieve or create?
+            # if 'id' not in initial_location or initial_location['id'] is None:
+            #     logger.debug('will create waypoint location')
+            #     if location['type'] in (LocationType.i.name, LocationType.w.name):
+            #         location = Location.objects.create(**location, updated_by=user)
+            #     else:
+            #         raise serializers.ValidationError('Users can only create incident and waypoint locations')
+            # else:
+            #     logger.debug('will retrieve waypoint location')
+            #     location = Location.objects.get(id=initial_location['id'])
+
+            # create waypoint and publish
+            validated_data['location'] = location
+            waypoint = super().create(validated_data)
+            if publish:
+                waypoint.publish()
+
+            return waypoint
 
     def update(self, instance, validated_data):
 
         # publish?
         publish = validated_data.pop('publish', False)
 
+        # # retrieve location
+        # location = validated_data.pop('location', None)
+        # if location is not None:
+        #     raise serializers.ValidationError('Waypoint locations cannot be updated.')
+
         # retrieve location
         location = validated_data.pop('location', None)
-        if location is not None:
-            raise serializers.ValidationError('Waypoint locations cannot be updated.')
+        location_id = validated_data.pop('location_id', None)
+        if location and location_id:
+            raise serializers.ValidationError('Only one of location or location_id should be set')
 
-        # update waypoint and publish
-        waypoint = super().update(instance, validated_data)
-        if publish:
-            waypoint.publish()
+        with transaction.atomic():
 
-        return waypoint
+            if location_id:
+
+                # retrieve existing location
+                try:
+                    instance.location = Location.objects.get(id=location_id)
+                    instance.location.save(publish=False)
+
+                except Location.DoesNotExist:
+                    raise serializers.ValidationError("Location with id '{}' could not be found".format(location_id))
+
+            elif location:
+
+                if instance.location.type in (LocationType.i.name, LocationType.w.name):
+
+                    if location['type'] not in (LocationType.i.name, LocationType.w.name):
+                        raise serializers.ValidationError("Cannot update location from type "
+                                                          "'{}' to type '{}'".format(instance.location.type,
+                                                                                     location['type']))
+
+                    # update location
+                    for field in location:
+                        setattr(instance.location, field, location[field])
+                    instance.location.save(publish=False)
+
+                else:
+                    raise serializers.ValidationError("Cannot update location of type '{}'".format(location['type']))
+
+            # update waypoint and publish
+            waypoint = super().update(instance, validated_data)
+            if publish:
+                waypoint.publish()
+
+            return waypoint
 
 
 # AmbulanceCall Serializer
