@@ -484,9 +484,9 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
             permissions = get_permissions(user)
             can_do = set()
             if user.userprofile.is_dispatcher:
-                can_do.update(permissions.get_can_read(ambulance=ambulance_id))
+                can_do.update(permissions.get_can_read('ambulances'))
             else:
-                can_do.update(permissions.get_can_write(ambulance=ambulance_id))
+                can_do.update(permissions.get_can_write('ambulances'))
 
             # query ambulances
             if ambulance_call.ambulance.id not in can_do:
@@ -495,7 +495,7 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
                 raise exceptions.PermissionDenied()
 
         # create
-        super().perform_create(serializer, ambulanceCall=ambulance_call)
+        super().perform_create(serializer, ambulance_call=ambulance_call)
 
     def perform_update(self, serializer):
 
@@ -512,7 +512,7 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
             raise exceptions.NotFound()
 
         # create
-        super().perform_update(serializer, ambulanceCall=ambulanceCall)
+        super().perform_update(serializer, ambulance_call=ambulanceCall)
 
 
 # CallPriorityViewSet
