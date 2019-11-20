@@ -456,6 +456,7 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
             raise exceptions.NotFound()
 
         # call super only after filtering the queryset
+        logger.debug(self.queryset)
         return super().get_queryset()
 
     def perform_create(self, serializer):
