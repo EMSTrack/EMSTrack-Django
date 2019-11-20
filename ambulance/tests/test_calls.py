@@ -459,7 +459,7 @@ class TestCall(TestSetup):
         }
         self.assertDictEqual(dict(serializer.data['location']), result)
 
-        # update waypoint 3
+        # update waypoint 3, cannot update
         data = {
             'order': 2,
             'status': WaypointStatus.C.name,
