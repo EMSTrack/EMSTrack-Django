@@ -31,8 +31,9 @@ class CreateModelUpdateByMixin(mixins.CreateModelMixin):
 
     update_by_field = 'updated_by'
 
-    def perform_create(self, serializer):
-        serializer.save(**{self.update_by_field: self.request.user})
+    def perform_create(self, serializer, **kwargs):
+        # serializer.save(**{self.update_by_field: self.request.user})
+        serializer.save(**{**{self.update_by_field: self.request.user}, **kwargs})
 
 
 # UpdateModelUpdateByMixin
@@ -41,8 +42,9 @@ class UpdateModelUpdateByMixin(mixins.UpdateModelMixin):
 
     update_by_field = 'updated_by'
 
-    def perform_update(self, serializer):
-        serializer.save(**{self.update_by_field: self.request.user})
+    def perform_update(self, serializer, **kwargs):
+        # serializer.save(**{self.update_by_field: self.request.user})
+        serializer.save(**{**{self.update_by_field: self.request.user}, **kwargs})
 
 
 # BasePermissionMixin

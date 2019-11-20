@@ -10,7 +10,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST
 from ambulance.permissions import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
-from login.permissions import IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher
+from login.permissions import IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher, get_permissions
 
 from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
     AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode, Waypoint
@@ -481,12 +481,12 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
                 raise exceptions.PermissionDenied()
 
             # get permissions
-            permissions = get_permissions(self.model, user)
+            permissions = get_permissions(user)
             can_do = set()
-            if self.include_writer:
-                can_do.update(permissions.get_can_write())
-            if self.include_dispatcher:
-                can_do.update(permissions.get_can_dispatch())
+            if user.userprofile.is_dispatcher:
+                can_do.update(permissions.get_can_read(ambulance=ambulance_id))
+            else:
+                can_do.update(permissions.get_can_write(ambulance=ambulance_id))
 
             # query ambulances
             if ambulance_call.ambulance.id not in can_do:
@@ -513,7 +513,6 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
 
         # create
         super().perform_update(serializer, ambulanceCall=ambulanceCall)
-
 
 
 # CallPriorityViewSet
