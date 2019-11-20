@@ -250,7 +250,7 @@ class WaypointSerializer(serializers.ModelSerializer):
 
                 # create location
                 if location['type'] in (LocationType.i.name, LocationType.w.name):
-                    location = Location.objects.create(**location, updated_by=user, publish=False)
+                    location = Location.objects.create(**location, updated_by=user)
 
                 else:
                     raise serializers.ValidationError("Cannot create location of type '{}'".format(location['type']))
