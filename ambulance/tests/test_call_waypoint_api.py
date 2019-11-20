@@ -79,7 +79,7 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json', follow=true)
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         logger.debug(response.status_code)
         logger.debug(response.content)
         c1 = JSONParser().parse(BytesIO(response.content))
