@@ -79,7 +79,7 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', json.dumps(call), content_type='application/json', follow=true)
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json', follow=true)
         logger.debug(response.status_code)
         logger.debug(response.content)
         c1 = JSONParser().parse(BytesIO(response.content))
@@ -110,116 +110,116 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Maria', 'age': 3}, {'name': 'Jose'}]
         }
-        response = client.post('/api/call/', json.dumps(call), content_type='application/json')
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         c2 = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(response.status_code, 201)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 2)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 1)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 1)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
         # login as test@user.com
         user = User.objects.get(email='test@user.com')
         client.force_authenticate(user=user)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 2)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 0)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 1)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
         # login as staff@user.com
         user = User.objects.get(email='staff@user.com')
         client.force_authenticate(user=user)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 0)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 0)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 0)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
         # login as test4@user.com (DISPATCHER)
         user = User.objects.get(email='test4@user.com')
         client.force_authenticate(user=user)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 0)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a2.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a3.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 1)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a1.id))
         self.assertEqual(response.status_code, 404)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
         self.assertEqual(len(answer), 1)
 
-        response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
+        response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
     def test_call_create_viewset_super(self):
@@ -287,14 +287,14 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', json.dumps(call), content_type='application/json')
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         # call/+/ambulance/+/wapypoint list
         call = Call.objects.get(status=CallStatus.P.name)
         for ambulancecall in call.ambulancecall_set.all():
 
-            response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
+            response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
             expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
@@ -304,7 +304,7 @@ class TestAmbulancewaypoint(TestSetup):
         for ambulancecall in call.ambulancecall_set.all():
 
             for waypoint in ambulancecall.waypoint_set.all():
-                response = client.get('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
+                response = client.get('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
                 self.assertEqual(response.status_code, 200)
                 answer = JSONParser().parse(BytesIO(response.content))
                 expected = WaypointSerializer(waypoint).data
@@ -323,7 +323,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'street': 'some street'
             }
         }
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         answer = JSONParser().parse(BytesIO(response.content))
@@ -341,7 +341,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'street': 'some street'
             }
         }
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
                                json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
@@ -362,7 +362,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'street': 'some street'
             }
         }
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
                                json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 201)
@@ -377,7 +377,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'type': LocationType.w.name,
             }
         }
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
@@ -393,7 +393,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'type': LocationType.h.name,
             }
         }
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 400)
@@ -463,7 +463,7 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', json.dumps(call), content_type='application/json')
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         # login as test@user.com
@@ -474,7 +474,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = Call.objects.get(status=CallStatus.P.name)
         for ambulancecall in call.ambulancecall_set.all():
 
-            response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
+            response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
             expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
@@ -484,7 +484,7 @@ class TestAmbulancewaypoint(TestSetup):
         for ambulancecall in call.ambulancecall_set.all():
 
             for waypoint in ambulancecall.waypoint_set.all():
-                response = client.get('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
+                response = client.get('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
                 self.assertEqual(response.status_code, 200)
                 answer = JSONParser().parse(BytesIO(response.content))
                 expected = WaypointSerializer(waypoint).data
@@ -503,15 +503,15 @@ class TestAmbulancewaypoint(TestSetup):
                 'street': 'some street'
             }
         }
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         answer = JSONParser().parse(BytesIO(response.content))
@@ -524,17 +524,17 @@ class TestAmbulancewaypoint(TestSetup):
                 'type': LocationType.w.name,
             }
         }
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
@@ -550,7 +550,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'type': LocationType.h.name,
             }
         }
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 400)
@@ -629,7 +629,7 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', json.dumps(call), content_type='application/json')
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         # login as test@user.com
@@ -640,7 +640,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = Call.objects.get(status=CallStatus.P.name)
         for ambulancecall in call.ambulancecall_set.all():
 
-            response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
+            response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
             expected = []
@@ -650,7 +650,7 @@ class TestAmbulancewaypoint(TestSetup):
         for ambulancecall in call.ambulancecall_set.all():
 
             for waypoint in ambulancecall.waypoint_set.all():
-                response = client.get('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
+                response = client.get('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
                 self.assertEqual(response.status_code, 404)
 
         # call/+/ambulance/+/wapypoint/ post
@@ -669,15 +669,15 @@ class TestAmbulancewaypoint(TestSetup):
                 }
             }
         }
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
@@ -690,13 +690,13 @@ class TestAmbulancewaypoint(TestSetup):
             }
         }
         waypoint = call.ambulancecall_set.get(ambulance=self.a2.id).locations.last()
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, waypoint.id),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, waypoint.id),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
         waypoint = call.ambulancecall_set.get(ambulance=self.a1.id).locations.last()
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, waypoint.id),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, waypoint.id),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
@@ -775,7 +775,7 @@ class TestAmbulancewaypoint(TestSetup):
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
-        response = client.post('/api/call/', json.dumps(call), content_type='application/json')
+        response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         # login as test@user.com
@@ -787,7 +787,7 @@ class TestAmbulancewaypoint(TestSetup):
         for ambulance in [self.a2, self.a3]:
 
             ambulancecall = call.ambulancecall_set.get(ambulance=ambulance)
-            response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
+            response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
             expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
@@ -796,7 +796,7 @@ class TestAmbulancewaypoint(TestSetup):
         for ambulance in [self.a1]:
 
             ambulancecall = call.ambulancecall_set.get(ambulance=ambulance)
-            response = client.get('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
+            response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
             expected = []
@@ -805,7 +805,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ retrieve
         for ambulance in [self.a2, self.a3]:
             for waypoint in call.ambulancecall_set.get(ambulance=ambulance).waypoint_set.all():
-                response = client.get('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulance.id, waypoint.id))
+                response = client.get('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulance.id, waypoint.id))
                 self.assertEqual(response.status_code, 200)
                 answer = JSONParser().parse(BytesIO(response.content))
                 expected = WaypointSerializer(waypoint).data
@@ -813,7 +813,7 @@ class TestAmbulancewaypoint(TestSetup):
 
         for ambulance in [self.a1]:
             for waypoint in call.ambulancecall_set.get(ambulance=ambulance).waypoint_set.all():
-                response = client.get('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulance.id, waypoint.id))
+                response = client.get('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulance.id, waypoint.id))
                 self.assertEqual(response.status_code, 404)
 
         # call/+/ambulance/+/wapypoint/ post
@@ -832,15 +832,15 @@ class TestAmbulancewaypoint(TestSetup):
                 }
             }
         }
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         answer = JSONParser().parse(BytesIO(response.content))
@@ -855,17 +855,17 @@ class TestAmbulancewaypoint(TestSetup):
                 }
             }
         }
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
@@ -883,7 +883,7 @@ class TestAmbulancewaypoint(TestSetup):
                 }
             }
         }
-        response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 400)
