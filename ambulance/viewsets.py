@@ -451,7 +451,7 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
         # does ambulancecall exist?
         try:
             ambulance_call = AmbulanceCall.objects.get(call_id=call_id, ambulance_id=ambulance_id)
-            self.queryset = ambulance_call.callwaypoint_set.all()
+            self.queryset = ambulance_call.waypoint_set.all()
         except AmbulanceCall.DoesNotExist:
             raise exceptions.NotFound()
 
