@@ -258,10 +258,7 @@ class TestCall(TestSetup):
         data = {
             'order': 1,
             'status': WaypointStatus.V.name,
-            'location': {
-                'id': self.h1.id,
-                'type': LocationType.h.name
-            }
+            'location_id': self.h1.id
         }
         serializer = WaypointSerializer(data=data)
         serializer.is_valid()
