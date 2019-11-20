@@ -431,7 +431,7 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
     Partially update existing waypoint instance in call.
     """
 
-    filter_field = 'ambulancecall__ambulance_id'
+    filter_field = 'ambulance_call__ambulance_id'
     profile_field = 'ambulances'
     queryset = Waypoint.objects.all()
     
