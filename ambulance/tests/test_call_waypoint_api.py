@@ -33,54 +33,45 @@ class TestAmbulancewaypoint(TestSetup):
             'priority': CallPriority.B.name,
             'ambulancecall_set': [
                 {
-                    'ambulance': self.a1.id,
+                    'ambulance_id': self.a1.id,
                     'waypoint_set': [
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '123',
-                                    'street': 'some street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
                             'status': WaypointStatus.D.name,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-110.54, 35.75]
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
                                 },
-                                'properties': {
-                                    'type': LocationType.w.name,
-                                }
+                                'type': LocationType.w.name,
                             }
                         }
                     ]
                 },
                 {
-                    'ambulance': self.a3.id,
+                    'ambulance_id': self.a3.id,
                     'waypoint_set': [
                         {
                             'order': 1,
                             'status': WaypointStatus.D.name,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-110.54, 35.75]
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
                                 },
-                                'properties': {
-                                    'type': LocationType.w.name,
-                                }
+                                'type': LocationType.w.name,
                             }
                         }
                     ]
@@ -98,21 +89,18 @@ class TestAmbulancewaypoint(TestSetup):
             'priority': CallPriority.A.name,
             'ambulancecall_set': [
                 {
-                    'ambulance': self.a2.id,
+                    'ambulance_id': self.a2.id,
                     'waypoint_set': [
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '321',
-                                    'street': 'another street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '321',
+                                'street': 'another street'
                             }
                         }
                     ]
@@ -247,61 +235,52 @@ class TestAmbulancewaypoint(TestSetup):
             'priority': CallPriority.B.name,
             'ambulancecall_set': [
                 {
-                    'ambulance': self.a1.id,
+                    'ambulance_id': self.a1.id,
                     'waypoint_set': [
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '123',
-                                    'street': 'some street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
                             'status': WaypointStatus.D.name,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-110.54, 35.75]
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
                                 },
-                                'properties': {
-                                    'type': LocationType.w.name,
-                                }
+                                'type': LocationType.w.name,
                             }
                         }
                     ]
                 },
                 {
-                    'ambulance': self.a2.id,
+                    'ambulance_id': self.a2.id,
                     'waypoint_set': [
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '321',
-                                    'street': 'another street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '321',
+                                'street': 'another street'
                             }
                         }
                     ]
                 },
                 {
-                    'ambulance': self.a3.id,
+                    'ambulance_id': self.a3.id,
                 }
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
@@ -333,16 +312,13 @@ class TestAmbulancewaypoint(TestSetup):
         data = {
             'order': 3,
             'location': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-123.0208, 44.0464],
+                'location': {
+                    'longitude': -123.0208,
+                    'latitude': 44.0464
                 },
-                'properties': {
-                    'type': LocationType.i.name,
-                    'number': '123',
-                    'street': 'some street'
-                }
+                'type': LocationType.i.name,
+                'number': '123',
+                'street': 'some street'
             }
         }
         response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
@@ -354,16 +330,13 @@ class TestAmbulancewaypoint(TestSetup):
 
         data = {
             'location': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-123.0208, 44.0464],
+                'location': {
+                    'longitude': -123.0208,
+                    'latitude': 44.0464
                 },
-                'properties': {
-                    'type': LocationType.i.name,
-                    'number': '123',
-                    'street': 'some street'
-                }
+                'type': LocationType.i.name,
+                'number': '123',
+                'street': 'some street'
             }
         }
         response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
@@ -378,16 +351,13 @@ class TestAmbulancewaypoint(TestSetup):
 
         data = {
             'location': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-123.0208, 44.0464],
+                'location': {
+                    'longitude': -123.0208,
+                    'latitude': 44.0464
                 },
-                'properties': {
-                    'type': LocationType.i.name,
-                    'number': '123',
-                    'street': 'some street'
-                }
+                'type': LocationType.i.name,
+                'number': '123',
+                'street': 'some street'
             }
         }
         response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
@@ -402,9 +372,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ update
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.w.name,
-                }
+                'type': LocationType.w.name,
             }
         }
         response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
@@ -420,9 +388,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ update to forbidden type
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.h.name,
-                }
+                'type': LocationType.h.name,
             }
         }
         response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
@@ -445,61 +411,52 @@ class TestAmbulancewaypoint(TestSetup):
             'priority': CallPriority.B.name,
             'ambulancecall_set': [
                 {
-                    'ambulance': self.a1.id,
+                    'ambulance_id': self.a1.id,
                     'waypoint_set': [
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '123',
-                                    'street': 'some street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
                             'status': WaypointStatus.D.name,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-110.54, 35.75]
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
                                 },
-                                'properties': {
-                                    'type': LocationType.w.name,
-                                }
+                                'type': LocationType.w.name,
                             }
                         }
                     ]
                 },
                 {
-                    'ambulance': self.a2.id,
+                    'ambulance_id': self.a2.id,
                     'waypoint_set': [
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '321',
-                                    'street': 'another street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '321',
+                                'street': 'another street'
                             }
                         }
                     ]
                 },
                 {
-                    'ambulance': self.a3.id,
+                    'ambulance_id': self.a3.id,
                 }
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
@@ -535,16 +492,13 @@ class TestAmbulancewaypoint(TestSetup):
         data = {
             'order': 3,
             'location': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-123.0208, 44.0464],
+                'location': {
+                    'longitude': -123.0208,
+                    'latitude': 44.0464
                 },
-                'properties': {
-                    'type': LocationType.i.name,
-                    'number': '123',
-                    'street': 'some street'
-                }
+                'type': LocationType.i.name,
+                'number': '123',
+                'street': 'some street'
             }
         }
         response = client.post('/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
@@ -565,9 +519,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ update
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.w.name,
-                }
+                'type': LocationType.w.name,
             }
         }
         response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
@@ -593,9 +545,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ update to forbidden type
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.h.name,
-                }
+                'type': LocationType.h.name,
             }
         }
         response = client.patch('/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
@@ -618,7 +568,7 @@ class TestAmbulancewaypoint(TestSetup):
             'priority': CallPriority.B.name,
             'ambulancecall_set': [
                 {
-                    'ambulance': self.a1.id,
+                    'ambulance_id': self.a1.id,
                     'waypoint_set': [
                         {
                             'order': 0,
@@ -652,7 +602,7 @@ class TestAmbulancewaypoint(TestSetup):
                     ]
                 },
                 {
-                    'ambulance': self.a2.id,
+                    'ambulance_id': self.a2.id,
                     'waypoint_set': [
                         {
                             'order': 0,
@@ -672,7 +622,7 @@ class TestAmbulancewaypoint(TestSetup):
                     ]
                 },
                 {
-                    'ambulance': self.a3.id,
+                    'ambulance_id': self.a3.id,
                 }
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
@@ -764,7 +714,7 @@ class TestAmbulancewaypoint(TestSetup):
             'priority': CallPriority.B.name,
             'ambulancecall_set': [
                 {
-                    'ambulance': self.a1.id,
+                    'ambulance_id': self.a1.id,
                     'waypoint_set': [
                         {
                             'order': 0,
@@ -798,7 +748,7 @@ class TestAmbulancewaypoint(TestSetup):
                     ]
                 },
                 {
-                    'ambulance': self.a2.id,
+                    'ambulance_id': self.a2.id,
                     'waypoint_set': [
                         {
                             'order': 0,
@@ -818,7 +768,7 @@ class TestAmbulancewaypoint(TestSetup):
                     ]
                 },
                 {
-                    'ambulance': self.a3.id,
+                    'ambulance_id': self.a3.id,
                 }
             ],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
