@@ -730,7 +730,7 @@ class Waypoint(PublishMixin,
             # set order to last current order when order is negative
             if not self.order or self.order < 0:
                 highest_order = \
-                    Waypoint.objects.filter(callvehicle=self.callvehicle).aggregate(Max('order'))['order__max']
+                    Waypoint.objects.filter(ambulance_call=self.ambulance_call).aggregate(Max('order'))['order__max']
                 self.order = 0 if highest_order is None else highest_order + 1
 
             # call super
