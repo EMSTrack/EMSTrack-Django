@@ -161,7 +161,7 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a2.id))
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
-        self.assertEqual(len(answer), 1)
+        self.assertEqual(len(answer), 0)
 
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
