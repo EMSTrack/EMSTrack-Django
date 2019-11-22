@@ -675,13 +675,13 @@ class TestAmbulancewaypoint(TestSetup):
                 'type': LocationType.w.name,
             }
         }
-        waypoint = call.ambulancecall_set.get(ambulance=self.a2.id).locations.last()
+        waypoint = call.ambulancecall_set.get(ambulance=self.a2.id).waypoint_set.last()
         response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, waypoint.id),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        waypoint = call.ambulancecall_set.get(ambulance=self.a1.id).locations.last()
+        waypoint = call.ambulancecall_set.get(ambulance=self.a1.id).waypoint_set.last()
         response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, waypoint.id),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
