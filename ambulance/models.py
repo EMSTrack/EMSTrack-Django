@@ -708,6 +708,9 @@ class Waypoint(PublishMixin,
                                  blank=True, null=True,
                                  verbose_name=_('location'))
 
+    class Meta:
+        unique_together = ('ambulance_call', 'order')
+
     def is_created(self):
         return self.status == WaypointStatus.C.name
 
