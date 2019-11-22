@@ -2,6 +2,8 @@ import logging
 from enum import Enum
 
 from django.contrib.gis.db import models
+from django.db import transaction
+from django.db.models import Max
 from django.utils import timezone
 from django.urls import reverse
 from django.template.defaulttags import register
@@ -720,13 +722,21 @@ class Waypoint(PublishMixin,
 
     def save(self, *args, **kwargs):
 
-        # call super
-        super().save(*args, **kwargs)
+        with transaction.atomic():
 
-        # waypoint history save
-        WaypointHistory.objects.create(waypoint=self,
-                                       order=self.order, status=self.status,
-                                       comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
+            # set order to last current order when order is negative
+            if not self.order or self.order < 0:
+                highest_order = \
+                    Waypoint.objects.filter(callvehicle=self.callvehicle).aggregate(Max('order'))['order__max']
+                self.order = 0 if highest_order is None else highest_order + 1
+
+            # call super
+            super().save(*args, **kwargs)
+
+            # waypoint history save
+            WaypointHistory.objects.create(waypoint=self,
+                                           order=self.order, status=self.status,
+                                           comment=self.comment, updated_by=self.updated_by, updated_on=self.updated_on)
 
     def publish(self, **kwargs):
 
