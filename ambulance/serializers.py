@@ -301,7 +301,7 @@ class WaypointSerializer(serializers.ModelSerializer):
                 # retrieve existing location
                 try:
                     instance.location = Location.objects.get(id=location_id)
-                    instance.location.save(publish=False)
+                    instance.location.save()
 
                 except Location.DoesNotExist:
                     raise serializers.ValidationError("Location with id '{}' could not be found".format(location_id))
@@ -318,7 +318,7 @@ class WaypointSerializer(serializers.ModelSerializer):
                     # update location
                     for field in location:
                         setattr(instance.location, field, location[field])
-                    instance.location.save(publish=False)
+                    instance.location.save()
 
                 else:
                     raise serializers.ValidationError("Cannot update location of type '{}'".format(location['type']))
