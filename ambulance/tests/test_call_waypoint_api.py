@@ -385,7 +385,7 @@ class TestAmbulancewaypoint(TestSetup):
         expected = WaypointSerializer(call.ambulancecall_set.get(ambulance=self.a3).waypoint_set.last()).data
         logger.debug(answer)
         self.assertDictEqual(answer, expected)
-        self.assertEqual(answer['location']['properties']['type'], LocationType.w.name)
+        self.assertEqual(answer['location']['type'], LocationType.w.name)
 
         # call/+/ambulance/+/wapypoint/+/ update to forbidden type
         data = {
@@ -542,7 +542,7 @@ class TestAmbulancewaypoint(TestSetup):
         expected = WaypointSerializer(call.ambulancecall_set.get(ambulance=self.a1).waypoint_set.last()).data
         logger.debug(answer)
         self.assertDictEqual(answer, expected)
-        self.assertEqual(answer['location']['properties']['type'], LocationType.w.name)
+        self.assertEqual(answer['location']['type'], LocationType.w.name)
 
         # call/+/ambulance/+/wapypoint/+/ update to forbidden type
         data = {
