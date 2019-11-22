@@ -138,8 +138,8 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
-        # login as test@user.com
-        user = User.objects.get(email='test@user.com')
+        # login as test2@user.com
+        user = User.objects.get(email='test2@user.com')
         client.force_authenticate(user=user)
 
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
@@ -166,8 +166,8 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
-        # login as staff@user.com
-        user = User.objects.get(email='staff@user.com')
+        # login as test1@user.com
+        user = User.objects.get(email='test1@user.com')
         client.force_authenticate(user=user)
 
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c1['id'], self.a1.id))
@@ -466,8 +466,8 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        # login as test@user.com
-        user = User.objects.get(email='test@user.com')
+        # login as test2@user.com
+        user = User.objects.get(email='test2@user.com')
         client.force_authenticate(user=user)
 
         # call/+/ambulance/+/wapypoint list
@@ -623,8 +623,8 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        # login as test@user.com
-        user = User.objects.get(email='staff@user.com')
+        # login as test2@user.com
+        user = User.objects.get(email='test1@user.com')
         client.force_authenticate(user=user)
 
         # call/+/ambulance/+/wapypoint list
@@ -755,7 +755,7 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.post('/en/api/call/', json.dumps(call), content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        # login as test@user.com
+        # login as test2@user.com
         user = User.objects.get(email='test4@user.com')
         client.force_authenticate(user=user)
 
