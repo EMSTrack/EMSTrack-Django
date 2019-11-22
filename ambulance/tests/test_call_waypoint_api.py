@@ -575,30 +575,24 @@ class TestAmbulancewaypoint(TestSetup):
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '123',
-                                    'street': 'some street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
                             'status': WaypointStatus.D.name,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-110.54, 35.75]
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
                                 },
-                                'properties': {
-                                    'type': LocationType.w.name,
-                                }
+                                'type': LocationType.w.name,
                             }
                         }
                     ]
@@ -609,16 +603,13 @@ class TestAmbulancewaypoint(TestSetup):
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '321',
-                                    'street': 'another street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '321',
+                                'street': 'another street'
                             }
                         }
                     ]
@@ -657,16 +648,13 @@ class TestAmbulancewaypoint(TestSetup):
         data = {
             'order': 3,
             'location': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-123.0208, 44.0464],
+                'location': {
+                    'longitude': -123.0208,
+                    'latitude': 44.0464
                 },
-                'properties': {
-                    'type': LocationType.i.name,
-                    'number': '123',
-                    'street': 'some street'
-                }
+                'type': LocationType.i.name,
+                'number': '123',
+                'street': 'some street'
             }
         }
         response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a2.id),
@@ -684,9 +672,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ update
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.w.name,
-                }
+                'type': LocationType.w.name,
             }
         }
         waypoint = call.ambulancecall_set.get(ambulance=self.a2.id).locations.last()
@@ -721,30 +707,24 @@ class TestAmbulancewaypoint(TestSetup):
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '123',
-                                    'street': 'some street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '123',
+                                'street': 'some street'
                             }
                         },
                         {
                             'order': 1,
                             'status': WaypointStatus.D.name,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-110.54, 35.75]
+                                'location': {
+                                    'longitude': -110.54,
+                                    'latitude': 35.75
                                 },
-                                'properties': {
-                                    'type': LocationType.w.name,
-                                }
+                                'type': LocationType.w.name,
                             }
                         }
                     ]
@@ -755,16 +735,13 @@ class TestAmbulancewaypoint(TestSetup):
                         {
                             'order': 0,
                             'location': {
-                                'type': 'Feature',
-                                'geometry': {
-                                    'type': 'Point',
-                                    'coordinates': [-123.0208, 44.0464],
+                                'location': {
+                                    'longitude': -123.0208,
+                                    'latitude': 44.0464
                                 },
-                                'properties': {
-                                    'type': LocationType.i.name,
-                                    'number': '321',
-                                    'street': 'another street'
-                                }
+                                'type': LocationType.i.name,
+                                'number': '321',
+                                'street': 'another street'
                             }
                         }
                     ]
@@ -820,16 +797,13 @@ class TestAmbulancewaypoint(TestSetup):
         data = {
             'order': 3,
             'location': {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-123.0208, 44.0464],
+                'location': {
+                    'longitude': -123.0208,
+                    'latitude': 44.0464
                 },
-                'properties': {
-                    'type': LocationType.i.name,
-                    'number': '123',
-                    'street': 'some street'
-                }
+                'type': LocationType.i.name,
+                'number': '123',
+                'street': 'some street'
             }
         }
         response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
@@ -850,9 +824,7 @@ class TestAmbulancewaypoint(TestSetup):
         # call/+/ambulance/+/wapypoint/+/ update
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.w.name,
-                }
+                'type': LocationType.w.name,
             }
         }
         response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
@@ -873,14 +845,12 @@ class TestAmbulancewaypoint(TestSetup):
         expected = WaypointSerializer(call.ambulancecall_set.get(ambulance=self.a2).waypoint_set.last()).data
         logger.debug(answer)
         self.assertDictEqual(answer, expected)
-        self.assertEqual(answer['location']['properties']['type'], LocationType.w.name)
+        self.assertEqual(answer['location']['type'], LocationType.w.name)
 
         # call/+/ambulance/+/wapypoint/+/ update to forbidden type
         data = {
             'location': {
-                'properties': {
-                    'type': LocationType.h.name,
-                }
+                'type': LocationType.h.name,
             }
         }
         response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
