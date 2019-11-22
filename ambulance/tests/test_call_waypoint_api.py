@@ -138,7 +138,7 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
-        # login as test2@user.com
+        # login as test2@user.com (DISPATCHER)
         user = User.objects.get(email='test2@user.com')
         client.force_authenticate(user=user)
 
@@ -194,7 +194,7 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(c2['id'], self.a3.id))
         self.assertEqual(response.status_code, 404)
 
-        # login as test4@user.com (DISPATCHER)
+        # login as test4@user.com
         user = User.objects.get(email='test4@user.com')
         client.force_authenticate(user=user)
 
