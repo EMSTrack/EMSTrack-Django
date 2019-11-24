@@ -291,7 +291,7 @@ export class AppClient extends TopicObserver {
     patchWaypoint(call_id, ambulance_id, waypoint_id, data) {
 
         // retrieve bases
-        return this.httpClient.post(`call/${call_id}/ambulance/${ambulance_id}/waypoint/${waypoint_id}/`, data)
+        return this.httpClient.patch(`call/${call_id}/ambulance/${ambulance_id}/waypoint/${waypoint_id}/`, data)
             .then( (response) => {
                 // return modified call
                 return response.data;
