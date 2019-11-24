@@ -287,7 +287,7 @@ class AmbulanceMap(TemplateView):
             "Close": _("Close"),
             "Please confirm that you want to skip the current waypoint.": _("Please confirm that you want to skip the "
                                                                             "current waypoint."),
-            "Do you want to save the modified waypoints?": _("Do you want to save the modified waypoints."),
+            "Do you want to save the modified waypoints?": _("Do you want to save the modified waypoints?"),
             "Do you want to save the modified patients?": _("Do you want to save the modified patients?")
         }
 
