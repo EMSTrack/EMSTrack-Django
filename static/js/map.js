@@ -845,13 +845,13 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
                                     }
                                 }
                             }
+
+                            $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
+                                .popover('toggle');
+                            event.stopPropagation();
+
                         }
                     );
-
-
-                    $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
-                        .popover('toggle');
-                    event.stopPropagation();
 
                 });
 
@@ -928,23 +928,38 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
                         // no changes
                         logger.log('info', 'No changes, no savings!');
 
+                        $('#call-' + call_id + '-patients-button')
+                            .popover('toggle');
+                        event.stopPropagation();
+
                     } else {
 
-                        // update call
-                        const data = { patient_set: newPatients };
-                        apiClient.patchCall(call_id, data)
-                            .then( (call) => {
-                                logger.log('info', "Successfully updated call");
-                            })
-                            .catch( (error) => {
-                                logger.log('error', "Could not update call: '%j'", error);
+
+                        dialog.dialog(
+                            settings.translation_table["Do you want to save the modified patients?"],
+                            (retval) => {
+
+                                if (retval === Dialog.OK) {
+
+                                    // update call
+                                    const data = { patient_set: newPatients };
+                                    apiClient.patchCall(call_id, data)
+                                        .then( (call) => {
+                                            logger.log('info', "Successfully updated call");
+                                        })
+                                        .catch( (error) => {
+                                            logger.log('error', "Could not update call: '%j'", error);
+                                        });
+
+                                }
+
+                                $('#call-' + call_id + '-patients-button')
+                                    .popover('toggle');
+                                event.stopPropagation();
+
                             });
 
                     }
-
-                    $('#call-' + call_id + '-patients-button')
-                        .popover('toggle');
-                    event.stopPropagation();
 
                 });
 
