@@ -432,6 +432,25 @@ export class Location {
         this.addressComponent.refresh(`location-${label}`);
 
     }
+    
+    getData() {
+        return {
+            
+        'id': this.id,
+        'name': this.name,
+        'type': this.type,
+        'number': this.number,
+        'street': this.street,
+        'unit': this.unit,
+        'neighborhood': this.neighborhood,
+        'city': this.city,
+        'state': this.state,
+        'zipcode': this.zipcode,
+        'country': this.country,
+        'location': new Point(this.location),
+            
+        };
+    }
 
 }
 

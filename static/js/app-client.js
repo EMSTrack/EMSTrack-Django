@@ -278,6 +278,26 @@ export class AppClient extends TopicObserver {
             });
     }
 
+    postWaypoint(call_id, ambulance_id, data) {
+
+        // retrieve bases
+        return this.httpClient.post(`call/${call_id}/ambulance/${ambulance_id}/waypoint/`, data)
+            .then( (response) => {
+                // return call
+                return response.data;
+            });
+    }
+
+    patchWaypoint(call_id, ambulance_id, waypoint_id, data) {
+
+        // retrieve bases
+        return this.httpClient.post(`call/${call_id}/ambulance/${ambulance_id}/waypoint/${waypoint_id}/`, data)
+            .then( (response) => {
+                // return modified call
+                return response.data;
+            });
+    }
+
     patchAmbulance(ambulance_id, data) {
 
         // retrieve bases

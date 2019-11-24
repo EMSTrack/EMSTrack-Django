@@ -66,6 +66,19 @@ export class Waypoint {
 
     }
 
+    getData() {
+
+        // select all inputs
+        const waypoint = {
+            'id': this.id,
+            'order': this.order,
+            'status': this.status,
+            'location': this.location.getData()
+        };
+
+        return waypoint;
+    }
+
 }
 
 Waypoint.default = {
@@ -248,7 +261,7 @@ export class Waypoints {
 
     }
 
-        swap(i, j) {
+    swap(i, j) {
 
         // check arguments
         if (i < 0 || i >= this.waypoints.length) {
@@ -470,30 +483,11 @@ export class Waypoints {
 
     getData() {
 
-        // select all inputs
-        const inputs = $(this.placeholderName + ' :input:not(:checkbox):not(:button):not(.deleted)');
-
-        let entry = {};
+        // loop over all waypoints
         const waypoints = [];
-        inputs.each( function() {
+        this.waypoints.forEach((waypoint) => {
 
-            // parse values
-            let value = $(this).val().trim();
-            if (this.name === 'name')
-                entry[this.name] = value;
-            else {
-                value = parseInt(value);
-                if ( !(this.name === 'id' && isNaN(value)) )
-                    entry[this.name] = isNaN(value) ? null : value;
-            }
-
-            // is it the end of the structure?
-            if (this.name === 'age') {
-                if (entry.name || entry.age)
-                    // skip if empty
-                    waypoints.push(entry);
-                entry = {};
-            }
+            waypoints.push(waypoint.getData());
 
         });
 
@@ -503,4 +497,5 @@ export class Waypoints {
     same(waypoints) {
         return JSON.stringify(waypoints) === JSON.stringify(this.waypoints);
     }
+
 }

@@ -803,6 +803,42 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
             $('#call-' + call_id + '-' + ambulance_id + '-waypoints-save-button')
                 .on('click', function (event) {
 
+                    // retrieve waypoints
+                    const newWaypoints = waypoints.getData();
+                    console.log(newWaypoints);
+                    console.log(waypoint_set);
+                    for (const waypoint of newWaypoints) {
+
+                        if (waypoint.id === null) {
+
+                            // new waypoint
+                            logger.log('info', 'New waypoint, post');
+
+                            apiClient.postWaypoint(call_id, ambulance_id, waypoint)
+                                .then((waypoint) => {
+                                    logger.log('info', "Successfully created waypointg");
+                                })
+                                .catch((error) => {
+                                    logger.log('error', "Could not create waypoint: '%j'", error);
+                                });
+
+                        } else {
+
+                            // existing waypoint
+                            logger.log('info', 'Existing waypoint, patch');
+
+                            apiClient.patchWaypoint(call_id, ambulance_id, waypoint.id, waypoint)
+                                .then((waypoint) => {
+                                    logger.log('info', "Successfully updated waypointg");
+                                })
+                                .catch((error) => {
+                                    logger.log('error', "Could not update waypoint: '%j'", error);
+                                });
+
+                        }
+                    }
+                    
+                    
                     $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
                         .popover('toggle');
                     event.stopPropagation();
@@ -873,7 +909,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
             $('#call-' + call_id + '-patients-save-button')
                 .on('click', function (event) {
 
-                    // retrieve patents
+                    // retrieve patients
                     const newPatients = patients.getData();
                     console.log(newPatients);
                     console.log(patient_set);
