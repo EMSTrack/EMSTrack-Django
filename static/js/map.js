@@ -808,50 +808,62 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
                     console.log(newWaypoints);
                     console.log(waypoint_set);
 
-                    dialog.dialog(
-                        settings.translation_table["Do you want to save the modified waypoints?"],
-                        (retval) => {
+                    if ( waypoints.same(newWaypoints) ) {
 
-                            if (retval === Dialog.OK) {
+                        // no changes
+                        logger.log('info', 'No changes, no savings!');
 
-                                for (const waypoint of newWaypoints) {
+                        $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
+                            .popover('toggle');
+                        event.stopPropagation();
 
-                                    if (waypoint.id === null) {
+                    } else {
 
-                                        // new waypoint
-                                        logger.log('info', 'New waypoint, post');
+                        dialog.dialog(
+                            settings.translation_table["Do you want to save the modified waypoints?"],
+                            (retval) => {
 
-                                        apiClient.postWaypoint(call_id, ambulance_id, waypoint)
-                                            .then((waypoint) => {
-                                                logger.log('info', "Successfully created waypointg");
-                                            })
-                                            .catch((error) => {
-                                                logger.log('error', "Could not create waypoint: '%j'", error);
-                                            });
+                                if (retval === Dialog.OK) {
 
-                                    } else {
+                                    for (const waypoint of newWaypoints) {
 
-                                        // existing waypoint
-                                        logger.log('info', 'Existing waypoint, patch');
+                                        if (waypoint.id === null) {
 
-                                        apiClient.patchWaypoint(call_id, ambulance_id, waypoint.id, waypoint)
-                                            .then((waypoint) => {
-                                                logger.log('info', "Successfully updated waypointg");
-                                            })
-                                            .catch((error) => {
-                                                logger.log('error', "Could not update waypoint: '%j'", error);
-                                            });
+                                            // new waypoint
+                                            logger.log('info', 'New waypoint, post');
 
+                                            apiClient.postWaypoint(call_id, ambulance_id, waypoint)
+                                                .then((waypoint) => {
+                                                    logger.log('info', "Successfully created waypointg");
+                                                })
+                                                .catch((error) => {
+                                                    logger.log('error', "Could not create waypoint: '%j'", error);
+                                                });
+
+                                        } else {
+
+                                            // existing waypoint
+                                            logger.log('info', 'Existing waypoint, patch');
+
+                                            apiClient.patchWaypoint(call_id, ambulance_id, waypoint.id, waypoint)
+                                                .then((waypoint) => {
+                                                    logger.log('info', "Successfully updated waypointg");
+                                                })
+                                                .catch((error) => {
+                                                    logger.log('error', "Could not update waypoint: '%j'", error);
+                                                });
+
+                                        }
                                     }
                                 }
-                            }
+                            });
 
-                            $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
-                                .popover('toggle');
-                            event.stopPropagation();
 
-                        }
-                    );
+                        $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
+                            .popover('toggle');
+                        event.stopPropagation();
+
+                    }
 
                 });
 

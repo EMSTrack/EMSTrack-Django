@@ -44,6 +44,7 @@
   "dependencies": {
     "chart.js": "^2.9.1",
     "chartjs-plugin-zoom": "^0.7.4",
+    "immutability-helper": "^3.0.1",
     "moment": "^2.24.0",
     "nouislider": "^14.0.3",
     "wnumb": "^1.2.0"
