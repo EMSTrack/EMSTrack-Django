@@ -495,6 +495,9 @@ export class Waypoints {
     }
 
     same(waypoints) {
+        logger.log('debug', JSON.stringify(waypoints));
+        logger.log('debug', JSON.stringify(this.waypoints));
+
         return JSON.stringify(waypoints) === JSON.stringify(this.waypoints);
     }
 
