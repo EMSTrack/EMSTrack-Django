@@ -736,7 +736,6 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
     // create waypoint object
     const placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints';
     const buttons_placeholder = 'call-' + call_id + '-' + ambulance_id + '-waypoints-buttons';
-    const waypoints = new Waypoints(waypoint_set, call_id + '-' + ambulance_id, '#' + placeholder);
     const selector = $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button');
 
     // destroy?
@@ -772,6 +771,10 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
         .on('inserted.bs.popover', () => {
 
             // create waypoint form
+            const waypoint_set_clone = $.extend(true, {}, waypoint_set);
+            const waypoints = new Waypoints(waypoint_set_clone, call_id + '-' + ambulance_id, '#' + placeholder);
+            const waypointsString = JSON.stringify(waypoints.getData());
+
             waypoints.render();
             waypoints.postRender();
 
@@ -805,12 +808,13 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
                     // retrieve waypoints
                     const newWaypoints = waypoints.getData();
-                    console.log(waypoints);
-                    console.log(newWaypoints);
-                    console.log(waypoints.same(newWaypoints));
-                    console.log(waypoint_set);
+                    const newWaypointsString = JSON.stringify(newWaypoints);
 
-                    if ( waypoints.same(newWaypoints) ) {
+                    console.log(newWaypoints);
+                    console.log(waypointsString);
+                    console.log(newWaypointsString);
+
+                    if ( waypointsString === newWaypointsString ) {
 
                         // no changes
                         logger.log('info', 'No changes, no savings!');
