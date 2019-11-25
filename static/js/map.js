@@ -805,7 +805,9 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
                     // retrieve waypoints
                     const newWaypoints = waypoints.getData();
+                    console.log(waypoints);
                     console.log(newWaypoints);
+                    console.log(waypoints.same(newWaypoints));
                     console.log(waypoint_set);
 
                     if ( waypoints.same(newWaypoints) ) {
@@ -847,7 +849,7 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
 
                                             apiClient.patchWaypoint(call_id, ambulance_id, waypoint.id, waypoint)
                                                 .then((waypoint) => {
-                                                    logger.log('info', "Successfully updated waypointg");
+                                                    logger.log('info', "Successfully updated waypoint");
                                                 })
                                                 .catch((error) => {
                                                     logger.log('error', "Could not update waypoint: '%j'", error);
