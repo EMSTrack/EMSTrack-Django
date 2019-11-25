@@ -771,7 +771,9 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
         .on('inserted.bs.popover', () => {
 
             // create waypoint form
-            const waypoint_set_clone = $.extend(true, {}, waypoint_set);
+            const waypoint_set_clone = JSON.parse(JSON.stringify(waypoint_set));
+            console.log(waypoint_set_clone);
+
             const waypoints = new Waypoints(waypoint_set_clone, call_id + '-' + ambulance_id, '#' + placeholder);
             const waypointsString = JSON.stringify(waypoints.getData());
 
