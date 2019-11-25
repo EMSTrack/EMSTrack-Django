@@ -864,12 +864,12 @@ function setCallWaypointPopover(call_id, ambulance_id, waypoint_set, destroy = f
                                         }
                                     }
                                 }
+
+                                $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
+                                    .popover('toggle');
+                                event.stopPropagation();
+
                             });
-
-
-                        $('#call-' + call_id + '-' + ambulance_id + '-waypoints-button')
-                            .popover('toggle');
-                        event.stopPropagation();
 
                     }
 
