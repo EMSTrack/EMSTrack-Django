@@ -11,9 +11,7 @@ django-extra-views
 django-import-export
 django-nose
 paho-mqtt
-tablib
 django-formset-js
 django-webpack-loader
 uwsgi
-odfpy
-pyyaml
+tablib[html,ods,xls,xlsx,yaml]>=0.14
