@@ -14,4 +14,4 @@ paho-mqtt
 django-formset-js
 django-webpack-loader
 uwsgi
-tablib[html,ods,xls,xlsx,yaml]>=0.14
+tablib[html,ods,xls,xlsx,yaml]<=0.14
