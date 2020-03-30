@@ -15,4 +15,4 @@ tablib
 django-formset-js
 django-webpack-loader
 uwsgi
-odf
+odfpy
