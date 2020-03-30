@@ -475,16 +475,19 @@ class CallAbortView(LoginRequiredMixin,
 class CallRadioCodeListView(PaginationViewMixin,
                             ListView):
     model = CallRadioCode
+    ordering = ['code']
 
 
 class CallPriorityCodeListView(PaginationViewMixin,
                                ListView):
     model = CallPriorityCode
+    ordering = ['prefix', 'priority', 'suffix']
 
 
 class CallPriorityClassificationListView(PaginationViewMixin,
                                          ListView):
     model = CallPriorityClassification
+    ordering = ['id']
 
 
 # Ambulance import and export
