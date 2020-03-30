@@ -87,7 +87,7 @@ urlpatterns = [
         name='import-radio-code'),
 
     url(r'^radio-code/process_import/$',
-        staff_member_required(views.AmbulanceProcessImportView.as_view()),
+        staff_member_required(views.CallRadioCodeProcessImportView.as_view()),
         name='process-import-radio-code'),
 
     url(r'^priority-code/list/$',
@@ -103,7 +103,7 @@ urlpatterns = [
         name='import-priority-code'),
 
     url(r'^priority-code/process_import/$',
-        staff_member_required(views.AmbulanceProcessImportView.as_view()),
+        staff_member_required(views.CallPriorityCodeProcessImportView.as_view()),
         name='process-import-priority-code'),
 
     url(r'^priority-classification/list/$',
@@ -119,7 +119,7 @@ urlpatterns = [
         name='import-priority-classification'),
 
     url(r'^priority-classification/process_import/$',
-        staff_member_required(views.AmbulanceProcessImportView.as_view()),
+        staff_member_required(views.CallPriorityClassificationProcessImportView.as_view()),
         name='process-import-priority-classification'),
 
     # url(r'^admin/$',
