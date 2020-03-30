@@ -16,3 +16,4 @@ django-formset-js
 django-webpack-loader
 uwsgi
 odfpy
+pyyaml
