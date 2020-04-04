@@ -48,6 +48,7 @@ class TestAmbulanceGetList(TestSetup):
             self.assertDictEqual(serializer.data, result)
 
     def test_ambulance_get_viewset(self):
+
         # instantiate client
         client = Client()
 

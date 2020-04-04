@@ -14,8 +14,15 @@ logger = logging.getLogger(__name__)
 class TestModels(TestSetup):
 
     def test_import(self):
+
+        # instantiate client
+        client = Client()
+
+        # login as admin
+        client.login(username=settings.MQTT['USERNAME'], password=settings.MQTT['PASSWORD'])
+
         # GET the import form
-        response = self.client.get('/en/auth/user/import/', follow=True)
+        response = client.get('/en/auth/user/import/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'import.html')
         self.assertContains(response, 'form action=""')
@@ -33,7 +40,7 @@ class TestModels(TestSetup):
                 'input_format': input_format,
                 'import_file': f,
             }
-            response = self.client.post('/en/auth/user/import/', data)
+            response = client.post('/en/auth/user/import/', data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('result', response.context)
         self.assertFalse(response.context['result'].has_errors())
@@ -42,8 +49,8 @@ class TestModels(TestSetup):
 
         data = confirm_form.initial
         self.assertEqual(data['original_file_name'], 'users.csv')
-        response = self.client.post('/en/auth/user/process_import/', data,
-                                    follow=True)
+        response = client.post('/en/auth/user/process_import/', data,
+                               follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response,
                             _('Import finished, with {} new and {} updated {}.').format(
