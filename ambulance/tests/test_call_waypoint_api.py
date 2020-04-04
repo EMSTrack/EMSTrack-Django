@@ -542,12 +542,12 @@ class TestAmbulancewaypoint(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 404)
 
-        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
@@ -563,7 +563,7 @@ class TestAmbulancewaypoint(TestSetup):
                 'type': LocationType.h.name,
             }
         }
-        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a1.id, answer['id']),
+        response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
         self.assertEqual(response.status_code, 400)
