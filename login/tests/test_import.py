@@ -35,7 +35,6 @@ class TestModels(TestSetup):
         filename = os.path.join(
             os.path.dirname(__file__),
             os.path.pardir,
-            'login',
             'tests',
             'users.csv')
         with open(filename, "rb") as f:
