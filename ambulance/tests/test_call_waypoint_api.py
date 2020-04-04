@@ -10,6 +10,8 @@ from ambulance.models import CallStatus, CallPriority, Call, WaypointStatus
 from ambulance.serializers import WaypointSerializer
 from ambulance.models import LocationType
 
+from login.permissions import get_permissions
+
 from login.tests.setup_data import TestSetup
 
 logger = logging.getLogger(__name__)
@@ -470,14 +472,20 @@ class TestAmbulancewaypoint(TestSetup):
         user = User.objects.get(email='test2@user.com')
         client.force_authenticate(user=user)
 
+        # get permissions
+        perms = get_permissions(user)
+
         # call/+/ambulance/+/wapypoint list
         call = Call.objects.get(status=CallStatus.P.name)
-        for ambulancecall in call.ambulancecall_set.exclude(ambulance_id=self.a2.id):
+        for ambulancecall in call.ambulancecall_set.all():
 
             response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
-            expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
+            if perms.check_can_read(ambulance=ambulancecall.ambulance.id):
+                expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
+            else:
+                expected = []
             logger.debug("answer = %s", answer)
             logger.debug("expected = %s", expected)
             self.assertCountEqual(answer, expected)
