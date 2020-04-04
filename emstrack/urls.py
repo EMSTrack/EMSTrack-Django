@@ -22,7 +22,8 @@ from .views import IndexView
 # schema_view = get_swagger_view(title='EMSTrack API')
 schema_view = get_schema_view(
    openapi.Info(
-      title="EMSTrack API",
+       title="EMSTrack API",
+       default_version='v1',
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
