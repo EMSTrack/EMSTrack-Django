@@ -54,6 +54,8 @@ class TestModels(TestSetup):
         response = client.post('/en/auth/user/process_import/', data,
                                follow=True)
         self.assertEqual(response.status_code, 200)
+
+        logger.debug(response)
         self.assertContains(response,
                             'Import finished, with {} new and {} updated {}.'.format(
                                 1, 0, User._meta.verbose_name_plural)
