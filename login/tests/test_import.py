@@ -55,6 +55,6 @@ class TestModels(TestSetup):
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
-        users = Uers.objects.filter(username='newuser')
+        users = User.objects.filter(username='newuser')
         self.assertTrue(users)
 
