@@ -36,7 +36,10 @@ SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='CHANG3M3')
 # swagger settings
 SWAGGER_SETTINGS = {
     'TAGS_SORTER': 'alpha',
-    'DOC_EXPANSION': 'list'
+    'DOC_EXPANSION': 'list',
+    'USER_SESSION_AUTH': True,
+    'LOGIN_URL': 'login:login',
+    'LOGOUT_URL': 'login:logout',
 }
 
 # SECURITY WARNING: don't run with debug turned on in production!
