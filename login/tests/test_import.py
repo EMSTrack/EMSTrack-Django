@@ -6,6 +6,8 @@ from django.utils.translation import activate
 
 from django.contrib.auth.models import User
 
+from django.test import Client
+
 from login.tests.setup_data import TestSetup
 
 logger = logging.getLogger(__name__)
