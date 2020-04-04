@@ -4,8 +4,9 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import views as auth_views
 
-from rest_framework import routers
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework import routers, permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
 
 from login.viewsets import ProfileViewSet, ClientViewSet
 from login.views import PasswordView, SettingsView, VersionView
@@ -18,7 +19,14 @@ from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
 
 from .views import IndexView
 
-schema_view = get_swagger_view(title='EMSTrack API')
+# schema_view = get_swagger_view(title='EMSTrack API')
+schema_view = get_schema_view(
+   openapi.Info(
+      title="EMSTrack API",
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 router = routers.DefaultRouter()
 
@@ -74,9 +82,9 @@ urlpatterns = i18n_patterns(*[
 
     # Router API urls
     url(r'^api/', include(router.urls)),
-    url(r'^docs/', login_required(schema_view)),
-    url(r'^api-auth/', include('rest_framework.urls',
-                               namespace='rest_framework')),
+    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
+    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     # Add mqtt_password to api
     url(r'^api/user/(?P<user__username>[\w.@+-]+)/password/$',
