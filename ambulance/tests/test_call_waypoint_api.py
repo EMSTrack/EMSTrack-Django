@@ -851,12 +851,7 @@ class TestAmbulancewaypoint(TestSetup):
         response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a3.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
         logger.debug(response.content)
-        self.assertEqual(response.status_code, 200)
-        answer = JSONParser().parse(BytesIO(response.content))
-        expected = WaypointSerializer(call.ambulancecall_set.get(ambulance=self.a3).waypoint_set.last()).data
-        logger.debug(answer)
-        self.assertDictEqual(answer, expected)
-        self.assertEqual(answer['location']['type'], LocationType.w.name)
+        self.assertEqual(response.status_code, 404)
 
         response = client.patch('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, self.a2.id, answer['id']),
                                 json.dumps(data), content_type='application/json')
