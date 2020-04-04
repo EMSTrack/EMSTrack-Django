@@ -55,7 +55,7 @@ class TestModels(TestSetup):
                                follow=True)
         self.assertEqual(response.status_code, 200)
 
-        logger.debug(response)
+        logger.debug(response.content)
         self.assertContains(response,
                             'Import finished, with {} new and {} updated {}.'.format(
                                 1, 0, User._meta.verbose_name_plural)
