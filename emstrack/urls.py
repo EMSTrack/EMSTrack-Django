@@ -11,10 +11,11 @@ from drf_yasg import openapi
 from login.viewsets import ProfileViewSet, ClientViewSet
 from login.views import PasswordView, SettingsView, VersionView
 
-from ambulance.viewsets import AmbulanceViewSet, LocationViewSet, LocationTypeViewSet, CallViewSet, CallPriorityViewSet, \
+from ambulance.viewsets import AmbulanceEquipmentItemViewSet, AmbulanceViewSet, \
+    LocationViewSet, LocationTypeViewSet, CallViewSet, CallPriorityViewSet, \
     CallRadioViewSet, AmbulanceCallWaypointViewSet
 
-from hospital.viewsets import HospitalViewSet
+from hospital.viewsets import HospitalViewSet, HospitalEquipmentItemViewSet
 from equipment.viewsets import EquipmentItemViewSet, EquipmentViewSet
 
 from .views import IndexView
@@ -39,6 +40,10 @@ router.register(r'ambulance',
                 AmbulanceViewSet,
                 basename='api-ambulance')
 
+router.register(r'ambulance/(?P<ambulance_id>[0-9]+)/equipment',
+                AmbulanceEquipmentItemViewSet,
+                basename='api-ambulance-equipment')
+
 router.register(r'location',
                 LocationViewSet,
                 basename='api-location')
@@ -50,6 +55,10 @@ router.register(r'location/(?P<type>.+)',
 router.register(r'hospital',
                 HospitalViewSet,
                 basename='api-hospital')
+
+router.register(r'hospital/(?P<hospital_id>[0-9]+)/equipment',
+                HospitalEquipmentItemViewSet,
+                basename='api-hospital-equipment')
 
 router.register(r'equipment/(?P<equipmentholder_id>[0-9]+)/item',
                 EquipmentItemViewSet,
