@@ -15,7 +15,7 @@ class TestModels(TestSetup):
 
     def test_import(self):
         # GET the import form
-        response = self.client.get('/en/auth/user/import/')
+        response = self.client.get('/en/auth/user/import/', follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'import.html')
         self.assertContains(response, 'form action=""')
