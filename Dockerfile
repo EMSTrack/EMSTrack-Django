@@ -39,7 +39,6 @@ WORKDIR /tmp
 RUN pip uninstall -y django-import-export
 RUN git clone https://github.com/mcdeoliveira/django-import-export
 WORKDIR /tmp/django-import-export
-RUN git checkout devel
 RUN pip install .
 
 
