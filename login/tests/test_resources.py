@@ -40,4 +40,4 @@ class TestUserResource(TestSetup):
 
         instance = self.resource.get_instance(instance_loader,
                                               self.dataset.dict[0])
-        self.assertEqual(instance, self.u5.id)
+        self.assertEqual(instance, self.u5)
