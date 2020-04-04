@@ -34,12 +34,12 @@ SESSION_SAVE_EVERY_REQUEST = True
 SECRET_KEY = env.str('DJANGO_SECRET_KEY', default='CHANG3M3')
 
 # swagger settings
-SWAGGER_SETTINGS = {
-    'APIS_SORTER': 'alpha',
-    'DOC_EXPANSION': 'list',
-    'LOGIN_URL': 'rest_framework:login',
-    'LOGOUT_URL': 'rest_framework:logout'
-}
+#SWAGGER_SETTINGS = {
+#    'APIS_SORTER': 'alpha',
+#    'DOC_EXPANSION': 'list',
+#    'LOGIN_URL': 'rest_framework:login',
+#    'LOGOUT_URL': 'rest_framework:logout'
+#}
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DJANGO_DEBUG', default=False)
