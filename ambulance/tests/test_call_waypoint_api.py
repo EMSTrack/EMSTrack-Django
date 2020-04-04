@@ -552,7 +552,7 @@ class TestAmbulancewaypoint(TestSetup):
         logger.debug(response.content)
         self.assertEqual(response.status_code, 200)
         answer = JSONParser().parse(BytesIO(response.content))
-        expected = WaypointSerializer(call.ambulancecall_set.get(ambulance=self.a1).waypoint_set.last()).data
+        expected = WaypointSerializer(call.ambulancecall_set.get(ambulance=self.a3).waypoint_set.last()).data
         logger.debug(answer)
         self.assertDictEqual(answer, expected)
         self.assertEqual(answer['location']['type'], LocationType.w.name)
