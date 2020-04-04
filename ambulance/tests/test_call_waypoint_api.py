@@ -486,8 +486,8 @@ class TestAmbulancewaypoint(TestSetup):
                 expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
             else:
                 expected = []
-            logger.debug("answer = %s", answer)
-            logger.debug("expected = %s", expected)
+            #logger.debug("answer = %s", answer)
+            #logger.debug("expected = %s", expected)
             self.assertCountEqual(answer, expected)
 
         # call/+/ambulance/+/wapypoint/+/ retrieve
@@ -495,10 +495,13 @@ class TestAmbulancewaypoint(TestSetup):
 
             for waypoint in ambulancecall.waypoint_set.all():
                 response = client.get('/en/api/call/{}/ambulance/{}/waypoint/{}/'.format(call.id, ambulancecall.ambulance.id, waypoint.id))
-                self.assertEqual(response.status_code, 200)
-                answer = JSONParser().parse(BytesIO(response.content))
-                expected = WaypointSerializer(waypoint).data
-                self.assertCountEqual(answer, expected)
+                if perms.check_can_read(ambulance=ambulancecall.ambulance.id):
+                    self.assertEqual(response.status_code, 200)
+                    answer = JSONParser().parse(BytesIO(response.content))
+                    expected = WaypointSerializer(waypoint).data
+                    self.assertCountEqual(answer, expected)
+                else:
+                    self.assertEqual(response.status_code, 404)
 
         # call/+/ambulance/+/wapypoint/ post
         data = {
