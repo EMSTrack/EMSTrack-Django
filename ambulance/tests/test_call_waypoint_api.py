@@ -472,7 +472,7 @@ class TestAmbulancewaypoint(TestSetup):
 
         # call/+/ambulance/+/wapypoint list
         call = Call.objects.get(status=CallStatus.P.name)
-        for ambulancecall in call.ambulancecall_set.all():
+        for ambulancecall in call.ambulancecall_set.exclude(ambulance_id=self.a2.id):
 
             response = client.get('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, ambulancecall.ambulance.id))
             self.assertEqual(response.status_code, 200)
