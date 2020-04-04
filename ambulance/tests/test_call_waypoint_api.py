@@ -520,11 +520,11 @@ class TestAmbulancewaypoint(TestSetup):
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a1.id),
+        response = client.post('/en/api/call/{}/ambulance/{}/waypoint/'.format(call.id, self.a3.id),
                                json.dumps(data), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         answer = JSONParser().parse(BytesIO(response.content))
