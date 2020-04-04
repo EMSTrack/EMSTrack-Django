@@ -15,7 +15,7 @@ class TestModels(TestSetup):
 
     def test_import(self):
         # GET the import form
-        response = self.client.get('/auth/user/import/')
+        response = self.client.get('/en/auth/user/import/')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'import.html')
         self.assertContains(response, 'form action=""')
@@ -33,7 +33,7 @@ class TestModels(TestSetup):
                 'input_format': input_format,
                 'import_file': f,
             }
-            response = self.client.post('/auth/user/import/', data)
+            response = self.client.post('/en/auth/user/import/', data)
         self.assertEqual(response.status_code, 200)
         self.assertIn('result', response.context)
         self.assertFalse(response.context['result'].has_errors())
@@ -42,7 +42,7 @@ class TestModels(TestSetup):
 
         data = confirm_form.initial
         self.assertEqual(data['original_file_name'], 'users.csv')
-        response = self.client.post('/auth/user/process_import/', data,
+        response = self.client.post('/en/auth/user/process_import/', data,
                                     follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response,
