@@ -82,10 +82,10 @@ router.register(r'client',
 urlpatterns = i18n_patterns(*[
 
     # Router API urls
-    url(r'^api/', include(router.urls)),
-    url(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
-    url(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    url(r'^api/', login_required(include(router.urls))),
+    url(r'^swagger(?P<format>\.json|\.yaml)$', login_required(schema_view.without_ui(cache_timeout=0), name='schema-json')),
+    url(r'^swagger/$', login_required(schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui')),
+    # url(r'^redoc/$', login_required(schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')),
 
     # Add mqtt_password to api
     url(r'^api/user/(?P<user__username>[\w.@+-]+)/password/$',
