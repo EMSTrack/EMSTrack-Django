@@ -478,6 +478,8 @@ class TestAmbulancewaypoint(TestSetup):
             self.assertEqual(response.status_code, 200)
             answer = JSONParser().parse(BytesIO(response.content))
             expected = WaypointSerializer(ambulancecall.waypoint_set.all(), many=True).data
+            logger.debug("answer = %s", answer)
+            logger.debug("expected = %s", expected)
             self.assertCountEqual(answer, expected)
 
         # call/+/ambulance/+/wapypoint/+/ retrieve
