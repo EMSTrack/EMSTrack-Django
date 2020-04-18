@@ -484,9 +484,13 @@ class TestCall(TestSetup):
         # add user
         c1.sms_notifications.add(self.u8)
 
-        # make sure it got message
+        # make sure it got messages
         self.assertEqual(len(sms_client.messages), 1)
         sms_client.reset_messages()
+
+        # u7 has no phone number so no messages
+        c1.sms_notifications.add(self.u7)
+        self.assertEqual(len(sms_client.messages), 0)
 
         # it is fine to have no ambulances because it is pending
         serializer = CallSerializer(c1)
@@ -504,10 +508,13 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'sms_notifications': [],
+            'sms_notifications': [self.u7.id, self.u8.id],
             'ambulancecall_set': [],
             'patient_set': []
         }
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
+        result = serializer.data
+        result['sms_notifications'] = []
         self.assertDictEqual(serializer.data, expected)
 
         # create first ambulance call
@@ -548,7 +555,9 @@ class TestCall(TestSetup):
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
@@ -607,7 +616,9 @@ class TestCall(TestSetup):
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
@@ -686,7 +697,9 @@ class TestCall(TestSetup):
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
@@ -814,7 +827,9 @@ class TestCall(TestSetup):
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['patient_set'],
                               [patient_serializer_2.data, patient_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
@@ -843,7 +858,9 @@ class TestCall(TestSetup):
                               CallAmbulanceSummarySerializer(c1.ambulancecall_set, many=True).data)
         self.assertCountEqual(serializer.data['patient_set'],
                               [patient_serializer_2.data, patient_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
