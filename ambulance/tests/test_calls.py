@@ -377,7 +377,7 @@ class TestCall(TestSetup):
 
         # update waypoint 1
         data = {
-            'order': 1,
+            'order': 3,
             'status': WaypointStatus.V.name
         }
         serializer = WaypointSerializer(wp_1, data=data)
@@ -390,7 +390,7 @@ class TestCall(TestSetup):
         result = {
             'id': wp_1.id,
             'ambulance_call_id': ac_1.id,
-            'order': 1,
+            'order': 3,
             'status': WaypointStatus.V.name,
             'location': wpl_1_serializer.data,
             'comment': wp_1.comment,
@@ -419,7 +419,7 @@ class TestCall(TestSetup):
 
         # update waypoint 2
         data = {
-            'order': 2,
+            'order': 0,
             'status': WaypointStatus.C.name
         }
         serializer = WaypointSerializer(wp_2, data=data)
@@ -432,7 +432,7 @@ class TestCall(TestSetup):
         result = {
             'id': wp_2.id,
             'ambulance_call_id': ac_1.id,
-            'order': 2,
+            'order': 0,
             'status': WaypointStatus.C.name,
             'location': wpl_2_serializer.data,
             'comment': wp_2.comment,
