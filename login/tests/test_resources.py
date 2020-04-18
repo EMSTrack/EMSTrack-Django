@@ -29,9 +29,9 @@ class TestUserResource(TestSetup):
 
         self.resource = UserResource()
 
-        self.dataset = tablib.Dataset(headers=['id', 'username', 'first_name', 'last_name', 'email',
+        self.dataset = tablib.Dataset(headers=['id', 'username', 'first_name', 'last_name', 'email', 'mobile_number',
                                                'is_staff', 'is_dispatcher', 'is_active'])
-        row = [self.u5.id, 'change', 'first', 'last', 'email@email.com', False, True, True]
+        row = [self.u5.id, 'change', 'first', 'last', 'email@email.com', '+15555050505', False, True, True]
         self.dataset.append(row)
 
     def test_get_instance(self):
