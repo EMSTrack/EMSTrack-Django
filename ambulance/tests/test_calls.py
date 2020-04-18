@@ -439,6 +439,7 @@ class TestCall(TestSetup):
             'updated_by': wp_2.updated_by.id,
             'updated_on': date2iso(wp_2.updated_on)
         }
+        self.maxDiff=None
         self.assertDictEqual(serializer.data, result)
         result = {
             'id': wpl_2.id,
