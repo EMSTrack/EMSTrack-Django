@@ -40,10 +40,11 @@ def user_groups_changed_handler(sender, instance, action,
 
         # notify users
         for user in users:
-            if user.mobile_number:
+            mobile_number = user.userprofile.mobile_number
+            if mobile_number:
                 sms = {
                     'from': settings.SMS_FROM,
-                    'to': user.userprofile.mobile_number,
+                    'to': mobile_number,
                     'text': message,
                 }
                 client.send_message(sms)
