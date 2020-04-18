@@ -1,14 +1,18 @@
 import logging
+
 from django.db import IntegrityError, transaction
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
-from drf_extra_fields.geo_fields import PointField
 from rest_framework.exceptions import PermissionDenied
 
+from drf_extra_fields.geo_fields import PointField
+
 from login.permissions import get_permissions
+from emstrack.latlon import calculate_orientation
+
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
     LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode
-from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
 
@@ -394,7 +398,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
-    sms_notifications = serializers.PrimaryKeyRelatedField(many=True)
+    sms_notifications = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all())
 
     class Meta:
         model = Call
