@@ -426,7 +426,7 @@ class Call(PublishMixin,
                                    verbose_name=_('radio_code'))
 
     # sms-notifications
-    sms_notifications = models.ManyToMany(User)
+    sms_notifications = models.ManyToManyField(User)
 
     # timestamps
     pending_at = models.DateTimeField(_('pending_at'), null=True, blank=True)
