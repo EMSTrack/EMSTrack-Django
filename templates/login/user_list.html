@@ -36,6 +36,7 @@
                             <th>{% trans "First" %}</th>
                             <th>{% trans "Last" %}</th>
                             <th>{% trans "Email" %}</th>
+                            <th>{% trans "Mobile" %}</th>
                             <th>{% trans "Staff" %}</th>
                             <th>{% trans "Dispatcher" %}</th>
                             <th>{% trans "Active" %}</th>
@@ -55,6 +56,9 @@
                             </td>
                             <td>
                                 {{ user.email}}
+                            </td>
+                            <td>
+                                {{ user.userprofile.mobile_number }}
                             </td>
                             <td>
                                 {{ user.is_staff|get_check }}
