@@ -451,7 +451,7 @@ class Call(PublishMixin,
 
             # stop notifications
             message = "Call '{}' has ended".format(self.id)
-            for user in self.sms_notifications:
+            for user in self.sms_notifications.all():
                 sms_client.notify_user(user, message)
 
         elif self.status == CallStatus.S.name:
