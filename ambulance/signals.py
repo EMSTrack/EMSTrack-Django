@@ -29,7 +29,7 @@ def user_groups_changed_handler(sender, instance, action,
             call_id = instance.id
             users = []
             for id in pk_set:
-                users.append(User.get(id=id))
+                users.append(User.objects.get(id=id))
 
         # create message
         if action == 'post_add':
