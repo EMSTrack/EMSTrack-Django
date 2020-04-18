@@ -225,9 +225,14 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Access Token
+# map provider
 MAP_PROVIDER = env.str('MAP_PROVIDER')
 MAP_PROVIDER_TOKEN = env.str('MAP_PROVIDER_TOKEN')
+
+# sms provider
+SMS_KEY = env.str('SMS_KEY')
+SMS_PASS = env.str('SMS_PASS')
+SMS_FROM = env.str('SMS_FROM')
 
 # Webpack Loader
 WEBPACK_LOADER = {

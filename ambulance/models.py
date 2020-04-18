@@ -2,6 +2,7 @@ import logging
 from enum import Enum
 
 from django.contrib.gis.db import models
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
@@ -423,6 +424,9 @@ class Call(PublishMixin,
                                    null=True,
                                    on_delete=models.CASCADE,
                                    verbose_name=_('radio_code'))
+
+    # sms-notifications
+    sms_notifications = models.ManyToMany(User)
 
     # timestamps
     pending_at = models.DateTimeField(_('pending_at'), null=True, blank=True)
