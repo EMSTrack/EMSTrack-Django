@@ -599,6 +599,7 @@ class CallSummarySerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = CallAmbulanceSummarySerializer(many=True, required=False)
+    sms_notifications = serializers.PrimaryKeyRelatedField(many=True, read_only=True, required=False)
 
     class Meta:
         model = Call
@@ -608,6 +609,7 @@ class CallSummarySerializer(serializers.ModelSerializer):
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
+                  'sms_notifications',
                   'ambulancecall_set',
                   'patient_set']
         read_only_fields = ['created_at', 'updated_by']
