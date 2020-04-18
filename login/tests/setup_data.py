@@ -64,6 +64,7 @@ class TestSetupData:
             password='so_secret',
             is_staff=True)
         cls.u8.userprofile.mobile_number = '+15555055050'
+        cls.u8.userprofile.save()
 
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
