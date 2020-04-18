@@ -18,7 +18,9 @@ from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPrior
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
     AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer, CallSummarySerializer, \
     CallAmbulanceSummarySerializer
+
 from emstrack.tests.util import date2iso, point2str
+from emstrack.sms import client as sms_client
 
 from login.tests.setup_data import TestSetup
 
@@ -478,6 +480,13 @@ class TestCall(TestSetup):
 
         # create call
         c1 = Call.objects.create(updated_by=self.u1)
+
+        # add user
+        c1.sms_notifications.add(self.u8)
+
+        # make sure it got message
+        self.assertEqual(len(sms_client.messages), 1)
+        sms_client.reset_messages()
 
         # it is fine to have no ambulances because it is pending
         serializer = CallSerializer(c1)
