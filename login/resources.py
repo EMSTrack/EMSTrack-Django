@@ -15,12 +15,15 @@ class UserResource(resources.ModelResource):
     is_dispatcher = fields.Field(attribute='userprofile__is_dispatcher',
                                  widget=widgets.PostSaveWidget(widgets.BooleanWidget()),
                                  readonly=False)
+    mobile_number = fields.Field(attribute='userprofile__mobile_number',
+                                 widget=widgets.PostSaveWidget(widgets.CharWidget()),
+                                 readonly=False)
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email',
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'mobile_number',
                   'is_staff', 'is_dispatcher', 'is_active')
-        export_order = ('id', 'username', 'first_name', 'last_name', 'email',
+        export_order = ('id', 'username', 'first_name', 'last_name', 'email', 'mobile_number',
                         'is_staff', 'is_dispatcher', 'is_active')
 
     # save userprofile related fields
@@ -41,9 +44,9 @@ class UserImportResource(UserResource):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'first_name', 'last_name', 'email',
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'mobile_number',
                   'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
-        export_order = ('id', 'username', 'first_name', 'last_name', 'email',
+        export_order = ('id', 'username', 'first_name', 'last_name', 'email', 'mobile_number',
                         'is_staff', 'is_dispatcher', 'is_active', 'reset_password')
 
     def before_import(self, dataset, using_transactions, dry_run, **kwargs):

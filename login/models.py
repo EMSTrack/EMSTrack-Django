@@ -10,6 +10,8 @@ from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 from ambulance.models import AmbulanceStatus
 from emstrack.util import make_choices
 from login.mixins import ClearPermissionCacheMixin
@@ -44,6 +46,7 @@ class UserProfile(ClearPermissionCacheMixin,
                                 on_delete=models.CASCADE,
                                 verbose_name=_('user'))
     is_dispatcher = models.BooleanField(_('is_dispatcher'), default=False)
+    mobile_number = PhoneNumberField(blank=True)
 
     def get_absolute_url(self):
         return reverse('login:detail-user', kwargs={'pk': self.user.id})

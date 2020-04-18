@@ -1,2 +1,2 @@
-id,username,first_name,last_name,email,is_staff,is_dispatcher,is_active,reset_password
-,newuser,New,User,newuser@gmail.com,0,0,1,0
+id,username,first_name,last_name,email,mobile_number,is_staff,is_dispatcher,is_active,reset_password
+,newuser,New,User,newuser@gmail.com,+15550505050,0,0,1,0

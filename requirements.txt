@@ -9,6 +9,7 @@ drf-yasg
 django-extra-fields
 django-extra-views
 django-import-export
+django-phonenumber-field[phonenumberslite]
 django-nose
 paho-mqtt
 django-formset-js

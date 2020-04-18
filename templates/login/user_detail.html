@@ -45,6 +45,10 @@
                 {{ view_user.email }}
             </p>
             <p>
+                <strong>{% trans "Mobile" %}:</strong>
+                {{ view_user.userprofile.mobile_number }}
+            </p>
+            <p>
                 <strong>{% trans "Staff" %}:</strong>
                 {{ view_user.is_staff }}
             </p>

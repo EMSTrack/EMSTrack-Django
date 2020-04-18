@@ -71,8 +71,8 @@ class SignupView(FormView):
         # form.send_email()
         # return super().form_valid(form)
         # for now abort and alert user
-        form.add_error(None, 'We are sorry but EMSTrack is not accepting new users at this point.');
-        return super().form_invalid(form);
+        form.add_error(None, 'We are sorry but EMSTrack is not accepting new users at this point.')
+        return super().form_invalid(form)
 
 
 # login
