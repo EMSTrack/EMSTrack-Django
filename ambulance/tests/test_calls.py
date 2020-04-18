@@ -890,6 +890,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -935,6 +936,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1031,6 +1033,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1080,6 +1083,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a1.id}],
             'patient_set': []
         }
@@ -1096,6 +1100,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1247,6 +1252,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1341,6 +1347,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1357,6 +1364,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1374,6 +1382,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1385,6 +1394,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1396,6 +1406,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}, {'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1412,6 +1423,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1583,6 +1595,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1598,6 +1611,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1619,6 +1633,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
