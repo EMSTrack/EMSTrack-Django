@@ -394,6 +394,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
+    sms_notifications = serializers.PrimaryKeyRelatedField(many=True)
 
     class Meta:
         model = Call
@@ -403,6 +404,7 @@ class CallSerializer(serializers.ModelSerializer):
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
+                  'sms_notifications',
                   'ambulancecall_set',
                   'patient_set']
         read_only_fields = ['created_at', 'updated_by']
@@ -418,6 +420,7 @@ class CallSerializer(serializers.ModelSerializer):
         
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
         patient_set = validated_data.pop('patient_set', [])
+        sms_notifications = validated_data.pop('sms_notifications', [])
 
         # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
@@ -470,6 +473,17 @@ class CallSerializer(serializers.ModelSerializer):
                     obj = Waypoint.objects.create(ambulance_call=ambulance_call, **waypoint,
                                                   location=location, updated_by=user)
 
+            # add users to sms notifications
+            for user_id in sms_notifications:
+                try:
+                    user = User.get(id=user_id)
+                    if user.userprofile.mobile_number:
+                        call.sms_notifications.add(user)
+                    else:
+                        logger.warning("User %s does not have a mobile phone on file, skipping", user)
+                except User.DoesNotExist:
+                    raise serializers.ValidationError("Invalid sms_notifications' user id '{}'".format(user_id))
+
             # publish call to mqtt only after all includes have succeeded
             call.publish()
 
@@ -487,6 +501,10 @@ class CallSerializer(serializers.ModelSerializer):
         # Make sure ambulancecall_set is not present
         if 'ambulancecall_set' in validated_data:
             raise serializers.ValidationError('Cannot modify ambulancecall_set')
+
+        # Make sure sms_notifications is not present
+        if 'sms_notifications' in validated_data:
+            raise serializers.ValidationError('Cannot modify sms_notifications')
 
         # Check permissions
         if not (user.is_superuser or user.is_staff):

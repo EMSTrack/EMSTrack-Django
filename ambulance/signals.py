@@ -1,15 +1,15 @@
-import nexmo
+import logging
 
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.auth.models import User
 
+from emstrack.sms import client
+
 from .models import Call
 
-# notify users that they will be updated call
-client = nexmo.Client(key=settings.SMS_KEY,
-                      secret=settings.SMS_PASS)
+logger = logging.getLogger(__name__)
 
 
 # Add signal to automatically clear cache when group permissions change
@@ -40,8 +40,13 @@ def user_groups_changed_handler(sender, instance, action,
 
         # notify users
         for user in users:
-            client.send_message({
-                'from': settings.SMS_FROM,
-                'to': '18587365867',
-                'text': message,
-            })
+            if user.mobile_number:
+                sms = {
+                    'from': settings.SMS_FROM,
+                    'to': user.userprofile.mobile_number,
+                    'text': message,
+                }
+                client.send_message(sms)
+                logger.debug('SMS sent: {}'.format(sms))
+            else:
+                logger.debug('SMS not sent: user {} does not have a mobile on file'.format(user))

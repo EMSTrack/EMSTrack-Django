@@ -495,6 +495,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -533,6 +534,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -590,6 +592,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -668,6 +671,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -793,6 +797,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -821,6 +826,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -909,6 +915,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -1000,6 +1007,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': []
         }
@@ -1052,6 +1060,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': expected_patient_set
         }
@@ -1306,6 +1315,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': expected_patient_set
         }
