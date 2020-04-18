@@ -33,21 +33,11 @@ def user_groups_changed_handler(sender, instance, action,
 
         # create message
         if action == 'post_add':
-            message = "EMSTrack\nYou will be notified of updates to call '{}'".format(call_id)
+            message = "You will be notified of updates to call '{}'".format(call_id)
 
         else: # if action == 'post_remove':
-            message = "EMSTrack\nYou will no longer be notified of updates to call '{}'".format(call_id)
+            message = "You will no longer be notified of updates to call '{}'".format(call_id)
 
         # notify users
         for user in users:
-            mobile_number = user.userprofile.mobile_number
-            if mobile_number:
-                sms = {
-                    'from': settings.SMS_FROM,
-                    'to': mobile_number,
-                    'text': message,
-                }
-                client.send_message(sms)
-                logger.debug('SMS sent: {}'.format(sms))
-            else:
-                logger.debug('SMS not sent: user {} does not have a mobile on file'.format(user))
+            client.notify_user(user, message)

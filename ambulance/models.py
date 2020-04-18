@@ -14,6 +14,8 @@ from emstrack.latlon import calculate_orientation, calculate_distance, stationar
 from emstrack.mixins import PublishMixin
 from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
 from emstrack.util import make_choices
+from emstrack.sms import client as sms_client
+
 from equipment.models import EquipmentHolder
 
 logger = logging.getLogger(__name__)
@@ -446,6 +448,11 @@ class Call(PublishMixin,
             # timestamp
             if self.ended_at is None:
                 self.ended_at = timezone.now()
+
+            # stop notifications
+            message = "Call '{}' has ended".format(self.id)
+            for user in self.sms_notifications:
+                sms_client.notify_user(user, message)
 
         elif self.status == CallStatus.S.name:
 

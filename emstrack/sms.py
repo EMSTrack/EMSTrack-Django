@@ -1,8 +1,13 @@
+import logger
+
 from django.conf import settings
+
+logger = logging.getLogger(__name__)
+
 
 if settings.TESTING:
 
-    class Client:
+    class BaseClient:
 
         def __init__(self, **kwargs):
             self.messages = []
@@ -18,7 +23,24 @@ if settings.TESTING:
 
 else:
 
-    from nexmo import Client
+    from nexmo import Client as BaseClient
+
+
+class Client(BaseClient):
+
+    def notify_user(self, user, message):
+        mobile_number = user.userprofile.mobile_number
+        if mobile_number:
+            sms = {
+                'from': settings.SMS_FROM,
+                'to': mobile_number,
+                'text': 'Message from EMSTrack:\n' + message,
+            }
+            client.send_message(sms)
+            logger.debug('SMS sent: {}'.format(sms))
+        else:
+            logger.debug('SMS not sent: user {} does not have a mobile on file'.format(user))
+
 
 # notify users that they will be updated call
 client = Client(key=settings.SMS_KEY,
