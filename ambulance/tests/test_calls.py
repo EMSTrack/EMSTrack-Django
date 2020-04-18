@@ -340,7 +340,7 @@ class TestCall(TestSetup):
                                        location=wpl_2, updated_by=self.u1)
 
         wpl_3 = self.h1.location_ptr
-        wp_3 = Waypoint.objects.create(ambulance_call=ac_1, order=1, status=WaypointStatus.V.name,
+        wp_3 = Waypoint.objects.create(ambulance_call=ac_1, order=2, status=WaypointStatus.V.name,
                                        location=wpl_3, updated_by=self.u1)
 
         wpl_1_serializer = LocationSerializer(wpl_1)
