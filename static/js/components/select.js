@@ -58,7 +58,7 @@ export class Select {
         delete this.values[id];
 
         // remove li element
-        $(`#${this.prefix}-select-li-${id})`).remove();
+        $(`#${this.prefix}-select-li-${id}`).remove();
     }
 
     addItem(id, value) {
