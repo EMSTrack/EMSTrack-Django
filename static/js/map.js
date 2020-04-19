@@ -1852,6 +1852,13 @@ function doUpdateAmbulanceStatus(ambulance_id, status) {
 
 // Dispatching
 
+// sms-notifications select element
+const select = new Select({
+    list: 'sms-notifications-list',
+    prefix: 'sms-notifications',
+    label: settings.translation_table['Select username']
+});
+
 function beginDispatching() {
 
     // quick return if not dispatching
@@ -1891,11 +1898,7 @@ function beginDispatching() {
     addPatientForm(0);
 
     // add sms notifications
-    const select = new Select({
-        list: 'sms-notifications-list',
-        prefix: 'sms-notifications',
-        label: 'Select username'
-    });
+    select.resetItems();
     $('#sms-notifications')
         .html(select.render());
     select.postRender();
@@ -2270,6 +2273,9 @@ function dispatchCall() {
 
     // add to patient set
     form['patient_set'] = patients;
+
+    // add sms-notifications
+    form['sms-notifications'] = select.getItems().keys();
 
     // post new call
     apiClient.postCall(form)

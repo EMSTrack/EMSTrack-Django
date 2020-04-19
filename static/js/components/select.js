@@ -52,6 +52,14 @@ export class Select {
 
     }
 
+    getItems() {
+        return this.values;
+    }
+
+    resetItems() {
+        this.values = {};
+    }
+
     removeItem(id, value) {
 
         // remove from list of values
