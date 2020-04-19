@@ -559,7 +559,7 @@ class CallSerializer(serializers.ModelSerializer):
                 user_ids = set([user.id for user in sms_notifications])
 
                 # delete users not in current notifications
-                instance.sms_notifications.exclude(id__in=user_ids).delete()
+                instance.sms_notifications.remove(instance.sms_notifications.exclude(id__in=user_ids))
 
                 # remove ids of users already in
                 user_ids = user_ids -\
