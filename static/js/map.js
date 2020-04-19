@@ -16,6 +16,8 @@ import { alert } from './alert';
 
 import { Patients } from './components/patients';
 
+import { Select } from './components/select';
+
 import { Waypoints } from './components/waypoints';
 
 import { Dialog } from "./components/dialog";
