@@ -238,13 +238,11 @@
                         <h5>
                             {% trans "SMS Notifications" %}
                         </h5>
-                        <input class="form-control form-control-sm"
-                               id="sms-notifications-input" list="sms-notifications-list"
-                               name="sms-notifications-input"
-                               placeholder="{% trans 'Select user' %}">
+                        <div id="sms-notifications">
+                        </div>
                         <datalist id="sms-notifications-list">
                             {% for user in sms_notifications_list %}
-                            <option id="sms-notifications-{{ user.id }}" value="{{ user.username }}">{{ user.username }}</option>
+                                <option id="sms-notifications-{{ user.id }}" value="{{ user.username }}">{{ user.username }}</option>
                             {% endfor %}
                         </datalist>
 

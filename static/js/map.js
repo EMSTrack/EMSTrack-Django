@@ -1888,6 +1888,15 @@ function beginDispatching() {
     // add new patient form entry
     addPatientForm(0);
 
+    // add sms notifications
+    const select = new Select({
+        list: 'sms-notifications-list',
+        prefix: 'sms-notifications',
+        label: 'Select username'
+    });
+    $('#sms-notifications')
+        .html(select.render());
+
     // resize size
     resizeMap();
 
@@ -1935,6 +1944,9 @@ function endDispatching() {
         .find('.btn-new-patient')
         .off('click')
         .empty();
+
+    // clear sms notifications
+    $('#sms-notifications').empty();
 
     if (!isFilterOpen) {
         // close filter panel
