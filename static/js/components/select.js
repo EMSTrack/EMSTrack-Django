@@ -41,8 +41,8 @@ export class Select {
             // process selection
             const value = $(this).val();
             const item = $(`#${self.list} option[value=${value}]`);
-            if (item) {
-                const id = item.attr('data-id');
+            if (item.length) {
+                const id = item[0].attr('data-id');
                 logger.debug(value, id);
                 self.click(value, id);
             }
