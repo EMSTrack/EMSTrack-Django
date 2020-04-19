@@ -502,10 +502,6 @@ class CallSerializer(serializers.ModelSerializer):
         if 'ambulancecall_set' in validated_data:
             raise serializers.ValidationError('Cannot modify ambulancecall_set')
 
-        # Make sure sms_notifications is not present
-        if 'sms_notifications' in validated_data:
-            raise serializers.ValidationError('Cannot modify sms_notifications')
-
         # Check permissions
         if not (user.is_superuser or user.is_staff):
             # Get ambulances
@@ -554,6 +550,24 @@ class CallSerializer(serializers.ModelSerializer):
 
                     # delete all patients
                     instance.patient_set.all().delete()
+
+            # Update sms_notifications
+            if 'sms_notifications' in validated_data:
+
+                # Extract users
+                sms_notifications = validated_data.pop('sms_notifications', [])
+                user_ids = set([user.id for user in sms_notifications])
+
+                # delete users not in current notifications
+                instance.sms_notifications.exclude(id__in=user_ids).delete()
+
+                # remove ids of users already in
+                user_ids = user_ids -\
+                    set(instance.sms_notifications.filter(id__in=user_ids).values_list('id', flat=True))
+
+                # add users not already in
+                for id in user_ids:
+                    instance.sms_notifications.add(User.objects.get(id=id))
 
             # call super to update call, which will publish
             super().update(instance, validated_data)
