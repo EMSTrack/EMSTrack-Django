@@ -65,7 +65,10 @@ export class Select {
             this.values[id] = key;
             $(`#${this.prefix}-select-ul`).append(
                 `<li id="${this.prefix}-select-li-${this.last_index++}">
-                   ${key}
+                     ${key}
+                     <button type="button" class="close" aria-label="Close">
+                         <span aria-hidden="true">&times;</span>
+                     </button>
                  </li>`
             );
 
