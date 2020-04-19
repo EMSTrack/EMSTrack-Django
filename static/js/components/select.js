@@ -37,7 +37,7 @@ export class Select {
 
         // initialize select
         $(`#${this.prefix}-select-input`).on('input', function() {
-            self.click(this.val());
+            self.click($(this).val());
         });
 
     }
