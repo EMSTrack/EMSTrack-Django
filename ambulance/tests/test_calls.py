@@ -1183,6 +1183,7 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
+        self.assertCountEqual(call.sms_notifications, [])
 
         # make sure it got messages
         self.assertEqual(len(sms_client.messages), 0)
@@ -1201,10 +1202,30 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertNotEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
+        self.assertCountEqual(call.sms_notifications, [self.u8, self.u6])
         started_at = call.started_at
 
         # make sure it got messages
         self.assertEqual(len(sms_client.messages), 2)
+
+        # remove update
+        data = {
+            'status': CallStatus.S.name,
+            'priority': CallPriority.D.name,
+            'sms_notifications': [self.u8.id]
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertNotEqual(call.pending_at, None)
+        self.assertEqual(call.started_at, started_at)
+        self.assertEqual(call.ended_at, None)
+        self.assertCountEqual(call.sms_notifications, [self.u8])
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 3)
 
         # partial update patient set
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
