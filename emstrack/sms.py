@@ -18,7 +18,7 @@ if settings.TESTING:
             assert 'text' in message
             self.messages.append(message)
 
-        def reset_messages(self):
+        def reset(self):
             self.messages = []
 
 else:

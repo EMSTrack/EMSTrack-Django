@@ -482,11 +482,11 @@ class TestCall(TestSetup):
         c1 = Call.objects.create(updated_by=self.u1)
 
         # add user
+        sms_client.reset()
         c1.sms_notifications.add(self.u8)
 
         # make sure it got messages
         self.assertEqual(len(sms_client.messages), 1)
-        sms_client.reset_messages()
 
         # u7 has no phone number so no messages
         c1.sms_notifications.add(self.u7)
@@ -913,16 +913,22 @@ class TestCall(TestSetup):
 
     def test_call_serializer_create(self):
 
+        # reset sms_client
+        sms_client.reset()
+
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
-            'sms_notifications': [],
+            'sms_notifications': [self.u8.id],
             'ambulancecall_set': [],
             'patient_set': []
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 1)
 
         # test CallSerializer
         c1 = Call.objects.get(id=call.id)
@@ -942,7 +948,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
-            'sms_notifications': [],
+            'sms_notifications': [self.u8.id],
             'ambulancecall_set': [],
             'patient_set': []
         }
