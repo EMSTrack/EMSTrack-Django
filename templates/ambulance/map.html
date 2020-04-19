@@ -242,7 +242,7 @@
                         </div>
                         <datalist id="sms-notifications-list">
                             {% for user in sms_notifications_list %}
-                                <option id="sms-notifications-{{ user.id }}" value="{{ user.username }}">{{ user.username }}</option>
+                                <option data-id="{{ user.id }}" value="{{ user.username }}">{{ user.username }}</option>
                             {% endfor %}
                         </datalist>
 

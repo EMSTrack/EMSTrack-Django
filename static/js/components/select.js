@@ -37,23 +37,38 @@ export class Select {
 
         // initialize select
         $(`#${this.prefix}-select-input`).on('change', function() {
-            self.click($(this).val());
+
+            // process selection
+            const value = $(this).val();
+            const id = $(`#${self.list} option[value=${value}]`).attr('data-id');
+            self.click(key, id);
+
+            // clear selection
+            $(this).val('');
+
         });
 
     }
 
-    click(key) {
+    click(key, id) {
 
-        logger.debug("Select: got click '%s'", key);
+        logger.debug("Select: got click");
 
-        if (!(key in this.values)) {
+        if (!(id in this.values)) {
+
+            logger.debug("Adding '%d -> %s' to list", id, key);
 
             // add to list of values
+            this.values[id] = key;
             $(`#${this.prefix}-select-ul`).append(
                 `<li id="${this.prefix}-select-li-${this.last_index++}">
                    ${key}
                  </li>`
             );
+
+        } else {
+
+            logger.debug("'%d -> %s' already present, skipping", id, key);
 
         }
 
@@ -63,7 +78,7 @@ export class Select {
 
 Select.default = {
     options: {},
-    values: [],
+    values: {},
     list: "",
     prefix: "dropdown",
     label: "Select:",
