@@ -44,6 +44,8 @@ export class Select {
 
     click(key) {
 
+        logger.debug("Select: got click '%s'", key);
+
         if (!(key in this.values)) {
 
             // add to list of values

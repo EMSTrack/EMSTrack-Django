@@ -1898,6 +1898,7 @@ function beginDispatching() {
     });
     $('#sms-notifications')
         .html(select.render());
+    select.postRender();
 
     // resize size
     resizeMap();
