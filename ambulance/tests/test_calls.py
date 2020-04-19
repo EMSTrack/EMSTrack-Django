@@ -1205,7 +1205,7 @@ class TestCall(TestSetup):
 
         # make sure it got messages
         self.assertEqual(len(sms_client.messages), 2)
-        
+
         # partial update patient set
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
         patient_set[0]['age'] = 5
