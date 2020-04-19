@@ -4,8 +4,11 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+if settings.SMS_PROVIDER == 'nexmo':
 
-if settings.TESTING:
+    from nexmo import Client as BaseClient
+
+else:
 
     class BaseClient:
 
@@ -20,10 +23,6 @@ if settings.TESTING:
 
         def reset(self):
             self.messages = []
-
-else:
-
-    from nexmo import Client as BaseClient
 
 
 class Client(BaseClient):

@@ -230,6 +230,7 @@ MAP_PROVIDER = env.str('MAP_PROVIDER')
 MAP_PROVIDER_TOKEN = env.str('MAP_PROVIDER_TOKEN')
 
 # sms provider
+SMS_PROVIDER = env.str('SMS_PROVIDER')
 SMS_KEY = env.str('SMS_KEY')
 SMS_PASS = env.str('SMS_PASS')
 SMS_FROM = env.str('SMS_FROM')
