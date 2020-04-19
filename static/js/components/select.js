@@ -54,7 +54,7 @@ export class Select {
 
         logger.debug("Select: got click");
 
-        if (!(id in this.values)) {
+        if (!this.values.hasOwnProperty(id)) {
 
             logger.debug("Adding '%d -> %s' to list", id, key);
 
