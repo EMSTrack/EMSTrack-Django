@@ -40,10 +40,12 @@ export class Select {
 
             // process selection
             const value = $(this).val();
-            const id = $(`#${self.list} option[value=${value}]`).attr('data-id');
-            logger.debug(value, id);
-            self.click(value, id);
-
+            const item = $(`#${self.list} option[value=${value}]`);
+            if (item) {
+                const id = item.attr('data-id');
+                logger.debug(value, id);
+                self.click(value, id);
+            }
             // clear selection
             $(this).val('');
 
