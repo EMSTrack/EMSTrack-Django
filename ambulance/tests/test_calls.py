@@ -1128,6 +1128,9 @@ class TestCall(TestSetup):
 
     def test_call_serializer_update(self):
         
+        # reset sms_client
+        sms_client.reset()
+
         # Pending Call with Ambulancecall_Set will create ambulancecalls
         call = {
             'status': CallStatus.P.name,
@@ -1181,10 +1184,14 @@ class TestCall(TestSetup):
         self.assertEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
 
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 0)
+
         # partial update call data
         data = {
             'status': CallStatus.S.name,
-            'priority': CallPriority.D.name
+            'priority': CallPriority.D.name,
+            'sms_notifications': [self.u8.id, self.u6.id]
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
@@ -1196,6 +1203,9 @@ class TestCall(TestSetup):
         self.assertEqual(call.ended_at, None)
         started_at = call.started_at
 
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 2)
+        
         # partial update patient set
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
         patient_set[0]['age'] = 5
