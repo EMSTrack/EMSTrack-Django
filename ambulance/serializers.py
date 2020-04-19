@@ -480,7 +480,7 @@ class CallSerializer(serializers.ModelSerializer):
             # add users to sms notifications
             for user_id in sms_notifications:
                 try:
-                    user = User.get(id=user_id)
+                    user = User.objects.get(id=user_id)
                     if user.userprofile.mobile_number:
                         call.sms_notifications.add(user)
                     else:
