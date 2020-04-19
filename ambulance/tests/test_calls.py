@@ -490,7 +490,7 @@ class TestCall(TestSetup):
 
         # u7 has no phone number so no messages
         c1.sms_notifications.add(self.u7)
-        self.assertEqual(len(sms_client.messages), 0)
+        self.assertEqual(len(sms_client.messages), 1)
 
         # it is fine to have no ambulances because it is pending
         serializer = CallSerializer(c1)
