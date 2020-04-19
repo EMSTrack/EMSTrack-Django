@@ -36,7 +36,7 @@ export class Select {
         const self = this;
 
         // initialize select
-        $(`#${this.prefix}-select-input`).on('input', function() {
+        $(`#${this.prefix}-select-input`).on('change', function() {
             self.click($(this).val());
         });
 
