@@ -247,6 +247,7 @@ class AmbulanceMap(TemplateView):
 
         context['radio_code_list'] = CallRadioCode.objects.all()
         context['priority_code_list'] = CallPriorityCode.objects.all()
+        context['sms_notifications_list'] = User.objects.exclude(userprofile__mobile_phone__exact='')
 
         default_values = defaults.copy()
         default_values['location'] = PointField().to_representation(defaults['location'])
