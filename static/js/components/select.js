@@ -43,8 +43,7 @@ export class Select {
             const item = $(`#${self.list} option[value=${value}]`);
             if (item.length) {
                 const id = item.first().attr('data-id');
-                logger.debug(value, id);
-                self.click(value, id);
+                self.addItem(id, value);
             }
             // clear selection
             $(this).val('');
@@ -53,28 +52,42 @@ export class Select {
 
     }
 
-    click(key, id) {
+    removeItem(id, value) {
+
+        // remove from list of values
+        delete this.values[id];
+
+        // remove li element
+        $(`#${this.prefix}-select-li-${id})`).remove();
+    }
+
+    addItem(id, value) {
 
         logger.debug("Select: got click");
 
         if (!this.values.hasOwnProperty(id)) {
 
-            logger.debug("Adding '%d -> %s' to list", id, key);
+            logger.debug("Adding '%d -> %s' to list", id, value);
 
             // add to list of values
-            this.values[id] = key;
-            $(`#${this.prefix}-select-ul`).append(
-                `<li id="${this.prefix}-select-li-${this.last_index++}">
-                     ${key}
-                     <button type="button" class="close" aria-label="Close">
-                         <span aria-hidden="true">&times;</span>
-                     </button>
-                 </li>`
-            );
+            this.values[id] = value;
+
+            // create list entry
+            const li = $(`<div id="${this.prefix}-select-li-${id}">
+                <li>
+                    ${value}
+                    <button type="button" class="close" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </li>
+            </div>`);
+            li.on('click', () => this.removeItem(id, value));
+
+            $(`#${this.prefix}-select-ul`).append(li);
 
         } else {
 
-            logger.debug("'%d -> %s' already present, skipping", id, key);
+            logger.debug("'%d -> %s' already present, skipping", id, value);
 
         }
 
