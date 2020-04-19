@@ -478,15 +478,11 @@ class CallSerializer(serializers.ModelSerializer):
                                                   location=location, updated_by=user)
 
             # add users to sms notifications
-            for user_id in sms_notifications:
-                try:
-                    user = User.objects.get(id=user_id)
-                    if user.userprofile.mobile_number:
-                        call.sms_notifications.add(user)
-                    else:
-                        logger.warning("User %s does not have a mobile phone on file, skipping", user)
-                except User.DoesNotExist:
-                    raise serializers.ValidationError("Invalid sms_notifications' user id '{}'".format(user_id))
+            for user in sms_notifications:
+                if user.userprofile.mobile_number:
+                    call.sms_notifications.add(user)
+                else:
+                    logger.warning("User %s does not have a mobile phone on file, skipping", user)
 
             # publish call to mqtt only after all includes have succeeded
             call.publish()
