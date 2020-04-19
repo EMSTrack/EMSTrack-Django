@@ -1183,7 +1183,7 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
-        self.assertCountEqual(call.sms_notifications, [])
+        self.assertCountEqual(call.sms_notifications.all(), [])
 
         # make sure it got messages
         self.assertEqual(len(sms_client.messages), 0)
@@ -1202,7 +1202,7 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertNotEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
-        self.assertCountEqual(call.sms_notifications, [self.u8, self.u6])
+        self.assertCountEqual(call.sms_notifications.all(), [self.u8, self.u6])
         started_at = call.started_at
 
         # make sure it got messages
@@ -1222,7 +1222,7 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertEqual(call.started_at, started_at)
         self.assertEqual(call.ended_at, None)
-        self.assertCountEqual(call.sms_notifications, [self.u8])
+        self.assertCountEqual(call.sms_notifications.all(), [self.u8])
 
         # make sure it got messages
         self.assertEqual(len(sms_client.messages), 3)
