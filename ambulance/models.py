@@ -520,7 +520,7 @@ class Call(PublishMixin,
                                for ac in self.ambulancecall_set.all())
 
         # id, priority, details, ambulances
-        return "#{}({}): {}\n{}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
+        return "#{}({}):\n-{}\n{}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
 
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)
