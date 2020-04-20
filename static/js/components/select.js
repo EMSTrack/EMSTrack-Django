@@ -11,6 +11,7 @@ export class Select {
         this.list = properties.list;
         this.label = properties.label;
         this.values = properties.values;
+        this.initial_values = properties.initial_values;
         this.onClick = properties.onClick;
     }
 
@@ -32,6 +33,15 @@ export class Select {
 
         // reference to this to be used inside method
         const self = this;
+
+        // set initial values
+        for (const value of this.initial_values) {
+            const item = $(`#${self.list} option[value=${value}]`);
+            if (item.length) {
+                const id = item.first().attr('data-id');
+                this.addItem(id, value);
+            }
+        }
 
         // initialize select
         $(`#${this.prefix}-select-input`).on('change', function() {
@@ -104,6 +114,7 @@ export class Select {
 Select.default = {
     options: {},
     values: {},
+    initial_values: [],
     list: "",
     prefix: "dropdown",
     label: "Select:",

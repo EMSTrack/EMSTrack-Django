@@ -958,7 +958,7 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
 
                         dialog.dialog(
-                            settings.translation_table["Do you want to save the modified patients?"],
+                            sprintf(settings.translation_table["Do you want to save %s?"], settings.translation_table["the patients"]),
                             (retval) => {
 
                                 if (retval === Dialog.OK) {
@@ -997,7 +997,7 @@ function setCallDetailPopover(call, destroy = false) {
     const sms_notifications = new Select({
         list: 'sms-notifications-list',
         prefix: 'call-' + call.id + '-sms-notifications',
-        label: settings.translation_table['Select username']
+        label: settings.translation_table['Select username'],
     });
     const selector = $('#call-' + call.id + '-detail-button');
 
@@ -1011,7 +1011,7 @@ function setCallDetailPopover(call, destroy = false) {
             title: settings.translation_table['Details'],
             // language=HTML
             content:
-            `<div>
+`<div>
   <div id="${placeholder}">
         <h5>
           ${settings.translation_table["Description"]}
@@ -1053,8 +1053,8 @@ function setCallDetailPopover(call, destroy = false) {
 
             // add buttons
             $(`#${buttons_placeholder}`)
-                .html(`
-<button id="call-${call.id}-detail-cancel-button" type="button" class="btn btn-secondary">
+                .html(
+`<button id="call-${call.id}-detail-cancel-button" type="button" class="btn btn-secondary">
     ${settings.translation_table["Cancel"]}
 </button>
 <button id="call-${call.id}-detail-save-button" type="button" class="btn btn-primary">
@@ -1076,10 +1076,14 @@ function setCallDetailPopover(call, destroy = false) {
                 .on('click', function (event) {
 
                     // retrieve detail
-                    const newdetail = detail.getData();
-                    console.log(newdetail);
-                    console.log(patient_set);
-                    if ( detail.same(newdetail) ) {
+                    const details_new = $(`#${placeholder}-description`).val().trim();
+
+                    // retrieve sms_notifications
+                    const sms_notifications_new = Object.keys(sms_notifications.getItems());
+
+                    // any changes?
+                    if ( details_new === call.details &&
+                        JSON.stringify(sms_notifications_new) === JSON.stringify(call.sms_notifications) ) {
 
                         // no changes
                         logger.log('info', 'No changes, no savings!');
@@ -1090,15 +1094,17 @@ function setCallDetailPopover(call, destroy = false) {
 
                     } else {
 
-
                         dialog.dialog(
-                            settings.translation_table["Do you want to save the modified detail?"],
+                            sprintf(settings.translation_table["Do you want to save %s?"], settings.translation_table["the call"]),
                             (retval) => {
 
                                 if (retval === Dialog.OK) {
 
                                     // update call
-                                    const data = { patient_set: newdetail };
+                                    const data = {
+                                        details: details_new,
+                                        sms_notifications: sms_notifications_new
+                                    };
                                     apiClient.patchCall(call.id, data)
                                         .then( (call) => {
                                             logger.log('info', "Successfully updated call");
@@ -1182,13 +1188,13 @@ function addCallToGrid(call) {
              data-target="#call-${call.id}-body"
              aria-expanded="true" aria-controls="call-${call.id}-body">
             <span id="call-date-${call.id}">${date}</span>        
-            <button id="call-${call.id}-patients-button"                 
-                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">
-                <span class="fas fa-user fa-sm"></span> 
-            </button>
             <button id="call-${call.id}-detail-button"                 
                     type="button" class="btn btn-outline-dark btn-sm" aria-label="Detail">
                 <span class="fas fa-info fa-sm"></span> 
+            </button>
+            <button id="call-${call.id}-patients-button"                 
+                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">
+                <span class="fas fa-user fa-sm"></span> 
             </button>
         </div>
         <div>
@@ -1955,7 +1961,7 @@ function updateAmbulanceStatus(ambulance, status) {
         return;
 
     dialog.dialog(
-        sprintf("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?",
+        sprintf(settings.translation_table["Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"],
             ambulance.identifier, settings.ambulance_status[status]),
         (retval) => {
 
