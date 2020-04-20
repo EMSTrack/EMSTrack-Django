@@ -1011,10 +1011,9 @@ function setCallDetailPopover(call, destroy = false) {
             title: settings.translation_table['Details'],
             // language=HTML
             content:
-            `
-<div>
+            `<div>
   <div id="${placeholder}">
-    <form>
+    <form method="POST" action="">
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
