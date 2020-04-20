@@ -38,8 +38,8 @@ export class Select {
         for (const value of this.initial_values) {
             const item = $(`#${self.list} option[data-id=${value}]`);
             if (item.length) {
-                const id = item.first().attr('data-id');
-                this.addItem(id, value);
+                const first = item.first();
+                this.addItem(first.attr('data-id'), first.attr('value'));
             }
         }
 
