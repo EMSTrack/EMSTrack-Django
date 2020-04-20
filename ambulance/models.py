@@ -508,18 +508,17 @@ class Call(PublishMixin,
     def to_string(self):
 
         # priority
-        priority_prefix = ''
-        priority_suffix = ''
         if self.priority_code:
             _priority = self.priority_code
-            priority = _priority.prefix.id + '-' + _priority.priority.name + '-' + _priority.suffix
+            priority = _priority.prefix.id + '-' + _priority.priority + '-' + _priority.suffix
         else:
-            priority = self.priority.name
+            priority = self.priority
 
         # ambulances
         ambulances = '\n'.join('-{}({}): {}'.format(ac.ambulance.identifier,
-                                                    ac.status.value,
-                                                    ac.ambulance.status.value) for ac in self.ambulancecall_set.all())
+                                                    AmbulanceCallStatus[ac.status].value,
+                                                    AmbulanceStatus[ac.ambulance.status].value)
+                               for ac in self.ambulancecall_set.all())
 
         # id, priority, details, ambulances
         return "#{}({}): {}\n{}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
