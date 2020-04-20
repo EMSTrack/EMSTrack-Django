@@ -1016,12 +1016,14 @@ function setCallDetailPopover(call, destroy = false) {
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
+        <div>
         <textarea class="form-control form-control-sm"
-                  form=""
                   name="${placeholder}-description-name"
                   rows="2" id="${placeholder}-description"
                   placeholder="${settings.translation_table['Describe the incident']}">
+              ${call.details}
         </textarea>
+        </div>
         <h5>
           ${settings.translation_table['SMS Notifications']}
         </h5>
@@ -1049,7 +1051,7 @@ function setCallDetailPopover(call, destroy = false) {
             sms_notifications.postRender();
 
             $(`#${placeholder}-description`)
-                .html(call.details);
+                .html();
 
             // add buttons
             $(`#${buttons_placeholder}`)
