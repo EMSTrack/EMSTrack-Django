@@ -36,7 +36,7 @@ export class Select {
 
         // set initial values
         for (const value of this.initial_values) {
-            const item = $(`#${self.list} option[value=${value}]`);
+            const item = $(`#${self.list} option[data-id=${value}]`);
             if (item.length) {
                 const id = item.first().attr('data-id');
                 this.addItem(id, value);

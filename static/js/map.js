@@ -565,6 +565,9 @@ function updateCall(call) {
             // update patients
             setCallPatientPopover(call.id, call.patient_set, true);
 
+            // update info
+            setCallDetailPopover(call, true);
+
             // Update waypoints
             if (status === 'E') {
 
