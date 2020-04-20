@@ -1045,7 +1045,8 @@ function setCallDetailPopover(call, destroy = false) {
             sms_notifications.postRender();
 
             $(`#${placeholder}-textarea`)
-                .html(`<textarea name="${placeholder}-description-name"
+                .html(`<textarea class="form-control form-control-sm"
+                                 name="${placeholder}-description-name"
                                  id="${placeholder}-description"
                                  rows="2"
                                  placeholder="${settings.translation_table['Describe the incident']}">${call.details}</textarea>`);
