@@ -512,7 +512,7 @@ class Call(PublishMixin,
         # priority
         if self.priority_code:
             _priority = self.priority_code
-            priority = _priority.prefix.id + '-' + _priority.priority + '-' + _priority.suffix
+            priority = '{}-{}-{}'.format(_priority.prefix.id, _priority.priority, _priority.suffix)
         else:
             priority = self.priority
 
