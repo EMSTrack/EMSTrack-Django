@@ -22,21 +22,21 @@ def user_groups_changed_handler(sender, instance, action,
         # get call and users
         if reverse:
             # call was added to user
-            call_id = pk_set[0]
+            call = Call.objects.get(id=pk_set[0])
             users = {instance.id}
         else:
             # user was added to call
-            call_id = instance.id
+            call = instance
             users = []
             for id in pk_set:
                 users.append(User.objects.get(id=id))
 
         # create message
         if action == 'post_add':
-            message = "You will be notified of updates to call '{}'".format(call_id)
+            message = "You will be notified of updates to call #{}: '{}'".format(call.id, call.details)
 
         else: # if action == 'post_remove':
-            message = "You will no longer be notified of updates to call '{}'".format(call_id)
+            message = "You will no longer be notified of updates to call #{}".format(call.id)
 
         # notify users
         for user in users:
