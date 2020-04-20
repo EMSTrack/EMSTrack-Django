@@ -560,7 +560,7 @@ function updateCall(call) {
             $('#call-date-' + call.id).html( date );
 
             // update details
-            $('#call-details-' + call.id).html( call.details );
+            $('#call-details-' + call.id).html( trimString(call.details, 20) );
 
             // update patients
             setCallPatientPopover(call.id, call.patient_set, true);
@@ -1136,6 +1136,15 @@ function setCallDetailPopover(call, destroy = false) {
 
 }
 
+function trimString(str, len) {
+
+    if (str.length < len) {
+        return str;
+    } else {
+        return str.substring(0, len) + '&hellip;';
+    }
+}
+
 function addCallToGrid(call) {
 
     logger.log('info', "Adding call '%d'[status:'%s'] to grid", call.id, call.status);
@@ -1188,7 +1197,7 @@ function addCallToGrid(call) {
             </button>
             <span class="font-weight-bold">${priority_suffix}</span>
             &nbsp;
-            <span id="call-details-${call.id}">${call.details}</span>
+            <span id="call-details-${call.id}">${trimString(call.details, 20)}</span>
         </div>
         <div class="ml-auto" data-toggle="collapse"
              data-target="#call-${call.id}-body"
