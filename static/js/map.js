@@ -1016,11 +1016,12 @@ function setCallDetailPopover(call, destroy = false) {
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
-        <input type="text"
+        <!--input type="text"
                name="${placeholder}-description-name"
                id="${placeholder}-description"
                placeholder="${settings.translation_table['Describe the incident']}"
-               value="${call.details}">
+               value="${call.details}"-->
+        ${call.details}
         <h5>
           ${settings.translation_table['SMS Notifications']}
         </h5>
