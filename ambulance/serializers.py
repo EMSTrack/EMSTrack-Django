@@ -552,10 +552,19 @@ class CallSerializer(serializers.ModelSerializer):
                     instance.patient_set.all().delete()
 
             # Update sms_notifications
+            sms_notifications_update = False
+            sms_notifications = []
             if 'sms_notifications' in validated_data:
+                sms_notifications = validated_data.pop('sms_notifications', [])
+                sms_notifications_update = True
+
+            # call super to update call, which will publish
+            super().update(instance, validated_data)
+
+            # sms notifications updated?
+            if sms_notifications_update:
 
                 # Extract users
-                sms_notifications = validated_data.pop('sms_notifications', [])
                 user_ids = set([user.id for user in sms_notifications])
 
                 # delete users not in current notifications
@@ -570,8 +579,9 @@ class CallSerializer(serializers.ModelSerializer):
                 for id in user_ids:
                     instance.sms_notifications.add(User.objects.get(id=id))
 
-            # call super to update call, which will publish
-            super().update(instance, validated_data)
+                # publish, again, to updaate users
+                # TODO: is there a way to avoid the double publication?
+                instance.publish()
 
         # call super
         return instance
