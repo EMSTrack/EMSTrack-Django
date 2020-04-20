@@ -996,7 +996,7 @@ function setCallDetailPopover(call, destroy = false) {
     const buttons_placeholder = 'call-' + call.id + '-detail-buttons';
     const sms_notifications = new Select({
         list: 'sms-notifications-list',
-        prefix: 'call-' + call.id + 'sms-notifications',
+        prefix: 'call-' + call.id + '-sms-notifications',
         label: settings.translation_table['Select username']
     });
     const selector = $('#call-' + call.id + '-detail-button');
@@ -1018,7 +1018,7 @@ function setCallDetailPopover(call, destroy = false) {
       ${settings.translation_table["Description"]}
     </h5>
     <textarea class="form-control form-control-sm"
-              name="${placeholder}-description"
+              name="${placeholder}-description-name"
               rows="2" id="${placeholder}-description"
               placeholder="${settings.translation_table['Describe the incident']}"
               required>
@@ -1043,7 +1043,6 @@ function setCallDetailPopover(call, destroy = false) {
         .on('inserted.bs.popover', () => {
 
             console.log(call);
-            console.log(placeholder);
 
             // create detail form
             $(`#${placeholder}-select`)
