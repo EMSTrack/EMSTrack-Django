@@ -989,6 +989,135 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 
 }
 
+function setCallDetailPopover(call, destroy = false) {
+
+    // create patient object
+    const placeholder = 'call-' + call.id + '-detail';
+    const buttons_placeholder = 'call-' + call.id + '-detail-buttons';
+    // const patients = new Patients(patient_set, call_id, '#' + placeholder);
+    const sms_notifications = new Select({
+        list: 'sms-notifications-list',
+        prefix: 'call-' + call.id + 'sms-notifications',
+        label: settings.translation_table['Select username']
+    });
+    const selector = $('#call-' + call.id + '-detail-button');
+
+    // destroy?
+    if (destroy)
+        selector.popover('dispose');
+
+    // Add popover to patient button
+    selector
+        .popover({
+            title: settings.translation_table['Details'],
+            // language=HTML
+            content:
+            `<div>
+  <div id="${placeholder}">
+    <h5>
+      ${settings.translation_table["Description"]}
+    </h5>
+    <textarea class="form-control form-control-sm"
+              name="${placeholder}-description"
+              value="${call.details}"
+              rows="2" id="${placeholder}-comment"
+              placeholder="${settings.translation_table['Describe the incident']}"
+              required></textarea>
+    <h5>
+      ${settings.translation_table['SMS Notifications']}
+    </h5>
+    <div id="${placeholder}-sms-notifications">
+    </div>
+  </div>
+    <div id="${buttons_placeholder}" class="float-right my-2">
+    </div>
+</div>`,
+            html: true,
+            placement: 'left',
+            trigger: 'manual'
+        })
+        .on('click', function(e) {
+            $(this).popover('show');
+            e.stopPropagation();
+        })
+        .on('inserted.bs.popover', () => {
+
+            // create patient form
+            $(`#${placeholder}-sms-notifications`)
+                .html(sms_notifications.render());
+
+            // add buttons
+            $(`#${buttons_placeholder}`)
+                .html(`
+<button id="call-${call_id}-detail-cancel-button" type="button" class="btn btn-secondary">
+    ${settings.translation_table["Cancel"]}
+</button>
+<button id="call-${call_id}-detail-save-button" type="button" class="btn btn-primary">
+    ${settings.translation_table["Save"]}
+</button>`);
+
+            // toggle on cancel
+            $('#call-' + call_id + '-detail-cancel-button')
+                .on('click', function (event) {
+
+                    $('#call-' + call_id + '-detail-button')
+                        .popover('toggle');
+                    event.stopPropagation();
+
+                });
+
+            // toggle on save
+            $('#call-' + call_id + '-detail-save-button')
+                .on('click', function (event) {
+
+                    // retrieve detail
+                    const newdetail = detail.getData();
+                    console.log(newdetail);
+                    console.log(patient_set);
+                    if ( detail.same(newdetail) ) {
+
+                        // no changes
+                        logger.log('info', 'No changes, no savings!');
+
+                        $('#call-' + call_id + '-detail-button')
+                            .popover('toggle');
+                        event.stopPropagation();
+
+                    } else {
+
+
+                        dialog.dialog(
+                            settings.translation_table["Do you want to save the modified detail?"],
+                            (retval) => {
+
+                                if (retval === Dialog.OK) {
+
+                                    // update call
+                                    const data = { patient_set: newdetail };
+                                    apiClient.patchCall(call_id, data)
+                                        .then( (call) => {
+                                            logger.log('info', "Successfully updated call");
+                                        })
+                                        .catch( (error) => {
+                                            logger.log('error', "Could not update call: '%j'", error);
+                                        });
+
+                                }
+
+                                $('#call-' + call_id + '-detail-button')
+                                    .popover('toggle');
+                                event.stopPropagation();
+
+                            });
+
+                    }
+
+                });
+
+        });
+
+}
+
 function addCallToGrid(call) {
 
     logger.log('info', "Adding call '%d'[status:'%s'] to grid", call.id, call.status);
@@ -1052,8 +1181,8 @@ function addCallToGrid(call) {
                     type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">
                 <span class="fas fa-user fa-sm"></span> 
             </button>
-            <button id="call-${call.id}-info-button"                 
-                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Info">
+            <button id="call-${call.id}-detail-button"                 
+                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Detail">
                 <span class="fas fa-info fa-sm"></span> 
             </button>
         </div>
@@ -1086,6 +1215,9 @@ function addCallToGrid(call) {
 
     // set call patient popover
     setCallPatientPopover(call.id, call.patient_set);
+
+    // set call detail popover
+    setCallDetailPopover(call);
 
     // Add listener to remove or add layer when filter checkbox is clicked
     $('#call-checkbox-' + call.id)

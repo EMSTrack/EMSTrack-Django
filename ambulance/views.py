@@ -282,6 +282,11 @@ class AmbulanceMap(TemplateView):
                 _("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"),
             "Patients": _("Patients"),
             "No patient names are available.": _("No patient names are available."),
+            "Details": _("Details"),
+            "Description": _("Description"),
+            "Describe the incident": _("Describe the incident"),
+            "SMS Notifications": _("SMS Notifications"),
+            "Select username": _("Select username"),
             "Save": _("Save"),
             "Cancel": _("Cancel"),
             "Roads": _("Roads"),
@@ -297,8 +302,7 @@ class AmbulanceMap(TemplateView):
             "Please confirm that you want to skip the current waypoint.": _("Please confirm that you want to skip the "
                                                                             "current waypoint."),
             "Do you want to save the modified waypoints?": _("Do you want to save the modified waypoints?"),
-            "Do you want to save the modified patients?": _("Do you want to save the modified patients?"),
-            "Select username": _("Select username")
+            "Do you want to save the modified patients?": _("Do you want to save the modified patients?")
         }
 
         return context
