@@ -1018,10 +1018,9 @@ function setCallDetailPopover(call, destroy = false) {
     </h5>
     <textarea class="form-control form-control-sm"
               name="${placeholder}-description"
-              rows="2" id="${placeholder}-comment"
+              rows="2" id="${placeholder}-description"
               placeholder="${settings.translation_table['Describe the incident']}"
               required>
-      ${call.details}
     </textarea>
     <h5>
       ${settings.translation_table['SMS Notifications']}
@@ -1042,9 +1041,12 @@ function setCallDetailPopover(call, destroy = false) {
         })
         .on('inserted.bs.popover', () => {
 
-            // create patient form
+            // create detail form
             $(`#${placeholder}-select`)
                 .html(sms_notifications.render());
+
+            $(`#${placeholder}-description`)
+                .html(${call.details});
 
             // add buttons
             $(`#${buttons_placeholder}`)
