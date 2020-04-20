@@ -40,6 +40,10 @@ class Client(BaseClient):
         else:
             logger.debug('SMS not sent: user {} does not have a mobile on file'.format(user))
 
+    if not hasattr(BaseClient, 'reset'):
+        def reset(self):
+            pass
+
 
 # notify users that they will be updated call
 client = Client(key=settings.SMS_KEY,
