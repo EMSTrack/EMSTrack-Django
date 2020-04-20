@@ -33,6 +33,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -91,6 +92,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.A.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a2.id,
@@ -237,6 +239,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -413,6 +416,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -581,6 +585,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -713,6 +718,7 @@ class TestAmbulancewaypoint(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,

@@ -35,6 +35,11 @@
                 {{ group.groupprofile.priority }}
             </p>
 
+            <p>
+                <strong>{% trans "SMS Notifications" %}:</strong>
+                {{ group.groupprofile.can_sms_notifications|get_check }}
+            </p>
+
         </div>
     </div>
 

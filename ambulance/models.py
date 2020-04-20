@@ -2,6 +2,7 @@ import logging
 from enum import Enum
 
 from django.contrib.gis.db import models
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
@@ -13,6 +14,8 @@ from emstrack.latlon import calculate_orientation, calculate_distance, stationar
 from emstrack.mixins import PublishMixin
 from emstrack.models import AddressModel, UpdatedByModel, defaults, UpdatedByHistoryModel
 from emstrack.util import make_choices
+from emstrack.sms import client as sms_client
+
 from equipment.models import EquipmentHolder
 
 logger = logging.getLogger(__name__)
@@ -424,6 +427,10 @@ class Call(PublishMixin,
                                    on_delete=models.CASCADE,
                                    verbose_name=_('radio_code'))
 
+    # sms-notifications
+    sms_notifications = models.ManyToManyField(User,
+                                               related_name='sms_users')
+
     # timestamps
     pending_at = models.DateTimeField(_('pending_at'), null=True, blank=True)
     started_at = models.DateTimeField(_('started_at'), null=True, blank=True)
@@ -441,6 +448,13 @@ class Call(PublishMixin,
             # timestamp
             if self.ended_at is None:
                 self.ended_at = timezone.now()
+
+            # stop notifications
+            message = "{}:\n* {} {}".format(_("You will no longer be notified of updates to"),
+                                            _("Call"),
+                                            self.to_string())
+            for user in self.sms_notifications.all():
+                sms_client.notify_user(user, message)
 
         elif self.status == CallStatus.S.name:
 
@@ -492,6 +506,23 @@ class Call(PublishMixin,
 
     def get_ambulances(self):
         return ', '.join(ac.ambulance.identifier for ac in self.ambulancecall_set.all())
+
+    def to_string(self):
+
+        # priority
+        if self.priority_code:
+            _priority = self.priority_code
+            priority = '{}-{}-{}'.format(_priority.prefix.id, _priority.priority, _priority.suffix)
+        else:
+            priority = self.priority
+
+        # ambulances
+        ambulances = '\n'.join('+ {}: {}'.format(ac.ambulance.identifier,
+                                                 AmbulanceStatus[ac.ambulance.status].value)
+                               for ac in self.ambulancecall_set.all())
+
+        # id, priority, details, ambulances
+        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
 
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)

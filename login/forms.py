@@ -215,6 +215,9 @@ class GroupHospitalPermissionAdminForm(forms.ModelForm):
 class GroupProfileAdminForm(forms.ModelForm):
     class Meta:
         model = GroupProfile
+        labels = {
+            'can_sms_notifications': _('SMS Notifications'),
+        }
         exclude = ['group']
 
 

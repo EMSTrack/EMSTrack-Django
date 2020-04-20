@@ -234,6 +234,18 @@
                         </h5>
                         <div id="patients">
                         </div>
+
+                        <h5>
+                            {% trans "SMS Notifications" %}
+                        </h5>
+                        <div id="sms-notifications">
+                        </div>
+                        <datalist id="sms-notifications-list">
+                            {% for user in sms_notifications_list %}
+                                <option data-id="{{ user.id }}" value="{{ user.username }}">{{ user.username }}</option>
+                            {% endfor %}
+                        </datalist>
+
                     </form>
 
                 </div>

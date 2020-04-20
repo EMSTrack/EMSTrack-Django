@@ -1,14 +1,18 @@
 import logging
+
 from django.db import IntegrityError, transaction
+from django.contrib.auth.models import User
 
 from rest_framework import serializers
-from drf_extra_fields.geo_fields import PointField
 from rest_framework.exceptions import PermissionDenied
 
+from drf_extra_fields.geo_fields import PointField
+
 from login.permissions import get_permissions
+from emstrack.latlon import calculate_orientation
+
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
     LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode
-from emstrack.latlon import calculate_orientation
 
 logger = logging.getLogger(__name__)
 
@@ -394,6 +398,7 @@ class CallSerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
+    sms_notifications = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
 
     class Meta:
         model = Call
@@ -403,6 +408,7 @@ class CallSerializer(serializers.ModelSerializer):
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
+                  'sms_notifications',
                   'ambulancecall_set',
                   'patient_set']
         read_only_fields = ['created_at', 'updated_by']
@@ -418,6 +424,7 @@ class CallSerializer(serializers.ModelSerializer):
         
         ambulancecall_set = validated_data.pop('ambulancecall_set', [])
         patient_set = validated_data.pop('patient_set', [])
+        sms_notifications = validated_data.pop('sms_notifications', [])
 
         # Makes sure database rolls back in case of integrity or other errors
         with transaction.atomic():
@@ -469,6 +476,13 @@ class CallSerializer(serializers.ModelSerializer):
                     # add waypoint
                     obj = Waypoint.objects.create(ambulance_call=ambulance_call, **waypoint,
                                                   location=location, updated_by=user)
+
+            # add users to sms notifications
+            for user in sms_notifications:
+                if user.userprofile.mobile_number:
+                    call.sms_notifications.add(user)
+                else:
+                    logger.warning("User %s does not have a mobile phone on file, skipping", user)
 
             # publish call to mqtt only after all includes have succeeded
             call.publish()
@@ -537,8 +551,37 @@ class CallSerializer(serializers.ModelSerializer):
                     # delete all patients
                     instance.patient_set.all().delete()
 
+            # Update sms_notifications
+            sms_notifications_update = False
+            sms_notifications = []
+            if 'sms_notifications' in validated_data:
+                sms_notifications = validated_data.pop('sms_notifications', [])
+                sms_notifications_update = True
+
             # call super to update call, which will publish
             super().update(instance, validated_data)
+
+            # sms notifications updated?
+            if sms_notifications_update:
+
+                # Extract users
+                user_ids = set([user.id for user in sms_notifications])
+
+                # delete users not in current notifications
+                for user in instance.sms_notifications.exclude(id__in=user_ids):
+                    instance.sms_notifications.remove(user)
+
+                # remove ids of users already in
+                user_ids = user_ids -\
+                    set(instance.sms_notifications.filter(id__in=user_ids).values_list('id', flat=True))
+
+                # add users not already in
+                for id in user_ids:
+                    instance.sms_notifications.add(User.objects.get(id=id))
+
+                # publish, again, to updaate users
+                # TODO: is there a way to avoid the double publication?
+                instance.publish()
 
         # call super
         return instance
@@ -577,6 +620,7 @@ class CallSummarySerializer(serializers.ModelSerializer):
 
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = CallAmbulanceSummarySerializer(many=True, required=False)
+    sms_notifications = serializers.PrimaryKeyRelatedField(many=True, read_only=True, required=False)
 
     class Meta:
         model = Call
@@ -586,6 +630,7 @@ class CallSummarySerializer(serializers.ModelSerializer):
                   'created_at',
                   'pending_at', 'started_at', 'ended_at',
                   'comment', 'updated_by', 'updated_on',
+                  'sms_notifications',
                   'ambulancecall_set',
                   'patient_set']
         read_only_fields = ['created_at', 'updated_by']

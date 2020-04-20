@@ -150,6 +150,7 @@ class TestMQTTCalls(TestMQTTCallBase, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': ambulance_id,
@@ -350,6 +351,7 @@ class TestMQTTCallsAbort(TestMQTTCallBase, MQTTTestCase):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': ambulance_id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -427,6 +429,7 @@ class TestMQTTCallsDecline(TestMQTTCallBase, MQTTTestCase):
             'priority': CallPriority.B.name,
             'number': '123',
             'street': 'asdasdasd asd asd asdas',
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': ambulance_id,
@@ -564,6 +567,7 @@ class TestMQTTCallsDeclineInTheMiddle(TestMQTTCallBase, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': ambulance_id,
@@ -679,6 +683,7 @@ class TestMQTTCallsMultipleAmbulances(TestMQTTCallBase, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': ambulance_id1,
@@ -975,6 +980,7 @@ class TestMQTTCallsMultipleAmbulancesSameTime(TestMQTTCallBase, MQTTTestCase):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': ambulance_id1,

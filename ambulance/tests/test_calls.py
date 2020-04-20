@@ -18,7 +18,9 @@ from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPrior
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
     AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer, CallSummarySerializer, \
     CallAmbulanceSummarySerializer
+
 from emstrack.tests.util import date2iso, point2str
+from emstrack.sms import client as sms_client
 
 from login.tests.setup_data import TestSetup
 
@@ -479,6 +481,17 @@ class TestCall(TestSetup):
         # create call
         c1 = Call.objects.create(updated_by=self.u1)
 
+        # add user
+        sms_client.reset()
+        c1.sms_notifications.add(self.u8)
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 1)
+
+        # u7 has no phone number so no messages
+        c1.sms_notifications.add(self.u7)
+        self.assertEqual(len(sms_client.messages), 1)
+
         # it is fine to have no ambulances because it is pending
         serializer = CallSerializer(c1)
         expected = {
@@ -495,9 +508,13 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [self.u7.id, self.u8.id],
             'ambulancecall_set': [],
             'patient_set': []
         }
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
+        result = serializer.data
+        result['sms_notifications'] = []
         self.assertDictEqual(serializer.data, expected)
 
         # create first ambulance call
@@ -533,11 +550,14 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
@@ -590,12 +610,15 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
@@ -668,12 +691,15 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         self.assertDictEqual(result, expected)
 
@@ -793,6 +819,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -800,7 +827,9 @@ class TestCall(TestSetup):
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['patient_set'],
                               [patient_serializer_2.data, patient_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
@@ -821,6 +850,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -828,7 +858,9 @@ class TestCall(TestSetup):
                               CallAmbulanceSummarySerializer(c1.ambulancecall_set, many=True).data)
         self.assertCountEqual(serializer.data['patient_set'],
                               [patient_serializer_2.data, patient_serializer_1.data])
+        self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
+        result['sms_notifications'] = []
         result['ambulancecall_set'] = []
         result['patient_set'] = []
         self.assertDictEqual(result, expected)
@@ -881,15 +913,22 @@ class TestCall(TestSetup):
 
     def test_call_serializer_create(self):
 
+        # reset sms_client
+        sms_client.reset()
+
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [self.u8.id],
             'ambulancecall_set': [],
             'patient_set': []
         }
         serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 1)
 
         # test CallSerializer
         c1 = Call.objects.get(id=call.id)
@@ -909,6 +948,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [self.u8.id],
             'ambulancecall_set': [],
             'patient_set': []
         }
@@ -928,6 +968,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1000,6 +1041,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': []
         }
@@ -1023,6 +1065,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1052,6 +1095,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': expected_patient_set
         }
@@ -1071,6 +1115,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.S.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a1.id}],
             'patient_set': []
         }
@@ -1083,10 +1128,14 @@ class TestCall(TestSetup):
 
     def test_call_serializer_update(self):
         
+        # reset sms_client
+        sms_client.reset()
+
         # Pending Call with Ambulancecall_Set will create ambulancecalls
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1134,11 +1183,16 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
+        self.assertCountEqual(call.sms_notifications.all(), [])
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 0)
 
         # partial update call data
         data = {
             'status': CallStatus.S.name,
-            'priority': CallPriority.D.name
+            'priority': CallPriority.D.name,
+            'sms_notifications': [self.u8.id, self.u6.id]
         }
         serializer = CallSerializer(call, data=data)
         serializer.is_valid()
@@ -1148,7 +1202,30 @@ class TestCall(TestSetup):
         self.assertNotEqual(call.pending_at, None)
         self.assertNotEqual(call.started_at, None)
         self.assertEqual(call.ended_at, None)
+        self.assertCountEqual(call.sms_notifications.all(), [self.u8, self.u6])
         started_at = call.started_at
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 2)
+
+        # remove update
+        data = {
+            'status': CallStatus.S.name,
+            'priority': CallPriority.D.name,
+            'sms_notifications': [self.u8.id]
+        }
+        serializer = CallSerializer(call, data=data)
+        serializer.is_valid()
+        call = serializer.save(updated_by=self.u1)
+        self.assertEqual(call.status, CallStatus.S.name)
+        self.assertEqual(call.priority, CallPriority.D.name)
+        self.assertNotEqual(call.pending_at, None)
+        self.assertEqual(call.started_at, started_at)
+        self.assertEqual(call.ended_at, None)
+        self.assertCountEqual(call.sms_notifications.all(), [self.u8])
+
+        # make sure it got messages
+        self.assertEqual(len(sms_client.messages), 3)
 
         # partial update patient set
         patient_set = PatientSerializer(call.patient_set.all(), many=True).data
@@ -1238,6 +1315,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1306,6 +1384,7 @@ class TestCall(TestSetup):
             'comment': c1.comment,
             'updated_by': c1.updated_by.id,
             'updated_on': date2iso(c1.updated_on),
+            'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': expected_patient_set
         }
@@ -1331,6 +1410,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1347,6 +1427,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1364,6 +1445,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1375,6 +1457,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1386,6 +1469,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}, {'ambulance_id': self.a1.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1402,6 +1486,7 @@ class TestCall(TestSetup):
         call = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [
                 {
                     'ambulance_id': self.a1.id,
@@ -1573,6 +1658,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1588,6 +1674,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
@@ -1609,6 +1696,7 @@ class TestCall(TestSetup):
         data = {
             'status': CallStatus.P.name,
             'priority': CallPriority.B.name,
+            'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }

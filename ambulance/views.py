@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponseForbidden
@@ -19,8 +20,16 @@ from drf_extra_fields.geo_fields import PointField
 from ambulance.permissions import CallPermissionMixin
 from ambulance.resources import AmbulanceResource, CallRadioCodeResource, CallPriorityCodeResource, \
     CallPriorityClassificationResource
-from emstrack.models import defaults
+
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
+
+from emstrack.models import defaults
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
+    ProcessImportModelMixin, PaginationViewMixin
+from emstrack.views import get_page_links, get_page_size_links
+
+from login.models import can_sms_notifications
+
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
@@ -29,8 +38,7 @@ from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
-    ProcessImportModelMixin, PaginationViewMixin
+
 
 from emstrack.views import get_page_links, get_page_size_links
 
@@ -247,6 +255,7 @@ class AmbulanceMap(TemplateView):
 
         context['radio_code_list'] = CallRadioCode.objects.all()
         context['priority_code_list'] = CallPriorityCode.objects.all()
+        context['sms_notifications_list'] = can_sms_notifications()
 
         default_values = defaults.copy()
         default_values['location'] = PointField().to_representation(defaults['location'])
@@ -273,6 +282,14 @@ class AmbulanceMap(TemplateView):
                 _("Do you want to modify ambulance <strong>%s</strong> status to <strong>%s</strong>?"),
             "Patients": _("Patients"),
             "No patient names are available.": _("No patient names are available."),
+            "Details": _("Details"),
+            "Description": _("Description"),
+            "Describe the incident": _("Describe the incident"),
+            "SMS Notifications": _("SMS Notifications"),
+            "Do you want to save %s?": _("Do you want to save the %s?"),
+            "Select username": _("Select username"),
+            "the call": _("the call"),
+            "the patients": _("the patients"),
             "Save": _("Save"),
             "Cancel": _("Cancel"),
             "Roads": _("Roads"),

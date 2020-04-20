@@ -52,6 +52,8 @@ class TestSetupData:
             username='highprioritytestuser',
             email='test6@user.com',
             password='exceptionally_secret')
+        cls.u6.userprofile.mobile_number = '+15555555555'
+        cls.u6.userprofile.save()
 
         cls.u7 = User.objects.create_user(
             username='lowprioritytestuser',
@@ -63,6 +65,8 @@ class TestSetupData:
             email='staff@user.com',
             password='so_secret',
             is_staff=True)
+        cls.u8.userprofile.mobile_number = '+15555055050'
+        cls.u8.userprofile.save()
 
         # Add ambulances
         cls.a1 = Ambulance.objects.create(
