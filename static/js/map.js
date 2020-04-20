@@ -994,7 +994,6 @@ function setCallDetailPopover(call, destroy = false) {
     // create patient object
     const placeholder = 'call-' + call.id + '-detail';
     const buttons_placeholder = 'call-' + call.id + '-detail-buttons';
-    // const patients = new Patients(patient_set, call.id, '#' + placeholder);
     const sms_notifications = new Select({
         list: 'sms-notifications-list',
         prefix: 'call-' + call.id + 'sms-notifications',
@@ -1027,7 +1026,7 @@ function setCallDetailPopover(call, destroy = false) {
     <h5>
       ${settings.translation_table['SMS Notifications']}
     </h5>
-    <div id="${placeholder}-sms-notifications">
+    <div id="${placeholder}-select">
     </div>
   </div>
     <div id="${buttons_placeholder}" class="float-right my-2">
@@ -1044,7 +1043,7 @@ function setCallDetailPopover(call, destroy = false) {
         .on('inserted.bs.popover', () => {
 
             // create patient form
-            $(`#${placeholder}-sms-notifications`)
+            $(`#${placeholder}-select`)
                 .html(sms_notifications.render());
 
             // add buttons
