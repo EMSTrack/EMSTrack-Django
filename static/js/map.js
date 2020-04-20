@@ -1014,18 +1014,21 @@ function setCallDetailPopover(call, destroy = false) {
             `
 <div>
   <div id="${placeholder}">
-    <h5>
-      ${settings.translation_table["Description"]}
-    </h5>
-    <textarea name="${placeholder}-description-name"
-              rows="2" id="${placeholder}-description"
-              placeholder="${settings.translation_table['Describe the incident']}">
-    </textarea>
-    <h5>
-      ${settings.translation_table['SMS Notifications']}
-    </h5>
-    <div id="${placeholder}-select">
-    </div>
+    <form>
+        <h5>
+          ${settings.translation_table["Description"]}
+        </h5>
+        <textarea class="form-control form-control-sm"
+                  name="${placeholder}-description-name"
+                  rows="2" id="${placeholder}-description"
+                  placeholder="${settings.translation_table['Describe the incident']}">
+        </textarea>
+        <h5>
+          ${settings.translation_table['SMS Notifications']}
+        </h5>
+        <div id="${placeholder}-select">
+        </div>
+    </form>
   </div>
   <div id="${buttons_placeholder}" class="float-right my-2">
   </div>
