@@ -2275,7 +2275,7 @@ function dispatchCall() {
     form['patient_set'] = patients;
 
     // add sms-notifications
-    form['sms-notifications'] = Object.keys(select.getItems());
+    form['sms_notifications'] = Object.keys(select.getItems());
 
     // post new call
     apiClient.postCall(form)
