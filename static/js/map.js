@@ -1046,7 +1046,7 @@ function setCallDetailPopover(call, destroy = false) {
                 .html(sms_notifications.render());
 
             $(`#${placeholder}-description`)
-                .html(${call.details});
+                .html(call.details);
 
             // add buttons
             $(`#${buttons_placeholder}`)
