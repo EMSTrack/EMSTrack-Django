@@ -1047,6 +1047,7 @@ function setCallDetailPopover(call, destroy = false) {
             // create detail form
             $(`#${placeholder}-select`)
                 .html(sms_notifications.render());
+            sms_notifications.postRender();
 
             $(`#${placeholder}-description`)
                 .html(call.details);

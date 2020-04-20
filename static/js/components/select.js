@@ -12,8 +12,6 @@ export class Select {
         this.label = properties.label;
         this.values = properties.values;
         this.onClick = properties.onClick;
-
-        this.last_index = 0;
     }
 
     render(classes = "") {
