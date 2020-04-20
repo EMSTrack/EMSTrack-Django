@@ -515,9 +515,8 @@ class Call(PublishMixin,
             priority = self.priority
 
         # ambulances
-        ambulances = '\n'.join('-{}({}): {}'.format(ac.ambulance.identifier,
-                                                    AmbulanceCallStatus[ac.status].value,
-                                                    AmbulanceStatus[ac.ambulance.status].value)
+        ambulances = '\n'.join('-{}: {}'.format(ac.ambulance.identifier,
+                                                AmbulanceStatus[ac.ambulance.status].value)
                                for ac in self.ambulancecall_set.all())
 
         # id, priority, details, ambulances
