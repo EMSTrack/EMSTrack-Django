@@ -1016,12 +1016,8 @@ function setCallDetailPopover(call, destroy = false) {
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
-        <input type="text"
-               name="${placeholder}-description-name"
-               id="${placeholder}-description"
-               placeholder="${settings.translation_table['Describe the incident']}"
-               value="${call.details}"> 
-        ${call.details}
+        <div id="${placeholder}-textarea">
+        </div>
         <h5>
           ${settings.translation_table['SMS Notifications']}
         </h5>
@@ -1047,6 +1043,12 @@ function setCallDetailPopover(call, destroy = false) {
             $(`#${placeholder}-select`)
                 .html(sms_notifications.render());
             sms_notifications.postRender();
+
+            $(`#${placeholder}-textarea`)
+                .html(`<textarea name="${placeholder}-description-name"
+                                 id="${placeholder}-description"
+                                 rows="2"
+                                 placeholder="${settings.translation_table['Describe the incident']}">${call.details}</textarea>`);
 
             // add buttons
             $(`#${buttons_placeholder}`)
