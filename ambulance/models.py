@@ -517,12 +517,12 @@ class Call(PublishMixin,
             priority = self.priority
 
         # ambulances
-        ambulances = '\n'.join('-{}: {}'.format(ac.ambulance.identifier,
-                                                AmbulanceStatus[ac.ambulance.status].value)
+        ambulances = '\n'.join('+ {}: {}'.format(ac.ambulance.identifier,
+                                                 AmbulanceStatus[ac.ambulance.status].value)
                                for ac in self.ambulancecall_set.all())
 
         # id, priority, details, ambulances
-        return "#{}({}):\n-{}\n{}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
+        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
 
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)
