@@ -1042,7 +1042,8 @@ function setCallDetailPopover(call, destroy = false) {
         })
         .on('inserted.bs.popover', () => {
 
-            logger.debug(call);
+            console.log(call);
+            console.log(placeholder);
 
             // create detail form
             $(`#${placeholder}-select`)
