@@ -1019,10 +1019,11 @@ function setCallDetailPopover(call, destroy = false) {
     </h5>
     <textarea class="form-control form-control-sm"
               name="${placeholder}-description"
-              value="${call.details}"
               rows="2" id="${placeholder}-comment"
               placeholder="${settings.translation_table['Describe the incident']}"
-              required></textarea>
+              required>
+      ${call.details}
+    </textarea>
     <h5>
       ${settings.translation_table['SMS Notifications']}
     </h5>
