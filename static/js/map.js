@@ -1013,11 +1013,11 @@ function setCallDetailPopover(call, destroy = false) {
             content:
             `<div>
   <div id="${placeholder}">
-    <form method="POST" action="">
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
         <textarea class="form-control form-control-sm"
+                  form=""
                   name="${placeholder}-description-name"
                   rows="2" id="${placeholder}-description"
                   placeholder="${settings.translation_table['Describe the incident']}">
@@ -1027,7 +1027,6 @@ function setCallDetailPopover(call, destroy = false) {
         </h5>
         <div id="${placeholder}-select">
         </div>
-    </form>
   </div>
   <div id="${buttons_placeholder}" class="float-right my-2">
   </div>
