@@ -1042,7 +1042,7 @@ function addCallToGrid(call) {
             <span class="font-weight-bold">${priority_suffix}</span>
         </div>
         <div>
-            <span id="call-details-${call.id}">${call.details}</span>
+            <span id="call-details-${call.id}">&nbsp;${call.details}</span>
         </div>
         <div class="ml-auto" data-toggle="collapse"
              data-target="#call-${call.id}-body"
@@ -1053,8 +1053,8 @@ function addCallToGrid(call) {
                 <span class="fas fa-user fa-sm"></span> 
             </button>
             <button id="call-${call.id}-info-button"                 
-                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Info">
-                <span class="fas fa-info-circle fa-sm"></span> 
+                    type="button" class="btn btn-sm" aria-label="Info">
+                <span class="fas fa-info-circle"></span> 
             </button>
         </div>
         <div>
