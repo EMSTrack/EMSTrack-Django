@@ -32,7 +32,7 @@ class Client(BaseClient):
         if mobile_number:
             sms = {
                 'from': settings.SMS_FROM,
-                'to': mobile_number,
+                'to': mobile_number.as_e164,
                 'text': 'Message from EMSTrack:\n' + message,
             }
             client.send_message(sms)
