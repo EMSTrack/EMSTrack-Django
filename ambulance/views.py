@@ -20,8 +20,16 @@ from drf_extra_fields.geo_fields import PointField
 from ambulance.permissions import CallPermissionMixin
 from ambulance.resources import AmbulanceResource, CallRadioCodeResource, CallPriorityCodeResource, \
     CallPriorityClassificationResource
-from emstrack.models import defaults
+
 from equipment.mixins import EquipmentHolderCreateMixin, EquipmentHolderUpdateMixin
+
+from emstrack.models import defaults
+from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
+    ProcessImportModelMixin, PaginationViewMixin
+from emstrack.views import get_page_links, get_page_size_links
+
+from login.models import can_sms_notifications
+
 from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
     Call, Location, LocationType, CallStatus, AmbulanceCallStatus, \
     CallPriority, AmbulanceStatusOrder, AmbulanceCapabilityOrder, CallStatusOrder, CallPriorityOrder, LocationTypeOrder, \
@@ -30,8 +38,7 @@ from .models import Ambulance, AmbulanceCapability, AmbulanceStatus, \
 
 from .forms import AmbulanceCreateForm, AmbulanceUpdateForm, LocationAdminCreateForm, LocationAdminUpdateForm
 
-from emstrack.mixins import BasePermissionMixin, UpdatedByMixin, ExportModelMixin, ImportModelMixin, \
-    ProcessImportModelMixin, PaginationViewMixin
+
 
 from emstrack.views import get_page_links, get_page_size_links
 
@@ -248,7 +255,7 @@ class AmbulanceMap(TemplateView):
 
         context['radio_code_list'] = CallRadioCode.objects.all()
         context['priority_code_list'] = CallPriorityCode.objects.all()
-        context['sms_notifications_list'] = User.objects.exclude(userprofile__mobile_number__exact='')
+        context['sms_notifications_list'] = can_sms_notifications()
 
         default_values = defaults.copy()
         default_values['location'] = PointField().to_representation(defaults['location'])

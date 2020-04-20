@@ -57,6 +57,19 @@ class UserProfile(ClearPermissionCacheMixin,
 
 # GroupProfile
 
+def can_sms_notifications():
+    groups = Group.objects.filter(groupprofile__can_sms_notifications=True).prefetch_related('user_set')
+    users = [g.user_set.all() for g in groups]
+    n = len(users)
+    if n > 1:
+        # union of all groups
+        users = users[0].union(users[1:])
+    elif n == 1:
+        # just one group
+        users = users[0]
+    return users
+
+
 class GroupProfile(ClearPermissionCacheMixin,
                    models.Model):
     group = models.OneToOneField(Group,
@@ -65,6 +78,7 @@ class GroupProfile(ClearPermissionCacheMixin,
 
     description = models.CharField(_('description'), max_length=100, blank=True)
     priority = models.PositiveIntegerField(_('priority'), validators=[MinValueValidator(1)], default=10)
+    can_sms_notifications = models.BooleanField(_('can_sms_notifications'), default=False)
 
     def get_absolute_url(self):
         return reverse('login:detail-group', kwargs={'pk': self.group.id})

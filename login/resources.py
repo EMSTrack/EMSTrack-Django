@@ -87,15 +87,19 @@ class GroupResource(resources.ModelResource):
                             widget=widgets.PostSaveWidget(widgets.IntegerWidget()),
                             readonly=False)
 
+    can_sms_notifications = fields.Field(attribute='groupprofile__can_sms_notifications',
+                                         widget=widgets.PostSaveWidget(widgets.BooleanWidget()),
+                                         readonly=False)
+
     user_set = fields.Field(attribute='user_set',
                             widget=widgets.ManyToManyWidget(User, field='username', separator=','))
 
     class Meta:
         model = Group
         fields = ('id', 'name',
-                  'description', 'priority', 'user_set')
+                  'description', 'priority', 'can_sms_notifications', 'user_set')
         export_order = ('id', 'name',
-                        'description', 'priority', 'user_set')
+                        'description', 'priority', 'can_sms_notifications', 'user_set')
 
     # save userprofile related fields
     def after_post_save_instance(self, instance, row, using_transactions, dry_run):
