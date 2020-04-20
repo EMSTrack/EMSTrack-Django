@@ -1041,6 +1041,9 @@ function addCallToGrid(call) {
             </button>
             <span class="font-weight-bold">${priority_suffix}</span>
         </div>
+        <div>
+            <span id="call-details-${call.id}">${call.details}</span>
+        </div>
         <div class="ml-auto" data-toggle="collapse"
              data-target="#call-${call.id}-body"
              aria-expanded="true" aria-controls="call-${call.id}-body">
@@ -1048,6 +1051,10 @@ function addCallToGrid(call) {
             <button id="call-${call.id}-patients-button"                 
                     type="button" class="btn btn-outline-dark btn-sm" aria-label="Patients">
                 <span class="fas fa-user fa-sm"></span> 
+            </button>
+            <button id="call-${call.id}-info-button"                 
+                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Info">
+                <span class="fas fa-info-circle fa-sm"></span> 
             </button>
         </div>
         <div>
