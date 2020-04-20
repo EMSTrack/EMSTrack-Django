@@ -1017,8 +1017,7 @@ function setCallDetailPopover(call, destroy = false) {
     <h5>
       ${settings.translation_table["Description"]}
     </h5>
-    <textarea class="form-control form-control-sm"
-              name="${placeholder}-description-name"
+    <textarea name="${placeholder}-description-name"
               rows="2" id="${placeholder}-description"
               placeholder="${settings.translation_table['Describe the incident']}">
     </textarea>
