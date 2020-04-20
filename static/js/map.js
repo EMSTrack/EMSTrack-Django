@@ -559,6 +559,9 @@ function updateCall(call) {
             // update date
             $('#call-date-' + call.id).html( date );
 
+            // update details
+            $('#call-details-' + call.id).html( call.details );
+
             // update patients
             setCallPatientPopover(call.id, call.patient_set, true);
 
@@ -998,6 +1001,7 @@ function setCallDetailPopover(call, destroy = false) {
         list: 'sms-notifications-list',
         prefix: 'call-' + call.id + '-sms-notifications',
         label: settings.translation_table['Select username'],
+        initial_values: call.sms_notifications
     });
     const selector = $('#call-' + call.id + '-detail-button');
 
