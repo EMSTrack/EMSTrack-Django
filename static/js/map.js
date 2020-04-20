@@ -1011,7 +1011,8 @@ function setCallDetailPopover(call, destroy = false) {
             title: settings.translation_table['Details'],
             // language=HTML
             content:
-            `<div>
+            `
+<div>
   <div id="${placeholder}">
     <h5>
       ${settings.translation_table["Description"]}
@@ -1028,8 +1029,8 @@ function setCallDetailPopover(call, destroy = false) {
     <div id="${placeholder}-select">
     </div>
   </div>
-    <div id="${buttons_placeholder}" class="float-right my-2">
-    </div>
+  <div id="${buttons_placeholder}" class="float-right my-2">
+  </div>
 </div>`,
             html: true,
             placement: 'left',
@@ -1040,6 +1041,8 @@ function setCallDetailPopover(call, destroy = false) {
             e.stopPropagation();
         })
         .on('inserted.bs.popover', () => {
+
+            logger.debug(call);
 
             // create detail form
             $(`#${placeholder}-select`)
