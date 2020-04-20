@@ -994,7 +994,7 @@ function setCallDetailPopover(call, destroy = false) {
     // create patient object
     const placeholder = 'call-' + call.id + '-detail';
     const buttons_placeholder = 'call-' + call.id + '-detail-buttons';
-    // const patients = new Patients(patient_set, call_id, '#' + placeholder);
+    // const patients = new Patients(patient_set, call.id, '#' + placeholder);
     const sms_notifications = new Select({
         list: 'sms-notifications-list',
         prefix: 'call-' + call.id + 'sms-notifications',
@@ -1049,25 +1049,25 @@ function setCallDetailPopover(call, destroy = false) {
             // add buttons
             $(`#${buttons_placeholder}`)
                 .html(`
-<button id="call-${call_id}-detail-cancel-button" type="button" class="btn btn-secondary">
+<button id="call-${call.id}-detail-cancel-button" type="button" class="btn btn-secondary">
     ${settings.translation_table["Cancel"]}
 </button>
-<button id="call-${call_id}-detail-save-button" type="button" class="btn btn-primary">
+<button id="call-${call.id}-detail-save-button" type="button" class="btn btn-primary">
     ${settings.translation_table["Save"]}
 </button>`);
 
             // toggle on cancel
-            $('#call-' + call_id + '-detail-cancel-button')
+            $('#call-' + call.id + '-detail-cancel-button')
                 .on('click', function (event) {
 
-                    $('#call-' + call_id + '-detail-button')
+                    $('#call-' + call.id + '-detail-button')
                         .popover('toggle');
                     event.stopPropagation();
 
                 });
 
             // toggle on save
-            $('#call-' + call_id + '-detail-save-button')
+            $('#call-' + call.id + '-detail-save-button')
                 .on('click', function (event) {
 
                     // retrieve detail
@@ -1079,7 +1079,7 @@ function setCallDetailPopover(call, destroy = false) {
                         // no changes
                         logger.log('info', 'No changes, no savings!');
 
-                        $('#call-' + call_id + '-detail-button')
+                        $('#call-' + call.id + '-detail-button')
                             .popover('toggle');
                         event.stopPropagation();
 
@@ -1094,7 +1094,7 @@ function setCallDetailPopover(call, destroy = false) {
 
                                     // update call
                                     const data = { patient_set: newdetail };
-                                    apiClient.patchCall(call_id, data)
+                                    apiClient.patchCall(call.id, data)
                                         .then( (call) => {
                                             logger.log('info', "Successfully updated call");
                                         })
@@ -1104,7 +1104,7 @@ function setCallDetailPopover(call, destroy = false) {
 
                                 }
 
-                                $('#call-' + call_id + '-detail-button')
+                                $('#call-' + call.id + '-detail-button')
                                     .popover('toggle');
                                 event.stopPropagation();
 
