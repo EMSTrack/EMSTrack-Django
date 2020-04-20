@@ -1053,8 +1053,8 @@ function addCallToGrid(call) {
                 <span class="fas fa-user fa-sm"></span> 
             </button>
             <button id="call-${call.id}-info-button"                 
-                    type="button" class="btn btn-sm" aria-label="Info">
-                <span class="fas fa-info-circle"></span> 
+                    type="button" class="btn btn-outline-dark btn-sm" aria-label="Info">
+                <span class="fas fa-info fa-sm"></span> 
             </button>
         </div>
         <div>
