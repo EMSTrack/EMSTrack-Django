@@ -450,7 +450,9 @@ class Call(PublishMixin,
                 self.ended_at = timezone.now()
 
             # stop notifications
-            message = "Call #{} has ended".format(self.id)
+            message = "{}:\n* {} {}".format(_("You will no longer be notified of updates to"),
+                                            _("Call"),
+                                            self.to_string())
             for user in self.sms_notifications.all():
                 sms_client.notify_user(user, message)
 

@@ -33,10 +33,10 @@ def user_groups_changed_handler(sender, instance, action,
 
         # create message
         if action == 'post_add':
-            message = "You will be notified of updates to call {}".format(call.to_string())
-
+            message = _("You will be notified of updates to")
         else: # if action == 'post_remove':
-            message = "You will no longer be notified of updates to call {}".format(call.to_string())
+            message = _("You will no longer be notified of updates to")
+        message = "{}:\n* {} {}".format(message, _("Call"), call.to_string())
 
         # notify users
         for user in users:
