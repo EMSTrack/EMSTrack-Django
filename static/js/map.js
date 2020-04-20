@@ -1187,9 +1187,8 @@ function addCallToGrid(call) {
                 ${settings.call_priority_css[call.priority].html}
             </button>
             <span class="font-weight-bold">${priority_suffix}</span>
-        </div>
-        <div>
-            <span id="call-details-${call.id}">&nbsp;${call.details}</span>
+            &nbsp;
+            <span id="call-details-${call.id}">${call.details}</span>
         </div>
         <div class="ml-auto" data-toggle="collapse"
              data-target="#call-${call.id}-body"
