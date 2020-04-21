@@ -586,7 +586,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
 
         # get user
         user = self.request.user
-        if not user.is_superuser or user.is_staff:
+        if not (user.is_superuser or user.is_staff):
 
             # return nothing if anonymous
             if user.is_anonymous:
@@ -602,6 +602,9 @@ class CallNoteViewSet(mixins.ListModelMixin,
 
             # query ambulances
             ambulance_ids = set(call.ambulancecall_set.values_list('ambulance_id'))
+
+            logger.debug(can_do)
+            logger.debug(ambulance_ids)
 
             # fail if disjoints
             if can_do.isdisjoint(ambulance_ids):
