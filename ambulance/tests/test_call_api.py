@@ -13,7 +13,8 @@ from emstrack.tests.util import date2iso
 
 from login.tests.setup_data import TestSetup
 
-from ambulance.models import CallStatus, CallPriority, LocationType, WaypointStatus, Call, Patient, AmbulanceCall
+from ambulance.models import CallStatus, CallPriority, LocationType, WaypointStatus, \
+    Call, Patient, AmbulanceCall, CallNote
 from ambulance.serializers import CallSerializer, PatientSerializer, AmbulanceCallSerializer, CallNoteSerializer
 
 logger = logging.getLogger(__name__)
