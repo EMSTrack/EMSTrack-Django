@@ -253,9 +253,9 @@ class AmbulanceMap(TemplateView):
         context['call_priority_css'] = CallPriorityCSS
         context['map_provider'] = {'provider': settings.MAP_PROVIDER, 'access_token': settings.MAP_PROVIDER_TOKEN}
 
-        context['radio_code_list'] = CallRadioCode.objects.all()
-        context['priority_code_list'] = CallPriorityCode.objects.all()
-        context['sms_notifications_list'] = can_sms_notifications()
+        context['radio_code_list'] = CallRadioCode.objects.all().order_by('code')
+        context['priority_code_list'] = CallPriorityCode.objects.all().order_by('prefix', 'priority', 'suffix')
+        context['sms_notifications_list'] = can_sms_notifications().order_by('username')
 
         default_values = defaults.copy()
         default_values['location'] = PointField().to_representation(defaults['location'])
