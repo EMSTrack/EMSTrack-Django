@@ -1038,7 +1038,7 @@ function setCallDetailPopover(call, destroy = false) {
         <div id="${placeholder}-select">
         </div>
         <div>
-            <input type="checkbox">
+            <span id="${placeholder}-notify"></span>
             ${settings.translation_table['Send SMS notifications?']}
         </div>
   </div>
@@ -1076,6 +1076,9 @@ function setCallDetailPopover(call, destroy = false) {
                 .html(sms_notifications.render());
             sms_notifications.postRender();
 
+            $(`#${placeholder}-notify`)
+                .html('<input type="checkbox">')
+            
             $(`#${placeholder}-textarea`)
                 .html(`<textarea class="form-control form-control-sm"
                                  name="${placeholder}-description-name"
