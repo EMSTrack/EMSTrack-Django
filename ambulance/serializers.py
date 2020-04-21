@@ -12,7 +12,7 @@ from login.permissions import get_permissions
 from emstrack.latlon import calculate_orientation
 
 from .models import Ambulance, AmbulanceUpdate, Call, Location, AmbulanceCall, Patient, CallStatus, Waypoint, \
-    LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode
+    LocationType, CallPriorityClassification, CallPriorityCode, CallRadioCode, CallNote
 
 logger = logging.getLogger(__name__)
 
@@ -393,6 +393,23 @@ class CallRadioCodeSerializer(serializers.ModelSerializer):
 
 
 # Call serializer
+
+class CallNoteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CallNote
+        fields = ['id',
+                  'comment', 'updated_by', 'updated_on']
+        read_only_fields = ['updated_by']
+
+    def create(self, validated_data):
+
+        # creates call first, do not publish
+        callnote = CallNote(**validated_data)
+        callnote.save(publish=False)
+
+        return callnote
+
 
 class CallSerializer(serializers.ModelSerializer):
 

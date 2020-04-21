@@ -1,3 +1,6 @@
+import logging
+import itertools
+
 from django.http import Http404
 from rest_framework import viewsets, mixins, exceptions
 from rest_framework.permissions import IsAuthenticated
@@ -7,23 +10,27 @@ from rest_framework.pagination import PageNumberPagination, LimitOffsetPaginatio
 from rest_framework.exceptions import APIException, NotFound
 from rest_framework.status import HTTP_400_BAD_REQUEST
 
-from ambulance.permissions import CallPermissionMixin
 from emstrack.mixins import BasePermissionMixin, \
     CreateModelUpdateByMixin, UpdateModelUpdateByMixin
+
 from login.permissions import IsCreateByAdminOrSuperOrDispatcher, IsAdminOrSuperOrDispatcher, get_permissions
-
-from .models import Location, Ambulance, LocationType, Call, AmbulanceUpdate, AmbulanceCall, AmbulanceCallHistory, \
-    AmbulanceCallStatus, CallStatus, CallPriorityClassification, CallPriorityCode, CallRadioCode, Waypoint
-
-from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
-    CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer, \
-    CallAmbulanceSummarySerializer, WaypointSerializer
 
 from equipment.models import EquipmentItem
 from equipment.serializers import EquipmentItemSerializer
 from equipment.viewsets import EquipmentItemViewSet
-import logging
+
+from .permissions import CallPermissionMixin
+
+from .models import Location, Ambulance, LocationType, Call, CallNote, AmbulanceUpdate, AmbulanceCall, \
+    AmbulanceCallHistory, AmbulanceCallStatus, CallStatus, CallPriorityClassification, \
+    CallPriorityCode, CallRadioCode, Waypoint
+
+from .serializers import LocationSerializer, AmbulanceSerializer, AmbulanceUpdateSerializer, CallSerializer, \
+    CallPriorityCodeSerializer, CallPriorityClassificationSerializer, CallRadioCodeSerializer, \
+    CallAmbulanceSummarySerializer, WaypointSerializer, CallNoteSerializer
+
 logger = logging.getLogger(__name__)
+flatten = itertools.chain.from_iterable
 
 
 # Django REST Framework Viewsets
@@ -47,6 +54,7 @@ class AmbulanceEquipmentItemViewSet(EquipmentItemViewSet):
 
     serializer_class = EquipmentItemSerializer
     lookup_field = 'equipment_id'
+
     def get_queryset(self):
 
         ambulance_id = int(self.kwargs['ambulance_id'])
@@ -544,6 +552,82 @@ class AmbulanceCallWaypointViewSet(mixins.ListModelMixin,
 
         # create
         super().perform_update(serializer, ambulance_call=ambulanceCall)
+
+
+# CallNoteViewset
+
+class CallNoteViewSet(mixins.ListModelMixin,
+                      CreateModelUpdateByMixin,
+                      viewsets.GenericViewSet):
+    """
+    API endpoint for manipulating notes in Calls.
+
+    list:
+    Retrieve list of notes.
+
+    create:
+    Create new note instance.
+    """
+
+    serializer_class = CalNoteSerializer
+
+    # permission_classes = (IsAuthenticated, )
+
+    def check_permissions(self):
+
+        # retrieve call_id
+        call_id = int(self.kwargs['call_id'])
+
+        # does call exist?
+        try:
+            call = Call.objects.get(call_id=call_id)
+        except Call.DoesNotExist:
+            raise exceptions.NotFound()
+
+        # get user
+        user = self.request.user
+        if not user.is_superuser or user.is_staff:
+
+            # return nothing if anonymous
+            if user.is_anonymous:
+                raise exceptions.PermissionDenied()
+
+            # get permissions
+            permissions = get_permissions(user)
+            can_do = set()
+            if user.userprofile.is_dispatcher:
+                can_do.update(permissions.get_can_read('ambulances'))
+            else:
+                can_do.update(permissions.get_can_write('ambulances'))
+
+            # query ambulances
+            ambulance_ids = set(call.ambulancecall_set.values_list('ambulance_id'))
+
+            # fail if disjoints
+            if can_do.is_disjoint(ambulance_ids):
+                logger.info("call note create: '%s' is not super, staff, authorized user, or dispatcher", user)
+                raise exceptions.PermissionDenied()
+
+        return call
+
+    def get_queryset(self):
+        """
+        Restricts the notes to call.
+        """
+
+        # check permissions
+        call = self.check_permissions()
+
+        # does ambulancecall exist?
+        return CallNote.objects.filter(call=call)
+
+    def perform_create(self, serializer):
+
+        # check permissions
+        call = self.check_permissions()
+
+        # create
+        super().perform_create(serializer, call=call)
 
 
 # CallPriorityViewSet

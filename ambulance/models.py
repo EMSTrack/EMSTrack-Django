@@ -528,6 +528,15 @@ class Call(PublishMixin,
         return "{} ({})".format(self.status, self.priority)
 
 
+class CallNote(PublishMixin,
+               UpdatedByModel):
+
+    # call
+    call = models.ForeignKey(Call,
+                             on_delete=models.CASCADE,
+                             verbose_name=_('call'))
+
+
 class AmbulanceCallStatus(Enum):
     R = _('Requested')
     A = _('Accepted')
