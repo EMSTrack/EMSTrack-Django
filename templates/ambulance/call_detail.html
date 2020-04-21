@@ -91,13 +91,19 @@
             <p>
                 <strong>{% trans "Notes" %}:</strong>
             </p>
-            <p>
-                <ul>
-                    {% for note in call.callnote_set.all %}
-                        <li>{{ note.updated_at }}: {{ note.comments }}</li>
-                    {% endfor %}
-                </ul>
-            </p>
+            <table class="table table-striped table-sm">
+                <tbody>
+                {% for note in call.callnote_set.all %}
+                    <tr>
+                        <td>
+                            <p>
+                                {{ note.updated_on }}: {{ note.comment }}
+                            </p>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
             {% endif %}
 
         </div>
