@@ -601,7 +601,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
                 can_do.update(permissions.get_can_write('ambulances'))
 
             # query ambulances
-            ambulance_ids = set(call.ambulancecall_set.values_list('ambulance_id'))
+            ambulance_ids = set(flatten(call.ambulancecall_set.values_list('ambulance_id')))
 
             logger.debug(can_do)
             logger.debug(ambulance_ids)
