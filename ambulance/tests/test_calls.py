@@ -545,8 +545,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [self.u7.id, self.u8.id],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
         result['sms_notifications'] = []
@@ -587,8 +588,8 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+}
         self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
@@ -647,8 +648,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
@@ -728,8 +730,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
@@ -856,8 +859,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               [ambulance_call_serializer_2.data, ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['patient_set'],
@@ -887,8 +891,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         self.assertCountEqual(serializer.data['ambulancecall_set'],
                               CallAmbulanceSummarySerializer(c1.ambulancecall_set, many=True).data)
         self.assertCountEqual(serializer.data['patient_set'],
@@ -985,8 +990,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [self.u8.id],
             'ambulancecall_set': [],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         self.assertDictEqual(serializer.data, result)
 
         # accepted Call without Ambulancecall_Set fails
@@ -1043,8 +1049,9 @@ class TestCall(TestSetup):
                     ]
                 }
             ],
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
         serializer = CallSerializer(data=call)
         serializer.is_valid()
         call = serializer.save(updated_by=self.u1)
@@ -1078,8 +1085,9 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
-            'patient_set': []
-        }
+            'patient_set': [],
+            'callnote_set': []
+}
 
         result = serializer.data
         # logger.debug(result['ambulancecall_set'])
