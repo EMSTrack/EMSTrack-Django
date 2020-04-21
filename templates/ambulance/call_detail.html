@@ -96,9 +96,10 @@
                 {% for note in call.callnote_set.all %}
                     <tr>
                         <td>
-                            <p>
-                                {{ note.updated_on }}: {{ note.comment }}
-                            </p>
+                            {{ note.updated_on }}:
+                        </td>
+                        <td>
+                            {{ note.comment }}
                         </td>
                     </tr>
                 {% endfor %}
@@ -176,11 +177,9 @@
                 {% for history in ambulancecall.ambulancecallhistory_set.all|dictsort:"updated_on" %}
                 <tr>
                     <td>
-                        <p>
-                            {{ history.status|get_ambulance_call_status }} @
-                            {{ history.updated_on|date:"DATE_FORMAT" }},
-                            {{ history.updated_on|date:"H:i:s" }}
-                        </p>
+                        {{ history.status|get_ambulance_call_status }} @
+                        {{ history.updated_on|date:"DATE_FORMAT" }},
+                        {{ history.updated_on|date:"H:i:s" }}
                     </td>
                 </tr>
                 {% endfor %}
