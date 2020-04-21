@@ -284,6 +284,8 @@ class AmbulanceMap(TemplateView):
             "No patient names are available.": _("No patient names are available."),
             "Details": _("Details"),
             "Notes": _("Notes"),
+            "Enter new note": _("Enter new note"),
+            "Send SMS notifications?": _("Send SMS notifications?"),
             "Description": _("Description"),
             "Describe the incident": _("Describe the incident"),
             "SMS Notifications": _("SMS Notifications"),

@@ -1037,6 +1037,10 @@ function setCallDetailPopover(call, destroy = false) {
         </h5>
         <div id="${placeholder}-select">
         </div>
+        <div>
+            <input type="checkbox">
+            ${settings.translation_table['Send SMS notifications?']}
+        </div>
   </div>
   <div id="${buttons_placeholder}" class="float-right my-2">
   </div>
@@ -1061,7 +1065,7 @@ function setCallDetailPopover(call, destroy = false) {
             let notes = '';
             for (const note of call.callnote_set) {
                 const date = (new Date(note.updated_on)).toLocaleString();
-                notes += `<p>${date}: ${note.comment}</p>`
+                notes += `<p>${date}:<br/>${note.comment}</p>`
             }
             notes += '';
             $(`#${placeholder}-notes`)
@@ -1077,7 +1081,7 @@ function setCallDetailPopover(call, destroy = false) {
                                  name="${placeholder}-description-name"
                                  id="${placeholder}-description"
                                  rows="2"
-                                 placeholder="${settings.translation_table['Describe the incident']}"></textarea>`);
+                                 placeholder="${settings.translation_table['New note']}"></textarea>`);
 
             // add buttons
             $(`#${buttons_placeholder}`)
