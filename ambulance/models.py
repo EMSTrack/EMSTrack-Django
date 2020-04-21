@@ -536,6 +536,11 @@ class CallNote(PublishMixin,
                              on_delete=models.CASCADE,
                              verbose_name=_('call'))
 
+    def publish(self, **kwargs):
+        # publish to mqtt
+        from mqtt.publish import SingletonPublishClient
+        SingletonPublishClient().publish_call(self.call, **kwargs)
+
 
 class AmbulanceCallStatus(Enum):
     R = _('Requested')

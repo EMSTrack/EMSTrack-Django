@@ -398,15 +398,14 @@ class CallNoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CallNote
-        fields = ['id',
-                  'comment', 'updated_by', 'updated_on']
-        read_only_fields = ['updated_by']
+        fields = ['comment', 'updated_by', 'updated_on']
+        read_only_fields = ['updated_by', 'updated_on']
 
     def create(self, validated_data):
 
         # creates call first, do not publish
         callnote = CallNote(**validated_data)
-        callnote.save(publish=False)
+        callnote.save()
 
         return callnote
 
@@ -416,6 +415,7 @@ class CallSerializer(serializers.ModelSerializer):
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
     sms_notifications = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
+    callnote_set = CallNoteSerializer(many=True)
 
     class Meta:
         model = Call
@@ -427,8 +427,9 @@ class CallSerializer(serializers.ModelSerializer):
                   'comment', 'updated_by', 'updated_on',
                   'sms_notifications',
                   'ambulancecall_set',
-                  'patient_set']
-        read_only_fields = ['created_at', 'updated_by']
+                  'patient_set',
+                  'callnote_set']
+        read_only_fields = ['created_at', 'updated_by', 'callnote_set']
 
     def create(self, validated_data):
 

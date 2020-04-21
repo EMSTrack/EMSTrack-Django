@@ -13,11 +13,11 @@ from rest_framework import serializers
 from io import BytesIO
 import json
 
-from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, \
+from ambulance.models import Call, Patient, AmbulanceCall, CallStatus, CallPriority, CallNote, \
     AmbulanceUpdate, AmbulanceStatus, Waypoint, Location, LocationType, WaypointStatus, AmbulanceCallStatus
 from ambulance.serializers import CallSerializer, AmbulanceCallSerializer, PatientSerializer, \
     AmbulanceUpdateSerializer, WaypointSerializer, LocationSerializer, CallSummarySerializer, \
-    CallAmbulanceSummarySerializer
+    CallAmbulanceSummarySerializer, CallNoteSerializer
 
 from emstrack.tests.util import date2iso, point2str
 from emstrack.sms import client as sms_client
@@ -28,6 +28,41 @@ logger = logging.getLogger(__name__)
 
 
 class TestCall(TestSetup):
+
+    def test_call_note_serializer(self):
+
+        # privileged user
+        user = self.u1
+
+        # test PatientSerializer
+        c1 = Call.objects.create(updated_by=user)
+
+        # serialization
+        n1 = CallNote.objects.create(call=c1, comment='some comment', updated_by=user)
+        serializer = CallNoteSerializer(n1)
+        result = {
+            'comment': n1.comment,
+            'updated_by': n1.updated_by.id,
+            'updated_on': n1.updated_on
+        }
+        self.assertDictEqual(serializer.data, result)
+
+        # deserialization
+        data = {
+            'comment': 'another comment'
+        }
+        serializer = CallNoteSerializer(data=data)
+        self.assertTrue(serializer.is_valid())
+        serializer.save(call=c1, updated_by=user)
+
+        n1 = c1.callnote_set.get(comment='another comment')
+        serializer = PatientSerializer(n1)
+        result = {
+            'comment': n1.comment,
+            'updated_by': n1.updated_by.id,
+            'updated_on': n1.updated_on
+        }
+        self.assertDictEqual(serializer.data, result)
 
     def test_patient_serializer(self):
 
