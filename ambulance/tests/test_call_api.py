@@ -138,6 +138,13 @@ class TestCallAPI(TestSetup):
         result['callnote_set'] = []
         self.assertDictEqual(result, expected)
 
+        # get notes
+        response = client.get('/en/api/call/{}/note/'.format(c1.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        result = JSONParser().parse(BytesIO(response.content))
+        self.assertCountEqual(result, expected_callnote_set)
+
         # logout
         client.logout()
 
