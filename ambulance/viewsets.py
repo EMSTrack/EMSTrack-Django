@@ -580,7 +580,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
 
         # does call exist?
         try:
-            call = Call.objects.get(call_id=call_id)
+            call = Call.objects.get(id=call_id)
         except Call.DoesNotExist:
             raise exceptions.NotFound()
 
