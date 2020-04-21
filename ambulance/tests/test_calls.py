@@ -589,7 +589,8 @@ class TestCall(TestSetup):
             'sms_notifications': [],
             'ambulancecall_set': [],
             'patient_set': [],
-}
+            'callnote_set': []
+        }
         self.assertCountEqual(serializer.data['ambulancecall_set'], [ambulance_call_serializer_1.data])
         self.assertCountEqual(serializer.data['sms_notifications'], [self.u7.id, self.u8.id])
         result = serializer.data
@@ -1139,7 +1140,8 @@ class TestCall(TestSetup):
             'updated_on': date2iso(c1.updated_on),
             'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
-            'patient_set': expected_patient_set
+            'patient_set': expected_patient_set,
+            'callnote_set': []
         }
 
         result = serializer.data
