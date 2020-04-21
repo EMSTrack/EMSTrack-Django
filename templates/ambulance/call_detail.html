@@ -76,8 +76,15 @@
                 {{ call.ended_at }}
                 </div>
             </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+
+            <h3>{% trans "Description" %}:</h3>
             <p>
-                <strong>{% trans "Description" %}:</strong>
                 {{ call.details }}
             </p>
             {% if call.callnote_set.all %}
@@ -87,7 +94,7 @@
             <p>
                 <ul>
                     {% for note in call.callnote_set.all %}
-                        <li>{{ note }}</li>
+                        <li>{{ note.updated_at }}: {{ note.comments }}</li>
                     {% endfor %}
                 </ul>
             </p>
