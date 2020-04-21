@@ -1059,7 +1059,7 @@ function setCallDetailPopover(call, destroy = false) {
 
             // notes
             let notes = '<ul>';
-            for (const note of call.notecall_set) {
+            for (const note of call.callnote_set) {
                 notes += `<li>${note.updated_on}: ${note.comment}</li>`
             }
             notes += '</ul>';
