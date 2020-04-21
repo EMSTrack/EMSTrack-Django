@@ -569,7 +569,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
     Create new note instance.
     """
 
-    serializer_class = CalNoteSerializer
+    serializer_class = CallNoteSerializer
 
     # permission_classes = (IsAuthenticated, )
 
