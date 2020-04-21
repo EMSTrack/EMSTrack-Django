@@ -604,7 +604,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
             ambulance_ids = set(call.ambulancecall_set.values_list('ambulance_id'))
 
             # fail if disjoints
-            if can_do.is_disjoint(ambulance_ids):
+            if can_do.isdisjoint(ambulance_ids):
                 logger.info("call note create: '%s' is not super, staff, authorized user, or dispatcher", user)
                 raise exceptions.PermissionDenied()
 
