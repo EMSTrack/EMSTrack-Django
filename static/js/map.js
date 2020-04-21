@@ -1121,7 +1121,7 @@ function setCallDetailPopover(call, destroy = false) {
                     const send_sms = $(`${placeholder}-checkbox`).prop( "checked");
 
                     // any changes?
-                    if ( new_note.isEmpty() && same_sms_notifications && !send_sms ) {
+                    if ( new_note.length === 0 && same_sms_notifications && !send_sms ) {
 
                         // no changes
                         logger.log('info', 'No changes, no savings!');
@@ -1139,7 +1139,7 @@ function setCallDetailPopover(call, destroy = false) {
                                 if (retval === Dialog.OK) {
 
                                     // new note?
-                                    if (!new_note.isEmpty()) {
+                                    if (new_note.length > 0) {
 
                                         // new note
                                         const data = {
