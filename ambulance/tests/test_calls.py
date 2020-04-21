@@ -56,7 +56,7 @@ class TestCall(TestSetup):
         serializer.save(call=c1, updated_by=user)
 
         n1 = c1.callnote_set.get(comment='another comment')
-        serializer = PatientSerializer(n1)
+        serializer = CallNoteSerializer(n1)
         result = {
             'comment': n1.comment,
             'updated_by': n1.updated_by.id,
