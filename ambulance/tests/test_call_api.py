@@ -76,12 +76,29 @@ class TestCallAPI(TestSetup):
         self.assertEqual(response.status_code, 201)
 
         c1 = Call.objects.get(status=CallStatus.P.name)
+
+        # add notes
+        data = {
+            'comment': 'some comment'
+        }
+        response = client.post('/en/api/call/{}/note/'.format(c1.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        data = {
+            'comment': 'another comment'
+        }
+        response = client.post('/en/api/call/{}/note/'.format(c1.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 201)
+
+        # serialize
         serializer = CallSerializer(c1)
 
         expected_patient_set = PatientSerializer(Patient.objects.filter(call_id=c1.id), many=True).data
         expected_ambulancecall_set = AmbulanceCallSerializer(AmbulanceCall.objects.filter(call_id=c1.id), many=True).data
+        expected_callnote_set = CallNoteSerializer(CallNote.objects.filter(call_id=c1.id), many=True).data
 
         self.assertEqual(len(expected_patient_set), 2)
+        self.assertEqual(len(expected_callnote_set), 2)
         self.assertEqual(len(expected_ambulancecall_set[0]['waypoint_set'])
                          + len(expected_ambulancecall_set[1]['waypoint_set']), 3)
 
@@ -102,7 +119,7 @@ class TestCallAPI(TestSetup):
             'sms_notifications': [],
             'ambulancecall_set': expected_ambulancecall_set,
             'patient_set': expected_patient_set,
-            'callnote_set': []
+            'callnote_set': expected_callnote_set
         }
 
         result = serializer.data
@@ -110,10 +127,14 @@ class TestCallAPI(TestSetup):
                               expected['ambulancecall_set'])
         self.assertCountEqual(result['patient_set'],
                               expected['patient_set'])
+        self.assertCountEqual(result['callnote_set'],
+                              expected['callnote_set'])
         expected['ambulancecall_set'] = []
         result['ambulancecall_set'] = []
         expected['patient_set'] = []
         result['patient_set'] = []
+        expected['callnote_set'] = []
+        result['callnote_set'] = []
         self.assertDictEqual(result, expected)
 
         # logout
