@@ -139,7 +139,7 @@ class TestCallAPI(TestSetup):
         self.assertDictEqual(result, expected)
 
         # get notes
-        response = client.get('/en/api/call/{}/note/'.format(c1.id), data, content_type='application/json')
+        response = client.get('/en/api/call/{}/note/'.format(c1.id))
         self.assertEqual(response.status_code, 200)
 
         result = JSONParser().parse(BytesIO(response.content))
@@ -162,7 +162,10 @@ class TestCallAPI(TestSetup):
         response = client.post('/en/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
-        # should fail because user can write to ambulances
+        # should fail because user can not read or write to ambulances
+        response = client.get('/en/api/call/{}/note/'.format(c1.id))
+        self.assertEqual(response.status_code, 403)
+
         data = {
             'comment': 'some comment'
         }
@@ -178,13 +181,25 @@ class TestCallAPI(TestSetup):
         # Should not fail, is staff
         data = {
             'status': CallStatus.P.name,
-            'priority': CallPriority.B.name,
+            'priority': CallPriority.A.name,
             'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a1.id}, {'ambulance_id': self.a2.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
+        self.assertEqual(response.status_code, 201)
+
+        c2 = Call.objects.get(priority=CallPriority.A.name)
+
+        # should not fail, user is staff
+        response = client.get('/en/api/call/{}/note/'.format(c2.id))
+        self.assertEqual(response.status_code, 200)
+
+        data = {
+            'comment': 'yet another comment'
+        }
+        response = client.post('/en/api/call/{}/note/'.format(c2.id), data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         # logout
@@ -196,13 +211,25 @@ class TestCallAPI(TestSetup):
         # Should not fail, is dispatcher
         data = {
             'status': CallStatus.P.name,
-            'priority': CallPriority.B.name,
+            'priority': CallPriority.C.name,
             'sms_notifications': [],
             'ambulancecall_set': [{'ambulance_id': self.a3.id}],
             'patient_set': [{'name': 'Jose', 'age': 3}, {'name': 'Maria', 'age': 10}]
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
+        self.assertEqual(response.status_code, 201)
+
+        c3 = Call.objects.get(priority=CallPriority.C.name)
+
+        # should not fail, user is dispatcher
+        response = client.get('/en/api/call/{}/note/'.format(c3.id))
+        self.assertEqual(response.status_code, 200)
+
+        data = {
+            'comment': 'yet another comment'
+        }
+        response = client.post('/en/api/call/{}/note/'.format(c3.id), data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
         # Should fail, dispatcher but not in authorized list of ambulances
@@ -215,6 +242,16 @@ class TestCallAPI(TestSetup):
         }
         response = client.post('/en/api/call/', data, content_type='application/json')
         logger.debug(response.content)
+        self.assertEqual(response.status_code, 403)
+
+        # should fail, user is staff
+        response = client.get('/en/api/call/{}/note/'.format(c2.id))
+        self.assertEqual(response.status_code, 403)
+
+        data = {
+            'comment': 'yet another comment'
+        }
+        response = client.post('/en/api/call/{}/note/'.format(c2.id), data, content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
         # Should fail, dispatcher but not in authorized list of ambulances
