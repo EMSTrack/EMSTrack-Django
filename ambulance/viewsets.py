@@ -573,7 +573,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
 
     # permission_classes = (IsAuthenticated, )
 
-    def check_permissions(self):
+    def check_ambulance_permissions(self):
 
         # retrieve call_id
         call_id = int(self.kwargs['call_id'])
@@ -616,7 +616,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
         """
 
         # check permissions
-        call = self.check_permissions()
+        call = self.check_ambulance_permissions()
 
         # does ambulancecall exist?
         return CallNote.objects.filter(call=call)
@@ -624,7 +624,7 @@ class CallNoteViewSet(mixins.ListModelMixin,
     def perform_create(self, serializer):
 
         # check permissions
-        call = self.check_permissions()
+        call = self.check_ambulance_permissions()
 
         # create
         super().perform_create(serializer, call=call)
