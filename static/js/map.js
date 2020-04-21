@@ -1060,7 +1060,7 @@ function setCallDetailPopover(call, destroy = false) {
             // notes
             let notes = '';
             for (const note of call.callnote_set) {
-                const date = (new Date(note.updated_on)).toDateString();
+                const date = (new Date(note.updated_on)).toLocaleString();
                 notes += `<p>${date}: ${note.comment}</p>`
             }
             notes += '';
