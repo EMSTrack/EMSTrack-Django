@@ -94,7 +94,8 @@
                 {% for note in call.callnote_set.all|dictsort:"updated_on" %}
                     <tr>
                         <td>
-                            {{ note.updated_on }}:
+                            {{ note.updated_on|date:"DATE_FORMAT" }},
+                            {{ note.updated_on|date:"H:i:s" }}
                         </td>
                         <td>
                             {{ note.comment }}
