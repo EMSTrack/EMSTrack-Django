@@ -415,7 +415,7 @@ class CallSerializer(serializers.ModelSerializer):
     patient_set = PatientSerializer(many=True, required=False)
     ambulancecall_set = AmbulanceCallSerializer(many=True, required=False)
     sms_notifications = serializers.PrimaryKeyRelatedField(many=True, queryset=User.objects.all(), required=False)
-    callnote_set = CallNoteSerializer(many=True)
+    callnote_set = CallNoteSerializer(many=True, required=False)
 
     class Meta:
         model = Call
