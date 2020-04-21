@@ -1023,6 +1023,13 @@ function setCallDetailPopover(call, destroy = false) {
         <h5>
           ${settings.translation_table["Description"]}
         </h5>
+        <div id="${placeholder}-details">
+        </div>
+        <h6>
+          ${settings.translation_table["Notes"]}
+        </h6>
+        <div id="${placeholder}-notes">
+        </div>
         <div id="${placeholder}-textarea">
         </div>
         <h5>
@@ -1046,6 +1053,19 @@ function setCallDetailPopover(call, destroy = false) {
 
             console.log(call);
 
+            // details
+            $(`#${placeholder}-details`)
+                .html(call.details);
+
+            // notes
+            let notes = '<ul>';
+            for (const note of call.notecall_set) {
+                notes += `<li>${note.updated_on}: ${note.comment}</li>`
+            }
+            notes += '</ul>';
+            $(`#${placeholder}-notes`)
+                .html(notes);
+
             // create detail form
             $(`#${placeholder}-select`)
                 .html(sms_notifications.render());
@@ -1056,7 +1076,7 @@ function setCallDetailPopover(call, destroy = false) {
                                  name="${placeholder}-description-name"
                                  id="${placeholder}-description"
                                  rows="2"
-                                 placeholder="${settings.translation_table['Describe the incident']}">${call.details}</textarea>`);
+                                 placeholder="${settings.translation_table['Describe the incident']}"></textarea>`);
 
             // add buttons
             $(`#${buttons_placeholder}`)
