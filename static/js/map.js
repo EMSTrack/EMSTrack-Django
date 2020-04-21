@@ -1078,7 +1078,7 @@ function setCallDetailPopover(call, destroy = false) {
 
             $(`#${placeholder}-notify`)
                 .html('<input type="checkbox">')
-            
+
             $(`#${placeholder}-textarea`)
                 .html(`<textarea class="form-control form-control-sm"
                                  name="${placeholder}-description-name"
