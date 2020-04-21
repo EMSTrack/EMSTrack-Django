@@ -162,6 +162,13 @@ class TestCallAPI(TestSetup):
         response = client.post('/en/api/call/', data, content_type='application/json')
         self.assertEqual(response.status_code, 403)
 
+        # should fail because user can write to ambulances
+        data = {
+            'comment': 'some comment'
+        }
+        response = client.post('/en/api/call/{}/note/'.format(c1.id), data, content_type='application/json')
+        self.assertEqual(response.status_code, 403)
+
         # logout
         client.logout()
 
