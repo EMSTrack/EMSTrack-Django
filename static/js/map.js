@@ -1058,11 +1058,12 @@ function setCallDetailPopover(call, destroy = false) {
                 .html(call.details);
 
             // notes
-            let notes = '<ul>';
+            let notes = '';
             for (const note of call.callnote_set) {
-                notes += `<li>${note.updated_on}: ${note.comment}</li>`
+                const date = Date.parse(note.updated_on).toDateString();
+                notes += `<p>${date}: ${note.comment}</p>`
             }
-            notes += '</ul>';
+            notes += '';
             $(`#${placeholder}-notes`)
                 .html(notes);
 
