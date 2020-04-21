@@ -31,10 +31,6 @@
                 <strong>{% trans "Status" %}:</strong>
                 {{ call.status|get_call_status }}
             </p>
-            <p>
-                <strong>{% trans "Details" %}:</strong>
-                {{ call.details }}
-            </p>
             {% if call.priority_code %}
             <p>
                 <strong>{% trans "Priority Code" %}:</strong>
@@ -80,6 +76,22 @@
                 {{ call.ended_at }}
                 </div>
             </div>
+            <p>
+                <strong>{% trans "Description" %}:</strong>
+                {{ call.details }}
+            </p>
+            {% if call.callnote_set.all %}
+            <p>
+                <strong>{% trans "Notes" %}:</strong>
+            </p>
+            <p>
+                <ul>
+                    {% for note in call.callnote_set.all %}
+                        <li>{{ note }}</li>
+                    {% endfor %}
+                </ul>
+            </p>
+            {% endif %}
 
         </div>
     </div>
