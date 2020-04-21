@@ -43,7 +43,7 @@ class TestCall(TestSetup):
         result = {
             'comment': n1.comment,
             'updated_by': n1.updated_by.id,
-            'updated_on': n1.updated_on
+            'updated_on': date2iso(n1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
@@ -60,7 +60,7 @@ class TestCall(TestSetup):
         result = {
             'comment': n1.comment,
             'updated_by': n1.updated_by.id,
-            'updated_on': n1.updated_on
+            'updated_on': date2iso(n1.updated_on)
         }
         self.assertDictEqual(serializer.data, result)
 
