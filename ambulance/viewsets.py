@@ -603,8 +603,8 @@ class CallNoteViewSet(mixins.ListModelMixin,
             # query ambulances
             ambulance_ids = set(flatten(call.ambulancecall_set.values_list('ambulance_id')))
 
-            logger.debug(can_do)
-            logger.debug(ambulance_ids)
+            # logger.debug(can_do)
+            # logger.debug(ambulance_ids)
 
             # fail if disjoints
             if can_do.isdisjoint(ambulance_ids):
