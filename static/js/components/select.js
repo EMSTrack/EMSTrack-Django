@@ -14,15 +14,17 @@ export class Select {
 
         // set initial values
         this.values = {};
-        for (const value of properties.initial_values) {
-            logger.debug('Initial value %s', value);
-            const item = $(`#${self.list} option[data-id=${value}]`);
+        for (const id of properties.initial_values) {
+            const item = $(`#${self.list} option[data-id=${id}]`);
+            logger.debug('Initial value %s, %s', id, item);
             if (item.length) {
                 // add to list of values
                 const first = item.first();
-                this.values[first.attr('data-id')] = first.attr('value');
+                this.values[id] = first.attr('value');
             }
         }
+
+        console.log(this.values);
 
     }
 
@@ -56,8 +58,11 @@ export class Select {
         // reference to this to be used inside method
         const self = this;
 
+        console.log(this.values);
+
         // set initial values
         for (const id in this.values) {
+            logger.debug('id = %d', id);
             const value = this.values[id];
             this.addItem(id, value, true);
         }
