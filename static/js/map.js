@@ -1019,7 +1019,7 @@ function setCallDetailPopover(call, destroy = false) {
             title: settings.translation_table['Details'],
             // language=HTML
             content:
-`<div>
+`<div >
   <div id="${placeholder}">
         <h5>
           ${settings.translation_table["Description"]}
@@ -1049,7 +1049,12 @@ function setCallDetailPopover(call, destroy = false) {
 </div>`,
             html: true,
             placement: 'left',
-            trigger: 'manual'
+            trigger: 'manual',
+            template: `<div class="popover popover-large" role="tooltip">
+    <div class="arrow"></div>
+    <h3 class="popover-header"></h3>
+    <div class="popover-body"></div>
+</div>`
         })
         .on('click', function(e) {
             $(this).popover('show');
