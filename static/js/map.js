@@ -1097,17 +1097,17 @@ function setCallDetailPopover(call, destroy = false) {
 </button>`);
 
             // toggle on cancel
-            $('#call-' + call.id + '-detail-cancel-button')
+            $(`#call-${call.id}-detail-cancel-button`)
                 .on('click', function (event) {
 
-                    $('#call-' + call.id + '-detail-button')
+                    $(`#call-${call.id}-detail-button`)
                         .popover('toggle');
                     event.stopPropagation();
 
                 });
 
             // toggle on save
-            $('#call-' + call.id + '-detail-save-button')
+            $(`#call-${call.id}-detail-save-button`)
                 .on('click', function (event) {
 
                     // note?
@@ -1147,7 +1147,7 @@ function setCallDetailPopover(call, destroy = false) {
 
                                 }
 
-                                $('#call-' + call.id + '-detail-button')
+                                $(`#call-${call.id}-detail-button`)
                                     .popover('toggle');
                                 event.stopPropagation();
 
@@ -1158,7 +1158,7 @@ function setCallDetailPopover(call, destroy = false) {
                         // no changes
                         logger.log('info', 'No changes, no savings!');
 
-                        $('#call-' + call.id + '-detail-button')
+                        $(`#call-${call.id}-detail-button`)
                             .popover('toggle');
                         event.stopPropagation();
 
