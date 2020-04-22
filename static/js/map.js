@@ -1147,14 +1147,19 @@ function setCallDetailPopover(call, destroy = false) {
 
                                 if (retval === Dialog.OK) {
 
+                                    let patchCall = false;
                                     if (postNewNote)
                                         noteData['comment'] = newNote;
 
-                                    if (patchSMSNotifications)
+                                    if (patchSMSNotifications) {
                                         callData['sms_notifications'] = newSMSNotifications;
+                                        patchCall = true;
+                                    }
 
-                                    if (patchPatients)
+                                    if (patchPatients) {
                                         callData['patient_set'] = newPatients;
+                                        patchCall = true;
+                                    }
 
                                     Promise.resolve()
                                         .then(postNewNote && apiClient.postCallNote(call.id, noteData))
