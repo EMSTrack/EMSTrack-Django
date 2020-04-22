@@ -752,7 +752,6 @@ msgstr "valor"
 #: equipment/views.py:156 equipment/views.py:168
 #: templates/equipment/equipment_detail.html:11
 #: templates/equipment/equipment_form.html:11
-#| msgid "Equipment"
 msgid "Equipments"
 msgstr "Equipo"
 
@@ -883,7 +882,6 @@ msgid "disconnected"
 msgstr "desconectado"
 
 #: login/models.py:207
-#| msgid "disconnected"
 msgid "reconnected"
 msgstr "reconectado"
 
@@ -1230,7 +1228,6 @@ msgid "Label"
 msgstr "Mensaje"
 
 #: templates/ambulance/callpriorityclassification_list.html:63
-#| msgid "No bases have been created yet."
 msgid "No priority classifications have been created yet."
 msgstr "No se han creados bases."
 
@@ -1240,12 +1237,10 @@ msgid "Code"
 msgstr "Código"
 
 #: templates/ambulance/callprioritycode_list.html:63
-#| msgid "No incident have been created yet."
 msgid "No priority codes have been created yet."
 msgstr "No se han creados incidentes."
 
 #: templates/ambulance/callradiocode_list.html:63
-#| msgid "No bases have been created yet."
 msgid "No radio codes have been created yet."
 msgstr "No se han creados bases."
 
@@ -1411,7 +1406,6 @@ msgid "No equipments have been created yet."
 msgstr "No se han creados equipos."
 
 #: templates/equipment/equipmentholder_form.html:17
-#| msgid "equipment"
 msgid "equipments"
 msgstr "equipo"
 
