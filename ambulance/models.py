@@ -523,7 +523,8 @@ class Call(PublishMixin,
 
         # message
         if self.callnote_set.all().order_by('updated_on'):
-            message = self.callnote_set.last()
+            note = self.callnote_set.last()
+            message = note.comment
         else:
             message = self.details
 
