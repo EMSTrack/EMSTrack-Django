@@ -16,9 +16,11 @@ export class Select {
         this.values = {};
         for (const id of properties.initial_values) {
             const item = $(`#${self.list} option[data-id=${id}]`);
-            logger.debug('Initial value %s, %s', id, item);
+            logger.debug('Initial value %d', id);
+            console.log(item);
             if (item.length) {
                 // add to list of values
+                logger.debug('Adding %d to list of values', id);
                 const first = item.first();
                 this.values[id] = first.attr('value');
             }
