@@ -521,8 +521,14 @@ class Call(PublishMixin,
                                                  AmbulanceStatus[ac.ambulance.status].value)
                                for ac in self.ambulancecall_set.all())
 
+        # message
+        if self.callnote_set.all().order_by('updated_on'):
+            message = self.callnote_set.last()
+        else:
+            message = self.details
+
         # id, priority, details, ambulances
-        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, self.details, _('Ambulances'), ambulances)
+        return "#{}({}):\n- {}\n* {}:\n{}".format(self.id, priority, message, _('Ambulances'), ambulances)
 
     def __str__(self):
         return "{} ({})".format(self.status, self.priority)
