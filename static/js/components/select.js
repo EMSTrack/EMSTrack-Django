@@ -34,6 +34,8 @@ export class Select {
         // reference to this to be used inside method
         const self = this;
 
+        console.log(this.initial_values);
+
         // set initial values
         for (const value of this.initial_values) {
             const item = $(`#${self.list} option[data-id=${value}]`);
@@ -79,7 +81,8 @@ export class Select {
 
     addItem(id, value) {
 
-        logger.debug("Select: got click");
+        logger.debug("addItem");
+        console.log(this.values);
 
         if (!this.values.hasOwnProperty(id)) {
 
