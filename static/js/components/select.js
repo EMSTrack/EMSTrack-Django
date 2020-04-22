@@ -122,6 +122,7 @@ export class Select {
 
 Select.default = {
     options: {},
+    initial_values: [],
     list: "",
     prefix: "dropdown",
     label: "Select:",
