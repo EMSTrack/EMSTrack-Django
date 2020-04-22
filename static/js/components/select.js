@@ -10,8 +10,8 @@ export class Select {
         this.prefix = properties.prefix;
         this.list = properties.list;
         this.label = properties.label;
-        this.values = properties.values;
-        this.initial_values = properties.initial_values;
+        this.values = {...properties.values};
+        this.initial_values = [...properties.initial_values];
         this.onClick = properties.onClick;
     }
 

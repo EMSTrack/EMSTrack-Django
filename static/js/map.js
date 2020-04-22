@@ -998,15 +998,15 @@ function setCallPatientPopover(call_id, patient_set, destroy = false) {
 function setCallDetailPopover(call, destroy = false) {
 
     // create patient object
-    const placeholder = 'call-' + call.id + '-detail';
-    const buttons_placeholder = 'call-' + call.id + '-detail-buttons';
+    const placeholder = `call-${call.id}-detail`;
+    const buttons_placeholder = `call-${call.id}-detail-buttons`;
     const sms_notifications = new Select({
         list: 'sms-notifications-list',
-        prefix: 'call-' + call.id + '-sms-notifications',
+        prefix: `call-${call.id}-sms-notifications`,
         label: settings.translation_table['Select username'],
         initial_values: call.sms_notifications
     });
-    const selector = $('#call-' + call.id + '-detail-button');
+    const selector = $(`#call-${call.id}-detail-button`);
 
     // destroy?
     if (destroy)
