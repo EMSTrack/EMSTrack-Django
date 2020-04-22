@@ -676,7 +676,6 @@ msgstr "Códigos de Prioridad"
 #, fuzzy
 # msgid "Priority Classifications"
 # msgstr "Clasificación de Prioridad"
-
 msgid "Priority Classifications"
 msgstr "Clasificaciones de Prioridad"
 
@@ -1848,7 +1847,7 @@ msgstr "Informe de Kilometraje"
 
 #: templates/report/vehicle-mileage.html:25
 msgid "begin"
-msgstr "el comienzo"
+msgstr "comienzo"
 
 #: templates/report/vehicle-mileage.html:31
 #, fuzzy
@@ -1856,7 +1855,7 @@ msgstr "el comienzo"
 # msgstr "Pendientes"
 
 msgid "end"
-msgstr "el fin"
+msgstr "fin"
 
 #: templates/report/vehicle-mileage.html:50
 msgid "Total"
@@ -1874,7 +1873,7 @@ msgstr "Vehículo"
 #: templates/report/vehicle-mileage.html:58
 #: templates/report/vehicle-mileage.html:90
 msgid "Distance"
-msgstr "Distacia"
+msgstr "Distancia"
 
 #: templates/report/vehicle-mileage.html:57
 #: templates/report/vehicle-mileage.html:60
